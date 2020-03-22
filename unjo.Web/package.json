@@ -1,0 +1,55 @@
+{
+  "name": "unjo.web",
+  "version": "1.0.0",
+  "description": "",
+  "bin": {
+    "unjo.web": "app.js"
+  },
+  "dependencies": {
+    "axios": "0.19.0",
+    "dayjs": "1.8.16",
+    "lodash": "4.17.15",
+    "tiptap": "1.26.3",
+    "tiptap-extensions": "1.28.3",
+    "vue": "2.6.10",
+    "vue-router": "3.1.3",
+    "vuex": "3.1.1"
+  },
+  "devDependencies": {
+    "@babel/core": "7.6.3",
+    "@babel/preset-env": "7.6.3",
+    "aspnet-webpack": "3.0.0",
+    "babel-loader": "8.0.6",
+    "css-loader": "3.2.0",
+    "html-webpack-plugin": "3.2.0",
+    "mini-css-extract-plugin": "0.8.0",
+    "node-sass": "^4.13.1",
+    "optimize-css-assets-webpack-plugin": "5.0.3",
+    "sass-loader": "8.0.0",
+    "style-loader": "1.0.0",
+    "uglifyjs-webpack-plugin": "2.2.0",
+    "vue-loader": "15.7.1",
+    "vue-template-compiler": "2.6.10",
+    "webpack": "4.41.0",
+    "webpack-cli": "3.3.9",
+    "webpack-dev-server": "3.8.2",
+    "webpack-hot-middleware": "2.25.0",
+    "webpack-merge": "4.2.2"
+  },
+  "peerDependencies": {
+    "vue-template-compiler": "2.6.10"
+  },
+  "scripts": {
+    "dev": "webpack-dev-server --progress --hot --open",
+    "debug": "webpack --progress",
+    "build": "webpack --progress --config webpack.prod.js",
+    "update:packages": "node wipe.js && rm -rf node_modules && npm update --save-dev && npm update --save"
+  },
+  "babel": {
+    "presets": [
+      "@babel/env"
+    ]
+  },
+  "author": "",
+  "license": "ISC"
+}
