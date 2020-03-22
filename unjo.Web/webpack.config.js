@@ -23,14 +23,7 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': __dirname,
-      'api': path.join(__dirname, 'Api'),
-      'cmp': path.join(__dirname, 'Components'),
-      'store': path.join(__dirname, 'Utils'),
-      'utils': path.join(__dirname, 'Utils'),
-      'view': path.join(__dirname, 'Views'),
-      'filter': path.join(__dirname, 'Utils'),
-      'directive': path.join(__dirname, 'Utils')
+      '@': __dirname
     }
   },
 

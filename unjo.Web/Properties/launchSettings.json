@@ -1,24 +1,22 @@
 ﻿{
   "iisSettings": {
     "windowsAuthentication": false, 
-    "anonymousAuthentication": true, 
+    "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:51017",
-      "sslPort": 0
+      "applicationUrl": "http://localhost:2300",
+      "sslPort": 44308
     }
   },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "unjo": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "applicationUrl": "http://localhost:5000",
+      "applicationUrl": "http://localhost:2300",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

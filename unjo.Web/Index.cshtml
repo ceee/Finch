@@ -1,11 +1,9 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @{
-  string theme = HttpContextAccessor.HttpContext.Request.Cookies["theme"] ?? "dark";
   Layout = null;
 }
 <!DOCTYPE html>
-<html data-theme="@theme">
+<html>
 <head>
   <meta charset="utf-8">
   <meta name="robots" content="noindex,nofollow">
@@ -22,13 +20,13 @@
   <meta name="msapplication-TileColor" content="#161e25">
   <meta name="theme-color" content="#161e25">
   <base href="~/">
-  <environment exclude="Development">
+  @*<environment exclude="Development">
     <link href="~/Assets/app.css" rel="stylesheet" asp-append-version="true" />
-  </environment>
-  <title>fifty</title>
+  </environment>*@
+  <title>unjo</title>
 </head>
 <body>
   <div id="app"></div>
-  <script src="~/Assets/app.js" asp-append-version="true"></script>
+  @*<script src="~/Assets/app.js" asp-append-version="true"></script>*@
 </body>
 </html>
