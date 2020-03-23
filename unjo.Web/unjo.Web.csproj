@@ -40,4 +40,8 @@
     <ProjectReference Include="..\unjo.Core\unjo.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
 </Project>

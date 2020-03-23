@@ -1,7 +1,6 @@
-//import Vue from 'vue'
-//import App from 'cmp/app.vue'
+import Vue from 'vue';
+import App from 'unjo/app.vue';
 //import 'filter/generic.js'
 //import 'directive/filedrop.js'
 
-//new Vue(App).$mount('#app'); 
-console.info('hi');
+new Vue(App).$mount('#app'); 
