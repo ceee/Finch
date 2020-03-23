@@ -263,7 +263,7 @@ __pycache__/
 
 # Media folder + app_data
 App_Data/
-**/Media/
+wwwroot/Media/
 Temp/
 **/Assets/app.*
 deps/*.dll
