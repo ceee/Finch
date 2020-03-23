@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using unjo.Core;
-using unjo.Core.Entities.Sections;
+using unjo.Core.Entities;
 
 namespace unjo.Web.Sections
 {
