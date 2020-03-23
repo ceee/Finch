@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace unjo.Core.Entities.Sections
+namespace unjo.Core.Entities
 {
   /// <summary>
   /// A section is a main part of the backoffice application

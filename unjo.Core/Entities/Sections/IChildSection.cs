@@ -1,4 +1,4 @@
-﻿namespace unjo.Core.Entities.Sections
+﻿namespace unjo.Core.Entities
 {
   /// <summary>
   /// A child section is a sub-navigation item of a section
