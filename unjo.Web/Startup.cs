@@ -54,6 +54,7 @@ namespace unjo.Web
       // add cookie-based authentication
       services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(opts => {
+          // override redirect to login page (handled by vue frontend) and return a 401 instead
           opts.Events.OnRedirectToLogin = (context) =>
           {
             context.Response.StatusCode = 401;
