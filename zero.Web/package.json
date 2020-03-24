@@ -1,0 +1,52 @@
+{
+  "name": "zero.web",
+  "version": "1.0.0",
+  "description": "",
+  "bin": {
+    "zero.web": "app.js"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dayjs": "^1.8.23",
+    "lodash": "*",
+    "vue": "^2.6.11",
+    "vue-router": "^3.1.6"
+  },
+  "devDependencies": {
+    "@babel/core": "*",
+    "@babel/preset-env": "*",
+    "aspnet-webpack": "*",
+    "babel-loader": "*",
+    "css-loader": "*",
+    "html-webpack-plugin": "*",
+    "mini-css-extract-plugin": "*",
+    "node-sass": "*",
+    "optimize-css-assets-webpack-plugin": "*",
+    "sass-loader": "*",
+    "style-loader": "*",
+    "uglifyjs-webpack-plugin": "*",
+    "vue-loader": "*",
+    "vue-template-compiler": "*",
+    "webpack": "*",
+    "webpack-cli": "*",
+    "webpack-dev-server": "*",
+    "webpack-hot-middleware": "*",
+    "webpack-merge": "*"
+  },
+  "peerDependencies": {
+    "vue-template-compiler": "2.6.10"
+  },
+  "scripts": {
+    "dev": "webpack-dev-server --progress --hot --open",
+    "debug": "webpack --progress",
+    "build": "webpack --progress --config webpack.prod.js",
+    "updatepackages": "node wipe.js && rm -rf node_modules && npm update --save-dev && npm update --save"
+  },
+  "babel": {
+    "presets": [
+      "@babel/env"
+    ]
+  },
+  "author": "",
+  "license": "ISC"
+}

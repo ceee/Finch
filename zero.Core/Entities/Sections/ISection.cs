@@ -1,0 +1,30 @@
+﻿using System.Collections.Generic;
+
+namespace zero.Core.Entities
+{
+  /// <summary>
+  /// A section is a main part of the backoffice application
+  /// </summary>
+  public interface ISection
+  {
+    /// <summary>
+    /// The section alias which acts as the url slug for navigation
+    /// </summary>
+    string Alias { get; }
+
+    /// <summary>
+    /// The name of the section (either a string or a translation key with @ prefix)
+    /// </summary>
+    string Name { get; }
+
+    /// <summary>
+    /// Icon of the section
+    /// </summary>
+    string Icon { get; }
+
+    /// <summary>
+    /// Children are displayed as a sub-navigation in the main nav area
+    /// </summary>
+    IList<IChildSection> Children { get; }
+  }
+}
