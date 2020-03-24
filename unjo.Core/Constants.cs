@@ -2,6 +2,11 @@
 {
   public static class Constants
   {
+    public static class Database
+    {
+      public const string SharedAppId = "shared";
+    }
+
     public static class Sections
     {
       public const string Dashboard = "dashboard";
