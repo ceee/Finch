@@ -2,6 +2,9 @@
 {
   public class BackofficeConfiguration : IBackofficeConfiguration
   {
+    public string DefaultLanguage { get; set; }
+
+
     public string SystemUserId { get; set; }
 
     public FoldersConfig Folders { get; set; }
@@ -13,6 +16,9 @@
 
   public interface IBackofficeConfiguration
   {
+    string DefaultLanguage { get; set; }
+
+
     string SystemUserId { get; set; }
 
     FoldersConfig Folders { get; set; }

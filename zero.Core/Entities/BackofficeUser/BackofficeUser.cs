@@ -29,7 +29,7 @@ namespace zero.Core.Entities
     public List<string> RoleIds { get; set; } = new List<string>();
 
     /// <inheritdoc/>
-    public List<IBackofficeUserClaim> Claims { get; set; } = new List<IBackofficeUserClaim>();
+    public List<BackofficeUserClaim> Claims { get; set; } = new List<BackofficeUserClaim>();
 
 
 
@@ -105,7 +105,7 @@ namespace zero.Core.Entities
     /// <summary>
     /// The user's claims, for use in claims-based authentication.
     /// </summary>
-    List<IBackofficeUserClaim> Claims { get; set; }
+    List<BackofficeUserClaim> Claims { get; set; }
 
 
 
