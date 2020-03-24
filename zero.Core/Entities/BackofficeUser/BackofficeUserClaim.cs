@@ -14,10 +14,11 @@ namespace zero.Core.Entities
     public Claim ToClaim() => new Claim(Type, Value);
 
     /// <inheritdoc/>
-    public void FromClaim(Claim other)
+    public IBackofficeUserClaim FromClaim(Claim other)
     {
       Type = other?.Type;
       Value = other?.Value;
+      return this;
     }
   }
 
@@ -38,7 +39,7 @@ namespace zero.Core.Entities
     /// <summary>
     /// Constructs a new claim with the type and value
     /// </summary>
-    void FromClaim(Claim other);
+    IBackofficeUserClaim FromClaim(Claim other);
 
     /// <summary>
     /// Initializes by copying ClaimType and ClaimValue from the other claim
