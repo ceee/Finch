@@ -43,10 +43,10 @@ namespace zero.Web
       //CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 
       // build and register app configuration
-      services.Configure<IBackofficeConfiguration>(config);
-      BackofficeConfiguration appConfig = new BackofficeConfiguration();
+      services.Configure<IZeroConfiguration>(config);
+      ZeroConfiguration appConfig = new ZeroConfiguration();
       ConfigurationBinder.Bind(config, appConfig);
-      services.AddSingleton<IBackofficeConfiguration>(appConfig);
+      services.AddSingleton<IZeroConfiguration>(appConfig);
 
       // add zero core
       //services.AddCore(appConfig, env);
@@ -119,16 +119,16 @@ namespace zero.Web
 
       app.UseEndpoints(endpoints =>
       {
-        // routes for API
-        endpoints.MapControllerRoute(
-          name: "api",
-          pattern: "api/{controller=Index}/{action=Index}/{id?}"
-        );
-
         // default routes
         endpoints.MapControllerRoute(
           name: "default",
           pattern: "{controller=Index}/{action=Index}/{id?}"
+        );
+
+        // routes for API
+        endpoints.MapControllerRoute(
+          name: "api",
+          pattern: "api/{controller=Index}/{action=Index}/{id?}"
         );
 
         // fallbacks for SPA

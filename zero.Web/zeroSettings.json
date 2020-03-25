@@ -1,9 +1,7 @@
 ﻿{
-  "SystemUserId": "system",
+  "ZeroVersion": null,
 
-  "Folders": {
-    "Temp": "Temp"
-  },
+  "DefaultLanguage": "en-US",
 
   "Raven": {
     "Url": "http://127.0.0.1:9800",

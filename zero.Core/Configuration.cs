@@ -1,30 +1,41 @@
 ﻿namespace zero.Core
 {
-  public class BackofficeConfiguration : IBackofficeConfiguration
+  public class ZeroConfiguration : IZeroConfiguration
   {
+    /// <inheritdoc />
+    public string ZeroVersion { get; set; }
+
+    /// <inheritdoc />
     public string DefaultLanguage { get; set; }
 
-
-    public string SystemUserId { get; set; }
-
-    public FoldersConfig Folders { get; set; }
-    
+    /// <inheritdoc />
     public RavenConfig Raven { get; set; }
 
+    /// <inheritdoc />
     public LoggingConfig Logging { get; set; }
   }
 
-  public interface IBackofficeConfiguration
+  public interface IZeroConfiguration
   {
+    /// <summary>
+    /// The currently active version
+    /// This should not be set manually, as it is used for setup and migrations and incremented automatically
+    /// </summary>
+    string ZeroVersion { get; set; }
+
+    /// <summary>
+    /// Default language ISO code
+    /// </summary>
     string DefaultLanguage { get; set; }
 
-
-    string SystemUserId { get; set; }
-
-    FoldersConfig Folders { get; set; }
-   
+    /// <summary>
+    /// RavenDB configuration data
+    /// </summary>
     RavenConfig Raven { get; set; }
 
+    /// <summary>
+    /// Logging
+    /// </summary>
     LoggingConfig Logging { get; set; }
   }
 

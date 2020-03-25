@@ -16,8 +16,8 @@
     <Content Remove="package.json" />
     <None Include="package.json" />
     <None Remove="Logs/*" />
-    <Content Remove="appsettings.Development.json" />
-    <None Include="appsettings.Development.json" />
+    <None Include="zeroSettings.json" />
+    <None Include="zeroSettings.Development.json" />
     <Content Remove="wwwroot/Temp/**" />
     <Content Remove="wwwroot/Media/**" />
     <Content Remove="web.release.config" />

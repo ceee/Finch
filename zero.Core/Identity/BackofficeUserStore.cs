@@ -21,7 +21,7 @@ namespace zero.Core.Identity
     /// <summary>
     /// Configuration
     /// </summary>
-    protected IBackofficeConfiguration Config { get; private set; }
+    protected IZeroConfiguration Config { get; private set; }
 
     /// <summary>
     /// Currently logged-in user
@@ -29,7 +29,7 @@ namespace zero.Core.Identity
     protected IBackofficeUser Current { get; private set; }
 
 
-    public BackofficeUserStore(IDocumentStore raven, IBackofficeConfiguration config, IBackofficeUser currentUser)
+    public BackofficeUserStore(IDocumentStore raven, IZeroConfiguration config, IBackofficeUser currentUser)
     {
       Raven = raven;
       Config = config;

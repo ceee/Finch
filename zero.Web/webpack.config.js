@@ -5,7 +5,10 @@ module.exports = {
 
   // entry point of the app
   context: __dirname,
-  entry: { app: './app.js' },
+  entry: {
+    app: './app.js',
+    setup: './Setup/setup.js'
+  },
 
   // dev environment (gets overwritten by prod.js)
   mode: 'development',
@@ -14,7 +17,7 @@ module.exports = {
   // output paths
   output: {
     path: path.resolve(__dirname, 'wwwroot/Assets'),
-    filename: 'app.js',
+    filename: '[name].js',
     publicPath: '/Assets/'
   },
 
@@ -24,6 +27,7 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       'zero': path.join(__dirname, 'App'),
+      'zerosetup': path.join(__dirname, 'Setup'),
       '@': __dirname
     }
   },

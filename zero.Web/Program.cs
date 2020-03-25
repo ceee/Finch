@@ -19,6 +19,11 @@ namespace zero.Web
     {
       return Host
         .CreateDefaultBuilder(args)
+        .ConfigureAppConfiguration((context, config) =>
+        {
+          config.AddJsonFile("zeroSettings.json", optional: false, reloadOnChange: true);
+          config.AddJsonFile($"zeroSettings.{context.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+        })
         .ConfigureLogging((context, builder) =>
         {
           IConfigurationSection configuration = context.Configuration.GetSection("Logging");
