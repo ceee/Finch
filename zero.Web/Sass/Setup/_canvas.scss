@@ -1,0 +1,60 @@
+﻿
+
+body, html
+{
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html
+{
+  height: 100%;
+}
+
+body
+{
+  min-height: 100%;
+  background: var(--color-fg);
+  color: var(--color-text);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  @extend %font;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.clear
+{
+  display: block;
+  clear: both;
+  float: none;
+}
+
+.app
+{
+  width: 100%;
+  max-width: 520px;
+  background: var(--color-bg);
+  border-radius: 3px;
+  min-height: 600px;
+  position: relative;
+  z-index: 2;
+}
+
+body:before
+{
+  content: 'setup';
+  @extend %font-headline;
+  color: #252525;
+  position: fixed;
+  left: -10vw;
+  bottom: -30vh;
+  font-size: 150vh;
+  line-height: 150vh;
+  font-weight: bold;
+}

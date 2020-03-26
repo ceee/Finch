@@ -1,0 +1,105 @@
+﻿
+
+
+/*button
+{
+  @extend %font;
+
+  &:focus
+  {
+    outline: 1px dotted var(--color-outline);
+  }
+}
+
+.button, a.button
+{
+  display: inline-block;
+  color: white;
+  background: var(--color-text);
+  padding: 0 1.8rem;
+  height: 3.1rem;
+  line-height: 3.05rem;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+  -webkit-backface-visibility: hidden;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  margin-top: 2rem;
+  will-change: transform, background, border-color;
+  transition: background .2s, transform .2s, opacity .2s;
+  overflow: hidden;
+  @extend %font;
+
+  a
+  {
+    color: white !important;
+    text-decoration: none !important;
+  }
+
+  &:hover
+  {
+    opacity: 0.9;
+  }
+
+  &:active
+  {
+    opacity: 1;
+    //transform: scale(0.97);
+  }
+
+  &.is-disabled, &[disabled]
+  {
+    pointer-events: none;
+    background: var(--color-dark);
+  }
+
+  i
+  {
+    display: none;
+  }
+
+  &.is-loading, &[data-state="loading"]
+  {
+    pointer-events: none;
+    color: transparent;
+
+    i
+    {
+      display: inline-block;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin-left: -10px;
+      margin-top: -10px;
+      border: 2px solid rgba(white, 0.1);
+      border-top-color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: buttonLoadingSpin 0.7s linear infinite;
+    }
+
+    &:focus
+    {
+      outline: none;
+    }
+  }
+}
+
+@keyframes buttonLoadingSpin
+{
+  0%
+  {
+    transform: rotate(0deg);
+  }
+
+  100%
+  {
+    transform: rotate(360deg);
+  }
+}*/

@@ -15,7 +15,7 @@ namespace zero.Web.Setup
 
     public IActionResult Index()
     {
-      return View("/Setup/Setup.cshtml");
+      return View("/Views/Setup.cshtml");
     }
   }
 }

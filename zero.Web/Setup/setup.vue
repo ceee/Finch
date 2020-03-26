@@ -1,15 +1,15 @@
 ﻿<template>
   <div class="app">
-    setup
   </div>
 </template>
 
 
 <script>
   import Vue from 'vue'
+  import Sass from '../Sass/setup.scss'
 
   export default {
-    name: 'app',
+    name: 'setup',
 
     data: () => ({
       count: 0

@@ -1,0 +1,41 @@
+
+$font-icon-name: 'Feather';
+$font-text-name: 'Lato';
+$font-headline-name: 'TwCenMt';
+
+@include font-face($font-icon-name, '/Assets/Fonts/Feather/feather', 400);
+
+@include font-face($font-text-name, '/Assets/Fonts/Lato/Lato-Light', 100);
+
+@include font-face($font-text-name, '/Assets/Fonts/Lato/Lato-Thin', 300);
+
+@include font-face($font-text-name, '/Assets/Fonts/Lato/Lato-Regular', 400);
+
+@include font-face($font-text-name, '/Assets/Fonts/Lato/Lato-Bold', 700);
+
+@include font-face($font-headline-name, '/Assets/Fonts/TwCenMt/twcenmt-regular', 400);
+
+@include font-face($font-headline-name, '/Assets/Fonts/TwCenMt/TwCenMt-bold', 700);
+
+%font
+{
+	font-family: $font-text-name, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+%font-headline
+{
+  font-family: $font-headline-name, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+%font-icon
+{
+  font-family: $font-icon-name;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
