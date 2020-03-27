@@ -1,5 +1,56 @@
 ﻿
 
+button
+{
+  @extend %font;
+
+  &:focus
+  {
+    outline: 1px dotted var(--color-line);
+  }
+}
+
+.ui-button
+{
+  display: inline-block;
+  color: white;
+  background: var(--color-primary);
+  padding: 0 30px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 3px;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  -webkit-backface-visibility: hidden;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  margin-top: 2rem;
+  will-change: transform, background, border-color;
+  transition: background .2s, transform .2s, opacity .2s;
+  overflow: hidden;
+  @extend %font;
+
+  &:hover
+  {
+    opacity: 0.9;
+  }
+
+  &:active
+  {
+    opacity: 1;
+  }
+
+  &.is-disabled, &[disabled]
+  {
+    pointer-events: none;
+    //background: var(--color-dark);
+  }
+}
+
 
 /*button
 {

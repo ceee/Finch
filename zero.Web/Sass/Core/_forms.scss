@@ -1,0 +1,18 @@
+﻿
+
+input, textarea
+{
+  @extend %font;
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  font-size: $font-size;
+  display: inline-block;
+  height: 36px;
+  padding: 6px 10px;
+  line-height: 1.5;
+  color: var(--color-fg);
+  border-radius: 0;
+  vertical-align: middle;
+  box-sizing: border-box;
+  width: 100%;
+}

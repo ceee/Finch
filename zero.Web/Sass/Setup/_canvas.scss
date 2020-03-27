@@ -13,6 +13,7 @@ body, html
 html
 {
   height: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 body
@@ -44,6 +45,7 @@ body
   min-height: 600px;
   position: relative;
   z-index: 2;
+  padding: 2rem;
 }
 
 body:before

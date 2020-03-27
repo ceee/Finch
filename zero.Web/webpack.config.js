@@ -28,6 +28,7 @@ module.exports = {
       'vue$': 'vue/dist/vue.esm.js',
       'zero': path.join(__dirname, 'App'),
       'zerosetup': path.join(__dirname, 'Setup'),
+      'zerocomponents': path.join(__dirname, 'App', 'Components'),
       '@': __dirname
     }
   },
@@ -52,7 +53,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ["style-loader", "css-loader", "sass-loader"]
+        use: ["vue-style-loader", "css-loader", "sass-loader"]
       }
     ]
   }

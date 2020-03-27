@@ -61,31 +61,23 @@ button
 
 h1
 {
-  @extend %font;
+  @extend %font-headline;
   font-size: calc(1.4rem + 0.1vmin);
-  font-weight: 600;
+  font-weight: 400;
   margin: -0.3rem 0 3rem;
 }
 
 h2
 {
-  @extend %font;
-  font-size: calc(1.3rem + 0.1vmin);
-  font-weight: 700;
-  margin: 0 0 2.5rem;
+  @extend %font-headline;
+  font-size: calc(1.4rem + 0.1vmin);
+  font-weight: 400;
+  margin: 0 0 2rem;
 }
 
-h2, h3
+h3
 {
-  @extend %font;
-}
-
-@media (max-width: 730px)
-{
-  h2
-  {
-    margin: 0 0 6px;
-  }
+  @extend %font-headline;
 }
 
 

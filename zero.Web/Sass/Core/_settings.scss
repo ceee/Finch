@@ -1,12 +1,26 @@
 
 :root
 {
+  // accent colors
+  --color-primary: #222;
+  --color-negative: #d82853; 
+
   // foreground/text color
   --color-fg: #222;
-  --color-fg-mid: #919294;
+  --color-fg-mid: #6f7375;
+  --color-fg-light: #919294;
 
   // background color shades
   --color-bg: #fff;
   --color-bg-light: #f8f9fa;
   --color-bg-mid: #f4f5f6;
+
+  // line colors
+  --color-line: #eaebec;
 }
+
+
+// font sizes
+
+$font-size: 14px;
+$font-size-s: 12px;

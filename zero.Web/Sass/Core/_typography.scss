@@ -5,13 +5,13 @@ $font-headline-name: 'TwCenMt';
 
 @include font-face($font-icon-name, '/Assets/Fonts/Feather/feather', 400);
 
-@include font-face($font-text-name, '/Assets/Fonts/Lato/Lato-Light', 100);
+@include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Light', 100);
 
-@include font-face($font-text-name, '/Assets/Fonts/Lato/Lato-Thin', 300);
+@include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Regular', 400);
 
-@include font-face($font-text-name, '/Assets/Fonts/Lato/Lato-Regular', 400);
+@include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Bold', 700);
 
-@include font-face($font-text-name, '/Assets/Fonts/Lato/Lato-Bold', 700);
+@include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Black', 700);
 
 @include font-face($font-headline-name, '/Assets/Fonts/TwCenMt/twcenmt-regular', 400);
 
@@ -19,12 +19,13 @@ $font-headline-name: 'TwCenMt';
 
 %font
 {
-	font-family: $font-text-name, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: $font-text-name, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 %font-headline
 {
-  font-family: $font-headline-name, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: $font-text-name, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  //font-family: $font-headline-name, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 %font-icon

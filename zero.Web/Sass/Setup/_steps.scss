@@ -1,0 +1,39 @@
+﻿
+
+.setup
+{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.setup-step
+{
+
+}
+
+.setup-step h2
+{
+  text-align: center;
+}
+
+.setup-step p
+{
+  color: var(--color-fg-mid);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0 0 2rem;
+}
+
+.setup-step p b
+{
+  color: var(--color-fg);
+  font-weight: 600;
+}
+
+.setup-step .ui-property + .ui-property
+{
+  padding-top: 0;
+  border-top: none;
+}
