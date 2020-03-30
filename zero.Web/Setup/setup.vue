@@ -2,7 +2,7 @@
   <div class="app setup">
     <step-database v-model="model.Database" />
     <div class="setup-buttons">
-      <ui-button type="outline" label="Go back" />
+      <ui-button type="outline" label="Go back" caret="left" caret-position="left" />
       <ui-button label="Next" />
     </div>
   </div>

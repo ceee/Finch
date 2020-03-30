@@ -1,6 +1,7 @@
 ﻿<template>
-  <button class="ui-button" :class="typeClass">
+  <button class="ui-button" :class="buttonClass">
     <span v-html="label"></span>
+    <i v-if="caret" :class="caretClass"></i>
   </button>
 </template>
 
@@ -22,14 +23,17 @@
         type: String,
         default: 'action'
       },
+      caret: String,
+      caretPosition: {
+        type: String,
+        default: 'right'
+      },
       disabled: Boolean
     },
 
     computed: {
-      typeClass() 
-      {
-        return 'type-' + this.type;
-      }
+      buttonClass() { return 'type-' + this.type + ' caret-' + this.caretPosition; },
+      caretClass() { return 'fth-chevron-' + this.caret; }
     },
 
     mounted ()
@@ -42,9 +46,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  @import 'Sass/Core/settings';
-
-  
-</style>
