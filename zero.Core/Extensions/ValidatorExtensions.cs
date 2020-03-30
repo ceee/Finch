@@ -24,6 +24,18 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Validate an email
     /// </summary>
+    public static IRuleBuilderOptions<T, string> Url<T>(this IRuleBuilder<T, string> ruleBuilder)
+    {
+      return ruleBuilder.Must((root, value, context) =>
+      {
+        return value.IsNullOrWhiteSpace() || Uri.IsWellFormedUriString(value, UriKind.Absolute);
+      }).WithMessage("@errors/invalid_uri");
+    }
+
+
+    /// <summary>
+    /// Validate an email
+    /// </summary>
     public static IRuleBuilderOptions<T, string> Email<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
       return ruleBuilder.Must((root, value, context) =>

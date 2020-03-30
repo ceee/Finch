@@ -1,5 +1,5 @@
 ﻿<template>
-  <button class="ui-button" :class="{ themeClass }">
+  <button class="ui-button" :class="typeClass">
     <span v-html="label"></span>
   </button>
 </template>
@@ -18,7 +18,7 @@
         type: String,
         default: 'default'
       },
-      theme: {
+      type: {
         type: String,
         default: 'action'
       },
@@ -26,9 +26,9 @@
     },
 
     computed: {
-      themeClass() 
+      typeClass() 
       {
-        return 'theme-' + this.theme;
+        return 'type-' + this.type;
       }
     },
 

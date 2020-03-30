@@ -1,0 +1,36 @@
+﻿<template>
+  <div class="setup-step setup-step-application">
+    <h2>your application</h2>
+    <p>With zero you can manage multiple applications with one installation. Start by adding your first application.</p>
+    
+    <ui-property label="Application name" :vertical="true">
+      <input v-model="value" type="text" class="ui-input" maxlength="40" placeholder="Enter name" />
+    </ui-property>
+  </div>
+</template>
+
+
+<script>
+  import UiProperty from 'zerocomponents/forms/property.vue'
+  import UiButton from 'zerocomponents/buttons/button.vue'
+
+  export default {
+    name: 'setupStepApplication',
+
+    props: {
+      value: String 
+    },
+
+    components: { UiProperty, UiButton },
+
+    mounted ()
+    {
+      
+    },
+
+    methods: {
+
+    }
+  }
+
+</script>
