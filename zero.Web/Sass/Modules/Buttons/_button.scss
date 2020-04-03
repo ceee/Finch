@@ -17,11 +17,11 @@ button
   align-items: center;
   color: white;
   background: var(--color-primary);
-  padding: 0 20px;
-  height: 40px;
+  padding: 0 24px;
+  height: 42px;
   border-radius: 3px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   margin: 0;
   -webkit-backface-visibility: hidden;
   -webkit-appearance: none;
@@ -52,7 +52,7 @@ button
 
   &.type-outline
   {
-    height: 41px;
+    height: 43px;
     background: var(--color-bg);
     color: var(--color-fg);
     border: 1px solid var(--color-line);

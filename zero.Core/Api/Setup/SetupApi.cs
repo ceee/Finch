@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using Raven.Client.Documents.Session;
@@ -12,9 +13,15 @@ namespace zero.Core.Api
 {
   public class SetupApi : ISetupApi
   {
-    public SetupApi()
+    protected IZeroConfiguration Config { get; private set; }
+
+    //protected UserManager<BackofficeUser> UserManager { get; private set; }
+
+
+    public SetupApi(IZeroConfiguration config)
     {
-      //Raven =
+      Config = config;
+      //UserManager = userManager;
     }
 
 
@@ -27,39 +34,71 @@ namespace zero.Core.Api
         return EntityChangeResult<SetupModel>.Fail(validation);
       }
 
-      // test read & write permissions on folders
-      // TODO
+      DocumentStore raven = null;
 
-      // create temporary instance of database
-      DocumentStore raven = new DocumentStore()
+      try
       {
-        Urls = model.Database.Url.Split(','),
-        Database = model.Database.Name
-      };
+        // test read & write permissions on folders
+        // TODO
 
-      raven.Conventions.FindCollectionName = type =>
-      {
-        return Constants.Database.CollectionPrefix + DocumentConventions.DefaultGetCollectionName(type);
-      };
+        // create temporary instance of database
+        raven = new DocumentStore()
+        {
+          Urls = model.Database.Url.Split(','),
+          Database = model.Database.Name
+        };
 
-      raven.Initialize();
+        raven.Conventions.FindCollectionName = type =>
+        {
+          return Constants.Database.CollectionPrefix + DocumentConventions.DefaultGetCollectionName(type);
+        };
 
-      // create application
-      Application app = new Application()
-      {
-        CreatedDate = DateTimeOffset.Now,
-        IsActive = true,
-        Name = model.AppName,
-        Alias = Alias.Generate(model.AppName)
-      };
+        raven.Initialize();
 
-      using (IAsyncDocumentSession session = raven.OpenAsyncSession())
-      {
-        await session.StoreAsync(app);
-        await session.SaveChangesAsync();
+        // create application
+        Application app = new Application()
+        {
+          CreatedDate = DateTimeOffset.Now,
+          IsActive = true,
+          Name = model.AppName,
+          Alias = Alias.Generate(model.AppName)
+        };
+
+        // create user
+        User user = new User()
+        {
+          IsSuper = true,
+          CreatedDate = DateTimeOffset.Now,
+          Email = model.User.Email,
+          Name = model.User.Name,
+          IsActive = true,
+          LanguageId = Config.DefaultLanguage,
+          Alias = Alias.Generate(model.User.Name),
+        };
+
+        // save application and user
+        using (IAsyncDocumentSession session = raven.OpenAsyncSession())
+        {
+          await session.StoreAsync(app);
+
+          // set app-id for user
+          user.AppId = session.Advanced.GetDocumentId(app);
+
+          await session.StoreAsync(user);
+
+          await session.SaveChangesAsync();
+        }
       }
+      catch (Exception ex)
+      {
+        // TODO revert
 
-      raven.Dispose();
+        throw ex;
+      }
+      finally
+      {
+        raven?.Dispose();
+      }
 
       return EntityChangeResult<SetupModel>.Success(model);
     }

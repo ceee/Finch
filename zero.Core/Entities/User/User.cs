@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace zero.Core.Entities
 {
-  public class BackofficeUser : DatabaseEntity, IBackofficeUser
+  public class User : DatabaseEntity, IUser
   {
     /// <inheritdoc/>
     public bool IsSuper { get; set; }
@@ -29,7 +29,7 @@ namespace zero.Core.Entities
     public List<string> RoleIds { get; set; } = new List<string>();
 
     /// <inheritdoc/>
-    public List<BackofficeUserClaim> Claims { get; set; } = new List<BackofficeUserClaim>();
+    public List<UserClaim> Claims { get; set; } = new List<UserClaim>();
 
 
 
@@ -62,7 +62,7 @@ namespace zero.Core.Entities
 
 
 
-  public interface IBackofficeUser : IDatabaseEntity
+  public interface IUser : IDatabaseEntity
   {
     /// <summary>
     /// sudo.
@@ -105,7 +105,7 @@ namespace zero.Core.Entities
     /// <summary>
     /// The user's claims, for use in claims-based authentication.
     /// </summary>
-    List<BackofficeUserClaim> Claims { get; set; }
+    List<UserClaim> Claims { get; set; }
 
 
 

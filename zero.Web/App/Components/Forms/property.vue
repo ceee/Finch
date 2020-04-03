@@ -75,7 +75,7 @@
     margin-bottom: 5px;
     font-size: $font-size;
     line-height: 1.5;
-    font-weight: 400;
+    font-weight: 700;
   }
 
   .ui-property-label small

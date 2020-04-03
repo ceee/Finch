@@ -11,7 +11,7 @@ $font-headline-name: 'TwCenMt';
 
 @include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Bold', 700);
 
-@include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Black', 700);
+@include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Black', 900);
 
 @include font-face($font-headline-name, '/Assets/Fonts/TwCenMt/twcenmt-regular', 400);
 

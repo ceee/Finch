@@ -4,7 +4,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Validation
 {
-  public class BackofficeUserValidator : AbstractValidator<IBackofficeUser>
+  public class BackofficeUserValidator : AbstractValidator<IUser>
   {
     public BackofficeUserValidator(bool isCreate = false)
     {

@@ -24,7 +24,7 @@ namespace zero.Web.Identity
     IUserTwoFactorStore<TUser>,
     IUserTwoFactorRecoveryCodeStore<TUser>,
     IDisposable
-    where TUser : class, IBackofficeUser, new()
+    where TUser : class, IUser, new()
   {
     /// <summary>
     /// Gets the database context for this store.

@@ -62,7 +62,7 @@
             this.onNext();
             clearInterval(interval);
           }
-        }, 30);
+        }, 50);
 
         Axios.post('/api/setup/install', this.value)
           .then(response =>
@@ -71,6 +71,8 @@
           })
           .catch((error) =>
           {
+            clearInterval(interval);
+
             // The request was made and the server responded with a status code that falls out of the range of 2xx
             if (error.response)
             {

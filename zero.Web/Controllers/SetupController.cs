@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
@@ -29,7 +31,14 @@ namespace zero.Web.Setup
     public async Task<IActionResult> Install([FromBody] SetupModel model)
     {
       EntityChangeResult<SetupModel> result = await Api.Install(model);
-      return Json(result);
+
+      if (result.IsSuccess)
+      {
+        return Json(result);
+      }
+
+      object value = String.Join("\n\n", result.Errors.Select(error => error.Message + "\n(property: " + error.Property + ")"));
+      return StatusCode(500, value);
     }
   }
 }

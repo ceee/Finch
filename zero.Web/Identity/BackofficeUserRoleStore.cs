@@ -16,8 +16,8 @@ namespace zero.Web.Identity
   /// Provides an abstraction for a store of role specific claims.
   /// </summary>
   public class BackofficeUserRoleStore<TRole, TClaim> : IRoleClaimStore<TRole> 
-    where TClaim : class, IBackofficeUserClaim, new()
-    where TRole : class, IBackofficeUserRole, new()
+    where TClaim : class, IUserClaim, new()
+    where TRole : class, IUserRole, new()
   {
     /// <summary>
     /// Gets the database context for this store.

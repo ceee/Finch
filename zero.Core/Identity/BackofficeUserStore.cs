@@ -10,8 +10,8 @@ using zero.Core.Extensions;
 namespace zero.Core.Identity
 {
   public class BackofficeUserStore<TUser, TRole>
-    where TUser : IBackofficeUser, new()
-    where TRole : IBackofficeUserRole, new()
+    where TUser : IUser, new()
+    where TRole : IUserRole, new()
   {
     /// <summary>
     /// Gets the database context for this store.
@@ -26,10 +26,10 @@ namespace zero.Core.Identity
     /// <summary>
     /// Currently logged-in user
     /// </summary>
-    protected IBackofficeUser Current { get; private set; }
+    protected IUser Current { get; private set; }
 
 
-    public BackofficeUserStore(IDocumentStore raven, IZeroConfiguration config, IBackofficeUser currentUser)
+    public BackofficeUserStore(IDocumentStore raven, IZeroConfiguration config, IUser currentUser)
     {
       Raven = raven;
       Config = config;
