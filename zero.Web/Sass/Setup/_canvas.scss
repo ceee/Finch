@@ -38,14 +38,16 @@ body
 
 .app
 {
-  width: 100%;
-  max-width: 520px;
-  background: var(--color-bg);
-  border-radius: 3px;
-  min-height: 600px;
-  position: relative;
-  z-index: 2;
-  padding: 40px;
+  height: 100%;
+}
+
+.app-headline
+{
+  text-align: center;
+  color: white;
+  font-size: 64px;
+  font-weight: 400;
+  margin: -10vh 0 8vh;
 }
 
 body:before

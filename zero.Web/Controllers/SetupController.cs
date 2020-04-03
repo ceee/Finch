@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using zero.Core;
+using zero.Core.Api;
+using zero.Core.Entities;
 using zero.Core.Entities.Setup;
 using zero.Web.Controllers;
 
@@ -10,9 +12,12 @@ namespace zero.Web.Setup
   [AllowAnonymous]
   public class SetupController : BackofficeController
   {
-    public SetupController(IZeroConfiguration config) : base(config)
-    {
+    protected ISetupApi Api { get; private set; }
 
+
+    public SetupController(IZeroConfiguration config, ISetupApi api) : base(config)
+    {
+      Api = api;
     }
 
     public IActionResult Index()
@@ -21,9 +26,10 @@ namespace zero.Web.Setup
     }
 
     [HttpPost]
-    public async Task<IActionResult> Save(SetupSave model)
+    public async Task<IActionResult> Install([FromBody] SetupModel model)
     {
-      return Ok();
+      EntityChangeResult<SetupModel> result = await Api.Install(model);
+      return Json(result);
     }
   }
 }

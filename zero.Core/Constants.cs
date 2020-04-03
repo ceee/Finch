@@ -5,6 +5,8 @@
     public static class Database
     {
       public const string SharedAppId = "shared";
+
+      public const string CollectionPrefix = "zero.";
     }
 
     public static class Sections

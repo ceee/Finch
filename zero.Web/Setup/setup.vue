@@ -1,9 +1,12 @@
 ﻿<template>
-  <div class="app setup">
-    <component v-bind:is="steps[step]" v-model="model" />
-    <div class="setup-buttons" v-if="step < 3">
-      <ui-button v-if="step > 0" type="outline" label="Go back" :click="prev" caret="left" caret-position="left" />
-      <ui-button label="Next" :click="next" />
+  <div class="app">
+    <h1 class="app-headline">zero</h1>
+    <div class="setup">
+      <component v-bind:is="steps[step]" v-model="model" :on-back="prev" :on-next="next" />
+      <div class="setup-buttons" v-if="step < 3">
+        <ui-button v-if="step > 0" type="outline" label="Go back" :click="prev" caret="left" caret-position="left" />
+        <ui-button :label="nextLabel" :click="next" />
+      </div>
     </div>
   </div>
 </template>
@@ -24,22 +27,29 @@
     components: { UiButton, StepUser, StepApplication, StepDatabase, StepInstall, StepFinish },
 
     data: () => ({
-      step: 3,
-      steps: [ 'step-user', 'step-application', 'step-database', 'step-install', 'step-finish' ],
-      model: {
-        AppName: null,
-        Part: null,
-        User: {
-          Name: null,
-          Email: null,
-          Password: null
-        },
-        Database: {
-          Url: 'http://localhost:9800',
-          Name: null
-        }
-      }
+      step: 0,
+      steps: ['step-user', 'step-database', 'step-application', 'step-install', 'step-finish'],
+      model: { "appName": "Brothers", "user": { "name": "Tobi", "email": "yolo@brothers.studio", "password": "yolo" }, "database": { "url": "http://localhost:9800", "name": "zero" } }
+      //model: {
+      //  appName: null,
+      //  user: {
+      //    name: null,
+      //    email: null,
+      //    password: null
+      //  },
+      //  database: {
+      //    url: 'http://localhost:9800',
+      //    name: null
+      //  }
+      //}
     }),
+
+    computed: {
+      nextLabel()
+      {
+        return this.step < 2 ? 'Next' : 'Install application';
+      }
+    },
 
     mounted()
     {
@@ -52,7 +62,7 @@
       {
         if (this.step + 1 >= this.steps.length)
         {
-
+          return;
         }
 
         this.step += 1;
@@ -80,6 +90,14 @@
     display: grid;
     grid-template-rows: 1fr auto;
     align-items: stretch;
+    max-width: 100%;
+    width: 520px;
+    background: var(--color-bg);
+    border-radius: 3px;
+    min-height: 600px;
+    position: relative;
+    z-index: 2;
+    padding: 40px;
   }
 
   .setup-step

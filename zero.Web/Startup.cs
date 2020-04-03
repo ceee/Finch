@@ -12,6 +12,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Threading.Tasks;
 using zero.Core;
+using zero.Core.Api;
 
 namespace zero.Web
 {
@@ -86,6 +87,9 @@ namespace zero.Web
       });
 
       services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+      // TODO move registration into core
+      services.AddTransient<ISetupApi, SetupApi>();
     }
 
 

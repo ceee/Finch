@@ -4,7 +4,7 @@ using zero.Core.Attributes;
 
 namespace zero.Core.Entities
 {
-  [DebuggerDisplay("Id = {Id,nq}, Name = {Name}")]
+  [DebuggerDisplay("Id = {Id,nq}, Name = {Name}, Alias = {Alias}")]
   public abstract class DatabaseEntity : IDatabaseEntity
   {
     /// <inheritdoc/>
@@ -17,6 +17,9 @@ namespace zero.Core.Entities
 
     /// <inheritdoc/>
     public string Name { get; set; }
+
+    /// <inheritdoc/>
+    public string Alias { get; set; }
 
     /// <inheritdoc/>
     public uint Sort { get; set; }
@@ -45,6 +48,12 @@ namespace zero.Core.Entities
     /// Full name of the entity
     /// </summary>
     string Name { get; set; }
+
+    /// <summary>
+    /// Unique alias which can be used in the frontend and URLs
+    /// As generating aliases from the name would not be unique we append an incremental number if the desired alias is not available anymore
+    /// </summary>
+    string Alias { get; set; }
 
     /// <summary>
     /// Sort order

@@ -21,6 +21,7 @@
     <Content Remove="wwwroot/Temp/**" />
     <Content Remove="wwwroot/Media/**" />
     <Content Remove="web.release.config" />
+    <None Remove="wipe.js" />
     <None Include="web.release.config" />
   </ItemGroup>
 
