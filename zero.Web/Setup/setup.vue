@@ -1,28 +1,31 @@
 ﻿<template>
   <div class="app setup">
-    <step-database v-model="model.Database" />
-    <div class="setup-buttons">
-      <ui-button type="outline" label="Go back" caret="left" caret-position="left" />
-      <ui-button label="Next" />
+    <component v-bind:is="steps[step]" v-model="model" />
+    <div class="setup-buttons" v-if="step < 3">
+      <ui-button v-if="step > 0" type="outline" label="Go back" :click="prev" caret="left" caret-position="left" />
+      <ui-button label="Next" :click="next" />
     </div>
   </div>
 </template>
 
 
 <script>
-  import Vue from 'vue'
   import Sass from '../Sass/setup.scss'
   import UiButton from 'zerocomponents/buttons/button.vue'
   import StepUser from './Steps/step-user.vue'
   import StepApplication from './Steps/step-application.vue'
   import StepDatabase from './Steps/step-database.vue'
+  import StepInstall from './Steps/step-install.vue'
+  import StepFinish from './Steps/step-finish.vue'
 
   export default {
     name: 'setup',
 
-    components: { UiButton, StepUser, StepApplication, StepDatabase },
+    components: { UiButton, StepUser, StepApplication, StepDatabase, StepInstall, StepFinish },
 
     data: () => ({
+      step: 3,
+      steps: [ 'step-user', 'step-application', 'step-database', 'step-install', 'step-finish' ],
       model: {
         AppName: null,
         Part: null,
@@ -38,12 +41,27 @@
       }
     }),
 
-    mounted ()
+    mounted()
     {
-      
+
     },
 
     methods: {
+
+      next()
+      {
+        if (this.step + 1 >= this.steps.length)
+        {
+
+        }
+
+        this.step += 1;
+      },
+
+      prev()
+      {
+        this.step -= 1;
+      },
 
       save()
       {
@@ -59,19 +77,19 @@
 <style lang="scss">
   .setup
   {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    align-items: stretch;
   }
 
   .setup-step
   {
-
+    width: 100%;
   }
 
   .setup-step h2
   {
+    display: block;
     text-align: center;
   }
 

@@ -19,7 +19,7 @@ html
 body
 {
   min-height: 100%;
-  background: var(--color-fg);
+  background: var(--color-secondary);
   color: var(--color-text);
   overflow-x: hidden;
   overflow-y: scroll;
@@ -45,14 +45,14 @@ body
   min-height: 600px;
   position: relative;
   z-index: 2;
-  padding: 2rem;
+  padding: 40px;
 }
 
 body:before
 {
   content: 'setup';
   @extend %font-headline;
-  color: #252525;
+  color: rgba(black, 0.05);
   position: fixed;
   left: -10vw;
   bottom: -30vh;

@@ -4,7 +4,7 @@
     <p>With zero you can manage multiple applications with one installation. Start by adding your first application.</p>
     
     <ui-property label="Application name" :vertical="true">
-      <input v-model="value" type="text" class="ui-input" maxlength="40" placeholder="Enter name" />
+      <input v-model="value.AppName" type="text" class="ui-input" maxlength="40" placeholder="Enter name" />
     </ui-property>
   </div>
 </template>
@@ -18,7 +18,7 @@
     name: 'setupStepApplication',
 
     props: {
-      value: String 
+      value: Object 
     },
 
     components: { UiProperty, UiButton },

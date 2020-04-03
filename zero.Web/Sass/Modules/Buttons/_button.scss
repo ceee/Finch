@@ -21,7 +21,7 @@ button
   height: 40px;
   border-radius: 3px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   margin: 0;
   -webkit-backface-visibility: hidden;
   -webkit-appearance: none;
@@ -59,6 +59,12 @@ button
     box-sizing: border-box;
     position: relative;
     top: 1px;
+  }
+
+  &.type-big
+  {
+    height: 50px;
+    padding: 0 30px;
   }
 
   & + .ui-button

@@ -1,5 +1,5 @@
 ﻿<template>
-  <button class="ui-button" :class="buttonClass">
+  <button class="ui-button" :class="buttonClass" @click="click">
     <span v-html="label"></span>
     <i v-if="caret" :class="caretClass"></i>
   </button>
@@ -28,11 +28,15 @@
         type: String,
         default: 'right'
       },
-      disabled: Boolean
+      disabled: Boolean,
+      click: {
+        type: Function,
+        default: () => { }
+      }
     },
 
     computed: {
-      buttonClass() { return 'type-' + this.type + ' caret-' + this.caretPosition; },
+      buttonClass() { return 'type-' + this.type.split(' ').join(' type-') + ' caret-' + this.caretPosition; },
       caretClass() { return 'fth-chevron-' + this.caret; }
     },
 
