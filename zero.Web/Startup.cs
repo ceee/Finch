@@ -13,6 +13,7 @@ using System;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
+using zero.Core.Entities;
 using zero.Web.Sections;
 
 namespace zero.Web
@@ -55,7 +56,9 @@ namespace zero.Web
       services.AddZero(opts =>
       {
         //opts.Sections.RemoveAt(1);
-        //opts.Sections.Add("ecommerce", "E-Commerce", "shopping-bag");
+        //var section = new Section("ecommerce", "E-Commerce", "shopping-bag");
+        //section.Children.Add(new Section("analytics", "Analytics"));
+        //opts.Sections.Add(section);
       });
 
       // add cookie-based authentication

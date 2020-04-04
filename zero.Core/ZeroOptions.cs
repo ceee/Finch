@@ -4,6 +4,8 @@ namespace zero.Core
 {
   public class ZeroOptions
   {
+    public string BackofficePath { get; set; }
+
     public SectionCollection Sections { get; private set; } = new SectionCollection();
   }
 }

@@ -8,11 +8,11 @@
     /// <summary>
     /// The section alias which acts as the url slug for navigation
     /// </summary>
-    public string Alias { get; set; }
+    public string Alias { get; }
 
     /// <summary>
     /// The name of the section (either a string or a translation key with @ prefix)
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; }
   }
 }

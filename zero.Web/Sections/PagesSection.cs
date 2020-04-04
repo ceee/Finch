@@ -22,6 +22,6 @@ namespace zero.Web.Sections
     public string Color => "#0cb0f5";
 
     /// <inheritdoc />
-    public IList<IChildSection> Children => null;
+    public IList<IChildSection> Children => new List<IChildSection>();
   }
 }

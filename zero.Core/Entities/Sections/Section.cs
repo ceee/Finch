@@ -5,7 +5,7 @@ namespace zero.Core.Entities
   /// <summary>
   /// A section is a main part of the backoffice application
   /// </summary>
-  public class Section : ISection
+  public class Section : ISection, IChildSection
   {
     /// <inheritdoc />
     public string Alias { get; }
@@ -27,7 +27,7 @@ namespace zero.Core.Entities
 
     public Section() { }
 
-    public Section(string alias, string name, string icon, string color = null)
+    public Section(string alias, string name, string icon = null, string color = null)
     {
       Alias = alias;
       Name = name;
