@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace zero.Web.Setup
     protected IWebHostEnvironment Environment { get; private set; }
 
 
-    public SetupController(IZeroConfiguration config, ISetupApi api, IWebHostEnvironment env) : base(config)
+    public SetupController(IZeroConfiguration config, ISetupApi api, IWebHostEnvironment env) : base(config) //  UserManager<User> userManager
     {
       Api = api;
       Environment = env;
