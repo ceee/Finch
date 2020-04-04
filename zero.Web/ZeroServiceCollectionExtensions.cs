@@ -5,9 +5,9 @@ using zero.Web.Sections;
 
 namespace zero.Web
 {
-  public static class ServiceCollectionExtensions
+  public static class ZeroServiceCollectionExtensions
   {
-    public static IServiceCollection AddZero(this IServiceCollection services)
+    public static ZeroBuilder AddZero(this IServiceCollection services)
     {
       services.AddOptions<ZeroOptions>()
         .Configure(opts =>
@@ -19,12 +19,14 @@ namespace zero.Web
           opts.Sections.Add<SettingsSection>();
         });
 
-      return services;
+      return new ZeroBuilder(services);
     }
 
-    public static IServiceCollection AddZero(this IServiceCollection services, Action<ZeroOptions> setupAction)
+    public static ZeroBuilder AddZero(this IServiceCollection services, Action<ZeroOptions> setupAction)
     {
-      return services.AddZero().PostConfigure(setupAction);
+      ZeroBuilder builder = services.AddZero();
+      builder.Services.PostConfigure(setupAction);
+      return builder;
     }
   }
 }

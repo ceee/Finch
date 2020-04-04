@@ -23,6 +23,11 @@ namespace zero.Core.Entities
     string Icon { get; }
 
     /// <summary>
+    /// HEX color (#aabbcc or #abc)
+    /// </summary>
+    string Color { get; }
+
+    /// <summary>
     /// Children are displayed as a sub-navigation in the main nav area
     /// </summary>
     IList<IChildSection> Children { get; }

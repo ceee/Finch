@@ -19,6 +19,9 @@ namespace zero.Web.Sections
     public string Icon => "fth-layers";
 
     /// <inheritdoc />
+    public string Color => "#f9c202";
+
+    /// <inheritdoc />
     public IList<IChildSection> Children => null;
   }
 }

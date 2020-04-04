@@ -19,6 +19,9 @@ namespace zero.Web.Sections
     public string Icon => "fth-folder";
 
     /// <inheritdoc />
+    public string Color => "#0cb0f5";
+
+    /// <inheritdoc />
     public IList<IChildSection> Children => null;
   }
 }
