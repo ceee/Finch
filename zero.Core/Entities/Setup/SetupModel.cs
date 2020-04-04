@@ -7,6 +7,8 @@
     public SetupUserModel User { get; set; }
 
     public SetupDatabaseModel Database { get; set; }
+
+    public string ContentRootPath { get; set; }
   }
 
 

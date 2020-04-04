@@ -1,17 +1,15 @@
-﻿{
-  "ZeroVersion": null,
+{
+  "ZeroVersion": "1.0.0.0",
 
   "DefaultLanguage": "en-US",
 
   "Raven": {
-    "Url": "http://127.0.0.1:9800",
+    "Url": "http://localhost:9800",
     "Database": "zero"
   },
 
   "Logging": {
-    "Json": true,
     "IncludeScopes": false,
-    "PathFormat": "Logs/log-{Date}.txt",
     "LogLevel": {
       "Default": "Warning",
       "System": "Warning",

@@ -1,13 +1,20 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using Raven.Client.Documents.Session;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Entities.Setup;
 using zero.Core.Validation;
+using Microsoft.AspNetCore.Hosting;
+
 
 namespace zero.Core.Api
 {
@@ -53,6 +60,8 @@ namespace zero.Core.Api
           return Constants.Database.CollectionPrefix + DocumentConventions.DefaultGetCollectionName(type);
         };
 
+        raven.Conventions.IdentityPartsSeparator = ".";
+
         raven.Initialize();
 
         // create application
@@ -86,6 +95,9 @@ namespace zero.Core.Api
 
           await session.StoreAsync(user);
 
+          // update settings file. if this fails the changes won't be stored
+          UpdateSettingsFile(model);
+
           await session.SaveChangesAsync();
         }
       }
@@ -101,6 +113,30 @@ namespace zero.Core.Api
       }
 
       return EntityChangeResult<SetupModel>.Success(model);
+    }
+
+
+    /// <summary>
+    /// Updates the settings file with the new data (database connection and version)
+    /// </summary>
+    void UpdateSettingsFile(SetupModel model)
+    {
+      var filePath = Path.Combine(model.ContentRootPath, "zeroSettings.json");
+      string json = File.ReadAllText(filePath);
+
+      ZeroConfiguration config = JsonConvert.DeserializeObject<ZeroConfiguration>(json);
+
+      config.Raven = new RavenConfig()
+      {
+        Database = model.Database.Name,
+        Url = model.Database.Url
+      };
+
+      config.ZeroVersion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
+
+      json = JsonConvert.SerializeObject(config, Formatting.Indented);
+
+      File.WriteAllText(filePath, json);
     }
   }
 
