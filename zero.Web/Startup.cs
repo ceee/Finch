@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -13,7 +14,7 @@ using System;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
-using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Web.Sections;
 
 namespace zero.Web
@@ -101,12 +102,13 @@ namespace zero.Web
       services.AddTransient<ISetupApi, SetupApi>();
     }
 
-
     /// <summary>
     /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     /// </summary>
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<ZeroOptions> zeroOptions)
     {
+      string zeroPath = zeroOptions.CurrentValue.BackofficePath.EnsureEndsWith('/');
+
       // enable webpack middleware
       if (env.IsDevelopment())
       {
@@ -132,20 +134,14 @@ namespace zero.Web
 
       app.UseEndpoints(endpoints =>
       {
-        // default routes
-        endpoints.MapControllerRoute(
-          name: "default",
-          pattern: "{controller=Index}/{action=Index}/{id?}"
-        );
-
         // routes for API
         endpoints.MapControllerRoute(
           name: "api",
-          pattern: "api/{controller=Index}/{action=Index}/{id?}"
+          pattern: zeroPath + "api/{controller=Index}/{action=Index}/{id?}"
         );
 
         // fallbacks for SPA
-        endpoints.MapFallbackToController("Index", "Index");
+        endpoints.MapFallbackToController(zeroPath + "{**path}", "Index", "Index");
       });
     }
   }
