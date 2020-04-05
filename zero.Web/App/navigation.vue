@@ -7,18 +7,20 @@
       <ui-button v-if="applications.length > 0" type="outline block" :label="applications[0].name" caret="down" />
     </div>
 
-    <nav>
+    <nav class="app-nav-inner">
       <template v-for="section in sections">
-        <a v-on:click.prevent="go(section)" href="#" class="app-nav-item" :class="{ 'is-active': section.alias === activeSection, 'has-children': hasChildren(section) }">
+        <router-link :to="getLink(section)" class="app-nav-item" :class="{ 'has-children': hasChildren(section) }">
           <i class="app-nav-item-icon" :class="section.icon" :style="{ color: section.color ? section.color : null }"></i>
           {{getName(section)}}
-          <i v-if="hasChildren(section)" class="fth-chevron-down"></i>
-        </a>
-        <div class="app-nav-children" v-if="hasChildren(section)">
-          <a v-for="child in section.children" v-on:click.prevent="go(child)" href="#" class="app-nav-child">
-            {{child.name}}
-          </a>
-        </div>
+          <i v-if="hasChildren(section)" class="app-nav-item-arrow fth-chevron-down"></i>
+        </router-link>
+        <transition name="app-nav-children">
+          <div class="app-nav-children" v-if="hasChildren(section) && $route.path.indexOf('/' + section.alias) > -1">
+            <router-link v-for="child in section.children" v-bind:key="child.alias" :to="getLink(section, child)" class="app-nav-child">
+              {{child.name}}
+            </router-link>
+          </div>
+        </transition>
       </template>
     </nav>
 
@@ -37,7 +39,6 @@
     components: { UiButton },
 
     data: () => ({
-      activeSection: null,
       applications: [],
       sections: []
     }),
@@ -47,7 +48,6 @@
       SectionsApi.getAll().then(items =>
       {
         this.sections = items;
-        this.activeSection = 'commerce';
       });
       ApplicationsApi.getAll().then(items =>
       {
@@ -67,9 +67,19 @@
         return section.alias.charAt(0).toUpperCase() + section.alias.slice(1);
       },
 
-      go(section)
+      getLink(section, child)
       {
-        this.activeSection = section.alias;
+        //if (section.alias === "dashboard" && !child)
+        //{
+        //  return '/';
+        //}
+
+        if (!child)
+        {
+          return '/' + section.alias;
+        }
+
+        return '/' + section.alias + '/' + child.alias;
       }
 
     }

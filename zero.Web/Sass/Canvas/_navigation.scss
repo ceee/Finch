@@ -5,11 +5,20 @@
   background: var(--color-secondary);
   width: 260px;
   color: white;
+  height: 100%;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
 
   a, button
   {
     outline: none !important;
   }
+}
+
+.app-nav-inner
+{
+  overflow-y: auto;
 }
 
 .app-nav-headline
@@ -58,6 +67,16 @@ a.app-nav-item
   {
     font-weight: 700;
   }
+
+  .app-nav-item-arrow
+  {
+    transition: transform 0.2s ease;
+  }
+
+  &.is-active .app-nav-item-arrow
+  {
+    transform: rotate(180deg);
+  }
 }
 
 .app-nav-item-icon
@@ -88,4 +107,26 @@ a.app-nav-child
   {
     color: var(--color-fg-reverse);
   }
+
+  &.is-active
+  {
+    font-weight: 700;
+  }
+}
+
+
+.app-nav-children-enter-active
+{
+  transition: all .3s ease;
+}
+
+.app-nav-children-leave-active
+{
+  transition: all 0;
+}
+
+.app-nav-children-enter, .app-nav-children-leave-to
+{
+  transform: translateX(10px);
+  opacity: 0;
 }

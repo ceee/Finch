@@ -9,9 +9,12 @@
   import Vue from 'vue'
   import Sass from '../Sass/app.scss'
   import AppNavigation from 'zero/navigation.vue'
+  import Router from '../router.js'
 
   export default {
     name: 'app',
+
+    router: Router,
 
     components: { AppNavigation },
 

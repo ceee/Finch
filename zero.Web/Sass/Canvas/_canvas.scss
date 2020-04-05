@@ -40,3 +40,13 @@ body
   grid-template-columns: auto 1fr;
   justify-content: stretch;
 }
+
+.fade-enter-active, .fade-leave-active
+{
+  transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to
+{
+  opacity: 0;
+}
