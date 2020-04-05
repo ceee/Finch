@@ -1,4 +1,6 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@using zero.Core.Extensions
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model zero.Core.ZeroOptions
 @{
   Layout = null;
 }
@@ -19,6 +21,10 @@
 </head>
 <body>
   <div id="app"></div>
+  <script>
+    window.zero = window.zero || {};
+    zero.path = "@Model.BackofficePath.EnsureEndsWith('/')";
+  </script>
   <script src="~/Assets/app.js" asp-append-version="true"></script>
 </body>
 </html>

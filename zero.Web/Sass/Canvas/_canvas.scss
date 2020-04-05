@@ -1,0 +1,42 @@
+﻿
+
+body, html
+{
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html
+{
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body
+{
+  height: 100%;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-size: 16px;
+  @extend %font;
+}
+
+.clear
+{
+  display: block;
+  clear: both;
+  float: none;
+}
+
+.app
+{
+  height: 100%;
+  min-height: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  justify-content: stretch;
+}

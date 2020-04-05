@@ -1,33 +1,21 @@
 ﻿<template>
   <div class="app">
-    count: {{count}} <br>
-    <button @click="add()">add</button>
+    <app-navigation />
   </div>
 </template>
 
 
 <script>
   import Vue from 'vue'
+  import Sass from '../Sass/app.scss'
+  import AppNavigation from 'zero/navigation.vue'
 
   export default {
     name: 'app',
 
-    data: () => ({
-      count: 0
-    }),
+    components: { AppNavigation },
 
-    mounted ()
-    {
-      
-    },
-
-    methods: {
-
-      add()
-      {
-        this.count += 1;
-      }
-    }
+    data: () => ({}),
   }
 
 </script>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,18 +22,21 @@ namespace zero.Web.Setup
 
     protected IWebHostEnvironment Environment { get; private set; }
 
+    protected ZeroOptions Options { get; private set; }
 
-    public SetupController(IZeroConfiguration config, ISetupApi api, IWebHostEnvironment env) : base(config) //  UserManager<User> userManager
+
+    public SetupController(IZeroConfiguration config, ISetupApi api, IWebHostEnvironment env, IOptionsMonitor<ZeroOptions> options) : base(config) //  UserManager<User> userManager
     {
       Api = api;
       Environment = env;
+      Options = options.CurrentValue;
     }
 
     public IActionResult Index()
     {
       if (!Configuration.ZeroVersion.IsNullOrEmpty())
       {
-        return RedirectToAction("Index", "Index");
+        return Redirect(Options.BackofficePath);
       }
 
       return View("/Views/Setup.cshtml");

@@ -134,6 +134,17 @@ namespace zero.Web
 
       app.UseEndpoints(endpoints =>
       {
+        // setup route
+        endpoints.MapControllerRoute(
+          name: "setup",
+          pattern: zeroPath + "setup",
+          defaults: new
+          {
+            controller = "Setup",
+            action = "Index"
+          }
+        );
+
         // routes for API
         endpoints.MapControllerRoute(
           name: "api",

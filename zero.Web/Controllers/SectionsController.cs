@@ -7,11 +7,11 @@ using zero.Core;
 namespace zero.Web.Controllers
 {
   [AllowAnonymous]
-  public class SectionController : BackofficeController
+  public class SectionsController : BackofficeController
   {
     private ZeroOptions Options { get; set; }
 
-    public SectionController(IZeroConfiguration config, IOptionsMonitor<ZeroOptions> options) : base(config)
+    public SectionsController(IZeroConfiguration config, IOptionsMonitor<ZeroOptions> options) : base(config)
     {
       Options = options.CurrentValue;
     }

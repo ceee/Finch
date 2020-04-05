@@ -9,9 +9,11 @@ namespace zero.Web.Controllers
   [AllowAnonymous]
   public class IndexController : BackofficeController
   {
+    private ZeroOptions Options { get; set; }
+
     public IndexController(IZeroConfiguration config, IOptionsMonitor<ZeroOptions> options) : base(config)
     {
-
+      Options = options.CurrentValue;
     }
 
 
@@ -22,7 +24,7 @@ namespace zero.Web.Controllers
         return RedirectToAction("Index", "Setup");
       }
 
-      return View("/Views/Index.cshtml");
+      return View("/Views/Index.cshtml", Options);
     }
   }
 }

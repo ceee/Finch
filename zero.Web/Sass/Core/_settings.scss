@@ -3,13 +3,16 @@
 {
   // accent colors
   --color-primary: #45acd7;
-  --color-secondary: #2f3a43;
+  --color-secondary: #1f272e;
   --color-negative: #d82853; 
 
   // foreground/text color
   --color-fg: #222;
   --color-fg-mid: #6f7375;
   --color-fg-light: #919294;
+
+  --color-fg-reverse: #fff;
+  --color-fg-reverse-mid: #c1c5c9;
 
   // background color shades
   --color-bg: #fff;
@@ -19,6 +22,12 @@
   // line colors
   --color-line: #eaebec;
   --color-line-mid: #d7d8d9;
+
+
+  // sizes
+
+  --padding: 32px;
+  --height-top: 74px;
 }
 
 

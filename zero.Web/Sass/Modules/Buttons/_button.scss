@@ -67,6 +67,12 @@ button
     padding: 0 30px;
   }
 
+  &.type-block
+  {
+    display: flex;
+    width: 100%;
+  }
+
   & + .ui-button
   {
     margin-left: 10px;
