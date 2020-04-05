@@ -7,9 +7,9 @@
       <ui-button type="outline block" label="brothers" caret="down" />
     </div>
 
-    <nav v-for="section in sections">
-      <a href="#" class="app-nav-item">
-        <i class="app-nav-item-icon" :class="section.icon" :style="{ color: section.color ? section.color : 'var(--color-fg-reverse-mid)' }"></i>
+    <nav>
+      <a v-for="section in sections" v-on:click.prevent="go(section)" href="#" class="app-nav-item" :class="{ 'is-active': section.alias === active }">
+        <i class="app-nav-item-icon" :class="section.icon" :style="{ color: section.color ? section.color : null }"></i>
         {{getName(section)}}
       </a>
     </nav>
@@ -28,6 +28,7 @@
     components: { UiButton },
 
     data: () => ({
+      active: null,
       sections: []
     }),
 
@@ -36,6 +37,7 @@
       SectionsApi.getAll().then(items =>
       {
         this.sections = items;
+        this.active = 'pages';
       });
     },
 
@@ -44,6 +46,11 @@
       getName(section)
       {
         return section.alias.charAt(0).toUpperCase() + section.alias.slice(1);
+      },
+
+      go(section)
+      {
+        this.active = section.alias;
       }
 
     }
