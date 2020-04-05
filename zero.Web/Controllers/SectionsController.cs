@@ -1,25 +1,24 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System.Linq;
 using zero.Core;
+using zero.Core.Api;
 
 namespace zero.Web.Controllers
 {
   [AllowAnonymous]
   public class SectionsController : BackofficeController
   {
-    private ZeroOptions Options { get; set; }
+    private ISectionsApi Api { get; set; }
 
-    public SectionsController(IZeroConfiguration config, IOptionsMonitor<ZeroOptions> options) : base(config)
+    public SectionsController(IZeroConfiguration config, ISectionsApi api) : base(config)
     {
-      Options = options.CurrentValue;
+      Api = api;
     }
 
 
     public IActionResult GetAll()
     {
-      return Json(Options.Sections.ToList());
+      return Json(Api.GetAll());
     }
   }
 }

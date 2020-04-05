@@ -12,16 +12,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="appSettings.Development.json" />
     <Content Remove="package-lock.json" />
     <Content Remove="package.json" />
     <None Include="package.json" />
     <None Remove="Logs/*" />
-    <None Include="zeroSettings.json" />
-    <None Include="zeroSettings.Development.json" />
     <Content Remove="wwwroot/Temp/**" />
     <Content Remove="wwwroot/Media/**" />
     <Content Remove="web.release.config" />
     <None Remove="wipe.js" />
+    <_ContentIncludedByDefault Remove="appSettings.Development.json" />
     <None Include="web.release.config" />
   </ItemGroup>
 

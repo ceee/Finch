@@ -4,14 +4,22 @@
     <h1 class="app-nav-headline">zero</h1>
 
     <div class="app-nav-switch">
-      <ui-button type="outline block" label="brothers" caret="down" />
+      <ui-button v-if="applications.length > 0" type="outline block" :label="applications[0].name" caret="down" />
     </div>
 
     <nav>
-      <a v-for="section in sections" v-on:click.prevent="go(section)" href="#" class="app-nav-item" :class="{ 'is-active': section.alias === active }">
-        <i class="app-nav-item-icon" :class="section.icon" :style="{ color: section.color ? section.color : null }"></i>
-        {{getName(section)}}
-      </a>
+      <template v-for="section in sections">
+        <a v-on:click.prevent="go(section)" href="#" class="app-nav-item" :class="{ 'is-active': section.alias === activeSection, 'has-children': hasChildren(section) }">
+          <i class="app-nav-item-icon" :class="section.icon" :style="{ color: section.color ? section.color : null }"></i>
+          {{getName(section)}}
+          <i v-if="hasChildren(section)" class="fth-chevron-down"></i>
+        </a>
+        <div class="app-nav-children" v-if="hasChildren(section)">
+          <a v-for="child in section.children" v-on:click.prevent="go(child)" href="#" class="app-nav-child">
+            {{child.name}}
+          </a>
+        </div>
+      </template>
     </nav>
 
   </div>
@@ -19,6 +27,7 @@
 
 
 <script>
+  import ApplicationsApi from 'zeroresources/applications.js'
   import SectionsApi from 'zeroresources/sections.js'
   import UiButton from 'zerocomponents/buttons/button.vue'
 
@@ -28,7 +37,8 @@
     components: { UiButton },
 
     data: () => ({
-      active: null,
+      activeSection: null,
+      applications: [],
       sections: []
     }),
 
@@ -37,11 +47,20 @@
       SectionsApi.getAll().then(items =>
       {
         this.sections = items;
-        this.active = 'pages';
+        this.activeSection = 'commerce';
+      });
+      ApplicationsApi.getAll().then(items =>
+      {
+        this.applications = items;
       });
     },
 
     methods: {
+
+      hasChildren(section)
+      {
+        return section.children && section.children.length > 0;
+      },
 
       getName(section)
       {
@@ -50,7 +69,7 @@
 
       go(section)
       {
-        this.active = section.alias;
+        this.activeSection = section.alias;
       }
 
     }

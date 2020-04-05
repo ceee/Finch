@@ -69,3 +69,23 @@ a.app-nav-item
   top: -2px;
   color: var(--color-fg-reverse-mid);
 }
+
+.app-nav-children
+{
+  padding: 5px 0 10px;
+}
+
+a.app-nav-child
+{
+  display: flex;
+  align-items: center;
+  font-size: $font-size;
+  padding: 0 var(--padding) 0 calc(var(--padding) + 36px);
+  height: 40px;
+  color: var(--color-fg-reverse-mid);
+
+  &:hover, &.is-active
+  {
+    color: var(--color-fg-reverse);
+  }
+}
