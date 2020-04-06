@@ -37,9 +37,9 @@
 {
   padding: 20px var(--padding) 30px;
 
-  .ui-button.type-outline
+  .ui-button.type-action
   {
-    background: var(--color-secondary);
+    background: rgba(white, 0.05);
     color: var(--color-fg-reverse-mid);
     border-color: rgba(white, 0.1);
     padding-left: 20px;

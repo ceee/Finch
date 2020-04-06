@@ -4,7 +4,7 @@
     <h1 class="app-nav-headline">zero</h1>
 
     <div class="app-nav-switch">
-      <ui-button v-if="applications.length > 0" type="outline block" :label="applications[0].name" caret="down" />
+      <ui-button v-if="applications.length > 0" type="action block" :label="applications[0].name" caret="down" />
     </div>
 
     <nav class="app-nav-inner">
