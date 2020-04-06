@@ -64,7 +64,7 @@
           }
         }, 50);
 
-        Axios.post('/api/setup/install', this.value)
+        Axios.post(zero.path + 'api/setup/install', this.value)
           .then(response =>
           {
             

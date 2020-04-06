@@ -1,4 +1,6 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@using zero.Core.Extensions
+@inject Microsoft.Extensions.Options.IOptionsMonitor<zero.Core.ZeroOptions> Options
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
   Layout = null;
 }
@@ -19,6 +21,10 @@
 </head>
 <body>
   <div id="application"></div>
+  <script>
+    window.zero = window.zero || {};
+    zero.path = "@Options.CurrentValue.BackofficePath.EnsureEndsWith('/')";
+  </script>
   <script src="~/Assets/setup.js" asp-append-version="true"></script>
 </body>
 </html>
