@@ -1,2 +1,2 @@
 
-import Localize from './localize.js';
+import './localize';

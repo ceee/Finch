@@ -7,8 +7,7 @@
 
 
 <script>
-  import Vue from 'vue'
-  import Sass from '../Sass/app.scss'
+  import '../Sass/app.scss'
   import AppNavigation from 'zero/navigation.vue'
   import Router from '../router.js'
 
