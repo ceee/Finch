@@ -10,12 +10,8 @@
 
 
 <script>
-  import UiButton from 'zerocomponents/buttons/button.vue'
-
   export default {
     name: 'setupStepFinish',
-
-    components: { UiButton },
 
     mounted ()
     {

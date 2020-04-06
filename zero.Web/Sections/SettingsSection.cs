@@ -13,7 +13,7 @@ namespace zero.Web.Sections
     public string Alias => Constants.Sections.Settings;
 
     /// <inheritdoc />
-    public string Name => "@ui_sections_settings";
+    public string Name => "@sections.item.settings";
 
     /// <inheritdoc />
     public string Icon => "fth-settings";

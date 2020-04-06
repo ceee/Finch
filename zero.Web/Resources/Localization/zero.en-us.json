@@ -1,0 +1,15 @@
+{
+  "zero": {
+    "name": "zero"
+  },
+
+  "sections": {
+    "item": {
+      "dashboard": "Dashboard",
+      "lists": "Lists",
+      //"media": "Media",
+      "pages": "Pages",
+      "settings": "Settings"
+    }
+  }
+}

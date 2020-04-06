@@ -1,8 +1,13 @@
 ﻿@using zero.Core.Extensions
+@using System.Text
+@using Microsoft.AspNetCore.Hosting
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model zero.Core.ZeroOptions
+@inject IWebHostEnvironment Env
 @{
   Layout = null;
+  string path = System.IO.Path.Combine(Env.ContentRootPath, "Resources/Localization/zero.en-us.json");
+  string text = System.IO.File.ReadAllText(path, Encoding.UTF8);
 }
 <!DOCTYPE html>
 <html>
@@ -24,6 +29,7 @@
   <script>
     window.zero = window.zero || {};
     zero.path = "@Model.BackofficePath.EnsureEndsWith('/')";
+    zero.translations = @Html.Raw(text);
   </script>
   <script src="~/Assets/app.js" asp-append-version="true"></script>
 </body>

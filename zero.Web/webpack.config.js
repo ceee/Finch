@@ -30,6 +30,9 @@ module.exports = {
       'zerosetup': path.join(__dirname, 'Setup'),
       'zerocomponents': path.join(__dirname, 'App', 'Components'),
       'zeroresources': path.join(__dirname, 'App', 'Resources'),
+      'zerodirectives': path.join(__dirname, 'App', 'Directives'),
+      'zeroservices': path.join(__dirname, 'App', 'Services'),
+      'zerofilters': path.join(__dirname, 'App', 'Filters'),
       '@': __dirname
     }
   },

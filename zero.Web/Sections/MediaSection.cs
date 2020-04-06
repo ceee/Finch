@@ -13,7 +13,7 @@ namespace zero.Web.Sections
     public string Alias => Constants.Sections.Media;
 
     /// <inheritdoc />
-    public string Name => "@ui_sections_media";
+    public string Name => "@sections.item.media";
 
     /// <inheritdoc />
     public string Icon => "fth-image";

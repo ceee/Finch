@@ -13,7 +13,7 @@ namespace zero.Web.Sections
     public string Alias => Constants.Sections.Lists;
 
     /// <inheritdoc />
-    public string Name => "@ui_sections_lists";
+    public string Name => "@sections.item.lists";
 
     /// <inheritdoc />
     public string Icon => "fth-layers";

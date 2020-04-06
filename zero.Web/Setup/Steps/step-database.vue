@@ -15,17 +15,12 @@
 
 
 <script>
-  import UiProperty from 'zerocomponents/forms/property.vue'
-  import UiButton from 'zerocomponents/buttons/button.vue'
-
   export default {
     name: 'setupStepDatabase',
 
     props: {
       value: Object 
     },
-
-    components: { UiProperty, UiButton },
 
     mounted ()
     {

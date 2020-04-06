@@ -56,7 +56,7 @@ namespace zero.Web
       services.AddSingleton<IZeroConfiguration>(appConfig);
 
       // add raven
-      services.AddSingleton(services =>
+      services.AddSingleton(_ =>
       {
         DocumentStore store = new DocumentStore()
         {

@@ -20,7 +20,6 @@
 
 
 <script>
-  import UiButton from 'zerocomponents/buttons/button.vue'
   import Axios from 'axios'
 
   export default {
@@ -37,8 +36,6 @@
         required: true
       }
     },
-
-    components: { UiButton },
 
     data: () => ({
       errorMessage: null,

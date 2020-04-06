@@ -13,7 +13,7 @@ namespace zero.Web.Sections
     public string Alias => Constants.Sections.Dashboard;
 
     /// <inheritdoc />
-    public string Name => "@ui_sections_dashboard";
+    public string Name => "@sections.item.dashboard";
 
     /// <inheritdoc />
     public string Icon => "fth-pie-chart";

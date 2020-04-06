@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="app-nav">
 
-    <h1 class="app-nav-headline">zero</h1>
+    <h1 class="app-nav-headline" v-localize="'@zero.name'">zero</h1>
 
     <div class="app-nav-switch">
       <ui-button v-if="applications.length > 0" type="action block" :label="applications[0].name" caret="down" />
@@ -11,7 +11,7 @@
       <template v-for="section in sections">
         <router-link :to="getLink(section)" class="app-nav-item" :class="{ 'has-children': hasChildren(section) }">
           <i class="app-nav-item-icon" :class="section.icon" :style="{ color: section.color ? section.color : null }"></i>
-          {{getName(section)}}
+          {{section.name | localize}}
           <i v-if="hasChildren(section)" class="app-nav-item-arrow fth-chevron-down"></i>
         </router-link>
         <transition name="app-nav-children">
@@ -24,6 +24,14 @@
       </template>
     </nav>
 
+    <footer class="app-nav-account">
+      <button type="button" class="app-nav-account-button">
+        <img class="-image" src="https://fifty.brothers.studio/Media/Avatars/tobi.jpg" alt="Tobi" />
+        <p class="-text"><strong>Tobias Klika</strong><br>Admin</p>
+        <i class="-arrow fth-chevron-down"></i>
+      </button>
+    </footer>
+
   </div>
 </template>
 
@@ -31,12 +39,9 @@
 <script>
   import ApplicationsApi from 'zeroresources/applications.js'
   import SectionsApi from 'zeroresources/sections.js'
-  import UiButton from 'zerocomponents/buttons/button.vue'
 
   export default {
     name: 'app-navigation',
-
-    components: { UiButton },
 
     data: () => ({
       applications: [],
@@ -45,6 +50,8 @@
 
     mounted ()
     {
+      console.info(this.$router);
+
       SectionsApi.getAll().then(items =>
       {
         this.sections = items;
