@@ -3,6 +3,7 @@ using Raven.Client.Documents;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using zero.Core.Entities;
 
 namespace zero.Core.Api
@@ -19,8 +20,10 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public IList<TreeItem> GetChildren(string contentPath, string parent = null) // TODO remove content path as it's only needed to load test data
+    public async Task<IList<TreeItem>> GetChildren(string contentPath, string parent = null) // TODO remove content path as it's only needed to load test data
     {
+      await Task.Delay(parent != null ? 1200 : 0);
+
       string path = System.IO.Path.Combine(contentPath, "Resources/tree" + (parent != null ? "-" + parent.ToString() : String.Empty) + ".debug.json");
       string text = System.IO.File.ReadAllText(path, Encoding.UTF8);
 
@@ -34,6 +37,6 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all children for the current parent page (or root if empty)
     /// </summary>
-    IList<TreeItem> GetChildren(string contentPath, string parent = null);
+    Task<IList<TreeItem>> GetChildren(string contentPath, string parent = null);
   }
 }

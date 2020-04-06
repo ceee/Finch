@@ -60,7 +60,6 @@ a.app-nav-item
 
   &:hover, &.is-active
   {
-    background: rgba(black, 0.1);
     color: var(--color-fg-reverse);
 
     .app-nav-item-icon
@@ -71,6 +70,7 @@ a.app-nav-item
 
   &.is-active
   {
+    background: rgba(black, 0.1);
     font-weight: 700;
   }
 

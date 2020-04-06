@@ -14,11 +14,26 @@
   export default {
     name: 'app-page',
 
+    data: () => ({
+      cache: {}
+    }),
+
     methods: {
 
       getItems(parent)
       {
-        return PageTreeApi.getChildren(parent);
+        const key = !parent ? '__root' : parent;
+
+        if (this.cache[key])
+        {
+          return Promise.resolve(this.cache[key]);
+        }
+
+        return PageTreeApi.getChildren(parent).then(response =>
+        {
+          this.cache[key] = response;
+          return response;
+        });
       }
 
     }
@@ -39,6 +54,6 @@
   {
     width: 340px;
     background: var(--color-bg-light);
-    padding: var(--padding);
+    padding: var(--padding) 0;
   }
 </style>

@@ -3,6 +3,7 @@
 button
 {
   @extend %font;
+  color: var(--color-fg);
 
   &:focus
   {

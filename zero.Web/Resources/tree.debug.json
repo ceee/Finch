@@ -12,8 +12,8 @@
     "id": "-99",
     "parentId": null,
     "sort": 1000,
-    "name": "@generic.recyclebin.name",
-    "description": "@generic.recyclebin.description",
+    "name": "@recyclebin.name",
+    "description": "@recyclebin.description",
     "icon": "fth-trash",
     "hasChildren": false
   }

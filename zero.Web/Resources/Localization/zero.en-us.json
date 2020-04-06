@@ -11,5 +11,10 @@
       "pages": "Pages",
       "settings": "Settings"
     }
+  },
+
+  "recyclebin": {
+    "name": "Recycle bin",
+    "description": "View recently deleted entities"
   }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
 
@@ -20,9 +21,9 @@ namespace zero.Web.Controllers
     }
 
 
-    public IActionResult GetChildren(string parent = null)
+    public async Task<IActionResult> GetChildren(string parent = null)
     {
-      return Json(Api.GetChildren(Env.ContentRootPath, parent));
+      return Json(await Api.GetChildren(Env.ContentRootPath, parent));
     }
   }
 }

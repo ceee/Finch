@@ -1,6 +1,19 @@
 ﻿<template>
-  <div class="ui-tree">
-    tree
+  <div class="ui-tree" :style="{ 'padding-left': depth > 0 ? ((depth * 18) + 'px') : null }">
+    <span v-if="status === 'loading'" class="ui-tree-item-loading"><i></i></span>
+    <template v-for="item in items">
+      <div class="ui-tree-item" :class="getClasses(item)">
+        <button v-if="item.hasChildren" @click="toggle(item)" type="button" class="ui-tree-item-toggle">
+          <i class="ui-tree-item-arrow" :class="['fth-chevron-' + (item.isOpen ? 'up' : 'down')]"></i>
+        </button>
+        <router-link to="/" class="ui-tree-item-link">
+          <i class="ui-tree-item-icon" :class="item.icon"></i>
+          <i v-if="item.modifier" :title="item.modifier.name" class="ui-tree-item-modifier" :class="item.modifier.icon"></i>
+          {{item.name | localize}}
+        </router-link>
+      </div>
+      <ui-tree v-if="item.hasChildren && item.isOpen" :get="get" :parent="item.id" :depth="depth + 1" />
+    </template>
   </div>
 </template>
 
@@ -10,15 +23,32 @@
     name: 'uiTree',
 
     props: {
+      depth: {
+        type: Number,
+        default: 0
+      },
+      parent: {
+        type: String,
+        default: null
+      },
       get: {
         type: Function,
         required: true
+      },
+      onChange: {
+        type: Function,
+        default: () => { }
       }
     },
 
+    data: () => ({
+      items: [],
+      status: 'none'
+    }),
+
     created ()
     {
-      this.load();
+      this.load(this.parent);
     },
 
     methods: {
@@ -26,20 +56,187 @@
       // loads children of the given parent id or on root if empty
       load(parent)
       {
-        let promise = this.get(parent);
+        this.setStatus('loading', this.items);
 
-        //if (typeof promise !== 'object' || !promise['then'] || typeof promise.then !== 'function')
+        let promise = this.get(parent);
 
         promise.then(response =>
         {
-          console.info(response);
+          this.items = response;
+          this.setStatus('loaded', this.items);
         })
         .catch(error =>
         {
+          this.setStatus('error', this.items, error);
           // TODO handle errors
         });
+      },
+
+
+      // updates the status for the current tree
+      setStatus(status)
+      {
+        this.status = status;
+        this.onChange(status, this.items);
+      },
+
+
+      // sets the current status for child tree
+      setChildTreeStatus(status, items, x)
+      {
+        console.info(status, items, x, this);
+      },
+
+
+      // toggles children of an item
+      toggle(item)
+      {
+        item.isOpen = !item.isOpen;
+
+        //if (item.isOpen && !item.items)
+        //{
+        //  item.children = this.load(item.id, items =>
+        //  {
+        //    item.items = items;
+        //  });
+        //}
+      },
+
+
+      // get all classes for a tree item
+      getClasses(item)
+      {
+        return {
+          'has-children': item.hasChildren,
+          'is-open': item.isOpen
+        };
       }
 
     }
   }
 </script>
+
+
+<style lang="scss">
+  .ui-tree
+  {
+    position: relative;
+  }
+
+  .ui-tree-item
+  {
+    display: grid;
+    
+    align-items: center;
+    font-size: var(--font-size);
+    padding: 0 var(--padding);
+    height: 50px;
+    color: var(--color-fg-reverse-mid);
+    position: relative;
+    transition: color 0.2s ease;
+
+    .ui-tree-item-arrow
+    {
+      transition: transform 0.2s ease;
+    }
+
+    &.is-open > .ui-tree-item-toggle .ui-tree-item-arrow
+    {
+      transform: rotate(180deg);
+    }
+  }
+
+  .ui-tree-item-link
+  {
+    display: grid;
+    grid-template-columns: 30px 1fr auto;
+    grid-gap: 6px;
+    height: 100%;
+    align-items: center;
+    position: relative;
+
+    &:hover
+    {
+      color: var(--color-fg);
+
+      .ui-tree-item-icon
+      {
+        color: var(--color-fg);
+      }
+    }
+  }
+
+  .ui-tree-item-toggle
+  {
+    position: absolute;
+    color: var(--color-fg-mid);
+    height: 100%;
+    top: 0;
+    left: 0;
+    width: 30px;
+    text-align: right;
+    padding-right: 5px;
+    outline: none !important;
+    transition: color 0.2s ease;
+
+    &:hover
+    {
+      color: var(--color-fg);
+    }
+  }
+
+  .ui-tree-item-icon
+  {
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 400;
+    position: relative;
+    top: -2px;
+    color: var(--color-fg-reverse-mid);
+    transition: color 0.2s ease;
+  }
+
+  .ui-tree-item-loading
+  {
+    display: block;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+
+    i
+    {
+      background-color: var(--color-line);
+      transform: translateX(-100%) scaleX(1);
+      animation: treeitemloading 1s linear infinite;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+
+  @keyframes treeitemloading
+  {
+    0%  { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .ui-tree-item-modifier
+  {
+    position: absolute;
+    left: 10px;
+    bottom: 12px;
+    background: var(--color-bg-light);
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    color: var(--color-text-mid);
+    font-size: 11px;
+    font-style: normal;
+    text-align: center;
+    line-height: 14px;
+  }
+</style>
