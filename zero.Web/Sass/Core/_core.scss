@@ -200,3 +200,11 @@ iframe, video
 {
   background: var(--color-light);
 }
+
+
+/// ui resizable
+
+.ui-resizing
+{
+  user-select: none;
+}

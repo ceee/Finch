@@ -28,6 +28,8 @@ var Resizable = function (element, params)
 {
   const prefix = 'ui.resizable:';
   const cacheKey = prefix + (params.save || 'none');
+  const resizingClass = 'ui-resizing';
+
   let isVertical = ['Y', 'y'].indexOf(params.axis) > -1;
 
   this.element = element;
@@ -44,6 +46,7 @@ var Resizable = function (element, params)
   this.listen = () =>
   {
     this.element.addEventListener('mousedown', this.start);
+    this.element.addEventListener('dblclick', this.reset);
   };
 
 
@@ -51,6 +54,7 @@ var Resizable = function (element, params)
   this.detach = () =>
   {
     this.element.removeEventListener('mousedown', this.start);
+    this.element.removeEventListener('dblclick', this.reset);
     document.removeEventListener('mousemove', this.resize);
     document.removeEventListener('mouseup', this.stop);
   };
@@ -65,6 +69,7 @@ var Resizable = function (element, params)
       offsetX: 0,
       offsetY: 0
     };
+    document.body.classList.add(resizingClass);
     document.addEventListener('mousemove', this.resize);
     document.addEventListener('mouseup', this.stop);
   };
@@ -94,6 +99,7 @@ var Resizable = function (element, params)
   // stop resizing and unbind listeners
   this.stop = (e) =>
   {
+    document.body.classList.remove(resizingClass);
     document.removeEventListener('mousemove', this.resize);
     document.removeEventListener('mouseup', this.stop);
 
@@ -110,6 +116,15 @@ var Resizable = function (element, params)
     {
       this.element.style[isVertical ? 'height' : 'width'] = value + 'px';
     }
+  };
+
+
+  // resets to the original value
+  this.reset = () =>
+  {
+    localStorage.removeItem(cacheKey);
+    this.element.style[isVertical ? 'height' : 'width'] = '';
+    this.value = getCurrentValue();
   };
 
 

@@ -1,10 +1,9 @@
 ﻿<template>
   <div class="page-container">
-    <div class="page-container-tree" v-resizable="{ axis: 'x', min: 260, max: 440, save: 'page-tree', handle: '.ui-resizable' }">
+    <div class="page-container-tree" v-resizable="{ axis: 'x', min: 260, max: 520, save: 'page-tree', handle: '.ui-resizable' }">
       <ui-tree :get="getItems" />
-      <button type="button" class="page-container-tree-resizable ui-resizable"></button>
+      <div class="page-container-tree-resizable ui-resizable"></div>
     </div>
-    <div></div>
   </div>
 </template>
 
