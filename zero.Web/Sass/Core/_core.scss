@@ -33,7 +33,7 @@ object, embed
 
 a, a:visited, a:link
 {
-  color: var(--color-text);
+  /*color: var(--color-fg);*/
   text-decoration: none;
   transition: color .2s, transform .2s, background .2s;
 }
@@ -110,7 +110,7 @@ ul li:before
   width: 4px;
   height: 4px;
   border-radius: 12px;
-  background: var(--color-text);
+  background: var(--color-fg);
   position: absolute;
   left: 1px;
   top: 9px;
@@ -198,7 +198,7 @@ iframe, video
 
 *
 {
-  scrollbar-color: var(--color-light) transparent;
+  scrollbar-color: var(--color-bg-light) transparent;
   scrollbar-width: thin;
 }
 
@@ -211,7 +211,7 @@ iframe, video
 
 ::-webkit-scrollbar-thumb
 {
-  background: var(--color-light);
+  background: var(--color-bg-light);
 }
 
 

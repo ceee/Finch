@@ -70,7 +70,7 @@
     grid-template-columns: auto 1fr;
     grid-gap: 1px;
     justify-content: stretch;
-    height: 100%;
+    height: 100vh;
   }
 
   .page-container-tree
@@ -79,6 +79,8 @@
     background: var(--color-bg-light);
     padding: 0;
     position: relative;
+    overflow-y: auto;
+    height: 100vh;
 
     .ui-header-bar + .ui-tree
     {

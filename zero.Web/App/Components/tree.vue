@@ -82,25 +82,10 @@
       },
 
 
-      // sets the current status for child tree
-      setChildTreeStatus(status, items, x)
-      {
-        console.info(status, items, x, this);
-      },
-
-
       // toggles children of an item
       toggle(item)
       {
         item.isOpen = !item.isOpen;
-
-        //if (item.isOpen && !item.items)
-        //{
-        //  item.children = this.load(item.id, items =>
-        //  {
-        //    item.items = items;
-        //  });
-        //}
       },
 
 
@@ -162,6 +147,7 @@
     height: 100%;
     align-items: center;
     position: relative;
+    color: var(--color-fg-mid);
 
     &:hover
     {
