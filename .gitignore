@@ -266,4 +266,5 @@ App_Data/
 wwwroot/Media/
 Temp/
 **/Assets/app.*
+**/Assets/setup.*
 deps/*.dll

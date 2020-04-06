@@ -20,8 +20,6 @@ export default {
     key = hasAtSign ? key.slice(1) : key;
     let value = this.cache;
 
-    console.info({ key, value });
-
     for (let part of key.split('.'))
     {
       if (!value[part])

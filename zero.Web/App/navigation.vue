@@ -50,7 +50,7 @@
 
     mounted ()
     {
-      console.info(this.$router);
+      console.info(this.$router.history.current.path);
 
       SectionsApi.getAll().then(items =>
       {
