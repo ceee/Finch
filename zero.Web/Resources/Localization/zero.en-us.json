@@ -5,7 +5,8 @@
 
   "ui": {
     "more": "More",
-    "actions": "Actions"
+    "actions": "Actions",
+    "back": "Go back"
   },
 
   "sections": {

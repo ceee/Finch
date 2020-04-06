@@ -16,7 +16,7 @@ button
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
-  color: white;
+  color: var(--color-primary-fg);
   background: var(--color-primary);
   padding: 0 24px;
   height: 42px;
@@ -68,6 +68,13 @@ button
     padding: 0 30px;
   }
 
+  &.type-light
+  {
+    background: var(--color-bg-mid);
+    color: var(--color-fg);
+    border: none;
+  }
+
   &.type-block
   {
     display: flex;
@@ -76,14 +83,15 @@ button
 
   & + .ui-button
   {
-    margin-left: 10px;
+    margin-left: 15px;
   }
 
   [class^="fth-"]
   {
-    margin-left: 12px;
+    margin-left: 15px;
     margin-right: -7px;
     position: relative;
+    font-size: var(--font-size-l);
     top: -1px;
     color: var(--color-fg-mid);
   }
@@ -122,6 +130,33 @@ button
     margin: 0;
   }
 }
+
+
+.ui-icon-button
+{
+  @extend .ui-button;
+  background: var(--color-bg-mid);
+  padding: 0;
+  height: 32px;
+  width: 32px;
+  border-radius: 16px;
+  text-align: center;
+  justify-content: center;
+  font-size: var(--font-size-l);
+
+  &:hover
+  {
+    opacity: 1;
+  }
+
+  [class^="fth-"]
+  {
+    color: var(--color-fg);
+    margin: 0;
+    top: 0;
+  }
+}
+
 
 
 /*button

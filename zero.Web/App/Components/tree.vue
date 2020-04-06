@@ -251,7 +251,6 @@
   .ui-tree-item-actions
   {
     transition: opacity 0.2s ease 0;
-    margin-right: -8px;
     opacity: 0;
     color: var(--color-fg-mid);
   }

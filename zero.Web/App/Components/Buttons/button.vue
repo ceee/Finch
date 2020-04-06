@@ -2,6 +2,7 @@
   <button class="ui-button" :class="buttonClass" @click="click">
     <span v-html="label"></span>
     <i v-if="caret" :class="caretClass"></i>
+    <i v-if="icon" :class="icon"></i>
   </button>
 </template>
 
@@ -23,6 +24,9 @@
         type: String,
         default: 'action'
       },
+      icon: {
+        type: String
+      },
       caret: String,
       caretPosition: {
         type: String,
@@ -36,7 +40,7 @@
     },
 
     computed: {
-      buttonClass() { return 'type-' + this.type.split(' ').join(' type-') + ' caret-' + this.caretPosition; },
+      buttonClass() { return 'type-' + this.type.split(' ').join(' type-') + ' caret-' + this.caretPosition + (!!this.icon ? ' has-icon' : ''); },
       caretClass() { return 'fth-chevron-' + this.caret; }
     },
 
