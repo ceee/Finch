@@ -10,14 +10,14 @@
     <nav class="app-nav-inner">
       <template v-for="section in sections">
         <router-link :to="getLink(section)" class="app-nav-item" :class="{ 'has-children': hasChildren(section) }">
-          <i class="app-nav-item-icon" :class="section.icon" :style="{ color: section.color ? section.color : null }"></i>
+          <i class="app-nav-item-icon" :class="section.icon" :style="{ color: false && section.color ? section.color : null }"></i>
           {{section.name | localize}}
           <i v-if="hasChildren(section)" class="app-nav-item-arrow fth-chevron-down"></i>
         </router-link>
         <transition name="app-nav-children">
           <div class="app-nav-children" v-if="hasChildren(section) && $route.path.indexOf('/' + section.alias) > -1">
             <router-link v-for="child in section.children" v-bind:key="child.alias" :to="getLink(section, child)" class="app-nav-child">
-              {{child.name}}
+              {{child.name | localize}}
             </router-link>
           </div>
         </transition>
@@ -50,7 +50,7 @@
 
     mounted ()
     {
-      console.info(this.$router.history.current.path);
+      //console.info(this.$router.history.current.path);
 
       SectionsApi.getAll().then(items =>
       {

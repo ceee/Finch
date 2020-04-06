@@ -62,6 +62,11 @@ a.app-nav-item
   {
     background: rgba(black, 0.1);
     color: var(--color-fg-reverse);
+
+    .app-nav-item-icon
+    {
+      color: var(--color-fg-reverse);
+    }
   }
 
   &.is-active
@@ -88,6 +93,7 @@ a.app-nav-item
   position: relative;
   top: -2px;
   color: var(--color-fg-reverse-mid);
+  transition: color 0.2s ease;
 }
 
 .app-nav-children

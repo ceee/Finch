@@ -1,6 +1,7 @@
 ﻿<template>
   <div class="app">
     <app-navigation />
+    <div :is="pageComponent"></div>
   </div>
 </template>
 
@@ -18,7 +19,23 @@
 
     components: { AppNavigation },
 
-    data: () => ({}),
+    data: () => ({
+      
+    }),
+
+    computed: {
+      pageComponent()
+      {
+        return 'app-page';
+      },
+      path()
+      {
+        return this.$route.path;
+      }
+    },
+
+    methods: {
+    }
   }
 
 </script>

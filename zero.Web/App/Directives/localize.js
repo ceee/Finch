@@ -21,6 +21,6 @@ Vue.directive('localize', {
 
   localize(el, binding)
   {
-    el.innerText = Localization.localize(binding.value, binding.arg === 'force');
+    el.innerText = Localization.localize(binding.value, binding.arg === 'if');
   }
 });
