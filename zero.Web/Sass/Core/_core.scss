@@ -181,6 +181,19 @@ iframe, video
 }
 
 
+// screenreader
+
+.sr-only
+{
+  height: 1px;
+  width: 1px;
+  clip: rect(1px, 1px, 1px, 1px);
+  overflow: hidden;
+  position: absolute;
+  opacity: 0.01;
+}
+
+
 /// scrollbar
 
 *

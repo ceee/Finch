@@ -1,0 +1,9 @@
+﻿
+
+h2.ui-headline
+{
+  @extend %font;
+  margin: 0;
+  font-size: var(--font-size-l);
+  font-weight: 700;
+}

@@ -101,6 +101,29 @@ button
 }
 
 
+.ui-dot-button
+{
+  @extend .ui-button;
+  background: transparent;
+  padding: 0;
+  height: 28px;
+  width: 36px;
+  text-align: center;
+  justify-content: center;
+  font-size: var(--font-size-xl);
+
+  &:hover
+  {
+    background: rgba(white, 0.05);
+  }
+
+  [class^="fth-"]
+  {
+    margin: 0;
+  }
+}
+
+
 /*button
 {
   @extend %font;

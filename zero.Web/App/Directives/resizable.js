@@ -45,16 +45,16 @@ var Resizable = function (element, params)
   // binds events to the handle so the resizing works
   this.listen = () =>
   {
-    this.element.addEventListener('mousedown', this.start);
-    this.element.addEventListener('dblclick', this.reset);
+    this.handle.addEventListener('mousedown', this.start);
+    this.handle.addEventListener('dblclick', this.reset);
   };
 
 
   // detaches the resizable
   this.detach = () =>
   {
-    this.element.removeEventListener('mousedown', this.start);
-    this.element.removeEventListener('dblclick', this.reset);
+    this.handle.removeEventListener('mousedown', this.start);
+    this.handle.removeEventListener('dblclick', this.reset);
     document.removeEventListener('mousemove', this.resize);
     document.removeEventListener('mouseup', this.stop);
   };

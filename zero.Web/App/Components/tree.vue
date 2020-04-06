@@ -11,6 +11,7 @@
           <i v-if="item.modifier" :title="item.modifier.name" class="ui-tree-item-modifier" :class="item.modifier.icon"></i>
           {{item.name | localize}}
         </router-link>
+        <ui-dot-button class="ui-tree-item-actions" />
       </div>
       <ui-tree v-if="item.hasChildren && item.isOpen" :get="get" :parent="item.id" :depth="depth + 1" />
     </template>
@@ -126,7 +127,7 @@
   .ui-tree-item
   {
     display: grid;
-    
+    grid-template-columns: 1fr auto;
     align-items: center;
     font-size: var(--font-size);
     padding: 0 var(--padding);
@@ -139,6 +140,13 @@
     {
       transition: transform 0.2s ease;
     }
+
+    &:hover > .ui-tree-item-actions
+    {
+      transition-delay: 0.2s;
+      opacity: 1;
+    }
+    
 
     &.is-open > .ui-tree-item-toggle .ui-tree-item-arrow
     {
@@ -233,10 +241,18 @@
     border-radius: 50%;
     width: 14px;
     height: 14px;
-    color: var(--color-text-mid);
+    color: var(--color-fg-mid);
     font-size: 11px;
     font-style: normal;
     text-align: center;
     line-height: 14px;
+  }
+
+  .ui-tree-item-actions
+  {
+    transition: opacity 0.2s ease 0;
+    margin-right: -8px;
+    opacity: 0;
+    color: var(--color-fg-mid);
   }
 </style>

@@ -1,6 +1,9 @@
 ﻿<template>
   <div class="page-container">
-    <div class="page-container-tree" v-resizable="{ axis: 'x', min: 260, max: 520, save: 'page-tree', handle: '.ui-resizable' }">
+    <div class="page-container-tree" v-resizable="resizable">
+      <ui-header-bar title="Pages">
+        <ui-dot-button style="margin-right: -8px;" />
+      </ui-header-bar>
       <ui-tree :get="getItems" />
       <div class="page-container-tree-resizable ui-resizable"></div>
     </div>
@@ -15,7 +18,14 @@
     name: 'app-page',
 
     data: () => ({
-      cache: {}
+      cache: {},
+      resizable: {
+        axis: 'x',
+        min: 260,
+        max: 520,
+        save: 'page-tree',
+        handle: '.ui-resizable'
+      }
     }),
 
     methods: {
@@ -54,8 +64,13 @@
   {
     width: 340px;
     background: var(--color-bg-light);
-    padding: var(--padding) 0;
+    padding: 0;
     position: relative;
+
+    .ui-header-bar + .ui-tree
+    {
+      margin-top: 2px;
+    }
   }
 
   .page-container-tree-resizable

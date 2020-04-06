@@ -3,6 +3,11 @@
     "name": "zero"
   },
 
+  "ui": {
+    "more": "More",
+    "actions": "Actions"
+  },
+
   "sections": {
     "item": {
       "dashboard": "Dashboard",
