@@ -1,21 +1,25 @@
 ﻿<template>
   <div class="page-container">
-    <div class="page-container-tree">tree</div>
+    <div class="page-container-tree">
+      <ui-tree :get="getItems" />
+    </div>
     <div></div>
   </div>
 </template>
 
 
 <script>
+  import PageTreeApi from 'zeroresources/page-tree.js'
+
   export default {
     name: 'app-page',
 
-    mounted ()
-    {
-      
-    },
-
     methods: {
+
+      getItems(parent)
+      {
+        return PageTreeApi.getChildren(parent);
+      }
 
     }
   }

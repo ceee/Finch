@@ -1,0 +1,46 @@
+[
+  {
+    "id": "10",
+    "parentId": "1",
+    "sort": 0,
+    "name": "Products",
+    "icon": "fth-folder",
+    "hasChildren": false
+  },
+  {
+    "id": "11",
+    "parentId": "1",
+    "sort": 1,
+    "name": "Checkout",
+    "icon": "fth-folder",
+    "hasChildren": false
+  },
+  {
+    "id": "12",
+    "parentId": "1",
+    "sort": 2,
+    "name": "About us",
+    "icon": "fth-folder",
+    "modifier": {
+      "name": "Redirect",
+      "icon": "fth-arrow-up-right"
+    },
+    "hasChildren": false
+  },
+  {
+    "id": "13",
+    "parentId": "1",
+    "sort": 3,
+    "name": "Support",
+    "icon": "fth-folder",
+    "hasChildren": true
+  },
+  {
+    "id": "14",
+    "parentId": "1",
+    "sort": 4,
+    "name": "News",
+    "icon": "fth-folder",
+    "hasChildren": false
+  }
+]

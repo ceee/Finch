@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "parentId": null,
+    "sort": 0,
+    "name": "Home",
+    "description": "Entry point on the website",
+    "icon": "fth-home",
+    "hasChildren": true
+  },
+  {
+    "id": "-99",
+    "parentId": null,
+    "sort": 1000,
+    "name": "@generic.recyclebin.name",
+    "description": "@generic.recyclebin.description",
+    "icon": "fth-trash",
+    "hasChildren": false
+  }
+]

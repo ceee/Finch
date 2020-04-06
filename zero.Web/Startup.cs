@@ -129,6 +129,8 @@ namespace zero.Web
       services.AddTransient<ISetupApi, SetupApi>();
       services.AddTransient<ISectionsApi, SectionsApi>();
       services.AddTransient<IApplicationsApi, ApplicationsApi>();
+      services.AddTransient<IPagesApi, PagesApi>();
+      services.AddTransient<IPageTreeApi, PageTreeApi>();
     }
 
     /// <summary>
