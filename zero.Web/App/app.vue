@@ -1,7 +1,9 @@
 ﻿<template>
   <div class="app">
     <app-navigation />
-    <div :is="pageComponent"></div>
+    <div class="app-main">
+      <div :is="pageComponent"></div>
+    </div>
   </div>
 </template>
 
@@ -19,21 +21,23 @@
     components: { AppNavigation },
 
     data: () => ({
-      
+      pageComponent: null
     }),
 
-    computed: {
-      pageComponent()
-      {
-        return 'app-page';
-      },
-      path()
-      {
-        return this.$route.path;
-      }
+    watch: {
+      '$route': 'update'
+    },
+
+    mounted()
+    {
+      this.update();
     },
 
     methods: {
+      update()
+      {
+        this.pageComponent = this.$route.path.indexOf('/settings') === 0 ? 'app-settings' : 'app-page';
+      }
     }
   }
 

@@ -15,7 +15,10 @@
     name: 'uiDropdown',
 
     props: {
-      
+      disabled: {
+        type: Boolean,
+        default: false
+      }
     },
 
     data: () => ({

@@ -6,4 +6,9 @@ h2.ui-headline
   margin: 0;
   font-size: var(--font-size-l);
   font-weight: 700;
+
+  &.xl
+  {
+    font-size: var(--font-size-xl);
+  }
 }

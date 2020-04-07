@@ -59,7 +59,7 @@
       });
       this.actions.push({
         name: 'Sort',
-        icon: 'fth-shuffle'
+        icon: 'fth-arrow-down'
       });
       this.actions.push({
         type: 'separator'
