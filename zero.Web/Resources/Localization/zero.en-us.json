@@ -19,6 +19,49 @@
     }
   },
 
+  "settings": {
+    "groups": {
+      "system": "System",
+      "plugins": "Plugins"
+    },
+    "system": {
+      "updates": {
+        "name": "Updates",
+        "text": "Version {version}"
+      },
+      "applications": {
+        "name": "Applications",
+        "text": "Edit website applications"
+      },
+      "users": {
+        "name": "Users & Permissions",
+        "text": "Administration of backoffice users"
+      },
+      "translations": {
+        "name": "Translations",
+        "text": "Frontend texts and translations"
+      },
+      "countries": {
+        "name": "Countries",
+        "text": "Manage list of countries"
+      },
+      "logs": {
+        "name": "Logging",
+        "text": "Debug und view logs"
+      }
+    },
+    "plugins": {
+      "installed": {
+        "name": "Installed",
+        "text": "{count} installed plugin(s)"
+      },
+      "create": {
+        "name": "Create a plugin",
+        "text": "Create from existing code"
+      }
+    }
+  },
+
   "recyclebin": {
     "name": "Recycle bin",
     "description": "View recently deleted entities"

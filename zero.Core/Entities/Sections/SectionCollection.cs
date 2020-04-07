@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace zero.Core.Entities.Sections
+namespace zero.Core.Entities
 {
   public class SectionCollection : List<ISection>
   {

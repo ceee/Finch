@@ -2,7 +2,6 @@
 using System;
 using System.Linq;
 using zero.Core.Entities;
-using zero.Core.Entities.Sections;
 
 namespace zero.Core.Api
 {

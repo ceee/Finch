@@ -1,4 +1,5 @@
-﻿using zero.Core.Entities.Sections;
+﻿using System.Collections.Generic;
+using zero.Core.Entities;
 
 namespace zero.Core
 {
@@ -7,5 +8,7 @@ namespace zero.Core
     public string BackofficePath { get; set; }
 
     public SectionCollection Sections { get; private set; } = new SectionCollection();
+
+    public IList<SettingsGroup> SettingsAreas { get; private set; } = new List<SettingsGroup>();
   }
 }

@@ -7,9 +7,9 @@
           <i class="settings-group-item-icon" :class="item.icon || 'fth-settings'" />
           <p class="settings-group-item-text">
             <strong v-localize="item.name"></strong>
-            <template v-if="item.text">
+            <template v-if="item.description">
               <br>
-              {{item.text | localize}}
+              {{item.description | localize}}
             </template>
           </p>
         </router-link>
@@ -20,6 +20,8 @@
 
 
 <script>
+  import SettingsApi from 'zeroresources/settings.js'
+
   export default {
     name: 'app-settings',
 
@@ -29,56 +31,9 @@
 
     created()
     {
-      this.groups.push({
-        name: 'System',
-        items: [
-          {
-            name: 'Updates',
-            text: 'Version 1.0.0',
-            icon: 'fth-check-circle'
-          },
-          {
-            name: 'Applications',
-            text: 'Edit website applications',
-            icon: 'fth-layers'
-          },
-          {
-            name: 'Users & Permissions',
-            text: 'Administration of backoffice users',
-            icon: 'fth-users'
-          },
-          {
-            name: 'Translations',
-            text: 'Frontend texts and translations',
-            icon: 'fth-type'
-          },
-          {
-            name: 'Countries',
-            text: 'Manage list of countries',
-            icon: 'fth-map-pin'
-          },
-          {
-            name: 'Logging',
-            text: 'Debug und view logs',
-            icon: 'fth-file-text'
-          },
-        ]
-      });
-      
-      this.groups.push({
-        name: 'Plugins',
-        items: [
-          {
-            name: 'Installed',
-            text: '7 installed plugins',
-            icon: 'fth-package'
-          },
-          {
-            name: 'Create a plugin',
-            text: 'Create from existing code',
-            icon: 'fth-box'
-          }
-        ]
+      SettingsApi.getAreas().then(items =>
+      {
+        this.groups = items;
       });
     },
 
@@ -116,7 +71,7 @@
   .settings-group-items
   {
     display: grid;
-    grid-gap: 40px;
+    grid-gap: 30px;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     align-items: stretch;
     margin-top: 40px;
@@ -133,21 +88,20 @@
 
     &:hover .settings-group-item-icon
     {
-      border-color: var(--color-highlight);
+      background: var(--color-bg-mid);
     }
   }
 
   .settings-group-item-icon
   {
-    width: 80px;
-    height: 80px;
-    line-height: 76px;
+    width: 70px;
+    height: 70px;
+    line-height: 68px;
     font-size: 24px;
     text-align: center;
-    background: var(--color-bg-mid);
-    border: 2px solid transparent;
+    background: var(--color-bg-light);
     border-radius: var(--radius);
-    transition: border 0.2s ease;
+    transition: background 0.2s ease;
   }
 
   .settings-group-item-text
