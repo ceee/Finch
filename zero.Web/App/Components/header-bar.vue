@@ -66,6 +66,11 @@
     display: flex;
     align-items: center;
     height: 100%;
+
+    > * + *
+    {
+      margin-left: 15px;
+    }
   }
 
   .ui-header-bar-title

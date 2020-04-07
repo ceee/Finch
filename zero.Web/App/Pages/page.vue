@@ -9,7 +9,12 @@
     </div>
     <div>
       <ui-header-bar title="Checkout" :on-back="onBack">
-        <ui-button type="light" label="Actions" caret="down" />
+        <ui-dropdown>
+          <template v-slot:button>
+            <ui-button type="light" label="Actions" caret="down" />
+          </template>
+          <ui-dropdown-list :items="actions" :action="actionSelected" />
+        </ui-dropdown>
         <ui-button type="light" label="Preview" icon="fth-eye" />
         <ui-button label="Save" />
       </ui-header-bar>
@@ -32,8 +37,44 @@
         max: 520,
         save: 'page-tree',
         handle: '.ui-resizable'
-      }
+      },
+      actions: []
     }),
+
+
+    created()
+    {
+      this.actions.push({
+        name: 'Create',
+        icon: 'fth-plus'
+      });
+      this.actions.push({
+        name: 'Move',
+        icon: 'fth-corner-down-right'
+      });
+      this.actions.push({
+        name: 'Copy',
+        icon: 'fth-copy',
+        disabled: true
+      });
+      this.actions.push({
+        name: 'Sort',
+        icon: 'fth-shuffle'
+      });
+      this.actions.push({
+        type: 'separator'
+      });
+      this.actions.push({
+        name: 'Delete',
+        icon: 'fth-x',
+        action(item, dropdown)
+        {
+          console.info('actionDeleteSelected', item);
+          dropdown.hide();
+        }
+      });
+    },
+
 
     methods: {
 
@@ -51,6 +92,12 @@
           this.cache[key] = response;
           return response;
         });
+      },
+
+      actionSelected(item, dropdown)
+      {
+        console.info('actionSelected', item);
+        dropdown.hide();
       },
 
       onBack()

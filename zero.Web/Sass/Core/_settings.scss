@@ -24,11 +24,17 @@
   --color-line: #2f3233;
   --color-line-mid: #d7d8d9;
 
+  // misc colors
+  --color-shadow: rgba(0,0,0,0.3);
+  --color-highlight: rgba(255,255,255, 0.05);
+
 
   // sizes
 
   --padding: 32px;
+  --padding-s: 24px;
   --height-top: 74px;
+  --radius: 5px;
 
   --font-size: 14px;
   --font-size-s: 12px;
