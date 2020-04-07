@@ -4,10 +4,16 @@ button
 {
   @extend %font;
   color: var(--color-fg);
+  outline: none !important;
 
-  &:focus
+  &:visited, &:link
   {
-    outline: 1px dotted var(--color-line);
+    text-decoration: none;
+  }
+
+  &:focus, &:active
+  {
+    outline: none !important;
   }
 }
 
@@ -33,11 +39,17 @@ button
   will-change: transform, background, border-color;
   transition: background .2s, transform .2s, opacity .2s;
   overflow: hidden;
+  outline: none !important;
   @extend %font;
 
   &:hover
   {
     opacity: 0.9;
+  }
+
+  &:focus, &:active
+  {
+    outline: none !important;
   }
 
   &:active

@@ -9,6 +9,7 @@
     "axios": "^0.19.2",
     "dayjs": "^1.8.23",
     "lodash": "*",
+    "underscore": "^1.10.2",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6"
   },

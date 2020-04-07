@@ -69,7 +69,6 @@
         icon: 'fth-x',
         action(item, dropdown)
         {
-          console.info('actionDeleteSelected', item);
           dropdown.hide();
         }
       });
@@ -96,7 +95,6 @@
 
       actionSelected(item, dropdown)
       {
-        console.info('actionSelected', item);
         dropdown.hide();
       },
 

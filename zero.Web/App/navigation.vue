@@ -3,9 +3,12 @@
 
     <h1 class="app-nav-headline" v-localize="'@zero.name'">zero</h1>
 
-    <div class="app-nav-switch">
-      <ui-button v-if="applications.length > 0" type="action block" :label="applications[0].name" caret="down" />
-    </div>
+    <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">
+      <template v-slot:button>
+        <ui-button type="action block" :label="applications[0].name" caret="down" />
+      </template>
+      <ui-dropdown-list :items="applicationItems" :action="applicationChanged" />
+    </ui-dropdown>
 
     <nav class="app-nav-inner">
       <template v-for="section in sections">
@@ -39,12 +42,14 @@
 <script>
   import ApplicationsApi from 'zeroresources/applications.js'
   import SectionsApi from 'zeroresources/sections.js'
+  import { map as umap } from 'underscore';
 
   export default {
     name: 'app-navigation',
 
     data: () => ({
       applications: [],
+      applicationItems: [],
       sections: []
     }),
 
@@ -59,8 +64,30 @@
       ApplicationsApi.getAll().then(items =>
       {
         this.applications = items;
+
+        this.applicationItems = umap(items, item =>
+        {
+          return {
+            application: item,
+            active: item.name === "Brothers", // TODO correct active application
+            name: item.name
+          };
+        });
+
+        this.applicationItems.push({
+          type: 'separator'
+        });
+        this.applicationItems.push({
+          name: 'Add new application...',
+          icon: 'fth-plus',
+          action(item, dropdown)
+          {
+            console.info('add');
+          }
+        });
       });
     },
+
 
     methods: {
 
@@ -87,6 +114,11 @@
         }
 
         return '/' + section.alias + '/' + child.alias;
+      },
+
+      applicationChanged(item, dropdown)
+      {
+        console.info('change');
       }
 
     }

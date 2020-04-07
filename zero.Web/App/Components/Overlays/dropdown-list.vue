@@ -1,9 +1,11 @@
 ﻿<template>
-  <div class="ui-dropdown-list">
+  <div class="ui-dropdown-list" :class="{ 'is-multiline': multiline }">
     <template v-for="item in items">
-      <button v-if="!item.type || item.type === 'button'" :disabled="item.disabled" type="button" @click="clicked(item)" class="ui-dropdown-list-item">
+      <button v-if="!item.type || item.type === 'button'" :disabled="item.disabled" type="button" @click="clicked(item)" 
+              class="ui-dropdown-list-item" :class="{ 'has-icon': item.icon, 'is-active': item.active || item.isActive }">
         <i v-if="item.icon" class="ui-dropdown-list-item-icon" :class="item.icon" :style="{ color: item.color ? item.color : null }"></i>
         {{item.name | localize}}
+        <i v-if="item.active || item.isActive" class="ui-dropdown-list-item-selected fth-check"></i>
       </button>
       <hr class="ui-dropdown-list-separator" v-if="item.type === 'separator'">
     </template>
@@ -16,6 +18,10 @@
     name: 'uiDropdownList',
 
     props: {
+      multiline: {
+        type: Boolean,
+        default: false
+      },
       items: {
         type: Array,
         required: true,
@@ -74,11 +80,11 @@
     padding: 5px;
   }
 
-  .ui-dropdown-list-item
+  button.ui-dropdown-list-item
   {
     display: grid;
     width: 100%;
-    grid-template-columns: 30px 1fr auto;
+    grid-template-columns: 1fr auto;
     grid-gap: 6px;
     align-items: center;
     font-size: var(--font-size);
@@ -86,17 +92,37 @@
     height: 46px;
     color: var(--color-fg-mid);
     border-radius: var(--radius);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 300px;
 
-    &:not([disabled]):hover, &.is-active
+    &.has-icon
+    {
+      grid-template-columns: 30px 1fr auto;
+    }
+
+    .is-multiline &
+    {
+      white-space: normal;
+      overflow: visible;
+    }
+
+    &:not([disabled]):hover, &.is-active, &:focus
     {
       background: var(--color-highlight);
       color: var(--color-fg);
-      font-weight: 700;
+      //font-weight: 700;
 
       .ui-dropdown-list-item-icon
       {
         color: var(--color-fg);
       }
+    }
+
+    &.is-active
+    {
+      font-weight: 700;
     }
 
     &[disabled]
@@ -126,6 +152,6 @@
   .ui-dropdown-list-separator
   {
     border-bottom-color: var(--color-highlight);
-    margin: 10px 0;
+    margin: 5px 0;
   }
 </style>

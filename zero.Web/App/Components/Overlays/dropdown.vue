@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-dropdown-container">
-    <div class="ui-dropdown-toggle" @click.stop.prevent="toggle">
+    <div class="ui-dropdown-toggle" @click.stop="toggle">
       <slot name="button"></slot>
     </div>
     <div class="ui-dropdown" role="dialog" v-if="open" v-click-outside="hide">
@@ -70,7 +70,7 @@
   {
     position: absolute;
     min-width: 300px;
-    min-height: 200px;
+    min-height: 20px;
     background: var(--color-bg-mid);
     border-radius: var(--radius);
     border: 1px solid var(--color-line);
