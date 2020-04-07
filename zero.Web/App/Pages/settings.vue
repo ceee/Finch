@@ -100,7 +100,7 @@
   {
     height: 100%;
     position: relative;
-    padding: 95px 0 0 95px;
+    padding: 95px 95px 0 95px;
     width: 100%;
     max-width: 1600px;
   }
@@ -152,11 +152,13 @@
 
   .settings-group-item-text
   {
-    line-height: 1.6;
+    line-height: 1.3;
     color: var(--color-fg-light);
 
     strong
     {
+      display: inline-block;
+      margin-bottom: 5px;
       color: var(--color-fg);
     }
   }

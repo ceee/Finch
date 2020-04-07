@@ -4,7 +4,8 @@ button
 {
   @extend %font;
   color: var(--color-fg);
-  outline: none !important;
+  outline: 0 solid transparent !important;
+  display: inline-block;
 
   &:visited, &:link
   {
@@ -13,8 +14,13 @@ button
 
   &:focus, &:active
   {
-    outline: none !important;
+    outline: 0 solid transparent !important;
   }
+}
+
+button::-moz-focus-inner
+{
+  border: 0;
 }
 
 .ui-button
@@ -32,14 +38,13 @@ button
   margin: 0;
   -webkit-backface-visibility: hidden;
   -webkit-appearance: none;
-  outline: none;
   cursor: pointer;
   user-select: none;
   border: none;
   will-change: transform, background, border-color;
   transition: background .2s, transform .2s, opacity .2s;
   overflow: hidden;
-  outline: none !important;
+  outline: 0 solid transparent !important;
   @extend %font;
 
   &:hover
