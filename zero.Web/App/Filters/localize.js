@@ -4,7 +4,7 @@ import Localization from 'zeroservices/localization';
 /// <summary>
 /// Localizes the given property and sets the inner-text of the node to its result
 /// </summary>
-Vue.filter('localize', (value, force) =>
+Vue.filter('localize', (value, options) =>
 {
-  return Localization.localize(value, force === true);
+  return Localization.localize(value, options);
 }); 

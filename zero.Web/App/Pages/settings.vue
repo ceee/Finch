@@ -9,7 +9,7 @@
             <strong v-localize="item.name"></strong>
             <template v-if="item.description">
               <br>
-              {{item.description | localize}}
+              {{item.description | localize({ tokens: tokens })}}
             </template>
           </p>
         </router-link>
@@ -26,7 +26,11 @@
     name: 'app-settings',
 
     data: () => ({
-      groups: []
+      groups: [],
+      tokens: {
+        'zero_version': '1.0.0-alpha.1',
+        'plugin_count': 7
+      }
     }),
 
     created()

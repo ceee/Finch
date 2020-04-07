@@ -42,7 +42,7 @@
 <script>
   import ApplicationsApi from 'zeroresources/applications.js'
   import SectionsApi from 'zeroresources/sections.js'
-  import { map as umap } from 'underscore';
+  import { map as _map } from 'underscore';
 
   export default {
     name: 'app-navigation',
@@ -65,7 +65,7 @@
       {
         this.applications = items;
 
-        this.applicationItems = umap(items, item =>
+        this.applicationItems = _map(items, item =>
         {
           return {
             application: item,

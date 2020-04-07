@@ -27,7 +27,7 @@
     "system": {
       "updates": {
         "name": "Updates",
-        "text": "Version {version}"
+        "text": "Version {zero_version}"
       },
       "applications": {
         "name": "Applications",
@@ -53,7 +53,7 @@
     "plugins": {
       "installed": {
         "name": "Installed",
-        "text": "{count} installed plugin(s)"
+        "text": "{plugin_count} installed plugin(s)"
       },
       "create": {
         "name": "Create a plugin",
