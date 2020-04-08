@@ -1,6 +1,6 @@
 ﻿<template>
   <button type="button" class="ui-button" :class="buttonClass" @click="click">
-    <span v-html="label"></span>
+    <span v-localize="label"></span>
     <i v-if="caret" :class="caretClass"></i>
     <i v-if="icon" :class="icon"></i>
   </button>

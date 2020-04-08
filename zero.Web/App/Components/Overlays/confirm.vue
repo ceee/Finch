@@ -1,9 +1,9 @@
 ﻿<template>
   <div class="app-confirm">
-    <h2 class="ui-headline">{{model.title}}</h2>
-    <p>{{model.text}}</p>
-    <ui-button label="confirm" :click="confirm"></ui-button>
-    <ui-button label="close" :click="overlay.close"></ui-button>
+    <h2 class="ui-headline">{{overlay.title}}</h2>
+    <p>{{overlay.text}}</p>
+    <ui-button type="light" :label="overlay.closeLabel" :click="overlay.close"></ui-button>
+    <ui-button :label="overlay.confirmLabel" :click="confirm"></ui-button>
   </div>
 </template>
 
@@ -42,6 +42,5 @@
   .app-confirm
   {
     width: 400px;
-    height: 200px;
   }
 </style>

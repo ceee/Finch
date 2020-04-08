@@ -74,7 +74,8 @@
     height: auto;
     background: var(--color-bg);
     border-radius: var(--radius);
-    /*box-shadow: 0 0 80px transparent;*/
+    border: none !important;
+    box-shadow: 0 0 20px var(--color-shadow);
     padding: var(--padding);
     max-width: 460px;
     text-align: center;
@@ -82,7 +83,6 @@
     will-change: transform, opacity;
     -webkit-backface-visibility: hidden;
     z-index: 3;
-    border: none !important;
     color: var(--color-fg);
     font-size: var(--font-size);
   }

@@ -32,7 +32,15 @@
       {        
         if (this.dirty)
         {
-          Overlay.confirm('Confirm', 'Do you really want to leave this form?').then(() => next(), () => next(false));
+          Overlay.confirm({
+            title: 'You have unsaved changes',
+            text: 'Are you sure you want to navigate away from this page?',
+            confirmLabel: '@unsavedchanges.confirm',
+            closeLabel: '@unsavedchanges.close'
+          }).then(
+            () => next(false),
+            () => next()
+          );
         }
         else
         {

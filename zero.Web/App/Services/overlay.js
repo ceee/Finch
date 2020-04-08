@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import AppConfirm from 'zerocomponents/Overlays/confirm';
 import Strings from 'zeroservices/strings';
-import { find as _find } from 'underscore';
+import { find as _find, extend as _extend } from 'underscore';
 
 export default new Vue({
 
@@ -14,13 +14,13 @@ export default new Vue({
     // open a confirm dialog with the given options
     confirm(title, text)
     {
-      let options = typeof title === 'object' ? title : {
-        model: {
-          title: title,
-          text: text
-        },
+      let options = _extend({
+        title: title,
+        text: text,
+        confirmLabel: '@ui.confirm',
+        closeLabel: '@ui.close',
         component: AppConfirm
-      };
+      }, typeof title === 'object' ? title : {});
 
       return this.open(options);
     },

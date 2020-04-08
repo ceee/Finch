@@ -6,7 +6,14 @@
   "ui": {
     "more": "More",
     "actions": "Actions",
-    "back": "Go back"
+    "back": "Go back",
+    "close": "Close",
+    "confirm": "Confirm"
+  },
+
+  "unsavedchanges": {
+    "close": "Discard changes",
+    "confirm": "Stay"
   },
 
   "sections": {
