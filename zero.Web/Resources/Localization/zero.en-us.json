@@ -62,6 +62,25 @@
     }
   },
 
+  "user": {
+    "name": "User",
+    "fields": {
+      "name": "Name",
+      "name_placeholder": "Enter your real name or a username",
+      "email": "Email",
+      "email_text": "Also used as login username",
+      "email_placeholder": "Enter your email address",
+      "avatar": "Avatar",
+      "avatar_text": "Upload a user image",
+      "language": "Language",
+      "language_text": "Set the backoffice language for this user",
+      "roles": "Roles",
+      "roles_text": "Add default permissions from roles",
+      "sections": "Sections",
+      "sections_text": "Specify access to backoffice sections"
+    }
+  },
+
   "recyclebin": {
     "name": "Recycle bin",
     "description": "View recently deleted entities"

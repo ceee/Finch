@@ -26,7 +26,7 @@ Vue.directive('resizable', {
 // object (new) that handles resizing of an element
 var Resizable = function (element, params)
 {
-  const prefix = 'ui.resizable:';
+  const prefix = 'zero.ui-resizable.';
   const cacheKey = prefix + (params.save || 'none');
   const resizingClass = 'ui-resizing';
 

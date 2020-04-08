@@ -3,6 +3,7 @@
     <div class="ui-header-bar-main">
       <ui-icon-button v-if="onBack" :click="onBack" />
       <h2 v-if="title" class="ui-header-bar-title" v-localize="title"></h2>
+      <h2 v-if="!title && titleEmpty" class="ui-header-bar-title is-empty" v-localize="titleEmpty"></h2>
     </div>
     <div class="ui-header-bar-aside">
       <slot></slot>
@@ -17,6 +18,9 @@
 
     props: {
       title: {
+        type: String
+      },
+      titleEmpty: {
         type: String
       },
       onBack: {
@@ -79,5 +83,11 @@
     margin: 0;
     font-size: var(--font-size-l);
     font-weight: 700;
+
+    &.is-empty
+    {
+      color: var(--color-fg-light);
+      font-weight: 400;
+    }
   }
 </style>

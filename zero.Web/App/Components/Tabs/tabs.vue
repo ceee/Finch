@@ -18,28 +18,38 @@
     name: 'uiTabs',
 
     props: {
-      
-    },
-
-    data: () => ({
-      tabs: [],
-      active: 0
-    }),
-
-    computed: {
-      storageKey()
-      {
-        return `vue-tabs-component.cache.${window.location.host}${window.location.pathname}`;
+      cache: {
+        type: String
+      },
+      active: {
+        type: Number,
+        default: 0
       }
     },
 
+    data: () => ({
+      storageKey: null,
+      tabs: []
+    }),
+
     created()
     {
+      this.cacheKey = this.cache ? `zero.ui-tabs.cache.${this.cache}` : null;
       this.tabs = this.$children;
     },
 
     mounted()
     {
+      if (this.cache)
+      {
+        const cachedActiveTab = localStorage.getItem(this.cacheKey);
+        if (cachedActiveTab !== null)
+        {
+          this.select(+cachedActiveTab);
+          return;
+        }
+      }
+
       this.select(this.active);
     },
 
@@ -63,6 +73,11 @@
         {
           tab.active = index === tabIndex;
         });
+
+        if (this.cache)
+        {
+          localStorage.setItem(this.cacheKey, index);
+        }
 
         //this.$emit('changed', { tab: selectedTab });
         //this.activeTabHash = selectedTab.hash;

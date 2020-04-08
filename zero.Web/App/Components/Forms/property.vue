@@ -1,9 +1,9 @@
 ﻿<template>
   <div class="ui-property" :class="{'is-vertical': vertical }">
     <label v-if="label" class="ui-property-label" for="">
-      <span v-html="label"></span>
+      <span v-localize="label"></span>
       <strong class="ui-property-required" v-if="required">*</strong>
-      <small v-if="description" v-html="description"></small>
+      <small v-if="description" v-localize="description"></small>
     </label>
 
     <div class="ui-property-content">    
@@ -47,7 +47,7 @@
     {
       padding-top: 25px;
       margin-top: 25px;
-      border-top: 1px solid var(--color-line);
+      /*border-top: 1px solid var(--color-line);*/
     }
   }
 
@@ -86,16 +86,18 @@
     font-weight: 400;
     line-height: 1.5;
     text-decoration: none;
-    color: var(--color-fg-mid);
+    color: var(--color-fg-light);
   }
 
   .ui-property-required
   {
     color: var(--color-negative);
+    margin-left: 0.2em;
   }
 
   .ui-property-content
   {
     flex: 1;
+    max-width: 800px;
   }
 </style>

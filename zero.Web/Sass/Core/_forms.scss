@@ -1,10 +1,15 @@
 ﻿
 
+::placeholder
+{
+  color: var(--color-fg-light);
+}
+
 input, textarea
 {
   @extend %font;
-  background: var(--color-bg);
-  border: 1px solid var(--color-line);
+  background: var(--color-bg-mid);
+  border: 1px solid transparent;
   font-size: $font-size;
   display: inline-block;
   height: 40px;
@@ -18,6 +23,6 @@ input, textarea
 
   &:focus
   {
-    border: 1px solid var(--color-line-mid);
+    border-color: var(--color-line-mid);
   }
 }
