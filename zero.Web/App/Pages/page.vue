@@ -30,6 +30,7 @@
     name: 'app-page',
 
     data: () => ({
+      page: true,
       cache: {},
       resizable: {
         axis: 'x',

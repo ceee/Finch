@@ -26,6 +26,7 @@
     name: 'app-settings',
 
     data: () => ({
+      page: true,
       groups: [],
       tokens: {
         'zero_version': '1.0.0-alpha.1',
@@ -101,7 +102,7 @@
   {
     width: 70px;
     height: 70px;
-    line-height: 68px;
+    line-height: 68px !important;
     font-size: 24px;
     text-align: center;
     background: var(--color-bg-light);

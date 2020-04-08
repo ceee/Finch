@@ -1,12 +1,18 @@
 ﻿import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+import ViewSettings from 'zeropages/settings';
+import ViewSettingsUser from 'zeropages/settings/user';
+import ViewDefault from 'zeropages/page';
+
 Vue.use(VueRouter);
 
 history.scrollRestoration = 'manual';
 
 const routes = [
-
+  { path: '/settings/user', component: ViewSettingsUser },
+  { path: '/settings*', component: ViewSettings },
+  { path: '*', component: ViewDefault }
 ];
 
 const router = new VueRouter({

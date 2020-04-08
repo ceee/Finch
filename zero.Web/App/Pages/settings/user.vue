@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="user">
+  <ui-form class="user">
 
     <ui-header-bar :title="model.name" title-empty="@user.name" :on-back="onBack">
       <ui-dropdown align="right">
@@ -36,7 +36,7 @@
       </ui-tab>
 
     </ui-tabs>
-  </div>
+  </ui-form>
 </template>
 
 
@@ -45,6 +45,7 @@
     name: 'app-settings-user',
 
     data: () => ({
+      page: true,
       actions: [],
       model: {
         name: null,
@@ -79,8 +80,7 @@
       actionSelected(item, dropdown)
       {
         dropdown.hide();
-      },
-
+      }
     }
   }
 </script>
