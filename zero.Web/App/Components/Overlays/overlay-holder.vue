@@ -1,76 +1,29 @@
 ﻿<template>
-  <div class="app-overlays" :class="{ 'has-multiple': multiple }">
-    <div v-for="instance in instances">
-      <template>{{instance.key}}</template>
-    </div>
-    <!--<ui-content-dialog v-for="instance in instances" :key="instance.id" :content="instance.data" :component="instance.component" />-->
-    <!--<ui-overlay v-for="instance in instances" :key="instance.id" :content="instance.data" :component="instance.component" />-->
+  <div class="app-overlays" :class="{ 'has-multiple': instances.length > 1 }">
+    <transition-group name="overlay" :duration="300">
+      <div class="app-overlay-outer" v-for="instance in instances" :key="instance.id">
+        <div class="app-overlay-bg" @click="close"></div>
+        <dialog open class="app-overlay">
+          <component :is="instance.component" :model.sync="instance.model" :overlay="instance"></component>
+        </dialog>
+      </div>
+    </transition-group>
   </div>
 </template>
 
 
 <script>
   import Overlay from 'zeroservices/overlay.js'
-  import Strings from 'zeroservices/strings.js'
 
   export default {
     data: () => ({
-      instances: []
+      instances: Overlay.instances
     }),
 
-    computed: {
-      multiple()
-      {
-        return this.instances.length > 1;
-      }
-    },
-
-    created ()
-    {
-      Overlay.$on('open', opts => this.open(opts));
-
-      //Overlay.$on('close', )
-
-      //EventHub.$on('overlay', (component, data) =>
-      //{
-      //  data.onClose = this.close;
-
-      //  this.instances.push({
-      //    id: Strings.guid(),
-      //    component: component,
-      //    data: data
-      //  });
-      //});
-
-      //EventHub.$on('overlay-close', () =>
-      //{
-      //  if (this.instances.length > 0)
-      //  {
-      //    this.close();
-      //  }    
-      //});
-    },
-
     methods: {
-
-      open(options)
-      {
-        const key = Strings.guid();
-
-        let instance = {
-          key: key,
-          component: options.component,
-          model: options.model,
-          options: options
-        };
-
-        this.instances.push(instance);
-      },
-
       close()
       {
-        //var instance = this.instances[this.instances.length - 1];
-        this.instances.pop();
+        Overlay.close();
       }
     }
   }
@@ -82,4 +35,83 @@
   {
     grid-column: span 2 / auto;
   }
+
+  .app-overlay-outer
+  {
+    display: flex;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    justify-content: center;
+    align-items: center;
+    will-change: opacity;
+
+    & + .app-overlay-outer .app-overlay
+    {
+      top: -10px;
+    }
+  }
+
+  .app-overlay-bg
+  {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-overlay-shade);
+    z-index: 2;
+    will-change: opacity;
+    opacity: 1;
+  }
+
+  .app-overlay
+  {
+    width: auto;
+    height: auto;
+    background: var(--color-bg);
+    border-radius: var(--radius);
+    /*box-shadow: 0 0 80px transparent;*/
+    padding: var(--padding);
+    max-width: 460px;
+    text-align: center;
+    position: relative;
+    will-change: transform, opacity;
+    -webkit-backface-visibility: hidden;
+    z-index: 3;
+    border: none !important;
+    color: var(--color-fg);
+    font-size: var(--font-size);
+  }
+
+  .overlay-enter-active, .overlay-leave-active
+  {
+    .app-overlay-bg
+    {
+      transition: opacity .3s ease;
+    }
+
+    .app-overlay
+    {
+      transition: transform .3s ease, opacity .3s ease;
+    }
+  }
+
+  .overlay-enter, .overlay-leave-to
+  { 
+    .app-overlay-bg
+    {
+      opacity: 0;
+    }
+
+    .app-overlay
+    {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  }
+
 </style>

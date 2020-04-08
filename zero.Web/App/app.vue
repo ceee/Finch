@@ -20,23 +20,7 @@
 
     router: Router,
 
-    components: { AppNavigation, AppOverlays },
-
-    data: () => ({
-      pageComponent: null
-    }),
-
-    mounted()
-    {
-      
-    },
-
-    methods: {
-      update()
-      {
-        
-      }
-    }
+    components: { AppNavigation, AppOverlays }
   }
 
 </script>

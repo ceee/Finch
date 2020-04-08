@@ -29,7 +29,7 @@
     methods: {
 
       beforeRouteLeave(to, from, next) 
-      {
+      {        
         if (this.dirty)
         {
           Overlay.confirm('Confirm', 'Do you really want to leave this form?').then(() => next(), () => next(false));

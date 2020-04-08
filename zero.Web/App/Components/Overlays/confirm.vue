@@ -1,14 +1,22 @@
 ﻿<template>
   <div class="app-confirm">
-    confirm
+    <h2 class="ui-headline">{{model.title}}</h2>
+    <p>{{model.text}}</p>
+    <ui-button label="confirm" :click="confirm"></ui-button>
+    <ui-button label="close" :click="overlay.close"></ui-button>
   </div>
 </template>
 
 
 <script>
+  import Overlay from 'zeroservices/overlay.js'
+
   export default {
 
-    props: [ 'content', 'component' ],
+    props: {
+      model: Object,
+      overlay: Object
+    },
 
     data: () => ({
       
@@ -16,10 +24,15 @@
 
     mounted()
     {
-      console.info(this.key, this.content, this.component);
+      
     },
 
     methods: {
+
+      confirm()
+      {
+        this.overlay.confirm({ success: true });
+      }
 
     }
   }
@@ -28,6 +41,7 @@
 <style lang="scss">
   .app-confirm
   {
-
+    width: 400px;
+    height: 200px;
   }
 </style>
