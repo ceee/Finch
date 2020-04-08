@@ -1,5 +1,5 @@
 ﻿<template>
-  <button class="ui-button" :class="buttonClass" @click="click">
+  <button type="button" class="ui-button" :class="buttonClass" @click="click">
     <span v-html="label"></span>
     <i v-if="caret" :class="caretClass"></i>
     <i v-if="icon" :class="icon"></i>

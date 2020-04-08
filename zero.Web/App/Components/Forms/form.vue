@@ -1,11 +1,13 @@
 ﻿<template>
-  <form class="ui-form" @change="changed">
+  <form class="ui-form" @submit="submit($event)" @change="changed">
     <slot />
   </form>
 </template>
 
 
 <script>
+  import Overlay from 'zeroservices/overlay.js'
+
   export default {
     name: 'uiForm',
 
@@ -21,42 +23,34 @@
 
     mounted()
     {
-      this.root = this.findRootComponent();
-      this.root.beforeRouteLeave = this.beforeRouteLeave;
-      console.info(this, this.root);
-    },
-
-    beforeRouteLeave(to, from, next) 
-    {
-      const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-      if (answer) {
-        next()
-      } else {
-        next(false)
-      }
+      
     },
 
     methods: {
 
-      findRootComponent()
+      beforeRouteLeave(to, from, next) 
       {
-        // find component which is attached to the router
-        let current = this;
-        do
+        if (this.dirty)
         {
-          if (current.page === true)
-          {
-            return current;
-          }
+          Overlay.confirm('Confirm', 'Do you really want to leave this form?').then(() => next(), () => next(false));
         }
-        while (current = current.$parent);
-
-        console.warn('ui-form: Could not find root component with page=true (on data set)');
+        else
+        {
+          next()
+        }
       },
+
 
       changed()
       {
         this.dirty = true;
+      },
+
+
+      submit(event)
+      {
+        event.preventDefault();
+        console.info('submit');
       }
 
     }

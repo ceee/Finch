@@ -1,5 +1,6 @@
 ﻿<template>
   <div class="app">
+    <app-overlays />
     <app-navigation />
     <div class="app-main">
       <router-view></router-view>
@@ -11,6 +12,7 @@
 <script>
   import '../Sass/app.scss'
   import AppNavigation from 'zero/navigation.vue'
+  import AppOverlays from 'zerocomponents/Overlays/overlay-holder.vue'
   import Router from '../router.js'
 
   export default {
@@ -18,7 +20,7 @@
 
     router: Router,
 
-    components: { AppNavigation },
+    components: { AppNavigation, AppOverlays },
 
     data: () => ({
       pageComponent: null

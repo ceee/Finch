@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-form class="user">
+  <ui-form ref="form" class="user">
 
     <ui-header-bar :title="model.name" title-empty="@user.name" :on-back="onBack">
       <ui-dropdown align="right">
@@ -67,6 +67,12 @@
         name: 'Delete',
         icon: 'fth-x'
       });
+    },
+
+
+    beforeRouteLeave(to, from, next) 
+    {
+      this.$refs.form.beforeRouteLeave(to, from, next);
     },
 
 
