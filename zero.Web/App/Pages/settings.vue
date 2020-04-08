@@ -3,7 +3,7 @@
     <div class="settings-group" v-for="group in groups">
       <h2 class="ui-headline xl settings-group-headline" v-localize="group.name"></h2>
       <div class="settings-group-items">
-        <router-link to="/" v-for="item in group.items" :key="item.name" class="settings-group-item">
+        <router-link :to="item.url || '/'" v-for="item in group.items" :key="item.name" class="settings-group-item">
           <i class="settings-group-item-icon" :class="item.icon || 'fth-settings'" />
           <p class="settings-group-item-text">
             <strong v-localize="item.name"></strong>
@@ -37,6 +37,7 @@
     {
       SettingsApi.getAreas().then(items =>
       {
+        items[0].items[2].url = '/settings/user';
         this.groups = items;
       });
     },

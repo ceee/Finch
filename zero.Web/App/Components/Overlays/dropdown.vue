@@ -3,7 +3,7 @@
     <div class="ui-dropdown-toggle" @click.stop="toggle">
       <slot name="button"></slot>
     </div>
-    <div class="ui-dropdown" role="dialog" v-if="open" v-click-outside="hide">
+    <div class="ui-dropdown" role="dialog" v-if="open" v-click-outside="hide" :class="'align-' + align">
       <slot></slot>
     </div>
   </div>
@@ -15,6 +15,10 @@
     name: 'uiDropdown',
 
     props: {
+      align: {
+        type: String,
+        default: 'left'
+      },
       disabled: {
         type: Boolean,
         default: false
@@ -80,5 +84,10 @@
     box-shadow: 0 0 20px var(--color-shadow);
     z-index: 8;
     top: calc(100% + 5px);
+
+    &.align-right
+    {
+      right: 0;
+    }
   }
 </style>

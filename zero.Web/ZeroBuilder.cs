@@ -17,6 +17,14 @@ namespace zero.Web
     {
       Services = services;
       Services.AddOptions<ZeroOptions>().Configure(opts => ConfigureDefaults(opts));
+
+      //services.AddAuthorization(opts =>
+      //{
+      //  opts.AddPolicy("zero.sections.dashboard", builder =>
+      //  {
+      //    //builder.RequireClaim()
+      //  });
+      //});
     }
 
 

@@ -36,7 +36,18 @@
     methods: {
       update()
       {
-        this.pageComponent = this.$route.path.indexOf('/settings') === 0 ? 'app-settings' : 'app-page';
+        if (this.$route.path.indexOf('/settings/user') === 0)
+        {
+          this.pageComponent = 'app-user';
+        }
+        else if (this.$route.path.indexOf('/settings') === 0)
+        {
+          this.pageComponent = 'app-settings';
+        }
+        else
+        {
+          this.pageComponent = 'app-page';
+        }
       }
     }
   }

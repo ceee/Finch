@@ -4,6 +4,11 @@ using zero.Core.Attributes;
 
 namespace zero.Core.Entities
 {
+  public interface IZeroEntity
+  {
+    string Id { get; set; }
+  }
+
   [DebuggerDisplay("Id = {Id,nq}, Name = {Name}, Alias = {Alias}")]
   public abstract class DatabaseEntity : IDatabaseEntity
   {
