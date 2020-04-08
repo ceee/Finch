@@ -9,6 +9,14 @@
       </ui-dropdown>
       <ui-button label="Save" />
     </ui-header-bar>
+    <ui-tabs>
+      <ui-tab class="ui-box" label="General">
+        general
+      </ui-tab>
+      <ui-tab class="ui-box" label="Permissions">
+        permissions
+      </ui-tab>
+    </ui-tabs>
   </div>
 </template>
 
