@@ -63,7 +63,7 @@
     },
 
     data: () => ({
-      stateTimeout: null,
+      stateTimeout: null
     }),
 
     computed: {
@@ -123,7 +123,7 @@
               console.warn(`ui-button: Add the .sync modifier to the "state" property, as changing the state to "${STATE_SUCCESS}" or "${STATE_ERROR}" will automatically set it back to "${STATE_DEFAULT}" after the state duration timeout`);
             }
 
-            this.$emit(stateUpdate, STATE_DEFAULT);
+            this.setState(STATE_DEFAULT);
           }, this.stateDuration);
         }
       }
@@ -135,6 +135,11 @@
     },
 
     methods: {
+
+      setState(state)
+      {
+        this.$emit('update:state', state);
+      },
 
       tryClick(ev)
       {

@@ -34,6 +34,7 @@ module.exports = {
       'zeroservices': path.join(__dirname, 'App', 'Services'),
       'zerofilters': path.join(__dirname, 'App', 'Filters'),
       'zeropages': path.join(__dirname, 'App', 'Pages'),
+      'zeromixins': path.join(__dirname, 'App', 'Mixins'),
       '@': __dirname
     }
   },

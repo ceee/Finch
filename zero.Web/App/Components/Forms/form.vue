@@ -1,5 +1,5 @@
 ﻿<template>
-  <form class="ui-form" @submit.prevent="submitted" @change="changed">
+  <form class="ui-form" @submit.prevent="onSubmit" @change="onChange">
     <slot />
   </form>
 </template>
@@ -17,16 +17,21 @@
         type: Function,
         default: () => { }
       },
-      change: {
-        type: Function,
-        default: () => { }
+      state: {
+        type: String,
+        default: 'default'
+      },
+      mapState: {
+        type: Boolean,
+        default: true
       }
     },
 
     data: () => ({
       dirty: false,
       errors: [],
-      errorFieldComponents: [ 'uiError' ]
+      errorFieldComponents: ['uiError'],
+      stateComponents: ['uiButton']
     }),
 
     created()
@@ -36,7 +41,7 @@
 
     mounted()
     {
-      
+      this.stateComponents = this.findStateComponents(['uiButton']); 
     },
 
     methods: {
@@ -63,19 +68,73 @@
         }
       },
 
+      // handles a promise
+      handle(promise)
+      {
+        this.setState('loading');
+
+        return new Promise((resolve, reject) =>
+        {
+          promise
+            .then(
+              response =>
+              {
+                this.setState('success');
+                this.setDirty(false);
+                resolve(response);
+              },
+              errors =>
+              {
+                this.setState('error');
+                this.setErrors(errors);
+                reject(errors);
+              }
+            )
+            .catch(exception =>
+            {
+              this.setState('error');
+              console.info('catch', exception);
+
+              // TODO should we throw here, probably show an error overlay
+              throw exception;
+            });
+        });
+      },
+
 
       // submits the form
-      submitted(e)
+      onSubmit(e)
       {
-        this.submit(e, this);
+        this.submit(this, e);
       },
 
 
       // set the form to dirty when one of the fields changes
-      changed(e)
+      onChange(e)
       {
         this.dirty = true;
-        this.change(e);
+      },
+
+
+      // set dirty status
+      setDirty(dirty)
+      {
+        this.dirty = dirty;
+      },
+
+
+      // set state for this component and all child components with a state
+      setState(state)
+      {
+        this.$emit('update:state', state);
+
+        if (this.mapState)
+        {
+          this.stateComponents.forEach(component =>
+          {
+            component.setState.call(component, state);
+          });
+        }
       },
 
 
@@ -121,11 +180,37 @@
           });
         };
 
-        traverseChildren(this);
-
-        
+        traverseChildren(this);       
       },
 
+
+      // tries to find a submit button and attaches its state
+      findStateComponents(types)
+      {
+        let components = [];
+
+        let traverseChildren = parent =>
+        {
+          parent.$children.forEach(component =>
+          {
+            const isStateComponent = types.indexOf(component.$options.name) > -1;
+            const isButton = component.$options.name === 'uiButton';
+
+            if (isStateComponent && typeof component.setState === 'function' && (!isButton || component.submit === true))
+            {
+              components.push(component);
+            }
+            else
+            {
+              traverseChildren(component);
+            }
+          });
+        };
+
+        traverseChildren(this);
+
+        return components;
+      }
     }
   }
 </script>

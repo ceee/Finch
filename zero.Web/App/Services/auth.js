@@ -24,9 +24,33 @@ export default new Vue({
     },
 
     // logs the user in with the passed credentials
-    login()
+    login(model)
     {
-
+      console.info(model);
+      return new Promise((resolve, reject) =>
+      {
+        setTimeout(() =>
+        {
+          if (model.email && model.password)
+          {
+            resolve(model);
+          }
+          else
+          {
+            reject([
+              {
+                field: 'email',
+                message: 'The email is not valid'
+              },
+              {
+                field: 'nonexisting',
+                message: 'This field does not exist'
+              }
+            ]);
+          }
+          //resolve(this.model);
+        }, 1000);
+      });
     },
 
     // logs the current user out

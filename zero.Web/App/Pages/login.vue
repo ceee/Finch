@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="app-auth">
     <h1 class="app-auth-headline">zero</h1>
-    <ui-form ref="form" class="app-auth-inner" :submit="login">
+    <ui-form class="app-auth-inner" :submit="onSubmit">
       <div>
         <h2 v-localize="'@login.headline'"></h2>
 
@@ -15,7 +15,7 @@
       </div>
 
       <div class="app-auth-bottom">
-        <ui-button :submit="true" label="@login.button" :state.sync="state" />
+        <ui-button :submit="true" label="@login.button" />
         <ui-button type="blank" label="@login.button_forgot" />
       </div>
     </ui-form>
@@ -24,50 +24,33 @@
 
 
 <script>
+  import AuthApi from 'zeroservices/auth.js'
+
   export default {
-    name: 'app-auth',
+    name: 'app-login',
+
+    //inject: ['form'],
 
     data: () => ({
-      state: 'default',
       model: {
         email: null,
         password: null
       }
     }),
 
-
     methods: {
-
-      login(e, form)
+      onSubmit(form)
       {
-        this.state = 'loading';
-
-        let loginPromise = new Promise((resolve, reject) =>
+        //console.info(this.form);
+        form.handle(AuthApi.login(this.model)).then(result =>
         {
-          setTimeout(() =>
-          {
-            this.state = 'error';
+          console.info('logged in', result);
+        }, () => { });
+      },
 
-            reject([
-              {
-                field: 'email',
-                message: 'The email is not valid'
-              },
-              {
-                field: 'nonexisting',
-                message: 'This field does not exist'
-              }
-            ]);
-            //resolve(this.model);
-          }, 1000);
-        });
-
-        loginPromise.then(
-          response =>
-          {
-            // TODO redirect
-          },
-          errors => form.setErrors(errors));
+      onSuccess(response)
+      {
+        console.info(response)
       }
     }
   }
