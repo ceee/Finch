@@ -1,11 +1,10 @@
 import Vue from 'vue';
-import Strings from 'zeroservices/strings';
 import { find as _find, extend as _extend } from 'underscore';
 
 export default new Vue({
 
   data: () => ({
-    isAuthenticated: false,
+    isAuthenticated: true,
     user: null
   }),
 

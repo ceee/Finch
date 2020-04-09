@@ -114,7 +114,7 @@
   {
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-gap: 1px;
+    grid-gap: 2px;
     justify-content: stretch;
     height: 100vh;
   }

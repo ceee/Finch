@@ -2,6 +2,46 @@
 :root
 {
   // accent colors
+  --color-primary: #292b2c;
+  --color-primary-fg: #fff;
+  --color-secondary: #292b2c;
+  --color-negative: #d82853; 
+
+  // foreground/text color
+  --color-fg: #222;
+  --color-fg-mid: #6f7375;
+  --color-fg-light: #919294;
+
+  // background color shades
+  --color-bg: #f8f9fa;
+  --color-bg-mid: #f4f5f6;
+  --color-bg-light: #fff;
+
+  // line colors
+  --color-line: #eaebec;
+  --color-line-mid: #eaebec;
+
+  // misc colors
+  --color-shadow: rgba(0,0,0,0.05);
+  --color-highlight: rgba(0,0,0,0.05);
+  --color-overlay-shade: rgba(0,0,0,0.1);
+
+  // sizes
+
+  --padding: 32px;
+  --padding-s: 24px;
+  --height-top: 74px;
+  --radius: 5px;
+
+  --font-size: 14px;
+  --font-size-s: 12px;
+  --font-size-l: 16px;
+  --font-size-xl: 18px;
+}
+
+.theme-dark
+{
+  // accent colors
   --color-primary: #f7f8f9;
   --color-primary-fg: #222;
   --color-secondary: #292b2c;
@@ -11,9 +51,6 @@
   --color-fg: #fff;
   --color-fg-mid: #c1c5c9;
   --color-fg-light: #919294;
-
-  --color-fg-reverse: #fff;
-  --color-fg-reverse-mid: #c1c5c9;
 
   /*--color-fg: #222;
   --color-fg-mid: #6f7375;
@@ -36,19 +73,6 @@
   --color-shadow: rgba(0,0,0,0.3);
   --color-highlight: rgba(255,255,255, 0.05);
   --color-overlay-shade: rgba(0,0,0,0.3);
-
-
-  // sizes
-
-  --padding: 32px;
-  --padding-s: 24px;
-  --height-top: 74px;
-  --radius: 5px;
-
-  --font-size: 14px;
-  --font-size-s: 12px;
-  --font-size-l: 16px;
-  --font-size-xl: 18px;
 }
 
 
