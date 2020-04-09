@@ -27,6 +27,14 @@
   --color-highlight: rgba(0,0,0,0.05);
   --color-overlay-shade: rgba(0,0,0,0.1);
 
+  // message colors
+  --color-accent-info: rgb(44, 162, 212);
+  --color-accent-info-bg: rgba(44, 162, 212, 0.1);
+  --color-accent-warn: rgb(211, 172, 35);
+  --color-accent-warn-bg: rgba(233, 193, 56, 0.1);
+  --color-accent-error: rgb(216, 40, 83);
+  --color-accent-error-bg: rgba(216, 40, 83, 0.1);
+
   // sizes
 
   --padding: 32px;
@@ -35,6 +43,7 @@
   --radius: 5px;
 
   --font-size: 14px;
+  --font-size-m: 13px;
   --font-size-s: 12px;
   --font-size-l: 16px;
   --font-size-xl: 18px;

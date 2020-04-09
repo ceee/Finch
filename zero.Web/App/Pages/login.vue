@@ -7,6 +7,7 @@
 
         <ui-property field="email" label="@login.fields.email" :vertical="true">
           <input v-model="model.email" type="text" class="ui-input" maxlength="120" v-localize:placeholder="'@login.fields.email_placeholder'" />
+          <ui-message type="error" text="The RavenDB client offers a <b>push notification</b> feature..." />
         </ui-property>
 
         <ui-property field="password" label="@login.fields.password" :vertical="true">
@@ -103,7 +104,8 @@
     max-width: 100%;
     width: 520px;
     background: var(--color-box);
-    border-radius: 3px;
+    border-radius: var(--radius);
+    /*border: 1px solid var(--color-line);*/
     position: relative;
     z-index: 2;
     padding: var(--padding);

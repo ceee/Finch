@@ -12,12 +12,17 @@ Vue.directive('localize', (el, binding) =>
     let key = isObject ? binding.value.key : binding.value;
     let options = isObject ? binding.value : null;
 
+    // set content as html
+    if (binding.arg === 'html')
+    {
+      el.innerHTML = Localization.localize(key, options);
+    }
     // set attribute
-    if (binding.arg)
+    else if (binding.arg)
     {
       el.setAttribute(binding.arg, Localization.localize(key, options));
     }
-    // set content
+    // set content as plain text
     else
     {
       el.innerText = Localization.localize(key, options);

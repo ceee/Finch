@@ -31,7 +31,7 @@ button::-moz-focus-inner
   align-items: center;
   color: var(--color-primary-fg);
   background: var(--color-primary);
-  padding: 0 24px;
+  padding: 0 28px;
   height: 42px;
   border-radius: 3px;
   font-size: 14px;
@@ -98,6 +98,7 @@ button::-moz-focus-inner
     background: transparent;
     color: var(--color-fg);
     border: none;
+    padding: 0 16px;
   }
 
   &.type-block
