@@ -9,6 +9,8 @@
     <div class="ui-property-content">    
       <slot></slot>
     </div>
+
+    <ui-error :field="field" />
   </div>
 </template>
 
@@ -18,6 +20,7 @@
     name: 'uiProperty',
 
     props: {
+      field: String,
       label: String,
       description: String,
       required: Boolean,

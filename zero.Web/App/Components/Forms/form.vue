@@ -7,6 +7,7 @@
 
 <script>
   import Overlay from 'zeroservices/overlay.js'
+  import { isArray as _isArray, filter as _filter, groupBy as _groupBy } from 'underscore'
 
   export default {
     name: 'uiForm',
@@ -24,7 +25,8 @@
 
     data: () => ({
       dirty: false,
-      errors: []
+      errors: [],
+      errorFieldComponents: [ 'uiError' ]
     }),
 
     created()
@@ -78,13 +80,13 @@
 
 
       // tries to find matching fields for the given errors and displays them
-      withErrors(errors)
+      setErrors(errors)
       {
         if (typeof errors === 'undefined')
         {
           this.errors = [];
         }
-        else if (typeof errors !== 'array')
+        else if (!_isArray(errors))
         {
           this.errors = [errors];
         }
@@ -93,8 +95,36 @@
           this.errors = errors;
         }
 
-        console.info(this.errors);
-      }
+        let errorGroups = _groupBy(this.errors, 'field');
+
+        // find components which can output errors
+        let traverseChildren = parent =>
+        {
+          parent.$children.forEach(component =>
+          {
+            const isErrorComponent = this.errorFieldComponents.indexOf(component.$options.name) > -1;
+            const field = component.field;
+
+            if (isErrorComponent && field)
+            {
+              let errorGroup = errorGroups[field];
+
+              if (errorGroup)
+              {
+                component.set(errorGroup);
+              }
+            }
+            else
+            {
+              traverseChildren(component);
+            }
+          });
+        };
+
+        traverseChildren(this);
+
+        
+      },
 
     }
   }

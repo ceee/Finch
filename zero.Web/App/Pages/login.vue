@@ -7,7 +7,6 @@
 
         <ui-property field="email" label="@login.fields.email" :vertical="true">
           <input v-model="model.email" type="text" class="ui-input" maxlength="120" v-localize:placeholder="'@login.fields.email_placeholder'" />
-          <ui-message type="error" text="The RavenDB client offers a <b>push notification</b> feature..." />
         </ui-property>
 
         <ui-property field="password" label="@login.fields.password" :vertical="true">
@@ -49,10 +48,16 @@
           {
             this.state = 'error';
 
-            reject({
-              field: 'email',
-              message: 'The email is not valid'
-            });
+            reject([
+              {
+                field: 'email',
+                message: 'The email is not valid'
+              },
+              {
+                field: 'nonexisting',
+                message: 'This field does not exist'
+              }
+            ]);
             //resolve(this.model);
           }, 1000);
         });
@@ -62,7 +67,7 @@
           {
             // TODO redirect
           },
-          errors => form.withErrors(errors));
+          errors => form.setErrors(errors));
       }
     }
   }

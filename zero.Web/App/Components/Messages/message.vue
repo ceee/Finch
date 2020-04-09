@@ -7,6 +7,13 @@
 
 
 <script>
+  const TYPE_ICONS = {
+    info: 'fth-info',
+    warn: 'fth-alert-circle',
+    error: 'fth-alert-circle',
+    success: 'fth-check-circle'
+  };
+
   export default {
     name: 'uiProperty',
 
@@ -32,7 +39,7 @@
     computed: {
       iconClass()
       {
-        return this.icon !== '-1' ? this.icon : (this.type === 'info' ? 'fth-info' : 'fth-alert-circle');
+        return this.icon !== '-1' ? this.icon : TYPE_ICONS[this.type];
       },
       messageClasses()
       {
@@ -61,9 +68,9 @@
     background: var(--color-accent-info-bg);
     color: var(--color-accent-info);
     display: inline-grid;
-    padding: 8px 12px;
+    padding: 8px 12px 7px 12px;
     grid-template-columns: auto 1fr;
-    grid-gap: 10px;
+    grid-gap: 12px;
     border-radius: var(--radius);
     position: relative;
     line-height: 20px;
@@ -80,6 +87,12 @@
       color: var(--color-accent-error);
     }
 
+    &.type-success
+    {
+      background: var(--color-accent-success-bg);
+      color: var(--color-accent-success);
+    }
+
     &.block
     {
       display: grid;
@@ -88,7 +101,7 @@
 
   .ui-message-icon
   {
-    font-size: 1.2em;
+    font-size: 1.3em;
     position: relative;
     top: 1px;
   }
