@@ -4,7 +4,7 @@ import { find as _find, extend as _extend } from 'underscore';
 export default new Vue({
 
   data: () => ({
-    isAuthenticated: true,
+    isAuthenticated: false,
     user: null
   }),
 

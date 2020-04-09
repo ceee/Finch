@@ -22,7 +22,8 @@
   --color-line-mid: #eaebec;
 
   // misc colors
-  --color-shadow: rgba(0,0,0,0.05);
+  --color-box: #fff;
+  --color-shadow: rgba(0,0,0,0.03);
   --color-highlight: rgba(0,0,0,0.05);
   --color-overlay-shade: rgba(0,0,0,0.1);
 
@@ -70,8 +71,9 @@
   --color-line-mid: #3b3e40;
 
   // misc colors
+  --color-box: #242526;
   --color-shadow: rgba(0,0,0,0.3);
-  --color-highlight: rgba(255,255,255, 0.05);
+  --color-highlight: rgba(255,255,255, 0.03);
   --color-overlay-shade: rgba(0,0,0,0.3);
 }
 

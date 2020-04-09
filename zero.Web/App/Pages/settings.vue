@@ -94,7 +94,7 @@
 
     &:hover .settings-group-item-icon
     {
-      background: var(--color-bg-mid);
+      box-shadow: 0 0 20px var(--color-shadow);
     }
   }
 
@@ -107,7 +107,8 @@
     text-align: center;
     background: var(--color-bg-light);
     border-radius: var(--radius);
-    transition: background 0.2s ease;
+    transition: box-shadow 0.2s ease;
+    box-shadow: 0 0 20px transparent;
   }
 
   .settings-group-item-text

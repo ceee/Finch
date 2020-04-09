@@ -35,7 +35,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import 'Sass/Core/settings';
 
   .ui-property

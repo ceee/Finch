@@ -25,6 +25,7 @@ button::-moz-focus-inner
 
 .ui-button
 {
+  position: relative;
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
@@ -71,7 +72,7 @@ button::-moz-focus-inner
   &.type-outline
   {
     height: 43px;
-    background: var(--color-bg);
+    background: var(--color-box);
     color: var(--color-fg);
     border: 1px solid var(--color-line);
     box-sizing: border-box;
@@ -92,6 +93,13 @@ button::-moz-focus-inner
     border: none;
   }
 
+  &.type-blank
+  {
+    background: transparent;
+    color: var(--color-fg);
+    border: none;
+  }
+
   &.type-block
   {
     display: flex;
@@ -103,7 +111,7 @@ button::-moz-focus-inner
     margin-left: 15px;
   }
 
-  [class^="fth-"]
+  .ui-button-icon, .ui-button-caret
   {
     margin-left: 15px;
     margin-right: -7px;
@@ -117,11 +125,71 @@ button::-moz-focus-inner
   {
     flex-direction: row-reverse;
 
-    [class^="fth-"]
+    .ui-button-icon, .ui-button-caret
     {
       margin-right: 12px;
       margin-left: -7px;
     }
+  }
+}
+
+.ui-button-state
+{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  margin-top: -8px;
+  text-align: center;
+}
+
+.ui-button-progress
+{   
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  border-radius: 40px;
+  border: 2px solid var(--color-fg-mid);
+  border-left-color: var(--color-bg);
+  opacity: 1;
+  will-change: transform;
+  animation: rotating .5s linear infinite;
+  transition: opacity .25s ease;
+
+  .type-light &, .type-blank &
+  {
+    border-color: var(--color-bg-mid);
+    border-left-color: var(--color-fg);
+  }
+}
+
+@keyframes rotating
+{
+  from
+  {
+    -webkit-transform: rotate(0);
+    transform: rotate(0)
+  }
+  to
+  {
+    -webkit-transform: rotate(1turn);
+    transform: rotate(1turn)
+  }
+}
+
+
+// states
+
+.ui-button:not(.state-default)
+{
+  > :not(.ui-button-state)
+  {
+    visibility: hidden;
   }
 }
 
