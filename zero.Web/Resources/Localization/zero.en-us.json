@@ -88,6 +88,18 @@
     }
   },
 
+  "login": {
+    "headline": "hello and welcome",
+    "button": "Login",
+    "button_forgot": "Forgot password?",
+    "fields": {
+      "email": "Email",
+      "email_placeholder": "Enter your email or username",
+      "password": "Password",
+      "password_placeholder": "Enter your password"
+    }
+  },
+  
   "recyclebin": {
     "name": "Recycle bin",
     "description": "View recently deleted entities"

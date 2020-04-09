@@ -1,5 +1,5 @@
 ﻿<template>
-  <form class="ui-form" @submit="submit($event)" @change="changed">
+  <form class="ui-form" @submit.prevent="submitted" @change="changed">
     <slot />
   </form>
 </template>
@@ -11,9 +11,20 @@
   export default {
     name: 'uiForm',
 
+    props: {
+      submit: {
+        type: Function,
+        default: () => { }
+      },
+      change: {
+        type: Function,
+        default: () => { }
+      }
+    },
+
     data: () => ({
       dirty: false,
-      root: null
+      errors: []
     }),
 
     created()
@@ -28,6 +39,8 @@
 
     methods: {
 
+      // shows a confirmation dialog for dirty forms when the route tries to change
+      // it only works when this method is attached to the route component
       beforeRouteLeave(to, from, next) 
       {        
         if (this.dirty)
@@ -49,16 +62,38 @@
       },
 
 
-      changed()
+      // submits the form
+      submitted(e)
       {
-        this.dirty = true;
+        this.submit(e, this);
       },
 
 
-      submit(event)
+      // set the form to dirty when one of the fields changes
+      changed(e)
       {
-        event.preventDefault();
-        console.info('submit');
+        this.dirty = true;
+        this.change(e);
+      },
+
+
+      // tries to find matching fields for the given errors and displays them
+      withErrors(errors)
+      {
+        if (typeof errors === 'undefined')
+        {
+          this.errors = [];
+        }
+        else if (typeof errors !== 'array')
+        {
+          this.errors = [errors];
+        }
+        else
+        {
+          this.errors = errors;
+        }
+
+        console.info(this.errors);
       }
 
     }

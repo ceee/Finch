@@ -1,24 +1,24 @@
 ﻿<template>
   <div class="app-auth">
     <h1 class="app-auth-headline">zero</h1>
-    <div class="app-auth-inner">
+    <ui-form ref="form" class="app-auth-inner" :submit="login">
       <div>
-        <h2>hello and welcome</h2>
+        <h2 v-localize="'@login.headline'"></h2>
 
-        <ui-property label="Email" :vertical="true">
-          <input type="text" class="ui-input" maxlength="120" placeholder="Enter your email or username" />
+        <ui-property field="email" label="@login.fields.email" :vertical="true">
+          <input v-model="model.email" type="text" class="ui-input" maxlength="120" v-localize:placeholder="'@login.fields.email_placeholder'" />
         </ui-property>
 
-        <ui-property label="Password" :vertical="true">
-          <input type="password" class="ui-input" maxlength="1024" placeholder="Password" />
+        <ui-property field="password" label="@login.fields.password" :vertical="true">
+          <input v-model="model.password" type="password" class="ui-input" maxlength="1024" v-localize:placeholder="'@login.fields.password_placeholder'" />
         </ui-property>
       </div>
 
       <div class="app-auth-bottom">
-        <ui-button label="Login" :state.sync="state" :click="login" />
-        <ui-button type="blank" label="Forgot password?" />
+        <ui-button :submit="true" label="@login.button" :state.sync="state" />
+        <ui-button type="blank" label="@login.button_forgot" />
       </div>
-    </div>
+    </ui-form>
   </div>
 </template>
 
@@ -28,17 +28,41 @@
     name: 'app-auth',
 
     data: () => ({
-      state: 'default'
+      state: 'default',
+      model: {
+        email: null,
+        password: null
+      }
     }),
 
 
     methods: {
 
-      login()
+      login(e, form)
       {
         this.state = 'loading';
-      }
 
+        let loginPromise = new Promise((resolve, reject) =>
+        {
+          setTimeout(() =>
+          {
+            this.state = 'error';
+
+            reject({
+              field: 'email',
+              message: 'The email is not valid'
+            });
+            //resolve(this.model);
+          }, 1000);
+        });
+
+        loginPromise.then(
+          response =>
+          {
+            // TODO redirect
+          },
+          errors => form.withErrors(errors));
+      }
     }
   }
 </script>
@@ -108,6 +132,6 @@
 
   .app-auth-bottom
   {
-    margin-top: var(--padding);
+    margin-top: 3rem;
   }
 </style>
