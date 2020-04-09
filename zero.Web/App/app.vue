@@ -14,6 +14,7 @@
   import AppNavigation from 'zero/navigation.vue'
   import AppOverlays from 'zerocomponents/Overlays/overlay-holder.vue'
   import Router from '../router.js'
+  import 'zero/axios.config.js'
 
   export default {
     name: 'app',

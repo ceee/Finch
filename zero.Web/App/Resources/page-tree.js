@@ -5,7 +5,7 @@ export default {
   // get all pages with a certain parent (can be empty)
   getChildren(parent)
   {
-    return Axios.get(zero.path + 'api/pageTree/getChildren', {
+    return Axios.get('pageTree/getChildren', {
       params: {
         parent: parent
       }
