@@ -40,6 +40,11 @@ body
   justify-content: stretch;
 }
 
+.app-main
+{
+  overflow-y: auto;
+}
+
 .fade-enter-active, .fade-leave-active
 {
   transition: opacity .5s;

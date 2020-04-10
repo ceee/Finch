@@ -37,7 +37,7 @@
           },
           status: {
             as: 'html',
-            render: item => 'status: <b>' + item.status + '</b>'
+            render: item => '<b>' + item.status + '</b>'
           }
         },
         items: this.getItems
@@ -74,7 +74,21 @@
               username: 'Christian Klika',
               price: 123.00,
               status: 'Completed'
-            }
+            },
+            {
+              no: 1,
+              createdDate: '2020-03-05T10:17:25.229+01:00',
+              username: 'Tobias Klika',
+              price: 70.90,
+              status: 'Open'
+            },
+            {
+              no: 2,
+              createdDate: '2020-03-05T10:17:25.229+01:00',
+              username: 'Fox Tales',
+              price: 12.95,
+              status: 'Processing'
+            },
           ]);
         });
       }

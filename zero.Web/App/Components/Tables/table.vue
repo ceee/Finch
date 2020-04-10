@@ -232,9 +232,9 @@
     color: var(--color-fg);
     position: sticky;
     top: 0;
-    //background: var(--color-bg-mid);
     border-bottom: 1px solid var(--color-line-light);
     z-index: 3;
+    background: var(--color-box);
 
     .ui-table-cell
     {
@@ -304,7 +304,7 @@
   {
     display: flex;
     justify-content: center;
-    padding: var(--padding) 0;
+    margin-top: var(--padding);
     align-items: center;
   }
 
