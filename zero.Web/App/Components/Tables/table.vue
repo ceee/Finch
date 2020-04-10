@@ -218,11 +218,32 @@
     border-bottom: 1px solid var(--color-line-light);
     position: relative;
     min-height: 60px;
+    outline: 1px solid transparent;
+    transition: outline 0.1s ease, box-shadow 0.1s ease;
 
     &:last-child
     {
       border-bottom: none;
     }
+  }
+
+  .ui-table-body .ui-table-row:hover
+  {
+    box-shadow: 0 0 5px 4px var(--color-shadow);
+    z-index: 4;
+    outline: 1px solid var(--color-line);
+    border-bottom-color: transparent;
+
+    /*&:before
+    {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      content: '';
+      width: 3px;
+      background: var(--color-line);
+    }*/
   }
 
   .ui-table-head
