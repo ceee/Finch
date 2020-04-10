@@ -18,7 +18,6 @@ using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Extensions;
-using zero.Web.Sections;
 
 namespace zero.Web
 {
@@ -89,9 +88,15 @@ namespace zero.Web
         opts.Sections.Insert(3, section);
       });
 
+      //services.AddAuthentication(opts =>
+      //{
+      //  opts.
+      //});
+
       // add cookie-based authentication
-      services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie(opts => {
+      services.AddAuthentication(Constants.Auth.Scheme)
+        .AddCookie(Constants.Auth.Scheme, opts => {
+          opts.Cookie.Name = Constants.Auth.CookieName;
           // override redirect to login page (handled by vue frontend) and return a 401 instead
           opts.Events.OnRedirectToLogin = (context) =>
           {
@@ -140,7 +145,7 @@ namespace zero.Web
     /// </summary>
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<ZeroOptions> zeroOptions)
     {
-      string zeroPath = zeroOptions.CurrentValue.BackofficePath.EnsureEndsWith('/');
+      string zeroPath = zeroOptions.CurrentValue.BackofficePath.EnsureEndsWith('/').EnsureStartsWith('/');
 
       // enable webpack middleware
       if (env.IsDevelopment())
@@ -160,32 +165,36 @@ namespace zero.Web
       }
 
       app.UseStaticFiles();
-      app.UseRouting();
       //app.UseCors();
-      app.UseAuthentication();
-      app.UseAuthorization();
 
-      app.UseEndpoints(endpoints =>
+      app.UseWhen(ctx => ctx.Request.Path.ToString().StartsWith(zeroPath.TrimEnd('/')), zeroApp =>
       {
-        // setup route
-        endpoints.MapControllerRoute(
-          name: "setup",
-          pattern: zeroPath + "setup",
-          defaults: new
-          {
-            controller = "Setup",
-            action = "Index"
-          }
-        );
+        zeroApp.UseRouting();
+        zeroApp.UseAuthentication();
+        zeroApp.UseAuthorization();
 
-        // routes for API
-        endpoints.MapControllerRoute(
-          name: "api",
-          pattern: zeroPath + "api/{controller=Index}/{action=Index}/{id?}"
-        );
+        zeroApp.UseEndpoints(endpoints =>
+        {
+          // setup route
+          endpoints.MapControllerRoute(
+            name: "setup",
+            pattern: zeroPath + "setup",
+            defaults: new
+            {
+              controller = "Setup",
+              action = "Index"
+            }
+          );
 
-        // fallbacks for SPA
-        endpoints.MapFallbackToController(zeroPath + "{**path}", "Index", "Index");
+          // routes for API
+          endpoints.MapControllerRoute(
+            name: "api",
+            pattern: zeroPath + "api/{controller=Index}/{action=Index}/{id?}"
+          );
+
+          // fallbacks for SPA
+          endpoints.MapFallbackToController(zeroPath + "{**path}", "Index", "Index");
+        });
       });
     }
   }

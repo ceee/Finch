@@ -127,7 +127,7 @@
       },
 
 
-      // set state for this component and all child components wich attached it's state from the slot props
+      // set state for this component and all child components which attached it's state from the slot props
       setState(state)
       {
         this.state = state;

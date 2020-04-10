@@ -28,6 +28,13 @@ $font-headline-name: 'TwCenMt';
   //font-family: $font-headline-name, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+:root
+{
+  --font: '#{$font-text-name}', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-headline: '#{$font-headline-name}', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-icon: '#{$font-icon-name}';
+}
+
 %font-icon
 {
   font-family: $font-icon-name;

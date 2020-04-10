@@ -39,16 +39,7 @@
     methods: {
       onSubmit(form)
       {
-        //console.info(this.form);
-        form.handle(AuthApi.login(this.model)).then(result =>
-        {
-          console.info('logged in', result);
-        }, () => { });
-      },
-
-      onSuccess(response)
-      {
-        console.info(response)
+        form.handle(AuthApi.login(this.model));
       }
     }
   }
@@ -56,8 +47,6 @@
 
 
 <style lang="scss">
-  @import './Sass/Core/all';
-
   .app-auth
   {
     grid-column: span 2 / auto;
@@ -71,7 +60,7 @@
     &:before
     {
       content: 'login';
-      @extend %font-headline;
+      font-family: var(--font-headline);
       color: rgba(black, 0.008);
       position: fixed;
       left: -10vw;

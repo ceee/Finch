@@ -8,6 +8,17 @@ export default new Vue({
     user: null
   }),
 
+  watch: {
+    isAuthenticated(value)
+    {
+      this.$emit('authenticated', value);
+    },
+    user(value)
+    {
+      this.$emit('user', value);
+    }
+  },
+
   methods: {
 
     // loads the current user into the cache
@@ -23,16 +34,23 @@ export default new Vue({
       this.user = null;
     },
 
+    // sets the current user and isAuthenticated to true
+    setUser(user)
+    {
+      this.isAuthenticated = true;
+      this.user = user;
+    },
+
     // logs the user in with the passed credentials
     login(model)
     {
-      console.info(model);
       return new Promise((resolve, reject) =>
       {
         setTimeout(() =>
         {
           if (model.email && model.password)
           {
+            this.setUser(model);
             resolve(model);
           }
           else

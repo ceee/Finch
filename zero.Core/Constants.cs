@@ -2,6 +2,13 @@
 {
   public static class Constants
   {
+    public static class Auth
+    {
+      public const string Scheme = "zeroCookies";
+
+      public const string CookieName = "zero.session";
+    }
+
     public static class Database
     {
       public const string SharedAppId = "shared";

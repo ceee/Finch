@@ -72,7 +72,7 @@
   {
     width: auto;
     height: auto;
-    background: var(--color-bg);
+    background: var(--color-box);
     border-radius: var(--radius);
     border: none !important;
     box-shadow: 0 0 20px var(--color-shadow);

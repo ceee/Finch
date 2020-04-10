@@ -61,7 +61,7 @@
   {
     height: 100%;
     position: relative;
-    padding: 95px 95px 0 95px;
+    padding: 95px;
     width: 100%;
     max-width: 1600px;
   }

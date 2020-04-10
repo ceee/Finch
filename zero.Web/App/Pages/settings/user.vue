@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-form ref="form" class="user">
+  <ui-form ref="form" class="user" v-slot="form" :submit="onSubmit">
 
     <ui-header-bar :title="model.name" title-empty="@user.name" :on-back="onBack">
       <ui-dropdown align="right">
@@ -8,7 +8,7 @@
         </template>
         <ui-dropdown-list :items="actions" :action="actionSelected" />
       </ui-dropdown>
-      <ui-button label="Save" />
+      <ui-button :submit="true" label="Save" :state="form.state" />
     </ui-header-bar>
 
     <ui-tabs>
@@ -81,6 +81,20 @@
       onBack()
       {
         this.$router.go(-1);
+      },
+
+      onSubmit(form)
+      {
+        form.handle(new Promise(resolve =>
+        {
+          setTimeout(() =>
+          {
+            resolve(true);
+          }, 1000);
+        })).then(() =>
+        {
+          form.setDirty(false);
+        });
       },
 
       actionSelected(item, dropdown)

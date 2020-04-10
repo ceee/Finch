@@ -1,13 +1,13 @@
 ﻿<template>
   <div class="app">
     <template v-if="isAuthenticated">
-      <app-overlays />
       <app-navigation />
       <div class="app-main">
         <router-view></router-view>
       </div>
+      <app-overlays />
     </template>
-    <app-auth v-else />
+    <app-login v-else />
   </div>
 </template>
 
@@ -15,10 +15,10 @@
 <script>
   import '../Sass/app.scss'
   import AppNavigation from 'zero/navigation.vue'
-  import AppAuth from 'zeropages/login.vue'
+  import AppLogin from 'zeropages/login.vue'
   import AppOverlays from 'zerocomponents/Overlays/overlay-holder.vue'
   import Router from '../router.js'
-  import Auth from 'zeroservices/auth.js';
+  import AuthApi from 'zeroservices/auth.js'
   import 'zero/axios.config.js'
 
   export default {
@@ -26,22 +26,18 @@
 
     router: Router,
 
-    components: { AppNavigation, AppOverlays, AppAuth },
+    components: { AppNavigation, AppOverlays, AppLogin },
 
     data: () => ({
-      isLoading: false,
-      isAuthenticated: Auth.isAuthenticated
+      isAuthenticated: false
     }),
 
-    mounted ()
+    created()
     {
-      //AuthApi.getUser(res =>
-      //{
-      //  Store.state.isAuthenticated = res.isAuthenticated;
-      //  Store.state.user = res.user;
-      //  Store.state.userMap = res.userMap;
-      //  this.isLoading = false;
-      //});
+      AuthApi.$on('authenticated', isAuthenticated =>
+      {
+        this.isAuthenticated = isAuthenticated;
+      });
     }
   }
 
