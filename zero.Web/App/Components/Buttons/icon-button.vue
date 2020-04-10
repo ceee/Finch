@@ -1,5 +1,5 @@
 ﻿<template>
-  <button type="button" class="ui-icon-button" @click="click" :title="title | localize">
+  <button type="button" class="ui-icon-button" :disabled="disabled" :class="'type-' +  type" @click="tryClick" :title="title | localize">
     <span class="sr-only" v-localize="title"></span>
     <i class="ui-button-icon" :class="icon"></i>
   </button>
@@ -19,6 +19,10 @@
         type: String,
         default: 'fth-arrow-left'
       },
+      type: {
+        type: String,
+        default: 'action'
+      },
       title: {
         type: String,
         default: '@ui.back'
@@ -37,6 +41,10 @@
 
     methods: {
 
+      tryClick(ev)
+      {
+        this.$emit('click', ev);
+      }
     }
   }
 </script>

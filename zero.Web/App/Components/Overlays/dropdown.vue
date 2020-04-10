@@ -89,5 +89,17 @@
     {
       right: 0;
     }
+
+    &.align-top
+    {
+      top: calc(100% + 5px);
+      bottom: auto;
+    }
+
+    &.align-bottom
+    {
+      bottom: calc(100% + 5px);
+      top: auto;
+    }
   }
 </style>

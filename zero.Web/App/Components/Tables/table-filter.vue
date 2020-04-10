@@ -40,5 +40,12 @@
     {
       margin-left: 15px;
     }
+
+    .ui-input
+    {
+      display: inline-block;
+      width: auto;
+      min-width: 320px;
+    }
   }
 </style>

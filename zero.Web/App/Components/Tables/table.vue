@@ -1,18 +1,34 @@
 ﻿<template>
-  <div class="ui-table">
+  <div class="ui-table-outer">
+    <div class="ui-table">
+      <header class="ui-table-row ui-table-head">      
+        <div v-for="column in columns" class="ui-table-cell" :table-field="column.field">
+          {{ column.label | localize }}
+          <button v-if="column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="filter.orderBy == column.field ? 'sort-' + (filter.isDescending ? 'desc' : 'asc') : null">
+            <i class="arrow arrow-down"></i>
+          </button>
+        </div>
+      </header>
+      <content class="ui-table-body">
+        <div class="ui-table-row" v-for="item in items">
+          <div v-for="column in columns" class="ui-table-cell" :table-field="column.field" v-table-value="{ item, column }"></div>
+        </div>
+      </content>
+    </div>
 
-    <header class="ui-table-row ui-table-head">      
-      <div v-for="column in columns" class="ui-table-cell" :table-field="column.field">
-        {{ column.label | localize }}
-        <button v-if="column.sort || config.sort" type="button" class="ui-table-sort"><i class="arrow-down"></i><i class="arrow-up"></i></button>
-      </div>
-    </header>
-
-    <content clsas="ui-table-body">
-      <div class="ui-table-row" v-for="item in items">
-        <div v-for="column in columns" class="ui-table-cell" :table-field="column.field" v-table-value="{ item, column }"></div>
-      </div>
-    </content>
+    <footer class="ui-table-pagination" v-if="pages > 1">
+      <ui-icon-button class="ui-table-pagination-next" type="white" title="Previous" icon="fth-chevron-left" :disabled="filter.page < 2" @click="setPage(filter.page - 1)" />
+      <ui-dropdown align="bottom">
+        <template v-slot:button>
+          <button type="button" class="ui-button type-blank caret-down ui-table-pagination-select">
+            <span class="ui-button-text" v-localize="{ key: '@ui.page_xofy', tokens: { x: filter.page, y: pages }}"></span>
+            <i class="ui-button-caret fth-chevron-down"></i>
+          </button>
+        </template>
+        <ui-dropdown-list :items="actions" />
+      </ui-dropdown>
+      <ui-icon-button class="ui-table-pagination-next" type="white" title="Next" icon="fth-chevron-right" :disabled="filter.page >= pages" @click="setPage(filter.page + 1)" />
+    </footer>
 
   </div>
 </template>
@@ -20,7 +36,19 @@
 
 <script>
   import TableValueDirective from 'zerocomponents/Tables/table-value.js';
+  import Strings from 'zeroservices/strings';
   import { each as _each, extend as _extend } from 'underscore';
+
+  const defaultConfig = {
+    // allow sorting of columns (asc + desc)
+    sort: true,
+    // define columns and how they are displayed
+    columns: {},
+    // prefix for column header translations
+    labelPrefix: '',
+    // promise which returns items based on the current filter and sorting
+    items: null
+  };
 
   export default {
     name: 'uiTable',
@@ -29,19 +57,7 @@
       config: {
         type: Object,
         required: true,
-        default: () =>
-        {
-          return {
-            // allow sorting of columns (asc + desc)
-            sort: true,
-            // define columns and how they are displayed
-            columns: {},
-            // prefix for column header translations
-            labelPrefix: '',
-            // promise which returns items based on the current filter and sorting
-            items: null
-          };
-        }
+        default: defaultConfig
       }
     },
 
@@ -53,18 +69,60 @@
     },
 
     data: () => ({
+      configuration: {},
       columns: [],
-      items: []
+      items: [],
+      pages: 8,
+      actions: [],
+      filter: {
+        orderBy: null,
+        isDescending: true,
+        page: 1
+      }
     }),
+
+    computed: {
+
+    },
 
     created()
     {
-      this.generateColumns(this.config.columns);
+      this.configuration = _extend(defaultConfig, this.config);
+      this.generateColumns(this.configuration.columns);
+
+      this.actions.push({
+        name: 'Create',
+        icon: 'fth-plus'
+      });
+      this.actions.push({
+        name: 'Move',
+        icon: 'fth-corner-down-right'
+      });
+      this.actions.push({
+        name: 'Copy',
+        icon: 'fth-copy',
+        disabled: true
+      });
+      this.actions.push({
+        name: 'Sort',
+        icon: 'fth-arrow-down'
+      });
+      this.actions.push({
+        type: 'separator'
+      });
+      this.actions.push({
+        name: 'Delete',
+        icon: 'fth-x',
+        action(item, dropdown)
+        {
+          dropdown.hide();
+        }
+      });
     },
 
     mounted()
     {
-      this.config.items().then(result =>
+      this.configuration.items().then(result =>
       {
         this.items = result;
       });
@@ -93,10 +151,35 @@
           }
 
           this.columns.push(_extend(data, {
-            label: column.label || (this.config.labelPrefix + key),
-            field: key
+            label: column.label || (this.configuration.labelPrefix + key),
+            field: key,
+            canSort: typeof column.sort === 'boolean' ? column.sort : this.configuration.sort
           }));
         });
+      },
+
+      // set the active page
+      setPage(index)
+      {
+        this.filter.page = index;
+      },
+
+      // sort by a column
+      sort(column)
+      {
+        if (this.filter.orderBy === column.field && this.filter.isDescending)
+        {
+          this.filter.isDescending = false;
+        }
+        else if (this.filter.orderBy === column.field)
+        {
+          this.filter.orderBy = null;
+        }
+        else
+        {
+          this.filter.orderBy = column.field;
+          this.filter.isDescending = true;
+        }
       }
     }
   }
@@ -130,11 +213,16 @@
     -webkit-box-direction: normal;
     flex-flow: row nowrap;
     -webkit-box-align: center;
-    align-items: center;
+    align-items: stretch;
     width: 100%;
     border-bottom: 1px solid var(--color-line-light);
     position: relative;
     min-height: 60px;
+
+    &:last-child
+    {
+      border-bottom: none;
+    }
   }
 
   .ui-table-head
@@ -145,41 +233,83 @@
     position: sticky;
     top: 0;
     //background: var(--color-bg-mid);
+    border-bottom: 1px solid var(--color-line-light);
     z-index: 3;
+
+    .ui-table-cell
+    {
+      justify-content: space-between;
+    }
   }
 
   .ui-table-cell
   {
+    display: inline-flex;
+    align-items: center;
     flex: 1 1 5%;
     position: relative;
     text-align: left;
     overflow: hidden;
-    margin: 0 0 0 30px;
-    padding: 15px 0;
+    padding: 10px 20px;
     white-space: nowrap;
     text-overflow: ellipsis;
+    border-left: 1px solid var(--color-line-light);
+
+    &:first-child
+    {
+      border-left: none;
+    }
   }
 
   .ui-table-sort
   {
-    display: none;
-    /*height: 40px;
-    width: 40px;
+    height: 29px;
+    width: 29px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    margin-right: -10px;
+    border-radius: 15px;
+    transition: background 0.2s ease;
 
-    .arrow-down
+    .arrow
     {
-      display: none;
+      border-top-color: var(--color-fg);
+      transition: opacity 0.2s ease, transform 0.3s ease;
+      opacity: 0.2;
     }
 
-    &.is-active
+    /*&:hover
     {
-      .arrow-down, .arrow-up
-      {
-        border
-      }
+      background: var(--color-bg);
     }*/
+
+    &:hover .arrow
+    {
+      opacity: 0.5;
+    }
+
+    &.sort-desc .arrow, &.sort-asc .arrow, 
+    {
+      opacity: 1;
+    }
+
+    &.sort-asc .arrow
+    {
+      transform: scaleY(-1) translateY(5px);
+    }
+  }
+
+  .ui-table-pagination
+  {
+    display: flex;
+    justify-content: center;
+    padding: var(--padding) 0;
+    align-items: center;
+  }
+
+  .ui-table-pagination-select
+  {
+    margin: 0 20px;
   }
 </style>

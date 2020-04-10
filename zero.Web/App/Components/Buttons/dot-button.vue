@@ -1,5 +1,5 @@
 ﻿<template>
-  <button type="button" class="ui-dot-button" @click="click" :title="title | localize">
+  <button type="button" class="ui-dot-button" :disabled="disabled" @click="click" :title="title | localize">
     <span class="sr-only" v-localize="title"></span>
     <i class="ui-button-icon fth-more-horizontal"></i>
   </button>

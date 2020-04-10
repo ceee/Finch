@@ -1,5 +1,5 @@
 ﻿<template>
-  <button :type="buttonType" class="ui-button has-state" :class="buttonClass" @click="tryClick">
+  <button :type="buttonType" class="ui-button has-state" :class="buttonClass" :disabled="disabled" @click="tryClick">
     <span class="ui-button-text" v-localize="label"></span>
     <i v-if="caret" class="ui-button-caret" :class="caretClass"></i>
     <i v-if="icon" class="ui-button-icon" :class="icon"></i>
@@ -48,10 +48,6 @@
         default: 'right'
       },
       disabled: Boolean,
-      click: {
-        type: Function,
-        default: null
-      },
       stateDuration: {
         type: Number,
         default: 2000
@@ -144,9 +140,9 @@
 
       tryClick(ev)
       {
-        if (this.isDefaultState && this.click)
+        if (this.isDefaultState)
         {
-          this.click(ev);
+          this.$emit('click', ev);
         }
       }
 
