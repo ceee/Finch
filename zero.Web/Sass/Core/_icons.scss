@@ -550,6 +550,26 @@
 
 .fth-google:before { content: "\e926"; }
 
+.arrow-down, .arrow-up
+{
+  width: 0;
+  height: 0;
+  font-size: 0;
+  line-height: 0;
+  border: 4px solid transparent;
+  border-top-color: var(--color-primary);
+  position: relative;
+  top: 2px;
+}
+
+.arrow-up
+{
+  border-top-color: transparent;
+  border-bottom-color: var(--color-primary);
+  position: relative;
+  top: -2px;
+}
+
 
 
 .colorized-icons .fth-facebook

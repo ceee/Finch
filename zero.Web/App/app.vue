@@ -29,7 +29,7 @@
     components: { AppNavigation, AppOverlays, AppLogin },
 
     data: () => ({
-      isAuthenticated: false
+      isAuthenticated: true
     }),
 
     created()

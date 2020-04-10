@@ -36,6 +36,7 @@ namespace zero.Web.Controllers
     [HttpPost, AllowAnonymous]
     public async Task<IActionResult> LoginUser()
     {
+      await Task.Delay(0);
       throw new NotImplementedException();
       //User user = await Api.Login(model.Username, model.Password, model.RememberMe);
 
@@ -61,6 +62,7 @@ namespace zero.Web.Controllers
     [HttpPost]
     public async Task<IActionResult> LogoutUser()
     {
+      await Task.Delay(0);
       throw new NotImplementedException();
       //await Api.Logout();
       //return AsSuccess();

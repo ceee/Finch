@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "dayjs": "^1.8.23",
+    "dayjs": "^1.8.24",
     "lodash": "*",
     "underscore": "^1.10.2",
     "vue": "^2.6.11",

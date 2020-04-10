@@ -40,8 +40,6 @@
 </script>
 
 <style lang="scss">
-  @import 'Sass/Core/all';
-
   .ui-header-bar
   {
     display: flex;
@@ -51,6 +49,7 @@
     height: 80px;
     padding: 0 var(--padding);
     background: var(--color-bg-light);
+    //border-bottom: 1px solid var(--color-line);
   }
 
   .ui-header-bar-main
@@ -79,7 +78,7 @@
 
   .ui-header-bar-title
   {
-    @extend %font;
+    font-family: var(--font);
     margin: 0;
     font-size: var(--font-size-l);
     font-weight: 700;

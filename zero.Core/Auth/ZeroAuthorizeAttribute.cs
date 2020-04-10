@@ -30,6 +30,7 @@ namespace zero.Core.Auth
 
     public override async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
+      await Task.Delay(0);
       //await base.OnAuthorizationAsync(context);
 
       Console.WriteLine("zeroauthorize: " + Name);

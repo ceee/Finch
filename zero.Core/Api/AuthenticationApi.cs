@@ -38,12 +38,8 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<User> GetUser()
     {
+      await Task.Delay(0);
       return null;
-
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        
-      }
     }
   }
 

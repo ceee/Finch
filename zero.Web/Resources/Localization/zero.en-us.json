@@ -8,7 +8,8 @@
     "actions": "Actions",
     "back": "Go back",
     "close": "Close",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "createdDate": "Created at"
   },
 
   "unsavedchanges": {
@@ -99,9 +100,18 @@
       "password_placeholder": "Enter your password"
     }
   },
-  
+
   "recyclebin": {
     "name": "Recycle bin",
     "description": "View recently deleted entities"
+  },
+
+  "order": {
+    "fields": {
+      "no": "Number",
+      "username": "Name",
+      "price": "Price",
+      "status": "Status"
+    }
   }
 }
