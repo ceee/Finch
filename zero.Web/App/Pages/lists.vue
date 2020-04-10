@@ -1,6 +1,7 @@
 ﻿<template>
   <div class="lists">
     <ui-header-bar title="Lists">
+      <ui-button type="light" label="Add list" icon="fth-plus" />
       <ui-table-filter />
     </ui-header-bar>
     <div class="ui-blank-box">

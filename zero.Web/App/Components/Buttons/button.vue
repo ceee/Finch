@@ -52,7 +52,7 @@
         type: Number,
         default: 2000
       },
-      addEllipsis: {
+      ellipsis: {
         type: Boolean,
         default: false
       }
@@ -87,7 +87,7 @@
         {
           classes.push('has-icon');
         }
-        if (this.addEllipsis)
+        if (this.ellipsis)
         {
           classes.push('has-ellipsis');
         }

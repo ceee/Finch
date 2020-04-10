@@ -122,12 +122,12 @@ button::-moz-focus-inner
 
   .ui-button-icon, .ui-button-caret
   {
-    margin-left: 15px;
-    margin-right: -7px;
+    margin-left: 18px;
+    margin-right: -3px;
     position: relative;
     font-size: var(--font-size-l);
     top: -1px;
-    color: var(--color-fg-mid);
+    /*color: var(--color-fg-mid);*/
   }
 
   &.caret-left
