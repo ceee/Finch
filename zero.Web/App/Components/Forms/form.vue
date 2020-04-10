@@ -1,6 +1,6 @@
 ﻿<template>
   <form class="ui-form" @submit.prevent="onSubmit" @change="onChange">
-    <slot />
+    <slot v-bind="slotProps" />
   </form>
 </template>
 
@@ -17,31 +17,35 @@
         type: Function,
         default: () => { }
       },
-      state: {
-        type: String,
-        default: 'default'
-      },
       mapState: {
         type: Boolean,
         default: true
+      },
+      errorComponents: {
+        type: Array,
+        default: () => [ 'uiError' ]
       }
     },
 
     data: () => ({
       dirty: false,
+      state: 'default',
       errors: [],
-      errorFieldComponents: ['uiError'],
-      stateComponents: ['uiButton']
+      slotProps: {
+        state: null
+      }
     }),
+
+    watch: {
+      state(val)
+      {
+        this.slotProps.state = val;
+      }
+    },
 
     created()
     {
-      
-    },
-
-    mounted()
-    {
-      this.stateComponents = this.findStateComponents(['uiButton']); 
+      this.slotProps.state = this.state;
     },
 
     methods: {
@@ -123,18 +127,10 @@
       },
 
 
-      // set state for this component and all child components with a state
+      // set state for this component and all child components wich attached it's state from the slot props
       setState(state)
       {
-        this.$emit('update:state', state);
-
-        if (this.mapState)
-        {
-          this.stateComponents.forEach(component =>
-          {
-            component.setState.call(component, state);
-          });
-        }
+        this.state = state;
       },
 
 
@@ -161,7 +157,7 @@
         {
           parent.$children.forEach(component =>
           {
-            const isErrorComponent = this.errorFieldComponents.indexOf(component.$options.name) > -1;
+            const isErrorComponent = this.errorComponents.indexOf(component.$options.name) > -1;
             const field = component.field;
 
             if (isErrorComponent && field)
@@ -181,35 +177,6 @@
         };
 
         traverseChildren(this);       
-      },
-
-
-      // tries to find a submit button and attaches its state
-      findStateComponents(types)
-      {
-        let components = [];
-
-        let traverseChildren = parent =>
-        {
-          parent.$children.forEach(component =>
-          {
-            const isStateComponent = types.indexOf(component.$options.name) > -1;
-            const isButton = component.$options.name === 'uiButton';
-
-            if (isStateComponent && typeof component.setState === 'function' && (!isButton || component.submit === true))
-            {
-              components.push(component);
-            }
-            else
-            {
-              traverseChildren(component);
-            }
-          });
-        };
-
-        traverseChildren(this);
-
-        return components;
       }
     }
   }

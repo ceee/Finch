@@ -4,9 +4,9 @@
     <i v-if="caret" class="ui-button-caret" :class="caretClass"></i>
     <i v-if="icon" class="ui-button-icon" :class="icon"></i>
     <span v-if="!isDefaultState" class="ui-button-state">
-      <i v-if="state == 'loading'" class="ui-button-progress"></i>
-      <i v-if="state == 'success'" class="fth-check"></i>
-      <i v-if="state == 'error'" class="fth-x"></i>
+      <i v-if="stateDisplay == 'loading'" class="ui-button-progress"></i>
+      <i v-if="stateDisplay == 'success'" class="fth-check"></i>
+      <i v-if="stateDisplay == 'error'" class="fth-x"></i>
     </span>
   </button>
 </template>
@@ -63,8 +63,14 @@
     },
 
     data: () => ({
+      stateDisplay: null,
       stateTimeout: null
     }),
+
+    created()
+    {
+      this.stateDisplay = this.state; 
+    },
 
     computed: {
       buttonType()
@@ -75,9 +81,12 @@
       {
         let classes = [];
         classes.push('type-' + this.type.split(' ').join(' type-'));
-        classes.push('caret-' + this.caretPosition);
-        classes.push('state-' + (this.isDefaultState ? STATE_DEFAULT : this.state));
+        classes.push('state-' + (this.isDefaultState ? STATE_DEFAULT : this.stateDisplay));
 
+        if (this.caret)
+        {
+          classes.push('caret-' + this.caretPosition);
+        }
         if (this.icon)
         {
           classes.push('has-icon');
@@ -95,13 +104,15 @@
       },
       isDefaultState()
       {
-        return !this.state || this.state === STATE_DEFAULT || STATES.indexOf(this.state) < 0;
+        return !this.stateDisplay || this.stateDisplay === STATE_DEFAULT || STATES.indexOf(this.stateDisplay) < 0;
       }
     },
 
     watch: {
       state(value)
       {
+        this.stateDisplay = value;
+
         clearTimeout(this.stateTimeout);
 
         if (value && STATES.indexOf(value) < 0)
@@ -112,34 +123,24 @@
         {
           this.stateTimeout = setTimeout(() =>
           {
-            const stateUpdate = 'update:state';
+            //const stateUpdate = 'update:state';
 
-            // check if :state property has .sync modifier
-            let listeners = this.$options._parentListeners;
-            const hasSyncModifier = listeners && listeners[stateUpdate];
+            //// check if :state property has .sync modifier
+            //let listeners = this.$options._parentListeners;
+            //const hasSyncModifier = listeners && listeners[stateUpdate];
 
-            if (!hasSyncModifier)
-            {
-              console.warn(`ui-button: Add the .sync modifier to the "state" property, as changing the state to "${STATE_SUCCESS}" or "${STATE_ERROR}" will automatically set it back to "${STATE_DEFAULT}" after the state duration timeout`);
-            }
+            //if (!hasSyncModifier)
+            //{
+            //  console.warn(`ui-button: Add the .sync modifier to the "state" property, as changing the state to "${STATE_SUCCESS}" or "${STATE_ERROR}" will automatically set it back to "${STATE_DEFAULT}" after the state duration timeout`);
+            //}
 
-            this.setState(STATE_DEFAULT);
+            this.stateDisplay = STATE_DEFAULT;
           }, this.stateDuration);
         }
       }
     },
 
-    mounted ()
-    {
-      
-    },
-
     methods: {
-
-      setState(state)
-      {
-        this.$emit('update:state', state);
-      },
 
       tryClick(ev)
       {

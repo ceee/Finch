@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="app-auth">
     <h1 class="app-auth-headline">zero</h1>
-    <ui-form class="app-auth-inner" :submit="onSubmit">
+    <ui-form class="app-auth-inner" v-slot="form" :submit="onSubmit">
       <div>
         <h2 v-localize="'@login.headline'"></h2>
 
@@ -15,7 +15,7 @@
       </div>
 
       <div class="app-auth-bottom">
-        <ui-button :submit="true" label="@login.button" />
+        <ui-button :submit="true" label="@login.button" :state="form.state" />
         <ui-button type="blank" label="@login.button_forgot" />
       </div>
     </ui-form>
@@ -28,8 +28,6 @@
 
   export default {
     name: 'app-login',
-
-    //inject: ['form'],
 
     data: () => ({
       model: {
