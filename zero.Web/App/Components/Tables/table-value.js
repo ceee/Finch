@@ -21,12 +21,12 @@ export default function (el, binding)
 
 
   // render empty
-  if (isEmpty)
-  {
-    render(column.default || value);
-  }
+  //if (isEmpty)
+  //{
+  //  render(column.default || value);
+  //}
   // output text string or HTML
-  else if (!column.as || column.as === 'text' || column.as === 'html')
+  if (!column.as || column.as === 'text' || column.as === 'html')
   {
     const hasFunc = typeof column.render === 'function';
     render(hasFunc ? column.render(item, column) : value, column.as === 'html');
@@ -47,8 +47,12 @@ export default function (el, binding)
 
     render(price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "&nbsp;") + "&nbsp;&euro;", true);
   }
+  else if (column.as === 'bool')
+  {
+    render('<span class="ui-table-field-bool' + (value === true ? ' is-checked' : '') + (column.colored ? ' is-colored' : '') + '"></span>', true);
+  }
   else
   {
-    console.warn('ui-table: Column display type ("as") is not supported');
+    console.warn(`ui-table: Column display type ("${column.as}") is not supported`);
   }
 }

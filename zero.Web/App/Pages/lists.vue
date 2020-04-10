@@ -35,6 +35,11 @@
             size: 's',
             sort: false
           },
+          isPublished: {
+            label: 'Published',
+            as: 'bool',
+            size: 'xs'
+          },
           status: {
             as: 'html',
             render: item => '<b>' + item.status + '</b>'
@@ -59,14 +64,16 @@
               createdDate: '2020-03-05T10:17:25.229+01:00',
               username: 'Tobias Klika',
               price: 70.90,
-              status: 'Open'
+              status: 'Open',
+              isPublished: true
             },
             {
               no: 2,
               createdDate: '2020-03-05T10:17:25.229+01:00',
               username: 'Fox Tales',
               price: 12.95,
-              status: 'Processing'
+              status: 'Processing',
+              isPublished: true
             },
             {
               no: 3,
@@ -80,7 +87,8 @@
               createdDate: '2020-03-05T10:17:25.229+01:00',
               username: 'Tobias Klika',
               price: 70.90,
-              status: 'Open'
+              status: 'Open',
+              isPublished: true
             },
             {
               no: 2,

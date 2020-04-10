@@ -312,4 +312,37 @@
   {
     margin: 0 20px;
   }
+
+  /* special styling for display types */
+
+  .ui-table-field-bool
+  {
+    font-family: var(--font-icon);
+    color: var(--color-fg-light);
+
+    &:before
+    {
+      content: "\e8f6";
+    }
+
+    &.is-checked
+    {
+      color: var(--color-fg);
+
+      &:before
+      {
+        content: "\e83f";
+      }
+    }
+
+    &.is-colored
+    {
+      color: var(--color-accent-error);
+
+      &.is-checked
+      {
+        color: var(--color-accent-success);
+      }
+    }
+  }
 </style>
