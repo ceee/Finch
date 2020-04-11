@@ -31,12 +31,22 @@ zero.sections.forEach(section =>
 
   if (section.alias === 'pages')
   {
-    route.children = [{
-      path: 'edit/:id',
-      props: true,
-      name: 'page',
-      component: () => import('zero/pages/' + section.alias + '/page')
-    }];
+    route.children = [
+      {
+        path: 'edit/:id',
+        props: true,
+        name: 'page',
+        component: () => import('zero/pages/' + section.alias + '/page')
+      },
+      {
+        path: 'recyclebin',
+        name: 'recyclebin',
+        component: () => import('zero/pages/' + section.alias + '/recyclebin'),
+        meta: {
+          name: '@recyclebin.name'
+        }
+      }
+    ];
   }
 
   if (section.children.length > 0)
@@ -52,7 +62,7 @@ zero.sections.forEach(section =>
 
 // add fallback route (this should probably by 404 page)
 
-//routes.push({ path: '*', component: ViewDefault });
+routes.push({ path: '*', component: () => import('zero/pages/notfound') });
 
 
 
@@ -79,6 +89,10 @@ router.beforeEach((to, from, next) =>
   if (to.meta.section)
   {
     document.title = Localization.localize(to.meta.section.name) + ' - zero';
+  }
+  else if (to.meta.name)
+  {
+    document.title = Localization.localize(to.meta.name) + ' - zero';
   }
   else
   {

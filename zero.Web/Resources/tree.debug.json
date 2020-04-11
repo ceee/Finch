@@ -9,7 +9,7 @@
     "hasChildren": true
   },
   {
-    "id": "-99",
+    "id": "recyclebin",
     "parentId": null,
     "sort": 1000,
     "name": "@recyclebin.name",

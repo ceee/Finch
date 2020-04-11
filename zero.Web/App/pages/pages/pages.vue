@@ -46,7 +46,7 @@
     computed: {
       isOverview()
       {
-        return !this.$route.params.id;
+        return !this.$route.params.id && this.$route.name !== 'recyclebin';
       }
     },
 
@@ -96,6 +96,13 @@
             item.url = {
               name: 'page',
               params: { id: item.id }
+            };
+
+            if (item.id === "recyclebin")
+            {
+              item.url = {
+                name: 'recyclebin'
+              };
             }
           });
           this.cache[key] = response;
