@@ -5,23 +5,23 @@ import ViewSettings from 'zeropages/settings';
 import ViewSettingsUser from 'zeropages/settings/user';
 import ViewDefault from 'zeropages/page';
 import ViewLists from 'zeropages/lists';
-import MyPluginRoutes from './Plugins/MyPlugin/Routes'
+//import MyPluginRoutes from './Plugins/MyPlugin/Routes';
 
 Vue.use(VueRouter);
 
 history.scrollRestoration = 'manual';
 
-const routes = [
+let routes = [
   { path: '/settings/user', component: ViewSettingsUser },
   { path: '/settings*', component: ViewSettings },
   { path: '/lists', component: ViewLists },
   { path: '*', component: ViewDefault }
 ];
 
-MyPluginRoutes.forEach(route =>
-{
-  routes.push(route);
-});
+//MyPluginRoutes.forEach(route =>
+//{
+//  routes.push(route);
+//});
 
 const router = new VueRouter({
   mode: 'history',
