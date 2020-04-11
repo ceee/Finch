@@ -54,8 +54,6 @@
 
       getItems(config)
       {
-        console.info('getitems with config', config);
-
         return new Promise(resolve =>
         {
           resolve([
