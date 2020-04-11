@@ -10,7 +10,12 @@
     "close": "Close",
     "confirm": "Confirm",
     "createdDate": "Created at",
-    "page_xofy": "Page {x} of {y}"
+
+    "pagination": {
+      "xofy": "Page {x} of {y}",
+      "next": "Next page",
+      "previous": "Previous page"
+    }
   },
 
   "unsavedchanges": {
