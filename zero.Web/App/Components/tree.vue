@@ -117,7 +117,7 @@
     font-size: var(--font-size);
     padding: 0 var(--padding);
     height: 50px;
-    color: var(--color-fg-reverse-mid);
+    color: var(--color-fg);
     position: relative;
     transition: color 0.2s ease;
 
@@ -147,7 +147,7 @@
     height: 100%;
     align-items: center;
     position: relative;
-    color: var(--color-fg-mid);
+    color: var(--color-fg);
 
     &:hover
     {

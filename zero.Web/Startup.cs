@@ -82,7 +82,7 @@ namespace zero.Web
         var section = new Section("commerce", "Commerce", "fth-shopping-bag", "#52bba1");
         section.Children.Add(new Section("orders", "Orders"));
         section.Children.Add(new Section("customers", "Customers"));
-        section.Children.Add(new Section("catalogue", "Catalogue"));
+        section.Children.Add(new Section("catalogue & ÖBB", "Catalogue"));
         section.Children.Add(new Section("promotions", "Promotions"));
         section.Children.Add(new Section("channels", "Channels"));
         opts.Sections.Insert(3, section);
@@ -131,6 +131,7 @@ namespace zero.Web
       services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
       // TODO move registration into core
+      services.AddTransient<IZeroVue, ZeroVue>();
       services.AddTransient<ISetupApi, SetupApi>();
       services.AddTransient<ISectionsApi, SectionsApi>();
       services.AddTransient<IApplicationsApi, ApplicationsApi>();

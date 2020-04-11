@@ -42,4 +42,8 @@
     <ProjectReference Include="..\zero.Core\zero.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="App\Mixins\" />
+  </ItemGroup>
+
 </Project>

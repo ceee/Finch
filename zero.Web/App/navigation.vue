@@ -12,14 +12,14 @@
 
     <nav class="app-nav-inner">
       <template v-for="section in sections">
-        <router-link :to="getLink(section)" class="app-nav-item" :class="{ 'has-children': hasChildren(section) }">
+        <router-link :to="section.url" class="app-nav-item" :class="{ 'has-children': hasChildren(section) }">
           <i class="app-nav-item-icon" :class="section.icon" :style="{ color: false && section.color ? section.color : null }"></i>
           {{section.name | localize}}
           <i v-if="hasChildren(section)" class="app-nav-item-arrow fth-chevron-down"></i>
         </router-link>
         <transition name="app-nav-children">
           <div class="app-nav-children" v-if="hasChildren(section) && $route.path.indexOf('/' + section.alias) > -1">
-            <router-link v-for="child in section.children" v-bind:key="child.alias" :to="getLink(section, child)" class="app-nav-child">
+            <router-link v-for="child in section.children" v-bind:key="child.alias" :to="child.url" class="app-nav-child">
               {{child.name | localize}}
             </router-link>
           </div>
@@ -40,51 +40,39 @@
 
 
 <script>
-  import ApplicationsApi from 'zeroresources/applications.js'
-  import SectionsApi from 'zeroresources/sections.js'
   import { map as _map } from 'underscore';
 
   export default {
     name: 'app-navigation',
 
     data: () => ({
-      applications: [],
+      applications: zero.applications,
       applicationItems: [],
-      sections: []
+      sections: zero.sections
     }),
 
     mounted ()
     {
-      //console.info(this.$router.history.current.path);
-
-      SectionsApi.getAll().then(items =>
+      this.applicationItems = _map(this.applications, item =>
       {
-        this.sections = items;
+        return {
+          application: item,
+          active: item.name === "Brothers", // TODO correct active application
+          name: item.name
+        };
       });
-      ApplicationsApi.getAll().then(items =>
-      {
-        this.applications = items;
 
-        this.applicationItems = _map(items, item =>
+      this.applicationItems.push({
+        type: 'separator'
+      });
+
+      this.applicationItems.push({
+        name: 'Add new application...',
+        icon: 'fth-plus',
+        action(item, dropdown)
         {
-          return {
-            application: item,
-            active: item.name === "Brothers", // TODO correct active application
-            name: item.name
-          };
-        });
-
-        this.applicationItems.push({
-          type: 'separator'
-        });
-        this.applicationItems.push({
-          name: 'Add new application...',
-          icon: 'fth-plus',
-          action(item, dropdown)
-          {
-            console.info('add');
-          }
-        });
+          console.info('add');
+        }
       });
     },
 
@@ -94,26 +82,6 @@
       hasChildren(section)
       {
         return section.children && section.children.length > 0;
-      },
-
-      getName(section)
-      {
-        return section.alias.charAt(0).toUpperCase() + section.alias.slice(1);
-      },
-
-      getLink(section, child)
-      {
-        //if (section.alias === "dashboard" && !child)
-        //{
-        //  return '/';
-        //}
-
-        if (!child)
-        {
-          return '/' + section.alias;
-        }
-
-        return '/' + section.alias + '/' + child.alias;
       },
 
       applicationChanged(item, dropdown)

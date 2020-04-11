@@ -2,8 +2,6 @@ import { extend as _extend, each as _each } from 'underscore';
 
 export default {
 
-  cache: zero.translations,
-
   localize(key, options)
   {
     let params = _extend({
@@ -24,19 +22,9 @@ export default {
     }
 
     key = hasAtSign ? key.slice(1) : key;
-    let value = this.cache;
+    const value = zero.translations[key];
 
-    for (let part of key.split('.'))
-    {
-      if (!value[part])
-      {
-        break;
-      }
-
-      value = value[part];
-    }
-
-    if (!value || value === this.cache || typeof value !== 'string')
+    if (!value || typeof value !== 'string')
     {
       return '[' + key + ']';
     }
