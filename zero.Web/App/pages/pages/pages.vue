@@ -7,7 +7,19 @@
       <ui-tree :get="getItems" />
       <div class="page-container-tree-resizable ui-resizable"></div>
     </div>
-    <router-view></router-view>
+
+    <router-view v-if="!isOverview"></router-view>
+
+    <div v-if="isOverview" class="page-overview">
+      <router-link :to="action.url" v-for="action in actions" :key="action.alias" class="page-overview-action">
+        <i class="page-overview-action-icon" :class="action.icon" />
+        <p class="page-overview-action-text">
+          <strong v-localize="'@page.overview.actions.' + action.alias"></strong>
+          <br>
+          <span v-localize="{ key: '@page.overview.actions.' + action.alias + '_text', tokens: action.tokens }"></span>
+        </p>
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -26,8 +38,44 @@
         max: 520,
         save: 'page-tree',
         handle: '.ui-resizable'
-      }
+      },
+      actions: []
     }),
+
+
+    computed: {
+      isOverview()
+      {
+        return !this.$route.params.id;
+      }
+    },
+
+
+    created()
+    {
+      this.actions.push({
+        alias: 'continue',
+        icon: 'fth-corner-down-right',
+        url: '/',
+        tokens: {
+          page: 'Products',
+          date: 'March 3rd, 2020'
+        }
+      });
+      this.actions.push({
+        alias: 'new',
+        icon: 'fth-plus',
+        url: '/',
+        tokens: {
+          root: 'Home'
+        }
+      });
+      this.actions.push({
+        alias: 'history',
+        icon: 'fth-clock',
+        url: '/'
+      });
+    },
 
 
     methods: {
@@ -105,6 +153,58 @@
     {
       transition-delay: 0.2s;
       opacity: 0.04;
+    }
+  }
+
+  .page-overview
+  {
+    padding: 95px 0 0 60px;
+  }
+
+  a.page-overview-action
+  {
+    color: var(--color-text);
+    font-size: var(--font-size);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 35px;
+    align-items: center;
+
+    &:hover .page-overview-action-icon
+    {
+      box-shadow: 0 0 20px var(--color-shadow);
+    }
+
+    & + a.page-overview-action
+    {
+      margin-top: 60px;
+    }
+  }
+
+  .page-overview-action-icon
+  {
+    width: 100px;
+    height: 100px;
+    line-height: 98px !important;
+    font-size: 26px;
+    text-align: center;
+    background: var(--color-bg-light);
+    border-radius: var(--radius);
+    transition: box-shadow 0.2s ease;
+    box-shadow: 0 0 20px transparent;
+  }
+
+  .page-overview-action-text
+  {
+    line-height: 1.3;
+    color: var(--color-fg-light);
+
+    strong
+    {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: var(--color-fg);
+      font-size: var(--font-size-l);
     }
   }
 </style>

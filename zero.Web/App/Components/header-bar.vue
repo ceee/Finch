@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-header-bar">
     <div class="ui-header-bar-main">
-      <ui-icon-button v-if="onBack" :click="onBack" />
+      <ui-icon-button v-if="onBack" @click="onBack" />
       <h2 v-if="title" class="ui-header-bar-title" v-localize="title"></h2>
       <h2 v-if="!title && titleEmpty" class="ui-header-bar-title is-empty" v-localize="titleEmpty"></h2>
     </div>

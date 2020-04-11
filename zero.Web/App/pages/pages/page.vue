@@ -63,7 +63,7 @@
 
       onBack()
       {
-        console.info('back');
+        this.$router.go(-1);
       }
 
     }
