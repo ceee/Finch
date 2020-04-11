@@ -17,17 +17,7 @@
     </div>
 
     <footer class="ui-table-pagination" v-if="pages > 1">
-      <ui-icon-button class="ui-table-pagination-next" type="white" title="Previous" icon="fth-chevron-left" :disabled="filter.page < 2" @click="setPage(filter.page - 1)" />
-      <ui-dropdown align="bottom">
-        <template v-slot:button>
-          <button type="button" class="ui-button type-blank caret-down ui-table-pagination-select">
-            <span class="ui-button-text" v-localize="{ key: '@ui.page_xofy', tokens: { x: filter.page, y: pages }}"></span>
-            <i class="ui-button-caret fth-chevron-down"></i>
-          </button>
-        </template>
-        <ui-dropdown-list :items="actions" />
-      </ui-dropdown>
-      <ui-icon-button class="ui-table-pagination-next" type="white" title="Next" icon="fth-chevron-right" :disabled="filter.page >= pages" @click="setPage(filter.page + 1)" />
+      <ui-pagination :pages="pages" :page="filter.page" @change="setPage" />
     </footer>
 
   </div>
@@ -36,6 +26,7 @@
 
 <script>
   import TableValueDirective from 'zerocomponents/Tables/table-value.js';
+  import UiPagination from 'zerocomponents/pagination.vue';
   import Strings from 'zeroservices/strings';
   import { each as _each, extend as _extend } from 'underscore';
 
@@ -60,6 +51,8 @@
         default: defaultConfig
       }
     },
+
+    components: { UiPagination },
 
     watch: {
       'config.columns': function (val)
@@ -319,19 +312,6 @@
     {
       transform: scaleY(-1) translateY(5px);
     }
-  }
-
-  .ui-table-pagination
-  {
-    display: flex;
-    justify-content: center;
-    margin-top: var(--padding);
-    align-items: center;
-  }
-
-  .ui-table-pagination-select
-  {
-    margin: 0 20px;
   }
 
   /* special styling for display types */
