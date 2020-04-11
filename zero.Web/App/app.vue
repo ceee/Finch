@@ -21,6 +21,9 @@
   import AuthApi from 'zeroservices/auth.js'
   import 'zero/axios.config.js'
 
+  console.info(Router);
+  console.dir(Router.options.routes);
+
   export default {
     name: 'app',
 
