@@ -19,6 +19,8 @@ export default function (el, binding)
     }
   };
 
+  // set multiline for cell
+  el.classList.toggle('is-multiline', column.multiline === true);
 
   // render empty
   //if (isEmpty)

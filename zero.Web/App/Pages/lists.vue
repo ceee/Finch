@@ -27,19 +27,18 @@
           no: 'text',
           createdDate: {
             label: '@ui.createdDate',
-            as: 'datetime',
-            size: 's'
+            as: 'datetime'
           },
-          username: 'text',
+          username: {
+            as: 'text'
+          },
           price: {
             as: 'price',
-            size: 's',
             sort: false
           },
           isPublished: {
             label: 'Published',
-            as: 'bool',
-            size: 'xs'
+            as: 'bool'
           },
           status: {
             as: 'html',
@@ -79,7 +78,7 @@
             {
               no: 3,
               createdDate: '2020-03-07T17:17:25.229+01:00',
-              username: 'Christian Klika',
+              username: 'Christian Klika, das ist mein Name und der könnte noch viel länger sein',
               price: 123.00,
               status: 'Completed'
             },

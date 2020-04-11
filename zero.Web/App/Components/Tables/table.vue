@@ -4,16 +4,15 @@
       <header class="ui-table-row ui-table-head">      
         <div v-for="column in columns" class="ui-table-cell" :table-field="column.field">
           {{ column.label | localize }}
-          <button v-if="column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="filter.orderBy == column.field ? 'sort-' + (filter.isDescending ? 'desc' : 'asc') : null">
+          <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="filter.orderBy == column.field ? 'sort-' + (filter.isDescending ? 'desc' : 'asc') : null">
             <i class="arrow arrow-down"></i>
           </button>
         </div>
       </header>
-      <content class="ui-table-body">
-        <div class="ui-table-row" v-for="item in items">
-          <div v-for="column in columns" class="ui-table-cell" :table-field="column.field" v-table-value="{ item, column }"></div>
-        </div>
-      </content>
+
+      <div class="ui-table-row" v-for="item in items">
+        <div v-for="column in columns" class="ui-table-cell" :table-field="column.field" v-table-value="{ item, column }"></div>
+      </div>
     </div>
 
     <footer class="ui-table-pagination" v-if="pages > 1">
@@ -176,7 +175,7 @@
     width: 100%;
     border-bottom: 1px solid var(--color-line-light);
     position: relative;
-    min-height: 60px;
+    //min-height: 60px;
     outline: 1px solid transparent;
     transition: outline 0.1s ease, box-shadow 0.1s ease;
 
@@ -224,33 +223,49 @@
 
   .ui-table-cell
   {
-    display: inline-flex;
+    display: inline-block;
     align-items: center;
-    flex: 1 1 5%;
+    flex: 1 0 5%;
     position: relative;
     text-align: left;
-    overflow: hidden;
-    padding: 10px 20px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    padding: 18px 20px 17px 20px;
     border-left: 1px solid var(--color-line-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 20px;
+    line-height: 20px;
 
     &:first-child
     {
       border-left: none;
     }
+
+    &.is-multiline
+    {
+      white-space: normal;
+      overflow: auto;
+      text-overflow: initial;
+    }
   }
 
   .ui-table-sort
   {
-    height: 29px;
-    width: 29px;
+    height: 20px;
+    width: 20px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     margin-right: -10px;
     border-radius: 15px;
     transition: background 0.2s ease;
+
+    &[disabled]
+    {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
 
     .arrow
     {
