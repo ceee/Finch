@@ -10,11 +10,14 @@
     "close": "Close",
     "confirm": "Confirm",
     "createdDate": "Created at",
-
     "pagination": {
       "xofy": "Page {x} of {y}",
       "next": "Next page",
       "previous": "Previous page"
+    },
+    "search": {
+      "placeholder": "Search ...",
+      "button": "Search"
     }
   },
 

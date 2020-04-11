@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-table-filter">
     <ui-button type="light" label="Filter" caret="down" />
-    <input type="search" class="ui-input" maxlength="120" v-localize:placeholder="'@login.fields.email_placeholder'" />
+    <ui-search />
   </div>
 </template>
 
@@ -39,13 +39,6 @@
     > * + *
     {
       margin-left: 15px;
-    }
-
-    .ui-input
-    {
-      display: inline-block;
-      width: auto;
-      min-width: 320px;
     }
   }
 </style>

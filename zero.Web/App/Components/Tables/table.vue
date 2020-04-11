@@ -66,7 +66,6 @@
       columns: [],
       items: [],
       pages: 8,
-      actions: [],
       filter: {
         orderBy: null,
         isDescending: true,
@@ -74,43 +73,10 @@
       }
     }),
 
-    computed: {
-
-    },
-
     created()
     {
       this.configuration = _extend(defaultConfig, this.config);
       this.generateColumns(this.configuration.columns);
-
-      this.actions.push({
-        name: 'Create',
-        icon: 'fth-plus'
-      });
-      this.actions.push({
-        name: 'Move',
-        icon: 'fth-corner-down-right'
-      });
-      this.actions.push({
-        name: 'Copy',
-        icon: 'fth-copy',
-        disabled: true
-      });
-      this.actions.push({
-        name: 'Sort',
-        icon: 'fth-arrow-down'
-      });
-      this.actions.push({
-        type: 'separator'
-      });
-      this.actions.push({
-        name: 'Delete',
-        icon: 'fth-x',
-        action(item, dropdown)
-        {
-          dropdown.hide();
-        }
-      });
     },
 
     mounted()
