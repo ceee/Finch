@@ -21,7 +21,7 @@
 
 
 <script>
-  import SettingsApi from 'zeroresources/settings.js'
+  import SettingsApi from 'zero/resources/settings.js'
 
   export default {
     name: 'app-settings',

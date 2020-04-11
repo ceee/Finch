@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { warn } from 'zeroservices/debug';
+import { warn } from 'zero/services/debug';
 
 export default function (el, binding)
 {

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Localization from 'zeroservices/localization';
+import Localization from 'zero/services/localization';
 
 /// <summary>
 /// Localizes the given property and sets the inner-text of the node to its result

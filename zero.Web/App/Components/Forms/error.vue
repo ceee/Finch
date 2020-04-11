@@ -9,7 +9,7 @@
 
 <script>
   import { isArray as _isArray } from 'underscore'
-  import Strings from 'zeroservices/strings'
+  import Strings from 'zero/services/strings'
 
   export default {
     name: 'uiError',

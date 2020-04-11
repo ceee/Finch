@@ -1,5 +1,5 @@
 ﻿import Axios from 'axios';
-import Auth from 'zeroservices/auth';
+import Auth from 'zero/services/auth';
 
 if (!zero || !zero.apiPath)
 {

@@ -25,7 +25,7 @@
 
 <script>
   import TableValueDirective from './table-value.js';
-  import UiPagination from 'zerocomponents/pagination.vue';
+  import UiPagination from 'zero/components/pagination.vue';
   import { each as _each, extend as _extend } from 'underscore';
 
   const defaultConfig = {
@@ -216,6 +216,7 @@
 
     .ui-table-cell
     {
+      display: inline-flex;
       justify-content: space-between;
     }
   }

@@ -9,7 +9,7 @@
 
 
 <script>
-  import Overlay from 'zeroservices/overlay.js'
+  import Overlay from 'zero/services/overlay.js'
 
   export default {
 

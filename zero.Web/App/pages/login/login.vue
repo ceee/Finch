@@ -24,7 +24,7 @@
 
 
 <script>
-  import AuthApi from 'zeroservices/auth.js'
+  import AuthApi from 'zero/services/auth.js'
 
   export default {
     name: 'app-login',

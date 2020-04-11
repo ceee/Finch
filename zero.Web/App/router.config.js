@@ -1,6 +1,6 @@
 ﻿import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Localization from 'zeroservices/localization';
+import Localization from 'zero/services/localization';
 
 Vue.use(VueRouter);
 
@@ -27,7 +27,7 @@ let addSection = (section, component) =>
 
 zero.sections.forEach(section =>
 {
-  let route = addSection(section, () => import('zeropages/' + section.alias + '/' + section.alias));
+  let route = addSection(section, () => import('zero/pages/' + section.alias + '/' + section.alias));
 
   if (section.alias === 'pages')
   {
@@ -35,7 +35,7 @@ zero.sections.forEach(section =>
       path: 'edit/:id',
       props: true,
       name: 'page',
-      component: () => import('zeropages/' + section.alias + '/page')
+      component: () => import('zero/pages/' + section.alias + '/page')
     }];
   }
 
@@ -43,7 +43,7 @@ zero.sections.forEach(section =>
   {
     section.children.forEach(child =>
     {
-      addSection(child, () => import('zeropages/' + section.alias + '/' + section.alias + '/' + child.alias));
+      addSection(child, () => import('zero/pages/' + section.alias + '/' + section.alias + '/' + child.alias));
     });
   }
 });

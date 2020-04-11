@@ -6,7 +6,7 @@
 
 
 <script>
-  import Overlay from 'zeroservices/overlay.js'
+  import Overlay from 'zero/services/overlay.js'
   import { isArray as _isArray, filter as _filter, groupBy as _groupBy } from 'underscore'
 
   export default {

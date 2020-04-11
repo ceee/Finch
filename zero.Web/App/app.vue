@@ -15,10 +15,10 @@
 <script>
   import '../Sass/app.scss'
   import AppNavigation from 'zero/navigation.vue'
-  import AppLogin from 'zeropages/login/login.vue'
-  import AppOverlays from 'zerocomponents/overlays/overlay-holder.vue'
+  import AppLogin from 'zero/pages/login/login.vue'
+  import AppOverlays from 'zero/components/overlays/overlay-holder.vue'
   import Router from 'zero/router.config.js'
-  import AuthApi from 'zeroservices/auth.js'
+  import AuthApi from 'zero/services/auth.js'
   import 'zero/vue.config.js'
   import 'zero/axios.config.js'
 

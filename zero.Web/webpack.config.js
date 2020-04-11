@@ -28,13 +28,6 @@ module.exports = {
       'vue$': 'vue/dist/vue.esm.js',
       'zero': path.join(__dirname, 'App'),
       'zerosetup': path.join(__dirname, 'Setup'),
-      'zerocomponents': path.join(__dirname, 'App', 'Components'),
-      'zeroresources': path.join(__dirname, 'App', 'Resources'),
-      'zerodirectives': path.join(__dirname, 'App', 'Directives'),
-      'zeroservices': path.join(__dirname, 'App', 'Services'),
-      'zerofilters': path.join(__dirname, 'App', 'Filters'),
-      'zeropages': path.join(__dirname, 'App', 'Pages'),
-      'zeromixins': path.join(__dirname, 'App', 'Mixins'),
       '@': __dirname
     }
   },
