@@ -1,12 +1,12 @@
 ﻿import Axios from 'axios';
 import Auth from 'zeroservices/auth';
 
-if (!zero || !zero.path)
+if (!zero || !zero.apiPath)
 {
-  throw Exception('window.zero and zero.path (= base path) have to be configured');
+  throw Exception('window.zero and zero.apiPath (= base path to the backoffice API) have to be configured');
 }
 
-Axios.defaults.baseURL = zero.path + 'api/';
+Axios.defaults.baseURL = zero.apiPath;
 Axios.defaults.withCredentials = true;
 
 Axios.interceptors.response.use(response => response, error =>

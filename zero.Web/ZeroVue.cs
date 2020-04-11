@@ -42,6 +42,7 @@ namespace zero.Web
       ZeroVueConfig config = new ZeroVueConfig();
 
       config.Path = Options.BackofficePath.EnsureEndsWith('/');
+      config.ApiPath = config.Path + "api/";
       config.Sections = CreateSections();
       config.Translations = CreateTranslations();
       config.Applications = await CreateApplications();
@@ -136,6 +137,8 @@ namespace zero.Web
   public class ZeroVueConfig
   {
     public string Path { get; set; }
+
+    public string ApiPath { get; set; }
 
     public IList<ZeroVueSection> Sections { get; set; } = new List<ZeroVueSection>();
 

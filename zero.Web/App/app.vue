@@ -17,7 +17,7 @@
   import AppNavigation from 'zero/navigation.vue'
   import AppLogin from 'zeropages/login/login.vue'
   import AppOverlays from 'zerocomponents/overlays/overlay-holder.vue'
-  import Router from 'zero/app.router.js'
+  import Router from 'zero/router.config.js'
   import AuthApi from 'zeroservices/auth.js'
   import 'zero/axios.config.js'
 

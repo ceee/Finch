@@ -267,4 +267,5 @@ wwwroot/Media/
 Temp/
 **/Assets/app.*
 **/Assets/setup.*
+**/Assets/*.js
 deps/*.dll

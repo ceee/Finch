@@ -15,6 +15,7 @@
         </router-link>
       </div>
     </div>
+    <router-view name="footer"></router-view>
   </div>
 </template>
 

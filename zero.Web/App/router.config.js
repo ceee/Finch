@@ -1,7 +1,6 @@
 ﻿import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Localization from 'zeroservices/localization';
-import ViewDefault from 'zeropages/pages/page';
 
 Vue.use(VueRouter);
 
@@ -13,18 +12,45 @@ const routes = [];
 
 let addSection = (section, component) =>
 {
-  routes.push({
-    path: section.url,
+  let route = {
+    path: section.url,    
     component: component,
     meta: {
       section: section
     }
-  });
+  };
+
+  //if (section.alias != 'pages')
+  //{
+  //  route.component = component;
+  //}
+  //else
+  //{
+  //  route.components = {
+  //    default: component,
+  //    footer: () => import('zeropages/' + section.alias + '/user')
+  //  };
+  //}
+
+  routes.push(route);
+
+  return route;
 };
 
 zero.sections.forEach(section =>
 {
-  addSection(section, () => import('zeropages/' + section.alias + '/' + section.alias));
+  let route = addSection(section, () => import('zeropages/' + section.alias + '/' + section.alias));
+
+  if (section.alias === 'pages')
+  {
+    route.children = [{
+      path: ':page',
+      props: true,
+      name: 'page',
+      component: () => import('zeropages/' + section.alias + '/page')
+    }];
+
+  }
 
   if (section.children.length > 0)
   {
@@ -35,11 +61,13 @@ zero.sections.forEach(section =>
   }
 });
 
+console.table(routes);
+
 
 
 // add fallback route (this should probably by 404 page)
 
-routes.push({ path: '*', component: ViewDefault });
+//routes.push({ path: '*', component: ViewDefault });
 
 
 
