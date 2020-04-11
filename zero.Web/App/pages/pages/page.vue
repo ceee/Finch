@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="page">
-    <ui-header-bar title="Checkout" :on-back="onBack">
+    <ui-header-bar :title="'Page ' + $route.params.id" :on-back="onBack">
       <ui-dropdown>
         <template v-slot:button>
           <ui-button type="light" label="Actions" caret="down" />

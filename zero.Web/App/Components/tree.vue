@@ -6,7 +6,7 @@
         <button v-if="item.hasChildren" @click="toggle(item)" type="button" class="ui-tree-item-toggle">
           <i class="ui-tree-item-arrow" :class="['fth-chevron-' + (item.isOpen ? 'up' : 'down')]"></i>
         </button>
-        <router-link to="/" class="ui-tree-item-link">
+        <router-link :to="item.url" class="ui-tree-item-link">
           <i class="ui-tree-item-icon" :class="item.icon"></i>
           <i v-if="item.modifier" :title="item.modifier.name" class="ui-tree-item-modifier" :class="item.modifier.icon"></i>
           {{item.name | localize}}
@@ -35,10 +35,6 @@
       get: {
         type: Function,
         required: true
-      },
-      onChange: {
-        type: Function,
-        default: () => { }
       }
     },
 
@@ -78,7 +74,7 @@
       setStatus(status)
       {
         this.status = status;
-        this.onChange(status, this.items);
+        this.$emit('onStatusChange', status);
       },
 
 
@@ -149,14 +145,9 @@
     position: relative;
     color: var(--color-fg);
 
-    &:hover
+    &.is-active
     {
-      color: var(--color-fg);
-
-      .ui-tree-item-icon
-      {
-        color: var(--color-fg);
-      }
+      font-weight: bold;
     }
   }
 

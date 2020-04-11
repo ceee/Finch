@@ -20,18 +20,6 @@ let addSection = (section, component) =>
     }
   };
 
-  //if (section.alias != 'pages')
-  //{
-  //  route.component = component;
-  //}
-  //else
-  //{
-  //  route.components = {
-  //    default: component,
-  //    footer: () => import('zeropages/' + section.alias + '/user')
-  //  };
-  //}
-
   routes.push(route);
 
   return route;
@@ -44,12 +32,11 @@ zero.sections.forEach(section =>
   if (section.alias === 'pages')
   {
     route.children = [{
-      path: ':page',
+      path: 'edit/:id',
       props: true,
       name: 'page',
       component: () => import('zeropages/' + section.alias + '/page')
     }];
-
   }
 
   if (section.children.length > 0)
@@ -60,8 +47,6 @@ zero.sections.forEach(section =>
     });
   }
 });
-
-console.table(routes);
 
 
 

@@ -19,6 +19,7 @@
   import AppOverlays from 'zerocomponents/overlays/overlay-holder.vue'
   import Router from 'zero/router.config.js'
   import AuthApi from 'zeroservices/auth.js'
+  import 'zero/vue.config.js'
   import 'zero/axios.config.js'
 
   export default {

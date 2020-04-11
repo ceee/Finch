@@ -184,7 +184,7 @@
     }
   }
 
-  .ui-table-body .ui-table-row:hover
+  .ui-table-row:not(.ui-table-head):hover
   {
     box-shadow: 0 0 5px 4px var(--color-shadow);
     z-index: 4;

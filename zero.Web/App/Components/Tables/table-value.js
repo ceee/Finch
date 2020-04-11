@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { warn } from 'zeroservices/debug';
 
 export default function (el, binding)
 {
@@ -55,6 +56,6 @@ export default function (el, binding)
   }
   else
   {
-    console.warn(`ui-table: Column display type ("${column.as}") is not supported`);
+    warn(`ui-table: Column display type ("${column.as}") is not supported`, this);
   }
 }

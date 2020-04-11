@@ -5,7 +5,6 @@
         <ui-dot-button />
       </ui-header-bar>
       <ui-tree :get="getItems" />
-      <ui-button type="white" label="Go to page" @click="goToPage" icon="fth-settings" />
       <div class="page-container-tree-resizable ui-resizable"></div>
     </div>
     <router-view></router-view>
@@ -33,11 +32,6 @@
 
     methods: {
 
-      goToPage()
-      {
-        this.$router.push({ name: 'page', params: { page: '23' } });
-      },
-
       getItems(parent)
       {
         const key = !parent ? '__root' : parent;
@@ -49,6 +43,13 @@
 
         return PageTreeApi.getChildren(parent).then(response =>
         {
+          response.forEach(item =>
+          {
+            item.url = {
+              name: 'page',
+              params: { id: item.id }
+            }
+          });
           this.cache[key] = response;
           return response;
         });
