@@ -1,7 +1,7 @@
 ﻿import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Localization from 'zeroservices/localization';
-import ViewDefault from 'zeropages/page';
+import ViewDefault from 'zeropages/pages/page';
 
 Vue.use(VueRouter);
 
@@ -24,13 +24,13 @@ let addSection = (section, component) =>
 
 zero.sections.forEach(section =>
 {
-  addSection(section, () => import('zeropages/' + section.alias));
+  addSection(section, () => import('zeropages/' + section.alias + '/' + section.alias));
 
   if (section.children.length > 0)
   {
     section.children.forEach(child =>
     {
-      addSection(child, () => import('zeropages/' + section.alias + '/' + child.alias));
+      addSection(child, () => import('zeropages/' + section.alias + '/' + section.alias + '/' + child.alias));
     });
   }
 });

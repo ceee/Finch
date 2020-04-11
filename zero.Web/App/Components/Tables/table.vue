@@ -24,9 +24,8 @@
 
 
 <script>
-  import TableValueDirective from 'zerocomponents/Tables/table-value.js';
+  import TableValueDirective from './table-value.js';
   import UiPagination from 'zerocomponents/pagination.vue';
-  import Strings from 'zeroservices/strings';
   import { each as _each, extend as _extend } from 'underscore';
 
   const defaultConfig = {

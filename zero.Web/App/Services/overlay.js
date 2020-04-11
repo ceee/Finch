@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import AppConfirm from 'zerocomponents/Overlays/confirm';
+import AppConfirm from 'zerocomponents/overlays/confirm';
 import Strings from 'zeroservices/strings';
 import { find as _find, extend as _extend } from 'underscore';
 
