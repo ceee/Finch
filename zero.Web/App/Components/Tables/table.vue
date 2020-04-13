@@ -108,7 +108,7 @@
           }
 
           this.columns.push(_extend(data, {
-            label: data.label || (this.configuration.labelPrefix + key),
+            label: typeof data.label !== 'undefined' ? data.label : (this.configuration.labelPrefix + key),
             field: key,
             canSort: typeof data.sort === 'boolean' ? data.sort : this.configuration.sort,
             flex: data.width ? { 'flex': '0 1 ' + data.width + 'px' } : {}
@@ -249,6 +249,11 @@
       overflow: auto;
       text-overflow: initial;
     }
+
+    &.is-bold
+    {
+      font-weight: bold;
+    }
   }
 
   .ui-table-sort
@@ -328,5 +333,11 @@
         color: var(--color-accent-success);
       }
     }
+  }
+
+  .ui-table .flag
+  {
+    position: relative;
+    top: 2px;
   }
 </style>

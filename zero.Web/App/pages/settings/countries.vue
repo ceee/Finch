@@ -25,17 +25,22 @@
         labelPrefix: '@country.fields.',
         sort: false,
         columns: {
-          name: 'text',
+          flag: {
+            label: '',
+            as: 'html',
+            render: item => `<i class="flag flag-${item.code.toLowerCase()}"></i>`,
+            width: 60
+          },
+          name: {
+            as: 'text',
+            bold: true
+          },
           code: 'text',
           isActive: {
             as: 'bool',
             label: '@ui.active',
             width: 200
           }
-          //status: {
-          //  as: 'html',
-          //  render: item => '<b>' + item.status + '</b>'
-          //}
         },
         items: CountriesApi.getAll
       };
