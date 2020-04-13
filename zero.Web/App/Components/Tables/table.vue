@@ -212,7 +212,7 @@
     position: sticky;
     top: 0;
     border-bottom: 1px solid var(--color-line-light);
-    z-index: 3;
+    z-index: 2;
     background: var(--color-box);
     //box-shadow: inset 0 -3px 3px rgba(0,0,0,0.02);
 

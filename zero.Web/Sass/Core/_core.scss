@@ -198,7 +198,7 @@ iframe, video
 
 *
 {
-  scrollbar-color: var(--color-bg-light) transparent;
+  //scrollbar-color: var(--color-bg-mid) transparent;
   scrollbar-width: thin;
 }
 
@@ -209,10 +209,10 @@ iframe, video
   background-color: transparent;
 }
 
-::-webkit-scrollbar-thumb
+/*::-webkit-scrollbar-thumb
 {
-  background: var(--color-bg-light);
-}
+  background: var(--color-bg-mid);
+}*/
 
 
 /// ui resizable
