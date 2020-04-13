@@ -1,7 +1,7 @@
 ﻿import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Localization from 'zero/services/localization';
-import { isArray as _isArray, find as _find } from 'underscore';
+import { isArray as _isArray, find as _find, map as _map, filter as _filter } from 'underscore';
 import { warn } from 'zero/services/debug';
 
 Vue.use(VueRouter);
@@ -19,6 +19,7 @@ let addSection = (section, component, parent) =>
     component: component,
     name: (parent ? parent.alias + '-' : '') + section.alias,
     meta: {
+      name: [ section.name, (parent ? parent.name : null) ],
       alias: section.alias,
       section: section,
       parent: parent
@@ -114,18 +115,26 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) =>
 {
-  if (to.meta.section)
+  let title = Localization.localize('@zero.name');
+
+  if (to.meta.name && to.meta.alias != zero.alias.sections.dashboard)
   {
-    document.title = Localization.localize(to.meta.section.name) + ' - zero';
+    let name = to.meta.name;
+    let nameParts = _isArray(name) ? name : [name];
+    let translations = [];
+
+    nameParts.forEach(part =>
+    {
+      if (part)
+      {
+        translations.push(Localization.localize(part));
+      }
+    });
+
+    title += ': ' + translations.join(' - ');
   }
-  else if (to.meta.name)
-  {
-    document.title = Localization.localize(to.meta.name) + ' - zero';
-  }
-  else
-  {
-    document.title = 'zero';
-  }
+
+  document.title = title;
 
   next();
 });

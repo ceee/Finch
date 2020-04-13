@@ -188,7 +188,7 @@
   .ui-table-row:not(.ui-table-head):hover
   {
     box-shadow: 0 0 5px 4px var(--color-shadow);
-    z-index: 4;
+    z-index: 2;
     outline: 1px solid var(--color-line);
     border-bottom-color: transparent;
 
@@ -214,7 +214,7 @@
     border-bottom: 1px solid var(--color-line-light);
     z-index: 3;
     background: var(--color-box);
-    box-shadow: inset 0 -3px 3px rgba(0,0,0,0.02);
+    //box-shadow: inset 0 -3px 3px rgba(0,0,0,0.02);
 
     .ui-table-cell
     {
