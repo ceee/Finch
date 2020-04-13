@@ -48,44 +48,54 @@ zero.sections.forEach(section =>
 
 // find internal route definitions per section
 
-const sectionRoutes = require.context('zero/pages', true, /routes\.js$/);
-
-sectionRoutes.keys().forEach((path) =>
+let addRoutesPerContext = (context, isPlugin) =>
 {
-  const routesDefinition = sectionRoutes(path);
-  const definition = routesDefinition.default || routesDefinition;
-  let _routes = _isArray(definition) ? definition : definition.routes;
-
-  // append routes to a section
-  if (typeof definition.section === 'string')
+  context.keys().forEach((path) =>
   {
-    const route = _find(routes, r => r.meta.alias === definition.section);
+    const routesDefinition = context(path);
+    const definition = routesDefinition.default || routesDefinition;
+    let _routes = _isArray(definition) ? definition : definition.routes;
 
-    if (!route)
+    // append routes to a section
+    if (typeof definition.section === 'string')
     {
-      warn(`router: Could not find section "${definition.section}" in route definition file ${path}`);
+      const route = _find(routes, r => r.meta.alias === definition.section);
+
+      if (!route)
+      {
+        warn(`router: Could not find section "${definition.section}" in route definition file ${path}`);
+      }
+      else
+      {
+        if (!route.children)
+        {
+          route.children = [];
+        }
+        _routes.forEach(r =>
+        {
+          route.children.push(r);
+        });
+      }
     }
+    // add routes to root
     else
     {
-      if (!route.children)
-      {
-        route.children = [];
-      }
       _routes.forEach(r =>
       {
-        route.children.push(r);
+        routes.push(r);
       });
     }
-  }
-  // add routes to root
-  else
-  {
-    _routes.forEach(r =>
-    {
-      routes.push(r);
-    });
-  }
-});
+  });
+};
+
+
+
+// add internal route extensions
+addRoutesPerContext(require.context('zero/pages', true, /routes\.js$/));
+
+// add plugin route extensions
+addRoutesPerContext(require.context('@/Plugins', true, /routes\.js$/), true); // TODO use zero.pluginPath, but this fails
+
 
 
 

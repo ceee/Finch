@@ -7,7 +7,7 @@ namespace zero.Web.Sections
   /// <summary>
   /// Global list entities
   /// </summary>
-  public class ListsSection : ISection
+  public class ListsSection : ISection, IBuiltInSection
   {
     /// <inheritdoc />
     public string Alias => Constants.Sections.Lists;

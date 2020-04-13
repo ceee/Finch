@@ -11,6 +11,7 @@ using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Web.Sections;
 
 namespace zero.Web
 {
@@ -43,6 +44,7 @@ namespace zero.Web
 
       config.Path = Options.BackofficePath.EnsureEndsWith('/');
       config.ApiPath = config.Path + "api/";
+      config.PluginPath = "@/Plugins";
       config.Sections = CreateSections();
       config.Translations = CreateTranslations();
       config.Applications = await CreateApplications();
@@ -65,6 +67,7 @@ namespace zero.Web
 
       foreach (ISection section in Options.Sections)
       {
+        bool isExternal = !(section is IBuiltInSection);
         string url = Alias.Generate(section.Alias).EnsureStartsWith('/');
 
         if (section.Alias == Constants.Sections.Dashboard)
@@ -79,7 +82,8 @@ namespace zero.Web
           Icon = section.Icon,
           Color = section.Color,
           Url = url,
-          Children = new List<ZeroVueSection>()
+          Children = new List<ZeroVueSection>(),
+          IsExternal = isExternal
         };
 
         foreach (ISection child in section.Children)
@@ -88,7 +92,8 @@ namespace zero.Web
           {
             Alias = child.Alias,
             Name = child.Name,
-            Url = vueSection.Url.EnsureEndsWith('/') + Alias.Generate(child.Alias)
+            Url = vueSection.Url.EnsureEndsWith('/') + Alias.Generate(child.Alias),
+            IsExternal = isExternal
           });
         }
 
@@ -196,6 +201,8 @@ namespace zero.Web
 
     public string ApiPath { get; set; }
 
+    public string PluginPath { get; set; }
+
     public IList<ZeroVueSection> Sections { get; set; } = new List<ZeroVueSection>();
 
     public IList<ZeroVueApplication> Applications { get; set; } = new List<ZeroVueApplication>();
@@ -219,6 +226,8 @@ namespace zero.Web
     public string Color { get; set; }
 
     public string Url { get; set; }
+
+    public bool IsExternal { get; set; }
 
     public IList<ZeroVueSection> Children { get; set; }
   }

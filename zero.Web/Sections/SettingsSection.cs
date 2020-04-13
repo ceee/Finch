@@ -7,7 +7,7 @@ namespace zero.Web.Sections
   /// <summary>
   /// Website and backoffice settings
   /// </summary>
-  public class SettingsSection : ISection
+  public class SettingsSection : ISection, IBuiltInSection
   {
     /// <inheritdoc />
     public string Alias => Constants.Sections.Settings;
