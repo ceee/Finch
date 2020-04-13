@@ -168,7 +168,7 @@ namespace zero.Core.Api
         {
           CreatedDate = DateTimeOffset.Now,
           IsActive = true,
-          Alias = Alias.Generate(model.AppName),
+          Alias = Alias.Generate(country.Key),
           LanguageId = languageISO,
           Code = country.Key,
           Name = country.Value

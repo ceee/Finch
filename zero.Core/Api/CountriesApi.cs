@@ -1,4 +1,5 @@
 ﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,11 +19,15 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IList<Country>> GetAll()
+    public async Task<IList<Country>> GetAll(string languageId)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<Country>().ToListAsync();
+        return await session.Query<Country>()
+          .Where(x => x.LanguageId == languageId)
+          .OrderByDescending(x => x.IsPreferred)
+          .ThenBy(x => x.Name)
+          .ToListAsync();
       }
     }
   }
@@ -33,6 +38,6 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all available countries
     /// </summary>
-    Task<IList<Country>> GetAll();
+    Task<IList<Country>> GetAll(string languageId);
   }
 }

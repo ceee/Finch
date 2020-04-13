@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-table-filter">
-    <ui-button type="light" label="Filter" caret="down" />
-    <ui-search />
+    <ui-button v-if="filter" type="light" label="Filter" caret="down" />
+    <ui-search v-if="search" />
   </div>
 </template>
 
@@ -11,7 +11,14 @@
     name: 'uiTableFilter',
 
     props: {
-      
+      filter: {
+        type: Boolean,
+        default: true
+      },
+      search: {
+        type: Boolean,
+        default: true
+      }
     },
 
     data: () => ({

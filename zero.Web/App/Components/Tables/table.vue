@@ -2,7 +2,7 @@
   <div class="ui-table-outer">
     <div class="ui-table">
       <header class="ui-table-row ui-table-head">      
-        <div v-for="column in columns" class="ui-table-cell" :table-field="column.field">
+        <div v-for="column in columns" class="ui-table-cell" :table-field="column.field" :style="column.flex">
           {{ column.label | localize }}
           <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="filter.orderBy == column.field ? 'sort-' + (filter.isDescending ? 'desc' : 'asc') : null">
             <i class="arrow arrow-down"></i>
@@ -11,7 +11,7 @@
       </header>
 
       <div class="ui-table-row" v-for="item in items">
-        <div v-for="column in columns" class="ui-table-cell" :table-field="column.field" v-table-value="{ item, column }"></div>
+        <div v-for="column in columns" class="ui-table-cell" :style="column.flex" :table-field="column.field" v-table-value="{ item, column }"></div>
       </div>
     </div>
 
@@ -108,9 +108,10 @@
           }
 
           this.columns.push(_extend(data, {
-            label: column.label || (this.configuration.labelPrefix + key),
+            label: data.label || (this.configuration.labelPrefix + key),
             field: key,
-            canSort: typeof column.sort === 'boolean' ? column.sort : this.configuration.sort
+            canSort: typeof data.sort === 'boolean' ? data.sort : this.configuration.sort,
+            flex: data.width ? { 'flex': '0 1 ' + data.width + 'px' } : {}
           }));
         });
       },
@@ -226,7 +227,7 @@
   {
     display: inline-block;
     align-items: center;
-    flex: 1 0 5%;
+    flex: 1 1 5%;
     position: relative;
     text-align: left;
     padding: 18px 20px 17px 20px;

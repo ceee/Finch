@@ -139,6 +139,7 @@ namespace zero.Web
       services.AddTransient<IPageTreeApi, PageTreeApi>();
       services.AddTransient<ISettingsApi, SettingsApi>();
       services.AddTransient<IAuthenticationApi, AuthenticationApi>();
+      services.AddTransient<ICountriesApi, CountriesApi>();
     }
 
     /// <summary>
