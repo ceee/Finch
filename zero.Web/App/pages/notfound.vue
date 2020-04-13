@@ -11,9 +11,13 @@
     <template v-if="details">
       <br><br>
       <div class="not-found-routes">
+        <span>#</span>
+        <span>Name</span>
+        <span>Path</span>
         <template v-for="(route, index) in routes">
           <span>{{index + 1}}.</span>
-          <span>{{route}}</span>
+          <span>{{route.name}}</span>
+          <span>{{route.path}}</span>
         </template>
       </div>
     </template>
@@ -58,7 +62,10 @@
 
         this.$router.options.routes.forEach(route =>
         {
-          this.routes.push(route.path);
+          this.routes.push({
+            path: route.path,
+            name: route.name
+          });
         });
       }
 
@@ -113,7 +120,7 @@
   .not-found-routes
   {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto auto 1fr;
     width: 100%;
     max-width: 100%;
     text-align: left;
@@ -130,7 +137,7 @@
       font-family: Consolas;
       font-size: 12px;
 
-      &:nth-child(2n+1)
+      &:nth-child(3n+1)
       {
         color: var(--color-fg-light);
       }

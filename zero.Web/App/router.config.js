@@ -1,6 +1,8 @@
 ﻿import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Localization from 'zero/services/localization';
+import { isArray as _isArray, find as _find } from 'underscore';
+import { warn } from 'zero/services/debug';
 
 Vue.use(VueRouter);
 
@@ -10,13 +12,16 @@ const routes = [];
 
 // add defined backoffice sections (with their children) to the router
 
-let addSection = (section, component) =>
+let addSection = (section, component, parent) =>
 {
   let route = {
     path: section.url,    
     component: component,
+    name: (parent ? parent.alias + '-' : '') + section.alias,
     meta: {
-      section: section
+      alias: section.alias,
+      section: section,
+      parent: parent
     }
   };
 
@@ -27,33 +32,56 @@ let addSection = (section, component) =>
 
 zero.sections.forEach(section =>
 {
-  let route = addSection(section, () => import('zero/pages/' + section.alias + '/' + section.alias));
-
-  if (section.alias === 'pages')
-  {
-    route.children = [
-      {
-        path: 'edit/:id',
-        props: true,
-        name: 'page',
-        component: () => import('zero/pages/' + section.alias + '/page')
-      },
-      {
-        path: 'recyclebin',
-        name: 'recyclebin',
-        component: () => import('zero/pages/' + section.alias + '/recyclebin'),
-        meta: {
-          name: '@recyclebin.name'
-        }
-      }
-    ];
-  }
+  addSection(section, () => import('zero/pages/' + section.alias + '/' + section.alias));
 
   if (section.children.length > 0)
   {
     section.children.forEach(child =>
     {
-      addSection(child, () => import('zero/pages/' + section.alias + '/' + section.alias + '/' + child.alias));
+      addSection(child, () => import('zero/pages/' + section.alias + '/' + section.alias + '/' + child.alias), section);
+    });
+  }
+});
+
+
+
+// find internal route definitions per section
+
+const sectionRoutes = require.context('zero/pages', true, /routes\.js$/);
+
+sectionRoutes.keys().forEach((path) =>
+{
+  const routesDefinition = sectionRoutes(path);
+  const definition = routesDefinition.default || routesDefinition;
+  let _routes = _isArray(definition) ? definition : definition.routes;
+
+  // append routes to a section
+  if (typeof definition.for === 'string')
+  {
+    const route = _find(routes, r => r.meta.alias === definition.for);
+
+    if (!route)
+    {
+      warn(`router: Could not find section "${definition.for}" in route definition file ${path}`);
+    }
+    else
+    {
+      if (!route.children)
+      {
+        route.children = [];
+      }
+      _routes.forEach(r =>
+      {
+        route.children.push(r);
+      });
+    }
+  }
+  // add routes to root
+  else
+  {
+    _routes.forEach(r =>
+    {
+      routes.push(r);
     });
   }
 });

@@ -37,10 +37,13 @@
 
     created()
     {
-      SettingsApi.getAreas().then(items =>
+      SettingsApi.getAreas().then(groups =>
       {
-        items[0].items[2].url = '/settings/user';
-        this.groups = items;
+        groups.forEach(group => group.items.forEach(item =>
+        {
+          item.url = '/' + zero.alias.sections.settings + '/' + item.alias;
+        }));
+        this.groups = groups;
       });
     },
 
