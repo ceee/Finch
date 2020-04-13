@@ -58,7 +58,7 @@ a.app-nav-item
   height: 52px;
   color: var(--color-fg-mid);
 
-  &:hover, &.is-active
+  &:hover
   {
     color: var(--color-fg);
 
@@ -68,15 +68,21 @@ a.app-nav-item
     }
   }
 
-  &.is-active
+  &.is-active:not([alias="dashboard"]), &.is-active-exact
   {
+    color: var(--color-fg);
     background: rgba(black, 0.1);
     font-weight: 700;
-  }
 
-  &.is-active .app-nav-item-arrow
-  {
-    transform: rotate(180deg);
+    .app-nav-item-icon
+    {
+      color: var(--color-fg);
+    }
+
+    .app-nav-item-arrow
+    {
+      transform: rotate(180deg);
+    }
   }
 }
 

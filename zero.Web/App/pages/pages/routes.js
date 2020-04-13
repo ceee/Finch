@@ -1,7 +1,7 @@
 ﻿const alias = zero.alias.sections.pages;
 
 export default {
-  for: alias,
+  section: alias,
   routes: [
     {
       path: 'edit/:id',

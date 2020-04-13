@@ -190,10 +190,10 @@
 
   .page-overview-action-icon
   {
-    width: 100px;
-    height: 100px;
-    line-height: 98px !important;
-    font-size: 26px;
+    width: 90px;
+    height: 90px;
+    line-height: 89px !important;
+    font-size: 22px;
     text-align: center;
     background: var(--color-bg-light);
     border-radius: var(--radius);

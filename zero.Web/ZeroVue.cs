@@ -65,13 +65,20 @@ namespace zero.Web
 
       foreach (ISection section in Options.Sections)
       {
+        string url = Alias.Generate(section.Alias).EnsureStartsWith('/');
+
+        if (section.Alias == Constants.Sections.Dashboard)
+        {
+          url = "/";
+        }
+
         ZeroVueSection vueSection = new ZeroVueSection()
         {
           Alias = section.Alias,
           Name = section.Name,
           Icon = section.Icon,
           Color = section.Color,
-          Url = Alias.Generate(section.Alias).EnsureStartsWith('/'),
+          Url = url,
           Children = new List<ZeroVueSection>()
         };
 

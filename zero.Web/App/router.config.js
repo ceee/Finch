@@ -56,13 +56,13 @@ sectionRoutes.keys().forEach((path) =>
   let _routes = _isArray(definition) ? definition : definition.routes;
 
   // append routes to a section
-  if (typeof definition.for === 'string')
+  if (typeof definition.section === 'string')
   {
-    const route = _find(routes, r => r.meta.alias === definition.for);
+    const route = _find(routes, r => r.meta.alias === definition.section);
 
     if (!route)
     {
-      warn(`router: Could not find section "${definition.for}" in route definition file ${path}`);
+      warn(`router: Could not find section "${definition.section}" in route definition file ${path}`);
     }
     else
     {

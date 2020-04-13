@@ -12,7 +12,7 @@
 
     <nav class="app-nav-inner">
       <template v-for="section in sections">
-        <router-link :to="section.url" class="app-nav-item" :class="{ 'has-children': hasChildren(section) }">
+        <router-link :to="section.url" class="app-nav-item" :alias="section.alias" :class="{ 'has-children': hasChildren(section) }">
           <i class="app-nav-item-icon" :class="section.icon" :style="{ color: false && section.color ? section.color : null }"></i>
           {{section.name | localize}}
           <i v-if="hasChildren(section)" class="app-nav-item-arrow fth-chevron-down"></i>
