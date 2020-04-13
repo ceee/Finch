@@ -1,19 +1,16 @@
 ﻿using FluentValidation.Results;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Entities.Setup;
 using zero.Core.Validation;
-using Microsoft.AspNetCore.Hosting;
 
 
 namespace zero.Core.Api
@@ -85,6 +82,8 @@ namespace zero.Core.Api
           Alias = Alias.Generate(model.User.Name),
         };
 
+        // get all countries
+
         // save application and user
         using (IAsyncDocumentSession session = raven.OpenAsyncSession())
         {
@@ -94,6 +93,15 @@ namespace zero.Core.Api
           user.AppId = session.Advanced.GetDocumentId(app);
 
           await session.StoreAsync(user);
+
+          // set countries
+          using (Raven.Client.Documents.BulkInsert.BulkInsertOperation bulkInsert = raven.BulkInsert())
+          {
+            foreach (Country country in GetCountries(model))
+            {
+              await bulkInsert.StoreAsync(country);
+            }
+          }
 
           // update settings file. if this fails the changes won't be stored
           UpdateSettingsFile(model);
@@ -137,6 +145,37 @@ namespace zero.Core.Api
       json = JsonConvert.SerializeObject(config, Formatting.Indented);
 
       File.WriteAllText(filePath, json);
+    }
+
+
+    /// <summary>
+    /// Get countries for supported backoffice languages
+    /// </summary>
+    IList<Country> GetCountries(SetupModel model)
+    {
+      List<Country> countries = new List<Country>();
+
+      string[] isoCodes = Config.SupportedLanguages;
+
+      foreach (string languageISO in isoCodes)
+      {
+        // country list from: https://github.com/umpirsky/country-list/tree/master/data
+        var filePath = Path.Combine(model.ContentRootPath, "Resources", "Countries", "countries." + languageISO.ToLowerInvariant() + ".json");
+        string json = File.ReadAllText(filePath);
+
+
+        countries.AddRange(JsonConvert.DeserializeObject<Dictionary<string, string>>(json).Select(country => new Country()
+        {
+          CreatedDate = DateTimeOffset.Now,
+          IsActive = true,
+          Alias = Alias.Generate(model.AppName),
+          LanguageId = languageISO,
+          Code = country.Key,
+          Name = country.Value
+        }).ToList());
+      }
+
+      return countries;
     }
   }
 

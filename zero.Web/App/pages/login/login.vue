@@ -1,7 +1,7 @@
 ﻿<template>
-  <div class="app-auth">
+  <div class="app-auth theme-dark">
     <h1 class="app-auth-headline">zero</h1>
-    <ui-form class="app-auth-inner" v-slot="form" :submit="onSubmit">
+    <ui-form class="app-auth-inner theme-light" v-slot="form" :submit="onSubmit">
       <div>
         <h2 v-localize="'@login.headline'"></h2>
 
@@ -56,8 +56,9 @@
     grid-template-rows: 1fr auto 1fr;
     align-items: center;
     justify-content: center;
+    background: var(--color-bg);
 
-    &:before
+    /*&:before
     {
       content: 'login';
       font-family: var(--font-headline);
@@ -68,7 +69,7 @@
       font-size: 150vh;
       line-height: 150vh;
       font-weight: bold;
-    }
+    }*/
   }
 
   .app-auth-inner
@@ -84,7 +85,8 @@
     position: relative;
     z-index: 2;
     padding: var(--padding);
-    box-shadow: 0 0 60px var(--color-shadow);
+    color: var(--color-fg);
+    /*box-shadow: 0 0 60px var(--color-shadow);*/
 
     h2
     {
@@ -99,6 +101,7 @@
     font-size: 58px;
     font-weight: 700;
     margin: 0;
+    color: var(--color-fg);
   }
 
   .app-auth .ui-property + .ui-property

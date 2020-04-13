@@ -4,8 +4,8 @@
     <div class="setup">
       <component v-bind:is="steps[step]" v-model="model" :on-back="prev" :on-next="next" />
       <div class="setup-buttons" v-if="step < 3">
-        <ui-button v-if="step > 0" type="outline" label="Go back" :click="prev" caret="left" caret-position="left" />
-        <ui-button :label="nextLabel" :click="next" />
+        <ui-button v-if="step > 0" type="outline" label="Go back" @click="prev" caret="left" caret-position="left" />
+        <ui-button :label="nextLabel" @click="next" />
       </div>
     </div>
   </div>
@@ -92,7 +92,7 @@
     align-items: stretch;
     max-width: 100%;
     width: 520px;
-    background: var(--color-bg);
+    background: var(--color-box);
     border-radius: 3px;
     min-height: 600px;
     position: relative;

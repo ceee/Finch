@@ -9,6 +9,9 @@
     public string DefaultLanguage { get; set; }
 
     /// <inheritdoc />
+    public string[] SupportedLanguages { get; private set; } = new string[] { "en-US", "de-DE" };
+
+    /// <inheritdoc />
     public RavenConfig Raven { get; set; }
 
     /// <inheritdoc />
@@ -27,6 +30,11 @@
     /// Default language ISO code
     /// </summary>
     string DefaultLanguage { get; set; }
+
+    /// <summary>
+    /// Language ISO codes which are supported by the zero backoffice
+    /// </summary>
+    string[] SupportedLanguages { get; }
 
     /// <summary>
     /// RavenDB configuration data

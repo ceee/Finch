@@ -1,6 +1,10 @@
 {
   "ZeroVersion": "1.0.0.0",
   "DefaultLanguage": "en-US",
+  "SupportedLanguages": [
+    "en-US",
+    "de-DE"
+  ],
   "Raven": {
     "Url": "http://localhost:9800",
     "Database": "zero"
