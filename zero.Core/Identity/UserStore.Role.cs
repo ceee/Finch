@@ -11,53 +11,45 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class UserStore : IUserRoleStore<IUser>
+  public partial class UserStore<TUser> : IUserRoleStore<TUser> where TUser : class, IUser
   {
     /// <inheritdoc />
-    public async Task AddToRoleAsync(IUser user, string roleName, CancellationToken cancellationToken)
+    public Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
     {  
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        user.RoleIds.Add(roleName);
-        await session.StoreAsync(user, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
+      user.RoleIds.Add(roleName);
+      return Task.CompletedTask;
     }
 
 
     /// <inheritdoc />
-    public Task<IList<string>> GetRolesAsync(IUser user, CancellationToken cancellationToken)
+    public Task<IList<string>> GetRolesAsync(TUser user, CancellationToken cancellationToken)
     {
       return Task.FromResult((IList<string>)user.RoleIds.ToList());
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<IUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+    public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<IUser>().Where(x => roleName.In(x.RoleIds)).ToListAsync();
+        return await session.Query<TUser>().Where(x => roleName.In(x.RoleIds)).ToListAsync();
       }
     }
 
 
     /// <inheritdoc />
-    public Task<bool> IsInRoleAsync(IUser user, string roleName, CancellationToken cancellationToken)
+    public Task<bool> IsInRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
     {
       return Task.FromResult(user.RoleIds.Contains(roleName, StringComparer.InvariantCultureIgnoreCase));
     }
 
 
     /// <inheritdoc />
-    public async Task RemoveFromRoleAsync(IUser user, string roleName, CancellationToken cancellationToken)
+    public Task RemoveFromRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        user.RoleIds.Remove(roleName);
-        await session.StoreAsync(user, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
+      user.RoleIds.Remove(roleName);
+      return Task.CompletedTask;
     }
   }
 }

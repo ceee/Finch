@@ -10,7 +10,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Identity
 {
-  public partial class UserStore : IUserStore<IUser>, IQueryableUserStore<IUser>
+  public partial class UserStore<TUser> : IUserStore<TUser>, IQueryableUserStore<TUser> where TUser : class, IUser
   {
     protected IDocumentStore Raven { get; private set; }
 
@@ -21,20 +21,20 @@ namespace zero.Core.Identity
 
 
     /// <inheritdoc />
-    public IQueryable<IUser> Users
+    public IQueryable<TUser> Users
     {
       get
       {
         using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
         {
-          return session.Query<IUser>();
+          return session.Query<TUser>();
         }
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<IdentityResult> CreateAsync(IUser user, CancellationToken cancellationToken)
+    public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
@@ -75,7 +75,7 @@ namespace zero.Core.Identity
 
 
     /// <inheritdoc />
-    public async Task<IdentityResult> DeleteAsync(IUser user, CancellationToken cancellationToken)
+    public async Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
     {
       // Remove the cluster-wide compare/exchange key.
       await Raven.RemoveReservationAsync(Constants.Database.ReservationPrefix + user.Email);
@@ -93,71 +93,67 @@ namespace zero.Core.Identity
 
 
     /// <inheritdoc />
-    public Task<IUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
+    public Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return session.LoadAsync<IUser>(userId);
+        return session.LoadAsync<TUser>(userId);
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<IUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+    public async Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<IUser>().FirstOrDefaultAsync(x => x.Name == normalizedUserName, cancellationToken);
+        return await session.Query<TUser>().FirstOrDefaultAsync(x => x.Email == normalizedUserName, cancellationToken);
       }
     }
 
 
     /// <inheritdoc />
-    public Task<string> GetNormalizedUserNameAsync(IUser user, CancellationToken cancellationToken)
+    public Task<string> GetNormalizedUserNameAsync(TUser user, CancellationToken cancellationToken)
     {
-      return Task.FromResult(user.Name);
+      return Task.FromResult(user.Email);
     }
 
 
     /// <inheritdoc />
-    public Task<string> GetUserIdAsync(IUser user, CancellationToken cancellationToken)
+    public Task<string> GetUserIdAsync(TUser user, CancellationToken cancellationToken)
     {
       return Task.FromResult(user.Id);
     }
 
 
     /// <inheritdoc />
-    public Task<string> GetUserNameAsync(IUser user, CancellationToken cancellationToken)
+    public Task<string> GetUserNameAsync(TUser user, CancellationToken cancellationToken)
     {
-      return Task.FromResult(user.Name);
+      return Task.FromResult(user.Email);
     }
 
 
     /// <inheritdoc />
-    public async Task SetNormalizedUserNameAsync(IUser user, string normalizedName, CancellationToken cancellationToken)
+    public Task SetNormalizedUserNameAsync(TUser user, string normalizedName, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        user.Name = normalizedName.ToLowerInvariant();
-        await session.StoreAsync(user, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
+      user.Email = normalizedName.ToLowerInvariant();
+      return Task.CompletedTask;
     }
 
 
     /// <inheritdoc />
-    public async Task SetUserNameAsync(IUser user, string userName, CancellationToken cancellationToken)
+    public async Task SetUserNameAsync(TUser user, string userName, CancellationToken cancellationToken)
     {
       await SetNormalizedUserNameAsync(user, userName, cancellationToken);
     }
 
 
     /// <inheritdoc />
-    public async Task<IdentityResult> UpdateAsync(IUser user, CancellationToken cancellationToken)
+    public async Task<IdentityResult> UpdateAsync(TUser user, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        IUser source = await FindByIdAsync(user.Id, cancellationToken);
+        TUser source = await session.LoadAsync<TUser>(user.Id, cancellationToken);
 
         if (source == null)
         {
@@ -189,7 +185,10 @@ namespace zero.Core.Identity
           // Remove the cluster-wide compare/exchange key.
           await Raven.RemoveReservationAsync(Constants.Database.ReservationPrefix + source.Email);
         }
+      }
 
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
         await session.StoreAsync(user, cancellationToken);
         await session.SaveChangesAsync(cancellationToken);
       }

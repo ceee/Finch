@@ -1,7 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Entities;
+using zero.Core.Identity;
 using zero.Web.Sections;
 
 namespace zero.Web
@@ -16,7 +20,45 @@ namespace zero.Web
     public ZeroBuilder(IServiceCollection services)
     {
       Services = services;
+
       Services.AddOptions<ZeroOptions>().Configure(opts => ConfigureDefaults(opts));
+
+      Services.AddIdentity<User, UserRole>(opts =>
+      {
+        opts.Password.RequireDigit = false;
+        opts.Password.RequireLowercase = false;
+        opts.Password.RequireUppercase = false;
+        opts.Password.RequireNonAlphanumeric = false;
+        opts.Password.RequiredLength = 12;
+        opts.Password.RequiredUniqueChars = 1;
+
+        opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+        opts.Lockout.MaxFailedAccessAttempts = 5;
+        opts.Lockout.AllowedForNewUsers = true;
+
+      }).AddDefaultTokenProviders();
+
+      Services.ConfigureApplicationCookie(opts =>
+      {
+        //opts.Cookie.Path = // TODO use backoffice path
+        opts.Cookie.Name = Constants.Auth.CookieName;
+        opts.SlidingExpiration = true;
+        opts.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+
+        // override redirect to login page (handled by vue frontend) and return a 401 instead
+        opts.Events.OnRedirectToLogin = (context) =>
+        {
+          context.Response.StatusCode = 401;
+          return Task.CompletedTask;
+        };
+      });
+
+      Services.AddTransient<IUserStore<User>, UserStore<User>>();
+      Services.AddTransient<IRoleStore<UserRole>, RoleStore<UserRole>>();
+
+      Services.AddScoped<UserManager<User>>();
+      Services.AddScoped<SignInManager<User>>();
+      Services.AddScoped<RoleManager<UserRole>>();
 
       //services.AddAuthorization(opts =>
       //{

@@ -29,7 +29,7 @@
     data: () => ({
       step: 0,
       steps: ['step-user', 'step-database', 'step-application', 'step-install', 'step-finish'],
-      model: { "appName": "Brothers", "user": { "name": "Tobi", "email": "yolo@brothers.studio", "password": "yolo" }, "database": { "url": "http://localhost:9800", "name": "zero" } }
+      model: { "appName": "Brothers", "user": { "name": "Tobi", "email": "tobi@brothers.studio", "password": "tobi1TOBI!" }, "database": { "url": "http://localhost:9800", "name": "zero" } }
       //model: {
       //  appName: null,
       //  user: {

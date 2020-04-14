@@ -12,10 +12,10 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class UserStore : IUserClaimStore<IUser>
+  public partial class UserStore<TUser> : IUserClaimStore<TUser> where TUser : class, IUser
   {
     /// <inheritdoc />
-    public async Task AddClaimsAsync(IUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+    public async Task AddClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
@@ -27,29 +27,29 @@ namespace zero.Core.Identity
 
 
     /// <inheritdoc />
-    public Task<IList<Claim>> GetClaimsAsync(IUser user, CancellationToken cancellationToken)
+    public Task<IList<Claim>> GetClaimsAsync(TUser user, CancellationToken cancellationToken)
     {
       return Task.FromResult((IList<Claim>)user.Claims.Select(claim => claim.ToClaim()).ToList());
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<IUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
+    public async Task<IList<TUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        IUserClaim userClaim = new UserClaim(claim);
-        return await session.Query<IUser>().Where(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value)).ToListAsync();
+        UserClaim userClaim = new UserClaim(claim);
+        return await session.Query<TUser>().Where(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value)).ToListAsync();
       }
     }
 
 
     /// <inheritdoc />
-    public async Task RemoveClaimsAsync(IUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+    public async Task RemoveClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        IEnumerable<IUserClaim> userClaims = claims.Select(c => new UserClaim(c)).ToList();
+        IEnumerable<UserClaim> userClaims = claims.Select(c => new UserClaim(c)).ToList();
 
         user.Claims = user.Claims.Except(userClaims, new UserClaimComparer()).ToList();
 
@@ -60,12 +60,12 @@ namespace zero.Core.Identity
 
 
     /// <inheritdoc />
-    public async Task ReplaceClaimAsync(IUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
+    public async Task ReplaceClaimAsync(TUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        IUserClaim userClaim = new UserClaim(claim);
-        IUserClaim newUserClaim = new UserClaim(newClaim);
+        UserClaim userClaim = new UserClaim(claim);
+        UserClaim newUserClaim = new UserClaim(newClaim);
 
         user.Claims.Remove(userClaim);
         user.Claims.Add(newUserClaim);

@@ -79,31 +79,14 @@ namespace zero.Web
       services.AddZero(opts =>
       {
         //opts.Sections.RemoveAt(1);
-        var section = new Section("commerce", "Commerce", "fth-shopping-bag", "#52bba1");
-        section.Children.Add(new Section("orders", "Orders"));
-        section.Children.Add(new Section("customers", "Customers"));
-        section.Children.Add(new Section("catalogue & ÖBB", "Catalogue"));
-        section.Children.Add(new Section("promotions", "Promotions"));
-        section.Children.Add(new Section("channels", "Channels"));
-        opts.Sections.Insert(3, section);
+        //var section = new Section("commerce", "Commerce", "fth-shopping-bag", "#52bba1");
+        //section.Children.Add(new Section("orders", "Orders"));
+        //section.Children.Add(new Section("customers", "Customers"));
+        //section.Children.Add(new Section("catalogue & ÖBB", "Catalogue"));
+        //section.Children.Add(new Section("promotions", "Promotions"));
+        //section.Children.Add(new Section("channels", "Channels"));
+        //opts.Sections.Insert(3, section);
       });
-
-      //services.AddAuthentication(opts =>
-      //{
-      //  opts.
-      //});
-
-      // add cookie-based authentication
-      services.AddAuthentication(Constants.Auth.Scheme)
-        .AddCookie(Constants.Auth.Scheme, opts => {
-          opts.Cookie.Name = Constants.Auth.CookieName;
-          // override redirect to login page (handled by vue frontend) and return a 401 instead
-          opts.Events.OnRedirectToLogin = (context) =>
-          {
-            context.Response.StatusCode = 401;
-            return Task.CompletedTask;
-          };
-        });
 
       // add Core MVC
       IMvcBuilder mvc = services.AddMvc(opts =>
@@ -167,6 +150,7 @@ namespace zero.Web
       }
 
       app.UseStaticFiles();
+
       //app.UseCors();
 
       app.UseWhen(ctx => ctx.Request.Path.ToString().StartsWith(zeroPath.TrimEnd('/')), zeroApp =>

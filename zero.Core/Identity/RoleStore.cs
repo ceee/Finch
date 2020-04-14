@@ -11,7 +11,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Identity
 {
-  public partial class RoleStore : IRoleStore<IUserRole>
+  public partial class RoleStore<TRole> : IRoleStore<TRole> where TRole : class, IUserRole
   {
     protected IDocumentStore Raven { get; private set; }
 
@@ -26,7 +26,7 @@ namespace zero.Core.Identity
 
 
     /// <inheritdoc/>
-    public async Task<IdentityResult> CreateAsync(IUserRole role, CancellationToken cancellationToken)
+    public async Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
@@ -38,7 +38,7 @@ namespace zero.Core.Identity
 
 
     /// <inheritdoc/>
-    public async Task<IdentityResult> UpdateAsync(IUserRole role, CancellationToken cancellationToken)
+    public async Task<IdentityResult> UpdateAsync(TRole role, CancellationToken cancellationToken)
     {
       try
       {
@@ -57,7 +57,7 @@ namespace zero.Core.Identity
 
 
     /// <inheritdoc/>
-    public async Task<IdentityResult> DeleteAsync(IUserRole role, CancellationToken cancellationToken)
+    public async Task<IdentityResult> DeleteAsync(TRole role, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
@@ -76,61 +76,57 @@ namespace zero.Core.Identity
 
 
     /// <inheritdoc/>
-    public Task<string> GetRoleIdAsync(IUserRole role, CancellationToken cancellationToken)
+    public Task<string> GetRoleIdAsync(TRole role, CancellationToken cancellationToken)
     {
       return Task.FromResult(role.Id);
     }
 
 
     /// <inheritdoc/>
-    public Task<string> GetRoleNameAsync(IUserRole role, CancellationToken cancellationToken)
+    public Task<string> GetRoleNameAsync(TRole role, CancellationToken cancellationToken)
     {
       return Task.FromResult(role.Name);
     }
 
 
     /// <inheritdoc/>
-    public async Task SetRoleNameAsync(IUserRole role, string roleName, CancellationToken cancellationToken)
+    public Task SetRoleNameAsync(TRole role, string roleName, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        role.Name = roleName;
-        await session.StoreAsync(role, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
+      role.Name = roleName;
+      return Task.CompletedTask;
     }
 
 
     /// <inheritdoc/>
-    public Task<string> GetNormalizedRoleNameAsync(IUserRole role, CancellationToken cancellationToken)
+    public Task<string> GetNormalizedRoleNameAsync(TRole role, CancellationToken cancellationToken)
     {
       return Task.FromResult(role.Name);
     }
 
 
     /// <inheritdoc/>
-    public async Task SetNormalizedRoleNameAsync(IUserRole role, string normalizedName, CancellationToken cancellationToken)
+    public async Task SetNormalizedRoleNameAsync(TRole role, string normalizedName, CancellationToken cancellationToken)
     {
       await SetRoleNameAsync(role, normalizedName, cancellationToken);
     }
 
 
     /// <inheritdoc/>
-    public async Task<IUserRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
+    public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.LoadAsync<IUserRole>(roleId);
+        return await session.LoadAsync<TRole>(roleId);
       }
     }
 
 
     /// <inheritdoc/>
-    public async Task<IUserRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
+    public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<IUserRole>().FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
+        return await session.Query<TRole>().FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
       }
     }
 

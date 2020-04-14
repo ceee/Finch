@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
@@ -19,13 +20,13 @@ namespace zero.Core.Api
   {
     protected IZeroConfiguration Config { get; private set; }
 
-    //protected UserManager<BackofficeUser> UserManager { get; private set; }
+    protected UserManager<User> UserManager { get; private set; }
 
 
-    public SetupApi(IZeroConfiguration config)
+    public SetupApi(IZeroConfiguration config, UserManager<User> userManager)
     {
       Config = config;
-      //UserManager = userManager;
+      UserManager = userManager;
     }
 
 
@@ -80,9 +81,23 @@ namespace zero.Core.Api
           IsActive = true,
           LanguageId = Config.DefaultLanguage,
           Alias = Alias.Generate(model.User.Name),
+          IsEmailConfirmed = true
         };
 
-        // get all countries
+        IdentityResult result = await UserManager.CreateAsync(user, model.User.Password);
+
+        // user creation failed
+        if (!result.Succeeded)
+        {
+          EntityChangeResult<SetupModel> entityResult = EntityChangeResult<SetupModel>.Fail();
+
+          foreach (IdentityError error in result.Errors)
+          {
+            entityResult.AddError(error.Code, error.Description);
+          }
+
+          return entityResult;
+        }
 
         // save application and user
         using (IAsyncDocumentSession session = raven.OpenAsyncSession())

@@ -7,76 +7,58 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class UserStore : IUserLockoutStore<IUser>
+  public partial class UserStore<TUser> : IUserLockoutStore<TUser> where TUser : class, IUser
   {
     /// <inheritdoc />
-    public Task<int> GetAccessFailedCountAsync(IUser user, CancellationToken cancellationToken)
+    public Task<int> GetAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
     {
       return Task.FromResult(user.AccessFailedCount);
     }
 
 
     /// <inheritdoc />
-    public Task<bool> GetLockoutEnabledAsync(IUser user, CancellationToken cancellationToken)
+    public Task<bool> GetLockoutEnabledAsync(TUser user, CancellationToken cancellationToken)
     {
       return Task.FromResult(user.LockoutEnabled);
     }
 
 
     /// <inheritdoc />
-    public Task<DateTimeOffset?> GetLockoutEndDateAsync(IUser user, CancellationToken cancellationToken)
+    public Task<DateTimeOffset?> GetLockoutEndDateAsync(TUser user, CancellationToken cancellationToken)
     {
       return Task.FromResult(user.LockoutEnd);
     }
 
 
     /// <inheritdoc />
-    public async Task<int> IncrementAccessFailedCountAsync(IUser user, CancellationToken cancellationToken)
+    public Task<int> IncrementAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        user.AccessFailedCount += 1;
-        await session.StoreAsync(user, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
-
-      return user.AccessFailedCount;
+      user.AccessFailedCount += 1;
+      return Task.FromResult(user.AccessFailedCount);
     }
 
 
     /// <inheritdoc />
-    public async Task ResetAccessFailedCountAsync(IUser user, CancellationToken cancellationToken)
+    public Task ResetAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        user.AccessFailedCount = 0;
-        await session.StoreAsync(user, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
+      user.AccessFailedCount = 0;
+      return Task.CompletedTask;
     }
 
 
     /// <inheritdoc />
-    public async Task SetLockoutEnabledAsync(IUser user, bool enabled, CancellationToken cancellationToken)
+    public Task SetLockoutEnabledAsync(TUser user, bool enabled, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        user.LockoutEnabled = enabled;
-        await session.StoreAsync(user, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
+      user.LockoutEnabled = enabled;
+      return Task.CompletedTask;
     }
 
 
     /// <inheritdoc />
-    public async Task SetLockoutEndDateAsync(IUser user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken)
+    public Task SetLockoutEndDateAsync(TUser user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        user.LockoutEnd = lockoutEnd;
-        await session.StoreAsync(user, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
+      user.LockoutEnd = lockoutEnd;
+      return Task.CompletedTask;
     }
   }
 }

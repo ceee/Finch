@@ -7,31 +7,27 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Identity
 {
-  public partial class UserStore : IUserPasswordStore<IUser>
+  public partial class UserStore<TUser> : IUserPasswordStore<TUser> where TUser : class, IUser
   {
     /// <inheritdoc />
-    public Task<string> GetPasswordHashAsync(IUser user, CancellationToken cancellationToken)
+    public Task<string> GetPasswordHashAsync(TUser user, CancellationToken cancellationToken)
     {
       return Task.FromResult(user.PasswordHash);
     }
 
 
     /// <inheritdoc />
-    public Task<bool> HasPasswordAsync(IUser user, CancellationToken cancellationToken)
+    public Task<bool> HasPasswordAsync(TUser user, CancellationToken cancellationToken)
     {
       return Task.FromResult(!user.PasswordHash.IsNullOrEmpty());
     }
 
 
     /// <inheritdoc />
-    public async Task SetPasswordHashAsync(IUser user, string passwordHash, CancellationToken cancellationToken)
+    public Task SetPasswordHashAsync(TUser user, string passwordHash, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        user.PasswordHash = passwordHash;
-        await session.StoreAsync(user, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
+      user.PasswordHash = passwordHash;
+      return Task.CompletedTask;
     }
   }
 }

@@ -11,8 +11,8 @@
         <pre class="setup-step-install-error-code"><code v-html="errorMessage"></code></pre>
       </div>
       <div class="setup-buttons">
-        <ui-button type="outline" :click="onBack" label="Go back" caret="left" caret-position="left" />
-        <ui-button label="Retry" :click="install" />
+        <ui-button type="outline" @click="onBack" label="Go back" caret="left" caret-position="left" />
+        <ui-button label="Retry" @click="install" />
       </div>
     </div>
   </div>
@@ -64,7 +64,10 @@
         Axios.post(zero.path + 'api/setup/install', this.value)
           .then(response =>
           {
-            
+            if (!response.success)
+            {
+              throw response;
+            }
           })
           .catch((error) =>
           {

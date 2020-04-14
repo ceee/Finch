@@ -9,39 +9,29 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class RoleStore : IRoleClaimStore<IUserRole>
+  public partial class RoleStore<TRole> : IRoleClaimStore<TRole> where TRole : class, IUserRole
   {
     /// <inheritdoc/>
-    public async Task AddClaimAsync(IUserRole role, Claim claim, CancellationToken cancellationToken = default)
+    public Task AddClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken = default)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        role.Claims.Add(new UserClaim(claim));
-        await session.StoreAsync(role, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
+      role.Claims.Add(new UserClaim(claim));
+      return Task.CompletedTask;
     }
 
 
     /// <inheritdoc/>
-    public Task<IList<Claim>> GetClaimsAsync(IUserRole role, CancellationToken cancellationToken = default)
+    public Task<IList<Claim>> GetClaimsAsync(TRole role, CancellationToken cancellationToken = default)
     {
       return Task.FromResult((IList<Claim>)role.Claims.Select(claim => claim.ToClaim()).ToList());
     }
 
 
     /// <inheritdoc/>
-    public async Task RemoveClaimAsync(IUserRole role, Claim claim, CancellationToken cancellationToken = default)
+    public Task RemoveClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken = default)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        IUserClaim userClaim = new UserClaim(claim);
-
-        role.Claims = role.Claims.Except(new List<IUserClaim>() { userClaim }, new UserClaimComparer()).ToList();
-
-        await session.StoreAsync(role, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
+      UserClaim userClaim = new UserClaim(claim);
+      role.Claims = role.Claims.Except(new List<UserClaim>() { userClaim }, new UserClaimComparer()).ToList();
+      return Task.CompletedTask;
     }
   }
 }

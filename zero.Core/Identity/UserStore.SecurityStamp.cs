@@ -6,24 +6,20 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class UserStore : IUserSecurityStampStore<IUser>
+  public partial class UserStore<TUser> : IUserSecurityStampStore<TUser> where TUser : class, IUser
   {
     /// <inheritdoc />
-    public Task<string> GetSecurityStampAsync(IUser user, CancellationToken cancellationToken)
+    public Task<string> GetSecurityStampAsync(TUser user, CancellationToken cancellationToken)
     {
       return Task.FromResult(user.SecurityStamp);
     }
 
 
     /// <inheritdoc />
-    public async Task SetSecurityStampAsync(IUser user, string stamp, CancellationToken cancellationToken)
+    public Task SetSecurityStampAsync(TUser user, string stamp, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        user.SecurityStamp = stamp;
-        await session.StoreAsync(user, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
+      user.SecurityStamp = stamp;
+      return Task.CompletedTask;
     }
   }
 }
