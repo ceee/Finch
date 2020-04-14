@@ -336,7 +336,7 @@
   .ui-table-field-bool
   {
     font-family: var(--font-icon);
-    color: var(--color-fg-light);
+    color: var(--color-fg-xlight);
 
     &:before
     {

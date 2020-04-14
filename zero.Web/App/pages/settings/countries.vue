@@ -29,13 +29,17 @@
             label: '',
             as: 'html',
             render: item => `<i class="flag flag-${item.code.toLowerCase()}"></i>`,
-            width: 45
+            width: 62
           },
           name: {
             as: 'text',
             bold: true
           },
           code: 'text',
+          isPreferred: {
+            as: 'bool',
+            width: 200
+          },
           isActive: {
             as: 'bool',
             label: '@ui.active',
@@ -55,14 +59,3 @@
     }
   }
 </script>
-
-<style lang="scss">
-  .countries .ui-table-cell[table-field="flag"]
-  {
-    padding-right: 0;
-  }
-  .countries .ui-table-cell[table-field="name"]
-  {
-    border-left: none;
-  }
-</style>
