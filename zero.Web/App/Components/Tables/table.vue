@@ -199,7 +199,7 @@
   .ui-table-row:not(.ui-table-head):hover
   {
     box-shadow: 0 0 5px 4px var(--color-shadow);
-    z-index: 2;
+    z-index: 1;
     outline: 1px solid var(--color-line);
     border-bottom-color: transparent;
 

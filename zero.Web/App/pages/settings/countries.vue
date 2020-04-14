@@ -1,7 +1,6 @@
 ﻿<template>
   <div class="countries">
     <ui-header-bar title="Countries" :on-back="goBack">
-      <ui-button type="light" label="Add" icon="fth-plus" />
       <ui-table-filter :filter="false" />
     </ui-header-bar>
     <div class="ui-blank-box">
