@@ -13,6 +13,15 @@
       <div class="ui-table-row" v-for="item in items">
         <div v-for="column in columns" class="ui-table-cell" :style="column.flex" :table-field="column.field" v-table-value="{ item, column }"></div>
       </div>
+
+      <div class="ui-table-empty" v-if="!isLoading && items.length < 1" @click="isLoading=true">
+        <i class="ui-table-empty-icon fth-list"></i>
+        There are no items to show in this list
+      </div>
+
+      <div class="ui-table-loading" v-if="isLoading" @click="isLoading=false">
+        <ui-loading />
+      </div>
     </div>
 
     <footer class="ui-table-pagination" v-if="pages > 1">
@@ -63,6 +72,7 @@
       configuration: {},
       columns: [],
       items: [],
+      isLoading: true,
       pages: 8,
       filter: {
         orderBy: null,
@@ -81,6 +91,7 @@
     {
       this.configuration.items().then(result =>
       {
+        this.isLoading = false;
         this.items = result;
       });
     },
@@ -301,6 +312,24 @@
       transform: scaleY(-1) translateY(5px);
     }
   }
+
+  .ui-table-empty, .ui-table-loading
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 250px;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .ui-table-empty-icon
+  {
+    font-size: 34px;
+    margin-bottom: 20px;
+  }
+
 
   /* special styling for display types */
 
