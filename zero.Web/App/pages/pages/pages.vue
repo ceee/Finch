@@ -73,7 +73,9 @@
       this.actions.push({
         alias: 'history',
         icon: 'fth-clock',
-        url: '/'
+        url: {
+          name: 'history'
+        }
       });
     },
 

@@ -101,7 +101,7 @@ addRoutesPerContext(require.context('@/Plugins', true, /routes\.js$/), true); //
 
 // add fallback route (this should probably by 404 page)
 
-routes.push({ path: '*', component: () => import('zero/pages/notfound') });
+routes.push({ name: '404', path: '*', component: () => import('zero/pages/notfound') });
 
 
 

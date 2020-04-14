@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace zero.Core.Entities
 {
@@ -13,12 +15,12 @@ namespace zero.Core.Entities
     /// <inheritdoc/>
     public Claim ToClaim() => new Claim(Type, Value);
 
-    /// <inheritdoc/>
-    public UserClaim FromClaim(Claim other)
+    public UserClaim() { }
+
+    public UserClaim(Claim claim)
     {
-      Type = other?.Type;
-      Value = other?.Value;
-      return this;
+      Type = claim?.Type;
+      Value = claim?.Value;
     }
   }
 
@@ -37,13 +39,23 @@ namespace zero.Core.Entities
     string Value { get; set; }
 
     /// <summary>
-    /// Constructs a new claim with the type and value
+    /// Convert to a claim
     /// </summary>
-    UserClaim FromClaim(Claim other);
-
-    /// <summary>
-    /// Initializes by copying ClaimType and ClaimValue from the other claim
-    /// </summary>
+    /// <returns></returns>
     Claim ToClaim();
+  }
+
+
+  public class UserClaimComparer : IEqualityComparer<IUserClaim>
+  {
+    public bool Equals(IUserClaim x, IUserClaim y)
+    {
+      return (x == null && y == null) || (x.Type.Equals(y.Type, StringComparison.InvariantCultureIgnoreCase) && x.Value.Equals(y.Value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    public int GetHashCode(IUserClaim obj)
+    {
+      return (obj.Type + obj.Value).GetHashCode();
+    }
   }
 }

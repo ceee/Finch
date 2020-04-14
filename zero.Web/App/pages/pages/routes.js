@@ -14,7 +14,15 @@ export default {
       name: 'recyclebin',
       component: () => import('zero/pages/' + alias + '/recyclebin'),
       meta: {
-        name: '@recyclebin.name'
+        name: '@page.recyclebin.name'
+      }
+    },
+    {
+      path: 'history',
+      name: 'history',
+      component: () => import('zero/pages/' + alias + '/history'),
+      meta: {
+        name: '@page.history.name'
       }
     }
   ]

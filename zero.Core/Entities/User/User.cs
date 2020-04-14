@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace zero.Core.Entities
@@ -10,6 +11,9 @@ namespace zero.Core.Entities
 
     /// <inheritdoc/>
     public string Email { get; set; }
+
+    /// <inheritdoc/>
+    public bool IsEmailConfirmed { get; set; }
 
     /// <inheritdoc/>
     public string PasswordHash { get; set; }
@@ -29,7 +33,7 @@ namespace zero.Core.Entities
     public List<string> RoleIds { get; set; } = new List<string>();
 
     /// <inheritdoc/>
-    public List<UserClaim> Claims { get; set; } = new List<UserClaim>();
+    public List<IUserClaim> Claims { get; set; } = new List<IUserClaim>();
 
 
 
@@ -39,14 +43,16 @@ namespace zero.Core.Entities
     /// <inheritdoc/>
     public DateTimeOffset? PasswordResetTokenExpirationDate { get; set; }
 
-    /// <inheritdoc/>
-    public int FailedPasswordAttempts { get; set; }
+
 
     /// <inheritdoc/>
-    public bool IsLockedOut { get; set; }
+    public int AccessFailedCount { get; set; }
 
     /// <inheritdoc/>
-    public DateTimeOffset? LockoutEndDate { get; set; }
+    public bool LockoutEnabled { get; set; }
+
+    /// <inheritdoc/>
+    public DateTimeOffset? LockoutEnd { get; set; }
 
 
 
@@ -74,6 +80,11 @@ namespace zero.Core.Entities
     /// E-Mail address which is also used as the username
     /// </summary>
     string Email { get; set; }
+
+    /// <summary>
+    /// Whether the email address has been confirmed
+    /// </summary>
+    public bool IsEmailConfirmed { get; set; }
 
     /// <summary>
     /// The password hash
@@ -105,7 +116,7 @@ namespace zero.Core.Entities
     /// <summary>
     /// The user's claims, for use in claims-based authentication.
     /// </summary>
-    List<UserClaim> Claims { get; set; }
+    List<IUserClaim> Claims { get; set; }
 
 
 
@@ -119,20 +130,22 @@ namespace zero.Core.Entities
     /// </summary>
     DateTimeOffset? PasswordResetTokenExpirationDate { get; set; }
 
+
+
     /// <summary>
     /// Number of times sign in failed.
     /// </summary>
-    int FailedPasswordAttempts { get; set; }
+    int AccessFailedCount { get; set; }
 
     /// <summary>
     /// Whether the user is locked out.
     /// </summary>
-    bool IsLockedOut { get; set; }
+    bool LockoutEnabled { get; set; }
 
     /// <summary>
     /// When the user lock out is over.
     /// </summary>
-    DateTimeOffset? LockoutEndDate { get; set; }
+    DateTimeOffset? LockoutEnd { get; set; }
 
 
 

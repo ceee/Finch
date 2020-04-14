@@ -14,6 +14,8 @@
       public const string SharedAppId = "shared";
 
       public const string CollectionPrefix = "zero.";
+
+      public const string ReservationPrefix = "zero.";
     }
 
     public static class Sections

@@ -66,6 +66,17 @@
             path: route.path,
             name: route.name
           });
+
+          if (route.children)
+          {
+            route.children.forEach(child =>
+            {
+              this.routes.push({
+                path: route.path + '/' + child.path,
+                name: child.name
+              });
+            });
+          }
         });
       }
 

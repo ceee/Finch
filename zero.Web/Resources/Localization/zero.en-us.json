@@ -111,11 +111,6 @@
     }
   },
 
-  "recyclebin": {
-    "name": "Recycle bin",
-    "description": "View recently deleted entities"
-  },
-
   "order": {
     "fields": {
       "no": "Number",
@@ -135,6 +130,13 @@
         "history": "History",
         "history_text": "View page editing history"
       }
+    },
+    "recyclebin": {
+      "name": "Recycle bin",
+      "description": "View recently deleted entities"
+    },
+    "history": {
+      "name": "History"
     }
   },
 

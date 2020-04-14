@@ -8,7 +8,7 @@ namespace zero.Core.Entities
     public string Icon { get; set; }
 
     /// <inheritdoc/>
-    public List<UserClaim> Claims { get; set; } = new List<UserClaim>();
+    public List<IUserClaim> Claims { get; set; } = new List<IUserClaim>();
   }
 
 
@@ -22,6 +22,6 @@ namespace zero.Core.Entities
     /// <summary>
     /// The user's claims, for use in claims-based authentication.
     /// </summary>
-    List<UserClaim> Claims { get; set; }
+    List<IUserClaim> Claims { get; set; }
   }
 }
