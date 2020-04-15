@@ -48,7 +48,7 @@ namespace zero.Web.Setup
     {
       model.ContentRootPath = Environment.ContentRootPath;
 
-      EntityChangeResult<SetupModel> result = await Api.Install(model);
+      EntityResult<SetupModel> result = await Api.Install(model);
 
       if (result.IsSuccess)
       {

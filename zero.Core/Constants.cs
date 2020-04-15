@@ -2,6 +2,9 @@
 {
   public static class Constants
   {
+    public const string ErrorFieldNone = "__zero_no_field";
+
+
     public static class Auth
     {
       public const string Scheme = "zeroCookies";

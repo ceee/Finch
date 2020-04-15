@@ -108,6 +108,12 @@
       "email_placeholder": "Enter your email or username",
       "password": "Password",
       "password_placeholder": "Enter your password"
+    },
+    "errors": {
+      "wrongcredentials": "Email or password is wrong",
+      "lockedout": "The user has been locked out due to many failed password attempts",
+      "notallowed": "The user is not allowed to sign in",
+      "requirestwofactor": "Two-factor authentication is required to login"
     }
   },
 

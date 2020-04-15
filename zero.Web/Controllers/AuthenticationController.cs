@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
 using zero.Core.Auth;
+using zero.Core.Entities;
+using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
-  [ZeroAuthorize]
+  [ZeroAuthorize(false)]
   public class AuthenticationController : BackofficeController
   {
     private IAuthenticationApi Api { get; set; }
@@ -20,50 +20,33 @@ namespace zero.Web.Controllers
 
 
     /// <summary>
-    /// Get the currently logged in user
-    /// </summary>
-    public async Task<IActionResult> GetUser()
+    /// If a user is logged in
+    /// </summary>    
+    public IActionResult IsLoggedIn()
     {
-      return Json(await Api.GetUser());
+      return Json(EntityResult.Maybe(Api.IsLoggedIn()));
     }
 
 
     /// <summary>
     /// Tries a login for a user with username/password
     /// </summary>
-    [HttpPost, AllowAnonymous]
-    public async Task<IActionResult> LoginUser()
+    [HttpPost]
+    public async Task<IActionResult> LoginUser([FromBody] LoginModel model)
     {
-      await Task.Delay(0);
-      throw new NotImplementedException();
-      //User user = await Api.Login(model.Username, model.Password, model.RememberMe);
-
-      //if (user == null)
-      //{
-      //  return AsError("Username or password is incorrect");
-      //}
-
-      //await Api.SetLastSeen(user);
-
-      //return Json(new
-      //{
-      //  IsSuccess = true,
-      //  User = new Results.User(user),
-      //  UserMap = await Api.GetUserMap()
-      //});
+      EntityResult result = await Api.Login(model.Email, model.Password, model.IsPersistent);
+      return Json(result);
     }
 
 
     /// <summary>
     /// Logout for the current user
     /// </summary>
-    [HttpPost]
+    [HttpPost, ZeroAuthorize]
     public async Task<IActionResult> LogoutUser()
     {
-      await Task.Delay(0);
-      throw new NotImplementedException();
-      //await Api.Logout();
-      //return AsSuccess();
+      await Api.Logout();
+      return Json(EntityResult.Success());
     }
   }
 }

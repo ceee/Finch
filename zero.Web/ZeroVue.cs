@@ -23,15 +23,18 @@ namespace zero.Web
 
     protected IApplicationsApi ApplicationsApi { get; private set; }
 
+    protected IUserApi UserApi { get; private set; }
+
     protected ZeroOptions Options { get; private set; }
 
 
-    public ZeroVue(IZeroConfiguration config, IWebHostEnvironment env, IOptionsMonitor<ZeroOptions> options, IApplicationsApi applicationsApi)
+    public ZeroVue(IZeroConfiguration config, IWebHostEnvironment env, IOptionsMonitor<ZeroOptions> options, IApplicationsApi applicationsApi, IUserApi userApi)
     {
       config = Config;
       Environment = env;
       Options = options.CurrentValue;
       ApplicationsApi = applicationsApi;
+      UserApi = userApi;
       //zero.path = "@Model.BackofficePath.EnsureEndsWith('/')";
       //zero.translations = @Html.Raw(text);
     }
@@ -45,11 +48,14 @@ namespace zero.Web
       config.Path = Options.BackofficePath.EnsureEndsWith('/');
       config.ApiPath = config.Path + "api/";
       config.PluginPath = "@/Plugins";
+      config.ErrorFieldNone = Constants.ErrorFieldNone;
       config.Sections = CreateSections();
       config.Translations = CreateTranslations();
       config.Applications = await CreateApplications();
       config.Alias = CreateAliases();
       config.SettingsAreas = CreateSettingsAreas();
+
+      config.User = await UserApi.GetUser();
 
       return JsonSerializer.Serialize(config, new JsonSerializerOptions()
       {
@@ -202,6 +208,10 @@ namespace zero.Web
     public string ApiPath { get; set; }
 
     public string PluginPath { get; set; }
+
+    public string ErrorFieldNone { get; set; }
+
+    public User User { get; set; }
 
     public IList<ZeroVueSection> Sections { get; set; } = new List<ZeroVueSection>();
 

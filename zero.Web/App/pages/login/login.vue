@@ -7,11 +7,13 @@
 
         <ui-property field="email" label="@login.fields.email" :vertical="true">
           <input v-model="model.email" type="text" class="ui-input" maxlength="120" v-localize:placeholder="'@login.fields.email_placeholder'" />
+          <ui-error :catch-remaining="true" />
         </ui-property>
 
         <ui-property field="password" label="@login.fields.password" :vertical="true">
           <input v-model="model.password" type="password" class="ui-input" maxlength="1024" v-localize:placeholder="'@login.fields.password_placeholder'" />
         </ui-property>
+
       </div>
 
       <div class="app-auth-bottom">
@@ -32,14 +34,21 @@
     data: () => ({
       model: {
         email: null,
-        password: null
+        password: null,
+        isPersistent: true
       }
     }),
 
     methods: {
       onSubmit(form)
       {
-        form.handle(AuthApi.login(this.model));
+        form.handle(AuthApi.login(this.model)).then(res =>
+        {
+          window.location.reload();
+        }, errors =>
+        {
+          console.info('login: error', errors);
+        });
       }
     }
   }

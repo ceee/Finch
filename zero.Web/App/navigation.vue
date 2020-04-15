@@ -27,10 +27,10 @@
       </template>
     </nav>
 
-    <footer class="app-nav-account">
+    <footer class="app-nav-account" v-if="user">
       <button type="button" class="app-nav-account-button">
         <img class="-image" src="https://fifty.brothers.studio/Media/Avatars/tobi.jpg" alt="Tobi" />
-        <p class="-text"><strong>Tobias Klika</strong><br>Admin</p>
+        <p class="-text"><strong>{{user.name}}</strong><br>Admin</p>
         <i class="-arrow fth-chevron-down"></i>
       </button>
     </footer>
@@ -41,6 +41,7 @@
 
 <script>
   import { map as _map } from 'underscore';
+  import AuthApi from 'zero/services/auth.js'
 
   export default {
     name: 'app-navigation',
@@ -48,8 +49,18 @@
     data: () => ({
       applications: zero.applications,
       applicationItems: [],
-      sections: zero.sections
+      sections: zero.sections,
+      user: null
     }),
+
+    created()
+    {
+      this.user = AuthApi.user;
+      AuthApi.$on('user', user =>
+      {
+        this.user = user;
+      });
+    },
 
     mounted ()
     {

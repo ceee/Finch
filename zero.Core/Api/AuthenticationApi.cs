@@ -38,11 +38,35 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<bool> Login(string email, string password, bool isPersistent)
+    public async Task<EntityResult> Login(string email, string password, bool isPersistent)
     {
       SignInResult result = await SignInManager.PasswordSignInAsync(email, password, isPersistent, true);
 
-      return result.Succeeded;
+      if (!result.Succeeded)
+      {
+        EntityResult failed = new EntityResult();
+        
+        if (result.IsLockedOut)
+        {
+          failed.AddError("@login.errors.lockedout");
+        }
+        else if (result.IsNotAllowed)
+        {
+          failed.AddError("@login.errors.notallowed");
+        }
+        else if (result.RequiresTwoFactor)
+        {
+          failed.AddError("@login.errors.requirestwofactor");
+        }
+        else
+        {
+          failed.AddError("@login.errors.wrongcredentials");
+        }
+
+        return failed;
+      }
+
+      return EntityResult.Success();
     }
 
 
@@ -72,7 +96,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Logs a zero-user in and sets cookie
     /// </summary>
-    Task<bool> Login(string email, string password, bool isPersistent);
+    Task<EntityResult> Login(string email, string password, bool isPersistent);
 
     /// <summary>
     /// Logs out the current user

@@ -7,7 +7,7 @@
 
 <script>
   import Overlay from 'zero/services/overlay.js'
-  import { isArray as _isArray, filter as _filter, groupBy as _groupBy } from 'underscore'
+  import { isArray as _isArray, filter as _filter, groupBy as _groupBy, each as _each } from 'underscore'
 
   export default {
     name: 'uiForm',
@@ -150,7 +150,10 @@
           this.errors = errors;
         }
 
-        let errorGroups = _groupBy(this.errors, 'field');
+        let errorGroups = _groupBy(this.errors, 'property');
+        let handledGroups = [];
+
+        let errorComponents = [];
 
         // find components which can output errors
         let traverseChildren = parent =>
@@ -160,12 +163,18 @@
             const isErrorComponent = this.errorComponents.indexOf(component.$options.name) > -1;
             const field = component.field;
 
+            if (isErrorComponent)
+            {
+              errorComponents.push(component);
+            }
+
             if (isErrorComponent && field)
             {
               let errorGroup = errorGroups[field];
 
               if (errorGroup)
               {
+                handledGroups.push(field);
                 component.set(errorGroup);
               }
             }
@@ -176,7 +185,39 @@
           });
         };
 
-        traverseChildren(this);       
+        traverseChildren(this);  
+
+
+        // fill leftovers
+        _each(errorGroups, (group, field) =>
+        {
+          if (handledGroups.indexOf(field) < 0)
+          {
+            errorComponents.forEach(component =>
+            {
+              if (component.catchRemaining)
+              {
+                component.set(group);
+              }
+            });
+          }
+        });
+
+
+        //_each(_groupBy(this.errors, 'property'), (group, field) =>
+        //{
+        //  let affectedComponents = _filter(errorComponents, component =>
+        //  {
+        //    return component.catchAll || component
+        //  });
+        //});
+
+        //errorComponents.forEach(component =>
+        //{
+        //  const field = component.field;
+        //  const catchAll = component.catchAll;
+        //  const catchRemaining = component.catchRemaining;
+        //});
       }
     }
   }

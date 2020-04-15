@@ -1,13 +1,14 @@
 import Vue from 'vue';
 import { find as _find, extend as _extend } from 'underscore';
+import Axios from 'axios';
 
 export default new Vue({
 
   data: () => ({
-    isAuthenticated: true,
+    isAuthenticated: false,
     user: {
-      name: 'Tobias Klika',
-      email: 'tobi@brothers.dev'
+      name: null,
+      email: null
     }
   }),
 
@@ -40,6 +41,11 @@ export default new Vue({
     // sets the current user and isAuthenticated to true
     setUser(user)
     {
+      if (!user)
+      {
+        this.rejectUser();
+        return;
+      }
       this.isAuthenticated = true;
       this.user = user;
     },
@@ -47,30 +53,21 @@ export default new Vue({
     // logs the user in with the passed credentials
     login(model)
     {
-      return new Promise((resolve, reject) =>
+      return Axios.post('authentication/loginUser', model).then(res =>
       {
-        setTimeout(() =>
+        return new Promise((resolve, reject) =>
         {
-          if (model.email && model.password)
+          if (res.data.success)
           {
-            this.setUser(model);
-            resolve(model);
+            this.setUser(res.data.model);
+            resolve(res.data.model);
           }
           else
           {
-            reject([
-              {
-                field: 'email',
-                message: 'The email is not valid'
-              },
-              {
-                field: 'nonexisting',
-                message: 'This field does not exist'
-              }
-            ]);
+            this.rejectUser();
+            reject(res.data.errors);
           }
-          //resolve(this.model);
-        }, 1000);
+        });
       });
     },
 

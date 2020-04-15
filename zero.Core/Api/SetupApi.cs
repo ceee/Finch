@@ -30,13 +30,13 @@ namespace zero.Core.Api
     }
 
 
-    public async Task<EntityChangeResult<SetupModel>> Install(SetupModel model)
+    public async Task<EntityResult<SetupModel>> Install(SetupModel model)
     {
       ValidationResult validation = await new SetupModelValidator().ValidateAsync(model);
 
       if (!validation.IsValid)
       {
-        return EntityChangeResult<SetupModel>.Fail(validation);
+        return EntityResult<SetupModel>.Fail(validation);
       }
 
       DocumentStore raven = null;
@@ -89,7 +89,7 @@ namespace zero.Core.Api
         // user creation failed
         if (!result.Succeeded)
         {
-          EntityChangeResult<SetupModel> entityResult = EntityChangeResult<SetupModel>.Fail();
+          EntityResult<SetupModel> entityResult = EntityResult<SetupModel>.Fail();
 
           foreach (IdentityError error in result.Errors)
           {
@@ -135,7 +135,7 @@ namespace zero.Core.Api
         raven?.Dispose();
       }
 
-      return EntityChangeResult<SetupModel>.Success(model);
+      return EntityResult<SetupModel>.Success(model);
     }
 
 
@@ -198,6 +198,6 @@ namespace zero.Core.Api
 
   public interface ISetupApi
   {
-    Task<EntityChangeResult<SetupModel>> Install(SetupModel model);
+    Task<EntityResult<SetupModel>> Install(SetupModel model);
   }
 }

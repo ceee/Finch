@@ -30,7 +30,7 @@
     components: { AppNavigation, AppOverlays, AppLogin },
 
     data: () => ({
-      isAuthenticated: true
+      isAuthenticated: false
     }),
 
     created()
@@ -39,6 +39,8 @@
       {
         this.isAuthenticated = isAuthenticated;
       });
+
+      AuthApi.setUser(zero.user);
     }
   }
 

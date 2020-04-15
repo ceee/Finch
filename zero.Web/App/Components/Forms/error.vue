@@ -15,7 +15,18 @@
     name: 'uiError',
 
     props: {
-      field: String
+      field: {
+        type: String,
+        default: ''
+      },
+      catchRemaining: {
+        type: Boolean,
+        default: false
+      },
+      catchAll: {
+        type: Boolean,
+        default: false
+      }
     },
 
     data: () => ({
