@@ -1,48 +1,64 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace zero.Core.Auth
 {
   public class ZeroAuthorizeAttribute : TypeFilterAttribute
   {
-    
-    public ZeroAuthorizeAttribute(string name) : base(typeof(ZeroAuthorizeFilter))
+
+    public ZeroAuthorizeAttribute() : this(String.Empty, true) { }
+
+    public ZeroAuthorizeAttribute(bool enabled) : this(String.Empty, enabled) { }
+
+    public ZeroAuthorizeAttribute(string name, bool enabled) : base(typeof(ZeroAuthorizeFilter))
     {
-      Arguments = new object[] { name };
+      Arguments = new object[] { name, enabled };
     }
   }
 
 
-  public class ZeroAuthorizeFilter : AuthorizeFilter
+  public class ZeroAuthorizeFilter : IAuthorizationFilter
   {
     string Name { get; set; }
 
+    bool Enabled { get; set; }
 
-    public ZeroAuthorizeFilter(string name)
+
+    public ZeroAuthorizeFilter(string name, bool enabled) : base()
     {
       Name = name;
+      Enabled = enabled;
     }
-    //public ZeroAuthorizeFilter(IAuthorizationPolicyProvider provider)
-    //    : base(provider, new[] { new AuthorizeData(Constants.AzureAdPolicy) }) { }
 
-    public override async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+    public void OnAuthorization(AuthorizationFilterContext context)
     {
-      await Task.Delay(0);
-      //await base.OnAuthorizationAsync(context);
+      Console.WriteLine("zeroauthorize: " + (Name ?? "[empty]"));
 
-      Console.WriteLine("zeroauthorize: " + Name);
+      // allow anonymous skips all authorization
+      if (context.Filters.Any(item => item is IAllowAnonymousFilter) || !Enabled)
+      {
+        return;
+      }
 
-      context.Result = new AcceptedResult();
-      //context.Result = new ForbidResult();
-      //await base.OnAuthorizationAsync(context);
+      var httpContext = context.HttpContext;
+      var authService = httpContext.RequestServices.GetRequiredService<IAuthorizationService>();
 
-      //var username = context.HttpContext.User.Identity.Name;
+      ClaimsPrincipal user = context.HttpContext.User;
 
-      //Console.WriteLine($"{username} just logged in!");
-      
+      bool isAuthenticated = user.Identity.IsAuthenticated;
+      bool isZeroUser = user.HasClaim(Constants.Auth.Claims.IsZero, Constants.Auth.Claims.IsZero);
+
+      if (!isAuthenticated || !isZeroUser)
+      {
+        context.Result = new StatusCodeResult(401);
+      }
     }
   }
 }

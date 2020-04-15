@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using zero.Core;
@@ -23,15 +22,6 @@ namespace zero.Web.Controllers
     }
 
 
-    [HttpGet]
-    public IActionResult GetUser()
-    {
-      return Json(new
-      {
-        user = HttpContext.User.Identity.IsAuthenticated
-      });
-    }
-
     [HttpPost]
     public async Task<IActionResult> Login([FromQuery] string username, [FromQuery] string password)
     {
@@ -42,6 +32,30 @@ namespace zero.Web.Controllers
         username,
         password,
         result
+      });
+    }
+
+
+    [ZeroAuthorize]
+    public async Task<IActionResult> GetUser()
+    {
+      User user = await SignInManager.UserManager.GetUserAsync(HttpContext.User);
+
+      return Json(new
+      {
+        user
+      });
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+      await SignInManager.SignOutAsync();
+
+      return Json(new
+      {
+        success = true
       });
     }
   }

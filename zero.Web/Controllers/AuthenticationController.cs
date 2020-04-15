@@ -4,11 +4,11 @@ using System;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
-using zero.Core.Entities;
+using zero.Core.Auth;
 
 namespace zero.Web.Controllers
 {
-  [AllowAnonymous]
+  [ZeroAuthorize]
   public class AuthenticationController : BackofficeController
   {
     private IAuthenticationApi Api { get; set; }
@@ -22,8 +22,6 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get the currently logged in user
     /// </summary>
-    [AllowAnonymous]
-    //[Authorize()]
     public async Task<IActionResult> GetUser()
     {
       return Json(await Api.GetUser());

@@ -7,7 +7,6 @@ using zero.Core.Api;
 
 namespace zero.Web.Controllers
 {
-  [AllowAnonymous]
   public class PageTreeController : BackofficeController
   {
     private IPageTreeApi Api { get; set; }

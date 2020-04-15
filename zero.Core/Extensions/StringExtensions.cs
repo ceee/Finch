@@ -30,6 +30,12 @@ namespace zero.Core.Extensions
     }
 
 
+    public static string EnsureSurroundedWith(this string input, char toSurroundWith)
+    {
+      return input.EnsureStartsWith(toSurroundWith).EnsureEndsWith(toSurroundWith);
+    }
+
+
     public static string TrimEnd(this string value, string forRemoving)
     {
       if (String.IsNullOrEmpty(value)) return value;

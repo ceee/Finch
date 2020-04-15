@@ -25,18 +25,25 @@ namespace zero.Web
 
       Services.AddIdentity<User, UserRole>(opts =>
       {
+        opts.ClaimsIdentity.UserIdClaimType = Constants.Auth.Claims.UserId;
+        opts.ClaimsIdentity.UserNameClaimType = Constants.Auth.Claims.UserName;
+        opts.ClaimsIdentity.RoleClaimType = Constants.Auth.Claims.RoleId;
+        opts.ClaimsIdentity.SecurityStampClaimType = Constants.Auth.Claims.SecurityStamp;
+
         opts.Password.RequireDigit = false;
         opts.Password.RequireLowercase = false;
         opts.Password.RequireUppercase = false;
         opts.Password.RequireNonAlphanumeric = false;
-        opts.Password.RequiredLength = 12;
+        opts.Password.RequiredLength = 8;
         opts.Password.RequiredUniqueChars = 1;
 
         opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
         opts.Lockout.MaxFailedAccessAttempts = 5;
         opts.Lockout.AllowedForNewUsers = true;
 
-      }).AddDefaultTokenProviders();
+      })
+        .AddClaimsPrincipalFactory<ZeroClaimsPrinicipalFactory>()
+        .AddDefaultTokenProviders();
 
       Services.ConfigureApplicationCookie(opts =>
       {

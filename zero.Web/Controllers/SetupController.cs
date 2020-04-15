@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
@@ -8,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
+using zero.Core.Auth;
 using zero.Core.Entities;
 using zero.Core.Entities.Setup;
 using zero.Core.Extensions;
@@ -15,7 +14,7 @@ using zero.Web.Controllers;
 
 namespace zero.Web.Setup
 {
-  [AllowAnonymous]
+  [ZeroAuthorize(false)]
   public class SetupController : BackofficeController
   {
     protected ISetupApi Api { get; private set; }
@@ -32,6 +31,7 @@ namespace zero.Web.Setup
       Options = options.CurrentValue;
     }
 
+
     public IActionResult Index()
     {
       if (!Configuration.ZeroVersion.IsNullOrEmpty())
@@ -41,6 +41,7 @@ namespace zero.Web.Setup
 
       return View("/Views/Setup.cshtml");
     }
+
 
     [HttpPost]
     public async Task<IActionResult> Install([FromBody] SetupModel model)

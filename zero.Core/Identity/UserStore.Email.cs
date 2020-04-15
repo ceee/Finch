@@ -43,7 +43,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public Task SetEmailAsync(TUser user, string email, CancellationToken cancellationToken)
     {
-      user.Email = email;
+      user.Email = email.ToLowerInvariant();
       return Task.CompletedTask;
     }
 
@@ -59,7 +59,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public Task SetNormalizedEmailAsync(TUser user, string normalizedEmail, CancellationToken cancellationToken)
     {
-      user.Email = normalizedEmail;
+      user.Email = normalizedEmail.ToLowerInvariant();
       return Task.CompletedTask;
     }
   }

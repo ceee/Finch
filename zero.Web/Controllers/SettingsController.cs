@@ -5,7 +5,6 @@ using zero.Core.Api;
 
 namespace zero.Web.Controllers
 {
-  [AllowAnonymous]
   public class SettingsController : BackofficeController
   {
     private ISettingsApi Api { get; set; }

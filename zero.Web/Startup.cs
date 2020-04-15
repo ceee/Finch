@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,10 +12,8 @@ using Newtonsoft.Json.Serialization;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using System;
-using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
-using zero.Core.Entities;
 using zero.Core.Extensions;
 
 namespace zero.Web
@@ -123,6 +120,7 @@ namespace zero.Web
       services.AddTransient<ISettingsApi, SettingsApi>();
       services.AddTransient<IAuthenticationApi, AuthenticationApi>();
       services.AddTransient<ICountriesApi, CountriesApi>();
+      services.AddTransient<IUserApi, UserApi>();
     }
 
     /// <summary>
@@ -153,34 +151,11 @@ namespace zero.Web
 
       //app.UseCors();
 
-      app.UseWhen(ctx => ctx.Request.Path.ToString().StartsWith(zeroPath.TrimEnd('/')), zeroApp =>
+      app.UseZero();
+
+      app.Run(async (context) =>
       {
-        zeroApp.UseRouting();
-        zeroApp.UseAuthentication();
-        zeroApp.UseAuthorization();
-
-        zeroApp.UseEndpoints(endpoints =>
-        {
-          // setup route
-          endpoints.MapControllerRoute(
-            name: "setup",
-            pattern: zeroPath + "setup",
-            defaults: new
-            {
-              controller = "Setup",
-              action = "Index"
-            }
-          );
-
-          // routes for API
-          endpoints.MapControllerRoute(
-            name: "api",
-            pattern: zeroPath + "api/{controller=Index}/{action=Index}/{id?}"
-          );
-
-          // fallbacks for SPA
-          endpoints.MapFallbackToController(zeroPath + "{**path}", "Index", "Index");
-        });
+        await context.Response.WriteAsync("from app");
       });
     }
   }

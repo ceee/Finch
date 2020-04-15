@@ -7,6 +7,19 @@
       public const string Scheme = "zeroCookies";
 
       public const string CookieName = "zero.session";
+
+      public static class Claims
+      {
+        public const string IsZero = "zero.claim.iszero";
+
+        public const string UserId = "zero.claim.userid";
+
+        public const string UserName = "zero.claim.username";
+
+        public const string RoleId = "zero.claim.roleid";
+
+        public const string SecurityStamp = "zero.claim.securitystamp";
+      }
     }
 
     public static class Database

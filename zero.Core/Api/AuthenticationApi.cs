@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 
@@ -12,34 +14,50 @@ namespace zero.Core.Api
 
     protected IHttpContextAccessor HttpContextAccessor { get; set; }
 
+    protected SignInManager<User> SignInManager { get; private set; }
 
-    public AuthenticationApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor)
+
+    public AuthenticationApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, SignInManager<User> signInManager)
     {
       Raven = raven;
       HttpContextAccessor = httpContextAccessor;
+      SignInManager = signInManager;
     }
 
 
     /// <inheritdoc />
     public bool IsLoggedIn()
     {
-      return HttpContextAccessor.HttpContext.User != null;
+      ClaimsPrincipal principal = HttpContextAccessor.HttpContext.User;
+
+      bool isAuthenticated = principal.Identity.IsAuthenticated;
+      bool isZeroUser = principal.HasClaim(Constants.Auth.Claims.IsZero, Constants.Auth.Claims.IsZero);
+
+      return isAuthenticated && isZeroUser;
+    }
+
+
+    /// <inheritdoc />
+    public async Task<bool> Login(string email, string password, bool isPersistent)
+    {
+      SignInResult result = await SignInManager.PasswordSignInAsync(email, password, isPersistent, true);
+
+      return result.Succeeded;
+    }
+
+
+    /// <inheritdoc />
+    public async Task Logout()
+    {
+      await SignInManager.SignOutAsync();
     }
 
 
     /// <inheritdoc />
     public string GetUserId()
     {
-      return null;
-      //ResolveIdFromClaimsPrincipal(HttpContextAccessor.HttpContext.User);
-    }
-
-
-    /// <inheritdoc />
-    public async Task<User> GetUser()
-    {
-      await Task.Delay(0);
-      return null;
+      ClaimsPrincipal principal = HttpContextAccessor.HttpContext.User;
+      return principal.Claims.FirstOrDefault(x => x.Type == Constants.Auth.Claims.UserId)?.Value;
     }
   }
 
@@ -52,13 +70,18 @@ namespace zero.Core.Api
     bool IsLoggedIn();
 
     /// <summary>
+    /// Logs a zero-user in and sets cookie
+    /// </summary>
+    Task<bool> Login(string email, string password, bool isPersistent);
+
+    /// <summary>
+    /// Logs out the current user
+    /// </summary>
+    Task Logout();
+
+    /// <summary>
     /// Get the ID of the currently logged in user
     /// </summary>
     string GetUserId();
-
-    /// <summary>
-    /// Get the currently logged-in user (or null if not logged in)
-    /// </summary>
-    Task<User> GetUser();
   }
 }

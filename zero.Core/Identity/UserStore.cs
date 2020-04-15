@@ -93,11 +93,11 @@ namespace zero.Core.Identity
 
 
     /// <inheritdoc />
-    public Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
+    public async Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return session.LoadAsync<TUser>(userId);
+        return await session.LoadAsync<TUser>(userId);
       }
     }
 
