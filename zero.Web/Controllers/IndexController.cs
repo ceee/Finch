@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using zero.Core;
-using zero.Core.Auth;
 using zero.Core.Extensions;
+using zero.Core.Identity;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers

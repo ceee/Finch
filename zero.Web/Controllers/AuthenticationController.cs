@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
-using zero.Core.Auth;
 using zero.Core.Entities;
+using zero.Core.Identity;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers

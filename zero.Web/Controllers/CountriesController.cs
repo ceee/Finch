@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
+using zero.Core.Identity;
 
 namespace zero.Web.Controllers
 {
+  [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Read)]
   public class CountriesController : BackofficeController
   {
     private ICountriesApi Api { get; set; }

@@ -6,10 +6,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
-using zero.Core.Auth;
 using zero.Core.Entities;
 using zero.Core.Entities.Setup;
 using zero.Core.Extensions;
+using zero.Core.Identity;
 using zero.Web.Controllers;
 
 namespace zero.Web.Setup

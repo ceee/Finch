@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using zero.Core;
-using zero.Core.Auth;
+using zero.Core.Identity;
 
 namespace zero.Web.Controllers
 {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Entities;
+using zero.Core.Identity;
 
 namespace zero.Core.Api
 {
@@ -31,7 +32,7 @@ namespace zero.Core.Api
       ClaimsPrincipal principal = HttpContextAccessor.HttpContext.User;
 
       bool isAuthenticated = principal.Identity.IsAuthenticated;
-      bool isZeroUser = principal.HasClaim(Constants.Auth.Claims.IsZero, Constants.Auth.Claims.IsZero);
+      bool isZeroUser = principal.HasClaim(Constants.Auth.Claims.IsZero, PermissionsValue.True);
 
       return isAuthenticated && isZeroUser;
     }

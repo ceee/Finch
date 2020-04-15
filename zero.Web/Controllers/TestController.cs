@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
-using zero.Core.Auth;
 using zero.Core.Entities;
+using zero.Core.Identity;
 
 namespace zero.Web.Controllers
 {

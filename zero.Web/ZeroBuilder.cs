@@ -60,8 +60,8 @@ namespace zero.Web
         };
       });
 
-      Services.AddTransient<IUserStore<User>, UserStore<User>>();
-      Services.AddTransient<IRoleStore<UserRole>, RoleStore<UserRole>>();
+      Services.AddTransient<IUserStore<User>, ZeroUserStore>();
+      Services.AddTransient<IRoleStore<UserRole>, ZeroRoleStore>();
 
       Services.AddScoped<UserManager<User>>();
       Services.AddScoped<SignInManager<User>>();
