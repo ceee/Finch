@@ -30,7 +30,7 @@ namespace zero.Core.Entities
 
 
     /// <inheritdoc/>
-    public List<string> RoleIds { get; set; } = new List<string>();
+    public List<string> Roles { get; set; } = new List<string>();
 
     /// <inheritdoc/>
     public List<IUserClaim> Claims { get; set; } = new List<IUserClaim>();
@@ -109,9 +109,9 @@ namespace zero.Core.Entities
 
 
     /// <summary>
-    /// The roles of the user
+    /// The roles (aliases) of the user
     /// </summary>
-    List<string> RoleIds { get; set; }
+    List<string> Roles { get; set; }
 
     /// <summary>
     /// The user's claims, for use in claims-based authentication.

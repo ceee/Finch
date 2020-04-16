@@ -27,7 +27,7 @@ namespace zero.Web
       {
         opts.ClaimsIdentity.UserIdClaimType = Constants.Auth.Claims.UserId;
         opts.ClaimsIdentity.UserNameClaimType = Constants.Auth.Claims.UserName;
-        opts.ClaimsIdentity.RoleClaimType = Constants.Auth.Claims.RoleId;
+        opts.ClaimsIdentity.RoleClaimType = Constants.Auth.Claims.Role;
         opts.ClaimsIdentity.SecurityStampClaimType = Constants.Auth.Claims.SecurityStamp;
 
         opts.Password.RequireDigit = false;

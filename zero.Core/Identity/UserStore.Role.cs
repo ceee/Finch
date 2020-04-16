@@ -16,7 +16,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
     {  
-      user.RoleIds.Add(roleName);
+      user.Roles.Add(roleName);
       return Task.CompletedTask;
     }
 
@@ -24,7 +24,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public Task<IList<string>> GetRolesAsync(TUser user, CancellationToken cancellationToken)
     {
-      return Task.FromResult((IList<string>)user.RoleIds.ToList());
+      return Task.FromResult((IList<string>)user.Roles.ToList());
     }
 
 
@@ -33,7 +33,7 @@ namespace zero.Core.Identity
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<TUser>().Where(x => roleName.In(x.RoleIds)).ToListAsync();
+        return await session.Query<TUser>().Where(x => roleName.In(x.Roles)).ToListAsync();
       }
     }
 
@@ -41,14 +41,14 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public Task<bool> IsInRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
     {
-      return Task.FromResult(user.RoleIds.Contains(roleName, StringComparer.InvariantCultureIgnoreCase));
+      return Task.FromResult(user.Roles.Contains(roleName, StringComparer.InvariantCultureIgnoreCase));
     }
 
 
     /// <inheritdoc />
     public Task RemoveFromRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
     {
-      user.RoleIds.Remove(roleName);
+      user.Roles.Remove(roleName);
       return Task.CompletedTask;
     }
   }

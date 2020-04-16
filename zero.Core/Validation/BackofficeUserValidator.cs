@@ -12,7 +12,7 @@ namespace zero.Core.Validation
       RuleFor(x => x.Email).Email();
       RuleFor(x => x.PasswordHash).NotEmpty();
       RuleFor(x => x.LanguageId).NotEmpty(); // TODO only allow available languages
-      RuleFor(x => x.RoleIds).NotEmpty();
+      RuleFor(x => x.Roles).NotEmpty();
 
       if (isCreate)
       {

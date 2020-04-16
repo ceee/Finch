@@ -2,18 +2,21 @@
 
 const alias = zero.alias.sections.settings;
 const section = _find(zero.sections, section => section.alias === alias);
-const areas = zero.settingsAreas;
+let routes = [];
 
-export default {
-  routes: _map(areas, area => 
+if (section)
+{
+  zero.settingsAreas.forEach(group => group.items.forEach(area => 
   {
-    return {
+    routes.push({
       path: area.url,
       name: alias + '-' + area.alias,
       component: () => import(`zero/pages/${alias}/${area.alias}`),
       meta: {
-        name: [area.name, section.name ]
+        name: [area.name, section.name]
       }
-    };
-  })
-};
+    });
+  }));
+}
+
+export default { routes };

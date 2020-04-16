@@ -103,7 +103,7 @@ addRoutesPerContext(require.context('@/Plugins', true, /routes\.js$/), true); //
 
 routes.push({ name: '404', path: '*', component: () => import('zero/pages/notfound') });
 
-
+console.info(routes);
 
 // create the router with history mode
 

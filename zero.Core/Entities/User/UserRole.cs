@@ -5,6 +5,9 @@ namespace zero.Core.Entities
   public class UserRole : DatabaseEntity, IUserRole
   {
     /// <inheritdoc/>
+    public string Description { get; set; }
+
+    /// <inheritdoc/>
     public string Icon { get; set; }
 
     /// <inheritdoc/>
@@ -14,6 +17,11 @@ namespace zero.Core.Entities
 
   public interface IUserRole : IDatabaseEntity
   {
+    /// <summary>
+    /// Additional description
+    /// </summary>
+    string Description { get; set; }
+
     /// <summary>
     /// Displayed icon alongside name
     /// </summary>

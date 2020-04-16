@@ -11,6 +11,7 @@ using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Identity;
 using zero.Web.Sections;
 
 namespace zero.Web
@@ -69,10 +70,18 @@ namespace zero.Web
     /// </summary>
     IList<ZeroVueSection> CreateSections()
     {
+      bool isSuperUser = UserApi.IsSuper();
+      IList<Permission> permissions = UserApi.GetPermissions(Permissions.Sections.PREFIX);
+
       List<ZeroVueSection> sections = new List<ZeroVueSection>();
 
       foreach (ISection section in Options.Sections)
       {
+        if (!isSuperUser && !Permission.CanReadKey(permissions, section.Alias, true))
+        {
+          continue;
+        }
+
         bool isExternal = !(section is IBuiltInSection);
         string url = Alias.Generate(section.Alias).EnsureStartsWith('/');
 
@@ -133,27 +142,47 @@ namespace zero.Web
     /// <summary>
     /// Creates the areas in the settings section
     /// </summary>
-    IList<ZeroVueSettingsArea> CreateSettingsAreas()
+    IList<ZeroVueSettingsGroup> CreateSettingsAreas()
     {
-      List<ZeroVueSettingsArea> areas = new List<ZeroVueSettingsArea>();
+      bool isSuperUser = UserApi.IsSuper();
+      IList<Permission> permissions = UserApi.GetPermissions(Permissions.Settings.PREFIX);
+
+      List<ZeroVueSettingsGroup> groups = new List<ZeroVueSettingsGroup>();
 
       foreach (SettingsGroup group in Options.SettingsAreas)
       {
+        List<ZeroVueSettingsArea> areas = new List<ZeroVueSettingsArea>();
+
         foreach (SettingsArea area in group.Items)
         {
+          if (!isSuperUser && !Permission.CanReadKey(permissions, area.Alias, true))
+          {
+            continue;
+          }
+
           ZeroVueSettingsArea vueArea = new ZeroVueSettingsArea()
           {
             Alias = area.Alias,
             Name = area.Name,
+            Description = area.Description,
             Icon = area.Icon,
             Url = Constants.Sections.Settings.EnsureStartsWith('/') + Alias.Generate(area.Alias).EnsureStartsWith('/')
           };
 
           areas.Add(vueArea);
         }
+
+        if (areas.Count > 0)
+        {
+          groups.Add(new ZeroVueSettingsGroup()
+          {
+            Name = group.Name,
+            Items = areas
+          });
+        }
       }
 
-      return areas;
+      return groups;
     }
 
 
@@ -217,7 +246,7 @@ namespace zero.Web
 
     public IList<ZeroVueApplication> Applications { get; set; } = new List<ZeroVueApplication>();
 
-    public IList<ZeroVueSettingsArea> SettingsAreas { get; set; } = new List<ZeroVueSettingsArea>();
+    public IList<ZeroVueSettingsGroup> SettingsAreas { get; set; } = new List<ZeroVueSettingsGroup>();
 
     public Dictionary<string, Dictionary<string, string>> Alias { get; set; } = new Dictionary<string, Dictionary<string, string>>();
 
@@ -243,11 +272,21 @@ namespace zero.Web
   }
 
 
+  public class ZeroVueSettingsGroup
+  {
+    public string Name { get; set; }
+
+    public IList<ZeroVueSettingsArea> Items { get; set; }
+  }
+
+
   public class ZeroVueSettingsArea
   {
     public string Alias { get; set; }
 
     public string Name { get; set; }
+
+    public string Description { get; set; }
 
     public string Icon { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using zero.Core.Entities;
+using zero.Core.Identity;
 
 namespace zero.Core.Api
 {

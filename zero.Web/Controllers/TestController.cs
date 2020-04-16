@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
@@ -45,6 +46,13 @@ namespace zero.Web.Controllers
       {
         user
       });
+    }
+
+
+    [ZeroAuthorize]
+    public IActionResult GetUserClaims()
+    {
+      return Json(HttpContext.User.Claims.Select(claim => new { claim.Type, claim.Value }).ToArray());
     }
 
 

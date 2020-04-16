@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Entities.Setup;
+using zero.Core.Identity;
 using zero.Core.Validation;
 
 
@@ -99,15 +100,25 @@ namespace zero.Core.Api
           return entityResult;
         }
 
-        // save application and user
+        // save entities
         using (IAsyncDocumentSession session = raven.OpenAsyncSession())
         {
           await session.StoreAsync(app);
 
-          // set app-id for user
+          // set app-id for user and store it
           user.AppId = session.Advanced.GetDocumentId(app);
-
           await session.StoreAsync(user);
+
+          // save default user roles
+          IList<UserRole> roles = GetRoles(model);
+
+          foreach (UserRole role in roles)
+          {
+            await session.StoreAsync(role);
+          }
+
+          // add admin role to super user
+          user.Roles.Add(roles.First(role => role.Name == "Administrator").Alias);
 
           // set countries
           using (Raven.Client.Documents.BulkInsert.BulkInsertOperation bulkInsert = raven.BulkInsert())
@@ -191,6 +202,78 @@ namespace zero.Core.Api
       }
 
       return countries;
+    }
+
+
+    /// <summary>
+    /// Create default roles
+    /// </summary>
+    IList<UserRole> GetRoles(SetupModel model)
+    {
+      string type = Constants.Auth.Claims.Permission;
+
+      UserRole adminRole = new UserRole()
+      {
+        Name = "Administrator",
+        Alias = Alias.Generate("Administrator"),
+        Sort = 0,
+        AppId = Constants.Database.SharedAppId,
+        Icon = "fth-award color-yellow",
+        CreatedDate = DateTimeOffset.Now,
+        IsActive = true,
+        Claims = new List<IUserClaim>()
+        {
+          new UserClaim(type, Permissions.Applications, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Sections.Lists, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Sections.Pages, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Sections.Media, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Sections.Settings, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Settings.Applications, PermissionsValue.None),
+          new UserClaim(type, Permissions.Settings.Countries, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Settings.Logging, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Settings.Translations, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Settings.Updates, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Settings.Users, PermissionsValue.Write),
+        },
+      };
+
+      UserRole editorRole = new UserRole()
+      {
+        Name = "Editor",
+        Alias = Alias.Generate("Editor"),
+        Sort = 1,
+        AppId = Constants.Database.SharedAppId,
+        Icon = "fth-feather",
+        CreatedDate = DateTimeOffset.Now,
+        IsActive = true,
+        Claims = new List<IUserClaim>()
+        {
+          new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.Read),
+          new UserClaim(type, Permissions.Sections.Lists, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Sections.Pages, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Sections.Media, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Sections.Settings, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Settings.Translations, PermissionsValue.Write)
+        }
+      };
+
+      UserRole defaultRole = new UserRole()
+      {
+        Name = "Standard",
+        Alias = Alias.Generate("Standard"),
+        Sort = 2,
+        AppId = Constants.Database.SharedAppId,
+        Icon = "fth-users",
+        CreatedDate = DateTimeOffset.Now,
+        IsActive = true,
+        Claims = new List<IUserClaim>()
+        {
+          new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.Read)
+        }
+      };
+
+      return new List<UserRole>() { adminRole, editorRole, defaultRole };
     }
   }
 

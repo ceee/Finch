@@ -65,18 +65,18 @@ namespace zero.Core.Identity
       // check claims
       if (!Permission.IsNullOrEmpty())
       {
-        bool isSuperUser = user.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
+        bool isSuperUser = false; // TODO user.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
         bool hasPassed = isSuperUser;
 
         if (!isSuperUser)
         {
           foreach (string value in PermissionValues)
           {
-            bool fulfillsClaim = user.HasClaim(Constants.Auth.Claims.Permissions, Permission + ":" + value);
+            bool fulfillsClaim = user.HasClaim(Constants.Auth.Claims.Permission, Permission + ":" + value);
 
             if (!fulfillsClaim && value == PermissionsValue.Read)
             {
-              fulfillsClaim = user.HasClaim(Constants.Auth.Claims.Permissions, Permission + ":" + PermissionsValue.Write);
+              fulfillsClaim = user.HasClaim(Constants.Auth.Claims.Permission, Permission + ":" + PermissionsValue.Write);
             }
 
             if (fulfillsClaim)

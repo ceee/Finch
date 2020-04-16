@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 
@@ -85,14 +86,14 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public Task<string> GetRoleNameAsync(TRole role, CancellationToken cancellationToken)
     {
-      return Task.FromResult(role.Name);
+      return Task.FromResult(role.Alias);
     }
 
 
     /// <inheritdoc/>
     public Task SetRoleNameAsync(TRole role, string roleName, CancellationToken cancellationToken)
     {
-      role.Name = roleName;
+      role.Alias = Alias.Generate(roleName);
       return Task.CompletedTask;
     }
 
@@ -100,7 +101,7 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public Task<string> GetNormalizedRoleNameAsync(TRole role, CancellationToken cancellationToken)
     {
-      return Task.FromResult(role.Name);
+      return Task.FromResult(role.Alias);
     }
 
 
@@ -126,7 +127,7 @@ namespace zero.Core.Identity
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<TRole>().FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
+        return await session.Query<TRole>().FirstOrDefaultAsync(x => x.Alias == normalizedRoleName, cancellationToken);
       }
     }
 

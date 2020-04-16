@@ -17,6 +17,18 @@ namespace zero.Core.Entities
 
     public UserClaim() { }
 
+    public UserClaim(string type, string value)
+    {
+      Type = type;
+      Value = value;
+    }
+
+    public UserClaim(string type, string key, string value)
+    {
+      Type = type;
+      Value = key + ":" + value;
+    }
+
     public UserClaim(Claim claim)
     {
       Type = claim?.Type;

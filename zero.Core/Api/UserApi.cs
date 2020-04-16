@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Entities;
+using zero.Core.Identity;
 
 namespace zero.Core.Api
 {
@@ -14,6 +18,8 @@ namespace zero.Core.Api
 
     protected UserManager<User> UserManager { get; private set; }
 
+    private ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
+
 
     public UserApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
     {
@@ -21,6 +27,7 @@ namespace zero.Core.Api
       HttpContextAccessor = httpContextAccessor;
       UserManager = userManager;
     }
+
 
     /// <inheritdoc />
     public async Task<User> GetUser()
@@ -44,6 +51,31 @@ namespace zero.Core.Api
       User user = await UserManager.FindByEmailAsync(email);
       return user;
     }
+
+
+    /// <inheritdoc />
+    public bool IsSuper()
+    {
+      return false; // TODO remove, this is only for testing
+      return Principal.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
+    }
+
+
+    /// <inheritdoc />
+    public bool IsAdmin()
+    {
+      return Principal.HasClaim(Constants.Auth.Claims.Role, "administrator"); // TODO use constant (in setup as well)
+    }
+
+
+    /// <inheritdoc />
+    public IList<Permission> GetPermissions(string prefix = null)
+    {
+      return Principal.Claims
+        .Where(claim => claim.Type == Constants.Auth.Claims.Permission && (prefix == null || claim.Value.StartsWith(prefix)))
+        .Select(claim => new Permission(claim, prefix))
+        .ToList();
+    }
   }
 
 
@@ -63,5 +95,20 @@ namespace zero.Core.Api
     /// Find user by email
     /// </summary>
     Task<User> GetUserByEmail(string email);
+
+    /// <summary>
+    /// Whether the current user is the super user who created the zero instance
+    /// </summary>
+    bool IsSuper();
+
+    /// <summary>
+    /// Whether the current user belongs to the administrator role (will always return false if this role gets deleted)
+    /// </summary>
+    bool IsAdmin();
+
+    /// <summary>
+    /// Get all permissions for the current user with an optional prefix
+    /// </summary>
+    IList<Permission> GetPermissions(string prefix = null);
   }
 }

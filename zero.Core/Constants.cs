@@ -15,9 +15,9 @@
         public const string IsSuper = "zero.claim.issuper";
         public const string UserId = "zero.claim.userid";
         public const string UserName = "zero.claim.username";
-        public const string RoleId = "zero.claim.roleid";
+        public const string Role = "zero.claim.rolealias";
         public const string SecurityStamp = "zero.claim.securitystamp";
-        public const string Permissions = "zero.claim.permissions";
+        public const string Permission = "zero.claim.permission";
       }
     }
 

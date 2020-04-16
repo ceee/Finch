@@ -28,34 +28,12 @@
 
     data: () => ({
       page: true,
-      groups: [],
+      groups: zero.settingsAreas,
       tokens: {
         'zero_version': '1.0.0-alpha.1',
         'plugin_count': 7
       }
-    }),
-
-    created()
-    {
-      SettingsApi.getAreas().then(groups =>
-      {
-        groups.forEach(group => group.items.forEach(item =>
-        {
-          item.url = '/' + zero.alias.sections.settings + '/' + item.alias;
-        }));
-        this.groups = groups;
-      });
-    },
-
-
-    methods: {
-
-      onBack()
-      {
-        console.info('back');
-      }
-
-    }
+    })
   }
 </script>
 
