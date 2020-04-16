@@ -27,12 +27,17 @@
       </template>
     </nav>
 
-    <footer class="app-nav-account" v-if="user">
-      <button type="button" class="app-nav-account-button">
-        <img class="-image" src="https://fifty.brothers.studio/Media/Avatars/tobi.jpg" alt="Tobi" />
-        <p class="-text"><strong>{{user.name}}</strong><br>Admin</p>
-        <i class="-arrow fth-chevron-down"></i>
-      </button>
+    <footer class="app-nav-account" v-if="user">     
+      <ui-dropdown align="left bottom">
+        <template v-slot:button>
+          <button type="button" class="app-nav-account-button">
+            <img class="-image" src="https://fifty.brothers.studio/Media/Avatars/tobi.jpg" alt="Tobi" />
+            <p class="-text"><strong>{{user.name}}</strong><br>Admin</p>
+            <i class="-arrow fth-chevron-down"></i>
+          </button>
+        </template>
+        <ui-dropdown-list :items="userActions" />
+      </ui-dropdown>
     </footer>
 
   </div>
@@ -50,7 +55,8 @@
       applications: zero.applications,
       applicationItems: [],
       sections: zero.sections,
-      user: null
+      user: null,
+      userActions: []
     }),
 
     created()
@@ -59,6 +65,23 @@
       AuthApi.$on('user', user =>
       {
         this.user = user;
+      });
+
+      this.userActions.push({
+        name: 'Edit',
+        icon: 'fth-edit-2'
+      });
+      this.userActions.push({
+        name: 'Change password',
+        icon: 'fth-lock'
+      });
+      this.userActions.push({
+        name: 'Logout',
+        icon: 'fth-log-out',
+        action()
+        {
+          AuthApi.logout();
+        }
       });
     },
 

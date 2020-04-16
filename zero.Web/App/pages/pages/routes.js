@@ -34,5 +34,5 @@ if (section)
 
 export default {
   section: alias,
-  routes
+  routes: routes
 };

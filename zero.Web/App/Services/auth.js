@@ -74,7 +74,9 @@ export default new Vue({
     // logs the current user out
     logout()
     {
-
+      let promise = Axios.post('authentication/logoutUser');
+      this.rejectUser();
+      return promise;
     }
   }
 });

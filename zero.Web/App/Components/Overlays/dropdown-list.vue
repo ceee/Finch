@@ -14,6 +14,8 @@
 
 
 <script>
+  import { warn } from 'zero/services/debug';
+
   export default {
     name: 'uiDropdownList',
 
@@ -57,7 +59,7 @@
 
       if (!this.dropdown)
       {
-        console.warn('ui-dropdown-list: Could not find parent <ui-dropdown />');
+        warn('ui-dropdown-list: Could not find parent <ui-dropdown />');
       }
     },
 

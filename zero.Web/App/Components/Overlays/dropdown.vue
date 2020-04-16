@@ -3,7 +3,7 @@
     <div class="ui-dropdown-toggle" @click.stop="toggle">
       <slot name="button"></slot>
     </div>
-    <div class="ui-dropdown theme-dark" role="dialog" v-if="open" v-click-outside="hide" :class="'align-' + align">
+    <div class="ui-dropdown theme-dark" role="dialog" v-if="open" v-click-outside="hide" :class="alignClasses">
       <slot></slot>
     </div>
   </div>
@@ -25,18 +25,17 @@
       }
     },
 
+    computed: {
+
+      alignClasses()
+      {
+        return 'align-' + this.align.split(' ').join(' align-');
+      }
+    },
+
     data: () => ({
       open: false
     }),
-
-    watch: {
-      
-    },
-
-    mounted ()
-    {
-      
-    },
 
     methods: {
 

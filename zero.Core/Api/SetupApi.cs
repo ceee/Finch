@@ -118,6 +118,7 @@ namespace zero.Core.Api
           }
 
           // add admin role to super user
+          user.Roles.Add(roles.First(role => role.Name == "Standard").Alias);
           user.Roles.Add(roles.First(role => role.Name == "Administrator").Alias);
 
           // set countries

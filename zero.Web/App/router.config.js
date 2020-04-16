@@ -63,7 +63,10 @@ let addRoutesPerContext = (context, isPlugin) =>
 
       if (!route)
       {
-        warn(`router: Could not find section "${definition.section}" in route definition file ${path}`);
+        if (_routes.length > 0)
+        {
+          warn(`router: Could not find section "${definition.section}" in route definition file ${path}`);
+        }
       }
       else
       {
@@ -103,7 +106,8 @@ addRoutesPerContext(require.context('@/Plugins', true, /routes\.js$/), true); //
 
 routes.push({ name: '404', path: '*', component: () => import('zero/pages/notfound') });
 
-console.info(routes);
+
+
 
 // create the router with history mode
 
