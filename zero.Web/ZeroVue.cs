@@ -133,7 +133,16 @@ namespace zero.Web
       sections.Add("media", Constants.Sections.Media);
       sections.Add("settings", Constants.Sections.Settings);
 
+      Dictionary<string, string> settings = new Dictionary<string, string>();
+      settings.Add("applications", Constants.SettingsAreas.Applications);
+      settings.Add("countries", Constants.SettingsAreas.Countries);
+      settings.Add("logging", Constants.SettingsAreas.Logging);
+      settings.Add("translations", Constants.SettingsAreas.Translations);
+      settings.Add("updates", Constants.SettingsAreas.Updates);
+      settings.Add("users", Constants.SettingsAreas.Users);
+
       aliases.Add("sections", sections);
+      aliases.Add("settings", settings);
 
       return aliases;
     }

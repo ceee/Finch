@@ -56,7 +56,6 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public bool IsSuper()
     {
-      return false; // TODO remove, this is only for testing
       return Principal.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
     }
 

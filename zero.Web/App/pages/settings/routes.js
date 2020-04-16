@@ -16,6 +16,18 @@ if (section)
         name: [area.name, section.name]
       }
     });
+
+    if (area.alias === zero.alias.settings.users)
+    {
+      routes.push({
+        path: area.url + '/edit/:id',
+        name: alias + '-' + area.alias + '-edit',
+        component: () => import(`zero/pages/${alias}/user`),
+        meta: {
+          name: [area.name, section.name]
+        }
+      });
+    }
   }));
 }
 
