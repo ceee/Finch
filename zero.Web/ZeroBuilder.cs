@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -26,7 +25,7 @@ namespace zero.Web
 
       Services.AddMapper<DefaultMapper>(opts =>
       {
-        opts.Add<UserMapper>();
+        opts.Add<UserMapperConfig>();
       });
 
       Services.AddIdentity<User, UserRole>(opts =>

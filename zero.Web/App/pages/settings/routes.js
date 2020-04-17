@@ -23,6 +23,7 @@ if (section)
         path: area.url + '/edit/:id',
         name: alias + '-' + area.alias + '-edit',
         component: () => import(`zero/pages/${alias}/user`),
+        props: true,
         meta: {
           name: [area.name, section.name]
         }

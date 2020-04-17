@@ -41,7 +41,11 @@
 
 
 <script>
+  import UsersApi from 'zero/resources/users';
+
   export default {
+    props: ['id'],
+
     name: 'app-settings-user',
 
     data: () => ({
@@ -55,6 +59,12 @@
 
     created()
     {
+      UsersApi.getById(this.id).then(response =>
+      {
+        console.info(response);
+        this.model = response;
+      });
+
       this.actions.push({
         name: 'Disable',
         icon: 'fth-minus-circle'

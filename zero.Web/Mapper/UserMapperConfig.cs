@@ -3,7 +3,7 @@ using zero.Web.Models;
 
 namespace zero.Web.Mapper
 {
-  public class UserMapper : IMapperConfig
+  public class UserMapperConfig : IMapperConfig
   {
     /// <inheritdoc />
     public void Configure(IMapper config)

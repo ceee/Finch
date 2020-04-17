@@ -35,6 +35,11 @@ namespace zero.Web.Mapper
     /// <inheritdoc />
     public TTarget Map<TSource, TTarget>(TSource source) where TTarget : class, new()
     {
+      if (source == null)
+      {
+        return null;
+      }
+
       return Map(source, new TTarget());
     }
 
