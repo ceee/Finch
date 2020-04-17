@@ -16,9 +16,13 @@
     <Content Remove="package-lock.json" />
     <Content Remove="package.json" />
     <None Include="package.json" />
+    <Compile Remove="App\mixins\**" />
+    <None Remove="App\mixins\**" />
     <None Remove="Logs/*" />
+    <Content Remove="App\mixins\**" />
     <Content Remove="wwwroot/Temp/**" />
     <Content Remove="wwwroot/Media/**" />
+    <EmbeddedResource Remove="App\mixins\**" />
     <Content Remove="web.release.config" />
     <None Remove="wipe.js" />
     <_ContentIncludedByDefault Remove="appSettings.Development.json" />
@@ -40,10 +44,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\zero.Core\zero.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="App\mixins\" />
   </ItemGroup>
 
 </Project>

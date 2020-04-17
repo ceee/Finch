@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
+using zero.Core.Entities;
 using zero.Core.Identity;
 
 namespace zero.Web.Controllers
@@ -18,9 +19,9 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] ListQuery<Country> query)
     {
-      return Json(await Api.GetAll("en-US"));
+      return Json(await Api.GetByQuery("en-US", query));
     }
   }
 }

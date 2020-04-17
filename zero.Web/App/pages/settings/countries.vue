@@ -1,10 +1,10 @@
 ﻿<template>
   <div class="countries">
     <ui-header-bar title="Countries" :on-back="goBack">
-      <ui-table-filter :filter="false" />
+      <ui-table-filter v-model="tableConfig" />
     </ui-header-bar>
     <div class="ui-blank-box">
-      <ui-table :config="tableConfig" />
+      <ui-table v-model="tableConfig" />
     </div>
   </div>
 </template>
@@ -22,7 +22,8 @@
     {
       this.tableConfig = {
         labelPrefix: '@country.fields.',
-        sort: false,
+        allowOrder: false,
+        search: null,
         columns: {
           flag: {
             label: '',

@@ -4,7 +4,7 @@
       <header class="ui-table-row ui-table-head">      
         <div v-for="column in columns" class="ui-table-cell" :table-field="column.field" :style="column.flex">
           {{ column.label | localize }}
-          <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="filter.orderBy == column.field ? 'sort-' + (filter.isDescending ? 'desc' : 'asc') : null">
+          <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="filter.orderBy == column.field ? 'sort-' + (filter.orderIsDescending ? 'desc' : 'asc') : null">
             <i class="arrow arrow-down"></i>
           </button>
         </div>
@@ -35,15 +35,23 @@
 <script>
   import TableValueDirective from './table-value.js';
   import UiPagination from 'zero/components/pagination.vue';
-  import { each as _each, extend as _extend } from 'underscore';
+  import { each as _each, extend as _extend, debounce as _debounce } from 'underscore';
 
   const defaultConfig = {
-    // allow sorting of columns (asc + desc)
-    sort: true,
+    order: {
+      // allow sorting of columns (asc + desc)
+      enabled: true,
+      // default order by
+      by: 'createdDate',
+      // order is descending
+      isDescending: true
+    },
     // define columns and how they are displayed
     columns: {},
     // prefix for column header translations
     labelPrefix: '',
+    // scroll to top on page change
+    scrollToTop: true,
     // promise which returns items based on the current filter and sorting
     items: null
   };
@@ -52,7 +60,7 @@
     name: 'uiTable',
 
     props: {
-      config: {
+      value: {
         type: Object,
         required: true,
         default: defaultConfig
@@ -62,9 +70,20 @@
     components: { UiPagination },
 
     watch: {
-      'config.columns': function (val)
+      'value.columns': function (val)
       {
         this.generateColumns(val);
+      },
+      'value.search': function (val)
+      {
+        this.filter.search = val;
+      },
+      filter: {
+        deep: true,
+        handler: function ()
+        {
+          this.debouncedUpdate();
+        }
       }
     },
 
@@ -73,27 +92,36 @@
       columns: [],
       items: [],
       isLoading: true,
-      pages: 8,
+      pages: 1,
+      count: 0,
       filter: {
         orderBy: null,
-        isDescending: true,
-        page: 1
-      }
+        orderIsDescending: true,
+        page: 1,
+        pageSize: 30,
+        search: null
+      },
+      debouncedUpdate: null
     }),
 
     created()
     {
-      this.configuration = _extend(defaultConfig, this.config);
+      this.debouncedUpdate = _debounce(this.update, 300);
+
+      this.configuration = _extend(defaultConfig, this.value);
+
+      if (this.configuration.order.enabled)
+      {
+        this.filter.orderBy = this.configuration.order.by;
+        this.filter.orderIsDescending = this.configuration.order.isDescending;
+      }
+
       this.generateColumns(this.configuration.columns);
     },
 
     mounted()
     {
-      this.configuration.items().then(result =>
-      {
-        this.isLoading = false;
-        this.items = result;
-      });
+      this.load(true);
     },
 
     directives: {
@@ -101,6 +129,38 @@
     },
 
     methods: {
+
+      // load items based on the current filter
+      load(initial)
+      {
+        this.configuration.items(this.filter).then(result =>
+        {
+          this.pages = result.totalPages;
+          this.count = result.totalItems;
+
+          this.isLoading = false;
+          this.items = result.items;
+
+          if (!initial && this.configuration.scrollToTop)
+          {
+            let container = document.querySelector('.app-main');
+
+            if (container)
+            {
+              this.$nextTick(() => container.scrollTo({ top: 0, behavior: 'smooth' }));
+            }
+          }
+        });
+      },
+
+      // updates the list (debounced)
+      update()
+      {
+        if (!this.isLoading)
+        {
+          this.load();
+        }
+      },
 
       // generate columns from the given config
       generateColumns(columns)
@@ -136,9 +196,9 @@
       // sort by a column
       sort(column)
       {
-        if (this.filter.orderBy === column.field && this.filter.isDescending)
+        if (this.filter.orderBy === column.field && this.filter.orderIsDescending)
         {
-          this.filter.isDescending = false;
+          this.filter.orderIsDescending = false;
         }
         else if (this.filter.orderBy === column.field)
         {
@@ -147,7 +207,7 @@
         else
         {
           this.filter.orderBy = column.field;
-          this.filter.isDescending = true;
+          this.filter.orderIsDescending = true;
         }
       }
     }

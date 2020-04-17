@@ -30,6 +30,7 @@
       onChange(ev)
       {
         this.$emit('change', ev.target.value);
+        this.$emit('input', ev.target.value);
       },
 
       onSubmit(ev)

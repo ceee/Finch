@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-table-filter">
-    <ui-button v-if="filter" type="light" label="Filter" caret="down" />
-    <ui-search v-if="search" />
+    <ui-button v-if="!hideFilter" type="light" label="Filter" caret="down" />
+    <ui-search v-if="!hideSearch" v-model="value.search" />
   </div>
 </template>
 
@@ -11,27 +11,40 @@
     name: 'uiTableFilter',
 
     props: {
-      filter: {
-        type: Boolean,
-        default: true
-      },
-      search: {
-        type: Boolean,
-        default: true
+      value: {
+        type: Object,
+        required: true,
+        default: {
+          filter: {},
+          search: null
+        }
+      }
+    },
+
+    watch: {
+      value: function (value)
+      {
+        this.reload();
       }
     },
 
     data: () => ({
-      
+      hideFilter: true,
+      hideSearch: true
     }),
 
-    mounted ()
+    created()
     {
-      
+      this.reload();
     },
 
     methods: {
 
+      reload()
+      {
+        this.hideFilter = typeof this.value.filter === 'undefined';
+        this.hideSearch = typeof this.value.search === 'undefined';
+      }
     }
   }
 </script>
