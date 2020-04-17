@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Web.Mapper;
 using zero.Web.Sections;
 
 namespace zero.Web
@@ -22,6 +23,11 @@ namespace zero.Web
       Services = services;
 
       Services.AddOptions<ZeroOptions>().Configure(opts => ConfigureDefaults(opts));
+
+      Services.AddMapper<DefaultMapper>(opts =>
+      {
+        opts.Add<UserMapper>();
+      });
 
       Services.AddIdentity<User, UserRole>(opts =>
       {

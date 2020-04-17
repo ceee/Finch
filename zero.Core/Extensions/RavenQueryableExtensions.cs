@@ -10,6 +10,25 @@ namespace zero.Core.Extensions
 {
   public static class RavenQueryableExtensions
   {
+    public static IRavenQueryable<T> ForApp<T>(this IRavenQueryable<T> source, string appId, bool includeShared = false) where T : IDatabaseEntity
+    {
+      if (appId.IsNullOrEmpty())
+      {
+        return source;
+      }
+
+      HashSet<string> ids = new HashSet<string>();
+      ids.Add(appId);
+
+      if (includeShared)
+      {
+        ids.Add(Constants.Database.SharedAppId);
+      }
+
+      return source.Where(item => item.AppId.In(ids));
+    }
+
+
     /// <summary>
     /// 
     /// </summary>

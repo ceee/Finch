@@ -6,6 +6,7 @@
       <!--<ui-table-filter :filter="false" />-->
     </ui-header-bar>
     <div class="ui-blank-box">
+      <router-link :to="{ name: 'settings-users-edit', params: { id: _user.id } }">{{_user.name}}</router-link>
       <!--<ui-table :config="tableConfig" />-->
     </div>
   </div>

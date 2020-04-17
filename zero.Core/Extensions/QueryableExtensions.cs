@@ -1,13 +1,16 @@
 ﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Queries;
 using Raven.Client.Documents.Session;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using zero.Core.Entities;
 
 namespace zero.Core.Extensions
 {
-  public static class LinqExtensions
+  public static class QueryableExtensions
   {
     public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> source, string path, bool isDescending, OrderingType type = OrderingType.String)
     {

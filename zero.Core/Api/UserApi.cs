@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Core.Identity;
 
 namespace zero.Core.Api
@@ -75,6 +77,32 @@ namespace zero.Core.Api
         .Select(claim => new Permission(claim, prefix))
         .ToList();
     }
+
+
+    /// <inheritdoc />
+    public async Task<IList<User>> GetAll(string appId = null)
+    {
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        return await session.Query<User>()
+          .ForApp(appId)
+          .OrderByDescending(x => x.CreatedDate)
+          .ToListAsync();
+      }
+    }
+
+    /// <inheritdoc />
+    public async Task<ListResult<User>> GetByQuery(ListQuery<User> query, string appId = null)
+    {
+      query.SearchSelector = user => user.Name;
+
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        return await session.Query<User>()
+          .ForApp(appId)
+          .ToQueriedListAsync(query);
+      }
+    }
   }
 
 
@@ -109,5 +137,15 @@ namespace zero.Core.Api
     /// Get all permissions for the current user with an optional prefix
     /// </summary>
     IList<Permission> GetPermissions(string prefix = null);
+
+    /// <summary>
+    /// Get all users for the selected application
+    /// </summary>
+    Task<IList<User>> GetAll(string appId = null);
+
+    /// <summary>
+    /// Get all available users (with query)
+    /// </summary>
+    Task<ListResult<User>> GetByQuery(ListQuery<User> query, string appId = null);
   }
 }

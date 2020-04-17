@@ -149,7 +149,7 @@
   "country": {
     "fields": {
       "name": "Name",
-      "code": "ISO",
+      "code": "Code",
       "isPreferred": "Show on top"
     }
   }

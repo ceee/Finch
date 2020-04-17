@@ -19,6 +19,12 @@ namespace zero.Web.Controllers
     }
 
 
+    //public async Task<IActionResult> GetAll([FromQuery] ListQuery<Country> query)
+    //{
+    //  return Json(await Api.GetByQuery("en-US", query));
+    //}
+
+
     public async Task<IActionResult> GetAll([FromQuery] ListQuery<Country> query)
     {
       return Json(await Api.GetByQuery("en-US", query));

@@ -60,6 +60,7 @@ namespace zero.Core.Identity
       if (!isAuthenticated || !isZeroUser)
       {
         context.Result = new StatusCodeResult(401);
+        return;
       }
 
       // check claims
