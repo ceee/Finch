@@ -1,7 +1,7 @@
 ﻿<template>
-  <div class="app-auth theme-dark">
+  <div class="app-auth">
     <h1 class="app-auth-headline">zero</h1>
-    <ui-form class="app-auth-inner theme-light" v-slot="form" :submit="onSubmit">
+    <ui-form class="app-auth-inner" v-slot="form" @submit="onSubmit">
       <div>
         <h2 v-localize="'@login.headline'"></h2>
 

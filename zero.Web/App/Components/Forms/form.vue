@@ -1,6 +1,8 @@
 ﻿<template>
   <form class="ui-form" @submit.prevent="onSubmit" @change="onChange">
-    <slot v-bind="slotProps" />
+    <slot v-if="loadingState === 'default'" v-bind="slotProps" />
+
+    <ui-error-view v-if="loadingState === 'error'" :error="loadingError" />
   </form>
 </template>
 
@@ -13,14 +15,6 @@
     name: 'uiForm',
 
     props: {
-      submit: {
-        type: Function,
-        default: () => { }
-      },
-      mapState: {
-        type: Boolean,
-        default: true
-      },
       errorComponents: {
         type: Array,
         default: () => [ 'uiError' ]
@@ -29,6 +23,8 @@
 
     data: () => ({
       dirty: false,
+      loadingState: 'default',
+      loadingError: null,
       state: 'default',
       errors: [],
       slotProps: {
@@ -46,6 +42,7 @@
     created()
     {
       this.slotProps.state = this.state;
+      this.$emit('load', this);
     },
 
     methods: {
@@ -72,7 +69,36 @@
         }
       },
 
-      // handles a promise
+      // loads data on creation of the form
+      load(promise)
+      {
+        this.loadingState = 'loading';
+
+        return new Promise((resolve, reject) =>
+        {
+          promise
+            .then(
+              response =>
+              {
+                this.loadingState = 'default';
+                resolve(response);
+              },
+              (error) =>
+              {
+                this.loadingState = 'error';
+                this.loadingError = error;
+                reject(error);
+              }
+            )
+            .catch(exception =>
+            {
+              this.loadingState = 'error';
+              this.loadingError = error;
+            });
+        });
+      },
+
+      // handles a promise as result of the form submission
       handle(promise)
       {
         this.setState('loading');
@@ -109,7 +135,7 @@
       // submits the form
       onSubmit(e)
       {
-        this.submit(this, e);
+        this.$emit('submit', this, e);
       },
 
 
@@ -222,3 +248,10 @@
     }
   }
 </script>
+
+<style lang="scss">
+  .ui-form
+  {
+    min-height: 100%;
+  }
+</style>

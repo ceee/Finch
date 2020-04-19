@@ -22,6 +22,21 @@
     }
   },
 
+  "errors": {
+    "http": {
+      "403": "Unauthorized",
+      "403_text": "You are not allowed to view this resource",
+      "404": "Not found",
+      "404_text": "The requested resource could not be found<br>({path})",
+      "4xx": "Client error",
+      "4xx_text": "There was an internal client error (code: {code})",
+      "504": "Timed out",
+      "504_text": "The backoffice did not receive a timely response from the server",
+      "5xx": "Server error",
+      "5xx_text": "There was an internal server error (code: {code})"
+    }
+  },
+
   "unsavedchanges": {
     "close": "Discard changes",
     "confirm": "Stay"

@@ -1,14 +1,14 @@
 ﻿<template>
-  <div class="page page-error theme-dark">
+  <div class="page page-error" :class="{'theme-dark': dark }">
     <i class="page-error-icon fth-cloud-snow"></i>
     <p class="page-error-text">
-      <strong class="page-error-headline">Not found</strong><br>
-      The requested resource could not be found
-      <br>
-      ({{path}})
+      <strong class="page-error-headline" v-localize="{ key: errorDetails.headline, tokens: tokens }"></strong><br>
+      <span v-localize:html="{ key: errorDetails.text, tokens: tokens }"></span>
     </p>
-    <ui-button class="page-error-button" type="light" :label="detailsText" @click="details = !details" />
-    <template v-if="details">
+    <ui-button v-if="errorDetails.code === 404" class="page-error-button" type="light" :label="detailsText" @click="details = !details" />
+    <ui-button v-if="errorDetails.code !== 404 && errorDetails.category === 4" class="page-error-button" type="light" label="@ui.back" @click="$router.go(-1)" />
+    <!--<ui-button v-if="errorDetails.code !== 404 && errorDetails.category === 5" class="page-error-button" type="light" label="@ui.back" @click="$router.go(-1)" />-->
+    <template v-if="errorDetails.code === 404 && details">
       <br><br>
       <div class="page-error-routes">
         <span>#</span>
@@ -26,15 +26,38 @@
 
 
 <script>
+  const KNOWN_ERRORS = [403, 404, 504];
+
   export default {
+
+    props: {
+      dark: {
+        type: Boolean,
+        default: false
+      },
+      error: {
+        type: Error,
+        default: null
+      }
+    },
 
     data: () => ({
       path: null,
       routes: [],
-      details: false
+      details: false,
+      errorDetails: {
+        category: 0,
+        code: null,
+        headline: null,
+        text: null
+      }
     }),
 
     watch: {
+      error: function (val)
+      {
+        this.rebuild();
+      },
       '$route': function (val)
       {
         this.rebuild();
@@ -45,11 +68,19 @@
       detailsText()
       {
         return this.details ? 'Hide' : 'Defined routes';
+      },
+      tokens()
+      {
+        return {
+          code: this.errorDetails.code,
+          path: this.path
+        };
       }
     },
 
     mounted()
     {
+      console.info(this.error.response);
       this.rebuild();
     },
 
@@ -57,6 +88,32 @@
 
       rebuild()
       {
+        if (this.error && this.error.response)
+        {
+          let errorKey = null;
+
+          const errorCode = this.error.response.status;
+          const errorCategory = Math.round(errorCode / 100);
+
+          if (KNOWN_ERRORS.indexOf(errorCode) > -1)
+          {
+            errorKey = '@errors.http.' + errorCode;
+          }
+          else if (errorCategory === 4)
+          {
+            errorKey = '@errors.http.4xx';
+          }
+          else if (errorCategory === 5)
+          {
+            errorKey = '@errors.http.5xx';
+          }
+
+          this.errorDetails.category = errorCategory;
+          this.errorDetails.code = errorCode;
+          this.errorDetails.headline = errorKey;
+          this.errorDetails.text = errorKey + '_text';
+        }
+
         this.path = this.$router.options.base + this.$route.path.substring(1);
         this.routes = [];
 
@@ -89,7 +146,7 @@
   .page-error
   {
     width: 100%;
-    min-height: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -28,6 +28,7 @@ namespace zero.Web.Controllers
     /// </summary>    
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
+      await Task.Delay(500);
       return Json(Mapper.Map<User, UserEditModel>(await Api.GetUserById(id)));
     }
 

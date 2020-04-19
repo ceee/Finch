@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-form ref="form" class="user" v-slot="form" :submit="onSubmit">
+  <ui-form ref="form" class="user" v-slot="form" @submit="onSubmit" @load="onLoad">
 
     <ui-header-bar :title="model.name" title-empty="@user.name" :on-back="onBack">
       <ui-dropdown align="right">
@@ -49,6 +49,7 @@
     name: 'app-settings-user',
 
     data: () => ({
+      loading: true,
       page: true,
       actions: [],
       model: {
@@ -59,12 +60,6 @@
 
     created()
     {
-      UsersApi.getById(this.id).then(response =>
-      {
-        console.info(response);
-        this.model = response;
-      });
-
       this.actions.push({
         name: 'Disable',
         icon: 'fth-minus-circle'
@@ -91,6 +86,15 @@
       onBack()
       {
         this.$router.go(-1);
+      },
+
+      onLoad(form)
+      {
+        form.load(UsersApi.getById(this.id)).then(response =>
+        {
+          console.info(response);
+          this.model = response;
+        });
       },
 
       onSubmit(form)
