@@ -1,7 +1,9 @@
 ﻿<template>
   <form class="ui-form" @submit.prevent="onSubmit" @change="onChange">
     <slot v-if="loadingState === 'default'" v-bind="slotProps" />
-
+    <div v-if="loadingState == 'loading'" class="ui-form-loading">
+      <i class="ui-form-loading-progress"></i>
+    </div>
     <ui-error-view v-if="loadingState === 'error'" :error="loadingError" />
   </form>
 </template>
@@ -253,5 +255,42 @@
   .ui-form
   {
     min-height: 100%;
+  }
+
+  .ui-form-loading
+  {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ui-form-loading-progress
+  {   
+    width: 32px;
+    height: 32px;
+    z-index: 2;
+    border-radius: 40px;
+    border: 2px solid var(--color-bg-mid);
+    border-left-color: var(--color-fg);
+    opacity: 1;
+    will-change: transform;
+    animation: rotating .5s linear infinite;
+    transition: opacity .25s ease;
+  }
+
+  @keyframes rotating
+  {
+    from
+    {
+      -webkit-transform: rotate(0);
+      transform: rotate(0)
+    }
+    to
+    {
+      -webkit-transform: rotate(1turn);
+      transform: rotate(1turn)
+    }
   }
 </style>
