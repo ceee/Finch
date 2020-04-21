@@ -2,8 +2,8 @@
   <div class="app-confirm">
     <h2 class="ui-headline">{{overlay.title}}</h2>
     <p>{{overlay.text}}</p>
-    <ui-button type="light" :label="overlay.closeLabel" :click="overlay.close"></ui-button>
-    <ui-button :label="overlay.confirmLabel" :click="confirm"></ui-button>
+    <ui-button type="light" :label="overlay.closeLabel" @click="overlay.close"></ui-button>
+    <ui-button :label="overlay.confirmLabel" @click="confirm"></ui-button>
   </div>
 </template>
 

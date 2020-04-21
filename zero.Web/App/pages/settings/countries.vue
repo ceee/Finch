@@ -32,6 +32,7 @@
             width: 62
           },
           name: {
+            label: '@ui.name',
             as: 'text',
             bold: true,
             link: item =>
