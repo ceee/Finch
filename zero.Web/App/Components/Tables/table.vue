@@ -11,7 +11,7 @@
       </header>
 
       <div class="ui-table-row" v-for="item in items">
-        <div v-for="column in columns" class="ui-table-cell" :style="column.flex" :table-field="column.field" v-table-value="{ item, column }"></div>
+        <component :is="column.tag" :to="getLink(column, item)" v-for="column in columns" class="ui-table-cell" :style="column.flex" :table-field="column.field" v-table-value="{ item, column }"></component>
       </div>
 
       <div class="ui-table-empty" v-if="!isLoading && items.length < 1" @click="isLoading=true">
@@ -63,7 +63,10 @@
       value: {
         type: Object,
         required: true,
-        default: defaultConfig
+        default: () =>
+        {
+          return defaultConfig;
+        }
       }
     },
 
@@ -130,6 +133,16 @@
 
     methods: {
 
+      getLink(column, item)
+      {
+        if (column.tag !== 'router-link')
+        {
+          return {};
+        }
+
+        return column.link(item);
+      },
+
       // load items based on the current filter
       load(initial)
       {
@@ -179,6 +192,7 @@
           }
 
           this.columns.push(_extend(data, {
+            tag: typeof data.link !== 'undefined' ? 'router-link' : 'div',
             label: typeof data.label !== 'undefined' ? data.label : (this.configuration.labelPrefix + key),
             field: key,
             canSort: typeof data.sort === 'boolean' ? data.sort : this.configuration.sort,
@@ -256,24 +270,13 @@
     }
   }
 
-  .ui-table-row:not(.ui-table-head):hover
+  /*.ui-table-row:not(.ui-table-head):hover
   {
     box-shadow: 0 0 5px 4px var(--color-shadow);
     z-index: 1;
     outline: 1px solid var(--color-line);
     border-bottom-color: transparent;
-
-    /*&:before
-    {
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      content: '';
-      width: 3px;
-      background: var(--color-line);
-    }*/
-  }
+  }*/
 
   .ui-table-head
   {
@@ -324,6 +327,16 @@
     &.is-bold
     {
       font-weight: bold;
+    }
+  }
+
+  a.ui-table-cell
+  {
+    color: var(--color-fg);
+   
+    &:hover
+    {
+      text-decoration: underline;
     }
   }
 

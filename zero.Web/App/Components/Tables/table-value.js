@@ -24,6 +24,7 @@ export default function (el, binding)
   el.classList.toggle('is-multiline', column.multiline === true);
   el.classList.toggle('is-bold', column.bold === true);
 
+
   // render empty
   //if (isEmpty)
   //{

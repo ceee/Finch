@@ -14,9 +14,12 @@
       value: {
         type: Object,
         required: true,
-        default: {
-          filter: {},
-          search: null
+        default: () =>
+        {
+          return {
+            filter: {},
+            search: null
+          }
         }
       }
     },

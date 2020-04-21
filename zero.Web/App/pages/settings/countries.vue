@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="countries">
-    <ui-header-bar title="Countries" :on-back="goBack">
+    <ui-header-bar title="Countries" :back-button="true">
       <ui-table-filter v-model="tableConfig" />
     </ui-header-bar>
     <div class="ui-blank-box">
@@ -33,7 +33,14 @@
           },
           name: {
             as: 'text',
-            bold: true
+            bold: true,
+            link: item =>
+            {
+              return {
+                name: zero.alias.sections.settings + '-' + zero.alias.settings.countries + '-edit',
+                params: { id: item.id }
+              };
+            }
           },
           code: 'text',
           isPreferred: {

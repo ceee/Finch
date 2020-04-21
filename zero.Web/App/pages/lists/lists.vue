@@ -2,10 +2,10 @@
   <div class="lists">
     <ui-header-bar title="Lists">
       <ui-button type="light" label="Add list" icon="fth-plus" />
-      <ui-table-filter />
+      <ui-table-filter v-model="tableConfig" />
     </ui-header-bar>
     <div class="ui-blank-box">
-      <ui-table :config="tableConfig" />
+      <ui-table v-model="tableConfig" />
     </div>
   </div>
 </template>
@@ -23,6 +23,7 @@
     {
       this.tableConfig = {
         labelPrefix: '@order.fields.',
+        items: this.getItems,
         columns: {
           no: 'text',
           createdDate: {
@@ -44,8 +45,7 @@
             as: 'html',
             render: item => '<b>' + item.status + '</b>'
           }
-        },
-        items: this.getItems
+        }
       };
     },
 
@@ -56,7 +56,10 @@
       {
         return new Promise(resolve =>
         {
-          resolve([
+          resolve({
+            totalPages: 1,
+            totalItems: 5,
+            items: [
             {
               no: 1,
               createdDate: '2020-03-05T10:17:25.229+01:00',
@@ -95,7 +98,7 @@
               price: 12.95,
               status: 'Processing'
             },
-          ]);
+          ]});
         });
       }
 

@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="users">
-    <ui-header-bar title="Users & Permissions">
+    <ui-header-bar title="Users & Permissions" :back-button="true">
       <ui-button type="light" label="Add user" icon="fth-plus" />
       <ui-button type="light" label="Add role" icon="fth-plus" />
       <!--<ui-table-filter :filter="false" />-->
