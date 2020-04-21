@@ -64,7 +64,7 @@
     display: inline-block;
     height: 22px;
     width: 40px;
-    background: var(--color-transparent);
+    background: var(--color-box);
     border: 1px solid var(--color-line);
     border-radius: 20px;
     transition: all 0.2s ease;

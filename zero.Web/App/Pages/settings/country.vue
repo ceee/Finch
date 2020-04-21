@@ -11,34 +11,31 @@
       <ui-button :submit="true" label="Save" :state="form.state" />
     </ui-header-bar>
 
-    <ui-tabs>
+    <div class="ui-form-box has-sidebar" label="General">
+      <div class="ui-box">
+        <ui-property label="@ui.name" :required="true">
+          <input v-model="model.name" type="text" class="ui-input" />
+        </ui-property>
+        <ui-property label="@country.fields.code" description="@country.fields.code_text" :required="true">
+          <input v-model="model.code" type="text" class="ui-input country-flag-input" maxlength="2" />
+        </ui-property>
+        <ui-property label="@country.fields.isPreferred">
+          <ui-toggle v-model="model.isPreferred" />
+        </ui-property>
+      </div>
+      <aside class="ui-form-box-aside">
+        <ui-property label="@ui.active" :vertical="true" :is-text="true">
+          <ui-toggle v-model="model.isActive" />
+        </ui-property>
+        <ui-property label="@ui.id" :vertical="true" :is-text="true">
+          {{model.id}}
+        </ui-property>
+        <ui-property label="@ui.createdDate" :vertical="true" :is-text="true">
+          <ui-date v-model="model.createdDate" />
+        </ui-property>
+      </aside>
+    </div>
 
-      <ui-tab class="ui-form-box has-sidebar" label="General">
-        <div class="ui-box">
-          <ui-property label="@ui.name" :required="true">
-            <input v-model="model.name" type="text" class="ui-input" />
-          </ui-property>
-          <ui-property label="@country.fields.code" description="@country.fields.code_text" :required="true">
-            <input v-model="model.code" type="text" class="ui-input country-flag-input" maxlength="2" />
-          </ui-property>
-          <ui-property label="@country.fields.isPreferred">
-            <ui-toggle v-model="model.isPreferred" />
-          </ui-property>
-        </div>
-        <aside class="ui-form-box-aside">
-          <ui-property label="@ui.active" :vertical="true">
-            <ui-toggle v-model="model.isActive" />
-          </ui-property>
-          <ui-property label="@ui.id" :vertical="true" :is-text="true">
-            {{model.id}}
-          </ui-property>
-          <ui-property label="@ui.createdDate" :vertical="true" :is-text="true">
-            <ui-date v-model="model.createdDate" />
-          </ui-property>
-        </aside>
-      </ui-tab>
-
-    </ui-tabs>
   </ui-form>
 </template>
 
