@@ -14,7 +14,7 @@
     <ui-tabs>
 
       <ui-tab class="ui-box" label="General">
-        <ui-property label="@user.fields.name" :required="true">
+        <ui-property label="@ui.name" :required="true">
           <input v-model="model.name" type="text" class="ui-input" v-localize:placeholder="'@user.fields.name_placeholder'" />
         </ui-property>
         <ui-property label="@user.fields.email" description="@user.fields.email_text" :required="true">

@@ -20,6 +20,16 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public async Task<Country> GetById(string id)
+    {
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        return await session.LoadAsync<Country>(id);
+      }
+    }
+
+
+    /// <inheritdoc />
     public async Task<IList<Country>> GetAll(string languageId)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
@@ -52,6 +62,11 @@ namespace zero.Core.Api
 
   public interface ICountriesApi
   {
+    /// <summary>
+    /// Get country by Id
+    /// </summary>
+    Task<Country> GetById(string id);
+
     /// <summary>
     /// Get all available countries
     /// </summary>

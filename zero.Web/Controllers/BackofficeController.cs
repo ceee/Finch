@@ -34,6 +34,11 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(404);
       }
 
+      if (Mapper == null)
+      {
+        // TODO show error with help on how to inject mapper in constructor + base constructor
+      }
+
       return Json(Mapper.Map<T, TTarget>(model));
     }
   }

@@ -10,6 +10,7 @@
     "close": "Close",
     "confirm": "Confirm",
     "createdDate": "Created at",
+    "id": "ID",
     "active": "Published",
     "pagination": {
       "xofy": "Page {x} of {y}",
@@ -19,7 +20,8 @@
     "search": {
       "placeholder": "Search ...",
       "button": "Search"
-    }
+    },
+    "name": "Name"
   },
 
   "errors": {
@@ -98,7 +100,6 @@
   "user": {
     "name": "User",
     "fields": {
-      "name": "Name",
       "name_placeholder": "Enter your real name or a username",
       "email": "Email",
       "email_text": "Also used as login username",
@@ -162,9 +163,10 @@
   },
 
   "country": {
+    "name": "Country",
     "fields": {
-      "name": "Name",
       "code": "Code",
+      "code_text": "Code in ISO 3166-1 format which is used to display the appropriate flag",
       "isPreferred": "Show on top"
     }
   }

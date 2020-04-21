@@ -14,3 +14,34 @@
   margin: var(--padding);
   border-radius: var(--radius);
 }
+
+
+.ui-form-box
+{
+  padding: var(--padding);
+
+  &.has-sidebar
+  {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-gap: var(--padding);
+  }
+
+  .ui-box, .ui-blank-box
+  {
+    margin: 0;
+  }
+}
+
+.ui-form-box-aside
+{
+  width: 320px;
+  max-width: 100%;
+  padding: var(--padding);
+
+  .ui-property + .ui-property
+  {
+    padding-top: 0;
+    margin-top: 25px;
+  }
+}

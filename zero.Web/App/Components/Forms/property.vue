@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-property" :class="{'is-vertical': vertical }">
+  <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText }">
     <label v-if="label" class="ui-property-label" for="">
       <span v-localize="label"></span>
       <strong class="ui-property-required" v-if="required">*</strong>
@@ -24,7 +24,8 @@
       label: String,
       description: String,
       required: Boolean,
-      vertical: Boolean
+      vertical: Boolean,
+      isText: Boolean
     },
 
     mounted ()
@@ -67,6 +68,11 @@
     {
       margin-top: 5px;
     }
+  }
+
+  .ui-property.is-text .ui-property-content
+  {
+    margin-top: 0;
   }
 
   .ui-property-label

@@ -255,6 +255,7 @@
   .ui-form
   {
     min-height: 100%;
+    font-size: var(--font-size);
   }
 
   .ui-form-loading

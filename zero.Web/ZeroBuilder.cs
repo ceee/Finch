@@ -26,6 +26,7 @@ namespace zero.Web
       Services.AddMapper<DefaultMapper>(opts =>
       {
         opts.Add<UserMapperConfig>();
+        opts.Add<CountryMapperConfig>();
       });
 
       Services.AddIdentity<User, UserRole>(opts =>

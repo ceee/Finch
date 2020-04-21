@@ -1,7 +1,7 @@
 ﻿<template>
-  <ui-form ref="form" class="user" v-slot="form" @submit="onSubmit" @load="onLoad">
+  <ui-form ref="form" class="country" v-slot="form" @submit="onSubmit" @load="onLoad">
 
-    <ui-header-bar :title="model.name" title-empty="@user.name">
+    <ui-header-bar :title="model.name" title-empty="@country.name">
       <ui-dropdown align="right">
         <template v-slot:button>
           <ui-button type="light" label="Actions" caret="down" />
@@ -13,26 +13,29 @@
 
     <ui-tabs>
 
-      <ui-tab class="ui-box" label="General">
-        <ui-property label="@user.fields.name" :required="true">
-          <input v-model="model.name" type="text" class="ui-input" v-localize:placeholder="'@user.fields.name_placeholder'" />
-        </ui-property>
-        <ui-property label="@user.fields.email" description="@user.fields.email_text" :required="true">
-          <input v-model.trim="model.email" type="email" class="ui-input" v-localize:placeholder="'@user.fields.email_placeholder'" />
-        </ui-property>
-      </ui-tab>
-
-      <ui-tab label="Permissions">
+      <ui-tab class="ui-form-box has-sidebar" label="General">
         <div class="ui-box">
-          <ui-property label="@user.fields.roles" description="@user.fields.roles_text" :required="true">
-            select
+          <ui-property label="@ui.name" :required="true">
+            <input v-model="model.name" type="text" class="ui-input" />
+          </ui-property>
+          <ui-property label="@country.fields.code" description="@country.fields.code_text" :required="true">
+            <input v-model="model.code" type="text" class="ui-input country-flag-input" maxlength="2" />
+          </ui-property>
+          <ui-property label="@country.fields.isPreferred">
+            <ui-toggle v-model="model.isPreferred" />
           </ui-property>
         </div>
-        <div class="ui-box">
-          <ui-property label="@user.fields.sections" description="@user.fields.sections_text" :required="true">
-            select
+        <aside class="ui-form-box-aside">
+          <ui-property label="@ui.active" :vertical="true">
+            <ui-toggle v-model="model.isActive" />
           </ui-property>
-        </div>
+          <ui-property label="@ui.id" :vertical="true" :is-text="true">
+            {{model.id}}
+          </ui-property>
+          <ui-property label="@ui.createdDate" :vertical="true" :is-text="true">
+            <ui-date v-model="model.createdDate" />
+          </ui-property>
+        </aside>
       </ui-tab>
 
     </ui-tabs>
@@ -41,12 +44,10 @@
 
 
 <script>
-  import UsersApi from 'zero/resources/users';
+  import CountriesApi from 'zero/resources/countries';
 
   export default {
     props: ['id'],
-
-    name: 'app-settings-user',
 
     data: () => ({
       loading: true,
@@ -90,7 +91,7 @@
 
       onLoad(form)
       {
-        form.load(UsersApi.getById(this.id)).then(response =>
+        form.load(CountriesApi.getById(this.id)).then(response =>
         {
           console.info(response);
           this.model = response;
@@ -121,5 +122,8 @@
 
 
 <style lang="scss">
-  
+  .country .country-flag-input
+  {
+    max-width: 80px;
+  }
 </style>
