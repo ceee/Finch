@@ -30,6 +30,8 @@
       "403_text": "You are not allowed to view this resource",
       "404": "Not found",
       "404_text": "The requested resource could not be found<br>({path})",
+      "409": "Conflict",
+      "409_text": "The operation could not be completed as it is not valid anymore. Please reload the page",
       "4xx": "Client error",
       "4xx_text": "There was an internal client error (code: {code})",
       "504": "Timed out",

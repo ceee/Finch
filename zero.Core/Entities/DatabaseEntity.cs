@@ -10,7 +10,7 @@ namespace zero.Core.Entities
   }
 
   [DebuggerDisplay("Id = {Id,nq}, Name = {Name}, Alias = {Alias}")]
-  public abstract class DatabaseEntity : IDatabaseEntity
+  public abstract class DatabaseEntity : IDatabaseEntity, IZeroEntity
   {
     /// <inheritdoc/>
     [GenerateId]

@@ -26,6 +26,7 @@
       public const string SharedAppId = "shared";
       public const string CollectionPrefix = "zero.";
       public const string ReservationPrefix = "zero.";
+      public const string Expires = Raven.Client.Constants.Documents.Metadata.Expires;
     }
 
     public static class Sections

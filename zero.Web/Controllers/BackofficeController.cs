@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using zero.Core;
+using zero.Core.Api;
+using zero.Core.Entities;
 using zero.Core.Identity;
 using zero.Web.Mapper;
+using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
@@ -13,11 +16,14 @@ namespace zero.Web.Controllers
 
     protected IMapper Mapper { get; set; }
 
+    protected IToken Token { get; set; }
 
-    public BackofficeController(IZeroConfiguration config, IMapper mapper)
+
+    public BackofficeController(IZeroConfiguration config, IMapper mapper, IToken token)
     {
       Configuration = config;
       Mapper = mapper;
+      Token = token;
     }
 
 
@@ -27,7 +33,7 @@ namespace zero.Web.Controllers
     }
 
 
-    protected IActionResult Json<T, TTarget>(T model) where TTarget : class, new()
+    protected async Task<IActionResult> As<T, TTarget>(T model) where TTarget : class, new() where T : IZeroEntity
     {
       if (model == null)
       {
@@ -39,7 +45,23 @@ namespace zero.Web.Controllers
         // TODO show error with help on how to inject mapper in constructor + base constructor
       }
 
-      return Json(Mapper.Map<T, TTarget>(model));
+      TTarget result = Mapper.Map<T, TTarget>(model);
+
+      //if (result is EditModel)
+      //{
+      //  (result as EditModel).Meta = new EditModelMeta()
+      //  {
+      //    Token = await Token.Get(model)
+      //  };
+      //}
+
+      return Json(result);
+    }
+
+
+    protected TTarget Map<T, TTarget>(T model) where TTarget : class, new()
+    {
+      return Mapper.Map<T, TTarget>(model);
     }
   }
 }

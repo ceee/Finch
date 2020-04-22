@@ -12,5 +12,11 @@ export default {
   getAll(query)
   {
     return Axios.get('countries/getAll', { params: query }).then(res => Promise.resolve(res.data));
+  },
+
+  // save a country
+  save(model)
+  {
+    return Axios.post('countries/save', model).then(res => Promise.resolve(res.data));
   }
 };

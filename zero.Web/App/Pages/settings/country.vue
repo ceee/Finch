@@ -11,10 +11,10 @@
       <ui-button :submit="true" label="Save" :state="form.state" />
     </ui-header-bar>
 
-    <div class="ui-form-box has-sidebar" label="General">
+    <div class="ui-view-box has-sidebar" label="General">
       <div class="ui-box">
         <ui-property label="@ui.name" :required="true">
-          <input v-model="model.name" type="text" class="ui-input" />
+          <input v-model="model.name" type="text" class="ui-input" maxlength="120" />
         </ui-property>
         <ui-property label="@country.fields.code" description="@country.fields.code_text" :required="true">
           <input v-model="model.code" type="text" class="ui-input country-flag-input" maxlength="2" />
@@ -23,7 +23,7 @@
           <ui-toggle v-model="model.isPreferred" />
         </ui-property>
       </div>
-      <aside class="ui-form-box-aside">
+      <aside class="ui-view-box-aside">
         <ui-property label="@ui.active" :vertical="true" :is-text="true">
           <ui-toggle v-model="model.isActive" />
         </ui-property>
@@ -90,22 +90,15 @@
       {
         form.load(CountriesApi.getById(this.id)).then(response =>
         {
-          console.info(response);
           this.model = response;
         });
       },
 
       onSubmit(form)
       {
-        form.handle(new Promise(resolve =>
+        form.handle(CountriesApi.save(this.model)).then(response =>
         {
-          setTimeout(() =>
-          {
-            resolve(true);
-          }, 1000);
-        })).then(() =>
-        {
-          form.setDirty(false);
+          console.info(response);
         });
       },
 

@@ -122,6 +122,7 @@ namespace zero.Web
       services.AddTransient<ICountriesApi, CountriesApi>();
       services.AddTransient<IUserApi, UserApi>();
       services.AddTransient<IUserRolesApi, UserRolesApi>();
+      services.AddTransient<IToken, Token>();
     }
 
     /// <summary>

@@ -14,7 +14,7 @@ namespace zero.Web.Controllers
   {
     private IUserApi Api { get; set; }
 
-    public UsersController(IZeroConfiguration config, IUserApi api, IMapper mapper) : base(config, mapper)
+    public UsersController(IZeroConfiguration config, IUserApi api, IMapper mapper, IToken token) : base(config, mapper, token)
     {
       Api = api;
     }
@@ -25,7 +25,7 @@ namespace zero.Web.Controllers
     /// </summary>    
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
-      return Json<User, UserEditModel>(await Api.GetUserById(id));
+      return await As<User, UserEditModel>(await Api.GetUserById(id));
     }
 
 

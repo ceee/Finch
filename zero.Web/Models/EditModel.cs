@@ -3,6 +3,11 @@
   public abstract class EditModel
   {
     /// <summary>
+    /// Id of the entity
+    /// </summary>
+    public string Id { get; set; }
+
+    /// <summary>
     /// Meta data for the entity
     /// </summary>
     public EditModelMeta Meta { get; set; } = new EditModelMeta();

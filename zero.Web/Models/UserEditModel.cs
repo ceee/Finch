@@ -6,8 +6,6 @@ namespace zero.Web.Models
 {
   public class UserEditModel : EditModel
   {
-    public string Id { get; set; }
-
     public string Name { get; set; }
 
     public bool IsActive { get; set; }

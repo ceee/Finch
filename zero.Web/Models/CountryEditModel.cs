@@ -4,8 +4,6 @@ namespace zero.Web.Models
 {
   public class CountryEditModel : EditModel
   {
-    public string Id { get; set; }
-
     public string Name { get; set; }
 
     public bool IsActive { get; set; }

@@ -12,6 +12,9 @@
     public string[] SupportedLanguages { get; private set; } = new string[] { "en-US", "de-DE" };
 
     /// <inheritdoc />
+    public int TokenExpiration { get; set; }
+
+    /// <inheritdoc />
     public RavenConfig Raven { get; set; }
 
     /// <inheritdoc />
@@ -35,6 +38,11 @@
     /// Language ISO codes which are supported by the zero backoffice
     /// </summary>
     string[] SupportedLanguages { get; }
+
+    /// <summary>
+    /// Expiration in minutes of a generated change token for an entity
+    /// </summary>
+    int TokenExpiration { get; set; }
 
     /// <summary>
     /// RavenDB configuration data

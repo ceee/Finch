@@ -26,7 +26,7 @@
 
 
 <script>
-  const KNOWN_ERRORS = [403, 404, 504];
+  const KNOWN_ERRORS = [403, 404, 409, 504];
 
   export default {
 

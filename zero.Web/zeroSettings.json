@@ -5,6 +5,7 @@
     "en-US",
     "de-DE"
   ],
+  "TokenExpiration": 60,
   "Raven": {
     "Url": "http://localhost:9800",
     "Database": "zero"
