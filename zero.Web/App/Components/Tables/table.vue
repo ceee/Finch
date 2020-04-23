@@ -333,10 +333,13 @@
   a.ui-table-cell
   {
     color: var(--color-fg);
+    transition: none;
    
     &:hover
     {
-      text-decoration: underline;
+      //text-decoration: underline;
+      color: var(--color-primary);
+      background: var(--color-bg-xxlight);
     }
   }
 

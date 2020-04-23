@@ -96,6 +96,29 @@ namespace zero.Core.Api
 
       return EntityResult<Country>.Success(model);
     }
+
+
+    /// <inheritdoc />
+    public async Task<EntityResult<Country>> Delete(string id)
+    {
+      return EntityResult<Country>.Success();
+
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        Country country = await session.LoadAsync<Country>(id);
+
+        if (country == null)
+        {
+          return EntityResult<Country>.Fail("@errors.ondelete.idnotfound");
+        }
+
+        session.Delete(country);
+
+        await session.SaveChangesAsync();
+      }
+
+      return EntityResult<Country>.Success();
+    }
   }
 
 
@@ -120,5 +143,10 @@ namespace zero.Core.Api
     /// Creates or updates a country
     /// </summary>
     Task<EntityResult<Country>> Save(Country model);
+
+    /// <summary>
+    /// Deletes a country by Id
+    /// </summary>
+    Task<EntityResult<Country>> Delete(string id);
   }
 }

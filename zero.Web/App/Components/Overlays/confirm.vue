@@ -1,9 +1,12 @@
 ﻿<template>
   <div class="app-confirm">
-    <h2 class="ui-headline">{{overlay.title}}</h2>
-    <p>{{overlay.text}}</p>
-    <ui-button type="light" :label="overlay.closeLabel" @click="overlay.close"></ui-button>
-    <ui-button :label="overlay.confirmLabel" @click="confirm"></ui-button>
+    <h2 class="ui-headline" v-localize="overlay.title"></h2>
+    <p v-localize:html="overlay.text"></p>
+    <ui-error ref="error" style="margin-top: 25px;" />
+    <div class="app-confirm-buttons">
+      <ui-button type="light" :label="overlay.closeLabel" :disabled="state == 'loading'" @click="overlay.close"></ui-button>
+      <ui-button :type="overlay.confirmType" :state="state" :label="overlay.confirmLabel" @click="confirm"></ui-button>
+    </div>
   </div>
 </template>
 
@@ -19,7 +22,7 @@
     },
 
     data: () => ({
-      
+      state: 'default'
     }),
 
     mounted()
@@ -31,9 +34,33 @@
 
       confirm()
       {
-        this.overlay.confirm({ success: true });
-      }
+        var instance = this;
 
+        this.overlay.confirm({
+          hide()
+          {
+            instance.overlay.close();
+          },
+          state(state)
+          {
+            instance.state = state;
+          },
+          errors(errors)
+          {
+            instance.state = 'error';
+
+            if (!errors)
+            {
+              instance.$refs.error.clear();
+            }
+            else
+            {
+              instance.$refs.error.set(errors);
+            }
+          },
+          success: true
+        });
+      }
     }
   }
 </script>
@@ -42,5 +69,10 @@
   .app-confirm
   {
     width: 400px;
+  }
+
+  .app-confirm-buttons
+  {
+    margin-top: 30px;
   }
 </style>

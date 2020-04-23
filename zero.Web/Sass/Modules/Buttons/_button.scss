@@ -93,6 +93,13 @@ button::-moz-focus-inner
     border: none;
   }
 
+  &.type-danger
+  {
+    background: var(--color-negative);
+    color: white;
+    border: none;
+  }
+
   &.type-white
   {
     background: var(--color-box);
@@ -168,7 +175,7 @@ button::-moz-focus-inner
   height: 100%;
   z-index: 2;
   border-radius: 40px;
-  border: 2px solid var(--color-fg-mid);
+  border: 2px solid rgba(white, 0.2);
   border-left-color: var(--color-bg);
   opacity: 1;
   will-change: transform;

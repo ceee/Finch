@@ -11,6 +11,23 @@ export default new Vue({
 
   methods: {
 
+    // open a deletion confirm dialog with the given options
+    confirmDelete(title, text)
+    {
+      let options = _extend({
+        title: typeof title === 'string' ? title : '@deleteoverlay.title',
+        text: text || '@deleteoverlay.text',
+        confirmLabel: '@deleteoverlay.confirm',
+        confirmType: 'danger',
+        closeLabel: '@deleteoverlay.close',
+        component: AppConfirm,
+        autoclose: false,
+        softdismiss: false
+      }, typeof title === 'object' ? title : {});
+
+      return this.open(options);
+    },
+
     // open a confirm dialog with the given options
     confirm(title, text)
     {
@@ -18,8 +35,11 @@ export default new Vue({
         title: title,
         text: text,
         confirmLabel: '@ui.confirm',
+        confirmType: 'default',
         closeLabel: '@ui.close',
-        component: AppConfirm
+        component: AppConfirm,
+        autoclose: true,
+        softdismiss: false
       }, typeof title === 'object' ? title : {});
 
       return this.open(options);
@@ -31,6 +51,8 @@ export default new Vue({
     {
       options.id = Strings.guid();
 
+      options.hide = this.close;
+
       this.instances.push(options);
 
       return new Promise((resolve, reject) =>
@@ -38,12 +60,15 @@ export default new Vue({
         options.close = () =>
         {
           this.close(options);
-          reject();
+          reject(options);
         };
         options.confirm = data =>
         {
-          this.close(options);
-          resolve(data);
+          if (options.autoclose)
+          {
+            this.close(options);
+          }
+          resolve(data, options);
         };
       });
     },

@@ -78,18 +78,18 @@
       width: 16px;
       border-radius: 20px;
       margin: 2px;
-      background: var(--color-fg);
+      background: var(--color-primary);
       transition: all 0.2s ease;
     }
 
     &.is-active
     {
-      background: var(--color-fg);
+      background: var(--color-primary);
       border-color: transparent;
 
       i
       {
-        background: var(--color-bg);
+        background: var(--color-primary-fg);
         transform: translateX(18px);
       }
     }

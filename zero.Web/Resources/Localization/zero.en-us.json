@@ -9,6 +9,7 @@
     "back": "Go back",
     "close": "Close",
     "confirm": "Confirm",
+    "save": "Save",
     "createdDate": "Created at",
     "id": "ID",
     "active": "Published",
@@ -21,10 +22,14 @@
       "placeholder": "Search ...",
       "button": "Search"
     },
-    "name": "Name"
+    "name": "Name",
+    "tab_general": "General"
   },
 
   "errors": {
+    "ondelete": {
+      "idnotfound": "Could not find an entity for the given ID"
+    },
     "http": {
       "403": "Unauthorized",
       "403_text": "You are not allowed to view this resource",
@@ -44,6 +49,13 @@
   "unsavedchanges": {
     "close": "Discard changes",
     "confirm": "Stay"
+  },
+
+  "deleteoverlay": {
+    "close": "Cancel",
+    "confirm": "Delete",
+    "title": "Delete entity",
+    "text": "Are you sure you want to delete this entity?",
   },
 
   "sections": {

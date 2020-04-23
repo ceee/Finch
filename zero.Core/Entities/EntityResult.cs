@@ -78,6 +78,13 @@ namespace zero.Core.Entities
       return result;
     }
 
+    public static EntityResult<T> Fail(string message)
+    {
+      EntityResult<T> result = new EntityResult<T>();
+      result.AddError(message);
+      return result;
+    }
+
     public static EntityResult<T> Fail(ValidationResult validation) => new EntityResult<T>(validation);
 
     public static EntityResult<T> Fail(EntityResultError error) => Fail(error.Property, error.Message);

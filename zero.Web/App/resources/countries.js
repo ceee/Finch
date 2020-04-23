@@ -18,5 +18,11 @@ export default {
   save(model)
   {
     return Axios.post('countries/save', model).then(res => Promise.resolve(res.data));
+  },
+
+  // deletes a country
+  delete(id)
+  {
+    return Axios.post('countries/delete', { params: { id } }).then(res => Promise.resolve(res.data));
   }
 };

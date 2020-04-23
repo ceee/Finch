@@ -2,16 +2,16 @@
   <ui-form ref="form" class="country" v-slot="form" @submit="onSubmit" @load="onLoad">
 
     <ui-header-bar :title="model.name" title-empty="@country.name">
-      <ui-dropdown align="right">
+      <!--<ui-dropdown align="right">
         <template v-slot:button>
-          <ui-button type="light" label="Actions" caret="down" />
+          <ui-button type="light" label="@ui.actions" caret="down" />
         </template>
-        <ui-dropdown-list :items="actions" :action="actionSelected" />
-      </ui-dropdown>
-      <ui-button :submit="true" label="Save" :state="form.state" />
+        <ui-dropdown-list v-model="actions" />
+      </ui-dropdown>-->
+      <ui-button :submit="true" label="@ui.save" :state="form.state" />
     </ui-header-bar>
 
-    <div class="ui-view-box has-sidebar" label="General">
+    <div class="ui-view-box has-sidebar" label="@ui.tab_general">
       <div class="ui-box">
         <ui-property label="@ui.name" :required="true">
           <input v-model="model.name" type="text" class="ui-input" maxlength="120" />
@@ -42,6 +42,7 @@
 
 <script>
   import CountriesApi from 'zero/resources/countries';
+  import Overlay from 'zero/services/overlay.js'
 
   export default {
     props: ['id'],
@@ -59,16 +60,9 @@
     created()
     {
       this.actions.push({
-        name: 'Disable',
-        icon: 'fth-minus-circle'
-      });
-      this.actions.push({
-        name: 'Change password',
-        icon: 'fth-lock'
-      });
-      this.actions.push({
         name: 'Delete',
-        icon: 'fth-x'
+        icon: 'fth-trash',
+        action: this.onDelete
       });
     },
 
@@ -81,11 +75,6 @@
 
     methods: {
 
-      onBack()
-      {
-        this.$router.go(-1);
-      },
-
       onLoad(form)
       {
         form.load(CountriesApi.getById(this.id)).then(response =>
@@ -96,15 +85,37 @@
 
       onSubmit(form)
       {
+        //this.model.id = "zero.countries.16-B";
         form.handle(CountriesApi.save(this.model)).then(response =>
         {
           console.info(response);
         });
       },
 
-      actionSelected(item, dropdown)
+      onDelete(item, opts)
       {
-        dropdown.hide();
+        opts.hide();
+
+        Overlay.confirmDelete().then((opts) =>
+        {
+          console.info('click');
+          opts.state('loading');
+
+          CountriesApi.delete(this.id).then(response =>
+          {
+            if (response.success)
+            {
+              opts.state('success');
+              opts.hide();
+              this.$router.go(-1);
+              // TODO show message
+            }
+            else
+            {
+              opts.errors(response.errors);
+            }
+          });
+        }); 
       }
     }
   }

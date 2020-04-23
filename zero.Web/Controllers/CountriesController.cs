@@ -45,9 +45,21 @@ namespace zero.Web.Controllers
     /// Save country
     /// </summary>
     [VerifyToken]
+    [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Write)]
     public async Task<IActionResult> Save([FromBody] CountryEditModel model)
     {
       return Json(await Api.Save(Mapper.Map<CountryEditModel, Country>(model)));
+    }
+
+
+    /// <summary>
+    /// Deletes a country
+    /// </summary>
+    [VerifyToken]
+    [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Write)]
+    public async Task<IActionResult> Delete([FromQuery] string id)
+    {
+      return Json(await Api.Delete(id));
     }
   }
 }

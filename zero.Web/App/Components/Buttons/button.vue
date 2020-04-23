@@ -1,5 +1,5 @@
 ﻿<template>
-  <button :type="buttonType" class="ui-button has-state" :class="buttonClass" :disabled="disabled" @click="tryClick">
+  <button :type="buttonType" class="ui-button has-state" :class="buttonClass" :disabled="disabled || state == 'loading'" @click="tryClick">
     <span class="ui-button-text" v-localize="label"></span>
     <i v-if="caret" class="ui-button-caret" :class="caretClass"></i>
     <i v-if="icon" class="ui-button-icon" :class="icon"></i>

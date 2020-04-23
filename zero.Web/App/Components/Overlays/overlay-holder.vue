@@ -2,7 +2,7 @@
   <div class="app-overlays" :class="{ 'has-multiple': instances.length > 1 }">
     <transition-group name="overlay" :duration="300">
       <div class="app-overlay-outer" v-for="instance in instances" :key="instance.id">
-        <div class="app-overlay-bg" @click="close"></div>
+        <div class="app-overlay-bg" @click="close(instance)"></div>
         <dialog open class="app-overlay">
           <component :is="instance.component" :model.sync="instance.model" :overlay="instance"></component>
         </dialog>
@@ -21,9 +21,12 @@
     }),
 
     methods: {
-      close()
+      close(instance)
       {
-        Overlay.close();
+        if (instance.softdismiss !== false)
+        {
+          Overlay.close();
+        }
       }
     }
   }

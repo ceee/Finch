@@ -74,6 +74,7 @@
     border-radius: var(--radius);
     position: relative;
     line-height: 20px;
+    text-align: left;
 
     &.type-warn
     {

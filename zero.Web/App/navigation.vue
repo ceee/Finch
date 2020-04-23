@@ -7,7 +7,7 @@
       <template v-slot:button>
         <ui-button type="action block" :label="applications[0].name" caret="down" />
       </template>
-      <ui-dropdown-list :items="applicationItems" :action="applicationChanged" />
+      <ui-dropdown-list v-model="applicationItems" :action="applicationChanged" />
     </ui-dropdown>
 
     <nav class="app-nav-inner">
@@ -36,7 +36,7 @@
             <i class="-arrow fth-chevron-down"></i>
           </button>
         </template>
-        <ui-dropdown-list :items="userActions" />
+        <ui-dropdown-list v-model="userActions" />
       </ui-dropdown>
     </footer>
 

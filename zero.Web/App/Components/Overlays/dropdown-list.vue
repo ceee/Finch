@@ -1,11 +1,12 @@
 ﻿<template>
   <div class="ui-dropdown-list" :class="{ 'is-multiline': multiline }">
-    <template v-for="item in items">
+    <template v-for="item in value">
       <button v-if="!item.type || item.type === 'button'" :disabled="item.disabled" type="button" @click="clicked(item)" 
               class="ui-dropdown-list-item" :class="{ 'has-icon': item.icon, 'is-active': item.active || item.isActive }">
         <i v-if="item.icon" class="ui-dropdown-list-item-icon" :class="item.icon" :style="{ color: item.color ? item.color : null }"></i>
         {{item.name | localize}}
         <i v-if="item.active || item.isActive" class="ui-dropdown-list-item-selected fth-check"></i>
+        <i v-if="item.loading" class="ui-dropdown-list-item-progress"></i>
       </button>
       <hr class="ui-dropdown-list-separator" v-if="item.type === 'separator'">
     </template>
@@ -24,7 +25,7 @@
         type: Boolean,
         default: false
       },
-      items: {
+      value: {
         type: Array,
         required: true,
         default: []
@@ -40,7 +41,10 @@
     }),
 
     watch: {
-      
+      value: function (val)
+      {
+        console.info(JSON.parse(JSON.stringify(val)));
+      }
     },
 
     mounted ()
@@ -67,8 +71,23 @@
 
       clicked(item)
       {
-        let baseObj = typeof item.action === 'function' ? item : this;
-        baseObj.action(item, this.dropdown);
+        var instance = this;
+
+        if (!item.loading && !item.disabled)
+        {
+          let baseObj = typeof item.action === 'function' ? item : this;
+          baseObj.action(item, {
+            dropdown: this.dropdown,
+            hide()
+            {
+              this.dropdown.hide();
+            },
+            loading(isLoading)
+            {
+              instance.$set(item, 'loading', isLoading);
+            }
+          });
+        }
       }
 
     }
@@ -155,5 +174,33 @@
   {
     border-bottom-color: var(--color-highlight);
     margin: 5px 0;
+  }
+
+  .ui-dropdown-list-item-progress
+  {   
+    width: 16px;
+    height: 16px;
+    z-index: 2;
+    border-radius: 40px;
+    border: 2px solid transparent;
+    border-left-color: var(--color-fg);
+    opacity: 1;
+    will-change: transform;
+    animation: rotating .5s linear infinite;
+    transition: opacity .25s ease;
+  }
+
+  @keyframes rotating
+  {
+    from
+    {
+      -webkit-transform: rotate(0);
+      transform: rotate(0)
+    }
+    to
+    {
+      -webkit-transform: rotate(1turn);
+      transform: rotate(1turn)
+    }
   }
 </style>
