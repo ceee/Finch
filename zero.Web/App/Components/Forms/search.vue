@@ -48,8 +48,7 @@
 
     .ui-input
     {
-      display: inline-block;
-      width: auto;
+      display: block;
       min-width: 320px;
       padding-right: 40px;
     }

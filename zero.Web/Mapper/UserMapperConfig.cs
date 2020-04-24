@@ -44,7 +44,7 @@ namespace zero.Web.Mapper
         target.Name = source.Name;
         target.IsActive = source.IsActive && (!source.LockoutEnabled || !source.LockoutEnd.HasValue);
         target.Email = source.Email;
-        target.Avatar = "http://localhost:14051/media/UserAvatars/09eb6d4d41894a44a9585b94bf9cff41.jpg?width=50&height=50&mode=crop"; // TODO //source.Avatar?.Source;
+        target.Avatar = "https://fifty.brothers.studio/Media/Avatars/tobi.jpg"; // TODO //source.Avatar?.Source;
         target.Roles = String.Join(", ", source.Roles); // TODO get name from alias
       });
 
