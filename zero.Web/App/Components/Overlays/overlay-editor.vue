@@ -36,8 +36,8 @@
     {
       display: flex;
       justify-content: flex-end;
-      padding: var(--padding);
-      padding-top: 0;
+      padding: 20px var(--padding);
+      border-top: 1px solid var(--color-line);
     }
 
     > content

@@ -2,12 +2,12 @@
   <ui-form ref="form" class="role" v-slot="form" @submit="onSubmit" @load="onLoad">
 
     <ui-header-bar :title="model.name" title-empty="@role.name" :back-button="true">
-      <!--<ui-dropdown align="right">
+      <ui-dropdown align="right">
         <template v-slot:button>
           <ui-button type="light" label="@ui.actions" caret="down" />
         </template>
         <ui-dropdown-list v-model="actions" />
-      </ui-dropdown>-->
+      </ui-dropdown>
       <ui-button :submit="true" label="@ui.save" :state="form.state" />
     </ui-header-bar>
 

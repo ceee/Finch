@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-iconpicker">
-    <input type="hidden" :value="value" @input="onChange" />
+    <input ref="input" type="text" :value="value" />
     <ui-select-button :icon="value" label="@ui.icon" :description="buttonDescription" @click="pick" />
   </div>
 </template>
@@ -45,11 +45,12 @@
 
     methods: {
 
-      onChange(ev)
+      onChange(value)
       {
-        this.$emit('input', !this.value);
+        this.$emit('change', value);
+        this.$emit('input', value);
+        // TODO this does not trigger the forms dirty flag
       },
-
 
       pick()
       {
@@ -64,7 +65,8 @@
 
         return Overlay.open(options).then(value =>
         {
-          this.$emit('input', value);
+          this.onChange(value);
+          //this.$refs.input.value = value;
         });
       }
       

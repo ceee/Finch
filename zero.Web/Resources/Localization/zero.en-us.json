@@ -49,8 +49,10 @@
   },
 
   "unsavedchanges": {
+    "title": "You have unsaved changes",
+    "text": "Are you sure you want to navigate away from this page?",
     "close": "Discard changes",
-    "confirm": "Stay"
+    "confirm": "Stay on page"
   },
 
   "deleteoverlay": {

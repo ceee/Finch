@@ -10,12 +10,12 @@
     <ui-search class="ui-iconpicker-overlay-search" v-model="query" />
 
     <div class="ui-iconpicker-overlay-colors">
-      <i v-for="col in colors" :class="{ 'is-active': ('color-' + col) === color || (col === 'default' && !color), ['bg-color-' + col]: true }" @click="selectColor(col)" :title="color"></i>
+      <i v-for="col in colors" :class="{ 'is-active': ('color-' + col) === color || (col === 'default' && !color), ['bg-color-' + col]: true }" @click="selectColor(col)" :title="col"></i>
     </div>
 
     <hr class="ui-iconpicker-overlay-line">
 
-    <div class="ui-iconpicker-overlay-items" :class="color">
+    <div class="ui-iconpicker-overlay-items">
       <button v-for="item in items" type="button" class="ui-iconpicker-overlay-item" :class="{ 'is-active': item === icon, [color]: item === icon }" :title="item" @click="select(item)">
         <i :class="item"></i>
       </button>
@@ -160,7 +160,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0 2px;
+    margin: 0 20px;
 
     i
     {
@@ -169,7 +169,6 @@
       height: 16px;
       border-radius: 20px;
       cursor: pointer;
-      border: 2px solid transparent;
       transition: transform 0.2s ease;
 
       &.is-active

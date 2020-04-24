@@ -66,11 +66,6 @@
 </script>
 
 <style lang="scss">
-  .app-confirm
-  {
-    width: 400px;
-  }
-
   .app-confirm-buttons
   {
     margin-top: 30px;

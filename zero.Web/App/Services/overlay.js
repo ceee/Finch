@@ -46,7 +46,7 @@ export default new Vue({
     // opens an overlay
     open(options)
     {
-      const defaultWidth = options.display === 'editor' ? 560 : 400;
+      const defaultWidth = options.display === 'editor' ? 560 : 460;
 
       options = _extend({
         id: Strings.guid(),

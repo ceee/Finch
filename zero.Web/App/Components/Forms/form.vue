@@ -56,8 +56,8 @@
         if (this.dirty)
         {
           Overlay.confirm({
-            title: 'You have unsaved changes',
-            text: 'Are you sure you want to navigate away from this page?',
+            title: '@unsavedchanges.title',
+            text: '@unsavedchanges.text',
             confirmLabel: '@unsavedchanges.confirm',
             closeLabel: '@unsavedchanges.close'
           }).then(
