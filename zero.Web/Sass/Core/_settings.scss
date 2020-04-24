@@ -97,14 +97,52 @@
 }
 
 
+$accent-color-prefix: --color-accent;
+$accent-colors: (
+  "blue-gray": "#527281",
+  "gray": "#8a9598",
+  "brown": "#795548",
+  "blue": "#429be2",
+  "purple": "#9f3f9d",
+  "teal": "#3bb1c0",
+  "green": "#2fbb98",
+  "lime": "#a0db61",
+  "yellow": "#ffd100",
+  "orange": "#f6b226",
+  "red": "#d82853"
+);
+
 :root
 {
-  --color-accent-yellow: #ffd100;
+  @each $name, $hex in $accent-colors
+  {
+    #{$accent-color-prefix}-#{$name}: unquote($hex);
+  }
 }
 
-.color-yellow
+@each $name, $hex in $accent-colors
 {
-  color: var(--color-accent-yellow);
+  $var: #{$accent-color-prefix}-#{$name};
+
+  .color-#{$name}
+  {
+    color: var(#{$var});
+  }
+
+  .bg-color-#{$name}
+  {
+    background: var(#{$var});
+  }
+}
+
+.color-default
+{
+  color: var(--color-fg);
+}
+
+.bg-color-default
+{
+  background: var(--color-fg);
 }
 
 

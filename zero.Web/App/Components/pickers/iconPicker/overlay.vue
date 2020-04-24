@@ -9,8 +9,14 @@
 
     <ui-search class="ui-iconpicker-overlay-search" v-model="query" />
 
+    <div class="ui-iconpicker-overlay-colors">
+      <i v-for="col in colors" :class="{ 'is-active': ('color-' + col) === color || (col === 'default' && !color), ['bg-color-' + col]: true }" @click="selectColor(col)" :title="color"></i>
+    </div>
+
+    <hr class="ui-iconpicker-overlay-line">
+
     <div class="ui-iconpicker-overlay-items" :class="color">
-      <button v-for="item in items" type="button" class="ui-iconpicker-overlay-item" :class="{ 'is-active': item === icon }" :title="item" @click="select(item)">
+      <button v-for="item in items" type="button" class="ui-iconpicker-overlay-item" :class="{ 'is-active': item === icon, [color]: item === icon }" :title="item" @click="select(item)">
         <i :class="item"></i>
       </button>
     </div>
@@ -29,6 +35,7 @@
     },
 
     data: () => ({
+      colors: [ 'default', 'gray', 'blue-gray', 'blue', 'teal', 'green', 'lime', 'yellow', 'orange', 'red', 'purple', 'brown' ],
       icon: null,
       color: null,
       query: '',
@@ -65,6 +72,11 @@
       {
         this.icon = item;
         this.confirm();
+      },
+
+      selectColor(color)
+      {
+        this.color = color === 'default' ? null : 'color-' + color;
       },
 
       init()
@@ -140,5 +152,35 @@
   .ui-iconpicker-overlay-search
   {
     margin-bottom: 20px;
+  }
+
+  .ui-iconpicker-overlay-colors
+  {
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 2px;
+
+    i
+    {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.2s ease;
+
+      &.is-active
+      {
+        transform: scale(1.4);
+      }
+    }
+  }
+
+  .ui-iconpicker-overlay-line
+  {
+
   }
 </style>
