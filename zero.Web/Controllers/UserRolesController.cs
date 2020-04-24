@@ -10,31 +10,31 @@ using zero.Web.Models;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Read)]
-  public class UsersController : BackofficeController
+  public class UserRolesController : BackofficeController
   {
-    private IUserApi Api { get; set; }
+    private IUserRolesApi Api { get; set; }
 
-    public UsersController(IZeroConfiguration config, IUserApi api, IMapper mapper, IToken token) : base(config, mapper, token)
+    public UserRolesController(IZeroConfiguration config, IUserRolesApi api, IMapper mapper, IToken token) : base(config, mapper, token)
     {
       Api = api;
     }
 
 
     /// <summary>
-    /// Get user by id
+    /// Get role by id
     /// </summary>    
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
-      return As<User, UserEditModel>(await Api.GetUserById(id));
+      return As<UserRole, UserRoleEditModel>(await Api.GetById(id));
     }
 
 
     /// <summary>
-    /// Get all users
+    /// Get all roles
     /// </summary>    
-    public async Task<IActionResult> GetAll([FromQuery] ListQuery<User> query)
+    public async Task<IActionResult> GetAll()
     {
-      return As<User, UserListModel>(await Api.GetByQuery(query, "zero.applications.1-A"));
+      return As<UserRole, UserRoleListModel>(await Api.GetAll());
     }
   }
 }

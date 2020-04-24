@@ -29,6 +29,15 @@ namespace zero.Web.Mapper
         target.LanguageId = source.LanguageId;
         target.Code = source.Code;
       });
+
+      config.CreateMap<Country, CountryListModel>((source, target) =>
+      {
+        target.Id = source.Id;
+        target.Name = source.Name;
+        target.IsActive = source.IsActive;
+        target.IsPreferred = source.IsPreferred;
+        target.Code = source.Code;
+      });
     }
   }
 }

@@ -1,12 +1,16 @@
-﻿import { map as _map, find as _find } from 'underscore';
+﻿import { map as _map, find as _find, isArray as _isArray } from 'underscore';
 
 const alias = zero.alias.sections.settings;
 const section = _find(zero.sections, section => section.alias === alias);
 let routes = [];
 
 const detailPages = [];
-detailPages[zero.alias.settings.users] = 'user';
+detailPages[zero.alias.settings.users] = [
+  { view: 'user' },
+  { view: 'role', path: 'role' }
+];
 detailPages[zero.alias.settings.countries] = 'country';
+
 
 if (section)
 {
@@ -25,14 +29,38 @@ if (section)
     // add details page
     if (detailPages[area.alias])
     {
-      routes.push({
-        path: area.url + '/edit/:id',
-        name: alias + '-' + area.alias + '-edit',
-        component: () => import(`zero/pages/${alias}/${detailPages[area.alias]}`),
-        props: true,
-        meta: {
-          name: [area.name, section.name]
-        }
+      var config = detailPages[area.alias];
+      var details = [];
+
+      if (typeof config === 'string')
+      {
+        details.push({
+          view: config,
+          path: 'edit'
+        });
+      }
+      else if (_isArray(config))
+      {
+        details = config;
+      }
+      else if (typeof config === 'object')
+      {
+        details.push(config);
+      }
+
+      details.forEach(detail =>
+      {
+        const path = detail.path || 'edit';
+
+        routes.push({
+          path: area.url + '/' + path + '/:id',
+          name: alias + '-' + area.alias + '-' + path,
+          component: () => import(`zero/pages/${alias}/${detail.view}`),
+          props: true,
+          meta: {
+            name: [area.name, section.name]
+          }
+        });
       });
     }
   }));

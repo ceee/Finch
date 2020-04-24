@@ -299,7 +299,7 @@
 
   .ui-table-cell
   {
-    display: inline-block;
+    display: inline-flex;
     align-items: center;
     flex: 1 1 5%;
     position: relative;
@@ -438,11 +438,5 @@
         color: var(--color-accent-success);
       }
     }
-  }
-
-  .ui-table .flag
-  {
-    position: relative;
-    top: 2px;
   }
 </style>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -18,96 +19,58 @@ namespace zero.Core.Api
 
     protected UserManager<User> UserManager { get; private set; }
 
+    protected RoleManager<UserRole> RoleManager { get; private set; }
+
     private ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
 
-    public UserRolesApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
+    public UserRolesApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, RoleManager<UserRole> roleManager)
     {
       Raven = raven;
       HttpContextAccessor = httpContextAccessor;
       UserManager = userManager;
+      RoleManager = roleManager;
     }
 
 
     /// <inheritdoc />
-    public async Task<User> GetUser()
+    public async Task<IList<UserRole>> GetAll()
     {
-      User user = await UserManager.GetUserAsync(HttpContextAccessor.HttpContext.User);
-      return user;
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        return await session.Query<UserRole>().OrderBy(x => x.Sort).ThenBy(x => x.Name).ToListAsync();
+      }
     }
 
 
     /// <inheritdoc />
-    public async Task<User> GetUserById(string id)
+    public async Task<UserRole> GetById(string id)
     {
-      User user = await UserManager.FindByIdAsync(id);
-      return user;
+      return await RoleManager.FindByIdAsync(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<User> GetUserByEmail(string email)
-    {
-      User user = await UserManager.FindByEmailAsync(email);
-      return user;
-    }
-
-
-    /// <inheritdoc />
-    public bool IsSuper()
-    {
-      return Principal.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
-    }
-
-
-    /// <inheritdoc />
-    public bool IsAdmin()
-    {
-      return Principal.HasClaim(Constants.Auth.Claims.Role, "administrator"); // TODO use constant (in setup as well)
-    }
-
-
-    /// <inheritdoc />
-    public IList<Permission> GetPermissions(string prefix = null)
-    {
-      return Principal.Claims
-        .Where(claim => claim.Type == Constants.Auth.Claims.Permission && (prefix == null || claim.Value.StartsWith(prefix)))
-        .Select(claim => new Permission(claim, prefix))
-        .ToList();
-    }
+    //public IList<Permission> GetPermissions(string prefix = null)
+    //{
+    //  return Principal.Claims
+    //    .Where(claim => claim.Type == Constants.Auth.Claims.Permission && (prefix == null || claim.Value.StartsWith(prefix)))
+    //    .Select(claim => new Permission(claim, prefix))
+    //    .ToList();
+    //}
   }
 
 
   public interface IUserRolesApi
   {
     /// <summary>
-    /// Get currently logged-in user
+    /// Get all user roles
     /// </summary>
-    Task<User> GetUser();
+    Task<IList<UserRole>> GetAll();
 
     /// <summary>
-    /// Find user by id
+    /// Get role by id
     /// </summary>
-    Task<User> GetUserById(string id);
-
-    /// <summary>
-    /// Find user by email
-    /// </summary>
-    Task<User> GetUserByEmail(string email);
-
-    /// <summary>
-    /// Whether the current user is the super user who created the zero instance
-    /// </summary>
-    bool IsSuper();
-
-    /// <summary>
-    /// Whether the current user belongs to the administrator role (will always return false if this role gets deleted)
-    /// </summary>
-    bool IsAdmin();
-
-    /// <summary>
-    /// Get all permissions for the current user with an optional prefix
-    /// </summary>
-    IList<Permission> GetPermissions(string prefix = null);
+    Task<UserRole> GetById(string id);
   }
 }

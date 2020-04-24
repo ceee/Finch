@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
@@ -33,7 +34,7 @@ namespace zero.Web.Controllers
     }
 
 
-    protected async Task<IActionResult> As<T, TTarget>(T model) where TTarget : class, new() where T : IZeroEntity
+    protected IActionResult As<T, TTarget>(T model) where TTarget : class, new() where T : IZeroEntity
     {
       if (model == null)
       {
@@ -47,15 +48,46 @@ namespace zero.Web.Controllers
 
       TTarget result = Mapper.Map<T, TTarget>(model);
 
-      //if (result is EditModel)
-      //{
-      //  (result as EditModel).Meta = new EditModelMeta()
-      //  {
-      //    Token = await Token.Get(model)
-      //  };
-      //}
+      return Json(result);
+    }
+
+
+    protected IActionResult As<T, TTarget>(IEnumerable<T> model) where TTarget : class, new() where T : IZeroEntity
+    {
+      if (model == null)
+      {
+        return new StatusCodeResult(404);
+      }
+
+      IList<TTarget> result = new List<TTarget>();
+
+      foreach (T item in model)
+      {
+        result.Add(Mapper.Map<T, TTarget>(item));
+      }
 
       return Json(result);
+    }
+
+
+    protected IActionResult As<T, TTarget>(ListResult<T> model) where TTarget : class, new() where T : IZeroEntity
+    {
+      if (model == null)
+      {
+        return new StatusCodeResult(404);
+      }
+
+      IList<TTarget> list = new List<TTarget>();
+
+      foreach (T item in model.Items)
+      {
+        list.Add(Mapper.Map<T, TTarget>(item));
+      }
+
+      return Json(new ListResult<TTarget>(list, model.TotalItems, model.Page, model.PageSize)
+      {
+        Statistics = model.Statistics
+      });
     }
 
 

@@ -28,7 +28,7 @@ namespace zero.Web.Controllers
     [AddToken]
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
-      return await As<Country, CountryEditModel>(await Api.GetById(id));
+      return As<Country, CountryEditModel>(await Api.GetById(id));
     }
 
 
@@ -37,7 +37,7 @@ namespace zero.Web.Controllers
     /// </summary>    
     public async Task<IActionResult> GetAll([FromQuery] ListQuery<Country> query)
     {
-      return Json(await Api.GetByQuery("en-US", query));
+      return As<Country, CountryListModel>(await Api.GetByQuery("en-US", query));
     }
 
 
@@ -48,7 +48,8 @@ namespace zero.Web.Controllers
     [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Write)]
     public async Task<IActionResult> Save([FromBody] CountryEditModel model)
     {
-      return Json(await Api.Save(Mapper.Map<CountryEditModel, Country>(model)));
+      Country country = Mapper.Map(model, await Api.GetById(model.Id));
+      return Json(await Api.Save(country));
     }
 
 

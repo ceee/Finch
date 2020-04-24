@@ -113,6 +113,10 @@
 
   "user": {
     "name": "User",
+    "users": "Users",
+    "roles": "Roles",
+    "count_permissions": "{count} permissions",
+    "one_permission": "1 permission",
     "fields": {
       "name_placeholder": "Enter your real name or a username",
       "email": "Email",
@@ -125,7 +129,8 @@
       "roles": "Roles",
       "roles_text": "Add default permissions from roles",
       "sections": "Sections",
-      "sections_text": "Specify access to backoffice sections"
+      "sections_text": "Specify access to backoffice sections",
+      "isActive": "Can login"
     }
   },
 
