@@ -59,14 +59,7 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(404);
       }
 
-      IList<TTarget> result = new List<TTarget>();
-
-      foreach (T item in model)
-      {
-        result.Add(Mapper.Map<T, TTarget>(item));
-      }
-
-      return Json(result);
+      return Json(Mapper.Map<T, TTarget>(model));
     }
 
 
@@ -77,17 +70,7 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(404);
       }
 
-      IList<TTarget> list = new List<TTarget>();
-
-      foreach (T item in model.Items)
-      {
-        list.Add(Mapper.Map<T, TTarget>(item));
-      }
-
-      return Json(new ListResult<TTarget>(list, model.TotalItems, model.Page, model.PageSize)
-      {
-        Statistics = model.Statistics
-      });
+      return Json(Mapper.Map<T, TTarget>(model));
     }
 
 

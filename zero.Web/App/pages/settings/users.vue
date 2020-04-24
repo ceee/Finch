@@ -1,13 +1,13 @@
 ﻿<template>
   <div class="users">
     <ui-header-bar title="Users & Permissions" :back-button="true">
-      <ui-button type="light" label="Add user" icon="fth-plus" />
       <ui-button type="light" label="Add role" icon="fth-plus" />
-      <!--<ui-table-filter :filter="false" />-->
+      <ui-button type="light" label="Add user" icon="fth-plus" />
+      <ui-table-filter v-model="usersConfig" />
     </ui-header-bar>
 
     <div class="ui-blank-box">
-      <h2 class="ui-headline users-group-headline" v-localize="'@user.roles'"></h2>
+      <h2 class="ui-headline users-group-headline" v-localize="'@role.roles'"></h2>
       <div class="users-roles">
         <router-link v-for="role in roles" :to="getRoleLink(role)" class="users-role">
           <i class="users-role-icon" :class="role.icon"></i>
@@ -70,7 +70,6 @@
       UserRolesApi.getAll().then(items =>
       {
         this.roles = items;
-        console.info(JSON.parse(JSON.stringify(items)));
       });
     },
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using zero.Core.Entities;
 
 namespace zero.Web.Mapper
 {
@@ -55,6 +56,37 @@ namespace zero.Web.Mapper
       Maps.Call(source, target);
 
       return target;
+    }
+
+
+    /// <inheritdoc />
+    public IEnumerable<TTarget> Map<TSource, TTarget>(IEnumerable<TSource> source) where TTarget : class, new()
+    {
+      IList<TTarget> target = new List<TTarget>();
+
+      foreach (TSource item in source)
+      {
+        target.Add(Map(item, new TTarget()));
+      }
+
+      return target;
+    }
+
+
+    /// <inheritdoc />
+    public ListResult<TTarget> Map<TSource, TTarget>(ListResult<TSource> source) where TTarget : class, new()
+    {
+      IList<TTarget> target = new List<TTarget>();
+
+      foreach (TSource item in source.Items)
+      {
+        target.Add(Map(item, new TTarget()));
+      }
+
+      return new ListResult<TTarget>(target, source.TotalItems, source.Page, source.PageSize)
+      {
+        Statistics = source.Statistics
+      };
     }
 
 
@@ -151,6 +183,16 @@ namespace zero.Web.Mapper
     /// Map an object to the target type given an already existing target instance
     /// </summary>
     TTarget Map<TSource, TTarget>(TSource source, TTarget target) where TTarget : class, new();
+
+    /// <summary>
+    /// Map a list of objects to the target type
+    /// </summary>
+    IEnumerable<TTarget> Map<TSource, TTarget>(IEnumerable<TSource> source) where TTarget : class, new();
+
+    /// <summary>
+    /// Map a list result containing objects to the target type
+    /// </summary>
+    ListResult<TTarget> Map<TSource, TTarget>(ListResult<TSource> source) where TTarget : class, new();
 
     /// <summary>
     /// Create a mapping from source to target object

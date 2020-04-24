@@ -7,12 +7,15 @@
     </div>
     <div class="ui-header-bar-aside">
       <slot></slot>
+      <ui-icon-button v-if="closeButton" @click="onClose" icon="fth-x" title="@ui.close" />
     </div>
   </div>
 </template>
 
 
 <script>
+  import Overlay from 'zero/services/overlay';
+
   export default {
     name: 'uiHeaderBar',
 
@@ -25,7 +28,11 @@
       },
       backButton: {
         type: Boolean,
-        default: true
+        default: false
+      },
+      closeButton: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -38,6 +45,10 @@
       onBack()
       {
         this.$router.go(-1);
+      },
+      onClose()
+      {
+        Overlay.close();
       }
     }
   }

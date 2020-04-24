@@ -1,10 +1,10 @@
 ﻿<template>
   <div class="app-overlays" :class="{ 'has-multiple': instances.length > 1 }">
-    <transition-group name="overlay" :duration="300">
-      <div class="app-overlay-outer" v-for="instance in instances" :key="instance.id">
+    <transition-group name="overlay" :duration="600">
+      <div class="app-overlay-outer" :display="instance.display" v-for="instance in instances" :key="instance.id">
         <div class="app-overlay-bg" @click="close(instance)"></div>
-        <dialog open class="app-overlay">
-          <component :is="instance.component" :model.sync="instance.model" :overlay="instance"></component>
+        <dialog open class="app-overlay" :style="{ width: instance.width + 'px' }" :display="instance.display">
+          <component :is="instance.component" :model.sync="instance.model" :config="instance"></component>
         </dialog>
       </div>
     </transition-group>
@@ -90,6 +90,21 @@
     font-size: var(--font-size);
   }
 
+  .app-overlay[display="editor"]
+  {
+    width: auto;
+    position: absolute;
+    left: auto;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 0;
+    box-shadow: -30px 0 40px var(--color-shadow);
+    text-align: left;
+    padding: 0;
+    max-width: 100%;
+  }
+
   .overlay-enter-active, .overlay-leave-active
   {
     .app-overlay-bg
@@ -100,6 +115,11 @@
     .app-overlay
     {
       transition: transform .3s ease, opacity .3s ease;
+    }
+
+    .app-overlay[display="editor"]
+    {
+     transition: transform .6s ease;
     }
   }
 
@@ -114,6 +134,12 @@
     {
       opacity: 0;
       transform: scale(0.95);
+    }
+
+    .app-overlay[display="editor"]
+    {
+      opacity: 1;
+      transform: scale(1) translateX(100%);
     }
   }
 

@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="page-container">
     <div class="page-container-tree" v-resizable="resizable">
-      <ui-header-bar title="Pages">
+      <ui-header-bar title="Pages" :back-button="false">
         <ui-dot-button />
       </ui-header-bar>
       <ui-tree :get="getItems" />

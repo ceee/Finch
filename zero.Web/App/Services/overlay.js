@@ -34,9 +34,6 @@ export default new Vue({
       let options = _extend({
         title: title,
         text: text,
-        confirmLabel: '@ui.confirm',
-        confirmType: 'default',
-        closeLabel: '@ui.close',
         component: AppConfirm,
         autoclose: true,
         softdismiss: false
@@ -49,9 +46,19 @@ export default new Vue({
     // opens an overlay
     open(options)
     {
-      options.id = Strings.guid();
+      const defaultWidth = options.display === 'editor' ? 560 : 400;
 
-      options.hide = this.close;
+      options = _extend({
+        id: Strings.guid(),
+        display: 'dialog',
+        width: defaultWidth,
+        hide: this.close,
+        autoclose: true,
+        softdismiss: options.display !== 'editor',
+        closeLabel: '@ui.close',
+        confirmLabel: '@ui.confirm',
+        confirmType: 'default'
+      }, options);
 
       this.instances.push(options);
 

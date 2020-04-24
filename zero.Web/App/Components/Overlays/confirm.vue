@@ -1,11 +1,11 @@
 ﻿<template>
   <div class="app-confirm">
-    <h2 class="ui-headline" v-localize="overlay.title"></h2>
-    <p v-localize:html="overlay.text"></p>
+    <h2 class="ui-headline" v-localize="config.title"></h2>
+    <p v-localize:html="config.text"></p>
     <ui-error ref="error" style="margin-top: 25px;" />
     <div class="app-confirm-buttons">
-      <ui-button type="light" :label="overlay.closeLabel" :disabled="state == 'loading'" @click="overlay.close"></ui-button>
-      <ui-button :type="overlay.confirmType" :state="state" :label="overlay.confirmLabel" @click="confirm"></ui-button>
+      <ui-button type="light" :label="config.closeLabel" :disabled="state == 'loading'" @click="config.close"></ui-button>
+      <ui-button :type="config.confirmType" :state="state" :label="config.confirmLabel" @click="confirm"></ui-button>
     </div>
   </div>
 </template>
@@ -18,7 +18,7 @@
 
     props: {
       model: Object,
-      overlay: Object
+      config: Object
     },
 
     data: () => ({
@@ -36,10 +36,10 @@
       {
         var instance = this;
 
-        this.overlay.confirm({
+        this.config.confirm({
           hide()
           {
-            instance.overlay.close();
+            instance.config.close();
           },
           state(state)
           {

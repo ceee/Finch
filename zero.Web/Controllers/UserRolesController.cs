@@ -4,6 +4,7 @@ using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Web.Filters;
 using zero.Web.Mapper;
 using zero.Web.Models;
 
@@ -22,7 +23,8 @@ namespace zero.Web.Controllers
 
     /// <summary>
     /// Get role by id
-    /// </summary>    
+    /// </summary>  
+    [AddToken]
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
       return As<UserRole, UserRoleEditModel>(await Api.GetById(id));

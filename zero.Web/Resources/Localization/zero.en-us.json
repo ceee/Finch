@@ -23,6 +23,8 @@
       "button": "Search"
     },
     "name": "Name",
+    "icon": "Icon",
+    "icon_select": "Select an icon",
     "tab_general": "General"
   },
 
@@ -114,7 +116,6 @@
   "user": {
     "name": "User",
     "users": "Users",
-    "roles": "Roles",
     "count_permissions": "{count} permissions",
     "one_permission": "1 permission",
     "fields": {
@@ -131,6 +132,15 @@
       "sections": "Sections",
       "sections_text": "Specify access to backoffice sections",
       "isActive": "Can login"
+    }
+  },
+
+  "role": {
+    "name": "Role",
+    "roles": "Roles",
+    "fields": {
+      "description": "Description",
+      "icon": "Icon"
     }
   },
 
@@ -188,5 +198,9 @@
       "code_text": "Code in ISO 3166-1 format which is used to display the appropriate flag",
       "isPreferred": "Show on top"
     }
+  },
+
+  "iconpicker": {
+    "title": "Pick an icon"
   }
 }

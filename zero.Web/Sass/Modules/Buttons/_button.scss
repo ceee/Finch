@@ -262,3 +262,40 @@ button::-moz-focus-inner
     top: 0;
   }
 }
+
+
+.ui-select-button
+{
+  olor: var(--color-fg);
+  display: inline-flex;
+  align-items: center;
+}
+
+.ui-select-button-icon
+{
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: var(--radius);
+  background: var(--color-bg-mid);
+  color: var(--color-fg);
+  text-align: center;
+  font-size: 20px;
+  margin-right: 16px;
+}
+
+.ui-select-button-content
+{
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.ui-select-button-label
+{
+}
+
+.ui-select-button-description
+{
+  color: var(--color-fg-mid);
+  margin-top: 3px;
+}
