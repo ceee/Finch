@@ -2,7 +2,7 @@
 :root, .theme-light
 {
   // accent colors
-  --color-primary: #292b2c;
+  --color-primary: #24b3a4;
   --color-primary-fg: #fff;
   --color-secondary: #292b2c;
   --color-negative: #d82853; 
@@ -15,6 +15,7 @@
 
   // background color shades
   --color-bg: #f7f8f9;
+  --color-bg-dark: #d1d4d9;
   --color-bg-mid: #f4f5f6;
   --color-bg-light: #fff;
   --color-bg-xlight: #f8f9fa;
@@ -59,8 +60,8 @@
 .theme-dark
 {
   // accent colors
-  --color-primary: #f7f8f9;
-  --color-primary-fg: #222;
+  //--color-primary: #ffac00;
+  --color-primary-fg: #fff;
   --color-secondary: #292b2c;
   --color-negative: #d82853; 
 
@@ -69,7 +70,6 @@
   --color-fg-mid: #c1c5c9;
   --color-fg-light: #919294;
   --color-fg-xlight: #919294;
-  --color-bg-xxlight: #919294;
 
   /*--color-fg: #222;
   --color-fg-mid: #6f7375;
@@ -77,8 +77,10 @@
 
   // background color shades
   --color-bg: #1c1e1f;
+  --color-bg-dark: #919294;
   --color-bg-mid: #292b2c;
   --color-bg-light: #242526;
+  --color-bg-xxlight: #242526;
 
   /*--color-bg: #fff;
   --color-bg-light: #f8f9fa;

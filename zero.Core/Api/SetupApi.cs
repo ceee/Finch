@@ -225,11 +225,11 @@ namespace zero.Core.Api
         Claims = new List<IUserClaim>()
         {
           new UserClaim(type, Permissions.Applications, PermissionsValue.Write),
-          new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.Write),
-          new UserClaim(type, Permissions.Sections.Lists, PermissionsValue.Write),
-          new UserClaim(type, Permissions.Sections.Pages, PermissionsValue.Write),
-          new UserClaim(type, Permissions.Sections.Media, PermissionsValue.Write),
-          new UserClaim(type, Permissions.Sections.Settings, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.True),
+          new UserClaim(type, Permissions.Sections.Lists, PermissionsValue.True),
+          new UserClaim(type, Permissions.Sections.Pages, PermissionsValue.True),
+          new UserClaim(type, Permissions.Sections.Media, PermissionsValue.True),
+          new UserClaim(type, Permissions.Sections.Settings, PermissionsValue.True),
           new UserClaim(type, Permissions.Settings.Applications, PermissionsValue.None),
           new UserClaim(type, Permissions.Settings.Countries, PermissionsValue.Write),
           new UserClaim(type, Permissions.Settings.Logging, PermissionsValue.Write),
@@ -250,12 +250,12 @@ namespace zero.Core.Api
         IsActive = true,
         Claims = new List<IUserClaim>()
         {
-          new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.Read),
-          new UserClaim(type, Permissions.Sections.Lists, PermissionsValue.Write),
-          new UserClaim(type, Permissions.Sections.Pages, PermissionsValue.Write),
-          new UserClaim(type, Permissions.Sections.Media, PermissionsValue.Write),
-          new UserClaim(type, Permissions.Sections.Settings, PermissionsValue.Write),
-          new UserClaim(type, Permissions.Settings.Translations, PermissionsValue.Write)
+          new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.True),
+          new UserClaim(type, Permissions.Sections.Lists, PermissionsValue.True),
+          new UserClaim(type, Permissions.Sections.Pages, PermissionsValue.True),
+          new UserClaim(type, Permissions.Sections.Media, PermissionsValue.True),
+          new UserClaim(type, Permissions.Sections.Settings, PermissionsValue.True),
+          new UserClaim(type, Permissions.Settings.Translations, PermissionsValue.True)
         }
       };
 
@@ -270,7 +270,7 @@ namespace zero.Core.Api
         IsActive = true,
         Claims = new List<IUserClaim>()
         {
-          new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.Read)
+          new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.True)
         }
       };
 

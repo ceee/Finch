@@ -54,3 +54,13 @@ body
 {
   opacity: 0;
 }
+
+
+.ui-split
+{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: var(--padding);
+  align-items: stretch;
+  justify-content: stretch;
+}

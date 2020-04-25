@@ -146,6 +146,11 @@
     }
   },
 
+  "permission": {
+    "sections": "Sections",
+    "settings": "Settings"
+  },
+
   "login": {
     "headline": "hello and welcome",
     "button": "Login",

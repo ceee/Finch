@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-iconpicker">
-    <input ref="input" type="text" :value="value" />
+    <input ref="input" type="hidden" :value="value" />
     <ui-select-button :icon="value" label="@ui.icon" :description="buttonDescription" @click="pick" />
   </div>
 </template>

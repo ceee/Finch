@@ -1,7 +1,7 @@
 ﻿<template>
   <ui-form ref="form" class="country" v-slot="form" @submit="onSubmit" @load="onLoad">
 
-    <ui-header-bar :title="model.name" title-empty="@country.name">
+    <ui-header-bar :title="model.name" title-empty="@country.name" :back-button="true">
       <!--<ui-dropdown align="right">
         <template v-slot:button>
           <ui-button type="light" label="@ui.actions" caret="down" />

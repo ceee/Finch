@@ -5,36 +5,66 @@ namespace zero.Core.Entities
   /// <summary>
   /// A media file (can contain an image or other media like videos and documents)
   /// </summary>
-  public class Media : DatabaseEntity
+  public class Media : DatabaseEntity, IMedia
+  {
+    /// <inheritdoc />
+    public string AlternativeText { get; set; }
+
+    /// <inheritdoc />
+    public string Caption { get; set; }
+
+    /// <inheritdoc />
+    public string Source { get; set; }
+
+    /// <inheritdoc />
+    public int Size { get; set; }
+
+    /// <inheritdoc />
+    public MediaDimension Dimension { get; set; }
+
+    /// <inheritdoc />
+    public DateTimeOffset LastModifiedDate { get; set; }
+
+    /// <inheritdoc />
+    public MediaFocalPoint FocalPoint { get; set; }
+  }
+
+
+  public interface IMedia : IDatabaseEntity, IZeroEntity
   {
     /// <summary>
     /// Alternative text which is used when the image can't be loaded
     /// </summary>
-    public string AlternativeText { get; set; }
+    string AlternativeText { get; set; }
 
     /// <summary>
     /// Additional caption text
     /// </summary>
-    public string Caption { get; set; }
+    string Caption { get; set; }
 
     /// <summary>
     /// Path of the media item
     /// </summary>
-    public string Source { get; set; }
+    string Source { get; set; }
 
     /// <summary>
     /// Filesize in bytes
     /// </summary>
-    public int Size { get; set; }
+    int Size { get; set; }
+
+    /// <summary>
+    /// Dimension (width + height) in pixels
+    /// </summary>
+    MediaDimension Dimension { get; set; }
 
     /// <summary>
     /// Time the file has last changed
     /// </summary>
-    public DateTimeOffset LastModifiedDate { get; set; }
+    DateTimeOffset LastModifiedDate { get; set; }
 
     /// <summary>
     /// Optional focal point for an image
     /// </summary>
-    public MediaFocalPoint FocalPoint { get; set; }
+    MediaFocalPoint FocalPoint { get; set; }
   }
 }

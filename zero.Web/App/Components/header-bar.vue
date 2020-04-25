@@ -94,6 +94,7 @@
   .ui-header-bar-title
   {
     font-family: var(--font);
+    color: var(--color-fg);
     margin: 0;
     font-size: var(--font-size-l);
     font-weight: 700;

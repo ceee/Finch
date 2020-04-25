@@ -60,6 +60,18 @@
       this.init();
     },
 
+    mounted()
+    {
+      let $selected = this.$el.querySelector('.ui-iconpicker-overlay-item.is-active');
+
+      if ($selected)
+      {
+        let $scrollable = this.$el.querySelector('content');
+        const offset = $selected.offsetTop - $scrollable.clientHeight * 0.5 - 30;
+        $scrollable.scrollTop = offset < 0 ? 0 : offset;
+      }
+    },
+
     methods: {
 
       confirm()
@@ -135,7 +147,7 @@
     font-size: 20px;
     height: 60px;
     border-radius: var(--radius);
-    border: 2px solid transparent;
+    /*border: 2px solid transparent;*/
 
     &:hover, &.is-active
     {
@@ -143,10 +155,10 @@
       box-shadow: 0 0 20px var(--color-shadow);
     }
 
-    /*&.is-active
+    &.is-active
     {
-      border-color: var(--color-line);
-    }*/
+      //color: var(--color-primary);
+    }
   }
 
   .ui-iconpicker-overlay-search

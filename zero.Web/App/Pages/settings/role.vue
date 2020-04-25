@@ -12,17 +12,35 @@
     </ui-header-bar>
 
     <div class="ui-view-box has-sidebar" label="@ui.tab_general">
-      <div class="ui-box">
-        <ui-property label="@ui.name" :required="true">
-          <input v-model="model.name" type="text" class="ui-input" maxlength="120" />
-        </ui-property>
-        <ui-property label="@role.fields.description">
-          <input v-model="model.description" type="text" class="ui-input" maxlength="200" />
-        </ui-property>
-        <ui-property label="@role.fields.icon" :required="true">
-          <ui-iconpicker v-model="model.icon" />
-        </ui-property>
+      <div>
+
+        <div class="ui-box">
+          <ui-property label="@ui.name" :required="true">
+            <input v-model="model.name" type="text" class="ui-input" maxlength="120" />
+          </ui-property>
+          <ui-property label="@role.fields.description">
+            <input v-model="model.description" type="text" class="ui-input" maxlength="200" />
+          </ui-property>
+          <ui-property label="@role.fields.icon" :required="true">
+            <ui-iconpicker v-model="model.icon" />
+          </ui-property>
+        </div>
+
+        <div class="ui-box">
+          <h2 class="ui-headline" v-localize="'@permission.sections'"></h2>
+          <ui-property class="role-permission-toggle" v-for="section in permissions.sections" :label="section.name">
+            <ui-toggle v-model="section.toggled" />
+          </ui-property>
+        </div>
+
+        <div class="ui-box">
+          <h2 class="ui-headline" v-localize="'@permission.settings'"></h2>
+          <ui-property class="role-permission-toggle" v-for="setting in permissions.settings" :label="setting.name">
+            <ui-toggle v-model="setting.toggled" />
+          </ui-property>
+        </div>
       </div>
+
       <aside class="ui-view-box-aside">
         <ui-property label="@ui.id" :vertical="true" :is-text="true">
           {{model.id}}
@@ -51,6 +69,10 @@
       model: {
         name: null,
         email: null
+      },
+      permissions: {
+        sections: [],
+        settings: []
       }
     }),
 
@@ -61,6 +83,16 @@
         icon: 'fth-trash',
         action: this.onDelete
       });
+
+      this.permissions.sections = zero.sections;
+
+      zero.settingsAreas.forEach(area =>
+      {
+        area.items.forEach(item =>
+        {
+          this.permissions.settings.push(item);
+        });
+      })
     },
 
 
@@ -118,10 +150,14 @@
   }
 </script>
 
-
 <style lang="scss">
-  .country .country-flag-input
+  .role-permission-toggle + .role-permission-toggle
   {
-    max-width: 80px;
+    padding-top: 0;
+  }
+
+  .role .-m-top
+  {
+    margin-top: var(--padding);
   }
 </style>

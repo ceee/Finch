@@ -1,4 +1,4 @@
-﻿<template>
+﻿ <template>
   <div class="ui-toggle">
     <input type="checkbox" :value="value" @input="onChange" />
     <span class="ui-toggle-switch" :class="{ 'is-active': value }"><i></i></span>
@@ -78,7 +78,7 @@
       width: 16px;
       border-radius: 20px;
       margin: 2px;
-      background: var(--color-primary);
+      background: var(--color-bg-dark);
       transition: all 0.2s ease;
     }
 
