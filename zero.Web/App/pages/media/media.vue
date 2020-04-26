@@ -1,19 +1,32 @@
 ﻿<template>
   <div class="media theme-dark">
-    <ui-header-bar title="Media">
-      <ui-search />
-      <ui-button label="Add media" icon="fth-plus" />
-    </ui-header-bar>
+    <div class="media-tree" v-resizable="resizable">
+      <ui-header-bar title="Media" />
+      <ui-tree :get="getItems" />
+      <div class="media-tree-resizable ui-resizable"></div>
+    </div>
 
-    <div class="ui-view-box">
-      <div class="media-items">
-        <a href="#" class="media-item" v-for="item in items">
-          <img v-if="item.type === 'image'" :src="item.source" />
-          <span class="media-item-content" v-if="item.type !== 'image'">
-            <i :class="icons[item.type]" :data-extension="item.extension"></i>
-            <span>{{item.source}}</span>
-          </span>
-        </a>
+    <div class="media-content">
+      <ui-header-bar title="Media">
+        <ui-search />
+        <ui-button label="Add media" icon="fth-plus" />
+      </ui-header-bar>
+
+      <div class="ui-view-box">
+        <div class="media-items">
+          <a href="#" class="media-item is-blank">
+            <span class="media-item-content">
+              <i class="fth-plus"></i>
+            </span>
+          </a>
+          <a href="#" class="media-item" v-for="item in items">
+            <img v-if="item.type === 'image'" :src="item.source" />
+            <span class="media-item-content" v-if="item.type !== 'image'">
+              <i :class="icons[item.type]" :data-extension="item.extension"></i>
+              <span>{{item.source}}</span>
+            </span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -21,15 +34,25 @@
 
 
 <script>
+  import PageTreeApi from 'zero/resources/page-tree.js'
+
   export default {
 
     data: () => ({
+      cache: {},
       items: [],
       icons: {
         image: 'fth-image',
         video: 'fth-video',
         file: 'fth-file'
-      }
+      },
+      resizable: {
+        axis: 'x',
+        min: 260,
+        max: 520,
+        save: 'media-tree',
+        handle: '.ui-resizable'
+      },
     }),
 
     created()
@@ -72,7 +95,35 @@
 
 
     methods: {
+      getItems(parent)
+      {
+        const key = !parent ? '__root' : parent;
 
+        if (this.cache[key])
+        {
+          return Promise.resolve(this.cache[key]);
+        }
+
+        return PageTreeApi.getChildren(parent).then(response =>
+        {
+          response.forEach(item =>
+          {
+            item.url = {
+              name: 'page',
+              params: { id: item.id }
+            };
+
+            if (item.id === "recyclebin")
+            {
+              item.url = {
+                name: 'recyclebin'
+              };
+            }
+          });
+          this.cache[key] = response;
+          return response;
+        });
+      }
     }
   }
 </script>
@@ -83,6 +134,55 @@
     width: 100%;
     height: 100vh;
     background: var(--color-bg);
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 2px;
+    justify-content: stretch;
+  }
+
+  .media-tree
+  {
+    width: 340px;
+    background: var(--color-bg-light);
+    padding: 0;
+    position: relative;
+    overflow-y: auto;
+    height: 100vh;
+
+    .ui-header-bar + .ui-tree
+    {
+      margin-top: 2px;
+    }
+
+    .ui-dot-button
+    {
+      margin-right: -8px;
+    }
+  }
+
+  .media-tree-resizable
+  {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: var(--color-fg);
+    opacity: 0;
+    right: 0;
+    width: 6px;
+    cursor: ew-resize;
+    transition: opacity 0.15s ease 0s;
+
+    &:hover
+    {
+      transition-delay: 0.2s;
+      opacity: 0.04;
+    }
+  }
+
+  .media-content
+  {
+    height: 100vh;
     overflow-y: auto;
   }
 
@@ -111,6 +211,12 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    &.is-blank
+    {
+      border: 2px dotted var(--color-line);
+      background: transparent;
     }
   }
 
@@ -148,6 +254,11 @@
         font-weight: 600;
         transform: translateX(-50%);
       }
+    }
+
+    .is-blank & i:after
+    {
+      display: none;
     }
 
     span
