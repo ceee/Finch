@@ -150,9 +150,9 @@
 
   "permission": {
     "collections": {
-      "sections": "Sections",
+      "sections": "Access to sections",
       "sections_description": "Allow access to the following sections",
-      "settings": "Settings",
+      "settings": "Access to settings",
       "settings_description": "Define read and write access for settings areas"
     }
   },

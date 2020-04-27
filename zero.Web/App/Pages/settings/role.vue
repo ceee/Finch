@@ -32,7 +32,7 @@
             <span v-if="permissionCollection.description" class="-minor"><br>{{ permissionCollection.description | localize }}</span>
           </h2>
           <ui-property v-for="permission in permissionCollection.items" class="role-permission-toggle" :label="permission.label" :description="permission.description">
-            <ui-toggle v-model="permission.toggled" />
+            <ui-toggle v-if="permission.valueType === 'boolean'" v-model="permission.value" />
           </ui-property>
         </div>
       </div>
@@ -53,7 +53,7 @@
 
 <script>
   import UserRolesApi from 'zero/resources/userRoles';
-  import Overlay from 'zero/services/overlay.js'
+  import Overlay from 'zero/services/overlay.js';
 
   export default {
     props: ['id'],
@@ -92,14 +92,45 @@
         form.load(UserRolesApi.getById(this.id)).then(response =>
         {
           this.model = response;
+
+          let claims = {};
+
+          response.claims.forEach(claim =>
+          {
+            const parts = claim.value.split(':');
+            claims[parts[0]] = parts[1];
+          });
+
+          UserRolesApi.getAllPermissions().then(response =>
+          {
+            response.forEach(collection =>
+            {
+              collection.items.forEach(permission =>
+              {
+                permission.value = this.parsePermissionValue(claims[permission.key], permission.valueType);
+              });
+            });
+
+            this.permissions = response;
+          });
         });
 
-        UserRolesApi.getAllPermissions().then(response =>
-        {
-          console.info(response);
-          this.permissions = response;
-        });
       },
+
+
+      parsePermissionValue(value, type)
+      {
+        if (type === 'boolean')
+        {
+          return value === 'true';
+        }
+        else if (type === 'readWrite' && !value)
+        {
+          return 'none';
+        }
+        return value;
+      },
+
 
       onSubmit(form)
       {
