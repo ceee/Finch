@@ -134,12 +134,12 @@ namespace zero.Web
       sections.Add("settings", Constants.Sections.Settings);
 
       Dictionary<string, string> settings = new Dictionary<string, string>();
-      settings.Add("applications", Constants.SettingsAreas.Applications);
-      settings.Add("countries", Constants.SettingsAreas.Countries);
-      settings.Add("logging", Constants.SettingsAreas.Logging);
-      settings.Add("translations", Constants.SettingsAreas.Translations);
-      settings.Add("updates", Constants.SettingsAreas.Updates);
-      settings.Add("users", Constants.SettingsAreas.Users);
+      settings.Add("applications", Constants.Settings.Applications);
+      settings.Add("countries", Constants.Settings.Countries);
+      settings.Add("logging", Constants.Settings.Logging);
+      settings.Add("translations", Constants.Settings.Translations);
+      settings.Add("updates", Constants.Settings.Updates);
+      settings.Add("users", Constants.Settings.Users);
 
       aliases.Add("sections", sections);
       aliases.Add("settings", settings);

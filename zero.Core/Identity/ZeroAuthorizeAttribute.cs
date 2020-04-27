@@ -83,11 +83,8 @@ namespace zero.Core.Identity
       // do not run this filter if it is overridden
       if (siblingFilters.Length > 1 && currentIndex < siblingFilters.Length - 1)
       {
-        Console.WriteLine("skip " + Permission + ": " + String.Join(", ", PermissionValues));
         return;
       }
-
-      Console.WriteLine("run " + Permission + ": " + String.Join(", ", PermissionValues));
 
       ClaimsPrincipal user = context.HttpContext.User;
 

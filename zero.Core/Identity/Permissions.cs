@@ -12,12 +12,14 @@
     public struct Settings
     {
       public const string PREFIX = "settings.area.";
-      public const string Updates = PREFIX + Constants.SettingsAreas.Updates;
-      public const string Applications = PREFIX + Constants.SettingsAreas.Applications;
-      public const string Users = PREFIX + Constants.SettingsAreas.Users;
-      public const string Translations = PREFIX + Constants.SettingsAreas.Translations;
-      public const string Countries = PREFIX + Constants.SettingsAreas.Countries;
-      public const string Logging = PREFIX + Constants.SettingsAreas.Logging;
+      public const string Updates = PREFIX + Constants.Settings.Updates;
+      public const string Applications = PREFIX + Constants.Settings.Applications;
+      public const string Users = PREFIX + Constants.Settings.Users;
+      public const string Translations = PREFIX + Constants.Settings.Translations;
+      public const string Countries = PREFIX + Constants.Settings.Countries;
+      public const string Logging = PREFIX + Constants.Settings.Logging;
+      public const string Plugins = PREFIX + Constants.Settings.Plugins;
+      public const string CreatePlugin = PREFIX + Constants.Settings.CreatePlugin;
     }
 
 

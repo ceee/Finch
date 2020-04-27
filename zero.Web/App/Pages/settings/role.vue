@@ -26,17 +26,13 @@
           </ui-property>
         </div>
 
-        <div class="ui-box">
-          <h2 class="ui-headline" v-localize="'@permission.sections'"></h2>
-          <ui-property class="role-permission-toggle" v-for="section in permissions.sections" :label="section.name">
-            <ui-toggle v-model="section.toggled" />
-          </ui-property>
-        </div>
-
-        <div class="ui-box">
-          <h2 class="ui-headline" v-localize="'@permission.settings'"></h2>
-          <ui-property class="role-permission-toggle" v-for="setting in permissions.settings" :label="setting.name">
-            <ui-toggle v-model="setting.toggled" />
+        <div v-for="permissionCollection in permissions" class="ui-box">
+          <h2 class="ui-headline">
+            {{ permissionCollection.label | localize }}
+            <span v-if="permissionCollection.description" class="-minor"><br>{{ permissionCollection.description | localize }}</span>
+          </h2>
+          <ui-property v-for="permission in permissionCollection.items" class="role-permission-toggle" :label="permission.label" :description="permission.description">
+            <ui-toggle v-model="permission.toggled" />
           </ui-property>
         </div>
       </div>
@@ -70,10 +66,7 @@
         name: null,
         email: null
       },
-      permissions: {
-        sections: [],
-        settings: []
-      }
+      permissions: []
     }),
 
     created()
@@ -83,16 +76,6 @@
         icon: 'fth-trash',
         action: this.onDelete
       });
-
-      this.permissions.sections = zero.sections;
-
-      zero.settingsAreas.forEach(area =>
-      {
-        area.items.forEach(item =>
-        {
-          this.permissions.settings.push(item);
-        });
-      })
     },
 
 
@@ -109,6 +92,12 @@
         form.load(UserRolesApi.getById(this.id)).then(response =>
         {
           this.model = response;
+        });
+
+        UserRolesApi.getAllPermissions().then(response =>
+        {
+          console.info(response);
+          this.permissions = response;
         });
       },
 

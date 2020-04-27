@@ -38,7 +38,7 @@
       public const string Settings = "settings";
     }
 
-    public static class SettingsAreas
+    public static class Settings
     {
       public const string Updates = "updates";
       public const string Applications = "applications";
@@ -46,6 +46,8 @@
       public const string Translations = "translations";
       public const string Countries = "countries";
       public const string Logging = "logs";
+      public const string Plugins = "plugins";
+      public const string CreatePlugin = "createplugin";
     }
   }
 }

@@ -7,63 +7,119 @@ namespace zero.Core.Identity
 {
   public class Permission
   {
+    /// <summary>
+    /// Full key (stored in left part claim value) of the permission
+    /// </summary>
     public string Key { get; set; }
 
+    /// <summary>
+    /// Normalized key with optionally removed prefix
+    /// </summary>
     public string NormalizedKey { get; set; }
 
+    /// <summary>
+    /// Value of the permission (boolean, read/write, ...). Stored in right part of claim value
+    /// </summary>
     public string Value { get; set; }
 
-    public bool CanRead => Value == PermissionsValue.Read || Value == PermissionsValue.Write;
+    /// <summary>
+    /// Title of this permission for output
+    /// </summary>
+    public string Label { get; set; }
 
-    public bool CanWrite => Value == PermissionsValue.Write;
+    /// <summary>
+    /// Optional description text
+    /// </summary>
+    public string Description { get; set; }
 
-    public bool IsTrue => Value == PermissionsValue.True;
-
-    public bool IsFalse => Value == PermissionsValue.False;
+    /// <summary>
+    /// Datatype of the value
+    /// </summary>
+    public PermissionValueType ValueType { get; set; }
 
 
     public Permission() { }
 
-    public Permission(Claim claim, string prefixToRemove = null) : this(claim.Value, prefixToRemove) { }
-
-    public Permission(string claimValue, string prefixToRemove = null)
+    public Permission(string key, string value, PermissionValueType valueType = PermissionValueType.ReadWrite)
     {
-      string[] valueParts = claimValue.Split(':');
+      Key = key;
+      Value = value;
+      ValueType = valueType;
+    }
 
-      Key = valueParts[0];
-      NormalizedKey = Key;
-      Value = valueParts.Length > 1 ? valueParts[1] : null;
-
-      if (!prefixToRemove.IsNullOrEmpty())
-      {
-        NormalizedKey = valueParts[0].TrimStart(prefixToRemove);
-      }
+    public Permission(string key, string label, string description, PermissionValueType valueType = PermissionValueType.ReadWrite)
+    {
+      Key = key;
+      Label = label;
+      Description = description;
+      ValueType = valueType;
     }
 
 
+    /// <summary>
+    /// Whether the value is read or write
+    /// </summary>
+    public bool CanRead => Value == PermissionsValue.Read || Value == PermissionsValue.Write;
+
+    /// <summary>
+    /// Whether the value is write
+    /// </summary>
+    public bool CanWrite => Value == PermissionsValue.Write;
+
+    /// <summary>
+    /// Whether the value is true
+    /// </summary>
+    public bool IsTrue => Value == PermissionsValue.True;
+
+    /// <summary>
+    /// Whether the value is false
+    /// </summary>
+    public bool IsFalse => Value == PermissionsValue.False;
+
+    /// <summary>
+    /// Whether a resource (with authorization based on the key) can be read by any of the given permisssions
+    /// </summary>
     public static bool CanReadKey(IEnumerable<Permission> permissions, string key, bool isNormalized = false)
     {
       Permission permission = permissions.FirstOrDefault(p => isNormalized ? p.NormalizedKey == key : p.Key == key);
-
-      if (permission == null)
-      {
-        return false;
-      }
-
-      return permission.CanRead;
+      return permission?.CanRead ?? false;
     }
 
-
+    /// <summary>
+    /// Whether a resource (with authorization based on the key) can be written to by any of the given permisssions
+    /// </summary>
     public static bool CanWriteKey(IEnumerable<Permission> permissions, string key, bool isNormalized = false)
     {
       Permission permission = permissions.FirstOrDefault(p => isNormalized ? p.NormalizedKey == key : p.Key == key);
+      return permission?.CanWrite ?? false;
+    }
 
-      if (permission == null)
+    /// <summary>
+    /// Create a permission from a claim
+    /// </summary>
+    public static Permission FromClaim(Claim claim, string prefixToRemove = null)
+    {
+      return FromClaim(claim.Value, prefixToRemove);
+    }
+
+    /// <summary>
+    /// Create a permission from a claim
+    /// </summary>
+    public static Permission FromClaim(string claimValue, string prefixToRemove = null)
+    {
+      Permission permission = new Permission();
+      string[] valueParts = claimValue.Split(':');
+
+      permission.Key = valueParts[0];
+      permission.NormalizedKey = permission.Key;
+      permission.Value = valueParts.Length > 1 ? valueParts[1] : null;
+
+      if (!prefixToRemove.IsNullOrEmpty())
       {
-        return false;
+        permission.NormalizedKey = valueParts[0].TrimStart(prefixToRemove);
       }
 
-      return permission.CanWrite;
+      return permission;
     }
   }
 }

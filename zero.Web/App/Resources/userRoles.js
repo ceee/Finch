@@ -12,5 +12,11 @@ export default {
   getAll()
   {
     return Axios.get('userRoles/getAll').then(res => Promise.resolve(res.data));
-  }
+  },
+
+  // get all permissions
+  getAllPermissions()
+  {
+    return Axios.get('userRoles/getAllPermissions').then(res => Promise.resolve(res.data));
+  },
 };

@@ -74,7 +74,7 @@ namespace zero.Core.Api
     {
       return Principal.Claims
         .Where(claim => claim.Type == Constants.Auth.Claims.Permission && (prefix == null || claim.Value.StartsWith(prefix)))
-        .Select(claim => new Permission(claim, prefix))
+        .Select(claim => Permission.FromClaim(claim, prefix))
         .ToList();
     }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using zero.Core.Entities;
+using zero.Core.Identity;
 
 namespace zero.Core
 {
@@ -10,5 +11,13 @@ namespace zero.Core
     public SectionCollection Sections { get; private set; } = new SectionCollection();
 
     public IList<SettingsGroup> SettingsAreas { get; private set; } = new List<SettingsGroup>();
+
+    public ZeroAuthorizationOptions Authorization { get; private set; } = new ZeroAuthorizationOptions();
+  }
+
+
+  public class ZeroAuthorizationOptions
+  {
+    public IList<PermissionCollection> Permissions { get; private set; } = new List<PermissionCollection>();
   }
 }

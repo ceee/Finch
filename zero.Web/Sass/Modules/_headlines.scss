@@ -11,4 +11,11 @@ h2.ui-headline
   {
     font-size: var(--font-size-xl);
   }
+
+  .-minor
+  {
+    font-size: var(--font-size);
+    color: var(--color-fg-mid);
+    font-weight: 400;
+  }
 }

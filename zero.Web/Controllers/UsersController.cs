@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
@@ -14,9 +15,12 @@ namespace zero.Web.Controllers
   {
     private IUserApi Api { get; set; }
 
-    public UsersController(IZeroConfiguration config, IUserApi api, IMapper mapper, IToken token) : base(config, mapper, token)
+    private ZeroOptions Options { get; set; }
+
+    public UsersController(IZeroConfiguration config, IUserApi api, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
     {
       Api = api;
+      Options = options.CurrentValue;
     }
 
 
@@ -35,6 +39,15 @@ namespace zero.Web.Controllers
     public async Task<IActionResult> GetAll([FromQuery] ListQuery<User> query)
     {
       return As<User, UserListModel>(await Api.GetByQuery(query, "zero.applications.1-A"));
+    }
+
+
+    /// <summary>
+    /// Get all permissions for selection
+    /// </summary>    
+    public IActionResult GetAllPermissions()
+    {
+      return Json(Options.Authorization.Permissions);
     }
   }
 }
