@@ -1,10 +1,10 @@
 ﻿<template>
   <div class="ui-permissions">
     <div v-for="permissionCollection in permissions" class="ui-box">
-      <h2 class="ui-headline">
+      <h3 class="ui-headline">
         {{ permissionCollection.label | localize }}
-        <span v-if="permissionCollection.description" class="-minor"><br>{{ permissionCollection.description | localize }}</span>
-      </h2>
+        <span v-if="permissionCollection.description" class="-minor">{{ permissionCollection.description | localize }}</span>
+      </h3>
       <ui-property v-for="permission in permissionCollection.items" class="role-permission-toggle" :label="permission.label" :description="permission.description">
         <ui-toggle v-if="permission.valueType === 'boolean'" :disabled="disabled" v-model="permission.value" @input="onChange" />
         <ui-state-button v-if="permission.valueType === 'readWrite'" :disabled="disabled" :items="stateItems" v-model="permission.value" @input="onChange" />
@@ -12,7 +12,7 @@
       </ui-property>
     </div>
   </div>
-</template>
+</template> 
 
 
 <script>

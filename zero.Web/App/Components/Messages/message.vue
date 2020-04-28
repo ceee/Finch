@@ -64,7 +64,7 @@
 <style lang="scss">
   .ui-message
   {
-    font-size: var(--font-size-m);
+    font-size: var(--font-size-s);
     background: var(--color-accent-info-bg);
     color: var(--color-accent-info);
     display: inline-grid;

@@ -204,7 +204,7 @@
     border-radius: var(--radius);
     overflow: hidden;
     color: var(--color-fg);
-    font-size: var(--font-size-s);
+    font-size: var(--font-size-xs);
 
     img
     {

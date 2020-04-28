@@ -123,21 +123,34 @@
       {
         this.setState('loading');
 
+        let handleError = (errors, reject) =>
+        {
+          console.info(errors);
+          this.setState('error');
+          this.setErrors(errors);
+          reject(errors);
+        };
+
         return new Promise((resolve, reject) =>
         {
           promise
             .then(
               response =>
               {
-                this.setState('success');
-                this.setDirty(false);
-                resolve(response);
+                if (response.success)
+                {
+                  this.setState('success');
+                  this.setDirty(false);
+                  resolve(response);
+                }
+                else
+                {
+                  handleError(response.errors, reject);
+                }
               },
               errors =>
               {
-                this.setState('error');
-                this.setErrors(errors);
-                reject(errors);
+                handleError(errors, reject);
               }
             )
             .catch(exception =>

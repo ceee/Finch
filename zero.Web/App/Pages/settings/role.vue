@@ -11,34 +11,37 @@
       <ui-button :submit="true" label="@ui.save" :state="form.state" v-if="!disabled" />
     </ui-header-bar>
 
-    <div class="ui-view-box has-sidebar" label="@ui.tab_general">
-      <div>
+    <ui-tabs>
 
-        <div class="ui-box">
-          <ui-property label="@ui.name" :required="true">
-            <input v-model="model.name" type="text" class="ui-input" maxlength="80" :readonly="disabled" />
-          </ui-property>
-          <ui-property label="@role.fields.description">
-            <input v-model="model.description" type="text" class="ui-input" maxlength="200" :readonly="disabled" />
-          </ui-property>
-          <ui-property label="@role.fields.icon" :required="true">
-            <ui-iconpicker v-model="model.icon" :disabled="disabled" />
-          </ui-property>
+      <ui-tab class="ui-view-box has-sidebar" label="General">
+        <div>
+          <div class="ui-box">
+            <ui-property label="@ui.name" :required="true">
+              <input v-model="model.name" type="text" class="ui-input" maxlength="80" :readonly="disabled" />
+            </ui-property>
+            <ui-property label="@role.fields.description">
+              <input v-model="model.description" type="text" class="ui-input" maxlength="200" :readonly="disabled" />
+            </ui-property>
+            <ui-property label="@role.fields.icon" :required="true">
+              <ui-iconpicker v-model="model.icon" :disabled="disabled" />
+            </ui-property>
+          </div>
         </div>
 
+        <aside class="ui-view-box-aside">
+          <ui-property label="@ui.id" :vertical="true" :is-text="true">
+            {{model.id}}
+          </ui-property>
+          <ui-property label="@ui.createdDate" :vertical="true" :is-text="true">
+            <ui-date v-model="model.createdDate" />
+          </ui-property>
+        </aside>
+      </ui-tab>
+
+      <ui-tab label="Permissions">
         <ui-permissions v-model="model.claims" :disabled="disabled" />
-      </div>
-
-      <aside class="ui-view-box-aside">
-        <ui-property label="@ui.id" :vertical="true" :is-text="true">
-          {{model.id}}
-        </ui-property>
-        <ui-property label="@ui.createdDate" :vertical="true" :is-text="true">
-          <ui-date v-model="model.createdDate" />
-        </ui-property>
-      </aside>
-    </div>
-
+      </ui-tab>
+    </ui-tabs>
   </ui-form>
 </template>
 
