@@ -6,17 +6,17 @@ using zero.Web.Models;
 
 namespace zero.Web.Filters
 {
-  public class AddTokenAttribute : TypeFilterAttribute
+  public class CanEditAttribute : TypeFilterAttribute
   {
-    public AddTokenAttribute() : base(typeof(AddTokenAttributeImpl)) { }
+    public CanEditAttribute() : base(typeof(CanEditAttributeImpl)) { }
 
 
-    private class AddTokenAttributeImpl : IAsyncResultFilter
+    private class CanEditAttributeImpl : IAsyncResultFilter
     {
       IToken token;
 
 
-      public AddTokenAttributeImpl(IToken token)
+      public CanEditAttributeImpl(IToken token)
       {
         this.token = token;
       }
@@ -31,8 +31,7 @@ namespace zero.Web.Filters
           {
             EditModel model = result.Value as EditModel;
 
-            model.Meta = model.Meta ?? new EditModelMeta();
-            model.Meta.Token = await token.Get(model.Id);
+            model.CanEdit = true; // TODO query authorize attrs to get permissions
           }
         }
 

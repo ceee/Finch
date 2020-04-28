@@ -16,6 +16,8 @@ namespace zero.Web.Models
 
     public string Icon { get; set; }
 
-    public List<IUserClaim> Claims { get; set; }
+    // TODO use IUserClaim and resolve to default type
+    // see here: http://www.dotnet-programming.com/post/2017/05/08/Aspnet-core-Deserializing-Json-with-Dependency-Injection.aspx
+    public List<UserClaim> Claims { get; set; }
   }
 }

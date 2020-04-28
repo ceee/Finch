@@ -45,6 +45,10 @@
       "504_text": "The backoffice did not receive a timely response from the server",
       "5xx": "Server error",
       "5xx_text": "There was an internal server error (code: {code})"
+    },
+    "role": {
+      "emptyclaim": "A permission needs both a key and a value",
+      "nosection": "You have to select at least one section to give users access to"
     }
   },
 

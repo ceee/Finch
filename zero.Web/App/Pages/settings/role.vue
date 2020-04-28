@@ -2,13 +2,13 @@
   <ui-form ref="form" class="role" v-slot="form" @submit="onSubmit" @load="onLoad">
 
     <ui-header-bar :title="model.name" title-empty="@role.name" :back-button="true">
-      <ui-dropdown align="right">
+      <ui-dropdown align="right" v-if="!disabled">
         <template v-slot:button>
           <ui-button type="light" label="@ui.actions" caret="down" />
         </template>
         <ui-dropdown-list v-model="actions" />
       </ui-dropdown>
-      <ui-button :submit="true" label="@ui.save" :state="form.state" />
+      <ui-button :submit="true" label="@ui.save" :state="form.state" v-if="!disabled" />
     </ui-header-bar>
 
     <div class="ui-view-box has-sidebar" label="@ui.tab_general">
@@ -16,17 +16,17 @@
 
         <div class="ui-box">
           <ui-property label="@ui.name" :required="true">
-            <input v-model="model.name" type="text" class="ui-input" maxlength="120" />
+            <input v-model="model.name" type="text" class="ui-input" maxlength="80" :readonly="disabled" />
           </ui-property>
           <ui-property label="@role.fields.description">
-            <input v-model="model.description" type="text" class="ui-input" maxlength="200" />
+            <input v-model="model.description" type="text" class="ui-input" maxlength="200" :readonly="disabled" />
           </ui-property>
           <ui-property label="@role.fields.icon" :required="true">
-            <ui-iconpicker v-model="model.icon" />
+            <ui-iconpicker v-model="model.icon" :disabled="disabled" />
           </ui-property>
         </div>
 
-        <ui-permissions v-model="model.claims" />
+        <ui-permissions v-model="model.claims" :disabled="disabled" />
       </div>
 
       <aside class="ui-view-box-aside">
@@ -57,7 +57,8 @@
       model: {
         name: null,
         email: null
-      }
+      },
+      disabled: false
     }),
 
     created()
@@ -82,6 +83,7 @@
       {
         form.load(UserRolesApi.getById(this.id)).then(response =>
         {
+          this.disabled = !response.canEdit;
           this.model = response;
         });
       },
@@ -89,7 +91,6 @@
 
       onSubmit(form)
       {
-        //this.model.id = "zero.countries.16-B";
         form.handle(UserRolesApi.save(this.model)).then(response =>
         {
           console.info(response);
@@ -102,7 +103,6 @@
 
         Overlay.confirmDelete().then((opts) =>
         {
-          console.info('click');
           opts.state('loading');
 
           UserRolesApi.delete(this.id).then(response =>

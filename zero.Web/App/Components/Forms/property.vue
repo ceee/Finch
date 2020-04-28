@@ -26,15 +26,6 @@
       required: Boolean,
       vertical: Boolean,
       isText: Boolean
-    },
-
-    mounted ()
-    {
-      
-    },
-
-    methods: {
-
     }
   }
 </script>
@@ -52,6 +43,11 @@
       padding-top: 25px;
       margin-top: 25px;
       /*border-top: 1px solid var(--color-line);*/
+    }
+
+    &.is-disabled
+    {
+      pointer-events: none;
     }
   }
 

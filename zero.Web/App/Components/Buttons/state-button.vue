@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-state-button">
+  <div class="ui-state-button" :class="{'is-disabled': disabled }">
     <input ref="input" type="hidden" :value="value" />
     <button v-for="item in items" @click="select(item.value)" v-localize="item.label"
             type="button" class="ui-state-button-item" :disabled="disabled || item.disabled" :class="{ 'is-active': value === item.value }"></button>
@@ -47,6 +47,11 @@
     display: flex;
   }
 
+  .ui-state-button.is-disabled button
+  {
+    cursor: default;
+  }
+
   button.ui-state-button-item
   {
     background: var(--color-bg-mid);
@@ -77,5 +82,6 @@
       color: var(--color-primary-fg);
       font-weight: bold;
     }
+   
   }
 </style>

@@ -1,7 +1,7 @@
 ﻿<template>
-  <div class="ui-iconpicker">
+  <div class="ui-iconpicker" :class="{'is-disabled': disabled }">
     <input ref="input" type="hidden" :value="value" />
-    <ui-select-button :icon="value" label="@ui.icon" :description="buttonDescription" @click="pick" />
+    <ui-select-button :icon="value" label="@ui.icon" :description="buttonDescription" @click="pick" :disabled="disabled" />
   </div>
 </template>
 
@@ -54,6 +54,11 @@
 
       pick()
       {
+        if (this.disabled)
+        {
+          return;
+        }
+
         let options = _extend({
           title: '@iconpicker.title',
           closeLabel: '@ui.close',
@@ -73,10 +78,3 @@
     }
   }
 </script>
-
-<style lang="scss">
-  .ui-iconpicker
-  {
-
-  }
-</style>

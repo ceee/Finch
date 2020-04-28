@@ -91,6 +91,18 @@ namespace zero.Web.Mapper
 
 
     /// <inheritdoc />
+    public EntityResult<TTarget> Map<TSource, TTarget>(EntityResult<TSource> source) where TTarget : class, new()
+    {
+      return new EntityResult<TTarget>()
+      {
+        IsSuccess = source.IsSuccess,
+        Errors = source.Errors,
+        Model = Map(source.Model, new TTarget())
+      };
+    }
+
+
+    /// <inheritdoc />
     public void CreateMap<TSource, TTarget>(Action<TSource, TTarget> map) where TTarget : class, new()
     {
       Maps.Add<TSource, TTarget>((source, target) =>  map((TSource)source, (TTarget)target));
@@ -193,6 +205,11 @@ namespace zero.Web.Mapper
     /// Map a list result containing objects to the target type
     /// </summary>
     ListResult<TTarget> Map<TSource, TTarget>(ListResult<TSource> source) where TTarget : class, new();
+
+    /// <summary>
+    /// Map an entity result to the target type
+    /// </summary>
+    EntityResult<TTarget> Map<TSource, TTarget>(EntityResult<TSource> source) where TTarget : class, new();
 
     /// <summary>
     /// Create a mapping from source to target object

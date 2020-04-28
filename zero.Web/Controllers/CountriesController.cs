@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
-using zero.Web.Filters;
 using zero.Web.Mapper;
 using zero.Web.Models;
 
@@ -25,7 +23,6 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get country by id
     /// </summary>
-    [AddToken]
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
       return As<Country, CountryEditModel>(await Api.GetById(id));
@@ -44,7 +41,6 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Save country
     /// </summary>
-    [VerifyToken]
     [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Write)]
     public async Task<IActionResult> Save([FromBody] CountryEditModel model)
     {
@@ -56,7 +52,6 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Deletes a country
     /// </summary>
-    [VerifyToken]
     [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Write)]
     public async Task<IActionResult> Delete([FromQuery] string id)
     {

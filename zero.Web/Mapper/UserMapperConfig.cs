@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using zero.Core.Entities;
 using zero.Web.Models;
 
@@ -56,7 +57,7 @@ namespace zero.Web.Mapper
         target.CreatedDate = source.CreatedDate;
         target.Description = source.Description;
         target.Icon = source.Icon;
-        target.Claims = source.Claims;
+        target.Claims = source.Claims.Cast<UserClaim>().ToList();
       });
 
       config.CreateMap<UserRoleEditModel, UserRole>((source, target) =>
@@ -65,7 +66,7 @@ namespace zero.Web.Mapper
         target.IsActive = source.IsActive;
         target.Description = source.Description;
         target.Icon = source.Icon;
-        target.Claims = source.Claims;
+        target.Claims = source.Claims.Cast<IUserClaim>().ToList();
       });
 
       config.CreateMap<UserRole, UserRoleListModel>((source, target) =>

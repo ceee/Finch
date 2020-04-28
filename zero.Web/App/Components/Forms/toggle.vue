@@ -1,6 +1,6 @@
 ﻿ <template>
-  <div class="ui-toggle">
-    <input type="checkbox" :value="value" @input="onChange" />
+  <div class="ui-toggle" :class="{'is-disabled': disabled }">
+    <input type="checkbox" :value="value" @input="onChange" :disabled="disabled" />
     <span class="ui-toggle-switch" :class="{ 'is-active': value }"><i></i></span>
   </div>
 </template>
@@ -12,6 +12,10 @@
 
     props: {
       value: {
+        type: Boolean,
+        default: false
+      },
+      disabled: {
         type: Boolean,
         default: false
       }
@@ -41,7 +45,6 @@
     display: inline-block;
     position: relative;
     height: 22px;
-    cursor: pointer;
 
     input
     {
@@ -56,6 +59,11 @@
       z-index: 2;
       opacity: 0;
       cursor: pointer;
+    }
+
+    &.is-disabled input
+    {
+      cursor: default;
     }
   }
 

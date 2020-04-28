@@ -20,6 +20,10 @@
       errorComponents: {
         type: Array,
         default: () => [ 'uiError' ]
+      },
+      inputComponents: {
+        type: Array,
+        default: () => [ 'uiProperty' ]
       }
     },
 
@@ -29,6 +33,7 @@
       loadingError: null,
       state: 'default',
       errors: [],
+      canEdit: true,
       slotProps: {
         state: null
       }
@@ -38,6 +43,13 @@
       state(val)
       {
         this.slotProps.state = val;
+      },
+      canEdit(val)
+      {
+        this.$nextTick(() =>
+        {
+          this.setCanEdit(val);
+        });
       }
     },
 
@@ -83,6 +95,12 @@
               response =>
               {
                 this.loadingState = 'default';
+
+                if (typeof response.canEdit === 'boolean')
+                {
+                  this.canEdit = response.canEdit;
+                }
+
                 resolve(response);
               },
               (error) =>
@@ -246,6 +264,53 @@
         //  const catchAll = component.catchAll;
         //  const catchRemaining = component.catchRemaining;
         //});
+      },
+
+
+      // sets the form editing ability
+      setCanEdit(canEdit)
+      {
+        // find components which can output errors
+        //let traverseChildren = parent =>
+        //{
+        //  parent.$children.forEach(component =>
+        //  {
+        //    const isValidComponent = this.inputComponents.indexOf(component.$options.name) > -1;
+        //    //const field = component.field;
+
+        //    if (typeof component._props.disabled === 'boolean')
+        //    {
+        //      component.$emit('update:disabled', canEdit);
+        //    }
+        //    else
+        //    {
+        //      traverseChildren(component);
+        //    }
+        //    //if (isErrorComponent)
+        //    //{
+        //    //  errorComponents.push(component);
+        //    //}
+
+        //    //if (isErrorComponent && field)
+        //    //{
+        //    //  let errorGroup = errorGroups[field];
+
+        //    //  if (errorGroup)
+        //    //  {
+        //    //    handledGroups.push(field);
+        //    //    component.set(errorGroup);
+        //    //  }
+        //    //}
+        //    //else
+        //    //{
+        //    //  traverseChildren(component);
+        //    //}
+        //  });
+        //};
+
+        //traverseChildren(this);
+
+        //console.info('done');
       }
     }
   }

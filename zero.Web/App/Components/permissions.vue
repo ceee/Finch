@@ -6,9 +6,9 @@
         <span v-if="permissionCollection.description" class="-minor"><br>{{ permissionCollection.description | localize }}</span>
       </h2>
       <ui-property v-for="permission in permissionCollection.items" class="role-permission-toggle" :label="permission.label" :description="permission.description">
-        <ui-toggle v-if="permission.valueType === 'boolean'" v-model="permission.value" />
-        <ui-state-button v-if="permission.valueType === 'readWrite'" :items="stateItems" v-model="permission.value" />
-        <input v-if="permission.valueType === 'string'" v-model="permission.value" type="text" class="ui-input" />
+        <ui-toggle v-if="permission.valueType === 'boolean'" :disabled="disabled" v-model="permission.value" @input="onChange" />
+        <ui-state-button v-if="permission.valueType === 'readWrite'" :disabled="disabled" :items="stateItems" v-model="permission.value" @input="onChange" />
+        <input v-if="permission.valueType === 'string'" :disabled="disabled" v-model="permission.value" type="text" class="ui-input" @input="onChange" />
       </ui-property>
     </div>
   </div>
@@ -25,6 +25,10 @@
       value: {
         type: Array,
         default: () => []
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -78,6 +82,31 @@
             permission.value = this.parsePermissionValue(claims[permission.key], permission.valueType);
           });
         });
+      },
+
+      onChange()
+      {
+        let claims = [];
+
+        this.permissions.forEach(collection =>
+        {
+          collection.items.forEach(permission =>
+          {
+            if (
+              (permission.valueType === 'boolean' && permission.value === true) ||
+              (permission.valueType === 'readWrite' && permission.value !== 'none') ||
+              (permission.valueType === 'string' && !!permission.value))
+            {
+              claims.push({
+                //$type: 'zero.Core.Entities.UserClaim, zero.Core',
+                type: 'zero.claim.permission',
+                value: permission.key + ":" + permission.value
+              });
+            }
+          });
+        });
+
+        this.$emit('input', claims);
       },
 
       parsePermissionValue(value, type)

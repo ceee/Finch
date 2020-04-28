@@ -19,4 +19,16 @@ export default {
   {
     return Axios.get('userRoles/getAllPermissions').then(res => Promise.resolve(res.data));
   },
+
+  // save a role
+  save(model)
+  {
+    return Axios.post('userRoles/save', model).then(res => Promise.resolve(res.data));
+  },
+
+  // deletes a role
+  delete(id)
+  {
+    return Axios.post('userRoles/delete', { params: { id } }).then(res => Promise.resolve(res.data));
+  }
 };

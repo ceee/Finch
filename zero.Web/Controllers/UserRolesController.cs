@@ -29,7 +29,6 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get role by id
     /// </summary>  
-    [AddToken]
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
       return As<UserRole, UserRoleEditModel>(await Api.GetById(id));
@@ -51,6 +50,28 @@ namespace zero.Web.Controllers
     public IActionResult GetAllPermissions()
     {
       return Json(Options.Authorization.Permissions);
+    }
+
+
+    /// <summary>
+    /// Save country
+    /// </summary>
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    public async Task<IActionResult> Save([FromBody] UserRoleEditModel model)
+    {
+      var state = ModelState;
+      UserRole role = Mapper.Map(model, await Api.GetById(model.Id));
+      return As<UserRole, UserRoleEditModel>(await Api.Save(role));
+    }
+
+
+    /// <summary>
+    /// Deletes a country
+    /// </summary>
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    public async Task<IActionResult> Delete([FromQuery] string id)
+    {
+      return As<UserRole, UserRoleEditModel>(await Api.Delete(id));
     }
   }
 }

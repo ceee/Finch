@@ -16,6 +16,12 @@ button
   {
     outline: 0 solid transparent !important;
   }
+
+  &[disabled]
+  {
+    cursor: default;
+    pointer-events: none;
+  }
 }
 
 button::-moz-focus-inner
@@ -63,10 +69,11 @@ button::-moz-focus-inner
     opacity: 1;
   }
 
-  &.is-disabled, &[disabled]
+  &[disabled]
   {
+    cursor: default;
+    opacity: 0.7;
     pointer-events: none;
-    //background: var(--color-dark);
   }
 
   &.type-outline
