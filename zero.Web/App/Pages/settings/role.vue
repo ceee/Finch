@@ -33,6 +33,7 @@
           </h2>
           <ui-property v-for="permission in permissionCollection.items" class="role-permission-toggle" :label="permission.label" :description="permission.description">
             <ui-toggle v-if="permission.valueType === 'boolean'" v-model="permission.value" />
+            <ui-state-button v-if="permission.valueType === 'readWrite'" :items="stateItems" v-model="permission.value" />
           </ui-property>
         </div>
       </div>
@@ -66,6 +67,11 @@
         name: null,
         email: null
       },
+      stateItems: [
+        { label: '@permission.states.none', value: 'none' },
+        { label: '@permission.states.read', value: 'read' },
+        { label: '@permission.states.write', value: 'write' }
+      ],
       permissions: []
     }),
 

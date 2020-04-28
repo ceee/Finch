@@ -149,6 +149,11 @@
   },
 
   "permission": {
+    "states": {
+      "read": "View",
+      "write": "Edit",
+      "none": "None"
+    },
     "collections": {
       "sections": "Access to sections",
       "sections_description": "Allow access to the following sections",
