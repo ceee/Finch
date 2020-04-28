@@ -75,6 +75,16 @@ namespace zero.Web
       //services.AddCore(appConfig, env);
       services.AddZero(opts =>
       {
+        //var commercePermissions = new Core.Identity.PermissionCollection()
+        //{
+        //  Label = "Commerce"
+        //};
+
+        //commercePermissions.Items.Add(new Core.Identity.Permission("commerce.orders", "Orders", "Manage and fulfill orders", Core.Identity.PermissionValueType.ReadWrite));
+        //commercePermissions.Items.Add(new Core.Identity.Permission("commerce.channels", "Channels", "Create and manage sales channels", Core.Identity.PermissionValueType.ReadWrite));
+        //commercePermissions.Items.Add(new Core.Identity.Permission("commerce.newchannels", "Create channels", "Create new channels", Core.Identity.PermissionValueType.Boolean));
+
+        //opts.Authorization.Permissions.Add(commercePermissions);
         //opts.Sections.RemoveAt(1);
         //var section = new Section("commerce", "Commerce", "fth-shopping-bag", "#52bba1");
         //section.Children.Add(new Section("orders", "Orders"));

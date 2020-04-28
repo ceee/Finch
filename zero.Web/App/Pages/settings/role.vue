@@ -26,16 +26,7 @@
           </ui-property>
         </div>
 
-        <div v-for="permissionCollection in permissions" class="ui-box">
-          <h2 class="ui-headline">
-            {{ permissionCollection.label | localize }}
-            <span v-if="permissionCollection.description" class="-minor"><br>{{ permissionCollection.description | localize }}</span>
-          </h2>
-          <ui-property v-for="permission in permissionCollection.items" class="role-permission-toggle" :label="permission.label" :description="permission.description">
-            <ui-toggle v-if="permission.valueType === 'boolean'" v-model="permission.value" />
-            <ui-state-button v-if="permission.valueType === 'readWrite'" :items="stateItems" v-model="permission.value" />
-          </ui-property>
-        </div>
+        <ui-permissions v-model="model.claims" />
       </div>
 
       <aside class="ui-view-box-aside">
@@ -66,13 +57,7 @@
       model: {
         name: null,
         email: null
-      },
-      stateItems: [
-        { label: '@permission.states.none', value: 'none' },
-        { label: '@permission.states.read', value: 'read' },
-        { label: '@permission.states.write', value: 'write' }
-      ],
-      permissions: []
+      }
     }),
 
     created()
@@ -98,43 +83,7 @@
         form.load(UserRolesApi.getById(this.id)).then(response =>
         {
           this.model = response;
-
-          let claims = {};
-
-          response.claims.forEach(claim =>
-          {
-            const parts = claim.value.split(':');
-            claims[parts[0]] = parts[1];
-          });
-
-          UserRolesApi.getAllPermissions().then(response =>
-          {
-            response.forEach(collection =>
-            {
-              collection.items.forEach(permission =>
-              {
-                permission.value = this.parsePermissionValue(claims[permission.key], permission.valueType);
-              });
-            });
-
-            this.permissions = response;
-          });
         });
-
-      },
-
-
-      parsePermissionValue(value, type)
-      {
-        if (type === 'boolean')
-        {
-          return value === 'true';
-        }
-        else if (type === 'readWrite' && !value)
-        {
-          return 'none';
-        }
-        return value;
       },
 
 
@@ -182,7 +131,7 @@
     padding-top: 0;
   }
 
-  .role .-m-top
+  .role .ui-box + .ui-permissions
   {
     margin-top: var(--padding);
   }

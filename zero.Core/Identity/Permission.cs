@@ -37,6 +37,11 @@ namespace zero.Core.Identity
     /// </summary>
     public PermissionValueType ValueType { get; set; }
 
+    /// <summary>
+    /// Renders a custom component for this permission in the backoffice
+    /// </summary>
+    public string CustomComponentPath { get; set; }
+
 
     public Permission() { }
 
