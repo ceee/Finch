@@ -2,6 +2,12 @@ import Axios from 'axios';
 
 export default {
 
+  // get list collection by alias
+  getCollectionByAlias(alias)
+  {
+    return Axios.get('lists/getCollectionByAlias', { params: { alias }}).then(res => Promise.resolve(res.data));
+  },
+
   // get all list collections
   getCollections()
   {

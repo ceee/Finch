@@ -14,12 +14,12 @@
         <component :is="column.tag" :to="getLink(column, item)" v-for="column in columns" class="ui-table-cell" :style="column.flex" :table-field="column.field" v-table-value="{ item, column }"></component>
       </div>
 
-      <div class="ui-table-empty" v-if="!isLoading && items.length < 1" @click="isLoading=true">
+      <div class="ui-table-empty" v-if="!isLoading && items.length < 1">
         <i class="ui-table-empty-icon fth-list"></i>
         There are no items to show in this list
       </div>
 
-      <div class="ui-table-loading" v-if="isLoading" @click="isLoading=false">
+      <div class="ui-table-loading" v-if="isLoading">
         <ui-loading />
       </div>
     </div>
@@ -81,6 +81,10 @@
       {
         this.filter.search = val;
       },
+      'value.items': function (val)
+      {
+        this.initialize();
+      },
       filter: {
         deep: true,
         handler: function ()
@@ -107,24 +111,9 @@
       debouncedUpdate: null
     }),
 
-    created()
-    {
-      this.debouncedUpdate = _debounce(this.update, 300);
-
-      this.configuration = _extend(defaultConfig, this.value);
-
-      if (this.configuration.order.enabled)
-      {
-        this.filter.orderBy = this.configuration.order.by;
-        this.filter.orderIsDescending = this.configuration.order.isDescending;
-      }
-
-      this.generateColumns(this.configuration.columns);
-    },
-
     mounted()
     {
-      this.load(true);
+      this.initialize();
     },
 
     directives: {
@@ -141,6 +130,23 @@
         }
 
         return column.link(item);
+      },
+
+      initialize()
+      {
+        this.debouncedUpdate = _debounce(this.update, 300);
+
+        this.configuration = _extend(defaultConfig, this.value);
+
+        if (this.configuration.order.enabled)
+        {
+          this.filter.orderBy = this.configuration.order.by;
+          this.filter.orderIsDescending = this.configuration.order.isDescending;
+        }
+
+        this.generateColumns(this.configuration.columns);
+
+        this.load(true);
       },
 
       // load items based on the current filter

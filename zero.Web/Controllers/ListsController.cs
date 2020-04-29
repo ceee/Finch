@@ -21,9 +21,18 @@ namespace zero.Web.Controllers
 
 
     /// <summary>
+    /// Get list collection by alias
+    /// </summary>
+    public IActionResult GetCollectionByAlias([FromQuery] string alias)
+    {
+      return Json(Api.GetCollectionByAlias(alias));
+    }
+
+
+    /// <summary>
     /// Get all list collections
     /// </summary>
-    public IActionResult GetCollections([FromQuery] string id)
+    public IActionResult GetCollections()
     {
       return Json(Api.GetCollections());
     }
@@ -32,9 +41,9 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get list items in a collection
     /// </summary>    
-    //public async Task<IActionResult> GetAll([FromQuery] string alias, [FromQuery] ListQuery<Country> query = null)
-    //{
-    //  return await As<Country, CountryListModel>(await Api.GetAll(alias));
-    //}
+    public async Task<IActionResult> GetAll([FromQuery] string alias, [FromQuery] ListQuery<ListItem> query = null)
+    {
+      return Json(await Api.GetByQuery<ListItem>(alias, query)); 
+    }
   }
 }

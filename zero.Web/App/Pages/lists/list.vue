@@ -1,8 +1,8 @@
 ﻿<template>
   <div class="list">
-    <ui-header-bar title="Lists">
-      <ui-button type="light" label="Add list" icon="fth-plus" />
+    <ui-header-bar :title="collection.name" title-empty="List">
       <ui-table-filter v-model="tableConfig" />
+      <ui-button label="Add item" icon="fth-plus" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table v-model="tableConfig" />
@@ -12,94 +12,55 @@
 
 
 <script>
+  import ListsApi from 'zero/resources/lists.js';
+
   export default {
     name: 'app-lists',
 
+    props: [ 'alias' ],
+
     data: () => ({
+      collection: {},
       tableConfig: {}
     }),
 
+    watch: {
+      '$route': 'load'
+    },
+
     created()
     {
-      this.tableConfig = {
-        labelPrefix: '@order.fields.',
-        items: this.getItems,
-        columns: {
-          no: 'text',
-          createdDate: {
-            label: '@ui.createdDate',
-            as: 'datetime'
-          },
-          username: {
-            as: 'text'
-          },
-          price: {
-            as: 'price',
-            sort: false
-          },
-          isPublished: {
-            label: 'Published',
-            as: 'bool'
-          },
-          status: {
-            as: 'html',
-            render: item => '<b>' + item.status + '</b>'
-          }
-        }
-      };
+      this.load();
     },
 
 
     methods: {
 
-      getItems(config)
+      load()
       {
-        return new Promise(resolve =>
+        ListsApi.getCollectionByAlias(this.alias).then(response =>
         {
-          resolve({
-            totalPages: 1,
-            totalItems: 5,
-            items: [
-            {
-              no: 1,
-              createdDate: '2020-03-05T10:17:25.229+01:00',
-              username: 'Tobias Klika',
-              price: 70.90,
-              status: 'Open',
-              isPublished: true
-            },
-            {
-              no: 2,
-              createdDate: '2020-03-05T10:17:25.229+01:00',
-              username: 'Fox Tales',
-              price: 12.95,
-              status: 'Processing',
-              isPublished: true
-            },
-            {
-              no: 3,
-              createdDate: '2020-03-07T17:17:25.229+01:00',
-              username: 'Christian Klika, das ist mein Name und der könnte noch viel länger sein',
-              price: 123.00,
-              status: 'Completed'
-            },
-            {
-              no: 1,
-              createdDate: '2020-03-05T10:17:25.229+01:00',
-              username: 'Tobias Klika',
-              price: 70.90,
-              status: 'Open',
-              isPublished: true
-            },
-            {
-              no: 2,
-              createdDate: '2020-03-05T10:17:25.229+01:00',
-              username: 'Fox Tales',
-              price: 12.95,
-              status: 'Processing'
-            },
-          ]});
+          this.collection = response;
         });
+
+        this.tableConfig = {
+          items: ListsApi.getAll.bind(this, this.alias),
+          columns: {
+            name: {
+              as: 'text',
+              label: '@ui.name'
+            },
+            createdDate: {
+              as: 'date',
+              label: '@ui.createdDate'
+            },
+            isActive: {
+              as: 'bool',
+              label: '@ui.active',
+              width: 200
+            }
+          }
+        };
       }
 
     }
