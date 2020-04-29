@@ -4,7 +4,7 @@ using System.Text;
 
 namespace zero.Core.Renderer
 {
-  public class MediaOptions
+  public class MediaOptions : AbstractFieldOptions
   {
     public MediaOptionsType Type { get; set; }
   }

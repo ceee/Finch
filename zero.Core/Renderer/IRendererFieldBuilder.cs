@@ -6,9 +6,9 @@ namespace zero.Core.Renderer
   {
     IRendererFieldBuilder Required();
 
-    IRendererFieldBuilder Text();
+    IRendererFieldBuilder Text(Action<TextOptions> optionsBuilder = null);
 
-    IRendererFieldBuilder Textarea();
+    IRendererFieldBuilder Textarea(Action<TextOptions> optionsBuilder = null);
 
     IRendererFieldBuilder Rte();
 
@@ -20,6 +20,11 @@ namespace zero.Core.Renderer
 
     IRendererFieldBuilder Media(Action<MediaOptions> optionsBuilder = null);
 
+    IRendererFieldBuilder Output();
+
+    IRendererFieldBuilder Nested<T>(IRenderer<T> renderer, Action<NestedOptions> optionsBuilder = null);
+
     IRendererFieldBuilder Custom(string path, Func<object> optionsBuilder = null);
+
   }
 }

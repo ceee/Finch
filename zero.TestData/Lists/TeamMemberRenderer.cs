@@ -12,32 +12,32 @@ namespace zero.TestData.Lists
 
       Validator = new TeamMemberValidator();
 
-      Field(x => x.Name, required: true).Text();
-
-      Tab("@team.tab.extras", () =>
+      Field(x => x.Name, required: true).Text(opts => opts.Placeholder = "Enter your name");
+      Field(x => x.Position, required: true).Text();
+      Field(x => x.Image).Media(opts => opts.Type = MediaOptionsType.Image);
+      Field(x => x.Email, required: true).Text(opts => opts.Classes.Add("email-field"));
+      Field(x => x.VideoUri).Text();
+      Field(x => x.Addresses, required: true).Nested(new AddressRenderer(), opts =>
       {
-        Field(x => x.Position, required: true).Text();
-        Field(x => x.Image).Media(opts =>
-        {
-          opts.Type = MediaOptionsType.Image;
-        });
-        Field(x => x.Email, required: true).Text();
-        Field(x => x.VideoUri).Text();
+        opts.Max = 5;
+        opts.AddLabel = "Add address";
       });
+    }
+  }
 
-      Tab("@team.tab.permissions", () =>
+
+  public class AddressRenderer : AbstractRenderer<TeamMemberAddress>
+  {
+    public AddressRenderer()
+    {
+      LabelTemplate = "@team.fields.address.{0}";
+
+      Field(x => x.City, required: true).Text();
+      Field(x => x.Street).Text();
+      Field(x => x.No).Text(opts => opts.Classes.Add("is-short"));
+      Field(x => x.CountryId).Custom("plugins/countryPicker/countrypicker", () => new
       {
-        Box("Acess to sections", null, () =>
-        {
-          Field(x => x.Alias).Toggle();
-          Field(x => x.AppId).Toggle();
-          Field(x => x.CreatedDate).State(opts =>
-          {
-            opts.Add("None", "none");
-            opts.Add("View", "view");
-            opts.Add("Edit", "edit");
-          });
-        });
+        startId = 107
       });
     }
   }
@@ -47,7 +47,7 @@ namespace zero.TestData.Lists
   {
     public TeamMemberValidator()
     {
-      
+      RuleFor(x => x.Name).NotEmpty().MaximumLength(120);
     }
   }
 }

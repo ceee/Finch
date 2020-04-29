@@ -12,11 +12,6 @@ namespace zero.Core.Renderer
 
     protected IValidator<T> Validator = null;
 
-    protected virtual IRendererFieldBuilder Field(ConstructorField field)
-    {
-      return null;
-    }
-
     protected virtual IRendererFieldBuilder Field(Expression<Func<T, object>> mapExpression, string label = null, string description = null, bool required = false)
     {
       return null;
