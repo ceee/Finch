@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Raven.Client.Documents;
 using System;
 using zero.Core;
 using zero.Web.Mapper;
@@ -7,7 +8,7 @@ namespace zero.Web
 {
   public static class MapperServiceCollectionExtensions
   {
-    public static IServiceCollection AddMapper<T>(this IServiceCollection services) where T : class, IMapper, new()
+    public static IServiceCollection AddMapper<T>(this IServiceCollection services) where T : class, IMapper
     {
       return services.AddSingleton<IMapper, T>();
     }
@@ -24,6 +25,14 @@ namespace zero.Web
 
     public static IServiceCollection AddMapper(this IServiceCollection services) => services.AddMapper<DefaultMapper>();
 
-    public static IServiceCollection AddMapper(this IServiceCollection services, Action<IMapper> options) => services.AddMapper<DefaultMapper>(options);
+    public static IServiceCollection AddMapper(this IServiceCollection services, Action<DefaultMapper> options)
+    {
+      return services.AddSingleton<IMapper, DefaultMapper>(factory =>
+      {
+        DefaultMapper mapper = new DefaultMapper(factory.GetService<IDocumentStore>());
+        options(mapper);
+        return mapper;
+      });
+    }
   }
 }

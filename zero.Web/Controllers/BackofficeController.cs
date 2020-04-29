@@ -35,7 +35,7 @@ namespace zero.Web.Controllers
     }
 
 
-    protected IActionResult As<T, TTarget>(T model) where TTarget : class, new() where T : IZeroEntity
+    protected async Task<IActionResult> As<T, TTarget>(T model) where TTarget : class, new() where T : IZeroEntity
     {
       if (model == null)
       {
@@ -47,7 +47,7 @@ namespace zero.Web.Controllers
         // TODO show error with help on how to inject mapper in constructor + base constructor
       }
 
-      TTarget result = Mapper.Map<T, TTarget>(model);
+      TTarget result = await Mapper.Map<T, TTarget>(model);
 
       if (result is EditModel)
       {
@@ -59,40 +59,40 @@ namespace zero.Web.Controllers
     }
 
 
-    protected IActionResult As<T, TTarget>(IEnumerable<T> model) where TTarget : class, new() where T : IZeroEntity
+    protected async Task<IActionResult> As<T, TTarget>(IEnumerable<T> model) where TTarget : class, new() where T : IZeroEntity
     {
       if (model == null)
       {
         return new StatusCodeResult(404);
       }
 
-      return Json(Mapper.Map<T, TTarget>(model));
+      return Json(await Mapper.Map<T, TTarget>(model));
     }
 
 
-    protected IActionResult As<T, TTarget>(ListResult<T> model) where TTarget : class, new() where T : IZeroEntity
+    protected async Task<IActionResult> As<T, TTarget>(ListResult<T> model) where TTarget : class, new() where T : IZeroEntity
     {
       if (model == null)
       {
         return new StatusCodeResult(404);
       }
 
-      return Json(Mapper.Map<T, TTarget>(model));
+      return Json(await Mapper.Map<T, TTarget>(model));
     }
 
-    protected IActionResult As<T, TTarget>(EntityResult<T> model) where TTarget : class, new() where T : IZeroEntity
+    protected async Task<IActionResult> As<T, TTarget>(EntityResult<T> model) where TTarget : class, new() where T : IZeroEntity
     {
       if (model == null)
       {
         return new StatusCodeResult(404);
       }
 
-      return Json(Mapper.Map<T, TTarget>(model));
+      return Json(await Mapper.Map<T, TTarget>(model));
     }
 
-    protected TTarget Map<T, TTarget>(T model) where TTarget : class, new()
+    protected async Task<TTarget> Map<T, TTarget>(T model) where TTarget : class, new()
     {
-      return Mapper.Map<T, TTarget>(model);
+      return await Mapper.Map<T, TTarget>(model);
     }
   }
 }

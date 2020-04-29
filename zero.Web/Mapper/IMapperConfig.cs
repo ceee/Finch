@@ -1,4 +1,6 @@
-﻿namespace zero.Web.Mapper
+﻿using Raven.Client.Documents;
+
+namespace zero.Web.Mapper
 {
   public interface IMapperConfig
   {

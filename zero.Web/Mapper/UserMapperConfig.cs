@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
 using zero.Core.Entities;
+using zero.Core.Identity;
+using zero.Core.Extensions;
 using zero.Web.Models;
+using Raven.Client.Documents;
 
 namespace zero.Web.Mapper
 {
@@ -73,7 +76,17 @@ namespace zero.Web.Mapper
       {
         target.Id = source.Id;
         target.Name = source.Name;
-        target.CountClaims = source.Claims.Count;
+        target.Alias = source.Alias;
+        target.CountClaims = source.Claims.Count(x =>
+        {
+          string[] parts = x.Value.Split(':');
+
+          if (parts.Length < 2)
+          {
+            return true;
+          }
+          return parts[1] == PermissionsValue.True || parts[1] == PermissionsValue.Read || parts[1] == PermissionsValue.Write;
+        });
         target.Icon = source.Icon;
       });
     }

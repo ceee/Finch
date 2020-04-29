@@ -13,13 +13,17 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Read)]
   public class UsersController : BackofficeController
   {
-    private IUserApi Api { get; set; }
+    IUserApi Api = null;
 
-    private ZeroOptions Options { get; set; }
+    IUserRolesApi RolesApi = null;
 
-    public UsersController(IZeroConfiguration config, IUserApi api, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
+    ZeroOptions Options = null;
+
+
+    public UsersController(IZeroConfiguration config, IUserApi api, IUserRolesApi rolesApi, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
     {
       Api = api;
+      RolesApi = rolesApi;
       Options = options.CurrentValue;
     }
 
@@ -29,7 +33,7 @@ namespace zero.Web.Controllers
     /// </summary>    
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
-      return As<User, UserEditModel>(await Api.GetUserById(id));
+      return await As<User, UserEditModel>(await Api.GetUserById(id));
     }
 
 
@@ -38,7 +42,7 @@ namespace zero.Web.Controllers
     /// </summary>    
     public async Task<IActionResult> GetAll([FromQuery] ListQuery<User> query)
     {
-      return As<User, UserListModel>(await Api.GetByQuery(query, "zero.applications.1-A"));
+      return await As<User, UserListModel>(await Api.GetByQuery(query, "zero.applications.1-A"));
     }
 
 

@@ -1,4 +1,5 @@
-﻿using zero.Core.Entities;
+﻿using Raven.Client.Documents;
+using zero.Core.Entities;
 using zero.Web.Models;
 
 namespace zero.Web.Mapper

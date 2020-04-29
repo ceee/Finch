@@ -93,9 +93,9 @@
           collection.items.forEach(permission =>
           {
             if (
-              (permission.valueType === 'boolean' && permission.value === true) ||
-              (permission.valueType === 'readWrite' && permission.value !== 'none') ||
-              (permission.valueType === 'string' && !!permission.value))
+              (permission.valueType === 'boolean') ||
+              (permission.valueType === 'readWrite') ||
+              (permission.valueType === 'string'))
             {
               claims.push({
                 //$type: 'zero.Core.Entities.UserClaim, zero.Core',

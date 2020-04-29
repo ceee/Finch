@@ -31,7 +31,7 @@ namespace zero.Web.Controllers
     /// </summary>  
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
-      return As<UserRole, UserRoleEditModel>(await Api.GetById(id));
+      return await As<UserRole, UserRoleEditModel>(await Api.GetById(id));
     }
 
 
@@ -40,7 +40,7 @@ namespace zero.Web.Controllers
     /// </summary>    
     public async Task<IActionResult> GetAll()
     {
-      return As<UserRole, UserRoleListModel>(await Api.GetAll());
+      return await As<UserRole, UserRoleListModel>(await Api.GetAll());
     }
 
 
@@ -60,8 +60,8 @@ namespace zero.Web.Controllers
     public async Task<IActionResult> Save([FromBody] UserRoleEditModel model)
     {
       var state = ModelState;
-      UserRole role = Mapper.Map(model, await Api.GetById(model.Id));
-      return As<UserRole, UserRoleEditModel>(await Api.Save(role));
+      UserRole role = await Mapper.Map(model, await Api.GetById(model.Id));
+      return await As<UserRole, UserRoleEditModel>(await Api.Save(role));
     }
 
 
@@ -71,7 +71,7 @@ namespace zero.Web.Controllers
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
     public async Task<IActionResult> Delete([FromQuery] string id)
     {
-      return As<UserRole, UserRoleEditModel>(await Api.Delete(id));
+      return await As<UserRole, UserRoleEditModel>(await Api.Delete(id));
     }
   }
 }

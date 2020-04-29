@@ -29,6 +29,7 @@
   import AuthApi from 'zero/services/auth.js'
   import UserRolesApi from 'zero/resources/userRoles.js';
   import UsersApi from 'zero/resources/users.js';
+  import { filter as _filter, map as _map } from 'underscore';
 
   export default {
     data: () => ({
@@ -38,7 +39,10 @@
 
     created()
     {
-      this._user = AuthApi.user;
+      UserRolesApi.getAll().then(items =>
+      {
+        this.roles = items;
+      });
 
       this.usersConfig = {
         labelPrefix: '@user.fields.',
@@ -58,7 +62,14 @@
             link: this.getUserLink
           },
           email: 'text',
-          roles: 'text',
+          roles: {
+            as: 'text',
+            render: item =>
+            {
+              const roles = _filter(this.roles, role => item.roles.indexOf(role.alias) > -1);
+              return _map(roles, role => role.name).join(', ');
+            }
+          },
           isActive: {
             as: 'bool',
             width: 200
@@ -66,11 +77,6 @@
         },
         items: UsersApi.getAll
       };
-
-      UserRolesApi.getAll().then(items =>
-      {
-        this.roles = items;
-      });
     },
 
     methods: {

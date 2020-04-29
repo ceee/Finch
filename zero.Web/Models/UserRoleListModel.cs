@@ -7,5 +7,7 @@
     public int CountClaims { get; set; }
 
     public string Icon { get; set; }
+
+    public string Alias { get; set; }
   }
 }

@@ -23,7 +23,7 @@ namespace zero.Web
 
       Services.AddOptions<ZeroOptions>().Configure(opts => ConfigureDefaults(opts));
 
-      Services.AddMapper<DefaultMapper>(opts =>
+      Services.AddMapper(opts =>
       {
         opts.Add<UserMapperConfig>();
         opts.Add<CountryMapperConfig>();
