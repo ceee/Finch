@@ -4,6 +4,11 @@
   {
     public const string ErrorFieldNone = "__zero_no_field";
 
+    public static class Tabs
+    {
+      public const string General = "general";
+    }
+
     public static class Auth
     {
       public const string Scheme = "zeroCookies";

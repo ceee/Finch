@@ -58,15 +58,6 @@
       {
         this.lists = response;
       });
-      //this.tableConfig = {
-      //  labelPrefix: '@lists.fields.',
-      //  allowOrder: false,
-      //  search: null,
-      //  columns: {
-      //    name: 'text'
-      //  },
-      //  items: ListsApi.getCollections
-      //};
     },
 
 
