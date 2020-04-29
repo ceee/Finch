@@ -15,6 +15,7 @@ using System;
 using zero.Core;
 using zero.Core.Api;
 using zero.Core.Extensions;
+using zero.TestData;
 
 namespace zero.Web
 {
@@ -75,6 +76,9 @@ namespace zero.Web
       //services.AddCore(appConfig, env);
       services.AddZero(opts =>
       {
+        opts.Lists.Add<TeamMember>("team", "Team", "Our team members", "fth-users");
+        opts.Lists.Add<News>("news", "News", "Articles about the company", "fth-edit");
+
         //var commercePermissions = new Core.Identity.PermissionCollection()
         //{
         //  Label = "Commerce"
@@ -133,6 +137,7 @@ namespace zero.Web
       services.AddTransient<IUserApi, UserApi>();
       services.AddTransient<IUserRolesApi, UserRolesApi>();
       services.AddTransient<IToken, Token>();
+      services.AddTransient<IListsApi, ListsApi>();
     }
 
     /// <summary>

@@ -44,6 +44,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\zero.Core\zero.Core.csproj" />
+    <ProjectReference Include="..\zero.TestData\zero.TestData.csproj" />
   </ItemGroup>
 
 </Project>
