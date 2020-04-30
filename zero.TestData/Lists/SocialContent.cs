@@ -1,4 +1,5 @@
-﻿using zero.Core.Entities;
+﻿using System.Collections.Generic;
+using zero.Core.Entities;
 
 namespace zero.TestData
 {
@@ -21,5 +22,18 @@ namespace zero.TestData
     public string xMedia { get; set; }
 
     public string xIconPicker { get; set; }
+
+    public List<SocialAddress> Addresses { get; set; } = new List<SocialAddress>();
+  }
+
+  public class SocialAddress
+  {
+    public string City { get; set; }
+
+    public string Street { get; set; }
+
+    public string No { get; set; }
+
+    public string CountryId { get; set; }
   }
 }

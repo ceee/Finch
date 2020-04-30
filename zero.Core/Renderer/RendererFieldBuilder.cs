@@ -58,7 +58,8 @@ namespace zero.Core.Renderer
 
     public void Nested<T>(IRenderer<T> renderer, Action<NestedOptions> optionsBuilder = null)
     {
-      throw new NotImplementedException();
+      View = "nested";
+      Options = BuildOptions(optionsBuilder);
     }
 
     public void Output()
