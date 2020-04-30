@@ -1,10 +1,16 @@
 ﻿<template>
-  <div class="space-editor">
+  <ui-form ref="form" class="space-editor" v-slot="form" @submit="onSubmit" @load="onLoad">
     <ui-header-bar :title="space.name" title-empty="Space">
-      
+      <!--<ui-dropdown align="right" v-if="!disabled">
+        <template v-slot:button>
+          <ui-button type="light" label="@ui.actions" caret="down" />
+        </template>
+        <ui-dropdown-list v-model="actions" />
+      </ui-dropdown>-->
+      <ui-button :submit="true" label="@ui.save" icon="fth-check" :state="form.state" v-if="!disabled" />
     </ui-header-bar>
     <ui-editor />
-  </div>
+  </ui-form>
 </template>
 
 
@@ -18,7 +24,8 @@
     components: { UiEditor },
 
     data: () => ({
-      
+      disabled: false,
+      actions: []
     }),
 
     watch: {
@@ -27,16 +34,25 @@
 
     created()
     {
-      this.load();
+      this.actions.push({
+        name: 'Delete',
+        icon: 'fth-trash'
+      });
     },
 
 
     methods: {
 
-      load()
+      onLoad(form)
       {
         
-      }
+      },
+
+
+      onSubmit(form)
+      {
+        
+      },
 
     }
   }

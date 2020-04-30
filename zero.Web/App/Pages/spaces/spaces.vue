@@ -211,6 +211,12 @@
     &.is-active
     {
       font-weight: bold;
+      color: var(--color-primary);
+
+      .spaces-tree-item-text span
+      {
+        font-weight: 400;
+      }
     }
   }
 
