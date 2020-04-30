@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using zero.Core.Extensions;
 
 namespace zero.Core.Renderer
 {
@@ -117,7 +118,7 @@ namespace zero.Core.Renderer
             memberExpression = (MemberExpression)mapExpression.Body;
           }
 
-          string fieldName = memberExpression.Member.Name;
+          string fieldName = memberExpression.Member.Name.ToCamelCase();
 
           RendererFieldBuilder.Data fieldData = builder.Build();
 

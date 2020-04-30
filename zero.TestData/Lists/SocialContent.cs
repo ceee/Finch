@@ -11,5 +11,15 @@ namespace zero.TestData
     public string Facebook { get; set; }
 
     public string Youtube { get; set; }
+
+    public string xRte { get; set; }
+
+    public string xTextarea { get; set; }
+
+    public string xState { get; set; }
+
+    public string xMedia { get; set; }
+
+    public string xIconPicker { get; set; }
   }
 }

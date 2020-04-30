@@ -109,5 +109,6 @@
   {
     flex: 1;
     max-width: 800px;
+    font-size: var(--font-size);
   }
 </style>

@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-iconpicker" :class="{'is-disabled': disabled }">
     <input ref="input" type="hidden" :value="value" />
-    <ui-select-button :icon="value" label="@ui.icon" :description="buttonDescription" @click="pick" :disabled="disabled" />
+    <ui-select-button :icon="previewIcon" label="@ui.icon" :description="buttonDescription" @click="pick" :disabled="disabled" />
   </div>
 </template>
 
@@ -40,6 +40,10 @@
       buttonDescription()
       {
         return this.value ? this.value.split(' ')[0] : '@ui.icon_select';
+      },
+      previewIcon()
+      {
+        return this.value || 'fth-plus';
       }
     },
 

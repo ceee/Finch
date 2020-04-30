@@ -12,7 +12,27 @@ namespace zero.TestData.Lists
 
       Validator = new SocialContentValidator();
 
-      Field(x => x.IsVisible).Toggle();    
+      Field(x => x.IsVisible).Toggle();
+
+      Field(x => x.xIconPicker).IconPicker();
+
+      Field(x => x.xTextarea).Textarea();
+
+      Field(x => x.xRte).Rte();
+
+      Field(x => x.xMedia).Media(opts =>
+      {
+        opts.Type = MediaOptionsType.Image;
+      });
+
+      Field(x => x.xTextarea).Output();
+
+      Field(x => x.xState).State(opts =>
+      {
+        opts.Add("Image", "image");
+        opts.Add("Video" , "video");
+        opts.Add("Other", "other");
+      });
 
       Tab("Networks", () => {
 
