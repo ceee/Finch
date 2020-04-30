@@ -3,18 +3,19 @@
     <ui-header-bar :title="space.name" title-empty="Space">
       
     </ui-header-bar>
-    <div class="ui-blank-box">
-      editor
-    </div>
+    <ui-editor />
   </div>
 </template>
 
 
 <script>
   import SpacesApi from 'zero/resources/spaces.js';
+  import UiEditor from 'zero/editor/editor';
 
   export default {
-    props: [ 'config', 'space' ],
+    props: ['config', 'space'],
+
+    components: { UiEditor },
 
     data: () => ({
       

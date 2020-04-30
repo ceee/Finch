@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace zero.Core.Renderer
@@ -24,9 +25,9 @@ namespace zero.Core.Renderer
     int CurrentDepth = 0;
 
 
-    protected string LabelTemplate = null;
+    protected string LabelTemplate = "{0}";
 
-    protected string DescriptionTemplate = null;
+    protected string DescriptionTemplate = "{0}";
 
     protected IValidator<T> Validator = null;
 
@@ -37,6 +38,7 @@ namespace zero.Core.Renderer
       config.Type = typeof(T);
 
       await Task.Delay(0);
+
 
       // compile fields
       static void compile(List<RenderProperty> properties)
@@ -52,6 +54,7 @@ namespace zero.Core.Renderer
         }
       }
       compile(Properties);
+
 
       // move top-level properties into tab in case other tabs exist
       int countTabs = Properties.Count(x => x.Method == METHOD_TAB);
@@ -74,6 +77,7 @@ namespace zero.Core.Renderer
         Properties = Properties.Where(x => x.Method == METHOD_TAB).ToList();
       }
 
+
       // map to result
       static RendererComponent Map(RenderProperty property)
       {
@@ -86,6 +90,7 @@ namespace zero.Core.Renderer
       }
 
       config.Components = Properties.Select(x => Map(x)).ToList();
+
 
       return config;
     }
@@ -100,18 +105,30 @@ namespace zero.Core.Renderer
         Method = METHOD_FIELD,
         Compile = property =>
         {
-          object field = mapExpression.Compile().Invoke(new T());
+          MemberExpression memberExpression = null;
+
+          if (mapExpression.Body is UnaryExpression)
+          {
+            UnaryExpression unaryExpression = (UnaryExpression)mapExpression.Body;
+            memberExpression = (MemberExpression)unaryExpression.Operand;
+          }
+          else
+          {
+            memberExpression = (MemberExpression)mapExpression.Body;
+          }
+
+          string fieldName = memberExpression.Member.Name;
 
           RendererFieldBuilder.Data fieldData = builder.Build();
 
           property.Params = new
           {
-            Field = field,
+            Field = fieldName,
             View = fieldData.View,
             ComponentPath = fieldData.ComponentPath,
             Options = fieldData.Options ?? new List<string>() { },
-            Label = label,
-            Description = description,
+            Label = String.Format(LabelTemplate, label ?? fieldName),
+            Description = String.Format(DescriptionTemplate, description ?? fieldName),
             Required = required
           };
         }

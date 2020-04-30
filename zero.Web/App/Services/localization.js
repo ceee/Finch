@@ -22,11 +22,12 @@ export default {
     }
 
     key = hasAtSign ? key.slice(1) : key;
-    const value = zero.translations[key];
+    const value = zero.translations[key.toLowerCase()];
 
+    // TODO only return key if in debug mode
     if (!value || typeof value !== 'string')
     {
-      return '[' + key + ']';
+      return ''; // '[' + key + ']';
     }
 
     return this.replaceTokens(value, params.tokens);

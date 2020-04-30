@@ -1,6 +1,6 @@
 ﻿import { find as _find } from 'underscore';
 
-const alias = zero.alias.sections.lists;
+const alias = zero.alias.sections.spaces;
 const section = _find(zero.sections, section => section.alias === alias);
 let routes = [];
 

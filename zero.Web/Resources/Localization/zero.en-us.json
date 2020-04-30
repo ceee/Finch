@@ -224,5 +224,17 @@
 
   "iconpicker": {
     "title": "Pick an icon"
+  },
+
+  "_test": {
+    "fields": {
+      "isvisible": "Visible",
+      "facebook": "Facebook",
+      "facebook_text": "Link to facebook page",
+      "youtube": "Youtube",
+      "youtube_text": "Link to youtube channel",
+      "twitter": "Twitter",
+      "twitter_text": "Link to twitter profile"
+    }
   }
 }

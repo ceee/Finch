@@ -129,7 +129,7 @@ namespace zero.Web
       Dictionary<string, string> sections = new Dictionary<string, string>();
       sections.Add("dashboard", Constants.Sections.Dashboard);
       sections.Add("pages", Constants.Sections.Pages);
-      sections.Add("lists", Constants.Sections.Spaces);
+      sections.Add("spaces", Constants.Sections.Spaces);
       sections.Add("media", Constants.Sections.Media);
       sections.Add("settings", Constants.Sections.Settings);
 
@@ -223,7 +223,7 @@ namespace zero.Web
 
       return tokens.Aggregate(new Dictionary<string, string>(), (properties, token) =>
       {
-        properties.Add(token.Path, token.ToString());
+        properties.Add(token.Path.ToLowerInvariant(), token.ToString());
         return properties;
       });
     }

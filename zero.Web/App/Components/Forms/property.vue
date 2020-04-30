@@ -92,6 +92,11 @@
     line-height: 1.5;
     text-decoration: none;
     color: var(--color-fg-light);
+
+    &:empty
+    {
+      display: none;
+    }
   }
 
   .ui-property-required

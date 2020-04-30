@@ -7,8 +7,8 @@ namespace zero.TestData.Lists
   {
     public SocialContentRenderer()
     {
-      LabelTemplate = "@socialcontent.fields.{0}";
-      DescriptionTemplate = "@socialcontent.fields.{0}_text";
+      LabelTemplate = "@_test.fields.{0}";
+      DescriptionTemplate = "@_test.fields.{0}_text";
 
       Validator = new SocialContentValidator();
 
