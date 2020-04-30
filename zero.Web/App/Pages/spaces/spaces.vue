@@ -66,7 +66,7 @@
 
     created()
     {
-      SpacesApi.getCollections().then(response =>
+      SpacesApi.getAll().then(response =>
       {
         this.spaces = response;
         this.loadSpace();
@@ -78,8 +78,6 @@
 
       loadSpace()
       {
-        console.info(this.$route.params);
-
         if (this.isOverview)
         {
           this.space = null;
@@ -104,8 +102,6 @@
         {
           throw "Not implemented. Custom space view";
         }
-
-        console.info(this.space);
 
         this.loaded = true;
       },

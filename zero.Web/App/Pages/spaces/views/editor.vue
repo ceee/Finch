@@ -14,11 +14,10 @@
   import SpacesApi from 'zero/resources/spaces.js';
 
   export default {
-    props: [ 'alias' ],
+    props: [ 'config', 'space' ],
 
     data: () => ({
-      space: {},
-      tableConfig: {}
+      
     }),
 
     watch: {
@@ -35,10 +34,7 @@
 
       load()
       {
-        SpacesApi.getByAlias(this.alias).then(response =>
-        {
-          this.space = response;
-        });
+        
       }
 
     }

@@ -40,27 +40,27 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    //public async Task<IList<T>> GetAll<T>(string alias) where T : SpaceListItem
-    //{
-    //  using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-    //  {
-    //    return await session.Query<SpaceListItem>().ProjectInto<T>().ToListAsync();
-    //  }
-    //}
+    public async Task<IList<T>> GetList<T>(string alias) where T : SpaceContent
+    {
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        return await session.Query<SpaceContent>().ProjectInto<T>().ToListAsync();
+      }
+    }
 
-    ///// <inheritdoc />
-    //public async Task<ListResult<T>> GetByQuery<T>(string alias, ListQuery<T> query, string appId = null) where T : SpaceListItem
-    //{
-    //  query.SearchSelector = user => user.Name;
+    /// <inheritdoc />
+    public async Task<ListResult<T>> GetListByQuery<T>(string alias, ListQuery<T> query, string appId = null) where T : SpaceContent
+    {
+      query.SearchSelector = item => item.Name;
 
-    //  using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-    //  {
-    //    return await session.Query<T>()
-    //      .ForApp(appId)
-    //      .Where(x => x.Alias == alias)
-    //      .ToQueriedListAsync(query);
-    //  }
-    //}
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        return await session.Query<T>()
+          .ForApp(appId)
+          .Where(x => x.Alias == alias)
+          .ToQueriedListAsync(query);
+      }
+    }
   }
 
 
@@ -79,11 +79,11 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all list items by a list collection alias
     /// </summary>
-    //Task<IList<T>> GetAll<T>(string alias) where T : SpaceListItem;
+    Task<IList<T>> GetList<T>(string alias) where T : SpaceContent;
 
     /// <summary>
     /// Get all list items for a collection (with query)
     /// </summary>
-    //Task<ListResult<T>> GetByQuery<T>(string alias, ListQuery<T> query, string appId = null) where T : SpaceListItem;
+    Task<ListResult<T>> GetListByQuery<T>(string alias, ListQuery<T> query, string appId = null) where T : SpaceContent;
   }
 }

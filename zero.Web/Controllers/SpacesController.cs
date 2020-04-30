@@ -39,11 +39,11 @@ namespace zero.Web.Controllers
 
 
     /// <summary>
-    /// Get list items in a collection
+    /// Get list items in a space
     /// </summary>    
-    //public async Task<IActionResult> GetAll([FromQuery] string alias, [FromQuery] ListQuery<SpaceListItem> query = null)
-    //{
-    //  return Json(await Api.GetByQuery<SpaceListItem>(alias, query)); 
-    //}
+    public async Task<IActionResult> GetList([FromQuery] string alias, [FromQuery] ListQuery<SpaceContent> query = null)
+    {
+      return Json(await Api.GetListByQuery<SpaceContent>(alias, query));
+    }
   }
 }

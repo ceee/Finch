@@ -9,16 +9,16 @@ export default {
   },
 
   // get all spaces
-  getCollections()
+  getAll()
   {
     return Axios.get('spaces/getAll').then(res => Promise.resolve(res.data));
   },
 
-  // get all list items in a collection
-  getAll(alias, query)
+  // get all list items in a space
+  getList(alias, query)
   {
     query.alias = alias;
 
-    return Axios.get('spaces/getAll', { params: query }).then(res => Promise.resolve(res.data));
+    return Axios.get('spaces/getList', { params: query }).then(res => Promise.resolve(res.data));
   }
 };

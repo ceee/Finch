@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="list">
-    <ui-header-bar :title="collection.name" title-empty="List">
+    <ui-header-bar :title="space.name" title-empty="List">
       <ui-table-filter v-model="tableConfig" />
       <ui-button label="Add item" icon="fth-plus" />
     </ui-header-bar>
@@ -12,18 +12,17 @@
 
 
 <script>
-  import ListsApi from 'zero/resources/spaces.js';
+  import SpacesApi from 'zero/resources/spaces.js';
 
   export default {
-    props: [ 'alias' ],
+    props: [ 'space', 'config' ],
 
     data: () => ({
-      collection: {},
       tableConfig: {}
     }),
 
     watch: {
-      '$route': 'load'
+      'space': 'load'
     },
 
     created()
@@ -36,13 +35,8 @@
 
       load()
       {
-        ListsApi.getCollectionByAlias(this.alias).then(response =>
-        {
-          this.collection = response;
-        });
-
         this.tableConfig = {
-          //items: ListsApi.getAll.bind(this, this.alias),
+          items: SpacesApi.getList.bind(this, this.space.alias),
           columns: {
             name: {
               as: 'text',

@@ -2,8 +2,11 @@
   <div class="ui-header-bar">
     <div class="ui-header-bar-main">
       <ui-icon-button v-if="backButton" @click="onBack" />
-      <h2 v-if="title" class="ui-header-bar-title" v-localize="title"></h2>
-      <h2 v-if="!title && titleEmpty" class="ui-header-bar-title is-empty" v-localize="titleEmpty"></h2>
+      <div>
+        <h2 v-if="title" class="ui-header-bar-title" v-localize="title"></h2>
+        <h2 v-if="!title && titleEmpty" class="ui-header-bar-title is-empty" v-localize="titleEmpty"></h2>
+        <p v-if="description" class="ui-header-bar-description" v-localize="description"></p>
+      </div>
     </div>
     <div class="ui-header-bar-aside">
       <slot></slot>
@@ -24,6 +27,9 @@
         type: String
       },
       titleEmpty: {
+        type: String
+      },
+      description: {
         type: String
       },
       backButton: {
@@ -104,5 +110,12 @@
       color: var(--color-fg-light);
       font-weight: 400;
     }
+  }
+
+  .ui-header-bar-description
+  {
+    font-size: var(--font-size-s);
+    color: var(--color-fg-light);
+    margin: 2px 0 0;
   }
 </style>
