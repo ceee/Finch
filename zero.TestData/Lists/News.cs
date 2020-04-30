@@ -2,7 +2,7 @@
 
 namespace zero.TestData
 {
-  public class News : ListItem
+  public class News : SpaceContent
   {
     
   }

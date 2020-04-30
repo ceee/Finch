@@ -7,13 +7,13 @@ namespace zero.Web.Sections
   /// <summary>
   /// Global list entities
   /// </summary>
-  public class ListsSection : ISection, IBuiltInSection
+  public class SpacesSection : ISection, IBuiltInSection
   {
     /// <inheritdoc />
-    public string Alias => Constants.Sections.Lists;
+    public string Alias => Constants.Sections.Spaces;
 
     /// <inheritdoc />
-    public string Name => "@sections.item.lists";
+    public string Name => "@sections.item.spaces";
 
     /// <inheritdoc />
     public string Icon => "fth-layers";

@@ -3,7 +3,7 @@ using zero.Core.Entities;
 
 namespace zero.TestData
 {
-  public class TeamMember : ListItem
+  public class TeamMember : SpaceContent
   {
     public string Position { get; set; }
 

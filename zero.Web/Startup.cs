@@ -76,8 +76,9 @@ namespace zero.Web
       //services.AddCore(appConfig, env);
       services.AddZero(opts =>
       {
-        opts.Lists.Add<TeamMember>("team", "Team", "Our team members", "fth-users");
-        opts.Lists.Add<News>("news", "News", "Articles about the company", "fth-edit");
+        opts.Spaces.AddList<TeamMember>("team", "Team", "Our team members", "fth-users");
+        opts.Spaces.AddList<News>("news", "News", "Articles about the company", "fth-edit");
+        opts.Spaces.AddEditor<SocialContent>("social", "Social", "Links to social media", "fth-twitter");
 
         //var commercePermissions = new Core.Identity.PermissionCollection()
         //{
@@ -137,7 +138,7 @@ namespace zero.Web
       services.AddTransient<IUserApi, UserApi>();
       services.AddTransient<IUserRolesApi, UserRolesApi>();
       services.AddTransient<IToken, Token>();
-      services.AddTransient<IListsApi, ListsApi>();
+      services.AddTransient<ISpacesApi, SpacesApi>();
     }
 
     /// <summary>

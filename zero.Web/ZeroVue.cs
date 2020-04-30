@@ -129,7 +129,7 @@ namespace zero.Web
       Dictionary<string, string> sections = new Dictionary<string, string>();
       sections.Add("dashboard", Constants.Sections.Dashboard);
       sections.Add("pages", Constants.Sections.Pages);
-      sections.Add("lists", Constants.Sections.Lists);
+      sections.Add("lists", Constants.Sections.Spaces);
       sections.Add("media", Constants.Sections.Media);
       sections.Add("settings", Constants.Sections.Settings);
 

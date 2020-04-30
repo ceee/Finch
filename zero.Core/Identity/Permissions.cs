@@ -28,7 +28,7 @@
       public const string PREFIX = "section.";
       public const string Dashboard = PREFIX + Constants.Sections.Dashboard;
       public const string Pages = PREFIX + Constants.Sections.Pages;
-      public const string Lists = PREFIX + Constants.Sections.Lists;
+      public const string Spaces = PREFIX + Constants.Sections.Spaces;
       public const string Media = PREFIX + Constants.Sections.Media;
       public const string Settings = PREFIX + Constants.Sections.Settings;
     }

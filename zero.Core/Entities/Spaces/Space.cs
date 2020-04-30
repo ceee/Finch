@@ -2,11 +2,15 @@
 
 namespace zero.Core.Entities
 {
-  public class ListCollection
+  public class Space
   {
     public string Alias { get; set; }
 
     public Type Type { get; set; }
+
+    public SpaceView View { get; set; }
+
+    public string ComponentPath { get; set; }
 
     public string Name { get; set; }
 

@@ -12,11 +12,9 @@
 
 
 <script>
-  import ListsApi from 'zero/resources/lists.js';
+  import ListsApi from 'zero/resources/spaces.js';
 
   export default {
-    name: 'app-lists',
-
     props: [ 'alias' ],
 
     data: () => ({
@@ -44,7 +42,7 @@
         });
 
         this.tableConfig = {
-          items: ListsApi.getAll.bind(this, this.alias),
+          //items: ListsApi.getAll.bind(this, this.alias),
           columns: {
             name: {
               as: 'text',

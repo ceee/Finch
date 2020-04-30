@@ -1,28 +1,29 @@
 ﻿<template>
-  <div class="lists">
-    <div class="lists-tree" v-resizable="resizable">
-      <ui-header-bar title="Lists" :back-button="false" />
-      <div class="lists-tree-items">
-        <div v-for="item in lists" class="lists-tree-item" :class="getClasses(item)">
-          <router-link :to="{ name: 'list', params: { alias: item.alias } }" class="lists-tree-item-link">
-            <i class="lists-tree-item-icon" :class="item.icon"></i>
-            <span class="lists-tree-item-text">
+  <div class="spaces">
+    <div class="spaces-tree" v-resizable="resizable">
+      <ui-header-bar title="Spaces" :back-button="false" />
+      <div class="spaces-tree-items">
+        <div v-for="item in spaces" class="spaces-tree-item" :class="getClasses(item)">
+          <router-link :to="{ name: 'space', params: { alias: item.alias } }" class="spaces-tree-item-link">
+            <i class="spaces-tree-item-icon" :class="item.icon"></i>
+            <span class="spaces-tree-item-text">
               {{item.name | localize}}
               <span v-if="item.description" v-localize="item.description"></span>
             </span>
           </router-link>
-          <ui-dot-button class="lists-tree-item-actions" />
+          <ui-dot-button class="spaces-tree-item-actions" />
         </div>
       </div>
-      <!--<div class="lists-tree-actions">
+      <!--<div class="spaces-tree-actions">
         <ui-button label="Add list" icon="fth-plus" />
       </div>-->
-      <div class="lists-tree-resizable ui-resizable"></div>
+      <div class="spaces-tree-resizable ui-resizable"></div>
     </div>
 
-    <router-view v-if="!isOverview"></router-view>
+    <!--<router-view v-if="!isOverview"></router-view>-->
+    <component v-if="!isOverview && loaded && component" :is="component" :space="space" :config="spaceConfig"></component>
 
-    <div v-if="isOverview" class="lists-overview">
+    <div v-if="isOverview" class="spaces-overview">
       
     </div>
 
@@ -30,17 +31,24 @@
 </template>
 
 <script>
-  import ListsApi from 'zero/resources/lists.js';
+  import SpaceEditor from 'zero/pages/spaces/views/editor';
+  import SpaceList from 'zero/pages/spaces/views/list';
+  import SpaceCustom from 'zero/pages/spaces/views/custom';
+  import SpacesApi from 'zero/resources/spaces.js';
+  import { find as _find } from 'underscore';
 
   export default {
     data: () => ({
-      tableConfig: {},
-      lists: [],
+      spaces: [],
+      loaded: false,
+      component: null,
+      space: null,
+      spaceConfig: {},
       resizable: {
         axis: 'x',
         min: 260,
         max: 520,
-        save: 'lists-tree',
+        save: 'spaces-tree',
         handle: '.ui-resizable'
       }
     }),
@@ -48,20 +56,60 @@
     computed: {
       isOverview()
       {
-        return !this.$route.params.id && this.$route.name !== 'list' && this.$route.name !== 'listitem';
+        return !this.$route.params.alias;
       }
+    },
+
+    watch: {
+      '$route': 'loadSpace'
     },
 
     created()
     {
-      ListsApi.getCollections().then(response =>
+      SpacesApi.getCollections().then(response =>
       {
-        this.lists = response;
+        this.spaces = response;
+        this.loadSpace();
       });
     },
 
 
     methods: {
+
+      loadSpace()
+      {
+        console.info(this.$route.params);
+
+        if (this.isOverview)
+        {
+          this.space = null;
+          this.component = null;
+          this.loaded = true;
+          return;
+        }
+
+        this.loaded = false;
+
+        this.space = _find(this.spaces, space => space.alias === this.$route.params.alias);
+
+        if (this.space.view === 'editor')
+        {
+          this.component = SpaceEditor;
+        }
+        else if (this.space.view === 'list')
+        {
+          this.component = SpaceList;
+        }
+        else
+        {
+          throw "Not implemented. Custom space view";
+        }
+
+        console.info(this.space);
+
+        this.loaded = true;
+      },
+
       // get all classes for a tree item
       getClasses(item)
       {
@@ -76,7 +124,7 @@
 
 
 <style lang="scss">
-  .lists
+  .spaces
   {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -85,7 +133,7 @@
     height: 100vh;
   }
 
-  .lists-tree
+  .spaces-tree
   {
     width: 340px;
     background: var(--color-bg-light);
@@ -100,12 +148,12 @@
     }
   }
 
-  .lists-tree-actions
+  .spaces-tree-actions
   {
     padding: var(--padding);
   }
 
-  .lists-tree-resizable
+  .spaces-tree-resizable
   {
     position: absolute;
     top: 0;
@@ -124,13 +172,13 @@
     }
   }
 
-  .lists-overview
+  .spaces-overview
   {
     padding: 95px 0 0 60px;
   }
 
 
-  .lists-tree-item
+  .spaces-tree-item
   {
     display: grid;
     grid-template-columns: 1fr auto;
@@ -142,19 +190,19 @@
     position: relative;
     transition: color 0.2s ease;
 
-    &:hover > .lists-tree-item-actions
+    &:hover > .spaces-tree-item-actions
     {
       transition-delay: 0.2s;
       opacity: 1;
     }
 
-    & + .lists-tree-item
+    & + .spaces-tree-item
     {
       margin-top: 15px;
     }
   }
 
-  .lists-tree-item-link
+  .spaces-tree-item-link
   {
     display: grid;
     grid-template-columns: 30px 1fr auto;
@@ -170,7 +218,7 @@
     }
   }
 
-  .lists-tree-item-text
+  .spaces-tree-item-text
   {
     display: flex;
     flex-direction: column;
@@ -181,7 +229,7 @@
     }
   }
 
-  .lists-tree-item-toggle
+  .spaces-tree-item-toggle
   {
     position: absolute;
     color: var(--color-fg-mid);
@@ -200,7 +248,7 @@
     }
   }
 
-  .lists-tree-item-icon
+  .spaces-tree-item-icon
   {
     font-size: 18px;
     line-height: 1;
@@ -211,7 +259,7 @@
     transition: color 0.2s ease;
   }
 
-  .lists-tree-item-actions
+  .spaces-tree-item-actions
   {
     transition: opacity 0.2s ease 0;
     opacity: 0;

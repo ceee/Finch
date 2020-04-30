@@ -226,7 +226,7 @@ namespace zero.Core.Api
         {
           new UserClaim(type, Permissions.Applications, PermissionsValue.Write),
           new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.True),
-          new UserClaim(type, Permissions.Sections.Lists, PermissionsValue.True),
+          new UserClaim(type, Permissions.Sections.Spaces, PermissionsValue.True),
           new UserClaim(type, Permissions.Sections.Pages, PermissionsValue.True),
           new UserClaim(type, Permissions.Sections.Media, PermissionsValue.True),
           new UserClaim(type, Permissions.Sections.Settings, PermissionsValue.True),
@@ -251,7 +251,7 @@ namespace zero.Core.Api
         Claims = new List<IUserClaim>()
         {
           new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.True),
-          new UserClaim(type, Permissions.Sections.Lists, PermissionsValue.True),
+          new UserClaim(type, Permissions.Sections.Spaces, PermissionsValue.True),
           new UserClaim(type, Permissions.Sections.Pages, PermissionsValue.True),
           new UserClaim(type, Permissions.Sections.Media, PermissionsValue.True),
           new UserClaim(type, Permissions.Sections.Settings, PermissionsValue.True),

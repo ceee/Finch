@@ -10,7 +10,7 @@ namespace zero.Core
 
     public SectionCollection Sections { get; private set; } = new SectionCollection();
 
-    public ListCollections Lists { get; private set; } = new ListCollections();
+    public SpaceCollection Spaces { get; private set; } = new SpaceCollection();
 
     public IList<SettingsGroup> SettingsAreas { get; private set; } = new List<SettingsGroup>();
 

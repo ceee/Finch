@@ -38,7 +38,7 @@
     {
       public const string Dashboard = "dashboard";
       public const string Pages = "pages";
-      public const string Lists = "lists";
+      public const string Spaces = "spaces";
       public const string Media = "media";
       public const string Settings = "settings";
     }

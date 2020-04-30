@@ -89,7 +89,7 @@ namespace zero.Web
 
       opts.Sections.Add<DashboardSection>();
       opts.Sections.Add<PagesSection>(); 
-      opts.Sections.Add<ListsSection>();
+      opts.Sections.Add<SpacesSection>();
       opts.Sections.Add<MediaSection>();
       opts.Sections.Add<SettingsSection>();
 
@@ -131,7 +131,7 @@ namespace zero.Web
 
       permissionSections.Items.Add(new Permission(Permissions.Sections.Dashboard, "@sections.item.dashboard", null, PermissionValueType.Boolean));
       permissionSections.Items.Add(new Permission(Permissions.Sections.Pages, "@sections.item.pages", null, PermissionValueType.Boolean));
-      permissionSections.Items.Add(new Permission(Permissions.Sections.Lists, "@sections.item.lists", null, PermissionValueType.Boolean));
+      permissionSections.Items.Add(new Permission(Permissions.Sections.Spaces, "@sections.item.spaces", null, PermissionValueType.Boolean));
       permissionSections.Items.Add(new Permission(Permissions.Sections.Media, "@sections.item.media", null, PermissionValueType.Boolean));
       permissionSections.Items.Add(new Permission(Permissions.Sections.Settings, "@sections.item.settings", null, PermissionValueType.Boolean));
 
