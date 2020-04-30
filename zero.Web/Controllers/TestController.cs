@@ -6,6 +6,7 @@ using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.TestData.Lists;
 
 namespace zero.Web.Controllers
 {
@@ -20,6 +21,16 @@ namespace zero.Web.Controllers
     {
       Api = api;
       SignInManager = signInManager;
+    }
+
+
+    [HttpGet]
+    [ZeroAuthorize(false)]
+    public async Task<IActionResult> RenderConfig()
+    {
+      SocialContentRenderer renderer = new SocialContentRenderer();
+
+      return Json(await renderer.Build());
     }
 
 

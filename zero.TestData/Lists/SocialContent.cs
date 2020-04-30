@@ -4,6 +4,8 @@ namespace zero.TestData
 {
   public class SocialContent : SpaceContent
   {
+    public bool IsVisible { get; set; }
+
     public string Twitter { get; set; }
 
     public string Facebook { get; set; }

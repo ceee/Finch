@@ -4,27 +4,24 @@ namespace zero.Core.Renderer
 {
   public interface IRendererFieldBuilder
   {
-    IRendererFieldBuilder Required();
+    void Text(Action<TextOptions> optionsBuilder = null);
 
-    IRendererFieldBuilder Text(Action<TextOptions> optionsBuilder = null);
+    void Textarea(Action<TextOptions> optionsBuilder = null);
 
-    IRendererFieldBuilder Textarea(Action<TextOptions> optionsBuilder = null);
+    void Rte();
 
-    IRendererFieldBuilder Rte();
+    void IconPicker();
 
-    IRendererFieldBuilder IconPicker();
+    void Toggle();
 
-    IRendererFieldBuilder Toggle();
+    void State(Action<StateOptions> optionsBuilder = null);
 
-    IRendererFieldBuilder State(Action<StateOptions> optionsBuilder = null);
+    void Media(Action<MediaOptions> optionsBuilder = null);
 
-    IRendererFieldBuilder Media(Action<MediaOptions> optionsBuilder = null);
+    void Output();
 
-    IRendererFieldBuilder Output();
+    void Nested<T>(IRenderer<T> renderer, Action<NestedOptions> optionsBuilder = null);
 
-    IRendererFieldBuilder Nested<T>(IRenderer<T> renderer, Action<NestedOptions> optionsBuilder = null);
-
-    IRendererFieldBuilder Custom(string path, Func<object> optionsBuilder = null);
-
+    void Custom(string path, Func<object> optionsBuilder = null);
   }
 }
