@@ -13,8 +13,11 @@ namespace zero.Core.Renderer
 {
   public class AbstractGenericRenderer : AbstractRenderer<object>
   {
+    public Type TargetType { get; set; }
+
     internal AbstractGenericRenderer(Type type, List<RenderProperty> properties)
     {
+      TargetType = type;
       Properties = properties;
     }
   }

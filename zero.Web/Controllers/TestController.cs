@@ -1,11 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Core.Renderer;
+using zero.TestData;
 using zero.TestData.Lists;
 
 namespace zero.Web.Controllers
@@ -15,12 +20,18 @@ namespace zero.Web.Controllers
   {
     private IAuthenticationApi Api { get; set; }
 
+    private ISpacesApi SpacesApi { get; set; }
+
     private SignInManager<User> SignInManager;
 
-    public TestController(IZeroConfiguration config, IAuthenticationApi api, SignInManager<User> signInManager) : base(config)
+    private ZeroOptions Options;
+
+    public TestController(IZeroConfiguration config, IAuthenticationApi api, ISpacesApi spacesApi, SignInManager<User> signInManager, IOptionsMonitor<ZeroOptions> options) : base(config)
     {
       Api = api;
+      SpacesApi = spacesApi;
       SignInManager = signInManager;
+      Options = options.CurrentValue;
     }
 
 
@@ -29,6 +40,55 @@ namespace zero.Web.Controllers
     public IActionResult RenderConfig()
     {
       SocialContentRenderer renderer = new SocialContentRenderer();
+
+      return Json(renderer.Build());
+    }
+
+
+    [HttpGet]
+    [ZeroAuthorize(false)]
+    public async Task<IActionResult> SaveSpaceContent()
+    {
+      TeamMember model = new TeamMember()
+      {
+        IsActive = true,
+        Email = "tobi@test.com",
+        Name = "Tobi",
+        Position = "Chef",
+        VideoUri = "https://swcs.pro"
+      };
+
+      model.Addresses.Add(new TeamMemberAddress()
+      {
+        City = "Braunau",
+        Street = "My street",
+        No = "23"
+      });
+
+      return Json(await SpacesApi.Save("team", model));
+    }
+
+
+    [HttpGet]
+    [ZeroAuthorize(false)]
+    public async Task<IActionResult> GetSpaceList()
+    {
+      return Json(await SpacesApi.GetList<TeamMember>("team"));
+    }
+
+
+    [HttpGet]
+    [ZeroAuthorize(false)]
+    public IActionResult GetRenderer([FromQuery] string alias)
+    {
+      Space space = SpacesApi.GetByAlias(alias);
+
+      AbstractGenericRenderer renderer = Options.Renderers.FirstOrDefault(x => x.TargetType == space.Type);
+
+      if (renderer == null)
+      {
+        return NotFound();
+      }
 
       return Json(renderer.Build());
     }

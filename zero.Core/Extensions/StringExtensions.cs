@@ -81,7 +81,11 @@ namespace zero.Core.Extensions
 
     public static string ToCamelCase(this string input)
     {
-      return Char.ToLowerInvariant(input[0]) + input.Substring(1);
+      if (!String.IsNullOrEmpty(input) && input.Length > 1)
+      {
+        return Char.ToLowerInvariant(input[0]) + input.Substring(1);
+      }
+      return input;
     }
   }
 }

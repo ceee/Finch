@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using FluentValidation.Results;
+using Microsoft.Extensions.Options;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
@@ -40,13 +41,30 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public async Task<T> GetItem<T>(string alias) where T : SpaceContent
+    {
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        return await session.Query<SpaceContent>()
+          .Where(x => x.SpaceAlias == alias)
+          .ProjectInto<T>()
+          .FirstOrDefaultAsync();
+      }
+    }
+
+
+    /// <inheritdoc />
     public async Task<IList<T>> GetList<T>(string alias) where T : SpaceContent
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<SpaceContent>().ProjectInto<T>().ToListAsync();
+        return await session.Query<SpaceContent>()
+          .Where(x => x.SpaceAlias == alias)
+          .ProjectInto<T>()
+          .ToListAsync();
       }
     }
+
 
     /// <inheritdoc />
     public async Task<ListResult<T>> GetListByQuery<T>(string alias, ListQuery<T> query, string appId = null) where T : SpaceContent
@@ -57,9 +75,39 @@ namespace zero.Core.Api
       {
         return await session.Query<T>()
           .ForApp(appId)
-          .Where(x => x.Alias == alias)
+          .Where(x => x.SpaceAlias == alias)
           .ToQueriedListAsync(query);
       }
+    }
+
+
+    /// <inheritdoc />
+    public async Task<EntityResult<T>> Save<T>(string alias, T model) where T : SpaceContent
+    {
+      Space space = Options.Spaces.GetByAlias(alias);
+      //ValidationResult validation = await new CountryValidator().ValidateAsync(model);
+
+      //if (!validation.IsValid)
+      //{
+      //  return EntityResult<Country>.Fail(validation);
+      //}
+
+      if (model.Id.IsNullOrEmpty())
+      {
+        model.AppId = "zero.applications.1-A"; // TODO real app id
+        model.CreatedDate = DateTimeOffset.Now;
+      }
+
+      model.SpaceAlias = alias;
+      model.Alias = Alias.Generate(model.Name);
+
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        await session.StoreAsync(model);
+        await session.SaveChangesAsync();
+      }
+
+      return EntityResult<T>.Success(model);
     }
   }
 
@@ -77,13 +125,23 @@ namespace zero.Core.Api
     SpaceCollection GetAll();
 
     /// <summary>
-    /// Get all list items by a list collection alias
+    /// Get editor item for a space
+    /// </summary>
+    Task<T> GetItem<T>(string alias) where T : SpaceContent;
+
+    /// <summary>
+    /// Get all list items by space alias
     /// </summary>
     Task<IList<T>> GetList<T>(string alias) where T : SpaceContent;
 
     /// <summary>
-    /// Get all list items for a collection (with query)
+    /// Get all list items for a space (with query)
     /// </summary>
     Task<ListResult<T>> GetListByQuery<T>(string alias, ListQuery<T> query, string appId = null) where T : SpaceContent;
+
+    /// <summary>
+    /// Saves a content item in a space
+    /// </summary>
+    Task<EntityResult<T>> Save<T>(string alias, T model) where T : SpaceContent;
   }
 }

@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace zero.Core.Entities
 {
   public class SpaceCollection : List<Space>
   {
+    public Space GetByAlias(string alias)
+    {
+      return this.FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+
     public void AddList<T>(string alias, string name, string description, string icon) where T : SpaceContent, new()
     {
       Add(new Space()

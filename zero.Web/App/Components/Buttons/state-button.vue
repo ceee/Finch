@@ -55,7 +55,7 @@
   button.ui-state-button-item
   {
     background: var(--color-bg-mid);
-    border: 1px solid var(--color-line);
+    //border: 1px solid var(--color-line);
     padding: 6px 16px;
 
     &:first-of-type
@@ -72,7 +72,7 @@
 
     & + button
     {
-      border-left: none;
+      border-left: 1px solid var(--color-line);
     }
 
     &.is-active

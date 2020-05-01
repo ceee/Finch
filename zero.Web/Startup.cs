@@ -14,8 +14,10 @@ using Raven.Client.Documents.Conventions;
 using System;
 using zero.Core;
 using zero.Core.Api;
+using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.TestData;
+using zero.TestData.Lists;
 
 namespace zero.Web
 {
@@ -63,7 +65,19 @@ namespace zero.Web
 
         store.Conventions.FindCollectionName = type =>
         {
-          return Constants.Database.CollectionPrefix + DocumentConventions.DefaultGetCollectionName(type);
+          Type finalType = type;
+
+          if (type.IsSubclassOf(typeof(SpaceContent)))
+          {
+            finalType = typeof(SpaceContent);
+          }
+
+          return Constants.Database.CollectionPrefix + DocumentConventions.DefaultGetCollectionName(finalType);
+        };
+
+        store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix = name =>
+        {
+          return DocumentConventions.DefaultTransformCollectionNameToDocumentIdPrefix(name.ToCamelCase());
         };
 
         store.Conventions.IdentityPartsSeparator = ".";
@@ -79,6 +93,9 @@ namespace zero.Web
         opts.Spaces.AddList<TeamMember>("team", "Team", "Our team members", "fth-users");
         opts.Spaces.AddList<News>("news", "News", "Articles about the company", "fth-edit");
         opts.Spaces.AddEditor<SocialContent>("social", "Social", "Links to social media", "fth-twitter");
+
+        opts.Renderers.Add<TeamMember, TeamMemberRenderer>();
+        opts.Renderers.Add<SocialContent, SocialContentRenderer>();
 
         //var commercePermissions = new Core.Identity.PermissionCollection()
         //{

@@ -43,7 +43,7 @@ namespace zero.Web.Controllers
     /// </summary>    
     public async Task<IActionResult> GetList([FromQuery] string alias, [FromQuery] ListQuery<SpaceContent> query = null)
     {
-      return Json(await Api.GetListByQuery<SpaceContent>(alias, query));
+      return Json(await Api.GetListByQuery(alias, query));
     }
   }
 }

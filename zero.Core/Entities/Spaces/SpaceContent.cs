@@ -6,6 +6,6 @@
   /// </summary>
   public class SpaceContent : DatabaseEntity
   {
-
+    public string SpaceAlias { get; set; }
   }
 }
