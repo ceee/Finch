@@ -20,6 +20,11 @@ namespace zero.TestData.Lists
         opts.Max = 5;
         opts.AddLabel = "Add address";
       });
+      Field(x => x.xCustom).Custom("MyPlugin/myplugineditor.vue", () => new
+      {
+        enabled = true,
+        name = "tobi"
+      });
       Field(x => x.xRte).Rte();
       Field(x => x.xMedia).Media(opts => opts.Type = MediaOptionsType.Image);
       Field(x => x.xTextarea).Output();

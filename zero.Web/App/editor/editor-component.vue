@@ -38,7 +38,17 @@
 
     created()
     {
-      this.fieldComponent = () => import(`zero/editor/fields/${this.component.params.view}`);
+      this.fieldComponent = () =>
+      {
+        if (this.component.params.view === 'custom')
+        {
+          return import('@/Plugins/' + this.component.params.componentPath);
+        }
+        else
+        {
+          return import(`zero/editor/fields/${this.component.params.view}`);
+        }
+      }
     },
 
     methods: {

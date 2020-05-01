@@ -23,6 +23,8 @@ namespace zero.TestData
 
     public string xIconPicker { get; set; }
 
+    public string xCustom { get; set; }
+
     public List<SocialAddress> Addresses { get; set; } = new List<SocialAddress>();
   }
 

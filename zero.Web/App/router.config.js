@@ -97,7 +97,7 @@ let addRoutesPerContext = (context, isPlugin) =>
 addRoutesPerContext(require.context('zero/pages', true, /routes\.js$/));
 
 // add plugin route extensions
-addRoutesPerContext(require.context('@/Plugins', true, /routes\.js$/), true); // TODO use zero.pluginPath, but this fails
+//addRoutesPerContext(require.context('@/plugins', true, /routes\.js$/), true); // TODO use zero.pluginPath, but this fails
 
 
 
