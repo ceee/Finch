@@ -40,7 +40,15 @@
           columns: {
             name: {
               as: 'text',
-              label: '@ui.name'
+              label: '@ui.name',
+              bold: true,
+              link: item =>
+              {
+                return {
+                  name: 'space-item',
+                  params: { alias: this.space.alias, id: item.id }
+                };
+              }
             },
             createdDate: {
               as: 'date',

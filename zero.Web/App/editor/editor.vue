@@ -3,7 +3,9 @@
     <ui-tab v-if="hasTabs" class="ui-box" :label="component.params.name" v-for="component in components">
       <editor-component v-for="child in component.components" v-model="model[child.params.field]" :component="child" />
     </ui-tab>
-    <editor-component v-if="!hasTabs" v-for="component in components" v-model="model[component.params.field]" :component="component" />
+    <div v-if="!hasTabs" class="ui-box">
+      <editor-component v-for="component in components" v-model="model[component.params.field]" :component="component" />
+    </div>
   </component>
 </template>
 
@@ -14,6 +16,13 @@
 
   export default {
     name: 'uiEditor',
+
+    props: {
+      config: {
+        type: Object,
+        required: true
+      }
+    },
 
     components: { EditorComponent },
 
@@ -34,25 +43,40 @@
     },
 
     watch: {
+      config: {
+        deep: true,
+        handler: function()
+        {
+          this.load();
+        }
+      },
       model: {
         deep: true,
         handler: function()
         {
-          console.info('change:editor')
-          console.table(JSON.parse(JSON.stringify(this.model)));
+          //console.info('change:editor')
+          //console.table(JSON.parse(JSON.stringify(this.model)));
         }
       }
     },  
 
     created()
     {
-      Axios.get('test/renderConfig').then(res =>
+      this.load(); 
+    },
+
+    methods: {
+
+      load()
       {
-        this.components = res.data.components;
+        if (!this.config.components)
+        {
+          return;
+        }
+        this.components = this.config.components;
         this.hasTabs = this.components.length > 0 && this.components[0].method === 'tab';
         this.loaded = true;
-        console.info(JSON.parse(JSON.stringify(this.components)));
-      });
+      }
     }
   }
 </script>

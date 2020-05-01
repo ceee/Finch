@@ -90,7 +90,7 @@
 
         this.space = _find(this.spaces, space => space.alias === this.$route.params.alias);
 
-        if (this.space.view === 'editor')
+        if (this.space.view === 'editor' || this.$route.params.id)
         {
           this.component = SpaceEditor;
         }

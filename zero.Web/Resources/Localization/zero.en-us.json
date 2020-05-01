@@ -228,6 +228,11 @@
 
   "_test": {
     "fields": {
+      "name": "Name",
+      "position": "Position",
+      "image": "Image",
+      "email": "Email",
+      "videoUri": "Video URL",
       "isvisible": "Visible",
       "facebook": "Facebook",
       "facebook_text": "Link to facebook page",

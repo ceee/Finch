@@ -7,8 +7,8 @@ namespace zero.TestData.Lists
   {
     public TeamMemberRenderer()
     {
-      LabelTemplate = "@team.fields.{0}";
-      DescriptionTemplate = "@team.fields.{0}_text";
+      LabelTemplate = "@_test.fields.{0}";
+      DescriptionTemplate = "@_test.fields.{0}_text";
 
       Validator = new TeamMemberValidator();
 
@@ -30,15 +30,16 @@ namespace zero.TestData.Lists
   {
     public AddressRenderer()
     {
-      LabelTemplate = "@team.fields.address.{0}";
+      LabelTemplate = "@_test.fields.address.{0}";
+      DescriptionTemplate = "@{0}";
 
       Field(x => x.City, required: true).Text();
       Field(x => x.Street).Text();
       Field(x => x.No).Text(opts => opts.Classes.Add("is-short"));
-      Field(x => x.CountryId).Custom("plugins/countryPicker/countrypicker", () => new
-      {
-        startId = 107
-      });
+      //Field(x => x.CountryId).Custom("plugins/countryPicker/countrypicker", () => new
+      //{
+      //  startId = 107
+      //});
     }
   }
 

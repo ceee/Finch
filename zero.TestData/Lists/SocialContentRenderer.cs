@@ -15,11 +15,11 @@ namespace zero.TestData.Lists
       Field(x => x.IsVisible).Toggle();
       Field(x => x.xIconPicker).IconPicker();
       Field(x => x.xTextarea).Textarea();
-      Field(x => x.Addresses, required: true).Nested(new SocialAddressRenderer(), opts =>
-      {
-        opts.Limit = 5;
-        opts.AddLabel = "Add address";
-      });
+      //Field(x => x.Addresses, required: true).Nested(new SocialAddressRenderer(), opts =>
+      //{
+      //  opts.Limit = 5;
+      //  opts.AddLabel = "Add address";
+      //});
       Field(x => x.xRte).Rte();
       Field(x => x.xMedia).Media(opts => opts.Type = MediaOptionsType.Image);
       Field(x => x.xTextarea).Output();

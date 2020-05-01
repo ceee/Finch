@@ -6,12 +6,12 @@ let routes = [];
 
 if (section)
 {
-  //routes.push({
-  //  path: 'edit/:id',
-  //  props: true,
-  //  name: 'spaceitem',
-  //  component: () => import('zero/pages/' + alias + '/item')
-  //});
+  routes.push({
+    path: ':alias/edit/:id',
+    props: true,
+    name: 'space-item',
+    component: () => import('zero/pages/' + alias + '/spaces')
+  });
 
   routes.push({
     path: ':alias',
