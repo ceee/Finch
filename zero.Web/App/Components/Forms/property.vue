@@ -71,6 +71,11 @@
     margin-top: 0;
   }
 
+  .ui-property.full-width > .ui-property-content
+  {
+    max-width: 100%;
+  }
+
   .ui-property-label
   {
     display: block;

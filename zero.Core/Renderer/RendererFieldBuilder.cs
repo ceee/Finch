@@ -4,29 +4,34 @@ namespace zero.Core.Renderer
 {
   public class RendererFieldBuilder : IRendererFieldBuilder
   {
-    public string View = null;
+    string View = null;
 
-    public string ComponentPath = null;
+    string ComponentPath = null;
 
-    public object Options = null;
+    object Options = null;
+
+    AbstractGenericRenderer Renderer = null;
 
 
-    public class Data
+    internal class Data
     {
       public string View = null;
 
       public string ComponentPath = null;
 
       public object Options = null;
+
+      public AbstractGenericRenderer Renderer = null;
     }
 
-    public Data Build()
+    internal Data Build()
     {
       return new Data()
       {
         View = View,
         ComponentPath = ComponentPath,
-        Options = Options
+        Options = Options,
+        Renderer = Renderer
       };
     }
 
@@ -59,6 +64,7 @@ namespace zero.Core.Renderer
     public void Nested<T>(IRenderer<T> renderer, Action<NestedOptions> optionsBuilder = null)
     {
       View = "nested";
+      Renderer = renderer.ToGenericRenderer();
       Options = BuildOptions(optionsBuilder);
     }
 

@@ -11,6 +11,15 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Renderer
 {
+  public class AbstractGenericRenderer : AbstractRenderer<object>
+  {
+    internal AbstractGenericRenderer(Type type, List<RenderProperty> properties)
+    {
+      Properties = properties;
+    }
+  }
+
+
   public abstract class AbstractRenderer<T> : IRenderer<T> where T : new()
   {
     const string METHOD_FIELD = "field";
@@ -19,7 +28,7 @@ namespace zero.Core.Renderer
 
     const string METHOD_BOX = "box";
 
-    List<RenderProperty> Properties = new List<RenderProperty>();
+    internal List<RenderProperty> Properties = new List<RenderProperty>();
 
     RenderProperty ParentProperty = null;
 
@@ -33,12 +42,10 @@ namespace zero.Core.Renderer
     protected IValidator<T> Validator = null;
 
 
-    public async Task<RendererConfig> Build()
+    public RendererConfig Build()
     {
       RendererConfig config = new RendererConfig();
       config.Type = typeof(T);
-
-      await Task.Delay(0);
 
 
       // compile fields
@@ -82,18 +89,34 @@ namespace zero.Core.Renderer
       // map to result
       static RendererComponent Map(RenderProperty property)
       {
-        return new RendererComponent()
+        RendererComponent component = new RendererComponent()
         {
           Method = property.Method,
-          Params = property.Params,
-          Components = property.Children.Select(x => Map(x)).ToList()
+          Params = property.Params
         };
+
+        if (property.Children.Count > 0)
+        {
+          component.Components = property.Children.Select(x => Map(x)).ToList();
+        }
+        else if (property.NestedRenderer != null)
+        {
+          component.Components = property.NestedRenderer.Build().Components;
+        }
+
+        return component;
       }
 
       config.Components = Properties.Select(x => Map(x)).ToList();
 
 
       return config;
+    }
+
+
+    public AbstractGenericRenderer ToGenericRenderer()
+    {
+      return new AbstractGenericRenderer(typeof(T), Properties);
     }
 
 
@@ -122,6 +145,7 @@ namespace zero.Core.Renderer
 
           RendererFieldBuilder.Data fieldData = builder.Build();
 
+          property.NestedRenderer = fieldData.Renderer;
           property.Params = new
           {
             Field = fieldName,
@@ -138,7 +162,7 @@ namespace zero.Core.Renderer
       return builder;
     }
 
-    protected virtual IRenderer<T> Tab(string name, Action builder)
+    protected virtual void Tab(string name, Action builder)
     {
       Add(new RenderProperty()
       {
@@ -149,11 +173,9 @@ namespace zero.Core.Renderer
           Name = name
         }
       });
-
-      return this;
     }
 
-    protected virtual IRenderer<T> Box(string name, string description, Action builder)
+    protected virtual void Box(string name, string description, Action builder)
     {
       Add(new RenderProperty()
       {
@@ -165,8 +187,6 @@ namespace zero.Core.Renderer
           Description = description
         }
       });
-
-      return this;
     }
 
     private void Add(RenderProperty property)

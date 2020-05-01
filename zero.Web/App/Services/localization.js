@@ -27,7 +27,7 @@ export default {
     // TODO only return key if in debug mode
     if (!value || typeof value !== 'string')
     {
-      return '[' + key + ']';
+      return ''; // '[' + key + ']';
     }
 
     return this.replaceTokens(value, params.tokens);

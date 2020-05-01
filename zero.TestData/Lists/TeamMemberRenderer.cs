@@ -19,7 +19,7 @@ namespace zero.TestData.Lists
       Field(x => x.VideoUri).Text();
       Field(x => x.Addresses, required: true).Nested(new AddressRenderer(), opts =>
       {
-        opts.Max = 5;
+        opts.Limit = 5;
         opts.AddLabel = "Add address";
       });
     }

@@ -10,11 +10,11 @@ namespace zero.Core.Renderer
 
     public dynamic Params { get; set; }
 
-    [JsonIgnore]
     public Action Builder { get; set; }
 
-    [JsonIgnore]
     public Action<RenderProperty> Compile { get; set; }
+
+    public AbstractGenericRenderer NestedRenderer { get; set; }
 
     public List<RenderProperty> Children { get; set; } = new List<RenderProperty>();
   }

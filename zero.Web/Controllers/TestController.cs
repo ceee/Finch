@@ -26,11 +26,11 @@ namespace zero.Web.Controllers
 
     [HttpGet]
     [ZeroAuthorize(false)]
-    public async Task<IActionResult> RenderConfig()
+    public IActionResult RenderConfig()
     {
       SocialContentRenderer renderer = new SocialContentRenderer();
 
-      return Json(await renderer.Build());
+      return Json(renderer.Build());
     }
 
 

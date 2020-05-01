@@ -17,13 +17,8 @@ namespace zero.TestData.Lists
       Field(x => x.xTextarea).Textarea();
       Field(x => x.Addresses, required: true).Nested(new SocialAddressRenderer(), opts =>
       {
-        opts.Max = 5;
+        opts.Limit = 5;
         opts.AddLabel = "Add address";
-      });
-      Field(x => x.xCustom).Custom("MyPlugin/myplugineditor.vue", () => new
-      {
-        enabled = true,
-        name = "tobi"
       });
       Field(x => x.xRte).Rte();
       Field(x => x.xMedia).Media(opts => opts.Type = MediaOptionsType.Image);
@@ -33,6 +28,11 @@ namespace zero.TestData.Lists
         opts.Add("Image", "image");
         opts.Add("Video" , "video");
         opts.Add("Other", "other");
+      });
+      Field(x => x.xCustom).Custom("MyPlugin/myplugineditor.vue", () => new
+      {
+        enabled = true,
+        name = "tobi"
       });
       Tab("Networks", () => {
 
@@ -49,14 +49,32 @@ namespace zero.TestData.Lists
     public SocialAddressRenderer()
     {
       LabelTemplate = "@_test.fields.address.{0}";
+      DescriptionTemplate = "@{0}";
 
       Field(x => x.City, required: true).Text();
       Field(x => x.Street).Text();
       Field(x => x.No).Text(opts => opts.Classes.Add("is-short"));
-      Field(x => x.CountryId).Custom("plugins/countryPicker/countrypicker", () => new
+      Field(x => x.Countries, required: true).Nested(new SocialAddressCountryRenderer(), opts =>
       {
-        startId = 107
+        opts.Limit = 1;
       });
+      //Field(x => x.CountryId).Custom("plugins/countryPicker/countrypicker", () => new
+      //{
+      //  startId = 107
+      //});
+    }
+  }
+
+
+  public class SocialAddressCountryRenderer : AbstractRenderer<SocialAddressCountry>
+  {
+    public SocialAddressCountryRenderer()
+    {
+      LabelTemplate = "@_test.fields.address.{0}";
+      DescriptionTemplate = "@{0}";
+
+      Field(x => x.Name, required: true).Text();
+      Field(x => x.Iso, required: true).Text();
     }
   }
 

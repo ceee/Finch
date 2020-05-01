@@ -6,8 +6,8 @@ namespace zero.Core.Renderer
 {
   public class NestedOptions : AbstractFieldOptions
   {
-    public int Max { get; set; }
+    public int Limit { get; set; } = 10;
 
-    public string AddLabel { get; set; }
+    public string AddLabel { get; set; } = "@ui.add";
   }
 }

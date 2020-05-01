@@ -36,6 +36,14 @@ namespace zero.TestData
 
     public string No { get; set; }
 
-    public string CountryId { get; set; }
+    public List<SocialAddressCountry> Countries { get; set; } = new List<SocialAddressCountry>();
+  }
+
+
+  public class SocialAddressCountry
+  {
+    public string Name { get; set; }
+
+    public string Iso { get; set; }
   }
 }

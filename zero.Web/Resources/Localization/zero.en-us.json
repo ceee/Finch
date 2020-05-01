@@ -234,7 +234,23 @@
       "youtube": "Youtube",
       "youtube_text": "Link to youtube channel",
       "twitter": "Twitter",
-      "twitter_text": "Link to twitter profile"
+      "twitter_text": "Link to twitter profile",
+      "xIconPicker": "Icon",
+      "xTextarea": "Description",
+      "addresses": "Addresses",
+      "addresses_text": "Enter as many addresses as you wish",
+      "xCustom": "Generate",
+      "xRte": "Description as HTML",
+      "xMedia": "Images",
+      "xState": "Select media type",
+      "address": {
+        "city": "City",
+        "street": "Street",
+        "no": "No",
+        "countries": "Country",
+        "name": "Name",
+        "iso": "ISO Code"
+      }
     }
   }
 }

@@ -20,7 +20,9 @@
     data: () => ({
       loaded: false,
       hasTabs: false,
-      model: {},
+      model: {
+        Addresses: []
+      },
       components: []
     }),
 
