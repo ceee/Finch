@@ -21,6 +21,9 @@
       config: {
         type: Object,
         required: true
+      },
+      value: {
+        type: Object
       }
     },
 
@@ -29,9 +32,7 @@
     data: () => ({
       loaded: false,
       hasTabs: false,
-      model: {
-        Addresses: []
-      },
+      model: {},
       components: []
     }),
 
@@ -48,6 +49,13 @@
         handler: function()
         {
           this.load();
+        }
+      },
+      value: {
+        deep: true,
+        handler: function (value)
+        {
+          this.model = value;
         }
       },
       model: {

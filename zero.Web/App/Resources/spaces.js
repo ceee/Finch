@@ -20,5 +20,23 @@ export default {
     query.alias = alias;
 
     return Axios.get('spaces/getList', { params: query }).then(res => Promise.resolve(res.data));
+  },
+
+  // get space item
+  getContent(alias, contentId)
+  {
+    return Axios.get('spaces/getContent', { params: { alias, contentId } }).then(res => Promise.resolve(res.data));
+  },
+
+  // save a space item
+  save(model)
+  {
+    return Axios.post('spaces/save', model).then(res => Promise.resolve(res.data));
+  },
+
+  // deletes an item
+  delete(id)
+  {
+    return Axios.post('spaces/delete', { params: { id } }).then(res => Promise.resolve(res.data));
   }
 };

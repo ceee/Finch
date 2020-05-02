@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Renderer;
 
 namespace zero.Core.Api
 {
@@ -41,12 +42,46 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public RendererConfig GetEditorConfig(string alias)
+    {
+      Space space = GetByAlias(alias);
+
+      if (space == null)
+      {
+        return null;
+      }
+
+      AbstractGenericRenderer renderer = Options.Renderers.FirstOrDefault(x => x.TargetType == space.Type);
+
+      if (renderer == null)
+      {
+        return null;
+      }
+
+      return renderer.Build();
+    }
+
+
+    /// <inheritdoc />
     public async Task<T> GetItem<T>(string alias) where T : SpaceContent
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<SpaceContent>()
           .Where(x => x.SpaceAlias == alias)
+          .ProjectInto<T>()
+          .FirstOrDefaultAsync();
+      }
+    }
+
+
+    /// <inheritdoc />
+    public async Task<T> GetItem<T>(string alias, string id) where T : SpaceContent
+    {
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        return await session.Query<SpaceContent>()
+          .Where(x => x.SpaceAlias == alias && x.Id == id)
           .ProjectInto<T>()
           .FirstOrDefaultAsync();
       }
@@ -125,9 +160,19 @@ namespace zero.Core.Api
     SpaceCollection GetAll();
 
     /// <summary>
+    /// Get editor configuration for a space
+    /// </summary>
+    RendererConfig GetEditorConfig(string alias);
+
+    /// <summary>
     /// Get editor item for a space
     /// </summary>
     Task<T> GetItem<T>(string alias) where T : SpaceContent;
+
+    /// <summary>
+    /// Get editor item for a space
+    /// </summary>
+    Task<T> GetItem<T>(string alias, string id) where T : SpaceContent;
 
     /// <summary>
     /// Get all list items by space alias

@@ -56,7 +56,7 @@
   {
     background: var(--color-bg-mid);
     //border: 1px solid var(--color-line);
-    padding: 6px 16px;
+    padding: 10px 16px;
 
     &:first-of-type
     {

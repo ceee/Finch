@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 
 namespace zero.Core.Extensions
 {
@@ -86,6 +87,23 @@ namespace zero.Core.Extensions
         return Char.ToLowerInvariant(input[0]) + input.Substring(1);
       }
       return input;
+    }
+
+    public static string ToCamelCaseId(this string input)
+    {
+      if (String.IsNullOrEmpty(input))
+      {
+        return input;
+      }
+
+      if (input.Length < 2)
+      {
+        return input.ToLowerInvariant();
+      }
+
+      string[] parts = input.Split('.');
+
+      return String.Join(".", parts.Select(x => x.ToCamelCase()));
     }
   }
 }

@@ -77,7 +77,7 @@ namespace zero.Web
 
         store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix = name =>
         {
-          return DocumentConventions.DefaultTransformCollectionNameToDocumentIdPrefix(name.ToCamelCase());
+          return name.ToCamelCaseId();
         };
 
         store.Conventions.IdentityPartsSeparator = ".";

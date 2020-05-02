@@ -9,13 +9,12 @@
       </ui-dropdown>
       <ui-button :submit="true" label="@ui.save" icon="fth-check" :state="form.state" v-if="!disabled" />
     </ui-header-bar>
-    <ui-editor v-if="renderer" :config="renderer" />
+    <ui-editor v-if="renderer" :config="renderer" v-model="model" />
   </ui-form>
 </template>
 
 
 <script>
-  import Axios from 'axios';
   import SpacesApi from 'zero/resources/spaces.js';
   import UiEditor from 'zero/editor/editor';
 
@@ -27,7 +26,8 @@
     data: () => ({
       disabled: false,
       renderer: {},
-      actions: []
+      actions: [],
+      model: null
     }),
 
     computed: {
@@ -54,16 +54,17 @@
 
       onLoad(form)
       {
-        form.load(Axios.get('test/getRenderer', { params: { alias: this.$route.params.alias } })).then(response =>
+        form.load(SpacesApi.getContent(this.$route.params.alias, this.$route.params.id)).then(response =>
         {
-          this.renderer = response.data;
+          this.renderer = response.config;
+          this.model = response.model;
         });
       },
 
 
       onSubmit(form)
       {
-        
+        console.table(JSON.parse(JSON.stringify(this.model)));
       },
 
     }

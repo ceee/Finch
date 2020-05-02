@@ -90,16 +90,23 @@
       transition: all 0.2s ease;
     }
 
-    &.is-active
+    &.is-active i
     {
       background: var(--color-primary);
+      transform: translateX(18px);
+      /*background: var(--color-primary);
       border-color: transparent;
 
       i
       {
         background: var(--color-primary-fg);
         transform: translateX(18px);
-      }
+      }*/
     }
   }
+
+  /*.ui-toggle.is-disabled .ui-toggle-switch i
+  {
+    background: var(--color-bg-dark);
+  }*/
 </style>
