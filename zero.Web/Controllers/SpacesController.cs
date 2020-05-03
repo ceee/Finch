@@ -87,11 +87,11 @@ namespace zero.Web.Controllers
 
 
     /// <summary>
-    /// Deletes a country
+    /// Deletes a content item
     /// </summary>
-    //public async Task<IActionResult> Delete([FromQuery] string id)
-    //{
-    //  return await As<UserRole, UserRoleEditModel>(await Api.Delete(id));
-    //}
+    public async Task<IActionResult> Delete([FromQuery] string alias, [FromQuery] string id)
+    {
+      return Json(await Api.Delete(alias, id));
+    }
   }
 }

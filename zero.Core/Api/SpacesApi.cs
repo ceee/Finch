@@ -144,6 +144,27 @@ namespace zero.Core.Api
 
       return EntityResult<T>.Success(model);
     }
+
+
+    /// <inheritdoc />
+    public async Task<EntityResult<object>> Delete(string alias, string id)
+    {
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        SpaceContent spaceContent = await session.LoadAsync<SpaceContent>(id);
+
+        if (spaceContent == null || !spaceContent.SpaceAlias.Equals(alias, StringComparison.InvariantCultureIgnoreCase))
+        {
+          return EntityResult.Fail("@errors.ondelete.idnotfound");
+        }
+
+        session.Delete(spaceContent);
+
+        await session.SaveChangesAsync();
+      }
+
+      return EntityResult.Success();
+    }
   }
 
 
@@ -188,5 +209,10 @@ namespace zero.Core.Api
     /// Saves a content item in a space
     /// </summary>
     Task<EntityResult<T>> Save<T>(string alias, T model) where T : SpaceContent;
+
+    /// <summary>
+    /// Deletes a space content item
+    /// </summary>
+    Task<EntityResult<object>> Delete(string alias, string id);
   }
 }

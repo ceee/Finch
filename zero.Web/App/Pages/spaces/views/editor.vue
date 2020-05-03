@@ -17,6 +17,7 @@
 <script>
   import SpacesApi from 'zero/resources/spaces.js';
   import UiEditor from 'zero/editor/editor';
+  import Overlay from 'zero/services/overlay.js';
 
   export default {
     props: ['config', 'space'],
@@ -46,7 +47,8 @@
     {
       this.actions.push({
         name: 'Delete',
-        icon: 'fth-trash'
+        icon: 'fth-trash',
+        action: this.onDelete
       });
     },
 
@@ -74,6 +76,31 @@
         });
       },
 
+
+      onDelete(item, opts)
+      {
+        opts.hide();
+
+        Overlay.confirmDelete().then((opts) =>
+        {
+          opts.state('loading');
+
+          SpacesApi.delete(this.$route.params.alias, this.$route.params.id).then(response =>
+          {
+            if (response.success)
+            {
+              opts.state('success');
+              opts.hide();
+              this.$router.go(-1);
+              // TODO show message
+            }
+            else
+            {
+              opts.errors(response.errors);
+            }
+          });
+        });
+      }
     }
   }
 </script>

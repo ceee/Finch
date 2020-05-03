@@ -35,8 +35,8 @@ export default {
   },
 
   // deletes an item
-  delete(id)
+  delete(alias, id)
   {
-    return Axios.post('spaces/delete', { params: { id } }).then(res => Promise.resolve(res.data));
+    return Axios.delete('spaces/delete', { params: { alias, id } }).then(res => Promise.resolve(res.data));
   }
 };
