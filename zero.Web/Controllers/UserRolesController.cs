@@ -59,7 +59,6 @@ namespace zero.Web.Controllers
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
     public async Task<IActionResult> Save([FromBody] UserRoleEditModel model)
     {
-      var state = ModelState;
       UserRole role = await Mapper.Map(model, await Api.GetById(model.Id));
       return await As<UserRole, UserRoleEditModel>(await Api.Save(role));
     }

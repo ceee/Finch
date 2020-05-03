@@ -27,7 +27,8 @@
       disabled: false,
       renderer: {},
       actions: [],
-      model: null
+      model: null,
+      fullModel: null
     }),
 
     computed: {
@@ -58,13 +59,19 @@
         {
           this.renderer = response.config;
           this.model = response.model;
+          this.fullModel = response;
         });
       },
 
 
       onSubmit(form)
       {
-        console.table(JSON.parse(JSON.stringify(this.model)));
+        this.fullModel.model = this.model;
+
+        form.handle(SpacesApi.save(this.fullModel)).then(response =>
+        {
+          console.info(response);
+        });
       },
 
     }

@@ -18,6 +18,7 @@ using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.TestData;
 using zero.TestData.Lists;
+using zero.Web.Formatters;
 
 namespace zero.Web
 {
@@ -122,6 +123,7 @@ namespace zero.Web
       IMvcBuilder mvc = services.AddMvc(opts =>
       {
         opts.Filters.Add<Core.Attributes.OperationCancelledExceptionFilterAttribute>();
+        opts.InputFormatters.Insert(0, new RawJsonBodyInputFormatter());
       })
       //.ExtendWithCore()
       .AddNewtonsoftJson(opts =>
@@ -129,6 +131,8 @@ namespace zero.Web
         opts.SerializerSettings.Converters.Add(new IsoDateTimeConverter() { DateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'" });
         opts.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
         opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
+        JsonConvert.DefaultSettings = () => opts.SerializerSettings;
       });
 
       if (Environment.GetEnvironmentVariable("DOTNET_WATCH") == "1")

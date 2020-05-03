@@ -1,4 +1,7 @@
-﻿namespace zero.Web.Models
+﻿using Newtonsoft.Json;
+using System;
+
+namespace zero.Web.Models
 {
   public abstract class EditModel
   {

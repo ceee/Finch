@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
@@ -61,22 +64,25 @@ namespace zero.Web.Controllers
         model = await Api.GetItem<TeamMember>(alias, contentId);
       }
 
+      JsonSerializerSettings settings = JsonConvert.DefaultSettings();
+      settings.TypeNameHandling = TypeNameHandling.Objects;
+
       return Json(new SpaceContentEditModel()
       {
+        Id = model.Id,
         Alias = alias,
         Model = model,
         Config = Api.GetEditorConfig(alias)
-      });
+      }, settings);
     }
 
 
     /// <summary>
     /// Save content item
     /// </summary>
-    public async Task<IActionResult> Save([FromBody] TeamMember model)
+    public async Task<IActionResult> Save([FromBody] SpaceContentEditModel model)
     {
-      TeamMember member = await Mapper.Map(model, await Api.GetItem<TeamMember>(model.Id));
-      return Json(await Api.Save(model.SpaceAlias, model));
+      return Json(await Api.Save(model.Alias, model.Model));
     }
 
 

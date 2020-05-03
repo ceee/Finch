@@ -1,4 +1,7 @@
-﻿namespace zero.Core.Entities
+﻿using Newtonsoft.Json;
+using System;
+
+namespace zero.Core.Entities
 {
   /// <summary>
   /// A list item can consist of unlimited properties and be rendered as you wish
