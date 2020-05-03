@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="media theme-dark">
+  <div class="media">
     <div class="media-tree" v-resizable="resizable">
       <ui-header-bar title="Media" />
       <ui-tree :get="getItems" />

@@ -111,6 +111,7 @@
       {
         return {
           'has-children': item.hasChildren,
+          'has-line': item.lineBelow,
           'is-open': item.isOpen
         };
       }
@@ -180,8 +181,7 @@
     grid-template-columns: 1fr auto;
     align-items: center;
     font-size: var(--font-size);
-    padding: 0 var(--padding);
-    height: 50px;
+    padding: 10px var(--padding);
     color: var(--color-fg);
     position: relative;
     transition: color 0.2s ease;
@@ -195,6 +195,12 @@
     & + .spaces-tree-item
     {
       margin-top: 15px;
+    }
+
+    &.has-line
+    {
+      border-bottom: 1px solid var(--color-bg);
+      padding-bottom: 25px;
     }
   }
 
@@ -228,6 +234,7 @@
     span
     {
       color: var(--color-fg-light);
+      margin-top: 3px;
     }
   }
 

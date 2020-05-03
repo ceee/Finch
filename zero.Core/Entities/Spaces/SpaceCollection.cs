@@ -40,6 +40,17 @@ namespace zero.Core.Entities
     }
 
 
+    public void AddSeparator()
+    {
+      Space lastSpace = this.LastOrDefault();
+
+      if (lastSpace != null)
+      {
+        lastSpace.LineBelow = true;
+      }
+    }
+
+
     public void AddCustom<T>(string componentPath, string alias, string name, string description, string icon) where T : SpaceContent, new()
     {
       Add(new Space()

@@ -17,11 +17,11 @@ namespace zero.TestData.Lists
       Field(x => x.Image).Media(opts => opts.Type = MediaOptionsType.Image);
       Field(x => x.Email, required: true).Text(opts => opts.Classes.Add("email-field"));
       Field(x => x.VideoUri).Text();
-      Field(x => x.Addresses, required: true).Nested(new AddressRenderer(), opts =>
-      {
-        opts.Limit = 5;
-        opts.AddLabel = "Add address";
-      });
+      //Field(x => x.Addresses, required: true).Nested(new AddressRenderer(), opts =>
+      //{
+      //  opts.Limit = 5;
+      //  opts.AddLabel = "Add address";
+      //});
     }
   }
 

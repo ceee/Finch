@@ -17,5 +17,7 @@ namespace zero.Core.Entities
     public string Description { get; set; }
 
     public string Icon { get; set; }
+
+    public bool LineBelow { get; set; }
   }
 }

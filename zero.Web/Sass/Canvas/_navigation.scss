@@ -2,8 +2,9 @@
 
 .app-nav
 {
-  background: var(--color-secondary);
+  background: var(--color-bg-light);
   width: 260px;
+  margin-right: 2px;
   color: white;
   height: 100vh;
   display: grid;
@@ -31,6 +32,7 @@
   font-weight: 700;
   height: var(--height-top);
   margin: 0;
+  color: var(--color-fg);
 }
 
 .app-nav-switch
@@ -40,9 +42,10 @@
 
   .ui-button.type-action
   {
-    background: rgba(white, 0.05);
-    color: var(--color-fg-mid);
-    border-color: rgba(white, 0.1);
+    background: var(--color-bg);
+    //background: rgba(white, 0.05);
+    color: var(--color-fg);
+    //border-color: rgba(white, 0.1);
     padding-left: 20px;
   }
 }
@@ -71,7 +74,7 @@ a.app-nav-item
   &.is-active:not([alias="dashboard"]), &.is-active-exact
   {
     color: var(--color-fg);
-    background: rgba(black, 0.1);
+    background: var(--color-bg-light);
     font-weight: 700;
 
     .app-nav-item-icon

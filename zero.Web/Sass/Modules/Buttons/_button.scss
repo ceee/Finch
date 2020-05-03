@@ -87,6 +87,11 @@ button::-moz-focus-inner
     top: 1px;
   }
 
+  &.type-secondary
+  {
+    background: var(--color-secondary);
+  }
+
   &.type-big
   {
     height: 50px;
