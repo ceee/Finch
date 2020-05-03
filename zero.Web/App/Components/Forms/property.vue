@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText }">
-    <label v-if="label" class="ui-property-label" for="">
+    <label v-if="label" class="ui-property-label" :for="field">
       <span v-localize="label"></span>
       <strong class="ui-property-required" v-if="required">*</strong>
       <small v-if="description" v-localize="description"></small>
@@ -8,9 +8,9 @@
 
     <div class="ui-property-content">    
       <slot></slot>
+      <ui-error :field="field" />
     </div>
 
-    <ui-error :field="field" />
   </div>
 </template>
 

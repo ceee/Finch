@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,11 @@ namespace zero.Core.Renderer
   {
     public Type TargetType { get; set; }
 
-    internal AbstractGenericRenderer(Type type, List<RenderProperty> properties)
+    internal AbstractGenericRenderer(Type type, List<RenderProperty> properties, IValidator validator = null)
     {
       TargetType = type;
       Properties = properties;
+      Validator = validator;
     }
   }
 
@@ -42,13 +44,14 @@ namespace zero.Core.Renderer
 
     protected string DescriptionTemplate = "{0}";
 
-    protected IValidator<T> Validator = null;
+    protected IValidator Validator = null;
 
 
     public RendererConfig Build()
     {
       RendererConfig config = new RendererConfig();
       config.Type = typeof(T);
+      config.Validator = Validator;
 
 
       // compile fields
@@ -119,7 +122,7 @@ namespace zero.Core.Renderer
 
     public AbstractGenericRenderer ToGenericRenderer()
     {
-      return new AbstractGenericRenderer(typeof(T), Properties);
+      return new AbstractGenericRenderer(typeof(T), Properties, Validator);
     }
 
 

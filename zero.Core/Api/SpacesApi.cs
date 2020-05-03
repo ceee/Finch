@@ -120,12 +120,17 @@ namespace zero.Core.Api
     public async Task<EntityResult<T>> Save<T>(string alias, T model) where T : SpaceContent
     {
       Space space = Options.Spaces.GetByAlias(alias);
-      //ValidationResult validation = await new CountryValidator().ValidateAsync(model);
+      RendererConfig config = GetEditorConfig(alias); 
 
-      //if (!validation.IsValid)
-      //{
-      //  return EntityResult<Country>.Fail(validation);
-      //}
+      if (config.Validator != null)
+      {
+        ValidationResult validation = await config.Validator.ValidateAsync(model);
+
+        if (!validation.IsValid)
+        {
+          return EntityResult<T>.Fail(validation);
+        }
+      }
 
       if (model.Id.IsNullOrEmpty())
       {

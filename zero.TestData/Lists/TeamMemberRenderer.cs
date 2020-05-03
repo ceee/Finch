@@ -49,6 +49,8 @@ namespace zero.TestData.Lists
     public TeamMemberValidator()
     {
       RuleFor(x => x.Name).NotEmpty().MaximumLength(120);
+      RuleFor(x => x.Position).NotEmpty().Length(3, 60);
+      RuleFor(x => x.Email).NotEmpty().EmailAddress();
     }
   }
 }

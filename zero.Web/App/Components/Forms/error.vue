@@ -1,8 +1,6 @@
 ﻿<template>
   <div class="ui-error" v-if="visible">
-    <transition>
-      <ui-message v-for="error in errors" :key="error.id" type="error" :text="error.message" :title="error.field" />
-    </transition>
+    <ui-message v-for="error in errors" :key="error.id" type="error" :text="error.message" :title="error.field" />
   </div>
 </template>
 

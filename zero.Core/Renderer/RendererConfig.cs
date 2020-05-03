@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FluentValidation;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,6 +9,9 @@ namespace zero.Core.Renderer
   public class RendererConfig
   {
     public Type Type { get; set; }
+
+    [JsonIgnore]
+    public IValidator Validator { get; set; }
 
     public List<RendererComponent> Components { get; set; } = new List<RendererComponent>();
   }

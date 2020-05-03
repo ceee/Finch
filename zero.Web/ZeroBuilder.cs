@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Core.Validation;
 using zero.Web.Mapper;
 using zero.Web.Sections;
 
@@ -20,6 +22,8 @@ namespace zero.Web
     public ZeroBuilder(IServiceCollection services)
     {
       Services = services;
+
+      ValidatorOptions.PropertyNameResolver = ValidatorCamelCasePropertyResolver.ResolvePropertyName;
 
       Services.AddOptions<ZeroOptions>().Configure(opts => ConfigureDefaults(opts));
 
