@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace zero.Core.Entities
@@ -15,6 +16,8 @@ namespace zero.Core.Entities
 
     public Expression<Func<T, object>> SearchSelector { get; set; } = null;
 
+    public Expression<Func<T, object>>[] SearchSelectors { get; private set; } = new Expression<Func<T, object>>[0] { };
+
     public string OrderBy { get; set; } = "createdDate";
 
     public ListQueryOrderType OrderType { get; set; } = ListQueryOrderType.String;
@@ -26,6 +29,11 @@ namespace zero.Core.Entities
     public int PageSize { get; set; } = 30;
 
     public TFilter Filter { get; set; }
+
+    public void SearchFor(params Expression<Func<T, object>>[] selectors)
+    {
+      SearchSelectors = selectors;
+    }
   }
 
 

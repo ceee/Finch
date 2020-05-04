@@ -44,6 +44,13 @@ namespace zero.Core.Extensions
         {
           rawQuery = rawQuery.SearchIf(query.SearchSelector, query.Search, "*", "*");
         }
+        if (!query.Search.IsNullOrEmpty() && query.SearchSelectors.Length > 0)
+        {
+          foreach (var selector in query.SearchSelectors)
+          {
+            rawQuery = rawQuery.SearchIf(selector, query.Search, "*", "*", Raven.Client.Documents.Queries.SearchOperator.Or);
+          }
+        }
 
         if (!query.OrderBy.IsNullOrEmpty())
         {

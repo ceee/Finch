@@ -48,7 +48,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<ListResult<Translation>> GetByQuery(string languageId, ListQuery<Translation> query)
     {
-      query.SearchSelector = entity => entity.Key;
+      query.SearchFor(entity => entity.Key, entity => entity.Value);
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
