@@ -96,6 +96,10 @@
         "name": "Users & Permissions",
         "text": "Administration of backoffice users"
       },
+      "languages": {
+        "name": "Languages",
+        "text": "Frontend languages"
+      },
       "translations": {
         "name": "Translations",
         "text": "Frontend texts and translations"
@@ -220,6 +224,21 @@
       "code": "Code",
       "code_text": "Code in ISO 3166-1 format which is used to display the appropriate flag",
       "isPreferred": "Show on top"
+    }
+  },
+
+  "language": {
+    "list": "Languages",
+    "name": "Language",
+    "fields": {
+      "name": "Name",
+      "locale": "Locale",
+      "code": "ISO Code",
+      "code_text": "Code in ISO 3166-1 format",
+      "isDefault": "Default",
+      "isDefault_text": "Use as default language",
+      "inheritedLanguageId": "Inherit from",
+      "inheritedLanguageId_text": "To allow multi-lingual content to fall back to another language if not present in the requested language, select it here"
     }
   },
 

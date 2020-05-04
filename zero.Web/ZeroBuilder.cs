@@ -32,6 +32,7 @@ namespace zero.Web
         opts.Add<UserMapperConfig>();
         opts.Add<CountryMapperConfig>();
         opts.Add<TranslationMapperConfig>();
+        opts.Add<LanguageMapperConfig>();
       });
 
       Services.AddIdentity<User, UserRole>(opts =>
@@ -102,8 +103,9 @@ namespace zero.Web
       systemSettings.Add(Constants.Settings.Updates, "@settings.system.updates.name", "@settings.system.updates.text", "fth-check-circle");
       systemSettings.Add(Constants.Settings.Applications, "@settings.system.applications.name", "@settings.system.applications.text", "fth-layers");
       systemSettings.Add(Constants.Settings.Users, "@settings.system.users.name", "@settings.system.users.text", "fth-users");
-      systemSettings.Add(Constants.Settings.Translations, "@settings.system.translations.name", "@settings.system.translations.text", "fth-type");
+      systemSettings.Add(Constants.Settings.Languages, "@settings.system.languages.name", "@settings.system.languages.text", "fth-globe");
       systemSettings.Add(Constants.Settings.Countries, "@settings.system.countries.name", "@settings.system.countries.text", "fth-map-pin");
+      systemSettings.Add(Constants.Settings.Translations, "@settings.system.translations.name", "@settings.system.translations.text", "fth-type");
       systemSettings.Add(Constants.Settings.Logging, "@settings.system.logs.name", "@settings.system.logs.text", "fth-file-text");
 
       SettingsGroup pluginSettings = new SettingsGroup("@settings.groups.plugins");
@@ -122,8 +124,9 @@ namespace zero.Web
       permissionSettings.Items.Add(new Permission(Permissions.Settings.Updates, "@settings.system.updates.name", "@settings.system.updates.text_default", PermissionValueType.ReadWrite));
       permissionSettings.Items.Add(new Permission(Permissions.Settings.Applications, "@settings.system.applications.name", "@settings.system.applications.text", PermissionValueType.ReadWrite));
       permissionSettings.Items.Add(new Permission(Permissions.Settings.Users, "@settings.system.users.name", "@settings.system.users.text", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Translations, "@settings.system.translations.name", "@settings.system.translations.text", PermissionValueType.ReadWrite));
+      permissionSettings.Items.Add(new Permission(Permissions.Settings.Languages, "@settings.system.languages.name", "@settings.system.languages.text", PermissionValueType.ReadWrite));
       permissionSettings.Items.Add(new Permission(Permissions.Settings.Countries, "@settings.system.countries.name", "@settings.system.countries.text", PermissionValueType.ReadWrite));
+      permissionSettings.Items.Add(new Permission(Permissions.Settings.Translations, "@settings.system.translations.name", "@settings.system.translations.text", PermissionValueType.ReadWrite));
       permissionSettings.Items.Add(new Permission(Permissions.Settings.Logging, "@settings.system.logs.name", "@settings.system.logs.text", PermissionValueType.ReadWrite));
       permissionSettings.Items.Add(new Permission(Permissions.Settings.Plugins, "@settings.plugins.installed.name", "@settings.plugins.installed.text_default", PermissionValueType.ReadWrite));
       permissionSettings.Items.Add(new Permission(Permissions.Settings.CreatePlugin, "@settings.plugins.create.name", "@settings.plugins.create.text", PermissionValueType.ReadWrite));

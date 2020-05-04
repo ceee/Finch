@@ -162,6 +162,7 @@ namespace zero.Web
       services.AddTransient<IToken, Token>();
       services.AddTransient<ISpacesApi, SpacesApi>();
       services.AddTransient<ITranslationsApi, TranslationsApi>();
+      services.AddTransient<ILanguagesApi, LanguagesApi>();
     }
 
     /// <summary>

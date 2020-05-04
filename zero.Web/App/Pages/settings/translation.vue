@@ -2,12 +2,14 @@
   <ui-form v-if="!loading" ref="form" class="translation" v-slot="form" @submit="onSubmit" @load="onLoad">
     <h2 class="ui-headline">Translation</h2>
     <div class="translation-items">
-      <ui-property label="@translation.fields.key" :required="true" :vertical="true">
-        <input v-model="item.key" type="text" class="ui-input" maxlength="200" :readonly="disabled" />
-      </ui-property>
-      <ui-property label="@translation.fields.display" :vertical="true">
-        <ui-state-button :disabled="disabled" :items="displayItems" v-model="item.display" />
-      </ui-property>
+      <div class="ui-split">
+        <ui-property label="@translation.fields.key" :required="true" :vertical="true">
+          <input v-model="item.key" type="text" class="ui-input" maxlength="200" :readonly="disabled" />
+        </ui-property>
+        <ui-property label="@translation.fields.display" :vertical="true">
+          <ui-state-button :disabled="disabled" :items="displayItems" v-model="item.display" />
+        </ui-property>
+      </div>
       <ui-property label="@translation.fields.value" :required="true" :vertical="true">
         <textarea v-model="item.value" class="ui-input" :readonly="disabled"></textarea>
       </ui-property>
@@ -99,7 +101,8 @@
   {
     margin-top: var(--padding);
 
-    .ui-property + .ui-property
+    .ui-property + .ui-property,
+    .ui-split + .ui-property
     {
       margin-top: 0;
     }

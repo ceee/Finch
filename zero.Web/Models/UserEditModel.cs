@@ -8,10 +8,6 @@ namespace zero.Web.Models
   {
     public string Name { get; set; }
 
-    public bool IsActive { get; set; }
-
-    public DateTimeOffset CreatedDate { get; set; }
-
     public bool IsSuper { get; set; }
 
     public string Email { get; set; }

@@ -63,4 +63,10 @@ body
   grid-gap: var(--padding);
   align-items: stretch;
   justify-content: stretch;
+
+  .ui-property + .ui-property
+  {
+    margin-top: 0;
+    padding-top: 0;
+  }
 }

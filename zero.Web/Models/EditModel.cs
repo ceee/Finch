@@ -11,9 +11,19 @@ namespace zero.Web.Models
     public string Id { get; set; }
 
     /// <summary>
+    /// Whether this entity is active
+    /// </summary>
+    public bool IsActive { get; set; }
+
+    /// <summary>
     /// Whether this entity can be edited or only viewed
     /// </summary>
     public bool CanEdit { get; set; }
+
+    /// <summary>
+    /// Date of creation
+    /// </summary>
+    public DateTimeOffset CreatedDate { get; set; }
 
     /// <summary>
     /// Meta data for the entity

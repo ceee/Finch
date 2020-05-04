@@ -48,6 +48,7 @@
       public const string Updates = "updates";
       public const string Applications = "applications";
       public const string Users = "users";
+      public const string Languages = "languages";
       public const string Translations = "translations";
       public const string Countries = "countries";
       public const string Logging = "logs";

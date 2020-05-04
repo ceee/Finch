@@ -22,14 +22,17 @@ namespace zero.Web.Controllers
 
     private ISpacesApi SpacesApi { get; set; }
 
+    private ILanguagesApi LanguagesApi { get; set; }
+
     private SignInManager<User> SignInManager;
 
     private ZeroOptions Options;
 
-    public TestController(IZeroConfiguration config, IAuthenticationApi api, ISpacesApi spacesApi, SignInManager<User> signInManager, IOptionsMonitor<ZeroOptions> options) : base(config)
+    public TestController(IZeroConfiguration config, IAuthenticationApi api, ISpacesApi spacesApi, ILanguagesApi languagesApi, SignInManager<User> signInManager, IOptionsMonitor<ZeroOptions> options) : base(config)
     {
       Api = api;
       SpacesApi = spacesApi;
+      LanguagesApi = languagesApi;
       SignInManager = signInManager;
       Options = options.CurrentValue;
     }
@@ -66,6 +69,21 @@ namespace zero.Web.Controllers
       });
 
       return Json(await SpacesApi.Save("team", model));
+    }
+
+
+    [HttpGet]
+    [ZeroAuthorize(false)]
+    public async Task<IActionResult> AddLanguage()
+    {
+      return Json(await LanguagesApi.Save(new Language()
+      {
+
+        IsActive = true,
+        Name = "English",
+        Code = "en-US",
+        IsDefault = true
+      }));
     }
 
 

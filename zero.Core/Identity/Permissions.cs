@@ -15,6 +15,7 @@
       public const string Updates = PREFIX + Constants.Settings.Updates;
       public const string Applications = PREFIX + Constants.Settings.Applications;
       public const string Users = PREFIX + Constants.Settings.Users;
+      public const string Languages = PREFIX + Constants.Settings.Languages;
       public const string Translations = PREFIX + Constants.Settings.Translations;
       public const string Countries = PREFIX + Constants.Settings.Countries;
       public const string Logging = PREFIX + Constants.Settings.Logging;

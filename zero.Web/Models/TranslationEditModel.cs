@@ -11,7 +11,5 @@ namespace zero.Web.Models
     public string Value { get; set; }
 
     public TranslationDisplay Display { get; set; }
-
-    public DateTimeOffset CreatedDate { get; set; }
   }
 }

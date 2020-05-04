@@ -137,6 +137,7 @@ namespace zero.Web
       settings.Add("applications", Constants.Settings.Applications);
       settings.Add("countries", Constants.Settings.Countries);
       settings.Add("logging", Constants.Settings.Logging);
+      settings.Add("languages", Constants.Settings.Languages);
       settings.Add("translations", Constants.Settings.Translations);
       settings.Add("updates", Constants.Settings.Updates);
       settings.Add("users", Constants.Settings.Users);

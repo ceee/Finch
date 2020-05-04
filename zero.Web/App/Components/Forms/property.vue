@@ -36,19 +36,20 @@
   .ui-property
   {
     position: relative;
-    display: flex;
-
-    & + .ui-property
-    {
-      padding-top: 25px;
-      margin-top: 25px;
-      /*border-top: 1px solid var(--color-line);*/
-    }
+    display: flex;  
 
     &.is-disabled
     {
       pointer-events: none;
     }
+  }
+
+  .ui-split + .ui-property,
+  .ui-property + .ui-property
+  {
+    padding-top: 25px;
+    margin-top: 25px;
+    /*border-top: 1px solid var(--color-line);*/
   }
 
   .ui-property.is-vertical
