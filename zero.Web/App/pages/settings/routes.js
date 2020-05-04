@@ -10,7 +10,7 @@ detailPages[zero.alias.settings.users] = [
   { view: 'role', path: 'role' }
 ];
 detailPages[zero.alias.settings.countries] = 'country';
-
+detailPages[zero.alias.settings.translations] = 'translations';
 
 if (section)
 {

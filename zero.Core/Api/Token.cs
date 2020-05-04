@@ -33,6 +33,11 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<bool> Verify(string entityId, string token)
     {
+      if (token.IsNullOrWhiteSpace() && entityId.IsNullOrEmpty())
+      {
+        return true;
+      }
+      
       if (token.IsNullOrWhiteSpace() || entityId.IsNullOrEmpty())
       {
         return false;

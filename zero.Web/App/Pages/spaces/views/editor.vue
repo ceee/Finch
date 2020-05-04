@@ -52,6 +52,10 @@
       });
     },
 
+    beforeRouteLeave(to, from, next) 
+    {
+      this.$refs.form.beforeRouteLeave(to, from, next);
+    },
 
     methods: {
 

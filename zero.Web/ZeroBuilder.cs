@@ -31,6 +31,7 @@ namespace zero.Web
       {
         opts.Add<UserMapperConfig>();
         opts.Add<CountryMapperConfig>();
+        opts.Add<TranslationMapperConfig>();
       });
 
       Services.AddIdentity<User, UserRole>(opts =>

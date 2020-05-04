@@ -13,6 +13,7 @@
     "createdDate": "Created at",
     "id": "ID",
     "active": "Published",
+    "delete": "Delete",
     "pagination": {
       "xofy": "Page {x} of {y}",
       "next": "Next page",
@@ -219,6 +220,20 @@
       "code": "Code",
       "code_text": "Code in ISO 3166-1 format which is used to display the appropriate flag",
       "isPreferred": "Show on top"
+    }
+  },
+
+  "translation": {
+    "list": "Translations",
+    "name": "Translation",
+    "display": {
+      "text": "Text",
+      "html": "HTML"
+    },
+    "fields": {
+      "key": "Key",
+      "value": "Value",
+      "display": "Display type"
     }
   },
 

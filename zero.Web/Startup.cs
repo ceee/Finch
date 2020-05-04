@@ -161,6 +161,7 @@ namespace zero.Web
       services.AddTransient<IUserRolesApi, UserRolesApi>();
       services.AddTransient<IToken, Token>();
       services.AddTransient<ISpacesApi, SpacesApi>();
+      services.AddTransient<ITranslationsApi, TranslationsApi>();
     }
 
     /// <summary>

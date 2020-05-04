@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="space">
-    <component v-if="loaded && component" :is="component" :space="space" :config="config"></component>
+    <component ref="comp" v-if="loaded && component" :is="component" :space="space" :config="config"></component>
   </div>
 </template>
 
@@ -29,9 +29,12 @@
       this.load();
     },
 
+    beforeRouteLeave(to, from, next) 
+    {
+      this.$refs.comp.beforeRouteLeave(to, from, next);
+    },
 
     methods: {
-
       load()
       {
         this.loaded = false;
@@ -56,7 +59,6 @@
           this.loaded = true;
         });
       }
-
     }
   }
 </script>

@@ -64,6 +64,11 @@ namespace zero.Web.Mapper
         return target;
       }
 
+      if (target == null)
+      {
+        return await Map<TSource, TTarget>(source);
+      }
+
       await Maps.Call(source, target);
 
       return target;

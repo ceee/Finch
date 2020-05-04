@@ -55,8 +55,9 @@
   button.ui-state-button-item
   {
     background: var(--color-bg-mid);
-    //border: 1px solid var(--color-line);
+    border: 1px solid transparent; // var(--color-line);
     padding: 10px 16px;
+    color: var(--color-fg-mid);
 
     &:first-of-type
     {
@@ -70,16 +71,13 @@
       border-bottom-right-radius: var(--radius);
     }
 
-    & + button
-    {
-      border-left: 1px solid var(--color-line);
-    }
-
     &.is-active
     {
-      background: var(--color-primary);
-      border-color: var(--color-primary);
-      color: var(--color-primary-fg);
+      /*background: var(--color-primary);
+      border-color: var(--color-primary);*/
+      border-color: var(--color-line);
+      background: var(--color-bg-light);
+      color: var(--color-fg);
       font-weight: bold;
     }
    

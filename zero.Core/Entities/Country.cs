@@ -13,6 +13,9 @@
     public string Code { get; set; }
 
     /// <inheritdoc />
+    public string ParentEntityId { get; set; }
+
+    /// <inheritdoc />
     public string LanguageId { get; set; }
   }
 }

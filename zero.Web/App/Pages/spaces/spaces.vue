@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="spaces">
     <div class="spaces-tree" v-resizable="resizable">
-      <ui-header-bar title="Spaces" :back-button="false" />
+      <ui-header-bar title="Spaces" />
       <div class="spaces-tree-items">
         <div v-for="item in spaces" class="spaces-tree-item" :class="getClasses(item)">
           <router-link :to="{ name: 'space', params: { alias: item.alias } }" class="spaces-tree-item-link">
@@ -21,7 +21,7 @@
     </div>
 
     <!--<router-view v-if="!isOverview"></router-view>-->
-    <component v-if="!isOverview && loaded && component" :is="component" :space="space" :config="spaceConfig"></component>
+    <component v-if="!isOverview && loaded && component" ref="comp" :is="component" :space="space" :config="spaceConfig"></component>
 
     <div v-if="isOverview" class="spaces-overview">
       
@@ -73,6 +73,29 @@
       });
     },
 
+    beforeRouteLeave(to, from, next) 
+    {
+      if (this.$refs.comp && this.$refs.comp.beforeRouteLeave)
+      {
+        this.$refs.comp.beforeRouteLeave(to, from, next);
+      }
+      else
+      {
+        next();
+      }
+    },
+
+    beforeRouteUpdate(to, from, next)
+    {
+      if (this.$refs.comp && this.$refs.comp.beforeRouteLeave)
+      {
+        this.$refs.comp.beforeRouteLeave(to, from, next);
+      }
+      else
+      {
+        next();
+      }
+    },
 
     methods: {
 

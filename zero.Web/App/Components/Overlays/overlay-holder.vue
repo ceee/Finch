@@ -25,7 +25,7 @@
       {
         if (instance.softdismiss !== false)
         {
-          Overlay.close();
+          instance.close();
         }
       }
     }
@@ -80,7 +80,7 @@
     border: none !important;
     box-shadow: 0 0 20px var(--color-shadow);
     padding: var(--padding);
-    max-width: 460px;
+   // max-width: 460px;
     text-align: center;
     position: relative;
     will-change: transform, opacity;
@@ -88,6 +88,11 @@
     z-index: 3;
     color: var(--color-fg);
     font-size: var(--font-size);
+  }
+
+  .app-overlay[display="dialog"] .ui-form-loading
+  {
+    height: 200px;
   }
 
   .app-overlay[display="editor"]
