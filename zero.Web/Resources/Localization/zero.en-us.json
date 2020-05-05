@@ -261,6 +261,13 @@
     "title": "Pick an icon"
   },
 
+  "mediapicker": {
+    "select_text": "Select",
+    "select_description": "Choose from library",
+    "upload_text": "Upload",
+    "upload_description": "Upload a new file"
+  },
+
   "application": {
     "list": "Applications",
     "name": "Application",

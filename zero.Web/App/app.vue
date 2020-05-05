@@ -21,6 +21,7 @@
   import AuthApi from 'zero/services/auth.js'
   import 'zero/vue.config.js'
   import 'zero/axios.config.js'
+  import 'zero/zero.config.js'
 
   export default {
     name: 'app',

@@ -292,7 +292,7 @@ button::-moz-focus-inner
   background: var(--color-bg-mid);
   color: var(--color-fg);
   text-align: center;
-  font-size: 20px;
+  font-size: 16px;
   margin-right: 16px;
 }
 
@@ -310,4 +310,5 @@ button::-moz-focus-inner
 {
   color: var(--color-fg-mid);
   margin-top: 3px;
+  font-size: var(--font-size-xs);
 }

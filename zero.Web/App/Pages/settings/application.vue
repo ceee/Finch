@@ -26,14 +26,10 @@
               <input v-model="model.email" type="email" class="ui-input" maxlength="200" :readonly="disabled" />
             </ui-property>
             <ui-property label="@application.fields.image" description="@application.fields.image_text" :required="true">
-              upload
+              <ui-media :config="mediaConfig" v-model="model.image" />
             </ui-property>
             <ui-property label="@application.fields.icon" description="@application.fields.icon_text" :required="true">
-              upload
-            </ui-property>
-            <ui-property label="@application.fields.domains" description="@application.fields.domains_text" :required="true">
-              <ui-input-list v-model="model.domains" :disabled="disabled" add-label="@application.fields.domains_add" />
-              <p class="ui-property-help" v-localize="'@application.fields.domains_help'"></p>
+              <ui-media :config="mediaConfig" v-model="model.icon" />
             </ui-property>
           </div>
         </div>
@@ -49,6 +45,13 @@
             <ui-date v-model="model.createdDate" />
           </ui-property>
         </aside>
+      </ui-tab>
+
+      <ui-tab label="@application.tab_domains" class="ui-box">
+        <ui-property label="@application.fields.domains" description="@application.fields.domains_text" :required="true">
+          <ui-input-list v-model="model.domains" :disabled="disabled" add-label="@application.fields.domains_add" />
+          <p class="ui-property-help" v-localize="'@application.fields.domains_help'"></p>
+        </ui-property>
       </ui-tab>
 
       <ui-tab v-if="features.length > 0" label="@application.tab_features" class="ui-box" :count="model.features.length">
@@ -73,7 +76,10 @@
       actions: [],
       model: { name: null, features: [] },
       disabled: false,
-      features: []
+      features: [],
+      mediaConfig: {
+        fileExtensions: zero.config.media.defaults.images_artificial
+      }
     }),
 
     created()
@@ -111,6 +117,9 @@
 
       onSubmit(form)
       {
+        console.info(JSON.parse(JSON.stringify(this.model)));
+        return;
+
         form.handle(ApplicationsApi.save(this.model)).then(response =>
         {
           console.info(response);
@@ -161,15 +170,3 @@
     }
   }
 </script>
-
-<style lang="scss">
-  /*.role-permission-toggle + .role-permission-toggle
-  {
-    padding-top: 0;
-  }
-
-  .role .ui-box + .ui-permissions
-  {
-    margin-top: var(--padding);
-  }*/
-</style>

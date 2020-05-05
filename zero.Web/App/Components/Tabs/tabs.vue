@@ -114,7 +114,12 @@
     position: relative;
     transition: color 0.2s ease;
     border-radius: var(--radius) var(--radius) 0 0;
-    background: rgba(white, 0.5); // TODO
+    background: var(--color-bg);
+
+    .theme-dark &
+    {
+      background: rgba(black, 0.5);
+    }
 
     & + .ui-tabs-list-item
     {
