@@ -263,7 +263,7 @@
 
   "mediapicker": {
     "select_text": "Select",
-    "select_description": "Choose from library",
+    "select_description": "from library",
     "upload_text": "Upload",
     "upload_description": "Upload a new file"
   },
