@@ -31,7 +31,7 @@
 </script>
 
 <style lang="scss">
-  @import 'Sass/Core/settings';
+  @import 'Sass/Core/all';
 
   .ui-property
   {
@@ -116,5 +116,25 @@
     flex: 1;
     max-width: 800px;
     font-size: var(--font-size);
+  }
+
+  .ui-property-help
+  {
+    max-width: 800px;
+    font-size: var(--font-size-s);
+    color: var(--color-fg-light);
+    margin: 15px 0 0;
+
+    &:before
+    {
+      content: "\e87f";
+      @extend %font-icon;
+      color: var(--color-primary);
+      font-size: var(--font-size-l);
+      float: left;
+      position: relative;
+      top: -1px;
+      margin-right: 6px;
+    }
   }
 </style>

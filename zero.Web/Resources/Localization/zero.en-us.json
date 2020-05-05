@@ -5,6 +5,7 @@
 
   "ui": {
     "more": "More",
+    "add": "Add",
     "actions": "Actions",
     "back": "Go back",
     "close": "Close",
@@ -258,6 +259,28 @@
 
   "iconpicker": {
     "title": "Pick an icon"
+  },
+
+  "application": {
+    "list": "Applications",
+    "name": "Application",
+    "tab_features": "Features",
+    "tab_domains": "Domains",
+    "fields": {
+      "name_text": "Short human-readable name",
+      "fullName": "Full name",
+      "fullName_text": "Full company or product name",
+      "image": "Image",
+      "image_text": "Image of the app (with transparent background), used for all mails, PDFs, ...",
+      "icon": "Icon",
+      "icon_text": "Icon of the app. Simplified image for minor application parts",
+      "email": "Email",
+      "email_text": "Generic contact email",
+      "domains": "Domains",
+      "domains_text": "Select domains for this application",
+      "domains_help": "Valid domain names are: \"example.com\", \"www.example.com\", \"example.com:8080\", or \"https://www.example.com\".",
+      "domains_add": "Add domain"
+    }
   },
 
   "_test": {

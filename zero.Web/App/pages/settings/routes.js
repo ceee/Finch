@@ -12,6 +12,7 @@ detailPages[zero.alias.settings.users] = [
 detailPages[zero.alias.settings.countries] = 'country';
 detailPages[zero.alias.settings.translations] = 'translations';
 detailPages[zero.alias.settings.languages] = 'language';
+detailPages[zero.alias.settings.applications] = 'application';
 
 if (section)
 {

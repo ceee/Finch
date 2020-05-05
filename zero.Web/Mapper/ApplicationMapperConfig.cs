@@ -1,0 +1,47 @@
+﻿using zero.Core.Entities;
+using zero.Web.Models;
+
+namespace zero.Web.Mapper
+{
+  public class ApplicationMapperConfig : IMapperConfig
+  {
+    /// <inheritdoc />
+    public void Configure(IMapper config)
+    {
+      config.CreateMap<Application, ApplicationEditModel>((source, target) =>
+      {
+        target.Id = source.Id;
+        target.Name = source.Name;
+        target.FullName = source.FullName;
+        target.Email = source.Email;
+        target.IsActive = source.IsActive;
+        target.CreatedDate = source.CreatedDate;
+        target.Domains = source.Domains;
+        target.Image = source.Image;
+        target.Icon = source.Icon;
+        target.Features = source.Features;
+      });
+
+      config.CreateMap<ApplicationEditModel, Application>((source, target) =>
+      {
+        target.Name = source.Name;
+        target.FullName = source.FullName;
+        target.Email = source.Email;
+        target.IsActive = source.IsActive;
+        target.Domains = source.Domains;
+        target.Image = source.Image;
+        target.Icon = source.Icon;
+        target.Features = source.Features;
+      });
+
+      config.CreateMap<Application, ApplicationListModel>((source, target) =>
+      {
+        target.Id = source.Id;
+        target.Name = source.Name;
+        target.IsActive = source.IsActive;
+        target.Domains = source.Domains;
+        target.Image = source.Image?.Source;
+      });
+    }
+  }
+}

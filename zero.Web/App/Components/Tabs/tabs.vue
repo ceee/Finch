@@ -4,6 +4,7 @@
       <button type="button" v-for="(tab, index) in tabs" class="ui-tabs-list-item" :key="index" :class="{ 'is-active': tab.active }" :disabled="tab.disabled" 
               :aria-selected="tab.active" role="tab" @click="select(index)">
         {{ tab.label | localize }}
+        <i v-if="tab.count > 0" class="ui-tabs-list-item-count">{{tab.count}}</i>
       </button>
     </div>
     <div class="ui-tabs-items">
@@ -97,22 +98,28 @@
 
   .ui-tabs-list
   {
-    border-bottom: 1px solid var(--color-line);
-    padding: 0 10px;
+    /*border-bottom: 1px solid var(--color-line);*/
+    padding: var(--padding) var(--padding) 0;
+    margin-bottom: calc(var(--padding) * -1);
   }
 
   .ui-tabs-list-item
   {
     display: inline-flex;
     align-items: center;
-    height: 60px;
-    padding: 0 20px;
-    margin: 0;
+    height: 58px;
+    padding: 0 var(--padding);
     font-size: var(--font-size);
-    color: var(--color-fg-light);
+    color: var(--color-fg);
     position: relative;
-    overflow: hidden;
     transition: color 0.2s ease;
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: rgba(white, 0.5); // TODO
+
+    & + .ui-tabs-list-item
+    {
+      margin-left: 4px;
+    }
 
     &:hover
     {
@@ -121,7 +128,14 @@
 
     &:before
     {
-      display: none;
+      content: '';
+      width: 100%;
+      height: 3px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: transparent;
+      border-radius: var(--radius) var(--radius) 0 0;
     }
 
     &[disabled]
@@ -134,25 +148,48 @@
     {
       content: '';
       height: 4px;
-      border-radius: 4px 4px 0 0;
-      background: var(--color-line);
+      width: 4px;      
       position: absolute;
-      left: 18px;
-      right: 18px;
-      bottom: 0;
-      transform: translateY(5px) scaleX(0.5);
-      transition: transform 0.2s ease;
+      left: 0;
+      bottom: -4px;
     }
 
     &.is-active
     {
       font-weight: 700;
       color: var(--color-fg);
+      background: var(--color-bg-light);
+
+      .ui-tabs-list-item-count
+      {
+        background: var(--color-bg);
+      }
+
+      &:before
+      {
+        background: var(--color-line);
+      }
 
       &:after
       {
-       transform: translateY(0) scaleX(1);
+        background: var(--color-bg-light);
       }
     }
+  }
+
+  .ui-tabs-list-item-count
+  {
+    font-style: normal;
+    font-size: 12px;
+    overflow: hidden;
+    float: right;
+    padding: 2px 6px;
+    background: var(--color-bg-light);
+    border-radius: 10px;
+    margin-left: 8px;
+    margin-right: -4px;
+    margin-top: -1px;
+    font-weight: bold;
+    color: var(--color-fg);
   }
 </style>

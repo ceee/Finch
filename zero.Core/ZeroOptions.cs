@@ -17,6 +17,8 @@ namespace zero.Core
     public IList<SettingsGroup> SettingsAreas { get; private set; } = new List<SettingsGroup>();
 
     public ZeroAuthorizationOptions Authorization { get; private set; } = new ZeroAuthorizationOptions();
+
+    public FeatureCollection Features { get; private set; } = new FeatureCollection();
   }
 
 
