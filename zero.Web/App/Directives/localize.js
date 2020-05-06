@@ -19,6 +19,11 @@ Vue.directive('localize', (el, binding) =>
     {
       el.innerHTML = result;
     }
+    // set title
+    else if (binding.arg === 'title')
+    {
+      el.title = result;
+    }
     // set attribute
     else if (binding.arg)
     {

@@ -8,6 +8,25 @@ namespace zero.Core.Extensions
   public static class DocumentStoreExtensions
   {
     /// <summary>
+    /// Create a new unique Id
+    /// </summary>
+    public static string Id(this IDocumentStore store, int length = -1)
+    {
+      if (length > 0)
+      {
+        return Convert.ToBase64String(Guid.NewGuid().ToByteArray())
+          .Replace("/", String.Empty)
+          .Replace("+", String.Empty)
+          .Replace("-", String.Empty)
+          .ToLowerInvariant()
+          .Substring(0, length);
+      }
+
+      return Guid.NewGuid().ToString();
+    }
+
+
+    /// <summary>
     /// Reserves a key cluster-wide
     /// </summary>
     public static async Task<bool> ReserveAsync(this IDocumentStore store, string key, string value = null)

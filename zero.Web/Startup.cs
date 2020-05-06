@@ -12,6 +12,7 @@ using Newtonsoft.Json.Serialization;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using System;
+using System.IO;
 using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
@@ -152,6 +153,7 @@ namespace zero.Web
 
       // TODO move registration into core
       services.AddTransient<IZeroVue, ZeroVue>();
+      services.AddTransient<IPaths>(factory => new Paths(env.WebRootPath, true));
       services.AddTransient<ISetupApi, SetupApi>();
       services.AddTransient<ISectionsApi, SectionsApi>();
       services.AddTransient<IApplicationsApi, ApplicationsApi>();
@@ -167,6 +169,7 @@ namespace zero.Web
       services.AddTransient<ITranslationsApi, TranslationsApi>();
       services.AddTransient<ILanguagesApi, LanguagesApi>();
       services.AddTransient<IPermissionsApi, PermissionsApi>();
+      services.AddTransient<IMediaApi, MediaApi>();
     }
 
     /// <summary>

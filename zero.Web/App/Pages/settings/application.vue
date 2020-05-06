@@ -78,6 +78,7 @@
       disabled: false,
       features: [],
       mediaConfig: {
+        limit: 5,
         fileExtensions: zero.config.media.defaults.images_artificial
       }
     }),
@@ -117,9 +118,6 @@
 
       onSubmit(form)
       {
-        console.info(JSON.parse(JSON.stringify(this.model)));
-        return;
-
         form.handle(ApplicationsApi.save(this.model)).then(response =>
         {
           console.info(response);

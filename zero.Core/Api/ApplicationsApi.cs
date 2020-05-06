@@ -1,7 +1,5 @@
-﻿using FluentValidation.Results;
-using Raven.Client.Documents;
+﻿using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Entities;
@@ -10,24 +8,18 @@ using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class ApplicationsApi : IApplicationsApi
+  public class ApplicationsApi : ApiBase, IApplicationsApi
   {
-    protected IDocumentStore Raven { get; private set; }
-
-
-    public ApplicationsApi(IDocumentStore raven)
+    public ApplicationsApi(IDocumentStore raven, IMediaApi media) : base(raven, media)
     {
-      Raven = raven;
+
     }
 
 
     /// <inheritdoc />
     public async Task<Application> GetById(string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.LoadAsync<Application>(id);
-      }
+      return await GetById<Application>(id);
     }
 
 
@@ -60,49 +52,14 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<Application>> Save(Application model)
     {
-      ValidationResult validation = await new ApplicationValidator().ValidateAsync(model);
-
-      if (!validation.IsValid)
-      {
-        return EntityResult<Application>.Fail(validation);
-      }
-
-      if (model.Id.IsNullOrEmpty())
-      {
-        model.AppId = Constants.Database.SharedAppId;
-        model.CreatedDate = DateTimeOffset.Now;
-      }
-
-      model.Alias = Alias.Generate(model.Name);
-
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        await session.StoreAsync(model);
-        await session.SaveChangesAsync();
-      }
-
-      return EntityResult<Application>.Success(model);
+      return await Save(model, new ApplicationValidator());
     }
 
 
     /// <inheritdoc />
     public async Task<EntityResult<Application>> Delete(string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        Application entity = await session.LoadAsync<Application>(id);
-
-        if (entity == null)
-        {
-          return EntityResult<Application>.Fail("@errors.ondelete.idnotfound");
-        }
-
-        session.Delete(entity);
-
-        await session.SaveChangesAsync();
-      }
-
-      return EntityResult<Application>.Success();
+      return await DeleteById<Application>(id);
     }
   }
 

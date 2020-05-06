@@ -1,9 +1,14 @@
 ﻿<template>
   <div class="ui-media">
-    <div class="ui-media-previews">
+    <div v-if="items.length > 0" class="ui-media-previews">
       <div v-for="item in items" class="ui-media-preview">
         <div class="ui-media-preview-image">
           <img v-if="item.source" :src="getPreview(item)" :alt="item.name" />
+          <button v-if="!disabled" type="button" class="ui-media-preview-image-delete" @click="remove(item)" v-localize:title="'@ui.remove'"><i class="fth-x"></i></button>
+        </div>
+        <div class="ui-media-preview-text">
+          <b :title="item.name">{{getFilename(item.name)}}</b>
+          <span class="is-filesize" v-filesize="item.size"></span>
         </div>
       </div>
     </div>
@@ -35,6 +40,8 @@
     BIG: 'big',
     GRID: 'grid'
   };
+
+  const MAX_FILENAME_LENGTH = 32;
 
   const defaultConfig = {
     // maximum media items
@@ -191,6 +198,14 @@
       },
 
 
+      remove(item)
+      {
+        const index = this.items.indexOf(item);
+        this.items.splice(item, 1);
+        this.update();
+      },
+
+
       update()
       {
         this.$emit('input', this.multiple ? this.items : this.items[0]);
@@ -209,13 +224,27 @@
           return item.source + "?width=100&height=100";
         }
 
-        if (!item.hasThumb)
+        if (!item.hasThumbnail)
         {
           return item.source;
         }
 
         var extension = '.' + item.source.split('.').pop();
         return item.source.replace(extension, ".thumb" + extension);
+      },
+
+
+      getFilename(name)
+      {
+        if (name.length < MAX_FILENAME_LENGTH)
+        {
+          return name;
+        }
+
+        const parts = name.split('.');
+        const extension = parts.pop();
+
+        return parts.join('.').substring(0, MAX_FILENAME_LENGTH - 6) + '...' + extension;
       }
     }
   }
@@ -257,9 +286,28 @@
     }
   }
 
+  .ui-media-previews + .ui-media-add,
+  .ui-media-preview + .ui-media-preview
+  {
+    margin-top: 10px;
+  }
+
+  .ui-media-previews + .ui-media-add
+  {
+    display: flex;
+    flex-direction: column;
+
+    .ui-select-button + .ui-media-add-upload
+    {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+
   .ui-media-preview
   {
-
+    display: flex;
+    align-items: center;
   }
 
   .ui-media-preview-image
@@ -267,11 +315,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
-    height: 80px;
+    width: 50px;
+    height: 50px;
     /*background: var(--color-bg);*/
     border: 1px solid var(--color-line-light);
-    padding: 5px;
+    padding: 3px;
     border-radius: var(--radius);
     color: var(--color-fg);
     position: relative;
@@ -290,5 +338,45 @@
       position: relative;
       z-index: 2;
     }
+
+    &:hover .ui-media-preview-image-delete
+    {
+      opacity: 1;
+      transition-delay: 0.1s;
+    }
+  }
+
+  .ui-media-preview-text
+  {
+    display: flex;
+    flex-direction: column;
+    margin-left: 16px;
+    font-size: var(--font-size);
+
+    .is-filesize
+    {
+      color: var(--color-fg-mid);
+      margin-top: 3px;
+      font-size: var(--font-size-xs);
+    }
+  }
+
+  .ui-media-preview-image-delete
+  {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    position: absolute;
+    display: inline-block;
+    right: 3px;
+    bottom: 3px;
+    width: 24px;
+    height: 24px;
+    line-height: 26px;
+    border-radius: 20px;
+    background: var(--color-negative);
+    color: var(--color-primary-fg);
+    z-index: 2;
+    text-align: center;
+    font-size: 13px;
   }
 </style>

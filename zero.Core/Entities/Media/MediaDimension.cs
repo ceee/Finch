@@ -5,8 +5,8 @@
   /// </summary>
   public class MediaDimension
   {
-    public decimal Width { get; set; }
+    public int Width { get; set; }
 
-    public decimal Height { get; set; }
+    public int Height { get; set; }
   }
 }

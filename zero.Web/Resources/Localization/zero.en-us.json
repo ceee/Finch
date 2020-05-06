@@ -15,6 +15,7 @@
     "id": "ID",
     "active": "Published",
     "delete": "Delete",
+    "remove": "Remove",
     "pagination": {
       "xofy": "Page {x} of {y}",
       "next": "Next page",

@@ -4,13 +4,8 @@ using zero.Core.Attributes;
 
 namespace zero.Core.Entities
 {
-  public interface IZeroEntity
-  {
-    string Id { get; set; }
-  }
-
   [DebuggerDisplay("Id = {Id,nq}, Name = {Name}, Alias = {Alias}")]
-  public abstract class DatabaseEntity : IDatabaseEntity, IZeroEntity
+  public abstract class DatabaseEntity : IDatabaseEntity
   {
     /// <inheritdoc/>
     [GenerateId]
@@ -37,13 +32,17 @@ namespace zero.Core.Entities
   }
 
 
-  public interface IDatabaseEntity
+  public interface IZeroEntity
   {
     /// <summary>
     /// Id of the entity
     /// </summary>
     string Id { get; set; }
+  }
 
+
+  public interface IDatabaseEntity : IZeroEntity
+  {
     /// <summary>
     /// Id of the associated application (auto-filled)
     /// </summary>
