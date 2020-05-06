@@ -179,11 +179,6 @@
     grid-gap: 35px;
     align-items: center;
 
-    &:hover .page-overview-action-icon
-    {
-      box-shadow: 0 0 20px var(--color-shadow);
-    }
-
     & + a.page-overview-action
     {
       margin-top: 60px;
@@ -200,7 +195,7 @@
     background: var(--color-bg-light);
     border-radius: var(--radius);
     transition: box-shadow 0.2s ease;
-    box-shadow: 0 0 20px transparent;
+    box-shadow: var(--color-shadow-short);
   }
 
   .page-overview-action-text

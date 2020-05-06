@@ -1,16 +1,18 @@
 ﻿<template>
   <div class="ui-header-bar">
-    <div class="ui-header-bar-main">
-      <ui-icon-button v-if="backButton" type="white" @click="onBack" />
-      <div>
-        <h2 v-if="title" class="ui-header-bar-title" v-localize="title"></h2>
-        <h2 v-if="!title && titleEmpty" class="ui-header-bar-title is-empty" v-localize="titleEmpty"></h2>
-        <p v-if="description" class="ui-header-bar-description" v-localize="description"></p>
+    <div class="ui-header-bar-inner">
+      <div class="ui-header-bar-main">
+        <ui-icon-button v-if="backButton" type="white" @click="onBack" />
+        <div>
+          <h2 v-if="title" class="ui-header-bar-title" v-localize="title"></h2>
+          <h2 v-if="!title && titleEmpty" class="ui-header-bar-title is-empty" v-localize="titleEmpty"></h2>
+          <p v-if="description" class="ui-header-bar-description" v-localize="description"></p>
+        </div>
       </div>
-    </div>
-    <div class="ui-header-bar-aside">
-      <slot></slot>
-      <ui-icon-button v-if="closeButton" @click="onClose" icon="fth-x" title="@ui.close" />
+      <div class="ui-header-bar-aside">
+        <slot></slot>
+        <ui-icon-button v-if="closeButton" @click="onClose" icon="fth-x" title="@ui.close" />
+      </div>
     </div>
   </div>
 </template>
@@ -63,9 +65,6 @@
 <style lang="scss">
   .ui-header-bar
   {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     width: 100%;
     height: 100px;
     padding: 0 var(--padding) 10px;
@@ -81,6 +80,15 @@
     {
       padding-top: 0;
     }
+  }
+
+  .ui-header-bar-inner
+  {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    max-width: 1104px;
   }
 
   .ui-header-bar-main

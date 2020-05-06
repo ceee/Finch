@@ -1,17 +1,13 @@
 ﻿<template>
-  <div class="ui-permissions">
-    <div v-for="permissionCollection in permissions" class="ui-box">
-      <h3 class="ui-headline">
-        {{ permissionCollection.label | localize }}
-        <span v-if="permissionCollection.description" class="-minor">{{ permissionCollection.description | localize }}</span>
-      </h3>
+  <div class="ui-permissions ui-box">
+    <ui-property v-for="permissionCollection in permissions" :label="permissionCollection.label" :description="permissionCollection.description">
       <ui-error field="Claims" />
       <ui-property v-for="permission in permissionCollection.items" class="role-permission-toggle" :label="permission.label" :description="permission.description">
         <ui-toggle v-if="permission.valueType === 'boolean'" :disabled="disabled" v-model="permission.value" @input="onChange" />
         <ui-state-button v-if="permission.valueType === 'readWrite'" :disabled="disabled" :items="stateItems" v-model="permission.value" @input="onChange" />
         <input v-if="permission.valueType === 'string'" :disabled="disabled" v-model="permission.value" type="text" class="ui-input" @input="onChange" />
       </ui-property>
-    </div>
+    </ui-property>
   </div>
 </template> 
 
@@ -127,5 +123,15 @@
 </script>
 
 <style lang="scss">
-  
+  .ui-permissions > .ui-property + .ui-property
+  {
+    border-top: 1px solid var(--color-line-light);
+    padding-top: 40px;
+    margin-top: 40px;
+  }
+
+  .ui-permissions > .ui-property > .ui-property-label
+  {
+    width: 300px;
+  }
 </style>

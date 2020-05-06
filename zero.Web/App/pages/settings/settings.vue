@@ -73,11 +73,6 @@
     grid-template-columns: auto 1fr;
     grid-gap: 25px;
     align-items: center;
-
-    &:hover .settings-group-item-icon
-    {
-      box-shadow: 0 0 20px var(--color-shadow);
-    }
   }
 
   .settings-group-item-icon
@@ -90,7 +85,7 @@
     background: var(--color-bg-light);
     border-radius: var(--radius);
     transition: box-shadow 0.2s ease;
-    box-shadow: 0 0 20px transparent;
+    box-shadow: var(--color-shadow-short);
   }
 
   .settings-group-item-text

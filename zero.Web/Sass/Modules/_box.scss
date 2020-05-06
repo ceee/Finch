@@ -8,6 +8,7 @@
   background: var(--color-bg-light);
   border-radius: var(--radius);
   box-shadow: var(--color-shadow-short);
+  max-width: 1104px;
 
   h2
   {
@@ -28,12 +29,14 @@
 {
   margin: var(--padding);
   border-radius: var(--radius);
+  max-width: 1104px;
 }
 
 
 .ui-view-box
 {
   padding: var(--padding);
+  max-width: 1104px + 32px + 320px + 64px;
 
   &.has-sidebar
   {
