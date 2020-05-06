@@ -293,6 +293,19 @@
     }
   },
 
+  "media": {
+    "list": "Media",
+    "name": "Media",
+    "fields": {
+      "caption": "Caption",
+      "dimension": "Dimension",
+      "size": "Size",
+      "date": "Date",
+      "filename": "Filename",
+      "alternativeText": "Alternative text"
+    }
+  },
+
   "_test": {
     "fields": {
       "name": "Name",

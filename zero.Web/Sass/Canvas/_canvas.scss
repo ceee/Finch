@@ -70,3 +70,9 @@ body
     padding-top: 0;
   }
 }
+
+.ui-split-three
+{
+  @extend .ui-split;
+  grid-template-columns: 1fr 1fr 1fr;
+}

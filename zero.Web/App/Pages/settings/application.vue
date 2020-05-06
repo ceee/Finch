@@ -78,7 +78,7 @@
       disabled: false,
       features: [],
       mediaConfig: {
-        limit: 5,
+        display: 'big',
         fileExtensions: zero.config.media.defaults.images_artificial
       }
     }),

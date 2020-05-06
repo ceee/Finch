@@ -4,6 +4,12 @@
 
 import Vue from 'vue';
 
+//const directories = ['buttons', 'forms', 'messages', 'tables', 'tabs'];
+
+// TODO this file will import all vue component files with subdirectories
+// if it contains a file "overlay.vue" it will create an "ui-overlay" component
+// if another folder contains a file "overlay.vue" it is not used anymore or overridden.
+// we don't want to add all files but only files where we define global component access in its settings
 
 // https://webpack.js.org/guides/dependency-management/#require-context
 const requireComponent = require.context(

@@ -1,14 +1,15 @@
 ﻿<template>
-  <div class="ui-media">
+  <div class="ui-media" :class="'display-' + configuration.display">
     <div v-if="items.length > 0" class="ui-media-previews">
       <div v-for="item in items" class="ui-media-preview">
         <div class="ui-media-preview-image">
           <img v-if="item.source" :src="getPreview(item)" :alt="item.name" />
           <button v-if="!disabled" type="button" class="ui-media-preview-image-delete" @click="remove(item)" v-localize:title="'@ui.remove'"><i class="fth-x"></i></button>
+          <button v-if="!disabled" type="button" class="ui-media-preview-image-edit" @click="edit(item)" v-localize:title="'@ui.edit'"><i class="fth-edit-2"></i></button>
         </div>
         <div class="ui-media-preview-text">
           <b :title="item.name">{{getFilename(item.name)}}</b>
-          <span class="is-filesize" v-filesize="item.size"></span>
+          <span class="is-filesize">{{getFileinfo(item)}}</span>
         </div>
       </div>
     </div>
@@ -26,6 +27,8 @@
 <script>
   import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
   import Strings from 'zero/services/strings.js';
+  import Overlay from 'zero/services/overlay.js';
+  import MediaOverlay from 'zero/pages/media/media-item';
 
   const TYPES = {
     ALL: 'all',
@@ -212,6 +215,34 @@
       },
 
 
+      edit(item)
+      {
+        let model = JSON.parse(JSON.stringify(item));
+
+        let options = {
+          title: '@iconpicker.title',
+          closeLabel: '@ui.close',
+          component: MediaOverlay,
+          model: model,
+          theme: 'dark'
+        };
+
+        return Overlay.open(options).then(value =>
+        {
+          if (value.deletionRequested)
+          {
+            this.remove(item);
+          }
+          else
+          {
+            item.alternativeText = value.alternativeText;
+            item.caption = value.caption;
+            item.focalPoint = value.focalPoint;
+          }
+        }, () => { });
+      },
+
+
       getPreview(item)
       {
         if (!item.id || item.id.indexOf('upload:') > -1 || item.source.indexOf("http") === 0)
@@ -245,6 +276,17 @@
         const extension = parts.pop();
 
         return parts.join('.').substring(0, MAX_FILENAME_LENGTH - 6) + '...' + extension;
+      },
+
+
+      getFileinfo(item)
+      {
+        if (item.dimension)
+        {
+          return `${Strings.filesize(item.size)} – ${item.dimension.width} × ${item.dimension.height}`;
+        }
+
+        return Strings.filesize(item.size);
       }
     }
   }
@@ -286,13 +328,27 @@
     }
   }
 
+  .ui-media-previews
+  {
+    .display-grid &
+    {
+      display: flex;
+      grid-gap: 10px;
+
+      .ui-media-preview + .ui-media-preview
+      {
+        margin-top: 0;
+      }
+    }
+  }
+
   .ui-media-previews + .ui-media-add,
   .ui-media-preview + .ui-media-preview
   {
     margin-top: 10px;
   }
 
-  .ui-media-previews + .ui-media-add
+  .ui-media:not(.display-grid) .ui-media-previews + .ui-media-add
   {
     display: flex;
     flex-direction: column;
@@ -339,10 +395,17 @@
       z-index: 2;
     }
 
-    &:hover .ui-media-preview-image-delete
+    &:hover .ui-media-preview-image-delete,
+    &:hover .ui-media-preview-image-edit
     {
       opacity: 1;
       transition-delay: 0.1s;
+    }
+
+    .display-big &, .display-grid &
+    {
+      width: 100px;
+      height: 100px;
     }
   }
 
@@ -359,9 +422,15 @@
       margin-top: 3px;
       font-size: var(--font-size-xs);
     }
+
+    .display-grid &
+    {
+      display: none;
+    }
   }
 
-  .ui-media-preview-image-delete
+  .ui-media-preview-image-delete,
+  .ui-media-preview-image-edit
   {
     opacity: 0;
     transition: opacity 0.15s ease;
@@ -378,5 +447,24 @@
     z-index: 2;
     text-align: center;
     font-size: 13px;
+
+    .ui-media.display-default &
+    {
+      width: 20px;
+      height: 20px;
+      line-height: 22px;
+    }
+  }
+
+  .ui-media-preview-image-edit
+  {
+    right: 30px;
+    background: var(--color-bg);
+    color: var(--color-fg);
+
+    .ui-media.display-default &
+    {
+      right: 24px;
+    }
   }
 </style>

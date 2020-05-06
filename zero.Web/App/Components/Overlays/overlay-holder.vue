@@ -3,7 +3,7 @@
     <transition-group name="overlay" :duration="600">
       <div class="app-overlay-outer" :display="instance.display" v-for="instance in instances" :key="instance.id">
         <div class="app-overlay-bg" @click="close(instance)"></div>
-        <dialog open class="app-overlay" :style="{ width: instance.width + 'px' }" :display="instance.display">
+        <dialog open class="app-overlay" :style="{ width: instance.width + 'px' }" :class="'theme-' + instance.theme" :display="instance.display">
           <component :is="instance.component" :model.sync="instance.model" :config="instance"></component>
         </dialog>
       </div>
@@ -88,6 +88,16 @@
     z-index: 3;
     color: var(--color-fg);
     font-size: var(--font-size);
+
+    &.theme-dark
+    {
+      box-shadow: none;
+    }
+  }
+
+  .theme-dark .app-overlay.theme-dark
+  {
+    box-shadow: 0 0 20px var(--color-shadow);
   }
 
   .app-overlay[display="dialog"] .ui-form-loading
