@@ -112,7 +112,7 @@
       },
       canAdd()
       {
-        return this.configuration.limit - this.items.length > 0;
+        return !this.disabled && this.configuration.limit - this.items.length > 0;
       },
       uploadDescription()
       {
@@ -224,7 +224,8 @@
           closeLabel: '@ui.close',
           component: MediaOverlay,
           model: model,
-          theme: 'dark'
+          theme: 'dark',
+          disabled: this.disabled
         };
 
         return Overlay.open(options).then(value =>

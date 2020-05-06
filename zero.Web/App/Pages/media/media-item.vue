@@ -50,10 +50,15 @@
     },
 
     data: () => ({
-      loading: false,
-      item: {},
-      disabled: false
+      loading: false
     }),
+
+    computed: {
+      disabled()
+      {
+        return this.config.disabled;
+      }
+    },
 
     methods: {
 
