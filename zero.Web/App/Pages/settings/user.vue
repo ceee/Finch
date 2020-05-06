@@ -4,7 +4,7 @@
     <ui-header-bar :title="model.name" title-empty="@user.name">
       <ui-dropdown align="right">
         <template v-slot:button>
-          <ui-button type="light" label="Actions" caret="down" />
+          <ui-button type="white" label="Actions" caret="down" />
         </template>
         <ui-dropdown-list :items="actions" :action="actionSelected" />
       </ui-dropdown>

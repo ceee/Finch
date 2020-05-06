@@ -3,11 +3,11 @@
     <ui-header-bar :back-button="isList" :title="title" title-empty="Space">
       <ui-dropdown v-if="isList && !disabled" align="right">
         <template v-slot:button>
-          <ui-button type="light" label="@ui.actions" caret="down" />
+          <ui-button type="white" label="@ui.actions" caret="down" />
         </template>
         <ui-dropdown-list v-model="actions" />
       </ui-dropdown>
-      <ui-button :submit="true" label="@ui.save" icon="fth-check" :state="form.state" v-if="!disabled" />
+      <ui-button :submit="true" label="@ui.save" :state="form.state" v-if="!disabled" />
     </ui-header-bar>
     <ui-editor v-if="renderer" :config="renderer" v-model="model" />
   </ui-form>
@@ -108,3 +108,10 @@
     }
   }
 </script>
+
+<style lang="scss">
+  .space-editor .ui-header-bar + .editor > .ui-box
+  {
+    margin-top: 0;
+  }
+</style>

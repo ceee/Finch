@@ -4,7 +4,7 @@
     <ui-header-bar :title="model.name" title-empty="@application.name" :back-button="true">
       <ui-dropdown align="right" v-if="!disabled">
         <template v-slot:button>
-          <ui-button type="light" label="@ui.actions" caret="down" />
+          <ui-button type="white" label="@ui.actions" caret="down" />
         </template>
         <ui-dropdown-list v-model="actions" />
       </ui-dropdown>
@@ -26,17 +26,17 @@
               <input v-model="model.email" type="email" class="ui-input" maxlength="200" :readonly="disabled" />
             </ui-property>
             <ui-property label="@application.fields.image" description="@application.fields.image_text" :required="true">
-              <ui-media :config="mediaConfig" v-model="model.image" />
+              <ui-media :config="mediaConfig" v-model="model.image" :disabled="disabled" />
             </ui-property>
             <ui-property label="@application.fields.icon" description="@application.fields.icon_text" :required="true">
-              <ui-media :config="mediaConfig" v-model="model.icon" />
+              <ui-media :config="mediaConfig" v-model="model.icon" :disabled="disabled" />
             </ui-property>
           </div>
         </div>
 
         <aside class="ui-view-box-aside">
           <ui-property label="@ui.active" :vertical="true" :is-text="true">
-            <ui-toggle v-model="model.isActive" />
+            <ui-toggle v-model="model.isActive" :disabled="disabled" />
           </ui-property>
           <ui-property label="@ui.id" :vertical="true" :is-text="true">
             {{model.id}}
@@ -50,13 +50,13 @@
       <ui-tab label="@application.tab_domains" class="ui-box">
         <ui-property label="@application.fields.domains" description="@application.fields.domains_text" :required="true">
           <ui-input-list v-model="model.domains" :disabled="disabled" add-label="@application.fields.domains_add" />
-          <p class="ui-property-help" v-localize="'@application.fields.domains_help'"></p>
+          <p v-if="!disabled" class="ui-property-help" v-localize="'@application.fields.domains_help'"></p>
         </ui-property>
       </ui-tab>
 
       <ui-tab v-if="features.length > 0" label="@application.tab_features" class="ui-box" :count="model.features.length">
         <ui-property v-for="feature in features" :label="feature.name" :description="feature.description">
-          <ui-toggle :value="model.features.indexOf(feature.alias) > -1" @input="onFeatureToggle($event, feature)" />
+          <ui-toggle :value="model.features.indexOf(feature.alias) > -1" @input="onFeatureToggle($event, feature)" :disabled="disabled" />
         </ui-property>
       </ui-tab>
 

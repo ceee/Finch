@@ -4,7 +4,7 @@
     <ui-header-bar :title="model.name" title-empty="@language.name" :back-button="true">
       <ui-dropdown align="right" v-if="!disabled">
         <template v-slot:button>
-          <ui-button type="light" label="@ui.actions" caret="down" />
+          <ui-button type="white" label="@ui.actions" caret="down" />
         </template>
         <ui-dropdown-list v-model="actions" />
       </ui-dropdown>

@@ -96,6 +96,11 @@
     
   }
 
+  .ui-header-bar + .ui-tabs > .ui-tabs-list
+  {
+    padding-top: 0;
+  }
+
   .ui-tabs-list
   {
     /*border-bottom: 1px solid var(--color-line);*/

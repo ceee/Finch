@@ -2,7 +2,7 @@
   <div class="users">
     <ui-header-bar title="Users & Permissions" :back-button="true">
       <ui-table-filter v-model="usersConfig" />
-      <ui-button type="light" label="Add role" icon="fth-plus" />
+      <ui-button type="white" label="Add role" icon="fth-plus" />
       <ui-button label="Add user" icon="fth-plus" />
     </ui-header-bar>
 

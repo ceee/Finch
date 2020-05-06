@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-header-bar">
     <div class="ui-header-bar-main">
-      <ui-icon-button v-if="backButton" @click="onBack" />
+      <ui-icon-button v-if="backButton" type="white" @click="onBack" />
       <div>
         <h2 v-if="title" class="ui-header-bar-title" v-localize="title"></h2>
         <h2 v-if="!title && titleEmpty" class="ui-header-bar-title is-empty" v-localize="titleEmpty"></h2>
@@ -67,10 +67,20 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: 80px;
-    padding: 0 var(--padding);
-    background: var(--color-bg-light);
+    height: 100px;
+    padding: 0 var(--padding) 10px;
+    /*background: var(--color-bg-light);*/
     //border-bottom: 1px solid var(--color-line);
+
+    & + .ui-blank-box, & + .ui-box, & + .ui-view-box
+    {
+      margin-top: 0;
+    }
+
+    & + .ui-view-box
+    {
+      padding-top: 0;
+    }
   }
 
   .ui-header-bar-main
