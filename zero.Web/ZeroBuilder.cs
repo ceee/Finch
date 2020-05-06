@@ -115,37 +115,6 @@ namespace zero.Web
 
       opts.SettingsAreas.Add(systemSettings);
       opts.SettingsAreas.Add(pluginSettings);
-
-      PermissionCollection permissionSettings = new PermissionCollection()
-      {
-        Label = "@permission.collections.settings",
-        Description = "@permission.collections.settings_description"
-      };
-
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Updates, "@settings.system.updates.name", "@settings.system.updates.text_default", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Applications, "@settings.system.applications.name", "@settings.system.applications.text", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Users, "@settings.system.users.name", "@settings.system.users.text", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Languages, "@settings.system.languages.name", "@settings.system.languages.text", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Countries, "@settings.system.countries.name", "@settings.system.countries.text", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Translations, "@settings.system.translations.name", "@settings.system.translations.text", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Logging, "@settings.system.logs.name", "@settings.system.logs.text", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Plugins, "@settings.plugins.installed.name", "@settings.plugins.installed.text_default", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.CreatePlugin, "@settings.plugins.create.name", "@settings.plugins.create.text", PermissionValueType.ReadWrite));
-
-      PermissionCollection permissionSections = new PermissionCollection()
-      {
-        Label = "@permission.collections.sections",
-        Description = "@permission.collections.sections_description"
-      };
-
-      permissionSections.Items.Add(new Permission(Permissions.Sections.Dashboard, "@sections.item.dashboard", null, PermissionValueType.Boolean));
-      permissionSections.Items.Add(new Permission(Permissions.Sections.Pages, "@sections.item.pages", null, PermissionValueType.Boolean));
-      permissionSections.Items.Add(new Permission(Permissions.Sections.Spaces, "@sections.item.spaces", null, PermissionValueType.Boolean));
-      permissionSections.Items.Add(new Permission(Permissions.Sections.Media, "@sections.item.media", null, PermissionValueType.Boolean));
-      permissionSections.Items.Add(new Permission(Permissions.Sections.Settings, "@sections.item.settings", null, PermissionValueType.Boolean));
-
-      opts.Authorization.Permissions.Add(permissionSections);
-      opts.Authorization.Permissions.Add(permissionSettings);
     }
 
 

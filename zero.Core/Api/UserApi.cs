@@ -80,6 +80,15 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public Permission GetPermission(string key = null)
+    {
+      Claim claim = Principal.Claims.FirstOrDefault(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(key + ":"));
+
+      return Permission.FromClaim(claim);
+    }
+
+
+    /// <inheritdoc />
     public async Task<IList<User>> GetAll(string appId = null)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
@@ -137,6 +146,11 @@ namespace zero.Core.Api
     /// Get all permissions for the current user with an optional prefix
     /// </summary>
     IList<Permission> GetPermissions(string prefix = null);
+
+    /// <summary>
+    /// Get a single permissions by key
+    /// </summary>
+    public Permission GetPermission(string key = null);
 
     /// <summary>
     /// Get all users for the selected application

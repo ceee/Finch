@@ -104,6 +104,10 @@ namespace zero.Core.Identity
     /// </summary>
     public static Permission FromClaim(Claim claim, string prefixToRemove = null)
     {
+      if (claim == null)
+      {
+        return null;
+      }
       return FromClaim(claim.Value, prefixToRemove);
     }
 

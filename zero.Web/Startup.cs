@@ -166,6 +166,7 @@ namespace zero.Web
       services.AddTransient<ISpacesApi, SpacesApi>();
       services.AddTransient<ITranslationsApi, TranslationsApi>();
       services.AddTransient<ILanguagesApi, LanguagesApi>();
+      services.AddTransient<IPermissionsApi, PermissionsApi>();
     }
 
     /// <summary>

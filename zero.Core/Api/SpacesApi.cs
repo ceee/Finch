@@ -17,12 +17,15 @@ namespace zero.Core.Api
   {
     protected IDocumentStore Raven { get; private set; }
 
+    protected IPermissionsApi PermissionsApi { get; private set; }
+
     protected ZeroOptions Options { get; private set; }
 
 
-    public SpacesApi(IDocumentStore raven, IOptionsMonitor<ZeroOptions> options)
+    public SpacesApi(IDocumentStore raven, IPermissionsApi permissionsApi, IOptionsMonitor<ZeroOptions> options)
     {
       Raven = raven;
+      PermissionsApi = permissionsApi;
       Options = options.CurrentValue;
     }
 

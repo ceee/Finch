@@ -55,7 +55,6 @@ export default new Vue({
     {
       return Axios.post('authentication/loginUser', model).then(res =>
       {
-        console.info(res);
         return new Promise((resolve, reject) =>
         {
           if (res.data.success)

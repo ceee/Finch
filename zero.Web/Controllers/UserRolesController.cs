@@ -16,12 +16,15 @@ namespace zero.Web.Controllers
   {
     private IUserRolesApi Api { get; set; }
 
+    private IPermissionsApi PermissionsApi { get; set; }
+
     private ZeroOptions Options { get; set; }
 
 
-    public UserRolesController(IZeroConfiguration config, IUserRolesApi api, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
+    public UserRolesController(IZeroConfiguration config, IUserRolesApi api, IPermissionsApi permissionsApi, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
     {
       Api = api;
+      PermissionsApi = permissionsApi;
       Options = options.CurrentValue;
     }
 
@@ -49,7 +52,7 @@ namespace zero.Web.Controllers
     /// </summary>    
     public IActionResult GetAllPermissions()
     {
-      return Json(Options.Authorization.Permissions);
+      return Json(PermissionsApi.GetAll());
     }
 
 

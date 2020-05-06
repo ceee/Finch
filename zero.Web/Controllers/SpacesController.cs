@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using zero.Core;
@@ -19,9 +21,12 @@ namespace zero.Web.Controllers
   {
     private ISpacesApi Api { get; set; }
 
-    public SpacesController(IZeroConfiguration config, ISpacesApi api, IMapper mapper, IToken token) : base(config, mapper, token)
+    private IUserApi UserApi { get; set; }
+
+    public SpacesController(IZeroConfiguration config, ISpacesApi api, IUserApi userApi, IMapper mapper, IToken token) : base(config, mapper, token)
     {
       Api = api;
+      UserApi = userApi;
     }
 
 
@@ -30,6 +35,11 @@ namespace zero.Web.Controllers
     /// </summary>
     public IActionResult GetByAlias([FromQuery] string alias)
     {
+      if (!CanReadSpace(alias))
+      {
+        return new StatusCodeResult(403);
+      }
+
       return Json(Api.GetByAlias(alias));
     }
 
@@ -39,7 +49,8 @@ namespace zero.Web.Controllers
     /// </summary>
     public IActionResult GetAll()
     {
-      return Json(Api.GetAll());
+      IList<Space> spaces = Api.GetAll().Where(space => CanReadSpace(space.Alias)).ToList();
+      return Json(spaces);
     }
 
 
@@ -48,6 +59,11 @@ namespace zero.Web.Controllers
     /// </summary>    
     public async Task<IActionResult> GetList([FromQuery] string alias, [FromQuery] ListQuery<SpaceContent> query = null)
     {
+      if (!CanReadSpace(alias))
+      {
+        return new StatusCodeResult(403);
+      }
+
       return Json(await Api.GetListByQuery(alias, query));
     }
 
@@ -57,6 +73,11 @@ namespace zero.Web.Controllers
     /// </summary>    
     public async Task<IActionResult> GetContent([FromQuery] string alias, [FromQuery] string contentId = null)
     {
+      if (!CanReadSpace(alias))
+      {
+        return new StatusCodeResult(403);
+      }
+
       TeamMember model = new TeamMember();
 
       if (!contentId.IsNullOrEmpty())
@@ -82,6 +103,11 @@ namespace zero.Web.Controllers
     /// </summary>
     public async Task<IActionResult> Save([FromBody] SpaceContentEditModel model)
     {
+      if (!CanWriteSpace(model.Alias))
+      {
+        return new StatusCodeResult(403);
+      }
+
       return Json(await Api.Save(model.Alias, model.Model));
     }
 
@@ -91,7 +117,32 @@ namespace zero.Web.Controllers
     /// </summary>
     public async Task<IActionResult> Delete([FromQuery] string alias, [FromQuery] string id)
     {
+      if (!CanWriteSpace(alias))
+      {
+        return new StatusCodeResult(403);
+      }
+
       return Json(await Api.Delete(alias, id));
+    }
+
+
+    /// <summary>
+    /// Whether the current user can read a space
+    /// </summary>
+    bool CanReadSpace(string alias)
+    {
+      Permission permission = UserApi.GetPermission(Permissions.Spaces.PREFIX + alias);
+      return permission != null && permission.CanRead;
+    }
+
+
+    /// <summary>
+    /// Whether the current user can read a space
+    /// </summary>
+    bool CanWriteSpace(string alias)
+    {
+      Permission permission = UserApi.GetPermission(Permissions.Spaces.PREFIX + alias);
+      return permission != null && permission.CanWrite;
     }
   }
 }

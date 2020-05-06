@@ -33,6 +33,12 @@
       public const string Media = PREFIX + Constants.Sections.Media;
       public const string Settings = PREFIX + Constants.Sections.Settings;
     }
+
+
+    public struct Spaces
+    {
+      public const string PREFIX = "space.";
+    }
   }
 
 

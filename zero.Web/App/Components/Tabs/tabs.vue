@@ -114,7 +114,7 @@
     position: relative;
     transition: color 0.2s ease;
     border-radius: var(--radius) var(--radius) 0 0;
-    background: var(--color-bg);
+    background: rgba(white, 0.4);
 
     .theme-dark &
     {

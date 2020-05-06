@@ -168,7 +168,9 @@
       "sections": "Access to sections",
       "sections_description": "Allow access to the following sections",
       "settings": "Access to settings",
-      "settings_description": "Define read and write access for settings areas"
+      "settings_description": "Define read and write access for settings areas",
+      "spaces": "Access to spaces",
+      "spaces_description": "Granular control of spaces"
     }
   },
 

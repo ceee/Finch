@@ -38,7 +38,7 @@
         </aside>
       </ui-tab>
 
-      <ui-tab label="Permissions">
+      <ui-tab label="Permissions" :count="claimCount">
         <ui-permissions v-model="model.claims" :disabled="disabled" />
       </ui-tab>
     </ui-tabs>
@@ -47,6 +47,7 @@
 
 
 <script>
+  import { filter as _filter } from 'underscore';
   import UserRolesApi from 'zero/resources/userRoles';
   import Overlay from 'zero/services/overlay.js';
 
@@ -59,7 +60,8 @@
       actions: [],
       model: {
         name: null,
-        email: null
+        email: null,
+        claims: []
       },
       disabled: false
     }),
@@ -71,6 +73,17 @@
         icon: 'fth-trash',
         action: this.onDelete
       });
+    },
+
+    computed: {
+      claimCount()
+      {
+        return _filter(this.model.claims, claim =>
+        {
+          const value = claim.value.split(':')[1];
+          return value !== 'none' && value !== 'false' && !!value;
+        }).length;
+      }
     },
 
 
