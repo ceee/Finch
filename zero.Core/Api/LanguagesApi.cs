@@ -4,6 +4,8 @@ using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -41,6 +43,23 @@ namespace zero.Core.Api
           .OrderByDescending(x => x.CreatedDate)
           .ToListAsync();
       }
+    }
+
+
+    /// <inheritdoc />
+    public IList<Culture> GetAllCultures(params string[] codes)
+    {
+      return CultureInfo.GetCultures(CultureTypes.AllCultures)
+        .Where(x => !x.Name.IsNullOrWhiteSpace())
+        .Select(x => new CultureInfo(x.Name))
+        .Where(x => codes.Length > 0 ? codes.Contains(x.Name, StringComparer.InvariantCultureIgnoreCase) : true)
+        .OrderBy(x => x.DisplayName)
+        .Select(x => new Culture()
+        {
+          Code = x.Name,
+          Name = x.DisplayName
+        })
+        .ToList();
     }
 
 
@@ -118,6 +137,11 @@ namespace zero.Core.Api
     /// Get all available languages
     /// </summary>
     Task<IList<Language>> GetAll();
+
+    /// <summary>
+    /// Get all available cultures
+    /// </summary>
+    IList<Culture> GetAllCultures(params string[] codes);
 
     /// <summary>
     /// Get all available languages (with query)

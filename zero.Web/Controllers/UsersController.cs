@@ -17,13 +17,16 @@ namespace zero.Web.Controllers
 
     IUserRolesApi RolesApi = null;
 
+    ILanguagesApi LanguagesApi = null;
+
     ZeroOptions Options = null;
 
 
-    public UsersController(IZeroConfiguration config, IUserApi api, IUserRolesApi rolesApi, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
+    public UsersController(IZeroConfiguration config, IUserApi api, IUserRolesApi rolesApi, ILanguagesApi languagesApi, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
     {
       Api = api;
       RolesApi = rolesApi;
+      LanguagesApi = languagesApi;
       Options = options.CurrentValue;
     }
 
@@ -33,7 +36,17 @@ namespace zero.Web.Controllers
     /// </summary>    
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
-      return await As<User, UserEditModel>(await Api.GetUserById(id));
+      User user = await Api.GetUserById(id);
+
+      if (user == null)
+      {
+        return new StatusCodeResult(404);
+      }
+
+      UserEditModel model = await Mapper.Map<User, UserEditModel>(user);
+      model.SupportedCultures = LanguagesApi.GetAllCultures(Configuration.SupportedLanguages);
+
+      return Json(model);
     }
 
 
@@ -74,6 +87,28 @@ namespace zero.Web.Controllers
 
       return Json(result);
       //return await As<Translation, TranslationEditModel>(await Api.);
+    }
+
+
+    /// <summary>
+    /// Disables a user
+    /// </summary>
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    public async Task<IActionResult> Disable([FromBody] UserEditModel model)
+    {
+      User entity = await Api.GetUserById(model.Id);
+      return await As<User, UserEditModel>(await Api.Disable(entity));
+    }
+
+
+    /// <summary>
+    /// Enables a user
+    /// </summary>
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    public async Task<IActionResult> Enable([FromBody] UserEditModel model)
+    {
+      User entity = await Api.GetUserById(model.Id);
+      return await As<User, UserEditModel>(await Api.Enable(entity));
     }
   }
 }

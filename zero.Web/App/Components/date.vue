@@ -5,15 +5,17 @@
 
 <script>
   import dayjs from 'dayjs';
-
-  const DATETIME_FORMAT = 'DD.MM.YY HH:mm';
-  const DATE_FORMAT = 'DD.MM.YY';
+  import Strings from 'zero/services/strings';
 
   export default {
     name: 'uiDate',
 
     props: {
       value: {
+        type: String,
+        default: null
+      },
+      format: {
         type: String,
         default: null
       }
@@ -45,7 +47,7 @@
           return;
         }
 
-        this.output = dayjs(this.value).format(DATE_FORMAT);
+        this.output = Strings.date(this.value, this.format);
       }
 
     }

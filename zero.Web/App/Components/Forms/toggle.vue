@@ -1,5 +1,5 @@
 ﻿ <template>
-  <div class="ui-toggle" :class="{'is-disabled': disabled }">
+  <div class="ui-toggle" :class="{'is-disabled': disabled, 'is-negative': negative }">
     <input type="checkbox" :value="value" @input="onChange" :disabled="disabled" />
     <span class="ui-toggle-switch" :class="{ 'is-active': value }"><i></i></span>
   </div>
@@ -18,11 +18,11 @@
       disabled: {
         type: Boolean,
         default: false
+      },
+      negative: {
+        type: Boolean,
+        default: false
       }
-    },
-
-    computed: {
-      
     },
 
     methods: {
@@ -31,10 +31,6 @@
       {
         this.$emit('input', !this.value);
       }
-      //onChange(ev)
-      //{
-      //  this.$emit('change', ev.target.value);
-      //},
     }
   }
 </script>
@@ -103,6 +99,11 @@
         transform: translateX(18px);
       }
     }
+  }
+
+  .ui-toggle.is-negative .ui-toggle-switch.is-active
+  {
+    background: var(--color-negative);
   }
 
   /*.ui-toggle.is-disabled .ui-toggle-switch i

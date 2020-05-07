@@ -27,6 +27,7 @@ namespace zero.Web.Mapper
         target.Roles = source.Roles;
         target.Claims = source.Claims;
         target.LockoutEnd = source.LockoutEnd;
+        target.IsLockedOut = source.LockoutEnabled && source.LockoutEnd.HasValue;
       });
 
       config.CreateMap<UserEditModel, User>((source, target) =>
@@ -39,7 +40,6 @@ namespace zero.Web.Mapper
         target.LanguageId = source.LanguageId;
         target.Roles = source.Roles;
         target.Claims = source.Claims;
-        target.LockoutEnd = source.LockoutEnd;
       });
 
       config.CreateMap<User, UserListModel>((source, target) =>

@@ -1,8 +1,5 @@
 import Vue from 'vue';
-import dayjs from 'dayjs';
-
-const DATETIME_FORMAT = 'DD.MM.YY HH:mm';
-const DATE_FORMAT = 'DD.MM.YY';
+import Strings from 'zero/services/strings';
 
 /// <summary>
 /// Outputs a formatted date
@@ -17,6 +14,6 @@ Vue.directive('date', (el, binding) =>
       return;
     }
 
-    el.innerHTML = dayjs(binding.value).format(DATE_FORMAT);
+    el.innerHTML = Strings.date(binding.value);
   }
 });

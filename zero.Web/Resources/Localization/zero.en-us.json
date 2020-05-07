@@ -161,7 +161,11 @@
       "roles_text": "Add default permissions from roles",
       "sections": "Sections",
       "sections_text": "Specify access to backoffice sections",
-      "isActive": "Can login"
+      "isActive": "Can login",
+      "isDisabled": "Disable",
+      "isLockedOut": "Locked out",
+      "isLockedOut_warning": "The user is locked out until",
+      "isDisabled_warning": "This user is disabled and cannot log into zero anymore. Status can be changed in <b>Actions</b> dropdown"
     }
   },
 

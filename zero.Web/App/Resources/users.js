@@ -19,5 +19,17 @@ export default {
   updatePassword(model)
   {
     return Axios.post('users/updatePassword', model).then(res => Promise.resolve(res.data));
+  },
+
+  // disable user
+  disable(model)
+  {
+    return Axios.post('users/disable', model).then(res => Promise.resolve(res.data));
+  },
+
+  // enable user
+  enable(model)
+  {
+    return Axios.post('users/enable', model).then(res => Promise.resolve(res.data));
   }
 };

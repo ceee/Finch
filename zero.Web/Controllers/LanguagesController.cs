@@ -60,15 +60,7 @@ namespace zero.Web.Controllers
     /// </summary>
     public IActionResult GetAllCultures()
     {
-      return Json(CultureInfo.GetCultures(CultureTypes.AllCultures)
-        .Where(x => !x.Name.IsNullOrWhiteSpace())
-        .Select(x => new CultureInfo(x.Name))
-        .OrderBy(x => x.DisplayName)
-        .Select(x => new
-        {
-          code = x.Name,
-          name = x.DisplayName
-        }));
+      return Json(Api.GetAllCultures());
     }
 
 

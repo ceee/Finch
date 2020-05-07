@@ -23,5 +23,9 @@ namespace zero.Web.Models
     public List<IUserClaim> Claims { get; set; } = new List<IUserClaim>();
 
     public DateTimeOffset? LockoutEnd { get; set; }
+
+    public bool IsLockedOut { get; set; }
+
+    public IList<Culture> SupportedCultures { get; set; } = new List<Culture>();
   }
 }

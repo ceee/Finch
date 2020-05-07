@@ -151,6 +151,46 @@ namespace zero.Core.Api
 
       return EntityResult<User>.Success(user);
     }
+
+
+    /// <inheritdoc />
+    public async Task<EntityResult<User>> Enable(User user)
+    {
+      return await UpdateActiveState(user, true);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<EntityResult<User>> Disable(User user)
+    {
+      return await UpdateActiveState(user, false);
+    }
+
+
+    /// <summary>
+    /// Updates the active state of user.
+    /// If IsActive=false, the user cannot login anymore
+    /// </summary>
+    async Task<EntityResult<User>> UpdateActiveState(User user, bool isActive)
+    {
+      user.IsActive = isActive;
+
+      IdentityResult identityResult = await UserManager.UpdateAsync(user);
+
+      if (!identityResult.Succeeded)
+      {
+        EntityResult<User> result = EntityResult<User>.Fail();
+
+        foreach (IdentityError error in identityResult.Errors)
+        {
+          result.AddError(error.Description);
+        }
+
+        return result;
+      }
+
+      return EntityResult<User>.Success(user);
+    }
   }
 
 
@@ -206,5 +246,15 @@ namespace zero.Core.Api
     /// User is logged out if this operation succeeds.
     /// </summary>
     Task<EntityResult<User>> UpdatePassword(string currentPassword, string newPassword);
+
+    /// <summary>
+    /// Enables a user
+    /// </summary>
+    Task<EntityResult<User>> Enable(User user);
+
+    /// <summary>
+    /// Disables a user
+    /// </summary>
+    Task<EntityResult<User>> Disable(User user);
   }
 }

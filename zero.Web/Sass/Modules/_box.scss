@@ -58,9 +58,14 @@
 
 .ui-view-box-aside
 {
-  width: 320px;
+  width: 360px;
   max-width: 100%;
   padding: var(--padding);
+
+  &.ui-box
+  {
+    margin-top: 0 !important;
+  }
 
   .ui-property + .ui-property
   {
