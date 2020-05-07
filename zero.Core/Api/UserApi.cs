@@ -189,6 +189,8 @@ namespace zero.Core.Api
         return result;
       }
 
+      await UserManager.UpdateSecurityStampAsync(user);
+
       return EntityResult<User>.Success(user);
     }
   }

@@ -34,37 +34,54 @@ namespace zero.Core.Api
       bool isAuthenticated = principal.Identity.IsAuthenticated;
       bool isZeroUser = principal.HasClaim(Constants.Auth.Claims.IsZero, PermissionsValue.True);
 
-      return isAuthenticated && isZeroUser;
+      bool isSignedIn = SignInManager.IsSignedIn(principal);
+
+      return isAuthenticated && isZeroUser && isSignedIn;
     }
 
 
     /// <inheritdoc />
     public async Task<EntityResult> Login(string email, string password, bool isPersistent)
     {
-      SignInResult result = await SignInManager.PasswordSignInAsync(email, password, isPersistent, true);
+      EntityResult result = new EntityResult();
 
-      if (!result.Succeeded)
+      User user = await SignInManager.UserManager.FindByNameAsync(email);
+
+      if (user == null)
       {
-        EntityResult failed = new EntityResult();
-        
-        if (result.IsLockedOut)
+        result.AddError("@login.errors.wrongcredentials");
+        return result;
+      }
+      // TODO probably move this logic into a custom SignInManager which overrides CanSignInAsync()
+      // see https://stackoverflow.com/a/35484758/670860
+      else if (!user.IsActive)
+      {
+        result.AddError("@login.errors.disabled");
+        return result;
+      }
+
+      SignInResult signInResult = await SignInManager.PasswordSignInAsync(email, password, isPersistent, true);
+
+      if (!signInResult.Succeeded)
+      {
+        if (signInResult.IsLockedOut)
         {
-          failed.AddError("@login.errors.lockedout");
+          result.AddError("@login.errors.lockedout");
         }
-        else if (result.IsNotAllowed)
+        else if (signInResult.IsNotAllowed)
         {
-          failed.AddError("@login.errors.notallowed");
+          result.AddError("@login.errors.notallowed");
         }
-        else if (result.RequiresTwoFactor)
+        else if (signInResult.RequiresTwoFactor)
         {
-          failed.AddError("@login.errors.requirestwofactor");
+          result.AddError("@login.errors.requirestwofactor");
         }
         else
         {
-          failed.AddError("@login.errors.wrongcredentials");
+          result.AddError("@login.errors.wrongcredentials");
         }
 
-        return failed;
+        return result;
       }
 
       return EntityResult.Success();

@@ -1,7 +1,7 @@
 ﻿<template>
   <ui-form ref="form" class="user" v-slot="form" @submit="onSubmit" @load="onLoad">
 
-    <ui-header-bar :title="model.name" title-empty="@user.name">
+    <ui-header-bar :title="model.name" title-empty="@user.name" :back-button="true">
       <ui-dropdown align="right">
         <template v-slot:button>
           <ui-button type="white" label="Actions" caret="down" />
@@ -22,15 +22,15 @@
           <ui-property label="@user.fields.email" description="@user.fields.email_text" :required="true">
             <input v-model.trim="model.email" type="email" class="ui-input" v-localize:placeholder="'@user.fields.email_placeholder'" />
           </ui-property>
-          <ui-property label="@user.fields.avatar" description="@user.fields.avatar_text" :required="true">
-            <ui-media :config="avatarConfig" v-model="model.avatar" :disabled="disabled" />
-          </ui-property>
           <ui-property label="@user.fields.language" description="@user.fields.language_text" :required="true">
             <div class="ui-native-select">
               <select v-model="model.languageId">
                 <option v-for="culture in model.supportedCultures" :value="culture.code">{{culture.name}}</option>
               </select>
             </div>
+          </ui-property>
+          <ui-property label="@user.fields.avatar" description="@user.fields.avatar_text" :required="true">
+            <ui-media :config="avatarConfig" v-model="model.avatar" :disabled="disabled" />
           </ui-property>
         </div>
 

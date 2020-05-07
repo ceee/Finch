@@ -207,6 +207,7 @@
     "errors": {
       "wrongcredentials": "Email or password is wrong",
       "lockedout": "The user has been locked out due to many failed password attempts",
+      "disabled": "The user has been deactivated",
       "notallowed": "The user is not allowed to sign in",
       "requirestwofactor": "Two-factor authentication is required to login"
     }
