@@ -69,7 +69,15 @@
 
       this.userActions.push({
         name: 'Edit',
-        icon: 'fth-edit-2'
+        icon: 'fth-edit-2',
+        action: (item, opts) =>
+        {
+          opts.hide();
+          this.$router.push({
+            name: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
+            params: { id: this.user.id }
+          });
+        }
       });
       this.userActions.push({
         name: 'Change password',
