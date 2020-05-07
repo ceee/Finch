@@ -36,6 +36,9 @@ namespace zero.Core.Entities
 
     /// <inheritdoc />
     public MediaFocalPoint FocalPoint { get; set; }
+
+    /// <inheritdoc />
+    public string FolderId { get; set; }
   }
 
 
@@ -85,5 +88,10 @@ namespace zero.Core.Entities
     /// Optional focal point for an image
     /// </summary>
     MediaFocalPoint FocalPoint { get; set; }
+    
+    /// <summary>
+    /// Id of the folder
+    /// </summary>
+    public string FolderId { get; set; }
   }
 }

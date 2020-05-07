@@ -88,7 +88,7 @@
     justify-content: space-between;
     align-items: center;
     height: 100%;
-    max-width: 1104px;
+    /*max-width: 1104px;*/
   }
 
   .ui-header-bar-main

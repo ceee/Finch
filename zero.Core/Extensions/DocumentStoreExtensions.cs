@@ -2,6 +2,7 @@
 using Raven.Client.Documents.Operations.CompareExchange;
 using System;
 using System.Threading.Tasks;
+using zero.Core.Utils;
 
 namespace zero.Core.Extensions
 {
@@ -12,17 +13,7 @@ namespace zero.Core.Extensions
     /// </summary>
     public static string Id(this IDocumentStore store, int length = -1)
     {
-      if (length > 0)
-      {
-        return Convert.ToBase64String(Guid.NewGuid().ToByteArray())
-          .Replace("/", String.Empty)
-          .Replace("+", String.Empty)
-          .Replace("-", String.Empty)
-          .ToLowerInvariant()
-          .Substring(0, length);
-      }
-
-      return Guid.NewGuid().ToString();
+      return IdGenerator.Create(length);
     }
 
 

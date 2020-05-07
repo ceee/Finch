@@ -16,14 +16,14 @@ namespace zero.Core.Api
   {
     protected IDocumentStore Raven { get; set; }
 
-    protected IMediaApi Media { get; set; }
+    protected IMediaUpload Media { get; set; }
 
     protected const string ASTERISK = "*";
 
     protected const string NEW_ID = "new:";
 
 
-    public ApiBase(IDocumentStore raven, IMediaApi media)
+    public ApiBase(IDocumentStore raven, IMediaUpload media)
     {
       Raven = raven;
       Media = media;

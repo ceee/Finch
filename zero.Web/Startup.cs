@@ -170,6 +170,7 @@ namespace zero.Web
       services.AddTransient<ILanguagesApi, LanguagesApi>();
       services.AddTransient<IPermissionsApi, PermissionsApi>();
       services.AddTransient<IMediaApi, MediaApi>();
+      services.AddTransient<IMediaUpload, MediaUpload>();
     }
 
     /// <summary>

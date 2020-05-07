@@ -10,10 +10,7 @@ namespace zero.Core.Api
 {
   public class ApplicationsApi : ApiBase, IApplicationsApi
   {
-    public ApplicationsApi(IDocumentStore raven, IMediaApi media) : base(raven, media)
-    {
-
-    }
+    public ApplicationsApi(IDocumentStore raven, IMediaUpload media) : base(raven, media) { }
 
 
     /// <inheritdoc />
