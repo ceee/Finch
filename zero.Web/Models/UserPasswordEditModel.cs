@@ -1,0 +1,11 @@
+﻿namespace zero.Web.Models
+{
+  public class UserPasswordEditModel
+  {
+    public string CurrentPassword { get; set; }
+
+    public string NewPassword { get; set; }
+
+    public string ConfirmNewPassword { get; set; }
+  }
+}

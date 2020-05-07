@@ -52,6 +52,11 @@
     "role": {
       "emptyclaim": "A permission needs both a key and a value",
       "nosection": "You have to select at least one section to give users access to"
+    },
+    "changepassword": {
+      "emptyfields": "Please fill out all fields",
+      "nouser": "User is invalid",
+      "newpasswordsnotmatching": "The new password does not match the confirmation"
     }
   },
 
@@ -67,6 +72,16 @@
     "confirm": "Delete",
     "title": "Delete entity",
     "text": "Are you sure you want to delete this entity?",
+  },
+
+  "changepasswordoverlay": {
+    "title": "Change password",
+    "confirm": "Change password",
+    "fields": {
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmNewPassword": "Confirm new password"
+    }
   },
 
   "sections": {

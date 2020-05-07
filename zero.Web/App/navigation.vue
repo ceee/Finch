@@ -73,7 +73,12 @@
       });
       this.userActions.push({
         name: 'Change password',
-        icon: 'fth-lock'
+        icon: 'fth-lock',
+        action(item, opts)
+        {
+          AuthApi.openPasswordOverlay();
+          opts.hide();
+        }
       });
       this.userActions.push({
         name: 'Logout',

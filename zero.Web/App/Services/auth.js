@@ -1,6 +1,8 @@
 import Vue from 'vue';
+import Overlay from 'zero/services/overlay';
 import { find as _find, extend as _extend } from 'underscore';
 import Axios from 'axios';
+import PasswordChangeOverlay from 'zero/pages/password-change';
 
 export default new Vue({
 
@@ -77,6 +79,17 @@ export default new Vue({
       let promise = Axios.post('authentication/logoutUser');
       this.rejectUser();
       return promise;
+    },
+
+    // open overlay to update password
+    openPasswordOverlay()
+    {
+      return Overlay.open({
+        title: '@changepasswordoverlay.title',
+        closeLabel: '@ui.close',
+        confirmLabel: '@changepasswordoverlay.confirm',
+        component: PasswordChangeOverlay
+      });
     }
   }
 });

@@ -35,6 +35,9 @@ namespace zero.Web.Controllers
     }
 
 
+    //protected 
+
+
     protected async Task<IActionResult> As<T, TTarget>(T model) where TTarget : class, new() where T : IZeroEntity
     {
       if (model == null)

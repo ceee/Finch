@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import AuthApi from 'zero/services/auth';
 
 export default {
 
@@ -12,5 +13,11 @@ export default {
   getAll(query)
   {
     return Axios.get('users/getAll', { params: query }).then(res => Promise.resolve(res.data));
+  },
+
+  // change password
+  updatePassword(model)
+  {
+    return Axios.post('users/updatePassword', model).then(res => Promise.resolve(res.data));
   }
 };

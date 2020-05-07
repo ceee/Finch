@@ -53,5 +53,27 @@ namespace zero.Web.Controllers
     {
       return Json(Options.Authorization.Permissions);
     }
+
+
+    /// <summary>
+    /// Updates a user password
+    /// </summary>
+    [ZeroAuthorize]
+    public async Task<IActionResult> UpdatePassword([FromBody] UserPasswordEditModel model)
+    {
+      EntityResult<User> result = null;
+
+      if (model.NewPassword != model.ConfirmNewPassword)
+      {
+        result = EntityResult<User>.Fail(nameof(model.NewPassword), "@errors.changepassword.newpasswordsnotmatching");
+      }
+      else
+      {
+        result = await Api.UpdatePassword(model.CurrentPassword, model.NewPassword);
+      }
+
+      return Json(result);
+      //return await As<Translation, TranslationEditModel>(await Api.);
+    }
   }
 }

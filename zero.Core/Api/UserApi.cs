@@ -18,15 +18,18 @@ namespace zero.Core.Api
 
     protected IHttpContextAccessor HttpContextAccessor { get; set; }
 
+    protected IAuthenticationApi AuthenticationApi { get; set; }
+
     protected UserManager<User> UserManager { get; private set; }
 
     private ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
 
-    public UserApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
+    public UserApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, IAuthenticationApi authenticationApi, UserManager<User> userManager)
     {
       Raven = raven;
       HttpContextAccessor = httpContextAccessor;
+      AuthenticationApi = authenticationApi;
       UserManager = userManager;
     }
 
@@ -100,6 +103,7 @@ namespace zero.Core.Api
       }
     }
 
+
     /// <inheritdoc />
     public async Task<ListResult<User>> GetByQuery(ListQuery<User> query, string appId = null)
     {
@@ -111,6 +115,41 @@ namespace zero.Core.Api
           .ForApp(appId)
           .ToQueriedListAsync(query);
       }
+    }
+
+
+    /// <inheritdoc />
+    public async Task<EntityResult<User>> UpdatePassword(string currentPassword, string newPassword)
+    {
+      if (currentPassword.IsNullOrWhiteSpace() || newPassword.IsNullOrWhiteSpace())
+      {
+        return EntityResult<User>.Fail(nameof(currentPassword), "@errors.changepassword.emptyfields");
+      }
+
+      User user = await GetUser();
+
+      if (user == null)
+      {
+        return EntityResult<User>.Fail("@errors.changepassword.nouser");
+      }
+
+      IdentityResult identityResult = await UserManager.ChangePasswordAsync(user, currentPassword, newPassword);
+
+      if (!identityResult.Succeeded)
+      {
+        EntityResult<User> result = EntityResult<User>.Fail();
+        
+        foreach (IdentityError error in identityResult.Errors)
+        {
+          result.AddError(error.Description);
+        }
+
+        return result;
+      }
+
+      await AuthenticationApi.Logout();
+
+      return EntityResult<User>.Success(user);
     }
   }
 
@@ -161,5 +200,11 @@ namespace zero.Core.Api
     /// Get all available users (with query)
     /// </summary>
     Task<ListResult<User>> GetByQuery(ListQuery<User> query, string appId = null);
+
+    /// <summary>
+    /// Changes the password of the current user.
+    /// User is logged out if this operation succeeds.
+    /// </summary>
+    Task<EntityResult<User>> UpdatePassword(string currentPassword, string newPassword);
   }
 }
