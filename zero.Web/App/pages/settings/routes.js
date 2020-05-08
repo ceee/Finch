@@ -18,7 +18,10 @@ detailPages[zero.alias.settings.translations] = [
   { view: 'translations', path: 'create', isCreate: true }
 ];
 detailPages[zero.alias.settings.languages] = 'language';
-detailPages[zero.alias.settings.applications] = 'application';
+detailPages[zero.alias.settings.applications] = [
+  { view: 'application' },
+  { view: 'application', path: 'create', isCreate: true }
+];
 
 if (section)
 {

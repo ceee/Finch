@@ -2,7 +2,7 @@
   <ui-form ref="form" class="application" v-slot="form" @submit="onSubmit" @load="onLoad">
 
     <ui-header-bar :title="model.name" title-empty="@application.name" :back-button="true">
-      <ui-dropdown align="right" v-if="!disabled">
+      <ui-dropdown align="right" v-if="!disabled && id">
         <template v-slot:button>
           <ui-button type="white" label="@ui.actions" caret="down" />
         </template>
@@ -38,10 +38,10 @@
           <ui-property label="@ui.active" :vertical="true" :is-text="true">
             <ui-toggle v-model="model.isActive" :disabled="disabled" />
           </ui-property>
-          <ui-property label="@ui.id" :vertical="true" :is-text="true">
+          <ui-property v-if="id" label="@ui.id" :vertical="true" :is-text="true">
             {{model.id}}
           </ui-property>
-          <ui-property label="@ui.createdDate" :vertical="true" :is-text="true">
+          <ui-property v-if="id" label="@ui.createdDate" :vertical="true" :is-text="true">
             <ui-date v-model="model.createdDate" />
           </ui-property>
         </aside>
@@ -103,7 +103,7 @@
 
       onLoad(form)
       {
-        form.load(ApplicationsApi.getById(this.id)).then(response =>
+        form.load(!this.id ? ApplicationsApi.getEmpty() : ApplicationsApi.getById(this.id)).then(response =>
         {
           this.disabled = !response.canEdit;
           this.model = response;
@@ -120,7 +120,13 @@
       {
         form.handle(ApplicationsApi.save(this.model)).then(response =>
         {
-          console.info(response);
+          if (!this.id)
+          {
+            this.$router.replace({
+              name: zero.alias.sections.settings + '-' + zero.alias.settings.applications + '-edit',
+              params: { id: response.model.id }
+            });
+          }
         });
       },
 

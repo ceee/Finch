@@ -6,11 +6,13 @@
     <div class="ui-blank-box">
       <div class="apps-items">
         <router-link v-for="app in apps" :to="getAppLink(app)" class="apps-item">
-          <!--<i class="apps-item-icon" :class="role.icon"></i>-->
-          <strong>{{app.name}}</strong>
-          <span class="apps-item-minor">{{app.alias}}</span>
+          <img class="apps-item-image" :src="app.image" :alt="app.name" />
+          <strong class="apps-item-name">{{app.name}}</strong>
+          <span class="apps-item-minor">{{app.domains[0]}}</span>
         </router-link>
-        <ui-button class="apps-items-add" label="Add" type="big" icon="fth-plus" />
+        <router-link :to="getAddLink()" class="apps-items-add">
+          <i class="fth-plus"></i>
+        </router-link>
       </div>
     </div>
   </div>
@@ -19,6 +21,8 @@
 
 <script>
   import ApplicationsApi from 'zero/resources/applications.js';
+
+  const baseRoute = zero.alias.sections.settings + '-' + zero.alias.settings.applications;
 
   export default {
     data: () => ({
@@ -38,10 +42,15 @@
       getAppLink(item)
       {
         return {
-          name: zero.alias.sections.settings + '-' + zero.alias.settings.applications + '-edit',
+          name: baseRoute + '-edit',
           params: { id: item.id }
         };
       },
+
+      getAddLink()
+      {
+        return { name: baseRoute + '-create' };
+      }
 
     }
   }
@@ -51,28 +60,26 @@
 <style lang="scss">
   .apps-items
   {
-    display: block;
+    display: grid;
     grid-gap: var(--padding);
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    align-items: stretch;
     margin-bottom: calc(var(--padding) * 2);
-  }
-
-  .apps-items-add
-  {
-    margin-top: var(--padding);
   }
 
   a.apps-item
   {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     background: var(--color-box);
     border-radius: var(--radius);
-    padding: var(--padding-s) var(--padding);
+    padding: var(--padding-s);
+    text-align: center;
     color: var(--color-fg);
     font-size: var(--font-size);
     line-height: 1.5;
     transition: box-shadow 0.2s ease;
+    box-shadow: var(--color-shadow-short);
 
     &:hover
     {
@@ -80,16 +87,38 @@
     }
   }
 
+  .apps-item-name
+  {
+    border-top: 1px solid var(--color-line-light);
+    padding-top: 20px;
+  }
+
   .apps-item-minor
   {
     color: var(--color-fg-mid);
   }
 
-  .apps-item-icon
+  .apps-item-image
   {
-    font-size: 26px;
+    text-align: center;
     display: inline-block;
     margin: 0 auto var(--padding-s);
     position: relative;
+    max-width: 120px;
+    max-height: 50px;
+  }
+
+  .apps-items-add
+  {
+    background: var(--color-bg-xmid);
+    color: var(--color-fg);
+    border-radius: var(--radius);
+    text-align: center;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    width: 100px;
   }
 </style>

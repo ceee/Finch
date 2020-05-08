@@ -9,7 +9,6 @@ namespace zero.Core.Entities
   public abstract class DatabaseEntity : IDatabaseEntity
   {
     /// <inheritdoc/>
-    [GenerateId]
     public string Id { get; set; }
 
     /// <inheritdoc/>

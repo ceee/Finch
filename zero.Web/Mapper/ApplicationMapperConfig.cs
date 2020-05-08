@@ -38,6 +38,7 @@ namespace zero.Web.Mapper
       {
         target.Id = source.Id;
         target.Name = source.Name;
+        target.FullName = source.FullName;
         target.IsActive = source.IsActive;
         target.Domains = source.Domains;
         target.Image = source.Image?.Source;
