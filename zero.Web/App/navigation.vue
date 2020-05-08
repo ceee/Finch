@@ -114,13 +114,25 @@
       });
 
       this.applicationItems.push({
-        name: 'Add new application...',
+        name: 'Add new application',
         icon: 'fth-plus',
         action: (item, opts) =>
         {
           opts.hide();
           this.$router.push({
             name: zero.alias.sections.settings + '-' + zero.alias.settings.applications + '-create'
+          });
+        }
+      });
+
+      this.applicationItems.push({
+        name: 'Manage apps',
+        icon: 'fth-edit-2',
+        action: (item, opts) =>
+        {
+          opts.hide();
+          this.$router.push({
+            name: zero.alias.sections.settings + '-' + zero.alias.settings.applications
           });
         }
       });
