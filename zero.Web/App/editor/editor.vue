@@ -1,10 +1,10 @@
 ﻿<template>
   <component v-if="loaded" :is="rootNode" class="editor">
-    <ui-tab v-if="hasTabs" class="ui-box" :label="component.params.name" v-for="component in components">
-      <editor-component v-for="child in component.components" v-model="model[child.params.field]" :component="child" />
+    <ui-tab v-if="hasTabs" class="ui-box" :label="component.params.name" v-for="(component, index) in components" :key="index">
+      <editor-component v-for="(child, index) in component.components" :key="index" v-model="model[child.params.field]" :component="child" />
     </ui-tab>
     <div v-if="!hasTabs" class="ui-box">
-      <editor-component v-for="component in components" v-model="model[component.params.field]" :component="component" />
+      <editor-component v-for="(component, index) in components" :key="index" v-model="model[component.params.field]" :component="component" />
     </div>
   </component>
 </template>

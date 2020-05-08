@@ -55,7 +55,7 @@
       </ui-tab>
 
       <ui-tab v-if="features.length > 0" label="@application.tab_features" class="ui-box" :count="model.features.length">
-        <ui-property v-for="feature in features" :label="feature.name" :description="feature.description">
+        <ui-property v-for="feature in features" :key="feature.alias" :label="feature.name" :description="feature.description">
           <ui-toggle :value="model.features.indexOf(feature.alias) > -1" @input="onFeatureToggle($event, feature)" :disabled="disabled" />
         </ui-property>
       </ui-tab>

@@ -2,7 +2,7 @@
   <div class="ui-table-outer">
     <div class="ui-table">
       <header class="ui-table-row ui-table-head">      
-        <div v-for="column in columns" class="ui-table-cell" :table-field="column.field" :style="column.flex">
+        <div v-for="column in columns" :key="column.key" class="ui-table-cell" :table-field="column.field" :style="column.flex">
           {{ column.label | localize }}
           <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="filter.orderBy == column.field ? 'sort-' + (filter.orderIsDescending ? 'desc' : 'asc') : null">
             <i class="arrow arrow-down"></i>
@@ -11,7 +11,8 @@
       </header>
 
       <div class="ui-table-row" v-for="item in items">
-        <component :is="column.tag" :to="getLink(column, item)" @click="onClick($event, column, item)" v-for="column in columns" class="ui-table-cell" :style="column.flex" :table-field="column.field" v-table-value="{ item, column }"></component>
+        <component :is="column.tag" :to="getLink(column, item)" @click="onClick($event, column, item)" v-for="column in columns" :key="column.key" 
+                   class="ui-table-cell" :style="column.flex" :table-field="column.field" v-table-value="{ item, column }"></component>
       </div>
 
       <div class="ui-table-empty" v-if="!isLoading && items.length < 1">
@@ -207,7 +208,10 @@
             };
           }
 
+
+
           this.columns.push(_extend(data, {
+            key: key,
             tag: typeof data.link !== 'undefined' ? 'router-link' : (typeof data.action !== 'undefined' ? 'a' : 'div'),
             label: typeof data.label !== 'undefined' ? data.label : (this.configuration.labelPrefix + key),
             field: key,

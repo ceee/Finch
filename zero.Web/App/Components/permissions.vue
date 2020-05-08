@@ -1,8 +1,8 @@
 ﻿<template>
   <div class="ui-permissions ui-box">
-    <ui-property v-for="permissionCollection in permissions" :label="permissionCollection.label" :description="permissionCollection.description">
+    <ui-property v-for="(permissionCollection, index) in permissions" :key="index" :label="permissionCollection.label" :description="permissionCollection.description">
       <ui-error field="Claims" />
-      <ui-property v-for="permission in permissionCollection.items" class="role-permission-toggle" :label="permission.label" :description="permission.description">
+      <ui-property v-for="(permission, index) in permissionCollection.items" :key="index" class="role-permission-toggle" :label="permission.label" :description="permission.description">
         <ui-toggle v-if="permission.valueType === 'boolean'" :disabled="disabled" v-model="permission.value" @input="onChange" />
         <ui-state-button v-if="permission.valueType === 'readWrite'" :disabled="disabled" :items="stateItems" v-model="permission.value" @input="onChange" />
         <input v-if="permission.valueType === 'string'" :disabled="disabled" v-model="permission.value" type="text" class="ui-input" @input="onChange" />

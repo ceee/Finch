@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="apps-items">
-    <router-link v-for="app in apps" :to="getAppLink(app)" class="apps-item">
+    <router-link v-for="app in apps" :key="app.id" :to="getAppLink(app)" class="apps-item">
       <strong class="apps-item-name">{{app.name}}</strong>
       <span class="apps-item-minor">{{app.domains[0]}}</span>
       <span class="apps-item-status" :class="{ 'is-active': app.isActive }" v-localize="getStatus(app)"></span>
