@@ -8,18 +8,18 @@ namespace zero.Core.Entities
   public class Section : ISection, IChildSection
   {
     /// <inheritdoc />
-    public string Alias { get; }
+    public string Alias { get; set; }
 
     /// <inheritdoc />
-    public string Name { get; }
+    public string Name { get; set; }
 
     /// <inheritdoc />
-    public string Icon { get; }
+    public string Icon { get; set; }
 
     /// <summary>
     /// HEX color (#aabbcc or #abc). Defaults to a neutral color
     /// </summary>
-    public string Color { get; }
+    public string Color { get; set; }
 
     /// <inheritdoc />
     public IList<IChildSection> Children { get; } = new List<IChildSection>();

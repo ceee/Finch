@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Core.Plugins;
 using zero.Core.Validation;
 using zero.Web.Mapper;
 using zero.Web.Sections;
@@ -125,8 +126,23 @@ namespace zero.Web
     }
 
 
+
+    public ZeroBuilder AddPlugin<T>() where T : ZeroPlugin
+    {
+      Services.AddTransient<T>();
+      return this;
+    }
+
+
+    public ZeroBuilder AddPlugin<T>(Func<IServiceProvider, T> implementationFactory) where T : ZeroPlugin
+    {
+      Services.AddTransient<T>(implementationFactory);
+      return this;
+    }
+
+
     //public virtual AuthenticationBuilder AddPolicyScheme(string authenticationScheme, string displayName, Action<PolicySchemeOptions> configureOptions);
-   
+
     //public virtual AuthenticationBuilder AddRemoteScheme<TOptions, THandler>(string authenticationScheme, string displayName, Action<TOptions> configureOptions)
     //  where TOptions : RemoteAuthenticationOptions, new()
     //  where THandler : RemoteAuthenticationHandler<TOptions>;

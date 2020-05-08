@@ -90,7 +90,7 @@ namespace zero.Web
 
       // add zero core
       //services.AddCore(appConfig, env);
-      services.AddZero(opts =>
+      ZeroBuilder zero = services.AddZero(opts =>
       {
         opts.Spaces.AddList<TeamMember>("team", "Team", "Our team members", "fth-users");
         opts.Spaces.AddList<News>("news", "News", "Articles about the company", "fth-edit");
@@ -102,25 +102,6 @@ namespace zero.Web
 
         opts.Renderers.Add<TeamMember, TeamMemberRenderer>();
         opts.Renderers.Add<SocialContent, SocialContentRenderer>();
-
-        //var commercePermissions = new Core.Identity.PermissionCollection()
-        //{
-        //  Label = "Commerce"
-        //};
-
-        //commercePermissions.Items.Add(new Core.Identity.Permission("commerce.orders", "Orders", "Manage and fulfill orders", Core.Identity.PermissionValueType.ReadWrite));
-        //commercePermissions.Items.Add(new Core.Identity.Permission("commerce.channels", "Channels", "Create and manage sales channels", Core.Identity.PermissionValueType.ReadWrite));
-        //commercePermissions.Items.Add(new Core.Identity.Permission("commerce.newchannels", "Create channels", "Create new channels", Core.Identity.PermissionValueType.Boolean));
-
-        //opts.Authorization.Permissions.Add(commercePermissions);
-        //opts.Sections.RemoveAt(1);
-        //var section = new Section("commerce", "Commerce", "fth-shopping-bag", "#52bba1");
-        //section.Children.Add(new Section("orders", "Orders"));
-        //section.Children.Add(new Section("customers", "Customers"));
-        //section.Children.Add(new Section("catalogue & ÖBB", "Catalogue"));
-        //section.Children.Add(new Section("promotions", "Promotions"));
-        //section.Children.Add(new Section("channels", "Channels"));
-        //opts.Sections.Insert(3, section);
       });
 
       // add Core MVC
