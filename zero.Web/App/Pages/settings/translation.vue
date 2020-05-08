@@ -48,7 +48,7 @@
 
       onLoad(form)
       {
-        form.load(this.model.id !== 'new' ? TranslationsApi.getById(this.model.id) : TranslationsApi.getEmpty()).then(response =>
+        form.load(!this.model.id ? TranslationsApi.getEmpty() : TranslationsApi.getById(this.model.id)).then(response =>
         {
           this.disabled = !response.canEdit;
           this.item = response;

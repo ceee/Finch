@@ -10,7 +10,10 @@ detailPages[zero.alias.settings.users] = [
   { view: 'role', path: 'role' }
 ];
 detailPages[zero.alias.settings.countries] = 'country';
-detailPages[zero.alias.settings.translations] = 'translations';
+detailPages[zero.alias.settings.translations] = [
+  { view: 'translations' },
+  { view: 'translations', path: 'create', isDetail: false }
+];
 detailPages[zero.alias.settings.languages] = 'language';
 detailPages[zero.alias.settings.applications] = 'application';
 
@@ -53,9 +56,10 @@ if (section)
       details.forEach(detail =>
       {
         const path = detail.path || 'edit';
+        const isDetail = typeof detail.isDetail === 'boolean' ? detail.isDetail : true;
 
         routes.push({
-          path: area.url + '/' + path + '/:id',
+          path: area.url + '/' + path + (isDetail ? '/:id' : ''),
           name: alias + '-' + area.alias + '-' + path,
           component: () => import(`zero/pages/${alias}/${detail.view}`),
           props: true,

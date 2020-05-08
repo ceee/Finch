@@ -16,6 +16,9 @@
   import Overlay from 'zero/services/overlay.js';
   import AddOverlay from './translation';
 
+  const editRouteName = zero.alias.sections.settings + '-' + zero.alias.settings.translations + '-edit';
+  const createRouteName = zero.alias.sections.settings + '-' + zero.alias.settings.translations + '-create';
+
   export default {
     data: () => ({
       tableConfig: {}
@@ -24,10 +27,9 @@
     props: ['id'],
 
     watch: {
-      'id': function (id)
+      '$route': function (route)
       {
-        if (id) this.edit(id);
-        else Overlay.close();
+        this.handleRouteChange();
       }
     },
 
@@ -43,7 +45,7 @@
             link: item =>
             {
               return {
-                name: zero.alias.sections.settings + '-' + zero.alias.settings.translations + '-edit',
+                name: editRouteName,
                 params: { id: item.id }
               };
             }
@@ -53,7 +55,7 @@
             link: item =>
             {
               return {
-                name: zero.alias.sections.settings + '-' + zero.alias.settings.translations + '-edit',
+                name: editRouteName,
                 params: { id: item.id }
               };
             }
@@ -62,16 +64,29 @@
         items: TranslationsApi.getAll
       };
 
-      if (this.id)
-      {
-        this.edit(this.id);
-      }
+      this.handleRouteChange();
     },
 
     methods: {
       goBack()
       {
         this.$router.go(-1);
+      },
+
+      handleRouteChange()
+      {
+        if (this.id)
+        {
+          this.edit(this.id);
+        }
+        else if (this.$route.name === createRouteName)
+        {
+          this.edit();
+        }
+        else
+        {
+          Overlay.close();
+        }
       },
 
       edit(id)
@@ -92,8 +107,7 @@
       add()
       {
         this.$router.push({
-          name: zero.alias.sections.settings + '-' + zero.alias.settings.translations + '-edit',
-          params: { id: 'new' }
+          name: createRouteName
         });
       }
     }
