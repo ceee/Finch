@@ -64,7 +64,7 @@ namespace zero.Web
         //opts.Cookie.Path = // TODO use backoffice path
         opts.Cookie.Name = Constants.Auth.CookieName;
         opts.SlidingExpiration = true;
-        opts.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        opts.ExpireTimeSpan = TimeSpan.FromSeconds(10); // TimeSpan.FromMinutes(60);
 
         // override redirect to login page (handled by vue frontend) and return a 401 instead
         opts.Events.OnRedirectToLogin = (context) =>

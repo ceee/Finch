@@ -8,6 +8,7 @@ export default new Vue({
 
   data: () => ({
     isAuthenticated: false,
+    rejectReason: null,
     user: {
       name: null,
       email: null
@@ -34,8 +35,9 @@ export default new Vue({
     },
 
     // the cached user has been rejected by the server so we clear credentials here
-    rejectUser()
+    rejectUser(reason)
     {
+      this.rejectReason = reason;
       this.isAuthenticated = false;
       this.user = null;
     },
@@ -77,7 +79,7 @@ export default new Vue({
     logout()
     {
       let promise = Axios.post('authentication/logoutUser');
-      this.rejectUser();
+      this.rejectUser("@login.rejectReasons.logout");
       return promise;
     },
 

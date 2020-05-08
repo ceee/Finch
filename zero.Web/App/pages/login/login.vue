@@ -5,9 +5,11 @@
       <div>
         <h2 v-localize="'@login.headline'"></h2>
 
+        <ui-error :catch-remaining="true" />
+        <ui-message type="info" v-if="rejectReason" :text="rejectReason" />
+
         <ui-property field="email" label="@login.fields.email" :vertical="true">
           <input v-model="model.email" type="text" class="ui-input" maxlength="120" v-localize:placeholder="'@login.fields.email_placeholder'" />
-          <ui-error :catch-remaining="true" />
         </ui-property>
 
         <ui-property field="password" label="@login.fields.password" :vertical="true">
@@ -32,6 +34,7 @@
     name: 'app-login',
 
     data: () => ({
+      rejectReason: null,
       model: {
         email: null,
         password: null,
@@ -39,9 +42,16 @@
       }
     }),
 
+    created()
+    {
+      this.rejectReason = AuthApi.rejectReason;
+    },
+
     methods: {
       onSubmit(form)
       {
+        this.rejectReason = null;
+
         form.handle(AuthApi.login(this.model)).then(res =>
         {
           window.location.reload();
@@ -122,5 +132,10 @@
   .app-auth-bottom
   {
     margin-top: 3rem;
+  }
+
+  .app-auth .ui-message
+  {
+    margin: -16px 0 var(--padding);
   }
 </style>

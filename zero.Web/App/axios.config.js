@@ -15,7 +15,7 @@ Axios.interceptors.response.use(response => response, error =>
   {
     if (error.response.status === 401)
     {
-      Auth.rejectUser();
+      Auth.rejectUser("@login.rejectReasons.inactive");
       //Notification.error('Authentication failed. Please login again.', 3);
     }
   }

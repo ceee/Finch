@@ -211,6 +211,13 @@
       "disabled": "The user has been deactivated",
       "notallowed": "The user is not allowed to sign in",
       "requirestwofactor": "Two-factor authentication is required to login"
+    },
+    "rejectReasons": {
+      "logout": "You have successfully logged out",
+      "inactive": "You have been inactive for too long. Please login again.",
+      "terminated": "Your session has been terminated. Please login again.",
+      "userchanged": "Your user data has changed. Please login again.",
+      "passwordchanged": "Your password was successfully changed. Please login again."
     }
   },
 

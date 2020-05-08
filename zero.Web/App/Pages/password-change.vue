@@ -50,7 +50,7 @@
         {
           setTimeout(() =>
           {
-            AuthApi.rejectUser();
+            AuthApi.rejectUser("@login.rejectReasons.passwordchanged");
           }, 500);
         }, errors =>
         {
