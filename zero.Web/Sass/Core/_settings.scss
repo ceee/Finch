@@ -2,7 +2,7 @@
 :root, .theme-light
 {
   // accent colors
-  --color-primary: #86bcaf;
+  --color-primary: #222; // #86bcaf
   --color-primary-fg: #fff;
   --color-secondary: #1f3053;
   --color-negative: #d82853; 
@@ -38,11 +38,11 @@
   --color-accent-info: rgb(44, 162, 212);
   --color-accent-info-bg: rgba(44, 162, 212, 0.1);
   --color-accent-success: rgb(47, 187, 152);
-  --color-accent-success-bg: rgba(47, 187, 152, 0.1);
+  --color-accent-success-bg: rgba(47, 187, 152, 0.15);
   --color-accent-warn: rgb(211, 172, 35);
   --color-accent-warn-bg: rgba(233, 193, 56, 0.1);
   --color-accent-error: rgb(216, 40, 83);
-  --color-accent-error-bg: rgba(216, 40, 83, 0.1);
+  --color-accent-error-bg: rgba(216, 40, 83, 0.08);
 
   // sizes
 

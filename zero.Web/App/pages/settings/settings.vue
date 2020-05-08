@@ -1,5 +1,9 @@
 ﻿<template>
   <div class="settings">
+    <div class="settings-group">
+      <h2 class="ui-headline xl settings-group-headline" v-localize="'@application.list'"></h2>
+      <applications-items />
+    </div>
     <div class="settings-group" v-for="group in groups">
       <h2 class="ui-headline xl settings-group-headline" v-localize="group.name"></h2>
       <div class="settings-group-items">
@@ -21,10 +25,12 @@
 
 
 <script>
-  import SettingsApi from 'zero/resources/settings.js'
+  import ApplicationsItems from 'zero/pages/settings/applications-items'
 
   export default {
     name: 'app-settings',
+
+    components: { ApplicationsItems },
 
     data: () => ({
       page: true,

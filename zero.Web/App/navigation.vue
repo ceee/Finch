@@ -116,9 +116,12 @@
       this.applicationItems.push({
         name: 'Add new application...',
         icon: 'fth-plus',
-        action(item, dropdown)
+        action: (item, opts) =>
         {
-          console.info('add');
+          opts.hide();
+          this.$router.push({
+            name: zero.alias.sections.settings + '-' + zero.alias.settings.applications + '-create'
+          });
         }
       });
     },
