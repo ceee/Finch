@@ -16,5 +16,10 @@
     /// If this language is inherited it gets all missing properties from its parent
     /// </summary>
     public string InheritedLanguageId { get; set; }
+
+    /// <summary>
+    /// Language variant
+    /// </summary>
+    public class Variant : LanguageVariant { }
   }
 }

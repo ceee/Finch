@@ -20,8 +20,11 @@
     /// <inheritdoc />
     public string ParentEntityId { get; set; }
 
-    /// <inheritdoc />
-    public string LanguageId { get; set; }
+
+    public class Variant : LanguageVariant
+    {
+      public string Value { get; set; }
+    }
   }
 
 

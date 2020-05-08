@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using zero.Core.Attributes;
 
@@ -29,6 +30,12 @@ namespace zero.Core.Entities
 
     /// <inheritdoc/>
     public DateTimeOffset CreatedDate { get; set; }
+
+    /// <inheritdoc/>
+    public IList<LanguageVariant> LanguageVariants { get; set; } = new List<LanguageVariant>();
+
+    /// <inheritdoc />
+    public string LanguageId { get; set; }
   }
 
 
