@@ -144,6 +144,7 @@
     font-size: var(--font-size);
     line-height: 1.5;
     transition: box-shadow 0.2s ease;
+    box-shadow: var(--color-shadow-short);
 
     &:hover
     {
