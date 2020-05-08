@@ -1,6 +1,6 @@
 ﻿namespace zero.TestData
 {
-  public static class Features
+  public static class TestFeatures
   {
     public const string Wishlist = "testdata.wishlist";
 

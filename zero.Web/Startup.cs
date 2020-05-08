@@ -97,8 +97,8 @@ namespace zero.Web
         opts.Spaces.AddSeparator();
         opts.Spaces.AddEditor<SocialContent>("social", "Social", "Links to social media", "fth-twitter");
 
-        opts.Features.Add(Features.Wishlist, "Wishlist", "Frontend wishlist for logged-in users");
-        opts.Features.Add(Features.SocialShopping, "Social shopping", "Integrate products into social media portals");
+        opts.Features.Add(TestFeatures.Wishlist, "Wishlist", "Frontend wishlist for logged-in users");
+        opts.Features.Add(TestFeatures.SocialShopping, "Social shopping", "Integrate products into social media portals");
 
         opts.Renderers.Add<TeamMember, TeamMemberRenderer>();
         opts.Renderers.Add<SocialContent, SocialContentRenderer>();
