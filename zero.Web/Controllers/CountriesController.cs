@@ -30,6 +30,15 @@ namespace zero.Web.Controllers
 
 
     /// <summary>
+    /// Get new country
+    /// </summary>  
+    public IActionResult GetEmpty()
+    {
+      return Json(new CountryEditModel());
+    }
+
+
+    /// <summary>
     /// Get all countries
     /// </summary>    
     public async Task<IActionResult> GetAll([FromQuery] ListQuery<Country> query)

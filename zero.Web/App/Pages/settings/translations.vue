@@ -1,8 +1,8 @@
 ﻿<template>
   <div class="translations">
-    <ui-header-bar title="Translations" :back-button="true">
+    <ui-header-bar title="@translation.list" :back-button="true">
       <ui-table-filter v-model="tableConfig" />
-      <ui-button label="Add" icon="fth-plus" @click="add" />
+      <ui-button label="@ui.add" icon="fth-plus" @click="add" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table v-model="tableConfig" />
@@ -16,8 +16,8 @@
   import Overlay from 'zero/services/overlay.js';
   import AddOverlay from './translation';
 
-  const editRouteName = zero.alias.sections.settings + '-' + zero.alias.settings.translations + '-edit';
-  const createRouteName = zero.alias.sections.settings + '-' + zero.alias.settings.translations + '-create';
+  const baseRoute = zero.alias.sections.settings + '-' + zero.alias.settings.translations;
+  const createRoute = baseRoute + '-create';
 
   export default {
     data: () => ({
@@ -35,6 +35,14 @@
 
     created()
     {
+      let link = item =>
+      {
+        return {
+          name: baseRoute + '-edit',
+          params: { id: item.id }
+        };
+      };
+
       this.tableConfig = {
         labelPrefix: '@translation.fields.',
         allowOrder: false,
@@ -42,23 +50,11 @@
         columns: {
           key: {
             as: 'text',
-            link: item =>
-            {
-              return {
-                name: editRouteName,
-                params: { id: item.id }
-              };
-            }
+            link: link
           },
           value: {
             as: 'text',
-            link: item =>
-            {
-              return {
-                name: editRouteName,
-                params: { id: item.id }
-              };
-            }
+            link: link
           }
         },
         items: TranslationsApi.getAll
@@ -79,7 +75,7 @@
         {
           this.edit(this.id);
         }
-        else if (this.$route.name === createRouteName)
+        else if (this.$route.name === createRoute)
         {
           this.edit();
         }
@@ -106,9 +102,7 @@
 
       add()
       {
-        this.$router.push({
-          name: createRouteName
-        });
+        this.$router.push({ name: createRoute });
       }
     }
   }

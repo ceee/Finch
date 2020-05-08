@@ -101,8 +101,6 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<Country>> Delete(string id)
     {
-      return EntityResult<Country>.Success();
-
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         Country country = await session.LoadAsync<Country>(id);

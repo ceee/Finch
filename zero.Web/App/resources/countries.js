@@ -8,6 +8,12 @@ export default {
     return Axios.get('countries/getById', { params: { id } }).then(res => Promise.resolve(res.data));
   },
 
+  // get new country model
+  getEmpty(id)
+  {
+    return Axios.get('countries/getEmpty').then(res => Promise.resolve(res.data));
+  },
+
   // get all countries
   getAll(query)
   {
@@ -23,6 +29,6 @@ export default {
   // deletes a country
   delete(id)
   {
-    return Axios.post('countries/delete', { params: { id } }).then(res => Promise.resolve(res.data));
+    return Axios.delete('countries/delete', { params: { id } }).then(res => Promise.resolve(res.data));
   }
 };

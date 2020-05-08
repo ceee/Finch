@@ -1,7 +1,8 @@
 ﻿<template>
   <div class="countries">
-    <ui-header-bar title="Countries" :back-button="true">
+    <ui-header-bar title="@country.list" :back-button="true">
       <ui-table-filter v-model="tableConfig" />
+      <ui-button label="@ui.add" icon="fth-plus" @click="add" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table v-model="tableConfig" />
@@ -12,6 +13,8 @@
 
 <script>
   import CountriesApi from 'zero/resources/countries.js';
+
+  const baseRoute = zero.alias.sections.settings + '-' + zero.alias.settings.countries;
 
   export default {
     data: () => ({
@@ -38,7 +41,7 @@
             link: item =>
             {
               return {
-                name: zero.alias.sections.settings + '-' + zero.alias.settings.countries + '-edit',
+                name: baseRoute + '-edit',
                 params: { id: item.id }
               };
             }
@@ -63,6 +66,11 @@
       goBack()
       {
         this.$router.go(-1);
+      },
+
+      add()
+      {
+        this.$router.push({ name: baseRoute + '-create' });
       }
     }
   }

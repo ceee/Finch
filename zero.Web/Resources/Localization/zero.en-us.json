@@ -243,6 +243,7 @@
   },
 
   "country": {
+    "list": "Countries",
     "name": "Country",
     "fields": {
       "code": "Code",

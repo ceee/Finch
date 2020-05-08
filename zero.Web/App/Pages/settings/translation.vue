@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-form v-if="!loading" ref="form" class="translation" v-slot="form" @submit="onSubmit" @load="onLoad">
-    <h2 class="ui-headline">Translation</h2>
+    <h2 class="ui-headline" v-localize="'@translation.name'"></h2>
     <div class="translation-items">
       <div class="ui-split">
         <ui-property label="@translation.fields.key" :required="true" :vertical="true">

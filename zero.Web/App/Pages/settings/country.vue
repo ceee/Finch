@@ -2,12 +2,12 @@
   <ui-form ref="form" class="country" v-slot="form" @submit="onSubmit" @load="onLoad">
 
     <ui-header-bar :title="model.name" title-empty="@country.name" :back-button="true">
-      <!--<ui-dropdown align="right">
+      <ui-dropdown v-if="id" align="right">
         <template v-slot:button>
-          <ui-button type="light" label="@ui.actions" caret="down" />
+          <ui-button type="white" label="@ui.actions" caret="down" />
         </template>
         <ui-dropdown-list v-model="actions" />
-      </ui-dropdown>-->
+      </ui-dropdown>
       <ui-button :submit="true" label="@ui.save" :state="form.state" />
     </ui-header-bar>
 
@@ -27,10 +27,10 @@
         <ui-property label="@ui.active" :vertical="true" :is-text="true">
           <ui-toggle v-model="model.isActive" />
         </ui-property>
-        <ui-property label="@ui.id" :vertical="true" :is-text="true">
+        <ui-property v-if="id" label="@ui.id" :vertical="true" :is-text="true">
           {{model.id}}
         </ui-property>
-        <ui-property label="@ui.createdDate" :vertical="true" :is-text="true">
+        <ui-property v-if="id" label="@ui.createdDate" :vertical="true" :is-text="true">
           <ui-date v-model="model.createdDate" />
         </ui-property>
       </aside>
@@ -77,7 +77,7 @@
 
       onLoad(form)
       {
-        form.load(CountriesApi.getById(this.id)).then(response =>
+        form.load(!this.id ? CountriesApi.getEmpty() : CountriesApi.getById(this.id)).then(response =>
         {
           this.model = response;
         });
@@ -88,7 +88,13 @@
         //this.model.id = "zero.countries.16-B";
         form.handle(CountriesApi.save(this.model)).then(response =>
         {
-          console.info(response);
+          if (!this.id)
+          {
+            this.$router.replace({
+              name: zero.alias.sections.settings + '-' + zero.alias.settings.countries + '-edit',
+              params: { id: response.model.id }
+            });
+          }
         });
       },
 
@@ -98,7 +104,6 @@
 
         Overlay.confirmDelete().then((opts) =>
         {
-          console.info('click');
           opts.state('loading');
 
           CountriesApi.delete(this.id).then(response =>
