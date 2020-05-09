@@ -45,7 +45,9 @@
 
       this.tableConfig = {
         labelPrefix: '@translation.fields.',
-        allowOrder: false,
+        order: {
+          enabled: false
+        },
         search: null,
         columns: {
           key: {

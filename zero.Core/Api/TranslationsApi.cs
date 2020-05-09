@@ -13,48 +13,43 @@ namespace zero.Core.Api
 {
   public class TranslationsApi : ITranslationsApi
   {
-    protected IDocumentStore Raven { get; private set; }
+    protected IAppAwareBackofficeStore Backoffice { get; private set; }
 
 
-    public TranslationsApi(IDocumentStore raven)
+    public TranslationsApi(IAppAwareBackofficeStore backoffice)
     {
-      Raven = raven;
+      Backoffice = backoffice;
     }
 
 
     /// <inheritdoc />
     public async Task<Translation> GetById(string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.LoadAsync<Translation>(id);
-      }
+      return await Backoffice.GetById<Translation>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<Translation>> GetAll(string languageId)
+    public async Task<IList<Translation>> GetAll()
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
       {
         return await session.Query<Translation>()
-          .Where(x => x.LanguageId == languageId)
           .OrderByDescending(x => x.CreatedDate)
+          .ForApp(Backoffice.AppId)
           .ToListAsync();
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<ListResult<Translation>> GetByQuery(string languageId, ListQuery<Translation> query)
+    public async Task<ListResult<Translation>> GetByQuery(ListQuery<Translation> query)
     {
       query.SearchFor(entity => entity.Key, entity => entity.Value);
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
       {
-        return await session.Query<Translation>()
-          .Where(x => x.LanguageId == languageId)
-          .ToQueriedListAsync(query);
+        return await session.Query<Translation>().ForApp(Backoffice.AppId).ToQueriedListAsync(query);
       }
     }
 
@@ -62,51 +57,14 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<Translation>> Save(Translation model)
     {
-      ValidationResult validation = await new TranslationValidator().ValidateAsync(model);
-
-      if (!validation.IsValid)
-      {
-        return EntityResult<Translation>.Fail(validation);
-      }
-
-      if (model.Id.IsNullOrEmpty())
-      {
-        model.AppId = "zero.applications.1-A"; // TODO real app id
-        model.CreatedDate = DateTimeOffset.Now;
-        model.LanguageId = "en-US"; // TODO
-      }
-
-      model.IsActive = true;
-      model.Alias = Alias.Generate(model.Name);
-
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        await session.StoreAsync(model);
-        await session.SaveChangesAsync();
-      }
-
-      return EntityResult<Translation>.Success(model);
+      return await Backoffice.Save(model, new TranslationValidator());
     }
 
 
     /// <inheritdoc />
     public async Task<EntityResult<Translation>> Delete(string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        Translation entity = await session.LoadAsync<Translation>(id);
-
-        if (entity == null)
-        {
-          return EntityResult<Translation>.Fail("@errors.ondelete.idnotfound");
-        }
-
-        session.Delete(entity);
-
-        await session.SaveChangesAsync();
-      }
-
-      return EntityResult<Translation>.Success();
+      return await Backoffice.DeleteById<Translation>(id);
     }
   }
 
@@ -121,12 +79,12 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all available translations
     /// </summary>
-    Task<IList<Translation>> GetAll(string languageId);
+    Task<IList<Translation>> GetAll();
 
     /// <summary>
     /// Get all available translations (with query)
     /// </summary>
-    Task<ListResult<Translation>> GetByQuery(string languageId, ListQuery<Translation> query);
+    Task<ListResult<Translation>> GetByQuery(ListQuery<Translation> query);
 
     /// <summary>
     /// Creates or updates a translation

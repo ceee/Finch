@@ -16,13 +16,14 @@ namespace zero.Core.Api
 {
   public class BackofficeStore : IBackofficeStore
   {
-    public bool IsAppAware => this is IAppAwareBackofficeStore;
+    public bool IsAppAware => this.Is<IAppAwareBackofficeStore>();
+
+    public string AppId { get; protected set; }
 
     public IDocumentStore Raven { get; private set; }
 
     IMediaUpload Media { get; set; }
 
-    protected string CurrentAppId { get; set; }
 
     protected string[] CurrentAppIds { get => GetAppIds(); }
 
@@ -41,11 +42,11 @@ namespace zero.Core.Api
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        if (typeof(T) is IAppAwareEntity)
+        if (typeof(T).Is<IAppAwareEntity>())
         {
           return await session.Query<T>()
             .Where(x => x.Id == id)
-            .ForApp(CurrentAppId, true)
+            .ForApp(AppId, true)
             .FirstOrDefaultAsync();
         }
 
@@ -65,6 +66,10 @@ namespace zero.Core.Api
       //  entity.Alias = entity.Alias?.ToLower().ToUrlSegment();
       //}
 
+      // get specifics 
+      IAppAwareEntity appAwareEntity = model as IAppAwareEntity;
+      IZeroEntity zeroEntity = model as IZeroEntity;
+
       // run validator
       if (validator != null)
       {
@@ -77,9 +82,9 @@ namespace zero.Core.Api
       }
 
       // check if current app id is valid
-      if (!model.Id.IsNullOrEmpty() && IsAppAware && model is IAppAwareEntity)
+      if (!model.Id.IsNullOrEmpty() && IsAppAware && appAwareEntity != null)
       {
-        if (!CurrentAppIds.Contains((model as IAppAwareEntity).AppId))
+        if (!CurrentAppIds.Contains(appAwareEntity.AppId))
         {
           return EntityResult<T>.Fail("@errors.onsave.notallowed");
         }
@@ -126,14 +131,14 @@ namespace zero.Core.Api
       // set default properties
       if (model.Id.IsNullOrEmpty())
       {
-        if (model is IZeroEntity)
+        if (zeroEntity != null)
         {
-          (model as IZeroEntity).CreatedDate = DateTimeOffset.Now;
+          zeroEntity.CreatedDate = DateTimeOffset.Now;
         }
 
-        if (model is IAppAwareEntity)
+        if (appAwareEntity != null)
         {
-          (model as IAppAwareEntity).AppId = Constants.Database.SharedAppId; // TODO correct app id
+          appAwareEntity.AppId = "zero.applications.1-A"; // Constants.Database.SharedAppId; // TODO correct app id
         }
 
         if (model is ILanguageAwareEntity)
@@ -143,9 +148,9 @@ namespace zero.Core.Api
       }
 
       // update name alias
-      if (model is IZeroEntity)
+      if (zeroEntity != null)
       {
-        (model as IZeroEntity).Alias = Alias.Generate((model as IZeroEntity).Name);
+        zeroEntity.Alias = Alias.Generate(zeroEntity.Name);
       }
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
@@ -165,13 +170,14 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         T entity = await session.LoadAsync<T>(id);
+        IAppAwareEntity appAwareEntity = entity as IAppAwareEntity;
 
         if (entity == null)
         {
           return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
         }
 
-        if (IsAppAware && entity is IAppAwareEntity && !CurrentAppIds.Contains((entity as IAppAwareEntity).AppId))
+        if (IsAppAware && appAwareEntity != null && !CurrentAppIds.Contains(appAwareEntity.AppId))
         {
           return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
         }
@@ -191,7 +197,7 @@ namespace zero.Core.Api
     /// </summary>
     string[] GetAppIds()
     {
-      return new string[2] { CurrentAppId, Constants.Database.SharedAppId };
+      return new string[2] { AppId, Constants.Database.SharedAppId };
     }
   }
 
@@ -199,6 +205,10 @@ namespace zero.Core.Api
   public interface IBackofficeStore
   {
     IDocumentStore Raven { get; }
+
+    bool IsAppAware { get; }
+
+    string AppId { get; }
 
     /// <summary>
     /// Get an entity by Id.
@@ -225,7 +235,7 @@ namespace zero.Core.Api
   {
     public AppAwareBackofficeStore(IDocumentStore raven, IMediaUpload media) : base(raven, media)
     {
-      CurrentAppId = "zero.applications.1-A"; // TODO
+      AppId = "zero.applications.1-A"; // TODO
     }
   }
 }

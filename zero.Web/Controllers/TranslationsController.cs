@@ -49,7 +49,7 @@ namespace zero.Web.Controllers
     /// </summary>    
     public async Task<IActionResult> GetAll([FromQuery] ListQuery<Translation> query)
     {
-      return await As<Translation, TranslationListModel>(await Api.GetByQuery("en-US", query));
+      return await As<Translation, TranslationListModel>(await Api.GetByQuery(query));
     }
 
 

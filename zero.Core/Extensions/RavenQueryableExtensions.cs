@@ -1,6 +1,7 @@
 ﻿using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,9 +11,9 @@ namespace zero.Core.Extensions
 {
   public static class RavenQueryableExtensions
   {
-    public static IRavenQueryable<T> ForApp<T>(this IRavenQueryable<T> source, string appId, bool includeShared = false) where T : IZeroIdEntity
+    public static IRavenQueryable<T> ForApp<T>(this IRavenQueryable<T> source, string appId, bool includeShared = true) where T : IZeroIdEntity
     {
-      if (appId.IsNullOrEmpty() || !(typeof(T) is IAppAwareEntity))
+      if (appId.IsNullOrEmpty() || source.ElementType.Is<IAppAwareEntity>())
       {
         return source;
       }

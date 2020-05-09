@@ -20,6 +20,7 @@ namespace zero.Web.Mapper
 
       config.CreateMap<TranslationEditModel, Translation>((source, target) =>
       {
+        target.IsActive = true;
         target.Key = source.Key;
         target.Value = source.Value;
         target.Display = source.Display;

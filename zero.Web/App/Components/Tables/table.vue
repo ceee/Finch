@@ -86,12 +86,9 @@
       {
         this.initialize();
       },
-      filter: {
-        deep: true,
-        handler: function ()
-        {
-          this.debouncedUpdate();
-        }
+      'filter.search': function (val)
+      {
+        this.debouncedUpdate();
       }
     },
 
@@ -208,14 +205,12 @@
             };
           }
 
-
-
           this.columns.push(_extend(data, {
             key: key,
             tag: typeof data.link !== 'undefined' ? 'router-link' : (typeof data.action !== 'undefined' ? 'a' : 'div'),
             label: typeof data.label !== 'undefined' ? data.label : (this.configuration.labelPrefix + key),
             field: key,
-            canSort: typeof data.sort === 'boolean' ? data.sort : this.configuration.sort,
+            canSort: typeof data.sort === 'boolean' ? data.sort : this.configuration.order.enabled,
             flex: data.width ? { 'flex': '0 1 ' + data.width + 'px' } : {}
           }));
         });
@@ -225,6 +220,7 @@
       setPage(index)
       {
         this.filter.page = index;
+        this.debouncedUpdate();
       },
 
       // sort by a column
@@ -243,6 +239,8 @@
           this.filter.orderBy = column.field;
           this.filter.orderIsDescending = true;
         }
+
+        this.debouncedUpdate();
       }
     }
   }
