@@ -9,7 +9,7 @@
 
     <ui-search class="ui-iconpicker-overlay-search" v-model="query" />
 
-    <div class="ui-iconpicker-overlay-colors">
+    <div class="ui-iconpicker-overlay-colors" v-if="config.colors">
       <i v-for="col in colors" :class="{ 'is-active': ('color-' + col) === color || (col === 'default' && !color), ['bg-color-' + col]: true }" @click="selectColor(col)" :title="col"></i>
     </div>
 
@@ -127,9 +127,9 @@
 </script>
 
 <style lang="scss">
-  .ui-iconpicker-overlay
+  .ui-iconpicker-overlay content
   {
-
+    padding-top: 0;
   }
 
   .ui-iconpicker-overlay-items

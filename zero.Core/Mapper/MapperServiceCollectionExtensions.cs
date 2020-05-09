@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
 using System;
-using zero.Core;
-using zero.Web.Mapper;
 
-namespace zero.Web
+namespace zero.Core.Mapper
 {
   public static class MapperServiceCollectionExtensions
   {

@@ -10,6 +10,7 @@ using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Identity;
+using zero.Core.Mapper;
 using zero.TestData;
 using zero.Web.Mapper;
 using zero.Web.Models;

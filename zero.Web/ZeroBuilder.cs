@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Core.Mapper;
 using zero.Core.Plugins;
 using zero.Core.Validation;
 using zero.Web.Mapper;

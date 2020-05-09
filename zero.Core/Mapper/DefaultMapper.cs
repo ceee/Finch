@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 
-namespace zero.Web.Mapper
+namespace zero.Core.Mapper
 {
   public class DefaultMapper : IMapper
   {

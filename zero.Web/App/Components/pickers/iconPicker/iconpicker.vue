@@ -25,6 +25,10 @@
         type: Boolean,
         default: false
       },
+      colors: {
+        type: Boolean,
+        default: false
+      },
       options: {
         type: Object,
         default: () =>
@@ -69,7 +73,8 @@
           component: PickIconOverlay,
           display: 'editor',
           items: FEATHER_ICONS,
-          model: this.value
+          model: this.value,
+          colors: this.colors,
         }, typeof this.options === 'object' ? this.options : {});
 
         return Overlay.open(options).then(value =>

@@ -1,6 +1,6 @@
 ﻿using Raven.Client.Documents;
 
-namespace zero.Web.Mapper
+namespace zero.Core.Mapper
 {
   public interface IMapperConfig
   {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Core.Mapper;
 
 namespace zero.Core.Plugins
 {
@@ -19,6 +20,8 @@ namespace zero.Core.Plugins
     protected PermissionGroupCollection Permissions { get; private set; }
 
     protected FeatureCollection Features { get; private set; }
+
+    protected IMapper Mapper { get; private set; }
 
     protected virtual IServiceCollection ConfigureServices(IServiceCollection services)
     {

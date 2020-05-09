@@ -16,6 +16,7 @@ namespace zero.Core.Entities
     public string AppId { get; set; }
 
     /// <inheritdoc/>
+    [Inherit]
     public string Name { get; set; }
 
     /// <inheritdoc/>

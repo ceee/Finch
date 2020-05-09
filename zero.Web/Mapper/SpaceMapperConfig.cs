@@ -5,6 +5,7 @@ using zero.Core.Identity;
 using zero.Core.Extensions;
 using zero.Web.Models;
 using Raven.Client.Documents;
+using zero.Core.Mapper;
 
 namespace zero.Web.Mapper
 {
