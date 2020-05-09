@@ -15,19 +15,19 @@ namespace zero.Core.Api
 {
   public class LanguagesApi : ILanguagesApi
   {
-    protected IDocumentStore Raven { get; private set; }
+    protected IAppAwareBackofficeStore Backoffice { get; private set; }
 
 
-    public LanguagesApi(IDocumentStore raven)
+    public LanguagesApi(IAppAwareBackofficeStore backoffice)
     {
-      Raven = raven;
+      Backoffice = backoffice;
     }
 
 
     /// <inheritdoc />
     public async Task<Language> GetById(string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
       {
         return await session.LoadAsync<Language>(id);
       }
@@ -37,7 +37,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<Language>> GetAll()
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
       {
         return await session.Query<Language>()
           .OrderByDescending(x => x.CreatedDate)
@@ -68,7 +68,7 @@ namespace zero.Core.Api
     {
       query.SearchFor(entity => entity.Name);
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
       {
         return await session.Query<Language>()
           .ToQueriedListAsync(query);
@@ -88,13 +88,12 @@ namespace zero.Core.Api
 
       if (model.Id.IsNullOrEmpty())
       {
-        model.AppId = Constants.Database.SharedAppId;
         model.CreatedDate = DateTimeOffset.Now;
       }
 
       model.Alias = Alias.Generate(model.Name);
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
       {
         await session.StoreAsync(model);
         await session.SaveChangesAsync();
@@ -107,7 +106,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<Language>> Delete(string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
       {
         Language entity = await session.LoadAsync<Language>(id);
 

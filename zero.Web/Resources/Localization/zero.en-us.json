@@ -33,6 +33,9 @@
   },
 
   "errors": {
+    "onsave": {
+      "notallowed": "You are not allowed to edit this resource"
+    },
     "ondelete": {
       "idnotfound": "Could not find an entity for the given ID"
     },

@@ -1,6 +1,6 @@
 ﻿namespace zero.Core.Entities
 {
-  public class Language : DatabaseEntity
+  public class Language : ZeroEntity
   {
     /// <summary>
     /// Language code (ISO 3166-1)
@@ -16,10 +16,5 @@
     /// If this language is inherited it gets all missing properties from its parent
     /// </summary>
     public string InheritedLanguageId { get; set; }
-
-    /// <summary>
-    /// Language variant
-    /// </summary>
-    public class Variant : LanguageVariant { }
   }
 }

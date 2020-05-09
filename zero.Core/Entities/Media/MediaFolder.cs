@@ -3,7 +3,7 @@
   /// <summary>
   /// A media folder contains media and other folders
   /// </summary>
-  public class MediaFolder : DatabaseEntity
+  public class MediaFolder : ZeroEntity
   {
     /// <summary>
     /// Parent folder id

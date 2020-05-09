@@ -27,16 +27,12 @@ namespace zero.Web
   {
     private readonly IConfiguration config;
 
-    private IWebHostEnvironment env;
-
-
     /// <summary>
     /// Bootstrap the application
     /// </summary>
-    public Startup(IConfiguration config, IWebHostEnvironment env)
+    public Startup(IConfiguration config)
     {
       this.config = config;
-      this.env = env;
     }
 
 
@@ -129,29 +125,6 @@ namespace zero.Web
       {
         options.AutomaticAuthentication = false;
       });
-
-      services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-      // TODO move registration into core
-      services.AddTransient<IZeroVue, ZeroVue>();
-      services.AddTransient<IPaths>(factory => new Paths(env.WebRootPath, true));
-      services.AddTransient<ISetupApi, SetupApi>();
-      services.AddTransient<ISectionsApi, SectionsApi>();
-      services.AddTransient<IApplicationsApi, ApplicationsApi>();
-      services.AddTransient<IPagesApi, PagesApi>();
-      services.AddTransient<IPageTreeApi, PageTreeApi>();
-      services.AddTransient<ISettingsApi, SettingsApi>();
-      services.AddTransient<IAuthenticationApi, AuthenticationApi>();
-      services.AddTransient<ICountriesApi, CountriesApi>();
-      services.AddTransient<IUserApi, UserApi>();
-      services.AddTransient<IUserRolesApi, UserRolesApi>();
-      services.AddTransient<IToken, Token>();
-      services.AddTransient<ISpacesApi, SpacesApi>();
-      services.AddTransient<ITranslationsApi, TranslationsApi>();
-      services.AddTransient<ILanguagesApi, LanguagesApi>();
-      services.AddTransient<IPermissionsApi, PermissionsApi>();
-      services.AddTransient<IMediaApi, MediaApi>();
-      services.AddTransient<IMediaUpload, MediaUpload>();
     }
 
     /// <summary>

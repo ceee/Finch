@@ -1,11 +1,13 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace zero.Core.Entities
 {
-  public class User : DatabaseEntity, IUser
+  public class User : ZeroEntity, IUser
   {
+    /// <inheritdoc />
+    public string AppId { get; set; }
+
     /// <inheritdoc/>
     public bool IsSuper { get; set; }
 
@@ -68,7 +70,7 @@ namespace zero.Core.Entities
 
 
 
-  public interface IUser : IDatabaseEntity
+  public interface IUser : IZeroEntity, IAppAwareEntity
   {
     /// <summary>
     /// sudo.

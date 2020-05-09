@@ -1,6 +1,6 @@
 ﻿namespace zero.Core.Entities
 {
-  public class Country : DatabaseEntity, ILanguageAwareEntity
+  public class Country : ZeroEntity, ILanguageAwareEntity
   {
     /// <summary>
     /// Language variant
@@ -18,6 +18,6 @@
     public string Code { get; set; }
 
     /// <inheritdoc />
-    public string ParentEntityId { get; set; }
+    public string LanguageId { get; set; }
   }
 }

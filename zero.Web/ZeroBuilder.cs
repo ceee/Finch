@@ -1,9 +1,12 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using zero.Core;
+using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
 using zero.Core.Mapper;
@@ -81,6 +84,32 @@ namespace zero.Web
       Services.AddScoped<UserManager<User>>();
       Services.AddScoped<SignInManager<User>>();
       Services.AddScoped<RoleManager<UserRole>>();
+
+      services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+      services.AddTransient<IZeroVue, ZeroVue>();
+      services.AddTransient<IPaths>(factory => new Paths(factory.GetService<IWebHostEnvironment>().WebRootPath, true));
+
+      services.AddTransient<IBackofficeStore, BackofficeStore>();
+      services.AddTransient<IAppAwareBackofficeStore, AppAwareBackofficeStore>();
+
+      services.AddTransient<ISetupApi, SetupApi>();
+      services.AddTransient<ISectionsApi, SectionsApi>();
+      services.AddTransient<IApplicationsApi, ApplicationsApi>();
+      services.AddTransient<IPagesApi, PagesApi>();
+      services.AddTransient<IPageTreeApi, PageTreeApi>();
+      services.AddTransient<ISettingsApi, SettingsApi>();
+      services.AddTransient<IAuthenticationApi, AuthenticationApi>();
+      services.AddTransient<ICountriesApi, CountriesApi>();
+      services.AddTransient<IUserApi, UserApi>();
+      services.AddTransient<IUserRolesApi, UserRolesApi>();
+      services.AddTransient<IToken, Token>();
+      services.AddTransient<ISpacesApi, SpacesApi>();
+      services.AddTransient<ITranslationsApi, TranslationsApi>();
+      services.AddTransient<ILanguagesApi, LanguagesApi>();
+      services.AddTransient<IPermissionsApi, PermissionsApi>();
+      services.AddTransient<IMediaApi, MediaApi>();
+      services.AddTransient<IMediaUpload, MediaUpload>();
 
       //services.AddAuthorization(opts =>
       //{

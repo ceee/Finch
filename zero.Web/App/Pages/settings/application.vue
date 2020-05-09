@@ -47,7 +47,7 @@
         </aside>
       </ui-tab>
 
-      <ui-tab label="@application.tab_domains" class="ui-box">
+      <ui-tab label="@application.tab_domains" class="ui-box" :count="model.domains.length">
         <ui-property label="@application.fields.domains" description="@application.fields.domains_text" :required="true">
           <ui-input-list v-model="model.domains" :disabled="disabled" add-label="@application.fields.domains_add" />
           <p v-if="!disabled" class="ui-property-help" v-localize="'@application.fields.domains_help'"></p>
@@ -74,7 +74,7 @@
 
     data: () => ({
       actions: [],
-      model: { name: null, features: [] },
+      model: { name: null, features: [], domains: [] },
       disabled: false,
       features: [],
       mediaConfig: {

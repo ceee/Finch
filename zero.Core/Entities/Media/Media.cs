@@ -11,6 +11,9 @@ namespace zero.Core.Entities
     public string Id { get; set; }
 
     /// <inheritdoc />
+    public string AppId { get; set; }
+
+    /// <inheritdoc />
     public string Name { get; set; }
 
     /// <inheritdoc />
@@ -42,7 +45,7 @@ namespace zero.Core.Entities
   }
 
 
-  public interface IMedia : IZeroEntity
+  public interface IMedia : IZeroIdEntity, IAppAwareEntity
   {
     /// <summary>
     /// File name

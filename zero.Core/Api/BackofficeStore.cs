@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Attributes;
 using zero.Core.Entities;
@@ -12,42 +14,49 @@ using zero.Core.Utils;
 
 namespace zero.Core.Api
 {
-  public abstract class ApiBase
+  public class BackofficeStore : IBackofficeStore
   {
-    protected IDocumentStore Raven { get; set; }
+    public bool IsAppAware => this is IAppAwareBackofficeStore;
 
-    protected IMediaUpload Media { get; set; }
+    public IDocumentStore Raven { get; private set; }
 
-    protected const string ASTERISK = "*";
+    IMediaUpload Media { get; set; }
 
-    protected const string NEW_ID = "new:";
+    protected string CurrentAppId { get; set; }
+
+    protected string[] CurrentAppIds { get => GetAppIds(); }
+
+    const string NEW_ID = "new:";
 
 
-    public ApiBase(IDocumentStore raven, IMediaUpload media)
+    public BackofficeStore(IDocumentStore raven, IMediaUpload media)
     {
       Raven = raven;
       Media = media;
     }
 
 
-    /// <summary>
-    /// Get an entity by Id
-    /// </summary>
-    protected async Task<T> GetById<T>(string id)
+    /// <inheritdoc />
+    public async Task<T> GetById<T>(string id) where T : IZeroIdEntity
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        // TODO store-aware?
+        if (typeof(T) is IAppAwareEntity)
+        {
+          return await session.Query<T>()
+            .Where(x => x.Id == id)
+            .ForApp(CurrentAppId, true)
+            .FirstOrDefaultAsync();
+        }
+
         return await session.LoadAsync<T>(id);
       }
     }
 
 
 
-    /// <summary>
-    /// Get an entity by Id and transform the result
-    /// </summary>
-    protected async Task<EntityResult<T>> Save<T>(T model, IValidator<T> validator = null) where T : IZeroEntity
+    /// <inheritdoc />
+    public async Task<EntityResult<T>> Save<T>(T model, IValidator<T> validator = null) where T : IZeroIdEntity
     {
       // check for alias
       //if (model is IUrlAliasEntity)
@@ -64,6 +73,15 @@ namespace zero.Core.Api
         if (!validation.IsValid)
         {
           return EntityResult<T>.Fail(validation);
+        }
+      }
+
+      // check if current app id is valid
+      if (!model.Id.IsNullOrEmpty() && IsAppAware && model is IAppAwareEntity)
+      {
+        if (!CurrentAppIds.Contains((model as IAppAwareEntity).AppId))
+        {
+          return EntityResult<T>.Fail("@errors.onsave.notallowed");
         }
       }
 
@@ -108,7 +126,10 @@ namespace zero.Core.Api
       // set default properties
       if (model.Id.IsNullOrEmpty())
       {
-        model.CreatedDate = DateTimeOffset.Now;
+        if (model is IZeroEntity)
+        {
+          (model as IZeroEntity).CreatedDate = DateTimeOffset.Now;
+        }
 
         if (model is IAppAwareEntity)
         {
@@ -122,7 +143,10 @@ namespace zero.Core.Api
       }
 
       // update name alias
-      model.Alias = Alias.Generate(model.Name);
+      if (model is IZeroEntity)
+      {
+        (model as IZeroEntity).Alias = Alias.Generate((model as IZeroEntity).Name);
+      }
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
@@ -134,17 +158,20 @@ namespace zero.Core.Api
     }
 
 
-    /// <summary>
-    /// Deletes an entity by Id
-    /// </summary>
-    protected async Task<EntityResult<T>> DeleteById<T>(string id)
+
+    /// <inheritdoc />
+    public async Task<EntityResult<T>> DeleteById<T>(string id) where T : IZeroIdEntity
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         T entity = await session.LoadAsync<T>(id);
 
-        // TODO || !Store.Has(entity))
         if (entity == null)
+        {
+          return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
+        }
+
+        if (IsAppAware && entity is IAppAwareEntity && !CurrentAppIds.Contains((entity as IAppAwareEntity).AppId))
         {
           return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
         }
@@ -155,6 +182,50 @@ namespace zero.Core.Api
 
         return EntityResult<T>.Success();
       }
+    }
+
+
+
+    /// <summary>
+    /// Get current app id + shared id
+    /// </summary>
+    string[] GetAppIds()
+    {
+      return new string[2] { CurrentAppId, Constants.Database.SharedAppId };
+    }
+  }
+
+
+  public interface IBackofficeStore
+  {
+    IDocumentStore Raven { get; }
+
+    /// <summary>
+    /// Get an entity by Id.
+    /// If the requested entity is an IAppAwareEntity it will only return entities for the currently selected app + shared app
+    /// </summary>
+    Task<T> GetById<T>(string id) where T : IZeroIdEntity;
+
+    /// <summary>
+    /// Updates or creates an entity with an optional validator
+    /// </summary>
+    Task<EntityResult<T>> Save<T>(T model, IValidator<T> validator = null) where T : IZeroIdEntity;
+
+    /// <summary>
+    /// Deletes an entity by Id
+    /// </summary>
+    Task<EntityResult<T>> DeleteById<T>(string id) where T : IZeroIdEntity;
+  }
+
+
+  public interface IAppAwareBackofficeStore : IBackofficeStore { }
+
+
+  public class AppAwareBackofficeStore : BackofficeStore, IAppAwareBackofficeStore
+  {
+    public AppAwareBackofficeStore(IDocumentStore raven, IMediaUpload media) : base(raven, media)
+    {
+      CurrentAppId = "zero.applications.1-A"; // TODO
     }
   }
 }

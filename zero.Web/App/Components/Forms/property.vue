@@ -81,7 +81,7 @@
   {
     display: block;
     color: var(--color-text);
-    width: 240px;
+    width: 280px;
     padding-right: 2rem;
     margin-bottom: 5px;
     font-size: $font-size;

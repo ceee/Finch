@@ -1,7 +1,13 @@
 ﻿namespace zero.Core.Entities
 {
-  public class Translation : DatabaseEntity, ILanguageAwareEntity
+  public class Translation : ZeroEntity, ILanguageAwareEntity, IAppAwareEntity
   {
+    /// <inheritdoc />
+    public string AppId { get; set; }
+
+    /// <inheritdoc />
+    public string LanguageId { get; set; }
+
     /// <summary>
     /// Key which can be used to query translations
     /// </summary>
@@ -16,15 +22,6 @@
     /// Display + input type
     /// </summary>
     public TranslationDisplay Display { get; set; }
-
-    /// <inheritdoc />
-    public string ParentEntityId { get; set; }
-
-
-    public class Variant : LanguageVariant
-    {
-      public string Value { get; set; }
-    }
   }
 
 

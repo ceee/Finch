@@ -5,7 +5,7 @@ namespace zero.Core.Entities
   /// <summary>
   /// An application is a website. zero can host multiple websites at once which share common assets
   /// </summary>
-  public class Application : DatabaseEntity
+  public class Application : ZeroEntity
   {
     /// <summary>
     /// Full company or product name

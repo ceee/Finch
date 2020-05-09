@@ -13,29 +13,26 @@ namespace zero.Core.Api
 {
   public class CountriesApi : ICountriesApi
   {
-    protected IDocumentStore Raven { get; private set; }
+    protected IAppAwareBackofficeStore Backoffice { get; private set; }
 
 
-    public CountriesApi(IDocumentStore raven)
+    public CountriesApi(IAppAwareBackofficeStore backoffice)
     {
-      Raven = raven;
+      Backoffice = backoffice;
     }
 
 
     /// <inheritdoc />
     public async Task<Country> GetById(string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.LoadAsync<Country>(id);
-      }
+      return await Backoffice.GetById<Country>(id);
     }
 
 
     /// <inheritdoc />
     public async Task<IList<Country>> GetAll(string languageId)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
       {
         return await session.Query<Country>()
           .Where(x => x.LanguageId == languageId)
@@ -51,7 +48,7 @@ namespace zero.Core.Api
     {
       query.SearchSelector = country => country.Name;
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
       {
         return await session.Query<Country>()
           .Where(x => x.LanguageId == languageId)
@@ -74,13 +71,12 @@ namespace zero.Core.Api
 
       if (model.Id.IsNullOrEmpty())
       {
-        model.AppId = "zero.applications.1-A"; // TODO real app id
         model.CreatedDate = DateTimeOffset.Now;
       }
 
       model.Alias = Alias.Generate(model.Name);
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
       {
         await session.StoreAsync(model);
 
@@ -101,7 +97,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<Country>> Delete(string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
       {
         Country country = await session.LoadAsync<Country>(id);
 

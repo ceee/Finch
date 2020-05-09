@@ -85,6 +85,17 @@ namespace zero.Core.Api
           IsEmailConfirmed = true
         };
 
+        // create default language
+        Language language = new Language() // TODO get default language selection from setup UI
+        {
+          Name = "English",
+          Alias = Alias.Generate("English"),
+          CreatedDate = DateTimeOffset.Now,
+          Code = "en-US",
+          IsActive = true,
+          IsDefault = true
+        };
+
         IdentityResult result = await UserManager.CreateAsync(user, model.User.Password);
 
         // user creation failed
@@ -121,10 +132,13 @@ namespace zero.Core.Api
           user.Roles.Add(roles.First(role => role.Name == "Standard").Alias);
           user.Roles.Add(roles.First(role => role.Name == "Administrator").Alias);
 
+          // create language
+          await session.StoreAsync(language);
+
           // set countries
           using (Raven.Client.Documents.BulkInsert.BulkInsertOperation bulkInsert = raven.BulkInsert())
           {
-            foreach (Country country in GetCountries(model))
+            foreach (Country country in GetCountries(model, language))
             {
               await bulkInsert.StoreAsync(country);
             }
@@ -178,11 +192,12 @@ namespace zero.Core.Api
     /// <summary>
     /// Get countries for supported backoffice languages
     /// </summary>
-    IList<Country> GetCountries(SetupModel model)
+    IList<Country> GetCountries(SetupModel model, Language defaultLanguage)
     {
       List<Country> countries = new List<Country>();
 
-      string[] isoCodes = Config.SupportedLanguages;
+      //string[] isoCodes = Config.SupportedLanguages;
+      string[] isoCodes = new string[1] { "en-US" };
 
       foreach (string languageISO in isoCodes)
       {
@@ -196,7 +211,7 @@ namespace zero.Core.Api
           CreatedDate = DateTimeOffset.Now,
           IsActive = true,
           Alias = Alias.Generate(country.Key),
-          LanguageId = languageISO,
+          LanguageId = defaultLanguage.Id,
           Code = country.Key,
           Name = country.Value
         }).ToList());
@@ -219,7 +234,7 @@ namespace zero.Core.Api
         Alias = Alias.Generate("Administrator"),
         Sort = 0,
         AppId = Constants.Database.SharedAppId,
-        Icon = "fth-award color-yellow",
+        Icon = "fth-award",
         CreatedDate = DateTimeOffset.Now,
         IsActive = true,
         Claims = new List<IUserClaim>()

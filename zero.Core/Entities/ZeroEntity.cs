@@ -1,22 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using zero.Core.Attributes;
 
 namespace zero.Core.Entities
 {
   [DebuggerDisplay("Id = {Id,nq}, Name = {Name}, Alias = {Alias}")]
-  public abstract class DatabaseEntity : IDatabaseEntity
+  public abstract class ZeroEntity : IZeroEntity
   {
     /// <inheritdoc/>
     public string Id { get; set; }
 
     /// <inheritdoc/>
-    [MapAppId]
-    public string AppId { get; set; }
-
-    /// <inheritdoc/>
-    [Inherit]
     public string Name { get; set; }
 
     /// <inheritdoc/>
@@ -30,31 +23,11 @@ namespace zero.Core.Entities
 
     /// <inheritdoc/>
     public DateTimeOffset CreatedDate { get; set; }
-
-    /// <inheritdoc/>
-    public IList<LanguageVariant> LanguageVariants { get; set; } = new List<LanguageVariant>();
-
-    /// <inheritdoc />
-    public string LanguageId { get; set; }
   }
 
 
-  public interface IZeroEntity
+  public interface IZeroEntity : IZeroIdEntity
   {
-    /// <summary>
-    /// Id of the entity
-    /// </summary>
-    string Id { get; set; }
-  }
-
-
-  public interface IDatabaseEntity : IZeroEntity
-  {
-    /// <summary>
-    /// Id of the associated application (auto-filled)
-    /// </summary>
-    string AppId { get; set; }
-
     /// <summary>
     /// Full name of the entity
     /// </summary>

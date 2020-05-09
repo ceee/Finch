@@ -2,8 +2,11 @@
 
 namespace zero.Core.Entities
 {
-  public class UserRole : DatabaseEntity, IUserRole
+  public class UserRole : ZeroEntity, IUserRole
   {
+    /// <inheritdoc />
+    public string AppId { get; set; }
+
     /// <inheritdoc/>
     public string Description { get; set; }
 
@@ -15,7 +18,7 @@ namespace zero.Core.Entities
   }
 
 
-  public interface IUserRole : IDatabaseEntity
+  public interface IUserRole : IZeroEntity, IAppAwareEntity
   {
     /// <summary>
     /// Additional description
