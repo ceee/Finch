@@ -49,7 +49,7 @@ namespace zero.Web.Mapper
         target.Name = source.Name;
         target.IsActive = source.IsActive && (!source.LockoutEnabled || !source.LockoutEnd.HasValue);
         target.Email = source.Email;
-        target.Avatar = "https://fifty.brothers.studio/Media/Avatars/tobi.jpg"; // TODO //source.Avatar?.Source;
+        target.Avatar = source.Avatar?.Source;
         target.Roles = String.Join(", ", source.Roles); // TODO get name from alias
       });
 

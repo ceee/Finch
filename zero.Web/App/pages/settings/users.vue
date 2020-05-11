@@ -51,9 +51,10 @@
           avatar: {
             label: '',
             as: 'html',
-            render: item => `<img src=${item.avatar} class="users-list-avatar">`,
+            render: item => `<img src="${item.avatar}" class="users-list-avatar">`,
             width: 70,
-            link: this.getUserLink
+            link: this.getUserLink,
+            sort: false
           },
           name: {
             label: '@ui.name',
