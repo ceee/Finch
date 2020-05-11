@@ -78,7 +78,11 @@ namespace zero.Web
       Services.AddHttpContextAccessor();
 
       Services.AddTransient<IZeroVue, ZeroVue>();
-      Services.AddTransient<IPaths>(factory => new Paths(factory.GetService<IWebHostEnvironment>().WebRootPath, true));
+      Services.AddTransient<IPaths>(factory =>
+      {
+        IWebHostEnvironment env = factory.GetService<IWebHostEnvironment>();
+        return new Paths(env.WebRootPath, true);
+      });
 
       Services.AddTransient<IBackofficeStore, BackofficeStore>();
       Services.AddTransient<IAppAwareBackofficeStore, AppAwareBackofficeStore>();
