@@ -23,6 +23,8 @@ using zero.Web.Mapper;
 
 namespace zero.Web
 {
+  // TODO maybe use a middleware like Hangfire does: https://github.com/HangfireIO/Hangfire/blob/master/src/Hangfire.AspNetCore/HangfireEndpointRouteBuilderExtensions.cs
+
   public class ZeroBuilder
   {
     public virtual IServiceCollection Services { get; }
