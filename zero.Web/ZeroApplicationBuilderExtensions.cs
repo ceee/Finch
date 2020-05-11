@@ -68,7 +68,7 @@ namespace zero.Web
       app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions()
       {
         HotModuleReplacement = true,
-        ProjectPath = webUiPath
+        ProjectPath = webUiPath,
       });
       #pragma warning restore CS0618
 

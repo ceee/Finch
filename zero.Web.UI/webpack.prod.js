@@ -9,6 +9,12 @@ module.exports = merge(config, {
   mode: 'production',
   devtool: 'source-map',
 
+  output: {
+    path: path.resolve(__dirname, 'wwwroot/Assets'),
+    filename: '[name].js',
+    publicPath: '/Assets/'
+  },
+
   plugins: [
     new MiniCssExtractPlugin({
       filename: "app.css",

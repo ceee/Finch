@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Commerce.Backoffice", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commerce", "Commerce", "{8FC2D7C8-AE39-41A5-AB95-053737BB3D55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Web", "zero.Web\zero.Web.csproj", "{06156006-7684-41EC-8BD4-3B2A762147CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Web", "zero.Web\zero.Web.csproj", "{06156006-7684-41EC-8BD4-3B2A762147CD}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "zero.Web.UI", "zero.Web.UI\", "{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -37,6 +37,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "zero.Web.UI", "zero.Web.UI\
 		VWDPort = "56763"
 		SlnRelativePath = "zero.Web.UI\"
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8FF8B328-93E3-4467-87DB-A273C09AAADC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +76,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{63A8AD15-15F0-4555-BD62-C38B4465FFC1} = {8FC2D7C8-AE39-41A5-AB95-053737BB3D55}
+		{83473041-7A1B-40ED-9FD0-968B22EB36B3} = {8FF8B328-93E3-4467-87DB-A273C09AAADC}
 		{9AB4C946-2337-43A2-8B07-30EC97D8372D} = {8FC2D7C8-AE39-41A5-AB95-053737BB3D55}
 		{8FC2D7C8-AE39-41A5-AB95-053737BB3D55} = {EB22CADA-EB9B-4066-A110-3D14DDDBF625}
 	EndGlobalSection

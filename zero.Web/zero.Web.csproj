@@ -19,5 +19,9 @@
   <ItemGroup>
     <ProjectReference Include="..\zero.Core\zero.Core.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="../zero.Web.UI/Assets/**/*" Link="wwwroot\Assets\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"  />
+  </ItemGroup>
 
 </Project>

@@ -16,7 +16,7 @@ module.exports = {
 
   // output paths
   output: {
-    path: path.resolve(__dirname, 'wwwroot/Assets'),
+    path: path.resolve(__dirname, 'Assets'),
     filename: '[name].js',
     publicPath: '/Assets/'
   },
