@@ -5,7 +5,7 @@ namespace zero.Core.Entities
   /// <summary>
   /// A media file (can contain an image or other media like videos and documents)
   /// </summary>
-  public class Media : IMedia
+  public class Media : IMedia, IZeroDbConventions
   {
     /// <inheritdoc />
     public string Id { get; set; }

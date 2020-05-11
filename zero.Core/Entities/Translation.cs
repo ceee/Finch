@@ -1,6 +1,6 @@
 ﻿namespace zero.Core.Entities
 {
-  public class Translation : ZeroEntity, ILanguageAwareEntity, IAppAwareEntity
+  public class Translation : ZeroEntity, ILanguageAwareEntity, IAppAwareEntity, IZeroDbConventions
   {
     /// <inheritdoc />
     public string AppId { get; set; }

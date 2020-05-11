@@ -4,7 +4,7 @@
   /// A list item can consist of unlimited properties and be rendered as you wish
   /// The backoffice rendering is done by an IRenderer
   /// </summary>
-  public class SpaceContent : ZeroEntity, IAppAwareEntity
+  public class SpaceContent : ZeroEntity, IAppAwareEntity, IZeroDbConventions
   {
     /// <summary>
     /// Associated space

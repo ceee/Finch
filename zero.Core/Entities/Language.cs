@@ -1,6 +1,6 @@
 ﻿namespace zero.Core.Entities
 {
-  public class Language : ZeroEntity
+  public class Language : ZeroEntity, IZeroDbConventions
   {
     /// <summary>
     /// Language code (ISO 3166-1)

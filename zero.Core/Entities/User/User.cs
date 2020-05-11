@@ -70,7 +70,7 @@ namespace zero.Core.Entities
 
 
 
-  public interface IUser : IZeroEntity, IAppAwareEntity
+  public interface IUser : IZeroEntity, IAppAwareEntity, IZeroDbConventions
   {
     /// <summary>
     /// sudo.

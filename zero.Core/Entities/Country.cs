@@ -1,6 +1,6 @@
 ﻿namespace zero.Core.Entities
 {
-  public class Country : ZeroEntity, ILanguageAwareEntity
+  public class Country : ZeroEntity, ILanguageAwareEntity, IZeroDbConventions
   {
     /// <summary>
     /// Language variant

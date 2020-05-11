@@ -63,6 +63,11 @@ namespace zero.Web
 
         store.Conventions.FindCollectionName = type =>
         {
+          if (!type.IsAssignableFrom(typeof(IZeroDbConventions)))
+          {
+            return DocumentConventions.DefaultGetCollectionName(type);
+          }
+
           Type finalType = type;
 
           if (type.IsSubclassOf(typeof(SpaceContent)))
