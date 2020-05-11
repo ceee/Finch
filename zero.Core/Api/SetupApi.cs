@@ -19,14 +19,14 @@ namespace zero.Core.Api
 {
   public class SetupApi : ISetupApi
   {
-    protected IZeroConfiguration Config { get; private set; }
+    protected IZeroOptions Options { get; private set; }
 
     protected UserManager<User> UserManager { get; private set; }
 
 
-    public SetupApi(IZeroConfiguration config, UserManager<User> userManager)
+    public SetupApi(IZeroOptions options, UserManager<User> userManager)
     {
-      Config = config;
+      Options = options;
       UserManager = userManager;
     }
 
@@ -80,7 +80,7 @@ namespace zero.Core.Api
           Email = model.User.Email,
           Name = model.User.Name,
           IsActive = true,
-          LanguageId = Config.DefaultLanguage,
+          LanguageId = Options.DefaultLanguage,
           Alias = Alias.Generate(model.User.Name),
           IsEmailConfirmed = true
         };
@@ -170,22 +170,25 @@ namespace zero.Core.Api
     /// </summary>
     void UpdateSettingsFile(SetupModel model)
     {
-      var filePath = Path.Combine(model.ContentRootPath, "zeroSettings.json");
-      string json = File.ReadAllText(filePath);
+      // TODO should we write this into appSettings.json now? 
+      // or let the user do it in the code editor?
 
-      ZeroConfiguration config = JsonConvert.DeserializeObject<ZeroConfiguration>(json);
+      //var filePath = Path.Combine(model.ContentRootPath, "zeroSettings.json");
+      //string json = File.ReadAllText(filePath);
 
-      config.Raven = new RavenConfig()
-      {
-        Database = model.Database.Name,
-        Url = model.Database.Url
-      };
+      //ZeroConfiguration config = JsonConvert.DeserializeObject<ZeroConfiguration>(json);
 
-      config.ZeroVersion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
+      //config.Raven = new RavenOptions()
+      //{
+      //  Database = model.Database.Name,
+      //  Url = model.Database.Url
+      //};
 
-      json = JsonConvert.SerializeObject(config, Formatting.Indented);
+      //config.ZeroVersion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
 
-      File.WriteAllText(filePath, json);
+      //json = JsonConvert.SerializeObject(config, Formatting.Indented);
+
+      //File.WriteAllText(filePath, json);
     }
 
 

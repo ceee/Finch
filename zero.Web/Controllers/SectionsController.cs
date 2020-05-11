@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using zero.Core;
+﻿using Microsoft.AspNetCore.Mvc;
 using zero.Core.Api;
 
 namespace zero.Web.Controllers
 {
   public class SectionsController : BackofficeController
   {
-    private ISectionsApi Api { get; set; }
+    ISectionsApi Api;
 
-    public SectionsController(IZeroConfiguration config, ISectionsApi api) : base(config)
+    public SectionsController(ISectionsApi api)
     {
       Api = api;
     }

@@ -1,15 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
-using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
-using zero.Core.Extensions;
 using zero.Core.Identity;
-using zero.Core.Mapper;
-using zero.Web.Mapper;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers
@@ -17,15 +10,12 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Read)]
   public class LanguagesController : BackofficeController
   {
-    private ILanguagesApi Api { get; set; }
-
-    private ZeroOptions Options { get; set; }
+    ILanguagesApi Api;
 
 
-    public LanguagesController(IZeroConfiguration config, ILanguagesApi api, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
+    public LanguagesController(ILanguagesApi api)
     {
       Api = api;
-      Options = options.CurrentValue;
     }
 
 

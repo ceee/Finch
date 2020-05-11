@@ -1,29 +1,84 @@
-﻿using System.Collections.Generic;
-using zero.Core.Entities;
-using zero.Core.Identity;
+﻿using zero.Core.Plugins;
 
 namespace zero.Core
 {
-  public class ZeroOptions
+  public class ZeroOptions : IZeroOptions
   {
+    public ZeroOptions()
+    {
+      SupportedLanguages = new string[2] { "en-US", "de-DE" };
+      DefaultLanguage = SupportedLanguages[0];
+      TokenExpiration = 60;
+      BackofficePath = "/zero";
+    }
+
+    /// <inheritdoc />
+    public string ZeroVersion { get; set; }
+
+    /// <inheritdoc />
+    public string DefaultLanguage { get; set; }
+
+    /// <inheritdoc />
+    public string[] SupportedLanguages { get; private set; }
+
+    /// <inheritdoc />
+    public int TokenExpiration { get; set; }
+
+    /// <inheritdoc />
+    public RavenOptions Raven { get; set; }
+
+    /// <inheritdoc />
     public string BackofficePath { get; set; }
 
-    public SectionCollection Sections { get; private set; } = new SectionCollection();
-
-    public SpaceCollection Spaces { get; private set; } = new SpaceCollection();
-
-    public RendererCollection Renderers { get; private set; } = new RendererCollection();
-
-    public IList<SettingsGroup> SettingsAreas { get; private set; } = new List<SettingsGroup>();
-
-    public ZeroAuthorizationOptions Authorization { get; private set; } = new ZeroAuthorizationOptions();
-
-    public FeatureCollection Features { get; private set; } = new FeatureCollection();
+    /// <inheritdoc />
+    public ZeroPlugin Backoffice { get; set; }
   }
 
 
-  public class ZeroAuthorizationOptions
+  public class RavenOptions
   {
-    public IList<PermissionCollection> Permissions { get; private set; } = new List<PermissionCollection>();
+    public string Url { get; set; }
+
+    public string Database { get; set; }
+  }
+
+
+  public interface IZeroOptions
+  {
+    /// <summary>
+    /// The currently active version
+    /// This should not be set manually, as it is used for setup and migrations and incremented automatically
+    /// </summary>
+    string ZeroVersion { get; set; }
+
+    /// <summary>
+    /// Default language ISO code
+    /// </summary>
+    string DefaultLanguage { get; set; }
+
+    /// <summary>
+    /// Language ISO codes which are supported by the zero backoffice
+    /// </summary>
+    string[] SupportedLanguages { get; }
+
+    /// <summary>
+    /// Expiration in minutes of a generated change token for an entity
+    /// </summary>
+    int TokenExpiration { get; set; }
+
+    /// <summary>
+    /// RavenDB configuration data
+    /// </summary>
+    RavenOptions Raven { get; set; }
+
+    /// <summary>
+    /// URL path to the backoffice (defaults to /zero)
+    /// </summary>
+    string BackofficePath { get; set; }
+
+    /// <summary>
+    /// Default settings for the backoffice
+    /// </summary>
+    ZeroPlugin Backoffice { get; set; }
   }
 }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.IO;
 using zero.Core;
 using zero.Core.Extensions;
 
@@ -16,6 +16,8 @@ namespace zero.Web
       ZeroOptions options = app.ApplicationServices.GetService<IOptionsMonitor<ZeroOptions>>().CurrentValue;
 
       string path = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
+
+      app.UseStaticFiles();
 
       // map backoffice
       //app.UseWhen()
@@ -55,9 +57,22 @@ namespace zero.Web
       return app;
     }
 
-    //public static ZeroBuilder AddZero(this IApplicationBuilder app, Action<ZeroOptions> setupAction)
-    //{
-    //  return services.AddZero().WithOptions(setupAction);
-    //}
+
+    public static IApplicationBuilder UseZeroDevEnvironment(this IApplicationBuilder app)
+    {
+      app.UseDeveloperExceptionPage();
+
+      string webUiPath = Path.Combine(Environment.CurrentDirectory, "..", "zero.Web.UI");
+
+      #pragma warning disable CS0618
+      app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions()
+      {
+        HotModuleReplacement = true,
+        ProjectPath = webUiPath
+      });
+      #pragma warning restore CS0618
+
+      return app;
+    }
   }
 }

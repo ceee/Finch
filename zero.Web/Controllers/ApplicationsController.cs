@@ -1,15 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
-using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
-using zero.Core.Extensions;
 using zero.Core.Identity;
-using zero.Core.Mapper;
-using zero.Web.Mapper;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers
@@ -17,15 +10,11 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(Permissions.Settings.Applications, PermissionsValue.Read)]
   public class ApplicationsController : BackofficeController
   {
-    private IApplicationsApi Api { get; set; }
+    IApplicationsApi Api;
 
-    private ZeroOptions Options { get; set; }
-
-
-    public ApplicationsController(IZeroConfiguration config, IApplicationsApi api, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
+    public ApplicationsController(IApplicationsApi api)
     {
       Api = api;
-      Options = options.CurrentValue;
     }
 
 
@@ -66,7 +55,7 @@ namespace zero.Web.Controllers
     /// </summary>
     public IActionResult GetAllFeatures()
     {
-      return Json(Options.Features);
+      return Json(Options.Backoffice.Features);
     }
 
 

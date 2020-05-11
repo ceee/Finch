@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -20,7 +20,7 @@ namespace zero.Web
 {
   public class ZeroVue : IZeroVue
   {
-    protected IZeroConfiguration Config { get; private set; }
+    protected IZeroOptions Options { get; private set; }
 
     protected IWebHostEnvironment Environment { get; private set; }
 
@@ -30,14 +30,11 @@ namespace zero.Web
 
     protected IMapper Mapper { get; private set; }
 
-    protected ZeroOptions Options { get; private set; }
 
-
-    public ZeroVue(IZeroConfiguration config, IWebHostEnvironment env, IOptionsMonitor<ZeroOptions> options, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IMapper mapper)
+    public ZeroVue(IZeroOptions options, IWebHostEnvironment env, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IMapper mapper)
     {
-      config = Config;
       Environment = env;
-      Options = options.CurrentValue;
+      Options = options;
       ApplicationsApi = applicationsApi;
       AuthenticationApi = authenticationApi;
       Mapper = mapper;
@@ -80,7 +77,7 @@ namespace zero.Web
 
       List<ZeroVueSection> sections = new List<ZeroVueSection>();
 
-      foreach (ISection section in Options.Sections)
+      foreach (ISection section in Options.Backoffice.Sections)
       {
         if (!isSuperUser && !Permission.CanReadKey(permissions, section.Alias, true))
         {
@@ -164,7 +161,7 @@ namespace zero.Web
 
       List<ZeroVueSettingsGroup> groups = new List<ZeroVueSettingsGroup>();
 
-      foreach (SettingsGroup group in Options.SettingsAreas)
+      foreach (SettingsGroup group in Options.Backoffice.Settings)
       {
         List<ZeroVueSettingsArea> areas = new List<ZeroVueSettingsArea>();
 
@@ -221,7 +218,8 @@ namespace zero.Web
     /// </summary>
     Dictionary<string, string> CreateTranslations()
     {
-      string path = Path.Combine(Environment.ContentRootPath, "Resources/Localization/zero.en-us.json");
+      string assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+      string path = Path.Combine(assemblyPath, "Resources/Localization/zero.en-us.json");
       string text = File.ReadAllText(path, Encoding.UTF8);
 
       JObject json = JObject.Parse(text);

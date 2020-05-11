@@ -1,18 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
-using zero.Core.Extensions;
 using zero.Core.Identity;
-using zero.Core.Mapper;
-using zero.TestData;
-using zero.Web.Mapper;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers
@@ -20,11 +13,10 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(Permissions.Sections.Spaces, PermissionsValue.True)]
   public class SpacesController : BackofficeController
   {
-    private ISpacesApi Api { get; set; }
+    ISpacesApi Api;
+    IAuthenticationApi AuthenticationApi;
 
-    private IAuthenticationApi AuthenticationApi { get; set; }
-
-    public SpacesController(IZeroConfiguration config, ISpacesApi api, IAuthenticationApi authenticationApi, IMapper mapper, IToken token) : base(config, mapper, token)
+    public SpacesController(ISpacesApi api, IAuthenticationApi authenticationApi)
     {
       Api = api;
       AuthenticationApi = authenticationApi;
@@ -72,28 +64,28 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get list items in a space
     /// </summary>    
-    public async Task<IActionResult> GetContent([FromQuery] string alias, [FromQuery] string contentId = null)
+    public IActionResult GetContent([FromQuery] string alias, [FromQuery] string contentId = null)
     {
       if (!CanReadSpace(alias))
       {
         return new StatusCodeResult(403);
       }
 
-      TeamMember model = new TeamMember();
+      //TeamMember model = new TeamMember();
 
-      if (!contentId.IsNullOrEmpty())
-      {
-        model = await Api.GetItem<TeamMember>(alias, contentId);
-      }
+      //if (!contentId.IsNullOrEmpty())
+      //{
+      //  model = await Api.GetItem<TeamMember>(alias, contentId);
+      //}
 
       JsonSerializerSettings settings = JsonConvert.DefaultSettings();
       settings.TypeNameHandling = TypeNameHandling.Objects;
 
       return Json(new SpaceContentEditModel()
       {
-        Id = model.Id,
+        //Id = model.Id,
         Alias = alias,
-        Model = model,
+        //Model = model,
         Config = Api.GetEditorConfig(alias)
       }, settings);
     }

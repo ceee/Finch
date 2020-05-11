@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Diagnostics;
 
 namespace zero.Debug
 {
@@ -7,19 +9,18 @@ namespace zero.Debug
   {
     public static void Main(string[] args)
     {
+      Console.WriteLine("Process ID: " + Process.GetCurrentProcess().Id);
       CreateHostBuilder(args).Build().Run();
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
-      IHostBuilder builder = Host.CreateDefaultBuilder(args);
-
-      builder.ConfigureWebHostDefaults(webBuilder =>
-      {
-        webBuilder.UseStartup<Startup>();
-      });
-
-      return builder;
+      return Host
+        .CreateDefaultBuilder(args)
+        .ConfigureWebHostDefaults(webBuilder =>
+        {
+          webBuilder.UseStartup<Startup>();
+        });
     }
   }
 }

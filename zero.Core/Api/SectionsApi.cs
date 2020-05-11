@@ -7,26 +7,26 @@ namespace zero.Core.Api
 {
   public class SectionsApi : ISectionsApi
   {
-    protected ZeroOptions Options { get; private set; }
+    protected IZeroOptions Options { get; private set; }
 
 
-    public SectionsApi(IOptionsMonitor<ZeroOptions> options)
+    public SectionsApi(IZeroOptions options)
     {
-      Options = options.CurrentValue;
+      Options = options;
     }
 
 
     /// <inheritdoc />
     public SectionCollection GetAll()
     {
-      return Options.Sections;
+      return Options.Backoffice.Sections;
     }
 
 
     /// <inheritdoc />
     public ISection GetByAlias(string alias)
     {
-      return Options.Sections.FirstOrDefault(section => section.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
+      return Options.Backoffice.Sections.FirstOrDefault(section => section.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
     }
   }
 

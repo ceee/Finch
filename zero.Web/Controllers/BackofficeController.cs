@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core;
@@ -15,28 +16,31 @@ namespace zero.Web.Controllers
   [ZeroAuthorize, CanEdit, AddToken]
   public abstract class BackofficeController : Controller
   {
-    protected IZeroConfiguration Configuration { get; set; }
+    IMapper _mapper;
 
-    protected IMapper Mapper { get; set; }
+    IZeroOptions _options;
 
-    protected IToken Token { get; set; }
-
-
-    public BackofficeController(IZeroConfiguration config, IMapper mapper, IToken token)
+    protected IMapper Mapper
     {
-      Configuration = config;
-      Mapper = mapper;
-      Token = token;
+      get
+      {
+        return _mapper ?? (_mapper = HttpContext?.RequestServices?.GetService<IMapper>());
+      }
+    }
+
+    protected IZeroOptions Options
+    {
+      get
+      {
+        return _options ?? (_options = HttpContext?.RequestServices?.GetService<IZeroOptions>());
+      }
     }
 
 
-    public BackofficeController(IZeroConfiguration config)
+    public BackofficeController()
     {
-      Configuration = config;
+      
     }
-
-
-    //protected 
 
 
     protected async Task<IActionResult> As<T, TTarget>(T model) where TTarget : class, new() where T : IZeroEntity

@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
-using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
-using zero.Core.Mapper;
-using zero.Web.Mapper;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers
@@ -14,15 +10,11 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(Permissions.Settings.Translations, PermissionsValue.Read)]
   public class TranslationsController : BackofficeController
   {
-    private ITranslationsApi Api { get; set; }
+    ITranslationsApi Api;
 
-    private ZeroOptions Options { get; set; }
-
-
-    public TranslationsController(IZeroConfiguration config, ITranslationsApi api, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
+    public TranslationsController(ITranslationsApi api)
     {
       Api = api;
-      Options = options.CurrentValue;
     }
 
 

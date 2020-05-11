@@ -1,19 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using zero.Core;
 using zero.Core.Api;
 
 namespace zero.Web.Controllers
 {
   public class PageTreeController : BackofficeController
   {
-    private IPageTreeApi Api { get; set; }
+    IPageTreeApi Api;
+    IWebHostEnvironment Env;
 
-    private IWebHostEnvironment Env { get; set; }
-
-    public PageTreeController(IZeroConfiguration config, IPageTreeApi api, IWebHostEnvironment env) : base(config)
+    public PageTreeController(IPageTreeApi api, IWebHostEnvironment env)
     {
       Api = api;
       Env = env;

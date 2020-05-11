@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
@@ -11,9 +10,9 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(false)]
   public class AuthenticationController : BackofficeController
   {
-    private IAuthenticationApi Api { get; set; }
+    IAuthenticationApi Api;
 
-    public AuthenticationController(IZeroConfiguration config, IAuthenticationApi api) : base(config)
+    public AuthenticationController(IAuthenticationApi api)
     {
       Api = api;
     }

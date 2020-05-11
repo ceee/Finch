@@ -9,19 +9,19 @@ namespace zero.Core.Plugins
 {
   public abstract class ZeroPlugin
   {
-    protected SectionCollection Sections { get; private set; }
+    public SectionCollection Sections { get; private set; } = new SectionCollection();
 
-    protected SpaceCollection Spaces { get; private set; }
+    public SpaceCollection Spaces { get; private set; } = new SpaceCollection();
 
-    protected RendererCollection Renderers { get; private set; }
+    public RendererCollection Renderers { get; private set; } = new RendererCollection();
 
-    protected IList<SettingsGroup> Settings { get; private set; }
+    public IList<SettingsGroup> Settings { get; private set; } = new List<SettingsGroup>();
 
-    protected PermissionGroupCollection Permissions { get; private set; }
+    public PermissionGroupCollection Permissions { get; private set; } = new PermissionGroupCollection();
 
-    protected FeatureCollection Features { get; private set; }
+    public FeatureCollection Features { get; private set; } = new FeatureCollection();
 
-    protected IMapper Mapper { get; private set; }
+    public IMapper Mapper { get; private set; }
 
     protected virtual IServiceCollection ConfigureServices(IServiceCollection services)
     {

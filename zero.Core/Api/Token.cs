@@ -11,15 +11,15 @@ namespace zero.Core.Api
   {
     protected IDocumentStore Raven { get; private set; }
 
-    protected IZeroConfiguration Config { get; private set; }
+    protected IZeroOptions Options { get; private set; }
 
     private const string PREFIX = "ChangeTokens.";
 
 
-    public Token(IDocumentStore raven, IZeroConfiguration config)
+    public Token(IDocumentStore raven, IZeroOptions options)
     {
       Raven = raven;
-      Config = config;
+      Options = options;
     }
 
 
@@ -74,7 +74,7 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         await session.StoreAsync(token);
-        session.Advanced.GetMetadataFor(token)[Constants.Database.Expires] = DateTime.UtcNow.AddMinutes(Config.TokenExpiration);
+        session.Advanced.GetMetadataFor(token)[Constants.Database.Expires] = DateTime.UtcNow.AddMinutes(Options.TokenExpiration);
         await session.SaveChangesAsync();
       }
 

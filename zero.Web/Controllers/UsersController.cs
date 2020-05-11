@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
-using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
-using zero.Core.Mapper;
-using zero.Web.Mapper;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers
@@ -14,24 +10,18 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Read)]
   public class UsersController : BackofficeController
   {
-    IUserApi Api = null;
-
-    IAuthenticationApi AuthenticationApi = null;
-
-    IUserRolesApi RolesApi = null;
-
-    ILanguagesApi LanguagesApi = null;
-
-    ZeroOptions Options = null;
+    IUserApi Api;
+    IAuthenticationApi AuthenticationApi;
+    IUserRolesApi RolesApi;
+    ILanguagesApi LanguagesApi;
 
 
-    public UsersController(IZeroConfiguration config, IUserApi api, IAuthenticationApi authenticationApi, IUserRolesApi rolesApi, ILanguagesApi languagesApi, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
+    public UsersController(IUserApi api, IAuthenticationApi authenticationApi, IUserRolesApi rolesApi, ILanguagesApi languagesApi)
     {
       Api = api;
       AuthenticationApi = authenticationApi;
       RolesApi = rolesApi;
       LanguagesApi = languagesApi;
-      Options = options.CurrentValue;
     }
 
 
@@ -48,7 +38,7 @@ namespace zero.Web.Controllers
       }
 
       UserEditModel model = await Mapper.Map<User, UserEditModel>(user);
-      model.SupportedCultures = LanguagesApi.GetAllCultures(Configuration.SupportedLanguages);
+      model.SupportedCultures = LanguagesApi.GetAllCultures(Options.SupportedLanguages);
 
       return Json(model);
     }
@@ -68,7 +58,7 @@ namespace zero.Web.Controllers
     /// </summary>    
     public IActionResult GetAllPermissions()
     {
-      return Json(Options.Authorization.Permissions);
+      return Json(Options.Backoffice.Permissions);
     }
 
 

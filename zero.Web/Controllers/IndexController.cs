@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using zero.Core;
+﻿using Microsoft.AspNetCore.Mvc;
 using zero.Core.Extensions;
 using zero.Core.Identity;
 using zero.Web.Models;
@@ -11,11 +8,9 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(false)]
   public class IndexController : BackofficeController
   {
-    private ZeroOptions Options { get; set; }
-
     private IZeroVue ZeroVue { get; set; }
 
-    public IndexController(IZeroConfiguration config, IZeroVue zeroVue) : base(config)
+    public IndexController(IZeroVue zeroVue)
     {
       ZeroVue = zeroVue;
     }
@@ -23,7 +18,7 @@ namespace zero.Web.Controllers
 
     public IActionResult Index()
     {
-      if (Configuration.ZeroVersion.IsNullOrEmpty())
+      if (Options.ZeroVersion.IsNullOrEmpty())
       {
         return RedirectToAction("Index", "Setup");
       }

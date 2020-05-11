@@ -1,25 +1,23 @@
-﻿using Microsoft.Extensions.Options;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using zero.Core.Entities;
-using zero.Core.Identity;
 
 namespace zero.Core.Api
 {
   public class SettingsApi : ISettingsApi
   {
-    protected ZeroOptions Options { get; private set; }
+    protected IZeroOptions Options { get; private set; }
 
 
-    public SettingsApi(IOptionsMonitor<ZeroOptions> options)
+    public SettingsApi(IZeroOptions options)
     {
-      Options = options.CurrentValue;
+      Options = options;
     }
 
 
     /// <inheritdoc />
     public IList<SettingsGroup> GetAreas()
     {
-      return Options.SettingsAreas;
+      return Options.Backoffice.Settings;
     }
   }
 

@@ -19,28 +19,28 @@ namespace zero.Core.Api
 
     protected IPermissionsApi PermissionsApi { get; private set; }
 
-    protected ZeroOptions Options { get; private set; }
+    protected IZeroOptions Options { get; private set; }
 
 
-    public SpacesApi(IDocumentStore raven, IPermissionsApi permissionsApi, IOptionsMonitor<ZeroOptions> options)
+    public SpacesApi(IDocumentStore raven, IPermissionsApi permissionsApi, IZeroOptions options)
     {
       Raven = raven;
       PermissionsApi = permissionsApi;
-      Options = options.CurrentValue;
+      Options = options;
     }
 
 
     /// <inheritdoc />
     public Space GetByAlias(string alias)
     {
-      return Options.Spaces.FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
+      return Options.Backoffice.Spaces.FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
     }
 
 
     /// <inheritdoc />
     public SpaceCollection GetAll()
     {
-      return Options.Spaces;
+      return Options.Backoffice.Spaces;
     }
 
 
@@ -54,7 +54,7 @@ namespace zero.Core.Api
         return null;
       }
 
-      AbstractGenericRenderer renderer = Options.Renderers.FirstOrDefault(x => x.TargetType == space.Type);
+      AbstractGenericRenderer renderer = Options.Backoffice.Renderers.FirstOrDefault(x => x.TargetType == space.Type);
 
       if (renderer == null)
       {
@@ -122,7 +122,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> Save<T>(string alias, T model) where T : SpaceContent
     {
-      Space space = Options.Spaces.GetByAlias(alias);
+      Space space = Options.Backoffice.Spaces.GetByAlias(alias);
       RendererConfig config = GetEditorConfig(alias); 
 
       if (config.Validator != null)

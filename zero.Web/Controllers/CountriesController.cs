@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
-using zero.Core.Mapper;
-using zero.Web.Mapper;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers
@@ -13,9 +10,9 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Read)]
   public class CountriesController : BackofficeController
   {
-    private ICountriesApi Api { get; set; }
+    ICountriesApi Api;
 
-    public CountriesController(IZeroConfiguration config, ICountriesApi api, IMapper mapper, IToken token) : base(config, mapper, token)
+    public CountriesController(ICountriesApi api)
     {
       Api = api;
     }

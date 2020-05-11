@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Entities.Setup;
@@ -17,24 +15,20 @@ namespace zero.Web.Setup
   [ZeroAuthorize(false)]
   public class SetupController : BackofficeController
   {
-    protected ISetupApi Api { get; private set; }
-
-    protected IWebHostEnvironment Environment { get; private set; }
-
-    protected ZeroOptions Options { get; private set; }
+    ISetupApi Api;
+    IWebHostEnvironment Env;
 
 
-    public SetupController(IZeroConfiguration config, ISetupApi api, IWebHostEnvironment env, IOptionsMonitor<ZeroOptions> options) : base(config) //  UserManager<User> userManager
+    public SetupController(ISetupApi api, IWebHostEnvironment env)
     {
       Api = api;
-      Environment = env;
-      Options = options.CurrentValue;
+      Env = env;
     }
 
 
     public IActionResult Index()
     {
-      if (!Configuration.ZeroVersion.IsNullOrEmpty())
+      if (!Options.ZeroVersion.IsNullOrEmpty())
       {
         return Redirect(Options.BackofficePath);
       }
@@ -46,7 +40,7 @@ namespace zero.Web.Setup
     [HttpPost]
     public async Task<IActionResult> Install([FromBody] SetupModel model)
     {
-      model.ContentRootPath = Environment.ContentRootPath;
+      model.ContentRootPath = Env.ContentRootPath;
 
       EntityResult<SetupModel> result = await Api.Install(model);
 

@@ -10,66 +10,59 @@ using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
 using zero.Core.Renderer;
-using zero.TestData;
-using zero.TestData.Lists;
 
 namespace zero.Web.Controllers
 {
   //[ZeroAuthorize("tobi")]
   public class TestController : BackofficeController
   {
-    private IAuthenticationApi Api { get; set; }
+    IAuthenticationApi Api;
+    ISpacesApi SpacesApi;
+    ILanguagesApi LanguagesApi;
+    SignInManager<User> SignInManager;
 
-    private ISpacesApi SpacesApi { get; set; }
 
-    private ILanguagesApi LanguagesApi { get; set; }
-
-    private SignInManager<User> SignInManager;
-
-    private ZeroOptions Options;
-
-    public TestController(IZeroConfiguration config, IAuthenticationApi api, ISpacesApi spacesApi, ILanguagesApi languagesApi, SignInManager<User> signInManager, IOptionsMonitor<ZeroOptions> options) : base(config)
+    public TestController(IAuthenticationApi api, ISpacesApi spacesApi, ILanguagesApi languagesApi, SignInManager<User> signInManager)
     {
       Api = api;
       SpacesApi = spacesApi;
       LanguagesApi = languagesApi;
       SignInManager = signInManager;
-      Options = options.CurrentValue;
     }
 
 
-    [HttpGet]
-    [ZeroAuthorize(false)]
-    public IActionResult RenderConfig()
-    {
-      SocialContentRenderer renderer = new SocialContentRenderer();
+    //[HttpGet]
+    //[ZeroAuthorize(false)]
+    //public IActionResult RenderConfig()
+    //{
+    //  SocialContentRenderer renderer = new SocialContentRenderer();
 
-      return Json(renderer.Build());
-    }
+    //  return Json(renderer.Build());
+    //}
 
 
-    [HttpGet]
-    [ZeroAuthorize(false)]
-    public async Task<IActionResult> SaveSpaceContent()
-    {
-      TeamMember model = new TeamMember()
-      {
-        IsActive = true,
-        Email = "tobi@test.com",
-        Name = "Tobi",
-        Position = "Chef",
-        VideoUri = "https://swcs.pro"
-      };
+    //[HttpGet]
+    //[ZeroAuthorize(false)]
+    //public async Task<IActionResult> SaveSpaceContent()
+    //{
+    //  TeamMember model = new TeamMember()
+    //  {
+    //    IsActive = true,
+    //    Email = "tobi@test.com",
+    //    Name = "Tobi",
+    //    Position = "Chef",
+    //    VideoUri = "https://swcs.pro"
+    //  };
 
-      model.Addresses.Add(new TeamMemberAddress()
-      {
-        City = "Braunau",
-        Street = "My street",
-        No = "23"
-      });
+    //  model.Addresses.Add(new TeamMemberAddress()
+    //  {
+    //    City = "Braunau",
+    //    Street = "My street",
+    //    No = "23"
+    //  });
 
-      return Json(await SpacesApi.Save("team", model));
-    }
+    //  return Json(await SpacesApi.Save("team", model));
+    //}
 
 
     [HttpGet]
@@ -87,12 +80,12 @@ namespace zero.Web.Controllers
     }
 
 
-    [HttpGet]
-    [ZeroAuthorize(false)]
-    public async Task<IActionResult> GetSpaceList()
-    {
-      return Json(await SpacesApi.GetList<TeamMember>("team"));
-    }
+    //[HttpGet]
+    //[ZeroAuthorize(false)]
+    //public async Task<IActionResult> GetSpaceList()
+    //{
+    //  return Json(await SpacesApi.GetList<TeamMember>("team"));
+    //}
 
 
     [HttpGet]
@@ -101,7 +94,7 @@ namespace zero.Web.Controllers
     {
       Space space = SpacesApi.GetByAlias(alias);
 
-      AbstractGenericRenderer renderer = Options.Renderers.FirstOrDefault(x => x.TargetType == space.Type);
+      AbstractGenericRenderer renderer = Options.Backoffice.Renderers.FirstOrDefault(x => x.TargetType == space.Type);
 
       if (renderer == null)
       {

@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
-using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
-using zero.Core.Mapper;
-using zero.Web.Filters;
-using zero.Web.Mapper;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers
@@ -15,18 +10,14 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Read)]
   public class UserRolesController : BackofficeController
   {
-    private IUserRolesApi Api { get; set; }
-
-    private IPermissionsApi PermissionsApi { get; set; }
-
-    private ZeroOptions Options { get; set; }
+    IUserRolesApi Api;
+    IPermissionsApi PermissionsApi;
 
 
-    public UserRolesController(IZeroConfiguration config, IUserRolesApi api, IPermissionsApi permissionsApi, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
+    public UserRolesController(IUserRolesApi api, IPermissionsApi permissionsApi)
     {
       Api = api;
       PermissionsApi = permissionsApi;
-      Options = options.CurrentValue;
     }
 
 
