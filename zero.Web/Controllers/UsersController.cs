@@ -16,6 +16,8 @@ namespace zero.Web.Controllers
   {
     IUserApi Api = null;
 
+    IAuthenticationApi AuthenticationApi = null;
+
     IUserRolesApi RolesApi = null;
 
     ILanguagesApi LanguagesApi = null;
@@ -23,9 +25,10 @@ namespace zero.Web.Controllers
     ZeroOptions Options = null;
 
 
-    public UsersController(IZeroConfiguration config, IUserApi api, IUserRolesApi rolesApi, ILanguagesApi languagesApi, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
+    public UsersController(IZeroConfiguration config, IUserApi api, IAuthenticationApi authenticationApi, IUserRolesApi rolesApi, ILanguagesApi languagesApi, IMapper mapper, IToken token, IOptionsMonitor<ZeroOptions> options) : base(config, mapper, token)
     {
       Api = api;
+      AuthenticationApi = authenticationApi;
       RolesApi = rolesApi;
       LanguagesApi = languagesApi;
       Options = options.CurrentValue;
@@ -75,7 +78,7 @@ namespace zero.Web.Controllers
     [ZeroAuthorize]
     public async Task<IActionResult> UpdatePassword([FromBody] UserPasswordEditModel model)
     {
-      EntityResult<User> result = null;
+      EntityResult<User> result;
 
       if (model.NewPassword != model.ConfirmNewPassword)
       {
@@ -83,7 +86,13 @@ namespace zero.Web.Controllers
       }
       else
       {
-        result = await Api.UpdatePassword(model.CurrentPassword, model.NewPassword);
+        User user = await AuthenticationApi.GetUser();
+        result = await Api.UpdatePassword(user, model.CurrentPassword, model.NewPassword);
+
+        if (result.IsSuccess)
+        {
+          await AuthenticationApi.Logout();
+        }
       }
 
       return Json(result);
@@ -110,6 +119,39 @@ namespace zero.Web.Controllers
     {
       User entity = await Api.GetUserById(model.Id);
       return await As<User, UserEditModel>(await Api.Enable(entity));
+    }
+
+
+    /// <summary>
+    /// Save user
+    /// </summary>
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    public async Task<IActionResult> Save([FromBody] UserEditModel model)
+    {
+      User entity = await Mapper.Map(model, await Api.GetUserById(model.Id));
+      return await As<User, UserEditModel>(await Api.Save(entity));
+    }
+
+
+    /// <summary>
+    /// Update current user
+    /// </summary>
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    // TODO do not need settings.users authorization for editing current user profiles
+    public async Task<IActionResult> SaveCurrent([FromBody] UserEditModel model)
+    {
+      User entity = await Mapper.Map(model, await Api.GetUserById(model.Id));
+      return await As<User, UserEditModel>(await Api.Save(entity));
+    }
+
+
+    /// <summary>
+    /// Deletes a user
+    /// </summary>
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    public async Task<IActionResult> Delete([FromQuery] string id)
+    {
+      return await As<User, UserEditModel>(await Api.Delete(id));
     }
   }
 }

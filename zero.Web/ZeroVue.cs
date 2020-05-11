@@ -12,6 +12,8 @@ using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Identity;
+using zero.Core.Mapper;
+using zero.Web.Models;
 using zero.Web.Sections;
 
 namespace zero.Web
@@ -24,18 +26,21 @@ namespace zero.Web
 
     protected IApplicationsApi ApplicationsApi { get; private set; }
 
-    protected IUserApi UserApi { get; private set; }
+    protected IAuthenticationApi AuthenticationApi { get; private set; }
+
+    protected IMapper Mapper { get; private set; }
 
     protected ZeroOptions Options { get; private set; }
 
 
-    public ZeroVue(IZeroConfiguration config, IWebHostEnvironment env, IOptionsMonitor<ZeroOptions> options, IApplicationsApi applicationsApi, IUserApi userApi)
+    public ZeroVue(IZeroConfiguration config, IWebHostEnvironment env, IOptionsMonitor<ZeroOptions> options, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IMapper mapper)
     {
       config = Config;
       Environment = env;
       Options = options.CurrentValue;
       ApplicationsApi = applicationsApi;
-      UserApi = userApi;
+      AuthenticationApi = authenticationApi;
+      Mapper = mapper;
       //zero.path = "@Model.BackofficePath.EnsureEndsWith('/')";
       //zero.translations = @Html.Raw(text);
     }
@@ -56,7 +61,7 @@ namespace zero.Web
       config.Alias = CreateAliases();
       config.SettingsAreas = CreateSettingsAreas();
 
-      config.User = await UserApi.GetUser();
+      config.User = await Mapper.Map<User, UserEditModel>(await AuthenticationApi.GetUser());
 
       return JsonSerializer.Serialize(config, new JsonSerializerOptions()
       {
@@ -70,8 +75,8 @@ namespace zero.Web
     /// </summary>
     IList<ZeroVueSection> CreateSections()
     {
-      bool isSuperUser = UserApi.IsSuper();
-      IList<Permission> permissions = UserApi.GetPermissions(Permissions.Sections.PREFIX);
+      bool isSuperUser = AuthenticationApi.IsSuper();
+      IList<Permission> permissions = AuthenticationApi.GetPermissions(Permissions.Sections.PREFIX);
 
       List<ZeroVueSection> sections = new List<ZeroVueSection>();
 
@@ -154,8 +159,8 @@ namespace zero.Web
     /// </summary>
     IList<ZeroVueSettingsGroup> CreateSettingsAreas()
     {
-      bool isSuperUser = UserApi.IsSuper();
-      IList<Permission> permissions = UserApi.GetPermissions(Permissions.Settings.PREFIX);
+      bool isSuperUser = AuthenticationApi.IsSuper();
+      IList<Permission> permissions = AuthenticationApi.GetPermissions(Permissions.Settings.PREFIX);
 
       List<ZeroVueSettingsGroup> groups = new List<ZeroVueSettingsGroup>();
 
@@ -250,7 +255,7 @@ namespace zero.Web
 
     public string ErrorFieldNone { get; set; }
 
-    public User User { get; set; }
+    public UserEditModel User { get; set; }
 
     public IList<ZeroVueSection> Sections { get; set; } = new List<ZeroVueSection>();
 

@@ -81,6 +81,7 @@
 <script>
   import UsersApi from 'zero/resources/users';
   import Strings from 'zero/services/strings';
+  import AuthApi from 'zero/services/auth'
 
   export default {
     props: ['id'],
@@ -120,7 +121,8 @@
       });
       this.actions.push({
         name: 'Delete',
-        icon: 'fth-x'
+        icon: 'fth-x',
+        action: this.onDelete
       });
     },
 
@@ -146,6 +148,7 @@
         this.$router.go(-1);
       },
 
+
       onLoad(form)
       {
         form.load(UsersApi.getById(this.id)).then(response =>
@@ -162,24 +165,58 @@
         });
       },
 
+
       onSubmit(form)
       {
-        form.handle(new Promise(resolve =>
+        form.handle(UsersApi.save(this.model)).then(response =>
         {
-          setTimeout(() =>
+          if (response.model.id === AuthApi.user.id)
           {
-            resolve(true);
-          }, 1000);
-        })).then(() =>
-        {
-          form.setDirty(false);
+            AuthApi.setUser(response.model);
+          }
+
+          if (!this.id)
+          {
+            this.$router.replace({
+              name: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
+              params: { id: response.model.id }
+            });
+          }
         });
       },
+
+
+      onDelete(item, opts)
+      {
+        opts.hide();
+
+        Overlay.confirmDelete().then((opts) =>
+        {
+          opts.state('loading');
+
+          UsersApi.delete(this.id).then(response =>
+          {
+            if (response.success)
+            {
+              opts.state('success');
+              opts.hide();
+              this.$router.go(-1);
+              // TODO show message
+            }
+            else
+            {
+              opts.errors(response.errors);
+            }
+          });
+        }); 
+      },
+
 
       onLockoutChange(locked)
       {
         this.model.lockoutEnd = locked ? this.originalLockoutEnd : null;
       },
+
 
       onActiveChange(opts)
       {
@@ -201,6 +238,7 @@
           }
         });
       },
+
 
       actionSelected(item, dropdown)
       {

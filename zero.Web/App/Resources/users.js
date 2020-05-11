@@ -15,6 +15,18 @@ export default {
     return Axios.get('users/getAll', { params: query }).then(res => Promise.resolve(res.data));
   },
 
+  // save a user
+  save(model)
+  {
+    return Axios.post('users/save', model).then(res => Promise.resolve(res.data));
+  },
+
+  // deletes a user
+  delete(id)
+  {
+    return Axios.delete('users/delete', { params: { id } }).then(res => Promise.resolve(res.data));
+  },
+
   // change password
   updatePassword(model)
   {

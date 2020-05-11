@@ -29,6 +29,6 @@ export default {
   // deletes a role
   delete(id)
   {
-    return Axios.post('userRoles/delete', { params: { id } }).then(res => Promise.resolve(res.data));
+    return Axios.delete('userRoles/delete', { params: { id } }).then(res => Promise.resolve(res.data));
   }
 };

@@ -20,6 +20,15 @@ namespace zero.Web.Controllers
 
 
     /// <summary>
+    /// Returns the current user
+    /// </summary>
+    public async Task<IActionResult> GetUser()
+    {
+      return await As<User, UserEditModel>(await Api.GetUser());
+    }
+
+
+    /// <summary>
     /// If a user is logged in
     /// </summary>    
     public IActionResult IsLoggedIn()

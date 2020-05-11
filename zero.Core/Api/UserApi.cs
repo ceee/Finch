@@ -14,31 +14,15 @@ namespace zero.Core.Api
 {
   public class UserApi : IUserApi
   {
-    protected IDocumentStore Raven { get; private set; }
-
-    protected IHttpContextAccessor HttpContextAccessor { get; set; }
-
-    protected IAuthenticationApi AuthenticationApi { get; set; }
-
     protected UserManager<User> UserManager { get; private set; }
 
-    private ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
+    protected IAppAwareBackofficeStore Backoffice { get; private set; }
 
 
-    public UserApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, IAuthenticationApi authenticationApi, UserManager<User> userManager)
+    public UserApi(IAppAwareBackofficeStore backoffice, UserManager<User> userManager)
     {
-      Raven = raven;
-      HttpContextAccessor = httpContextAccessor;
-      AuthenticationApi = authenticationApi;
+      Backoffice = backoffice;
       UserManager = userManager;
-    }
-
-
-    /// <inheritdoc />
-    public async Task<User> GetUser()
-    {
-      User user = await UserManager.GetUserAsync(HttpContextAccessor.HttpContext.User);
-      return user;
     }
 
 
@@ -59,42 +43,9 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public bool IsSuper()
-    {
-      return Principal.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
-    }
-
-
-    /// <inheritdoc />
-    public bool IsAdmin()
-    {
-      return Principal.HasClaim(Constants.Auth.Claims.Role, "administrator"); // TODO use constant (in setup as well)
-    }
-
-
-    /// <inheritdoc />
-    public IList<Permission> GetPermissions(string prefix = null)
-    {
-      return Principal.Claims
-        .Where(claim => claim.Type == Constants.Auth.Claims.Permission && (prefix == null || claim.Value.StartsWith(prefix)))
-        .Select(claim => Permission.FromClaim(claim, prefix))
-        .ToList();
-    }
-
-
-    /// <inheritdoc />
-    public Permission GetPermission(string key = null)
-    {
-      Claim claim = Principal.Claims.FirstOrDefault(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(key + ":"));
-
-      return Permission.FromClaim(claim);
-    }
-
-
-    /// <inheritdoc />
     public async Task<IList<User>> GetAll(string appId = null)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
       {
         return await session.Query<User>()
           .ForApp(appId)
@@ -109,7 +60,7 @@ namespace zero.Core.Api
     {
       query.SearchSelector = user => user.Name;
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
       {
         return await session.Query<User>()
           .ForApp(appId)
@@ -119,14 +70,26 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<User>> UpdatePassword(string currentPassword, string newPassword)
+    public async Task<EntityResult<User>> Save(User model)
+    {
+      return await Backoffice.Save(model); //, new UserValidator<User>());
+    }
+
+
+    /// <inheritdoc />
+    public async Task<EntityResult<User>> Delete(string id)
+    {
+      return await Backoffice.DeleteById<User>(id);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<EntityResult<User>> UpdatePassword(User user, string currentPassword, string newPassword)
     {
       if (currentPassword.IsNullOrWhiteSpace() || newPassword.IsNullOrWhiteSpace())
       {
         return EntityResult<User>.Fail(nameof(currentPassword), "@errors.changepassword.emptyfields");
       }
-
-      User user = await GetUser();
 
       if (user == null)
       {
@@ -146,8 +109,6 @@ namespace zero.Core.Api
 
         return result;
       }
-
-      await AuthenticationApi.Logout();
 
       return EntityResult<User>.Success(user);
     }
@@ -199,11 +160,6 @@ namespace zero.Core.Api
   public interface IUserApi
   {
     /// <summary>
-    /// Get currently logged-in user
-    /// </summary>
-    Task<User> GetUser();
-
-    /// <summary>
     /// Find user by id
     /// </summary>
     Task<User> GetUserById(string id);
@@ -211,27 +167,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Find user by email
     /// </summary>
-    Task<User> GetUserByEmail(string email);
-
-    /// <summary>
-    /// Whether the current user is the super user who created the zero instance
-    /// </summary>
-    bool IsSuper();
-
-    /// <summary>
-    /// Whether the current user belongs to the administrator role (will always return false if this role gets deleted)
-    /// </summary>
-    bool IsAdmin();
-
-    /// <summary>
-    /// Get all permissions for the current user with an optional prefix
-    /// </summary>
-    IList<Permission> GetPermissions(string prefix = null);
-
-    /// <summary>
-    /// Get a single permissions by key
-    /// </summary>
-    public Permission GetPermission(string key = null);
+    Task<User> GetUserByEmail(string email);  
 
     /// <summary>
     /// Get all users for the selected application
@@ -244,10 +180,20 @@ namespace zero.Core.Api
     Task<ListResult<User>> GetByQuery(ListQuery<User> query, string appId = null);
 
     /// <summary>
+    /// Creates or updates a user
+    /// </summary>
+    Task<EntityResult<User>> Save(User model);
+
+    /// <summary>
+    /// Deletes a user
+    /// </summary>
+    Task<EntityResult<User>> Delete(string id);
+
+    /// <summary>
     /// Changes the password of the current user.
     /// User is logged out if this operation succeeds.
     /// </summary>
-    Task<EntityResult<User>> UpdatePassword(string currentPassword, string newPassword);
+    Task<EntityResult<User>> UpdatePassword(User user, string currentPassword, string newPassword);
 
     /// <summary>
     /// Enables a user

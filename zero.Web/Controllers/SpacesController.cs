@@ -22,12 +22,12 @@ namespace zero.Web.Controllers
   {
     private ISpacesApi Api { get; set; }
 
-    private IUserApi UserApi { get; set; }
+    private IAuthenticationApi AuthenticationApi { get; set; }
 
-    public SpacesController(IZeroConfiguration config, ISpacesApi api, IUserApi userApi, IMapper mapper, IToken token) : base(config, mapper, token)
+    public SpacesController(IZeroConfiguration config, ISpacesApi api, IAuthenticationApi authenticationApi, IMapper mapper, IToken token) : base(config, mapper, token)
     {
       Api = api;
-      UserApi = userApi;
+      AuthenticationApi = authenticationApi;
     }
 
 
@@ -132,7 +132,7 @@ namespace zero.Web.Controllers
     /// </summary>
     bool CanReadSpace(string alias)
     {
-      Permission permission = UserApi.GetPermission(Permissions.Spaces.PREFIX + alias);
+      Permission permission = AuthenticationApi.GetPermission(Permissions.Spaces.PREFIX + alias);
       return permission != null && permission.CanRead;
     }
 
@@ -142,7 +142,7 @@ namespace zero.Web.Controllers
     /// </summary>
     bool CanWriteSpace(string alias)
     {
-      Permission permission = UserApi.GetPermission(Permissions.Spaces.PREFIX + alias);
+      Permission permission = AuthenticationApi.GetPermission(Permissions.Spaces.PREFIX + alias);
       return permission != null && permission.CanWrite;
     }
   }

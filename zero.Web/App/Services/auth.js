@@ -31,7 +31,15 @@ export default new Vue({
     // loads the current user into the cache
     loadUser()
     {
+      Axios.get('authentication/getUser').then(res =>
+      {
+        this.isAuthenticated = res.data.success && res.data.model;
 
+        if (res.data.success)
+        {
+          this.user = res.data.model;
+        }
+      });
     },
 
     // the cached user has been rejected by the server so we clear credentials here
