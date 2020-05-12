@@ -24,7 +24,7 @@ namespace zero.Debug
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddZero(Configuration);
-
+      services.AddMvc();
       services.Configure<IISOptions>(opts => opts.AutomaticAuthentication = false);
     }
 

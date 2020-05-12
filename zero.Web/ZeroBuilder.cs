@@ -224,7 +224,6 @@ namespace zero.Web
         opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
         opts.Lockout.MaxFailedAccessAttempts = 5;
         opts.Lockout.AllowedForNewUsers = true;
-
       })
         .AddClaimsPrincipalFactory<ZeroClaimsPrinicipalFactory>()
         .AddDefaultTokenProviders();
