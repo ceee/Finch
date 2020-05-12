@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using zero.TestData;
 using zero.Web;
 
 namespace zero.Debug
@@ -34,7 +35,9 @@ namespace zero.Debug
         options.LoginPath = "/Account/Index";
       });
 
-      services.AddZero(Configuration);
+      services.AddZero(Configuration)
+        .AddPlugin<TestPlugin>()
+        .AddPlugin<Test2Plugin>();
       services.AddMvc();
 
       services.Configure<IISOptions>(opts => opts.AutomaticAuthentication = false);

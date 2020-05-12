@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Plugins;
 using zero.Core.Renderer;
 
 namespace zero.Core.Api
@@ -21,26 +22,31 @@ namespace zero.Core.Api
 
     protected IZeroOptions Options { get; private set; }
 
+    protected IEnumerable<ZeroPlugin> Plugins { get; private set; }
 
-    public SpacesApi(IDocumentStore raven, IPermissionsApi permissionsApi, IZeroOptions options)
+
+    public SpacesApi(IDocumentStore raven, IPermissionsApi permissionsApi, IZeroOptions options, IEnumerable<ZeroPlugin> plugins)
     {
       Raven = raven;
       PermissionsApi = permissionsApi;
       Options = options;
+      Plugins = plugins;
     }
 
 
     /// <inheritdoc />
     public Space GetByAlias(string alias)
     {
-      return Options.Backoffice.Spaces.FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
+      return Plugins.SelectMany(x => x.Spaces).FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
     }
 
 
     /// <inheritdoc />
     public SpaceCollection GetAll()
     {
-      return Options.Backoffice.Spaces;
+      var collection = new SpaceCollection();
+      collection.AddRange(Plugins.SelectMany(x => x.Spaces));
+      return collection;
     }
 
 
@@ -54,7 +60,7 @@ namespace zero.Core.Api
         return null;
       }
 
-      AbstractGenericRenderer renderer = Options.Backoffice.Renderers.FirstOrDefault(x => x.TargetType == space.Type);
+      AbstractGenericRenderer renderer = Plugins.SelectMany(x => x.Renderers).FirstOrDefault(x => x.TargetType == space.Type);
 
       if (renderer == null)
       {
@@ -122,7 +128,10 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> Save<T>(string alias, T model) where T : SpaceContent
     {
-      Space space = Options.Backoffice.Spaces.GetByAlias(alias);
+      var collection = new SpaceCollection();
+      collection.AddRange(Plugins.SelectMany(x => x.Spaces));
+
+      Space space = collection.GetByAlias(alias);
       RendererConfig config = GetEditorConfig(alias); 
 
       if (config.Validator != null)

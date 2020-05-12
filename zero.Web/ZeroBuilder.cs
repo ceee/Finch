@@ -54,6 +54,8 @@ namespace zero.Web
       ConfigureIdentity();
 
       AddServices();
+
+      AddPlugin(x => x.GetService<IZeroOptions>().Backoffice);
     }
 
 
@@ -267,7 +269,7 @@ namespace zero.Web
     /// </summary>
     public ZeroBuilder AddPlugin<T>() where T : ZeroPlugin
     {
-      Services.AddTransient<T>();
+      Services.AddTransient<ZeroPlugin, T>();
       return this;
     }
 
@@ -277,7 +279,7 @@ namespace zero.Web
     /// </summary>
     public ZeroBuilder AddPlugin<T>(Func<IServiceProvider, T> implementationFactory) where T : ZeroPlugin
     {
-      Services.AddTransient<T>(implementationFactory);
+      Services.AddTransient<ZeroPlugin, T>(implementationFactory);
       return this;
     }
   }

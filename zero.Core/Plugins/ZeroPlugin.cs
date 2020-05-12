@@ -21,6 +21,8 @@ namespace zero.Core.Plugins
 
     public FeatureCollection Features { get; private set; } = new FeatureCollection();
 
+    public PageTypeCollection PageTypes { get; private set; } = new PageTypeCollection();
+
     public IMapper Mapper { get; private set; }
 
     protected virtual IServiceCollection ConfigureServices(IServiceCollection services)

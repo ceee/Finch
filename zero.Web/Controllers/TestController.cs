@@ -9,6 +9,7 @@ using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Core.Plugins;
 using zero.Core.Renderer;
 
 namespace zero.Web.Controllers
@@ -28,6 +29,14 @@ namespace zero.Web.Controllers
       SpacesApi = spacesApi;
       LanguagesApi = languagesApi;
       SignInManager = signInManager;
+    }
+
+
+    [HttpGet]
+    [ZeroAuthorize(false)]
+    public IActionResult GetPlugins([FromServices] IEnumerable<ZeroPlugin> plugins)
+    {
+      return Json(plugins);
     }
 
 

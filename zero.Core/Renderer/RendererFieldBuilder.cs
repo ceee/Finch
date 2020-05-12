@@ -10,7 +10,7 @@ namespace zero.Core.Renderer
 
     object Options = null;
 
-    AbstractGenericRenderer Renderer = null;
+    AbstractGenericRenderer CustomRenderer = null;
 
 
     internal class Data
@@ -31,7 +31,7 @@ namespace zero.Core.Renderer
         View = View,
         ComponentPath = ComponentPath,
         Options = Options,
-        Renderer = Renderer
+        Renderer = CustomRenderer
       };
     }
 
@@ -64,7 +64,7 @@ namespace zero.Core.Renderer
     public void Nested<T>(IRenderer<T> renderer, Action<NestedOptions> optionsBuilder = null)
     {
       View = "nested";
-      Renderer = renderer.ToGenericRenderer();
+      CustomRenderer = renderer.ToGenericRenderer();
       Options = BuildOptions(optionsBuilder);
     }
 
@@ -76,6 +76,13 @@ namespace zero.Core.Renderer
     public void Rte()
     {
       View = "rte";
+    }
+
+    public void Renderer<T>(IRenderer<T> renderer, Action<RendererOptions> optionsBuilder = null)
+    {
+      View = "_renderer";
+      CustomRenderer = renderer.ToGenericRenderer();
+      Options = BuildOptions(optionsBuilder);
     }
 
     public void State(Action<StateOptions> optionsBuilder = null)
