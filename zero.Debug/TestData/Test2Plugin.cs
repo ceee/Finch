@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using zero.Core.Entities;
 using zero.Core.Plugins;
 
 namespace zero.TestData
 {
-  public class Test2Plugin : ZeroPlugin
+  public class Test2Plugin : IZeroPlugin
   {
-    public Test2Plugin()
+    public void Configure(IServiceCollection services, IZeroPluginBuilder builder)
     {
-      PageTypes.Add(new PageType<NewsPage>()
+      builder.PageTypes.Add(new PageType<NewsPage>()
       {
         Alias = "news",
         Name = "News",
@@ -16,7 +17,7 @@ namespace zero.TestData
         Icon = "fth-book"
       });
 
-      PageTypes.Add(new PageType<ContentPage>()
+      builder.PageTypes.Add(new PageType<ContentPage>()
       {
         Alias = "content",
         Name = "Page",
@@ -25,7 +26,7 @@ namespace zero.TestData
         AllowAllChildrenTypes = true
       });
 
-      PageTypes.Add(new PageType<RedirectPage>()
+      builder.PageTypes.Add(new PageType<RedirectPage>()
       {
         Alias = "redirect",
         Name = "Redirect",
@@ -33,11 +34,11 @@ namespace zero.TestData
         AllowedChildrenTypes = new List<string>() { "content", "redirect" }
       });
 
-      Renderers.Add<OptionsPagePartial, OptionsPagePartialRenderer>();
-      Renderers.Add<MetaPagePartial, MetaPagePartialRenderer>();
-      Renderers.Add<NewsPage, NewsPageRenderer>();
-      Renderers.Add<RedirectPage, RedirectPageRenderer>();
-      Renderers.Add<ContentPage, ContentPageRenderer>();
+      builder.Renderers.Add<OptionsPagePartial, OptionsPagePartialRenderer>();
+      builder.Renderers.Add<MetaPagePartial, MetaPagePartialRenderer>();
+      builder.Renderers.Add<NewsPage, NewsPageRenderer>();
+      builder.Renderers.Add<RedirectPage, RedirectPageRenderer>();
+      builder.Renderers.Add<ContentPage, ContentPageRenderer>();
     }
   }
 }

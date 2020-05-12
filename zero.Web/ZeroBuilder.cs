@@ -10,6 +10,7 @@ using Newtonsoft.Json.Serialization;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
@@ -39,23 +40,18 @@ namespace zero.Web
       Services = services;
       Configuration = configuration;
 
-
-
       //CultureInfo cultureInfo = new CultureInfo("en-US");
       //cultureInfo.NumberFormat.CurrencySymbol = "€";
       //CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 
       AddConfiguration();
-
       ConfgureMvc();
       ConfigureDatabase();
       ConfigureValidation();
       ConfigureMapper();
       ConfigureIdentity();
-
       AddServices();
-
-      AddPlugin(x => x.GetService<IZeroOptions>().Backoffice);
+      AddPlugins();
     }
 
 
@@ -108,6 +104,8 @@ namespace zero.Web
       Services.AddTransient<IPermissionsApi, PermissionsApi>();
       Services.AddTransient<IMediaApi, MediaApi>();
       Services.AddTransient<IMediaUpload, MediaUpload>();
+
+      Services.AddSingleton<IZeroPluginBuilder, ZeroPluginBuilder>();
     }
 
 
@@ -254,6 +252,21 @@ namespace zero.Web
     }
 
 
+    void AddPlugins()
+    {
+      AddPlugin(x => x.GetService<IZeroOptions>().Backoffice);
+
+      // build plugins
+      //IEnumerable<IZeroPlugin> plugins = app.ApplicationServices.GetServices<IZeroPlugin>();
+      //IZeroPluginBuilder pluginBuilder = app.ApplicationServices.GetService<IZeroPluginBuilder>();
+
+      //foreach (IZeroPlugin plugin in plugins)
+      //{
+      //  plugin.Configure(app.ApplicationServices)
+      //}
+    }
+
+
     /// <summary>
     /// Use specified options
     /// </summary>
@@ -267,9 +280,9 @@ namespace zero.Web
     /// <summary>
     /// Adds a zero plugin
     /// </summary>
-    public ZeroBuilder AddPlugin<T>() where T : ZeroPlugin
+    public ZeroBuilder AddPlugin<T>() where T : class, IZeroPlugin
     {
-      Services.AddTransient<ZeroPlugin, T>();
+      Services.AddTransient<IZeroPlugin, T>();
       return this;
     }
 
@@ -277,9 +290,9 @@ namespace zero.Web
     /// <summary>
     /// Adds a zero plugin
     /// </summary>
-    public ZeroBuilder AddPlugin<T>(Func<IServiceProvider, T> implementationFactory) where T : ZeroPlugin
+    public ZeroBuilder AddPlugin<T>(Func<IServiceProvider, T> implementationFactory) where T : class, IZeroPlugin
     {
-      Services.AddTransient<ZeroPlugin, T>(implementationFactory);
+      Services.AddTransient<IZeroPlugin, T>(implementationFactory);
       return this;
     }
   }

@@ -1,19 +1,20 @@
-﻿using zero.Core;
+﻿using Microsoft.Extensions.DependencyInjection;
+using zero.Core;
 using zero.Core.Entities;
 using zero.Core.Plugins;
 using zero.Web.Sections;
 
 namespace zero.Web
 {
-  public class DefaultBackofficePlugin : ZeroPlugin
+  public class DefaultBackofficePlugin : IZeroPlugin
   {
-    public DefaultBackofficePlugin()
+    public void Configure(IServiceCollection services, IZeroPluginBuilder builder)
     {
-      Sections.Add<DashboardSection>();
-      Sections.Add<PagesSection>();
-      Sections.Add<SpacesSection>();
-      Sections.Add<MediaSection>();
-      Sections.Add<SettingsSection>();
+      builder.Sections.Add<DashboardSection>();
+      builder.Sections.Add<PagesSection>();
+      builder.Sections.Add<SpacesSection>();
+      builder.Sections.Add<MediaSection>();
+      builder.Sections.Add<SettingsSection>();
 
       SettingsGroup systemSettings = new SettingsGroup("@settings.groups.system");
       systemSettings.Add(Constants.Settings.Updates, "@settings.system.updates.name", "@settings.system.updates.text", "fth-check-circle");
@@ -28,8 +29,8 @@ namespace zero.Web
       pluginSettings.Add(Constants.Settings.Plugins, "@settings.plugins.installed.name", "@settings.plugins.installed.text", "fth-package");
       pluginSettings.Add(Constants.Settings.CreatePlugin, "@settings.plugins.create.name", "@settings.plugins.create.text", "fth-box");
 
-      Settings.Add(systemSettings);
-      Settings.Add(pluginSettings);
+      builder.Settings.Add(systemSettings);
+      builder.Settings.Add(pluginSettings);
     }
   }
 }

@@ -9,31 +9,12 @@ namespace zero.Core.Plugins
 {
   public abstract class ZeroPlugin
   {
-    public SectionCollection Sections { get; private set; } = new SectionCollection();
-
-    public SpaceCollection Spaces { get; private set; } = new SpaceCollection();
-
-    public RendererCollection Renderers { get; private set; } = new RendererCollection();
-
-    public IList<SettingsGroup> Settings { get; private set; } = new List<SettingsGroup>();
-
-    public PermissionGroupCollection Permissions { get; private set; } = new PermissionGroupCollection();
-
-    public FeatureCollection Features { get; private set; } = new FeatureCollection();
-
-    public PageTypeCollection PageTypes { get; private set; } = new PageTypeCollection();
-
-    public IMapper Mapper { get; private set; }
-
-    protected virtual IServiceCollection ConfigureServices(IServiceCollection services)
-    {
-      return services;
-    }
+    protected virtual void Configure(IServiceCollection services, IZeroPluginBuilder builder) { }
   }
 
 
   public interface IZeroPlugin
   {
-
+    void Configure(IServiceCollection services, IZeroPluginBuilder builder);
   }
 }

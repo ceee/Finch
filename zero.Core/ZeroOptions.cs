@@ -31,7 +31,7 @@ namespace zero.Core
     public string BackofficePath { get; set; }
 
     /// <inheritdoc />
-    public ZeroPlugin Backoffice { get; set; }
+    public IZeroPlugin Backoffice { get; set; }
   }
 
 
@@ -79,6 +79,6 @@ namespace zero.Core
     /// <summary>
     /// Default settings for the backoffice
     /// </summary>
-    ZeroPlugin Backoffice { get; set; }
+    IZeroPlugin Backoffice { get; set; }
   }
 }

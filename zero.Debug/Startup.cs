@@ -38,6 +38,7 @@ namespace zero.Debug
       services.AddZero(Configuration)
         .AddPlugin<TestPlugin>()
         .AddPlugin<Test2Plugin>();
+
       services.AddMvc();
 
       services.Configure<IISOptions>(opts => opts.AutomaticAuthentication = false);
