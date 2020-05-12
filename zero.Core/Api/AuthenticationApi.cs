@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using System.Collections.Generic;
@@ -102,6 +103,7 @@ namespace zero.Core.Api
         result.AddError("@login.errors.disabled");
         return result;
       }
+
 
       SignInResult signInResult = await SignInManager.PasswordSignInAsync(email, password, isPersistent, true);
 

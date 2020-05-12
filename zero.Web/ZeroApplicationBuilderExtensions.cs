@@ -21,7 +21,6 @@ namespace zero.Web
       app.UseStaticFiles();
 
       // map backoffice
-      //app.UseWhen()
       app.UseWhen(ctx => ctx.Request.Path.ToString().StartsWith(path), builder =>
       {
         builder.UseRouting();
