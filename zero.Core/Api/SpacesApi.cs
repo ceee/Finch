@@ -22,31 +22,29 @@ namespace zero.Core.Api
 
     protected IZeroOptions Options { get; private set; }
 
-    protected IEnumerable<ZeroPlugin> Plugins { get; private set; }
+    protected IZeroPluginBuilder PluginBuilder { get; private set; }
 
 
-    public SpacesApi(IDocumentStore raven, IPermissionsApi permissionsApi, IZeroOptions options, IEnumerable<ZeroPlugin> plugins)
+    public SpacesApi(IDocumentStore raven, IPermissionsApi permissionsApi, IZeroOptions options, IZeroPluginBuilder pluginBuilder)
     {
       Raven = raven;
       PermissionsApi = permissionsApi;
       Options = options;
-      Plugins = plugins;
+      PluginBuilder = pluginBuilder;
     }
 
 
     /// <inheritdoc />
     public Space GetByAlias(string alias)
     {
-      return Plugins.SelectMany(x => x.Spaces).FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
+      return PluginBuilder.Spaces.FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
     }
 
 
     /// <inheritdoc />
     public SpaceCollection GetAll()
     {
-      var collection = new SpaceCollection();
-      collection.AddRange(Plugins.SelectMany(x => x.Spaces));
-      return collection;
+      return PluginBuilder.Spaces;
     }
 
 
@@ -60,7 +58,7 @@ namespace zero.Core.Api
         return null;
       }
 
-      AbstractGenericRenderer renderer = Plugins.SelectMany(x => x.Renderers).FirstOrDefault(x => x.TargetType == space.Type);
+      AbstractGenericRenderer renderer = PluginBuilder.Renderers.FirstOrDefault(x => x.TargetType == space.Type);
 
       if (renderer == null)
       {
@@ -128,10 +126,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> Save<T>(string alias, T model) where T : SpaceContent
     {
-      var collection = new SpaceCollection();
-      collection.AddRange(Plugins.SelectMany(x => x.Spaces));
-
-      Space space = collection.GetByAlias(alias);
+      Space space = GetByAlias(alias);
       RendererConfig config = GetEditorConfig(alias); 
 
       if (config.Validator != null)

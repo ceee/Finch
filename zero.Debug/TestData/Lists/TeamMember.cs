@@ -3,6 +3,7 @@ using zero.Core.Entities;
 
 namespace zero.TestData
 {
+  //[Space("team", "@dbg.spaces.team.name", "fth-users", "@dbg.spaces.team.description")]
   public class TeamMember : SpaceContent
   {
     public string Position { get; set; }

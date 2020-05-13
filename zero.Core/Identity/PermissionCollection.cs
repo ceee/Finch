@@ -5,6 +5,11 @@ namespace zero.Core.Identity
   public class PermissionCollection
   {
     /// <summary>
+    /// Alias for querying
+    /// </summary>
+    public string Alias { get; set; }
+
+    /// <summary>
     /// Name of the group
     /// </summary>
     public string Label { get; set; }

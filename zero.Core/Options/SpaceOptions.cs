@@ -1,26 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using zero.Core.Entities;
 
-namespace zero.Core.Entities
+namespace zero.Core.Options
 {
-  public class SpaceCollection : List<Space>
+  public class SpaceOptions : ZeroBackofficeCollection<Space>, IZeroCollectionOptions
   {
-    public Space GetByAlias(string alias)
+    public SpaceOptions()
     {
-      return this.FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
+
     }
 
 
     public void Add<T>() where T : Space, new()
     {
-      Add(new T());
+      Items.Add(new T());
     }
 
 
     public void AddList<T>(string alias, string name, string description, string icon) where T : SpaceContent, new()
     {
-      Add(new Space()
+      Items.Add(new Space()
       {
         Alias = alias,
         View = SpaceView.List,
@@ -34,7 +36,7 @@ namespace zero.Core.Entities
 
     public void AddEditor<T>(string alias, string name, string description, string icon) where T : SpaceContent, new()
     {
-      Add(new Space()
+      Items.Add(new Space()
       {
         Alias = alias,
         View = SpaceView.Editor,
@@ -48,7 +50,7 @@ namespace zero.Core.Entities
 
     public void AddSeparator()
     {
-      Space lastSpace = this.LastOrDefault();
+      Space lastSpace = Items.LastOrDefault();
 
       if (lastSpace != null)
       {
@@ -59,7 +61,7 @@ namespace zero.Core.Entities
 
     public void AddCustom<T>(string componentPath, string alias, string name, string description, string icon) where T : SpaceContent, new()
     {
-      Add(new Space()
+      Items.Add(new Space()
       {
         Alias = alias,
         View = SpaceView.Custom,
@@ -74,7 +76,7 @@ namespace zero.Core.Entities
 
     public void AddCustom(string componentPath, string alias, string name, string description, string icon)
     {
-      Add(new Space()
+      Items.Add(new Space()
       {
         Alias = alias,
         View = SpaceView.Custom,

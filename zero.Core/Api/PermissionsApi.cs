@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Options;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Core.Options;
 
 namespace zero.Core.Api
 {
@@ -23,6 +23,7 @@ namespace zero.Core.Api
 
       PermissionCollection permissionSections = new PermissionCollection()
       {
+        Alias = Constants.PermissionCollections.Sections,
         Label = "@permission.collections.sections",
         Description = "@permission.collections.sections_description"
       };
@@ -41,6 +42,7 @@ namespace zero.Core.Api
       {
         PermissionCollection permissionSpaces = new PermissionCollection()
         {
+          Alias = Constants.PermissionCollections.Spaces,
           Label = "@permission.collections.spaces",
           Description = "@permission.collections.spaces_description"
         };
@@ -55,6 +57,7 @@ namespace zero.Core.Api
 
       PermissionCollection permissionSettings = new PermissionCollection()
       {
+        Alias = Constants.PermissionCollections.Settings,
         Label = "@permission.collections.settings",
         Description = "@permission.collections.settings_description"
       };

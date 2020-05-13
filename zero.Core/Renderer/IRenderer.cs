@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
-
-namespace zero.Core.Renderer
+﻿namespace zero.Core.Renderer
 {
-  public interface IRenderer<T>
+  public interface IRenderer<T> : IRenderer { }
+
+
+  public interface IRenderer
   {
     RendererConfig Build();
 

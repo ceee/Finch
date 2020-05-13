@@ -30,15 +30,17 @@ namespace zero.Web
   {
     public virtual IServiceCollection Services { get; }
 
-    public virtual ZeroOptions Options { get; }
-
     IConfiguration Configuration { get; set; }
+
+    IZeroPluginBuilder PluginBuilder { get; set; }
 
 
     public ZeroBuilder(IServiceCollection services, IConfiguration configuration)
     {
       Services = services;
       Configuration = configuration;
+
+      PluginBuilder = new ZeroPluginBuilder();
 
       //CultureInfo cultureInfo = new CultureInfo("en-US");
       //cultureInfo.NumberFormat.CurrencySymbol = "€";
@@ -51,7 +53,7 @@ namespace zero.Web
       ConfigureMapper();
       ConfigureIdentity();
       AddServices();
-      AddPlugins();
+      //AddPlugins();
     }
 
 
@@ -61,11 +63,14 @@ namespace zero.Web
     void AddConfiguration()
     {
       Services.Configure<ZeroOptions>(Configuration.GetSection("Zero"));
-      Services.PostConfigure<ZeroOptions>(opts =>
+      Services.PostConfigureAll<ZeroOptions>(opts =>
       {
         opts.ZeroVersion = "0.0.1.0"; // TODO
-        opts.Backoffice = new DefaultBackofficePlugin();
+        opts.Plugins = new PluginCollection(Services, PluginBuilder);
+        opts.Plugins.Add<DefaultBackofficePlugin>();
+        opts.Backoffice = PluginBuilder;
       });
+
       Services.AddTransient<IZeroOptions>(factory => factory.GetService<IOptionsMonitor<ZeroOptions>>().CurrentValue);
     }
 
@@ -88,31 +93,32 @@ namespace zero.Web
       Services.AddTransient<IAppAwareBackofficeStore, AppAwareBackofficeStore>();
 
       Services.AddTransient<ISetupApi, SetupApi>();
-      Services.AddTransient<ISectionsApi, SectionsApi>();
-      Services.AddTransient<IApplicationsApi, ApplicationsApi>();
-      Services.AddTransient<IPagesApi, PagesApi>();
-      Services.AddTransient<IPageTreeApi, PageTreeApi>();
-      Services.AddTransient<ISettingsApi, SettingsApi>();
-      Services.AddTransient<IAuthenticationApi, AuthenticationApi>();
-      Services.AddTransient<ICountriesApi, CountriesApi>();
-      Services.AddTransient<IUserApi, UserApi>();
-      Services.AddTransient<IUserRolesApi, UserRolesApi>();
-      Services.AddTransient<IToken, Token>();
-      Services.AddTransient<ISpacesApi, SpacesApi>();
-      Services.AddTransient<ITranslationsApi, TranslationsApi>();
-      Services.AddTransient<ILanguagesApi, LanguagesApi>();
-      Services.AddTransient<IPermissionsApi, PermissionsApi>();
-      Services.AddTransient<IMediaApi, MediaApi>();
-      Services.AddTransient<IMediaUpload, MediaUpload>();
 
-      Services.AddSingleton<IZeroPluginBuilder, ZeroPluginBuilder>();
+      Services.AddScoped<ISectionsApi, SectionsApi>();
+      Services.AddScoped<IApplicationsApi, ApplicationsApi>();
+      Services.AddScoped<IPagesApi, PagesApi>();
+      Services.AddScoped<IPageTreeApi, PageTreeApi>();
+      Services.AddScoped<ISettingsApi, SettingsApi>();
+      Services.AddScoped<IAuthenticationApi, AuthenticationApi>();
+      Services.AddScoped<ICountriesApi, CountriesApi>();
+      Services.AddScoped<IUserApi, UserApi>();
+      Services.AddScoped<IUserRolesApi, UserRolesApi>();
+      Services.AddScoped<IToken, Token>();
+      Services.AddScoped<ISpacesApi, SpacesApi>();
+      Services.AddScoped<ITranslationsApi, TranslationsApi>();
+      Services.AddScoped<ILanguagesApi, LanguagesApi>();
+      Services.AddScoped<IPermissionsApi, PermissionsApi>();
+      Services.AddScoped<IMediaApi, MediaApi>();
+      Services.AddScoped<IMediaUpload, MediaUpload>();
+
+      Services.AddSingleton(PluginBuilder);
     }
 
 
     /// <summary>
     /// Configures ASP.NET Core MVC
     /// </summary>
-    void ConfgureMvc()
+    IMvcBuilder ConfgureMvc()
     {
       IMvcBuilder mvc = Services.AddMvc();
 
@@ -129,6 +135,8 @@ namespace zero.Web
       {
         mvc.AddRazorRuntimeCompilation();
       }
+
+      return mvc;
     }
 
 
@@ -252,47 +260,12 @@ namespace zero.Web
     }
 
 
-    void AddPlugins()
-    {
-      AddPlugin(x => x.GetService<IZeroOptions>().Backoffice);
-
-      // build plugins
-      //IEnumerable<IZeroPlugin> plugins = app.ApplicationServices.GetServices<IZeroPlugin>();
-      //IZeroPluginBuilder pluginBuilder = app.ApplicationServices.GetService<IZeroPluginBuilder>();
-
-      //foreach (IZeroPlugin plugin in plugins)
-      //{
-      //  plugin.Configure(app.ApplicationServices)
-      //}
-    }
-
-
     /// <summary>
     /// Use specified options
     /// </summary>
     public ZeroBuilder WithOptions(Action<ZeroOptions> configureOptions)
     {
       Services.PostConfigure(configureOptions);
-      return this;
-    }
-
-
-    /// <summary>
-    /// Adds a zero plugin
-    /// </summary>
-    public ZeroBuilder AddPlugin<T>() where T : class, IZeroPlugin
-    {
-      Services.AddTransient<IZeroPlugin, T>();
-      return this;
-    }
-
-
-    /// <summary>
-    /// Adds a zero plugin
-    /// </summary>
-    public ZeroBuilder AddPlugin<T>(Func<IServiceProvider, T> implementationFactory) where T : class, IZeroPlugin
-    {
-      Services.AddTransient<IZeroPlugin, T>(implementationFactory);
       return this;
     }
   }

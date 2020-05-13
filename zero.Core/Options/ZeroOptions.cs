@@ -1,6 +1,7 @@
-﻿using zero.Core.Plugins;
+﻿using System.Collections.Generic;
+using zero.Core.Plugins;
 
-namespace zero.Core
+namespace zero.Core.Options
 {
   public class ZeroOptions : IZeroOptions
   {
@@ -31,7 +32,10 @@ namespace zero.Core
     public string BackofficePath { get; set; }
 
     /// <inheritdoc />
-    public IZeroPlugin Backoffice { get; set; }
+    public IZeroPluginBuilder Backoffice { get; set; }
+
+    /// <inheritdoc />
+    public PluginCollection Plugins { get; set; }
   }
 
 
@@ -79,6 +83,6 @@ namespace zero.Core
     /// <summary>
     /// Default settings for the backoffice
     /// </summary>
-    IZeroPlugin Backoffice { get; set; }
+    IZeroPluginBuilder Backoffice { get; set; }
   }
 }

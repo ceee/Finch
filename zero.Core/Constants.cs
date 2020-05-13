@@ -55,5 +55,14 @@
       public const string Plugins = "plugins";
       public const string CreatePlugin = "createplugin";
     }
+
+    public static class PermissionCollections
+    {
+      public const string Sections = "permissionCollectionSections";
+
+      public const string Spaces = "permissionCollectionSpaces";
+
+      public const string Settings = "permisssionCollectionSettings";
+    }
   }
 }

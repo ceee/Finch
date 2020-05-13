@@ -35,9 +35,10 @@ namespace zero.Debug
         options.LoginPath = "/Account/Index";
       });
 
-      services.AddZero(Configuration)
-        .AddPlugin<TestPlugin>()
-        .AddPlugin<Test2Plugin>();
+      services.AddZero(Configuration, opts =>
+      {
+        opts.Plugins.Add<TestPlugin>();
+      });
 
       services.AddMvc();
 
