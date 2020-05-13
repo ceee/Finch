@@ -32,7 +32,7 @@ namespace zero.Core.Options
     public string BackofficePath { get; set; }
 
     /// <inheritdoc />
-    public IZeroPluginBuilder Backoffice { get; set; }
+    public IZeroPluginConfiguration Backoffice { get; set; }
 
     /// <inheritdoc />
     public PluginCollection Plugins { get; set; }
@@ -83,6 +83,6 @@ namespace zero.Core.Options
     /// <summary>
     /// Default settings for the backoffice
     /// </summary>
-    IZeroPluginBuilder Backoffice { get; set; }
+    IZeroPluginConfiguration Backoffice { get; set; }
   }
 }

@@ -6,8 +6,12 @@ using zero.Core.Options;
 
 namespace zero.Core.Plugins
 {
-  public class ZeroPluginBuilder : IZeroPluginBuilder
+  public class ZeroPluginConfiguration : IZeroPluginConfiguration
   {
+    public void Configure<T>(Action<T> setupAction) where T : IZeroCollectionOptions
+    {
+      setupAction(null); // TODO
+    }
     //public SectionCollection Sections { get; private set; }
 
     //public SpaceOptions Spaces { get; private set; }
@@ -36,7 +40,7 @@ namespace zero.Core.Plugins
   }
 
 
-  public interface IZeroPluginBuilder
+  public interface IZeroPluginConfiguration
   {
     //SectionCollection Sections { get; }
 

@@ -8,7 +8,7 @@ namespace zero.Web
 {
   public class DefaultBackofficePlugin : IZeroPlugin
   {
-    public void Configure(IServiceCollection services, IZeroPluginBuilder zero)
+    public void Configure(IServiceCollection services, IZeroPluginConfiguration zero)
     {
       zero.Configure<SectionOptions>(opts =>
       {

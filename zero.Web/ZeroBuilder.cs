@@ -32,7 +32,7 @@ namespace zero.Web
 
     IConfiguration Configuration { get; set; }
 
-    IZeroPluginBuilder PluginBuilder { get; set; }
+    IZeroPluginConfiguration PluginBuilder { get; set; }
 
 
     public ZeroBuilder(IServiceCollection services, IConfiguration configuration)
@@ -40,7 +40,7 @@ namespace zero.Web
       Services = services;
       Configuration = configuration;
 
-      PluginBuilder = new ZeroPluginBuilder();
+      PluginBuilder = new ZeroPluginConfiguration();
 
       //CultureInfo cultureInfo = new CultureInfo("en-US");
       //cultureInfo.NumberFormat.CurrencySymbol = "€";

@@ -7,10 +7,10 @@ namespace zero.Core.Plugins
   {
     IServiceCollection Services;
 
-    IZeroPluginBuilder Builder;
+    IZeroPluginConfiguration Builder;
 
 
-    public PluginCollection(IServiceCollection services, IZeroPluginBuilder builder)
+    public PluginCollection(IServiceCollection services, IZeroPluginConfiguration builder)
     {
       Services = services;
       Builder = builder;

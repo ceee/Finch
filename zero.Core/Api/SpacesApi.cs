@@ -22,10 +22,10 @@ namespace zero.Core.Api
 
     protected IZeroOptions Options { get; private set; }
 
-    protected IZeroPluginBuilder PluginBuilder { get; private set; }
+    protected IZeroPluginConfiguration PluginBuilder { get; private set; }
 
 
-    public SpacesApi(IDocumentStore raven, IPermissionsApi permissionsApi, IZeroOptions options, IZeroPluginBuilder pluginBuilder)
+    public SpacesApi(IDocumentStore raven, IPermissionsApi permissionsApi, IZeroOptions options, IZeroPluginConfiguration pluginBuilder)
     {
       Raven = raven;
       PermissionsApi = permissionsApi;

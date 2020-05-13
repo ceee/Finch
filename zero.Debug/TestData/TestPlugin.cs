@@ -9,7 +9,7 @@ namespace zero.TestData
 {
   public class TestPlugin : IZeroPlugin
   {
-    public void Configure(IServiceCollection services, IZeroPluginBuilder zero)
+    public void Configure(IServiceCollection services, IZeroPluginConfiguration zero)
     {
       services.AddTransient<ITestService, TestService>();
 
@@ -37,7 +37,6 @@ namespace zero.TestData
         opts.Add<RedirectPageRenderer>();
         opts.Add<ContentPageRenderer>();
       });
-
 
       zero.Configure<PageOptions>(opts =>
       {
