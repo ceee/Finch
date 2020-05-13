@@ -2,9 +2,8 @@
 using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Web.Sections;
-using zero.Web.Settings;
 
-namespace zero.Web
+namespace zero.Web.Defaults
 {
   public class DefaultBackofficePlugin : IZeroPlugin
   {
@@ -23,6 +22,12 @@ namespace zero.Web
       {
         opts.AddGroup<SystemSettings>();
         opts.AddGroup<PluginSettings>();
+      });
+
+
+      zero.Configure<PermissionOptions>(opts =>
+      {
+
       });
     }
   }

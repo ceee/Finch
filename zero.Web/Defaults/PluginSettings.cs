@@ -1,7 +1,7 @@
 ﻿using zero.Core;
 using zero.Core.Entities;
 
-namespace zero.Web.Settings
+namespace zero.Web.Defaults
 {
   public class PluginSettings : SettingsGroup
   {
