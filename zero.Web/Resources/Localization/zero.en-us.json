@@ -297,8 +297,8 @@
   },
 
   "mediapicker": {
-    "select_text": "Select",
-    "select_description": "from library",
+    "select_text": "Add media",
+    "select_description": "Upload or select",
     "upload_text": "Upload",
     "upload_description": "Upload a new file"
   },

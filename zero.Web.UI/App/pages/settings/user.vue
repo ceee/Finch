@@ -30,7 +30,7 @@
             </div>
           </ui-property>
           <ui-property label="@user.fields.avatar" description="@user.fields.avatar_text" :required="true">
-            <ui-media :config="avatarConfig" v-model="model.avatarId" :disabled="disabled" />
+            <ui-mediapicker :config="avatarConfig" v-model="model.avatarId" :disabled="disabled" />
           </ui-property>
         </div>
 

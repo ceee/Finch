@@ -13,7 +13,7 @@ namespace zero.Web
     public ZeroMiddleware(RequestDelegate next, IZeroOptions options)
     {
       Next = next;
-      Options = options;
+      Options = options; 
     }
 
 

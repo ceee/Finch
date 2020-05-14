@@ -64,7 +64,7 @@
   };
 
   export default {
-    name: 'uiMedia',
+    name: 'uiMediaOld',
 
     props: {
       disabled: {
