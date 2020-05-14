@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using zero.Core.Options;
 
 namespace zero.Core.Plugins
 {
@@ -7,13 +8,13 @@ namespace zero.Core.Plugins
   {
     IServiceCollection Services;
 
-    IZeroPluginConfiguration Builder;
+    IZeroOptions Options;
 
 
-    public PluginCollection(IServiceCollection services, IZeroPluginConfiguration builder)
+    public PluginCollection(IServiceCollection services, IZeroOptions options)
     {
       Services = services;
-      Builder = builder;
+      Options = options;
     }
 
 
@@ -45,7 +46,7 @@ namespace zero.Core.Plugins
     {
       try
       {
-        new T().Configure(Services, Builder);
+        new T().Configure(Services, Options);
       }
       catch
       {

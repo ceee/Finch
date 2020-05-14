@@ -11,6 +11,13 @@ namespace zero.Core.Options
       DefaultLanguage = SupportedLanguages[0];
       TokenExpiration = 60;
       BackofficePath = "/zero";
+      Sections = new SectionOptions();
+      Features = new FeatureOptions();
+      Pages = new PageOptions();
+      Permissions = new PermissionOptions();
+      Renderers = new RendererOptions();
+      Settings = new SettingsOptions();
+      Spaces = new SpaceOptions();
     }
 
     /// <inheritdoc />
@@ -32,10 +39,31 @@ namespace zero.Core.Options
     public string BackofficePath { get; set; }
 
     /// <inheritdoc />
-    public IZeroPluginConfiguration Backoffice { get; set; }
+    //public IZeroPluginConfiguration Backoffice { get; set; }
 
     /// <inheritdoc />
     public PluginCollection Plugins { get; set; }
+
+    /// <inheritdoc />
+    public SectionOptions Sections { get; private set; }
+
+    /// <inheritdoc />
+    public FeatureOptions Features { get; private set; }
+
+    /// <inheritdoc />
+    public PageOptions Pages { get; private set; }
+
+    /// <inheritdoc />
+    public PermissionOptions Permissions { get; private set; }
+
+    /// <inheritdoc />
+    public RendererOptions Renderers { get; private set; }
+
+    /// <inheritdoc />
+    public SettingsOptions Settings { get; private set; }
+
+    /// <inheritdoc />
+    public SpaceOptions Spaces { get; private set; }
   }
 
 
@@ -81,8 +109,50 @@ namespace zero.Core.Options
     string BackofficePath { get; set; }
 
     /// <summary>
+    /// 
+    /// </summary>
+    PluginCollection Plugins { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    SectionOptions Sections { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    FeatureOptions Features { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    PageOptions Pages { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    PermissionOptions Permissions { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RendererOptions Renderers { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    SettingsOptions Settings { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    SpaceOptions Spaces { get; }
+
+
+
+    /// <summary>
     /// Default settings for the backoffice
     /// </summary>
-    IZeroPluginConfiguration Backoffice { get; set; }
+    //IZeroPluginConfiguration Backoffice { get; set; }
   }
 }

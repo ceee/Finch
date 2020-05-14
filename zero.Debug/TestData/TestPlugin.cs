@@ -9,41 +9,29 @@ namespace zero.TestData
 {
   public class TestPlugin : IZeroPlugin
   {
-    public void Configure(IServiceCollection services, IZeroPluginConfiguration zero)
+    public void Configure(IServiceCollection services, IZeroOptions zero)
     {
       services.AddTransient<ITestService, TestService>();
 
-      zero.Configure<SpaceOptions>(opts =>
-      {
-        opts.AddList<TeamMember>("team", "Team", "Our team members", "fth-users");
-        opts.AddList<News>("news", "News", "Articles about the company", "fth-edit");
-        opts.AddSeparator();
-        opts.AddEditor<SocialContent>("social", "Social", "Links to social media", "fth-twitter");
-      });
+      zero.Spaces.AddList<TeamMember>("team", "Team", "Our team members", "fth-users");
+      zero.Spaces.AddList<News>("news", "News", "Articles about the company", "fth-edit");
+      zero.Spaces.AddSeparator();
+      zero.Spaces.AddEditor<SocialContent>("social", "Social", "Links to social media", "fth-twitter");
 
-      zero.Configure<FeatureOptions>(opts =>
-      {
-        opts.Add(TestFeatures.Wishlist, "Wishlist", "Frontend wishlist for logged-in users");
-        opts.Add(TestFeatures.SocialShopping, "Social shopping", "Integrate products into social media portals");
-      });
+      zero.Features.Add(TestFeatures.Wishlist, "Wishlist", "Frontend wishlist for logged-in users");
+      zero.Features.Add(TestFeatures.SocialShopping, "Social shopping", "Integrate products into social media portals");
 
-      zero.Configure<RendererOptions>(opts =>
-      {
-        opts.Add<TeamMemberRenderer>();
-        opts.Add<SocialContentRenderer>();
-        opts.Add<OptionsPagePartialRenderer>();
-        opts.Add<MetaPagePartialRenderer>();
-        opts.Add<NewsPageRenderer>();
-        opts.Add<RedirectPageRenderer>();
-        opts.Add<ContentPageRenderer>();
-      });
+      zero.Renderers.Add<TeamMemberRenderer>();
+      zero.Renderers.Add<SocialContentRenderer>();
+      zero.Renderers.Add<OptionsPagePartialRenderer>();
+      zero.Renderers.Add<MetaPagePartialRenderer>();
+      zero.Renderers.Add<NewsPageRenderer>();
+      zero.Renderers.Add<RedirectPageRenderer>();
+      zero.Renderers.Add<ContentPageRenderer>();
 
-      zero.Configure<PageOptions>(opts =>
-      {
-        opts.Add<NewsPage>("news", "News", "News about the company", "fth-book");
-        opts.Add<ContentPage>("content", "Page", "Page consisting of modules", "fth-box", true, true);
-        opts.Add<RedirectPage>("redirect", "Redirect", "Redirect to another page or an external URL", "fth-box", true, false, new List<string>() { "content", "redirect" });
-      });
+      zero.Pages.Add<NewsPage>("news", "News", "News about the company", "fth-book");
+      zero.Pages.Add<ContentPage>("content", "Page", "Page consisting of modules", "fth-box", true, true);
+      zero.Pages.Add<RedirectPage>("redirect", "Redirect", "Redirect to another page or an external URL", "fth-box", true, false, new List<string>() { "content", "redirect" });
     }
   }
 }

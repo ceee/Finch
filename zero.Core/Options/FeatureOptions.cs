@@ -4,12 +4,6 @@ namespace zero.Core.Options
 {
   public class FeatureOptions : ZeroBackofficeCollection<IFeature>, IZeroCollectionOptions
   {
-    public FeatureOptions()
-    {
-      
-    }
-
-
     public void Add<T>() where T : IFeature, new()
     {
       Items.Add(new T());

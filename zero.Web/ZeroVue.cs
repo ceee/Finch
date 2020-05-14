@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +14,7 @@ using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Identity;
 using zero.Core.Mapper;
+using zero.Core.Options;
 using zero.Web.Models;
 using zero.Web.Sections;
 
@@ -77,7 +79,7 @@ namespace zero.Web
 
       List<ZeroVueSection> sections = new List<ZeroVueSection>();
 
-      foreach (ISection section in Options.Backoffice.Sections)
+      foreach (ISection section in Options.Sections.GetAllItems())
       {
         if (!isSuperUser && !Permission.CanReadKey(permissions, section.Alias, true))
         {
@@ -161,7 +163,7 @@ namespace zero.Web
 
       List<ZeroVueSettingsGroup> groups = new List<ZeroVueSettingsGroup>();
 
-      foreach (SettingsGroup group in Options.Backoffice.Settings)
+      foreach (SettingsGroup group in Options.Settings.GetAllItems())
       {
         List<ZeroVueSettingsArea> areas = new List<ZeroVueSettingsArea>();
 

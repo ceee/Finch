@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Entities.Setup;
 using zero.Core.Identity;
+using zero.Core.Options;
 using zero.Core.Validation;
 
 

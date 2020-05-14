@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using zero.Core;
 using zero.Core.Extensions;
+using zero.Core.Options;
 
 namespace zero.Web
 {
@@ -13,7 +14,7 @@ namespace zero.Web
   {
     public static IApplicationBuilder UseZero(this IApplicationBuilder app)
     {
-      ZeroOptions options = app.ApplicationServices.GetService<IOptionsMonitor<ZeroOptions>>().CurrentValue;
+      IZeroOptions options = app.ApplicationServices.GetService<IZeroOptions>();
 
       string path = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
 

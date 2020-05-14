@@ -10,7 +10,7 @@ namespace zero.Core.Api
     protected IZeroOptions Options { get; set; }
 
 
-    public PermissionsApi (IZeroOptions options)
+    public PermissionsApi(IZeroOptions options)
     {
       Options = options;
     }
@@ -38,7 +38,9 @@ namespace zero.Core.Api
 
       // TODO add back spaces
 
-      if (Options.Backoffice.Spaces.Count > 0)
+      IReadOnlyCollection<Space> spaces = Options.Spaces.GetAllItems();
+
+      if (spaces.Count > 0)
       {
         PermissionCollection permissionSpaces = new PermissionCollection()
         {
@@ -47,7 +49,7 @@ namespace zero.Core.Api
           Description = "@permission.collections.spaces_description"
         };
 
-        foreach (Space space in Options.Backoffice.Spaces)
+        foreach (Space space in spaces)
         {
           permissionSpaces.Items.Add(new Permission(Permissions.Spaces.PREFIX + space.Alias, space.Name, null, PermissionValueType.ReadWrite));
         }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Core.Renderer;
 
@@ -20,31 +21,28 @@ namespace zero.Core.Api
 
     protected IPermissionsApi PermissionsApi { get; private set; }
 
-    protected IZeroOptions Options { get; private set; }
-
-    protected IZeroPluginConfiguration PluginBuilder { get; private set; }
+    protected IZeroOptions Options { get; set; }
 
 
-    public SpacesApi(IDocumentStore raven, IPermissionsApi permissionsApi, IZeroOptions options, IZeroPluginConfiguration pluginBuilder)
+    public SpacesApi(IDocumentStore raven, IPermissionsApi permissionsApi, IZeroOptions options)
     {
       Raven = raven;
       PermissionsApi = permissionsApi;
       Options = options;
-      PluginBuilder = pluginBuilder;
     }
 
 
     /// <inheritdoc />
     public Space GetByAlias(string alias)
     {
-      return PluginBuilder.Spaces.FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
+      return Options.Spaces.GetAllItems().FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
     }
 
 
     /// <inheritdoc />
-    public SpaceCollection GetAll()
+    public IReadOnlyCollection<Space> GetAll()
     {
-      return PluginBuilder.Spaces;
+      return Options.Spaces.GetAllItems();
     }
 
 
@@ -58,7 +56,7 @@ namespace zero.Core.Api
         return null;
       }
 
-      AbstractGenericRenderer renderer = PluginBuilder.Renderers.FirstOrDefault(x => x.TargetType == space.Type);
+      AbstractGenericRenderer renderer = Options.Renderers.GetAllItems().FirstOrDefault(x => x.TargetType == space.Type);
 
       if (renderer == null)
       {
@@ -190,7 +188,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all spaces
     /// </summary>
-    SpaceCollection GetAll();
+    IReadOnlyCollection<Space> GetAll();
 
     /// <summary>
     /// Get editor configuration for a space

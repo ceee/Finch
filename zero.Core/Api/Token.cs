@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Options;
 
 namespace zero.Core.Api
 {

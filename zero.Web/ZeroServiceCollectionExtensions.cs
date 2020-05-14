@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using zero.Core;
+using zero.Core.Options;
 
 namespace zero.Web
 {

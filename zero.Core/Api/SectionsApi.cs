@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Options;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using zero.Core.Entities;
+using zero.Core.Options;
 
 namespace zero.Core.Api
 {
@@ -17,16 +18,16 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public SectionCollection GetAll()
+    public IReadOnlyCollection<ISection> GetAll()
     {
-      return Options.Backoffice.Sections;
+      return Options.Sections.GetAllItems();
     }
 
 
     /// <inheritdoc />
     public ISection GetByAlias(string alias)
     {
-      return Options.Backoffice.Sections.FirstOrDefault(section => section.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
+      return Options.Sections.GetAllItems().FirstOrDefault(section => section.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
     }
   }
 
@@ -36,7 +37,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all available backoffice sections
     /// </summary>
-    SectionCollection GetAll();
+    IReadOnlyCollection<ISection> GetAll();
 
     /// <summary>
     /// Get backoffice section by alias

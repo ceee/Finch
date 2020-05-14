@@ -22,7 +22,7 @@ namespace zero.Core.Renderer
 
     void Nested<T>(IRenderer<T> renderer, Action<NestedOptions> optionsBuilder = null);
 
-    void Renderer<T>(IRenderer<T> renderer, Action<RendererOptions> optionsBuilder = null);
+    void Renderer<T>(IRenderer<T> renderer, Action<DefaultRendererOptions> optionsBuilder = null);
 
     void Custom(string path, Func<object> optionsBuilder = null);
   }

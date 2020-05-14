@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Core.Options;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers
@@ -55,7 +56,7 @@ namespace zero.Web.Controllers
     /// </summary>
     public IActionResult GetAllFeatures()
     {
-      return Json(Options.Backoffice.Features);
+      return Json(Options.Features.GetAllItems());
     }
 
 

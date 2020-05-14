@@ -78,7 +78,7 @@ namespace zero.Core.Renderer
       View = "rte";
     }
 
-    public void Renderer<T>(IRenderer<T> renderer, Action<RendererOptions> optionsBuilder = null)
+    public void Renderer<T>(IRenderer<T> renderer, Action<DefaultRendererOptions> optionsBuilder = null)
     {
       View = "_renderer";
       CustomRenderer = renderer.ToGenericRenderer();

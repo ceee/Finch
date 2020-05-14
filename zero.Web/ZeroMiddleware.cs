@@ -1,21 +1,16 @@
-﻿using System;
-using System.Net;
+﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
-using zero.Core;
+using zero.Core.Options;
 
 namespace zero.Web
 {
   public class ZeroMiddleware
   {
     private RequestDelegate Next { get; set; }
-    private ZeroOptions Options { get; set; }
+    private IZeroOptions Options { get; set; }
 
 
-    public ZeroMiddleware(RequestDelegate next, ZeroOptions options)
+    public ZeroMiddleware(RequestDelegate next, IZeroOptions options)
     {
       Next = next;
       Options = options;

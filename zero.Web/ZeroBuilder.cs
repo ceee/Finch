@@ -18,8 +18,10 @@ using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Identity;
 using zero.Core.Mapper;
+using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Core.Validation;
+using zero.Web.Defaults;
 using zero.Web.Mapper;
 
 namespace zero.Web
@@ -32,15 +34,11 @@ namespace zero.Web
 
     IConfiguration Configuration { get; set; }
 
-    IZeroPluginConfiguration PluginBuilder { get; set; }
-
 
     public ZeroBuilder(IServiceCollection services, IConfiguration configuration)
     {
       Services = services;
       Configuration = configuration;
-
-      PluginBuilder = new ZeroPluginConfiguration();
 
       //CultureInfo cultureInfo = new CultureInfo("en-US");
       //cultureInfo.NumberFormat.CurrencySymbol = "€";
@@ -62,16 +60,16 @@ namespace zero.Web
     /// </summary>
     void AddConfiguration()
     {
-      Services.Configure<ZeroOptions>(Configuration.GetSection("Zero"));
-      Services.PostConfigureAll<ZeroOptions>(opts =>
-      {
-        opts.ZeroVersion = "0.0.1.0"; // TODO
-        opts.Plugins = new PluginCollection(Services, PluginBuilder);
-        opts.Plugins.Add<DefaultBackofficePlugin>();
-        opts.Backoffice = PluginBuilder;
-      });
+      Services.AddOptions<ZeroOptions>()
+        .Bind(Configuration.GetSection("Zero"))
+        .Configure(opts =>
+        {
+          opts.ZeroVersion = "0.0.1.0"; // TODO
+          opts.Plugins = new PluginCollection(Services, opts);
+          opts.Plugins.Add<DefaultBackofficePlugin>();
+        });
 
-      Services.AddTransient<IZeroOptions>(factory => factory.GetService<IOptionsMonitor<ZeroOptions>>().CurrentValue);
+      Services.AddTransient<IZeroOptions>(factory => factory.GetService<IOptionsMonitor<ZeroOptions>>().CurrentValue); 
     }
 
 
@@ -110,8 +108,6 @@ namespace zero.Web
       Services.AddScoped<IPermissionsApi, PermissionsApi>();
       Services.AddScoped<IMediaApi, MediaApi>();
       Services.AddScoped<IMediaUpload, MediaUpload>();
-
-      Services.AddSingleton(PluginBuilder);
     }
 
 
@@ -265,7 +261,7 @@ namespace zero.Web
     /// </summary>
     public ZeroBuilder WithOptions(Action<ZeroOptions> configureOptions)
     {
-      Services.PostConfigure(configureOptions);
+      Services.Configure(configureOptions);
       return this;
     }
   }

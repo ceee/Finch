@@ -14,14 +14,16 @@ namespace zero.Web.Controllers
     IAuthenticationApi AuthenticationApi;
     IUserRolesApi RolesApi;
     ILanguagesApi LanguagesApi;
+    IPermissionsApi PermissionsApi;
 
 
-    public UsersController(IUserApi api, IAuthenticationApi authenticationApi, IUserRolesApi rolesApi, ILanguagesApi languagesApi)
+    public UsersController(IUserApi api, IAuthenticationApi authenticationApi, IUserRolesApi rolesApi, ILanguagesApi languagesApi, IPermissionsApi permissionsApi)
     {
       Api = api;
       AuthenticationApi = authenticationApi;
       RolesApi = rolesApi;
       LanguagesApi = languagesApi;
+      PermissionsApi = permissionsApi;
     }
 
 
@@ -58,7 +60,7 @@ namespace zero.Web.Controllers
     /// </summary>    
     public IActionResult GetAllPermissions()
     {
-      return Json(Options.Backoffice.Permissions);
+      return Json(PermissionsApi.GetAll());
     }
 
 

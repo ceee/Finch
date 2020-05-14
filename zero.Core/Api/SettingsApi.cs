@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using zero.Core.Entities;
+using zero.Core.Options;
 
 namespace zero.Core.Api
 {
   public class SettingsApi : ISettingsApi
   {
-    protected IZeroOptions Options { get; private set; }
+    protected IZeroOptions Options { get; set; }
 
 
     public SettingsApi(IZeroOptions options)
@@ -15,9 +16,9 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public IList<SettingsGroup> GetAreas()
+    public IReadOnlyCollection<SettingsGroup> GetAreas()
     {
-      return Options.Backoffice.Settings;
+      return Options.Settings.GetAllItems();
     }
   }
 
@@ -27,6 +28,6 @@ namespace zero.Core.Api
     /// <summary>
     /// Get settings areas for backoffice display and grouping
     /// </summary>
-    IList<SettingsGroup> GetAreas();
+    IReadOnlyCollection<SettingsGroup> GetAreas();
   }
 }

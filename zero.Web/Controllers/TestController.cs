@@ -9,6 +9,7 @@ using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Core.Renderer;
 
@@ -34,7 +35,7 @@ namespace zero.Web.Controllers
 
     [HttpGet]
     [ZeroAuthorize(false)]
-    public IActionResult GetPlugins([FromServices] IEnumerable<ZeroPlugin> plugins)
+    public IActionResult GetPlugins([FromServices] IEnumerable<IZeroPlugin> plugins)
     {
       return Json(plugins);
     }
@@ -103,7 +104,7 @@ namespace zero.Web.Controllers
     {
       Space space = SpacesApi.GetByAlias(alias);
 
-      AbstractGenericRenderer renderer = Options.Backoffice.Renderers.FirstOrDefault(x => x.TargetType == space.Type);
+      AbstractGenericRenderer renderer = Options.Renderers.GetAllItems().FirstOrDefault(x => x.TargetType == space.Type);
 
       if (renderer == null)
       {
