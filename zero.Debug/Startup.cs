@@ -38,6 +38,7 @@ namespace zero.Debug
       services.AddZero(Configuration, opts =>
       {
         opts.Plugins.Add<TestPlugin>();
+        opts.Plugins.Add<Commerce.CommercePlugin>();
       });
 
       services.AddMvc();

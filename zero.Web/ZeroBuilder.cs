@@ -66,7 +66,9 @@ namespace zero.Web
         {
           opts.ZeroVersion = "0.0.1.0"; // TODO
           opts.Plugins = new PluginCollection(Services, opts);
-          opts.Plugins.Add<DefaultBackofficePlugin>();
+
+          // resolve default plugin
+          new DefaultBackofficePlugin().Configure(Services, opts);
         });
 
       Services.AddTransient<IZeroOptions>(factory => factory.GetService<IOptionsMonitor<ZeroOptions>>().CurrentValue); 

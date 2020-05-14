@@ -6,7 +6,7 @@ using zero.Web.Sections;
 
 namespace zero.Web.Defaults
 {
-  public class DefaultBackofficePlugin : IZeroPlugin
+  internal class DefaultBackofficePlugin : IZeroPlugin
   {
     public void Configure(IServiceCollection services, IZeroOptions zero)
     {
