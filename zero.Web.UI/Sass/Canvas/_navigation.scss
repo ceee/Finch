@@ -165,7 +165,11 @@ a.app-nav-child
     width: 36px;
     border-radius: 18px;
     position: relative;
-    top: -2px;
+    top: -1px;
+    background: var(--color-bg-mid);
+    text-align: center;
+    line-height: 37px;
+    font-size: 16px;
   }
 
   .-text

@@ -10,6 +10,6 @@
 
     public string Roles { get; set; }
 
-    public string Avatar { get; set; }
+    public string AvatarId { get; set; }
   }
 }

@@ -14,7 +14,7 @@ namespace zero.Web.Models
 
     public bool IsEmailConfirmed { get; set; }
 
-    public Media Avatar { get; set; }
+    public string AvatarId { get; set; }
 
     public string LanguageId { get; set; }
 

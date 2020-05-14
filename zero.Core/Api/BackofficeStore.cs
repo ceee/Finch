@@ -91,24 +91,24 @@ namespace zero.Core.Api
       }
 
       // find all media items in model
-      List<ObjectTraverser.Result<Media>> media = ObjectTraverser.Find<Media>(model);
+      //List<ObjectTraverser.Result<Media>> media = ObjectTraverser.Find<Media>(model);
 
       // upload media items
-      Dictionary<string, Media> mediaItems = new Dictionary<string, Media>();
+      //Dictionary<string, Media> mediaItems = new Dictionary<string, Media>();
 
-      foreach (ObjectTraverser.Result<Media> item in media)
-      {
-        string id = item.Item?.Id;
+      //foreach (ObjectTraverser.Result<Media> item in media)
+      //{
+      //  string id = item.Item?.Id;
 
-        if (!Media.Upload(item.Item, out bool uploaded, out string uploadError))
-        {
-          return EntityResult<T>.Fail(item.Path, uploadError);
-        }
-        else
-        {
-          mediaItems.Add(id, item.Item);
-        }
-      }
+      //  if (!Media.Upload(item.Item, out bool uploaded, out string uploadError))
+      //  {
+      //    return EntityResult<T>.Fail(item.Path, uploadError);
+      //  }
+      //  else
+      //  {
+      //    mediaItems.Add(id, item.Item);
+      //  }
+      //}
 
       //if (operation.Media != null)
       //{
@@ -155,7 +155,11 @@ namespace zero.Core.Api
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
+        // store entity
         await session.StoreAsync(model);
+
+        // store media
+
         await session.SaveChangesAsync();
       }
 

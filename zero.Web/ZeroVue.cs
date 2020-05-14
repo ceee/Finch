@@ -15,6 +15,7 @@ using zero.Core.Extensions;
 using zero.Core.Identity;
 using zero.Core.Mapper;
 using zero.Core.Options;
+using zero.Core.Plugins;
 using zero.Web.Models;
 using zero.Web.Sections;
 
@@ -32,14 +33,17 @@ namespace zero.Web
 
     protected IMapper Mapper { get; private set; }
 
+    protected IEnumerable<IZeroPlugin> Plugins { get; private set; }
 
-    public ZeroVue(IZeroOptions options, IWebHostEnvironment env, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IMapper mapper)
+
+    public ZeroVue(IZeroOptions options, IWebHostEnvironment env, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IMapper mapper, IEnumerable<IZeroPlugin> plugins)
     {
       Environment = env;
       Options = options;
       ApplicationsApi = applicationsApi;
       AuthenticationApi = authenticationApi;
       Mapper = mapper;
+      Plugins = plugins;
       //zero.path = "@Model.BackofficePath.EnsureEndsWith('/')";
       //zero.translations = @Html.Raw(text);
     }
@@ -53,6 +57,8 @@ namespace zero.Web
       config.Path = Options.BackofficePath.EnsureEndsWith('/');
       config.ApiPath = config.Path + "api/";
       config.PluginPath = "@/Plugins";
+      config.Version = Options.ZeroVersion;
+      config.PluginCount = 2; // TODO Plugins.Count();
       config.ErrorFieldNone = Constants.ErrorFieldNone;
       config.Sections = CreateSections();
       config.Translations = CreateTranslations();
@@ -252,6 +258,10 @@ namespace zero.Web
     public string ApiPath { get; set; }
 
     public string PluginPath { get; set; }
+
+    public string Version { get; set; }
+
+    public int PluginCount { get; set; }
 
     public string ErrorFieldNone { get; set; }
 

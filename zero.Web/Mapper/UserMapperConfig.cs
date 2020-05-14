@@ -23,7 +23,7 @@ namespace zero.Web.Mapper
         target.IsSuper = source.IsSuper;
         target.Email = source.Email;
         target.IsEmailConfirmed = source.IsEmailConfirmed;
-        target.Avatar = source.Avatar;
+        target.AvatarId = source.AvatarId;
         target.LanguageId = source.LanguageId;
         target.Roles = source.Roles;
         target.Claims = source.Claims;
@@ -37,7 +37,7 @@ namespace zero.Web.Mapper
         target.IsActive = source.IsActive;
         target.IsSuper = source.IsSuper;
         target.Email = source.Email;
-        target.Avatar = source.Avatar;
+        target.AvatarId = source.AvatarId;
         target.LanguageId = source.LanguageId;
         target.Roles = source.Roles;
         target.Claims = source.Claims;
@@ -49,7 +49,7 @@ namespace zero.Web.Mapper
         target.Name = source.Name;
         target.IsActive = source.IsActive && (!source.LockoutEnabled || !source.LockoutEnd.HasValue);
         target.Email = source.Email;
-        target.Avatar = source.Avatar?.Source;
+        target.AvatarId = source.AvatarId;
         target.Roles = String.Join(", ", source.Roles); // TODO get name from alias
       });
 

@@ -36,8 +36,8 @@
       page: true,
       groups: zero.settingsAreas,
       tokens: {
-        'zero_version': '1.0.0-alpha.1',
-        'plugin_count': 7
+        'zero_version': zero.version,
+        'plugin_count': zero.pluginCount
       }
     })
   }

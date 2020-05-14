@@ -44,15 +44,18 @@ namespace zero.Core.Api
         return true;
       }
 
-      // generate new id
-      media.Id = IdGenerator.Create();
+      // set id to null in case it was prefixed to signal an upload
+      media.Id = null;
+
+      // generate file id which is used as the folder name on disk
+      media.FileId = IdGenerator.Create();
 
       // get bytes for media content
       string byteString = media.Source.Split(SEP)[1];
       byte[] bytes = Convert.FromBase64String(byteString);
 
       // build folder and full file path
-      string folderPath = Path.Combine(Paths.Media, media.Id);
+      string folderPath = Path.Combine(Paths.Media, media.FileId);
       string filePath = Path.Combine(folderPath, media.Name);
 
       Paths.Create(folderPath);
@@ -81,15 +84,19 @@ namespace zero.Core.Api
               Size = new Size(100, 100),
               Mode = ResizeMode.Max
             }));
-            image.Save(filePath.Replace(extension, THUMB_EXTENSION + extension));
 
-            media.HasThumbnail = true;
+            string thumbFileName = media.Name.Replace(extension, THUMB_EXTENSION + extension);
+            string thumbSourcePath = Path.Combine(Paths.Media, media.FileId, thumbFileName);
+
+            image.Save(thumbSourcePath);
+
+            media.ThumbnailSource = Path.Combine(PATH_PREFIX, media.FileId, thumbFileName).Replace(Path.DirectorySeparatorChar, PATH_SEPARATOR);
           }
         }
 
         // set new properties
         media.LastModifiedDate = DateTimeOffset.Now;
-        media.Source = Path.Combine(PATH_PREFIX, media.Id, media.Name).Replace(Path.DirectorySeparatorChar, PATH_SEPARATOR);
+        media.Source = Path.Combine(PATH_PREFIX, media.FileId, media.Name).Replace(Path.DirectorySeparatorChar, PATH_SEPARATOR);
         media.Size = bytes.Length;
 
         uploaded = true;

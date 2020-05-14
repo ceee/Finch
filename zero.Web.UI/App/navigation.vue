@@ -31,7 +31,8 @@
       <ui-dropdown align="left bottom">
         <template v-slot:button>
           <button type="button" class="app-nav-account-button">
-            <img class="-image" :src="user.avatar.source" :alt="user.name" />
+            <img class="-image" v-if="user.avatar" :src="user.avatar.source" :alt="user.name" />
+            <span class="-image" v-if="!user.avatar"><i class="fth-user"></i></span>
             <p class="-text"><strong>{{user.name}}</strong><br>{{user.email}}</p>
             <i class="-arrow fth-chevron-down"></i>
           </button>

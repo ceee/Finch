@@ -5,16 +5,16 @@ namespace zero.Core.Entities
   /// <summary>
   /// A media file (can contain an image or other media like videos and documents)
   /// </summary>
-  public class Media : IMedia, IZeroDbConventions
+  public class Media : ZeroEntity, IMedia
   {
-    /// <inheritdoc />
-    public string Id { get; set; }
-
     /// <inheritdoc />
     public string AppId { get; set; }
 
     /// <inheritdoc />
-    public string Name { get; set; }
+    public string FileId { get; set; }
+
+    /// <inheritdoc />
+    public string FolderId { get; set; }
 
     /// <inheritdoc />
     public string AlternativeText { get; set; }
@@ -26,7 +26,7 @@ namespace zero.Core.Entities
     public string Source { get; set; }
 
     /// <inheritdoc />
-    public bool HasThumbnail { get; set; }
+    public string ThumbnailSource { get; set; }
 
     /// <inheritdoc />
     public int Size { get; set; }
@@ -39,18 +39,20 @@ namespace zero.Core.Entities
 
     /// <inheritdoc />
     public MediaFocalPoint FocalPoint { get; set; }
-
-    /// <inheritdoc />
-    public string FolderId { get; set; }
   }
 
 
-  public interface IMedia : IZeroIdEntity, IAppAwareEntity
+  public interface IMedia : IZeroEntity, IAppAwareEntity, IZeroDbConventions
   {
     /// <summary>
-    /// File name
+    /// Id/name of the folder which is stored on disk/cloud
     /// </summary>
-    public string Name { get; set; }
+    public string FileId { get; set; }
+
+    /// <summary>
+    /// Id of the media folder
+    /// </summary>
+    public string FolderId { get; set; }
 
     /// <summary>
     /// Alternative text which is used when the image can't be loaded
@@ -68,9 +70,9 @@ namespace zero.Core.Entities
     string Source { get; set; }
 
     /// <summary>
-    /// Whether this file has a thumbnail
+    /// For images this is the source for a 100x100px thumbnail
     /// </summary>
-    bool HasThumbnail { get; set; }
+    string ThumbnailSource { get; set; }
 
     /// <summary>
     /// Filesize in bytes
@@ -91,10 +93,5 @@ namespace zero.Core.Entities
     /// Optional focal point for an image
     /// </summary>
     MediaFocalPoint FocalPoint { get; set; }
-    
-    /// <summary>
-    /// Id of the folder
-    /// </summary>
-    public string FolderId { get; set; }
   }
 }
