@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Entities.Setup;
+using zero.Core.Extensions;
 using zero.Core.Identity;
 using zero.Core.Options;
 using zero.Core.Validation;
@@ -55,12 +56,16 @@ namespace zero.Core.Api
           Database = model.Database.Name
         };
 
+        raven.Conventions.IdentityPartsSeparator = ".";
         raven.Conventions.FindCollectionName = type =>
         {
           return Constants.Database.CollectionPrefix + DocumentConventions.DefaultGetCollectionName(type);
         };
+        raven.Conventions.TransformTypeCollectionNameToDocumentIdPrefix = name =>
+        {
+          return name.Replace(Constants.Database.CollectionPrefix, Constants.Database.CollectionPrefix + raven.Conventions.IdentityPartsSeparator).ToCamelCaseId();
+        };
 
-        raven.Conventions.IdentityPartsSeparator = ".";
 
         raven.Initialize();
 
@@ -97,6 +102,7 @@ namespace zero.Core.Api
           IsDefault = true
         };
 
+        // TODO UserManager uses the DI resolved IDocumentStore instance which should not be available at this point??
         IdentityResult result = await UserManager.CreateAsync(user, model.User.Password);
 
         // user creation failed

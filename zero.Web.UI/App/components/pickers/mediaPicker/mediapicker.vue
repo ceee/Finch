@@ -70,6 +70,11 @@
       
     },
 
+    created()
+    {
+
+    },
+
     methods: {
 
       onChange(value)
@@ -92,6 +97,7 @@
           component: PickMediaOverlay,
           model: this.value,
           theme: 'dark',
+          width: 520
         }, typeof this.config === 'object' ? this.config : {});
 
         return Overlay.open(options).then(value =>

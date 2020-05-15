@@ -9,11 +9,13 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
+using Raven.Client.Documents.Indexes;
 using System;
-using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
+using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Identity;
@@ -154,6 +156,8 @@ namespace zero.Web
           Database = options.Raven.Database
         };
 
+        store.Conventions.IdentityPartsSeparator = ".";
+
         store.Conventions.FindCollectionName = type =>
         {
           if (!typeof(IZeroDbConventions).IsAssignableFrom(type))
@@ -173,12 +177,16 @@ namespace zero.Web
 
         store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix = name =>
         {
-          return name.ToCamelCaseId();
+          return name.Replace(Constants.Database.CollectionPrefix, Constants.Database.CollectionPrefix + store.Conventions.IdentityPartsSeparator).ToCamelCaseId();
         };
 
-        store.Conventions.IdentityPartsSeparator = ".";
+        
 
-        return store.Initialize();
+        IDocumentStore raven = store.Initialize();
+
+        IndexCreation.CreateIndexes(Assembly.GetAssembly(typeof(MediaFolder_ByHierarchy)), store);
+
+        return raven;
       });
     }
 

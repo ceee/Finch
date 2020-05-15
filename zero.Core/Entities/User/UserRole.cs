@@ -2,7 +2,7 @@
 
 namespace zero.Core.Entities
 {
-  public class UserRole : ZeroEntity, IUserRole
+  public class UserRole : ZeroEntity, IUserRole, IZeroDbConventions
   {
     /// <inheritdoc />
     public string AppId { get; set; }

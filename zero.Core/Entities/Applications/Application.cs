@@ -20,12 +20,12 @@ namespace zero.Core.Entities
     /// <summary>
     /// Image of the application
     /// </summary>
-    public Media Image { get; set; }
+    public string ImageId { get; set; }
 
     /// <summary>
     /// Simple image of the application (used as favicon)
     /// </summary>
-    public Media Icon { get; set; }
+    public string IconId { get; set; }
 
     /// <summary>
     /// All assigned domains for this application

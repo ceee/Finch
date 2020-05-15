@@ -57,7 +57,7 @@ namespace zero.Core.Extensions
     }
 
 
-    public static IQueryable<T> WhereIf<T>(this IQueryable<T> source, Expression<Func<T, bool>> predicate, bool condition, Expression<Func<T, bool>> elsePredicate = null)
+    public static IRavenQueryable<T> WhereIf<T>(this IRavenQueryable<T> source, Expression<Func<T, bool>> predicate, bool condition, Expression<Func<T, bool>> elsePredicate = null)
     {
       if (!condition)
       {

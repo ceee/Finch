@@ -7,9 +7,9 @@ namespace zero.Web.Models
   {
     public string Name { get; set; }
 
-    public Media Image { get; set; }
+    public string ImageId { get; set; }
 
-    public Media Icon { get; set; }
+    public string IconId { get; set; }
 
     public string[] Domains { get; set; } = new string[] { };
 

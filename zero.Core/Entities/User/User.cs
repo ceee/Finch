@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace zero.Core.Entities
 {
-  public class User : ZeroEntity, IUser
+  public class User : ZeroEntity, IUser, IZeroDbConventions
   {
     /// <inheritdoc />
     public string AppId { get; set; }

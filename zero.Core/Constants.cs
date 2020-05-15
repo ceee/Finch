@@ -29,7 +29,7 @@
     public static class Database
     {
       public const string SharedAppId = "shared";
-      public const string CollectionPrefix = "zero.";
+      public const string CollectionPrefix = "zero"; // TODO initially we had a dot (zero.) suffix here, but that did not work out anymore when it comes to index creation
       public const string ReservationPrefix = "zero.";
       public const string Expires = Raven.Client.Constants.Documents.Metadata.Expires;
     }

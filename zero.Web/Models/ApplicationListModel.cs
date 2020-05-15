@@ -6,7 +6,7 @@
 
     public string FullName { get; set; }
 
-    public string Image { get; set; }
+    public string ImageId { get; set; }
 
     public string[] Domains { get; set; }
 
