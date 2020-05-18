@@ -40,18 +40,14 @@ namespace zero.Web.Controllers
     public async Task<IActionResult> GetAll([FromQuery] MediaListQuery query)
     {
       ListResult<MediaListModel> items = await Mapper.Map<Media, MediaListModel>(await Api.GetByQuery(query));
+      IEnumerable<MediaListModel> folders = new List<MediaListModel>();
 
       if (query.Page < 2)
       {
-        IEnumerable<MediaListModel> folders = await Mapper.Map<MediaFolder, MediaListModel>(await MediaFolderApi.GetAll(query.FolderId));
-
-        foreach (MediaListModel folder in folders.Reverse())
-        {
-          items.Items.Insert(0, folder);
-        }
+        folders = await Mapper.Map<MediaFolder, MediaListModel>(await MediaFolderApi.GetAll(query.FolderId));
       }
 
-      return Json(items);
+      return Json(new MediaListResultModel(items, folders));
     }
 
 

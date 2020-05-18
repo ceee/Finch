@@ -9,24 +9,33 @@
     <div class="media-content">
       <ui-header-bar :title="title">
         <ui-search />
-        <ui-button type="white" label="Add folder" icon="fth-plus" @click="addFolder($route.params.id)" />
+        <ui-button type="white" label="Add folder" icon="fth-plus" @click="addFolder(id)" />
         <!--<ui-button label="Add media" icon="fth-plus" />-->
       </ui-header-bar>
 
       <div class="ui-view-box">
         <div class="media-items">
-          <a href="#" class="media-item is-blank">
+
+          <!-- upload field -->
+          <div class="media-item is-blank">
+            <input class="media-item-upload" type="file" multiple @change="onUpload" />
             <span class="media-item-content">
               <i class="fth-plus"></i>
             </span>
-          </a>
-          <a href="#" class="media-item" v-for="item in items">
-            <img v-if="item.type === 'image'" :src="item.source" />
-            <span class="media-item-content is-folder" v-if="item.isFolder">
+          </div>
+
+          <!-- folder list -->
+          <a href="#" class="media-item" v-for="item in folders">
+            <span class="media-item-content is-folder">
               <i class="fth-folder"></i>
               <span>{{item.name}}</span>
             </span>
-            <span class="media-item-content" v-if="item.type !== 'image' && !item.isFolder">
+          </a>
+
+          <!-- media list -->
+          <a href="#" class="media-item" v-for="item in items">
+            <img v-if="item.type === 'image'" :src="item.source" />
+            <span class="media-item-content is-file" v-if="item.type !== 'image'">
               <i :class="icons[item.type]" :data-extension="item.extension"></i>
               <span>{{item.source}}</span>
             </span>
@@ -43,14 +52,17 @@
   import MediaFolderApi from 'zero/resources/media-folder.js'
   import Overlay from 'zero/services/overlay.js';
   import AddFolderOverlay from './folder';
+  import MediaItemOverlay from './media-item';
+  import UploadStatusOverlay from './upload-status';
+  import Strings from 'zero/services/strings.js';
+  import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
 
   export default {
-
-    props: ['id'],
 
     data: () => ({
       cache: {},
       items: [],
+      folders: [],
       icons: {
         image: 'fth-image',
         video: 'fth-video',
@@ -86,9 +98,13 @@
     },
 
     computed: {
+      id()
+      {
+        return this.$route.params.id;
+      },
       title()
       {
-        return this.$route.params.id ? 'Media (...)' : '@media.list';
+        return this.id ? 'Media (...)' : '@media.list';
       }
     },
 
@@ -102,6 +118,7 @@
         MediaApi.getAll(this.filter).then(response =>
         {
           this.items = response.items;
+          this.folders = response.folders;
         });
       },
 
@@ -152,7 +169,80 @@
         {
           
         });
-      }
+      },
+
+
+      // adds a new file
+      addFile(folderId)
+      {
+        let options = {
+          title: '@iconpicker.title',
+          closeLabel: '@ui.close',
+          component: MediaItemOverlay,
+          isCreate: true,
+          model: {
+            folderId: folderId
+          },
+          theme: 'dark',
+          width: 520
+        };
+
+        return Overlay.open(options).then(value =>
+        {
+          console.info(value);
+          //this.onChange(value);
+        }, () => { });
+      },
+
+
+      onUpload(event)
+      {
+        const files = event.target.files;
+        let items = [];
+
+        if (files && files.length > 0)
+        {
+          for (var i = 0; i < files.length; i++)
+          {
+            let file = files[i];
+
+            items.push({
+              id: 'upload:' + Strings.guid(),
+              name: file.name,
+              size: file.size,
+              mimeType: file.type,
+              source: null,
+              file: file
+            });
+            //items.push(this.addFile(files[i]));
+          }
+        }
+
+        console.info(items);
+        //this.update();
+      },
+
+
+      //addFile(file)
+      //{
+      //  var source = URL.createObjectURL(file);
+      //  var media = {
+      //    id: 'upload:' + Strings.guid(),
+      //    name: file.name,
+      //    source: source,
+      //    size: file.size,
+      //    mimeType: file.type
+      //  };
+
+      //  var reader = new FileReader();
+      //  reader.onload = function (e)
+      //  {
+      //    media.source = e.target.result;
+      //  };
+      //  reader.readAsDataURL(file);
+
+      //  return media;
+      //},
     }
   }
 </script>
@@ -223,7 +313,7 @@
     align-items: stretch;
   }
 
-  a.media-item
+  a.media-item, .media-item
   {
     display: inline-flex;
     align-items: center;
@@ -234,6 +324,7 @@
     overflow: hidden;
     color: var(--color-fg);
     font-size: var(--font-size-xs);
+    position: relative;
 
     img
     {
@@ -256,7 +347,11 @@
     grid-template-rows: 1fr auto;
     text-align: center;
     height: 100%;
-    
+  
+    /*&.is-folder, &.is-file
+    {
+      box-shadow: var(--color-shadow-short);
+    }*/
 
     i
     {
@@ -302,5 +397,18 @@
     {
       font-weight: bold;
     }
+  }
+
+  input[type="file"].media-item-upload
+  {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    bottom: 0;
+    opacity: 0.001;
+    cursor: pointer;
   }
 </style>
