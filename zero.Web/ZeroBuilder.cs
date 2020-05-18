@@ -111,6 +111,7 @@ namespace zero.Web
       Services.AddScoped<ILanguagesApi, LanguagesApi>();
       Services.AddScoped<IPermissionsApi, PermissionsApi>();
       Services.AddScoped<IMediaApi, MediaApi>();
+      Services.AddScoped<IMediaFolderApi, MediaFolderApi>();
       Services.AddScoped<IMediaUpload, MediaUpload>();
     }
 
@@ -212,6 +213,8 @@ namespace zero.Web
         opts.Add<TranslationMapperConfig>();
         opts.Add<LanguageMapperConfig>();
         opts.Add<ApplicationMapperConfig>();
+        opts.Add<MediaMapperConfig>();
+        opts.Add<SpaceMapperConfig>();
       });
     }
 

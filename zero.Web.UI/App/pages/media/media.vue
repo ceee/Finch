@@ -2,13 +2,14 @@
   <div class="media">
     <div class="media-tree" v-resizable="resizable">
       <ui-header-bar title="Media" />
-      <ui-tree :get="getItems" />
+      <ui-tree :get="getTree" />
       <div class="media-tree-resizable ui-resizable"></div>
     </div>
 
     <div class="media-content">
       <ui-header-bar title="Media">
         <ui-search />
+        <ui-button type="white" label="Add folder" icon="fth-plus" @click="addFolder($route.params.id)" />
         <ui-button label="Add media" icon="fth-plus" />
       </ui-header-bar>
 
@@ -34,9 +35,13 @@
 
 
 <script>
-  import PageTreeApi from 'zero/resources/page-tree.js'
+  import MediaFolderApi from 'zero/resources/media-folder.js'
+  import Overlay from 'zero/services/overlay.js';
+  import AddFolderOverlay from './folder';
 
   export default {
+
+    props: ['id'],
 
     data: () => ({
       cache: {},
@@ -57,45 +62,20 @@
 
     created()
     {
-      //const sources = [
-      //  'http://nolbert.com/wp-content/uploads/2018/04/nolbert_logitech_thumb_s.jpg',
-      //  'http://nolbert.com/wp-content/uploads/2019/06/nolbert_orange_stack_01_thumb_sn.jpg',
-      //  'http://nolbert.com/wp-content/uploads/2019/04/nolbert_vyvyd_thumb_violet_n.jpg',
-      //  'http://nolbert.com/wp-content/uploads/2018/08/nolbert_oppo_r15_thumb_s.jpg',
-      //  'http://nolbert.com/wp-content/uploads/2018/04/nolbert_asus_thumb_yellow_sq_n.jpg',
-      //  'http://nolbert.com/wp-content/uploads/2017/06/nolbert_yas_darkbg_n.jpg',
-      //  'http://nolbert.com/wp-content/uploads/2018/04/nolbert_atypical_thumb_s.jpg',
-      //  'http://nolbert.com/wp-content/uploads/2018/01/nolbert_npci_book_shot_01_n.jpg',
-      //  'http://nolbert.com/wp-content/uploads/2018/05/nolbert_fortune500_thumb_s.jpg',
-      //  'http://nolbert.com/wp-content/uploads/2018/04/wired_thumb_s.jpg',
-      //  'http://nolbert.com/wp-content/uploads/2018/04/nolbert_new_republic_thumb_s.jpg',
-      //  'http://nolbert.com/wp-content/uploads/2018/05/nolbert_mm_smiley_thumb_n.jpg'
-      //];
-
-      //sources.forEach(source =>
-      //{
-      //  this.items.push({
-      //    source: source,
-      //    type: 'image'
-      //  });
-      //});
-
-      //this.items.push({
-      //  source: 'zeromagic-loop.webm',
-      //  type: 'video',
-      //  extension: '.webm'
-      //});
-
-      //this.items.push({
-      //  source: 'documentation.docx',
-      //  type: 'file',
-      //  extension: '.docx'
-      //});
+      
     },
 
+    watch: {
+      '$route'()
+      {
+        
+      }
+    },
 
     methods: {
-      getItems(parent)
+
+      // load folders in tree
+      getTree(parent)
       {
         const key = !parent ? '__root' : parent;
 
@@ -104,24 +84,42 @@
           return Promise.resolve(this.cache[key]);
         }
 
-        return PageTreeApi.getChildren(parent).then(response =>
+        return MediaFolderApi.getAllAsTree(parent).then(response =>
         {
           response.forEach(item =>
           {
             item.url = {
-              name: 'page',
+              name: 'mediafolder',
               params: { id: item.id }
             };
 
             if (item.id === "recyclebin")
             {
               item.url = {
-                name: 'recyclebin'
+                name: 'mediarecyclebin'
               };
             }
           });
           this.cache[key] = response;
           return response;
+        });
+      },
+
+
+      // adds a new folder
+      addFolder(parentId)
+      {
+        Overlay.open({
+          component: AddFolderOverlay,
+          width: 700,
+          model: { parentId }
+        }).then(item =>
+        {
+          console.info(item);
+          // TODO reload?
+        }, () =>
+        {
+          
         });
       }
     }
@@ -152,7 +150,7 @@
 
     .ui-header-bar + .ui-tree
     {
-      margin-top: 2px;
+      margin-top: -10px;
     }
 
     .ui-dot-button

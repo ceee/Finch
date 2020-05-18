@@ -51,6 +51,24 @@ namespace zero.Web.Mapper
         target.Name = source.Name;
         target.IsFolder = true;
       });
+
+
+      config.CreateMap<MediaFolder, MediaFolderEditModel>((source, target) =>
+      {
+        target.Id = source.Id;
+        target.Name = source.Name;
+        target.IsActive = source.IsActive;
+        target.CreatedDate = source.CreatedDate;
+        target.ParentId = source.ParentId;
+      });
+
+      config.CreateMap<MediaFolderEditModel, MediaFolder>((source, target) =>
+      {
+        target.Name = source.Name;
+        target.IsActive = source.IsActive;
+        target.CreatedDate = source.CreatedDate;
+        target.ParentId = source.ParentId;
+      });
     }
   }
 }

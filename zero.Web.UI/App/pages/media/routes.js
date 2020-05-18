@@ -7,20 +7,27 @@ let routes = [];
 if (section)
 {
   routes.push({
+    path: 'folder/:id',
+    props: true,
+    name: 'mediafolder',
+    component: () => import('zero/pages/' + alias + '/media')
+  });
+
+  routes.push({
     path: 'edit/:id',
     props: true,
     name: 'mediaitem',
     component: () => import('zero/pages/' + alias + '/detail')
   });
 
-  //routes.push({
-  //  path: 'recyclebin',
-  //  name: 'recyclebin',
-  //  component: () => import('zero/pages/' + alias + '/recyclebin'),
-  //  meta: {
-  //    name: '@page.recyclebin.name'
-  //  }
-  //});
+  routes.push({
+    path: 'recyclebin',
+    name: 'mediarecyclebin',
+    component: () => import('zero/pages/' + alias + '/recyclebin'),
+    meta: {
+      name: '@page.recyclebin.name'
+    }
+  });
 
   //routes.push({
   //  path: 'history',

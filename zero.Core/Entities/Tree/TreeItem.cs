@@ -18,7 +18,7 @@
     /// <summary>
     /// Sort order
     /// </summary>
-    public int Sort { get; set; }
+    public uint Sort { get; set; }
 
     /// <summary>
     /// Name of the item

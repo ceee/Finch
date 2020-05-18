@@ -14,9 +14,13 @@ namespace zero.Web.Controllers
   {
     IMediaApi Api;
 
-    public MediaController(IMediaApi api)
+    IMediaFolderApi MediaFolderApi;
+
+
+    public MediaController(IMediaApi api, IMediaFolderApi mediaFolderApi)
     {
       Api = api;
+      MediaFolderApi = mediaFolderApi;
     }
 
 
@@ -35,7 +39,7 @@ namespace zero.Web.Controllers
     public async Task<IActionResult> GetAll([FromQuery] MediaListQuery query)
     {
       ListResult<MediaListModel> items = await Mapper.Map<Media, MediaListModel>(await Api.GetByQuery(query));
-      IEnumerable<MediaListModel> folders = await Mapper.Map<MediaFolder, MediaListModel>(await Api.GetFolders(query.Filter.FolderId));
+      IEnumerable<MediaListModel> folders = await Mapper.Map<MediaFolder, MediaListModel>(await MediaFolderApi.GetAll(query.Filter.FolderId));
 
       return Json(new MediaListResultModel(items, folders));
     }
