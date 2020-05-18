@@ -24,7 +24,7 @@ namespace zero.Core.Entities
       }
     }
 
-    public ListResult(IEnumerable<T> items, long totalItems, long pageNumber, long pageSize) : this(totalItems, pageNumber, pageSize)
+    public ListResult(IList<T> items, long totalItems, long pageNumber, long pageSize) : this(totalItems, pageNumber, pageSize)
     {
       Items = items;
     }
@@ -37,7 +37,7 @@ namespace zero.Core.Entities
 
     public long TotalItems { get; private set; }
 
-    public IEnumerable<T> Items { get; set; }
+    public IList<T> Items { get; set; }
 
     public List<PagedResultStatistic> Statistics { get; set; } = new List<PagedResultStatistic>();
 

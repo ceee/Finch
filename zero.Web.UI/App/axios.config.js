@@ -1,5 +1,6 @@
 ﻿import Axios from 'axios';
 import Auth from 'zero/services/auth';
+import Qs from 'qs';
 
 if (!zero || !zero.apiPath)
 {
@@ -8,6 +9,11 @@ if (!zero || !zero.apiPath)
 
 Axios.defaults.baseURL = zero.apiPath;
 Axios.defaults.withCredentials = true;
+
+Axios.defaults.paramsSerializer = (params) =>
+{
+  return Qs.stringify(params, { arrayFormat: 'brackets' });
+};
 
 Axios.interceptors.response.use(response => response, error =>
 {

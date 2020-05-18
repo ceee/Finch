@@ -1,16 +1,16 @@
 ﻿<template>
   <div class="media">
     <div class="media-tree" v-resizable="resizable">
-      <ui-header-bar title="Media" />
+      <ui-header-bar title="@media.list" />
       <ui-tree :get="getTree" />
       <div class="media-tree-resizable ui-resizable"></div>
     </div>
 
     <div class="media-content">
-      <ui-header-bar title="Media">
+      <ui-header-bar :title="title">
         <ui-search />
         <ui-button type="white" label="Add folder" icon="fth-plus" @click="addFolder($route.params.id)" />
-        <ui-button label="Add media" icon="fth-plus" />
+        <!--<ui-button label="Add media" icon="fth-plus" />-->
       </ui-header-bar>
 
       <div class="ui-view-box">
@@ -22,7 +22,11 @@
           </a>
           <a href="#" class="media-item" v-for="item in items">
             <img v-if="item.type === 'image'" :src="item.source" />
-            <span class="media-item-content" v-if="item.type !== 'image'">
+            <span class="media-item-content is-folder" v-if="item.isFolder">
+              <i class="fth-folder"></i>
+              <span>{{item.name}}</span>
+            </span>
+            <span class="media-item-content" v-if="item.type !== 'image' && !item.isFolder">
               <i :class="icons[item.type]" :data-extension="item.extension"></i>
               <span>{{item.source}}</span>
             </span>
@@ -35,6 +39,7 @@
 
 
 <script>
+  import MediaApi from 'zero/resources/media.js'
   import MediaFolderApi from 'zero/resources/media-folder.js'
   import Overlay from 'zero/services/overlay.js';
   import AddFolderOverlay from './folder';
@@ -58,21 +63,47 @@
         save: 'media-tree',
         handle: '.ui-resizable'
       },
+      filter: {
+        orderBy: 'createdDate',
+        orderIsDescending: true,
+        page: 1,
+        pageSize: 20,
+        search: null,
+        folderId: null
+      },
     }),
 
     created()
     {
-      
+      this.getItems();
     },
 
     watch: {
       '$route'()
       {
-        
+        this.getItems();
+      }
+    },
+
+    computed: {
+      title()
+      {
+        return this.$route.params.id ? 'Media (...)' : '@media.list';
       }
     },
 
     methods: {
+
+      // get items (media + subfolders) in the current folder
+      getItems()
+      {
+        this.filter.folderId = this.$route.params.id;
+
+        MediaApi.getAll(this.filter).then(response =>
+        {
+          this.items = response.items;
+        });
+      },
 
       // load folders in tree
       getTree(parent)
@@ -254,7 +285,8 @@
       }
     }
 
-    .is-blank & i:after
+    .is-blank & i:after,
+    &.is-folder i:after
     {
       display: none;
     }
@@ -262,8 +294,13 @@
     span
     {
       display: block;
-      border-top: 1px solid var(--color-line);
+      /*border-top: 1px solid var(--color-line);*/
       padding: 10px 20px 12px;
+    }
+
+    &.is-folder span
+    {
+      font-weight: bold;
     }
   }
 </style>

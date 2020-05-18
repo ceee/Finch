@@ -37,7 +37,7 @@ namespace zero.Core.Api
       {
         return await session.Query<Media>()
           .ForApp(Backoffice.AppId)
-          .WhereIf(x => x.FolderId == query.Filter.FolderId, query.Filter != null && !query.Filter.FolderId.IsNullOrEmpty())
+          .WhereIf(x => x.FolderId == query.FolderId, !query.FolderId.IsNullOrEmpty())
           .ToQueriedListAsync(query);
       }
     }
