@@ -33,14 +33,17 @@ let addSection = (section, component, parent) =>
 
 zero.sections.forEach(section =>
 {
-  addSection(section, () => import('zero/pages/' + section.alias + '/' + section.alias));
-
-  if (section.children.length > 0)
+  if (!section.isExternal)
   {
-    section.children.forEach(child =>
+    addSection(section, () => import('zero/pages/' + section.alias + '/' + section.alias));
+
+    if (section.children.length > 0)
     {
-      addSection(child, () => import('zero/pages/' + section.alias + '/' + section.alias + '/' + child.alias), section);
-    });
+      section.children.forEach(child =>
+      {
+        addSection(child, () => import('zero/pages/' + section.alias + '/' + section.alias + '/' + child.alias), section);
+      });
+    }
   }
 });
 
@@ -97,6 +100,7 @@ let addRoutesPerContext = (context, isPlugin) =>
 addRoutesPerContext(require.context('zero/pages', true, /routes\.js$/));
 
 // add plugin route extensions
+addRoutesPerContext(require.context('@/../zero.Commerce/Plugin', true, /routes\.js$/), true);
 //addRoutesPerContext(require.context('@/plugins', true, /routes\.js$/), true); // TODO use zero.pluginPath, but this fails
 
 

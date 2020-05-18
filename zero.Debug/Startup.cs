@@ -35,11 +35,9 @@ namespace zero.Debug
         options.LoginPath = "/Account/Index";
       });
 
-      services.AddZero(Configuration, opts =>
-      {
-        opts.Plugins.Add<TestPlugin>();
-        opts.Plugins.Add<Commerce.CommercePlugin>();
-      });
+      ZeroBuilder zero = services.AddZero(Configuration);
+      zero.AddPlugin<TestPlugin>();
+      zero.AddPlugin<Commerce.CommercePlugin>();
 
       services.AddMvc();
 

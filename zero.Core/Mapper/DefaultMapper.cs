@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using zero.Core.Entities;
+using zero.Core.Options;
 
 namespace zero.Core.Mapper
 {
@@ -15,10 +16,18 @@ namespace zero.Core.Mapper
 
     IDocumentStore Raven = null;
 
+    IZeroOptions Options = null;
 
-    public DefaultMapper(IDocumentStore raven)
+
+    public DefaultMapper(IDocumentStore raven, IZeroOptions options)
     {
       Raven = raven;
+      Options = options;
+
+      foreach (IMapperConfig config in options.Mapper.GetAllItems())
+      {
+        config.Configure(this);
+      }
     }
 
 

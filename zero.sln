@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{EB22
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Debug", "zero.Debug\zero.Debug.csproj", "{83473041-7A1B-40ED-9FD0-968B22EB36B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Commerce.Backoffice", "zero.Commerce\zero.Commerce.Backoffice\zero.Commerce.Backoffice.csproj", "{9AB4C946-2337-43A2-8B07-30EC97D8372D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commerce", "Commerce", "{8FC2D7C8-AE39-41A5-AB95-053737BB3D55}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Web", "zero.Web\zero.Web.csproj", "{06156006-7684-41EC-8BD4-3B2A762147CD}"
@@ -61,10 +59,6 @@ Global
 		{83473041-7A1B-40ED-9FD0-968B22EB36B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83473041-7A1B-40ED-9FD0-968B22EB36B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83473041-7A1B-40ED-9FD0-968B22EB36B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9AB4C946-2337-43A2-8B07-30EC97D8372D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9AB4C946-2337-43A2-8B07-30EC97D8372D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9AB4C946-2337-43A2-8B07-30EC97D8372D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9AB4C946-2337-43A2-8B07-30EC97D8372D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{06156006-7684-41EC-8BD4-3B2A762147CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{06156006-7684-41EC-8BD4-3B2A762147CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06156006-7684-41EC-8BD4-3B2A762147CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -79,7 +73,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{63A8AD15-15F0-4555-BD62-C38B4465FFC1} = {8FC2D7C8-AE39-41A5-AB95-053737BB3D55}
-		{9AB4C946-2337-43A2-8B07-30EC97D8372D} = {8FC2D7C8-AE39-41A5-AB95-053737BB3D55}
 		{8FC2D7C8-AE39-41A5-AB95-053737BB3D55} = {EB22CADA-EB9B-4066-A110-3D14DDDBF625}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

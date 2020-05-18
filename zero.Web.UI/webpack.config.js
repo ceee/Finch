@@ -25,10 +25,12 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
+      'vue$': path.join(__dirname, 'node_modules', 'vue/dist/vue.esm.js'),
+      'deps': path.join(__dirname, 'node_modules'),
       'zero': path.join(__dirname, 'App'),
       'zerosetup': path.join(__dirname, 'Setup'),
-      '@': __dirname
+      '@': __dirname,
+      'shop': path.join(__dirname, '..', 'zero.Commerce/Plugin')
     }
   },
 

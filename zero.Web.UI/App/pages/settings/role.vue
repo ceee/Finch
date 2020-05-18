@@ -14,18 +14,16 @@
     <ui-tabs>
 
       <ui-tab class="ui-view-box has-sidebar" label="General">
-        <div>
-          <div class="ui-box">
-            <ui-property label="@ui.name" :required="true">
-              <input v-model="model.name" type="text" class="ui-input" maxlength="80" :readonly="disabled" />
-            </ui-property>
-            <ui-property label="@role.fields.description">
-              <input v-model="model.description" type="text" class="ui-input" maxlength="200" :readonly="disabled" />
-            </ui-property>
-            <ui-property label="@role.fields.icon" :required="true">
-              <ui-iconpicker v-model="model.icon" :disabled="disabled" />
-            </ui-property>
-          </div>
+        <div class="ui-box">
+          <ui-property label="@ui.name" :required="true">
+            <input v-model="model.name" type="text" class="ui-input" maxlength="80" :readonly="disabled" />
+          </ui-property>
+          <ui-property label="@role.fields.description">
+            <input v-model="model.description" type="text" class="ui-input" maxlength="200" :readonly="disabled" />
+          </ui-property>
+          <ui-property label="@role.fields.icon" :required="true">
+            <ui-iconpicker v-model="model.icon" :disabled="disabled" />
+          </ui-property>
         </div>
 
         <aside class="ui-view-box-aside">

@@ -5,6 +5,8 @@ namespace zero.Core.Plugins
 {
   public interface IZeroPlugin
   {
-    void Configure(IServiceCollection services, IZeroOptions zero);
+    void ConfigureServices(IServiceCollection services);
+
+    void Configure(IZeroOptions zero);
   }
 }

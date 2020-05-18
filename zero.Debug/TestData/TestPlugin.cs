@@ -9,10 +9,8 @@ namespace zero.TestData
 {
   public class TestPlugin : IZeroPlugin
   {
-    public void Configure(IServiceCollection services, IZeroOptions zero)
+    public void Configure(IZeroOptions zero)
     {
-      services.AddTransient<ITestService, TestService>();
-
       zero.Spaces.AddList<TeamMember>("team", "Team", "Our team members", "fth-users");
       zero.Spaces.AddList<News>("news", "News", "Articles about the company", "fth-edit");
       zero.Spaces.AddSeparator();
@@ -32,6 +30,11 @@ namespace zero.TestData
       zero.Pages.Add<NewsPage>("news", "News", "News about the company", "fth-book");
       zero.Pages.Add<ContentPage>("content", "Page", "Page consisting of modules", "fth-box", true, true);
       zero.Pages.Add<RedirectPage>("redirect", "Redirect", "Redirect to another page or an external URL", "fth-box", true, false, new List<string>() { "content", "redirect" });
+    }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+      services.AddTransient<ITestService, TestService>();
     }
   }
 }

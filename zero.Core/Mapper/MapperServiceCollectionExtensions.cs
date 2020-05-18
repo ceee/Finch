@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
 using System;
+using zero.Core.Options;
 
 namespace zero.Core.Mapper
 {
@@ -27,7 +28,7 @@ namespace zero.Core.Mapper
     {
       return services.AddSingleton<IMapper, DefaultMapper>(factory =>
       {
-        DefaultMapper mapper = new DefaultMapper(factory.GetService<IDocumentStore>());
+        DefaultMapper mapper = new DefaultMapper(factory.GetService<IDocumentStore>(), factory.GetService<IZeroOptions>());
         options(mapper);
         return mapper;
       });

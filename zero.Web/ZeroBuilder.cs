@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
+using zero.Core.Attributes;
 using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -46,11 +47,12 @@ namespace zero.Web
       //cultureInfo.NumberFormat.CurrencySymbol = "€";
       //CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 
+      AddPlugin<DefaultBackofficePlugin>();
+
       AddConfiguration();
       ConfgureMvc();
       ConfigureDatabase();
       ConfigureValidation();
-      ConfigureMapper();
       ConfigureIdentity();
       AddServices();
       //AddPlugins();
@@ -67,10 +69,6 @@ namespace zero.Web
         .Configure(opts =>
         {
           opts.ZeroVersion = "0.0.1.0"; // TODO
-          opts.Plugins = new PluginCollection(Services, opts);
-
-          // resolve default plugin
-          new DefaultBackofficePlugin().Configure(Services, opts);
         });
 
       Services.AddTransient<IZeroOptions>(factory => factory.GetService<IOptionsMonitor<ZeroOptions>>().CurrentValue); 
@@ -90,6 +88,8 @@ namespace zero.Web
         IWebHostEnvironment env = factory.GetService<IWebHostEnvironment>();
         return new Paths(env.WebRootPath, true);
       });
+
+      Services.AddMapper();
 
       Services.AddTransient<IBackofficeStore, BackofficeStore>();
       Services.AddTransient<IAppAwareBackofficeStore, AppAwareBackofficeStore>();
@@ -166,6 +166,13 @@ namespace zero.Web
             return DocumentConventions.DefaultGetCollectionName(type);
           }
 
+          CollectionAttribute collection = type.GetCustomAttribute<CollectionAttribute>();
+
+          if (collection != null)
+          {
+            return collection.Name;
+          }
+
           Type finalType = type;
 
           if (type.IsSubclassOf(typeof(SpaceContent)))
@@ -198,24 +205,6 @@ namespace zero.Web
     void ConfigureValidation()
     {
       ValidatorOptions.PropertyNameResolver = ValidatorCamelCasePropertyResolver.ResolvePropertyName;
-    }
-
-
-    /// <summary>
-    /// Configures internal object mapper
-    /// </summary>
-    void ConfigureMapper()
-    {
-      Services.AddMapper(opts =>
-      {
-        opts.Add<UserMapperConfig>();
-        opts.Add<CountryMapperConfig>();
-        opts.Add<TranslationMapperConfig>();
-        opts.Add<LanguageMapperConfig>();
-        opts.Add<ApplicationMapperConfig>();
-        opts.Add<MediaMapperConfig>();
-        opts.Add<SpaceMapperConfig>();
-      });
     }
 
 
@@ -276,6 +265,47 @@ namespace zero.Web
     {
       Services.Configure(configureOptions);
       return this;
+    }
+
+
+    /// <summary>
+    /// Adds a zero plugin
+    /// </summary>
+    public void AddPlugin<T>() where T : class, IZeroPlugin, new()
+    {
+      Services.AddScoped<IZeroPlugin, T>();
+      AddPluginServices<T>();
+    }
+
+
+    /// <summary>
+    /// Adds a zero plugin
+    /// </summary>
+    public void AddPlugin<T>(Func<IServiceProvider, T> implementationFactory) where T : class, IZeroPlugin, new()
+    {
+      Services.AddScoped<IZeroPlugin, T>(implementationFactory);
+      AddPluginServices<T>();
+    }
+
+
+    /// <summary>
+    /// Creates a temporary instance of the plugin to add additional services
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    void AddPluginServices<T>() where T : class, IZeroPlugin, new()
+    {
+      try
+      {
+        T plugin = new T();
+
+        plugin.ConfigureServices(Services);
+
+        Services.Configure<ZeroOptions>(opts => plugin.Configure(opts));
+      }
+      catch
+      {
+        throw new Exception($"Plugin \"{nameof(T)}\" needs an additional parameterless constructor as ConfigureServices() is called before the DI container is built");
+      }
     }
   }
 }

@@ -1,14 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using zero.Core;
 using zero.Core.Options;
 using zero.Core.Plugins;
+using zero.Web.Mapper;
 using zero.Web.Sections;
 
 namespace zero.Web.Defaults
 {
   internal class DefaultBackofficePlugin : IZeroPlugin
   {
-    public void Configure(IServiceCollection services, IZeroOptions zero)
+    public void ConfigureServices(IServiceCollection services) { }
+    
+    public void Configure(IZeroOptions zero)
     {
       zero.Sections.Add<DashboardSection>();
       zero.Sections.Add<PagesSection>();
@@ -18,6 +20,14 @@ namespace zero.Web.Defaults
 
       zero.Settings.AddGroup<SystemSettings>();
       zero.Settings.AddGroup<PluginSettings>();
+
+      zero.Mapper.Add<UserMapperConfig>();
+      zero.Mapper.Add<CountryMapperConfig>();
+      zero.Mapper.Add<TranslationMapperConfig>();
+      zero.Mapper.Add<LanguageMapperConfig>();
+      zero.Mapper.Add<ApplicationMapperConfig>();
+      zero.Mapper.Add<MediaMapperConfig>();
+      zero.Mapper.Add<SpaceMapperConfig>();
     }
   }
 }
