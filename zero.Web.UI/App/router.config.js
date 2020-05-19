@@ -100,7 +100,14 @@ let addRoutesPerContext = (context, isPlugin) =>
 addRoutesPerContext(require.context('zero/pages', true, /routes\.js$/));
 
 // add plugin route extensions
-addRoutesPerContext(require.context('@/../zero.Commerce/Plugin', true, /routes\.js$/), true);
+try
+{
+  addRoutesPerContext(require.context('@/../zero.Commerce/Plugin', true, /routes\.js$/), true);
+}
+catch (exc)
+{
+  // TODO error will throw when user is not logged in as "section" in routes.js is null
+}
 //addRoutesPerContext(require.context('@/plugins', true, /routes\.js$/), true); // TODO use zero.pluginPath, but this fails
 
 

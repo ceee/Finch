@@ -369,16 +369,5 @@
         "iso": "ISO Code"
       }
     }
-  },
-
-
-  "shop": {
-    "section": {
-      "orders": "Orders",
-      "customers": "Customers",
-      "catalogue": "Catalogue",
-      "promotions": "Promotions",
-      "channels": "Channels"
-    }
   }
 }

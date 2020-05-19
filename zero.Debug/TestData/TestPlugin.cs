@@ -9,8 +9,10 @@ namespace zero.TestData
 {
   public class TestPlugin : IZeroPlugin
   {
-    public void Configure(IZeroOptions zero)
+    public void Configure(IZeroPluginOptions plugin, IZeroOptions zero)
     {
+      plugin.Name = "Test Plugin";
+
       zero.Spaces.AddList<TeamMember>("team", "Team", "Our team members", "fth-users");
       zero.Spaces.AddList<News>("news", "News", "Articles about the company", "fth-edit");
       zero.Spaces.AddSeparator();

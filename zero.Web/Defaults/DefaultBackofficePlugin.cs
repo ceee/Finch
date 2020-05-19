@@ -10,8 +10,11 @@ namespace zero.Web.Defaults
   {
     public void ConfigureServices(IServiceCollection services) { }
     
-    public void Configure(IZeroOptions zero)
+    public void Configure(IZeroPluginOptions plugin, IZeroOptions zero)
     {
+      plugin.Name = "zero.Defaults";
+      plugin.LocalizationPaths.Add("~/Resources/Localization/zero.{lang}.json");
+
       zero.Sections.Add<DashboardSection>();
       zero.Sections.Add<PagesSection>();
       zero.Sections.Add<SpacesSection>();

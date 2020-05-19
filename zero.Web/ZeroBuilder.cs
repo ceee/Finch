@@ -300,7 +300,7 @@ namespace zero.Web
 
         plugin.ConfigureServices(Services);
 
-        Services.Configure<ZeroOptions>(opts => plugin.Configure(opts));
+        Services.Configure<ZeroOptions>(opts => plugin.Configure(new ZeroPluginOptions(), opts));
       }
       catch
       {

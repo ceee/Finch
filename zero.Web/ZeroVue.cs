@@ -226,8 +226,20 @@ namespace zero.Web
     /// </summary>
     Dictionary<string, string> CreateTranslations()
     {
-      string assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-      string path = Path.Combine(assemblyPath, "Resources/Localization/zero.en-us.json");
+      var zeroTranslations = CreateTranslationsForFile("O:/zero/zero.Web/Resources/Localization/zero.en-us.json");
+      var commerceTranslations = CreateTranslationsForFile("O:/zero/zero.Commerce/Resources/Localization/zero.commerce.en-us.json");
+
+      foreach (var translation in commerceTranslations)
+      {
+        zeroTranslations.Add(translation.Key, translation.Value);
+      }
+
+      return zeroTranslations;
+    }
+
+
+    Dictionary<string, string> CreateTranslationsForFile(string path)
+    {
       string text = File.ReadAllText(path, Encoding.UTF8);
 
       JObject json = JObject.Parse(text);
