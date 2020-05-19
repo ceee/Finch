@@ -46,7 +46,7 @@
       selector: []
     }),
 
-    created()
+    mounted()
     {
       this.rebuildModel();
     },

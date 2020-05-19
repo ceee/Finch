@@ -1,25 +1,25 @@
 ﻿<template>
   <component v-if="loaded" :is="rootNode" class="editor">
     <ui-tab v-if="hasTabs" class="ui-box" :label="component.params.name" v-for="(component, index) in components" :key="index">
-      <editor-component v-for="(child, index) in component.components" :key="index" :field="child.params.field" v-model="model" :component="child" />
+      <editor-component v-for="(child, index) in component.components" :key="index" :field="child.params.field" v-model="value" :component="child" />
     </ui-tab>
     <div v-if="!hasTabs" class="ui-box">
-      <editor-component v-for="(component, index) in components" :key="index" :field="component.params.field" v-model="model" :component="component" />
+      <editor-component v-for="(component, index) in components" :key="index" :field="component.params.field" v-model="value" :component="component" />
     </div>
   </component>
 </template>
 
 
 <script>
-  import Axios from 'axios';
   import EditorComponent from 'zero/editor/editor-component';
+  import RendererApi from 'zero/resources/renderer';
 
   export default {
     name: 'uiEditor',
 
     props: {
       config: {
-        type: Object,
+        type: [ String, Object ],
         required: true
       },
       value: {
@@ -32,7 +32,6 @@
     data: () => ({
       loaded: false,
       hasTabs: false,
-      model: null,
       components: []
     }),
 
@@ -50,39 +49,39 @@
         {
           this.load();
         }
-      },
-      value: {
-        deep: true,
-        handler: function (value)
-        {
-          this.model = value;
-        }
-      },
-      model: {
-        deep: true,
-        handler: function()
-        {
-          console.info('change:model');
-          //console.info('change:editor')
-          //console.table(JSON.parse(JSON.stringify(this.model)));
-        }
       }
     },  
 
     created()
     {
-      this.load(); 
+      this.load();
     },
 
     methods: {
 
       load()
       {
-        if (!this.config.components)
+        if (typeof this.config === 'string')
+        {
+          RendererApi.getByAlias(this.config).then(response =>
+          {
+            this.finishLoad(response);
+          });
+        }
+        else
+        {
+          this.finishLoad(this.config);
+        }
+      },
+
+      finishLoad(config)
+      {
+        if (!config.components)
         {
           return;
         }
-        this.components = this.config.components;
+
+        this.components = config.components;
         this.hasTabs = this.components.length > 0 && this.components[0].method === 'tab';
         this.loaded = true;
       }
