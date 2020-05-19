@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using System.Collections.Generic;
+using zero.Core.Entities;
 using zero.Core.Mapper;
 using zero.Core.Plugins;
 using zero.Core.Renderer;
@@ -74,12 +75,12 @@ namespace zero.Core.Options
     public TypeOptions Types { get; private set; }
 
     /// <inheritdoc />
-    public void Extend<T, TTarget>() where TTarget : T
+    public void Extend<T, TTarget>() where TTarget : class, T
     {
       Types.Add<T, TTarget>();
     }
 
-    public ZeroExtend<T> Extend<T>()
+    public ZeroExtend<T> Extend<T>() where T : class, IZeroEntity
     {
       return new ZeroExtend<T>();
     }
@@ -173,9 +174,9 @@ namespace zero.Core.Options
     TypeOptions Types { get; }
 
     /// <inheritdoc />
-    void Extend<T, TTarget>() where TTarget : T;
+    void Extend<T, TTarget>() where TTarget : class, T;
 
-    ZeroExtend<T> Extend<T>();
+    ZeroExtend<T> Extend<T>() where T : class, IZeroEntity;
 
     /// <summary>
     /// Default settings for the backoffice
@@ -184,22 +185,22 @@ namespace zero.Core.Options
   }
 
 
-  public class ZeroExtend<T>
+  public class ZeroExtend<T> where T : IZeroEntity
   {
-    public ZeroExtend<T> Use<TTarget>() where TTarget : T
+    public ZeroExtend<T> Use<TTarget>() where TTarget : class, T
     {
       return this;
     }
 
     public ZeroExtend<T> Use<TTarget, TRenderer>() 
-      where TTarget : T 
+      where TTarget : class, T
       where TRenderer : IRenderer<T>
     {
       return this;
     }
 
     public ZeroExtend<T> Use<TTarget, TRenderer, TValidator>() 
-      where TTarget : T 
+      where TTarget : class, T
       where TRenderer : IRenderer<T> 
       where TValidator : IValidator<T>
     {
@@ -208,10 +209,26 @@ namespace zero.Core.Options
 
 
     public ZeroExtend<T> Use<TTarget, TRenderer, TValidator, TMapper>() 
-      where TTarget : T 
+      where TTarget : class, T
       where TRenderer : IRenderer<T> 
       where TValidator : IValidator<T>
       where TMapper : IMapperConfig
+    {
+      return this;
+    }
+
+
+    public ZeroExtend<T> UseRenderer<TRenderer>() where TRenderer : IRenderer<T>
+    {
+      return this;
+    }
+
+    public ZeroExtend<T> UseValidator<TValidator>() where TValidator : IRenderer<T>
+    {
+      return this;
+    }
+
+    public ZeroExtend<T> UseMapper<TMapper>() where TMapper : IRenderer<T>
     {
       return this;
     }

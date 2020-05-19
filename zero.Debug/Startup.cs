@@ -1,14 +1,10 @@
-using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using zero.Commerce.Backoffice;
 using zero.Commerce.Entities;
-using zero.Core.Renderer;
 using zero.Debug.Models;
 using zero.TestData;
 using zero.Web;
@@ -46,7 +42,7 @@ namespace zero.Debug
 
       zero.WithOptions(opts =>
       {
-        opts.Extend<IChannel, SalesChannel>();
+        opts.Extend<IChannel>().Use<SalesChannel>();
 
         //IRenderer<IChannel> renderer = (IRenderer<IChannel>)new SalesChannelRenderer();
         //renderer.
