@@ -29,9 +29,10 @@ namespace zero.TestData
       zero.Renderers.Add<RedirectPageRenderer>();
       zero.Renderers.Add<ContentPageRenderer>();
 
-      zero.Pages.Add<NewsPage>("news", "News", "News about the company", "fth-book");
-      zero.Pages.Add<ContentPage>("content", "Page", "Page consisting of modules", "fth-box", true, true);
-      zero.Pages.Add<RedirectPage>("redirect", "Redirect", "Redirect to another page or an external URL", "fth-box", true, false, new List<string>() { "content", "redirect" });
+      zero.Pages.Add<NewsPage>("news", "News", "News about the company", "fth-file-text");
+      zero.Pages.Add<ContentPage>("content", "Page", "Page consisting of modules", "fth-box", allowAsRoot: true, allowAllChildrenTypes: true);
+      zero.Pages.Add<ContentPage>("root", "Homepage", "Entry point for the website", "fth-home", allowAsRoot: true, allowAllChildrenTypes: true);
+      zero.Pages.Add<RedirectPage>("redirect", "Redirect", "Redirect to another page or an external URL", "fth-external-link", allowAsRoot: true, allowedChildrenTypes: new List<string>() { "content", "redirect" });
     }
 
     public void ConfigureServices(IServiceCollection services)

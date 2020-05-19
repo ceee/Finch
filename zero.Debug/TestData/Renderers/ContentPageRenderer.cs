@@ -7,6 +7,8 @@ namespace zero.TestData
   {
     public ContentPageRenderer()
     {
+      Alias = "debug.contentpage";
+
       LabelTemplate = "@_test.fields.{0}";
       DescriptionTemplate = "@_test.fields.{0}_text";
 

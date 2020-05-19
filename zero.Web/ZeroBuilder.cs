@@ -179,6 +179,10 @@ namespace zero.Web
           {
             finalType = typeof(SpaceContent);
           }
+          if (type.IsSubclassOf(typeof(Page)))
+          {
+            finalType = typeof(Page);
+          }
 
           return Constants.Database.CollectionPrefix + DocumentConventions.DefaultGetCollectionName(finalType);
         };

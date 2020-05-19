@@ -49,6 +49,11 @@
     /// Whether this item has children
     /// </summary>
     public bool HasChildren { get; set; }
+
+    /// <summary>
+    /// Whether this item is published or not
+    /// </summary>
+    public bool IsInactive { get; set; }
   }
 
 

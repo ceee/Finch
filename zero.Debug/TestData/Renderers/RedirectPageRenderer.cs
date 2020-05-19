@@ -10,6 +10,8 @@ namespace zero.TestData
   {
     public RedirectPageRenderer()
     {
+      Alias = "debug.redirectpage";
+
       LabelTemplate = "@_test.fields.{0}";
       DescriptionTemplate = "@_test.fields.{0}_text";
 

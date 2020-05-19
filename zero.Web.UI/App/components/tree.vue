@@ -90,6 +90,7 @@
       {
         return {
           'has-children': item.hasChildren,
+          'is-inactive': item.isInactive,
           'is-open': item.isOpen
         };
       }

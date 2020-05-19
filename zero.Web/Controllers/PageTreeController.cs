@@ -8,18 +8,16 @@ namespace zero.Web.Controllers
   public class PageTreeController : BackofficeController
   {
     IPageTreeApi Api;
-    IWebHostEnvironment Env;
 
-    public PageTreeController(IPageTreeApi api, IWebHostEnvironment env)
+    public PageTreeController(IPageTreeApi api)
     {
       Api = api;
-      Env = env;
     }
 
 
     public async Task<IActionResult> GetChildren(string parent = null)
     {
-      return Json(await Api.GetChildren(Env.ContentRootPath, parent));
+      return AsJson(await Api.GetChildren(parent));
     }
   }
 }
