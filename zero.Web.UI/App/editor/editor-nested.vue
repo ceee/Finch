@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="editor-nested">
-    <editor-component v-for="(comp, index) in component.components" :key="index" v-model="val" :component="comp" :deep="true" />
+    <!--<editor-component v-for="(comp, index) in component.components" :key="index" v-model="val" :component="comp" :deep="true" />-->
   </div>
   <!--<input :value="value" @input="$emit('input', $event.target.value)" type="text" class="ui-input" v-localize:placeholder="" />-->
 </template>

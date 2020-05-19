@@ -1,13 +1,9 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
-using Newtonsoft.Json;
+using Lambda2Js;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Threading.Tasks;
 using zero.Core.Extensions;
 
 namespace zero.Core.Renderer
@@ -16,8 +12,9 @@ namespace zero.Core.Renderer
   {
     public Type TargetType { get; set; }
 
-    internal AbstractGenericRenderer(Type type, List<RenderProperty> properties, IValidator validator = null)
+    internal AbstractGenericRenderer(Type type, string alias, List<RenderProperty> properties, IValidator validator = null)
     {
+      Alias = alias;
       TargetType = type;
       Properties = properties;
       Validator = validator;
@@ -39,6 +36,7 @@ namespace zero.Core.Renderer
 
     int CurrentDepth = 0;
 
+    public string Alias { get; protected set; }
 
     protected string LabelTemplate = "{0}";
 
@@ -122,11 +120,11 @@ namespace zero.Core.Renderer
 
     public AbstractGenericRenderer ToGenericRenderer()
     {
-      return new AbstractGenericRenderer(typeof(T), Properties, Validator);
+      return new AbstractGenericRenderer(typeof(T), Alias, Properties, Validator);
     }
 
 
-    protected virtual IRendererFieldBuilder Field(Expression<Func<T, object>> mapExpression, string label = null, string description = null, bool required = false)
+    protected virtual IRendererFieldBuilder Field(Expression<Func<T, object>> mapExpression, string label = null, string description = null, bool required = false, bool noDescription = false)
     {
       RendererFieldBuilder builder = new RendererFieldBuilder();
 
@@ -135,31 +133,20 @@ namespace zero.Core.Renderer
         Method = METHOD_FIELD,
         Compile = property =>
         {
-          MemberExpression memberExpression = null;
-
-          if (mapExpression.Body is UnaryExpression)
-          {
-            UnaryExpression unaryExpression = (UnaryExpression)mapExpression.Body;
-            memberExpression = (MemberExpression)unaryExpression.Operand;
-          }
-          else
-          {
-            memberExpression = (MemberExpression)mapExpression.Body;
-          }
-
-          string fieldName = memberExpression.Member.Name.ToCamelCase();
+          string field = mapExpression.CompileToJavascript().ToCamelCaseId();
+          string fieldTranslationName = field;
 
           RendererFieldBuilder.Data fieldData = builder.Build();
 
           property.NestedRenderer = fieldData.Renderer;
           property.Params = new
           {
-            Field = fieldName,
+            Field = field,
             View = fieldData.View,
             ComponentPath = fieldData.ComponentPath,
             Options = fieldData.Options ?? new List<string>() { },
-            Label = String.Format(LabelTemplate, label ?? fieldName),
-            Description = String.Format(DescriptionTemplate, description ?? fieldName),
+            Label = label != null && label.StartsWith("@") ? label : String.Format(LabelTemplate, label ?? fieldTranslationName),
+            Description = description != null && description.StartsWith("@") ? description : (noDescription ? null : String.Format(DescriptionTemplate, description ?? fieldTranslationName)),
             Required = required
           };
         }

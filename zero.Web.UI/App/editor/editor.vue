@@ -1,10 +1,10 @@
 ﻿<template>
   <component v-if="loaded" :is="rootNode" class="editor">
     <ui-tab v-if="hasTabs" class="ui-box" :label="component.params.name" v-for="(component, index) in components" :key="index">
-      <editor-component v-for="(child, index) in component.components" :key="index" v-model="model[child.params.field]" :component="child" />
+      <editor-component v-for="(child, index) in component.components" :key="index" :field="child.params.field" v-model="model" :component="child" />
     </ui-tab>
     <div v-if="!hasTabs" class="ui-box">
-      <editor-component v-for="(component, index) in components" :key="index" v-model="model[component.params.field]" :component="component" />
+      <editor-component v-for="(component, index) in components" :key="index" :field="component.params.field" v-model="model" :component="component" />
     </div>
   </component>
 </template>
@@ -32,7 +32,7 @@
     data: () => ({
       loaded: false,
       hasTabs: false,
-      model: {},
+      model: null,
       components: []
     }),
 
@@ -62,6 +62,7 @@
         deep: true,
         handler: function()
         {
+          console.info('change:model');
           //console.info('change:editor')
           //console.table(JSON.parse(JSON.stringify(this.model)));
         }

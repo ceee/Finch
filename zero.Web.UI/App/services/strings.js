@@ -61,5 +61,13 @@ export default {
     }
 
     return dayjs(value).format(format);
+  },
+
+
+  selectorToArray(selector)
+  {
+    selector = selector.replace(/\[(\w+)\]/g, '.$1');
+    selector = selector.replace(/^\./, '');
+    return selector.split('.');
   }
 };

@@ -1,19 +1,24 @@
 ﻿<template>
   <ui-property :field="params.field" :label="params.label" :description="params.description" :required="params.required" :class="classes" :is-text="view === 'output'">
-    <component v-if="fieldComponent" :is="fieldComponent" :component="component" :config="params" :value="value" @input="onChange" />
+    <component v-if="fieldComponent" :is="fieldComponent" :component="component" :config="params" :value="model" @input="onChange" />
   </ui-property>
 </template>
 
 
 <script>
-  import Axios from 'axios';
+  import Strings from 'zero/services/strings';
+  import Objects from 'zero/services/objects';
 
   export default {
     name: 'uiEditorComponent',
 
     props: {
       value: {
-        type: [ Object, Number, Array, String, Boolean, Date ]
+        type: [ Object, Array ]
+      },
+      field: {
+        type: String,
+        required: true
       },
       component: {
         type: Object,
@@ -25,9 +30,26 @@
       }
     },
 
+    watch: {
+      value: {
+        deep: true,
+        handler: function ()
+        {
+          this.rebuildModel();
+        }
+      },
+    },
+
     data: () => ({
-      fieldComponent: null
+      fieldComponent: null,
+      model: null,
+      selector: []
     }),
+
+    created()
+    {
+      this.rebuildModel();
+    },
 
     computed: {
       params()
@@ -69,9 +91,38 @@
     },
 
     methods: {
+
+      rebuildModel()
+      {
+        this.selector = Strings.selectorToArray(this.field);
+        var currentValue = this.value;
+
+        if (!this.selector || !this.selector.length || !currentValue)
+        {
+          this.model = null;
+        }
+        else
+        {
+          for (var key of this.selector)
+          {
+            if (key in currentValue)
+            {
+              currentValue = currentValue[key];
+            }
+            else
+            {
+              break;
+            }
+          }
+
+          this.model = currentValue;
+        }
+      },
+
       onChange(value)
       {
-        this.$emit('input', value);
+        Objects.setValue(this.value, this.selector, value);
+        this.$emit('input', this.value);
       }
     }
   }
