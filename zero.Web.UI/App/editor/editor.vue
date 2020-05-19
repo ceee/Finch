@@ -1,7 +1,20 @@
 ﻿<template>
   <component v-if="loaded" :is="rootNode" class="editor">
-    <ui-tab v-if="hasTabs" class="ui-box" :label="component.params.name" v-for="(component, index) in components" :key="index">
-      <editor-component v-for="(child, index) in component.components" :key="index" :field="child.params.field" v-model="value" :component="child" />
+    <ui-tab v-if="hasTabs" :class="index === 0 ? 'ui-view-box has-sidebar' : 'ui-box'" :label="component.params.name" v-for="(component, index) in components" :key="index">
+      <div v-if="index === 0" class="ui-box">
+        <editor-component v-for="(child, index) in component.components" :key="index" :field="child.params.field" v-model="value" :component="child" />
+      </div>
+
+      <aside v-if="index === 0" class="ui-view-box-aside">
+        <ui-property label="@ui.id" :vertical="true" :is-text="true">
+          {{value.id}}
+        </ui-property>
+        <ui-property label="@ui.createdDate" :vertical="true" :is-text="true">
+          <ui-date v-model="value.createdDate" />
+        </ui-property>
+      </aside>
+
+      <editor-component v-if="index > 0" v-for="(child, cindex) in component.components" :key="cindex" :field="child.params.field" v-model="value" :component="child" />
     </ui-tab>
     <div v-if="!hasTabs" class="ui-box">
       <editor-component v-for="(component, index) in components" :key="index" :field="component.params.field" v-model="value" :component="component" />
