@@ -1,15 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using zero.Core;
-using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
 using zero.Core.Mapper;
 using zero.Core.Options;
 using zero.Web.Filters;
-using zero.Web.Mapper;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers
@@ -44,6 +42,14 @@ namespace zero.Web.Controllers
     }
 
 
+    protected JsonResult AsJson(object data)
+    {
+      JsonSerializerSettings settings = JsonConvert.DefaultSettings();
+      settings.TypeNameHandling = TypeNameHandling.Objects;
+      return Json(data, settings);
+    }
+
+
     protected async Task<IActionResult> As<T, TTarget>(T model) where TTarget : class, new() where T : IZeroEntity
     {
       if (model == null)
@@ -64,7 +70,7 @@ namespace zero.Web.Controllers
         //model.CanEdit = 
       }
 
-      return Json(result);
+      return AsJson(result);
     }
 
 
@@ -75,7 +81,7 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(404);
       }
 
-      return Json(await Mapper.Map<T, TTarget>(model));
+      return AsJson(await Mapper.Map<T, TTarget>(model));
     }
 
 
@@ -86,7 +92,7 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(404);
       }
 
-      return Json(await Mapper.Map<T, TTarget>(model));
+      return AsJson(await Mapper.Map<T, TTarget>(model));
     }
 
     protected async Task<IActionResult> As<T, TTarget>(EntityResult<T> model) where TTarget : class, new() where T : IZeroEntity
@@ -96,7 +102,7 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(404);
       }
 
-      return Json(await Mapper.Map<T, TTarget>(model));
+      return AsJson(await Mapper.Map<T, TTarget>(model));
     }
 
     protected async Task<TTarget> Map<T, TTarget>(T model) where TTarget : class, new()

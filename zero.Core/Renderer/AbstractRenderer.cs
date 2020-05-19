@@ -22,7 +22,7 @@ namespace zero.Core.Renderer
   }
 
 
-  public abstract class AbstractRenderer<T> : IRenderer<T>, IRenderer where T : new()
+  public abstract class AbstractRenderer<T> : IRenderer<T>, IRenderer
   {
     const string METHOD_FIELD = "field";
 

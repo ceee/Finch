@@ -32,9 +32,9 @@ namespace zero.Core.Mapper
 
 
     /// <inheritdoc />
-    public void Add<T>() where T : IMapperConfig, new()
+    public void Add<T>() where T : IMapperConfig
     {
-      T config = new T();
+      T config = Activator.CreateInstance<T>();
       config.Configure(this);
     }
 
@@ -54,19 +54,19 @@ namespace zero.Core.Mapper
 
 
     /// <inheritdoc />
-    public async Task<TTarget> Map<TSource, TTarget>(TSource source) where TTarget : class, new()
+    public async Task<TTarget> Map<TSource, TTarget>(TSource source)
     {
       if (source == null)
       {
-        return null;
+        return default;
       }
 
-      return await Map(source, new TTarget());
+      return await Map(source, Activator.CreateInstance<TTarget>());
     }
 
 
     /// <inheritdoc />
-    public async Task<TTarget> Map<TSource, TTarget>(TSource source, TTarget target) where TTarget : class, new()
+    public async Task<TTarget> Map<TSource, TTarget>(TSource source, TTarget target)
     {
       if (source == null)
       {
@@ -85,13 +85,13 @@ namespace zero.Core.Mapper
 
 
     /// <inheritdoc />
-    public async Task<IEnumerable<TTarget>> Map<TSource, TTarget>(IEnumerable<TSource> source) where TTarget : class, new()
+    public async Task<IEnumerable<TTarget>> Map<TSource, TTarget>(IEnumerable<TSource> source)
     {
       IList<TTarget> target = new List<TTarget>();
 
       foreach (TSource item in source)
       {
-        target.Add(await Map(item, new TTarget()));
+        target.Add(await Map(item, Activator.CreateInstance<TTarget>()));
       }
 
       return target;
@@ -99,13 +99,13 @@ namespace zero.Core.Mapper
 
 
     /// <inheritdoc />
-    public async Task<ListResult<TTarget>> Map<TSource, TTarget>(ListResult<TSource> source) where TTarget : class, new()
+    public async Task<ListResult<TTarget>> Map<TSource, TTarget>(ListResult<TSource> source)
     {
       IList<TTarget> target = new List<TTarget>();
 
       foreach (TSource item in source.Items)
       {
-        target.Add(await Map(item, new TTarget()));
+        target.Add(await Map(item, Activator.CreateInstance<TTarget>()));
       }
 
       return new ListResult<TTarget>(target, source.TotalItems, source.Page, source.PageSize)
@@ -116,19 +116,19 @@ namespace zero.Core.Mapper
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<TTarget>> Map<TSource, TTarget>(EntityResult<TSource> source) where TTarget : class, new()
+    public async Task<EntityResult<TTarget>> Map<TSource, TTarget>(EntityResult<TSource> source)
     {
       return new EntityResult<TTarget>()
       {
         IsSuccess = source.IsSuccess,
         Errors = source.Errors,
-        Model = await Map(source.Model, new TTarget())
+        Model = await Map(source.Model, Activator.CreateInstance<TTarget>())
       };
     }
 
 
     /// <inheritdoc />
-    public void CreateMap<TSource, TTarget>(Action<TSource, TTarget> map) where TTarget : class, new()
+    public void CreateMap<TSource, TTarget>(Action<TSource, TTarget> map)
     {
       Maps.Add<TSource, TTarget>((source, target) =>
       {
@@ -139,7 +139,7 @@ namespace zero.Core.Mapper
 
 
     /// <inheritdoc />
-    public void CreateMap<TSource, TTarget>(Func<TSource, TTarget, IAsyncDocumentSession, Task> map) where TTarget : class, new()
+    public void CreateMap<TSource, TTarget>(Func<TSource, TTarget, IAsyncDocumentSession, Task> map)
     {   
       Maps.Add<TSource, TTarget>(async (source, target) =>
       {
@@ -220,7 +220,7 @@ namespace zero.Core.Mapper
   public interface IMapper
   {
     /// <inheritdoc />
-    void Add<T>() where T : IMapperConfig, new();
+    void Add<T>() where T : IMapperConfig;
 
     /// <inheritdoc />
     void Add(Assembly assembly);
@@ -228,34 +228,34 @@ namespace zero.Core.Mapper
     /// <summary>
     /// Map an object to the target type
     /// </summary>
-    Task<TTarget> Map<TSource, TTarget>(TSource source) where TTarget : class, new();
+    Task<TTarget> Map<TSource, TTarget>(TSource source);
 
     /// <summary>
     /// Map an object to the target type given an already existing target instance
     /// </summary>
-    Task<TTarget> Map<TSource, TTarget>(TSource source, TTarget target) where TTarget : class, new();
+    Task<TTarget> Map<TSource, TTarget>(TSource source, TTarget target);
 
     /// <summary>
     /// Map a list of objects to the target type
     /// </summary>
-    Task<IEnumerable<TTarget>> Map<TSource, TTarget>(IEnumerable<TSource> source) where TTarget : class, new();
+    Task<IEnumerable<TTarget>> Map<TSource, TTarget>(IEnumerable<TSource> source);
 
     /// <summary>
     /// Map a list result containing objects to the target type
     /// </summary>
-    Task<ListResult<TTarget>> Map<TSource, TTarget>(ListResult<TSource> source) where TTarget : class, new();
+    Task<ListResult<TTarget>> Map<TSource, TTarget>(ListResult<TSource> source);
 
     /// <summary>
     /// Map an entity result to the target type
     /// </summary>
-    Task<EntityResult<TTarget>> Map<TSource, TTarget>(EntityResult<TSource> source) where TTarget : class, new();
+    Task<EntityResult<TTarget>> Map<TSource, TTarget>(EntityResult<TSource> source);
 
     /// <summary>
     /// Create a mapping from source to target object
     /// </summary>
-    void CreateMap<TSource, TTarget>(Action<TSource, TTarget> map) where TTarget : class, new();
+    void CreateMap<TSource, TTarget>(Action<TSource, TTarget> map);
 
     /// <inheritdoc />
-    void CreateMap<TSource, TTarget>(Func<TSource, TTarget, IAsyncDocumentSession, Task> map) where TTarget : class, new();
+    void CreateMap<TSource, TTarget>(Func<TSource, TTarget, IAsyncDocumentSession, Task> map);
   }
 }

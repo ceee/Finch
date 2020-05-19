@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using FluentValidation;
+using System.Collections.Generic;
+using zero.Core.Mapper;
 using zero.Core.Plugins;
+using zero.Core.Renderer;
 
 namespace zero.Core.Options
 {
@@ -19,6 +22,7 @@ namespace zero.Core.Options
       Settings = new SettingsOptions();
       Spaces = new SpaceOptions();
       Mapper = new MapperOptions();
+      Types = new TypeOptions();
     }
 
     /// <inheritdoc />
@@ -65,6 +69,20 @@ namespace zero.Core.Options
 
     /// <inheritdoc />
     public MapperOptions Mapper { get; private set; }
+
+    /// <inheritdoc />
+    public TypeOptions Types { get; private set; }
+
+    /// <inheritdoc />
+    public void Extend<T, TTarget>() where TTarget : T
+    {
+      Types.Add<T, TTarget>();
+    }
+
+    public ZeroExtend<T> Extend<T>()
+    {
+      return new ZeroExtend<T>();
+    }
   }
 
 
@@ -149,10 +167,53 @@ namespace zero.Core.Options
     /// </summary>
     MapperOptions Mapper { get; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    TypeOptions Types { get; }
+
+    /// <inheritdoc />
+    void Extend<T, TTarget>() where TTarget : T;
+
+    ZeroExtend<T> Extend<T>();
 
     /// <summary>
     /// Default settings for the backoffice
     /// </summary>
     //IZeroPluginConfiguration Backoffice { get; set; }
+  }
+
+
+  public class ZeroExtend<T>
+  {
+    public ZeroExtend<T> Use<TTarget>() where TTarget : T
+    {
+      return this;
+    }
+
+    public ZeroExtend<T> Use<TTarget, TRenderer>() 
+      where TTarget : T 
+      where TRenderer : IRenderer<T>
+    {
+      return this;
+    }
+
+    public ZeroExtend<T> Use<TTarget, TRenderer, TValidator>() 
+      where TTarget : T 
+      where TRenderer : IRenderer<T> 
+      where TValidator : IValidator<T>
+    {
+      return this;
+    }
+
+
+    public ZeroExtend<T> Use<TTarget, TRenderer, TValidator, TMapper>() 
+      where TTarget : T 
+      where TRenderer : IRenderer<T> 
+      where TValidator : IValidator<T>
+      where TMapper : IMapperConfig
+    {
+      return this;
+    }
   }
 }

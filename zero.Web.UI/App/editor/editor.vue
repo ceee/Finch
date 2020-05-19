@@ -6,6 +6,9 @@
       </div>
 
       <aside v-if="index === 0" class="ui-view-box-aside">
+        <ui-property label="@ui.active" :vertical="true" :is-text="true">
+          <ui-toggle v-model="value.isActive" />
+        </ui-property>
         <ui-property label="@ui.id" :vertical="true" :is-text="true">
           {{value.id}}
         </ui-property>

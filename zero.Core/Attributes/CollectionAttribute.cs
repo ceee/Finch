@@ -5,7 +5,7 @@ namespace zero.Core.Attributes
   /// <summary>
   /// This attribute will allow the usage of custom collection names for Raven collections
   /// </summary>
-  [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+  [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class, AllowMultiple = false)]
   public class CollectionAttribute : Attribute
   {
     public string Name { get; set; }

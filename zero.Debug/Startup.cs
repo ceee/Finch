@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -5,6 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using zero.Commerce.Backoffice;
+using zero.Commerce.Entities;
+using zero.Core.Renderer;
+using zero.Debug.Models;
 using zero.TestData;
 using zero.Web;
 
@@ -38,6 +43,15 @@ namespace zero.Debug
       ZeroBuilder zero = services.AddZero(Configuration);
       zero.AddPlugin<TestPlugin>();
       zero.AddPlugin<Commerce.CommercePlugin>();
+
+      zero.WithOptions(opts =>
+      {
+        opts.Extend<IChannel, SalesChannel>();
+
+        //IRenderer<IChannel> renderer = (IRenderer<IChannel>)new SalesChannelRenderer();
+        //renderer.
+        //opts.Renderers.Extend<IChannel, SalesChannelRenderer>();
+      });
 
       services.AddMvc();
 
