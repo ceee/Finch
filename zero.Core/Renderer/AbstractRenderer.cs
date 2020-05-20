@@ -30,7 +30,7 @@ namespace zero.Core.Renderer
 
     const string METHOD_BOX = "box";
 
-    internal List<RenderProperty> Properties = new List<RenderProperty>();
+    protected List<RenderProperty> Properties { get; set; } = new List<RenderProperty>();
 
     RenderProperty ParentProperty = null;
 

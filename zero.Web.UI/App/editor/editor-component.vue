@@ -79,7 +79,6 @@
     {
       this.fieldComponent = () =>
       {
-        console.info(this.view);
         if (this.view === 'custom')
         {
           //return import('@/Plugins/' + this.component.params.componentPath);

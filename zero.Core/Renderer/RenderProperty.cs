@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace zero.Core.Renderer
 {
-  internal class RenderProperty
+  public class RenderProperty
   {
     public string Method { get; set; }
 
