@@ -1,5 +1,8 @@
 ﻿<template>
   <div class="ui-tree" :style="{ 'padding-left': depth > 0 ? ((depth * 18) + 'px') : null }">
+    <ui-header-bar class="ui-tree-header" :title="header" :back-button="false" v-if="header">
+      <ui-dot-button @click="onActionsClicked(null, $event)" />
+    </ui-header-bar>
     <span v-if="status === 'loading'" class="ui-tree-item-loading"><i></i></span>
     <template v-for="item in items">
       <div class="ui-tree-item" :class="getClasses(item)" v-on:contextmenu="onRightClicked(item, $event)">
@@ -11,7 +14,7 @@
           <i v-if="item.modifier" :title="item.modifier.name" class="ui-tree-item-modifier" :class="item.modifier.icon"></i>
           <span class="ui-tree-item-text">{{item.name | localize}}</span>
         </router-link>
-        <ui-dot-button class="ui-tree-item-actions" v-if="configuration.onActionsRequested" @click="onActionsClicked(item, $event)" />
+        <ui-dot-button class="ui-tree-item-actions" v-if="configuration.onActionsRequested && item.hasActions" @click="onActionsClicked(item, $event)" />
       </div>
       <ui-tree v-if="item.hasChildren && item.isOpen" :get="get" :parent="item.id" :depth="depth + 1" :active="active" :config="config" />
     </template>
@@ -43,6 +46,10 @@
         default: null
       },
       parent: {
+        type: String,
+        default: null
+      },
+      header: {
         type: String,
         default: null
       },
@@ -138,7 +145,7 @@
       // right clicked on an item
       onRightClicked(item, ev)
       {
-        if (this.configuration.onActionsRequested)
+        if (item.hasActions && this.configuration.onActionsRequested)
         {
           ev.preventDefault();  
           this.onActionsClicked(item, ev);
@@ -149,15 +156,19 @@
       onActionsClicked(item, ev)
       {
         this.actionsLoaded = false;
-        this.actionsOpen = !this.actionsOpen;
 
         if (!this.actionsOpen)
+        {
+          this.actions = this.configuration.onActionsRequested(item);
+        }
+
+        if (!this.actions || this.actions.length < 1 || this.actionsOpen)
         {
           this.actionsLoaded = true;
           return;
         }
 
-        this.actions = this.configuration.onActionsRequested(item);
+        this.actionsOpen = !this.actionsOpen;
 
         this.$nextTick(() =>
         {
@@ -165,14 +176,14 @@
           let target = ev.target;
           do
           {
-            if (target.classList.contains('ui-tree-item'))
+            if (target.classList.contains('ui-tree-item') || target.classList.contains('ui-tree-header'))
             {
               break;
             }
           }
           while (target = target.parentElement);
 
-          target = target.querySelector('.ui-tree-item-actions');
+          target = target.querySelector('.ui-dot-button');
 
           var rect = target.getBoundingClientRect();
           var width = 240;
@@ -202,6 +213,11 @@
   .ui-tree
   {
     position: relative;
+  }
+
+  .ui-tree-header + .ui-tree-item
+  {
+    margin-top: -18px;
   }
 
   .ui-tree-item

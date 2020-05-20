@@ -92,6 +92,7 @@ namespace zero.Core.Api
             Icon = pageType.Icon,
             IsOpen = openIds.Contains(page.Id),
             IsInactive = !page.IsActive,
+            HasActions = true,
             Modifier = !page.IsActive ? new TreeItemModifier()
             {
               Icon = "fth-minus-circle color-red",
@@ -110,7 +111,8 @@ namespace zero.Core.Api
           Sort = 99999,
           Name = "@page.recyclebin.name",
           Icon = "fth-trash",
-          HasChildren = false
+          HasChildren = false,
+          HasActions = true
         });
       }
 

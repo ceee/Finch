@@ -59,6 +59,11 @@
     /// Whether this item is published or not
     /// </summary>
     public bool IsInactive { get; set; }
+
+    /// <summary>
+    /// Whether to show actions menu. This will only work when the onActionsRequested cb is implemented in the component
+    /// </summary>
+    public bool HasActions { get; set; }
   }
 
 

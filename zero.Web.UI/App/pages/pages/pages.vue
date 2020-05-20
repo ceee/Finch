@@ -1,10 +1,7 @@
 ﻿<template>
   <div class="page-container">
     <div class="page-container-tree" v-resizable="resizable">
-      <ui-header-bar title="Pages" :back-button="false">
-        <ui-dot-button />
-      </ui-header-bar>
-      <ui-tree :get="getItems" :config="treeConfig" :active="id" />
+      <ui-tree :get="getItems" :config="treeConfig" :active="id" header="Pages" />
       <div class="page-container-tree-resizable ui-resizable"></div>
     </div>
 
@@ -89,34 +86,51 @@
       {
         let actions = [];
 
+        if (item && item.id === 'recyclebin')
+        {
+          return [{
+            name: 'Empty recycle bin',
+            icon: 'fth-trash-2'
+          }];
+        }
+
         actions.push({
           name: 'Create',
           icon: 'fth-plus'
         });
-        actions.push({
-          name: 'Move',
-          icon: 'fth-corner-down-right'
-        });
-        actions.push({
-          name: 'Copy',
-          icon: 'fth-copy',
-          disabled: true
-        });
+
+        if (item)
+        {
+          actions.push({
+            name: 'Move',
+            icon: 'fth-corner-down-right'
+          });
+          actions.push({
+            name: 'Copy',
+            icon: 'fth-copy',
+            disabled: true
+          });
+        }
+
         actions.push({
           name: 'Sort',
           icon: 'fth-arrow-down'
         });
-        actions.push({
-          type: 'separator'
-        });
-        actions.push({
-          name: 'Delete',
-          icon: 'fth-x',
-          action(item, dropdown)
-          {
-            dropdown.hide();
-          }
-        });
+
+        if (item)
+        {
+          actions.push({
+            type: 'separator'
+          });
+          actions.push({
+            name: 'Delete',
+            icon: 'fth-x',
+            action(item, dropdown)
+            {
+              dropdown.hide();
+            }
+          });
+        }
 
         return actions;
       };
