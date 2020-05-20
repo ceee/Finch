@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core;
@@ -26,6 +28,22 @@ namespace zero.Web
       {
         identity.AddClaim(new Claim(Constants.Auth.Claims.IsSuper, PermissionsValue.True));
       }
+
+      // get all allowed app ids
+      IEnumerable<Permission> permissions = identity.Claims
+        .Where(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(Permissions.Applications))
+        .Select(x => Permission.FromClaim(x, Permissions.Applications));
+
+      string[] appIds = permissions.Where(x => x.IsTrue).Select(x => x.NormalizedKey).ToArray();
+
+      string currentAppId = user.CurrentAppId ?? user.AppId;
+
+      if (!user.IsSuper && !appIds.Contains(currentAppId))
+      {
+        currentAppId = user.AppId;
+      }
+
+      identity.AddClaim(new Claim(Constants.Auth.Claims.CurrentAppId, currentAppId));
 
       return principal;
     }

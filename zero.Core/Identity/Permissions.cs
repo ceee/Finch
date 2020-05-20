@@ -6,7 +6,7 @@
     /// Ability to switch zero applications and read/write other applications out of the user appId
     /// If PermissionsValue.Write is set for this permission, the user will be limited to his/her claims in other applications too
     /// </summary>
-    public const string Applications = "applications";
+    public const string Applications = "applications.";
 
 
     public struct Settings

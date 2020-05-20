@@ -23,6 +23,8 @@
         public const string Role = "zero.claim.rolealias";
         public const string SecurityStamp = "zero.claim.securitystamp";
         public const string Permission = "zero.claim.permission";
+        public const string DefaultAppId = "zero.claim.defaultAppId";
+        public const string CurrentAppId = "zero.claim.currentAppId";
       }
     }
 

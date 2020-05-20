@@ -8,6 +8,9 @@ namespace zero.Core.Entities
     /// <inheritdoc />
     public string AppId { get; set; }
 
+    /// <inheritdoc />
+    public string CurrentAppId { get; set; }
+
     /// <inheritdoc/>
     public bool IsSuper { get; set; }
 
@@ -72,6 +75,11 @@ namespace zero.Core.Entities
 
   public interface IUser : IZeroEntity, IAppAwareEntity, IZeroDbConventions
   {
+    /// <summary>
+    /// Currently selected app id for the backoffice
+    /// </summary>
+    public string CurrentAppId { get; set; }
+
     /// <summary>
     /// sudo.
     /// The user who created the instance.

@@ -1,11 +1,13 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Attributes;
 using zero.Core.Entities;
@@ -237,9 +239,10 @@ namespace zero.Core.Api
 
   public class AppAwareBackofficeStore : BackofficeStore, IAppAwareBackofficeStore
   {
-    public AppAwareBackofficeStore(IDocumentStore raven, IMediaUpload media) : base(raven, media)
+    public AppAwareBackofficeStore(IDocumentStore raven, IMediaUpload media, IHttpContextAccessor httpContextAccessor) : base(raven, media)
     {
-      AppId = "zero.applications.1-A"; // TODO
+      Claim appIdClaim = httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == Constants.Auth.Claims.CurrentAppId);
+      AppId = appIdClaim.Value;
     }
   }
 }

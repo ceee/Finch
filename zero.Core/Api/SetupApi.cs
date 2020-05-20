@@ -249,7 +249,7 @@ namespace zero.Core.Api
         IsActive = true,
         Claims = new List<IUserClaim>()
         {
-          new UserClaim(type, Permissions.Applications, PermissionsValue.Write),
+          //new UserClaim(type, Permissions.Applications, PermissionsValue.Write),
           new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.True),
           new UserClaim(type, Permissions.Sections.Spaces, PermissionsValue.True),
           new UserClaim(type, Permissions.Sections.Pages, PermissionsValue.True),
