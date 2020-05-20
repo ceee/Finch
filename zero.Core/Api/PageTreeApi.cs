@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,8 @@ namespace zero.Core.Api
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .ToListAsync();
 
+
+        // get hierarchy so we know if we should set the page to open
         if (!activeId.IsNullOrEmpty())
         {
           Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
@@ -56,6 +59,18 @@ namespace zero.Core.Api
           }
         }
 
+
+        // get children for all pages
+        string[] pageIds = pages.Select(x => x.Id).ToArray();
+
+        IList<Pages_WithChildren.Result> children = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
+            .ProjectInto<Pages_WithChildren.Result>()
+            .ForApp(Backoffice.AppId)
+            .Where(x => x.Id.In(pageIds))
+            .ToListAsync();
+
+
+        // build tree
         foreach (Page page in pages)
         {
           PageType pageType = pageTypes.FirstOrDefault(x => x.Alias == page.PageTypeAlias);
@@ -70,7 +85,7 @@ namespace zero.Core.Api
           {
             Id = page.Id,
             Name = page.Name,
-            HasChildren = true,
+            HasChildren = children.Any(x => x.Id == page.Id),
             ParentId = page.ParentId,
             Sort = page.Sort,
             Icon = pageType.Icon,
