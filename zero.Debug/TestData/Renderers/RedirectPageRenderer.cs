@@ -22,7 +22,7 @@ namespace zero.TestData
 
       Tab("Options", () =>
       {
-        Field(x => x.Options).Renderer(new OptionsPagePartialRenderer());
+        Field(x => x.Options).Renderer(new OptionsPagePartialRenderer(), opts => opts.HideLabel = true);
       });
     }
   }

@@ -72,9 +72,15 @@
     margin-top: 0;
   }
 
-  .ui-property.full-width > .ui-property-content
+  .ui-property.full-width > .ui-property-content,
+  .ui-property.hide-label > .ui-property-content
   {
     max-width: 100%;
+  }
+
+  .ui-property.hide-label > .ui-property-label
+  {
+    display: none;
   }
 
   .ui-property-label

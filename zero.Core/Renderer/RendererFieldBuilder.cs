@@ -80,7 +80,7 @@ namespace zero.Core.Renderer
 
     public void Renderer<T>(IRenderer<T> renderer, Action<DefaultRendererOptions> optionsBuilder = null)
     {
-      View = "_renderer";
+      View = "renderer";
       CustomRenderer = renderer.ToGenericRenderer();
       Options = BuildOptions(optionsBuilder);
     }

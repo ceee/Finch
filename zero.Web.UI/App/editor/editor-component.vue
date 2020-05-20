@@ -67,6 +67,10 @@
         {
           classes.push('full-width');
         }
+        if (this.component.params.options.hideLabel)
+        {
+          classes.push('hide-label');
+        }
         return classes;
       }
     },
@@ -75,11 +79,16 @@
     {
       this.fieldComponent = () =>
       {
+        console.info(this.view);
         if (this.view === 'custom')
         {
           //return import('@/Plugins/' + this.component.params.componentPath);
         }
         else if (this.view === 'nested')
+        {
+          return import(`zero/editor/editor-nested`);
+        }
+        else if (this.view === 'renderer')
         {
           return import(`zero/editor/editor-nested`);
         }

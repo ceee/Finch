@@ -10,17 +10,31 @@
       <ui-button type="white" label="Preview" icon="fth-eye" />
       <ui-button label="Save" />
     </ui-header-bar>
+
+     <ui-editor :config="renderer" v-model="model" />
   </div>
 </template>
 
 
 <script>
+  import UiEditor from 'zero/editor/editor';
+
   export default {
 
-    props: [ 'id', 'type' ],
+    props: ['id', 'type'],
+
+    components: { UiEditor },
 
     data: () => ({
-      actions: []
+      renderer: 'debug.redirectpage',
+      actions: [],
+      model: {
+        name: null,
+        options: {
+          hideInNavigation: false
+        },
+        link: null
+      }
     }),
 
     created()
