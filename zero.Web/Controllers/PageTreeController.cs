@@ -15,9 +15,9 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<IActionResult> GetChildren(string parent = null)
+    public async Task<IActionResult> GetChildren(string parent = null, string active = null)
     {
-      return AsJson(await Api.GetChildren(parent));
+      return AsJson(await Api.GetChildren(parent, active));
     }
   }
 }

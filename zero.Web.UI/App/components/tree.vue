@@ -11,15 +11,22 @@
           <i v-if="item.modifier" :title="item.modifier.name" class="ui-tree-item-modifier" :class="item.modifier.icon"></i>
           {{item.name | localize}}
         </router-link>
-        <ui-dot-button class="ui-tree-item-actions" />
+        <ui-dot-button class="ui-tree-item-actions" v-if="configuration.onActionsRequested" />
       </div>
-      <ui-tree v-if="item.hasChildren && item.isOpen" :get="get" :parent="item.id" :depth="depth + 1" />
+      <ui-tree v-if="item.hasChildren && item.isOpen" :get="get" :parent="item.id" :depth="depth + 1" :active="active" :config="config" />
     </template>
   </div>
 </template>
 
 
 <script>
+  import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
+
+  const defaultConfig = {
+    // return actions for an item
+    onActionsRequested: null
+  };
+
   export default {
     name: 'uiTree',
 
@@ -28,6 +35,10 @@
         type: Number,
         default: 0
       },
+      active: {
+        type: String,
+        default: null
+      },
       parent: {
         type: String,
         default: null
@@ -35,27 +46,49 @@
       get: {
         type: Function,
         required: true
+      },
+      config: {
+        type: Object,
+        default: () =>
+        {
+          return defaultConfig;
+        }
+      }
+    },
+
+    watch: {
+      active(val)
+      {
+        console.info('active: ' + val);
       }
     },
 
     data: () => ({
       items: [],
-      status: 'none'
+      status: 'none',
+      actions: [],
+      configuration: {}
     }),
 
-    created ()
+    mounted()
     {
+      this.initialize();
       this.load(this.parent);
     },
 
     methods: {
+
+      initialize()
+      {
+        this.configuration = _extend(defaultConfig, this.config);
+      },
 
       // loads children of the given parent id or on root if empty
       load(parent)
       {
         this.setStatus('loading', this.items);
 
-        let promise = this.get(parent);
+        let promise = this.get(parent, this.active);
 
         promise.then(response =>
         {

@@ -4,7 +4,7 @@
       <ui-header-bar title="Pages" :back-button="false">
         <ui-dot-button />
       </ui-header-bar>
-      <ui-tree :get="getItems" />
+      <ui-tree :get="getItems" :config="treeConfig" :active="id" />
       <div class="page-container-tree-resizable ui-resizable"></div>
     </div>
 
@@ -39,11 +39,18 @@
         save: 'page-tree',
         handle: '.ui-resizable'
       },
-      actions: []
+      actions: [],
+      treeConfig: {
+
+      }
     }),
 
 
     computed: {
+      id()
+      {
+        return this.$route.params.id;
+      },
       isOverview()
       {
         return !this.$route.params.id && this.$route.name !== 'recyclebin';
@@ -77,6 +84,42 @@
           name: 'history'
         }
       });
+
+      this.treeConfig.onActionsRequested = item =>
+      {
+        let actions = [];
+
+        actions.push({
+          name: 'Create',
+          icon: 'fth-plus'
+        });
+        actions.push({
+          name: 'Move',
+          icon: 'fth-corner-down-right'
+        });
+        actions.push({
+          name: 'Copy',
+          icon: 'fth-copy',
+          disabled: true
+        });
+        actions.push({
+          name: 'Sort',
+          icon: 'fth-arrow-down'
+        });
+        actions.push({
+          type: 'separator'
+        });
+        actions.push({
+          name: 'Delete',
+          icon: 'fth-x',
+          action(item, dropdown)
+          {
+            dropdown.hide();
+          }
+        });
+
+        return actions;
+      };
     },
 
 
@@ -91,7 +134,7 @@
           return Promise.resolve(this.cache[key]);
         }
 
-        return PageTreeApi.getChildren(parent).then(response =>
+        return PageTreeApi.getChildren(parent, this.id).then(response =>
         {
           response.forEach(item =>
           {

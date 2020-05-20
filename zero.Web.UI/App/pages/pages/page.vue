@@ -3,11 +3,11 @@
     <ui-header-bar :title="'Page ' + $route.params.id" :on-back="onBack">
       <ui-dropdown>
         <template v-slot:button>
-          <ui-button type="light" label="Actions" caret="down" />
+          <ui-button type="white" label="Actions" caret="down" />
         </template>
         <ui-dropdown-list v-model="actions" :action="actionSelected" />
       </ui-dropdown>
-      <ui-button type="light" label="Preview" icon="fth-eye" />
+      <ui-button type="white" label="Preview" icon="fth-eye" />
       <ui-button label="Save" />
     </ui-header-bar>
   </div>
