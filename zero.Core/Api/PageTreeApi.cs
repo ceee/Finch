@@ -1,11 +1,9 @@
-﻿using Newtonsoft.Json;
-using Raven.Client.Documents;
+﻿using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using zero.Core.Database.Indexes;
 using zero.Core.Entities;
@@ -81,16 +79,24 @@ namespace zero.Core.Api
             // TODO the page type does not exist anymore
           }
 
+          int childCount = children.Count(x => x.Id == page.Id);
+
           items.Add(new TreeItem()
           {
             Id = page.Id,
             Name = page.Name,
-            HasChildren = children.Any(x => x.Id == page.Id),
+            HasChildren = childCount > 0,
+            ChildCount = childCount,
             ParentId = page.ParentId,
             Sort = page.Sort,
             Icon = pageType.Icon,
             IsOpen = openIds.Contains(page.Id),
-            IsInactive = !page.IsActive
+            IsInactive = !page.IsActive,
+            Modifier = !page.IsActive ? new TreeItemModifier()
+            {
+              Icon = "fth-minus-circle color-red",
+              Name = "Inactive"
+            } : null
           });
         }
       }
@@ -110,27 +116,6 @@ namespace zero.Core.Api
 
       return items;
     }
-
-
-    /// <inheritdoc />
-    public async Task<IList<Page>> GetHierarchy(string id)
-    {
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
-      {
-        Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
-          .ProjectInto<Pages_ByHierarchy.Result>()
-          .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
-          .ForApp(Backoffice.AppId)
-          .FirstOrDefaultAsync(x => x.Id == id);
-
-        if (result == null)
-        {
-          return new List<Page>();
-        }
-
-        return (await session.LoadAsync<Page>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
-      }
-    }
   }
 
 
@@ -140,10 +125,5 @@ namespace zero.Core.Api
     /// Get all children for the current parent page (or root if empty)
     /// </summary>
     Task<IList<TreeItem>> GetChildren(string parentId = null, string activeId = null);
-
-    /// <summary>
-    /// Get hierarchy for a page
-    /// </summary>
-    Task<IList<Page>> GetHierarchy(string id);
   }
 }

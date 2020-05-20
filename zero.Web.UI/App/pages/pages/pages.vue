@@ -180,7 +180,7 @@
 
     .ui-header-bar + .ui-tree
     {
-      margin-top: 2px;
+      margin-top: -10px;
     }
 
     .ui-dot-button

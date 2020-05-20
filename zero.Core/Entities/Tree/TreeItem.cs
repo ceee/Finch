@@ -51,6 +51,11 @@
     public bool HasChildren { get; set; }
 
     /// <summary>
+    /// Count of children
+    /// </summary>
+    public int ChildCount { get; set; }
+
+    /// <summary>
     /// Whether this item is published or not
     /// </summary>
     public bool IsInactive { get; set; }

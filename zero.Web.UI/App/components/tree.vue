@@ -9,7 +9,7 @@
         <router-link :to="item.url" class="ui-tree-item-link">
           <i class="ui-tree-item-icon" :class="item.icon"></i>
           <i v-if="item.modifier" :title="item.modifier.name" class="ui-tree-item-modifier" :class="item.modifier.icon"></i>
-          {{item.name | localize}}
+          <span class="ui-tree-item-text">{{item.name | localize}}</span>
         </router-link>
         <ui-dot-button class="ui-tree-item-actions" v-if="configuration.onActionsRequested" />
       </div>
@@ -53,13 +53,6 @@
         {
           return defaultConfig;
         }
-      }
-    },
-
-    watch: {
-      active(val)
-      {
-        console.info('active: ' + val);
       }
     },
 
@@ -150,6 +143,12 @@
     color: var(--color-fg);
     position: relative;
     transition: color 0.2s ease;
+
+    &.is-inactive .ui-tree-item-text
+    //&.is-inactive .ui-tree-item-icon
+    {
+      opacity: .5;
+    }
 
     .ui-tree-item-arrow
     {
@@ -252,7 +251,7 @@
     border-radius: 50%;
     width: 14px;
     height: 14px;
-    color: var(--color-fg-mid);
+    /*color: var(--color-fg-mid);*/
     font-size: 11px;
     font-style: normal;
     text-align: center;
