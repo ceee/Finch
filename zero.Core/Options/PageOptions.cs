@@ -28,7 +28,7 @@ namespace zero.Core.Options
         Icon = icon,
         AllowAsRoot = allowAsRoot,
         AllowAllChildrenTypes = allowAllChildrenTypes,
-        AllowedChildrenTypes = allowedChildrenTypes
+        AllowedChildrenTypes = allowedChildrenTypes ?? new List<string>()
       });
     }
 
@@ -43,7 +43,7 @@ namespace zero.Core.Options
         Icon = icon,
         AllowAsRoot = allowAsRoot,
         AllowAllChildrenTypes = allowAllChildrenTypes,
-        AllowedChildrenTypes = allowedChildrenTypes
+        AllowedChildrenTypes = allowedChildrenTypes ?? new List<string>()
       });
     }
   }

@@ -239,7 +239,7 @@
         "continue": "Continue",
         "continue_text": "You have last edited \"{page}\" on {date}",
         "new": "New page",
-        "new_text": "Create a new page below \"{root}\"",
+        "new_text": "Create a new page on root",
         "history": "History",
         "history_text": "View page editing history"
       }

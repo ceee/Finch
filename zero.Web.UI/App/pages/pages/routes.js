@@ -14,6 +14,13 @@ if (section)
   });
 
   routes.push({
+    path: 'create/:type',
+    props: true,
+    name: 'page-create',
+    component: () => import('zero/pages/' + alias + '/page')
+  });
+
+  routes.push({
     path: 'recyclebin',
     name: 'recyclebin',
     component: () => import('zero/pages/' + alias + '/recyclebin'),

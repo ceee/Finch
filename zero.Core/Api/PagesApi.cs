@@ -55,7 +55,7 @@ namespace zero.Core.Api
       }
 
       Page page = await Backoffice.GetById<Page>(parentId);
-      PageType pageType = page != null ? types.FirstOrDefault(x => x.Alias == page.Alias) : null;
+      PageType pageType = page != null ? types.FirstOrDefault(x => x.Alias == page.PageTypeAlias) : null;
 
       if (pageType == null)
       {

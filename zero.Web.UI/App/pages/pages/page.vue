@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="page">
-    <ui-header-bar :title="'Page ' + $route.params.id" :on-back="onBack">
+    <ui-header-bar :title="title" :on-back="onBack">
       <ui-dropdown>
         <template v-slot:button>
           <ui-button type="white" label="Actions" caret="down" />
@@ -16,6 +16,8 @@
 
 <script>
   export default {
+
+    props: [ 'id', 'type' ],
 
     data: () => ({
       actions: []
@@ -54,7 +56,38 @@
     },
 
 
+    computed: {
+      isCreate()
+      {
+        return this.$route.name === 'page-create';
+      },
+      title()
+      {
+        return this.isCreate ? 'Create new page' : 'Page ' + this.id;
+      }
+    },
+
+
+    watch: {
+      '$route': function ()
+      {
+        this.initialize();
+      }
+    },
+
+
+    mounted()
+    {
+      this.initialize();
+    },
+
+
     methods: {
+
+      initialize()
+      {
+        console.info(this.id, this.type);
+      },
 
       actionSelected(item, dropdown)
       {

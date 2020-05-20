@@ -8,14 +8,14 @@
     <router-view v-if="!isOverview"></router-view>
 
     <div v-if="isOverview" class="page-overview">
-      <router-link :to="action.url" v-for="action in actions" :key="action.alias" class="page-overview-action">
+      <button type="button" @click="action.action(action)" v-for="action in actions" :key="action.alias" class="page-overview-action">
         <i class="page-overview-action-icon" :class="action.icon" />
         <p class="page-overview-action-text">
           <strong v-localize="'@page.overview.actions.' + action.alias"></strong>
           <br>
           <span v-localize="{ key: '@page.overview.actions.' + action.alias + '_text', tokens: action.tokens }"></span>
         </p>
-      </router-link>
+      </button>
     </div>
   </div>
 </template>
@@ -23,6 +23,8 @@
 
 <script>
   import PageTreeApi from 'zero/resources/page-tree.js'
+  import Overlay from 'zero/services/overlay.js'
+  import CreateOverlay from './create'
 
   export default {
 
@@ -50,17 +52,18 @@
       },
       isOverview()
       {
-        return !this.$route.params.id && this.$route.name !== 'recyclebin';
+        return !this.$route.params.id && !this.$route.params.type && this.$route.name !== 'recyclebin';
       }
     },
 
 
     created()
     {
+      var instance = this;
+
       this.actions.push({
         alias: 'continue',
         icon: 'fth-corner-down-right',
-        url: '/',
         tokens: {
           page: 'Products',
           date: 'March 3rd, 2020'
@@ -69,17 +72,17 @@
       this.actions.push({
         alias: 'new',
         icon: 'fth-plus',
-        url: '/',
         tokens: {
           root: 'Home'
+        },
+        action()
+        {
+          instance.create();
         }
       });
       this.actions.push({
         alias: 'history',
-        icon: 'fth-clock',
-        url: {
-          name: 'history'
-        }
+        icon: 'fth-clock'
       });
 
       this.treeConfig.onActionsRequested = item =>
@@ -96,7 +99,12 @@
 
         actions.push({
           name: 'Create',
-          icon: 'fth-plus'
+          icon: 'fth-plus',
+          action(action, dropdown)
+          {
+            dropdown.hide();
+            instance.create(item);
+          }
         });
 
         if (item)
@@ -124,11 +132,7 @@
           });
           actions.push({
             name: 'Delete',
-            icon: 'fth-x',
-            action(item, dropdown)
-            {
-              dropdown.hide();
-            }
+            icon: 'fth-x'
           });
         }
 
@@ -166,6 +170,23 @@
           });
           this.cache[key] = response;
           return response;
+        });
+      },
+
+
+      // opens dialog for creating a new page
+      create(parent)
+      {
+        Overlay.open({
+          component: CreateOverlay,
+          width: 520,
+          parent: parent
+        }).then(() =>
+        {
+
+        }, () =>
+        {
+                
         });
       }
     }
@@ -227,7 +248,7 @@
     padding: 95px 0 0 60px;
   }
 
-  a.page-overview-action
+  .page-overview-action
   {
     color: var(--color-text);
     font-size: var(--font-size);
@@ -236,7 +257,7 @@
     grid-gap: 35px;
     align-items: center;
 
-    & + a.page-overview-action
+    & + .page-overview-action
     {
       margin-top: 60px;
     }

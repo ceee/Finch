@@ -54,7 +54,7 @@
       }
       while (current = current.$parent);
 
-      if (!this.dropdown)
+      if (false && !this.dropdown)
       {
         warn('ui-dropdown-list: Could not find parent <ui-dropdown />');
       }
