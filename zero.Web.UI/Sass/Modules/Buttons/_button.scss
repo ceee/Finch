@@ -236,7 +236,7 @@ button::-moz-focus-inner
   width: 36px;
   text-align: center;
   justify-content: center;
-  font-size: var(--font-size-xl);
+  color: var(--color-text);
 
   &:hover
   {
@@ -245,6 +245,7 @@ button::-moz-focus-inner
 
   .ui-button-icon
   {
+    font-size: var(--font-size-xl);
     margin: 0;
   }
 }

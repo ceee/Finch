@@ -40,13 +40,6 @@
       dropdown: null
     }),
 
-    watch: {
-      value: function (val)
-      {
-        console.info(JSON.parse(JSON.stringify(val)));
-      }
-    },
-
     mounted ()
     {
       // find parent dropdown so we can pass it on item click
@@ -80,7 +73,11 @@
             dropdown: this.dropdown,
             hide()
             {
-              this.dropdown.hide();
+              if (this.dropdown)
+              {
+                this.dropdown.hide();
+              }
+              instance.$emit('hide');
             },
             loading(isLoading)
             {

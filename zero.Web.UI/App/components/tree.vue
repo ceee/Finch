@@ -2,7 +2,7 @@
   <div class="ui-tree" :style="{ 'padding-left': depth > 0 ? ((depth * 18) + 'px') : null }">
     <span v-if="status === 'loading'" class="ui-tree-item-loading"><i></i></span>
     <template v-for="item in items">
-      <div class="ui-tree-item" :class="getClasses(item)">
+      <div class="ui-tree-item" :class="getClasses(item)" v-on:contextmenu="onRightClicked(item, $event)">
         <button v-if="item.hasChildren" @click="toggle(item)" type="button" class="ui-tree-item-toggle">
           <i class="ui-tree-item-arrow" :class="['fth-chevron-' + (item.isOpen ? 'up' : 'down')]"></i>
         </button>
@@ -11,10 +11,13 @@
           <i v-if="item.modifier" :title="item.modifier.name" class="ui-tree-item-modifier" :class="item.modifier.icon"></i>
           <span class="ui-tree-item-text">{{item.name | localize}}</span>
         </router-link>
-        <ui-dot-button class="ui-tree-item-actions" v-if="configuration.onActionsRequested" />
+        <ui-dot-button class="ui-tree-item-actions" v-if="configuration.onActionsRequested" @click="onActionsClicked(item, $event)" />
       </div>
       <ui-tree v-if="item.hasChildren && item.isOpen" :get="get" :parent="item.id" :depth="depth + 1" :active="active" :config="config" />
     </template>
+    <div ref="dropdown" class="ui-dropdown ui-tree-dropdown theme-dark align-top" role="dialog" v-click-outside="hideActions" v-if="actionsOpen">
+      <ui-dropdown-list v-model="actions" @hide="hideActions" />
+    </div>
   </div>
 </template>
 
@@ -59,6 +62,8 @@
     data: () => ({
       items: [],
       status: 'none',
+      actionsOpen: false,
+      actionsLoaded: false,
       actions: [],
       configuration: {}
     }),
@@ -119,6 +124,73 @@
           'is-inactive': item.isInactive,
           'is-open': item.isOpen
         };
+      },
+
+      // hide actions overlay
+      hideActions()
+      {
+        if (this.actionsLoaded)
+        {
+          this.actionsOpen = false;
+        }
+      },
+
+      // right clicked on an item
+      onRightClicked(item, ev)
+      {
+        if (this.configuration.onActionsRequested)
+        {
+          ev.preventDefault();  
+          this.onActionsClicked(item, ev);
+        }
+      },
+
+      // actions button clicked on item
+      onActionsClicked(item, ev)
+      {
+        this.actionsLoaded = false;
+        this.actionsOpen = !this.actionsOpen;
+
+        if (!this.actionsOpen)
+        {
+          this.actionsLoaded = true;
+          return;
+        }
+
+        this.actions = this.configuration.onActionsRequested(item);
+
+        this.$nextTick(() =>
+        {
+          let dropdown = this.$refs.dropdown;
+          let target = ev.target;
+          do
+          {
+            if (target.classList.contains('ui-tree-item'))
+            {
+              break;
+            }
+          }
+          while (target = target.parentElement);
+
+          target = target.querySelector('.ui-tree-item-actions');
+
+          var rect = target.getBoundingClientRect();
+          var width = 240;
+
+          var position = {
+            x: rect.left - width + rect.width,
+            y: rect.top + rect.height
+          };
+
+          dropdown.style.top = position.y + 'px';
+          dropdown.style.left = position.x + 'px';
+          dropdown.style.width = width + 'px';
+
+          setTimeout(() =>
+          {
+            this.actionsLoaded = true;
+          }, 300);
+        });
       }
 
     }
@@ -263,5 +335,11 @@
     transition: opacity 0.2s ease 0;
     opacity: 0;
     color: var(--color-fg-mid);
+  }
+
+  .ui-tree-dropdown
+  {
+    position: fixed;
+    min-width: 200px;
   }
 </style>

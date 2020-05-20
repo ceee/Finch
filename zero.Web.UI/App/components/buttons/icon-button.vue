@@ -27,11 +27,7 @@
         type: String,
         default: '@ui.back'
       },
-      disabled: Boolean,
-      click: {
-        type: Function,
-        default: () => { }
-      }
+      disabled: Boolean
     },
 
     mounted ()
