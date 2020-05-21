@@ -8,15 +8,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Raven.Client.Documents;
-using Raven.Client.Documents.Conventions;
 using Raven.Client.Documents.Indexes;
 using System;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
-using zero.Core.Attributes;
 using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -26,7 +23,6 @@ using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Core.Validation;
 using zero.Web.Defaults;
-using zero.Web.Mapper;
 
 namespace zero.Web
 {

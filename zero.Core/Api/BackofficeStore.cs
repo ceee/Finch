@@ -138,12 +138,12 @@ namespace zero.Core.Api
 
         if (appAwareEntity != null)
         {
-          appAwareEntity.AppId = "zero.applications.1-A"; // Constants.Database.SharedAppId; // TODO correct app id
+          appAwareEntity.AppId = AppId; // Constants.Database.SharedAppId; // TODO correct app id
         }
 
         if (model is ILanguageAwareEntity)
         {
-          (model as ILanguageAwareEntity).LanguageId = "zero.languages.1-A"; // TODO correct language id
+          (model as ILanguageAwareEntity).LanguageId = "languages.1-A"; // TODO correct language id
         }
       }
 

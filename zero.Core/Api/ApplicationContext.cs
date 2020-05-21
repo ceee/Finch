@@ -163,6 +163,8 @@ namespace zero.Core.Api
     /// </summary>
     IApplication ResolveFromUriInternal(Uri uri, IList<Application> apps)
     {
+      string[] protocols = new string[3] { "https://", "http://", "//" };
+
       IApplication currentApp = null;
 
       foreach (Application app in apps)
@@ -174,9 +176,26 @@ namespace zero.Core.Api
 
         foreach (string domain in app.Domains)
         {
-          Uri domainUri = new Uri(domain, UriKind.Absolute);
+          if (domain.IsNullOrEmpty())
+          {
+            continue;
+          }
 
-          int compareResult = Uri.Compare(uri, domainUri, UriComponents.HostAndPort, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase);
+          string normalizedDomain = domain;
+
+          if (!protocols.Any(protocol => domain.StartsWith(protocol, StringComparison.OrdinalIgnoreCase)))
+          {
+            normalizedDomain = "http://" + domain;
+          }
+
+          UriBuilder uriBuilder = new UriBuilder(normalizedDomain);
+
+          if (!uriBuilder.Uri.IsAbsoluteUri)
+          {
+            continue;
+          }
+
+          int compareResult = Uri.Compare(uri, uriBuilder.Uri, UriComponents.HostAndPort, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase);
 
           if (compareResult == 0)
           {
