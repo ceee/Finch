@@ -5,7 +5,7 @@
 
     <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">
       <template v-slot:button>
-        <ui-button type="action block" :label="applications[0].name" caret="down" />
+        <ui-button type="action block" :label="currentApplication.name" caret="down" />
       </template>
       <ui-dropdown-list v-model="applicationItems" :action="applicationChanged" />
     </ui-dropdown>
@@ -46,7 +46,7 @@
 
 
 <script>
-  import { map as _map } from 'underscore';
+  import { map as _map, find as _find } from 'underscore';
   import AuthApi from 'zero/services/auth.js'
 
   export default {
@@ -59,6 +59,15 @@
       user: null,
       userActions: []
     }),
+
+
+    computed: {
+      currentApplication()
+      {
+        return _find(this.applications, x => x.id === zero.appId);
+      }
+    },
+
 
     created()
     {
@@ -105,8 +114,21 @@
       {
         return {
           application: item,
-          active: item.name === "Brothers", // TODO correct active application
-          name: item.name
+          active: item.id === zero.appId,
+          name: item.name,
+          action: (_, opts) =>
+          {
+            opts.loading(true);
+
+            AuthApi.switchApp(item.id).then(success =>
+            {
+              opts.loading(false);
+              if (success)
+              {
+                location.reload();
+              }
+            });
+          }
         };
       });
 

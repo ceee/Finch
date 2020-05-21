@@ -35,8 +35,10 @@ namespace zero.Web
 
     protected IEnumerable<IZeroPlugin> Plugins { get; private set; }
 
+    protected IApplicationContext AppContext { get; private set; }
 
-    public ZeroVue(IZeroOptions options, IWebHostEnvironment env, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IMapper mapper, IEnumerable<IZeroPlugin> plugins)
+
+    public ZeroVue(IZeroOptions options, IWebHostEnvironment env, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IMapper mapper, IEnumerable<IZeroPlugin> plugins, IApplicationContext appContext)
     {
       Environment = env;
       Options = options;
@@ -44,6 +46,7 @@ namespace zero.Web
       AuthenticationApi = authenticationApi;
       Mapper = mapper;
       Plugins = plugins;
+      AppContext = appContext;
       //zero.path = "@Model.BackofficePath.EnsureEndsWith('/')";
       //zero.translations = @Html.Raw(text);
     }
@@ -65,6 +68,7 @@ namespace zero.Web
       config.Applications = await CreateApplications();
       config.Alias = CreateAliases();
       config.SettingsAreas = CreateSettingsAreas();
+      config.AppId = AppContext.AppId;
 
       config.User = await Mapper.Map<User, UserEditModel>(await AuthenticationApi.GetUser());
 
@@ -276,6 +280,8 @@ namespace zero.Web
     public int PluginCount { get; set; }
 
     public string ErrorFieldNone { get; set; }
+
+    public string AppId { get; set; }
 
     public UserEditModel User { get; set; }
 

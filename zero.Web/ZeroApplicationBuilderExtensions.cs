@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using zero.Core;
 using zero.Core.Extensions;
+using zero.Core.Middlewares;
 using zero.Core.Options;
 
 namespace zero.Web
@@ -19,6 +20,8 @@ namespace zero.Web
       string path = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
 
       app.UseStaticFiles();
+
+      app.UseMiddleware<ApplicationContextMiddleware>();
 
       // map backoffice
       app.UseWhen(ctx => ctx.Request.Path.ToString().StartsWith(path), builder =>

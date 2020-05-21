@@ -11,10 +11,13 @@ namespace zero.Web.Controllers
   public class AuthenticationController : BackofficeController
   {
     IAuthenticationApi Api;
+    IApplicationContext AppContext;
 
-    public AuthenticationController(IAuthenticationApi api)
+
+    public AuthenticationController(IAuthenticationApi api, IApplicationContext appContext)
     {
       Api = api;
+      AppContext = appContext;
     }
 
 
@@ -55,6 +58,22 @@ namespace zero.Web.Controllers
     {
       await Api.Logout();
       return Json(EntityResult.Success());
+    }
+
+
+    /// <summary>
+    /// Try to switch selected application for user
+    /// </summary>
+    [HttpPost, ZeroAuthorize]
+    public async Task<IActionResult> SwitchApp(string appId)
+    {
+      User user = await Api.GetUser();
+      bool isSuccess = await AppContext.TrySwitchForUser(user, appId);
+
+      return Json(new EntityResult() 
+      { 
+        IsSuccess = isSuccess 
+      });
     }
   }
 }

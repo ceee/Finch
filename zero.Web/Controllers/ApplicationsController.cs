@@ -79,5 +79,14 @@ namespace zero.Web.Controllers
     {
       return await As<Application, ApplicationEditModel>(await Api.Delete(id));
     }
+
+
+    /// <summary>
+    /// Save translation
+    /// </summary>
+    //public async Task<IActionResult> Switch([FromQuery] string id)
+    //{
+    //  return await As<Application, ApplicationEditModel>(await Api.Save(entity));
+    //}
   }
 }

@@ -92,6 +92,8 @@ namespace zero.Web
 
       Services.AddMapper();
 
+      Services.AddScoped<IApplicationContext, ApplicationContext>();
+
       Services.AddTransient<IBackofficeStore, BackofficeStore>();
       Services.AddTransient<IAppAwareBackofficeStore, AppAwareBackofficeStore>();
 
