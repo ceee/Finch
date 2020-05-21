@@ -1,13 +1,66 @@
 ﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Conventions;
 using Raven.Client.Documents.Operations.CompareExchange;
 using System;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using zero.Core.Attributes;
+using zero.Core.Entities;
+using zero.Core.Options;
 using zero.Core.Utils;
 
 namespace zero.Core.Extensions
 {
   public static class DocumentStoreExtensions
   {
+    /// <summary>
+    /// Setup conventions for the document store
+    /// </summary>
+    public static IDocumentStore Setup(this IDocumentStore store, IZeroOptions options)
+    {
+      Type[] polymorphTypes = new Type[2] { typeof(SpaceContent), typeof(Page) };
+
+
+      store.Conventions.IdentityPartsSeparator = ".";
+
+      store.Conventions.FindCollectionName = type =>
+      {
+        // do not alter non-internal entities
+        if (!typeof(IZeroDbConventions).IsAssignableFrom(type))
+        {
+          return DocumentConventions.DefaultGetCollectionName(type);
+        }
+
+        // use name from attribute if available
+        CollectionAttribute collection = type.GetCustomAttribute<CollectionAttribute>();
+        if (collection != null)
+        {
+          return collection.Name;
+        }
+
+        // use base type for polymorphism
+        Type polymorphBaseType = polymorphTypes.FirstOrDefault(x => type.IsSubclassOf(x));
+        Type finalType = polymorphBaseType ?? type;
+
+        return options.Raven.CollectionPrefix + DocumentConventions.DefaultGetCollectionName(finalType);
+      };
+
+
+      store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix = name =>
+      {
+        if (!options.Raven.CollectionPrefix.IsNullOrWhiteSpace())
+        {
+          name = options.Raven.CollectionPrefix.EnsureEndsWith(store.Conventions.IdentityPartsSeparator) + name.TrimStart(options.Raven.CollectionPrefix);
+        }
+
+        return name.ToCamelCaseId();
+      };
+
+      return store;
+    }
+
+
     /// <summary>
     /// Create a new unique Id
     /// </summary>

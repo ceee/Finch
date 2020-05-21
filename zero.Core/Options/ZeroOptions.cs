@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using System;
 using System.Collections.Generic;
 using zero.Core.Entities;
 using zero.Core.Mapper;
@@ -15,6 +16,10 @@ namespace zero.Core.Options
       DefaultLanguage = SupportedLanguages[0];
       TokenExpiration = 60;
       BackofficePath = "/zero";
+      Raven = new RavenOptions()
+      {
+        CollectionPrefix = String.Empty
+      };
       Sections = new SectionOptions();
       Features = new FeatureOptions();
       Pages = new PageOptions();
@@ -92,6 +97,8 @@ namespace zero.Core.Options
     public string Url { get; set; }
 
     public string Database { get; set; }
+
+    public string CollectionPrefix { get; set; }
   }
 
 

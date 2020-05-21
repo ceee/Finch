@@ -56,18 +56,7 @@ namespace zero.Core.Api
           Database = model.Database.Name
         };
 
-        raven.Conventions.IdentityPartsSeparator = ".";
-        raven.Conventions.FindCollectionName = type =>
-        {
-          return Constants.Database.CollectionPrefix + DocumentConventions.DefaultGetCollectionName(type);
-        };
-        raven.Conventions.TransformTypeCollectionNameToDocumentIdPrefix = name =>
-        {
-          return name.Replace(Constants.Database.CollectionPrefix, Constants.Database.CollectionPrefix + raven.Conventions.IdentityPartsSeparator).ToCamelCaseId();
-        };
-
-
-        raven.Initialize();
+        raven.Setup(Options).Initialize();
 
         // create application
         Application app = new Application()

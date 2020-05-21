@@ -242,7 +242,7 @@ namespace zero.Core.Api
     public AppAwareBackofficeStore(IDocumentStore raven, IMediaUpload media, IHttpContextAccessor httpContextAccessor) : base(raven, media)
     {
       Claim appIdClaim = httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == Constants.Auth.Claims.CurrentAppId);
-      AppId = appIdClaim.Value;
+      AppId = appIdClaim?.Value;
     }
   }
 }

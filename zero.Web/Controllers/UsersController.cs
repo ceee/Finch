@@ -51,7 +51,7 @@ namespace zero.Web.Controllers
     /// </summary>    
     public async Task<IActionResult> GetAll([FromQuery] ListQuery<User> query)
     {
-      return await As<User, UserListModel>(await Api.GetByQuery(query, "zero.applications.1-A"));
+      return await As<User, UserListModel>(await Api.GetByQuery(query)); // TODO , "zero.applications.1-A"
     }
 
 

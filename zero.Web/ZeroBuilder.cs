@@ -11,6 +11,7 @@ using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using Raven.Client.Documents.Indexes;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using zero.Core;
@@ -157,45 +158,9 @@ namespace zero.Web
           Database = options.Raven.Database
         };
 
-        store.Conventions.IdentityPartsSeparator = ".";
+        IDocumentStore raven = store.Setup(options).Initialize();
 
-        store.Conventions.FindCollectionName = type =>
-        {
-          if (!typeof(IZeroDbConventions).IsAssignableFrom(type))
-          {
-            return DocumentConventions.DefaultGetCollectionName(type);
-          }
-
-          CollectionAttribute collection = type.GetCustomAttribute<CollectionAttribute>();
-
-          if (collection != null)
-          {
-            return collection.Name;
-          }
-
-          Type finalType = type;
-
-          if (type.IsSubclassOf(typeof(SpaceContent)))
-          {
-            finalType = typeof(SpaceContent);
-          }
-          if (type.IsSubclassOf(typeof(Page)))
-          {
-            finalType = typeof(Page);
-          }
-
-          return Constants.Database.CollectionPrefix + DocumentConventions.DefaultGetCollectionName(finalType);
-        };
-
-        store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix = name =>
-        {
-          return name.Replace(Constants.Database.CollectionPrefix, Constants.Database.CollectionPrefix + store.Conventions.IdentityPartsSeparator).ToCamelCaseId();
-        };
-
-        
-
-        IDocumentStore raven = store.Initialize();
-
+        // create all indexes
         IndexCreation.CreateIndexes(Assembly.GetAssembly(typeof(MediaFolder_ByHierarchy)), store);
 
         return raven;

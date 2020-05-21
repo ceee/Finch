@@ -14,7 +14,7 @@ namespace zero.Core.Api
 
     protected IZeroOptions Options { get; private set; }
 
-    private const string PREFIX = "ChangeTokens.";
+    private const string PREFIX = "changeTokens";
 
 
     public Token(IDocumentStore raven, IZeroOptions options)
@@ -68,7 +68,7 @@ namespace zero.Core.Api
 
       ChangeToken token = new ChangeToken()
       {
-        Id = Constants.Database.CollectionPrefix + PREFIX + Guid.NewGuid(),
+        Id = Options.Raven.CollectionPrefix.EnsureEndsWith(Raven.Conventions.IdentityPartsSeparator) + PREFIX.EnsureEndsWith(Raven.Conventions.IdentityPartsSeparator) + Guid.NewGuid(),
         ReferenceId = entityId
       };
 

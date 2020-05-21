@@ -5,7 +5,7 @@
 
     <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">
       <template v-slot:button>
-        <ui-button type="action block" :label="applications[1].name" caret="down" />
+        <ui-button type="action block" :label="applications[0].name" caret="down" />
       </template>
       <ui-dropdown-list v-model="applicationItems" :action="applicationChanged" />
     </ui-dropdown>

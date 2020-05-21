@@ -10,10 +10,10 @@ namespace zero.Core.Api
 {
   public class ApplicationsApi : IApplicationsApi
   {
-    protected IAppAwareBackofficeStore Backoffice { get; private set; }
+    protected IBackofficeStore Backoffice { get; private set; }
 
 
-    public ApplicationsApi(IAppAwareBackofficeStore backoffice)
+    public ApplicationsApi(IBackofficeStore backoffice)
     {
       Backoffice = backoffice;
     }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System;
 using System.Threading.Tasks;
+using zero.Core.Entities;
 using zero.TestData;
 
 namespace zero.Debug.Controllers
@@ -20,6 +22,8 @@ namespace zero.Debug.Controllers
     {
       using (IAsyncDocumentSession session = raven.OpenAsyncSession())
       {
+        Application app = await session.Query<Application>().Where(x => x.IsActive).FirstOrDefaultAsync();
+
         await session.StoreAsync(new ContentPage()
         {
           CreatedDate = DateTimeOffset.Now,
@@ -28,7 +32,7 @@ namespace zero.Debug.Controllers
           IsActive = true,
           PageTypeAlias = "root",
           Text = "This is a text",
-          AppId = "zero.applications.1-A",
+          AppId = app.Id,
           Meta = new MetaPagePartial()
           {
             TitleOverrideAll = "brothers Klika OG"
@@ -47,7 +51,7 @@ namespace zero.Debug.Controllers
           IsActive = true,
           PageTypeAlias = "content",
           Text = "Our products page",
-          AppId = "zero.applications.1-A"
+          AppId = app.Id
         });
 
         ContentPage newsPage = new ContentPage()
@@ -58,7 +62,7 @@ namespace zero.Debug.Controllers
           IsActive = true,
           PageTypeAlias = "content",
           Text = "1 out of 100 news are good",
-          AppId = "zero.applications.1-A"
+          AppId = app.Id
         };
 
         await session.StoreAsync(newsPage);
@@ -72,7 +76,7 @@ namespace zero.Debug.Controllers
           PageTypeAlias = "news",
           Text = "What the fuckk",
           PublishDate = DateTimeOffset.Now.AddDays(3),
-          AppId = "zero.applications.1-A",
+          AppId = app.Id,
           ParentId = newsPage.Id
         });
 
@@ -85,7 +89,7 @@ namespace zero.Debug.Controllers
           PageTypeAlias = "news",
           Text = "What the fuckkii",
           PublishDate = DateTimeOffset.Now.AddDays(-20),
-          AppId = "zero.applications.1-A",
+          AppId = app.Id,
           ParentId = newsPage.Id
         });
 
@@ -96,7 +100,7 @@ namespace zero.Debug.Controllers
           Alias = "xxx",
           IsActive = true,
           PageTypeAlias = "redirect",
-          AppId = "zero.applications.1-A",
+          AppId = app.Id,
           ParentId = newsPage.Id,
           Link = "https://brothers.studio"
         });
