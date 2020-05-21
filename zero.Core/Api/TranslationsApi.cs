@@ -1,8 +1,6 @@
-﻿using FluentValidation.Results;
-using Raven.Client.Documents;
+﻿using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Entities;
@@ -11,32 +9,29 @@ using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class TranslationsApi : ITranslationsApi
+  public class TranslationsApi : BackofficeApi<ITranslationsApi>, ITranslationsApi
   {
-    protected IAppAwareBackofficeStore Backoffice { get; private set; }
-
-
-    public TranslationsApi(IAppAwareBackofficeStore backoffice)
+    public TranslationsApi(IDocumentStore raven, IApplicationContext appContext) : base(raven)
     {
-      Backoffice = backoffice;
+      AppId = appContext.AppId;
     }
 
 
     /// <inheritdoc />
     public async Task<Translation> GetById(string id)
     {
-      return await Backoffice.GetById<Translation>(id);
+      return await GetById<Translation>(id);
     }
 
 
     /// <inheritdoc />
     public async Task<IList<Translation>> GetAll()
     {
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<Translation>()
           .OrderByDescending(x => x.CreatedDate)
-          .ForApp(Backoffice.AppId)
+          .ForApp(AppId)
           .ToListAsync();
       }
     }
@@ -47,9 +42,9 @@ namespace zero.Core.Api
     {
       query.SearchFor(entity => entity.Key, entity => entity.Value);
 
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<Translation>().ForApp(Backoffice.AppId).ToQueriedListAsync(query);
+        return await session.Query<Translation>().ForApp(AppId).ToQueriedListAsync(query);
       }
     }
 
@@ -57,19 +52,19 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<Translation>> Save(Translation model)
     {
-      return await Backoffice.Save(model, new TranslationValidator());
+      return await Save(model, new TranslationValidator());
     }
 
 
     /// <inheritdoc />
     public async Task<EntityResult<Translation>> Delete(string id)
     {
-      return await Backoffice.DeleteById<Translation>(id);
+      return await DeleteById<Translation>(id);
     }
   }
 
 
-  public interface ITranslationsApi
+  public interface ITranslationsApi : IBackofficeApi<ITranslationsApi>
   {
     /// <summary>
     /// Get translation by Id
