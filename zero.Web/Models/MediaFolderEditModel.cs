@@ -1,6 +1,6 @@
 ﻿namespace zero.Web.Models
 {
-  public class MediaFolderEditModel : EditModel
+  public class MediaFolderEditModel : ObsoleteEditModel
   {
     public string Name { get; set; }
 

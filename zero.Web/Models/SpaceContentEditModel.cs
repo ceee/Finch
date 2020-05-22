@@ -5,7 +5,7 @@ using zero.Core.Renderer;
 
 namespace zero.Web.Models
 {
-  public class SpaceContentEditModel : EditModel
+  public class SpaceContentEditModel : ObsoleteEditModel
   {
     public string Alias { get; set; }
 

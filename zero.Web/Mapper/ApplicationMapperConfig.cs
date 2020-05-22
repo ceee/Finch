@@ -17,7 +17,7 @@ namespace zero.Web.Mapper
         target.Email = source.Email;
         target.IsActive = source.IsActive;
         target.CreatedDate = source.CreatedDate;
-        target.Domains = source.Domains;
+        //target.Domains = source.Domains;
         target.ImageId = source.ImageId;
         target.IconId = source.IconId;
         target.Features = source.Features;
@@ -29,7 +29,7 @@ namespace zero.Web.Mapper
         target.FullName = source.FullName;
         target.Email = source.Email;
         target.IsActive = source.IsActive;
-        target.Domains = source.Domains;
+        //target.Domains = source.Domains;
         target.ImageId = source.ImageId;
         target.IconId = source.IconId;
         target.Features = source.Features;
@@ -41,7 +41,7 @@ namespace zero.Web.Mapper
         target.Name = source.Name;
         target.FullName = source.FullName;
         target.IsActive = source.IsActive;
-        target.Domains = source.Domains;
+        //target.Domains = source.Domains;
         target.ImageId = source.ImageId;
       });
     }

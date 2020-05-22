@@ -3,7 +3,7 @@ using zero.Core.Entities;
 
 namespace zero.Web.Models
 {
-  public class ApplicationEditModel : EditModel
+  public class ApplicationEditModel : ObsoleteEditModel
   {
     public string Name { get; set; }
 

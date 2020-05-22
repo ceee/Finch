@@ -4,7 +4,7 @@ using zero.Core.Entities;
 
 namespace zero.Web.Models
 {
-  public class TranslationEditModel : EditModel
+  public class TranslationEditModel : ObsoleteEditModel
   {
     public string Key { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace zero.Web.Models
 {
-  public class MediaEditModel : EditModel
+  public class MediaEditModel : ObsoleteEditModel
   {
     
   }

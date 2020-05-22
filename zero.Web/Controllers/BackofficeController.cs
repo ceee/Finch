@@ -19,35 +19,35 @@ namespace zero.Web.Controllers
 
     IZeroOptions _options;
 
-    protected IMapper Mapper
-    {
-      get
-      {
-        return _mapper ?? (_mapper = HttpContext?.RequestServices?.GetService<IMapper>());
-      }
-    }
+    protected IMapper Mapper => _mapper ?? (_mapper = HttpContext?.RequestServices?.GetService<IMapper>());
 
-    protected IZeroOptions Options
-    {
-      get
-      {
-        return _options ?? (_options = HttpContext?.RequestServices?.GetService<IZeroOptions>());
-      }
-    }
+    protected IZeroOptions Options => _options ?? (_options = HttpContext?.RequestServices?.GetService<IZeroOptions>());
 
 
-    public BackofficeController()
-    {
-      
-    }
-
-
-    protected JsonResult AsJson(object data)
+    /// <summary>
+    /// Creates a Microsoft.AspNetCore.Mvc.JsonResult object that serializes the specified data object to JSON.
+    /// </summary>
+    public override JsonResult Json(object data)
     {
       JsonSerializerSettings settings = JsonConvert.DefaultSettings();
       settings.TypeNameHandling = TypeNameHandling.Objects;
       return Json(data, settings);
     }
+
+
+    /// <summary>
+    /// Creates an edit model with appropriate options and permissions
+    /// </summary>
+    public JsonResult JsonEdit<T>(T data)
+    {
+      return Json(new EditModel<T>()
+      {
+        Entity = data
+      });
+    }
+
+
+
 
 
     protected async Task<IActionResult> As<T, TTarget>(T model) where TTarget : class, new() where T : IZeroEntity
@@ -64,13 +64,13 @@ namespace zero.Web.Controllers
 
       TTarget result = await Mapper.Map<T, TTarget>(model);
 
-      if (result is EditModel)
+      if (result is ObsoleteEditModel)
       {
-        EditModel editModel = result as EditModel;
+        ObsoleteEditModel editModel = result as ObsoleteEditModel;
         //model.CanEdit = 
       }
 
-      return AsJson(result);
+      return Json(result);
     }
 
 
@@ -81,7 +81,7 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(404);
       }
 
-      return AsJson(await Mapper.Map<T, TTarget>(model));
+      return Json(await Mapper.Map<T, TTarget>(model));
     }
 
 
@@ -92,7 +92,7 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(404);
       }
 
-      return AsJson(await Mapper.Map<T, TTarget>(model));
+      return Json(await Mapper.Map<T, TTarget>(model));
     }
 
     protected async Task<IActionResult> As<T, TTarget>(EntityResult<T> model) where TTarget : class, new() where T : IZeroEntity
@@ -102,7 +102,7 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(404);
       }
 
-      return AsJson(await Mapper.Map<T, TTarget>(model));
+      return Json(await Mapper.Map<T, TTarget>(model));
     }
 
     protected async Task<TTarget> Map<T, TTarget>(T model) where TTarget : class, new()

@@ -8,28 +8,33 @@ using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class ApplicationsApi : BackofficeApi, IApplicationsApi
+  //public class ApplicationsApi : ApplicationsApi<Application>
+  //{
+  //  public ApplicationsApi(IBackofficeStore store) : base(store) { }
+  //}
+
+  //public interface IApplicationsApi : IApplicationsApi<IApplication> { }
+
+
+  public class ApplicationsApi<T> : BackofficeApi, IApplicationsApi<T> where T : IApplication
   {
-    public ApplicationsApi(IBackofficeStore store) : base(store)
+    public ApplicationsApi(IBackofficeStore store) : base(store) { }
+
+
+    /// <inheritdoc />
+    public async Task<T> GetById(string id)
     {
-      
+      return await GetById<T>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<Application> GetById(string id)
-    {
-      return await GetById<Application>(id);
-    }
-
-
-    /// <inheritdoc />
-    public async Task<IList<Application>> GetAll()
+    public async Task<IList<T>> GetAll()
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session
-          .Query<Application>()
+          .Query<T>()
           .OrderByDescending(x => x.CreatedDate)
           .ToListAsync();
       }
@@ -37,58 +42,58 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<Application>> GetByQuery(ListQuery<Application> query)
+    public async Task<ListResult<T>> GetByQuery(ListQuery<T> query)
     {
       query.SearchFor(entity => entity.Name);
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<Application>()
+        return await session.Query<T>()
           .ToQueriedListAsync(query);
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<Application>> Save(Application model)
+    public async Task<EntityResult<T>> Save(T model)
     {
       return await Save(model, new ApplicationValidator());
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<Application>> Delete(string id)
+    public async Task<EntityResult<T>> Delete(string id)
     {
-      return await DeleteById<Application>(id);
+      return await DeleteById<T>(id);
     }
   }
 
 
-  public interface IApplicationsApi
+  public interface IApplicationsApi<T> where T : IApplication
   {
     /// <summary>
     /// Get application by Id
     /// </summary>
-    Task<Application> GetById(string id);
+    Task<T> GetById(string id);
 
     /// <summary>
     /// Get all available zero applications
     /// </summary>
-    Task<IList<Application>> GetAll();
+    Task<IList<T>> GetAll();
 
     /// <summary>
     /// Get all available applications (with query)
     /// </summary>
-    Task<ListResult<Application>> GetByQuery(ListQuery<Application> query);
+    Task<ListResult<T>> GetByQuery(ListQuery<T> query);
 
     /// <summary>
     /// Creates or updates a application
     /// </summary>
-    Task<EntityResult<Application>> Save(Application model);
+    Task<EntityResult<T>> Save(T model);
 
     /// <summary>
     /// Deletes a application by Id
     /// </summary>
-    Task<EntityResult<Application>> Delete(string id);
+    Task<EntityResult<T>> Delete(string id);
   }
 }

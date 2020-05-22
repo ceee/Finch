@@ -87,6 +87,7 @@ namespace zero.Web
       });
 
       Services.AddMapper();
+      Services.AddZeroCoreServices();
 
       Services.AddScoped<IApplicationContext, ApplicationContext>();
 
@@ -95,7 +96,6 @@ namespace zero.Web
 
       Services.AddTransient<ISetupApi, SetupApi>();
       Services.AddTransient<ISectionsApi, SectionsApi>();
-      Services.AddTransient<IApplicationsApi, ApplicationsApi>();
       Services.AddTransient<IPagesApi, PagesApi>();
       Services.AddTransient<IPageTreeApi, PageTreeApi>();
       Services.AddTransient<ISettingsApi, SettingsApi>();
@@ -134,6 +134,11 @@ namespace zero.Web
       {
         mvc.AddRazorRuntimeCompilation();
       }
+
+      mvc.ConfigureApplicationPartManager(setup =>
+      {
+        setup.FeatureProviders.Add(new Web.ApiControllerFeatureProvider());
+      });
 
       return mvc;
     }

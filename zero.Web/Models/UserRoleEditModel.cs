@@ -4,7 +4,7 @@ using zero.Core.Entities;
 
 namespace zero.Web.Models
 {
-  public class UserRoleEditModel : EditModel
+  public class UserRoleEditModel : ObsoleteEditModel
   {
     public string Name { get; set; }
 

@@ -2,7 +2,7 @@
 
 namespace zero.Web.Models
 {
-  public class CountryEditModel : EditModel
+  public class CountryEditModel : ObsoleteEditModel
   {
     public string Name { get; set; }
 

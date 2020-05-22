@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
@@ -11,9 +13,12 @@ namespace zero.Debug.Controllers
     IAppScope<ITranslationsApi> Api;
     ITranslationsApi CurrentApi;
 
+    private readonly IActionDescriptorCollectionProvider _actionDescriptorCollectionProvider;
 
-    public TestController(IAppScope<ITranslationsApi> api, ITranslationsApi currentApi)
+
+    public TestController(IAppScope<ITranslationsApi> api, ITranslationsApi currentApi, IActionDescriptorCollectionProvider actionDescriptorCollectionProvider)
     {
+      _actionDescriptorCollectionProvider = actionDescriptorCollectionProvider;
       Api = api;
       CurrentApi = currentApi;
     }
@@ -34,5 +39,26 @@ namespace zero.Debug.Controllers
         shared
       });
     }
+
+
+    
+
+    [HttpGet]
+    public IActionResult Routes()
+    {
+
+      var routes = _actionDescriptorCollectionProvider.ActionDescriptors.Items.ToList();
+      if (routes != null && routes.Any())
+      {
+        return Json(routes);
+      }
+      return Json(new string [0]);
+    }
+  }
+
+  internal class RouteModel
+  {
+    public string Name { get; set; }
+    public string Template { get; set; }
   }
 }

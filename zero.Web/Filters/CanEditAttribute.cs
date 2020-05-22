@@ -27,9 +27,9 @@ namespace zero.Web.Filters
         {
           JsonResult result = context.Result as JsonResult;
 
-          if (result.Value is EditModel)
+          if (result.Value is ObsoleteEditModel)
           {
-            EditModel model = result.Value as EditModel;
+            ObsoleteEditModel model = result.Value as ObsoleteEditModel;
 
             model.CanEdit = true; // TODO query authorize attrs to get permissions
           }

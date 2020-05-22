@@ -27,9 +27,17 @@ namespace zero.Web.Filters
         {
           JsonResult result = context.Result as JsonResult;
 
-          if (result.Value is EditModel)
+          if (result.Value is ObsoleteEditModel)
           {
-            EditModel model = result.Value as EditModel;
+            ObsoleteEditModel model = result.Value as ObsoleteEditModel;
+
+            model.Meta = model.Meta ?? new EditModelMeta();
+            model.Meta.Token = await token.Get(model.Id);
+          }
+
+          if (result.Value is ObsoleteEditModel)
+          {
+            ObsoleteEditModel model = result.Value as ObsoleteEditModel;
 
             model.Meta = model.Meta ?? new EditModelMeta();
             model.Meta.Token = await token.Get(model.Id);

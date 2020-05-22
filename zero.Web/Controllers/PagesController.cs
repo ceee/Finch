@@ -19,7 +19,7 @@ namespace zero.Web.Controllers
     /// </summary>
     public async Task<ActionResult> GetAllowedPageTypes([FromQuery] string parent = null)
     {
-      return AsJson(await Api.GetAllowedPageTypes(parent));
+      return Json(await Api.GetAllowedPageTypes(parent));
     }
   }
 }

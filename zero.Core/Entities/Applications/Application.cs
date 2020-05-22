@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace zero.Core.Entities
 {
@@ -20,7 +21,7 @@ namespace zero.Core.Entities
     public string IconId { get; set; }
 
     /// <inheritdoc />
-    public string[] Domains { get; set; } = new string[] { };
+    public Uri[] Domains { get; set; } = new Uri[] { };
 
     /// <inheritdoc />
     public List<string> Features { get; set; } = new List<string>();
@@ -52,7 +53,7 @@ namespace zero.Core.Entities
     /// <summary>
     /// All assigned domains for this application
     /// </summary>
-    string[] Domains { get; set; }
+    Uri[] Domains { get; set; }
 
     /// <summary>
     /// Features which are enabled for this application.

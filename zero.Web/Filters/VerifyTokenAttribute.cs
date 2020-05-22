@@ -34,9 +34,9 @@ namespace zero.Web.Filters
         {
           object argument = context.ActionArguments[key];
 
-          if (argument is EditModel)
+          if (argument is ObsoleteEditModel)
           {
-            EditModel model = (argument as EditModel);
+            ObsoleteEditModel model = (argument as ObsoleteEditModel);
             string tokenId = model.Meta?.Token;
 
             bool isVerified = await token.Verify(model.Id, tokenId);

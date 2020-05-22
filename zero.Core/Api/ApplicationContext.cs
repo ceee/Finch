@@ -174,28 +174,23 @@ namespace zero.Core.Api
           continue;
         }
 
-        foreach (string domain in app.Domains)
+        foreach (Uri domain in app.Domains)
         {
-          if (domain.IsNullOrEmpty())
-          {
-            continue;
-          }
+          //string normalizedDomain = domain;
 
-          string normalizedDomain = domain;
+          //if (!protocols.Any(protocol => domain.StartsWith(protocol, StringComparison.OrdinalIgnoreCase)))
+          //{
+          //  normalizedDomain = "http://" + domain;
+          //}
 
-          if (!protocols.Any(protocol => domain.StartsWith(protocol, StringComparison.OrdinalIgnoreCase)))
-          {
-            normalizedDomain = "http://" + domain;
-          }
+          //UriBuilder uriBuilder = new UriBuilder(normalizedDomain);
 
-          UriBuilder uriBuilder = new UriBuilder(normalizedDomain);
+          //if (!uriBuilder.Uri.IsAbsoluteUri)
+          //{
+          //  continue;
+          //}
 
-          if (!uriBuilder.Uri.IsAbsoluteUri)
-          {
-            continue;
-          }
-
-          int compareResult = Uri.Compare(uri, uriBuilder.Uri, UriComponents.HostAndPort, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase);
+          int compareResult = Uri.Compare(uri, domain, UriComponents.HostAndPort, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase);
 
           if (compareResult == 0)
           {

@@ -1,9 +1,30 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 
 namespace zero.Web.Models
 {
-  public abstract class EditModel
+  public class EditModel : EditModel<object> { }
+
+
+  public class EditModel<T>
+  {
+    /// <summary>
+    /// Model
+    /// </summary>
+    public T Entity { get; set; }
+
+    /// <summary>
+    /// Whether this entity can be edited or only viewed
+    /// </summary>
+    public bool CanEdit { get; set; }
+
+    /// <summary>
+    /// Meta data for the entity
+    /// </summary>
+    public EditModelMeta Meta { get; set; } = new EditModelMeta();
+  }
+
+
+  public abstract class ObsoleteEditModel
   {
     /// <summary>
     /// Id of the entity

@@ -1,6 +1,6 @@
 ﻿namespace zero.Web.Models
 {
-  public class LanguageEditModel : EditModel
+  public class LanguageEditModel : ObsoleteEditModel
   {
     public string Name { get; set; }
 
