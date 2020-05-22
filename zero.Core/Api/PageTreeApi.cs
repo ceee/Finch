@@ -12,16 +12,12 @@ using zero.Core.Options;
 
 namespace zero.Core.Api
 {
-  public class PageTreeApi : IPageTreeApi
+  public class PageTreeApi : AppAwareBackofficeApi, IPageTreeApi
   {
     protected IZeroOptions Options { get; private set; }
 
-    protected IAppAwareBackofficeStore Backoffice { get; private set; }
-
-
-    public PageTreeApi(IAppAwareBackofficeStore backoffice, IZeroOptions options)
+    public PageTreeApi(IZeroOptions options, IBackofficeStore store) : base(store)
     {
-      Backoffice = backoffice;
       Options = options;
     }
 
@@ -33,11 +29,11 @@ namespace zero.Core.Api
       IReadOnlyCollection<PageType> pageTypes = Options.Pages.GetAllItems();
       string[] openIds = new string[0] { };
 
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         IList<Page> pages = await session
           .Query<Page>()
-          .ForApp(Backoffice.AppId)
+          .Scope(Scope)
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .ToListAsync();
 
@@ -48,7 +44,7 @@ namespace zero.Core.Api
           Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
             .ProjectInto<Pages_ByHierarchy.Result>()
             .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
-            .ForApp(Backoffice.AppId)
+            .Scope(Scope)
             .FirstOrDefaultAsync(x => x.Id == activeId);
 
           if (result != null)
@@ -62,10 +58,10 @@ namespace zero.Core.Api
         string[] pageIds = pages.Select(x => x.Id).ToArray();
 
         IList<Pages_WithChildren.Result> children = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
-            .ProjectInto<Pages_WithChildren.Result>()
-            .ForApp(Backoffice.AppId)
-            .Where(x => x.Id.In(pageIds))
-            .ToListAsync();
+          .ProjectInto<Pages_WithChildren.Result>()
+          .Scope(Scope)
+          .Where(x => x.Id.In(pageIds))
+          .ToListAsync();
 
 
         // build tree
@@ -121,7 +117,7 @@ namespace zero.Core.Api
   }
 
 
-  public interface IPageTreeApi
+  public interface IPageTreeApi : IAppAwareBackofficeApi
   {
     /// <summary>
     /// Get all children for the current parent page (or root if empty)

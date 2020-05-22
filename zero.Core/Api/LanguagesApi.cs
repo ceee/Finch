@@ -13,21 +13,15 @@ using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class LanguagesApi : ILanguagesApi
+  public class LanguagesApi : BackofficeApi, ILanguagesApi
   {
-    protected IAppAwareBackofficeStore Backoffice { get; private set; }
-
-
-    public LanguagesApi(IAppAwareBackofficeStore backoffice)
-    {
-      Backoffice = backoffice;
-    }
+    public LanguagesApi(IBackofficeStore store) : base(store) { }
 
 
     /// <inheritdoc />
     public async Task<Language> GetById(string id)
     {
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.LoadAsync<Language>(id);
       }
@@ -37,7 +31,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<Language>> GetAll()
     {
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<Language>()
           .OrderByDescending(x => x.CreatedDate)
@@ -68,7 +62,7 @@ namespace zero.Core.Api
     {
       query.SearchFor(entity => entity.Name);
 
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<Language>()
           .ToQueriedListAsync(query);
@@ -93,7 +87,7 @@ namespace zero.Core.Api
 
       model.Alias = Alias.Generate(model.Name);
 
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         await session.StoreAsync(model);
         await session.SaveChangesAsync();
@@ -106,7 +100,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<Language>> Delete(string id)
     {
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         Language entity = await session.LoadAsync<Language>(id);
 

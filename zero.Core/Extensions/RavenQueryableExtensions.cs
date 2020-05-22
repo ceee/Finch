@@ -5,13 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using zero.Core.Api;
 using zero.Core.Entities;
 
 namespace zero.Core.Extensions
 {
   public static class RavenQueryableExtensions
   {
-    public static IRavenQueryable<T> ForApp<T>(this IRavenQueryable<T> source, string appId, bool includeShared = true) where T : IZeroIdEntity
+    public static IRavenQueryable<T> Scope<T>(this IRavenQueryable<T> source, string appId, bool includeShared = true) where T : IZeroIdEntity
     {
       if (appId.IsNullOrEmpty() || source.ElementType.Is<IAppAwareEntity>())
       {
@@ -22,6 +23,30 @@ namespace zero.Core.Extensions
       ids.Add(appId);
 
       if (includeShared)
+      {
+        ids.Add(Constants.Database.SharedAppId);
+      }
+
+      return source.Where(item => (item as IAppAwareEntity).AppId.In(ids));
+    }
+
+
+    public static IRavenQueryable<T> Scope<T>(this IRavenQueryable<T> source, ApiScope scope) where T : IZeroIdEntity
+    {
+      if (scope == null || scope.Global)
+      {
+        return source;
+      }
+
+      if (scope.AppId.IsNullOrEmpty() || source.ElementType.Is<IAppAwareEntity>())
+      {
+        return source;
+      }
+
+      HashSet<string> ids = new HashSet<string>();
+      ids.Add(scope.AppId);
+
+      if (scope.IncludeShared)
       {
         ids.Add(Constants.Database.SharedAppId);
       }

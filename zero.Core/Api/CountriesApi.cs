@@ -11,28 +11,22 @@ using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class CountriesApi : ICountriesApi
+  public class CountriesApi : BackofficeApi, ICountriesApi
   {
-    protected IAppAwareBackofficeStore Backoffice { get; private set; }
-
-
-    public CountriesApi(IAppAwareBackofficeStore backoffice)
-    {
-      Backoffice = backoffice;
-    }
+    public CountriesApi(IBackofficeStore store) : base(store) { }
 
 
     /// <inheritdoc />
     public async Task<Country> GetById(string id)
     {
-      return await Backoffice.GetById<Country>(id);
+      return await GetById<Country>(id);
     }
 
 
     /// <inheritdoc />
     public async Task<IList<Country>> GetAll(string languageId)
     {
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<Country>()
           .Where(x => x.LanguageId == languageId)
@@ -48,7 +42,7 @@ namespace zero.Core.Api
     {
       query.SearchSelector = country => country.Name;
 
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<Country>()
           .Where(x => x.LanguageId == languageId)
@@ -76,7 +70,7 @@ namespace zero.Core.Api
 
       model.Alias = Alias.Generate(model.Name);
 
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         await session.StoreAsync(model);
 
@@ -97,7 +91,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<Country>> Delete(string id)
     {
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         Country country = await session.LoadAsync<Country>(id);
 

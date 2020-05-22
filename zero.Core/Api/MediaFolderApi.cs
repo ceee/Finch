@@ -10,31 +10,25 @@ using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class MediaFolderApi : IMediaFolderApi
+  public class MediaFolderApi : AppAwareBackofficeApi, IMediaFolderApi
   {
-    protected IAppAwareBackofficeStore Backoffice { get; private set; }
-
-
-    public MediaFolderApi(IAppAwareBackofficeStore backoffice)
-    {
-      Backoffice = backoffice;
-    }
+    public MediaFolderApi(IBackofficeStore store) : base(store) { }
 
 
     /// <inheritdoc />
     public async Task<MediaFolder> GetById(string id)
     {
-      return await Backoffice.GetById<MediaFolder>(id);
+      return await GetById<MediaFolder>(id);
     }
 
 
     /// <inheritdoc />
     public async Task<IList<MediaFolder>> GetAll(string parentId = null)
     {
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<MediaFolder>()
-          .ForApp(Backoffice.AppId)
+          .Scope(Scope)
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .OrderByDescending(x => x.Name)
           .ToListAsync();
@@ -47,10 +41,10 @@ namespace zero.Core.Api
     {
       List<TreeItem> result = new List<TreeItem>();
 
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         IList<MediaFolder> items = await session.Query<MediaFolder>()
-          .ForApp(Backoffice.AppId)
+          .Scope(Scope)
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .OrderByDescending(x => x.Name)
           .ToListAsync();
@@ -89,12 +83,12 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<MediaFolder>> GetHierarchy(string id)
     {
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         MediaFolder_ByHierarchy.Result result = await session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
           .ProjectInto<MediaFolder_ByHierarchy.Result>()
           .Include<MediaFolder_ByHierarchy.Result, MediaFolder>(x => x.Path.Select(p => p.Id))
-          .ForApp(Backoffice.AppId)
+          .Scope(Scope)
           .FirstOrDefaultAsync(x => x.Id == id);
 
         if (result == null)
@@ -110,19 +104,19 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<MediaFolder>> Save(MediaFolder model)
     {
-      return await Backoffice.Save(model, new MediaFolderValidator());
+      return await Save(model, new MediaFolderValidator());
     }
 
 
     /// <inheritdoc />
     public async Task<EntityResult<MediaFolder>> Delete(string id)
     {
-      return await Backoffice.DeleteById<MediaFolder>(id);
+      return await DeleteById<MediaFolder>(id);
     }
   }
 
 
-  public interface IMediaFolderApi
+  public interface IMediaFolderApi : IAppAwareBackofficeApi
   {
     /// <summary>
     /// Get application by Id

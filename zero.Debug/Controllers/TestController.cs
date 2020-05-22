@@ -1,40 +1,37 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
-using zero.Debug.Models;
 
 namespace zero.Debug.Controllers
 {
   public class TestController : Controller
   {
-    ITranslationsApi Api;
+    IAppScope<ITranslationsApi> Api;
+    ITranslationsApi CurrentApi;
 
-    IApplicationContext AppContext;
 
-
-    public TestController(ITranslationsApi api, IApplicationContext appContext)
+    public TestController(IAppScope<ITranslationsApi> api, ITranslationsApi currentApi)
     {
       Api = api;
-      AppContext = appContext;
+      CurrentApi = currentApi;
     }
 
 
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-      IList<Translation> all = await Api.GetAll();
-      IList<Translation> scoped = await Api.Scope(global: true).GetAll();
+      IList<Translation> global = await Api.Global.GetAll();
+      IList<Translation> current = await CurrentApi.GetAll();
+      IList<Translation> appTwo = await Api.App("applications.2-A").GetAll();
+      IList<Translation> shared = await Api.Shared.GetAll(); 
 
       return Json(new {
-        all,
-        scoped
+        current,
+        global,
+        appTwo,
+        shared
       });
     }
   }

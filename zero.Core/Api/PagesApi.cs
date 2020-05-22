@@ -9,16 +9,12 @@ using zero.Core.Options;
 
 namespace zero.Core.Api
 {
-  public class PagesApi : IPagesApi
+  public class PagesApi : AppAwareBackofficeApi, IPagesApi
   {
     protected IZeroOptions Options { get; private set; }
 
-    protected IAppAwareBackofficeStore Backoffice { get; private set; }
-
-
-    public PagesApi(IAppAwareBackofficeStore backoffice, IZeroOptions options)
+    public PagesApi(IZeroOptions options, IBackofficeStore store) : base(store)
     {
-      Backoffice = backoffice;
       Options = options;
     }
 
@@ -26,11 +22,11 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<Page>> GetChildren(string parentId = null)
     {
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session
           .Query<Page>()
-          .ForApp(Backoffice.AppId)
+          .Scope(Scope)
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .ToListAsync();
       }
@@ -54,7 +50,7 @@ namespace zero.Core.Api
         return types.Where(x => x.AllowAsRoot).ToList();
       }
 
-      Page page = await Backoffice.GetById<Page>(parentId);
+      Page page = await GetById<Page>(parentId);
       PageType pageType = page != null ? types.FirstOrDefault(x => x.Alias == page.PageTypeAlias) : null;
 
       if (pageType == null)
@@ -72,7 +68,7 @@ namespace zero.Core.Api
   }
 
 
-  public interface IPagesApi
+  public interface IPagesApi : IAppAwareBackofficeApi
   {
     /// <summary>
     /// Get all available page types

@@ -12,16 +12,12 @@ using zero.Core.Identity;
 
 namespace zero.Core.Api
 {
-  public class UserApi : IUserApi
+  public class UserApi : AppAwareBackofficeApi, IUserApi
   {
     protected UserManager<User> UserManager { get; private set; }
 
-    protected IAppAwareBackofficeStore Backoffice { get; private set; }
-
-
-    public UserApi(IAppAwareBackofficeStore backoffice, UserManager<User> userManager)
+    public UserApi(IBackofficeStore store, UserManager<User> userManager) : base(store)
     {
-      Backoffice = backoffice;
       UserManager = userManager;
     }
 
@@ -45,10 +41,10 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<User>> GetAll(string appId = null)
     {
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<User>()
-          .ForApp(appId)
+          .Scope(appId)
           .OrderByDescending(x => x.CreatedDate)
           .ToListAsync();
       }
@@ -60,10 +56,10 @@ namespace zero.Core.Api
     {
       query.SearchSelector = user => user.Name;
 
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<User>()
-          .ForApp(appId)
+          .Scope(appId)
           .ToQueriedListAsync(query);
       }
     }
@@ -72,14 +68,14 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<User>> Save(User model)
     {
-      return await Backoffice.Save(model); //, new UserValidator<User>());
+      return await Save(model); //, new UserValidator<User>());
     }
 
 
     /// <inheritdoc />
     public async Task<EntityResult<User>> Delete(string id)
     {
-      return await Backoffice.DeleteById<User>(id);
+      return await DeleteById<User>(id);
     }
 
 
@@ -157,7 +153,7 @@ namespace zero.Core.Api
   }
 
 
-  public interface IUserApi
+  public interface IUserApi : IAppAwareBackofficeApi
   {
     /// <summary>
     /// Find user by id

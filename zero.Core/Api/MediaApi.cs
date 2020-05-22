@@ -1,30 +1,19 @@
-﻿using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Raven.Client.Documents.Session;
 using System.Threading.Tasks;
-using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
-using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class MediaApi : IMediaApi
+  public class MediaApi : AppAwareBackofficeApi, IMediaApi
   {
-    protected IAppAwareBackofficeStore Backoffice { get; private set; }
-
-
-    public MediaApi(IAppAwareBackofficeStore backoffice)
-    {
-      Backoffice = backoffice;
-    }
+    public MediaApi(IBackofficeStore store) : base(store) { }
 
 
     /// <inheritdoc />
     public async Task<Media> GetById(string id)
     {
-      return await Backoffice.GetById<Media>(id);
+      return await GetById<Media>(id);
     }
 
 
@@ -33,10 +22,10 @@ namespace zero.Core.Api
     {
       query.SearchFor(entity => entity.Name);
 
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<Media>()
-          .ForApp(Backoffice.AppId)
+          .Scope(Scope)
           .WhereIf(x => x.FolderId == query.FolderId, !query.FolderId.IsNullOrEmpty())
           .ToQueriedListAsync(query);
       }
@@ -46,14 +35,14 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<Media>> Save(Media model)
     {
-      return await Backoffice.Save(model);
+      return await Save(model);
     }
 
 
     /// <inheritdoc />
     public async Task<EntityResult<Media>> Delete(string id)
     {
-      return await Backoffice.DeleteById<Media>(id);
+      return await DeleteById<Media>(id);
     }
 
 
@@ -65,7 +54,7 @@ namespace zero.Core.Api
   }
 
 
-  public interface IMediaApi
+  public interface IMediaApi : IAppAwareBackofficeApi
   {
     /// <summary>
     /// Get application by Id

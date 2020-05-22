@@ -8,28 +8,25 @@ using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class ApplicationsApi : IApplicationsApi
+  public class ApplicationsApi : BackofficeApi, IApplicationsApi
   {
-    protected IBackofficeStore Backoffice { get; private set; }
-
-
-    public ApplicationsApi(IBackofficeStore backoffice)
+    public ApplicationsApi(IBackofficeStore store) : base(store)
     {
-      Backoffice = backoffice;
+      
     }
 
 
     /// <inheritdoc />
     public async Task<Application> GetById(string id)
     {
-      return await Backoffice.GetById<Application>(id);
+      return await GetById<Application>(id);
     }
 
 
     /// <inheritdoc />
     public async Task<IList<Application>> GetAll()
     {
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session
           .Query<Application>()
@@ -44,7 +41,7 @@ namespace zero.Core.Api
     {
       query.SearchFor(entity => entity.Name);
 
-      using (IAsyncDocumentSession session = Backoffice.Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<Application>()
           .ToQueriedListAsync(query);
@@ -55,14 +52,14 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<Application>> Save(Application model)
     {
-      return await Backoffice.Save(model, new ApplicationValidator());
+      return await Save(model, new ApplicationValidator());
     }
 
 
     /// <inheritdoc />
     public async Task<EntityResult<Application>> Delete(string id)
     {
-      return await Backoffice.DeleteById<Application>(id);
+      return await DeleteById<Application>(id);
     }
   }
 

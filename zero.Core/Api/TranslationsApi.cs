@@ -9,11 +9,11 @@ using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class TranslationsApi : BackofficeApi<ITranslationsApi>, ITranslationsApi
+  public class TranslationsApi : AppAwareBackofficeApi, ITranslationsApi
   {
-    public TranslationsApi(IDocumentStore raven, IApplicationContext appContext) : base(raven)
+    public TranslationsApi(IBackofficeStore store) : base(store)
     {
-      AppId = appContext.AppId;
+      AllowShared = true;
     }
 
 
@@ -31,7 +31,7 @@ namespace zero.Core.Api
       {
         return await session.Query<Translation>()
           .OrderByDescending(x => x.CreatedDate)
-          .ForApp(AppId)
+          .Scope(Scope)
           .ToListAsync();
       }
     }
@@ -44,7 +44,7 @@ namespace zero.Core.Api
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<Translation>().ForApp(AppId).ToQueriedListAsync(query);
+        return await session.Query<Translation>().Scope(Scope).ToQueriedListAsync(query);
       }
     }
 
@@ -64,7 +64,7 @@ namespace zero.Core.Api
   }
 
 
-  public interface ITranslationsApi : IBackofficeApi<ITranslationsApi>
+  public interface ITranslationsApi : IAppAwareBackofficeApi
   {
     /// <summary>
     /// Get translation by Id

@@ -15,10 +15,8 @@ using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class UserRolesApi : IUserRolesApi
+  public class UserRolesApi : AppAwareBackofficeApi, IUserRolesApi
   {
-    protected IDocumentStore Raven { get; private set; }
-
     protected IHttpContextAccessor HttpContextAccessor { get; set; }
 
     protected UserManager<User> UserManager { get; private set; }
@@ -28,9 +26,8 @@ namespace zero.Core.Api
     private ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
 
-    public UserRolesApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, RoleManager<UserRole> roleManager)
+    public UserRolesApi(IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, RoleManager<UserRole> roleManager, IBackofficeStore store) : base(store)
     {
-      Raven = raven;
       HttpContextAccessor = httpContextAccessor;
       UserManager = userManager;
       RoleManager = roleManager;
@@ -66,7 +63,7 @@ namespace zero.Core.Api
 
       if (model.Id.IsNullOrEmpty())
       {
-        model.AppId = "zero.applications.1-A"; // TODO real app id
+        model.AppId = Scope.AppId;
         model.CreatedDate = DateTimeOffset.Now;
       }
 
@@ -112,7 +109,7 @@ namespace zero.Core.Api
   }
 
 
-  public interface IUserRolesApi
+  public interface IUserRolesApi : IAppAwareBackofficeApi
   {
     /// <summary>
     /// Get all user roles

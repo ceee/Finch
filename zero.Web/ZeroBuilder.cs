@@ -91,27 +91,26 @@ namespace zero.Web
       Services.AddScoped<IApplicationContext, ApplicationContext>();
 
       Services.AddTransient<IBackofficeStore, BackofficeStore>();
-      Services.AddTransient<IAppAwareBackofficeStore, AppAwareBackofficeStore>();
+      Services.AddTransient(typeof(IAppScope<>), typeof(AppScope<>));
 
       Services.AddTransient<ISetupApi, SetupApi>();
-
-      Services.AddScoped<ISectionsApi, SectionsApi>();
-      Services.AddScoped<IApplicationsApi, ApplicationsApi>();
-      Services.AddScoped<IPagesApi, PagesApi>();
-      Services.AddScoped<IPageTreeApi, PageTreeApi>();
-      Services.AddScoped<ISettingsApi, SettingsApi>();
-      Services.AddScoped<IAuthenticationApi, AuthenticationApi>();
-      Services.AddScoped<ICountriesApi, CountriesApi>();
-      Services.AddScoped<IUserApi, UserApi>();
-      Services.AddScoped<IUserRolesApi, UserRolesApi>();
-      Services.AddScoped<IToken, Token>();
-      Services.AddScoped<ISpacesApi, SpacesApi>();
-      Services.AddScoped<ITranslationsApi, TranslationsApi>();
-      Services.AddScoped<ILanguagesApi, LanguagesApi>();
-      Services.AddScoped<IPermissionsApi, PermissionsApi>();
-      Services.AddScoped<IMediaApi, MediaApi>();
-      Services.AddScoped<IMediaFolderApi, MediaFolderApi>();
-      Services.AddScoped<IMediaUpload, MediaUpload>();
+      Services.AddTransient<ISectionsApi, SectionsApi>();
+      Services.AddTransient<IApplicationsApi, ApplicationsApi>();
+      Services.AddTransient<IPagesApi, PagesApi>();
+      Services.AddTransient<IPageTreeApi, PageTreeApi>();
+      Services.AddTransient<ISettingsApi, SettingsApi>();
+      Services.AddTransient<IAuthenticationApi, AuthenticationApi>();
+      Services.AddTransient<ICountriesApi, CountriesApi>();
+      Services.AddTransient<IUserApi, UserApi>();
+      Services.AddTransient<IUserRolesApi, UserRolesApi>();
+      Services.AddTransient<IToken, Token>();
+      Services.AddTransient<ISpacesApi, SpacesApi>();
+      Services.AddTransient<ITranslationsApi, TranslationsApi>();
+      Services.AddTransient<ILanguagesApi, LanguagesApi>();
+      Services.AddTransient<IPermissionsApi, PermissionsApi>();
+      Services.AddTransient<IMediaApi, MediaApi>();
+      Services.AddTransient<IMediaFolderApi, MediaFolderApi>();
+      Services.AddTransient<IMediaUpload, MediaUpload>();
     }
 
 

@@ -114,7 +114,7 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<T>()
-          .ForApp(appId)
+          .Scope(appId)
           .Where(x => x.SpaceAlias == alias)
           .ToQueriedListAsync(query);
       }

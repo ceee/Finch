@@ -14,32 +14,40 @@ using zero.Core.Utils;
 
 namespace zero.Core.Api
 {
-  public abstract class BackofficeApi<T> : IBackofficeApi<T>
+  public abstract class AppAwareBackofficeApi : BackofficeApi, IAppAwareBackofficeApi
   {
-    public bool IsAppAware => !AppId.IsNullOrEmpty();
+    protected bool AllowShared { get; set; } = false;
 
-    public string AppId { get; protected set; }
+    public AppAwareBackofficeApi(IBackofficeStore store) : base(store)
+    {
+      Scope = new ApiScope()
+      {
+        AppId = store.AppContext.AppId,
+        IncludeShared = false // TODO based on user
+      };
+    }
+  }
 
-    public IDocumentStore Raven { get; private set; }
 
-    protected string[] CurrentAppIds { get => GetAppIds(); }
+  public abstract class BackofficeApi : IBackofficeApi
+  {
+    public ApiScope Scope { get; protected set; }
+
+    protected IDocumentStore Raven { get; private set; }
 
     const string NEW_ID = "new:";
 
+    IBackofficeStore Backoffice;
 
-    public BackofficeApi(IDocumentStore raven)
+
+    public BackofficeApi(IBackofficeStore store)
     {
-      Raven = raven;
-    }
-
-
-    public async Task<T> Scoped<T>(Func<Task<T>> action)
-    {
-      string appId = AppId;
-      AppId = null;
-      T result = await action();
-      AppId = appId;
-      return result;
+      Raven = store.Raven;
+      Backoffice = store;
+      Scope = new ApiScope()
+      {
+        Global = true
+      };
     }
 
 
@@ -52,7 +60,7 @@ namespace zero.Core.Api
         {
           return await session.Query<T>()
             .Where(x => x.Id == id)
-            .ForApp(AppId, true)
+            .Scope(Scope)
             .FirstOrDefaultAsync();
         }
 
@@ -88,9 +96,9 @@ namespace zero.Core.Api
       }
 
       // check if current app id is valid
-      if (!model.Id.IsNullOrEmpty() && IsAppAware && appAwareEntity != null)
+      if (!model.Id.IsNullOrEmpty() && Scope.IsAppAware && appAwareEntity != null)
       {
-        if (!CurrentAppIds.Contains(appAwareEntity.AppId))
+        if (!Scope.IsAllowed(appAwareEntity.AppId))
         {
           return EntityResult<T>.Fail("@errors.onsave.notallowed");
         }
@@ -142,9 +150,9 @@ namespace zero.Core.Api
           zeroEntity.CreatedDate = DateTimeOffset.Now;
         }
 
-        if (appAwareEntity != null)
+        if (appAwareEntity != null && appAwareEntity.AppId.IsNullOrEmpty())
         {
-          appAwareEntity.AppId = AppId; // Constants.Database.SharedAppId; // TODO correct app id
+          appAwareEntity.AppId = Scope.AppId; // Constants.Database.SharedAppId; // TODO correct app id
         }
 
         if (model is ILanguageAwareEntity)
@@ -187,7 +195,7 @@ namespace zero.Core.Api
           return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
         }
 
-        if (IsAppAware && appAwareEntity != null && !CurrentAppIds.Contains(appAwareEntity.AppId))
+        if (appAwareEntity != null && Scope.IsAppAware && !Scope.IsAllowed(appAwareEntity.AppId))
         {
           return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
         }
@@ -199,27 +207,11 @@ namespace zero.Core.Api
         return EntityResult<T>.Success();
       }
     }
-
-
-
-    /// <summary>
-    /// Get current app id + shared id
-    /// </summary>
-    string[] GetAppIds()
-    {
-      return new string[2] { AppId, Constants.Database.SharedAppId };
-    }
   }
 
 
-  public interface IBackofficeApi<T>
+  public interface IBackofficeApi
   {
-    IDocumentStore Raven { get; }
-
-    bool IsAppAware { get; }
-
-    string AppId { get; }
-
     /// <summary>
     /// Get an entity by Id.
     /// If the requested entity is an IAppAwareEntity it will only return entities for the currently selected app + shared app
@@ -235,21 +227,11 @@ namespace zero.Core.Api
     /// Deletes an entity by Id
     /// </summary>
     Task<EntityResult<T>> DeleteById<T>(string id) where T : IZeroIdEntity;
-
-    T Scope(string appId = null, bool global = false, bool includeShared = false);
   }
 
 
-  public class AppScope : IDisposable
+  public interface IAppAwareBackofficeApi : IBackofficeApi
   {
-    public AppScope() { }
-
-    public AppScope(string appId) { }
-
-    public AppScope(string appId, bool includeShared) { }
-
-    public void Dispose()
-    {
-    }
+    ApiScope Scope { get; }
   }
 }
