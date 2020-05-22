@@ -137,7 +137,7 @@ namespace zero.Web
 
       mvc.ConfigureApplicationPartManager(setup =>
       {
-        setup.FeatureProviders.Add(new Web.ApiControllerFeatureProvider());
+        setup.FeatureProviders.Add(new ApiControllerFeatureProvider());
       });
 
       return mvc;
@@ -237,6 +237,19 @@ namespace zero.Web
       Services.Configure(configureOptions);
       return this;
     }
+
+
+    private static EntityDefinition[] Entities = new EntityDefinition[] { };
+
+    //public ZeroPlugin Use<TService, TImplementation>(Action<EntityDefinition<TService, TImplementation>> configure) where TImplementation : TService
+    //{
+    //  //configure()
+    //}
+
+    //public ZeroPlugin Use<TService, TImplementation>() where TImplementation : TService
+    //{
+    //  //configure()
+    //}
 
 
     /// <summary>

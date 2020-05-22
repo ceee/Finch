@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,6 +23,37 @@ namespace zero.Debug.Controllers
       _actionDescriptorCollectionProvider = actionDescriptorCollectionProvider;
       Api = api;
       CurrentApi = currentApi;
+    }
+
+
+    [HttpGet]
+    public IActionResult Services()
+    {
+      List<object> items = new List<object>();
+
+      foreach (var service in Startup.Services)
+      {
+        if (!service.ServiceType.FullName.StartsWith("zero.") && (service.ImplementationType == null || !service.ImplementationType.FullName.StartsWith("zero.")))
+        {
+          continue;
+        }
+
+        items.Add(new
+        {
+          name = service.ServiceType.FullName,
+          lifetime = service.Lifetime,
+          instance = service.ImplementationType?.FullName
+        });
+      }
+
+      return Json(items);
+    }
+
+
+    [HttpGet]
+    public IActionResult Things([FromServices] IValidator<Application> appValidator)
+    {
+      return Ok();
     }
 
 

@@ -13,6 +13,7 @@ using zero.Web.Models;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize, CanEdit, AddToken]
+  [BackofficeGenericController]
   public abstract class BackofficeController : Controller
   {
     IMapper _mapper;
@@ -42,7 +43,8 @@ namespace zero.Web.Controllers
     {
       return Json(new EditModel<T>()
       {
-        Entity = data
+        Entity = data,
+        CanEdit = true
       });
     }
 

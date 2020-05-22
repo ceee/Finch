@@ -2,33 +2,43 @@
 using Microsoft.AspNetCore.Mvc.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using System.Text;
-using zero.Core.Entities;
-using zero.Web.Controllers;
+using zero.Core;
+using zero.Web.Filters;
 
 namespace zero.Web
 {
   public class ApiControllerFeatureProvider : IApplicationFeatureProvider<ControllerFeature>
   {
+    public ApiControllerFeatureProvider()
+    {
+
+    }
+
+
     public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
     {
-      var ctrls = feature.Controllers;
+      Assembly currentAssembly = typeof(ApiControllerFeatureProvider).Assembly;
 
-      var type = typeof(ApplicationsController<>).MakeGenericType(typeof(Application)).GetTypeInfo();
+      IEnumerable<Type> candidates = currentAssembly.GetExportedTypes().Where(x => x.GetCustomAttributes<BackofficeGenericControllerAttribute>().Any() && x.ContainsGenericParameters);
 
-      feature.Controllers.Add(type);
-      //var controllerType = typeof(GenericController<>).MakeGenericType(entityType.AsType()).GetTypeInfo();
+      foreach (Type candidate in candidates)
+      {
+        Type genericType = candidate.GetGenericTypeDefinition();
+        Type[] arguments = genericType.GetGenericArguments();
+        Type desiredInterface = arguments.FirstOrDefault()?.GetInterfaces().FirstOrDefault();
 
-      //feature.Controllers.Add()
-      //var typeName = entityType.Name + "Controller";
+        if (desiredInterface == null)
+        {
+          continue;
+        }
 
-      //// Check to see if there is a "real" controller for this class
-      //if (!feature.Controllers.Any(t => t.Name == typeName))
-      //{
-      //  // Create a generic controller for this type
-      //  feature.Controllers.Add(controllerType);
-      //}
+        Type implementation = EntityMap.Get(desiredInterface);
+        TypeInfo type = candidate.MakeGenericType(implementation).GetTypeInfo();
+        
+        feature.Controllers.Add(type);
+      }
     }
   }
 }

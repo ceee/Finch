@@ -106,7 +106,7 @@
         form.load(!this.id ? ApplicationsApi.getEmpty() : ApplicationsApi.getById(this.id)).then(response =>
         {
           this.disabled = !response.canEdit;
-          this.model = response;
+          this.model = response.entity;
         });
 
         ApplicationsApi.getAllFeatures().then(items =>

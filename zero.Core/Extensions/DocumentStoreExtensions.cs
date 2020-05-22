@@ -33,7 +33,7 @@ namespace zero.Core.Extensions
         }
 
         // use name from attribute if available
-        CollectionAttribute collection = type.GetCustomAttribute<CollectionAttribute>();
+        CollectionAttribute collection = type.GetCustomAttribute<CollectionAttribute>(true);
         if (collection != null)
         {
           return collection.Name;

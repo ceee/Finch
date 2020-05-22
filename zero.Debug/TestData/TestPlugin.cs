@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using zero.Core;
+using zero.Core.Entities;
 using zero.Core.Options;
 using zero.Core.Plugins;
+using zero.Debug;
 using zero.Debug.TestData;
 using zero.TestData.Lists;
 
@@ -37,6 +40,8 @@ namespace zero.TestData
 
     public void ConfigureServices(IServiceCollection services)
     {
+      EntityMap.Use<IApplication, MyApplication>();
+
       services.AddTransient<ITestService, TestService>();
     }
   }

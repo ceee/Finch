@@ -1,4 +1,5 @@
-﻿using Raven.Client.Documents;
+﻿using FluentValidation;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,17 +9,15 @@ using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  //public class ApplicationsApi : ApplicationsApi<Application>
-  //{
-  //  public ApplicationsApi(IBackofficeStore store) : base(store) { }
-  //}
-
-  //public interface IApplicationsApi : IApplicationsApi<IApplication> { }
-
-
   public class ApplicationsApi<T> : BackofficeApi, IApplicationsApi<T> where T : IApplication
   {
-    public ApplicationsApi(IBackofficeStore store) : base(store) { }
+    IValidator<T> Validator;
+
+
+    public ApplicationsApi(IBackofficeStore store, IValidator<T> validator) : base(store)
+    {
+      Validator = validator;
+    }
 
 
     /// <inheritdoc />
@@ -57,7 +56,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> Save(T model)
     {
-      return await Save(model, new ApplicationValidator());
+      return await Save(model, Validator);
     }
 
 
