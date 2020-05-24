@@ -1,6 +1,6 @@
 ﻿namespace zero.Core.Entities
 {
-  public class Translation : ZeroEntity, ILanguageAwareEntity, IAppAwareEntity, IZeroDbConventions
+  public class Translation : ZeroEntity, ITranslation
   {
     /// <inheritdoc />
     public string AppId { get; set; }
@@ -8,19 +8,13 @@
     /// <inheritdoc />
     public string LanguageId { get; set; }
 
-    /// <summary>
-    /// Key which can be used to query translations
-    /// </summary>
+    /// <inheritdoc />
     public string Key { get; set; }
 
-    /// <summary>
-    /// Value of the translation
-    /// </summary>
+    /// <inheritdoc />
     public string Value { get; set; }
 
-    /// <summary>
-    /// Display + input type
-    /// </summary>
+    /// <inheritdoc />
     public TranslationDisplay Display { get; set; }
   }
 
@@ -29,5 +23,24 @@
   {
     Text = 0,
     HTML = 1
+  }
+
+
+  public interface ITranslation : IZeroEntity, ILanguageAwareEntity, IAppAwareEntity, IZeroDbConventions
+  {
+    /// <summary>
+    /// Key which can be used to query translations
+    /// </summary>
+    string Key { get; set; }
+
+    /// <summary>
+    /// Value of the translation
+    /// </summary>
+    string Value { get; set; }
+
+    /// <summary>
+    /// Display + input type
+    /// </summary>
+    TranslationDisplay Display { get; set; }
   }
 }

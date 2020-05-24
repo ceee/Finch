@@ -12,17 +12,12 @@ namespace zero.Debug.Controllers
 {
   public class TestController : Controller
   {
-    IAppScope<ITranslationsApi> Api;
-    ITranslationsApi CurrentApi;
-
     private readonly IActionDescriptorCollectionProvider _actionDescriptorCollectionProvider;
 
 
-    public TestController(IAppScope<ITranslationsApi> api, ITranslationsApi currentApi, IActionDescriptorCollectionProvider actionDescriptorCollectionProvider)
+    public TestController(IActionDescriptorCollectionProvider actionDescriptorCollectionProvider)
     {
       _actionDescriptorCollectionProvider = actionDescriptorCollectionProvider;
-      Api = api;
-      CurrentApi = currentApi;
     }
 
 
@@ -54,23 +49,6 @@ namespace zero.Debug.Controllers
     public IActionResult Things([FromServices] IValidator<Application> appValidator)
     {
       return Ok();
-    }
-
-
-    [HttpGet]
-    public async Task<IActionResult> Index()
-    {
-      IList<Translation> global = await Api.Global.GetAll();
-      IList<Translation> current = await CurrentApi.GetAll();
-      IList<Translation> appTwo = await Api.App("applications.2-A").GetAll();
-      IList<Translation> shared = await Api.Shared.GetAll(); 
-
-      return Json(new {
-        current,
-        global,
-        appTwo,
-        shared
-      });
     }
 
 

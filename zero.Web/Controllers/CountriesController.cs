@@ -26,7 +26,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get new country
     /// </summary>  
-    public IActionResult GetEmpty() => Json(new T());
+    public IActionResult GetEmpty() => JsonEdit(new T());
 
 
     /// <summary>

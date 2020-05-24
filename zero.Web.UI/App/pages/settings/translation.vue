@@ -51,7 +51,7 @@
         form.load(!this.model.id ? TranslationsApi.getEmpty() : TranslationsApi.getById(this.model.id)).then(response =>
         {
           this.disabled = !response.canEdit;
-          this.item = response;
+          this.item = response.entity;
           this.loading = false;
         });
       },

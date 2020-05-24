@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
-using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
@@ -22,7 +21,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get translation by id
     /// </summary>  
-    public IActionResult GetEmpty() => Json(new T());
+    public IActionResult GetEmpty() => JsonEdit(new T());
 
 
     /// <summary>
