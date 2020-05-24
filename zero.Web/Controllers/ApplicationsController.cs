@@ -7,7 +7,7 @@ using zero.Core.Identity;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Applications, PermissionsValue.Read)]
-  public class ApplicationsController<T> : BackofficeController where T : IApplication
+  public class ApplicationsController<T> : BackofficeController where T : IApplication, new()
   {
     IApplicationsApi<T> Api;
 
@@ -20,7 +20,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get translation by id
     /// </summary>  
-    public IActionResult GetEmpty([FromServices] T app) => JsonEdit(app);
+    public IActionResult GetEmpty() => JsonEdit(new T());
 
 
     /// <summary>

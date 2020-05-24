@@ -12,15 +12,6 @@ namespace zero.Core.Entities
   {
     public static void AddZeroCoreServices(this IServiceCollection services)
     {
-      //services.Scan(scan => scan.FromAssemblyOf<IApplication>()
-      //  .AddClasses(classes => classes.AssignableTo(typeof(IValidator<>)))
-      //  .AsImplementedInterfaces()
-      //  //.As(typeof(IValidator<>))
-      //  .WithScopedLifetime()
-      //);
-
-      //Assembly[] assemblies = new Assembly[1] { typeof(IApplication).Assembly };
-
       services.AddAllByInterfaceTransient(typeof(IValidator), typeof(IValidator<>), AppDomain.CurrentDomain.GetAssemblies());
 
       services.AddTransient<IApplication, Application>(); 
@@ -31,24 +22,6 @@ namespace zero.Core.Entities
     public static void AddAllByInterfaceTransient<TService, TImplementation>(this IServiceCollection services, Assembly[] assemblies)
     {
       services.AddAllByInterfaceTransient(typeof(TService), typeof(TImplementation), assemblies);
-      //Type searchFor = typeof(TService);
-      //string searchForName = nameof(TService); // + (isGeneric ? "`1" : String.Empty);
-
-      //foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-      //{
-      //  foreach (Type type in assembly.GetExportedTypes())
-      //  {
-      //    if (searchFor.IsAssignableFrom(type) && type.IsClass)
-      //    {
-      //      Type service = type.GetInterfaces().FirstOrDefault(x => x.IsInterface && x.Name == searchForName);
-
-      //      if (service != null)
-      //      {
-      //        services.AddTransient(service, type);
-      //      }
-      //    }
-      //  }
-      //}
     }
 
 

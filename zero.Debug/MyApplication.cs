@@ -17,7 +17,7 @@ namespace zero.Debug
     {
       Include(new ApplicationValidator());
 
-      RuleFor(x => x.Description).NotEmpty();
+      //RuleFor(x => x.Description).NotEmpty();
     }
   }
 }
