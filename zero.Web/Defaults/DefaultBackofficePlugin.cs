@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using zero.Core;
+using zero.Core.Entities;
 using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Web.Mapper;
@@ -8,7 +10,11 @@ namespace zero.Web.Defaults
 {
   internal class DefaultBackofficePlugin : IZeroPlugin
   {
-    public void ConfigureServices(IServiceCollection services) { }
+    public void ConfigureServices(IServiceCollection services) 
+    {
+      EntityMap.Use<IApplication, Application>();
+      EntityMap.Use<ICountry, Country>();
+    }
     
     public void Configure(IZeroPluginOptions plugin, IZeroOptions zero)
     {

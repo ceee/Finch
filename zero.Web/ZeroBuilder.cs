@@ -100,7 +100,6 @@ namespace zero.Web
       Services.AddTransient<IPageTreeApi, PageTreeApi>();
       Services.AddTransient<ISettingsApi, SettingsApi>();
       Services.AddTransient<IAuthenticationApi, AuthenticationApi>();
-      Services.AddTransient<ICountriesApi, CountriesApi>();
       Services.AddTransient<IUserApi, UserApi>();
       Services.AddTransient<IUserRolesApi, UserRolesApi>();
       Services.AddTransient<IToken, Token>();

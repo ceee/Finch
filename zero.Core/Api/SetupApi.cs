@@ -209,9 +209,9 @@ namespace zero.Core.Api
         {
           CreatedDate = DateTimeOffset.Now,
           IsActive = true,
-          Alias = Alias.Generate(country.Key),
+          Alias = Alias.Generate(country.Value),
           LanguageId = defaultLanguage.Id,
-          Code = country.Key,
+          Code = country.Key.ToLowerInvariant(),
           Name = country.Value
         }).ToList());
       }

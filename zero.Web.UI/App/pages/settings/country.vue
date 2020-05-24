@@ -79,7 +79,7 @@
       {
         form.load(!this.id ? CountriesApi.getEmpty() : CountriesApi.getById(this.id)).then(response =>
         {
-          this.model = response;
+          this.model = response.entity;
         });
       },
 

@@ -16,6 +16,9 @@ namespace zero.Core.Entities
 
       services.AddTransient<IApplication, Application>(); 
       services.AddTransient(typeof(IApplicationsApi<>), typeof(ApplicationsApi<>));
+
+      services.AddTransient<ICountry, Country>();
+      services.AddTransient(typeof(ICountriesApi<>), typeof(CountriesApi<>));
     }
 
 

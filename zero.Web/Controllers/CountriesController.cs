@@ -3,16 +3,15 @@ using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
-using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Read)]
-  public class CountriesController : BackofficeController
+  public class CountriesController<T> : BackofficeController where T : ICountry, new()
   {
-    ICountriesApi Api;
+    ICountriesApi<T> Api;
 
-    public CountriesController(ICountriesApi api)
+    public CountriesController(ICountriesApi<T> api)
     {
       Api = api;
     }
@@ -21,48 +20,32 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get country by id
     /// </summary>
-    public async Task<IActionResult> GetById([FromQuery] string id)
-    {
-      return await As<Country, CountryEditModel>(await Api.GetById(id));
-    }
+    public async Task<IActionResult> GetById([FromQuery] string id) => JsonEdit(await Api.GetById(id));
 
 
     /// <summary>
     /// Get new country
     /// </summary>  
-    public IActionResult GetEmpty()
-    {
-      return Json(new CountryEditModel());
-    }
+    public IActionResult GetEmpty() => Json(new T());
 
 
     /// <summary>
     /// Get all countries
     /// </summary>    
-    public async Task<IActionResult> GetAll([FromQuery] ListQuery<Country> query)
-    {
-      return await As<Country, CountryListModel>(await Api.GetByQuery("en-US", query));
-    }
+    public async Task<IActionResult> GetAll([FromQuery] ListQuery<T> query) => Json(await Api.GetByQuery("languages.1-A", query)); // TODO correct language
 
 
     /// <summary>
     /// Save country
     /// </summary>
     [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Write)]
-    public async Task<IActionResult> Save([FromBody] CountryEditModel model)
-    {
-      Country country = await Mapper.Map(model, await Api.GetById(model.Id));
-      return Json(await Api.Save(country));
-    }
+    public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
 
 
     /// <summary>
     /// Deletes a country
     /// </summary>
     [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Write)]
-    public async Task<IActionResult> Delete([FromQuery] string id)
-    {
-      return Json(await Api.Delete(id));
-    }
+    public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
   }
 }

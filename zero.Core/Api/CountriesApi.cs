@@ -1,4 +1,5 @@
-﻿using FluentValidation.Results;
+﻿using FluentValidation;
+using FluentValidation.Results;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
@@ -7,28 +8,33 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
-using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class CountriesApi : BackofficeApi, ICountriesApi
+  public class CountriesApi<T> : BackofficeApi, ICountriesApi<T> where T : ICountry
   {
-    public CountriesApi(IBackofficeStore store) : base(store) { }
+    IValidator<T> Validator;
 
 
-    /// <inheritdoc />
-    public async Task<Country> GetById(string id)
+    public CountriesApi(IBackofficeStore store, IValidator<T> validator) : base(store)
     {
-      return await GetById<Country>(id);
+      Validator = validator;
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<Country>> GetAll(string languageId)
+    public async Task<T> GetById(string id)
+    {
+      return await GetById<T>(id);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<IList<T>> GetAll(string languageId)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<Country>()
+        return await session.Query<T>()
           .Where(x => x.LanguageId == languageId)
           .OrderByDescending(x => x.IsPreferred)
           .ThenBy(x => x.Name)
@@ -38,13 +44,13 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<Country>> GetByQuery(string languageId, ListQuery<Country> query)
+    public async Task<ListResult<T>> GetByQuery(string languageId, ListQuery<T> query)
     {
       query.SearchSelector = country => country.Name;
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<Country>()
+        return await session.Query<T>()
           .Where(x => x.LanguageId == languageId)
           .OrderByDescending(x => x.IsPreferred)
           .ThenBy(x => x.Name)
@@ -54,13 +60,13 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<Country>> Save(Country model)
+    public async Task<EntityResult<T>> Save(T model)
     {
-      ValidationResult validation = await new CountryValidator().ValidateAsync(model);
+      ValidationResult validation = await Validator.ValidateAsync(model);
 
       if (!validation.IsValid)
       {
-        return EntityResult<Country>.Fail(validation);
+        return EntityResult<T>.Fail(validation);
       }
 
       if (model.Id.IsNullOrEmpty())
@@ -84,20 +90,20 @@ namespace zero.Core.Api
         }
       }
 
-      return EntityResult<Country>.Success(model);
+      return EntityResult<T>.Success(model);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<Country>> Delete(string id)
+    public async Task<EntityResult<T>> Delete(string id)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        Country country = await session.LoadAsync<Country>(id);
+        T country = await session.LoadAsync<T>(id);
 
         if (country == null)
         {
-          return EntityResult<Country>.Fail("@errors.ondelete.idnotfound");
+          return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
         }
 
         session.Delete(country);
@@ -105,36 +111,36 @@ namespace zero.Core.Api
         await session.SaveChangesAsync();
       }
 
-      return EntityResult<Country>.Success();
+      return EntityResult<T>.Success();
     }
   }
 
 
-  public interface ICountriesApi
+  public interface ICountriesApi<T> where T : ICountry
   {
     /// <summary>
     /// Get country by Id
     /// </summary>
-    Task<Country> GetById(string id);
+    Task<T> GetById(string id);
 
     /// <summary>
     /// Get all available countries
     /// </summary>
-    Task<IList<Country>> GetAll(string languageId);
+    Task<IList<T>> GetAll(string languageId);
 
     /// <summary>
     /// Get all available countries (with query)
     /// </summary>
-    Task<ListResult<Country>> GetByQuery(string languageId, ListQuery<Country> query);
+    Task<ListResult<T>> GetByQuery(string languageId, ListQuery<T> query);
 
     /// <summary>
     /// Creates or updates a country
     /// </summary>
-    Task<EntityResult<Country>> Save(Country model);
+    Task<EntityResult<T>> Save(T model);
 
     /// <summary>
     /// Deletes a country by Id
     /// </summary>
-    Task<EntityResult<Country>> Delete(string id);
+    Task<EntityResult<T>> Delete(string id);
   }
 }

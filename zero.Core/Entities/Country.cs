@@ -1,12 +1,20 @@
 ﻿namespace zero.Core.Entities
 {
-  public class Country : ZeroEntity, ILanguageAwareEntity, IZeroDbConventions
+  public class Country : ZeroEntity, ICountry
   {
-    /// <summary>
-    /// Language variant
-    /// </summary>
-    public class Variant : LanguageVariant { }
+    /// <inheritdoc />
+    public bool IsPreferred { get; set; }
 
+    /// <inheritdoc />
+    public string Code { get; set; }
+
+    /// <inheritdoc />
+    public string LanguageId { get; set; }
+  }
+
+
+  public interface ICountry : IZeroEntity, ILanguageAwareEntity, IZeroDbConventions
+  {
     /// <summary>
     /// Preferred countries are displayed on top in lists
     /// </summary>
@@ -16,8 +24,5 @@
     /// Country code (ISO 3166-1)
     /// </summary>
     public string Code { get; set; }
-
-    /// <inheritdoc />
-    public string LanguageId { get; set; }
   }
 }
