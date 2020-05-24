@@ -32,14 +32,20 @@ namespace zero.Core.Api
   }
 
 
+  public class TranslationsApi : TranslationsApi<ITranslation>, ITranslationsApi
+  {
+    public TranslationsApi(IBackofficeStore store) : base(store) { }
+  }
+
+
   public class TranslationsApi<T> : AppAwareBackofficeApi, ITranslationsApi<T> where T : ITranslation
   {
     IValidator<T> Validator;
 
 
-    public TranslationsApi(IBackofficeStore store, IValidator<T> validator) : base(store)
+    public TranslationsApi(IBackofficeStore store) : base(store)
     {
-      Validator = validator;
+      //Validator = validator;
       AllowShared = true;
     }
 
@@ -117,5 +123,11 @@ namespace zero.Core.Api
     /// Deletes a translation by Id
     /// </summary>
     Task<EntityResult<T>> Delete(string id);
+  }
+
+
+  public interface ITranslationsApi : ITranslationsApi<ITranslation>
+  {
+
   }
 }

@@ -46,9 +46,9 @@ namespace zero.Debug.Controllers
 
 
     [HttpGet]
-    public async Task<IActionResult> GetTranslations([FromServices] ITranslationsApiFacade api)
+    public async Task<IActionResult> GetTranslations([FromServices] ITranslationsApi api)
     {
-      return Json(await api.As<Translation>().GetAll());
+      return Json(await api.GetAll());
     }
 
 

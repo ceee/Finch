@@ -23,6 +23,7 @@ namespace zero.Core.Entities
       services.AddTransient(typeof(ILanguagesApi<>), typeof(LanguagesApi<>));
 
       services.AddTransient<ITranslation, Translation>();
+      services.AddTransient(typeof(ITranslationsApi), typeof(TranslationsApi));
       services.AddTransient(typeof(ITranslationsApi<>), typeof(TranslationsApi<>));
       services.AddTransient(typeof(ITranslationsApiFacade), typeof(TranslationsApiFacade));
     }
