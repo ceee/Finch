@@ -8,16 +8,16 @@ using zero.Web.Models;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Read)]
-  public class UsersController : BackofficeController
+  public class UsersController<TLanguage> : BackofficeController where TLanguage : ILanguage
   {
     IUserApi Api;
     IAuthenticationApi AuthenticationApi;
     IUserRolesApi RolesApi;
-    ILanguagesApi LanguagesApi;
+    ILanguagesApi<TLanguage> LanguagesApi;
     IPermissionsApi PermissionsApi;
 
 
-    public UsersController(IUserApi api, IAuthenticationApi authenticationApi, IUserRolesApi rolesApi, ILanguagesApi languagesApi, IPermissionsApi permissionsApi)
+    public UsersController(IUserApi api, IAuthenticationApi authenticationApi, IUserRolesApi rolesApi, ILanguagesApi<TLanguage> languagesApi, IPermissionsApi permissionsApi)
     {
       Api = api;
       AuthenticationApi = authenticationApi;

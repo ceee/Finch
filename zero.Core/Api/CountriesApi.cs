@@ -62,56 +62,14 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> Save(T model)
     {
-      ValidationResult validation = await Validator.ValidateAsync(model);
-
-      if (!validation.IsValid)
-      {
-        return EntityResult<T>.Fail(validation);
-      }
-
-      if (model.Id.IsNullOrEmpty())
-      {
-        model.CreatedDate = DateTimeOffset.Now;
-      }
-
-      model.Alias = Alias.Generate(model.Name);
-
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        await session.StoreAsync(model);
-
-        string id = session.Advanced.GetDocumentId(model);
-
-        await session.SaveChangesAsync();
-
-        if (model.Id.IsNullOrEmpty())
-        {
-          model.Id = id;
-        }
-      }
-
-      return EntityResult<T>.Success(model);
+      return await Save(model, Validator);
     }
 
 
     /// <inheritdoc />
     public async Task<EntityResult<T>> Delete(string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        T country = await session.LoadAsync<T>(id);
-
-        if (country == null)
-        {
-          return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
-        }
-
-        session.Delete(country);
-
-        await session.SaveChangesAsync();
-      }
-
-      return EntityResult<T>.Success();
+      return await DeleteById<T>(id);
     }
   }
 

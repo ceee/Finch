@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using Scrutor;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -19,6 +18,9 @@ namespace zero.Core.Entities
 
       services.AddTransient<ICountry, Country>();
       services.AddTransient(typeof(ICountriesApi<>), typeof(CountriesApi<>));
+
+      services.AddTransient<ILanguage, Language>();
+      services.AddTransient(typeof(ILanguagesApi<>), typeof(LanguagesApi<>));
     }
 
 

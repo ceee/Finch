@@ -105,7 +105,6 @@ namespace zero.Web
       Services.AddTransient<IToken, Token>();
       Services.AddTransient<ISpacesApi, SpacesApi>();
       Services.AddTransient<ITranslationsApi, TranslationsApi>();
-      Services.AddTransient<ILanguagesApi, LanguagesApi>();
       Services.AddTransient<IPermissionsApi, PermissionsApi>();
       Services.AddTransient<IMediaApi, MediaApi>();
       Services.AddTransient<IMediaFolderApi, MediaFolderApi>();

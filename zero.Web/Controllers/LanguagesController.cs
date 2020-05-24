@@ -8,12 +8,12 @@ using zero.Web.Models;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Read)]
-  public class LanguagesController : BackofficeController
+  public class LanguagesController<T> : BackofficeController where T : ILanguage, new()
   {
-    ILanguagesApi Api;
+    ILanguagesApi<T> Api;
 
 
-    public LanguagesController(ILanguagesApi api)
+    public LanguagesController(ILanguagesApi<T> api)
     {
       Api = api;
     }
@@ -22,57 +22,38 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get translation by id
     /// </summary>  
-    public IActionResult GetEmpty()
-    {
-      return Json(new LanguageEditModel());
-    }
+    public IActionResult GetEmpty() => Json(new T());
 
 
     /// <summary>
     /// Get translation by id
     /// </summary>  
-    public async Task<IActionResult> GetById([FromQuery] string id)
-    {
-      return await As<Language, LanguageEditModel>(await Api.GetById(id));
-    }
+    public async Task<IActionResult> GetById([FromQuery] string id) => JsonEdit(await Api.GetById(id));
 
 
     /// <summary>
     /// Get all translations
     /// </summary>    
-    public async Task<IActionResult> GetAll([FromQuery] ListQuery<Language> query)
-    {
-      return await As<Language, LanguageListModel>(await Api.GetByQuery(query));
-    }
+    public async Task<IActionResult> GetAll([FromQuery] ListQuery<T> query) => Json(await Api.GetByQuery(query));
 
 
     /// <summary>
     /// Returns all cultures available for creating languages.
     /// </summary>
-    public IActionResult GetAllCultures()
-    {
-      return Json(Api.GetAllCultures());
-    }
+    public IActionResult GetAllCultures() => Json(Api.GetAllCultures());
 
 
     /// <summary>
     /// Save translation
     /// </summary>
     [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Write)]
-    public async Task<IActionResult> Save([FromBody] LanguageEditModel model)
-    {
-      Language entity = await Mapper.Map(model, await Api.GetById(model.Id));
-      return await As<Language, LanguageEditModel>(await Api.Save(entity));
-    }
+    public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
 
 
     /// <summary>
     /// Deletes a translation
     /// </summary>
     [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Write)]
-    public async Task<IActionResult> Delete([FromQuery] string id)
-    {
-      return await As<Language, LanguageEditModel>(await Api.Delete(id));
-    }
+    public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
   }
 }

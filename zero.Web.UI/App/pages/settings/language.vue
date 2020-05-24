@@ -80,7 +80,7 @@
         form.load(LanguagesApi.getById(this.id)).then(response =>
         {
           this.disabled = !response.canEdit;
-          this.model = response;
+          this.model = response.entity;
         });
 
         LanguagesApi.getAllCultures().then(res =>

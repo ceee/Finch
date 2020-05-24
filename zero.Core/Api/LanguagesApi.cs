@@ -1,4 +1,4 @@
-﻿using FluentValidation.Results;
+﻿using FluentValidation;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
@@ -9,31 +9,33 @@ using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
-using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class LanguagesApi : BackofficeApi, ILanguagesApi
+  public class LanguagesApi<T> : BackofficeApi, ILanguagesApi<T> where T : ILanguage
   {
-    public LanguagesApi(IBackofficeStore store) : base(store) { }
+    IValidator<T> Validator;
 
 
-    /// <inheritdoc />
-    public async Task<Language> GetById(string id)
+    public LanguagesApi(IBackofficeStore store, IValidator<T> validator) : base(store)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.LoadAsync<Language>(id);
-      }
+      Validator = validator;
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<Language>> GetAll()
+    public async Task<T> GetById(string id)
+    {
+      return await GetById<T>(id);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<IList<T>> GetAll()
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<Language>()
+        return await session.Query<T>()
           .OrderByDescending(x => x.CreatedDate)
           .ToListAsync();
       }
@@ -58,78 +60,44 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<Language>> GetByQuery(ListQuery<Language> query)
+    public async Task<ListResult<T>> GetByQuery(ListQuery<T> query)
     {
       query.SearchFor(entity => entity.Name);
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<Language>()
+        return await session.Query<T>()
           .ToQueriedListAsync(query);
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<Language>> Save(Language model)
+    public async Task<EntityResult<T>> Save(T model)
     {
-      ValidationResult validation = await new LanguageValidator().ValidateAsync(model);
-
-      if (!validation.IsValid)
-      {
-        return EntityResult<Language>.Fail(validation);
-      }
-
-      if (model.Id.IsNullOrEmpty())
-      {
-        model.CreatedDate = DateTimeOffset.Now;
-      }
-
-      model.Alias = Alias.Generate(model.Name);
-
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        await session.StoreAsync(model);
-        await session.SaveChangesAsync();
-      }
-
-      return EntityResult<Language>.Success(model);
+      return await Save(model, Validator);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<Language>> Delete(string id)
+    public async Task<EntityResult<T>> Delete(string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        Language entity = await session.LoadAsync<Language>(id);
-
-        if (entity == null)
-        {
-          return EntityResult<Language>.Fail("@errors.ondelete.idnotfound");
-        }
-
-        session.Delete(entity);
-
-        await session.SaveChangesAsync();
-      }
-
-      return EntityResult<Language>.Success();
+      return await DeleteById<T>(id);
     }
   }
 
 
-  public interface ILanguagesApi
+  public interface ILanguagesApi<T> where T : ILanguage
   {
     /// <summary>
     /// Get language by Id
     /// </summary>
-    Task<Language> GetById(string id);
+    Task<T> GetById(string id);
 
     /// <summary>
     /// Get all available languages
     /// </summary>
-    Task<IList<Language>> GetAll();
+    Task<IList<T>> GetAll();
 
     /// <summary>
     /// Get all available cultures
@@ -139,16 +107,16 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all available languages (with query)
     /// </summary>
-    Task<ListResult<Language>> GetByQuery(ListQuery<Language> query);
+    Task<ListResult<T>> GetByQuery(ListQuery<T> query);
 
     /// <summary>
     /// Creates or updates a language
     /// </summary>
-    Task<EntityResult<Language>> Save(Language model);
+    Task<EntityResult<T>> Save(T model);
 
     /// <summary>
     /// Deletes a language by Id
     /// </summary>
-    Task<EntityResult<Language>> Delete(string id);
+    Task<EntityResult<T>> Delete(string id);
   }
 }
