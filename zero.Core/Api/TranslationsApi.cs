@@ -2,6 +2,7 @@
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Entities;
@@ -9,6 +10,28 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
+  public class TranslationsApiFacade : ITranslationsApiFacade
+  {
+    IServiceProvider Services;
+
+    public TranslationsApiFacade(IServiceProvider services)
+    {
+      Services = services;
+    }
+
+    public ITranslationsApi<T> As<T>() where T : ITranslation
+    {
+      return Services.GetService(typeof(ITranslationsApi<T>)) as ITranslationsApi<T>;
+    }
+  }
+
+
+  public interface ITranslationsApiFacade
+  {
+    ITranslationsApi<T> As<T>() where T : ITranslation;
+  }
+
+
   public class TranslationsApi<T> : AppAwareBackofficeApi, ITranslationsApi<T> where T : ITranslation
   {
     IValidator<T> Validator;
