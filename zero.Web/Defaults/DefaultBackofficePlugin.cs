@@ -16,6 +16,7 @@ namespace zero.Web.Defaults
       EntityMap.Use<ICountry, Country>();
       EntityMap.Use<ILanguage, Language>();
       EntityMap.Use<ITranslation, Translation>();
+      EntityMap.Use<IPage, Page>();
     }
     
     public void Configure(IZeroPluginOptions plugin, IZeroOptions zero)

@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using zero.Core.Api;
+using zero.Core.Entities;
 
 namespace zero.Web.Controllers
 {
-  public class PageTreeController : BackofficeController
+  public class PageTreeController<T> : BackofficeController where T : IPage
   {
-    IPageTreeApi Api;
+    IPageTreeApi<T> Api;
 
-    public PageTreeController(IPageTreeApi api)
+    public PageTreeController(IPageTreeApi<T> api)
     {
       Api = api;
     }

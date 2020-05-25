@@ -9,7 +9,7 @@ using zero.Core.Options;
 
 namespace zero.Core.Api
 {
-  public class PagesApi : AppAwareBackofficeApi, IPagesApi
+  public class PagesApi<T> : AppAwareBackofficeApi, IPagesApi<T> where T : IPage
   {
     protected IZeroOptions Options { get; private set; }
 
@@ -20,16 +20,9 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IList<Page>> GetChildren(string parentId = null)
+    public async Task<T> GetById(string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session
-          .Query<Page>()
-          .Scope(Scope)
-          .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
-          .ToListAsync();
-      }
+      return await GetById<T>(id);
     }
 
 
@@ -65,11 +58,30 @@ namespace zero.Core.Api
 
       return types.Where(x => pageType.AllowedChildrenTypes.Contains(x.Alias)).ToList();
     }
+
+
+    /// <inheritdoc />
+    public async Task<EntityResult<T>> Save(T model)
+    {
+      return await Save(model, null);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<EntityResult<T>> Delete(string id)
+    {
+      return await DeleteById<T>(id);
+    }
   }
 
 
-  public interface IPagesApi : IAppAwareBackofficeApi
+  public interface IPagesApi<T> where T : IPage
   {
+    /// <summary>
+    /// Get page by Id
+    /// </summary>
+    Task<T> GetById(string id);
+
     /// <summary>
     /// Get all available page types
     /// </summary>
@@ -79,5 +91,15 @@ namespace zero.Core.Api
     /// Get all page types which are allowed below a selected parent page
     /// </summary>
     Task<IList<PageType>> GetAllowedPageTypes(string parentId = null);
+
+    /// <summary>
+    /// Creates or updates a page
+    /// </summary>
+    Task<EntityResult<T>> Save(T model);
+
+    /// <summary>
+    /// Deletes a page by Id
+    /// </summary>
+    Task<EntityResult<T>> Delete(string id);
   }
 }

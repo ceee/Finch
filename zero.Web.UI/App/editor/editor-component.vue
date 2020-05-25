@@ -54,7 +54,7 @@
     computed: {
       params()
       {
-        return this.component.params;
+        return this.view === 'renderer' ? this.component : this.component.params;
       },
       view()
       {
@@ -63,7 +63,7 @@
       classes()
       {
         let classes = this.component.params.options.classes;
-        if (this.view === 'nested')
+        if (this.view === 'nested' || this.view === 'renderer')
         {
           classes.push('full-width');
         }
@@ -89,7 +89,7 @@
         }
         else if (this.view === 'renderer')
         {
-          return import(`zero/editor/editor-nested`);
+          return import(`zero/editor/editor`);
         }
         else
         {

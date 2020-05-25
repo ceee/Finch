@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using zero.Core.Api;
+using zero.Core.Entities;
 
 namespace zero.Web.Controllers
 {
-  public class PagesController : BackofficeController
+  public class PagesController<T> : BackofficeController where T : IPage
   {
-    IPagesApi Api;
+    IPagesApi<T> Api;
 
-    public PagesController(IPagesApi api)
+    public PagesController(IPagesApi<T> api)
     {
       Api = api;
     }
@@ -21,5 +22,17 @@ namespace zero.Web.Controllers
     {
       return Json(await Api.GetAllowedPageTypes(parent));
     }
+
+
+    /// <summary>
+    /// Get translation by id
+    /// </summary>  
+    //public IActionResult GetEmpty() => JsonEdit(new T());
+
+
+    /// <summary>
+    /// Get page by id
+    /// </summary>  
+    public async Task<IActionResult> GetById([FromQuery] string id) => JsonEdit(await Api.GetById(id));
   }
 }

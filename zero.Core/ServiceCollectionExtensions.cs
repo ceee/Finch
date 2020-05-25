@@ -14,18 +14,20 @@ namespace zero.Core.Entities
       services.AddAllByInterfaceTransient(typeof(IValidator), typeof(IValidator<>), AppDomain.CurrentDomain.GetAssemblies());
 
       services.AddTransient<IApplication, Application>(); 
-      services.AddTransient(typeof(IApplicationsApi<>), typeof(ApplicationsApi<>));
-
       services.AddTransient<ICountry, Country>();
-      services.AddTransient(typeof(ICountriesApi<>), typeof(CountriesApi<>));
-
       services.AddTransient<ILanguage, Language>();
-      services.AddTransient(typeof(ILanguagesApi<>), typeof(LanguagesApi<>));
-
       services.AddTransient<ITranslation, Translation>();
+      services.AddTransient<IPage, Page>();
+
+
+      services.AddTransient(typeof(IApplicationsApi<>), typeof(ApplicationsApi<>));
+      services.AddTransient(typeof(ICountriesApi<>), typeof(CountriesApi<>));
+      services.AddTransient(typeof(ILanguagesApi<>), typeof(LanguagesApi<>));
       services.AddTransient(typeof(ITranslationsApi), typeof(TranslationsApi));
       services.AddTransient(typeof(ITranslationsApi<>), typeof(TranslationsApi<>));
       services.AddTransient(typeof(ITranslationsApiFacade), typeof(TranslationsApiFacade));
+      services.AddTransient(typeof(IPagesApi<>), typeof(PagesApi<>));
+      services.AddTransient(typeof(IPageTreeApi<>), typeof(PageTreeApi<>));
     }
 
 

@@ -10,6 +10,8 @@ namespace zero.TestData
   {
     public NewsPageRenderer()
     {
+      Alias = "debug.newspage";
+
       LabelTemplate = "@_test.fields.{0}";
       DescriptionTemplate = "@_test.fields.{0}_text";
 

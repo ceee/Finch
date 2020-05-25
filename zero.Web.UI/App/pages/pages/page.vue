@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="page">
+  <ui-form ref="form" class="page" v-slot="form" @submit="onSubmit" @load="onLoad">
     <ui-header-bar :title="title" :on-back="onBack">
       <ui-dropdown>
         <template v-slot:button>
@@ -8,16 +8,17 @@
         <ui-dropdown-list v-model="actions" :action="actionSelected" />
       </ui-dropdown>
       <ui-button type="white" label="Preview" icon="fth-eye" />
-      <ui-button label="Save" />
+      <ui-button :submit="true" label="Save" />
     </ui-header-bar>
 
-     <ui-editor :config="renderer" v-model="model" />
-  </div>
+     <ui-editor v-if="!loading" :config="renderer" v-model="model" />
+  </ui-form>
 </template>
 
 
 <script>
   import UiEditor from 'zero/editor/editor';
+  import PagesApi from 'zero/resources/pages';
 
   export default {
 
@@ -26,7 +27,8 @@
     components: { UiEditor },
 
     data: () => ({
-      renderer: 'debug.redirectpage',
+      loading: true,
+      renderer: null,
       actions: [],
       model: {
         name: null,
@@ -36,38 +38,6 @@
         link: null
       }
     }),
-
-    created()
-    {
-      this.actions.push({
-        name: 'Create',
-        icon: 'fth-plus'
-      });
-      this.actions.push({
-        name: 'Move',
-        icon: 'fth-corner-down-right'
-      });
-      this.actions.push({
-        name: 'Copy',
-        icon: 'fth-copy',
-        disabled: true
-      });
-      this.actions.push({
-        name: 'Sort',
-        icon: 'fth-arrow-down'
-      });
-      this.actions.push({
-        type: 'separator'
-      });
-      this.actions.push({
-        name: 'Delete',
-        icon: 'fth-x',
-        action(item, dropdown)
-        {
-          dropdown.hide();
-        }
-      });
-    },
 
 
     computed: {
@@ -111,7 +81,29 @@
       onBack()
       {
         this.$router.go(-1);
-      }
+      },
+
+      onLoad(form)
+      {
+        form.load(PagesApi.getById(this.$route.params.id)).then(response =>
+        {
+          this.renderer = 'debug.' + response.entity.pageTypeAlias + 'page';
+          this.model = response.entity;
+          this.loading = false;
+        });
+      },
+
+
+      onSubmit(form)
+      {
+        //this.fullModel.model = this.model;
+
+        console.info(JSON.parse(JSON.stringify(this.model)));
+        //form.handle(PagesApi.save(this.model)).then(response =>
+        //{
+        //  console.info(response);
+        //});
+      },
 
     }
   }

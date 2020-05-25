@@ -4,19 +4,29 @@
   /// A page can consist of unlimited properties and be rendered as you wish
   /// The backoffice rendering is done by an IRenderer
   /// </summary>
-  public class Page : ZeroEntity, IAppAwareEntity, IZeroDbConventions
+  public class Page : ZeroEntity, IPage
   {
-    /// <summary>
-    /// Id of the parent page
-    /// </summary>
+    /// <inheritdoc />
     public string ParentId { get; set; }
 
-    /// <summary>
-    /// Alias of the used page type
-    /// </summary>
+    /// <inheritdoc />
     public string PageTypeAlias { get; set; }
 
     /// <inheritdoc />
     public string AppId { get; set; }
+  }
+
+
+  public interface IPage : IZeroEntity, IAppAwareEntity, IZeroDbConventions
+  {
+    /// <summary>
+    /// Id of the parent page
+    /// </summary>
+    string ParentId { get; set; }
+
+    /// <summary>
+    /// Alias of the used page type
+    /// </summary>
+    string PageTypeAlias { get; set; }
   }
 }
