@@ -41,7 +41,11 @@ namespace zero.Debug.Controllers
         });
       }
 
-      return Json(items);
+      return Json(new
+      {
+        count = items.Count,
+        items
+      });
     }
 
 

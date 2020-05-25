@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using zero.Core.Api;
+using zero.Core.Renderer;
 
 namespace zero.Core.Entities
 {
@@ -11,7 +12,10 @@ namespace zero.Core.Entities
   {
     public static void AddZeroCoreServices(this IServiceCollection services)
     {
-      services.AddAllByInterfaceTransient(typeof(IValidator), typeof(IValidator<>), AppDomain.CurrentDomain.GetAssemblies());
+      Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+      services.AddAllByInterfaceTransient(typeof(IValidator), typeof(IValidator<>), assemblies, true);
+      services.AddAllByInterfaceTransient(typeof(IRenderer), typeof(IRenderer<>), assemblies);
 
       services.AddTransient<IApplication, Application>(); 
       services.AddTransient<ICountry, Country>();
@@ -37,19 +41,26 @@ namespace zero.Core.Entities
     }
 
 
-    public static void AddAllByInterfaceTransient(this IServiceCollection services, Type serviceType, Type implementingType, Assembly[] assemblies)
+    public static void AddAllByInterfaceTransient(this IServiceCollection services, Type serviceType, Type implementingType, Assembly[] assemblies, bool transient = false)
     {
       foreach (Assembly assembly in assemblies)
       {
         foreach (Type type in assembly.GetExportedTypes())
         {
-          if (serviceType.IsAssignableFrom(type) && type.IsClass && !type.IsAbstract && !type.FullName.StartsWith("Fluent"))
+          if (serviceType.IsAssignableFrom(type) && type.IsClass && !type.IsAbstract && !type.FullName.StartsWith("Fluent") && type.Name != "AbstractGenericRenderer")
           {
             Type service = type.GetInterfaces().FirstOrDefault(x => x.IsInterface && x.Name == implementingType.Name);
 
             if (service != null)
             {
-              services.AddTransient(service, type);
+              if (transient)
+              {
+                services.AddTransient(service, type);
+              }
+              else
+              {
+                services.AddScoped(service, type);
+              }
             }
           }
         }

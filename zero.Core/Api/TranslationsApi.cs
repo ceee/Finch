@@ -45,8 +45,14 @@ namespace zero.Core.Api
 
     public TranslationsApi(IBackofficeStore store) : base(store)
     {
-      //Validator = validator;
-      AllowShared = true;
+      Scope.IncludeShared = true;
+    }
+
+
+    /// <inheritdoc />
+    public async Task<string> GetStringById(string id)
+    {
+      return (await GetById<T>(id))?.Value;
     }
 
 
@@ -100,9 +106,14 @@ namespace zero.Core.Api
   public interface ITranslationsApi<T> where T : ITranslation
   {
     /// <summary>
-    /// Get translation by Id
+    /// Get translation by id
     /// </summary>
     Task<T> GetById(string id);
+
+    /// <summary>
+    /// Get a translated string by id
+    /// </summary>
+    Task<string> GetStringById(string id);
 
     /// <summary>
     /// Get all available translations
@@ -120,7 +131,7 @@ namespace zero.Core.Api
     Task<EntityResult<T>> Save(T model);
 
     /// <summary>
-    /// Deletes a translation by Id
+    /// Deletes a translation by id
     /// </summary>
     Task<EntityResult<T>> Delete(string id);
   }

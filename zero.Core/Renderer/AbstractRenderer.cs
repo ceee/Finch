@@ -146,7 +146,7 @@ namespace zero.Core.Renderer
             ComponentPath = fieldData.ComponentPath,
             Options = fieldData.Options ?? new List<string>() { },
             Label = label != null && label.StartsWith("@") ? label : String.Format(LabelTemplate, label ?? fieldTranslationName),
-            Description = description != null && description.StartsWith("@") ? description : (noDescription ? null : String.Format(DescriptionTemplate, description ?? fieldTranslationName)),
+            Description = description != null && description.StartsWith("@") ? description : null, // TODO (noDescription ? null : String.Format(DescriptionTemplate, description ?? fieldTranslationName)),
             Required = required
           };
         }

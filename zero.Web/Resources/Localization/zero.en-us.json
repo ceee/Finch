@@ -367,7 +367,15 @@
         "countries": "Country",
         "name": "Name",
         "iso": "ISO Code"
-      }
+      },
+      "hideInNavigation": "Hide in navigation",
+      "hideInTitle": "Hide in title",
+      "titleOverride": "Override title",
+      "titleOverrideAll": "Override full title",
+      "seoDescription": "SEO Description",
+      "seoImage": "Image",
+      "noFollow": "No follow",
+      "noIndex": "No index"
     }
   }
 }

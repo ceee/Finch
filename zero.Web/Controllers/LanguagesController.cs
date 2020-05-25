@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Core.Renderer;
 
 namespace zero.Web.Controllers
 {
@@ -19,19 +20,25 @@ namespace zero.Web.Controllers
 
 
     /// <summary>
-    /// Get translation by id
+    /// Get empty language model
     /// </summary>  
     public IActionResult GetEmpty() => JsonEdit(new T());
 
 
     /// <summary>
-    /// Get translation by id
+    /// Get language by id
     /// </summary>  
     public async Task<IActionResult> GetById([FromQuery] string id) => JsonEdit(await Api.GetById(id));
 
 
     /// <summary>
-    /// Get all translations
+    /// Get language renderer
+    /// </summary>
+    public IActionResult GetRenderer([FromServices] IRenderer<T> renderer) => Json(renderer.Build());
+
+
+    /// <summary>
+    /// Get all languages
     /// </summary>    
     public async Task<IActionResult> GetAll([FromQuery] ListQuery<T> query) => Json(await Api.GetByQuery(query));
 
@@ -43,14 +50,14 @@ namespace zero.Web.Controllers
 
 
     /// <summary>
-    /// Save translation
+    /// Save language
     /// </summary>
     [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Write)]
     public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
 
 
     /// <summary>
-    /// Deletes a translation
+    /// Deletes a language
     /// </summary>
     [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Write)]
     public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
