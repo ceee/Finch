@@ -100,7 +100,7 @@ namespace zero.Core.Identity
       // check claims
       if (!Permission.IsNullOrEmpty())
       {
-        bool isSuperUser = false; // TODO user.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
+        bool isSuperUser = user.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
         bool hasPassed = isSuperUser;
 
         if (!isSuperUser)

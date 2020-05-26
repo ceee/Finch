@@ -2,7 +2,7 @@
   <div class="apps">
     <ui-header-bar title="@application.list" :back-button="true" />
     <div class="ui-blank-box">
-      <applications-items />
+      <applications-items v-model="apps" />
     </div>
   </div>
 </template>
@@ -10,13 +10,22 @@
 
 <script>
   import ApplicationsItems from 'zero/pages/settings/applications-items'
+  import ApplicationsApi from 'zero/resources/applications.js'
 
   export default {
     data: () => ({
       apps: []
     }),
 
-    components: { ApplicationsItems }
+    components: { ApplicationsItems },
+
+    mounted()
+    {
+      ApplicationsApi.getAll().then(response =>
+      {
+        this.apps = response.items;
+      });
+    }
   }
 </script>
 

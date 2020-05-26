@@ -1,8 +1,8 @@
 ﻿<template>
   <div class="settings">
-    <div class="settings-group">
+    <div class="settings-group" v-if="apps.length > 0">
       <h2 class="ui-headline xl settings-group-headline" v-localize="'@application.list'"></h2>
-      <applications-items />
+      <applications-items v-model="apps" />
     </div>
     <div class="settings-group" v-for="group in groups">
       <h2 class="ui-headline xl settings-group-headline" v-localize="group.name"></h2>
@@ -26,6 +26,7 @@
 
 <script>
   import ApplicationsItems from 'zero/pages/settings/applications-items'
+  import SettingsApi from 'zero/resources/settings.js';
 
   export default {
     name: 'app-settings',
@@ -34,12 +35,22 @@
 
     data: () => ({
       page: true,
-      groups: zero.settingsAreas,
+      groups: [],
+      apps: [],
       tokens: {
         'zero_version': zero.version,
         'plugin_count': zero.pluginCount
       }
-    })
+    }),
+
+    mounted()
+    {
+      SettingsApi.getAreas().then(response =>
+      {
+        this.groups = response.groups;
+        this.apps = response.applications;
+      });
+    }
   }
 </script>
 

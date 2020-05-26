@@ -1,4 +1,10 @@
-﻿using zero.Core.Api;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using zero.Core;
+using zero.Core.Api;
+using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Core.Identity;
 
 namespace zero.Web.Controllers
@@ -6,11 +12,74 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(Permissions.Sections.Settings, PermissionsValue.Read)]
   public class SettingsController : BackofficeController
   {
-    ISettingsApi Api;
+    IAuthenticationApi AuthApi;
 
-    public SettingsController(ISettingsApi api)
+    IApplicationsApi<Application> ApplicationsApi;
+
+
+    public SettingsController(IAuthenticationApi authApi, IApplicationsApi<Application> applicationsApi)
     {
-      Api = api;
+      AuthApi = authApi;
+      ApplicationsApi = applicationsApi;
+    }
+
+
+
+    /// <summary>
+    /// Get all settings areas
+    /// </summary>    
+    public async Task<IActionResult> GetAreas()
+    {
+      bool isSuperUser = AuthApi.IsSuper();
+      IList<Permission> permissions = AuthApi.GetPermissions(Permissions.Settings.PREFIX);
+
+      List<ZeroVueSettingsGroup> groups = new List<ZeroVueSettingsGroup>();
+
+      foreach (SettingsGroup group in Options.Settings.GetAllItems())
+      {
+        List<ZeroVueSettingsArea> areas = new List<ZeroVueSettingsArea>();
+
+        foreach (SettingsArea area in group.Items)
+        {
+          if (!isSuperUser && !Permission.CanReadKey(permissions, area.Alias, true))
+          {
+            continue;
+          }
+
+          ZeroVueSettingsArea vueArea = new ZeroVueSettingsArea()
+          {
+            Alias = area.Alias,
+            Name = area.Name,
+            Description = area.Description,
+            Icon = area.Icon,
+            Url = Constants.Sections.Settings.EnsureStartsWith('/') + Alias.Generate(area.Alias).EnsureStartsWith('/')
+          };
+
+          areas.Add(vueArea);
+        }
+
+        if (areas.Count > 0)
+        {
+          groups.Add(new ZeroVueSettingsGroup()
+          {
+            Name = group.Name,
+            Items = areas
+          });
+        }
+      }
+
+      IList<Application> applications = new List<Application>();
+
+      if (Permission.CanReadKey(permissions, Permissions.Settings.Applications, false))
+      {
+        applications = await ApplicationsApi.GetAll();
+      }
+
+      return Json(new
+      {
+        groups,
+        applications
+      });
     }
   }
 }
