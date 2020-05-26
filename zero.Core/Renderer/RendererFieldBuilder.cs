@@ -97,6 +97,12 @@ namespace zero.Core.Renderer
       Options = BuildOptions(optionsBuilder);
     }
 
+    public void Number(Action<NumberOptions> optionsBuilder = null)
+    {
+      View = "number";
+      Options = BuildOptions(optionsBuilder);
+    }
+
     public void Textarea(Action<TextOptions> optionsBuilder = null)
     {
       View = "textarea";

@@ -7,11 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Core", "zero.Core\zero
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Commerce", "zero.Commerce\zero.Commerce.csproj", "{63A8AD15-15F0-4555-BD62-C38B4465FFC1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{EB22CADA-EB9B-4066-A110-3D14DDDBF625}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Debug", "zero.Debug\zero.Debug.csproj", "{83473041-7A1B-40ED-9FD0-968B22EB36B3}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commerce", "Commerce", "{8FC2D7C8-AE39-41A5-AB95-053737BB3D55}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Web", "zero.Web\zero.Web.csproj", "{06156006-7684-41EC-8BD4-3B2A762147CD}"
 EndProject
@@ -65,10 +61,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{63A8AD15-15F0-4555-BD62-C38B4465FFC1} = {8FC2D7C8-AE39-41A5-AB95-053737BB3D55}
-		{8FC2D7C8-AE39-41A5-AB95-053737BB3D55} = {EB22CADA-EB9B-4066-A110-3D14DDDBF625}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD3F31B9-8BBB-4334-9571-F556B9E632C9}

@@ -19,8 +19,24 @@
 
       <editor-component v-if="!renderInfo || index > 0" v-for="(child, cindex) in component.components" :key="cindex" :field="child.params.field" v-model="value" :component="child" />
     </ui-tab>
-    <div v-if="!hasTabs" class="ui-box">
-      <editor-component v-for="(component, index) in components" :key="index" :field="component.params.field" v-model="value" :component="component" />
+    <div v-if="!hasTabs" :class="renderInfo ? 'ui-view-box has-sidebar' : 'ui-box'">
+      <div v-if="renderInfo" class="ui-box">
+        <editor-component v-for="(component, index) in components" :key="index" :field="component.params.field" v-model="value" :component="component" />
+      </div>
+
+      <aside v-if="renderInfo" class="ui-view-box-aside">
+        <ui-property label="@ui.active" :vertical="true" :is-text="true">
+          <ui-toggle v-model="value.isActive" />
+        </ui-property>
+        <ui-property label="@ui.id" :vertical="true" :is-text="true">
+          {{value.id}}
+        </ui-property>
+        <ui-property label="@ui.createdDate" :vertical="true" :is-text="true">
+          <ui-date v-model="value.createdDate" />
+        </ui-property>
+      </aside>
+
+      <editor-component v-if="!renderInfo" v-for="(component, index) in components" :key="index" :field="component.params.field" v-model="value" :component="component" />
     </div>
   </component>
 </template>
@@ -49,7 +65,7 @@
       loaded: false,
       hasTabs: false,
       components: [],
-      renderInfo: false
+      renderInfo: true
     }),
 
     computed: {

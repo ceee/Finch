@@ -4,8 +4,10 @@
       <div class="ui-header-bar-main">
         <ui-icon-button v-if="backButton" type="white" @click="onBack" />
         <div>
-          <h2 v-if="title" class="ui-header-bar-title" v-localize="title"></h2>
-          <h2 v-if="!title && titleEmpty" class="ui-header-bar-title is-empty" v-localize="titleEmpty"></h2>
+          <h2 class="ui-header-bar-title" :class="{'is-empty': !title && titleEmpty}">
+            <span v-if="prefix" class="-minor" v-localize="prefix"></span>
+            <span v-localize="title || titleEmpty"></span>
+          </h2>
           <p v-if="description" class="ui-header-bar-description" v-localize="description"></p>
         </div>
       </div>
@@ -31,6 +33,9 @@
       titleEmpty: {
         type: String
       },
+      prefix: {
+        type: String
+      },
       description: {
         type: String
       },
@@ -42,11 +47,6 @@
         type: Boolean,
         default: false
       }
-    },
-
-    mounted ()
-    {
-      
     },
 
     methods: {
@@ -123,7 +123,7 @@
     font-size: var(--font-size-l);
     font-weight: 700;
 
-    &.is-empty
+    &.is-empty, .-minor
     {
       color: var(--color-fg-light);
       font-weight: 400;

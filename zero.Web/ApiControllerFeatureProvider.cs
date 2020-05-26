@@ -19,9 +19,11 @@ namespace zero.Web
 
     public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
     {
-      Assembly currentAssembly = typeof(ApiControllerFeatureProvider).Assembly;
+      Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-      IEnumerable<Type> candidates = currentAssembly.GetExportedTypes().Where(x => x.GetCustomAttributes<BackofficeGenericControllerAttribute>().Any() && x.ContainsGenericParameters);
+      IEnumerable<Type> candidates = assemblies
+        .Where(assembly => !assembly.IsDynamic)
+        .SelectMany(assembly => assembly.GetExportedTypes().Where(x => x.GetCustomAttributes<BackofficeGenericControllerAttribute>().Any() && x.ContainsGenericParameters));
 
       foreach (Type candidate in candidates)
       {
