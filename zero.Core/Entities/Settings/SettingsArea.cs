@@ -36,4 +36,11 @@
       Description = description;
     }
   }
+
+
+  public class InternalSettingsArea : SettingsArea, IZeroInternal
+  {
+    public InternalSettingsArea() { }
+    public InternalSettingsArea(string alias, string name, string description = null, string icon = null) : base(alias, name, description, icon) { }
+  }
 }

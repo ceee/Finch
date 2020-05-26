@@ -58,11 +58,11 @@
 <style lang="scss">
   .settings
   {
-    height: 100%;
+    min-height: 100%;
     position: relative;
     padding: 95px;
     width: 100%;
-    max-width: 1600px;
+    max-width: 2000px;
   }
 
   .settings-group
@@ -97,7 +97,7 @@
     width: 70px;
     height: 70px;
     line-height: 68px !important;
-    font-size: 24px;
+    font-size: 20px;
     text-align: center;
     background: var(--color-bg-light);
     border-radius: var(--radius);

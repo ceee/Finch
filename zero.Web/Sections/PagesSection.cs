@@ -7,7 +7,7 @@ namespace zero.Web.Sections
   /// <summary>
   /// Manage the page tree in this section
   /// </summary>
-  public class PagesSection : ISection, IBuiltInSection
+  public class PagesSection : ISection, IZeroInternal
   {
     /// <inheritdoc />
     public string Alias => Constants.Sections.Pages;

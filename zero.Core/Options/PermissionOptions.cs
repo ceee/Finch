@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using zero.Core.Entities;
 using zero.Core.Identity;
 
 namespace zero.Core.Options
 {
   public class PermissionOptions : ZeroBackofficeCollection<PermissionCollection>, IZeroCollectionOptions
   {
-    public PermissionOptions()
-    {
-      
-    }
-
-
     public void AddCollection(PermissionCollection collection, int index = -1)
     {
       if (index > -1 && index < Items.Count)
@@ -23,6 +16,19 @@ namespace zero.Core.Options
       else
       {
         Items.Add(collection);
+      }
+    }
+
+
+    public void AddCollection<T>(int index = -1) where T : PermissionCollection, new()
+    {
+      if (index > -1 && index < Items.Count)
+      {
+        Items.Insert(index, new T());
+      }
+      else
+      {
+        Items.Add(new T());
       }
     }
 

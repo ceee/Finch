@@ -28,14 +28,17 @@ if (section)
   zero.settingsAreas.forEach(group => group.items.forEach(area => 
   {
     // add settings area page
-    routes.push({
-      path: area.url,
-      name: alias + '-' + area.alias,
-      component: () => import(`zero/pages/${alias}/${area.alias}`),
-      meta: {
-        name: [area.name, section.name]
-      }
-    });
+    if (!area.isPlugin)
+    {
+      routes.push({
+        path: area.url,
+        name: alias + '-' + area.alias,
+        component: () => import(`zero/pages/${alias}/${area.alias}`),
+        meta: {
+          name: [area.name, section.name]
+        }
+      });
+    }
 
     // add details page
     if (detailPages[area.alias])

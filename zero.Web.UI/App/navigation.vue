@@ -18,7 +18,7 @@
           <i v-if="hasChildren(section)" class="app-nav-item-arrow fth-chevron-down"></i>
         </router-link>
         <transition name="app-nav-children">
-          <div class="app-nav-children" v-if="hasChildren(section) && $route.path.indexOf('/' + section.alias) > -1">
+          <div class="app-nav-children" v-if="hasChildren(section) && $route.path.indexOf('/' + section.alias) === 0">
             <router-link v-for="child in section.children" v-bind:key="child.alias" :to="child.url" class="app-nav-child">
               {{child.name | localize}}
             </router-link>

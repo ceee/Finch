@@ -7,7 +7,7 @@ namespace zero.Web.Sections
   /// <summary>
   /// The dashboard aggregates data from all sections
   /// </summary>
-  public class DashboardSection : ISection, IBuiltInSection
+  public class DashboardSection : ISection, IZeroInternal
   {
     /// <inheritdoc />
     public string Alias => Constants.Sections.Dashboard;

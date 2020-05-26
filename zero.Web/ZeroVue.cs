@@ -96,7 +96,7 @@ namespace zero.Web
           continue;
         }
 
-        bool isExternal = !(section is IBuiltInSection);
+        bool isExternal = !(section is IZeroInternal);
         string url = Alias.Generate(section.Alias).EnsureStartsWith('/');
 
         if (section.Alias == Constants.Sections.Dashboard)
@@ -184,13 +184,16 @@ namespace zero.Web
             continue;
           }
 
+          bool isPlugin = !(area is IZeroInternal);
+
           ZeroVueSettingsArea vueArea = new ZeroVueSettingsArea()
           {
             Alias = area.Alias,
             Name = area.Name,
             Description = area.Description,
             Icon = area.Icon,
-            Url = Constants.Sections.Settings.EnsureStartsWith('/') + Alias.Generate(area.Alias).EnsureStartsWith('/')
+            Url = Constants.Sections.Settings.EnsureStartsWith('/') + Alias.Generate(area.Alias).EnsureStartsWith('/'),
+            IsPlugin = isPlugin
           };
 
           areas.Add(vueArea);
@@ -334,6 +337,8 @@ namespace zero.Web
     public string Icon { get; set; }
 
     public string Url { get; set; }
+
+    public bool IsPlugin { get; set; }
   }
 
 

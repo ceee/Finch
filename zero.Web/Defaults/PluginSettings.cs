@@ -9,8 +9,8 @@ namespace zero.Web.Defaults
     {
       Name = "@settings.groups.plugins";
 
-      Add(Constants.Settings.Plugins, "@settings.plugins.installed.name", "@settings.plugins.installed.text", "fth-package");
-      Add(Constants.Settings.CreatePlugin, "@settings.plugins.create.name", "@settings.plugins.create.text", "fth-box");
+      AddInternal(Constants.Settings.Plugins, "@settings.plugins.installed.name", "@settings.plugins.installed.text", "fth-package");
+      AddInternal(Constants.Settings.CreatePlugin, "@settings.plugins.create.name", "@settings.plugins.create.text", "fth-box");
     }
   }
 }
