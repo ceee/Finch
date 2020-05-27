@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -10,10 +11,13 @@ using Newtonsoft.Json.Serialization;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
+using zero.Core.Assemblies;
 using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -32,91 +36,55 @@ namespace zero.Web
   {
     public virtual IServiceCollection Services { get; }
 
-    IConfiguration Configuration { get; set; }
+    public virtual IMvcBuilder Mvc { get; }
+
+    IConfiguration Configuration;
+
+    IZeroStartupOptions StartupOptions;
+
+    IAssemblyDiscovery AssemblyDiscovery;
 
 
-    public ZeroBuilder(IServiceCollection services, IConfiguration configuration)
+    public ZeroBuilder(IMvcBuilder builder, IConfiguration configuration, Action<IZeroStartupOptions> setupAction)
     {
-      Services = services;
+      Mvc = builder;
+      Services = Mvc.Services;
       Configuration = configuration;
 
-      //CultureInfo cultureInfo = new CultureInfo("en-US");
-      //cultureInfo.NumberFormat.CurrencySymbol = "€";
-      //CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 
-      AddPlugin<DefaultBackofficePlugin>();
-
-      AddConfiguration();
-      ConfgureMvc();
-      ConfigureDatabase();
-      ConfigureValidation();
-      ConfigureIdentity();
-      AddServices();
-      //AddPlugins();
-    }
+      // create startup options
+      StartupOptions = new ZeroStartupOptions();
+      StartupOptions.AssemblyDiscoveryRules.Add(new ZeroAssemblyDiscoveryRule());
+      setupAction?.Invoke(StartupOptions);
 
 
-    /// <summary>
-    /// Adds zero specific configuration
-    /// </summary>
-    void AddConfiguration()
-    {
+      // adds and discovers additional and built-in assemblies
+      AssemblyDiscovery = new AssemblyDiscovery(Mvc);
+      AssemblyDiscovery.Execute(StartupOptions.AssemblyDiscoveryRules);
+
+      ServiceCollectionExtensions.ZeroAssemblyDiscovery = AssemblyDiscovery;
+
+
+      // add default plugin
+      AddPlugin<ZeroBackofficePlugin>();
+
+      
+      // create and bind zero options
       Services.AddOptions<ZeroOptions>()
         .Bind(Configuration.GetSection("Zero"))
         .Configure(opts =>
         {
+          //opts.AssemblyDiscoveryRules.Add(new ZeroAssemblyDiscoveryRule());
           opts.ZeroVersion = "0.0.1.0"; // TODO
         });
 
-      Services.AddTransient<IZeroOptions>(factory => factory.GetService<IOptionsMonitor<ZeroOptions>>().CurrentValue); 
-    }
+
+      // add transient options to DI
+      Services.AddTransient<IZeroOptions>(factory => factory.GetService<IOptionsMonitor<ZeroOptions>>().CurrentValue);
 
 
-    /// <summary>
-    /// Adds all services which are required by zero
-    /// </summary>
-    void AddServices()
-    {
-      Services.AddHttpContextAccessor();
-
-      Services.AddTransient<IZeroVue, ZeroVue>();
-      Services.AddTransient<IPaths>(factory =>
-      {
-        IWebHostEnvironment env = factory.GetService<IWebHostEnvironment>();
-        return new Paths(env.WebRootPath, true);
-      });
-
-      Services.AddMapper();
-      Services.AddZeroCoreServices();
-
-      Services.AddScoped<IApplicationContext, ApplicationContext>();
-
-      Services.AddTransient<IBackofficeStore, BackofficeStore>();
-      Services.AddTransient(typeof(IAppScope<>), typeof(AppScope<>));
-
-      Services.AddTransient<ISetupApi, SetupApi>();
-      Services.AddTransient<ISectionsApi, SectionsApi>();
-      Services.AddTransient<ISettingsApi, SettingsApi>();
-      Services.AddTransient<IAuthenticationApi, AuthenticationApi>();
-      Services.AddTransient<IUserApi, UserApi>();
-      Services.AddTransient<IUserRolesApi, UserRolesApi>();
-      Services.AddTransient<IToken, Token>();
-      Services.AddTransient<ISpacesApi, SpacesApi>();
-      Services.AddTransient<IPermissionsApi, PermissionsApi>();
-      Services.AddTransient<IMediaApi, MediaApi>();
-      Services.AddTransient<IMediaFolderApi, MediaFolderApi>();
-      Services.AddTransient<IMediaUpload, MediaUpload>();
-    }
-
-
-    /// <summary>
-    /// Configures ASP.NET Core MVC
-    /// </summary>
-    IMvcBuilder ConfgureMvc()
-    {
-      IMvcBuilder mvc = Services.AddMvc();
-
-      mvc.AddNewtonsoftJson(opts =>
+      // configure MVC
+      Mvc.AddNewtonsoftJson(opts =>
       {
         opts.SerializerSettings.Converters.Add(new IsoDateTimeConverter() { DateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'" });
         opts.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
@@ -127,15 +95,42 @@ namespace zero.Web
 
       if (Environment.GetEnvironmentVariable("DOTNET_WATCH") == "1")
       {
-        mvc.AddRazorRuntimeCompilation();
+        Mvc.AddRazorRuntimeCompilation();
       }
 
-      mvc.ConfigureApplicationPartManager(setup =>
+      Mvc.ConfigureApplicationPartManager(setup =>
       {
         setup.FeatureProviders.Add(new ApiControllerFeatureProvider());
       });
 
-      return mvc;
+
+      // configure Raven + Identity
+      ConfigureDatabase();
+      ConfigureIdentity();
+
+
+      // configure FluentValidation
+      ValidatorOptions.PropertyNameResolver = ValidatorCamelCasePropertyResolver.ResolvePropertyName;
+
+
+      // add default mapper
+      Services.AddMapper();
+
+
+      // add default services
+      Services.AddScoped<IApplicationContext, ApplicationContext>();
+
+      Services.AddTransient<IBackofficeStore, BackofficeStore>();
+      Services.AddTransient(typeof(IAppScope<>), typeof(AppScope<>));
+
+      Services.AddHttpContextAccessor();
+
+      Services.AddTransient<IZeroVue, ZeroVue>();
+      Services.AddTransient<IPaths>(factory =>
+      {
+        IWebHostEnvironment env = factory.GetService<IWebHostEnvironment>();
+        return new Paths(env.WebRootPath, true);
+      });
     }
 
 
@@ -162,15 +157,6 @@ namespace zero.Web
 
         return raven;
       });
-    }
-
-
-    /// <summary>
-    /// Configures FluentValidation
-    /// </summary>
-    void ConfigureValidation()
-    {
-      ValidatorOptions.PropertyNameResolver = ValidatorCamelCasePropertyResolver.ResolvePropertyName;
     }
 
 
@@ -234,24 +220,12 @@ namespace zero.Web
     }
 
 
-    private static EntityDefinition[] Entities = new EntityDefinition[] { };
-
-    //public ZeroPlugin Use<TService, TImplementation>(Action<EntityDefinition<TService, TImplementation>> configure) where TImplementation : TService
-    //{
-    //  //configure()
-    //}
-
-    //public ZeroPlugin Use<TService, TImplementation>() where TImplementation : TService
-    //{
-    //  //configure()
-    //}
-
-
     /// <summary>
     /// Adds a zero plugin
     /// </summary>
     public void AddPlugin<T>() where T : class, IZeroPlugin, new()
     {
+      Mvc.AddApplicationPart(typeof(T).Assembly);
       Services.AddScoped<IZeroPlugin, T>();
       AddPluginServices<T>();
     }
@@ -262,6 +236,7 @@ namespace zero.Web
     /// </summary>
     public void AddPlugin<T>(Func<IServiceProvider, T> implementationFactory) where T : class, IZeroPlugin, new()
     {
+      Mvc.AddApplicationPart(typeof(T).Assembly);
       Services.AddScoped<IZeroPlugin, T>(implementationFactory);
       AddPluginServices<T>();
     }

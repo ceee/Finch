@@ -1,0 +1,79 @@
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Reflection;
+using zero.Core;
+using zero.Core.Api;
+using zero.Core.Entities;
+using zero.Core.Extensions;
+using zero.Core.Options;
+using zero.Core.Plugins;
+using zero.Core.Renderer;
+using zero.Web.Mapper;
+using zero.Web.Sections;
+
+namespace zero.Web.Defaults
+{
+  internal class ZeroBackofficePlugin : IZeroPlugin
+  {
+    public void ConfigureServices(IServiceCollection services) 
+    {
+      Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+      services.AddAll(typeof(IValidator<>));
+      services.AddAll(typeof(IRenderer<>));
+
+      services.AddTransient<IApplication, Application>();
+      services.AddTransient<ICountry, Country>();
+      services.AddTransient<ILanguage, Language>();
+      services.AddTransient<ITranslation, Translation>();
+      services.AddTransient<IPage, Page>();
+
+      services.AddTransient(typeof(IApplicationsApi<>), typeof(ApplicationsApi<>));
+      services.AddTransient(typeof(ICountriesApi<>), typeof(CountriesApi<>));
+      services.AddTransient(typeof(ILanguagesApi<>), typeof(LanguagesApi<>));
+      services.AddTransient(typeof(ITranslationsApi), typeof(TranslationsApi));
+      services.AddTransient(typeof(ITranslationsApi<>), typeof(TranslationsApi<>));
+      services.AddTransient(typeof(ITranslationsApiFacade), typeof(TranslationsApiFacade));
+      services.AddTransient(typeof(IPagesApi<>), typeof(PagesApi<>));
+      services.AddTransient(typeof(IPageTreeApi<>), typeof(PageTreeApi<>));
+
+      services.AddTransient<ISetupApi, SetupApi>();
+      services.AddTransient<ISectionsApi, SectionsApi>();
+      services.AddTransient<ISettingsApi, SettingsApi>();
+      services.AddTransient<IAuthenticationApi, AuthenticationApi>();
+      services.AddTransient<IUserApi, UserApi>();
+      services.AddTransient<IUserRolesApi, UserRolesApi>();
+      services.AddTransient<IToken, Token>();
+      services.AddTransient<ISpacesApi, SpacesApi>();
+      services.AddTransient<IPermissionsApi, PermissionsApi>();
+      services.AddTransient<IMediaApi, MediaApi>();
+      services.AddTransient<IMediaFolderApi, MediaFolderApi>();
+      services.AddTransient<IMediaUpload, MediaUpload>();
+    }
+    
+    public void Configure(IZeroPluginOptions plugin, IZeroOptions zero)
+    {
+      plugin.Name = "zero.Defaults";
+      plugin.LocalizationPaths.Add("~/Resources/Localization/zero.{lang}.json");
+
+      zero.Sections.Add<DashboardSection>();
+      zero.Sections.Add<PagesSection>();
+      zero.Sections.Add<SpacesSection>();
+      zero.Sections.Add<MediaSection>();
+      zero.Sections.Add<SettingsSection>();
+
+      zero.Settings.AddGroup<SystemSettings>();
+      zero.Settings.AddGroup<PluginSettings>();
+
+      zero.Mapper.Add<UserMapperConfig>();
+      zero.Mapper.Add<CountryMapperConfig>();
+      zero.Mapper.Add<TranslationMapperConfig>();
+      zero.Mapper.Add<LanguageMapperConfig>();
+      zero.Mapper.Add<ApplicationMapperConfig>();
+      zero.Mapper.Add<MediaMapperConfig>();
+      zero.Mapper.Add<SpaceMapperConfig>();
+    }
+  }
+}

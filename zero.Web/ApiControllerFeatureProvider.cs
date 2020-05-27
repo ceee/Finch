@@ -37,9 +37,12 @@ namespace zero.Web
         }
 
         Type implementation = EntityMap.Get(desiredInterface);
-        TypeInfo type = candidate.MakeGenericType(implementation).GetTypeInfo();
-        
-        feature.Controllers.Add(type);
+
+        if (implementation != null)
+        {
+          TypeInfo type = candidate.MakeGenericType(implementation).GetTypeInfo();
+          feature.Controllers.Add(type);
+        }
       }
     }
   }

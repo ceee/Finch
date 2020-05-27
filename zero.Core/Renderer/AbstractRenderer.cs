@@ -12,6 +12,8 @@ namespace zero.Core.Renderer
   {
     public Type TargetType { get; set; }
 
+    public AbstractGenericRenderer() { }
+
     internal AbstractGenericRenderer(Type type, string alias, List<RenderProperty> properties, IValidator validator = null)
     {
       Alias = alias;

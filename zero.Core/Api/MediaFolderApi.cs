@@ -104,7 +104,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<MediaFolder>> Save(MediaFolder model)
     {
-      return await Save(model, new MediaFolderValidator());
+      return await SaveModel(model, new MediaFolderValidator());
     }
 
 

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using System;
 using System.Collections.Generic;
+using zero.Core.Assemblies;
 using zero.Core.Entities;
 using zero.Core.Mapper;
 using zero.Core.Plugins;

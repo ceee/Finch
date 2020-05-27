@@ -62,7 +62,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> Save(T model)
     {
-      return await Save(model, Validator);
+      return await SaveModel(model, Validator);
     }
 
 
