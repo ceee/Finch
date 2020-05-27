@@ -14,12 +14,9 @@ namespace zero.Core.Api
 {
   public class LanguagesApi<T> : BackofficeApi, ILanguagesApi<T> where T : ILanguage
   {
-    IValidator<T> Validator;
-
-
-    public LanguagesApi(IBackofficeStore store, IValidator<T> validator) : base(store)
+    public LanguagesApi(IBackofficeStore store) : base(store)
     {
-      Validator = validator;
+      
     }
 
 
@@ -75,7 +72,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> Save(T model)
     {
-      return await SaveModel(model, Validator);
+      return await SaveModel(model, null);
     }
 
 

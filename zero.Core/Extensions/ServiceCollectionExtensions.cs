@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,11 +54,11 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Adds or overrides an implementation
     /// </summary>
-    public static void Replace<TService, TImplementation>(this IServiceCollection services) 
+    public static void Replace<TService, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Transient) 
       where TService : class
       where TImplementation : class, TService
     {
-      services.Remove<TService>(out ServiceLifetime lifetime);
+      services.RemoveAll<TService>();
       services.Add(new ServiceDescriptor(typeof(TService), typeof(TImplementation), lifetime));
     }
 
@@ -65,44 +66,12 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Adds or overrides an implementation
     /// </summary>
-    public static void Replace<TService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory)
+    public static void Replace<TService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, ServiceLifetime lifetime = ServiceLifetime.Transient)
       where TService : class
       where TImplementation : class, TService
     {
-      services.Remove<TService>(out ServiceLifetime lifetime);
+      services.RemoveAll<TService>();
       services.Add(new ServiceDescriptor(typeof(TService), implementationFactory, lifetime));
-    }
-
-
-    /// <summary>
-    /// Removes all instances of a registered service
-    /// </summary>
-    public static bool Remove<TService>(this IServiceCollection services) => services.Remove<TService>(out ServiceLifetime lifetime);
-
-
-    /// <summary>
-    /// Removes all instances of a registered service
-    /// </summary>
-    public static bool Remove<TService>(this IServiceCollection services, out ServiceLifetime lifetime)
-    {
-      Type serviceType = typeof(TService);
-      IEnumerable<ServiceDescriptor> descriptors = services.Where(x => x.ServiceType == serviceType);
-
-      if (descriptors.Any())
-      {
-        lifetime = descriptors.First().Lifetime;
-
-        foreach (ServiceDescriptor descriptor in descriptors)
-        {
-          services.Remove(descriptor);
-        }
-      }
-      else
-      {
-        lifetime = ServiceLifetime.Transient;
-      }
-
-      return descriptors.Any();
     }
   }
 }

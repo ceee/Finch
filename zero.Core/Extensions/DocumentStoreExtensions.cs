@@ -21,13 +21,16 @@ namespace zero.Core.Extensions
     {
       Type[] polymorphTypes = new Type[2] { typeof(SpaceContent), typeof(Page) };
 
+      Type dbConventionType = typeof(IZeroDbConventions);
 
       store.Conventions.IdentityPartsSeparator = ".";
 
       store.Conventions.FindCollectionName = type =>
       {
+        Type finalType = type;
+
         // do not alter non-internal entities
-        if (!typeof(IZeroDbConventions).IsAssignableFrom(type))
+        if (!dbConventionType.IsAssignableFrom(type))
         {
           return DocumentConventions.DefaultGetCollectionName(type);
         }
@@ -39,9 +42,26 @@ namespace zero.Core.Extensions
           return collection.Name;
         }
 
+        // use base interface if available
+        Type interfaceBaseType = type.GetInterfaces().FirstOrDefault(x => x.IsInterface && dbConventionType.IsAssignableFrom(x) && x.Name != dbConventionType.Name);
+        
+        if (interfaceBaseType != null)
+        {
+          // use name from attribute if available
+          collection = interfaceBaseType.GetCustomAttribute<CollectionAttribute>(true);
+          if (collection != null)
+          {
+            return options.Raven.CollectionPrefix + collection.Name;
+          }
+        }
+
         // use base type for polymorphism
         Type polymorphBaseType = polymorphTypes.FirstOrDefault(x => type.IsSubclassOf(x));
-        Type finalType = polymorphBaseType ?? type;
+
+        if (polymorphBaseType != null)
+        {
+          finalType = polymorphBaseType;
+        }
 
         return options.Raven.CollectionPrefix + DocumentConventions.DefaultGetCollectionName(finalType);
       };

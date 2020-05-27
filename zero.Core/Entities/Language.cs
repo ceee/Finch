@@ -1,4 +1,6 @@
-﻿namespace zero.Core.Entities
+﻿using zero.Core.Attributes;
+
+namespace zero.Core.Entities
 {
   public class Language : ZeroEntity, ILanguage
   {
@@ -12,7 +14,7 @@
     public string InheritedLanguageId { get; set; }
   }
 
-
+  [Collection("Languages")]
   public interface ILanguage : IZeroEntity, IZeroDbConventions
   {
     /// <summary>
