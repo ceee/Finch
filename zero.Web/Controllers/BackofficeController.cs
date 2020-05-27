@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Entities;
@@ -24,30 +26,47 @@ namespace zero.Web.Controllers
 
     protected IZeroOptions Options => _options ?? (_options = HttpContext?.RequestServices?.GetService<IZeroOptions>());
 
+    static JsonSerializerSettings JsonSettings;
+
+    static JsonSerializerSettings TypedJsonSettings;
+
+
+    static BackofficeController()
+    {
+      JsonSettings = new BackofficeJsonSerlializerSettings(false);
+      TypedJsonSettings = new BackofficeJsonSerlializerSettings(true);
+    }
+
 
     /// <summary>
     /// Creates a Microsoft.AspNetCore.Mvc.JsonResult object that serializes the specified data object to JSON.
     /// </summary>
-    public override JsonResult Json(object data)
-    {
-      JsonSerializerSettings settings = JsonConvert.DefaultSettings();
-      settings.TypeNameHandling = TypeNameHandling.Objects;
-      return Json(data, settings);
-    }
+    public override JsonResult Json(object data) => Json(data, false);
+
+
+    /// <summary>
+    /// Creates a Microsoft.AspNetCore.Mvc.JsonResult object that serializes the specified data object to JSON.
+    /// </summary>
+    public JsonResult Json(object data, bool typed) => Json(data, typed ? TypedJsonSettings : JsonSettings);
 
 
     /// <summary>
     /// Creates an edit model with appropriate options and permissions
     /// </summary>
-    public JsonResult JsonEdit<T>(T data)
+    public JsonResult JsonEdit<T>(T data) => JsonEdit(data, false);
+
+
+    /// <summary>
+    /// Creates an edit model with appropriate options and permissions
+    /// </summary>
+    public JsonResult JsonEdit<T>(T data, bool typed)
     {
       return Json(new EditModel<T>()
       {
         Entity = data,
         CanEdit = true
-      });
+      }, typed);
     }
-
 
 
 

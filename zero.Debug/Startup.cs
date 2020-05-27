@@ -39,23 +39,14 @@ namespace zero.Debug
         options.LoginPath = "/Account/Index";
       });
 
-      IMvcBuilder mvc = services.AddMvc();
-
-      ZeroBuilder zero = mvc.AddZero(Configuration);
-
-      zero.AddPlugin<TestPlugin>();
-      zero.AddPlugin<Commerce.CommercePlugin>();
-
-      zero.WithOptions(opts =>
-      {
-        opts.Extend<IChannel>().Use<SalesChannel>();
-
-        //IRenderer<IChannel> renderer = (IRenderer<IChannel>)new SalesChannelRenderer();
-        //renderer.
-        //opts.Renderers.Extend<IChannel, SalesChannelRenderer>();
-      });
-
-      services.AddMvc();
+      ZeroBuilder zero = services
+        .AddZero(Configuration)
+        .AddPlugin<TestPlugin>()
+        .AddPlugin<Commerce.CommercePlugin>()
+        .WithOptions(opts =>
+        {
+          opts.Extend<IChannel>().Use<SalesChannel>();
+        });
 
       services.Configure<IISOptions>(opts => opts.AutomaticAuthentication = false);
     }

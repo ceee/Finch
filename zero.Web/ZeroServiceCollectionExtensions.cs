@@ -7,14 +7,14 @@ namespace zero.Web
 {
   public static class ZeroServiceCollectionExtensions
   {
-    public static ZeroBuilder AddZero(this IMvcBuilder builder, IConfiguration configuration)
+    public static ZeroBuilder AddZero(this IServiceCollection services, IConfiguration configuration)
     {
-      return new ZeroBuilder(builder, configuration, null);
+      return new ZeroBuilder(services, configuration, null);
     }
 
-    public static ZeroBuilder AddZero(this IMvcBuilder builder, IConfiguration configuration, Action<IZeroStartupOptions> setupAction)
+    public static ZeroBuilder AddZero(this IServiceCollection services, IConfiguration configuration, Action<IZeroStartupOptions> setupAction)
     {
-      return new ZeroBuilder(builder, configuration, setupAction);
+      return new ZeroBuilder(services, configuration, setupAction);
     }
   }
 }

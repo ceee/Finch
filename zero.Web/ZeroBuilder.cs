@@ -1,18 +1,12 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using zero.Core;
@@ -45,18 +39,16 @@ namespace zero.Web
     IAssemblyDiscovery AssemblyDiscovery;
 
 
-    public ZeroBuilder(IMvcBuilder builder, IConfiguration configuration, Action<IZeroStartupOptions> setupAction)
+    public ZeroBuilder(IServiceCollection services, IConfiguration configuration, Action<IZeroStartupOptions> setupAction)
     {
-      Mvc = builder;
-      Services = Mvc.Services;
+      Services = services;
+      Mvc = services.AddMvc();
       Configuration = configuration;
 
-
       // create startup options
-      StartupOptions = new ZeroStartupOptions();
+      StartupOptions = new ZeroStartupOptions(Mvc);
       StartupOptions.AssemblyDiscoveryRules.Add(new ZeroAssemblyDiscoveryRule());
       setupAction?.Invoke(StartupOptions);
-
 
       // adds and discovers additional and built-in assemblies
       AssemblyDiscovery = new AssemblyDiscovery(Mvc);
@@ -68,7 +60,7 @@ namespace zero.Web
       // add default plugin
       AddPlugin<ZeroBackofficePlugin>();
 
-      
+
       // create and bind zero options
       Services.AddOptions<ZeroOptions>()
         .Bind(Configuration.GetSection("Zero"))
@@ -84,24 +76,12 @@ namespace zero.Web
 
 
       // configure MVC
-      Mvc.AddNewtonsoftJson(opts =>
-      {
-        opts.SerializerSettings.Converters.Add(new IsoDateTimeConverter() { DateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'" });
-        opts.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-        opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-
-        JsonConvert.DefaultSettings = () => opts.SerializerSettings;
-      });
-
+      Mvc.AddNewtonsoftJson();
       if (Environment.GetEnvironmentVariable("DOTNET_WATCH") == "1")
       {
         Mvc.AddRazorRuntimeCompilation();
       }
-
-      Mvc.ConfigureApplicationPartManager(setup =>
-      {
-        setup.FeatureProviders.Add(new ApiControllerFeatureProvider());
-      });
+      Mvc.PartManager.FeatureProviders.Add(new ApiControllerFeatureProvider());
 
 
       // configure Raven + Identity
@@ -223,22 +203,24 @@ namespace zero.Web
     /// <summary>
     /// Adds a zero plugin
     /// </summary>
-    public void AddPlugin<T>() where T : class, IZeroPlugin, new()
+    public ZeroBuilder AddPlugin<T>() where T : class, IZeroPlugin, new()
     {
       Mvc.AddApplicationPart(typeof(T).Assembly);
       Services.AddScoped<IZeroPlugin, T>();
       AddPluginServices<T>();
+      return this;
     }
 
 
     /// <summary>
     /// Adds a zero plugin
     /// </summary>
-    public void AddPlugin<T>(Func<IServiceProvider, T> implementationFactory) where T : class, IZeroPlugin, new()
+    public ZeroBuilder AddPlugin<T>(Func<IServiceProvider, T> implementationFactory) where T : class, IZeroPlugin, new()
     {
       Mvc.AddApplicationPart(typeof(T).Assembly);
       Services.AddScoped<IZeroPlugin, T>(implementationFactory);
       AddPluginServices<T>();
+      return this;
     }
 
 
