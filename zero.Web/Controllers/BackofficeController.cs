@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Entities;
@@ -14,9 +12,11 @@ using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
-  [ZeroAuthorize, CanEdit, AddToken]
+  [ZeroAuthorize]
+  [CanEdit]
+  [AddToken]
   [BackofficeGenericController]
-  public abstract class BackofficeController : Controller
+  public abstract class BackofficeController : Controller, ISupportsGenericsController
   {
     IMapper _mapper;
 

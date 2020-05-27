@@ -36,8 +36,6 @@ namespace zero.Web
 
     IZeroStartupOptions StartupOptions;
 
-    IAssemblyDiscovery AssemblyDiscovery;
-
 
     public ZeroBuilder(IServiceCollection services, IConfiguration configuration, Action<IZeroStartupOptions> setupAction)
     {
@@ -50,11 +48,9 @@ namespace zero.Web
       StartupOptions.AssemblyDiscoveryRules.Add(new ZeroAssemblyDiscoveryRule());
       setupAction?.Invoke(StartupOptions);
 
-      // adds and discovers additional and built-in assemblies
-      AssemblyDiscovery = new AssemblyDiscovery(Mvc);
-      AssemblyDiscovery.Execute(StartupOptions.AssemblyDiscoveryRules);
 
-      ServiceCollectionExtensions.ZeroAssemblyDiscovery = AssemblyDiscovery;
+      // adds and discovers additional and built-in assemblies
+      new AssemblyDiscovery(Mvc).Execute(StartupOptions.AssemblyDiscoveryRules);
 
 
       // add default plugin
@@ -205,7 +201,7 @@ namespace zero.Web
     /// </summary>
     public ZeroBuilder AddPlugin<T>() where T : class, IZeroPlugin, new()
     {
-      Mvc.AddApplicationPart(typeof(T).Assembly);
+      AssemblyDiscovery.Current.AddAssembly(typeof(T).Assembly);
       Services.AddScoped<IZeroPlugin, T>();
       AddPluginServices<T>();
       return this;
@@ -217,7 +213,7 @@ namespace zero.Web
     /// </summary>
     public ZeroBuilder AddPlugin<T>(Func<IServiceProvider, T> implementationFactory) where T : class, IZeroPlugin, new()
     {
-      Mvc.AddApplicationPart(typeof(T).Assembly);
+      AssemblyDiscovery.Current.AddAssembly(typeof(T).Assembly);
       Services.AddScoped<IZeroPlugin, T>(implementationFactory);
       AddPluginServices<T>();
       return this;

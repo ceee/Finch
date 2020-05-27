@@ -9,9 +9,6 @@ namespace zero.Core.Extensions
 {
   public static class ServiceCollectionExtensions
   {
-    public static IAssemblyDiscovery ZeroAssemblyDiscovery { get; set; }
-
-
     /// <summary>
     /// Adds all found implementations based on the service type and assembly discovery rules
     /// </summary>
@@ -23,7 +20,7 @@ namespace zero.Core.Extensions
     /// </summary>
     public static void AddAll(this IServiceCollection services, Type serviceType, ServiceLifetime lifetime = ServiceLifetime.Transient)
     {
-      if (ZeroAssemblyDiscovery == null)
+      if (AssemblyDiscovery.Current == null)
       {
         throw new Exception("services.AddAll() can only be run after mvcBuilder.AddZero()");
       }
@@ -31,7 +28,7 @@ namespace zero.Core.Extensions
       // add implementations with generic service types
       if (serviceType.GetTypeInfo().IsGenericTypeDefinition)
       {
-        IEnumerable<(Type, TypeInfo)> matches = ZeroAssemblyDiscovery.GetConcreteTypes().SelectMany(type =>
+        IEnumerable<(Type, TypeInfo)> matches = AssemblyDiscovery.Current.GetAllClassTypes().SelectMany(type =>
         {
           IEnumerable<Type> genericTypes = type.GetInterfaces().Select(x => x.GetTypeInfo()).Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == serviceType);
           return genericTypes.Select(x => (x, type));
@@ -45,7 +42,7 @@ namespace zero.Core.Extensions
       // add implementations with specific service types
       else
       {
-        foreach (Type type in ZeroAssemblyDiscovery.GetTypes(serviceType))
+        foreach (Type type in AssemblyDiscovery.Current.GetTypes(serviceType))
         {
           services.Add(new ServiceDescriptor(serviceType, type, lifetime));
         }

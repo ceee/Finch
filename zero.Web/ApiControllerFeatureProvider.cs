@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using zero.Core;
+using zero.Core.Assemblies;
+using zero.Web.Controllers;
 using zero.Web.Filters;
 
 namespace zero.Web
@@ -18,31 +20,46 @@ namespace zero.Web
 
 
     public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
-    {
-      Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+    {  
+      IEnumerable<TypeInfo> candidates = AssemblyDiscovery.Current.GetTypes<ISupportsGenericsController>(parts, true).Where(x => x.ContainsGenericParameters);
 
-      IEnumerable<Type> candidates = assemblies
-        .Where(assembly => !assembly.IsDynamic)
-        .SelectMany(assembly => assembly.GetExportedTypes().Where(x => x.GetCustomAttributes<BackofficeGenericControllerAttribute>().Any() && x.ContainsGenericParameters));
-
-      foreach (Type candidate in candidates)
+      foreach (TypeInfo candidate in candidates)
       {
         Type genericType = candidate.GetGenericTypeDefinition();
-        Type[] arguments = genericType.GetGenericArguments();
-        Type desiredInterface = arguments.FirstOrDefault()?.GetInterfaces().FirstOrDefault();
+        Type[] genericArguments = genericType.GetGenericArguments();
 
-        if (desiredInterface == null)
+        List<Type> concreteArguments = new List<Type>();
+
+        bool isValid = true;
+
+        foreach (Type arg in genericArguments)
+        {
+          Type requiredService = arg.GetInterfaces().FirstOrDefault();
+
+          if (requiredService == null)
+          {
+            isValid = false;
+            break;
+          }
+
+          TypeInfo concreteArgument = AssemblyDiscovery.Current.GetTypes(requiredService, parts).FirstOrDefault();
+
+          if (concreteArgument == null)
+          {
+            isValid = false;
+            break;
+          }
+
+          concreteArguments.Add(concreteArgument);
+        }
+
+        if (!isValid)
         {
           continue;
         }
 
-        Type implementation = EntityMap.Get(desiredInterface);
-
-        if (implementation != null)
-        {
-          TypeInfo type = candidate.MakeGenericType(implementation).GetTypeInfo();
-          feature.Controllers.Add(type);
-        }
+        TypeInfo type = candidate.MakeGenericType(concreteArguments.ToArray()).GetTypeInfo();
+        feature.Controllers.Add(type);
       }
     }
   }
