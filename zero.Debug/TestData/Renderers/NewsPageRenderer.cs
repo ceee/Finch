@@ -15,8 +15,6 @@ namespace zero.TestData
       LabelTemplate = "@_test.fields.{0}";
       DescriptionTemplate = "@_test.fields.{0}_text";
 
-      Validator = new NewsPageValidator();
-
       Field(x => x.Name, required: true).Text(opts => opts.Placeholder = "Enter your name");
       Field(x => x.Text, required: true).Rte();
     }

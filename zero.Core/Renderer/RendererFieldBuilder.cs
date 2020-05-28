@@ -97,6 +97,12 @@ namespace zero.Core.Renderer
       Options = BuildOptions(optionsBuilder);
     }
 
+    public void TextList(Action<TextListOptions> optionsBuilder = null)
+    {
+      View = "textlist";
+      Options = BuildOptions(optionsBuilder);
+    }
+
     public void Number(Action<NumberOptions> optionsBuilder = null)
     {
       View = "number";

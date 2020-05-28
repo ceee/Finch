@@ -6,6 +6,8 @@ namespace zero.Core.Renderer
   {
     void Text(Action<TextOptions> optionsBuilder = null);
 
+    void TextList(Action<TextListOptions> optionsBuilder = null);
+
     void Number(Action<NumberOptions> optionsBuilder = null);
 
     void Textarea(Action<TextOptions> optionsBuilder = null);

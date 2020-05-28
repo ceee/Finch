@@ -14,12 +14,11 @@ namespace zero.Core.Renderer
 
     public AbstractGenericRenderer() { }
 
-    internal AbstractGenericRenderer(Type type, string alias, List<RenderProperty> properties, IValidator validator = null)
+    internal AbstractGenericRenderer(Type type, string alias, List<RenderProperty> properties)
     {
       Alias = alias;
       TargetType = type;
       Properties = properties;
-      Validator = validator;
     }
   }
 
@@ -44,14 +43,15 @@ namespace zero.Core.Renderer
 
     protected string DescriptionTemplate = "{0}";
 
-    protected IValidator Validator = null;
+    protected Func<string, string> FindLabelName = field => "@" + field;
+
+    protected Func<string, string> FindLabelDescriptionName = field => null;
 
 
     public RendererConfig Build()
     {
       RendererConfig config = new RendererConfig();
       config.Type = typeof(T);
-      config.Validator = Validator;
 
 
       // compile fields
@@ -122,11 +122,11 @@ namespace zero.Core.Renderer
 
     public AbstractGenericRenderer ToGenericRenderer()
     {
-      return new AbstractGenericRenderer(typeof(T), Alias, Properties, Validator);
+      return new AbstractGenericRenderer(typeof(T), Alias, Properties);
     }
 
 
-    protected virtual IRendererFieldBuilder Field(Expression<Func<T, object>> mapExpression, string label = null, string description = null, bool required = false, bool noDescription = false)
+    protected virtual IRendererFieldBuilder Field(Expression<Func<T, object>> mapExpression, bool required = false)
     {
       RendererFieldBuilder builder = new RendererFieldBuilder();
 
@@ -136,7 +136,6 @@ namespace zero.Core.Renderer
         Compile = property =>
         {
           string field = mapExpression.CompileToJavascript().ToCamelCaseId();
-          string fieldTranslationName = field;
 
           RendererFieldBuilder.Data fieldData = builder.Build();
 
@@ -147,7 +146,37 @@ namespace zero.Core.Renderer
             View = fieldData.View,
             ComponentPath = fieldData.ComponentPath,
             Options = fieldData.Options ?? new List<string>() { },
-            Label = label != null && label.StartsWith("@") ? label : String.Format(LabelTemplate, label ?? fieldTranslationName),
+            Label = FindLabelName?.Invoke(field),
+            Description = FindLabelDescriptionName?.Invoke(field),
+            Required = required
+          };
+        }
+      });
+
+      return builder;
+    }
+
+    protected virtual IRendererFieldBuilder Field(Expression<Func<T, object>> mapExpression, string label, string description = null, bool required = false, bool noDescription = false)
+    {
+      RendererFieldBuilder builder = new RendererFieldBuilder();
+
+      Add(new RenderProperty()
+      {
+        Method = METHOD_FIELD,
+        Compile = property =>
+        {
+          string field = mapExpression.CompileToJavascript().ToCamelCaseId();
+
+          RendererFieldBuilder.Data fieldData = builder.Build();
+
+          property.NestedRenderer = fieldData.Renderer;
+          property.Params = new
+          {
+            Field = field,
+            View = fieldData.View,
+            ComponentPath = fieldData.ComponentPath,
+            Options = fieldData.Options ?? new List<string>() { },
+            Label = label != null && label.StartsWith("@") ? label : String.Format(LabelTemplate, label ?? field),
             Description = description != null && description.StartsWith("@") ? description : null, // TODO (noDescription ? null : String.Format(DescriptionTemplate, description ?? fieldTranslationName)),
             Required = required
           };

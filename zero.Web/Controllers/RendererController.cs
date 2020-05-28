@@ -15,15 +15,10 @@ namespace zero.Web.Controllers
     /// </summary>    
     public IActionResult GetByAlias([FromServices] IEnumerable<IRenderer> renderers, [FromQuery] string alias)
     {
-      RendererConfig config = null;
-      AbstractGenericRenderer renderer = Options.Renderers.GetAllItems().FirstOrDefault(x => x.Alias == alias);
+      IRenderer renderer = renderers.FirstOrDefault(x => x.Alias == alias);
+      RendererConfig config = renderer?.Build();
 
-      config = renderer?.Build();
-
-      JsonSerializerSettings settings = JsonConvert.DefaultSettings();
-      settings.TypeNameHandling = TypeNameHandling.Objects;
-
-      return Json(config, settings);
+      return Json(config, false);
     }
   }
 }

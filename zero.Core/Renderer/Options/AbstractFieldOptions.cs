@@ -7,5 +7,7 @@ namespace zero.Core.Renderer
     public bool HideLabel { get; set; }
 
     public List<string> Classes { get; set; } = new List<string>();
+
+    public string HelpText { get; set; }
   }
 }

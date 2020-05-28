@@ -5,6 +5,8 @@
 
   public interface IRenderer
   {
+    string Alias { get; }
+
     RendererConfig Build();
 
     AbstractGenericRenderer ToGenericRenderer();

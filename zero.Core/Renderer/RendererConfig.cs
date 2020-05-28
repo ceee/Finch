@@ -10,9 +10,6 @@ namespace zero.Core.Renderer
   {
     public Type Type { get; set; }
 
-    [JsonIgnore]
-    public IValidator Validator { get; set; }
-
     public List<RendererComponent> Components { get; set; } = new List<RendererComponent>();
   }
 

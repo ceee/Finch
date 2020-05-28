@@ -10,8 +10,6 @@ namespace zero.TestData
       LabelTemplate = "@_test.fields.{0}";
       DescriptionTemplate = "@_test.fields.{0}_text";
 
-      Validator = new MetaPagePartialValidator();
-
       Field(x => x.HideInTitle).Toggle();
       Field(x => x.TitleOverride).Text();
       Field(x => x.TitleOverrideAll).Text();

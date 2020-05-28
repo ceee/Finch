@@ -10,8 +10,6 @@ namespace zero.TestData.Lists
       LabelTemplate = "@_test.fields.{0}";
       DescriptionTemplate = "@_test.fields.{0}_text";
 
-      Validator = new SocialContentValidator();
-
       Field(x => x.IsVisible).Toggle();
       Field(x => x.xIconPicker).IconPicker();
       Field(x => x.xTextarea).Textarea();

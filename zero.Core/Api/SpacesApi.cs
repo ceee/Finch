@@ -127,15 +127,15 @@ namespace zero.Core.Api
       Space space = GetByAlias(alias);
       RendererConfig config = GetEditorConfig(alias); 
 
-      if (config.Validator != null)
-      {
-        ValidationResult validation = await config.Validator.ValidateAsync(model);
+      //if (config.Validator != null)
+      //{
+      //  ValidationResult validation = await config.Validator.ValidateAsync(model);
 
-        if (!validation.IsValid)
-        {
-          return EntityResult<T>.Fail(validation);
-        }
-      }
+      //  if (!validation.IsValid)
+      //  {
+      //    return EntityResult<T>.Fail(validation);
+      //  }
+      //}
 
       if (model.Id.IsNullOrEmpty())
       {

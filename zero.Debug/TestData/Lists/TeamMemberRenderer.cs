@@ -10,8 +10,6 @@ namespace zero.TestData.Lists
       LabelTemplate = "@_test.fields.{0}";
       DescriptionTemplate = "@_test.fields.{0}_text";
 
-      Validator = new TeamMemberValidator();
-
       Field(x => x.Name, required: true).Text(opts => opts.Placeholder = "Enter your name");
       Field(x => x.Position, required: true).Text();
       Field(x => x.Image).Media(opts => opts.Type = MediaOptionsType.Image);
