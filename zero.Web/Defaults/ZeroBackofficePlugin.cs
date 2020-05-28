@@ -1,10 +1,8 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Reflection;
-using zero.Core;
 using zero.Core.Api;
+using zero.Core.Attributes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Options;
@@ -19,10 +17,8 @@ namespace zero.Web.Defaults
   {
     public void ConfigureServices(IServiceCollection services) 
     {
-      Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-      services.AddAll(typeof(IValidator<>));
-      services.AddAll(typeof(IRenderer<>));
+      services.AddAll(typeof(IValidator<>), ServiceLifetime.Scoped);
+      services.AddAll(typeof(IRenderer<>), ServiceLifetime.Scoped);
 
       services.AddTransient<IApplication, Application>();
       services.AddTransient<ICountry, Country>();
