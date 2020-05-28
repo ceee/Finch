@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 using zero.Core.Identity;
 using zero.Core.Renderer;
@@ -12,7 +13,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get a renderer by alias
     /// </summary>    
-    public IActionResult GetByAlias([FromQuery] string alias)
+    public IActionResult GetByAlias([FromServices] IEnumerable<IRenderer> renderers, [FromQuery] string alias)
     {
       RendererConfig config = null;
       AbstractGenericRenderer renderer = Options.Renderers.GetAllItems().FirstOrDefault(x => x.Alias == alias);

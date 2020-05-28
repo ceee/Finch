@@ -42,11 +42,7 @@ namespace zero.Debug
       ZeroBuilder zero = services
         .AddZero(Configuration)
         .AddPlugin<TestPlugin>()
-        .AddPlugin<Commerce.CommercePlugin>()
-        .WithOptions(opts =>
-        {
-          opts.Extend<IChannel>().Use<SalesChannel>();
-        });
+        .AddPlugin<Commerce.CommercePlugin>();
 
       services.Configure<IISOptions>(opts => opts.AutomaticAuthentication = false);
     }

@@ -1,11 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
-using zero.Core;
-using zero.Core.Entities;
-using zero.Core.Extensions;
 using zero.Core.Options;
 using zero.Core.Plugins;
-using zero.Debug;
 using zero.Debug.TestData;
 using zero.TestData.Lists;
 
@@ -41,8 +37,6 @@ namespace zero.TestData
 
     public void ConfigureServices(IServiceCollection services)
     {
-      services.Replace<ILanguage, MyLanguage>();
-
       services.AddTransient<ITestService, TestService>();
     }
   }

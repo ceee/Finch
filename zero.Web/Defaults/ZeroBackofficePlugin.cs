@@ -18,7 +18,9 @@ namespace zero.Web.Defaults
     public void ConfigureServices(IServiceCollection services) 
     {
       services.AddAll(typeof(IValidator<>), ServiceLifetime.Scoped);
+      services.AddAll(typeof(IValidator), ServiceLifetime.Scoped);
       services.AddAll(typeof(IRenderer<>), ServiceLifetime.Scoped);
+      services.AddAll(typeof(IRenderer), ServiceLifetime.Scoped);
 
       services.AddTransient<IApplication, Application>();
       services.AddTransient<ICountry, Country>();
