@@ -4,7 +4,7 @@ using System.Text;
 
 namespace zero.Core.Renderer
 {
-  public class NestedOptions : AbstractFieldOptions
+  public class NestedOptions : AbstractFieldInputOptions
   {
     public int Limit { get; set; } = 10;
 

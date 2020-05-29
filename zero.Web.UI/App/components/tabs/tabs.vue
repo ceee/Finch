@@ -177,7 +177,7 @@
 
       &:before
       {
-        background: var(--color-line);
+        background: var(--color-primary);
       }
 
       &:after

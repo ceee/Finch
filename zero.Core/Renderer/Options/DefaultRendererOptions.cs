@@ -1,6 +1,6 @@
 ﻿namespace zero.Core.Renderer
 {
-  public class DefaultRendererOptions : AbstractFieldOptions
+  public class DefaultRendererOptions : AbstractFieldInputOptions
   {
     
   }

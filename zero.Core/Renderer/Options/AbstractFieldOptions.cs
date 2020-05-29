@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace zero.Core.Renderer
+namespace zero.Core.Renderer.Options
 {
-  public abstract class AbstractFieldOptions
+  public class AbstractFieldOptions
   {
-    public bool HideLabel { get; set; }
 
-    public List<string> Classes { get; set; } = new List<string>();
-
-    public string HelpText { get; set; }
   }
 }

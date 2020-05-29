@@ -2,7 +2,7 @@
 
 namespace zero.Core.Renderer
 {
-  public class StateOptions : AbstractFieldOptions
+  public class StateOptions : AbstractFieldInputOptions
   {
     public class Item
     {

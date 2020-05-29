@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using zero.Core.Entities;
+﻿using zero.Core.Entities;
 using zero.Core.Renderer;
 
 namespace zero.Web.Renderers
@@ -39,13 +38,4 @@ namespace zero.Web.Renderers
       //RuleFor(x => x.Name).NotEmpty();
     }
   }
-
-
-  //public class ApplicationValidator : AbstractValidator<Application>
-  //{
-  //  public ApplicationValidator()
-  //  {
-  //    RuleFor(x => x.Name).NotNull()
-  //  }
-  //}
 }

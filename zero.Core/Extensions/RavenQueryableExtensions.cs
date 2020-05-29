@@ -12,9 +12,11 @@ namespace zero.Core.Extensions
 {
   public static class RavenQueryableExtensions
   {
-    public static IRavenQueryable<T> Scope<T>(this IRavenQueryable<T> source, string appId, bool includeShared = true) where T : IZeroIdEntity
+    static Type _appAwareEntity = typeof(IAppAwareEntity);
+
+    public static IRavenQueryable<T> Scope<T>(this IRavenQueryable<T> source, string appId, bool includeShared = true)
     {
-      if (appId.IsNullOrEmpty() || source.ElementType.Is<IAppAwareEntity>())
+      if (appId.IsNullOrEmpty() || !_appAwareEntity.IsAssignableFrom(source.ElementType))
       {
         return source;
       }
@@ -31,14 +33,14 @@ namespace zero.Core.Extensions
     }
 
 
-    public static IRavenQueryable<T> Scope<T>(this IRavenQueryable<T> source, ApiScope scope) where T : IZeroIdEntity
+    public static IRavenQueryable<T> Scope<T>(this IRavenQueryable<T> source, ApiScope scope)
     {
       if (scope == null || scope.Global)
       {
         return source;
       }
 
-      if (scope.AppId.IsNullOrEmpty() || source.ElementType.Is<IAppAwareEntity>())
+      if (scope.AppId.IsNullOrEmpty() || !_appAwareEntity.IsAssignableFrom(source.ElementType))
       {
         return source;
       }

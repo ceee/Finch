@@ -16,6 +16,7 @@
     "active": "Published",
     "inactive": "Unpublished",
     "delete": "Delete",
+    "default": "Default",
     "remove": "Remove",
     "pagination": {
       "xofy": "Page {x} of {y}",

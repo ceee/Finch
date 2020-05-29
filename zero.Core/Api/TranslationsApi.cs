@@ -40,7 +40,7 @@ namespace zero.Core.Api
 
   public class TranslationsApi<T> : AppAwareBackofficeApi, ITranslationsApi<T> where T : ITranslation
   {
-    IValidator<T> Validator;
+    //IValidator<T> Validator;
 
 
     public TranslationsApi(IBackofficeStore store) : base(store)
@@ -91,7 +91,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> Save(T model)
     {
-      return await SaveModel(model, Validator);
+      return await SaveModel(model, null);
     }
 
 

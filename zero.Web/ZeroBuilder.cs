@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using zero.Core;
@@ -129,7 +130,13 @@ namespace zero.Web
         IDocumentStore raven = store.Setup(options).Initialize();
 
         // create all indexes
-        IndexCreation.CreateIndexes(Assembly.GetAssembly(typeof(MediaFolder_ByHierarchy)), store);
+        var assemblies = AssemblyDiscovery.Current.GetAssemblies().ToList();
+
+        // TODO maybe we shouldn't use all auto-registered assemblies but specify them directly via options?
+        foreach (Assembly assembly in assemblies)
+        {
+          IndexCreation.CreateIndexes(assembly, store);
+        }
 
         return raven;
       });

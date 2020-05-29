@@ -1,6 +1,6 @@
 ﻿namespace zero.Core.Renderer
 {
-  public class NumberOptions : AbstractFieldOptions
+  public class NumberOptions : AbstractFieldInputOptions
   {
     public int MaxLength { get; set; }
 

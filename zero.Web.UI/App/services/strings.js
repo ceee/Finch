@@ -69,5 +69,21 @@ export default {
     selector = selector.replace(/\[(\w+)\]/g, '.$1');
     selector = selector.replace(/^\./, '');
     return selector.split('.');
+  },
+
+
+  currency(value, decimals, hideSymbol, noEncode)
+  {
+    if (isNaN(value))
+    {
+      value = 0;
+    }
+
+    var fixedDecimals = typeof decimals !== 'undefined';
+    decimals = !fixedDecimals ? 2 : decimals;
+    var hasDecimals = ~~value !== value;
+    var val = (hasDecimals || fixedDecimals) ? (value / 1).toFixed(decimals) : ~~value;
+    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, noEncode ? " " : "&nbsp;") + (hideSymbol === true ? "" : (noEncode ? " €" : "&nbsp;&euro;"));
+    // TODO we have dynamic currencies, not fixed to €
   }
 };

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace zero.Core.Entities
 {
@@ -27,6 +28,14 @@ namespace zero.Core.Entities
     public ListResult(IList<T> items, long totalItems, long pageNumber, long pageSize) : this(totalItems, pageNumber, pageSize)
     {
       Items = items;
+    }
+
+    public ListResult<TTarget> MapTo<TTarget>(Func<T, TTarget> convertItem)
+    {
+      return new ListResult<TTarget>(Items.Select(x => convertItem(x)).ToList(), TotalItems, Page, PageSize)
+      {
+        Statistics = Statistics
+      };
     }
 
     public long Page { get; private set; }

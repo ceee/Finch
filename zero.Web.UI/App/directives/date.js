@@ -10,7 +10,7 @@ Vue.directive('date', (el, binding) =>
   {
     if (!binding.value)
     {
-      el.innerHTML = '';
+      el.innerHTML = '-';
       return;
     }
 
