@@ -15,7 +15,7 @@
         <div class="media-items">
 
           <!-- upload field -->
-          <div class="media-item is-blank">
+          <div v-if="id" class="media-item is-blank">
             <input class="media-item-upload" type="file" multiple @change="onUpload" />
             <span class="media-item-content">
               <i class="fth-plus"></i>
