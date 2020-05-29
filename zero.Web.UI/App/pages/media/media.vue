@@ -6,7 +6,7 @@
     </div>
 
     <div class="media-content">
-      <ui-header-bar :title="title">
+      <ui-header-bar :title="title" :back-button="!!id">
         <ui-search />
         <ui-button type="white" label="Add folder" icon="fth-plus" @click="addFolder(id)" />
       </ui-header-bar>
@@ -23,21 +23,21 @@
           </div>
 
           <!-- folder list -->
-          <a href="#" class="media-item" v-for="item in folders">
+          <router-link :to="getLink(item)" class="media-item" v-for="item in folders" :key="item.id">
             <span class="media-item-content is-folder">
               <i class="fth-folder"></i>
               <span>{{item.name}}</span>
             </span>
-          </a>
+          </router-link>
 
           <!-- media list -->
-          <a href="#" class="media-item" v-for="item in items">
+          <router-link :to="getLink(item, true)" class="media-item" v-for="item in items" :key="item.id">
             <img v-if="item.type === 'image'" :src="item.source" />
             <span class="media-item-content is-file" v-if="item.type !== 'image'">
               <i :class="icons[item.type]" :data-extension="item.extension"></i>
               <span>{{item.source}}</span>
             </span>
-          </a>
+          </router-link>
         </div>
       </div>
     </div>
@@ -168,6 +168,22 @@
         });
       },
 
+
+      // get link for folder or media item
+      getLink(item, isMediaItem)
+      {
+        if (item.id === 'recyclebin')
+        {
+          return { name: 'mediarecyclebin' };
+        }
+
+        return {
+          name: 'mediafolder',
+          params: { id: item.id }
+        };
+      },
+
+
       // load folders in tree
       getTree(parent)
       {
@@ -182,17 +198,7 @@
         {
           response.forEach(item =>
           {
-            item.url = {
-              name: 'mediafolder',
-              params: { id: item.id }
-            };
-
-            if (item.id === "recyclebin")
-            {
-              item.url = {
-                name: 'mediarecyclebin'
-              };
-            }
+            item.url = this.getLink(item);
           });
           this.cache[key] = response;
           return response;
@@ -214,7 +220,6 @@
           {
             this.$refs.tree.refresh();
             this.$router.push({ name: 'mediafolder', params: { id: item.model.id } });
-            //this.getItems();
           }, 500);
         }, () => { });
       },
