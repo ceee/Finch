@@ -88,6 +88,12 @@
         this.configuration = _extend(defaultConfig, this.config);
       },
 
+      refresh()
+      {
+        this.initialize();
+        this.load(this.parent);
+      },
+
       // loads children of the given parent id or on root if empty
       load(parent)
       {

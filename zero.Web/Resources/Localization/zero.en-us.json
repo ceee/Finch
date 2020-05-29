@@ -11,6 +11,7 @@
     "close": "Close",
     "confirm": "Confirm",
     "save": "Save",
+    "create": "Create",
     "createdDate": "Created at",
     "id": "ID",
     "active": "Published",
@@ -330,6 +331,7 @@
   "media": {
     "list": "Media",
     "name": "Media",
+    "addfolder": "Add a new folder",
     "fields": {
       "caption": "Caption",
       "dimension": "Dimension",

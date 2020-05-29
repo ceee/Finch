@@ -1,8 +1,7 @@
 ﻿<template>
   <div class="media">
     <div class="media-tree" v-resizable="resizable">
-      <ui-header-bar title="@media.list" />
-      <ui-tree :get="getTree" />
+      <ui-tree ref="tree" :get="getTree" :config="treeConfig" :active="id" header="@media.list" />
       <div class="media-tree-resizable ui-resizable"></div>
     </div>
 
@@ -10,7 +9,6 @@
       <ui-header-bar :title="title">
         <ui-search />
         <ui-button type="white" label="Add folder" icon="fth-plus" @click="addFolder(id)" />
-        <!--<ui-button label="Add media" icon="fth-plus" />-->
       </ui-header-bar>
 
       <div class="ui-view-box">
@@ -63,6 +61,7 @@
       cache: {},
       items: [],
       folders: [],
+      treeConfig: {},
       icons: {
         image: 'fth-image',
         video: 'fth-video',
@@ -87,7 +86,53 @@
 
     created()
     {
+      var instance = this;
+
       this.getItems();
+
+      this.treeConfig.onActionsRequested = item =>
+      {
+        let actions = [];
+
+        if (item && item.id === 'recyclebin')
+        {
+          return [{
+            name: 'Empty recycle bin',
+            icon: 'fth-trash-2'
+          }];
+        }
+
+        actions.push({
+          name: 'Create',
+          icon: 'fth-plus',
+          action(action, dropdown)
+          {
+            dropdown.hide();
+            instance.addFolder();
+          }
+        });
+
+        if (item)
+        {
+          actions.push({
+            name: 'Move',
+            icon: 'fth-corner-down-right'
+          });
+        }
+
+        if (item)
+        {
+          actions.push({
+            type: 'separator'
+          });
+          actions.push({
+            name: 'Delete',
+            icon: 'fth-x'
+          });
+        }
+
+        return actions;
+      };
     },
 
     watch: {
@@ -160,15 +205,17 @@
         Overlay.open({
           component: AddFolderOverlay,
           width: 700,
-          model: { parentId }
+          model: { parentId },
+          theme: 'dark'
         }).then(item =>
         {
-          console.info(item);
-          // TODO reload?
-        }, () =>
-        {
-          
-        });
+          setTimeout(() =>
+          {
+            this.cache = {};
+            this.$refs.tree.refresh();
+            this.getItems();
+          }, 1000);
+        }, () => { });
       },
 
 
