@@ -23,7 +23,7 @@
           </div>
 
           <!-- folder list -->
-          <router-link :to="getLink(item)" class="media-item" v-for="item in folders" :key="item.id">
+          <router-link :to="getLink(item)" class="media-item is-folder" v-for="item in folders" :key="item.id">
             <span class="media-item-content is-folder">
               <i class="fth-folder"></i>
               <span>{{item.name}}</span>
@@ -360,9 +360,10 @@
 
   .media-items
   {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     grid-gap: var(--padding);
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    //grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     align-items: stretch;
   }
 
@@ -390,6 +391,11 @@
     {
       border: 2px dotted var(--color-line);
       background: transparent;
+    }
+
+    &.is-folder
+    {
+      width: 210px;
     }
   }
 
