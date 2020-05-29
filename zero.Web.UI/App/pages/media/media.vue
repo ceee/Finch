@@ -393,7 +393,7 @@
       background: transparent;
     }
 
-    &.is-folder
+    &.is-folder, &.is-blank
     {
       width: 210px;
     }
