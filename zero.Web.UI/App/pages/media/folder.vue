@@ -37,8 +37,6 @@
 
       onLoad(form)
       {
-        console.info(JSON.parse(JSON.stringify(this.model)));
-
         form.load(!this.model.id ? MediaFolderApi.getEmpty() : MediaFolderApi.getById(this.model.id)).then(response =>
         {
           this.disabled = !response.canEdit;

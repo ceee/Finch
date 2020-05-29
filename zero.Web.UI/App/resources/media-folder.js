@@ -17,9 +17,14 @@ export default {
   },
 
   // get all folder with a certain parent (can be empty) as tree
-  getAllAsTree(parent)
+  getAllAsTree(parent, active)
   {
-    return Axios.get(base + 'getAllAsTree', { params: { parent } }).then(res => Promise.resolve(res.data));
+    return Axios.get(base + 'getAllAsTree', {
+      params: {
+        parent: parent,
+        active: active
+      }
+    }).then(res => Promise.resolve(res.data));
   },
 
   // save a media folder

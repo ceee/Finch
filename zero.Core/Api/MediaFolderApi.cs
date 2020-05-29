@@ -1,4 +1,5 @@
 ﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,35 +38,74 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IList<TreeItem>> GetAllAsTree(string parentId = null)
+    public async Task<IList<TreeItem>> GetAllAsTree(string parentId = null, string activeId = null)
     {
-      List<TreeItem> result = new List<TreeItem>();
+      List<TreeItem> items = new List<TreeItem>();
+      string[] openIds = new string[0] { };
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        IList<MediaFolder> items = await session.Query<MediaFolder>()
+        IList<MediaFolder> folders = await session.Query<MediaFolder>()
           .Scope(Scope)
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .OrderByDescending(x => x.Name)
           .ToListAsync();
 
-        foreach (MediaFolder folder in items)
+
+        // get hierarchy so we know if we should set the folder to open
+        if (!activeId.IsNullOrEmpty())
         {
-          result.Add(new TreeItem()
+          MediaFolder_ByHierarchy.Result result = await session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
+            .ProjectInto<MediaFolder_ByHierarchy.Result>()
+            .Include<MediaFolder_ByHierarchy.Result, MediaFolder>(x => x.Path.Select(p => p.Id))
+            .Scope(Scope)
+            .FirstOrDefaultAsync(x => x.Id == activeId);
+
+          if (result != null)
+          {
+            openIds = result.Path.Select(x => x.Id).ToArray();
+          }
+        }
+
+
+        // get children for all folders
+        string[] folderIds = folders.Select(x => x.Id).ToArray();
+
+        IList<MediaFolders_WithChildren.Result> children = await session.Query<MediaFolders_WithChildren.Result, MediaFolders_WithChildren>()
+          .ProjectInto<MediaFolders_WithChildren.Result>()
+          .Scope(Scope)
+          .Where(x => x.Id.In(folderIds))
+          .ToListAsync();
+
+
+        foreach (MediaFolder folder in folders)
+        {
+          int childCount = children.Count(x => x.Id == folder.Id);
+
+          items.Add(new TreeItem()
           {
             Id = folder.Id,
             Name = folder.Name,
-            HasChildren = true,
+            HasChildren = childCount > 0,
+            ChildCount = childCount,
             ParentId = folder.ParentId,
             Sort = folder.Sort,
-            Icon = "fth-folder"
+            Icon = "fth-folder",
+            IsOpen = openIds.Contains(folder.Id),
+            IsInactive = !folder.IsActive,
+            HasActions = true,
+            Modifier = !folder.IsActive ? new TreeItemModifier()
+            {
+              Icon = "fth-minus-circle color-red",
+              Name = "Inactive"
+            } : null
           });
         } 
       }
 
       if (parentId.IsNullOrEmpty())
       {
-        result.Add(new TreeItem()
+        items.Add(new TreeItem()
         {
           Id = "recyclebin",
           ParentId = null,
@@ -76,7 +116,7 @@ namespace zero.Core.Api
         });
       }
 
-      return result;
+      return items;
     }
 
 
@@ -104,6 +144,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<MediaFolder>> Save(MediaFolder model)
     {
+      model.IsActive = true;
       return await SaveModel(model, new MediaFolderValidator());
     }
 
@@ -136,7 +177,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all folders with the specified parent or on root for tree output
     /// </summary>
-    Task<IList<TreeItem>> GetAllAsTree(string parentId = null);
+    Task<IList<TreeItem>> GetAllAsTree(string parentId = null, string activeId = null);
 
     /// <summary>
     /// Creates or updates a folder

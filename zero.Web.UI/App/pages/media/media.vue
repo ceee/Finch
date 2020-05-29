@@ -138,6 +138,7 @@
     watch: {
       '$route'()
       {
+        this.cache = {};
         this.getItems();
       }
     },
@@ -177,7 +178,7 @@
           return Promise.resolve(this.cache[key]);
         }
 
-        return MediaFolderApi.getAllAsTree(parent).then(response =>
+        return MediaFolderApi.getAllAsTree(parent, this.id).then(response =>
         {
           response.forEach(item =>
           {
@@ -211,10 +212,10 @@
         {
           setTimeout(() =>
           {
-            this.cache = {};
             this.$refs.tree.refresh();
-            this.getItems();
-          }, 1000);
+            this.$router.push({ name: 'mediafolder', params: { id: item.model.id } });
+            //this.getItems();
+          }, 500);
         }, () => { });
       },
 

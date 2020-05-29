@@ -41,9 +41,9 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get all folders with a specific parent as tree
     /// </summary>    
-    public async Task<IActionResult> GetAllAsTree([FromQuery] string parent = null)
+    public async Task<IActionResult> GetAllAsTree([FromQuery] string parent = null, [FromQuery] string active = null)
     {
-      return Json(await Api.GetAllAsTree(parent));
+      return Json(await Api.GetAllAsTree(parent, active));
     }
 
 
