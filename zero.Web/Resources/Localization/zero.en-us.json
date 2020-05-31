@@ -333,6 +333,7 @@
     "name": "Media",
     "addfolder": "Add a new folder",
     "fields": {
+      "foldername_placeholder": "Enter a name ...",
       "caption": "Caption",
       "dimension": "Dimension",
       "size": "Size",

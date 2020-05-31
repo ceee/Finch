@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-tree" :style="{ 'padding-left': depth > 0 ? ((depth * 18) + 'px') : null }">
+  <div class="ui-tree" :style="{ 'padding-left': depth > 0 ? (((depth > 0 ? 1 : 0) * 15) + 'px') : null }">
     <ui-header-bar class="ui-tree-header" :title="header" :back-button="false" v-if="header">
       <ui-dot-button @click="onActionsClicked(null, $event)" />
     </ui-header-bar>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,13 +42,19 @@ namespace zero.Web.Controllers
     {
       ListResult<MediaListModel> items = await Mapper.Map<Media, MediaListModel>(await Api.GetByQuery(query));
       IEnumerable<MediaListModel> folders = new List<MediaListModel>();
+      MediaFolder folder = null;
 
       if (query.Page < 2)
       {
         folders = await Mapper.Map<MediaFolder, MediaListModel>(await MediaFolderApi.GetAll(query.FolderId));
       }
 
-      return Json(new MediaListResultModel(items, folders));
+      if (!String.IsNullOrEmpty(query.FolderId))
+      {
+        folder = await MediaFolderApi.GetById(query.FolderId);
+      }   
+
+      return Json(new MediaListResultModel(items, folders, folder));
     }
 
 

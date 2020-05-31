@@ -123,6 +123,7 @@
   .apps-items-add
   {
     background: transparent;
+    border: 2px dotted var(--color-line);
     color: var(--color-fg);
     border-radius: var(--radius);
     text-align: center;
@@ -132,11 +133,5 @@
     align-items: center;
     font-size: 22px;
     width: 60px;
-    margin-left: -20px;
-
-    &:hover
-    {
-      background: var(--color-bg-xmid);
-    }
   }
 </style>

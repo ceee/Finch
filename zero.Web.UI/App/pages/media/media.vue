@@ -62,6 +62,7 @@
       items: [],
       folders: [],
       treeConfig: {},
+      current: null,
       icons: {
         image: 'fth-image',
         video: 'fth-video',
@@ -150,7 +151,7 @@
       },
       title()
       {
-        return this.id ? 'Media (...)' : '@media.list';
+        return this.current ? this.current.name : '@media.list';
       }
     },
 
@@ -165,6 +166,7 @@
         {
           this.items = response.items;
           this.folders = response.folders;
+          this.current = response.folder;
         });
       },
 
@@ -211,7 +213,6 @@
       {
         Overlay.open({
           component: AddFolderOverlay,
-          width: 700,
           model: { parentId },
           theme: 'dark'
         }).then(item =>

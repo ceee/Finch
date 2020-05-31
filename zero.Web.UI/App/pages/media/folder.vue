@@ -2,10 +2,8 @@
   <ui-form v-if="!loading" ref="form" class="mediafolder" v-slot="form" @submit="onSubmit" @load="onLoad">
     <h2 class="ui-headline" v-localize="'@media.addfolder'"></h2>
     <div class="mediafolder-items">
-      <ui-property label="@ui.name" :required="true" :vertical="true">
-        <input v-model="item.name" type="text" class="ui-input" maxlength="200" :readonly="disabled" />
-      </ui-property>
-        <!-- // TODO add parent selector -->
+      <input v-model="item.name" type="text" class="ui-input" maxlength="200" v-localize:placeholder="'@media.fields.foldername_placeholder'" :readonly="disabled" />
+      <!-- // TODO add parent selector -->
     </div>
     <div class="app-confirm-buttons">
       <ui-button v-if="!disabled" :submit="true" :state="form.state" label="@ui.create"></ui-button>
@@ -95,6 +93,12 @@
     .ui-split + .ui-property
     {
       margin-top: 0;
+    }
+
+    .ui-input
+    {
+      background: var(--color-bg-mid);
+      border: none;
     }
   }
 </style>
