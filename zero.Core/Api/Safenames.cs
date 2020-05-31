@@ -1,22 +1,49 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class Alias
+  public class Safenames
   {
-    private const char HYPHEN = '-';
+    public enum Scope
+    {
+      Url,
+      File
+    }
 
-    private const char PLUS = '+';
+    const char HYPHEN = '-';
 
-    private const char AMPERSAND = '&';
+    const char DOT = '.';
+
+    const char PLUS = '+';
+
+    const char AMPERSAND = '&';
+
+
+    /// <summary>
+    /// Converts an untrusted to a safe filename
+    /// </summary>
+    public static string File(string value)
+    {
+      return Generate(Path.GetFileName(value), Scope.File);
+    }
 
 
     /// <summary>
     /// Converts a term to a safe alias (suitable for URLs)
     /// </summary>
-    public static string Generate(string value)
+    public static string Alias(string value)
+    {
+      return Generate(value, Scope.Url);
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    static string Generate(string value, Scope scope)
     {
       if (String.IsNullOrWhiteSpace(value))
       {
@@ -57,6 +84,10 @@ namespace zero.Core.Api
         else if (character == PLUS || character == AMPERSAND)
         {
           target = PLUS;
+        }
+        else if (scope == Scope.File && character == DOT)
+        {
+          target = DOT;
         }
         // add hyphen for all other characters
         else

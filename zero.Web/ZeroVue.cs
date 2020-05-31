@@ -97,7 +97,7 @@ namespace zero.Web
         }
 
         bool isExternal = !(section is IZeroInternal);
-        string url = Alias.Generate(section.Alias).EnsureStartsWith('/');
+        string url = Safenames.Alias(section.Alias).EnsureStartsWith('/');
 
         if (section.Alias == Constants.Sections.Dashboard)
         {
@@ -121,7 +121,7 @@ namespace zero.Web
           {
             Alias = child.Alias,
             Name = child.Name,
-            Url = vueSection.Url.EnsureEndsWith('/') + Alias.Generate(child.Alias),
+            Url = vueSection.Url.EnsureEndsWith('/') + Safenames.Alias(child.Alias),
             IsExternal = isExternal
           });
         }
@@ -192,7 +192,7 @@ namespace zero.Web
             Name = area.Name,
             Description = area.Description,
             Icon = area.Icon,
-            Url = Constants.Sections.Settings.EnsureStartsWith('/') + Alias.Generate(area.Alias).EnsureStartsWith('/'),
+            Url = Constants.Sections.Settings.EnsureStartsWith('/') + Safenames.Alias(area.Alias).EnsureStartsWith('/'),
             IsPlugin = isPlugin
           };
 

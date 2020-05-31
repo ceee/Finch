@@ -28,6 +28,27 @@ export default {
     return Axios.post(base + 'save', model).then(res => Promise.resolve(res.data));
   },
 
+  // uploads a file
+  upload(file, folderId)
+  {
+    var data = new FormData();
+    data.append('file', file);
+    data.append('folderId', folderId);
+
+    return Axios.post(base + 'upload', data, {
+      onUploadProgress: function (progressEvent)
+      {
+        var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        console.info('upload: ' + percentCompleted);
+      }
+    }).then(function (res)
+    {
+      Promise.resolve(res.data);
+    });
+
+    //return Axios.post(base + 'save', model).then(res => Promise.resolve(res.data));
+  },
+
   // deletes a media
   delete(id)
   {

@@ -122,7 +122,7 @@ namespace zero.Core.Api
       }
 
       // update name alias
-      model.Alias = Alias.Generate(model.Name);
+      model.Alias = Safenames.Alias(model.Name);
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {

@@ -64,7 +64,7 @@ namespace zero.Core.Api
           CreatedDate = DateTimeOffset.Now,
           IsActive = true,
           Name = model.AppName,
-          Alias = Alias.Generate(model.AppName)
+          Alias = Safenames.Alias(model.AppName)
         };
 
         // create user
@@ -76,7 +76,7 @@ namespace zero.Core.Api
           Name = model.User.Name,
           IsActive = true,
           LanguageId = Options.DefaultLanguage,
-          Alias = Alias.Generate(model.User.Name),
+          Alias = Safenames.Alias(model.User.Name),
           IsEmailConfirmed = true
         };
 
@@ -84,7 +84,7 @@ namespace zero.Core.Api
         Language language = new Language() // TODO get default language selection from setup UI
         {
           Name = "English",
-          Alias = Alias.Generate("English"),
+          Alias = Safenames.Alias("English"),
           CreatedDate = DateTimeOffset.Now,
           Code = "en-US",
           IsActive = true,
@@ -209,7 +209,7 @@ namespace zero.Core.Api
         {
           CreatedDate = DateTimeOffset.Now,
           IsActive = true,
-          Alias = Alias.Generate(country.Value),
+          Alias = Safenames.Alias(country.Value),
           LanguageId = defaultLanguage.Id,
           Code = country.Key.ToLowerInvariant(),
           Name = country.Value
@@ -230,7 +230,7 @@ namespace zero.Core.Api
       UserRole adminRole = new UserRole()
       {
         Name = "Administrator",
-        Alias = Alias.Generate("Administrator"),
+        Alias = Safenames.Alias("Administrator"),
         Sort = 0,
         AppId = Constants.Database.SharedAppId,
         Icon = "fth-award",
@@ -256,7 +256,7 @@ namespace zero.Core.Api
       UserRole editorRole = new UserRole()
       {
         Name = "Editor",
-        Alias = Alias.Generate("Editor"),
+        Alias = Safenames.Alias("Editor"),
         Sort = 1,
         AppId = Constants.Database.SharedAppId,
         Icon = "fth-feather",
@@ -276,7 +276,7 @@ namespace zero.Core.Api
       UserRole defaultRole = new UserRole()
       {
         Name = "Standard",
-        Alias = Alias.Generate("Standard"),
+        Alias = Safenames.Alias("Standard"),
         Sort = 2,
         AppId = Constants.Database.SharedAppId,
         Icon = "fth-users",

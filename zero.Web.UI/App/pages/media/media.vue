@@ -34,8 +34,8 @@
           <router-link :to="getLink(item, true)" class="media-item" v-for="item in items" :key="item.id">
             <img v-if="item.type === 'image'" :src="item.source" />
             <span class="media-item-content is-file" v-if="item.type !== 'image'">
-              <i :class="icons[item.type]" :data-extension="item.extension"></i>
-              <span>{{item.source}}</span>
+              <i :class="icons[item.type]" :data-extension="item.source.split('.').pop()"></i>
+              <span>{{item.name}}</span>
             </span>
           </router-link>
         </div>
@@ -265,14 +265,18 @@
               name: file.name,
               size: file.size,
               mimeType: file.type,
-              source: null,
-              file: file
+              source: null
             });
+
             //items.push(this.addFile(files[i]));
+
+            MediaApi.upload(file, this.id).then(res =>
+            {
+              console.info(res);
+            });
           }
         }
 
-        console.info(items);
         //this.update();
       },
 

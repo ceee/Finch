@@ -38,11 +38,11 @@ namespace zero.Web.Mapper
       config.CreateMap<Media, MediaListModel>((source, target) =>
       {
         target.Id = source.Id;
-        target.Name = source.Name;
         target.IsFolder = false;
+        target.Name = source.Name;
+        target.Type = source.Type;
         target.Size = source.Size;
-        target.Source = source.Source;
-        target.ThumbnailSource = source.ThumbnailSource;
+        target.Source = source.PreviewSource ?? source.Source;
       });
 
       config.CreateMap<MediaFolder, MediaListModel>((source, target) =>

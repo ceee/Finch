@@ -93,7 +93,7 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public Task SetRoleNameAsync(TRole role, string roleName, CancellationToken cancellationToken)
     {
-      role.Alias = Alias.Generate(roleName);
+      role.Alias = Safenames.Alias(roleName);
       return Task.CompletedTask;
     }
 

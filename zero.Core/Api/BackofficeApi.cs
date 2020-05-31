@@ -164,7 +164,7 @@ namespace zero.Core.Api
       // update name alias
       if (zeroEntity != null)
       {
-        zeroEntity.Alias = Alias.Generate(zeroEntity.Name);
+        zeroEntity.Alias = Safenames.Alias(zeroEntity.Name);
       }
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())

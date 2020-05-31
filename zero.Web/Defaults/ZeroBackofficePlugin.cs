@@ -48,6 +48,7 @@ namespace zero.Web.Defaults
       services.AddTransient<IPermissionsApi, PermissionsApi>();
       services.AddTransient<IMediaApi, MediaApi>();
       services.AddTransient<IMediaFolderApi, MediaFolderApi>();
+      services.AddTransient<IMediaUploadApi, MediaUploadApi>();
       services.AddTransient<IMediaUpload, MediaUpload>();
     }
     

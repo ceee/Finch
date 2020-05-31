@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +19,14 @@ namespace zero.Web.Controllers
 
     IMediaFolderApi MediaFolderApi;
 
+    IMediaUploadApi MediaUploadApi;
 
-    public MediaController(IMediaApi api, IMediaFolderApi mediaFolderApi)
+
+    public MediaController(IMediaApi api, IMediaFolderApi mediaFolderApi, IMediaUploadApi mediaUploadApi)
     {
       Api = api;
       MediaFolderApi = mediaFolderApi;
+      MediaUploadApi = mediaUploadApi;
     }
 
 
@@ -65,6 +69,16 @@ namespace zero.Web.Controllers
     {
       Media entity = await Mapper.Map(model, await Api.GetById(model.Id));
       return await As<Media, MediaEditModel>(await Api.Save(entity));
+    }
+
+
+    /// <summary>
+    /// Upload a file
+    /// </summary>
+    public async Task<IActionResult> Upload(IFormFile file, string folderId)
+    {
+      Media media = await MediaUploadApi.Upload(file, folderId);
+      return Json(await Api.Save(media));
     }
 
 

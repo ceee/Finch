@@ -1,4 +1,5 @@
 ﻿using System;
+using zero.Core.Attributes;
 
 namespace zero.Core.Entities
 {
@@ -29,7 +30,10 @@ namespace zero.Core.Entities
     public string ThumbnailSource { get; set; }
 
     /// <inheritdoc />
-    public int Size { get; set; }
+    public string PreviewSource { get; set; }
+
+    /// <inheritdoc />
+    public long Size { get; set; }
 
     /// <inheritdoc />
     public MediaDimension Dimension { get; set; }
@@ -39,13 +43,17 @@ namespace zero.Core.Entities
 
     /// <inheritdoc />
     public MediaFocalPoint FocalPoint { get; set; }
+
+    /// <inheritdoc />
+    public MediaType Type { get; set; }
   }
 
 
+  [Collection("Media")]
   public interface IMedia : IZeroEntity, IAppAwareEntity, IZeroDbConventions
   {
     /// <summary>
-    /// Id/name of the folder which is stored on disk/cloud
+    /// Id/name of the phyiscal folder which is stored on disk/cloud
     /// </summary>
     public string FileId { get; set; }
 
@@ -75,9 +83,14 @@ namespace zero.Core.Entities
     string ThumbnailSource { get; set; }
 
     /// <summary>
+    /// For images this is the source for a [proportional]x210px thumbnail
+    /// </summary>
+    string PreviewSource { get; set; }
+
+    /// <summary>
     /// Filesize in bytes
     /// </summary>
-    int Size { get; set; }
+    long Size { get; set; }
 
     /// <summary>
     /// Dimension (width + height) in pixels
@@ -93,5 +106,10 @@ namespace zero.Core.Entities
     /// Optional focal point for an image
     /// </summary>
     MediaFocalPoint FocalPoint { get; set; }
+
+    /// <summary>
+    /// Type of the media
+    /// </summary>
+    MediaType Type { get; set; }
   }
 }

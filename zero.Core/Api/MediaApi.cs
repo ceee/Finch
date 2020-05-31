@@ -35,7 +35,8 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<Media>> Save(Media model)
     {
-      return await Save(model);
+      model.IsActive = true;
+      return await SaveModel(model);
     }
 
 

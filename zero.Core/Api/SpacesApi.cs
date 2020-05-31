@@ -144,7 +144,7 @@ namespace zero.Core.Api
       }
 
       model.SpaceAlias = alias;
-      model.Alias = Alias.Generate(model.Name);
+      model.Alias = Safenames.Alias(model.Name);
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
