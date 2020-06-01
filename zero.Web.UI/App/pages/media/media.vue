@@ -251,31 +251,48 @@
 
       onUpload(event)
       {
-        const files = event.target.files;
-        let items = [];
+        let options = {
+          title: 'Upload status',
+          closeLabel: '@ui.close',
+          component: UploadStatusOverlay,
+          isCreate: true,
+          model: event.target.files,
+          folderId: this.id,
+          theme: 'dark',
+          width: 520
+        };
 
-        if (files && files.length > 0)
+        return Overlay.open(options).then(value =>
         {
-          for (var i = 0; i < files.length; i++)
-          {
-            let file = files[i];
+          console.info(value);
+          //this.onChange(value);
+        }, () => { });
 
-            items.push({
-              id: 'upload:' + Strings.guid(),
-              name: file.name,
-              size: file.size,
-              mimeType: file.type,
-              source: null
-            });
+        //const files = event.target.files;
+        //let items = [];
 
-            //items.push(this.addFile(files[i]));
+        //if (files && files.length > 0)
+        //{
+        //  for (var i = 0; i < files.length; i++)
+        //  {
+        //    let file = files[i];
 
-            MediaApi.upload(file, this.id).then(res =>
-            {
-              console.info(res);
-            });
-          }
-        }
+        //    items.push({
+        //      id: 'upload:' + Strings.guid(),
+        //      name: file.name,
+        //      size: file.size,
+        //      mimeType: file.type,
+        //      source: null
+        //    });
+
+        //    //items.push(this.addFile(files[i]));
+
+        //    MediaApi.upload(file, this.id).then(res =>
+        //    {
+        //      console.info(res);
+        //    });
+        //  }
+        //}
 
         //this.update();
       },
@@ -367,7 +384,7 @@
   {
     display: flex;
     flex-wrap: wrap;
-    grid-gap: var(--padding);
+    grid-gap: 15px;
     //grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     align-items: stretch;
   }
@@ -375,10 +392,11 @@
   a.media-item, .media-item
   {
     display: inline-flex;
+    flex: 1 0 auto;
     align-items: center;
     justify-content: center;
     background: var(--color-bg-light);
-    height: 210px;
+    height: 160px;
     border-radius: var(--radius);
     overflow: hidden;
     color: var(--color-fg);
@@ -400,7 +418,8 @@
 
     &.is-folder, &.is-blank
     {
-      width: 210px;
+      width: 160px;
+      flex: 0 1 auto;
     }
   }
 

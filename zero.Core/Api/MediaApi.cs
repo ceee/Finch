@@ -26,7 +26,7 @@ namespace zero.Core.Api
       {
         return await session.Query<Media>()
           .Scope(Scope)
-          .WhereIf(x => x.FolderId == query.FolderId, !query.FolderId.IsNullOrEmpty())
+          .WhereIf(x => x.FolderId == query.FolderId, !query.FolderId.IsNullOrEmpty(), x => x.FolderId == null)
           .ToQueriedListAsync(query);
       }
     }

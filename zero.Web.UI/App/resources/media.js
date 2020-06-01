@@ -29,21 +29,24 @@ export default {
   },
 
   // uploads a file
-  upload(file, folderId)
+  upload(file, folderId, onProgress)
   {
     var data = new FormData();
     data.append('file', file);
     data.append('folderId', folderId);
 
     return Axios.post(base + 'upload', data, {
-      onUploadProgress: function (progressEvent)
+      onUploadProgress: (progressEvent) =>
       {
-        var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        console.info('upload: ' + percentCompleted);
+        if (typeof onProgress === 'function')
+        {
+          var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          onProgress(percentCompleted);
+        }
       }
     }).then(function (res)
     {
-      Promise.resolve(res.data);
+      return Promise.resolve(res.data);
     });
 
     //return Axios.post(base + 'save', model).then(res => Promise.resolve(res.data));

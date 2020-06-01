@@ -1,9 +1,16 @@
 ﻿<template>
   <div class="ui-media-upload">
-    <h2 class="ui-headline" v-localize="'@media.name'"></h2>
+    <h2 class="ui-headline" v-localize="'Upload status'"></h2>
 
-    <div class="ui-media-upload-preview">
-      
+    <div class="ui-media-upload-items">
+      <button type="button" v-for="item in items" class="ui-media-upload-item">
+        <img class="-preview" v-if="item.isImage" :src="item.source" />
+        <span class="-preview" v-if="!item.isImage"><i class="fth-file"></i></span>
+        <p class="ui-media-upload-item-text">
+          {{item.name}}
+          <span class="-minor"><br>{{item.progress}}</span>
+        </p>
+      </button>
     </div>
 
     <div class="app-confirm-buttons">
@@ -15,16 +22,74 @@
 
 
 <script>
+  import MediaApi from 'zero/resources/media.js'
+  import Strings from 'zero/services/strings.js';
+
   export default {
 
     props: {
-      model: Object,
+      model: FileList,
       config: Object
     },
 
     data: () => ({
-      loading: false
+      loading: false,
+      items: []
     }),
+
+
+    mounted()
+    {
+      const files = this.model;
+      let items = [];
+
+      if (!files || files.length < 1)
+      {
+        return;
+      }
+
+      for (var i = 0; i < files.length; i++)
+      {
+        let file = files[i];
+
+        this.items.push({
+          id: 'upload:' + Strings.guid(),
+          name: file.name,
+          size: file.size,
+          mimeType: file.type,
+          source: null,
+          progress: 0,
+          file: file,
+          isImage: false,
+          success: false,
+          error: null
+        });
+      }
+
+
+      for (var i = 0; i < this.items.length; i++)
+      {
+        let item = this.items[i];
+
+        MediaApi.upload(item.file, this.config.folderId, progress =>
+        {
+          item.progress = progress;
+        }).then(res =>
+        {
+          if (res.success)
+          {
+            item.source = res.model.thumbnailSource || res.model.source;
+            item.isImage = res.model.type === 'image';
+            item.success = true;
+          }
+          else
+          {
+            item.success = false;
+            // TODO output error
+          }
+        });
+      }
+    },
 
     methods: {
 
@@ -50,5 +115,63 @@
     margin-top: var(--padding);
     padding: 10px;
     overflow: hidden;*/
+  }
+
+  .ui-media-upload-items
+  {
+    margin-top: 25px;
+    max-height: 495px;
+    overflow-y: auto;
+  }
+
+  .ui-media-upload-item
+  {
+    width: 100%;
+    height: 70px;
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    grid-gap: 15px;
+    align-items: center;
+    line-height: 1.4;
+
+    & + .ui-media-upload-item
+    {
+      margin-top: 15px;
+    }
+
+    .-preview
+    {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      height: 70px;
+      width: 70px;
+      object-fit: cover;
+      background: var(--color-bg-mid);
+      border-radius: var(--radius);
+      position: relative;
+      text-align: center;
+      font-size: 22px;
+    }
+
+    /*&.is-upload .-preview
+    {
+      background: var(--color-primary);
+      color: var(--color-primary-fg);
+    }*/
+
+    .-extension
+    {
+      font-size: 12px;
+      font-style: normal;
+      margin-top: 8px;
+    }
+
+    .-minor
+    {
+      color: var(--color-fg-light);
+      font-size: var(--font-size-s);
+    }
   }
 </style>
