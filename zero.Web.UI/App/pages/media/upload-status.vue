@@ -8,7 +8,13 @@
         <span class="-preview" v-if="!item.isImage"><i class="fth-file"></i></span>
         <p class="ui-media-upload-item-text">
           {{item.name}}
-          <span class="-minor"><br>{{item.progress}}</span>
+          <span class="-minor">
+            <br>
+            <span v-if="item.progress < 100 && !item.error && !item.success" class="ui-media-upload-item-progress">
+              <span class="-inner" :style="{ width: item.progress + '%' }"></span>
+            </span>
+            <span v-if="item.success">Completed</span>
+          </span>
         </p>
       </button>
     </div>
@@ -172,6 +178,27 @@
     {
       color: var(--color-fg-light);
       font-size: var(--font-size-s);
+    }
+  }
+
+  .ui-media-upload-item-progress
+  {
+    display: block;
+    width: 50%;
+    height: 8px;
+    margin-top: 6px;
+    border-radius: 2px;
+    background: var(--color-bg-mid);
+    position: relative;
+
+    .-inner
+    {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      border-radius: 2px;
+      background: var(--color-primary);
     }
   }
 </style>

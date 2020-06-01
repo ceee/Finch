@@ -87,7 +87,7 @@
         orderBy: null,
         orderIsDescending: true,
         page: 1,
-        pageSize: 30,
+        pageSize: 20,
         search: null
       },
       debouncedUpdate: null

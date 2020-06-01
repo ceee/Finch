@@ -15,29 +15,24 @@
         <div class="media-items">
 
           <!-- upload field -->
-          <div v-if="id" class="media-item is-blank">
+          <!--<div v-if="id" class="media-item is-blank">
             <input class="media-item-upload" type="file" multiple @change="onUpload" />
             <span class="media-item-content">
               <i class="fth-plus"></i>
             </span>
-          </div>
+          </div>-->
 
           <!-- folder list -->
-          <router-link :to="getLink(item)" class="media-item is-folder" v-for="item in folders" :key="item.id">
-            <span class="media-item-content is-folder">
-              <i class="fth-folder"></i>
-              <span>{{item.name}}</span>
-            </span>
-          </router-link>
+          <div v-if="!id" class="ui-datagrid-items">
+            <router-link :to="getLink(item)" class="media-item is-folder" v-for="item in folders" :key="item.id">
+              <span class="media-item-content is-folder">
+                <i class="fth-folder"></i>
+                <span>{{item.name}}</span>
+              </span>
+            </router-link>
+          </div>
 
-          <!-- media list -->
-          <router-link :to="getLink(item, true)" class="media-item" v-for="item in items" :key="item.id">
-            <img v-if="item.type === 'image'" :src="item.source" />
-            <span class="media-item-content is-file" v-if="item.type !== 'image'">
-              <i :class="icons[item.type]" :data-extension="item.source.split('.').pop()"></i>
-              <span>{{item.name}}</span>
-            </span>
-          </router-link>
+          <ui-datagrid v-if="id" ref="grid" v-model="gridConfig" />
         </div>
       </div>
     </div>
@@ -50,7 +45,8 @@
   import MediaFolderApi from 'zero/resources/media-folder.js'
   import Overlay from 'zero/services/overlay.js';
   import AddFolderOverlay from './folder';
-  import MediaItemOverlay from './media-item';
+  import MediaItemOverlay from './media-overlay-item';
+  import MediaItem from './media-item';
   import UploadStatusOverlay from './upload-status';
   import Strings from 'zero/services/strings.js';
   import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
@@ -74,22 +70,24 @@
         max: 520,
         save: 'media-tree',
         handle: '.ui-resizable'
-      },
-      filter: {
-        orderBy: 'createdDate',
-        orderIsDescending: true,
-        page: 1,
-        pageSize: 20,
-        search: null,
-        folderId: null
-      },
+      }
     }),
 
     created()
     {
       var instance = this;
 
-      this.getItems();
+      this.gridConfig = {
+        search: null,
+        width: 360,
+        component: MediaItem,
+        items: this.getItems
+      };
+
+      if (!this.id)
+      {
+        this.getItems();
+      }
 
       this.treeConfig.onActionsRequested = item =>
       {
@@ -140,7 +138,16 @@
       '$route'()
       {
         this.cache = {};
-        this.getItems();
+
+        if (!this.id)
+        {
+          this.getItems();
+        }
+        else
+        {
+          this.$refs.grid.load();
+        }
+        //this.getItems();
       }
     },
 
@@ -158,15 +165,22 @@
     methods: {
 
       // get items (media + subfolders) in the current folder
-      getItems()
+      getItems(query)
       {
-        this.filter.folderId = this.$route.params.id;
+        if (!query)
+        {
+          query = {};
+        }
 
-        MediaApi.getAll(this.filter).then(response =>
+        query.folderId = this.$route.params.id;
+
+        return MediaApi.getAll(query).then(response =>
         {
           this.items = response.items;
           this.folders = response.folders;
           this.current = response.folder;
+
+          return Promise.resolve(response);
         });
       },
 
@@ -265,59 +279,8 @@
         return Overlay.open(options).then(value =>
         {
           console.info(value);
-          //this.onChange(value);
         }, () => { });
-
-        //const files = event.target.files;
-        //let items = [];
-
-        //if (files && files.length > 0)
-        //{
-        //  for (var i = 0; i < files.length; i++)
-        //  {
-        //    let file = files[i];
-
-        //    items.push({
-        //      id: 'upload:' + Strings.guid(),
-        //      name: file.name,
-        //      size: file.size,
-        //      mimeType: file.type,
-        //      source: null
-        //    });
-
-        //    //items.push(this.addFile(files[i]));
-
-        //    MediaApi.upload(file, this.id).then(res =>
-        //    {
-        //      console.info(res);
-        //    });
-        //  }
-        //}
-
-        //this.update();
       },
-
-
-      //addFile(file)
-      //{
-      //  var source = URL.createObjectURL(file);
-      //  var media = {
-      //    id: 'upload:' + Strings.guid(),
-      //    name: file.name,
-      //    source: source,
-      //    size: file.size,
-      //    mimeType: file.type
-      //  };
-
-      //  var reader = new FileReader();
-      //  reader.onload = function (e)
-      //  {
-      //    media.source = e.target.result;
-      //  };
-      //  reader.readAsDataURL(file);
-
-      //  return media;
-      //},
     }
   }
 </script>
@@ -380,7 +343,7 @@
     overflow-y: auto;
   }
 
-  .media-items
+  .media-items .ui-datagrid-items
   {
     display: flex;
     flex-wrap: wrap;
