@@ -87,7 +87,7 @@
         orderBy: null,
         orderIsDescending: true,
         page: 1,
-        pageSize: 20,
+        pageSize: 30,
         search: null
       },
       debouncedUpdate: null
@@ -195,6 +195,7 @@
     height: 250px;
     text-align: center;
     padding: 0 20px;
+    font-size: var(--font-size);
   }
 
   .ui-datagrid-empty-icon

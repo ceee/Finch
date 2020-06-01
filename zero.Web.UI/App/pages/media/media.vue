@@ -9,6 +9,11 @@
       <ui-header-bar :title="title" :back-button="!!id">
         <ui-search />
         <ui-button type="white" label="Add folder" icon="fth-plus" @click="addFolder(id)" />
+        <div type="button" class="ui-button has-state type-action state-default has-icon">
+          <span class="ui-button-text">Add files</span>
+          <i class="ui-button-icon fth-plus"></i>
+          <input class="media-item-upload" type="file" multiple @change="onUpload" />
+        </div>
       </ui-header-bar>
 
       <div class="ui-view-box">
@@ -79,7 +84,7 @@
 
       this.gridConfig = {
         search: null,
-        width: 360,
+        width: 160,
         component: MediaItem,
         items: this.getItems
       };
@@ -345,17 +350,16 @@
 
   .media-items .ui-datagrid-items
   {
-    display: flex;
-    flex-wrap: wrap;
+    /*display: grid;
+    flex-wrap: wrap;*/
     grid-gap: 15px;
-    //grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
     align-items: stretch;
   }
 
   a.media-item, .media-item
   {
     display: inline-flex;
-    flex: 1 0 auto;
     align-items: center;
     justify-content: center;
     background: var(--color-bg-light);
@@ -381,7 +385,6 @@
 
     &.is-folder, &.is-blank
     {
-      width: 160px;
       flex: 0 1 auto;
     }
   }
