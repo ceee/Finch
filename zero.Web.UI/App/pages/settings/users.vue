@@ -29,6 +29,7 @@
   import AuthApi from 'zero/services/auth.js'
   import UserRolesApi from 'zero/resources/userRoles.js';
   import UsersApi from 'zero/resources/users.js';
+  import MediaApi from 'zero/resources/media.js';
   import { filter as _filter, map as _map } from 'underscore';
 
   export default {
@@ -51,7 +52,7 @@
           avatar: {
             label: '',
             as: 'html',
-            render: item => `<img src="${item.avatar}" class="users-list-avatar">`,
+            render: item => `<img src="${MediaApi.getImageSource(item.avatarId)}" class="users-list-avatar">`,
             width: 70,
             link: this.getUserLink,
             sort: false

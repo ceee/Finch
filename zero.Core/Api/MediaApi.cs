@@ -8,13 +8,33 @@ namespace zero.Core.Api
 {
   public class MediaApi : AppAwareBackofficeApi, IMediaApi
   {
-    public MediaApi(IBackofficeStore store) : base(store) { }
+    protected IPaths Paths { get; private set; }
+
+
+    public MediaApi(IBackofficeStore store, IPaths paths) : base(store)
+    {
+      Paths = paths;
+    }
 
 
     /// <inheritdoc />
     public async Task<Media> GetById(string id)
     {
       return await GetById<Media>(id);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<string> GetSourceById(string id, bool thumb = false)
+    {
+      Media media = await GetById(id);
+
+      if (media == null)
+      {
+        return null;
+      }
+
+      return media.ThumbnailSource ?? media.Source;
     }
 
 
@@ -72,6 +92,11 @@ namespace zero.Core.Api
     /// Get media by Id
     /// </summary>
     Task<Media> GetById(string id);
+
+    /// <summary>
+    /// Get media source by Id
+    /// </summary>
+    Task<string> GetSourceById(string id, bool thumb = false);
 
     /// <summary>
     /// Get media by ids

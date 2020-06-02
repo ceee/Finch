@@ -173,10 +173,7 @@
 
         if (user && user.avatarId)
         {
-          MediaApi.getById(user.avatarId).then(res =>
-          {
-            this.userAvatar = res.entity.source;
-          });
+          this.userAvatar = MediaApi.getImageSource(user.avatarId);
         }
         else
         {

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Api;
@@ -99,6 +101,30 @@ namespace zero.Web.Controllers
     public async Task<IActionResult> Delete([FromQuery] string id)
     {
       return await As<Media, MediaEditModel>(await Api.Delete(id));
+    }
+
+
+    /// <summary>
+    /// Streams a media thumbnail by id
+    /// </summary>
+    [HttpGet]
+    public async Task<IActionResult> StreamThumbnail(string id)
+    {
+      string path = await Api.GetSourceById(id, true);
+
+      if (path == null)
+      {
+        return NotFound();
+      }
+
+      var provider = new FileExtensionContentTypeProvider();
+      string contentType;
+      if (!provider.TryGetContentType(Path.GetFileName(path), out contentType))
+      {
+        contentType = "application/octet-stream";
+      }
+
+      return File(path, contentType);
     }
   }
 }

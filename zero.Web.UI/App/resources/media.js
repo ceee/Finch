@@ -28,6 +28,16 @@ export default {
     return Axios.get(base + 'getAll', { params: query }).then(res => Promise.resolve(res.data));
   },
 
+  // get path to thumbnail source
+  getImageSource(id)
+  {
+    if (!id)
+    {
+      return null;
+    }
+    return base + 'streamThumbnail/' + id;
+  },
+
   // save a media
   save(model)
   {
