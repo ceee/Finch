@@ -93,6 +93,7 @@
       disabled: false,
       actions: [],
       model: {
+        avatarId: null,
         name: null,
         email: null,
         supportedCultures: []

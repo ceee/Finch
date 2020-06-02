@@ -40,6 +40,15 @@ namespace zero.Web.Controllers
 
 
     /// <summary>
+    /// Get media item by id
+    /// </summary>  
+    public async Task<IActionResult> GetByIds([FromQuery] string[] ids)
+    {
+      return Json(await Api.GetById(ids));
+    }
+
+
+    /// <summary>
     /// Get all media items + folders
     /// </summary>    
     public async Task<IActionResult> GetAll([FromQuery] MediaListQuery query)

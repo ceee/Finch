@@ -1,4 +1,5 @@
 ﻿using Raven.Client.Documents.Session;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -14,6 +15,16 @@ namespace zero.Core.Api
     public async Task<Media> GetById(string id)
     {
       return await GetById<Media>(id);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<Dictionary<string, Media>> GetById(IEnumerable<string> ids)
+    {
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        return await session.LoadAsync<Media>(ids);
+      }
     }
 
 
@@ -58,9 +69,14 @@ namespace zero.Core.Api
   public interface IMediaApi : IAppAwareBackofficeApi
   {
     /// <summary>
-    /// Get application by Id
+    /// Get media by Id
     /// </summary>
     Task<Media> GetById(string id);
+
+    /// <summary>
+    /// Get media by ids
+    /// </summary>
+    Task<Dictionary<string, Media>> GetById(IEnumerable<string> ids);
 
     /// <summary>
     /// Get all available media items (with query)

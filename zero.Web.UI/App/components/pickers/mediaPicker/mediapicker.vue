@@ -1,12 +1,28 @@
 ﻿<template>
-  <div class="ui-iconpicker" :class="{'is-disabled': disabled }">
-    <input ref="input" type="hidden" :value="value" />
-    <ui-select-button icon="fth-plus" label="@mediapicker.select_text" description="@mediapicker.select_description" @click="pick" :disabled="disabled" />
+  <div class="ui-mediapicker">
+    <div v-if="previews.length > 0" class="ui-mediapicker-previews">
+      <div v-for="item in previews" class="ui-mediapicker-preview">
+        <div class="ui-mediapicker-preview-image">
+          <img v-if="item.thumbnailSource" :src="item.thumbnailSource" :alt="item.name" />
+          <button v-if="!disabled" type="button" class="ui-mediapicker-preview-image-delete" @click="remove(item)" v-localize:title="'@ui.remove'"><i class="fth-x"></i></button>
+          <button v-if="!disabled" type="button" class="ui-mediapicker-preview-image-edit" @click="edit(item)" v-localize:title="'@ui.edit'"><i class="fth-edit-2"></i></button>
+        </div>
+        <div class="ui-mediapicker-preview-text">
+          <b :title="item.name">{{getFilename(item.name)}}</b>
+          <span class="is-filesize">{{getFileinfo(item)}}</span>
+        </div>
+      </div>
+    </div>
+    <div v-if="canAdd" class="ui-mediapicker-select" :class="{'is-disabled': disabled }">
+      <input ref="input" type="hidden" :value="value" />
+      <ui-select-button icon="fth-plus" label="@mediapicker.select_text" description="@mediapicker.select_description" @click="pick" :disabled="disabled" />
+    </div>
   </div>
 </template>
 
 
 <script>
+  import MediaApi from 'zero/resources/media.js'
   import PickMediaOverlay from './overlay';
   import Overlay from 'zero/services/overlay';
   import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
@@ -66,23 +82,134 @@
       },
     },
 
-    computed: {
-      
+
+    data: () => ({
+      configuration: {},
+      previews: []
+    }),
+
+
+    watch: {
+      value()
+      {
+        this.updatePreviews();
+      }
     },
+
 
     created()
     {
-
+      this.configuration = _extend(defaultConfig, this.config);
     },
+
+
+    mounted()
+    {
+      this.updatePreviews();
+    },
+
+
+    computed: {
+      canAdd()
+      {
+        return !this.disabled && this.configuration.limit - this.previews.length > 0;
+      },
+    },
+
 
     methods: {
 
-      onChange(value)
+      updatePreviews()
       {
+        //console.info('preview', JSON.parse(JSON.stringify(this.value)));
+        let ids = [];
+
+        if (typeof this.value === 'string')
+        {
+          ids = [this.value];
+        }
+        else if (_isArray(this.value))
+        {
+          ids = this.value;
+        }
+
+        this.previews = [];
+
+        if (!ids || ids.length < 1)
+        {
+          return;
+        }
+
+        MediaApi.getByIds(ids).then(res =>
+        {
+          _each(res, (value, id) =>
+          {
+            if (!value)
+            {
+              this.previews.push({
+                error: 'Could not load'
+              });
+            }
+            else
+            {
+              this.previews.push(value);
+            }
+          });
+        });
+      },
+
+
+      remove(item)
+      {
+        let newValue = this.value;
+
+        if (typeof this.value === 'string')
+        {
+          newValue = null;
+        }
+        else if (_isArray(this.value))
+        {
+          const index = this.value.indexOf(item.id);
+          newValue.splice(index, 1);
+        }
+
+        this.onChange(newValue);
+      },
+
+
+      getFilename(name)
+      {
+        if (name.length < MAX_FILENAME_LENGTH)
+        {
+          return name;
+        }
+
+        const parts = name.split('.');
+        const extension = parts.pop();
+
+        return parts.join('.').substring(0, MAX_FILENAME_LENGTH - 6) + '...' + extension;
+      },
+
+
+      getFileinfo(item)
+      {
+        if (item.dimension)
+        {
+          return `${Strings.filesize(item.size)} – ${item.dimension.width} × ${item.dimension.height}`;
+        }
+
+        return Strings.filesize(item.size);
+      },
+
+
+      onChange(value)
+      {    
         this.$emit('change', value);
         this.$emit('input', value);
+        //this.updatePreviews();
         // TODO this does not trigger the forms dirty flag
       },
+
 
       pick()
       {
@@ -102,7 +229,7 @@
 
         return Overlay.open(options).then(value =>
         {
-          this.onChange(value);
+          //this.onChange(value);
           //this.$refs.input.value = value;
         });
       }
@@ -110,3 +237,145 @@
     }
   }
 </script>
+
+<style lang="scss">
+  .ui-mediapicker-previews
+  {
+    .display-grid &
+    {
+      display: flex;
+      grid-gap: 10px;
+
+      .ui-mediapicker-preview + .ui-mediapicker-preview
+      {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .ui-mediapicker-previews + .ui-mediapicker-select,
+  .ui-mediapicker-preview + .ui-mediapicker-preview
+  {
+    margin-top: 10px;
+  }
+
+  .ui-mediapicker:not(.display-grid) .ui-mediapicker-previews + .ui-mediapicker-add
+  {
+    display: flex;
+    flex-direction: column;
+
+    .ui-select-button + .ui-mediapicker-add-upload
+    {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+
+  .ui-mediapicker-preview
+  {
+    display: flex;
+    align-items: center;
+  }
+
+  .ui-mediapicker-preview-image
+  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    /*background: var(--color-bg);*/
+    border: 1px solid var(--color-line-light);
+    padding: 3px;
+    border-radius: var(--radius);
+    color: var(--color-fg);
+    position: relative;
+    overflow: hidden;
+
+    img
+    {
+      border-radius: 3px;
+      max-width: 100%;
+      max-height: 100%;
+      margin: auto;
+      display: block;
+      color: transprent;
+      overflow: hidden;
+      font-size: 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    &:hover .ui-mediapicker-preview-image-delete,
+    &:hover .ui-mediapicker-preview-image-edit
+    {
+      opacity: 1;
+      transition-delay: 0.1s;
+    }
+
+    .display-big &, .display-grid &
+    {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  .ui-mediapicker-preview-text
+  {
+    display: flex;
+    flex-direction: column;
+    margin-left: 16px;
+    font-size: var(--font-size);
+
+    .is-filesize
+    {
+      color: var(--color-fg-mid);
+      margin-top: 3px;
+      font-size: var(--font-size-xs);
+    }
+
+    .display-grid &
+    {
+      display: none;
+    }
+  }
+
+  .ui-mediapicker-preview-image-delete,
+  .ui-mediapicker-preview-image-edit
+  {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    position: absolute;
+    display: inline-block;
+    right: 3px;
+    bottom: 3px;
+    width: 24px;
+    height: 24px;
+    line-height: 26px;
+    border-radius: 20px;
+    background: var(--color-negative);
+    color: var(--color-primary-fg);
+    z-index: 2;
+    text-align: center;
+    font-size: 13px;
+
+    .ui-media.display-default &
+    {
+      width: 20px;
+      height: 20px;
+      line-height: 22px;
+    }
+  }
+
+  .ui-mediapicker-preview-image-edit
+  {
+    right: 30px;
+    background: var(--color-bg);
+    color: var(--color-fg);
+
+    .ui-media.display-default &
+    {
+      right: 24px;
+    }
+  }
+</style>

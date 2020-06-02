@@ -10,6 +10,12 @@ export default {
     return Axios.get(base + 'getById', { params: { id } }).then(res => Promise.resolve(res.data));
   },
 
+  // get media by ids
+  getByIds(ids)
+  {
+    return Axios.get(base + 'getByIds', { params: { ids } }).then(res => Promise.resolve(res.data));
+  },
+
   // get new media model
   getEmpty()
   {
