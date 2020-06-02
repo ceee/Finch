@@ -54,6 +54,7 @@ namespace zero.Web.Controllers
     public async Task<IActionResult> GetAll([FromQuery] MediaListQuery query)
     {
       ListResult<MediaListModel> items = await Mapper.Map<Media, MediaListModel>(await Api.GetByQuery(query));
+      IList<MediaFolder> hierarchy = null;
       IEnumerable<MediaListModel> folders = new List<MediaListModel>();
       MediaFolder folder = null;
 
@@ -65,9 +66,10 @@ namespace zero.Web.Controllers
       if (!String.IsNullOrEmpty(query.FolderId))
       {
         folder = await MediaFolderApi.GetById(query.FolderId);
+        hierarchy = await MediaFolderApi.GetHierarchy(query.FolderId);
       }   
 
-      return Json(new MediaListResultModel(items, folders, folder));
+      return Json(new MediaListResultModel(items, folders, folder, hierarchy));
     }
 
 

@@ -223,6 +223,7 @@
           closeLabel: '@ui.close',
           component: PickMediaOverlay,
           model: this.value,
+          folderId: 'mediaFolders.97-A',
           theme: 'dark',
           width: 520
         }, typeof this.config === 'object' ? this.config : {});

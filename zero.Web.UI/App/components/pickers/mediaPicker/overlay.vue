@@ -5,6 +5,7 @@
     <ui-search class="ui-mediapicker-overlay-search" v-model="query" />
 
     <nav class="ui-mediapicker-overlay-hierarchy">
+      <button type="button" class="ui-mediapicker-overlay-hierarchy-item" @click="selectFolder(null)"><i class="fth-home"></i></button>
       <button type="button" v-for="item in hierarchy" class="ui-mediapicker-overlay-hierarchy-item" @click="selectFolder(item.id)">{{item.name}}</button>
       <button type="button" class="ui-mediapicker-overlay-hierarchy-item" @click="addFolder"><i class="fth-plus"></i></button>
     </nav>
@@ -22,7 +23,7 @@
         <span class="-preview" v-if="item.type !== 'image'"><i :class="item.type !== 'folder' ? 'fth-file' : 'fth-folder'"></i></span>
         <p class="ui-mediapicker-overlay-item-text">
           {{item.name}}
-          <span class="-minor" v-if="item.size"><br>{{item.size}}</span>
+          <span class="-minor" v-if="item.size"><br><span v-filesize="item.size"></span></span>
         </p>
       </button>
     </div>
@@ -36,6 +37,7 @@
 
 
 <script>
+  import MediaApi from 'zero/resources/media.js'
   import { debounce as _debounce, filter as _filter } from 'underscore';
 
   export default {
@@ -46,17 +48,18 @@
     },
 
     data: () => ({
+      folderId: null,
       icon: null,
       query: '',
       items: [],
-      hierarchy: [
-        { id: 0, name: 'Media' },
-        { id: 1, name: 'News' },
-        { id: 2, name: '2019' }
-      ]
+      hierarchy: []
     }),
 
     watch: {
+      'config.folderId': function (id)
+      {
+        this.folderId = id;
+      },
       model()
       {
         //this.init();
@@ -69,60 +72,100 @@
 
     created()
     {
+      this.folderId = this.config.folderId;
+
       this.debouncedSearch = _debounce(this.search, 100);
       //this.items = this.config.items;
       //this.init();
 
-      const sources = [
-        'http://nolbert.com/wp-content/uploads/2018/04/nolbert_logitech_thumb_s.jpg',
-        'http://nolbert.com/wp-content/uploads/2019/06/nolbert_orange_stack_01_thumb_sn.jpg',
-        'http://nolbert.com/wp-content/uploads/2019/04/nolbert_vyvyd_thumb_violet_n.jpg',
-        'http://nolbert.com/wp-content/uploads/2018/08/nolbert_oppo_r15_thumb_s.jpg'
-      ];
-
-      this.items.push({
-        name: 'Unfinished',
-        type: 'folder'
-      });
-
-      sources.forEach(source =>
-      {
-        this.items.push({
-          source: source,
-          name: source.split('/')[7],
-          size: '100 kB',
-          type: 'image'
-        });
-      });
-
-      this.items.push({
-        source: 'zeromagic-loop.webm',
-        name: 'zeromagic-loop-zeromagic-loop-zeromagic-loop-zeromagic-loop-zeromagic-loop.webm',
-        size: '2.3 MB',
-        type: 'video',
-        extension: '.webm'
-      });
-
-      this.items.push({
-        source: 'documentation.docx',
-        name: 'documentation.docx',
-        size: '723 kB',
-        type: 'file',
-        extension: '.docx'
-      });
+      //this.gridConfig = {
+      //  search: null,
+      //  width: 160,
+      //  component: MediaItem,
+      //  items: this.getItems
+      //};
     },
 
     mounted()
     {
-      
+      this.getItems();
     },
 
     methods: {
 
+      // get items (media + subfolders) in the current folder
+      getItems(query)
+      {
+        if (!query)
+        {
+          query = {};
+        }
+
+        query.folderId = this.folderId;
+
+        return MediaApi.getAll(query).then(response =>
+        {
+          this.current = response.folder;
+
+          this.items = [];
+
+          response.folders.forEach(item =>
+          {
+            this.items.push({
+              id: item.id,
+              name: item.name,
+              type: 'folder'
+            });
+          });
+
+          response.items.forEach(item =>
+          {
+            this.items.push({
+              id: item.id,
+              source: item.source,
+              name: item.name,
+              size: item.size,
+              type: item.type
+            });
+          });
+
+          this.buildHierarchy(response.folderHierarchy);
+
+          return Promise.resolve(response);
+        });
+      },
+
+      buildHierarchy(folders)
+      {
+        let items = [];
+
+        if (folders)
+        {
+          folders.forEach(item =>
+          {
+            items.push({
+              id: item.id,
+              name: item.name
+            });
+          });
+        }
+
+        if (this.current)
+        {
+          items.push({
+            id: this.current.id,
+            name: this.current.name
+          })
+        }
+
+        this.hierarchy = items;
+      },
+
       // switches view to the selected folder
       selectFolder(id)
       {
-
+        this.folderId = id;
+        this.getItems();
       },
 
       // adds a new folder within the current parent
