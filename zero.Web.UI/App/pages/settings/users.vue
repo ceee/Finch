@@ -52,7 +52,10 @@
           avatar: {
             label: '',
             as: 'html',
-            render: item => `<img src="${MediaApi.getImageSource(item.avatarId)}" class="users-list-avatar">`,
+            render: item =>
+            {
+              return item.avatarId ? `<img src="${MediaApi.getImageSource(item.avatarId)}" class="users-list-avatar">` : '';
+            },
             width: 70,
             link: this.getUserLink,
             sort: false

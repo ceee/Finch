@@ -6,7 +6,7 @@
         <h2 v-localize="'@login.headline'"></h2>
 
         <ui-error :catch-remaining="true" />
-        <ui-message type="info" v-if="rejectReason" :text="rejectReason" />
+        <ui-message type="warn" v-if="rejectReason" :text="rejectReason" />
 
         <ui-property field="email" label="@login.fields.email" :vertical="true">
           <input v-model="model.email" type="text" class="ui-input" maxlength="120" v-localize:placeholder="'@login.fields.email_placeholder'" />

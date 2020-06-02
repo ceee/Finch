@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="page page-error theme-dark">
+  <div class="page page-error">
     <i class="page-error-icon fth-cloud-snow"></i>
     <p class="page-error-text">
       <strong class="page-error-headline">Not found</strong><br>
@@ -7,7 +7,7 @@
       <br>
       ({{path}})
     </p>
-    <ui-button class="page-error-button" type="light" :label="detailsText" @click="details = !details" />
+    <ui-button class="page-error-button" type="white" :label="detailsText" @click="details = !details" />
     <template v-if="details">
       <br><br>
       <div class="page-error-routes">
@@ -16,7 +16,7 @@
         <span>Path</span>
         <template v-for="(route, index) in routes">
           <span>{{index + 1}}.</span>
-          <span>{{route.name}}</span>
+          <b>{{route.name}}</b>
           <span>{{route.path}}</span>
         </template>
       </div>
@@ -94,7 +94,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: var(--color-bg-light);
+    background: var(--color-bg);
     color: var(--color-fg);
     text-align: center;
     padding: var(--padding);
@@ -139,7 +139,7 @@
     border-left: 1px solid var(--color-line);
     margin-top: 30px;
 
-    span
+    span, b
     {
       border: 1px solid var(--color-line);
       border-left: none;
