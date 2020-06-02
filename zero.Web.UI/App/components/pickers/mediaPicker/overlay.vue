@@ -11,7 +11,7 @@
     </nav>
 
     <div class="ui-mediapicker-overlay-items">
-      <button type="button" class="ui-mediapicker-overlay-item is-upload" @click="upload">
+      <button v-if="folderId" type="button" class="ui-mediapicker-overlay-item is-upload" @click="upload">
         <span class="-preview"><i class="fth-plus"></i></span>
         <p class="ui-mediapicker-overlay-item-text">
           Upload media
@@ -38,7 +38,9 @@
 
 <script>
   import MediaApi from 'zero/resources/media.js'
-  import { debounce as _debounce, filter as _filter } from 'underscore';
+  import Overlay from 'zero/services/overlay.js'
+  import AddFolderOverlay from 'zero/pages/media/folder'
+  import { debounce as _debounce, filter as _filter } from 'underscore'
 
   export default {
 
@@ -171,13 +173,23 @@
       // adds a new folder within the current parent
       addFolder()
       {
-
+        Overlay.open({
+          component: AddFolderOverlay,
+          model: { parentId: this.folderId },
+          theme: 'dark'
+        }).then(item =>
+        {
+          setTimeout(() =>
+          {
+            this.selectFolder(item.model.id);
+          }, 1000);
+        }, () => { });
       },
 
       // uploads a new media item within the current parent
       upload()
       {
-
+        console.info('upload');
       },
 
       // select an item, this can either be a folder or a media item
