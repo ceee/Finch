@@ -22,7 +22,7 @@ namespace zero.Core.Entities
 
     public ListQueryOrderType OrderType { get; set; } = ListQueryOrderType.String;
 
-    public bool OrderIsDescending { get; set; } = false;
+    public bool OrderIsDescending { get; set; } = true;
 
     public int Page { get; set; } = 1;
 

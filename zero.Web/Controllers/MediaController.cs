@@ -35,7 +35,7 @@ namespace zero.Web.Controllers
     /// </summary>  
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
-      return await As<Media, MediaEditModel>(await Api.GetById(id));
+      return JsonEdit(await Api.GetById(id));
     }
 
 

@@ -110,6 +110,10 @@
 
 
     computed: {
+      multiple()
+      {
+        return this.configuration.limit > 1;
+      },
       canAdd()
       {
         return !this.disabled && this.configuration.limit - this.previews.length > 0;
@@ -230,8 +234,22 @@
 
         return Overlay.open(options).then(value =>
         {
-          //this.onChange(value);
-          //this.$refs.input.value = value;
+          let newValue = this.value;
+
+          if (this.multiple)
+          {
+            if (!newValue)
+            {
+              newValue = [];
+            }
+            newValue.push(value.id);
+          }
+          else
+          {
+            newValue = value.id;
+          }
+
+          this.onChange(newValue);
         });
       }
       

@@ -31,8 +31,8 @@
       <ui-dropdown align="left bottom">
         <template v-slot:button>
           <button type="button" class="app-nav-account-button">
-            <img class="-image" v-if="user.avatar" :src="user.avatar.source" :alt="user.name" />
-            <span class="-image" v-if="!user.avatar"><i class="fth-user"></i></span>
+            <img class="-image" v-if="userAvatar" :src="userAvatar" :alt="user.name" />
+            <span class="-image" v-if="!userAvatar"><i class="fth-user"></i></span>
             <p class="-text"><strong>{{user.name}}</strong><br>{{user.email}}</p>
             <i class="-arrow fth-chevron-down"></i>
           </button>
@@ -48,6 +48,7 @@
 <script>
   import { map as _map, find as _find } from 'underscore';
   import AuthApi from 'zero/services/auth.js'
+  import MediaApi from 'zero/resources/media.js'
 
   export default {
     name: 'app-navigation',
@@ -57,6 +58,7 @@
       applicationItems: [],
       sections: zero.sections,
       user: null,
+      userAvatar: null,
       userActions: []
     }),
 
@@ -71,10 +73,11 @@
 
     created()
     {
-      this.user = AuthApi.user;
+      this.buildUser(AuthApi.user);
+
       AuthApi.$on('user', user =>
       {
-        this.user = user;
+        this.buildUser(user);
       });
 
       this.userActions.push({
@@ -163,6 +166,23 @@
 
 
     methods: {
+
+      buildUser(user)
+      {
+        this.user = user;
+
+        if (user && user.avatarId)
+        {
+          MediaApi.getById(user.avatarId).then(res =>
+          {
+            this.userAvatar = res.entity.source;
+          });
+        }
+        else
+        {
+          this.userAvatar = null;
+        }
+      },
 
       hasChildren(section)
       {

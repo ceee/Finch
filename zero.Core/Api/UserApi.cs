@@ -68,7 +68,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<User>> Save(User model)
     {
-      return await Save(model); //, new UserValidator<User>());
+      return await SaveModel(model); //, new UserValidator<User>());
     }
 
 

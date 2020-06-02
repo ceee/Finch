@@ -11,12 +11,13 @@
     </nav>
 
     <div class="ui-mediapicker-overlay-items">
-      <button v-if="folderId" type="button" class="ui-mediapicker-overlay-item is-upload" @click="upload">
+      <div v-if="folderId" class="ui-mediapicker-overlay-item is-upload">
+        <input class="ui-mediapicker-overlay-upload" type="file" multiple @change="onUpload" />
         <span class="-preview"><i class="fth-plus"></i></span>
         <p class="ui-mediapicker-overlay-item-text">
           Upload media
         </p>
-      </button>
+      </div>
 
       <button type="button" v-for="item in items" class="ui-mediapicker-overlay-item" @click="select(item)">
         <img class="-preview" v-if="item.type === 'image'" :src="item.source" />
@@ -40,6 +41,7 @@
   import MediaApi from 'zero/resources/media.js'
   import Overlay from 'zero/services/overlay.js'
   import AddFolderOverlay from 'zero/pages/media/folder'
+  import UploadStatusOverlay from 'zero/pages/media/upload-status'
   import { debounce as _debounce, filter as _filter } from 'underscore'
 
   export default {
@@ -177,19 +179,36 @@
           component: AddFolderOverlay,
           model: { parentId: this.folderId },
           theme: 'dark'
-        }).then(item =>
+        }).then(() => { }, () =>
         {
           setTimeout(() =>
           {
             this.selectFolder(item.model.id);
           }, 1000);
-        }, () => { });
+        });
       },
 
       // uploads a new media item within the current parent
-      upload()
+      onUpload(event)
       {
-        console.info('upload');
+        let options = {
+          title: 'Upload status',
+          closeLabel: '@ui.close',
+          component: UploadStatusOverlay,
+          isCreate: true,
+          model: event.target.files,
+          folderId: this.folderId,
+          theme: 'dark',
+          width: 520
+        };
+
+        return Overlay.open(options).then(value =>
+        {
+          setTimeout(() =>
+          {
+            this.getItems();
+          }, 500);
+        }, () => { });
       },
 
       // select an item, this can either be a folder or a media item
@@ -198,6 +217,10 @@
         if (item.type === 'folder')
         {
           return this.selectFolder(item.id);
+        }
+        else
+        {
+          this.config.confirm(item, this.config);
         }
       }
     }
@@ -278,6 +301,11 @@
       color: var(--color-primary-fg);
     }*/
 
+    &.is-upload
+    {
+      position: relative;
+    }
+
     .-extension
     {
       font-size: 12px;
@@ -298,5 +326,18 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 0;
+  }
+
+  input[type="file"].ui-mediapicker-overlay-upload
+  {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    bottom: 0;
+    opacity: 0.001;
+    cursor: pointer;
   }
 </style>

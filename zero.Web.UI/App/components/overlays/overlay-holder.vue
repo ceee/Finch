@@ -50,7 +50,6 @@
     z-index: 5;
     justify-content: center;
     align-items: center;
-    will-change: opacity;
 
     & + .app-overlay-outer .app-overlay
     {
@@ -67,7 +66,6 @@
     bottom: 0;
     background: var(--color-overlay-shade);
     z-index: 2;
-    will-change: opacity;
     opacity: 1;
   }
 
@@ -83,7 +81,6 @@
    // max-width: 460px;
     text-align: center;
     position: relative;
-    will-change: transform, opacity;
     -webkit-backface-visibility: hidden;
     z-index: 3;
     color: var(--color-fg);
