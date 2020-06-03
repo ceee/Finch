@@ -18,7 +18,7 @@ namespace zero.Core.Entities
   }
 
 
-  public interface IUserRole : IZeroEntity, IAppAwareEntity, IZeroDbConventions
+  public interface IUserRole : IZeroEntity, IAppAwareShareableEntity, IZeroDbConventions
   {
     /// <summary>
     /// Additional description

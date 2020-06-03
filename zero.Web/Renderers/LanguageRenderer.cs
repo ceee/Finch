@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-using System.Threading.Tasks;
-using zero.Core.Entities;
+﻿using zero.Core.Entities;
 using zero.Core.Renderer;
 
 namespace zero.Web.Renderers

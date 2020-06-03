@@ -31,10 +31,11 @@
       </div>
 
       <aside class="ui-view-box-aside">
-        <ui-property label="@ui.id" :vertical="true" :is-text="true">
+        <ui-message-shared />
+        <ui-property v-if="model.id" label="@ui.id" :vertical="true" :is-text="true">
           {{model.id}}
         </ui-property>
-        <ui-property label="@ui.createdDate" :vertical="true" :is-text="true">
+        <ui-property v-if="model.id" label="@ui.createdDate" :vertical="true" :is-text="true">
           <ui-date v-model="model.createdDate" />
         </ui-property>
       </aside>

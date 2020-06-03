@@ -4,6 +4,7 @@ using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
 using zero.Core.Renderer;
+using zero.Web.Filters;
 
 namespace zero.Web.Controllers
 {
@@ -22,13 +23,13 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get empty language model
     /// </summary>  
-    public IActionResult GetEmpty() => JsonEdit(new T());
+    public IActionResult GetEmpty() => Edit(new T());
 
 
     /// <summary>
     /// Get language by id
     /// </summary>  
-    public async Task<IActionResult> GetById([FromQuery] string id) => JsonEdit(await Api.GetById(id));
+    public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
 
     /// <summary>

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
 using zero.Core.Mapper;
@@ -13,22 +15,22 @@ using zero.Web.Models;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize]
-  [CanEdit]
-  [AddToken]
   [BackofficeGenericController]
   public abstract class BackofficeController : Controller, ISupportsGenericsController
   {
     IMapper _mapper;
-
     IZeroOptions _options;
+    IToken _token;
 
     protected IMapper Mapper => _mapper ?? (_mapper = HttpContext?.RequestServices?.GetService<IMapper>());
-
     protected IZeroOptions Options => _options ?? (_options = HttpContext?.RequestServices?.GetService<IZeroOptions>());
+    protected IToken Token => _token ?? (_token = HttpContext?.RequestServices?.GetService<IToken>());
 
     static JsonSerializerSettings JsonSettings;
-
     static JsonSerializerSettings TypedJsonSettings;
+
+    static Type AppAwareType = typeof(IAppAwareEntity);
+    static Type AppAwareShareableType = typeof(IAppAwareShareableEntity);
 
 
     static BackofficeController()
@@ -53,21 +55,31 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Creates an edit model with appropriate options and permissions
     /// </summary>
-    public JsonResult JsonEdit<T>(T data) => JsonEdit(data, false);
+    public JsonResult Edit<T>(T data) where T : IZeroEntity => Edit(data, false);
 
 
     /// <summary>
     /// Creates an edit model with appropriate options and permissions
     /// </summary>
-    public JsonResult JsonEdit<T>(T data, bool typed)
+    public JsonResult Edit<T>(T data, bool typed) where T : IZeroEntity
     {
+      Type type = typeof(T);
+      bool canBeShared = AppAwareShareableType.IsAssignableFrom(type);
+
+      //ControllerContext.ActionDescriptor.FilterDescriptors[0].
+
       return Json(new EditModel<T>()
       {
         Entity = data,
-        CanEdit = true
+        Token = Token.Get(data),
+        IsAppAware = AppAwareType.IsAssignableFrom(type),
+        CanBeShared = canBeShared,
+        CanCreate = true,
+        CanCreateShared = canBeShared,
+        CanEdit = true,
+        CanDelete = true
       }, typed);
     }
-
 
 
 

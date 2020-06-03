@@ -7,4 +7,10 @@
     /// </summary>
     string AppId { get; set; }
   }
+
+
+  public interface IAppAwareShareableEntity : IAppAwareEntity
+  {
+    
+  }
 }

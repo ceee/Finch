@@ -37,7 +37,7 @@ namespace zero.Web.Controllers
     /// </summary>  
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
-      return JsonEdit(await Api.GetById(id));
+      return Edit(await Api.GetById(id));
     }
 
 

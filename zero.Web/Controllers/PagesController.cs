@@ -33,6 +33,6 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get page by id
     /// </summary>  
-    public async Task<IActionResult> GetById([FromQuery] string id) => JsonEdit(await Api.GetById(id));
+    public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
   }
 }

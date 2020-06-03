@@ -1,6 +1,7 @@
 ﻿using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -25,14 +26,14 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<bool> Verify(IZeroEntity entity, string token)
+    public bool Verify(IZeroEntity entity, string token)
     {
-      return await Verify(entity?.Id, token);
+      return Verify(entity?.Id, token);
     }
 
 
     /// <inheritdoc />
-    public async Task<bool> Verify(string entityId, string token)
+    public bool Verify(string entityId, string token)
     {
       if (token.IsNullOrWhiteSpace() && entityId.IsNullOrEmpty())
       {
@@ -44,22 +45,22 @@ namespace zero.Core.Api
         return false;
       }
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IDocumentSession session = Raven.OpenSession())
       {
-        return await session.Query<ChangeToken>().AnyAsync(x => x.Id == token && x.ReferenceId == entityId);
+        return session.Query<ChangeToken>().Any(x => x.Id == token && x.ReferenceId == entityId);
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<string> Get(IZeroEntity entity)
+    public string Get(IZeroEntity entity)
     {
-      return await Get(entity?.Id);
+      return Get(entity?.Id);
     }
 
 
     /// <inheritdoc />
-    public async Task<string> Get(string entityId)
+    public string Get(string entityId)
     {
       if (entityId.IsNullOrEmpty())
       {
@@ -72,11 +73,11 @@ namespace zero.Core.Api
         ReferenceId = entityId
       };
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IDocumentSession session = Raven.OpenSession())
       {
-        await session.StoreAsync(token);
+        session.Store(token);
         session.Advanced.GetMetadataFor(token)[Constants.Database.Expires] = DateTime.UtcNow.AddMinutes(Options.TokenExpiration);
-        await session.SaveChangesAsync();
+        session.SaveChanges();
       }
 
       return token.Id;
@@ -89,21 +90,21 @@ namespace zero.Core.Api
     /// <summary>
     /// Verifies if the change token is valid for the entity
     /// </summary>
-    Task<bool> Verify(IZeroEntity entity, string token);
+    bool Verify(IZeroEntity entity, string token);
 
     /// <summary>
     /// Verifies if the change token is valid for the entity
     /// </summary>
-    Task<bool> Verify(string entityId, string token);
+    bool Verify(string entityId, string token);
 
     /// <summary>
     /// Get a new change token for the entity
     /// </summary>
-    Task<string> Get(IZeroEntity entity);
+    string Get(IZeroEntity entity);
 
     /// <summary>
     /// Get a new change token for the entity
     /// </summary>
-    Task<string> Get(string entityId);
+    string Get(string entityId);
   }
 }

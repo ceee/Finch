@@ -20,13 +20,13 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get translation by id
     /// </summary>  
-    public IActionResult GetEmpty() => JsonEdit(new T());
+    public IActionResult GetEmpty() => Edit(new T());
 
 
     /// <summary>
     /// Get translation by id
     /// </summary>  
-    public async Task<IActionResult> GetById([FromQuery] string id) => JsonEdit(await Api.GetById(id));
+    public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
 
     /// <summary>

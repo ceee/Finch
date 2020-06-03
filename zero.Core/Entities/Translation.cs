@@ -26,7 +26,7 @@
   }
 
 
-  public interface ITranslation : IZeroEntity, ILanguageAwareEntity, IAppAwareEntity, IZeroDbConventions
+  public interface ITranslation : IZeroEntity, ILanguageAwareEntity, IAppAwareShareableEntity, IZeroDbConventions
   {
     /// <summary>
     /// Key which can be used to query translations

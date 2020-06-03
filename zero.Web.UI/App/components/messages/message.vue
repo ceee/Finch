@@ -8,6 +8,7 @@
 
 <script>
   const TYPE_ICONS = {
+    neutral: 'fth-info',
     info: 'fth-info',
     warn: 'fth-alert-circle',
     error: 'fth-alert-circle',
@@ -15,7 +16,7 @@
   };
 
   export default {
-    name: 'uiProperty',
+    name: 'uiMessage',
 
     props: {
       type: {
@@ -92,6 +93,12 @@
     {
       background: var(--color-accent-success-bg);
       color: var(--color-accent-success);
+    }
+
+    &.type-neutral
+    {
+      background: var(--color-bg);
+      color: var(--color-fg);
     }
 
     &.block

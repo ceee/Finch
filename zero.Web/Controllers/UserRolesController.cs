@@ -26,7 +26,7 @@ namespace zero.Web.Controllers
     /// </summary>  
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
-      return await As<UserRole, UserRoleEditModel>(await Api.GetById(id));
+      return Edit(await Api.GetById(id));
     }
 
 
