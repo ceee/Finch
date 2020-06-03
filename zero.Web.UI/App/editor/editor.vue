@@ -121,3 +121,10 @@
     }
   }
 </script>
+
+<style lang="scss">
+  .editor > .ui-view-box
+  {
+    padding-top: 0;
+  }
+</style>

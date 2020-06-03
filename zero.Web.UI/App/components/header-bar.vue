@@ -5,8 +5,9 @@
         <ui-icon-button v-if="backButton" type="white" @click="onBack" />
         <div>
           <h2 class="ui-header-bar-title" :class="{'is-empty': !title && titleEmpty}">
-            <span v-if="prefix" class="-minor" v-localize="prefix"></span>
+            <span v-if="prefix" class="-minor" v-localize:html="prefix"></span>
             <span v-localize="title || titleEmpty"></span>
+            <span v-if="suffix" class="-minor" v-localize:html="suffix"></span>
           </h2>
           <p v-if="description" class="ui-header-bar-description" v-localize="description"></p>
         </div>
@@ -34,6 +35,9 @@
         type: String
       },
       prefix: {
+        type: String
+      },
+      suffix: {
         type: String
       },
       description: {

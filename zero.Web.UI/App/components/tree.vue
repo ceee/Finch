@@ -3,6 +3,7 @@
     <ui-header-bar class="ui-tree-header" :title="header" :back-button="false" v-if="header">
       <ui-dot-button @click="onActionsClicked(null, $event)" />
     </ui-header-bar>
+    <slot></slot>
     <span v-if="status === 'loading'" class="ui-tree-item-loading"><i></i></span>
     <template v-for="item in items">
       <div class="ui-tree-item" :class="getClasses(item)" v-on:contextmenu="onRightClicked(item, $event)">
