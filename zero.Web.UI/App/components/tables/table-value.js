@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { warn } from 'zero/services/debug';
+import MediaApi from 'zero/resources/media';
 
 export default function (el, binding)
 {
@@ -55,6 +56,10 @@ export default function (el, binding)
   else if (column.as === 'bool')
   {
     render('<span class="ui-table-field-bool' + (value === true ? ' is-checked' : '') + (column.colored ? ' is-colored' : '') + '"></span>', true);
+  }
+  else if (column.as === 'image')
+  {
+    render(value ? `<img src="${MediaApi.getImageSource(value)}" class="ui-table-field-image">` : '', true);
   }
   else
   {

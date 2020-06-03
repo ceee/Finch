@@ -49,13 +49,9 @@
         labelPrefix: '@user.fields.',
         search: null,
         columns: {
-          avatar: {
+          avatarId: {
             label: '',
-            as: 'html',
-            render: item =>
-            {
-              return item.avatarId ? `<img src="${MediaApi.getImageSource(item.avatarId)}" class="users-list-avatar">` : '';
-            },
+            as: 'image',
             width: 70,
             link: this.getUserLink,
             sort: false
@@ -112,7 +108,7 @@
     margin-bottom: 30px;
   }
 
-  .users-list-avatar
+  .users .ui-table-field-image
   {
     border-radius: 50px;
   }

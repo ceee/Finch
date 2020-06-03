@@ -107,7 +107,7 @@
 
                   if (response.entity)
                   {
-                    this.isShared = response.entity.appId === 'shared' || !response.entity.appId;
+                    this.isShared = response.entity.appId === zero.sharedAppId || !response.entity.appId;
                   }
                 }
 

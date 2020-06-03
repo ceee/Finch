@@ -1,4 +1,5 @@
 ﻿using System;
+using zero.Core.Renderer;
 
 namespace zero.Web.Models
 {
@@ -48,6 +49,11 @@ namespace zero.Web.Models
     /// // TODO expiration expiry  session.Advanced.GetMetadataFor(user)[Raven.Client.Constants.Documents.Metadata.Expires] = DateTime.UtcNow.AddMinutes(60);
     /// </summary>
     public string Token { get; set; }
+
+    /// <summary>
+    /// Submits the renderer configuration which is used to create the editor
+    /// </summary>
+    public RendererConfig Renderer { get; set; }
   }
 
 

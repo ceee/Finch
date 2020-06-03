@@ -11,7 +11,8 @@
       <ui-button :submit="true" label="@ui.save" :state="form.state" v-if="!disabled" />
     </ui-header-bar>
 
-    <div class="ui-view-box has-sidebar">
+    <ui-editor :config="renderer" v-model="model" />
+    <!--<div class="ui-view-box has-sidebar">
       <div>
         <div class="ui-box">
           <ui-property label="@ui.name" :required="true">
@@ -39,7 +40,7 @@
           <ui-date v-model="model.createdDate" />
         </ui-property>
       </aside>
-    </div>
+    </div>-->
   </ui-form>
 </template>
 
@@ -47,13 +48,17 @@
 <script>
   import LanguagesApi from 'zero/resources/languages';
   import Overlay from 'zero/services/overlay.js';
+  import UiEditor from 'zero/editor/editor';
 
   export default {
     props: ['id'],
 
+    components: { UiEditor },
+
     data: () => ({
       actions: [],
       model: { name: null },
+      renderer: {},
       disabled: false,
       cultures: []
     }),
@@ -82,6 +87,7 @@
         {
           this.disabled = !response.canEdit;
           this.model = response.entity;
+          this.renderer = response.renderer;
         });
 
         LanguagesApi.getAllCultures().then(res =>

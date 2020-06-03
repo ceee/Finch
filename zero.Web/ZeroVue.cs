@@ -69,6 +69,7 @@ namespace zero.Web
       config.Alias = CreateAliases();
       config.SettingsAreas = CreateSettingsAreas();
       config.AppId = AppContext.AppId;
+      config.SharedAppId = Constants.Database.SharedAppId;
 
       config.User = await Mapper.Map<User, UserEditModel>(await AuthenticationApi.GetUser());
 
@@ -285,6 +286,8 @@ namespace zero.Web
     public string ErrorFieldNone { get; set; }
 
     public string AppId { get; set; }
+
+    public string SharedAppId { get; set; }
 
     public UserEditModel User { get; set; }
 

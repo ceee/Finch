@@ -126,7 +126,7 @@ namespace zero.Core.Renderer
     }
 
 
-    protected virtual IRendererFieldBuilder Field(Expression<Func<T, object>> mapExpression, bool required = false)
+    protected virtual IRendererFieldBuilder Field(Expression<Func<T, object>> mapExpression, bool required = false, string label = null, string description = null)
     {
       RendererFieldBuilder builder = new RendererFieldBuilder();
 
@@ -146,8 +146,8 @@ namespace zero.Core.Renderer
             View = fieldData.View,
             ComponentPath = fieldData.ComponentPath,
             Options = fieldData.Options ?? new List<string>() { },
-            Label = FindLabelName?.Invoke(field),
-            Description = FindLabelDescriptionName?.Invoke(field),
+            Label = label != null ? label : FindLabelName?.Invoke(field),
+            Description = description != null ? description : FindLabelDescriptionName?.Invoke(field),
             Required = required
           };
         }
@@ -155,39 +155,19 @@ namespace zero.Core.Renderer
 
       return builder;
     }
+
 
     protected virtual IRendererFieldBuilder Field(Expression<Func<T, object>> mapExpression, string label, string description = null, bool required = false, bool noDescription = false)
     {
-      RendererFieldBuilder builder = new RendererFieldBuilder();
-
-      Add(new RenderProperty()
-      {
-        Method = METHOD_FIELD,
-        Compile = property =>
-        {
-          string field = mapExpression.CompileToJavascript().ToCamelCaseId();
-
-          RendererFieldBuilder.Data fieldData = builder.Build();
-
-          property.NestedRenderer = fieldData.Renderer;
-          property.Params = new
-          {
-            Field = field,
-            View = fieldData.View,
-            ComponentPath = fieldData.ComponentPath,
-            Options = fieldData.Options ?? new List<string>() { },
-            Label = label != null && label.StartsWith("@") ? label : String.Format(LabelTemplate, label ?? field),
-            Description = description != null && description.StartsWith("@") ? description : null, // TODO (noDescription ? null : String.Format(DescriptionTemplate, description ?? fieldTranslationName)),
-            Required = required
-          };
-        }
-      });
-
-      return builder;
+      return Field(mapExpression, required, label, description);
     }
+
 
     protected virtual void Tab(string name, Action builder)
     {
+      builder(); // TODO re-enable tabs
+      return;
+
       Add(new RenderProperty()
       {
         Method = METHOD_TAB,

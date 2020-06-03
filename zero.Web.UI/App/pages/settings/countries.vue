@@ -40,7 +40,8 @@
             label: '',
             as: 'html',
             render: item => `<i class="flag flag-${item.code.toLowerCase()}"></i>`,
-            width: 62
+            width: 62,
+            sort: false
           },
           name: {
             label: '@ui.name',
