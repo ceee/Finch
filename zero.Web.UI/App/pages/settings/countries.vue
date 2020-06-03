@@ -30,17 +30,6 @@
         icon: 'fth-trash'
       });
 
-      this.selectActions.push({
-        name: 'Clear selection',
-        icon: 'fth-x',
-        action: (item, opts) =>
-        {
-          this.$refs.table.selected = [];
-          this.selection = [];
-          opts.hide();
-        }
-      });
-
       this.tableConfig = {
         labelPrefix: '@country.fields.',
         allowOrder: false,

@@ -8,9 +8,9 @@
             <i class="arrow arrow-down"></i>
           </button>
         </div>
-        <div v-if="configuration.selectable" table-field="table_selectable" class="ui-table-cell is-head is-selectable">
+        <button type="button" v-if="configuration.selectable" table-field="table_selectable" class="ui-table-cell is-head is-selectable" @click="select()">
           <i class="fth-check-square"></i>
-        </div>
+        </button>
       </header>
 
       <div class="ui-table-row" v-for="item in items" :class="{ 'is-selected': configuration.selectable && selected.indexOf(item) > -1 }">
@@ -256,15 +256,33 @@
       // toggle selection of an item
       select(item)
       {
-        const index = this.selected.indexOf(item);
-
-        if (index > -1)
+        if (!item)
         {
-          this.selected.splice(index, 1);
+          if (this.selected.length >= this.items.length)
+          {
+            this.selected = [];
+          }
+          else
+          {
+            this.selected = [];
+            this.items.forEach(item =>
+            {
+              this.selected.push(item);
+            });
+          }
         }
         else
         {
-          this.selected.push(item);
+          const index = this.selected.indexOf(item);
+
+          if (index > -1)
+          {
+            this.selected.splice(index, 1);
+          }
+          else
+          {
+            this.selected.push(item);
+          }
         }
 
         this.$emit('select', this.selected, this);
