@@ -1,7 +1,13 @@
 ﻿<template>
   <div class="ui-table-filter">
-    <ui-button v-if="!hideFilter" type="light" label="Filter" caret="down" />
     <ui-search v-if="!hideSearch" v-model="value.search" />
+    <ui-button v-if="!hideFilter" type="light" label="Filter" caret="down" />
+    <ui-dropdown v-if="!hideSelection && selection.length > 0" align="right">
+      <template v-slot:button>
+        <ui-button type="white" :label="selectedText" caret="down" />
+      </template>
+      <ui-dropdown-list v-model="selectActions" />
+    </ui-dropdown>
   </div>
 </template>
 
@@ -18,9 +24,18 @@
         {
           return {
             filter: {},
+            selectable: false,
             search: null
           }
         }
+      },
+      selection: {
+        type: Array,
+        default: () => []
+      },
+      selectActions: {
+        type: Array,
+        default: () => []
       }
     },
 
@@ -33,7 +48,8 @@
 
     data: () => ({
       hideFilter: true,
-      hideSearch: true
+      hideSearch: true,
+      hideSelection: true
     }),
 
     created()
@@ -41,12 +57,21 @@
       this.reload();
     },
 
+    computed: {
+      selectedText()
+      {
+        return this.selection.length + ' selected'; 
+      }
+    },
+
     methods: {
 
       reload()
       {
+        console.info(this.value);
         this.hideFilter = typeof this.value.filter === 'undefined';
         this.hideSearch = typeof this.value.search === 'undefined';
+        this.hideSelection = this.value.selectable !== true;
       }
     }
   }

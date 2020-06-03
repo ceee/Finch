@@ -25,6 +25,7 @@
         labelPrefix: '@language.fields.',
         allowOrder: false,
         search: null,
+        selectable: true,
         columns: {
           name: {
             label: '@ui.name',
@@ -39,11 +40,6 @@
             }
           },
           code: 'text',
-          isActive: {
-            as: 'bool',
-            label: '@ui.active',
-            width: 200
-          },
           isDefault: {
             as: 'bool',
             width: 200

@@ -34,6 +34,7 @@
       state: 'default',
       errors: [],
       canEdit: true,
+      isShared: false,
       slotProps: {
         state: null
       }
@@ -103,6 +104,11 @@
                 if (typeof response.canEdit === 'boolean')
                 {
                   this.canEdit = response.canEdit;
+
+                  if (response.entity)
+                  {
+                    this.isShared = response.entity.appId === 'shared' || !response.entity.appId;
+                  }
                 }
 
                 resolve(response);

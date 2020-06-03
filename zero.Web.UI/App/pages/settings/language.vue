@@ -31,7 +31,7 @@
       </div>
 
       <aside class="ui-view-box-aside">
-        <ui-message-shared />
+        <ui-message-shared v-if="form.isShared" />
         <ui-property v-if="model.id" label="@ui.id" :vertical="true" :is-text="true">
           {{model.id}}
         </ui-property>

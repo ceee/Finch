@@ -8,11 +8,17 @@
             <i class="arrow arrow-down"></i>
           </button>
         </div>
+        <div v-if="configuration.selectable" table-field="table_selectable" class="ui-table-cell is-head is-selectable">
+          <i class="fth-check-square"></i>
+        </div>
       </header>
 
-      <div class="ui-table-row" v-for="item in items">
+      <div class="ui-table-row" v-for="item in items" :class="{ 'is-selected': configuration.selectable && selected.indexOf(item) > -1 }">
         <component :is="column.tag" :to="getLink(column, item)" @click="onClick($event, column, item)" v-for="column in columns" :key="column.key" 
                    class="ui-table-cell" :style="column.flex" :table-field="column.field" v-table-value="{ item, column }"></component>
+        <button type="button" v-if="configuration.selectable" table-field="table_selectable" class="ui-table-cell is-selectable" @click="select(item)">
+          <i class="fth-check-square"></i>
+        </button>
       </div>
 
       <div class="ui-table-empty" v-if="!isLoading && items.length < 1">
@@ -54,7 +60,9 @@
     // scroll to top on page change
     scrollToTop: true,
     // promise which returns items based on the current filter and sorting
-    items: null
+    items: null,
+    // ability to select items
+    selectable: false
   };
 
   export default {
@@ -106,7 +114,8 @@
         pageSize: 30,
         search: null
       },
-      debouncedUpdate: null
+      debouncedUpdate: null,
+      selected: []
     }),
 
     mounted()
@@ -167,6 +176,7 @@
 
           this.isLoading = false;
           this.items = result.items;
+          this.selected = [];
 
           if (!initial && this.configuration.scrollToTop)
           {
@@ -241,6 +251,23 @@
         }
 
         this.debouncedUpdate();
+      },
+
+      // toggle selection of an item
+      select(item)
+      {
+        const index = this.selected.indexOf(item);
+
+        if (index > -1)
+        {
+          this.selected.splice(index, 1);
+        }
+        else
+        {
+          this.selected.push(item);
+        }
+
+        this.$emit('select', this.selected, this);
       }
     }
   }
@@ -285,6 +312,11 @@
     &:last-child
     {
       border-bottom: none;
+    }
+
+    &.is-selected .ui-table-cell
+    {
+      background: var(--color-bg-xxlight);
     }
   }
 
@@ -345,6 +377,26 @@
     &.is-bold
     {
       font-weight: bold;
+    }
+
+    &.is-selectable
+    {
+      font-size: var(--font-size-l);
+      flex: 0 1 40px;
+      text-align: center;
+      padding: 0;
+      justify-content: center;
+    }
+  }
+
+  .ui-table-row:not(.is-selected) .ui-table-cell:not(.is-head).is-selectable i
+  {
+    color: var(--color-fg-xlight);
+    margin-right: 1px;
+
+    &:before
+    {
+      content: "\e8cb";
     }
   }
 

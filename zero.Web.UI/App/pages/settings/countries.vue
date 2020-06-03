@@ -1,11 +1,11 @@
 ﻿<template>
   <div class="countries">
     <ui-header-bar title="@country.list" :back-button="true">
-      <ui-table-filter v-model="tableConfig" />
+      <ui-table-filter v-model="tableConfig" :selection="selection" :select-actions="selectActions" />
       <ui-button label="@ui.add" icon="fth-plus" @click="add" />
     </ui-header-bar>
     <div class="ui-blank-box">
-      <ui-table v-model="tableConfig" />
+      <ui-table ref="table" v-model="tableConfig" @select="onSelect" />
     </div>
   </div>
 </template>
@@ -18,15 +18,34 @@
 
   export default {
     data: () => ({
-      tableConfig: {}
+      tableConfig: {},
+      selection: [],
+      selectActions: []
     }),
 
     created()
     {
+      this.selectActions.push({
+        name: 'Delete',
+        icon: 'fth-trash'
+      });
+
+      this.selectActions.push({
+        name: 'Clear selection',
+        icon: 'fth-x',
+        action: (item, opts) =>
+        {
+          this.$refs.table.selected = [];
+          this.selection = [];
+          opts.hide();
+        }
+      });
+
       this.tableConfig = {
         labelPrefix: '@country.fields.',
         allowOrder: false,
         search: null,
+        selectable: true,
         columns: {
           flag: {
             label: '',
@@ -66,6 +85,11 @@
       goBack()
       {
         this.$router.go(-1);
+      },
+
+      onSelect(items)
+      {
+        this.selection = items;
       },
 
       add()
