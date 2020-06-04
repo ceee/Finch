@@ -7,7 +7,10 @@
       <template v-slot:button>
         <ui-button type="action block" :label="currentApplication.name" caret="down" />
       </template>
-      <ui-dropdown-list v-model="applicationItems" :action="applicationChanged" />
+      <ui-dropdown-button v-for="app in applications" :value="app" :key="app.id" :label="app.name" :selected="app.id === appId" @click="applicationChanged" />
+      <ui-dropdown-separator />
+      <ui-dropdown-button label="Add new application" icon="fth-plus" @click="addApplication" />
+      <ui-dropdown-button label="Manage apps" icon="fth-edit-2" @click="manageApplications" />
     </ui-dropdown>
 
     <nav class="app-nav-inner">
@@ -37,7 +40,9 @@
             <i class="-arrow fth-chevron-down"></i>
           </button>
         </template>
-        <ui-dropdown-list v-model="userActions" />
+        <ui-dropdown-button label="Edit" icon="fth-edit-2" @click="editUser" />
+        <ui-dropdown-button label="Change password" icon="fth-lock" @click="changePassword" />
+        <ui-dropdown-button label="Logout" icon="fth-log-out" @click="logout" />
       </ui-dropdown>
     </footer>
 
@@ -54,12 +59,11 @@
     name: 'app-navigation',
 
     data: () => ({
+      appId: zero.appId,
       applications: zero.applications,
-      applicationItems: [],
       sections: zero.sections,
       user: null,
-      userAvatar: null,
-      userActions: []
+      userAvatar: null
     }),
 
 
@@ -78,89 +82,6 @@
       AuthApi.$on('user', user =>
       {
         this.buildUser(user);
-      });
-
-      this.userActions.push({
-        name: 'Edit',
-        icon: 'fth-edit-2',
-        action: (item, opts) =>
-        {
-          opts.hide();
-          this.$router.push({
-            name: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
-            params: { id: this.user.id }
-          });
-        }
-      });
-      this.userActions.push({
-        name: 'Change password',
-        icon: 'fth-lock',
-        action(item, opts)
-        {
-          AuthApi.openPasswordOverlay();
-          opts.hide();
-        }
-      });
-      this.userActions.push({
-        name: 'Logout',
-        icon: 'fth-log-out',
-        action()
-        {
-          AuthApi.logout();
-        }
-      });
-    },
-
-    mounted ()
-    {
-      this.applicationItems = _map(this.applications, item =>
-      {
-        return {
-          application: item,
-          active: item.id === zero.appId,
-          name: item.name,
-          action: (_, opts) =>
-          {
-            opts.loading(true);
-
-            AuthApi.switchApp(item.id).then(success =>
-            {
-              opts.loading(false);
-              if (success)
-              {
-                location.reload();
-              }
-            });
-          }
-        };
-      });
-
-      this.applicationItems.push({
-        type: 'separator'
-      });
-
-      this.applicationItems.push({
-        name: 'Add new application',
-        icon: 'fth-plus',
-        action: (item, opts) =>
-        {
-          opts.hide();
-          this.$router.push({
-            name: zero.alias.sections.settings + '-' + zero.alias.settings.applications + '-create'
-          });
-        }
-      });
-
-      this.applicationItems.push({
-        name: 'Manage apps',
-        icon: 'fth-edit-2',
-        action: (item, opts) =>
-        {
-          opts.hide();
-          this.$router.push({
-            name: zero.alias.sections.settings + '-' + zero.alias.settings.applications
-          });
-        }
       });
     },
 
@@ -186,9 +107,58 @@
         return section.children && section.children.length > 0;
       },
 
-      applicationChanged(item, dropdown)
+      editUser(item, opts)
       {
-        console.info('change');
+        opts.hide();
+        this.$router.push({
+          name: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
+          params: { id: this.user.id }
+        });
+      },
+
+      changePassword(item, opts)
+      {
+        AuthApi.openPasswordOverlay();
+        opts.hide();
+      },
+
+      logout(item, opts)
+      {
+        AuthApi.logout();
+        opts.hide();
+      },
+
+      addApplication(item, opts)
+      {
+        opts.hide();
+        this.$router.push({
+          name: zero.alias.sections.settings + '-' + zero.alias.settings.applications + '-create'
+        });
+      },
+
+      manageApplications(item, opts)
+      {
+        opts.hide();
+        this.$router.push({
+          name: zero.alias.sections.settings + '-' + zero.alias.settings.applications
+        });
+      },
+
+      applicationChanged(item, opts)
+      {
+        console.info(item, opts);
+        opts.loading(true);
+
+        AuthApi.switchApp(item.id).then(success =>
+        {
+          opts.loading(false);
+          opts.hide();
+
+          if (success)
+          {
+            location.reload();
+          }
+        });
       }
 
     }

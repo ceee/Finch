@@ -83,6 +83,7 @@
     /*box-shadow: 0 0 20px var(--color-shadow);*/
     z-index: 8;
     top: calc(100% + 5px);
+    padding: 5px;
 
     &.align-right
     {
