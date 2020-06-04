@@ -37,7 +37,7 @@ namespace zero.Core.Api
 
     const string NEW_ID = "new:";
 
-    IBackofficeStore Backoffice;
+    protected IBackofficeStore Backoffice { get; private set; }
 
 
     public BackofficeApi(IBackofficeStore store)

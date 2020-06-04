@@ -14,19 +14,14 @@ namespace zero.Core.Api
 {
   public class PageTreeApi<T> : AppAwareBackofficeApi, IPageTreeApi<T> where T : IPage
   {
-    protected IZeroOptions Options { get; private set; }
-
-    public PageTreeApi(IZeroOptions options, IBackofficeStore store) : base(store)
-    {
-      Options = options;
-    }
+    public PageTreeApi(IBackofficeStore store) : base(store) { }
 
 
     /// <inheritdoc />
     public async Task<IList<TreeItem>> GetChildren(string parentId = null, string activeId = null)
     {
       IList<TreeItem> items = new List<TreeItem>();
-      IReadOnlyCollection<PageType> pageTypes = Options.Pages.GetAllItems();
+      IReadOnlyCollection<PageType> pageTypes = Backoffice.Options.Pages.GetAllItems();
       string[] openIds = new string[0] { };
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())

@@ -1,4 +1,5 @@
 ﻿using Raven.Client.Documents;
+using zero.Core.Options;
 
 namespace zero.Core.Api
 {
@@ -8,11 +9,14 @@ namespace zero.Core.Api
 
     public IApplicationContext AppContext { get; private set; }
 
+    public IZeroOptions Options { get; private set; }
 
-    public BackofficeStore(IDocumentStore raven, IApplicationContext appContext)
+
+    public BackofficeStore(IDocumentStore raven, IApplicationContext appContext, IZeroOptions options)
     {
       Raven = raven;
       AppContext = appContext;
+      Options = options;
     }
   }
 
@@ -22,5 +26,7 @@ namespace zero.Core.Api
     IDocumentStore Raven { get; }
 
     IApplicationContext AppContext { get; }
+
+    IZeroOptions Options { get; }
   }
 }
