@@ -44,7 +44,9 @@
 <style lang="scss">
   .ui-state-button
   {
-    display: flex;
+    display: inline-flex;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
   }
 
   .ui-state-button.is-disabled button
@@ -55,7 +57,7 @@
   button.ui-state-button-item
   {
     background: var(--color-bg-light);
-    border: 1px solid var(--color-line); // var(--color-line);
+    //border: 1px solid var(--color-line); // var(--color-line);
     padding: 10px 16px;
     color: var(--color-fg-mid);
 
