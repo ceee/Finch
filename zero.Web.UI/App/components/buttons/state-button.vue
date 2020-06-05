@@ -54,10 +54,15 @@
 
   button.ui-state-button-item
   {
-    background: var(--color-bg-mid);
-    border: 1px solid transparent; // var(--color-line);
+    background: var(--color-bg-light);
+    border: 1px solid var(--color-line); // var(--color-line);
     padding: 10px 16px;
     color: var(--color-fg-mid);
+
+    & + .ui-state-button-item
+    {
+      border-left: none;
+    }
 
     &:first-of-type
     {
@@ -73,10 +78,9 @@
 
     &.is-active
     {
+      background: var(--color-bg-mid);
       /*background: var(--color-primary);
       border-color: var(--color-primary);*/
-      border-color: var(--color-line);
-      background: var(--color-bg-light);
       color: var(--color-fg);
       font-weight: bold;
     }

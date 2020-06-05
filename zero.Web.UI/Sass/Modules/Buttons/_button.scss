@@ -6,6 +6,7 @@ button
   color: var(--color-fg);
   outline: 0 solid transparent !important;
   display: inline-block;
+  font-size: var(--font-size);
 
   &:visited, &:link
   {
@@ -40,7 +41,7 @@ button::-moz-focus-inner
   padding: 0 20px;
   height: 42px;
   border-radius: 3px;
-  font-size: 14px;
+  font-size: var(--font-size);
   font-weight: 700;
   margin: 0;
   -webkit-backface-visibility: hidden;

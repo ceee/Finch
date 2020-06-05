@@ -1,14 +1,14 @@
 ﻿<template>
   <div class="ui-tree-item" :class="getClasses(value)" v-on:contextmenu="onRightClicked(value, $event)">
-    <button v-if="value.hasChildren" @click="toggle(value)" type="button" class="ui-tree-item-toggle">
+    <button :disabled="value.disabled" v-if="value.hasChildren" @click="toggle(value)" type="button" class="ui-tree-item-toggle">
       <i class="ui-tree-item-arrow" :class="['fth-chevron-' + (value.isOpen ? 'up' : 'down')]"></i>
     </button>
-    <component :is="tag" type="button" :to="value.url" class="ui-tree-item-link" @click="onClick(value, $event)">
+    <component :disabled="value.disabled" :is="tag" type="button" :to="value.url" class="ui-tree-item-link" @click="onClick(value, $event)">
       <i class="ui-tree-item-icon" :class="value.icon"></i>
       <i v-if="value.modifier" :title="value.modifier.name" class="ui-tree-item-modifier" :class="value.modifier.icon"></i>
       <span class="ui-tree-item-text">{{value.name | localize}}</span>
     </component>
-    <ui-dot-button class="ui-tree-item-actions" v-if="value.hasActions" @click="onActionsClicked(value, $event)" />
+    <ui-dot-button :disabled="value.disabled" class="ui-tree-item-actions" v-if="value.hasActions" @click="onActionsClicked(value, $event)" />
   </div>
 </template>
 
@@ -56,7 +56,9 @@
         return {
           'has-children': item.hasChildren,
           'is-inactive': item.isInactive,
-          'is-open': item.isOpen
+          'is-open': item.isOpen,
+          'is-selected': item.isSelected,
+          'is-disabled': item.disabled
         };
       },
 
@@ -69,13 +71,19 @@
       // right clicked on an item
       onRightClicked(item, ev)
       {
-        this.$emit('rightclick', item, ev);
+        if (!item.disabled)
+        {
+          this.$emit('rightclick', item, ev);
+        }
       },
 
       // actions button clicked on item
       onActionsClicked(item, ev)
       {
-        this.$emit('actions', item, ev);
+        if (!item.disabled)
+        {
+          this.$emit('actions', item, ev);
+        }
       }
     }
   }
@@ -117,6 +125,11 @@
     &.is-open > .ui-tree-item-toggle .ui-tree-item-arrow
     {
       transform: rotate(180deg);
+    }
+
+    &.is-disabled
+    {
+      cursor: not-allowed;
     }
   }
 

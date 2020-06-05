@@ -9,7 +9,6 @@
   border-radius: var(--radius);
   box-shadow: var(--color-shadow-short);
   /*max-width: 1104px;*/
-
   h2
   {
     margin: -5px -32px var(--padding);
@@ -31,6 +30,16 @@
     background: transparent;
     box-shadow: none;
   }
+
+  &.is-light
+  {
+    background: var(--color-bg);
+  }
+}
+
+.ui-box + .ui-box.is-connected
+{
+  margin-top: -31px;
 }
 
 .ui-blank-box

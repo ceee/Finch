@@ -6,8 +6,8 @@
     <slot></slot>
     <span v-if="status === 'loading'" class="ui-tree-item-loading"><i></i></span>
     <template v-for="item in items">
-      <ui-tree-item :value="item" @rightclick="onRightClicked" @actions="onActionsClicked" @open="toggle" />
-      <ui-tree v-if="item.hasChildren && item.isOpen" :get="get" :parent="item.id" :depth="depth + 1" :active="active" :config="config" />
+      <ui-tree-item :value="item" @rightclick="onRightClicked" @click="onSelect(item, $event)" @actions="onActionsClicked" @open="toggle" />
+      <ui-tree v-if="item.hasChildren && item.isOpen" :get="get" :parent="item.id" :depth="depth + 1" :active="active" :config="config" @select="onSelect" />
     </template>
     <slot name="bottom"></slot>
     <div ref="dropdown" class="ui-dropdown ui-tree-dropdown theme-dark align-top" role="dialog" v-click-outside="hideActions" v-if="actionsOpen">
@@ -77,7 +77,7 @@
 
       initialize()
       {
-        this.configuration = _extend(defaultConfig, this.config);
+        this.configuration = _extend(defaultConfig, this.config || {});
       },
 
       refresh()
@@ -126,6 +126,11 @@
       toggle(item)
       {
         item.isOpen = !item.isOpen;
+      },
+
+      onSelect(item, ev)
+      {
+        this.$emit('select', item, ev);
       },
 
       // right clicked on an item

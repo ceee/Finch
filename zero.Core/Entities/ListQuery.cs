@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace zero.Core.Entities
@@ -23,6 +24,8 @@ namespace zero.Core.Entities
     public ListQueryOrderType OrderType { get; set; } = ListQueryOrderType.String;
 
     public bool OrderIsDescending { get; set; } = true;
+
+    public Func<IQueryable<T>, IQueryable<T>> OrderQuery = null;
 
     public int Page { get; set; } = 1;
 

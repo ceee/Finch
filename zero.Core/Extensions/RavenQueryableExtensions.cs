@@ -80,7 +80,11 @@ namespace zero.Core.Extensions
           }
         }
 
-        if (!query.OrderBy.IsNullOrEmpty())
+        if (query.OrderQuery != null)
+        {
+          rawQuery = query.OrderQuery(rawQuery);
+        }
+        else if (!query.OrderBy.IsNullOrEmpty())
         {
           rawQuery = rawQuery.OrderBy(query.OrderBy, query.OrderIsDescending, query.OrderType == ListQueryOrderType.String ? OrderingType.String : OrderingType.Double);
         }
