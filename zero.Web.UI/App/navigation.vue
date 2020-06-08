@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="app-nav theme-light">
+  <div class="app-nav theme-dark">
 
     <h1 class="app-nav-headline" v-localize="'@zero.name'">zero</h1>
 

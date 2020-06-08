@@ -45,6 +45,7 @@ textarea
 .ui-native-select
 {
   position: relative;
+  font-size: var(--font-size);
 
   select
   {
@@ -58,6 +59,7 @@ textarea
     padding-left: 9px;
     -webkit-appearance: none;
     border: none;
+    font-size: var(--font-size);
   }
 
   &:after
