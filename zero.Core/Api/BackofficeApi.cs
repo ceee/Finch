@@ -54,6 +54,11 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<T> GetById<T>(string id) where T : IZeroIdEntity
     {
+      if (id.IsNullOrWhiteSpace())
+      {
+        return default;
+      }
+
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         if (typeof(T).Is<IAppAwareEntity>())

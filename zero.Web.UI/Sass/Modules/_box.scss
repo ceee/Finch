@@ -37,7 +37,8 @@
   }
 }
 
-.ui-box + .ui-box.is-connected
+.ui-box + .ui-box.is-connected,
+.ui-tabs + .ui-box.is-connected
 {
   margin-top: -31px;
 }
