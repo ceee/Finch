@@ -32,7 +32,13 @@
     "select": "Select",
     "icon": "Icon",
     "icon_select": "Select an icon",
-    "tab_general": "General"
+    "tab_general": "General",
+    "pick": {
+      "title": "Choose one",
+      "title_multiple": "Choose",
+      "title_autocomplete": "Enter a value",
+      "max": "max. {count}"
+    }
   },
 
   "errors": {
