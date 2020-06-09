@@ -107,7 +107,7 @@
     &.is-inactive .ui-tree-item-text
     //&.is-inactive .ui-tree-item-icon
     {
-      opacity: .5;
+      opacity: .8;
     }
 
     .ui-tree-item-arrow
@@ -140,12 +140,19 @@
     grid-gap: 6px;
     height: 100%;
     align-items: center;
-    position: relative;
-    color: var(--color-fg);
+    position: relative;    
+    color: var(--color-fg-mid);
+
+    &:hover
+    {
+      color: var(--color-fg);
+    }
 
     &.is-active
     {
+      color: var(--color-fg);
       font-weight: bold;
+      //color: var(--color-primary);
     }
   }
 

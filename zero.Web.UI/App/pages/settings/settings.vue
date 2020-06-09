@@ -60,7 +60,7 @@
   {
     min-height: 100%;
     position: relative;
-    padding: 95px;
+    padding: 100px var(--padding);
     width: 100%;
     max-width: 2000px;
   }

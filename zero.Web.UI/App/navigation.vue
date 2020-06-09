@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="app-nav theme-light">
+  <div class="app-nav theme-dark">
 
     <h1 class="app-nav-headline" v-localize="'@zero.name'">zero</h1>
 
@@ -16,7 +16,7 @@
     <nav class="app-nav-inner">
       <template v-for="section in sections">
         <router-link :to="section.url" class="app-nav-item" :alias="section.alias" :class="{ 'has-children': hasChildren(section) }">
-          <i class="app-nav-item-icon" :class="section.icon" :style="{ color: false && section.color ? section.color : null }"></i>
+          <i class="app-nav-item-icon" :class="section.icon"></i>
           {{section.name | localize}}
           <i v-if="hasChildren(section)" class="app-nav-item-arrow fth-chevron-down"></i>
         </router-link>
