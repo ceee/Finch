@@ -37,6 +37,7 @@
       open: false
     }),
 
+
     methods: {
 
       toggle()
@@ -84,6 +85,7 @@
     z-index: 8;
     top: calc(100% + 5px);
     padding: 5px;
+    color: var(--color-fg);
 
     &.align-right
     {

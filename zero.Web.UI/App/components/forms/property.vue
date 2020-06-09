@@ -115,6 +115,7 @@
   {
     color: var(--color-negative);
     margin-left: 0.2em;
+    font-weight: 400;
   }
 
   .ui-property-content

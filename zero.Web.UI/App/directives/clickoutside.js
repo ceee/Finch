@@ -29,7 +29,11 @@ Vue.directive('click-outside', {
       handler: handler,
       callback: binding.value
     };
-    !Helpers.isServer(vNode) && document.addEventListener('click', handler);
+
+    setTimeout(() =>
+    {
+      !Helpers.isServer(vNode) && document.addEventListener('click', handler);
+    }, 200);
   },
 
   update(el, binding)
