@@ -88,7 +88,7 @@
     display: block;
     color: var(--color-text);
     width: 280px;
-    padding-right: 2rem;
+    padding-right: 50px;
     margin-bottom: 5px;
     font-size: $font-size;
     line-height: 1.5;

@@ -41,6 +41,27 @@
     }
   },
 
+  "rte": {
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "strikethrough": "Strike-through",
+    "heading1": "Heading 1",
+    "heading2": "Heading 2",
+    "paragraph": "Paragraph",
+    "quote": "Quote",
+    "olist": "Ordered list",
+    "ulist": "Unordered list",
+    "code": "Code",
+    "line": "Horizontal line",
+    "link": "Link",
+    "image": "Image",
+    "video": "Video",
+    "accept": "Accept",
+    "cancel": "Cancel",
+    "raw": "Edit HTML"
+  },
+
   "errors": {
     "onsave": {
       "notallowed": "You are not allowed to edit this resource"
