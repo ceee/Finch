@@ -149,9 +149,13 @@
 
 
     watch: {
-      config()
-      {
-        this.buildConfig();
+      config: {
+        deep: true,
+        handler()
+        {
+          this.buildConfig();
+          this.loaded = false;
+        }
       },
       value(val)
       {
@@ -212,18 +216,12 @@
     },
 
 
-    mounted()
-    {
-      this.load();
-    },
-
-
     methods: {
 
       buildConfig()
       {
         var config = JSON.parse(JSON.stringify(defaultConfig));
-        this.configuration = _extend(defaultConfig, this.config);
+        this.configuration = _extend(JSON.parse(JSON.stringify(config)), this.config);
         this.configuration.search = _extend(config.search, this.config.search || {});
         this.configuration.addButton = _extend(config.addButton, this.config.addButton || {});
         this.configuration.preview = _extend(config.preview, this.config.preview || {});
@@ -234,6 +232,10 @@
 
       overlayOpened()
       {
+        if (!this.loaded)
+        {
+          this.load();
+        }
         if (this.configuration.search.focus)
         {
           this.$nextTick(() => this.$refs.search.focus());

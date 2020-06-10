@@ -141,7 +141,7 @@
     height: 100%;
     align-items: center;
     position: relative;    
-    color: var(--color-fg-mid);
+    color: var(--color-fg);
 
     &:hover
     {

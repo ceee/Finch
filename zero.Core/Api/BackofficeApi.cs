@@ -74,6 +74,21 @@ namespace zero.Core.Api
     }
 
 
+    /// <inheritdoc />
+    public async Task<Dictionary<string, T>> GetByIds<T>(params string[] ids) where T : IZeroIdEntity
+    {
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        IList<T> items = await session.Query<T>()
+          .Scope(Scope)
+          .Where(x => x.Id.In(ids))
+          .ToListAsync();
+
+        return ids.ToDictionary(x => x, x => items.FirstOrDefault(item => item.Id == x));
+      }
+    }
+
+
 
     /// <inheritdoc />
     public async Task<EntityResult<T>> SaveModel<T>(T model, IValidator validator = null) where T : IZeroIdEntity
@@ -222,6 +237,12 @@ namespace zero.Core.Api
     /// If the requested entity is an IAppAwareEntity it will only return entities for the currently selected app + shared app
     /// </summary>
     Task<T> GetById<T>(string id) where T : IZeroIdEntity;
+
+    /// <summary>
+    /// Get entities by ids.
+    /// If the requested entity is an IAppAwareEntity it will only return entities for the currently selected app + shared app
+    /// </summary>
+    Task<Dictionary<string, T>> GetByIds<T>(params string[] ids) where T : IZeroIdEntity;
 
     /// <summary>
     /// Updates or creates an entity with an optional validator
