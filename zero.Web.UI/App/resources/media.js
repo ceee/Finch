@@ -35,7 +35,7 @@ export default {
     {
       return null;
     }
-    return base + 'streamThumbnail/' + id;
+    return zero.apiPath + base + 'streamThumbnail/' + id;
   },
 
   // save a media

@@ -4,7 +4,7 @@
     <!-- previews -->
     <div class="ui-pick-previews" v-if="previews.length > 0">
       <div v-if="configuration.preview.enabled && !configuration.preview.combined" v-for="preview in previews" class="ui-pick-preview">
-        <ui-select-button :icon="getPreviewIcon(preview)" :label="preview[configuration.keys.name]" :description="getPreviewDescription(preview)" :disabled="disabled" @click="pick(preview.id)" :tokens="preview" />
+        <ui-select-button :icon="getPreviewIcon(preview)" :icon-as-image="configuration.preview.iconAsImage" :label="preview[configuration.keys.name]" :description="getPreviewDescription(preview)" :disabled="disabled" @click="pick(preview.id)" :tokens="preview" />
         <ui-icon-button v-if="!disabled && configuration.preview.delete" @click="remove(preview.id)" icon="fth-x" title="@ui.close" />
       </div>
     </div>
@@ -27,9 +27,9 @@
       <!-- search -->
       <ui-search ref="search" class="ui-pick-overlay-search" :value="searchValue" @input="onSearch" @submit="onSearchSubmit" />
 
-      <!-- empty results -->
+      <!-- items -->
       <div class="ui-pick-overlay-items">
-        <button v-for="item in items" :key="item.id" type="button" class="ui-pick-overlay-item">
+        <button v-for="item in items" :key="item.id" type="button" class="ui-pick-overlay-item" @click="select(item)" :class="{'is-selected': isSelected(item) }">
           <i v-if="item[configuration.keys.icon]" class="-icon" :class="item[configuration.keys.icon]" />
           <div class="ui-pick-overlay-item-title">
             <span class="-name" v-localize="item[configuration.keys.name]"></span>
@@ -52,11 +52,13 @@
 
 
 <script>
-  import { extend as _extend, filter as _filter, debounce as _debounce } from 'underscore';
+  import { extend as _extend, filter as _filter, debounce as _debounce, isArray as _isArray, clone as _clone, find as _find } from 'underscore';
 
   const defaultConfig = {
     // picker items, can either be a static list or a promise
     items: [],
+    // preview items, can either be a static list or a promise. If null, take the items list
+    previews: [],
     // exclude Ids from the picker selection items
     excludedIds: [],
     // autocomplete allows entering custom texts
@@ -153,10 +155,16 @@
       },
       value(val)
       {
-        if (val)
+        if (this.multiple)
         {
-          this.load();
+          this.selected = _isArray(val) && val.length ? _clone(val) : [];
         }
+        else
+        {
+          this.selected = val ? [val] : [];
+        }
+
+        this.loadPreviews();
       }
     },
 
@@ -164,17 +172,21 @@
     computed: {
       canAdd()
       {
-        return (!this.value && this.limit < 2) || (!this.value || this.value.length < this.configuration.limit);
+        return (!this.value && !this.multiple) || (!this.value || this.value.length < this.configuration.limit);
       },
       isRemote()
       {
         return typeof this.configuration.items === 'function';
       },
+      multiple()
+      {
+        return this.configuration.limit > 1;
+      },
       title()
       {
         if (!!this.configuration.title) return this.configuration.title;
         if (this.configuration.autocomplete) return '@ui.pick.title_autocomplete';
-        if (this.configuration.limit > 1) return '@ui.pick.title_multiple';
+        if (this.multiple) return '@ui.pick.title_multiple';
         return '@ui.pick.title';
       }
     },
@@ -185,6 +197,7 @@
       previews: [],
       allItems: [],
       items: [],
+      selected: [],
       loaded: false,
       isLoading: false,
       debouncedUpdate: null,
@@ -196,6 +209,12 @@
     {
       this.buildConfig();
       this.debouncedUpdate = _debounce(this.loadSuggestions, 300);
+    },
+
+
+    mounted()
+    {
+      this.load();
     },
 
 
@@ -239,9 +258,11 @@
       },
 
 
-      remove()
+      remove(id)
       {
-
+        let index = this.selected.indexOf(id);
+        this.selected.splice(index, 1);
+        this.onChange(this.multiple ? this.selected : null);
       },
 
 
@@ -312,6 +333,39 @@
       },
 
 
+      loadPreviews()
+      {
+        let onLoaded = (items, needsFilter) =>
+        {
+          if (needsFilter)
+          {
+            this.previews = [];
+
+            this.selected.forEach(id =>
+            {
+              let res = _find(this.items, item => item.id === id);
+              this.previews.push(_clone(res));
+            });
+          }
+          else
+          {
+            this.previews = items;
+          }
+        };
+
+        let promise = this.configuration.previews || this.configuration.items;
+
+        if (typeof promise === 'function')
+        {
+          promise(this.selected).then(onLoaded, false);
+        }
+        else
+        {
+          onLoaded(promise, true);
+        }
+      },
+
+
       onSearch(value)
       {
         this.searchValue = value;
@@ -325,9 +379,59 @@
       },
 
 
+      select(item)
+      {
+        let value = this.configuration.autocomplete ? item[this.configuration.keys.name] : item.id;
+
+        if (this.multiple)
+        {
+          if (!this.canAdd)
+          {
+            return;
+          }
+
+          var index = this.selected.indexOf(this.value);
+
+          if (index > -1)
+          {
+            this.selected.splice(index, 1);
+          }
+          else
+          {
+            this.selected.push(index);
+          }
+
+          this.onChange(this.selected);
+        }
+        else
+        {
+          this.selected = [value];
+          this.onChange(value);
+        }
+      },
+
+
+      onChange(value)
+      {
+        this.$emit('input', value);
+
+        if (this.configuration.closeOnClick)
+        {
+          this.$refs.overlay.hide();
+        }
+      },
+
+
+      isSelected(item)
+      {
+        let value = this.configuration.autocomplete ? item[this.configuration.keys.name] : item.id;
+        return this.selected.indexOf(value) > -1;
+      },
+
+
       getPreviewIcon(preview)
       {
-        return this.configuration.preview.icon ? (preview[configuration.keys.icon] || this.configuration.preview.defaultIcon) : null;
+        return this.configuration.preview.icon ? (preview[this.configuration.keys.icon] || this.configuration.preview.defaultIcon) : null;
       },
 
 
@@ -430,6 +534,11 @@
     &.is-selected
     {
       padding-right: 32px;
+      
+      .-name
+      {
+        font-weight: 600;
+      }
     }
 
     &.is-selected:after
@@ -438,6 +547,8 @@
       content: "\e83e";
       font-size: 16px;
       color: var(--color-primary);
+      position: absolute;
+      right: 20px;
     }
   }
 
@@ -452,6 +563,27 @@
     {
       color: var(--color-fg-light);
       
+    }
+  }
+
+  .ui-pick-preview
+  {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ui-pick-previews
+  {
+    .ui-icon-button 
+    {
+      height: 24px;
+      width: 24px;
+
+      .ui-button-icon
+      {
+        font-size: 13px;
+      }
     }
   }
 </style>

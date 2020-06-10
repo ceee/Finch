@@ -49,7 +49,6 @@
 
       onChange(ev)
       {
-        console.info(ev.target.value);
         this.$emit('change', ev.target.value);
         this.$emit('input', ev.target.value);
         // TODO this does not trigger the forms dirty flag
