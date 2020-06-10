@@ -6,7 +6,7 @@ import Localization from 'zero/services/localization';
 /// </summary>
 Vue.directive('localize', (el, binding) =>
 {
-  if (binding.value !== binding.oldValue)
+  if (binding.value !== binding.oldValue || !el.innerText)
   {
     const isObject = typeof binding.value === 'object';
     let key = isObject ? binding.value.key : binding.value;

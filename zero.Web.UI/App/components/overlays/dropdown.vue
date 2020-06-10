@@ -55,11 +55,13 @@
       show()
       {
         this.open = true;
+        this.$emit('opened');
       },
 
       hide()
       {
         this.open = false;
+        this.$emit('closed');
       }
 
     }

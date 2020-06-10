@@ -36,6 +36,11 @@
       onSubmit(ev)
       {
         this.$emit('submit', this.$refs.input.value)
+      },
+
+      focus()
+      {
+        this.$refs.input.focus();
       }
     }
   }
