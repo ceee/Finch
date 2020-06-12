@@ -84,6 +84,35 @@ namespace zero.Web.Controllers
     }
 
 
+    public IActionResult JsonPreviews<T>(Dictionary<string, T> items, Func<T, PreviewModel> transform)
+    {
+      IList<PreviewModel> previews = new List<PreviewModel>();
+
+      foreach (var item in items)
+      {
+        bool exists = item.Value != null;
+
+        if (!exists)
+        {
+          previews.Add(new PreviewModel()
+          {
+            HasError = true,
+            Icon = "fth-alert-circle color-red",
+            Id = item.Key,
+            Name = "@errors.preview.notfound",
+            Text = "@errors.preview.notfound_text"
+          });
+        }
+        else
+        {
+          previews.Add(transform(item.Value));
+        }
+      }
+
+      return Json(previews);
+    }
+
+
 
     protected async Task<IActionResult> As<T, TTarget>(T model) where TTarget : class, new() where T : IZeroEntity
     {

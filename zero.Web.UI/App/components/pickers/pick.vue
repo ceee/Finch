@@ -25,7 +25,7 @@
       </div>
 
       <!-- search -->
-      <ui-search ref="search" class="ui-pick-overlay-search" :value="searchValue" @input="onSearch" @submit="onSearchSubmit" />
+      <ui-search v-if="configuration.search.enabled" ref="search" class="ui-pick-overlay-search" :value="searchValue" @input="onSearch" @submit="onSearchSubmit" />
 
       <!-- items -->
       <div class="ui-pick-overlay-items">
@@ -236,7 +236,7 @@
         {
           this.load();
         }
-        if (this.configuration.search.focus)
+        if (this.configuration.search.enabled && this.configuration.search.focus)
         {
           this.$nextTick(() => this.$refs.search.focus());
         }
@@ -392,7 +392,7 @@
             return;
           }
 
-          var index = this.selected.indexOf(this.value);
+          var index = this.selected.indexOf(value);
 
           if (index > -1)
           {
@@ -400,7 +400,8 @@
           }
           else
           {
-            this.selected.push(index);
+            this.selected.push(value);
+            this.onSelected(value);
           }
 
           this.onChange(this.selected);
@@ -409,7 +410,14 @@
         {
           this.selected = [value];
           this.onChange(value);
+          this.onSelected(value);
         }
+      },
+
+
+      onSelected(value)
+      {
+        this.$emit('select', value);
       },
 
 

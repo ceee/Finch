@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText }">
+  <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText, 'hide-label': hideLabel }">
     <label v-if="label" class="ui-property-label" :for="field">
       <span v-localize="label"></span>
       <strong class="ui-property-required" v-if="required">*</strong>
@@ -22,6 +22,7 @@
     props: {
       field: String,
       label: String,
+      hideLabel: Boolean,
       description: String,
       required: Boolean,
       vertical: Boolean,
