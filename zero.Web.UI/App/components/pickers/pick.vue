@@ -1,16 +1,23 @@
 ﻿<template>
-  <div class="ui-pick" :class="{'is-disabled': disabled }">
+  <div class="ui-pick" :class="{'is-disabled': disabled, 'is-combined': configuration.preview.combined }">
     
     <!-- previews -->
-    <div class="ui-pick-previews" v-if="previews.length > 0">
-      <div v-if="configuration.preview.enabled && !configuration.preview.combined" v-for="preview in previews" class="ui-pick-preview">
+    <div class="ui-pick-previews" v-if="configuration.preview.enabled && previews.length > 0">
+      <div v-if="!configuration.preview.combined" v-for="preview in previews" class="ui-pick-preview">
         <ui-select-button :icon="getPreviewIcon(preview)" :icon-as-image="configuration.preview.iconAsImage" :label="preview[configuration.keys.name]" :description="getPreviewDescription(preview)" :disabled="disabled" @click="pick(preview.id)" :tokens="preview" />
         <ui-icon-button v-if="!disabled && configuration.preview.delete" @click="remove(preview.id)" icon="fth-x" title="@ui.close" />
       </div>
     </div>
 
+    <!-- combined preview -->
+    <div class="ui-pick-previews" v-if="configuration.preview.enabled">
+      <div v-if="configuration.preview.combined" class="ui-pick-preview">
+         <ui-select-button icon="fth-check-circle" :label="combinedTitle" :disabled="disabled" @click="pick()" />
+      </div>
+    </div>
+
     <!-- add button -->
-    <ui-select-button v-if="canAdd && configuration.addButton.enabled" icon="fth-plus" :label="configuration.addButton.label" @click="pick()" :disabled="disabled" />
+    <ui-select-button v-if="canAdd && configuration.addButton.enabled && !configuration.preview.combined" icon="fth-plus" :label="configuration.addButton.label" @click="pick()" :disabled="disabled" />
 
     <!-- overlay -->
     <ui-dropdown ref="overlay" class="ui-pick-overlay" @opened="overlayOpened">
@@ -52,7 +59,7 @@
 
 
 <script>
-  import { extend as _extend, filter as _filter, debounce as _debounce, isArray as _isArray, clone as _clone, find as _find } from 'underscore';
+  import { extend as _extend, filter as _filter, debounce as _debounce, isArray as _isArray, clone as _clone, find as _find, map as _map } from 'underscore';
 
   const defaultConfig = {
     // picker items, can either be a static list or a promise
@@ -192,6 +199,17 @@
         if (this.configuration.autocomplete) return '@ui.pick.title_autocomplete';
         if (this.multiple) return '@ui.pick.title_multiple';
         return '@ui.pick.title';
+      },
+      combinedTitle()
+      {
+        let html = this.configuration.preview.combinedTitle ? this.configuration.preview.combinedTitle : '';
+
+        if (this.previews.length > 0)
+        {
+          html += ': <b>' + _map(this.previews, p => p[this.configuration.keys.name]).join(', ') + '</b>';
+        }
+
+        return html;
       }
     },
 
@@ -264,6 +282,13 @@
       {
         let index = this.selected.indexOf(id);
         this.selected.splice(index, 1);
+        this.onChange(this.multiple ? this.selected : null);
+      },
+
+
+      clear()
+      {
+        this.selected = [];
         this.onChange(this.multiple ? this.selected : null);
       },
 
@@ -397,11 +422,12 @@
           if (index > -1)
           {
             this.selected.splice(index, 1);
+            this.onDeselected(value, index);
           }
           else
           {
             this.selected.push(value);
-            this.onSelected(value);
+            this.onSelected(value, item);
           }
 
           this.onChange(this.selected);
@@ -409,21 +435,28 @@
         else
         {
           this.selected = [value];
-          this.onChange(value);
-          this.onSelected(value);
+          this.onChange(value, 0);
+          this.onSelected(value, item);
         }
       },
 
 
-      onSelected(value)
+      onSelected(value, item)
       {
-        this.$emit('select', value);
+        this.$emit('select', value, item);
+      },
+
+
+      onDeselected(value, index)
+      {
+        this.$emit('deselect', value, index);
       },
 
 
       onChange(value)
       {
         this.$emit('input', value);
+        this.$emit('change', value);
 
         if (this.configuration.closeOnClick)
         {
@@ -523,6 +556,8 @@
   .ui-pick-overlay-items
   {
     margin: 15px 0;
+    max-height: 290px;
+    overflow-y: auto;
   }
 
   .ui-pick-overlay-item
@@ -535,6 +570,7 @@
     border-radius: var(--radius);
     align-items: center;
     transition: background .2s, transform .2s, opacity .2s;
+    position: relative;
 
     &:hover
     {
@@ -581,6 +617,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .ui-pick.is-combined .ui-select-button-label
+  {
+    font-weight: 400;
   }
 
   .ui-pick-previews

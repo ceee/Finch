@@ -5,7 +5,7 @@
       <img :src="source" :alt="icon" />
     </span>
     <content class="ui-select-button-content">
-      <strong class="ui-select-button-label" v-localize="{ key: label, tokens: tokens }"></strong>
+      <strong class="ui-select-button-label" v-localize:html="{ key: label, tokens: tokens }"></strong>
       <span class="ui-select-button-description" v-if="description" v-localize:html="{ key: description, tokens: tokens }"></span>
     </content>
   </button>

@@ -53,7 +53,7 @@ namespace zero.Core.Extensions
         ids.Add(Constants.Database.SharedAppId);
       }
 
-      return source.Where(item => (item as IAppAwareEntity).AppId.In(ids));
+      return source.Where(item => ((IAppAwareEntity)item).AppId.In(ids));
     }
 
 
