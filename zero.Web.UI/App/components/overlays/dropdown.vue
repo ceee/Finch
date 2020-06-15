@@ -19,6 +19,10 @@
         type: String,
         default: 'left'
       },
+      locked: {
+        type: Boolean,
+        default: false
+      },
       disabled: {
         type: Boolean,
         default: false
@@ -60,6 +64,10 @@
 
       hide()
       {
+        if (this.locked)
+        {
+          return;
+        }
         this.open = false;
         this.$emit('closed');
       }

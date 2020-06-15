@@ -8,6 +8,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "dayjs": "^1.8.26",
+    "flatpickr": "^4.6.3",
     "lodash": "*",
     "underscore": "^1.10.2",
     "vue": "^2.6.11",

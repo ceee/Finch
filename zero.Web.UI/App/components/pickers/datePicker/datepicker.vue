@@ -1,12 +1,11 @@
 ﻿<template>
   <div class="ui-datepicker" :class="{'is-disabled': disabled }">
-    <input type="text" class="ui-input ui-datepicker-input" :value="output" @input="onChange" @focus="onFocus" @blur="onBlur" :disabled="disabled" />
-    <i class="fth-calendar ui-datepicker-icon"></i>
+    <input type="text" class="ui-input ui-datepicker-input" v-localize:placeholder="'@ui.date.select'" :value="output" @input="onChange" @focus="onFocus" @blur="onBlur" :disabled="disabled" />
+    <i v-if="!clear || !value" class="fth-calendar ui-datepicker-icon"></i>
+    <button v-if="clear && value" type="button" class="ui-datepicker-input-button" @click="clearInput"><i class="fth-x"></i></button>
 
     <ui-dropdown ref="overlay" class="ui-datepicker-overlay" @opened="overlayOpened">
-      <div>
-        <datepicker-overlay />
-      </div>
+      <datepicker-overlay :value="value" @change="onSelect" :options="pickerOptions" />
     </ui-dropdown>
   </div>
 </template>
@@ -16,6 +15,10 @@
   import Strings from 'zero/services/strings';
   import DatepickerOverlay from './overlay';
   import { extend as _extend } from 'underscore';
+  import dayjs from 'dayjs';
+
+  const DATETIME_FORMAT = 'DD.MM.YY HH:mm';
+  const DATE_FORMAT = 'DD.MM.YY';
 
   export default {
     name: 'uiDatepicker',
@@ -27,13 +30,33 @@
         type: String,
         default: null
       },
+      clear: {
+        type: Boolean,
+        default: false
+      },
       disabled: {
         type: Boolean,
         default: false
       },
       format: {
         type: String,
-        default: 'DD.MM.YY HH:mm'
+        default: null
+      },
+      time: {
+        type: Boolean,
+        default: false,
+      },
+      max: {
+        type: [String, Date],
+        default: null
+      },
+      min: {
+        type: [String, Date],
+        default: null
+      },
+      amPm: {
+        type: Boolean,
+        default: false
       },
       options: {
         type: Object,
@@ -44,7 +67,8 @@
 
     data: () => ({
       id: null,
-      output: null
+      output: null,
+      pickerOptions: {}
     }),
 
 
@@ -63,6 +87,7 @@
     created()
     {
       this.id = 'datepicker-' + Strings.guid();
+      this.updateOptions();
     },
 
 
@@ -70,15 +95,40 @@
 
       updateOutput()
       {
-        this.output = Strings.date(this.value, this.format);
+        this.output = Strings.date(this.value, this.format || (this.time ? DATETIME_FORMAT : DATE_FORMAT));
+      },
+
+
+      updateOptions()
+      {
+        this.pickerOptions = {
+          enableTime: this.time,
+          maxDate: this.max,
+          minDate: this.min,
+          time_24hr: !this.amPm
+        };
+      },
+
+
+      onSelect(date)
+      {
+        let dateStr = dayjs(date).toISOString();
+        this.setValue(dateStr);
+        this.$refs.overlay.hide();
+        document.activeElement.blur();
       },
 
 
       onChange(ev)
       {
-        this.$emit('change', ev.target.value);
-        this.$emit('input', ev.target.value);
-        // TODO this does not trigger the forms dirty flag
+        this.setValue(ev.target.value);
+      },
+
+
+      setValue(value)
+      {
+        this.$emit('change', value);
+        this.$emit('input', value);
       },
 
 
@@ -90,7 +140,16 @@
 
       onBlur()
       {
-        this.$refs.overlay.hide();
+        if (!this.$refs.overlay.open)
+        {
+          this.$refs.overlay.hide();
+        }
+      },
+
+
+      clearInput()
+      {
+        this.setValue(null);
       },
 
 
@@ -129,4 +188,20 @@
     font-size: var(--font-size-l);
   }
 
+  .ui-datepicker-overlay .ui-dropdown
+  {
+    padding: 0;
+  }
+
+  .ui-datepicker-input-button
+  {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 40px;
+    text-align: center;
+    font-size: var(--font-size);
+    padding-top: 1px;
+  }
 </style>
