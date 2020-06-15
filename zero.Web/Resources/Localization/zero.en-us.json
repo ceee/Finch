@@ -38,6 +38,11 @@
       "title_multiple": "Choose",
       "title_autocomplete": "Enter a value",
       "max": "max. {count}"
+    },
+    "date": {
+      "xtoy": "{x} to {y}",
+      "x": "from {x}",
+      "y": "until {y}"
     }
   },
 

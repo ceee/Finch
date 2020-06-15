@@ -60,6 +60,7 @@
     .ui-property-label
     {
       width: 100%;
+      padding-right: 0;
     }
 
     .ui-property-content
@@ -143,6 +144,24 @@
       position: relative;
       top: -1px;
       margin-right: 6px;
+    }
+  }
+
+  .ui-properties-floating
+  {
+    .ui-property
+    {
+      display: inline-flex;
+      min-height: 52px;
+    }
+
+    .ui-property + .ui-property
+    {
+      padding-top: 0;
+      margin-top: 0;
+      border-left: 1px solid var(--color-line);
+      padding-left: 50px;
+      margin-left: 50px;
     }
   }
 </style>
