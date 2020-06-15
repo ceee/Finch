@@ -396,7 +396,14 @@
       onSearch(value)
       {
         this.searchValue = value;
-        this.debouncedUpdate();
+        if (!this.isRemote || this.configuration.search.local)
+        {
+          this.loadSuggestions();
+        }
+        else
+        {
+          this.debouncedUpdate();
+        }
       },
 
 
