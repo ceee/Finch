@@ -32,7 +32,11 @@
       </div>
 
       <!-- search -->
-      <ui-search v-if="configuration.search.enabled" ref="search" class="ui-pick-overlay-search" :value="searchValue" @input="onSearch" @submit="onSearchSubmit" />
+      <ui-search v-if="configuration.search.enabled" ref="search" class="ui-pick-overlay-search" :value="searchValue" @input="onSearch" @submit="onSearchSubmit">
+        <template v-slot:button="search" v-if="configuration.autocomplete">
+          <button type="button" class="ui-searchinput-button" v-localize:title="'@ui.search.button'" @click="search.onSubmit"><i class="fth-check"></i></button>
+        </template>
+      </ui-search>
 
       <!-- items -->
       <div class="ui-pick-overlay-items">
@@ -72,6 +76,8 @@
     autocomplete: false,  
     // maximum selection count
     limit: 10,
+    // multiple selection
+    multiple: true,
     // whether the previews/results are sortable or not
     sortable: true,
     // close picker when an item is clicked
@@ -158,29 +164,27 @@
     watch: {
       config: {
         deep: true,
-        handler()
+        handler(newval, oldval)
         {
-          this.buildConfig();
-          this.loaded = false;
+          if (JSON.stringify(newval) !== JSON.stringify(oldval))
+          {
+            this.buildConfig();
+            this.loaded = false;
+          }
         }
       },
       value(val)
       {
-        if (this.multiple)
-        {
-          this.selected = _isArray(val) && val.length ? _clone(val) : [];
-        }
-        else
-        {
-          this.selected = val ? [val] : [];
-        }
-
-        this.loadPreviews();
+        this.onValueChanged(val);
       }
     },
 
 
     computed: {
+      multiple()
+      {
+        return this.configuration.multiple;
+      },
       canAdd()
       {
         return (!this.value && !this.multiple) || (!this.value || this.value.length < this.configuration.limit);
@@ -188,10 +192,6 @@
       isRemote()
       {
         return typeof this.configuration.items === 'function';
-      },
-      multiple()
-      {
-        return this.configuration.limit > 1;
       },
       title()
       {
@@ -231,10 +231,26 @@
     {
       this.buildConfig();
       this.debouncedUpdate = _debounce(this.loadSuggestions, 300);
+      this.onValueChanged(this.value);
     },
 
 
     methods: {
+
+      onValueChanged(val)
+      {
+        if (this.multiple)
+        {
+          this.selected = _isArray(val) && val.length ? _clone(val) : [];
+        }
+        else
+        {
+          this.selected = val ? [val] : [];
+        }
+
+        this.loadPreviews();
+      },
+
 
       buildConfig()
       {
@@ -371,6 +387,12 @@
             this.selected.forEach(id =>
             {
               let res = _find(this.items, item => item.id === id);
+
+              if (!res)
+              {
+                // TODO push error output
+              }
+
               this.previews.push(_clone(res));
             });
           }
@@ -378,17 +400,31 @@
           {
             this.previews = items;
           }
+
+          //console.info(JSON.parse(JSON.stringify(this.previews)));
         };
 
-        let promise = this.configuration.previews || this.configuration.items;
-
-        if (typeof promise === 'function')
+        if (this.configuration.autocomplete)
         {
-          promise(this.selected).then(onLoaded, false);
+          onLoaded(_map(this.selected, s =>
+          {
+            let item = { id: s };
+            item[this.configuration.keys.name] = s;
+            return item;
+          }), false);
         }
         else
         {
-          onLoaded(promise, true);
+          let promise = this.configuration.previews || this.configuration.items;
+
+          if (typeof promise === 'function')
+          {
+            promise(this.selected).then(onLoaded);
+          }
+          else
+          {
+            onLoaded(promise, true);
+          }
         }
       },
 
@@ -409,7 +445,11 @@
 
       onSearchSubmit()
       {
-
+        let value = this.searchValue.trim();
+        let item = {};
+        item.id = value;
+        item[this.configuration.keys.name] = value;
+        this.select(item);
       },
 
 
@@ -421,7 +461,12 @@
         {
           if (!this.canAdd)
           {
-            return;
+            if (this.limit > 1)
+            {
+              return;
+            }
+
+            this.selected = [];
           }
 
           var index = this.selected.indexOf(value);
@@ -442,7 +487,7 @@
         else
         {
           this.selected = [value];
-          this.onChange(value, 0);
+          this.onChange(value);
           this.onSelected(value, item);
         }
       },

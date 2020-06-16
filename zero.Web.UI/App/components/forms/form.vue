@@ -1,5 +1,5 @@
 ﻿<template>
-  <form class="ui-form" @submit.prevent="onSubmit" @change="onChange">
+  <form class="ui-form" @keydown="onKeydown" @submit.prevent="onSubmit" @change="onChange">
     <slot v-if="loadingState === 'default'" v-bind="slotProps" />
     <div v-if="loadingState == 'loading'" class="ui-form-loading">
       <i class="ui-form-loading-progress"></i>
@@ -37,7 +37,8 @@
       isShared: false,
       slotProps: {
         state: null
-      }
+      },
+      submitBlocked: false
     }),
 
     watch: {
@@ -178,7 +179,10 @@
       // submits the form
       onSubmit(e)
       {
-        this.$emit('submit', this, e);
+        if (!this.submitBlocked)
+        {
+          this.$emit('submit', this, e);
+        }
       },
 
 
@@ -186,6 +190,18 @@
       onChange(e)
       {
         this.dirty = true;
+      },
+
+
+      // prevent submission of form on enter key press
+      onKeydown(e)
+      {
+        if (e.keyCode === 13)
+        {
+          this.submitBlocked = true;
+          clearTimeout(this.submitBlockedTimeout);
+          this.submitBlockedTimeout = setTimeout(() => this.submitBlocked = false, 300);
+        }
       },
 
 

@@ -1,7 +1,9 @@
 ﻿<template>
   <div class="ui-searchinput">
     <input ref="input" type="search" :value="value" @input="onChange" @keyup.enter="onSubmit" class="ui-input" v-localize:placeholder="placeholder" />
-    <button type="button" class="ui-searchinput-button" v-localize:title="'@ui.search.button'" @click="onSubmit"><i class="fth-search"></i></button>
+    <slot name="button" v-bind="{ onSubmit: onSubmit }">
+      <button type="button" class="ui-searchinput-button" v-localize:title="'@ui.search.button'" @click="onSubmit"><i class="fth-search"></i></button>
+    </slot>
   </div>
 </template>
 
@@ -35,7 +37,7 @@
 
       onSubmit(ev)
       {
-        this.$emit('submit', this.$refs.input.value)
+        this.$emit('submit', this.$refs.input.value);
       },
 
       focus()
