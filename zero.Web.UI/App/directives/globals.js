@@ -6,3 +6,4 @@ import './dropdown';
 import './clickoutside';
 import './filesize';
 import './currency';
+import './sortable';
