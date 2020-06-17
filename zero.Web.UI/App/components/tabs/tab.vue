@@ -1,5 +1,5 @@
 ﻿<template>
-  <section v-show="active" class="ui-tab" :aria-hidden="!active" role="tabpanel">
+  <section v-if="loaded" v-show="active" class="ui-tab" :aria-hidden="!active" role="tabpanel">
     <slot />
   </section>
 </template>
@@ -25,12 +25,20 @@
     },
 
     data: () => ({
+      loaded: false,
       active: false
     }),
 
+    watch: {
+      active(val)
+      {
+        this.loaded = true;
+      }
+    },
+
     mounted ()
     {
-      
+      this.loaded = this.active;
     },
 
     methods: {
