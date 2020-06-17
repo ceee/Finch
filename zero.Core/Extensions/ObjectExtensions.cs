@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace zero.Core.Extensions
 {
@@ -13,6 +14,12 @@ namespace zero.Core.Extensions
     public static bool Is<T>(this object obj)
     {
       return obj.GetType().IsAssignableFrom(typeof(T));
+    }
+
+
+    public static T Clone<T>(this T obj)
+    {
+      return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj));
     }
   }
 }

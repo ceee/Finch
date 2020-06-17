@@ -275,6 +275,17 @@ button::-moz-focus-inner
     margin: 0;
     top: 0;
   }
+
+  &.type-small
+  {
+    height: 24px;
+    width: 24px;
+
+    .ui-button-icon
+    {
+      font-size: 13px;
+    }
+  }
 }
 
 

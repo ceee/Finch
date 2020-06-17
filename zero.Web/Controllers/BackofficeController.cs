@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
@@ -56,31 +57,33 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Creates an edit model with appropriate options and permissions
     /// </summary>
-    public JsonResult Edit<T>(T data, bool typed = true) where T : IZeroEntity => Edit(data, null, typed);
+    public JsonResult Edit<T>(T data, bool typed = true, Action<dynamic> transform = null) where T : IZeroEntity => Edit(data, null, typed, transform);
 
 
     /// <summary>
     /// Creates an edit model with appropriate options and permissions
     /// </summary>
-    public JsonResult Edit<T>(T data, IRenderer<T> renderer, bool typed = true) where T : IZeroEntity
+    public JsonResult Edit<T>(T data, IRenderer<T> renderer, bool typed = true, Action<dynamic> transform = null) where T : IZeroEntity
     {
       Type type = typeof(T);
       bool canBeShared = AppAwareShareableType.IsAssignableFrom(type);
 
       //ControllerContext.ActionDescriptor.FilterDescriptors[0].
 
-      return Json(new EditModel<T>()
-      {
-        Entity = data,
-        Renderer = renderer != null ? renderer.Build() : null,
-        Token = Token.Get(data),
-        IsAppAware = AppAwareType.IsAssignableFrom(type),
-        CanBeShared = canBeShared,
-        CanCreate = true,
-        CanCreateShared = canBeShared,
-        CanEdit = true,
-        CanDelete = true
-      }, typed);
+      dynamic model = new ExpandoObject();
+      model.Entity = data;
+      model.Renderer = renderer != null ? renderer.Build() : null;
+      model.Token = Token.Get(data);
+      model.IsAppAware = AppAwareType.IsAssignableFrom(type);
+      model.CanBeShared = canBeShared;
+      model.CanCreate = true;
+      model.CanCreateShared = canBeShared;
+      model.CanEdit = true;
+      model.CanDelete = true;
+
+      transform?.Invoke(model);
+
+      return Json(model, typed);
     }
 
 
@@ -106,6 +109,36 @@ namespace zero.Web.Controllers
         else
         {
           previews.Add(transform(item.Value));
+        }
+      }
+
+      return Json(previews);
+    }
+
+
+
+    public async Task<IActionResult> JsonPreviews<T>(Dictionary<string, T> items, Func<T, Task<PreviewModel>> transform)
+    {
+      IList<PreviewModel> previews = new List<PreviewModel>();
+
+      foreach (var item in items)
+      {
+        bool exists = item.Value != null;
+
+        if (!exists)
+        {
+          previews.Add(new PreviewModel()
+          {
+            HasError = true,
+            Icon = "fth-alert-circle color-red",
+            Id = item.Key,
+            Name = "@errors.preview.notfound",
+            Text = "@errors.preview.notfound_text"
+          });
+        }
+        else
+        {
+          previews.Add(await transform(item.Value));
         }
       }
 
