@@ -1,8 +1,14 @@
 ﻿export default {
   tabs: {
     general: '@ui.general',
-    domains: '@application.tab_domains',
-    features: '@application.tab_features'
+    domains: {
+      label: '@application.tab_domains',
+      count: x => x.domains.length
+    },
+    features: {
+      label: '@application.tab_features',
+      count: x => x.features.length
+    }
   },
 
   labelTemplate(field)
@@ -42,12 +48,18 @@
       type: 'image'
     },
     {
+      tab: 'domains',
       field: 'domains',
       display: 'textList',
       limit: 10,
       addLabel: '@application.fields.domains_add',
-      helpText: '@application.fields.domains_help',
-      tab: 'domains'
+      helpText: '@application.fields.domains_help'
+    },
+    {
+      tab: 'features',
+      field: 'features',
+      display: 'custom',
+      path: './mycomponent.vue'
     }
   ]
 };
