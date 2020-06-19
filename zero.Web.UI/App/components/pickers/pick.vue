@@ -84,6 +84,8 @@
     closeOnClick: true,
     // title in dropdown
     title: null,
+    // automatically open picker
+    autoOpen: false,
 
     keys: {
       // name key
@@ -232,6 +234,15 @@
       this.buildConfig();
       this.debouncedUpdate = _debounce(this.loadSuggestions, 300);
       this.onValueChanged(this.value);
+    },
+
+
+    mounted()
+    {
+      if (this.configuration.autoOpen)
+      {
+        this.pick();
+      }
     },
 
 
