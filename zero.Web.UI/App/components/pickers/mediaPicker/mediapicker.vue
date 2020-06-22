@@ -226,7 +226,7 @@
           title: '@iconpicker.title',
           closeLabel: '@ui.close',
           component: PickMediaOverlay,
-          model: this.configuration.limit > 1 && this.value.length ? this.value[0] : this.value,
+          model: this.configuration.limit > 1 ? this.value[0] : this.value,
           folderId: null, //'mediaFolders.97-A',
           theme: 'dark',
           width: 520

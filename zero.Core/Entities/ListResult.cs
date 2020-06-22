@@ -32,7 +32,7 @@ namespace zero.Core.Entities
 
     public ListResult<TTarget> MapTo<TTarget>(Func<T, TTarget> convertItem)
     {
-      return new ListResult<TTarget>(Items.Select(x => convertItem(x)).ToList(), TotalItems, Page, PageSize)
+      return new ListResult<TTarget>(Items.Select(x => convertItem(x)).Where(x => x != null).ToList(), TotalItems, Page, PageSize)
       {
         Statistics = Statistics
       };

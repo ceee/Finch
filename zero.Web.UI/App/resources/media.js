@@ -31,9 +31,9 @@ export default {
   // get path to thumbnail source
   getImageSource(id)
   {
-    if (!id)
+    if (!id || id.indexOf('http') === 0)
     {
-      return null;
+      return id;
     }
     return zero.apiPath + base + 'streamThumbnail/' + id;
   },
