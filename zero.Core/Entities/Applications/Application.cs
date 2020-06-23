@@ -29,6 +29,7 @@ namespace zero.Core.Entities
   }
 
 
+  [Collection("Applications")]
   public interface IApplication : IZeroEntity, IZeroDbConventions
   {
     /// <summary>

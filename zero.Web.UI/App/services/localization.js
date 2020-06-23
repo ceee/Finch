@@ -6,7 +6,8 @@ export default {
   {
     let params = _extend({
       force: false,
-      tokens: {}
+      tokens: {},
+      hideEmpty: false
     }, options || {});
 
     if (!key)
@@ -25,7 +26,7 @@ export default {
     const value = zero.translations[key.toLowerCase()];
 
     // TODO only return key if in debug mode
-    if (!value || typeof value !== 'string')
+    if (!params.hideEmpty && (!value || typeof value !== 'string'))
     {
       return '[' + key + ']';
     }

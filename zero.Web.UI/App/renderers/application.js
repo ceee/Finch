@@ -1,15 +1,22 @@
 ﻿export default {
-  tabs: {
-    general: '@ui.general',
-    domains: {
+  collection: 'applications',
+
+  tabs: [
+    {
+      name: 'general',
+      label: '@ui.tab_general'
+    },
+    {
+      name: 'domains',
       label: '@application.tab_domains',
       count: x => x.domains.length
     },
-    features: {
+    {
+      name: 'features',
       label: '@application.tab_features',
       count: x => x.features.length
     }
-  },
+  ],
 
   labelTemplate(field)
   {
@@ -40,7 +47,8 @@
     {
       field: 'imageId',
       display: 'media',
-      type: 'image'
+      type: 'image',
+      class: 'my-image'
     },
     {
       field: 'iconId',
@@ -50,7 +58,7 @@
     {
       tab: 'domains',
       field: 'domains',
-      display: 'textList',
+      display: 'inputList',
       limit: 10,
       addLabel: '@application.fields.domains_add',
       helpText: '@application.fields.domains_help'
@@ -59,7 +67,7 @@
       tab: 'features',
       field: 'features',
       display: 'custom',
-      path: './mycomponent.vue'
+      path: '@zero/pages/settings/application-features.vue'
     }
   ]
 };

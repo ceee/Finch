@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-state-button :items="config.options.items" :value="value" @input="$emit('input', $event)" />
+  <ui-state-button :items="config.items" :value="value" @input="$emit('input', $event)" />
 </template>
 
 

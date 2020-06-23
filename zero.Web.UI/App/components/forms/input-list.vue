@@ -47,11 +47,17 @@
       {
         this.items = _map(value, item =>
         {
-          return {
-            value: item
-          };
+          return { value: item };
         });
       }
+    },
+
+    mounted()
+    {
+      this.items = _map(this.value, item =>
+      {
+        return { value: item };
+      });
     },
 
     methods: {

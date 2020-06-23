@@ -1,9 +1,7 @@
 ﻿<template>
   <component v-if="loaded" :is="rootNode" class="editor">
-    <ui-tab :class="renderInfo && index === -1 ? 'ui-view-box has-sidebar' : 'ui-box'" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index">
-
-      <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" />
-      <!--<div v-if="renderInfo && index === 0" class="ui-box">
+    <ui-tab v-if="hasTabs" :class="renderInfo && index === 0 ? 'ui-view-box has-sidebar' : 'ui-box'" :label="component.params.name" v-for="(component, index) in components" :key="index">
+      <div v-if="renderInfo && index === 0" class="ui-box">
         <editor-component v-for="(child, index) in component.components" :key="index" :field="child.params.field" v-model="value" :component="child" />
       </div>
 
@@ -19,8 +17,27 @@
         </ui-property>
       </aside>
 
-      <editor-component v-if="!renderInfo || index > 0" v-for="(child, cindex) in component.components" :key="cindex" :field="child.params.field" v-model="value" :component="child" />-->
+      <editor-component v-if="!renderInfo || index > 0" v-for="(child, cindex) in component.components" :key="cindex" :field="child.params.field" v-model="value" :component="child" />
     </ui-tab>
+    <div v-if="!hasTabs" :class="renderInfo ? 'ui-view-box has-sidebar' : 'ui-box'">
+      <div v-if="renderInfo" class="ui-box">
+        <editor-component v-for="(component, index) in components" :key="index" :field="component.params.field" v-model="value" :component="component" />
+      </div>
+
+      <aside v-if="renderInfo" class="ui-view-box-aside">
+        <ui-property label="@ui.active" :vertical="true" :is-text="true">
+          <ui-toggle v-model="value.isActive" />
+        </ui-property>
+        <ui-property label="@ui.id" :vertical="true" :is-text="true">
+          {{value.id}}
+        </ui-property>
+        <ui-property label="@ui.createdDate" :vertical="true" :is-text="true">
+          <ui-date v-model="value.createdDate" />
+        </ui-property>
+      </aside>
+
+      <editor-component v-if="!renderInfo" v-for="(component, index) in components" :key="index" :field="component.params.field" v-model="value" :component="component" />
+    </div>
   </component>
 </template>
 
@@ -28,10 +45,9 @@
 <script>
   import EditorComponent from 'zero/editor/editor-component';
   import RendererApi from 'zero/resources/renderer';
-  import { each as _each, map as _map, filter as _filter } from 'underscore';
 
   export default {
-    name: 'uiEditor',
+    name: 'uiEditorOld',
 
     props: {
       config: {
@@ -46,11 +62,9 @@
     components: { EditorComponent },
 
     data: () => ({
-      configuration: {},
       loaded: false,
       hasTabs: false,
-      tabs: [],
-      fields: [],
+      components: [],
       renderInfo: true
     }),
 
@@ -82,7 +96,10 @@
       {
         if (typeof this.config === 'string')
         {
-          this.finishLoad(zero.renderers[this.config]);
+          RendererApi.getByAlias(this.config).then(response =>
+          {
+            this.finishLoad(response);
+          });
         }
         else
         {
@@ -90,38 +107,15 @@
         }
       },
 
-
       finishLoad(config)
       {
-        this.configuration = config;
-
-        if (!config.fields)
+        if (!config.components)
         {
           return;
         }
 
-        this.fields = config.fields;
-        this.hasTabs = typeof this.configuration.tabs !== 'undefined';
-
-        let tabs = this.configuration.tabs || [];
-
-        this.tabs = _map(tabs, (tab, index) =>
-        {
-          let tabConfig = tab;
-          tabConfig.count = typeof tabConfig.count === 'function' ? tabConfig.count : () => null;
-          tabConfig.fields = _filter(this.configuration.fields, x => index === 0 ? !x.tab || x.tab === tab.name : x.tab === tab.name);
-          return tabConfig;
-        });
-
-        if (!this.tabs.length)
-        {
-          this.tabs.push({
-            fields: this.configuration.fields
-          });
-        }
-
-
-
+        this.components = config.components;
+        this.hasTabs = this.components.length > 0 && this.components[0].method === 'tab';
         this.loaded = true;
       }
     }

@@ -16,7 +16,7 @@
     computed: {
       maxLength()
       {
-        return this.config.options.maxLength > 0 ? this.config.options.maxLength : null;
+        return this.config.maxLength > 0 ? this.config.maxLength : null;
       },
     },
 

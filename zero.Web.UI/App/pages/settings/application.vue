@@ -11,7 +11,9 @@
       <ui-button :submit="true" label="@ui.save" :state="form.state" v-if="!disabled" />
     </ui-header-bar>
 
-    <ui-tabs>
+    <ui-editor config="applications" v-model="model" />
+
+    <!--<ui-tabs>
 
       <ui-tab label="@ui.tab_general" class="ui-view-box has-sidebar">
         <div>
@@ -60,7 +62,7 @@
         </ui-property>
       </ui-tab>
 
-    </ui-tabs>
+    </ui-tabs>-->
   </ui-form>
 </template>
 
@@ -68,15 +70,17 @@
 <script>
   import ApplicationsApi from 'zero/resources/applications';
   import Overlay from 'zero/services/overlay.js';
+  import UiEditor from 'zero/editor/editor';
 
   export default {
     props: ['id'],
+
+    components: { UiEditor },
 
     data: () => ({
       actions: [],
       model: { name: null, features: [], domains: [] },
       disabled: false,
-      features: [],
       mediaConfig: {
         display: 'big',
         fileExtensions: zero.config.media.defaults.images_artificial
@@ -107,11 +111,6 @@
         {
           this.disabled = !response.canEdit;
           this.model = response.entity;
-        });
-
-        ApplicationsApi.getAllFeatures().then(items =>
-        {
-          this.features = items;
         });
       },
 
@@ -154,23 +153,7 @@
             }
           });
         }); 
-      },
-
-
-      onFeatureToggle(isOn, feature)
-      {
-        const alias = feature.alias;
-        const index = this.model.features.indexOf(alias);
-
-        if (!isOn && index > -1)
-        {
-          this.model.features.splice(index, 1);
-        }
-        else if (isOn && index === -1)
-        {
-          this.model.features.push(alias);
-        }
-      }
+      }     
     }
   }
 </script>

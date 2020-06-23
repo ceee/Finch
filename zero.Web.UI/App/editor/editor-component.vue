@@ -1,6 +1,6 @@
 ﻿<template>
-  <ui-property :field="params.field" :label="params.label" :description="params.description" :required="params.required" :class="classes" :is-text="view === 'output'">
-    <component v-if="fieldComponent" :is="fieldComponent" :component="component" :config="params" :value="model" @input="onChange" />
+  <ui-property :field="config.field" :label="label" :description="description" :required="config.required" :class="classList" :is-text="view === 'output'">
+    <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" @input="onChange" />
   </ui-property>
 </template>
 
@@ -8,6 +8,7 @@
 <script>
   import Strings from 'zero/services/strings';
   import Objects from 'zero/services/objects';
+  import Localization from 'zero/services/localization';
 
   export default {
     name: 'uiEditorComponent',
@@ -16,17 +17,13 @@
       value: {
         type: [ Object, Array ]
       },
-      field: {
-        type: String,
-        required: true
-      },
-      component: {
+      config: {
         type: Object,
         required: true
       },
-      deep: {
-        type: Boolean,
-        default: false
+      renderer: {
+        type: Object,
+        required: true
       }
     },
 
@@ -38,12 +35,29 @@
           this.rebuildModel();
         }
       },
+      config: {
+        deep: true,
+        handler: function ()
+        {
+          this.rebuildConfig();
+        }
+      },
+      renderer: {
+        deep: true,
+        handler: function ()
+        {
+          this.rebuildConfig();
+        }
+      }
     },
 
     data: () => ({
       fieldComponent: null,
       model: null,
-      selector: []
+      selector: [],
+      classList: [],
+      label: null,
+      description: null
     }),
 
     mounted()
@@ -52,26 +66,13 @@
     },
 
     computed: {
-      params()
-      {
-        return this.view === 'renderer' ? this.component : this.component.params;
-      },
       view()
       {
-        return this.component.params.view;
+        return this.config.display;
       },
       classes()
       {
-        let classes = this.component.params.options.classes;
-        if (this.view === 'nested' || this.view === 'renderer')
-        {
-          classes.push('full-width');
-        }
-        if (this.component.params.options.hideLabel)
-        {
-          classes.push('hide-label');
-        }
-        return classes;
+        
       }
     },
 
@@ -81,7 +82,14 @@
       {
         if (this.view === 'custom')
         {
-          //return import('@/Plugins/' + this.component.params.componentPath);
+          if (this.config.path.indexOf('@zero') === 0)
+          {
+            return import(`zero/` + this.config.path.substring(6));
+          }
+          else
+          {
+            // TODO external imports
+          }
         }
         else if (this.view === 'nested')
         {
@@ -93,16 +101,19 @@
         }
         else
         {
-          return import(`zero/editor/fields/${this.view}`);
+          return import(`zero/editor/fields/${this.view.toLowerCase()}`);
         }
       }
+
+      this.rebuildModel();
+      this.rebuildConfig();
     },
 
     methods: {
 
       rebuildModel()
       {
-        this.selector = Strings.selectorToArray(this.field);
+        this.selector = Strings.selectorToArray(this.config.field);
         var currentValue = this.value;
 
         if (!this.selector || !this.selector.length || !currentValue)
@@ -126,6 +137,61 @@
           this.model = currentValue;
         }
       },
+
+
+      rebuildConfig()
+      {
+        // build class list
+        let classes = typeof this.config.class === 'string' ? this.config.class.split(' ') : (this.config.class || {});
+        if (this.view === 'nested' || this.view === 'renderer')
+        {
+          classes.push('full-width');
+        }
+        if (this.config.hideLabel)
+        {
+          classes.push('hide-label');
+        }
+        this.classList = classes;
+
+
+        // build label
+        let label = null;
+        if (this.config.label && this.config.label.indexOf('@') === 0)
+        {
+          label = this.config.label;
+        }
+        else if (this.renderer.labelTemplate)
+        {
+          label = this.renderer.labelTemplate(this.config.label || this.config.field);
+        }
+        else
+        {
+          label = this.config.label || this.config.field;
+        }
+        this.label = Localization.localize(label, { hideEmpty: true });
+
+
+        // build description
+        let description = null;
+        if (this.config.description && this.config.description.indexOf('@') === 0)
+        {
+          description = this.config.description;
+        }
+        else if (this.config.description === null)
+        {
+          description = null;
+        }
+        else if (this.renderer.descriptionTemplate)
+        {
+          description = this.renderer.descriptionTemplate(this.config.description || this.config.field);
+        }
+        else
+        {
+          description = this.config.description;
+        }
+        this.description = Localization.localize(description, { hideEmpty: true });
+      },
+
 
       onChange(value)
       {
