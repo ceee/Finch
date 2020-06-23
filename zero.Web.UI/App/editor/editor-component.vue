@@ -1,6 +1,7 @@
 ﻿<template>
   <ui-property :field="config.field" :label="label" :description="description" :required="config.required" :class="classList" :is-text="view === 'output'">
     <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" @input="onChange" />
+    <p v-if="config.helpText" class="ui-property-help" v-localize="config.helpText"></p>
   </ui-property>
 </template>
 

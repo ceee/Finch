@@ -91,3 +91,14 @@
     margin-top: 25px;
   }
 }
+
+.ui-view-split
+{
+  display: grid;
+  grid-template-columns: 1fr 360px;
+
+  > :last-child
+  {
+    margin-top: 90px;
+  }
+}

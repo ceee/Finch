@@ -136,32 +136,67 @@ const router = new VueRouter({
 
 
 
+
 // set meta title before routing
 
 router.beforeEach((to, from, next) =>
 {
-  let title = Localization.localize('@zero.name');
+  let isGuarded = false;
 
-  if (to.meta.name && to.meta.alias != zero.alias.sections.dashboard)
+
+  // set document title + call next
+  let callback = () =>
   {
-    let name = to.meta.name;
-    let nameParts = _isArray(name) ? name : [name];
-    let translations = [];
+    let title = Localization.localize('@zero.name');
 
-    nameParts.forEach(part =>
+    if (to.meta.name && to.meta.alias !== zero.alias.sections.dashboard)
     {
-      if (part)
-      {
-        translations.push(Localization.localize(part));
-      }
-    });
+      let name = to.meta.name;
+      let nameParts = _isArray(name) ? name : [name];
+      let translations = [];
 
-    title += ': ' + translations.join(' - ');
+      nameParts.forEach(part =>
+      {
+        if (part)
+        {
+          translations.push(Localization.localize(part));
+        }
+      });
+
+      title += ': ' + translations.join(' - ');
+    }
+
+    document.title = title;
+
+    next();
+  };
+
+  // dirty form guard
+  if (from.matched.length && from.matched[0].instances)
+  {
+    let instance = from.matched[0].instances.default;
+
+    if (instance.$refs['form'] && typeof instance.$refs.form.beforeRouteLeave === 'function')
+    {
+      isGuarded = true;
+      instance.$refs.form.beforeRouteLeave(to, from, res =>
+      {
+        if (res === false)
+        {
+          next(false);
+        }
+        else
+        {
+          callback();
+        }
+      });
+    }
   }
 
-  document.title = title;
-
-  next();
+  if (!isGuarded)
+  {
+    callback();
+  }
 });
 
 

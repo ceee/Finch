@@ -24,6 +24,10 @@
       inputComponents: {
         type: Array,
         default: () => [ 'uiProperty' ]
+      },
+      route: {
+        type: String,
+        default: null
       }
     },
 
@@ -59,11 +63,13 @@
       }
     },
 
+
     created()
     {
       this.slotProps.state = this.state;
       this.$emit('load', this);
     },
+
 
     methods: {
 
@@ -130,7 +136,7 @@
       },
 
       // handles a promise as result of the form submission
-      handle(promise)
+      handle(promise, isCreate)
       {
         this.setState('loading');
 
@@ -153,6 +159,16 @@
                   this.setState('success');
                   this.setDirty(false);
                   resolve(response);
+
+                  console.info(this.route, this.$route);
+
+                  if (response.model && this.route && this.$route.name !== this.route)
+                  {
+                    this.$router.replace({
+                      name: this.route,
+                      params: { id: response.model.id }
+                    });
+                  }
                 }
                 else
                 {
@@ -190,6 +206,31 @@
       onChange(e)
       {
         this.dirty = true;
+      },
+
+
+      // handle delete event
+      onDelete(promise)
+      {
+        Overlay.confirmDelete().then(opts =>
+        {
+          opts.state('loading');
+
+          promise().then(response =>
+          {
+            if (response.success)
+            {
+              opts.state('success');
+              opts.hide();
+              this.$router.go(-1);
+              // TODO show message
+            }
+            else
+            {
+              opts.errors(response.errors);
+            }
+          });
+        }); 
       },
 
 

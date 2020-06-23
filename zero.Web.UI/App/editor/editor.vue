@@ -1,27 +1,24 @@
 ﻿<template>
-  <component v-if="loaded" :is="rootNode" class="editor">
-    <ui-tab :class="renderInfo && index === -1 ? 'ui-view-box has-sidebar' : 'ui-box'" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index">
-
-      <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" />
-      <!--<div v-if="renderInfo && index === 0" class="ui-box">
-        <editor-component v-for="(child, index) in component.components" :key="index" :field="child.params.field" v-model="value" :component="child" />
-      </div>
-
-      <aside v-if="renderInfo && index === 0" class="ui-view-box-aside">
+  <div class="editor-outer" v-if="loaded" :class="'-infos-' + infos">
+    <component :is="rootNode" class="editor">
+      <ui-tab :class="renderInfo && index === -1 ? 'ui-view-box has-sidebar' : 'ui-box'" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index">
+        <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" />
+      </ui-tab>
+    </component>
+    <aside v-if="infos && infos != 'none'" class="ui-view-box-aside editor-infos">
+      <slot name="aside">
         <ui-property label="@ui.active" :vertical="true" :is-text="true">
           <ui-toggle v-model="value.isActive" />
         </ui-property>
-        <ui-property label="@ui.id" :vertical="true" :is-text="true">
+        <ui-property v-if="value.id" label="@ui.id" :vertical="true" :is-text="true">
           {{value.id}}
         </ui-property>
-        <ui-property label="@ui.createdDate" :vertical="true" :is-text="true">
+        <ui-property v-if="value.id" label="@ui.createdDate" :vertical="true" :is-text="true">
           <ui-date v-model="value.createdDate" />
         </ui-property>
-      </aside>
-
-      <editor-component v-if="!renderInfo || index > 0" v-for="(child, cindex) in component.components" :key="cindex" :field="child.params.field" v-model="value" :component="child" />-->
-    </ui-tab>
-  </component>
+      </slot>
+    </aside>
+  </div>
 </template>
 
 
@@ -40,6 +37,10 @@
       },
       value: {
         type: Object
+      },
+      infos: {
+        type: String,
+        default: 'aside'
       }
     },
 
@@ -132,5 +133,27 @@
   .editor > .ui-view-box
   {
     padding-top: 0;
+  }
+
+  .editor
+  {
+    .ui-tabs-list
+    {
+      padding-top: 0;
+    }
+  }
+
+  .editor-outer
+  {
+    &.-infos-aside
+    {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+    }
+  }
+
+  .editor-infos
+  {
+    margin-top: 55px;
   }
 </style>
