@@ -5,18 +5,24 @@
         <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" />
       </ui-tab>
     </component>
-    <aside v-if="infos && infos != 'none'" class="ui-view-box-aside editor-infos">
-      <slot name="aside">
-        <ui-property label="@ui.active" :vertical="true" :is-text="true">
-          <ui-toggle v-model="value.isActive" />
-        </ui-property>
-        <ui-property v-if="value.id" label="@ui.id" :vertical="true" :is-text="true">
-          {{value.id}}
-        </ui-property>
-        <ui-property v-if="value.id" label="@ui.createdDate" :vertical="true" :is-text="true">
-          <ui-date v-model="value.createdDate" />
-        </ui-property>
-      </slot>
+    <aside v-if="infos && infos != 'none'" class="editor-infos">
+      <div class="ui-box">
+        <slot name="settings">
+          <ui-property label="@ui.active" :is-text="true" class="is-toggle">
+            <ui-toggle v-model="value.isActive" />
+          </ui-property>
+        </slot>
+      </div>
+      <div class="ui-box is-light is-connected">
+        <slot name="infos">
+          <ui-property v-if="value.id" label="@ui.id" :is-text="true">
+            {{value.id}}
+          </ui-property>
+          <ui-property v-if="value.id" label="@ui.createdDate" :is-text="true">
+            <ui-date v-model="value.createdDate" />
+          </ui-property>
+        </slot>
+      </div>
     </aside>
   </div>
 </template>
@@ -148,12 +154,37 @@
     &.-infos-aside
     {
       display: grid;
-      grid-template-columns: 1fr 360px;
+      grid-template-columns: 1fr 320px var(--padding);
+      align-items: flex-start;
     }
   }
 
   .editor-infos
   {
-    margin-top: 55px;
+    margin: 58px 0 0;
+
+    .ui-box
+    {
+      margin: 0;
+    }
+
+    .ui-box + .ui-box
+    {
+      margin-top: 1px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    .ui-property + .ui-property
+    {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: none;
+    }
+
+    .is-toggle
+    {
+      align-items: center;
+    }
   }
 </style>

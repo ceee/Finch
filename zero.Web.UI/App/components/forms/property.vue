@@ -74,7 +74,7 @@
 
   .ui-property.is-text .ui-property-content
   {
-    margin-top: 0;
+    margin-top: 2px;
   }
 
   .ui-property.full-width > .ui-property-content,
@@ -91,10 +91,9 @@
   .ui-property-label
   {
     display: block;
-    color: var(--color-text);
+    color: var(--color-fg);
     width: 260px;
     padding-right: 60px;
-    margin-bottom: 5px;
     font-size: $font-size;
     line-height: 1.5;
     font-weight: 700;
