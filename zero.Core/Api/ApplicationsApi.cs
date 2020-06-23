@@ -5,16 +5,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
-using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public interface IApplicationsApi : IApplicationsApi<IApplication>
-  {
-
-  }
-
-
   public class ApplicationsApi<T> : BackofficeApi, IApplicationsApi<T> where T : IApplication
   {
     IValidator<T> Validator;

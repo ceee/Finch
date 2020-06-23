@@ -1,8 +1,9 @@
 ﻿<template>
   <div class="ui-tabs">
     <div role="tablist" class="ui-tabs-list">
-      <button type="button" v-for="(tab, index) in tabs" class="ui-tabs-list-item" :key="index" :class="{ 'is-active': tab.active }" :disabled="tab.disabled" 
+      <button type="button" v-for="(tab, index) in tabs" class="ui-tabs-list-item" :key="index" :class="{ 'is-active': tab.active, 'has-errors': tab.error }" :disabled="tab.disabled" 
               :aria-selected="tab.active" role="tab" @click="select(index)">
+        <i v-if="tab.error" class="ui-tabs-list-item-error fth-alert-circle"></i>
         {{ tab.label | localize }}
         <i v-if="tab.count > 0" class="ui-tabs-list-item-count">{{tab.count}}</i>
       </button>
@@ -85,7 +86,7 @@
         //this.activeTabIndex = this.getTabIndex(selectedTabHash);
         //this.lastActiveTabHash = this.activeTabHash = selectedTab.hash;
         //expiringStorage.set(this.storageKey, selectedTab.hash, this.cacheLifetime);
-      },
+      }
     }
   }
 </script>
@@ -113,6 +114,7 @@
     display: inline-flex;
     align-items: center;
     height: 58px;
+    overflow: hidden;
     padding: 0 var(--padding);
     font-size: var(--font-size);
     color: var(--color-fg);
@@ -185,6 +187,21 @@
         background: var(--color-bg-light);
       }
     }
+
+    &.has-errors
+    {
+      color: var(--color-accent-error);
+
+      &.is-active
+      {
+        color: var(--color-accent-error);
+
+         &:before
+        {
+          background: var(--color-accent-error);
+        }
+      }
+    }
   }
 
   .ui-tabs-list-item-count
@@ -201,5 +218,17 @@
     margin-top: -1px;
     font-weight: bold;
     color: var(--color-fg);
+  }
+
+  .ui-tabs-list-item-error
+  {
+    display: inline-block;
+    float: left;
+    font-size: 16px;
+    margin-right: 6px;
+    margin-left: -4px;
+    position: relative;
+    margin-top: -4px;
+    top: 1px;
   }
 </style>

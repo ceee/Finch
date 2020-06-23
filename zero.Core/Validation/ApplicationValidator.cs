@@ -10,7 +10,8 @@ namespace zero.Core.Validation
     public ApplicationValidator()
     {
       //RuleFor(x => x.Code).Length(2);
-      //RuleFor(x => x.Name).Length(2, 120);
+      RuleFor(x => x.Name).NotEmpty().Length(2, 120);
+      RuleFor(x => x.Domains).NotEmpty();
     }
   }
 }
