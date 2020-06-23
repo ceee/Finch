@@ -2,37 +2,38 @@
 :root, .theme-light
 {
   // accent colors
-  --color-primary: #229b79; // #292b2c; // #00aea2
+  --color-primary: #282c3b; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
   --color-primary-fg: #fff;
   --color-secondary: #1f3053;
+  --color-primary-button: #282c3b;
   --color-negative: #d82853; 
 
   // foreground/text color
   --color-fg: #222;
-  --color-fg-mid: #6f7375;
-  --color-fg-light: #919294;
-  --color-fg-xlight: #bec0c3;
+  --color-fg-mid: #656f74;
+  --color-fg-light: #838995;
+  --color-fg-xlight: #b2b8c2;
 
   // background color shades
-  --color-bg: #f7f7f7;
-  --color-bg-dark: #d4d4d4;
-  --color-bg-xmid: #f0f0f0;
-  --color-bg-mid: #f4f4f4;
+  --color-bg: #f7f8f9;
+  --color-bg-dark: #d4d5d6;
+  --color-bg-xmid: #f0f1f2;
+  --color-bg-mid: #f4f5f6;
   --color-bg-light: #fff;
-  --color-bg-xlight: #f8f8f8;
-  --color-bg-xxlight: #fcfcfc;
+  --color-bg-xlight: #f8f9fa;
+  --color-bg-xxlight: #fcfdfe;
 
   // line colors
-  --color-line: #eaeaea;
-  --color-line-mid: #efefef;
-  --color-line-light: #f4f4f4;
+  --color-line: #eaebec;
+  --color-line-mid: #eff0f1;
+  --color-line-light: #f4f5f6;
 
   // misc colors
   --color-box: #fff;
   --color-shadow: rgba(0,0,0,0.03);
   --color-shadow-short: 0 1px 1px 0 rgba(0,0,0,0.05);
   --color-highlight: rgba(0,0,0,0.05);
-  --color-overlay-shade: rgba(0,0,0,0.3);
+  --color-overlay-shade: rgba(0,0,0,0.15);
 
   // message colors
   --color-accent-info: rgb(44, 162, 212);
@@ -66,6 +67,7 @@
   --color-primary-fg: #fff;
   --color-secondary: #292b2c;
   --color-negative: #d82853; 
+  --color-primary-button: linear-gradient(75deg, #48da9c, #3eb8ad);
 
   // foreground/text color
   --color-fg: #fff;
@@ -81,7 +83,7 @@
   --color-bg: #1c1e1f;
   --color-bg-dark: #1c1e1f;
   --color-bg-xmid: #292b2c;
-  --color-bg-mid: #292b2c;
+  --color-bg-mid: #282c3b;
   --color-bg-light: #242526;
   --color-bg-xlight: #292b2c;
   --color-bg-xxlight: #242526;

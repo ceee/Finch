@@ -25,7 +25,8 @@ textarea, .ui-native-select
 
   &:focus
   {
-    border-color: var(--color-line-mid);
+    //border: 1px dashed var(--color-primary);
+    /*box-shadow: 0 0 4px var(--color-accent-info-bg);*/
   }
 
   &[disabled], &[readonly]

@@ -1,7 +1,9 @@
 ﻿<template>
   <div class="app-nav">
 
-    <h1 class="app-nav-headline" v-localize="'@zero.name'">zero</h1>
+    <h1 class="app-nav-headline">
+      <img src="/Assets/zero.png" v-localize:alt="'@zero.name'" />
+    </h1>
 
     <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">
       <template v-slot:button>

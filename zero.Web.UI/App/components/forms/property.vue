@@ -38,6 +38,8 @@
   {
     position: relative;
     display: flex;  
+    margin: 0 -32px 0;
+    padding: 0 32px 0;
 
     &.is-disabled
     {
@@ -48,14 +50,15 @@
   .ui-split + .ui-property,
   .ui-property + .ui-property
   {
-    padding-top: 25px;
-    margin-top: 25px;
-    /*border-top: 1px solid var(--color-line);*/
+    padding-top: 30px;
+    margin-top: 30px;
+    border-top: 1px solid var(--color-line-light);
   }
 
   .ui-property.is-vertical
   {
     flex-direction: column;
+    border-top: none;
 
     .ui-property-label
     {
@@ -89,8 +92,8 @@
   {
     display: block;
     color: var(--color-text);
-    width: 280px;
-    padding-right: 50px;
+    width: 260px;
+    padding-right: 60px;
     margin-bottom: 5px;
     font-size: $font-size;
     line-height: 1.5;
@@ -101,11 +104,12 @@
   {
     display: block;
     padding-top: 5px;
-    font-size: $font-size-s;
+    font-size: var(--font-size-xs);
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.4;
     text-decoration: none;
     color: var(--color-fg-light);
+    letter-spacing: 0.3px;
 
     &:empty
     {
@@ -130,9 +134,10 @@
   .ui-property-help
   {
     max-width: 800px;
-    font-size: var(--font-size-s);
+    font-size: var(--font-size-xs);
     color: var(--color-fg-light);
     margin: 15px 0 0;
+    letter-spacing: 0.3px;
 
     &:before
     {

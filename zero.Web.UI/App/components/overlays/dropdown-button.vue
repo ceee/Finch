@@ -111,7 +111,7 @@
     font-size: var(--font-size);
     padding: 0 16px;
     height: 46px;
-    color: var(--color-fg-mid);
+    color: var(--color-fg);
     border-radius: var(--radius);
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -131,7 +131,7 @@
 
     &:not([disabled]):hover, &.is-active, &:focus
     {
-      background: var(--color-highlight);
+      background: var(--color-bg-xlight);
       color: var(--color-fg);
       //font-weight: 700;
 
@@ -166,7 +166,7 @@
     font-weight: 400;
     position: relative;
     top: -1px;
-    color: var(--color-fg-mid);
+    color: var(--color-fg);
     transition: color 0.2s ease;
   }
 

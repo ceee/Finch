@@ -3,7 +3,7 @@
     <div class="ui-dropdown-toggle" @click.stop="toggle">
       <slot name="button"></slot>
     </div>
-    <div class="ui-dropdown theme-dark" role="dialog" v-if="open" v-click-outside="hide" :class="alignClasses">
+    <div class="ui-dropdown" role="dialog" v-if="open" v-click-outside="hide" :class="alignClasses">
       <slot></slot>
     </div>
   </div>
@@ -88,10 +88,10 @@
     position: absolute;
     min-width: 300px;
     min-height: 20px;
-    background: var(--color-bg-mid);
+    background: var(--color-bg-light);
     border-radius: var(--radius);
-    border: 1px solid var(--color-line);
-    /*box-shadow: 0 0 20px var(--color-shadow);*/
+    border: 1px solid var(--color-line-light);
+    box-shadow: 0 0 20px var(--color-shadow);
     z-index: 8;
     top: calc(100% + 5px);
     padding: 5px;
