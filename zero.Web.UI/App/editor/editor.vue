@@ -1,10 +1,10 @@
 ﻿<template>
-  <div class="editor-outer" v-if="loaded" :class="'-infos-' + infos">
-    <component :is="rootNode" class="editor">
-      <ui-tab :class="renderInfo && index === -1 ? 'ui-view-box has-sidebar' : 'ui-box'" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index">
+  <div class="editor-outer -infos-aside" v-if="loaded" :class="{ 'has-tabs': hasTabs }">
+    <ui-tabs class="editor">
+      <ui-tab class="ui-box" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index">
         <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" />
       </ui-tab>
-    </component>
+    </ui-tabs>
     <aside v-if="infos && infos != 'none'" class="editor-infos">
       
 
@@ -77,10 +77,6 @@
     }),
 
     computed: {
-      rootNode()
-      {
-        return this.hasTabs ? 'ui-tabs' : 'div';
-      },
       isShared()
       {
         return this.meta.canBeShared && this.value && this.value.appId === zero.sharedAppId;
@@ -142,7 +138,9 @@
         if (!this.tabs.length)
         {
           this.tabs.push({
-            fields: this.configuration.fields
+            label: '',
+            fields: this.configuration.fields,
+            count: () => null
           });
         }
 
@@ -175,6 +173,21 @@
       display: grid;
       grid-template-columns: 1fr 340px var(--padding);
       align-items: flex-start;
+    }
+
+    &:not(.has-tabs) .ui-tabs-list
+    {
+      display: none;
+    }
+
+    .ui-tab
+    {
+      margin-top: 0;
+    }
+    
+    .editor-infos
+    {
+      margin-top: 0;
     }
   }
 

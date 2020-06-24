@@ -1,5 +1,5 @@
 ﻿export default {
-  collection: 'applications',
+  alias: 'application',
 
   tabs: [
     {

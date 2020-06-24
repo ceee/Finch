@@ -11,7 +11,8 @@
         </ui-property>
       </div>
       <ui-property label="@translation.fields.value" :required="true" :vertical="true">
-        <textarea v-model="item.value" class="ui-input" :readonly="disabled"></textarea>
+        <textarea v-if="item.display === 'text'" v-model="item.value" class="ui-input" :readonly="disabled"></textarea>
+        <ui-rte v-if="item.display === 'html'" v-model="item.value" :disabled="disabled" />
       </ui-property>
     </div>
     <div class="app-confirm-buttons">
@@ -50,7 +51,7 @@
       {
         form.load(!this.model.id ? TranslationsApi.getEmpty() : TranslationsApi.getById(this.model.id)).then(response =>
         {
-          this.disabled = !response.canEdit;
+          this.disabled = !response.meta.canEdit;
           this.item = response.entity;
           this.loading = false;
         });

@@ -23,7 +23,7 @@ requireComponent.keys().forEach((path) =>
   }
 
   const componentConfig = requireComponent(path);
-  const collection = componentConfig.default.collection;
+  const alias = componentConfig.default.alias;
 
-  zero.renderers[collection] = componentConfig.default;
+  zero.renderers[alias] = componentConfig.default;
 });

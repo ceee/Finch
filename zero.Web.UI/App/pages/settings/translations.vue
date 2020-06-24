@@ -52,6 +52,7 @@
         columns: {
           key: {
             as: 'text',
+            shared: true,
             link: link
           },
           value: {

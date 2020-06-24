@@ -1,7 +1,7 @@
 ﻿import { filter as _filter } from 'underscore';
 
 export default {
-  collection: 'userRoles',
+  alias: 'userRole',
 
   tabs: [
     {
