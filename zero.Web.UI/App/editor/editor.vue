@@ -217,6 +217,23 @@
     {
       align-items: center;
     }
+
+    .ui-property-label
+    {
+      width: auto;
+      padding-right: 20px;
+    }
+
+    .ui-property-content
+    {
+      flex: 0 1 auto;
+    }
+
+    .ui-property
+    {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 
   .editor-active-toggle
