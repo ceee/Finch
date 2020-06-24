@@ -123,7 +123,6 @@
         }
 
         this.fields = config.fields;
-        this.hasTabs = typeof this.configuration.tabs !== 'undefined';
 
         let tabs = this.configuration.tabs || [];
 
@@ -134,6 +133,8 @@
           tabConfig.fields = _filter(this.configuration.fields, x => index === 0 ? !x.tab || x.tab === tab.name : x.tab === tab.name);
           return tabConfig;
         });
+
+        this.hasTabs = this.tabs.length > 0;
 
         if (!this.tabs.length)
         {
@@ -175,19 +176,17 @@
       align-items: flex-start;
     }
 
-    &:not(.has-tabs) .ui-tabs-list
+    &:not(.has-tabs) 
     {
-      display: none;
-    }
+      .ui-tabs-list
+      {
+        display: none;
+      }
 
-    .ui-tab
-    {
-      margin-top: 0;
-    }
-    
-    .editor-infos
-    {
-      margin-top: 0;
+      .ui-tab, .editor-infos
+      {
+        margin-top: 0;
+      }
     }
   }
 

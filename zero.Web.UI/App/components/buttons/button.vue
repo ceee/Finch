@@ -1,6 +1,6 @@
 ﻿<template>
   <button :type="buttonType" class="ui-button has-state" :class="buttonClass" :disabled="disabled || state == 'loading'" @click="tryClick">
-    <span class="ui-button-text" v-localize:html="label"></span>
+    <span v-if="label" class="ui-button-text" v-localize:html="label"></span>
     <i v-if="caret" class="ui-button-caret" :class="caretClass"></i>
     <i v-if="icon" class="ui-button-icon" :class="icon"></i>
     <span v-if="!isDefaultState" class="ui-button-state">
@@ -24,8 +24,7 @@
 
     props: {
       label: {
-        type: String,
-        required: true
+        type: String
       },
       state: {
         type: String,
@@ -90,6 +89,10 @@
         if (this.ellipsis)
         {
           classes.push('has-ellipsis');
+        }
+        if (!this.label)
+        {
+          classes.push('no-label');
         }
 
         return classes;

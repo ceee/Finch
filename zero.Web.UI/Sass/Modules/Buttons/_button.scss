@@ -150,6 +150,11 @@ button::-moz-focus-inner
     /*color: var(--color-fg-mid);*/
   }
 
+  &.no-label .ui-button-icon
+  {
+    margin: 0 -5px !important;
+  }
+
   &.caret-left
   {
     flex-direction: row-reverse;
