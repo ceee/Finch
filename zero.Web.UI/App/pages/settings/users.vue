@@ -60,7 +60,8 @@
             label: '@ui.name',
             as: 'text',
             bold: true,
-            link: this.getUserLink
+            link: this.getUserLink,
+            shared: true
           },
           email: 'text',
           roles: {

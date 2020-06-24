@@ -215,6 +215,13 @@
             };
           }
 
+          if (data.as === 'shared')
+          {
+            data.width = 56;
+            data.label = null;
+            data.sort = false;
+          }
+
           this.columns.push(_extend(data, {
             key: key,
             tag: typeof data.link !== 'undefined' ? 'router-link' : (typeof data.action !== 'undefined' ? 'a' : 'div'),
@@ -525,6 +532,20 @@
       {
         color: var(--color-accent-success);
       }
+    }
+  }
+
+  .ui-table-field-shared
+  {
+    font-size: 16px;
+    color: var(--color-primary-two);
+
+    &.is-inline
+    {
+      margin-right: 0.5em;
+      font-size: 18px;
+      position: relative;
+      top: -1px;
     }
   }
 </style>

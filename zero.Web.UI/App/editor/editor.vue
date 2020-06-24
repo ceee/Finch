@@ -6,8 +6,15 @@
       </ui-tab>
     </component>
     <aside v-if="infos && infos != 'none'" class="editor-infos">
+      
+
       <div class="ui-box editor-active-toggle" :class="{'is-active': value.isActive }">
         <slot name="settings">
+          <div v-if="isShared" class="editor-global-flag">
+            <b>This entity is shared</b> and can be used by all applications.<br>
+            <a href="/">More info</a>
+            <i class="fth-radio"></i>
+          </div>
           <ui-property label="@ui.active" :is-text="true" class="is-toggle">
             <ui-toggle v-model="value.isActive" class="is-primary" />
           </ui-property>
@@ -41,6 +48,10 @@
         type: [ String, Object ],
         required: true
       },
+      meta: {
+        type: Object,
+        default: () => { }
+      },
       value: {
         type: Object
       },
@@ -65,6 +76,10 @@
       rootNode()
       {
         return this.hasTabs ? 'ui-tabs' : 'div';
+      },
+      isShared()
+      {
+        return this.meta.canBeShared && this.value && this.value.appId === zero.sharedAppId;
       }
     },
 
@@ -154,7 +169,7 @@
     &.-infos-aside
     {
       display: grid;
-      grid-template-columns: 1fr 320px var(--padding);
+      grid-template-columns: 1fr 340px var(--padding);
       align-items: flex-start;
     }
   }
@@ -165,10 +180,22 @@
 
     .ui-box
     {
-      margin: 0;
+      margin-left: 0;
+      margin-right: 0;
+      margin-bottom: 0;
+    }
+
+    .ui-box:first-child
+    {
+      margin-top: 0;
     }
 
     .ui-box + .ui-box
+    {
+      margin-top: 16px;
+    }
+
+    .ui-box + .ui-box.is-light
     {
       margin-top: 1px;
       border-top-left-radius: 0;
@@ -203,4 +230,34 @@
       color: var(--color-accent-info);
     }
   }*/
+
+
+  .editor-global-flag
+  {
+    font-size: var(--font-size);
+    line-height: 1.5;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--color-line-light);
+    padding-right: 70px;
+    position: relative;
+
+    i
+    {
+      position: absolute;
+      top: 50%;
+      margin-top: -36px;
+      right: -3px;
+      font-size: 42px;
+      color: var(--color-fg-xlight);
+      opacity: 0.2;
+    }
+
+    a
+    {
+      color: var(--color-fg-light);
+      text-decoration: underline dotted;
+      font-size: var(--font-size-s);
+    }
+  }
 </style>

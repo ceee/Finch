@@ -72,14 +72,15 @@ namespace zero.Web.Controllers
 
       dynamic model = new ExpandoObject();
       model.Entity = data;
-      model.Renderer = renderer != null ? renderer.Build() : null;
-      model.Token = Token.Get(data);
-      model.IsAppAware = AppAwareType.IsAssignableFrom(type);
-      model.CanBeShared = canBeShared;
-      model.CanCreate = true;
-      model.CanCreateShared = canBeShared;
-      model.CanEdit = true;
-      model.CanDelete = true;
+
+      model.Meta = new ExpandoObject();
+      model.Meta.Token = Token.Get(data);
+      model.Meta.IsAppAware = AppAwareType.IsAssignableFrom(type);
+      model.Meta.CanBeShared = canBeShared;
+      model.Meta.CanCreate = true;
+      model.Meta.CanCreateShared = canBeShared;
+      model.Meta.CanEdit = true;
+      model.Meta.CanDelete = true;
 
       transform?.Invoke(model);
 

@@ -35,7 +35,17 @@ export default function (el, binding)
   if (!column.as || column.as === 'text' || column.as === 'html')
   {
     const hasFunc = typeof column.render === 'function';
-    render(hasFunc ? column.render(item, column) : value, column.as === 'html');
+    const hasSharedIndicator = column.shared === true && item.appId === zero.sharedAppId;
+
+    let html = hasFunc ? column.render(item, column) : value;
+    let isHtml = column.as === 'html' || hasSharedIndicator;
+
+    if (hasSharedIndicator)
+    {
+      html = '<i class="ui-table-field-shared is-inline fth-radio"></i> ' + html;
+    }
+
+    render(html, isHtml);
   }
   // formatted date with optional time
   else if (column.as === 'date' || column.as === 'datetime')
@@ -53,13 +63,20 @@ export default function (el, binding)
 
     render(price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "&nbsp;") + "&nbsp;&euro;", true);
   }
+  // render checkbox
   else if (column.as === 'bool')
   {
     render('<span class="ui-table-field-bool' + (value === true ? ' is-checked' : '') + (column.colored ? ' is-colored' : '') + '"></span>', true);
   }
+  // render an image
   else if (column.as === 'image')
   {
     render(value ? `<img src="${MediaApi.getImageSource(value)}" class="ui-table-field-image">` : '', true);
+  }
+  // render global flag
+  else if (column.as === 'shared')
+  {
+    render(value === zero.sharedAppId ? '<i class="ui-table-field-shared fth-radio"></i>' : '', true);
   }
   else
   {

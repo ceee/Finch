@@ -1,45 +1,7 @@
 ﻿<template>
-  <ui-form ref="form" class="role" v-slot="form" @submit="onSubmit" @load="onLoad">
-
-    <ui-header-bar :title="model.name" title-empty="@role.name" :back-button="true">
-      <ui-dropdown align="right" v-if="!disabled">
-        <template v-slot:button>
-          <ui-button type="white" label="@ui.actions" caret="down" />
-        </template>
-        <ui-dropdown-list v-model="actions" />
-      </ui-dropdown>
-      <ui-button :submit="true" label="@ui.save" :state="form.state" v-if="!disabled" />
-    </ui-header-bar>
-
-    <ui-tabs>
-
-      <ui-tab class="ui-view-box has-sidebar" label="General">
-        <div class="ui-box">
-          <ui-property label="@ui.name" :required="true">
-            <input v-model="model.name" type="text" class="ui-input" maxlength="80" :readonly="disabled" />
-          </ui-property>
-          <ui-property label="@role.fields.description">
-            <input v-model="model.description" type="text" class="ui-input" maxlength="200" :readonly="disabled" />
-          </ui-property>
-          <ui-property label="@role.fields.icon" :required="true">
-            <ui-iconpicker v-model="model.icon" :disabled="disabled" />
-          </ui-property>
-        </div>
-
-        <aside class="ui-view-box-aside">
-          <ui-property label="@ui.id" :vertical="true" :is-text="true">
-            {{model.id}}
-          </ui-property>
-          <ui-property label="@ui.createdDate" :vertical="true" :is-text="true">
-            <ui-date v-model="model.createdDate" />
-          </ui-property>
-        </aside>
-      </ui-tab>
-
-      <ui-tab label="Permissions" :count="claimCount">
-        <ui-permissions v-model="model.claims" :disabled="disabled" />
-      </ui-tab>
-    </ui-tabs>
+  <ui-form ref="form" class="role" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
+    <ui-form-header v-model="model" title="@role.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
+    <ui-editor config="userRoles" v-model="model" :meta="meta" />
   </ui-form>
 </template>
 
@@ -47,94 +9,44 @@
 <script>
   import { filter as _filter } from 'underscore';
   import UserRolesApi from 'zero/resources/userRoles';
-  import Overlay from 'zero/services/overlay.js';
+  import UiEditor from 'zero/editor/editor';
 
   export default {
     props: ['id'],
 
+    components: { UiEditor },
+
     data: () => ({
-      loading: true,
-      page: true,
-      actions: [],
-      model: {
-        name: null,
-        email: null,
-        claims: []
-      },
+      meta: {},
+      model: { name: null, features: [], domains: [] },
+      route: zero.alias.sections.settings + '-' + zero.alias.settings.roles + '-edit',
       disabled: false
     }),
-
-    created()
-    {
-      this.actions.push({
-        name: 'Delete',
-        icon: 'fth-trash',
-        action: this.onDelete
-      });
-    },
-
-    computed: {
-      claimCount()
-      {
-        return _filter(this.model.claims, claim =>
-        {
-          const value = claim.value.split(':')[1];
-          return value !== 'none' && value !== 'false' && !!value;
-        }).length;
-      }
-    },
-
-
-    beforeRouteLeave(to, from, next) 
-    {
-      this.$refs.form.beforeRouteLeave(to, from, next);
-    },
-
 
     methods: {
 
       onLoad(form)
       {
-        form.load(UserRolesApi.getById(this.id)).then(response =>
+        form.load(!this.id ? UserRolesApi.getEmpty() : UserRolesApi.getById(this.id)).then(response =>
         {
-          this.disabled = !response.canEdit;
-          this.model = response;
+          this.disabled = !response.meta.canEdit;
+          this.meta = response.meta;
+          this.model = response.entity;
         });
       },
 
 
       onSubmit(form)
       {
-        form.handle(UserRolesApi.save(this.model)).then(response =>
-        {
-          console.info(response);
-        });
+        form.handle(UserRolesApi.save(this.model));
       },
+
 
       onDelete(item, opts)
       {
         opts.hide();
-
-        Overlay.confirmDelete().then((opts) =>
-        {
-          opts.state('loading');
-
-          UserRolesApi.delete(this.id).then(response =>
-          {
-            if (response.success)
-            {
-              opts.state('success');
-              opts.hide();
-              this.$router.go(-1);
-              // TODO show message
-            }
-            else
-            {
-              opts.errors(response.errors);
-            }
-          });
-        }); 
-      }
+        this.$refs.form.onDelete(UserRolesApi.delete.bind(this, this.id));
+      }     
     }
   }
 </script>

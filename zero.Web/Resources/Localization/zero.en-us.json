@@ -216,6 +216,7 @@
   "role": {
     "name": "Role",
     "roles": "Roles",
+    "tab_permissions": "Permissions",
     "fields": {
       "description": "Description",
       "icon": "Icon"

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using zero.Core.Attributes;
 
 namespace zero.Core.Entities
 {
@@ -18,6 +19,7 @@ namespace zero.Core.Entities
   }
 
 
+  [Collection("UserRoles")]
   public interface IUserRole : IZeroEntity, IAppAwareShareableEntity, IZeroDbConventions
   {
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿<template>
   <ui-form ref="form" class="application" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model="model" title="@application.name" :disabled="disabled" :is-create="!id" :state="form.state" @delete="onDelete" />
-    <ui-editor config="applications" v-model="model" />
+    <ui-form-header v-model="model" title="@application.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
+    <ui-editor config="applications" v-model="model" :meta="meta" />
   </ui-form>
 </template>
 
@@ -16,6 +16,7 @@
     components: { UiEditor },
 
     data: () => ({
+      meta: {},
       model: { name: null, features: [], domains: [] },
       route: zero.alias.sections.settings + '-' + zero.alias.settings.applications + '-edit',
       disabled: false
@@ -27,7 +28,8 @@
       {
         form.load(!this.id ? ApplicationsApi.getEmpty() : ApplicationsApi.getById(this.id)).then(response =>
         {
-          this.disabled = !response.canEdit;
+          this.disabled = !response.meta.canEdit;
+          this.meta = response.meta;
           this.model = response.entity;
         });
       },
