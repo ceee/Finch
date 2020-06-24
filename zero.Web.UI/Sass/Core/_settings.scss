@@ -2,9 +2,11 @@
 :root, .theme-light
 {
   // accent colors
-  --color-primary: #282c3b; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
+  --color-primary: rgb(44, 162, 212); //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
   --color-primary-fg: #fff;
-  --color-secondary: #1f3053;
+  --color-primary-low: rgba(44, 162, 212, 0.15);
+  --color-secondary: #282c3b;
+  --color-secondary-fg: #fff;
   --color-primary-two: #3d72c4;
   --color-negative: #d82853; 
 
@@ -63,9 +65,10 @@
 .theme-dark
 {
   // accent colors
-  --color-primary: #229b79;
+  --color-primary: rgb(44, 162, 212);
   --color-primary-fg: #fff;
-  --color-secondary: #292b2c;
+  --color-secondary: #fff;
+  --color-secondary-fg: #222;
   --color-negative: #d82853; 
   --color-primary-button: linear-gradient(75deg, #48da9c, #3eb8ad);
 

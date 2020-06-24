@@ -227,7 +227,7 @@
     .pell-button-selected
     {
       background-color: var(--color-highlight);
-      color: var(--color-primary);
+      color: var(--color-secondary);
     }
   }
 </style>

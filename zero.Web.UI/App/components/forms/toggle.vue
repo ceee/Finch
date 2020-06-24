@@ -88,21 +88,21 @@
 
     &.is-active
     {
-      /*background: var(--color-primary);
+      /*background: var(--color-secondary);
       transform: translateX(18px);*/
-      background: var(--color-primary);
+      background: var(--color-secondary);
       border-color: transparent;
 
       i
       {
-        background: var(--color-primary-fg);
+        background: var(--color-secondary-fg);
         transform: translateX(18px);
       }
 
       .is-primary &
       {
-        background: var(--color-accent-info);
-        box-shadow: 0 0 0 4px var(--color-accent-info-bg);
+        background: var(--color-primary);
+        box-shadow: 0 0 0 4px var(--color-primary-low);
       }
     }
   }

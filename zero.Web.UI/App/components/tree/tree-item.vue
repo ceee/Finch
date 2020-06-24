@@ -152,7 +152,7 @@
     {
       color: var(--color-fg);
       font-weight: bold;
-      //color: var(--color-primary);
+      //color: var(--color-secondary);
     }
   }
 

@@ -81,8 +81,8 @@
     &.is-active
     {
       background: var(--color-bg-mid);
-      /*background: var(--color-primary);
-      border-color: var(--color-primary);*/
+      /*background: var(--color-secondary);
+      border-color: var(--color-secondary);*/
       color: var(--color-fg);
       font-weight: bold;
     }

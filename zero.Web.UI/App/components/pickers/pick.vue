@@ -655,7 +655,7 @@
       font-family: "Feather";
       content: "\e83e";
       font-size: 16px;
-      color: var(--color-primary);
+      color: var(--color-secondary);
       position: absolute;
       right: 20px;
     }

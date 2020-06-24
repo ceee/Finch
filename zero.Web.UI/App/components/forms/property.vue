@@ -142,7 +142,7 @@
     {
       content: "\e87f";
       @extend %font-icon;
-      color: var(--color-primary);
+      color: var(--color-secondary);
       font-size: var(--font-size-l);
       float: left;
       position: relative;

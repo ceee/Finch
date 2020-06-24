@@ -240,7 +240,7 @@
     &.is-active
     {
       font-weight: bold;
-      color: var(--color-primary);
+      color: var(--color-secondary);
 
       .spaces-tree-item-text span
       {

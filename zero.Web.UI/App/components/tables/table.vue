@@ -433,7 +433,7 @@
     &:hover
     {
       //text-decoration: underline;
-      color: var(--color-primary);
+      color: var(--color-secondary);
       background: var(--color-bg-xxlight);
     }
   }
@@ -538,7 +538,7 @@
   .ui-table-field-shared
   {
     font-size: 16px;
-    color: var(--color-primary-two);
+    color: var(--color-primary);
 
     &.is-inline
     {

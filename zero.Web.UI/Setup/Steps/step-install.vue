@@ -131,7 +131,7 @@
 
     i
     {
-      background: var(--color-primary);
+      background: var(--color-secondary);
       transition: width 0.1s ease;
       display: block;
       height: 100%;

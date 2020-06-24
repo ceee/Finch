@@ -373,7 +373,7 @@
     line-height: 26px;
     border-radius: 20px;
     background: var(--color-negative);
-    color: var(--color-primary-fg);
+    color: var(--color-secondary-fg);
     z-index: 2;
     text-align: center;
     font-size: 13px;

@@ -179,7 +179,7 @@
 
       &:before
       {
-        background: var(--color-primary);
+        background: var(--color-secondary);
       }
 
       &:after

@@ -150,7 +150,7 @@
     &.is-active
     {
       font-weight: bold;
-      color: var(--color-primary);
+      color: var(--color-secondary);
 
       .page-create-item-text span
       {

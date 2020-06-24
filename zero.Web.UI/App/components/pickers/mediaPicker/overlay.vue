@@ -297,8 +297,8 @@
 
     /*&.is-upload .-preview
     {
-      background: var(--color-primary);
-      color: var(--color-primary-fg);
+      background: var(--color-secondary);
+      color: var(--color-secondary-fg);
     }*/
 
     &.is-upload
