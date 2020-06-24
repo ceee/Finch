@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-property :field="config.field" :label="label" :description="description" :required="config.required" :class="classList" :is-text="view === 'output'">
+  <ui-property v-if="fulfillsCondition" :field="config.field" :label="label" :description="description" :required="config.required" :class="classList" :is-text="view === 'output'">
     <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" @input="onChange" />
     <p v-if="config.helpText" class="ui-property-help" v-localize="config.helpText"></p>
   </ui-property>
@@ -74,6 +74,10 @@
       classes()
       {
         
+      },
+      fulfillsCondition()
+      {
+        return typeof this.config.condition !== 'function' || this.config.condition(this.value);
       }
     },
 

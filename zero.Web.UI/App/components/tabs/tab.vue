@@ -1,5 +1,5 @@
 ﻿<template>
-  <section v-if="loaded" v-show="active" class="ui-tab" :aria-hidden="!active" role="tabpanel">
+  <section v-show="active" class="ui-tab" :aria-hidden="!active" role="tabpanel">
     <slot />
   </section>
 </template>

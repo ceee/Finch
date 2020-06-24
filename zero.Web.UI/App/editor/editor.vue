@@ -6,10 +6,10 @@
       </ui-tab>
     </component>
     <aside v-if="infos && infos != 'none'" class="editor-infos">
-      <div class="ui-box">
+      <div class="ui-box editor-active-toggle" :class="{'is-active': value.isActive }">
         <slot name="settings">
           <ui-property label="@ui.active" :is-text="true" class="is-toggle">
-            <ui-toggle v-model="value.isActive" />
+            <ui-toggle v-model="value.isActive" class="is-primary" />
           </ui-property>
         </slot>
       </div>
@@ -187,4 +187,20 @@
       align-items: center;
     }
   }
+
+  .editor-active-toggle
+  {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  /*.editor-active-toggle.is-active
+  {
+    background: var(--color-accent-info-bg);   
+
+    .ui-property-label
+    {
+      color: var(--color-accent-info);
+    }
+  }*/
 </style>

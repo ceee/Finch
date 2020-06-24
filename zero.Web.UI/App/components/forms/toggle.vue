@@ -98,6 +98,12 @@
         background: var(--color-primary-fg);
         transform: translateX(18px);
       }
+
+      .is-primary &
+      {
+        background: var(--color-accent-info);
+        box-shadow: 0 0 0 4px var(--color-accent-info-bg);
+      }
     }
   }
 
