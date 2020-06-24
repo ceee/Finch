@@ -147,7 +147,7 @@
       rebuildConfig()
       {
         // build class list
-        let classes = typeof this.config.class === 'string' ? this.config.class.split(' ') : (this.config.class || {});
+        let classes = typeof this.config.class === 'string' ? this.config.class.split(' ') : (this.config.class || []);
         if (this.view === 'nested' || this.view === 'renderer')
         {
           classes.push('full-width');

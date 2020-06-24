@@ -15,7 +15,7 @@
             <a href="/">More info</a>
             <i class="fth-radio"></i>
           </div>
-          <ui-property label="@ui.active" :is-text="true" class="is-toggle">
+          <ui-property v-if="activeToggle" label="@ui.active" :is-text="true" class="is-toggle">
             <ui-toggle v-model="value.isActive" class="is-primary" />
           </ui-property>
         </slot>
@@ -58,6 +58,10 @@
       infos: {
         type: String,
         default: 'aside'
+      },
+      activeToggle: {
+        type: Boolean,
+        default: true
       }
     },
 
@@ -236,9 +240,6 @@
   {
     font-size: var(--font-size);
     line-height: 1.5;
-    margin-bottom: 32px;
-    padding-bottom: 32px;
-    border-bottom: 1px solid var(--color-line-light);
     padding-right: 70px;
     position: relative;
 
@@ -246,7 +247,7 @@
     {
       position: absolute;
       top: 50%;
-      margin-top: -36px;
+      margin-top: -28px;
       right: -3px;
       font-size: 42px;
       color: var(--color-fg-xlight);
@@ -258,6 +259,13 @@
       color: var(--color-fg-light);
       text-decoration: underline dotted;
       font-size: var(--font-size-s);
+    }
+
+    & + .ui-property
+    {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid var(--color-line-light);
     }
   }
 </style>

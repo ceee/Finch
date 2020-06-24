@@ -1,11 +1,11 @@
 ﻿<template>
   <div class="settings">
-    <div class="settings-group" v-if="apps.length > 0">
-      <h2 class="ui-headline xl settings-group-headline" v-localize="'@application.list'"></h2>
+    <div class="settings-group" v-if="false && apps.length > 0">
+      <h2 class="ui-headline settings-group-headline" v-localize="'@application.list'"></h2>
       <applications-items v-model="apps" />
     </div>
     <div class="settings-group" v-for="group in groups">
-      <h2 class="ui-headline xl settings-group-headline" v-localize="group.name"></h2>
+      <h2 class="ui-headline settings-group-headline" v-localize="group.name"></h2>
       <div class="settings-group-items">
         <router-link :to="item.url || '/'" v-for="item in group.items" :key="item.name" class="settings-group-item">
           <i class="settings-group-item-icon" :class="item.icon || 'fth-settings'" />
@@ -63,20 +63,16 @@
     padding: 100px var(--padding);
     width: 100%;
     max-width: 2000px;
-  }
-
-  .settings-group
-  {
-    & + .settings-group
-    {
-      margin-top: 80px;
-    }
+    display: grid;
+    grid-gap: 80px 40px;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    padding-left: 80px;
   }
 
   .settings-group-items
   {
     display: grid;
-    grid-gap: 30px;
+    grid-gap: 30px 20px;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     align-items: stretch;
     margin-top: 40px;
@@ -88,16 +84,16 @@
     font-size: var(--font-size);
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-gap: 25px;
+    grid-gap: 20px;
     align-items: center;
   }
 
   .settings-group-item-icon
   {
-    width: 70px;
-    height: 70px;
-    line-height: 68px !important;
-    font-size: 20px;
+    width: 54px;
+    height: 54px;
+    line-height: 53px !important;
+    font-size: 18px;
     text-align: center;
     background: var(--color-bg-light);
     border-radius: var(--radius);
@@ -109,6 +105,7 @@
   {
     line-height: 1.3;
     color: var(--color-fg-light);
+    margin: 0;
 
     strong
     {

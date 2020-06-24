@@ -134,4 +134,9 @@
   {
     width: 300px;
   }
+
+  .role-permission-toggle
+  {
+    border-top-width: 0 !important;
+  }
 </style>

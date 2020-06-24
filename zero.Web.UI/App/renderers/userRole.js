@@ -52,5 +52,12 @@ export default {
     //  field: 'claims',
     //  display: 'text'
     //}
+    {
+      tab: 'permissions',
+      field: 'claims',
+      display: 'custom',
+      hideLabel: true,
+      path: '@zero/components/permissions.vue'
+    }
   ]
 };
