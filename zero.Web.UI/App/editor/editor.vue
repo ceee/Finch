@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="editor-outer -infos-aside" v-if="loaded" :class="{ 'has-tabs': hasTabs }">
-    <ui-tabs class="editor">
+    <ui-tabs class="editor" :active="2">
       <ui-tab class="ui-box" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index">
         <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" />
       </ui-tab>

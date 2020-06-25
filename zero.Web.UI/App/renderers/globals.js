@@ -27,3 +27,18 @@ requireComponent.keys().forEach((path) =>
 
   zero.renderers[alias] = componentConfig.default;
 });
+
+// load renderers from plugins 
+// TODO use correct paths for sure
+//const pluginrenderers = require.context('@/../zero.commerce/plugin', true, /renderers\.js$/);
+
+//// for each matching file name...
+//pluginrenderers.keys().foreach((path) =>
+//{
+//  let pathparts = path.split('/');
+
+//  const componentconfig = pluginrenderers(path);
+//  const alias = componentconfig.default.alias;
+
+//  zero.renderers[alias] = componentconfig.default;
+//});

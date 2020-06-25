@@ -96,10 +96,6 @@
             // TODO external imports
           }
         }
-        else if (this.view === 'nested')
-        {
-          return import(`zero/editor/editor-nested`);
-        }
         else if (this.view === 'renderer')
         {
           return import(`zero/editor/editor`);
@@ -148,7 +144,7 @@
       {
         // build class list
         let classes = typeof this.config.class === 'string' ? this.config.class.split(' ') : (this.config.class || []);
-        if (this.view === 'nested' || this.view === 'renderer')
+        if (this.view === 'renderer')
         {
           classes.push('full-width');
         }
@@ -173,7 +169,7 @@
         {
           label = this.config.label || this.config.field;
         }
-        this.label = Localization.localize(label, { hideEmpty: true });
+        this.label = Localization.localize(label);
 
 
         // build description
