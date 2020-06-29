@@ -74,3 +74,69 @@ textarea
     line-height: 40px;
   }
 }
+
+.ui-native-check
+{
+  position: relative;
+  top: 1px;
+  font-size: var(--font-size);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  line-height: 1;
+
+  input
+  {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    overflow: hidden;
+    visibility: hidden;
+    -webkit-appearance: none;
+    border: none;
+  }
+
+  &.is-primary input:checked ~ .ui-native-check-toggle
+  {
+    background: var(--color-primary);
+
+    &:before
+    {
+      color: var(--color-primary-fg);
+    }
+  }
+}
+
+.ui-native-check-toggle
+{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: var(--radius);
+  background: var(--color-bg-mid);
+  margin-right: 10px;
+  position: relative;
+  top: -1px;
+
+  &:before
+  {
+    content: "\e83f";
+    @extend %font-icon;
+    color: transparent;
+    font-size: var(--font-size-xs);
+  }
+
+  input:checked ~ &
+  {
+    background: var(--color-secondary);
+
+    &:before
+    {
+      color: var(--color-secondary-fg);
+    }
+  }
+}
