@@ -6,8 +6,7 @@
       </ui-tab>
     </ui-tabs>
     <aside v-if="!nested && infos && infos != 'none'" class="editor-infos">
-      
-      <div class="ui-box editor-active-toggle" :class="{'is-active': value.isActive }">
+      <div class="ui-box editor-active-toggle" v-if="isShared || activeToggle" :class="{'is-active': value.isActive }">
         <slot name="settings">
           <div v-if="isShared" class="editor-global-flag">
             <b>This entity is shared</b> and can be used by all applications.<br>
@@ -17,6 +16,7 @@
           <ui-property v-if="activeToggle" label="@ui.active" :is-text="true" class="is-toggle">
             <ui-toggle v-model="value.isActive" class="is-primary" />
           </ui-property>
+          <slot name="settings-after"></slot>
         </slot>
       </div>
       <div class="ui-box is-light is-connected">
@@ -139,7 +139,7 @@
 
         this.hasTabs = this.tabs.length > 0 && !this.nested;
 
-        if (!this.tabs.length)
+        if (this.tabs.length < 1)
         {
           this.tabs.push({
             label: '',

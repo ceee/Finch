@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-toggle :value="value" @input="$emit('input', $event)" />
+  <ui-toggle :value="value" @input="$emit('input', $event)" :disabled="disabled" />
 </template>
 
 
@@ -9,7 +9,12 @@
       value: {
         type: Boolean,
         default: false
-      }
+      },
+      disabled: {
+        type: Boolean,
+        default: false
+      },
+      config: Object
     }
   }
 </script>
