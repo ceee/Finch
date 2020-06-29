@@ -1,13 +1,12 @@
 ﻿<template>
-  <div class="editor-outer -infos-aside" v-if="loaded" :class="{ 'has-tabs': hasTabs }">
-    <ui-tabs class="editor" :active="2">
+  <div class="editor-outer" v-if="loaded" :class="{ 'has-tabs': hasTabs, '-infos-aside': !nested }">
+    <ui-tabs class="editor">
       <ui-tab class="ui-box" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index">
-        <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" />
+        <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" :meta="meta" />
       </ui-tab>
     </ui-tabs>
-    <aside v-if="infos && infos != 'none'" class="editor-infos">
+    <aside v-if="!nested && infos && infos != 'none'" class="editor-infos">
       
-
       <div class="ui-box editor-active-toggle" :class="{'is-active': value.isActive }">
         <slot name="settings">
           <div v-if="isShared" class="editor-global-flag">
@@ -62,6 +61,10 @@
       activeToggle: {
         type: Boolean,
         default: true
+      },
+      nested: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -134,7 +137,7 @@
           return tabConfig;
         });
 
-        this.hasTabs = this.tabs.length > 0;
+        this.hasTabs = this.tabs.length > 0 && !this.nested;
 
         if (!this.tabs.length)
         {

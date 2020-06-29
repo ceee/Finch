@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-property v-if="fulfillsCondition" :field="config.field" :label="label" :description="description" :required="config.required" :class="classList" :is-text="view === 'output'">
-    <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" @input="onChange" />
+    <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" @input="onChange" :meta="meta" />
     <p v-if="config.helpText" class="ui-property-help" v-localize="config.helpText"></p>
   </ui-property>
 </template>
@@ -25,7 +25,11 @@
       renderer: {
         type: Object,
         required: true
-      }
+      },
+      meta: {
+        type: Object,
+        default: () => { }
+      },
     },
 
     watch: {
@@ -144,7 +148,7 @@
       {
         // build class list
         let classes = typeof this.config.class === 'string' ? this.config.class.split(' ') : (this.config.class || []);
-        if (this.view === 'renderer')
+        if (this.view === 'renderer' || this.view === 'nested')
         {
           classes.push('full-width');
         }

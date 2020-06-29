@@ -1,15 +1,20 @@
 ﻿<template>
   <div class="editor-nested">
-    <div v-for="item in items" class="editor-nested-item">
+    <div v-for="(item, index) in items" class="editor-nested-item">
       <div class="editor-nested-item-header">
-        <router-link :to="{ name: 'space', params: { alias: item.alias } }" class="editor-nested-item-header-link">
+        <button type="button" class="editor-nested-item-header-link" @click="toggle(item)">
           <i class="editor-nested-item-header-icon fth-truck" :class="item.icon"></i>
           <span class="editor-nested-item-header-text">
             {{item.name | localize}}
             <span v-if="item.description" v-localize="item.description"></span>
           </span>
-        </router-link>
-        <ui-dot-button class="editor-nested-item-header-actions" />
+        </button>
+        <aside class="editor-nested-item-header-actions">
+          <ui-icon-button icon="fth-x" title="@ui.remove" type="action small" @click="removeItem(index)" />
+        </aside>
+      </div>
+      <div v-if="item.open" class="editor-nested-item-content">
+        <ui-editor :config="config.renderer" :value="item" @input="onChange" :meta="meta" :nested="true" />
       </div>
     </div>
     <ui-button type="light" :label="config.addLabel || '@ui.add'" @click="addItem" />
@@ -17,10 +22,19 @@
 </template>
 
 <script>
+  import UiEditor from 'zero/editor/editor';
+
   export default {
+
+    components: { UiEditor },
+
     props: {
       value: {
         type: [Array, Object]
+      },
+      meta: {
+        type: Object,
+        default: () => { }
       },
       config: Object
     },
@@ -37,8 +51,29 @@
       {
         this.items.push({
           name: 'Österreichische Post',
-          description: 'All countries'
+          description: 'All countries',
+          deliveryTime: '',
+          imageId: null,
+          open: false
         });
+      },
+
+
+      toggle(item)
+      {
+        item.open = !item.open;
+      },
+
+
+      removeItem(index)
+      {
+        this.items.splice(index, 1);
+      },
+
+
+      onChange(val)
+      {
+        console.info(val);
       }
 
     }
@@ -51,28 +86,23 @@
     padding-top: 0;
   }
 
+  .editor-nested-item + .editor-nested-item,
+  .editor-nested-item + .ui-button
+  {
+    margin-top: 15px;
+  }
+
   .editor-nested-item-header
   {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
     font-size: var(--font-size);
-    padding: 10px 0;
+    padding: 5px 0;
     color: var(--color-fg);
     position: relative;
     transition: color 0.2s ease;
     line-height: 1.5;
-
-    &:hover > .editor-nested-item-header-actions
-    {
-      transition-delay: 0.2s;
-      opacity: 1;
-    }
-
-    & + .editor-nested-item-header
-    {
-      margin-top: 15px;
-    }
 
     &.has-line
     {
@@ -129,9 +159,10 @@
     transition: color 0.2s ease;
 
     &:hover
-    {
-      color: var(--color-fg);
-    }
+  {
+    color: var(--color-fg);
+  }
+
   }
 
   .editor-nested-item-header-icon
@@ -145,10 +176,16 @@
     transition: color 0.2s ease;
   }
 
-  .editor-nested-item-header-actions
+  .editor-nested-item-content
   {
-    transition: opacity 0.2s ease 0;
-    opacity: 0;
-    color: var(--color-fg-mid);
+    margin-top: 10px;
+    background: var(--color-bg-xlight);
+    border: 1px solid var(--color-line-light);
+    border-right: none;
+    padding: 32px;
+    margin-top: 10px;
+    border-radius: var(--radius) 0 0 var(--radius);
+    margin-right: -32px;
+    padding-right: var(--padding);
   }
 </style>
