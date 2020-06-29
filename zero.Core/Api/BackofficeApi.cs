@@ -115,6 +115,12 @@ namespace zero.Core.Api
         }
       }
 
+      // set app id
+      if (appAwareEntity != null && appAwareEntity.AppId.IsNullOrEmpty())
+      {
+        appAwareEntity.AppId = Scope.AppId; // Constants.Database.SharedAppId; // TODO correct app id
+      }
+
       // check if current app id is valid
       if (!model.Id.IsNullOrEmpty() && Scope.IsAppAware && appAwareEntity != null)
       {
@@ -168,11 +174,6 @@ namespace zero.Core.Api
         if (zeroEntity != null)
         {
           zeroEntity.CreatedDate = DateTimeOffset.Now;
-        }
-
-        if (appAwareEntity != null && appAwareEntity.AppId.IsNullOrEmpty())
-        {
-          appAwareEntity.AppId = Scope.AppId; // Constants.Database.SharedAppId; // TODO correct app id
         }
 
         if (model is ILanguageAwareEntity)

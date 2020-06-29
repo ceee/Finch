@@ -20,6 +20,11 @@ namespace zero.Core.Api
         return true;
       }
 
+      if (appId.IsNullOrWhiteSpace())
+      {
+        return false;
+      }
+
       if (IncludeShared && appId.Equals(Constants.Database.SharedAppId, StringComparison.OrdinalIgnoreCase))
       {
         return true;

@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="editor-outer -infos-aside" v-if="loaded" :class="{ 'has-tabs': hasTabs }">
-    <ui-tabs class="editor" :active="2">
+    <ui-tabs class="editor">
       <ui-tab class="ui-box" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index">
         <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" />
       </ui-tab>
@@ -8,7 +8,7 @@
     <aside v-if="infos && infos != 'none'" class="editor-infos">
       
 
-      <div class="ui-box editor-active-toggle" :class="{'is-active': value.isActive }">
+      <div class="ui-box editor-active-toggle" v-if="isShared || activeToggle" :class="{'is-active': value.isActive }">
         <slot name="settings">
           <div v-if="isShared" class="editor-global-flag">
             <b>This entity is shared</b> and can be used by all applications.<br>
@@ -18,6 +18,7 @@
           <ui-property v-if="activeToggle" label="@ui.active" :is-text="true" class="is-toggle">
             <ui-toggle v-model="value.isActive" class="is-primary" />
           </ui-property>
+          <slot name="settings-after"></slot>
         </slot>
       </div>
       <div class="ui-box is-light is-connected">
@@ -136,7 +137,7 @@
 
         this.hasTabs = this.tabs.length > 0;
 
-        if (!this.tabs.length)
+        if (this.tabs.length < 1)
         {
           this.tabs.push({
             label: '',
