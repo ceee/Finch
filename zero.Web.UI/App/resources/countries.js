@@ -2,31 +2,36 @@ import Axios from 'axios';
 
 export default {
 
-  // get country by id
   getById(id)
   {
     return Axios.get('countries/getById', { params: { id } }).then(res => Promise.resolve(res.data));
   },
 
-  // get new country model
   getEmpty(id)
   {
     return Axios.get('countries/getEmpty').then(res => Promise.resolve(res.data));
   },
 
-  // get all countries
   getAll(query)
   {
     return Axios.get('countries/getAll', { params: query }).then(res => Promise.resolve(res.data));
   },
 
-  // save a country
+  getPreviews(ids)
+  {
+    return Axios.get('countries/getPreviews', { params: { ids } }).then(res => Promise.resolve(res.data));
+  },
+
+  getForPicker()
+  {
+    return Axios.get('countries/getForPicker').then(res => Promise.resolve(res.data));
+  },
+
   save(model)
   {
     return Axios.post('countries/save', model).then(res => Promise.resolve(res.data));
   },
 
-  // deletes a country
   delete(id)
   {
     return Axios.delete('countries/delete', { params: { id } }).then(res => Promise.resolve(res.data));

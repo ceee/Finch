@@ -30,6 +30,13 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public async Task<Dictionary<string, T>> GetByIds(params string[] ids)
+    {
+      return await GetByIds<T>(ids);
+    }
+
+
+    /// <inheritdoc />
     public async Task<IList<T>> GetAll(string languageId)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
@@ -80,6 +87,11 @@ namespace zero.Core.Api
     /// Get country by Id
     /// </summary>
     Task<T> GetById(string id);
+
+    /// <summary>
+    /// Get countries by ids
+    /// </summary>
+    Task<Dictionary<string, T>> GetByIds(params string[] ids);
 
     /// <summary>
     /// Get all available countries

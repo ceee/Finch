@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-property v-if="fulfillsCondition" :field="config.field" :label="label" :description="description" :required="config.required" :class="classList" :is-text="view === 'output'">
-    <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" @input="onChange" :meta="meta" :disabled="config.disabled" />
+    <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" @input="onChange" :meta="meta" :disabled="config.disabled" :depth="depth" />
     <p v-if="config.helpText" class="ui-property-help" v-localize="config.helpText"></p>
   </ui-property>
 </template>
@@ -30,6 +30,10 @@
         type: Object,
         default: () => { }
       },
+      depth: {
+        type: Number,
+        default: 0
+      }
     },
 
     watch: {
@@ -155,6 +159,10 @@
         if (this.config.hideLabel)
         {
           classes.push('hide-label');
+        }
+        if (this.depth > 0)
+        {
+          classes.push('is-nested');
         }
         this.classList = classes;
 

@@ -1,6 +1,6 @@
 ﻿<template>
-  <div class="editor-nested">
-    <div v-for="(item, index) in items" class="editor-nested-item">
+  <div class="editor-nested" :depth="depth">
+    <div v-for="(item, index) in items" class="editor-nested-item" :depth="depth">
       <div class="editor-nested-item-header">
         <button type="button" class="editor-nested-item-header-link" @click="toggle(item)">
           <i class="editor-nested-item-header-icon fth-truck" :class="item.icon"></i>
@@ -14,7 +14,7 @@
         </aside>
       </div>
       <div v-if="item.open" class="editor-nested-item-content">
-        <ui-editor :config="config.renderer" :value="item" @input="onChange" :meta="meta" :nested="true" />
+        <ui-editor :config="config.renderer" :value="item" @input="onChange" :meta="meta" :nested="true" :depth="depth + 1" />
       </div>
     </div>
     <ui-button type="light" :label="config.addLabel || '@ui.add'" @click="addItem" />
@@ -36,6 +36,10 @@
         type: Object,
         default: () => { }
       },
+      depth: {
+        type: Number,
+        default: 0
+      },
       config: Object
     },
 
@@ -45,23 +49,30 @@
     }),
 
 
+    mounted()
+    {
+      this.items = JSON.parse(JSON.stringify(this.value));
+    },
+
+
     methods: {
+
+      getNewItem()
+      {
+        let item = JSON.parse(JSON.stringify(this.config.template || {}));
+        item.open = false;
+        return item;
+      },
 
       addItem()
       {
-        this.items.push({
-          name: 'Österreichische Post',
-          description: 'All countries',
-          deliveryTime: '',
-          imageId: null,
-          open: false
-        });
+        this.items.push(this.getNewItem());
       },
 
 
       toggle(item)
       {
-        item.open = !item.open;
+        this.$set(item, 'open', !item.open);
       },
 
 
@@ -73,7 +84,7 @@
 
       onChange(val)
       {
-        console.info(val);
+        this.$emit('input', this.items);
       }
 
     }
@@ -179,7 +190,7 @@
   .editor-nested-item-content
   {
     margin-top: 10px;
-    background: var(--color-bg-xlight);
+    //background: var(--color-bg-xlight);
     border: 1px solid var(--color-line-light);
     border-right: none;
     padding: 32px;
@@ -187,5 +198,18 @@
     border-radius: var(--radius) 0 0 var(--radius);
     margin-right: -32px;
     padding-right: var(--padding);
+    background: var(--color-box);
+    box-shadow: var(--color-shadow-short);
+  }
+
+  .editor-nested .ui-property-label
+  {
+    width: 180px;
+    padding-right: 40px;
+  }
+
+  .editor-nested .ui-property + .ui-property
+  {
+    //border-top: none;
   }
 </style>
