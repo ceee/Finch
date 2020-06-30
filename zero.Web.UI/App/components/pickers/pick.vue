@@ -20,7 +20,7 @@
     <ui-select-button v-if="canAdd && configuration.addButton.enabled && !configuration.preview.combined" icon="fth-plus" :label="configuration.addButton.label" @click="pick()" :disabled="disabled" />
 
     <!-- overlay -->
-    <ui-dropdown ref="overlay" class="ui-pick-overlay" @opened="overlayOpened">
+    <ui-dropdown ref="overlay" class="ui-pick-overlay theme-dark" @opened="overlayOpened">
 
       <!-- headline -->
       <div class="ui-pick-overlay-head">
@@ -427,10 +427,15 @@
         else
         {
           let promise = this.configuration.previews || this.configuration.items;
+          let isFunc = typeof promise === 'function';
 
-          if (typeof promise === 'function')
+          if (isFunc && this.selected.length > 0)
           {
             promise(this.selected).then(onLoaded);
+          }
+          else if (isFunc)
+          {
+            onLoaded([]);
           }
           else
           {

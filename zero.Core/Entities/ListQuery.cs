@@ -1,17 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace zero.Core.Entities
 {
   [BindProperties(SupportsGet = true)]
-  public class ListQuery<T> : ListQuery<T, EmptyListSpecificQuery> { }
-
-  [BindProperties(SupportsGet = true)]
-  public class ListQuery<T, TFilter> where TFilter : IListSpecificQuery
+  public class ListQuery<T>
   {
     public string Search { get; set; } = null;
 
@@ -31,12 +27,17 @@ namespace zero.Core.Entities
 
     public int PageSize { get; set; } = 30;
 
-    public TFilter Filter { get; set; }
-
     public void SearchFor(params Expression<Func<T, object>>[] selectors)
     {
       SearchSelectors = selectors;
     }
+  }
+
+
+  [BindProperties(SupportsGet = true)]
+  public class ListQuery<T, TFilter> : ListQuery<T> where TFilter : IListSpecificQuery
+  {
+    public TFilter Filter { get; set; }
   }
 
 
