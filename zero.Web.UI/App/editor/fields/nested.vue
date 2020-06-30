@@ -3,10 +3,10 @@
     <div v-for="(item, index) in items" class="editor-nested-item" :depth="depth">
       <div class="editor-nested-item-header">
         <button type="button" class="editor-nested-item-header-link" @click="toggle(item)">
-          <i class="editor-nested-item-header-icon fth-truck" :class="item.icon"></i>
+          <i class="editor-nested-item-header-icon" :class="config.icon"></i>
           <span class="editor-nested-item-header-text">
-            {{item.name | localize}}
-            <span v-if="item.description" v-localize="item.description"></span>
+            <span v-localize:html="getName(item)"></span>
+            <span v-if="getDescription(item)" class="-desc" v-localize:html="getDescription(item)"></span>
           </span>
         </button>
         <aside class="editor-nested-item-header-actions">
@@ -67,6 +67,7 @@
       addItem()
       {
         this.items.push(this.getNewItem());
+        this.onChange();
       },
 
 
@@ -79,13 +80,27 @@
       removeItem(index)
       {
         this.items.splice(index, 1);
+        this.onChange();
       },
 
 
-      onChange(val)
+      onChange()
       {
         this.$emit('input', this.items);
+      },
+
+
+      getName(item)
+      {
+        return this.config.item && typeof this.config.item.label === 'function' ? this.config.item.label(item) : 'Item';
+      },
+
+
+      getDescription(item)
+      {
+        return this.config.item && typeof this.config.item.description === 'function' ? this.config.item.description(item) : '';
       }
+
 
     }
   }
@@ -131,28 +146,20 @@
     align-items: center;
     position: relative;
     color: var(--color-fg);
-
-    &.is-active
-    {
-      font-weight: bold;
-      color: var(--color-secondary);
-
-      .editor-nested-item-header-text span
-      {
-        font-weight: 400;
-      }
-    }
   }
 
   .editor-nested-item-header-text
   {
     display: flex;
     flex-direction: column;
+    font-weight: bold;
 
-    span
+    .-desc
     {
-      color: var(--color-fg-light);
+      font-weight: 400;
+      color: var(--color-fg-mid);
       margin-top: 3px;
+      font-size: var(--font-size-xs);
     }
   }
 
@@ -182,7 +189,7 @@
     line-height: 1;
     font-weight: 400;
     position: relative;
-    top: -2px;
+    top: -1px;
     color: var(--color-fg);
     transition: color 0.2s ease;
   }

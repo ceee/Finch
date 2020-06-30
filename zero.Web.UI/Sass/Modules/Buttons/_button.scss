@@ -305,7 +305,9 @@ button::-moz-focus-inner
 {
   width: 42px;
   height: 42px;
-  line-height: 42px !important;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   border-radius: var(--radius);
   background: var(--color-bg-xlight);
   color: var(--color-fg);
@@ -314,9 +316,6 @@ button::-moz-focus-inner
 
   &.is-image
   {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
     padding: 10px;
   }
 }

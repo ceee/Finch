@@ -1,6 +1,8 @@
 ﻿<template>
   <button type="button" class="ui-select-button type-light" :disabled="disabled" @click="tryClick">
-    <i class="ui-select-button-icon" :class="icon" v-if="!isImage"></i>
+    <span class="ui-select-button-icon" v-if="!isImage">
+      <i :class="icon"></i>
+    </span>
     <span class="ui-select-button-icon is-image" v-if="isImage">
       <img :src="source" :alt="icon" />
     </span>

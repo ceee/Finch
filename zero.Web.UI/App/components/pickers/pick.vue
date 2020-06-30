@@ -2,16 +2,16 @@
   <div class="ui-pick" :class="{'is-disabled': disabled, 'is-combined': configuration.preview.combined }">
     
     <!-- previews -->
-    <div class="ui-pick-previews" v-if="configuration.preview.enabled && previews.length > 0">
-      <div v-if="!configuration.preview.combined" v-for="preview in previews" class="ui-pick-preview">
+    <div class="ui-pick-previews" v-if="configuration.preview.enabled && previews.length > 0 && !configuration.preview.combined">
+      <div v-for="preview in previews" class="ui-pick-preview">
         <ui-select-button :icon="getPreviewIcon(preview)" :icon-as-image="configuration.preview.iconAsImage" :label="preview[configuration.keys.name]" :description="getPreviewDescription(preview)" :disabled="disabled" @click="pick(preview.id)" :tokens="preview" />
         <ui-icon-button v-if="!disabled && configuration.preview.delete" @click="remove(preview.id)" icon="fth-x" title="@ui.close" />
       </div>
     </div>
 
     <!-- combined preview -->
-    <div class="ui-pick-previews" v-if="configuration.preview.enabled">
-      <div v-if="configuration.preview.combined" class="ui-pick-preview">
+    <div class="ui-pick-previews" v-if="configuration.preview.enabled && configuration.preview.combined">
+      <div class="ui-pick-preview">
          <ui-select-button icon="fth-check-circle" :label="combinedTitle" :disabled="disabled" @click="pick()" />
       </div>
     </div>
@@ -680,6 +680,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .ui-pick-preview + .ui-pick-preview,
+  .ui-pick-previews + .ui-select-button
+  {
+    margin-top: 10px;
   }
 
   .ui-pick.is-combined .ui-select-button-label

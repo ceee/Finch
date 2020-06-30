@@ -44,6 +44,12 @@
       "xtoy": "{x} to {y}",
       "x": "from {x}",
       "y": "until {y}"
+    },
+    "price": {
+      "free": "Free",
+      "xtoy": "from {x} to {y}",
+      "x": "from {x}",
+      "y": "to {y}"
     }
   },
 
