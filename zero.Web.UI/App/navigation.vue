@@ -148,7 +148,6 @@
 
       applicationChanged(item, opts)
       {
-        console.info(item, opts);
         opts.loading(true);
 
         AuthApi.switchApp(item.id).then(success =>

@@ -2,7 +2,7 @@
   <div class="languages">
     <ui-header-bar title="@language.list" :back-button="true">
       <ui-table-filter v-model="tableConfig" />
-      <ui-button label="Add" icon="fth-plus" />
+      <ui-add-button @click="onAdd" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table v-model="tableConfig" />
@@ -47,6 +47,13 @@
         },
         items: LanguagesApi.getAll
       };
+    },
+
+    methods: {
+      onAdd()
+      {
+        console.info('add');
+      }
     }
   }
 </script>

@@ -45,7 +45,7 @@
       {
         opts.hide();
         this.$refs.form.onDelete(ApplicationsApi.delete.bind(this, this.id));
-      }     
+      }
     }
   }
 </script>

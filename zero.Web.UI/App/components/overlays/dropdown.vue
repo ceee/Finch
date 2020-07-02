@@ -3,7 +3,7 @@
     <div class="ui-dropdown-toggle" @click.stop="toggle">
       <slot name="button"></slot>
     </div>
-    <div class="ui-dropdown" role="dialog" v-if="open" v-click-outside="hide" :class="alignClasses">
+    <div class="ui-dropdown" role="dialog" v-if="open" v-click-outside="hide" :class="dropdownClasses">
       <slot></slot>
     </div>
   </div>
@@ -19,6 +19,10 @@
         type: String,
         default: 'left'
       },
+      theme: {
+        type: String,
+        default: null
+      },
       locked: {
         type: Boolean,
         default: false
@@ -31,9 +35,16 @@
 
     computed: {
 
-      alignClasses()
+      dropdownClasses()
       {
-        return 'align-' + this.align.split(' ').join(' align-');
+        let classes = 'align-' + this.align.split(' ').join(' align-');
+
+        if (!!this.theme)
+        {
+          classes += ' theme-' + this.theme;
+        }
+
+        return classes;
       }
     },
 

@@ -369,7 +369,9 @@
       "domains": "Domains",
       "domains_text": "Select domains for this application",
       "domains_help": "Valid domain names are: \"example.com\", \"www.example.com\", \"example.com:8080\", or \"https://www.example.com\".",
-      "domains_add": "Add domain"
+      "domains_add": "Add domain",
+      "features": "Features",
+      "features_text": "Enable additional features for this application"
     }
   },
 
