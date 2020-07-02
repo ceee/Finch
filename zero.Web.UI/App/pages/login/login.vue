@@ -1,5 +1,6 @@
 ﻿<template>
   <div class="app-auth">
+    <i class="fth-home app-auth-font-trigger"></i>
     <h1 class="app-auth-headline">zero</h1>
     <ui-form class="app-auth-inner" v-slot="form" @submit="onSubmit">
       <div>
@@ -89,6 +90,15 @@
       line-height: 150vh;
       font-weight: bold;
     }*/
+  }
+
+  .app-auth-font-trigger
+  {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.001;
+    bottom: 0;
+    right: 0;
   }
 
   .app-auth-inner
