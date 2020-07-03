@@ -5,6 +5,9 @@ namespace zero.Core.Entities
   public class Language : ZeroEntity, ILanguage
   {
     /// <inheritdoc />
+    public string AppId { get; set; }
+
+    /// <inheritdoc />
     public string Code { get; set; }
 
     /// <inheritdoc />
@@ -15,7 +18,7 @@ namespace zero.Core.Entities
   }
 
   [Collection("Languages")]
-  public interface ILanguage : IZeroEntity, IZeroDbConventions
+  public interface ILanguage : IZeroEntity, IAppAwareShareableEntity, IZeroDbConventions
   {
     /// <summary>
     /// Language code (ISO 3166-1)

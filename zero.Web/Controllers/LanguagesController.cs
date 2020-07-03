@@ -12,26 +12,24 @@ namespace zero.Web.Controllers
   public class LanguagesController<T> : BackofficeController where T : ILanguage, new()
   {
     ILanguagesApi<T> Api;
-    IRenderer<T> Renderer;
 
 
-    public LanguagesController(ILanguagesApi<T> api, IRenderer<T> renderer)
+    public LanguagesController(ILanguagesApi<T> api)
     {
       Api = api;
-      Renderer = renderer;
     }
 
 
     /// <summary>
     /// Get empty language model
     /// </summary>  
-    public IActionResult GetEmpty() => Edit(new T(), Renderer);
+    public IActionResult GetEmpty() => Edit(new T());
 
 
     /// <summary>
     /// Get language by id
     /// </summary>  
-    public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id), Renderer);
+    public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
 
     /// <summary>

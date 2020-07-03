@@ -12,13 +12,14 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class LanguagesApi<T> : BackofficeApi, ILanguagesApi<T> where T : ILanguage
+  public class LanguagesApi<T> : AppAwareBackofficeApi, ILanguagesApi<T> where T : ILanguage
   {
     protected IValidator<T> Validator { get; private set; }
 
 
     public LanguagesApi(IBackofficeStore store, IValidator<T> validator = null) : base(store)
     {
+      Scope.IncludeShared = true;
       Validator = validator;
     }
 
@@ -36,6 +37,7 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<T>()
+          .Scope(Scope)
           .OrderByDescending(x => x.CreatedDate)
           .ToListAsync();
       }
@@ -67,6 +69,7 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<T>()
+          .Scope(Scope)
           .ToQueriedListAsync(query);
       }
     }

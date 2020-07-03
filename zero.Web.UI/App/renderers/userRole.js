@@ -13,7 +13,7 @@ export default {
       label: '@role.tab_permissions',
       count: x =>
       {
-        return _filter(x.claims, claim =>
+        return _filter(x.claims || [], claim =>
         {
           const value = claim.value.split(':')[1];
           return value !== 'none' && value !== 'false' && !!value;
@@ -47,11 +47,6 @@ export default {
       field: 'icon',
       display: 'iconpicker'
     },
-    //{
-    //  tab: 'permissions',
-    //  field: 'claims',
-    //  display: 'text'
-    //}
     {
       tab: 'permissions',
       field: 'claims',

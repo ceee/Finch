@@ -2,7 +2,7 @@
   <div class="countries">
     <ui-header-bar title="@country.list" :back-button="true">
       <ui-table-filter v-model="tableConfig" :selection="selection" :select-actions="selectActions" />
-      <ui-button label="@ui.add" icon="fth-plus" @click="add" />
+      <ui-add-button :route="createRoute" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table ref="table" v-model="tableConfig" @select="onSelect" />
@@ -18,6 +18,7 @@
 
   export default {
     data: () => ({
+      createRoute: baseRoute + '-create',
       tableConfig: {},
       selection: [],
       selectActions: []
@@ -80,11 +81,6 @@
       onSelect(items)
       {
         this.selection = items;
-      },
-
-      add()
-      {
-        this.$router.push({ name: baseRoute + '-create' });
       }
     }
   }

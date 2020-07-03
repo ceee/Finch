@@ -2,7 +2,7 @@
   <div class="translations">
     <ui-header-bar title="@translation.list" :back-button="true">
       <ui-table-filter v-model="tableConfig" />
-      <ui-button label="@ui.add" icon="fth-plus" @click="add" />
+      <ui-add-button :route="createRoute" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table v-model="tableConfig" />
@@ -17,10 +17,10 @@
   import AddOverlay from './translation';
 
   const baseRoute = zero.alias.sections.settings + '-' + zero.alias.settings.translations;
-  const createRoute = baseRoute + '-create';
 
   export default {
     data: () => ({
+      createRoute: baseRoute + '-create',
       tableConfig: {}
     }),
 
@@ -78,7 +78,7 @@
         {
           this.edit(this.id);
         }
-        else if (this.$route.name === createRoute)
+        else if (this.$route.name === this.createRoute)
         {
           this.edit();
         }
@@ -101,11 +101,6 @@
         {
           this.$router.go(-1);
         });
-      },
-
-      add()
-      {
-        this.$router.push({ name: createRoute });
       }
     }
   }

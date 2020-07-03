@@ -2,7 +2,7 @@
   <div class="users">
     <ui-header-bar title="Users & Permissions" :back-button="true">
       <ui-table-filter v-model="usersConfig" />
-      <ui-button type="white" label="Add role" icon="fth-plus" />
+      <ui-add-button type="white" :route="createRoleRoute" label="Add role" />
       <ui-button label="Add user" icon="fth-plus" />
     </ui-header-bar>
 
@@ -34,6 +34,7 @@
 
   export default {
     data: () => ({
+      createRoleRoute: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-role-create',
       roles: [],
       usersConfig: {}
     }),

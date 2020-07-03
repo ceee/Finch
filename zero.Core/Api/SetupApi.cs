@@ -83,6 +83,7 @@ namespace zero.Core.Api
         // create default language
         Language language = new Language() // TODO get default language selection from setup UI
         {
+          AppId = Constants.Database.SharedAppId,
           Name = "English",
           Alias = Safenames.Alias("English"),
           CreatedDate = DateTimeOffset.Now,
@@ -209,6 +210,7 @@ namespace zero.Core.Api
         {
           CreatedDate = DateTimeOffset.Now,
           IsActive = true,
+          AppId = Constants.Database.SharedAppId,
           Alias = Safenames.Alias(country.Value),
           LanguageId = defaultLanguage.Id,
           Code = country.Key.ToLowerInvariant(),

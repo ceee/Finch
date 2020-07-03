@@ -11,13 +11,14 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class CountriesApi<T> : BackofficeApi, ICountriesApi<T> where T : ICountry
+  public class CountriesApi<T> : AppAwareBackofficeApi, ICountriesApi<T> where T : ICountry
   {
     IValidator<T> Validator;
 
 
     public CountriesApi(IBackofficeStore store, IValidator<T> validator) : base(store)
     {
+      Scope.IncludeShared = true;
       Validator = validator;
     }
 
@@ -42,6 +43,7 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<T>()
+          .Scope(Scope)
           .Where(x => x.LanguageId == languageId)
           .OrderByDescending(x => x.IsPreferred)
           .ThenBy(x => x.Name)
@@ -58,6 +60,7 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<T>()
+          .Scope(Scope)
           .Where(x => x.LanguageId == languageId)
           .OrderByDescending(x => x.IsPreferred)
           .ThenBy(x => x.Name)

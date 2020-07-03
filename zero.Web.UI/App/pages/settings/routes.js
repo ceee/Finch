@@ -7,7 +7,8 @@ let routes = [];
 const detailPages = [];
 detailPages[zero.alias.settings.users] = [
   { view: 'user' },
-  { view: 'role', path: 'role' }
+  { view: 'role', path: 'role' },
+  { view: 'role', path: 'role/create', isCreate: true }
 ];
 detailPages[zero.alias.settings.countries] = [
   { view: 'country' },
@@ -17,7 +18,10 @@ detailPages[zero.alias.settings.translations] = [
   { view: 'translations' },
   { view: 'translations', path: 'create', isCreate: true }
 ];
-detailPages[zero.alias.settings.languages] = 'language';
+detailPages[zero.alias.settings.languages] = [
+  { view: 'language' },
+  { view: 'language', path: 'create', isCreate: true }
+];
 detailPages[zero.alias.settings.applications] = [
   { view: 'application' },
   { view: 'application', path: 'create', isCreate: true }
@@ -68,8 +72,8 @@ if (section)
         const isCreate = typeof detail.isCreate === 'boolean' ? detail.isCreate : false;
 
         routes.push({
-          path: area.url + '/' + path + (!isCreate ? '/:id' : ''),
-          name: alias + '-' + area.alias + '-' + path,
+          path: area.url + '/' + path + (!isCreate ? '/:id' : '/:scope?'),
+          name: alias + '-' + area.alias + '-' + path.replace('/', '-'),
           component: () => import(`zero/pages/${alias}/${detail.view}`),
           props: true,
           meta: {

@@ -2,6 +2,11 @@
   <ui-form v-if="!loading" ref="form" class="translation" v-slot="form" @submit="onSubmit" @load="onLoad">
     <h2 class="ui-headline" v-localize="'@translation.name'"></h2>
     <div class="translation-items">
+      <div v-if="form.isShared" class="editor-global-flag is-block">
+        <b>This entity is shared</b> and can be used by all applications.<br>
+        <a href="/">More info</a>
+        <i class="fth-radio"></i>
+      </div>
       <div class="ui-split">
         <ui-property label="@translation.fields.key" :required="true" :vertical="true">
           <input v-model="item.key" type="text" class="ui-input" maxlength="200" :readonly="disabled" />
@@ -27,6 +32,7 @@
 <script>
   import TranslationsApi from 'zero/resources/translations.js';
   import Overlay from 'zero/services/overlay.js';
+  import Editor from 'zero/editor/editor';
 
   export default {
 

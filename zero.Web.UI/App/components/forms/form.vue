@@ -40,7 +40,8 @@
       canEdit: true,
       isShared: false,
       slotProps: {
-        state: null
+        state: null,
+        isShared: false
       },
       submitBlocked: false
     }),
@@ -53,6 +54,10 @@
       state(val)
       {
         this.slotProps.state = val;
+      },
+      isShared(val)
+      {
+        this.slotProps.isShared = val;
       },
       canEdit(val)
       {
@@ -108,12 +113,17 @@
               {
                 this.loadingState = 'default';
 
-                if (typeof response.canEdit === 'boolean')
+                if (typeof response.meta.canEdit === 'boolean')
                 {
-                  this.canEdit = response.canEdit;
+                  this.canEdit = response.meta.canEdit;
 
                   if (response.entity)
                   {
+                    if (!response.entity.id && this.$route.params.scope === zero.sharedAppId)
+                    {
+                      response.entity.appId = zero.sharedAppId;
+                    }
+
                     this.isShared = response.entity.appId === zero.sharedAppId || !response.entity.appId;
                   }
                 }
@@ -159,8 +169,6 @@
                   this.setState('success');
                   this.setDirty(false);
                   resolve(response);
-
-                  console.info(this.route, this.$route);
 
                   if (response.model && this.route && this.$route.name !== this.route)
                   {

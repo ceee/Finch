@@ -309,5 +309,20 @@
       padding-top: 32px;
       border-top: 1px solid var(--color-line-light);
     }
+
+    &.is-block
+    {
+      padding: 20px;
+      padding-right: 70px;
+      border-radius: var(--radius);
+      background: var(--color-bg-xlight);
+      margin-bottom: var(--padding);
+
+      i
+      {
+        margin-top: -22px;
+        right: 20px;
+      }
+    }
   }
 </style>

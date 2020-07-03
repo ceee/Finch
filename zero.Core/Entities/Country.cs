@@ -3,6 +3,9 @@
   public class Country : ZeroEntity, ICountry
   {
     /// <inheritdoc />
+    public string AppId { get; set; }
+
+    /// <inheritdoc />
     public bool IsPreferred { get; set; }
 
     /// <inheritdoc />
@@ -13,7 +16,7 @@
   }
 
 
-  public interface ICountry : IZeroEntity, ILanguageAwareEntity, IZeroDbConventions
+  public interface ICountry : IZeroEntity, IAppAwareShareableEntity, ILanguageAwareEntity, IZeroDbConventions
   {
     /// <summary>
     /// Preferred countries are displayed on top in lists

@@ -542,7 +542,7 @@
 
     &.is-inline
     {
-      margin-right: 0.5em;
+      margin-left: 0.5em;
       font-size: 18px;
       position: relative;
       top: -1px;

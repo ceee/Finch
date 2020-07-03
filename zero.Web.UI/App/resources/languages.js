@@ -8,6 +8,12 @@ export default {
     return Axios.get('languages/getById', { params: { id } }).then(res => Promise.resolve(res.data));
   },
 
+  // get new language model
+  getEmpty()
+  {
+    return Axios.get('languages/getEmpty').then(res => Promise.resolve(res.data));
+  },
+
   // get all languages
   getAll()
   {

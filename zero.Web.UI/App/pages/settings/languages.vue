@@ -2,7 +2,7 @@
   <div class="languages">
     <ui-header-bar title="@language.list" :back-button="true">
       <ui-table-filter v-model="tableConfig" />
-      <ui-add-button @click="onAdd" />
+      <ui-add-button :route="createRoute" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table v-model="tableConfig" />
@@ -16,6 +16,7 @@
 
   export default {
     data: () => ({
+      createRoute: zero.alias.sections.settings + '-' + zero.alias.settings.languages + '-create',
       tableConfig: {}
     }),
 
@@ -31,6 +32,7 @@
             label: '@ui.name',
             as: 'text',
             bold: true,
+            shared: true,
             link: item =>
             {
               return {
@@ -47,13 +49,6 @@
         },
         items: LanguagesApi.getAll
       };
-    },
-
-    methods: {
-      onAdd()
-      {
-        console.info('add');
-      }
     }
   }
 </script>
