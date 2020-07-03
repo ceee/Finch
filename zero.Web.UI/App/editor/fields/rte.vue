@@ -1,5 +1,5 @@
 ﻿<template>
-  <input :value="value" @input="$emit('input', $event.target.value)" type="text" class="ui-input" v-localize:placeholder="" :maxlength="maxLength" />
+  <ui-rte :value="value" @input="$emit('input', $event)" />
 </template>
 
 
@@ -11,13 +11,6 @@
         default: null
       },
       config: Object
-    },
-
-    computed: {
-      maxLength()
-      {
-        return this.config.maxLength > 0 ? this.config.maxLength : null;
-      }
     }
   }
 </script>

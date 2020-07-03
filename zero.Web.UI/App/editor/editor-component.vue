@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-property v-if="fulfillsCondition" :field="config.field" :label="label" :description="description" :required="config.required" :class="classList" :is-text="view === 'output'">
-    <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" @input="onChange" :meta="meta" :disabled="config.disabled" :depth="depth" />
+    <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" :entity="value" @input="onChange" :meta="meta" :disabled="config.disabled" :depth="depth" />
     <p v-if="config.helpText" class="ui-property-help" v-localize="config.helpText"></p>
   </ui-property>
 </template>
@@ -98,6 +98,10 @@
           if (this.config.path.indexOf('@zero') === 0)
           {
             return import(`zero/` + this.config.path.substring(6));
+          }
+          else if (this.config.path.indexOf('@shop') === 0) // TODO common system for plugins
+          {
+            return import(`shop/` + this.config.path.substring(6));
           }
           else
           {
