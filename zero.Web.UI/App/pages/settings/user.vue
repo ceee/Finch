@@ -1,4 +1,11 @@
 ﻿<template>
+  <ui-form ref="form" class="user" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
+    <ui-form-header v-model="model" title="@user.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
+    <ui-editor config="user" v-model="model" :meta="meta" :active-toggle="false" />
+  </ui-form>
+</template>
+
+<!--<template>
   <ui-form ref="form" class="user" v-slot="form" @submit="onSubmit" @load="onLoad">
 
     <ui-header-bar :title="model.name" title-empty="@user.name" :back-button="true">
@@ -75,10 +82,60 @@
 
     </ui-tabs>
   </ui-form>
-</template>
+</template>-->
 
 
 <script>
+  import { filter as _filter } from 'underscore';
+  import UsersApi from 'zero/resources/users';
+  import UiEditor from 'zero/editor/editor';
+
+  export default {
+    props: ['id'],
+
+    components: { UiEditor },
+
+    data: () => ({
+      meta: {},
+      model: {
+        avatarId: null,
+        name: null,
+        email: null,
+        supportedCultures: []
+      },
+      route: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
+      disabled: false
+    }),
+
+    methods: {
+
+      onLoad(form)
+      {
+        form.load(!this.id ? UsersApi.getEmpty() : UsersApi.getById(this.id)).then(response =>
+        {
+          this.disabled = !response.meta.canEdit;
+          this.meta = response.meta;
+          this.model = response;
+        });
+      },
+
+
+      onSubmit(form)
+      {
+        form.handle(UsersApi.save(this.model));
+      },
+
+
+      onDelete(item, opts)
+      {
+        opts.hide();
+        this.$refs.form.onDelete(UsersApi.delete.bind(this, this.id));
+      }     
+    }
+  }
+</script>
+
+<!--<script>
   import UsersApi from 'zero/resources/users';
   import Strings from 'zero/services/strings';
   import AuthApi from 'zero/services/auth'
@@ -258,4 +315,4 @@
   {
     margin-bottom: 0;
   }
-</style>
+</style>-->
