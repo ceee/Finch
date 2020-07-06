@@ -11,7 +11,6 @@ using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Options;
 using zero.Core.Plugins;
-using zero.Core.Renderer;
 
 namespace zero.Core.Api
 {
@@ -43,27 +42,6 @@ namespace zero.Core.Api
     public IReadOnlyCollection<Space> GetAll()
     {
       return Options.Spaces.GetAllItems();
-    }
-
-
-    /// <inheritdoc />
-    public RendererConfig GetEditorConfig(string alias)
-    {
-      Space space = GetByAlias(alias);
-
-      if (space == null)
-      {
-        return null;
-      }
-
-      AbstractGenericRenderer renderer = Options.Renderers.GetAllItems().FirstOrDefault(x => x.TargetType == space.Type);
-
-      if (renderer == null)
-      {
-        return null;
-      }
-
-      return renderer.Build();
     }
 
 
@@ -125,7 +103,7 @@ namespace zero.Core.Api
     public async Task<EntityResult<T>> Save<T>(string alias, T model) where T : SpaceContent
     {
       Space space = GetByAlias(alias);
-      RendererConfig config = GetEditorConfig(alias); 
+      //RendererConfig config = GetEditorConfig(alias); 
 
       //if (config.Validator != null)
       //{
@@ -189,11 +167,6 @@ namespace zero.Core.Api
     /// Get all spaces
     /// </summary>
     IReadOnlyCollection<Space> GetAll();
-
-    /// <summary>
-    /// Get editor configuration for a space
-    /// </summary>
-    RendererConfig GetEditorConfig(string alias);
 
     /// <summary>
     /// Get editor item for a space

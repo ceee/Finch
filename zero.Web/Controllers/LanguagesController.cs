@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
-using zero.Core.Renderer;
 using zero.Web.Filters;
 
 namespace zero.Web.Controllers
@@ -33,12 +32,6 @@ namespace zero.Web.Controllers
 
 
     /// <summary>
-    /// Get language renderer
-    /// </summary>
-    public IActionResult GetRenderer([FromServices] IRenderer<T> renderer) => Json(renderer.Build());
-
-
-    /// <summary>
     /// Get all languages
     /// </summary>    
     public async Task<IActionResult> GetAll([FromQuery] ListQuery<T> query) => Json(await Api.GetByQuery(query));
@@ -48,6 +41,12 @@ namespace zero.Web.Controllers
     /// Returns all cultures available for creating languages.
     /// </summary>
     public IActionResult GetAllCultures() => Json(Api.GetAllCultures());
+
+
+    /// <summary>
+    /// Returns all available backoffice cultures.
+    /// </summary>
+    public IActionResult GetSupportedCultures() => Json(Api.GetAllCultures(Options.SupportedLanguages));
 
 
     /// <summary>

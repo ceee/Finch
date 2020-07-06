@@ -45,6 +45,11 @@ export default {
       required: true
     },
     {
+      field: 'languageId',
+      display: 'culture',
+      required: true
+    },
+    {
       field: 'avatarId',
       display: 'media',
       type: 'image'

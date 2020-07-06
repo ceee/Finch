@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using zero.Core.Attributes;
 
 namespace zero.Core.Entities
 {
@@ -72,7 +73,7 @@ namespace zero.Core.Entities
   }
 
 
-
+  [Collection("Users")]
   public interface IUser : IZeroEntity, IAppAwareEntity, IZeroDbConventions
   {
     /// <summary>

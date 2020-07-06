@@ -4,8 +4,8 @@
       <template v-slot:button>
         <ui-button type="white" label="@ui.actions" caret="down" />
       </template>
-      <ui-dropdown-button v-if="canDelete" label="@ui.delete" icon="fth-trash" @click="onDelete" :disabled="disabled" />
       <slot name="actions"></slot>
+      <ui-dropdown-button v-if="canDelete" label="@ui.delete" icon="fth-trash" @click="onDelete" :disabled="disabled" />
     </ui-dropdown>
     <ui-button :submit="true" label="@ui.save" :state="state" v-if="!disabled" />
   </ui-header-bar>

@@ -18,7 +18,6 @@ namespace zero.Core.Options
       Features = new FeatureOptions();
       Pages = new PageOptions();
       Permissions = new PermissionOptions();
-      Renderers = new RendererOptions();
       Settings = new SettingsOptions();
       Spaces = new SpaceOptions();
       Mapper = new MapperOptions();
@@ -56,9 +55,6 @@ namespace zero.Core.Options
 
     /// <inheritdoc />
     public PermissionOptions Permissions { get; private set; }
-
-    /// <inheritdoc />
-    public RendererOptions Renderers { get; private set; }
 
     /// <inheritdoc />
     public SettingsOptions Settings { get; private set; }
@@ -133,11 +129,6 @@ namespace zero.Core.Options
     /// 
     /// </summary>
     PermissionOptions Permissions { get; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    RendererOptions Renderers { get; }
 
     /// <summary>
     /// 

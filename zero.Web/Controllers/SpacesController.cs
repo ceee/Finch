@@ -86,7 +86,7 @@ namespace zero.Web.Controllers
         //Id = model.Id,
         Alias = alias,
         //Model = model,
-        Config = Api.GetEditorConfig(alias)
+        //Config = Api.GetEditorConfig(alias)
       }, settings);
     }
 

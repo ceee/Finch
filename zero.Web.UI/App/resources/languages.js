@@ -26,6 +26,12 @@ export default {
     return Axios.get('languages/getAllCultures').then(res => Promise.resolve(res.data));
   },
 
+  // get all supported backoffice cultures
+  getSupportedCultures()
+  {
+    return Axios.get('languages/getSupportedCultures').then(res => Promise.resolve(res.data));
+  },
+
   // save a language
   save(model)
   {

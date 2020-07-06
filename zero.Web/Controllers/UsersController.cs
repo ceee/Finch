@@ -8,16 +8,18 @@ using zero.Web.Models;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Read)]
-  public class UsersController<TLanguage> : BackofficeController where TLanguage : ILanguage
+  public class UsersController<T, TLanguage> : BackofficeController 
+    where T : class, IUser
+    where TLanguage : ILanguage
   {
-    IUserApi Api;
+    IUserApi<T> Api;
     IAuthenticationApi AuthenticationApi;
     IUserRolesApi RolesApi;
     ILanguagesApi<TLanguage> LanguagesApi;
     IPermissionsApi PermissionsApi;
 
 
-    public UsersController(IUserApi api, IAuthenticationApi authenticationApi, IUserRolesApi rolesApi, ILanguagesApi<TLanguage> languagesApi, IPermissionsApi permissionsApi)
+    public UsersController(IUserApi<T> api, IAuthenticationApi authenticationApi, IUserRolesApi rolesApi, ILanguagesApi<TLanguage> languagesApi, IPermissionsApi permissionsApi)
     {
       Api = api;
       AuthenticationApi = authenticationApi;
@@ -27,59 +29,31 @@ namespace zero.Web.Controllers
     }
 
 
-    /// <summary>
-    /// Get user by id
-    /// </summary>    
-    public async Task<IActionResult> GetById([FromQuery] string id)
-    {
-      User user = await Api.GetUserById(id);
-
-      if (user == null)
-      {
-        return new StatusCodeResult(404);
-      }
-
-      UserEditModel model = await Mapper.Map<User, UserEditModel>(user);
-      model.SupportedCultures = LanguagesApi.GetAllCultures(Options.SupportedLanguages);
-
-      return Json(model);
-    }
+    public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetUserById(id));
 
 
-    /// <summary>
-    /// Get all users
-    /// </summary>    
-    public async Task<IActionResult> GetAll([FromQuery] ListQuery<User> query)
-    {
-      return await As<User, UserListModel>(await Api.GetByQuery(query)); // TODO , "zero.applications.1-A"
-    }
+    public IActionResult GetSupportedCultures() => Json(LanguagesApi.GetAllCultures(Options.SupportedLanguages));
 
 
-    /// <summary>
-    /// Get all permissions for selection
-    /// </summary>    
-    public IActionResult GetAllPermissions()
-    {
-      return Json(PermissionsApi.GetAll());
-    }
+    public async Task<IActionResult> GetAll([FromQuery] ListQuery<T> query) => Json(await Api.GetByQuery(query));
 
 
-    /// <summary>
-    /// Updates a user password
-    /// </summary>
+    public IActionResult GetAllPermissions() => Json(PermissionsApi.GetAll());
+
+
     [ZeroAuthorize]
     public async Task<IActionResult> UpdatePassword([FromBody] UserPasswordEditModel model)
     {
-      EntityResult<User> result;
+      EntityResult<T> result;
 
       if (model.NewPassword != model.ConfirmNewPassword)
       {
-        result = EntityResult<User>.Fail(nameof(model.NewPassword), "@errors.changepassword.newpasswordsnotmatching");
+        result = EntityResult<T>.Fail(nameof(model.NewPassword), "@errors.changepassword.newpasswordsnotmatching");
       }
       else
       {
         User user = await AuthenticationApi.GetUser();
-        result = await Api.UpdatePassword(user, model.CurrentPassword, model.NewPassword);
+        result = await Api.UpdatePassword(user as T, model.CurrentPassword, model.NewPassword);
 
         if (result.IsSuccess)
         {
@@ -88,62 +62,35 @@ namespace zero.Web.Controllers
       }
 
       return Json(result);
-      //return await As<Translation, TranslationEditModel>(await Api.);
     }
 
 
-    /// <summary>
-    /// Disables a user
-    /// </summary>
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
-    public async Task<IActionResult> Disable([FromBody] UserEditModel model)
+    public async Task<IActionResult> Disable([FromBody] T model)
     {
-      User entity = await Api.GetUserById(model.Id);
-      return await As<User, UserEditModel>(await Api.Disable(entity));
+      T entity = await Api.GetUserById(model.Id);
+      return Json(await Api.Disable(entity));
     }
 
 
-    /// <summary>
-    /// Enables a user
-    /// </summary>
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
-    public async Task<IActionResult> Enable([FromBody] UserEditModel model)
+    public async Task<IActionResult> Enable([FromBody] T model)
     {
-      User entity = await Api.GetUserById(model.Id);
-      return await As<User, UserEditModel>(await Api.Enable(entity));
+      T entity = await Api.GetUserById(model.Id);
+      return Json(await Api.Enable(entity));
     }
 
 
-    /// <summary>
-    /// Save user
-    /// </summary>
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
-    public async Task<IActionResult> Save([FromBody] UserEditModel model)
-    {
-      User entity = await Mapper.Map(model, await Api.GetUserById(model.Id));
-      return await As<User, UserEditModel>(await Api.Save(entity));
-    }
+    public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
 
 
-    /// <summary>
-    /// Update current user
-    /// </summary>
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
     // TODO do not need settings.users authorization for editing current user profiles
-    public async Task<IActionResult> SaveCurrent([FromBody] UserEditModel model)
-    {
-      User entity = await Mapper.Map(model, await Api.GetUserById(model.Id));
-      return await As<User, UserEditModel>(await Api.Save(entity));
-    }
+    public async Task<IActionResult> SaveCurrent([FromBody] T model) => Json(await Api.Save(model));
 
 
-    /// <summary>
-    /// Deletes a user
-    /// </summary>
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
-    public async Task<IActionResult> Delete([FromQuery] string id)
-    {
-      return await As<User, UserEditModel>(await Api.Delete(id));
-    }
+    public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
   }
 }

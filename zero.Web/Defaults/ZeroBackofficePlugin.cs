@@ -7,7 +7,6 @@ using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Options;
 using zero.Core.Plugins;
-using zero.Core.Renderer;
 using zero.Web.Mapper;
 using zero.Web.Sections;
 
@@ -19,8 +18,6 @@ namespace zero.Web.Defaults
     {
       services.AddAll(typeof(IValidator<>), ServiceLifetime.Scoped);
       services.AddAll(typeof(IValidator), ServiceLifetime.Scoped);
-      services.AddAll(typeof(IRenderer<>), ServiceLifetime.Scoped);
-      services.AddAll(typeof(IRenderer), ServiceLifetime.Scoped);
 
       services.AddTransient<IApplication, Application>();
       services.AddTransient<ICountry, Country>();
@@ -36,12 +33,12 @@ namespace zero.Web.Defaults
       services.AddTransient(typeof(ITranslationsApiFacade), typeof(TranslationsApiFacade));
       services.AddTransient(typeof(IPagesApi<>), typeof(PagesApi<>));
       services.AddTransient(typeof(IPageTreeApi<>), typeof(PageTreeApi<>));
+      services.AddTransient(typeof(IUserApi<>), typeof(UserApi<>));
 
       services.AddTransient<ISetupApi, SetupApi>();
       services.AddTransient<ISectionsApi, SectionsApi>();
       services.AddTransient<ISettingsApi, SettingsApi>();
       services.AddTransient<IAuthenticationApi, AuthenticationApi>();
-      services.AddTransient<IUserApi, UserApi>();
       services.AddTransient<IUserRolesApi, UserRolesApi>();
       services.AddTransient<IToken, Token>();
       services.AddTransient<ISpacesApi, SpacesApi>();
