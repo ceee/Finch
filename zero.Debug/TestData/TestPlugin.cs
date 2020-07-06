@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Linq;
+using zero.Core;
+using zero.Core.Entities;
 using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Debug.TestData;
@@ -11,6 +14,9 @@ namespace zero.TestData
     public void Configure(IZeroPluginOptions plugin, IZeroOptions zero)
     {
       plugin.Name = "Test Plugin";
+
+      ISection spaceSection = zero.Sections.GetAllItems().FirstOrDefault(x => x.Alias == Constants.Sections.Spaces);
+      zero.Sections.Remove(spaceSection);
 
       zero.Spaces.AddList<TeamMember>("team", "Team", "Our team members", "fth-users");
       zero.Spaces.AddList<News>("news", "News", "Articles about the company", "fth-edit");

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace zero.Core.Options
 {
@@ -14,6 +10,18 @@ namespace zero.Core.Options
     public IReadOnlyCollection<T> GetAllItems()
     {
       return Items.AsReadOnly();
+    }
+
+
+    public void RemoveAt(int index)
+    {
+      Items.RemoveAt(index);
+    }
+
+
+    public bool Remove(T item)
+    {
+      return Items.Remove(item);
     }
   }
 }
