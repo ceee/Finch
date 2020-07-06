@@ -10,7 +10,6 @@ using zero.Core.Entities;
 using zero.Core.Identity;
 using zero.Core.Mapper;
 using zero.Core.Options;
-using zero.Core.Renderer;
 using zero.Web.Filters;
 using zero.Web.Models;
 
@@ -57,13 +56,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Creates an edit model with appropriate options and permissions
     /// </summary>
-    public JsonResult Edit<T>(T data, bool typed = true, Action<dynamic> transform = null) where T : IZeroEntity => Edit(data, null, typed, transform);
-
-
-    /// <summary>
-    /// Creates an edit model with appropriate options and permissions
-    /// </summary>
-    public JsonResult Edit<T>(T data, IRenderer<T> renderer, bool typed = true, Action<dynamic> transform = null) where T : IZeroEntity
+    public JsonResult Edit<T>(T data, bool typed = true, Action<dynamic> transform = null) where T : IZeroEntity
     {
       Type type = typeof(T);
       bool canBeShared = AppAwareShareableType.IsAssignableFrom(type);

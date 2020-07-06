@@ -36,7 +36,6 @@
 
 <script>
   import EditorComponent from 'zero/editor/editor-component';
-  import RendererApi from 'zero/resources/renderer';
   import { each as _each, map as _map, filter as _filter } from 'underscore';
 
   export default {
