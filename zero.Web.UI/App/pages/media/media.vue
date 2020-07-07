@@ -8,10 +8,9 @@
     <div class="media-content">
       <ui-header-bar :title="title" :back-button="!!id">
         <ui-search />
-        <ui-button type="white" label="Add folder" icon="fth-plus" @click="addFolder(id)" />
+        <ui-button type="white" label="Add folder" @click="addFolder(id)" />
         <div type="button" class="ui-button has-state type-action state-default has-icon">
-          <span class="ui-button-text">Add files</span>
-          <i class="ui-button-icon fth-plus"></i>
+          <span class="ui-button-text">Add</span>
           <input class="media-item-upload" type="file" multiple @change="onUpload" />
         </div>
       </ui-header-bar>
