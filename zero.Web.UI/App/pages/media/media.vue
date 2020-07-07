@@ -150,7 +150,10 @@
         }
         else
         {
-          this.$refs.grid.load();
+          this.$nextTick(() =>
+          {
+            this.$refs.grid.load();
+          });
         }
         //this.getItems();
       }
