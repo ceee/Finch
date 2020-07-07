@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="editor-outer" v-if="loaded" :class="{ 'has-tabs': hasTabs, '-infos-aside': !nested }">
+  <div class="editor-outer" v-if="loaded" :class="{ 'has-tabs': hasTabs, '-infos-aside': !nested }" :renderer="config">
     <ui-tabs class="editor">
       <ui-tab class="ui-box" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index" :depth="depth">
         <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" @input="onChange" :meta="meta" :depth="depth" />
