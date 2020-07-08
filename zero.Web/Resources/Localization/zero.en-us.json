@@ -129,7 +129,9 @@
     "close": "Cancel",
     "confirm": "Delete",
     "title": "Delete entity",
-    "text": "Are you sure you want to delete this entity?"
+    "text": "Are you sure you want to delete this entity?",
+    "success": "Deleted",
+    "success_text": "You have successfully deleted this entity"
   },
 
   "changepasswordoverlay": {

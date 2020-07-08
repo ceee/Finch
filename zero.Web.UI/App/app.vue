@@ -6,6 +6,7 @@
         <router-view></router-view>
       </div>
       <app-overlays />
+      <app-notifications />
     </template>
     <app-login v-else />
   </div>
@@ -17,6 +18,7 @@
   import AppNavigation from 'zero/navigation.vue'
   import AppLogin from 'zero/pages/login/login.vue'
   import AppOverlays from 'zero/components/overlays/overlay-holder.vue'
+  import AppNotifications from 'zero/components/notifications/notification-holder.vue'
   import Router from 'zero/router.config.js'
   import AuthApi from 'zero/services/auth.js'
   import 'zero/vue.config.js'
@@ -28,7 +30,7 @@
 
     router: Router,
 
-    components: { AppNavigation, AppOverlays, AppLogin },
+    components: { AppNavigation, AppOverlays, AppLogin, AppNotifications },
 
     data: () => ({
       isAuthenticated: false

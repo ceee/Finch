@@ -11,6 +11,7 @@
 
 <script>
   import Overlay from 'zero/services/overlay.js'
+  import Notification from 'zero/services/notification.js'
   import { isArray as _isArray, filter as _filter, groupBy as _groupBy, each as _each } from 'underscore'
 
   export default {
@@ -223,7 +224,7 @@
         Overlay.confirmDelete().then(opts =>
         {
           opts.state('loading');
-
+          
           promise().then(response =>
           {
             if (response.success)
@@ -231,7 +232,7 @@
               opts.state('success');
               opts.hide();
               this.$router.go(-1);
-              // TODO show message
+              Notification.success('@deleteoverlay.success', '@deleteoverlay.success_text');
             }
             else
             {
