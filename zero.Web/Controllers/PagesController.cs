@@ -15,24 +15,18 @@ namespace zero.Web.Controllers
     }
 
 
-    /// <summary>
-    /// Get all page types which are allowed below a selected parent page
-    /// </summary>
-    public async Task<ActionResult> GetAllowedPageTypes([FromQuery] string parent = null)
-    {
-      return Json(await Api.GetAllowedPageTypes(parent));
-    }
+    public async Task<ActionResult> GetAllowedPageTypes([FromQuery] string parent = null) => Json(await Api.GetAllowedPageTypes(parent));
+
+ 
+    public IActionResult GetPageType([FromQuery] string alias) => Json(Api.GetPageType(alias));
 
 
-    /// <summary>
-    /// Get translation by id
-    /// </summary>  
-    //public IActionResult GetEmpty() => JsonEdit(new T());
-
-
-    /// <summary>
-    /// Get page by id
-    /// </summary>  
     public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
+
+
+    public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
+
+
+    public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
   }
 }

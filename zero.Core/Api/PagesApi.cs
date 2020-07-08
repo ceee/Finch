@@ -61,6 +61,13 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public PageType GetPageType(string alias)
+    {
+      return Options.Pages.GetAllItems().FirstOrDefault(x => x.Alias == alias);
+    }
+
+
+    /// <inheritdoc />
     public async Task<EntityResult<T>> Save(T model)
     {
       return await SaveModel(model, null);
@@ -91,6 +98,11 @@ namespace zero.Core.Api
     /// Get all page types which are allowed below a selected parent page
     /// </summary>
     Task<IList<PageType>> GetAllowedPageTypes(string parentId = null);
+
+    /// <summary>
+    /// Get a specific page type by alias
+    /// </summary>
+    PageType GetPageType(string alias);
 
     /// <summary>
     /// Creates or updates a page

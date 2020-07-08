@@ -10,6 +10,12 @@ export default {
     return Axios.get(base + 'getAllowedPageTypes', { params: { parent } }).then(res => Promise.resolve(res.data));
   },
 
+  // get page type by alias
+  getPageType(alias)
+  {
+    return Axios.get(base + 'getPageType', { params: { alias } }).then(res => Promise.resolve(res.data));
+  },
+
   // get media by id
   getById(id)
   {

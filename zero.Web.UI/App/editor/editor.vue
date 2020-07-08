@@ -1,9 +1,10 @@
 ﻿<template>
   <div>
     <div class="editor-outer" v-if="loaded && !rendererNotFound" :class="{ 'has-tabs': hasTabs, '-infos-aside': !nested, 'is-page': isPage }" :renderer="config">
-      <ui-tabs class="editor">
-        <ui-tab class="ui-box" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index" :depth="depth">
+      <ui-tabs class="editor" :active="activeTab">
+        <ui-tab class="ui-box" :class="tab.class" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index" :depth="depth" :name="tab.name">
           <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" @input="onChange" :meta="meta" :depth="depth" />
+          <component v-if="tab.component" :is="tab.component" v-model="value" />
         </ui-tab>
       </ui-tabs>
       <aside v-if="!nested && infos && infos != 'none'" class="editor-infos">
@@ -79,6 +80,14 @@
         default: false
       },
       depth: {
+        type: Number,
+        default: 0
+      },
+      onConfigure: {
+        type: Function,
+        default: () => { }
+      },
+      activeTab: {
         type: Number,
         default: 0
       }
@@ -172,6 +181,8 @@
             this.hasTabs = true;
           }
         }
+
+        this.onConfigure(this);
 
         this.rendererNotFound = false;
         this.loaded = true;

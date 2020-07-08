@@ -35,6 +35,15 @@
   {
     background: var(--color-bg-xxlight);
   }
+
+  &.is-blank
+  {
+    background: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
 }
 
 .ui-box + .ui-box.is-connected,
@@ -76,7 +85,7 @@
 
 .ui-view-box-aside
 {
-  width: 360px;
+  width: 340px;
   max-width: 100%;
   padding: var(--padding);
 
