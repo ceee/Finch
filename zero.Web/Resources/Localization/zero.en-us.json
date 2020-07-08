@@ -33,6 +33,7 @@
     "icon": "Icon",
     "icon_select": "Select an icon",
     "tab_general": "General",
+    "tab_content": "Content",
     "pick": {
       "title": "Choose one",
       "title_multiple": "Choose",

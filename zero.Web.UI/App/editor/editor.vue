@@ -1,35 +1,44 @@
 ﻿<template>
-  <div class="editor-outer" v-if="loaded" :class="{ 'has-tabs': hasTabs, '-infos-aside': !nested }" :renderer="config">
-    <ui-tabs class="editor">
-      <ui-tab class="ui-box" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index" :depth="depth">
-        <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" @input="onChange" :meta="meta" :depth="depth" />
-      </ui-tab>
-    </ui-tabs>
-    <aside v-if="!nested && infos && infos != 'none'" class="editor-infos">
-      <div class="ui-box editor-active-toggle" v-if="isShared || activeToggle" :class="{'is-active': value.isActive }">
-        <slot name="settings">
-          <div v-if="isShared" class="editor-global-flag">
-            <b>This entity is shared</b> and can be used by all applications.<br>
-            <a href="/">More info</a>
-            <i class="fth-radio"></i>
-          </div>
-          <ui-property v-if="activeToggle" label="@ui.active" :is-text="true" class="is-toggle">
-            <ui-toggle v-model="value.isActive" class="is-primary" />
-          </ui-property>
-          <slot name="settings-after"></slot>
-        </slot>
-      </div>
-      <div class="ui-box is-light is-connected">
-        <slot name="infos">
-          <ui-property v-if="value.id" label="@ui.id" :is-text="true">
-            {{value.id}}
-          </ui-property>
-          <ui-property v-if="value.id" label="@ui.createdDate" :is-text="true">
-            <ui-date v-model="value.createdDate" />
-          </ui-property>
-        </slot>
-      </div>
-    </aside>
+  <div>
+    <div class="editor-outer" v-if="loaded && !rendererNotFound" :class="{ 'has-tabs': hasTabs, '-infos-aside': !nested, 'is-page': isPage }" :renderer="config">
+      <ui-tabs class="editor">
+        <ui-tab class="ui-box" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index" :depth="depth">
+          <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" @input="onChange" :meta="meta" :depth="depth" />
+        </ui-tab>
+      </ui-tabs>
+      <aside v-if="!nested && infos && infos != 'none'" class="editor-infos">
+        <div class="ui-box editor-active-toggle" v-if="isShared || activeToggle" :class="{'is-active': value.isActive }">
+          <slot name="settings">
+            <div v-if="isShared" class="editor-global-flag">
+              <b>This entity is shared</b> and can be used by all applications.<br>
+              <a href="/">More info</a>
+              <i class="fth-radio"></i>
+            </div>
+            <ui-property v-if="activeToggle" label="@ui.active" :is-text="true" class="is-toggle">
+              <ui-toggle v-model="value.isActive" class="is-primary" />
+            </ui-property>
+            <slot name="settings-after"></slot>
+          </slot>
+        </div>
+        <div class="ui-box is-light is-connected">
+          <slot name="infos">
+            <ui-property v-if="value.id" label="@ui.id" :is-text="true">
+              {{value.id}}
+            </ui-property>
+            <ui-property v-if="value.id" label="@ui.createdDate" :is-text="true">
+              <ui-date v-model="value.createdDate" />
+            </ui-property>
+          </slot>
+        </div>
+      </aside>
+    </div>
+    <div class="page page-error editor-error" v-if="loaded && rendererNotFound">
+      <i class="page-error-icon fth-cloud-snow"></i>
+      <p class="page-error-text">
+        <strong class="page-error-headline">Not found</strong><br>
+        The renderer <code>[{{config}}]</code> could not be found
+      </p>
+    </div>
   </div>
 </template>
 
@@ -65,6 +74,10 @@
         type: Boolean,
         default: false
       },
+      isPage: {
+        type: Boolean,
+        default: false
+      },
       depth: {
         type: Number,
         default: 0
@@ -74,6 +87,7 @@
     components: { EditorComponent },
 
     data: () => ({
+      rendererNotFound: false,
       configuration: {},
       loaded: false,
       hasTabs: false,
@@ -123,8 +137,10 @@
       {
         this.configuration = config;
 
-        if (!config.fields)
+        if (!config || !config.fields)
         {
+          this.rendererNotFound = true;
+          this.loaded = true;
           return;
         }
 
@@ -145,14 +161,19 @@
         if (this.tabs.length < 1)
         {
           this.tabs.push({
-            label: '',
+            label: '@ui.tab_general',
             fields: this.configuration.fields,
             count: () => null
           });
+
+          if (this.isPage)
+          {
+            this.tabs[0].label = '@ui.tab_content';
+            this.hasTabs = true;
+          }
         }
 
-
-
+        this.rendererNotFound = false;
         this.loaded = true;
       },
 
@@ -181,7 +202,7 @@
 
   .editor-outer
   {
-    &.-infos-aside
+    &.-infos-aside:not(.is-page)
     {
       display: grid;
       grid-template-columns: 1fr 340px var(--padding);
@@ -323,5 +344,11 @@
         right: 20px;
       }
     }
+  }
+
+  .editor-error
+  {
+    background: transparent;
+    min-height: calc(100vh - 100px);
   }
 </style>

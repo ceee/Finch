@@ -11,7 +11,7 @@
       <ui-button :submit="true" label="Save" />
     </ui-header-bar>
 
-     <ui-editor v-if="!loading" :config="renderer" v-model="model" />
+    <ui-editor v-if="!loading" :config="renderer" v-model="model" :meta="meta" :is-page="true" infos="none" />
   </ui-form>
 </template>
 
@@ -30,6 +30,7 @@
       loading: true,
       renderer: null,
       actions: [],
+      meta: {},
       model: {
         name: null,
         options: {
@@ -47,7 +48,7 @@
       },
       title()
       {
-        return this.isCreate ? 'Create new page' : 'Page ' + this.id;
+        return this.isCreate ? 'Create new page' : this.model.name;
       }
     },
 
@@ -70,7 +71,7 @@
 
       initialize()
       {
-        console.info(this.id, this.type);
+        
       },
 
       actionSelected(item, dropdown)
@@ -87,8 +88,9 @@
       {
         form.load(PagesApi.getById(this.$route.params.id)).then(response =>
         {
-          this.renderer = 'debug.' + response.entity.pageTypeAlias + 'page';
+          this.renderer = 'page.' + response.entity.pageTypeAlias;
           this.model = response.entity;
+          this.meta = response.meta;
           this.loading = false;
         });
       },
