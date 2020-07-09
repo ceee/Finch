@@ -73,7 +73,7 @@ namespace zero.Web
       //  spa.UseProxyToSpaDevelopmentServer("http://localhost:8999");
       //});
 
-#pragma warning disable CS0618
+      #pragma warning disable CS0618
       app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions()
       {
         HotModuleReplacement = true,
