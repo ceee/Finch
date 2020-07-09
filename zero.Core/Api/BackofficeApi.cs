@@ -91,7 +91,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> SaveModel<T>(T model, IValidator validator = null) where T : IZeroIdEntity
+    public async Task<EntityResult<T>> SaveModel<T>(T model, IValidator<T> validator = null) where T : IZeroIdEntity
     {
       // check for alias
       //if (model is IUrlAliasEntity)
@@ -248,7 +248,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Updates or creates an entity with an optional validator
     /// </summary>
-    Task<EntityResult<T>> SaveModel<T>(T model, IValidator validator = null) where T : IZeroIdEntity;
+    Task<EntityResult<T>> SaveModel<T>(T model, IValidator<T> validator = null) where T : IZeroIdEntity;
 
     /// <summary>
     /// Deletes an entity by Id

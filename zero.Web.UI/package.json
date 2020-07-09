@@ -40,7 +40,7 @@
     "vue-template-compiler": "2.6.10"
   },
   "scripts": {
-    "dev": "webpack-dev-server --progress --hot --open",
+    "dev": "webpack-dev-server -port 8999 --progress --hot --open",
     "debug": "webpack --progress",
     "build": "webpack --progress --config webpack.prod.js",
     "updatepackages": "node wipe.js && rm -rf node_modules && npm update --save-dev && npm update --save"

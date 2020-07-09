@@ -67,11 +67,18 @@ namespace zero.Web
 
       string webUiPath = Path.Combine(Environment.CurrentDirectory, "..", "zero.Web.UI");
 
-      #pragma warning disable CS0618
+      //app.UseSpa(spa =>
+      //{
+      //  spa.Options.SourcePath = webUiPath;
+      //  spa.UseProxyToSpaDevelopmentServer("http://localhost:8999");
+      //});
+
+#pragma warning disable CS0618
       app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions()
       {
         HotModuleReplacement = true,
         ProjectPath = webUiPath,
+        HotModuleReplacementServerPort = 8999
       });
       #pragma warning restore CS0618
 

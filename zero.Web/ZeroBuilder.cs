@@ -87,7 +87,7 @@ namespace zero.Web
 
 
       // configure FluentValidation
-      ValidatorOptions.PropertyNameResolver = ValidatorCamelCasePropertyResolver.ResolvePropertyName;
+      ValidatorOptions.Global.PropertyNameResolver = ValidatorCamelCasePropertyResolver.ResolvePropertyName;
 
 
       // add default mapper
