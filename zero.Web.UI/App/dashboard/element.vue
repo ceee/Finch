@@ -27,6 +27,10 @@
       high: {
         type: Boolean,
         default: false
+      },
+      theme: {
+        type: String,
+        default: 'default'
       }
     },
 
@@ -39,7 +43,8 @@
       {
         return {
           'is-high': this.high,
-          'is-wide': this.wide
+          'is-wide': this.wide,
+          ['theme-' + this.theme]: true
         };
       }
     }
@@ -57,6 +62,7 @@
     background: var(--color-bg-light);
     border-radius: var(--radius);
     box-shadow: var(--color-shadow-short);
+    color: var(--color-fg);
 
     &.is-wide
     {
@@ -80,7 +86,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 12px $dashboard-element-padding;
-    border-bottom: 1px solid var(--color-line-light);
+    /*border-bottom: 1px solid var(--color-line-light);*/
 
     .ui-icon-button
     {
@@ -92,6 +98,6 @@
   h2.ui-dashboard-element-title
   {
     margin: 0;
-    font-size: var(--font-size-m);
+    font-size: var(--font-size);
   }
 </style>

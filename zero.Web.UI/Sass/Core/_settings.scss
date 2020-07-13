@@ -108,6 +108,67 @@
 }
 
 
+.theme-primary
+{
+  // accent colors
+  --color-primary: #fff; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
+  --color-primary-fg: #000;
+  --color-primary-low: rgba(255, 255, 255, 0.15);
+
+  // foreground/text color
+  --color-fg: #fff;
+  --color-fg-mid: rgba(255, 255, 255, 0.6);
+  --color-fg-light: rgba(255, 255, 255, 0.4);
+  --color-fg-xlight: rgba(255, 255, 255, 0.3);
+
+  // background color shades
+  --color-bg: #04bfbf;
+  --color-bg-light: #04bfbf;
+  /*--color-bg-dark: #d4d5d6;
+  --color-bg-xmid: #f0f1f2;
+  --color-bg-mid: #f4f5f6;
+  --color-bg-light: #fff;
+  --color-bg-xlight: #f8f9fa;
+  --color-bg-xxlight: #fcfdfe;*/
+
+  // line colors
+  /*--color-line: #eaebec;
+  --color-line-mid: #eff0f1;
+  --color-line-light: #f4f5f6;
+
+  // misc colors
+  --color-box: #fff;
+  --color-shadow: rgba(0,0,0,0.03);
+  --color-shadow-short: 0 1px 1px 0 rgba(0,0,0,0.05);
+  --color-highlight: rgba(0,0,0,0.05);
+  --color-overlay-shade: rgba(0,0,0,0.15);
+
+  // message colors
+  --color-accent-info: rgb(44, 162, 212);
+  --color-accent-info-bg: rgba(44, 162, 212, 0.1);
+  --color-accent-success: rgb(47, 187, 152);
+  --color-accent-success-bg: rgba(47, 187, 152, 0.15);
+  --color-accent-warn: rgb(211, 172, 35);
+  --color-accent-warn-bg: rgba(233, 193, 56, 0.1);
+  --color-accent-error: rgb(216, 40, 83);
+  --color-accent-error-bg: rgba(216, 40, 83, 0.08);*/
+
+  // sizes
+
+  --padding: 32px;
+  --padding-s: 24px;
+  --height-top: 74px;
+  --radius: 3px;
+
+  --font-size-xs: 12px;
+  --font-size-s: 13px;
+  --font-size: 14px;
+  --font-size-m: 15px;
+  --font-size-l: 16px;
+  --font-size-xl: 18px;
+}
+
+
 $accent-color-prefix: --color-accent;
 $accent-colors: (
   "blue-gray": "#527281",
