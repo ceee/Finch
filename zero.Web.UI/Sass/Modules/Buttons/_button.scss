@@ -40,7 +40,7 @@ button::-moz-focus-inner
   background: var(--color-secondary);
   padding: 0 20px;
   height: 42px;
-  border-radius: 3px;
+  border-radius: var(--radius);
   font-size: var(--font-size);
   font-weight: 700;
   margin: 0;

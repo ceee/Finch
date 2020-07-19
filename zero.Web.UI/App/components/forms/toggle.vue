@@ -67,7 +67,7 @@
   {
     display: inline-block;
     height: 22px;
-    width: 40px;
+    width: 36px;
     background: var(--color-bg);
     border: 1px solid var(--color-line);
     border-radius: 20px;
@@ -96,7 +96,7 @@
       i
       {
         background: var(--color-secondary-fg);
-        transform: translateX(18px);
+        transform: translateX(14px);
       }
 
       .is-primary &
