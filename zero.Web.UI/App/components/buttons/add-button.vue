@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-add-button">
-    <ui-button v-if="!decision" :type="type" :label="label" icon="fth-plus" @click="onClick(false)" :disabled="disabled" />
+    <ui-button v-if="!hasDropdown" :type="type" :label="label" icon="fth-plus" @click="onClick(false)" :disabled="disabled" />
     <ui-dropdown v-else ref="dropdown" align="right">
       <template v-slot:button>
         <ui-button :label="label" :type="type" icon="fth-plus" :disabled="disabled" />
@@ -52,6 +52,10 @@
       application()
       {
         return _find(zero.applications, x => x.id === zero.appId);
+      },
+      hasDropdown()
+      {
+        return this.decision && zero.apps.shared;
       }
     },
 
@@ -59,7 +63,10 @@
 
       onClick(isShared)
       {
-        this.$refs.dropdown.hide();
+        if (this.$refs.dropdown)
+        {
+          this.$refs.dropdown.hide();
+        }
 
         if (!!this.route)
         {

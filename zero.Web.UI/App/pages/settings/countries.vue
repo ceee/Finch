@@ -54,7 +54,8 @@
                 name: baseRoute + '-edit',
                 params: { id: item.id }
               };
-            }
+            },
+            shared: true
           },
           code: 'text',
           isPreferred: {

@@ -42,7 +42,8 @@ export default function (el, binding)
 
     if (hasSharedIndicator)
     {
-      html = html + ' <i class="ui-table-field-shared is-inline fth-radio"></i>';
+      //html = html + ' <i class="ui-table-field-shared is-inline fth-radio"></i>';
+      html = html + ' <i class="ui-table-field-shared-2 is-inline">(shared)</i>';
     }
 
     render(html, isHtml);

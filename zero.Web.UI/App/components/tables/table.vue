@@ -538,7 +538,7 @@
   .ui-table-field-shared
   {
     font-size: 16px;
-    color: var(--color-primary);
+    color: var(--color-accent-info);
 
     &.is-inline
     {
@@ -546,6 +546,20 @@
       font-size: 18px;
       position: relative;
       top: -1px;
+    }
+  }
+
+  .ui-table-field-shared-2
+  {
+    color: var(--color-fg-light);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 0.85em;
+
+    &.is-inline
+    {
+      margin-left: 0.5em;
+      position: relative;
     }
   }
 </style>
