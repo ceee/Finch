@@ -32,6 +32,16 @@ export default {
     return Axios.get('languages/getSupportedCultures').then(res => Promise.resolve(res.data));
   },
 
+  getPreviews(ids)
+  {
+    return Axios.get('languages/getPreviews', { params: { ids } }).then(res => Promise.resolve(res.data));
+  },
+
+  getForPicker()
+  {
+    return Axios.get('languages/getForPicker').then(res => Promise.resolve(res.data));
+  },
+
   // save a language
   save(model)
   {

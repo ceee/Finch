@@ -99,11 +99,11 @@
         transform: translateX(14px);
       }
 
-      .is-primary &
+      /*.is-primary &
       {
         background: var(--color-primary);
         box-shadow: 0 0 0 4px var(--color-primary-low);
-      }
+      }*/
     }
   }
 

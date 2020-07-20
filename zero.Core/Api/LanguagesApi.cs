@@ -32,15 +32,21 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public async Task<Dictionary<string, T>> GetByIds(params string[] ids)
+    {
+      return await GetByIds<T>(ids);
+    }
+
+
+    /// <inheritdoc />
     public async Task<IList<T>> GetAll()
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.Query<T>()
-          .Scope(Scope)
-          .OrderByDescending(x => x.CreatedDate)
-          .ToListAsync();
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+
+      return await session.Query<T>()
+        .Scope(Scope)
+        .OrderByDescending(x => x.CreatedDate)
+        .ToListAsync();
     }
 
 
@@ -66,12 +72,9 @@ namespace zero.Core.Api
     {
       query.SearchFor(entity => entity.Name);
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.Query<T>()
-          .Scope(Scope)
-          .ToQueriedListAsync(query);
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+
+      return await session.Query<T>().Scope(Scope).ToQueriedListAsync(query);
     }
 
 
@@ -96,6 +99,11 @@ namespace zero.Core.Api
     /// Get language by Id
     /// </summary>
     Task<T> GetById(string id);
+
+    /// <summary>
+    /// Get countries by ids
+    /// </summary>
+    Task<Dictionary<string, T>> GetByIds(params string[] ids);
 
     /// <summary>
     /// Get all available languages

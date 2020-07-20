@@ -20,10 +20,19 @@
     },
     {
       field: 'code',
-      display: 'text'
+      display: 'text',
+      required: true
+    },
+    {
+      field: 'inheritedLanguageId',
+      display: 'language'
     },
     {
       field: 'isDefault',
+      display: 'toggle'
+    },
+    {
+      field: 'isOptional',
       display: 'toggle'
     }
   ]

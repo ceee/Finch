@@ -331,7 +331,9 @@
       "code_text": "Code in ISO 3166-1 format",
       "isDefault": "Default",
       "isDefault_text": "Use as default language",
-      "inheritedLanguageId": "Inherit from",
+      "isOptional": "Optional",
+      "isOptional_text": "Values for an optional language must not be entered, even if the field is required",
+      "inheritedLanguageId": "Fallback",
       "inheritedLanguageId_text": "To allow multi-lingual content to fall back to another language if not present in the requested language, select it here"
     }
   },
