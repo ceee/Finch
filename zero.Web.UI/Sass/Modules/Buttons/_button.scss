@@ -172,6 +172,14 @@ button::-moz-focus-inner
   }
 }
 
+.ui-button-text
+{
+  span
+  {
+    font-weight: 400;
+  }
+}
+
 .ui-button-state
 {
   position: absolute;
