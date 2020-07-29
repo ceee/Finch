@@ -65,7 +65,7 @@ namespace zero.Web
     {
       app.UseDeveloperExceptionPage();
 
-      string webUiPath = Path.Combine(Environment.CurrentDirectory, "..", "zero.Web.UI");
+      string webUiPath = Path.Combine(Environment.CurrentDirectory, "..", "zero.Web.UI"); // TODO dynPATH
 
       //app.UseSpa(spa =>
       //{

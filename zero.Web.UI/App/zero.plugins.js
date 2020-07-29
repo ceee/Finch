@@ -2,7 +2,7 @@
 zero.plugins = zero.plugins || [];
 
 // TODO correct path
-let plugins = require.context('@/../zero.Commerce/Plugin', true, /plugin\.js$/);
+let plugins = require.context('@/../zero.Commerce/Plugin', true, /plugin\.js$/); // TODO dynPATH
 
 plugins.keys().forEach(path =>
 {
@@ -13,7 +13,7 @@ plugins.keys().forEach(path =>
   zero.plugins.push(definition);
 });
 
-plugins = require.context('@/../zero.Debug', true, /plugin\.js$/);
+plugins = require.context('@/../zero.Debug', true, /plugin\.js$/); // TODO dynPATH
 
 plugins.keys().forEach(path =>
 {
