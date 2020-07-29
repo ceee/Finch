@@ -23,7 +23,7 @@ namespace zero.Core.Extensions
 
       Type dbConventionType = typeof(IZeroDbConventions);
 
-      store.Conventions.IdentityPartsSeparator = ".";
+      store.Conventions.IdentityPartsSeparator = '.';
 
       store.Conventions.FindCollectionName = type =>
       {
