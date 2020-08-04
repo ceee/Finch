@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <LangVersion>8.0</LangVersion>
@@ -7,10 +7,18 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>zero.Web</PackageId>
+    <PackageId>zero.XTest</PackageId>
     <Version>0.1.0</Version>
     <Description>// TODO 2</Description>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <Content Remove="Resources/**/*" />
+    <Content Include="Resources/**/*">
+      <Pack>true</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
