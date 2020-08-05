@@ -89,15 +89,6 @@ Go-Root
 Write-Host "Done" -ForegroundColor Cyan
 New-Line
 
-# pack zero web
-Write-Host "zero.XTest: building and packing..."
-New-Line
-Set-Project "zero.XTest"
-dotnet pack -o $packagesPath
-Go-Root
-Write-Host "Done" -ForegroundColor Cyan
-New-Line
-
 # pack zero commerce
 Write-Host "zero.Commerce: building and packing..."
 New-Line

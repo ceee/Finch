@@ -25,24 +25,25 @@
     <ProjectReference Include="..\zero.Core\zero.Core.csproj" />
   </ItemGroup>
 
-  <!--<ItemGroup>
-    <BackofficeUI Include="..\zero.Web.UI\**\*" Exclude="..\zero.Web.UI\node_modules\**\*;..\zero.Web.UI\Assets\*.js;..\zero.Web.UI\package-lock.json" />
-    <Content Include="@(BackofficeUI)" Link="zero\web\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest">
+  <ItemGroup>
+    <Content Remove="Resources/**/*" />
+    <None Include="Resources/**/*">
       <Pack>true</Pack>
-      <PackagePath>content\zero\web\</PackagePath>
-    </Content>
-  </ItemGroup>-->
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackagePath>content\Resources\</PackagePath>
+    </None>
+    
+    <None Include="zero.Web.targets">
+      <Pack>true</Pack>
+      <PackagePath>build\</PackagePath>
+    </None>
 
-  <!--<Target Name="CopyBackofficeUI" BeforeTargets="BeforeBuild">
-    <Message Text="Copy Backoffice UI" />
-    <MakeDir Directories="$(OutDir)\zero\web" Condition="!Exists('$(OutDir)\zero\web')" />
-    <ItemGroup>
-      <BackofficeUI Include="..\zero.Web.UI\**\*" Exclude="..\zero.Web.UI\node_modules\**\*;..\zero.Web.UI\Assets\*.js;..\zero.Web.UI\package-lock.json" />
-      <Content Include="@(BackofficeUI)" Link="zero\web\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest">
-        <Pack>true</Pack>
-        <PackagePath>zero\web\</PackagePath>
-      </Content>
-    </ItemGroup>
-  </Target>-->
+    <BackofficeUI Include="..\zero.Web.UI\**\*" Exclude="..\zero.Web.UI\node_modules\**\*;..\zero.Web.UI\Assets\*.js;..\zero.Web.UI\package-lock.json" />
+    <None Include="@(BackofficeUI)" Link="Zero\%(RecursiveDir)%(Filename)%(Extension)" >
+      <Pack>true</Pack>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackagePath>content\Web\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
