@@ -29,8 +29,8 @@ module.exports = {
       'deps': path.join(__dirname, 'node_modules'),
       'zero': path.join(__dirname, 'App'),
       'zerosetup': path.join(__dirname, 'Setup'),
-      '@': __dirname,
-      'shop': path.join(__dirname, '..', 'zero.Commerce/Plugin') // TODO dynPATH
+      '@': __dirname
+      //'shop': path.join(__dirname, '..', 'zero.Commerce/Plugin') // TODO dynPATH
     }
   },
 

@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <Target Name="CopyZeroWebUI">
-    <Copy SourceFiles="@(ZeroWebUI)" DestinationFiles="@(ZeroWebUI->'$(ProjectDir)\zero\%(TargetPath)\%(RecursiveDir)\%(Filename)%(Extension)')" Condition="!Exists('$(ProjectDir)\zero')">
+    <Copy SourceFiles="@(ZeroWebUI)" DestinationFiles="@(ZeroWebUI->'$(ProjectDir)\%(TargetPath)\%(RecursiveDir)\%(Filename)%(Extension)')" Condition="!Exists('$(ProjectDir)\zero')">
       <Output TaskParameter="DestinationFiles" ItemName="FileWrites" />
     </Copy>
   </Target>

@@ -30,7 +30,7 @@
     <None Include="Resources/**/*">
       <Pack>true</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
-      <PackagePath>content\Resources\</PackagePath>
+      <PackagePath>content\zero\Resources\</PackagePath>
     </None>
     
     <None Include="zero.Web.targets">
@@ -42,7 +42,7 @@
     <None Include="@(BackofficeUI)" Link="Zero\%(RecursiveDir)%(Filename)%(Extension)" >
       <Pack>true</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
-      <PackagePath>content\Web\</PackagePath>
+      <PackagePath>content\zero\Web\</PackagePath>
     </None>
   </ItemGroup>
 

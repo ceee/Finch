@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace zero.Core.Options
 {
@@ -10,6 +11,7 @@ namespace zero.Core.Options
       DefaultLanguage = SupportedLanguages[0];
       TokenExpiration = 60;
       BackofficePath = "/zero";
+      ExcludedPaths = new List<string>() { };
       Raven = new RavenOptions()
       {
         CollectionPrefix = String.Empty
@@ -40,6 +42,11 @@ namespace zero.Core.Options
 
     /// <inheritdoc />
     public string BackofficePath { get; set; }
+
+    /// <summary>
+    /// Paths in the backoffice which are not handled by zero
+    /// </summary>
+    public List<string> ExcludedPaths { get; private set; }
 
     /// <inheritdoc />
     //public IZeroPluginConfiguration Backoffice { get; set; }
@@ -109,6 +116,11 @@ namespace zero.Core.Options
     /// URL path to the backoffice (defaults to /zero)
     /// </summary>
     string BackofficePath { get; set; }
+
+    /// <summary>
+    /// Paths in the backoffice which are not handled by zero
+    /// </summary>
+    List<string> ExcludedPaths { get; }
 
     /// <summary>
     /// 
