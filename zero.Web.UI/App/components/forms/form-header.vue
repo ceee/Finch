@@ -1,10 +1,10 @@
 ﻿<template>
   <ui-header-bar :title="value.name" :title-empty="title" :back-button="true">
-    <ui-dropdown align="right" :disabled="isCreate">
+    <!--<ui-dropdown align="right" :disabled="isCreate">
       <template v-slot:button>
         <ui-button type="white" label="<span>Language:</span> English" caret="down" />
       </template>
-    </ui-dropdown>
+    </ui-dropdown>-->
     <ui-dropdown v-if="!isCreate" align="right">
       <template v-slot:button>
         <ui-button type="white" label="@ui.actions" caret="down" />

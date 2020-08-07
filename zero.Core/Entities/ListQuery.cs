@@ -6,7 +6,6 @@ using System.Linq.Expressions;
 
 namespace zero.Core.Entities
 {
-  [BindProperties(SupportsGet = true)]
   public class ListQuery<T>
   {
     public string Search { get; set; } = null;
@@ -34,7 +33,6 @@ namespace zero.Core.Entities
   }
 
 
-  [BindProperties(SupportsGet = true)]
   public class ListQuery<T, TFilter> : ListQuery<T> where TFilter : IListSpecificQuery
   {
     public TFilter Filter { get; set; }

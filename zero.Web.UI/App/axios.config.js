@@ -12,7 +12,7 @@ Axios.defaults.withCredentials = true;
 
 Axios.defaults.paramsSerializer = (params) =>
 {
-  return Qs.stringify(params, { arrayFormat: 'none' });
+  return Qs.stringify(params, { arrayFormat: 'brackets' });
 };
 
 Axios.interceptors.response.use(response => response, error =>
