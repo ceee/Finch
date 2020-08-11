@@ -51,7 +51,7 @@ namespace zero.Core.Api
 
         foreach (Space space in spaces)
         {
-          permissionSpaces.Items.Add(new Permission(Permissions.Spaces.PREFIX + space.Alias, space.Name, null, PermissionValueType.ReadWrite));
+          permissionSpaces.Items.Add(new Permission(Permissions.Spaces.PREFIX + space.Alias, space.Name, null, PermissionValueType.CRUD));
         }
 
         result.Add(permissionSpaces);
@@ -64,15 +64,15 @@ namespace zero.Core.Api
         Description = "@permission.collections.settings_description"
       };
 
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Updates, "@settings.system.updates.name", "@settings.system.updates.text_default", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Applications, "@settings.system.applications.name", "@settings.system.applications.text", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Users, "@settings.system.users.name", "@settings.system.users.text", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Languages, "@settings.system.languages.name", "@settings.system.languages.text", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Countries, "@settings.system.countries.name", "@settings.system.countries.text", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Translations, "@settings.system.translations.name", "@settings.system.translations.text", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Logging, "@settings.system.logs.name", "@settings.system.logs.text", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Plugins, "@settings.plugins.installed.name", "@settings.plugins.installed.text_default", PermissionValueType.ReadWrite));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.CreatePlugin, "@settings.plugins.create.name", "@settings.plugins.create.text", PermissionValueType.ReadWrite));
+      permissionSettings.Items.Add(new Permission(Permissions.Settings.Updates, "@settings.system.updates.name", "@settings.system.updates.text_default", PermissionValueType.CRUD));
+      permissionSettings.Items.Add(new Permission(Permissions.Settings.Applications, "@settings.system.applications.name", "@settings.system.applications.text", PermissionValueType.CRUD));
+      permissionSettings.Items.Add(new Permission(Permissions.Settings.Users, "@settings.system.users.name", "@settings.system.users.text", PermissionValueType.CRUD));
+      permissionSettings.Items.Add(new Permission(Permissions.Settings.Languages, "@settings.system.languages.name", "@settings.system.languages.text", PermissionValueType.CRUD));
+      permissionSettings.Items.Add(new Permission(Permissions.Settings.Countries, "@settings.system.countries.name", "@settings.system.countries.text", PermissionValueType.CRUD));
+      permissionSettings.Items.Add(new Permission(Permissions.Settings.Translations, "@settings.system.translations.name", "@settings.system.translations.text", PermissionValueType.CRUD));
+      permissionSettings.Items.Add(new Permission(Permissions.Settings.Logging, "@settings.system.logs.name", "@settings.system.logs.text", PermissionValueType.CRUD));
+      permissionSettings.Items.Add(new Permission(Permissions.Settings.Plugins, "@settings.plugins.installed.name", "@settings.plugins.installed.text_default", PermissionValueType.CRUD));
+      permissionSettings.Items.Add(new Permission(Permissions.Settings.CreatePlugin, "@settings.plugins.create.name", "@settings.plugins.create.text", PermissionValueType.CRUD));
 
       result.Add(permissionSettings);
 

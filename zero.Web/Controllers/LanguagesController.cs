@@ -73,14 +73,14 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Save language
     /// </summary>
-    [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Write)]
+    [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Update)]
     public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
 
 
     /// <summary>
     /// Deletes a language
     /// </summary>
-    [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Write)]
+    [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Update)]
     public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
   }
 }

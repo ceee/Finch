@@ -51,7 +51,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Save country
     /// </summary>
-    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
     public async Task<IActionResult> Save([FromBody] UserRoleEditModel model)
     {
       UserRole role = await Mapper.Map(model, await Api.GetById(model.Id));
@@ -62,7 +62,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Deletes a country
     /// </summary>
-    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
     public async Task<IActionResult> Delete([FromQuery] string id)
     {
       return await As<UserRole, UserRoleEditModel>(await Api.Delete(id));

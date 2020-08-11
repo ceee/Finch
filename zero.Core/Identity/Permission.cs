@@ -45,14 +45,14 @@ namespace zero.Core.Identity
 
     public Permission() { }
 
-    public Permission(string key, string value, PermissionValueType valueType = PermissionValueType.ReadWrite)
+    public Permission(string key, string value, PermissionValueType valueType = PermissionValueType.CRUD)
     {
       Key = key;
       Value = value;
       ValueType = valueType;
     }
 
-    public Permission(string key, string label, string description, PermissionValueType valueType = PermissionValueType.ReadWrite)
+    public Permission(string key, string label, string description, PermissionValueType valueType = PermissionValueType.CRUD)
     {
       Key = key;
       Label = label;
@@ -64,12 +64,12 @@ namespace zero.Core.Identity
     /// <summary>
     /// Whether the value is read or write
     /// </summary>
-    public bool CanRead => Value == PermissionsValue.Read || Value == PermissionsValue.Write;
+    public bool CanRead => Value == PermissionsValue.Read || Value == PermissionsValue.Update;
 
     /// <summary>
     /// Whether the value is write
     /// </summary>
-    public bool CanWrite => Value == PermissionsValue.Write;
+    public bool CanWrite => Value == PermissionsValue.Update;
 
     /// <summary>
     /// Whether the value is true

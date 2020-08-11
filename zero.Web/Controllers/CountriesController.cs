@@ -48,11 +48,11 @@ namespace zero.Web.Controllers
     }
 
 
-    [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Write)]
+    [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Update)]
     public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
 
 
-    [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Write)]
+    [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Update)]
     public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
   }
 }

@@ -65,7 +65,7 @@ namespace zero.Web.Controllers
     }
 
 
-    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
     public async Task<IActionResult> Disable([FromBody] T model)
     {
       T entity = await Api.GetUserById(model.Id);
@@ -73,7 +73,7 @@ namespace zero.Web.Controllers
     }
 
 
-    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
     public async Task<IActionResult> Enable([FromBody] T model)
     {
       T entity = await Api.GetUserById(model.Id);
@@ -81,16 +81,16 @@ namespace zero.Web.Controllers
     }
 
 
-    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
     public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
 
 
-    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
     // TODO do not need settings.users authorization for editing current user profiles
     public async Task<IActionResult> SaveCurrent([FromBody] T model) => Json(await Api.Save(model));
 
 
-    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Write)]
+    [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
     public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
   }
 }

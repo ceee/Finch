@@ -7,9 +7,9 @@
     /// </summary>
     Boolean = 0,
     /// <summary>
-    /// Read, write or none
+    /// Create, read, update, delete or none
     /// </summary>
-    ReadWrite = 1,
+    CRUD = 1,
     /// <summary>
     /// Simple text string
     /// </summary>

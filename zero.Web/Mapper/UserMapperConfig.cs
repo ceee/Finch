@@ -86,7 +86,7 @@ namespace zero.Web.Mapper
           {
             return true;
           }
-          return parts[1] == PermissionsValue.True || parts[1] == PermissionsValue.Read || parts[1] == PermissionsValue.Write;
+          return parts[1] == PermissionsValue.True || parts[1] == PermissionsValue.Read || parts[1] == PermissionsValue.Update;
         });
         target.Icon = source.Icon;
       });

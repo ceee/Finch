@@ -246,11 +246,11 @@ namespace zero.Core.Api
           new UserClaim(type, Permissions.Sections.Media, PermissionsValue.True),
           new UserClaim(type, Permissions.Sections.Settings, PermissionsValue.True),
           new UserClaim(type, Permissions.Settings.Applications, PermissionsValue.None),
-          new UserClaim(type, Permissions.Settings.Countries, PermissionsValue.Write),
-          new UserClaim(type, Permissions.Settings.Logging, PermissionsValue.Write),
-          new UserClaim(type, Permissions.Settings.Translations, PermissionsValue.Write),
-          new UserClaim(type, Permissions.Settings.Updates, PermissionsValue.Write),
-          new UserClaim(type, Permissions.Settings.Users, PermissionsValue.Write),
+          new UserClaim(type, Permissions.Settings.Countries, PermissionsValue.Update),
+          new UserClaim(type, Permissions.Settings.Logging, PermissionsValue.Update),
+          new UserClaim(type, Permissions.Settings.Translations, PermissionsValue.Update),
+          new UserClaim(type, Permissions.Settings.Updates, PermissionsValue.Update),
+          new UserClaim(type, Permissions.Settings.Users, PermissionsValue.Update),
         },
       };
 

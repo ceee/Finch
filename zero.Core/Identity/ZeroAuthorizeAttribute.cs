@@ -33,7 +33,7 @@ namespace zero.Core.Identity
   {
     string Permission { get; set; }
 
-    string[] PermissionValues { get; set; }
+    List<string> PermissionValues { get; set; }
 
     bool Enabled { get; set; }
 
@@ -41,7 +41,7 @@ namespace zero.Core.Identity
     public ZeroAuthorizeFilter(bool enabled, string permission, string[] values) : base()
     {
       Permission = permission;
-      PermissionValues = values;
+      PermissionValues = values.ToList();
       Enabled = enabled;
     }
 
@@ -100,18 +100,34 @@ namespace zero.Core.Identity
       // check claims
       if (!Permission.IsNullOrEmpty())
       {
-        bool isSuperUser = user.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
+        bool isSuperUser = false; // TODO user.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
         bool hasPassed = isSuperUser;
 
         if (!isSuperUser)
         {
+          // automatically request write permission for methods which start with `Save` or `Delete` or `Post` or `Put`
+          string actionName = ((Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor)context.ActionDescriptor).ActionName;
+
+          if (actionName.StartsWith("Create"))
+          {
+            PermissionValues.Add(PermissionsValue.Create);
+          }
+          if (actionName.StartsWith("Update") || actionName.StartsWith("Save"))
+          {
+            PermissionValues.Add(PermissionsValue.Update);
+          }
+          if (actionName.StartsWith("Delete") || actionName.StartsWith("Remove"))
+          {
+            PermissionValues.Add(PermissionsValue.Delete);
+          }
+
           foreach (string value in PermissionValues)
           {
             bool fulfillsClaim = user.HasClaim(Constants.Auth.Claims.Permission, Permission + ":" + value);
 
             if (!fulfillsClaim && value == PermissionsValue.Read)
             {
-              fulfillsClaim = user.HasClaim(Constants.Auth.Claims.Permission, Permission + ":" + PermissionsValue.Write);
+              fulfillsClaim = user.HasClaim(Constants.Auth.Claims.Permission, Permission + ":" + PermissionsValue.Update);
             }
 
             if (fulfillsClaim)
@@ -122,10 +138,10 @@ namespace zero.Core.Identity
           }
         }
 
-        if (!hasPassed)
-        {
-          context.Result = new StatusCodeResult(403);
-        }
+        //if (!hasPassed) // TODO 
+        //{
+        //  context.Result = new StatusCodeResult(403);
+        //}
       }
     }
   }

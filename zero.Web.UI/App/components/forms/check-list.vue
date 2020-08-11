@@ -1,9 +1,9 @@
 ﻿ <template>
-  <div class="ui-check-list" :class="{'is-disabled': disabled }">
+  <div class="ui-check-list" :class="{'is-disabled': disabled, 'is-inline': inline }">
     <label v-for="item in list" class="ui-native-check ui-check-list-item">
       <input type="checkbox" :checked="isChecked(item)" @input="onChange(item)" />
       <span class="ui-native-check-toggle"></span>
-      {{item.name}}
+      <span v-localize="item.name"></span>
     </label>
   </div>
 </template>
@@ -25,6 +25,10 @@
         required: true
       },
       disabled: {
+        type: Boolean,
+        default: false
+      },
+      inline: {
         type: Boolean,
         default: false
       },
@@ -102,11 +106,6 @@
 </script>
 
 <style lang="scss">
-  .ui-check-list
-  {
-    
-  }
-
   .ui-check-list-item
   {
     display: block;
@@ -114,6 +113,17 @@
     & + .ui-check-list-item
     {
       margin-top: 14px;
+    }
+  }
+
+  .ui-check-list.is-inline .ui-check-list-item
+  {
+    display: inline-block;
+    
+    & + .ui-check-list-item
+    {
+      margin-top: 0;
+      margin-left: 30px;
     }
   }
 </style>

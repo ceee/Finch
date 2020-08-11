@@ -55,6 +55,7 @@
   .role-permission-toggle + .role-permission-toggle
   {
     padding-top: 0;
+    margin-top: var(--padding);
   }
 
   .role .ui-box + .ui-permissions
