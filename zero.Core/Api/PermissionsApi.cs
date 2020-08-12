@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using zero.Core.Entities;
 using zero.Core.Identity;
 using zero.Core.Options;
@@ -19,62 +20,18 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public IList<PermissionCollection> GetAll()
     {
-      IList<PermissionCollection> result = new List<PermissionCollection>();
+      List<PermissionCollection> result = Options.Permissions.GetAllItems().ToList();
+      PermissionCollection spaceCollection = result.FirstOrDefault(x => x.Alias == Constants.PermissionCollections.Spaces);
 
-      PermissionCollection permissionSections = new PermissionCollection()
+      if (spaceCollection != null)
       {
-        Alias = Constants.PermissionCollections.Sections,
-        Label = "@permission.collections.sections",
-        Description = "@permission.collections.sections_description"
-      };
+        spaceCollection.Items.Clear();
 
-      permissionSections.Items.Add(new Permission(Permissions.Sections.Dashboard, "@sections.item.dashboard", null, PermissionValueType.Boolean));
-      permissionSections.Items.Add(new Permission(Permissions.Sections.Pages, "@sections.item.pages", null, PermissionValueType.Boolean));
-      permissionSections.Items.Add(new Permission(Permissions.Sections.Spaces, "@sections.item.spaces", null, PermissionValueType.Boolean));
-      permissionSections.Items.Add(new Permission(Permissions.Sections.Media, "@sections.item.media", null, PermissionValueType.Boolean));
-      permissionSections.Items.Add(new Permission(Permissions.Sections.Settings, "@sections.item.settings", null, PermissionValueType.Boolean));
-
-      result.Add(permissionSections);
-
-      // TODO add back spaces
-
-      IReadOnlyCollection<Space> spaces = Options.Spaces.GetAllItems();
-
-      if (spaces.Count > 0)
-      {
-        PermissionCollection permissionSpaces = new PermissionCollection()
+        foreach (Space space in Options.Spaces.GetAllItems())
         {
-          Alias = Constants.PermissionCollections.Spaces,
-          Label = "@permission.collections.spaces",
-          Description = "@permission.collections.spaces_description"
-        };
-
-        foreach (Space space in spaces)
-        {
-          permissionSpaces.Items.Add(new Permission(Permissions.Spaces.PREFIX + space.Alias, space.Name, null, PermissionValueType.CRUD));
+          spaceCollection.Items.Add(new Permission(Permissions.Spaces.PREFIX + space.Alias, space.Name, null, PermissionValueType.CRUD));
         }
-
-        result.Add(permissionSpaces);
       }
-
-      PermissionCollection permissionSettings = new PermissionCollection()
-      {
-        Alias = Constants.PermissionCollections.Settings,
-        Label = "@permission.collections.settings",
-        Description = "@permission.collections.settings_description"
-      };
-
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Updates, "@settings.system.updates.name", "@settings.system.updates.text_default", PermissionValueType.CRUD));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Applications, "@settings.system.applications.name", "@settings.system.applications.text", PermissionValueType.CRUD));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Users, "@settings.system.users.name", "@settings.system.users.text", PermissionValueType.CRUD));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Languages, "@settings.system.languages.name", "@settings.system.languages.text", PermissionValueType.CRUD));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Countries, "@settings.system.countries.name", "@settings.system.countries.text", PermissionValueType.CRUD));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Translations, "@settings.system.translations.name", "@settings.system.translations.text", PermissionValueType.CRUD));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Logging, "@settings.system.logs.name", "@settings.system.logs.text", PermissionValueType.CRUD));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.Plugins, "@settings.plugins.installed.name", "@settings.plugins.installed.text_default", PermissionValueType.CRUD));
-      permissionSettings.Items.Add(new Permission(Permissions.Settings.CreatePlugin, "@settings.plugins.create.name", "@settings.plugins.create.text", PermissionValueType.CRUD));
-
-      result.Add(permissionSettings);
 
       return result;
     }

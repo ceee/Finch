@@ -70,6 +70,10 @@ namespace zero.Web.Defaults
       zero.Mapper.Add<ApplicationMapperConfig>();
       zero.Mapper.Add<MediaMapperConfig>();
       zero.Mapper.Add<SpaceMapperConfig>();
+
+      zero.Permissions.AddCollection<SectionPermissions>();
+      zero.Permissions.AddCollection<SettingsPermissions>();
+      zero.Permissions.AddCollection<SpacePermissions>();
     }
   }
 }

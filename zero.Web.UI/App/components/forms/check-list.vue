@@ -125,5 +125,10 @@
       margin-top: 0;
       margin-left: 30px;
     }
+
+    .ui-native-check-toggle
+    {
+      margin-right: 6px;
+    }
   }
 </style>
