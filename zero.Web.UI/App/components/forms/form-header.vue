@@ -5,6 +5,7 @@
         <ui-button type="white" label="<span>Language:</span> English" caret="down" />
       </template>
     </ui-dropdown>-->
+    <slot></slot>
     <ui-dropdown v-if="!isCreate" align="right">
       <template v-slot:button>
         <ui-button type="white" label="@ui.actions" caret="down" />

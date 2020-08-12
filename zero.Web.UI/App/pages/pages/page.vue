@@ -1,17 +1,12 @@
 ﻿<template>
-  <ui-form ref="form" class="page page-editor" v-slot="form" @submit="onSubmit" @load="onLoad">
-    <ui-header-bar :title="title" :on-back="onBack">
-      <ui-button type="white" icon="fth-eye" title="Preview" />
-      <ui-dropdown align="right">
-        <template v-slot:button>
-          <ui-button type="white" label="Actions" caret="down" />
-        </template>
-        <ui-dropdown-list v-model="actions" :action="actionSelected" />
-      </ui-dropdown>
-      <ui-button :submit="true" label="Save" />
-    </ui-header-bar>
+  <ui-form ref="form" class="page page-editor" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
+    <ui-form-header v-model="model" title="@page.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete">
+      <template v-slot:actions>
+        <ui-dropdown-button label="Preview" icon="fth-eye" :disabled="disabled" />
+      </template>
+    </ui-form-header>
 
-    <ui-editor v-if="!loading" :config="renderer" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" :active-tab="2" />
+    <ui-editor v-if="!loading" :config="renderer" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" />
   </ui-form>
 </template>
 
@@ -19,6 +14,7 @@
 <script>
   import UiEditor from 'zero/editor/editor';
   import PagesApi from 'zero/resources/pages';
+  import EventHub from 'zero/services/eventhub';
   import InfoTab from './page-info';
 
   export default {
@@ -29,10 +25,12 @@
 
     data: () => ({
       loading: true,
+      disabled: false,
       renderer: null,
       actions: [],
       meta: {},
       pageType: {},
+      route: 'page',
       model: {
         name: null,
         options: {
@@ -47,10 +45,6 @@
       isCreate()
       {
         return this.$route.name === 'page-create';
-      },
-      title()
-      {
-        return this.isCreate ? 'Create new page' : this.model.name;
       }
     },
 
@@ -100,13 +94,21 @@
 
       onSubmit(form)
       {
-        //this.fullModel.model = this.model;
-
-       //console.info(JSON.parse(JSON.stringify(this.model)));
         form.handle(PagesApi.save(this.model)).then(response =>
         {
-          console.info(response);
+          if (response.success)
+          {
+            EventHub.$emit('page.update', response.model);
+            this.model = response.model;
+          }
         });
+      },
+
+
+      onDelete(item, opts)
+      {
+        opts.hide();
+        this.$refs.form.onDelete(PagesApi.delete.bind(this, this.id));
       },
 
 

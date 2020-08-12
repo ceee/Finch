@@ -295,6 +295,8 @@
   },
 
   "page": {
+    "name": "Page",
+
     "overview": {
       "actions": {
         "continue": "Continue",

@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="page-container">
     <div class="page-container-tree" v-resizable="resizable">
-      <ui-tree :get="getItems" :config="treeConfig" :active="id" header="Pages" />
+      <ui-tree ref="tree" :get="getItems" :config="treeConfig" :active="id" header="Pages" />
       <div class="page-container-tree-resizable ui-resizable"></div>
     </div>
 
@@ -25,6 +25,7 @@
   import PageTreeApi from 'zero/resources/page-tree.js'
   import Overlay from 'zero/services/overlay.js'
   import CreateOverlay from './create'
+  import EventHub from 'zero/services/eventhub'
 
   export default {
 
@@ -138,6 +139,12 @@
 
         return actions;
       };
+
+      EventHub.$on('page.update', page =>
+      {
+        this.cache = [];
+        this.$refs.tree.refresh();
+      });
     },
 
 

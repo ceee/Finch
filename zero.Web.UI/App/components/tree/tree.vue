@@ -7,7 +7,7 @@
     <span v-if="status === 'loading'" class="ui-tree-item-loading"><i></i></span>
     <template v-for="item in items">
       <ui-tree-item :value="item" @rightclick="onRightClicked" @click="onSelect(item, $event)" @actions="onActionsClicked" @open="toggle" />
-      <ui-tree v-if="item.hasChildren && item.isOpen" :get="get" :parent="item.id" :depth="depth + 1" :active="active" :config="config" @select="onSelect" />
+      <ui-tree v-if="item.hasChildren && item.isOpen && status != 'loading'" :get="get" :parent="item.id" :depth="depth + 1" :active="active" :config="config" @select="onSelect" />
     </template>
     <slot name="bottom"></slot>
     <div ref="dropdown" class="ui-dropdown ui-tree-dropdown theme-dark align-top" role="dialog" v-click-outside="hideActions" v-if="actionsOpen">
