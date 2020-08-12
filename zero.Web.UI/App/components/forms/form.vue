@@ -141,7 +141,7 @@
             .catch(exception =>
             {
               this.loadingState = 'error';
-              this.loadingError = error;
+              this.loadingError = exception;
             });
         });
       },

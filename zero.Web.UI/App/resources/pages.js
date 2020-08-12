@@ -23,9 +23,9 @@ export default {
   },
 
   // get new media model
-  getEmpty()
+  getEmpty(type, parent)
   {
-    return Axios.get(base + 'getEmpty').then(res => Promise.resolve(res.data));
+    return Axios.get(base + 'getEmpty', { params: { type, parent } }).then(res => Promise.resolve(res.data));
   },
 
   // get all media items

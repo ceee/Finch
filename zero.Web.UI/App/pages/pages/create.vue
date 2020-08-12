@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-form v-if="!loading" ref="form" class="page-create" v-slot="form" @submit="onSubmit" @load="onLoad">
+  <div v-if="!loading" class="page-create">
     <h2 class="ui-headline">Create page</h2>
     <div class="page-create-parent" v-if="config.parent">
       Parent: <strong>{{config.parent.name}}</strong>
@@ -17,7 +17,7 @@
     <div class="app-confirm-buttons">
       <ui-button type="light" :label="config.closeLabel" :disabled="loading" @click="config.close"></ui-button>
     </div>
-  </ui-form>
+  </div>
 </template>
 
 
@@ -46,63 +46,30 @@
 
     created()
     {
-      console.info(this.config.parent);
       this.model.parentId = this.config.parent ? this.config.parent.id : null;
     },
 
 
-    methods: {
-
-      onLoad(form)
+    mounted()
+    {
+      PagesApi.getAllowedPageTypes(this.model.parentId).then(response =>
       {
-        form.load(PagesApi.getAllowedPageTypes(this.model.parentId)).then(response =>
-        {
-          this.pageTypes = response;
-          this.loading = false;
-        });
-      },
+        this.pageTypes = response;
+        this.loading = false;
+      });
+    },
 
+
+    methods: {
       onSelect(item)
       {
         this.config.close();
 
         this.$router.push({
           name: 'page-create',
-          params: { type: item.alias }
+          params: { type: item.alias, parent: this.model.parentId }
         });
       },
-
-
-      onSubmit(form)
-      {
-        //form.handle(TranslationsApi.save(this.item)).then(response =>
-        //{
-        //  console.info(response);
-        //});
-      },
-
-      onDelete()
-      {
-        //Overlay.confirmDelete().then((opts) =>
-        //{
-        //  opts.state('loading');
-
-        //  TranslationsApi.delete(this.model.id).then(response =>
-        //  {
-        //    if (response.success)
-        //    {
-        //      opts.state('success');
-        //      opts.hide();
-        //      this.config.close();
-        //    }
-        //    else
-        //    {
-        //      opts.errors(response.errors);
-        //    }
-        //  });
-        //}); 
-      }
-
     }
   }
 </script>

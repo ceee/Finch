@@ -23,7 +23,7 @@
 
   export default {
 
-    props: ['id', 'type'],
+    props: ['id', 'type', 'parent'],
 
     components: { UiEditor },
 
@@ -88,7 +88,7 @@
 
       onLoad(form)
       {
-        form.load(PagesApi.getById(this.$route.params.id)).then(response =>
+        form.load(!this.id ? PagesApi.getEmpty(this.type, this.parent) : PagesApi.getById(this.id)).then(response =>
         {
           this.renderer = 'page.' + response.entity.pageTypeAlias;
           this.model = response.entity;

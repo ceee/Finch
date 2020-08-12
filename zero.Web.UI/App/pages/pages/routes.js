@@ -14,7 +14,7 @@ if (section)
   });
 
   routes.push({
-    path: 'create/:type',
+    path: 'create/:type/:parent?',
     props: true,
     name: 'page-create',
     component: () => import('zero/pages/' + alias + '/page')

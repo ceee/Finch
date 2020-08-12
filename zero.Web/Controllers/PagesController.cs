@@ -5,7 +5,7 @@ using zero.Core.Entities;
 
 namespace zero.Web.Controllers
 {
-  public class PagesController<T> : BackofficeController where T : IPage
+  public class PagesController<T> : BackofficeController where T : IPage, new()
   {
     IPagesApi<T> Api;
 
@@ -22,6 +22,12 @@ namespace zero.Web.Controllers
 
 
     public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
+
+    public IActionResult GetEmpty(string type, string parent = null) => Edit(new T()
+    {
+      PageTypeAlias = type,
+      ParentId = parent
+    });
 
 
     public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
