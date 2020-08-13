@@ -59,7 +59,7 @@
           'is-open': item.isOpen,
           'is-selected': item.isSelected,
           'is-disabled': item.disabled,
-          'is-active': item.id == this.$route.params.id
+          'is-active': this.isLink && item.id == this.$route.params.id
         };
       },
 

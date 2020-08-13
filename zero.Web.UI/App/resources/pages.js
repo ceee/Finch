@@ -39,6 +39,11 @@ export default {
     return Axios.post(base + 'saveSorting', ids).then(res => Promise.resolve(res.data));
   },
 
+  move(id, parentId)
+  {
+    return Axios.post(base + 'move', { id, parentId }).then(res => Promise.resolve(res.data));
+  },
+
   delete(id)
   {
     return Axios.delete(base + 'delete', { params: { id } }).then(res => Promise.resolve(res.data));

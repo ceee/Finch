@@ -55,6 +55,11 @@
     "sort": {
       "title": "Sort",
       "text": "Drag the different items up or down below to set how they should be arranged."
+    },
+    "move": {
+      "title": "Move",
+      "action": "Move",
+      "text": " Choose where to move <b>{name}</b> to in the tree structure below."
     }
   },
 

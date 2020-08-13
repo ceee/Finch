@@ -102,6 +102,15 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public async Task<EntityResult<T>> Move(string id, string parentId)
+    {
+      T model = await GetById<T>(id);
+      model.ParentId = parentId;
+      return await Save(model);
+    }
+
+
+    /// <inheritdoc />
     public async Task<EntityResult<T>> Delete(string id)
     {
       return await DeleteById<T>(id);
@@ -140,6 +149,11 @@ namespace zero.Core.Api
     /// Update sorting of pages on a specific level
     /// </summary>
     Task<EntityResult<T>> SaveSorting(string[] sortedIds);
+
+    /// <summary>
+    /// Move a page to a new parent
+    /// </summary>
+    Task<EntityResult<T>> Move(string id, string parentId);
 
     /// <summary>
     /// Deletes a page by Id

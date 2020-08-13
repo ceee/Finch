@@ -190,6 +190,8 @@ namespace zero.Core.Api
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
+        session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
+
         // store entity
         await session.StoreAsync(model);
 
