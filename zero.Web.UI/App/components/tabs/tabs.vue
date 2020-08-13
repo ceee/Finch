@@ -137,12 +137,11 @@
     {
       content: '';
       width: 100%;
-      height: 3px;
+      height: 16px;
       position: absolute;
       left: 0;
-      top: 0;
-      background: transparent;
-      border-radius: var(--radius) var(--radius) 0 0;
+      bottom: 0;
+      background: linear-gradient(0deg, var(--color-bg-xlight), transparent);
     }
 
     &[disabled]
@@ -172,10 +171,10 @@
         background: var(--color-bg);
       }
 
-      /*&:before
+      &:before
       {
-        background: var(--color-secondary);
-      }*/
+        display: none;
+      }
 
       &:after
       {
