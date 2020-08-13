@@ -107,13 +107,14 @@
     /*border-bottom: 1px solid var(--color-line);*/
     padding: var(--padding) var(--padding) 0;
     margin-bottom: calc(var(--padding) * -1);
+    //margin-left: -1px;
   }
 
   .ui-tabs-list-item
   {
     display: inline-flex;
     align-items: center;
-    height: 56px;
+    height: 50px;
     overflow: hidden;
     padding: 0 var(--padding);
     font-size: var(--font-size);
@@ -122,6 +123,8 @@
     transition: color 0.2s ease;
     border-radius: var(--radius) var(--radius) 0 0;
     background: var(--color-bg-xxlight);
+    //border: 1px solid transparent;
+    //border-bottom: none;
 
     & + .ui-tabs-list-item
     {
@@ -165,6 +168,7 @@
       font-weight: 700;
       color: var(--color-fg);
       background: var(--color-bg-light);
+      border-color: var(--color-line-mid);
 
       .ui-tabs-list-item-count
       {
