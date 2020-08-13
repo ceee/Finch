@@ -1,7 +1,9 @@
 ﻿ <template>
-  <div class="ui-toggle" :class="{'is-disabled': disabled, 'is-negative': negative }">
+  <div class="ui-toggle" :class="{'is-disabled': disabled, 'is-negative': negative, 'is-active': value, 'is-content-left': contentLeft }">
     <input type="checkbox" :value="value" @input="onChange" :disabled="disabled" />
     <span class="ui-toggle-switch" :class="{ 'is-active': value }"><i></i></span>
+    <span class="ui-toggle-text" v-if="onContent && value" v-localize="onContent"></span>
+    <span class="ui-toggle-text" v-if="offContent && !value" v-localize="offContent"></span>
   </div>
 </template>
 
@@ -22,6 +24,18 @@
       negative: {
         type: Boolean,
         default: false
+      },
+      onContent: {
+        type: String,
+        default: null
+      },
+      offContent: {
+        type: String,
+        default: null
+      },
+      contentLeft: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -38,7 +52,8 @@
 <style lang="scss">
   .ui-toggle
   {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     position: relative;
     height: 22px;
 
@@ -61,6 +76,28 @@
     {
       cursor: default;
     }
+
+    &.is-content-left
+    {
+      flex-direction: row-reverse;
+
+      .ui-toggle-text
+      {
+        margin-left: 0;
+        margin-right: 12px;
+      }
+    }
+  }
+
+  .ui-toggle-text
+  {
+    margin-top: 1px;
+    margin-left: 12px;
+
+    .ui-toggle.is-active &
+    {
+      font-weight: 600;
+    }
   }
 
   .ui-toggle-switch
@@ -74,7 +111,6 @@
     transition: all 0.2s ease;
     z-index: 1;
     pointer-events: none;
-
     i
     {
       display: inline-block;

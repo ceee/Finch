@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-form ref="form" class="page page-editor" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model="model" title="@page.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete">
+    <ui-form-header v-model="model" title="@page.name" :disabled="disabled" :is-create="!id" :state="form.state" :active-toggle="true" :can-delete="meta.canDelete" @delete="onDelete">
       <template v-slot:actions>
         <ui-dropdown-button label="Preview" icon="fth-eye" :disabled="disabled" />
       </template>
