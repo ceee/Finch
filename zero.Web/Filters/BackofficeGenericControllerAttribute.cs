@@ -6,11 +6,16 @@ namespace zero.Web.Filters
 {
   public class BackofficeGenericControllerAttribute : Attribute, IControllerModelConvention
   {
+    const char BACKTICK = '`';
+
+    const string CONTROLLER = "Controller";
+
+
     public void Apply(ControllerModel controller)
     {
-      if (controller.ControllerName.Contains('`'))
+      if (controller.ControllerName.Contains(BACKTICK))
       {
-        controller.ControllerName = controller.ControllerName.Split('`')[0].TrimEnd("Controller");   
+        controller.ControllerName = controller.ControllerName.Split(BACKTICK)[0].TrimEnd(CONTROLLER);   
       }
     }
   }

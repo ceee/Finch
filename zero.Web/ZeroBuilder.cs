@@ -22,6 +22,7 @@ using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Core.Validation;
 using zero.Web.Defaults;
+using zero.Web.Filters;
 
 namespace zero.Web
 {
@@ -99,6 +100,8 @@ namespace zero.Web
 
       Services.AddTransient<IBackofficeStore, BackofficeStore>();
       Services.AddTransient(typeof(IAppScope<>), typeof(AppScope<>));
+
+      Services.AddScoped<ModelStateValidationFilterAttribute>();
 
       Services.AddHttpContextAccessor();
 

@@ -12,7 +12,7 @@ namespace zero.TestData
 
     public string SeoDescription { get; set; }
 
-    public Media SeoImage { get; set; }
+    public string SeoImageId { get; set; }
 
     public bool NoFollow { get; set; }
 

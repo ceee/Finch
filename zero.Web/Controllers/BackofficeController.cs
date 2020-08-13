@@ -17,6 +17,7 @@ namespace zero.Web.Controllers
 {
   [ZeroAuthorize]
   [BackofficeGenericController]
+  [ServiceFilter(typeof(ModelStateValidationFilterAttribute))]
   public abstract class BackofficeController : Controller, ISupportsGenericsController
   {
     IMapper _mapper;

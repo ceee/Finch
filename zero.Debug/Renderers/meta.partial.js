@@ -14,7 +14,7 @@ export default [
   },
   {
     tab: 'meta',
-    field: 'meta.titleOverride',
+    field: 'meta.titleOverrideAll',
     display: 'text',
     label: 'Title override all'
   },
@@ -27,7 +27,7 @@ export default [
   },
   {
     tab: 'meta',
-    field: 'meta.seoImage',
+    field: 'meta.seoImageId',
     display: 'media',
     label: 'SEO image'
   },

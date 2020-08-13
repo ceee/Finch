@@ -113,7 +113,7 @@
   {
     display: inline-flex;
     align-items: center;
-    height: 58px;
+    height: 56px;
     overflow: hidden;
     padding: 0 var(--padding);
     font-size: var(--font-size);
@@ -121,12 +121,7 @@
     position: relative;
     transition: color 0.2s ease;
     border-radius: var(--radius) var(--radius) 0 0;
-    background: rgba(white, 0.4);
-
-    .theme-dark &
-    {
-      background: rgba(black, 0.5);
-    }
+    background: var(--color-bg-xxlight);
 
     & + .ui-tabs-list-item
     {
@@ -177,10 +172,10 @@
         background: var(--color-bg);
       }
 
-      &:before
+      /*&:before
       {
         background: var(--color-secondary);
-      }
+      }*/
 
       &:after
       {

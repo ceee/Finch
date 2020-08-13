@@ -51,7 +51,7 @@
   .ui-property + .ui-property
   {
     padding-top: 30px;
-    margin-top: 50px;
+    margin-top: 30px;
     border-top: 1px solid var(--color-line-light);
   }
 
