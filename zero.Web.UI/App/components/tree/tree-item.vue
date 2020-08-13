@@ -58,7 +58,8 @@
           'is-inactive': item.isInactive,
           'is-open': item.isOpen,
           'is-selected': item.isSelected,
-          'is-disabled': item.disabled
+          'is-disabled': item.disabled,
+          'is-active': item.id == this.$route.params.id
         };
       },
 
@@ -103,6 +104,7 @@
     color: var(--color-fg);
     position: relative;
     transition: color 0.2s ease;
+    position: relative;
 
     &.is-inactive .ui-tree-item-text
     //&.is-inactive .ui-tree-item-icon
@@ -130,6 +132,17 @@
     &.is-disabled
     {
       cursor: not-allowed;
+    }
+
+    &.is-active:before
+    {
+      content: ' ';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -300px;
+      right: 0;
+      background: var(--color-bg-xlight);
     }
   }
 

@@ -51,6 +51,10 @@
       "xtoy": "from {x} to {y}",
       "x": "from {x}",
       "y": "to {y}"
+    },
+    "sort": {
+      "title": "Sort",
+      "text": "Drag the different items up or down below to set how they should be arranged."
     }
   },
 

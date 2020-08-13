@@ -4,43 +4,41 @@ const base = 'pages/';
 
 export default {
 
-  // get allowed page types for parent page
   getAllowedPageTypes(parent)
   {
     return Axios.get(base + 'getAllowedPageTypes', { params: { parent } }).then(res => Promise.resolve(res.data));
   },
 
-  // get page type by alias
   getPageType(alias)
   {
     return Axios.get(base + 'getPageType', { params: { alias } }).then(res => Promise.resolve(res.data));
   },
 
-  // get media by id
   getById(id)
   {
     return Axios.get(base + 'getById', { params: { id } }).then(res => Promise.resolve(res.data));
   },
 
-  // get new media model
   getEmpty(type, parent)
   {
     return Axios.get(base + 'getEmpty', { params: { type, parent } }).then(res => Promise.resolve(res.data));
   },
 
-  // get all media items
   getAll(query)
   {
     return Axios.get(base + 'getAll', { params: query }).then(res => Promise.resolve(res.data));
   },
 
-  // save a media
   save(model)
   {
     return Axios.post(base + 'save', model).then(res => Promise.resolve(res.data));
   },
 
-  // deletes a media
+  saveSorting(ids)
+  {
+    return Axios.post(base + 'saveSorting', ids).then(res => Promise.resolve(res.data));
+  },
+
   delete(id)
   {
     return Axios.delete(base + 'delete', { params: { id } }).then(res => Promise.resolve(res.data));

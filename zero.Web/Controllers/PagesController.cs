@@ -32,6 +32,9 @@ namespace zero.Web.Controllers
 
     public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
 
+    [HttpPost]
+    public async Task<IActionResult> SaveSorting([FromBody] string[] ids) => Json(await Api.SaveSorting(ids));
+
 
     public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
   }

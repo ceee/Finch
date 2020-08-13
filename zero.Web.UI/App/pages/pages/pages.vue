@@ -25,6 +25,7 @@
   import PageTreeApi from 'zero/resources/page-tree.js'
   import Overlay from 'zero/services/overlay.js'
   import CreateOverlay from './create'
+  import SortOverlay from './sort'
   import EventHub from 'zero/services/eventhub'
 
   export default {
@@ -123,7 +124,12 @@
 
         actions.push({
           name: 'Sort',
-          icon: 'fth-arrow-down'
+          icon: 'fth-arrow-down',
+          action(action, dropdown)
+          {
+            dropdown.hide();
+            instance.sort(item);
+          }
         });
 
         if (item)
@@ -195,6 +201,19 @@
         {
                 
         });
+      },
+
+
+      sort(item)
+      {
+        return Overlay.open({
+          component: SortOverlay,
+          display: 'editor',
+          model: item
+        }).then(value =>
+        {
+          EventHub.$emit('page.update');
+        });
       }
     }
   }
@@ -219,6 +238,7 @@
     position: relative;
     overflow-y: auto;
     height: 100vh;
+    border-right: 1px solid var(--color-line-mid);
 
     .ui-header-bar + .ui-tree
     {

@@ -75,6 +75,33 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public async Task<EntityResult<T>> SaveSorting(string[] sortedIds)
+    {
+      Dictionary<string, T> items = await GetByIds<T>(sortedIds);
+      uint index = 0;
+
+      // TODO check if all items are valid
+
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
+
+        foreach (var item in items)
+        {
+          item.Value.Sort = index;
+          index += 23;
+          await session.StoreAsync(item.Value);
+          //session.Advanced.Patch<T, uint>(item.Value.Id, x => x.Sort, index++);
+        }
+
+        await session.SaveChangesAsync();
+      }
+
+      return EntityResult<T>.Success();
+    }
+
+
+    /// <inheritdoc />
     public async Task<EntityResult<T>> Delete(string id)
     {
       return await DeleteById<T>(id);
@@ -108,6 +135,11 @@ namespace zero.Core.Api
     /// Creates or updates a page
     /// </summary>
     Task<EntityResult<T>> Save(T model);
+
+    /// <summary>
+    /// Update sorting of pages on a specific level
+    /// </summary>
+    Task<EntityResult<T>> SaveSorting(string[] sortedIds);
 
     /// <summary>
     /// Deletes a page by Id
