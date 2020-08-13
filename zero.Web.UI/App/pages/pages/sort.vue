@@ -40,9 +40,17 @@
     }),
 
 
+    computed: {
+      parentId()
+      {
+        return this.model ? this.model.parentId : null;
+      }
+    },
+
+
     mounted()
     {
-      return PageTreeApi.getChildren(this.model.parentId).then(response =>
+      return PageTreeApi.getChildren(this.parentId).then(response =>
       {
         this.items = response.filter(x => x.id !== 'recyclebin');
       });

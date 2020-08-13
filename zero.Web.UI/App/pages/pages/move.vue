@@ -75,10 +75,32 @@
 
         return PageTreeApi.getChildren(parent).then(response =>
         {
+          if (!parent)
+          {
+            response.splice(0, 0, {
+              id: null,
+              parentId: null,
+              sort: 0,
+              name: 'Root',
+              icon: 'fth-arrow-down-circle',
+              isOpen: false,
+              modifier:	null,
+              hasChildren: false,
+              childCount: 0,
+              isInactive: false,
+              hasActions: false
+            });
+          }
+
           response.forEach(item =>
           {
             //item.disabled = true;
-            item.isSelected = false;
+            item.isSelected = this.model.parentId == item.id;
+
+            if (item.isSelected)
+            {
+              this.prevItem = item;
+            }
             item.disabled = item.id === 'recyclebin' || item.id == this.model.id;
             item.hasActions = false;
           });
