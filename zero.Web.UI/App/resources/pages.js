@@ -39,9 +39,14 @@ export default {
     return Axios.post(base + 'saveSorting', ids).then(res => Promise.resolve(res.data));
   },
 
-  move(id, parentId)
+  move(id, destinationId)
   {
-    return Axios.post(base + 'move', { id, parentId }).then(res => Promise.resolve(res.data));
+    return Axios.post(base + 'move', { id, destinationId }).then(res => Promise.resolve(res.data));
+  },
+
+  copy(id, destinationId, includeDescendants)
+  {
+    return Axios.post(base + 'copy', { id, destinationId, includeDescendants }).then(res => Promise.resolve(res.data));
   },
 
   delete(id)

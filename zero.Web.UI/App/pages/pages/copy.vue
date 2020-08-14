@@ -1,15 +1,20 @@
 ﻿<template>
-  <ui-overlay-editor class="pages-move">
+  <ui-overlay-editor class="pages-copy">
     <template v-slot:header>
-      <ui-header-bar title="@ui.move.title" :back-button="false" :close-button="true" />
+      <ui-header-bar title="@ui.copy.title" :back-button="false" :close-button="true" />
     </template>
     <template v-slot:footer>
       <ui-button type="white" label="@ui.close" @click="config.hide"></ui-button>
-      <ui-button label="@ui.move.action" @click="onSave" :state="state"></ui-button>
+      <ui-button label="@ui.copy.action" @click="onSave" :state="state"></ui-button>
     </template>
 
-    <p class="pages-move-text" v-localize:html="{ key: '@ui.move.text', tokens: { name: model.name } }"></p>
-    <div class="ui-box pages-move-items">
+    <p class="pages-copy-text" v-localize:html="{ key: '@ui.copy.text', tokens: { name: model.name } }"></p>
+    <div class="ui-box">
+      <ui-property label="Include descendants">
+        <ui-toggle v-model="includeDescendants" class="is-primary" />
+      </ui-property>
+    </div>
+    <div class="ui-box pages-copy-items">
       <ui-tree ref="tree" :get="getItems" @select="onSelect" />
     </div>
   </ui-overlay-editor>
@@ -38,7 +43,8 @@
       state: 'default',
       cache: {},
       prevItem: null,
-      selected: null
+      selected: null,
+      includeDescendants: true
     }),
 
 
@@ -120,12 +126,12 @@
 
         this.state = 'loading';
 
-        PagesApi.move(this.model.id, this.selected.id).then(res =>
+        PagesApi.copy(this.model.id, this.selected.id, this.includeDescendants).then(res =>
         {
           if (res.success)
           {
             this.state = 'success';
-            this.config.confirm();
+            this.config.confirm(res.model);
           }
           else
           {
@@ -138,10 +144,33 @@
 </script>
 
 <style lang="scss">
-  .pages-move .ui-box
+  .pages-copy .ui-property
   {
-    margin: 0;
-    padding: 16px 0;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .pages-copy .ui-property-content
+  {
+    display: inline;
+    flex: 0 0 auto;
+  }
+
+  .pages-copy .ui-property-label
+  {
+    padding-top: 1px;
+  }
+
+  .pages-copy .ui-box
+  {
+    margin: 0;    
+    padding: 20px var(--padding) 18px;
+
+    & + .ui-box
+    {
+      padding: 16px 0;
+      margin-top: 26px;
+    }
 
     .ui-tree-item.is-disabled
     {
@@ -170,12 +199,12 @@
     }
   }
 
-  .pages-move content
+  .pages-copy content
   {
     padding-top: 0;
   }
 
-  .pages-move-text
+  .pages-copy-text
   {
     margin: 0 0 20px;
   }

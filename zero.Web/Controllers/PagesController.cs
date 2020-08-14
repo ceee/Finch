@@ -36,9 +36,22 @@ namespace zero.Web.Controllers
     public async Task<IActionResult> SaveSorting([FromBody] string[] ids) => Json(await Api.SaveSorting(ids));
 
     [HttpPost]
-    public async Task<IActionResult> Move([FromBody] T model) => Json(await Api.Move(model.Id, model.ParentId));
+    public async Task<IActionResult> Move([FromBody] CopyModel model) => Json(await Api.Move(model.Id, model.DestinationId));
+
+    [HttpPost]
+    public async Task<IActionResult> Copy([FromBody] CopyModel model) => Json(await Api.Copy(model.Id, model.DestinationId, model.IncludeDescendants));
 
 
     public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
+
+
+    public class CopyModel
+    {
+      public string Id { get; set; }
+
+      public string DestinationId { get; set; }
+
+      public bool IncludeDescendants { get; set; }
+    }
   }
 }

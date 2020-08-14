@@ -27,6 +27,7 @@
   import CreateOverlay from './create'
   import SortOverlay from './sort'
   import MoveOverlay from './move'
+  import CopyOverlay from './copy'
   import EventHub from 'zero/services/eventhub'
 
   export default {
@@ -123,7 +124,12 @@
           });
           actions.push({
             name: 'Copy',
-            icon: 'fth-copy'
+            icon: 'fth-copy',
+            action(action, dropdown)
+            {
+              dropdown.hide();
+              instance.copy(item);
+            }
           });
         }
 
@@ -227,11 +233,27 @@
         return Overlay.open({
           component: MoveOverlay,
           display: 'editor',
-          model: item,
-          isCopy: false
+          model: item
         }).then(value =>
         {
           EventHub.$emit('page.update');
+        });
+      },
+
+
+      copy(item)
+      {
+        return Overlay.open({
+          component: CopyOverlay,
+          display: 'editor',
+          model: item
+        }).then(value =>
+        {
+          EventHub.$emit('page.update');
+          this.$router.push({
+            name: 'page',
+            params: { id: value.id }
+          });
         });
       },
     }

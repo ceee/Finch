@@ -60,6 +60,11 @@
       "title": "Move",
       "action": "Move",
       "text": " Choose where to move <b>{name}</b> to in the tree structure below."
+    },
+    "copy": {
+      "title": "Copy",
+      "action": "Copy",
+      "text": " Choose where to copy <b>{name}</b> to in the tree structure below."
     }
   },
 

@@ -1,8 +1,10 @@
 ﻿using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Options;
@@ -111,6 +113,67 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public async Task<EntityResult<T>> Copy(string id, string destinationId, bool includeDescendants = false)
+    {
+      T model = await GetById<T>(id);
+
+      string baseId = model.Id;
+
+      // update new page properties
+      model.Id = null;
+      model.ParentId = destinationId;
+      model.IsActive = false;
+      model.CreatedDate = DateTimeOffset.Now;
+
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
+
+        // recursive function to store descendants
+        async Task AddChildren(string oldParentId, string newParentId)
+        {
+          Pages_WithChildren.Result childrenResult = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
+            .ProjectInto<Pages_WithChildren.Result>()
+            .Include<Pages_WithChildren.Result, T>(x => x.Id)
+            .Scope(Scope)
+            .Where(x => x.Id == oldParentId)
+            .FirstOrDefaultAsync();
+
+          if (childrenResult == null || childrenResult.ChildrenIds.Length < 1)
+          {
+            return;
+          }
+
+          Dictionary<string, T> childrenPages = await session.LoadAsync<T>(childrenResult.ChildrenIds);
+
+          foreach (var child in childrenPages)
+          {
+            T childPage = child.Value.Clone();
+            childPage.Id = null;
+            childPage.IsActive = false;
+            childPage.ParentId = newParentId;
+            childPage.CreatedDate = DateTimeOffset.Now;
+
+            await session.StoreAsync(childPage);
+            await AddChildren(child.Key, childPage.Id);
+          }
+        }
+
+        await session.StoreAsync(model);
+
+        if (includeDescendants)
+        {
+          await AddChildren(baseId, model.Id);
+        }
+
+        await session.SaveChangesAsync();
+      }
+
+      return EntityResult<T>.Success(model);
+    }
+
+
+    /// <inheritdoc />
     public async Task<EntityResult<T>> Delete(string id)
     {
       return await DeleteById<T>(id);
@@ -154,6 +217,11 @@ namespace zero.Core.Api
     /// Move a page to a new parent
     /// </summary>
     Task<EntityResult<T>> Move(string id, string parentId);
+
+    /// <summary>
+    /// Copies a page (with optional descendants) to a new location
+    /// </summary>
+    Task<EntityResult<T>> Copy(string id, string destinationId, bool includeDescendants = false);
 
     /// <summary>
     /// Deletes a page by Id
