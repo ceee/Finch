@@ -5,7 +5,7 @@
     </template>
     <template v-slot:footer>
       <ui-button type="white" label="@ui.close" @click="config.hide"></ui-button>
-      <ui-button label="@ui.copy.action" @click="onSave" :state="state"></ui-button>
+      <ui-button label="@ui.copy.action" @click="onSave" :state="state" :disabled="selected == null"></ui-button>
     </template>
 
     <p class="pages-copy-text" v-localize:html="{ key: '@ui.copy.text', tokens: { name: model.name } }"></p>
@@ -50,7 +50,7 @@
 
     mounted()
     {
-      this.selected = this.model;
+      
     },
 
 
@@ -101,12 +101,7 @@
           response.forEach(item =>
           {
             //item.disabled = true;
-            item.isSelected = this.model.parentId == item.id;
-
-            if (item.isSelected)
-            {
-              this.prevItem = item;
-            }
+            item.isSelected = false;
             item.disabled = item.id === 'recyclebin' || item.id == this.model.id;
             item.hasActions = false;
           });
@@ -118,12 +113,6 @@
 
       onSave()
       {
-        if (this.model.parentId == this.selected.id)
-        {
-          this.config.close();
-          return;
-        }
-
         this.state = 'loading';
 
         PagesApi.copy(this.model.id, this.selected.id, this.includeDescendants).then(res =>
