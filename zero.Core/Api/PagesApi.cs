@@ -174,9 +174,102 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Delete(string id)
+    public async Task<EntityResult<string[]>> Delete(string id, bool moveToRecycleBin = true)
     {
-      return await DeleteById<T>(id);
+      IList<T> pages = await GetByIdWithDescendants(id);
+
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
+
+        foreach (T page in pages)
+        {
+          if (moveToRecycleBin)
+          {
+            page.IsRecycled = true;
+            await session.StoreAsync(page);
+          }
+          else
+          {
+            session.Delete(page.Id);
+          }
+        }
+
+        await session.SaveChangesAsync();
+      }
+
+      return EntityResult<string[]>.Success(pages.Select(x => x.Id).ToArray());
+    }
+
+
+    /// <inheritdoc />
+    public async Task<EntityResult<string[]>> Restore(string id)
+    {
+      IList<T> pages = await GetByIdWithDescendants(id);
+
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
+
+        foreach (T page in pages)
+        {
+          page.IsRecycled = false;
+          await session.StoreAsync(page);
+        }
+
+        await session.SaveChangesAsync();
+      }
+
+      return EntityResult<string[]>.Success(pages.Select(x => x.Id).ToArray());
+    }
+
+
+    /// <summary>
+    /// Get a page with all its descendants
+    /// </summary>
+    async Task<List<T>> GetByIdWithDescendants(string id)
+    {
+      List<T> items = new List<T>();
+
+      T model = await GetById<T>(id);
+
+      if (model == null)
+      {
+        return items;
+      }
+
+      items.Add(model);
+
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        // recursive function to store descendants
+        async Task AddChildren(string parentId)
+        {
+          Pages_WithChildren.Result childrenResult = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
+            .ProjectInto<Pages_WithChildren.Result>()
+            .Include<Pages_WithChildren.Result, T>(x => x.Id)
+            .Scope(Scope)
+            .Where(x => x.Id == parentId)
+            .FirstOrDefaultAsync();
+
+          if (childrenResult == null || childrenResult.ChildrenIds.Length < 1)
+          {
+            return;
+          }
+
+          Dictionary<string, T> childrenPages = await session.LoadAsync<T>(childrenResult.ChildrenIds);
+
+          foreach (var child in childrenPages)
+          {
+            items.Add(child.Value);
+            await AddChildren(child.Value.Id);
+          }
+        }
+
+        await AddChildren(model.Id);
+      }
+
+      return items;
     }
   }
 
@@ -224,8 +317,13 @@ namespace zero.Core.Api
     Task<EntityResult<T>> Copy(string id, string destinationId, bool includeDescendants = false);
 
     /// <summary>
-    /// Deletes a page by Id
+    /// Deletes a page by Id (with all it's descendants)
     /// </summary>
-    Task<EntityResult<T>> Delete(string id);
+    Task<EntityResult<string[]>> Delete(string id, bool moveToRecycleBin = true);
+
+    /// <summary>
+    /// Restores a page from the recycle bin
+    /// </summary>
+    Task<EntityResult<string[]>> Restore(string id);
   }
 }

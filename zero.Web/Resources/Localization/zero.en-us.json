@@ -145,7 +145,10 @@
     "title": "Delete entity",
     "text": "Are you sure you want to delete this entity?",
     "success": "Deleted",
-    "success_text": "You have successfully deleted this entity"
+    "success_text": "You have successfully deleted this entity",
+    "page_text": "This will delete the page and all its descendants. Are you sure?",
+    "success": "Deleted",
+    "page_success_text": "You have successfully deleted this page"
   },
 
   "changepasswordoverlay": {

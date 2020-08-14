@@ -23,12 +23,14 @@
 
 <script>
   import PageTreeApi from 'zero/resources/page-tree.js'
+  import PagesApi from 'zero/resources/pages.js'
   import Overlay from 'zero/services/overlay.js'
   import CreateOverlay from './create'
   import SortOverlay from './sort'
   import MoveOverlay from './move'
   import CopyOverlay from './copy'
   import EventHub from 'zero/services/eventhub'
+  import Notification from 'zero/services/notification.js'
 
   export default {
 
@@ -150,7 +152,12 @@
           });
           actions.push({
             name: 'Delete',
-            icon: 'fth-x'
+            icon: 'fth-x',
+            action(action, dropdown)
+            {
+              dropdown.hide();
+              instance.delete(item);
+            }
           });
         }
 
@@ -253,6 +260,31 @@
           this.$router.push({
             name: 'page',
             params: { id: value.id }
+          });
+        });
+      },
+
+
+      delete(item)
+      {
+        Overlay.confirmDelete(item.name, '@deleteoverlay.page_text').then(opts =>
+        {
+          opts.state('loading');
+
+          PagesApi.delete(item.id).then(response =>
+          {
+            if (response.success)
+            {
+              opts.state('success');
+              opts.hide();
+              //this.$router.go(-1);
+              EventHub.$emit('page.update');
+              Notification.success('@deleteoverlay.success', '@deleteoverlay.page_success_text');
+            }
+            else
+            {
+              opts.errors(response.errors);
+            }
           });
         });
       },

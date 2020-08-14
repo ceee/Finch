@@ -14,6 +14,9 @@
 
     /// <inheritdoc />
     public string AppId { get; set; }
+
+    /// <inheritdoc />
+    public bool IsRecycled { get; set; }
   }
 
 
@@ -28,5 +31,10 @@
     /// Alias of the used page type
     /// </summary>
     string PageTypeAlias { get; set; }
+
+    /// <summary>
+    /// Whether this page is recycled or not
+    /// </summary>
+    bool IsRecycled { get; set; }
   }
 }
