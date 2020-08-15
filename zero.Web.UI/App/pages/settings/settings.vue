@@ -80,7 +80,7 @@
 
   a.settings-group-item
   {
-    color: var(--color-text);
+    color: var(--color-fg);
     font-size: var(--font-size);
     display: grid;
     grid-template-columns: auto 1fr;
@@ -90,12 +90,12 @@
 
   .settings-group-item-icon
   {
-    width: 54px;
-    height: 54px;
-    line-height: 53px !important;
+    width: 60px;
+    height: 60px;
+    line-height: 59px !important;
     font-size: 18px;
     text-align: center;
-    background: var(--color-bg-light);
+    background: var(--color-bg-bright);
     border-radius: var(--radius);
     transition: box-shadow 0.2s ease;
     box-shadow: var(--color-shadow-short);
@@ -104,7 +104,7 @@
   .settings-group-item-text
   {
     line-height: 1.3;
-    color: var(--color-fg-light);
+    color: var(--color-fg-dim);
     margin: 0;
 
     strong

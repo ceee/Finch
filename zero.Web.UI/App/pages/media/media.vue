@@ -1,8 +1,8 @@
 ﻿<template>
   <div class="media">
-    <div class="media-tree" v-resizable="resizable">
+    <div class="app-tree media-tree" v-resizable="resizable">
       <ui-tree ref="tree" :get="getTree" :config="treeConfig" :active="id" header="@media.list" />
-      <div class="media-tree-resizable ui-resizable"></div>
+      <div class="app-tree-resizable ui-resizable"></div>
     </div>
 
     <div class="media-content">
@@ -303,45 +303,6 @@
     grid-template-columns: auto 1fr;
     grid-gap: 2px;
     justify-content: stretch;
-  }
-
-  .media-tree
-  {
-    width: 340px;
-    background: var(--color-bg-light);
-    padding: 0;
-    position: relative;
-    overflow-y: auto;
-    height: 100vh;
-
-    .ui-header-bar + .ui-tree
-    {
-      margin-top: -10px;
-    }
-
-    .ui-dot-button
-    {
-      margin-right: -8px;
-    }
-  }
-
-  .media-tree-resizable
-  {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    background: var(--color-fg);
-    opacity: 0;
-    right: 0;
-    width: 6px;
-    cursor: ew-resize;
-    transition: opacity 0.15s ease 0s;
-
-    &:hover
-    {
-      transition-delay: 0.2s;
-      opacity: 0.04;
-    }
   }
 
   .media-content

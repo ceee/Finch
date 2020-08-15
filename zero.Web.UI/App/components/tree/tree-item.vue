@@ -232,7 +232,7 @@
     position: absolute;
     left: 10px;
     bottom: 12px;
-    background: var(--color-bg-light);
+    background: var(--color-bg-bright);
     border-radius: 50%;
     width: 14px;
     height: 14px;

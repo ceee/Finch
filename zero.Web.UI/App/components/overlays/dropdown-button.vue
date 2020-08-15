@@ -131,7 +131,7 @@
 
     &:not([disabled]):hover, &.is-active, &:focus
     {
-      background: var(--color-bg-xlight);
+      background: var(--color-bg-bright-three);
       color: var(--color-fg);
       //font-weight: 700;
 
@@ -148,14 +148,19 @@
 
     &[disabled]
     {
-      color: var(--color-fg-light);
+      color: var(--color-fg-dim);
       cursor: default;
       pointer-events: none;
 
       .ui-dropdown-list-item-icon
       {
-        color: var(--color-fg-light);
+        color: var(--color-fg-dim);
       }
+    }
+
+    & + .ui-dropdown-button
+    {
+      margin-top: 4px;
     }
   }
 

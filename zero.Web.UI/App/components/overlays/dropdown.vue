@@ -99,10 +99,10 @@
     position: absolute;
     min-width: 300px;
     min-height: 20px;
-    background: var(--color-bg-light);
+    background: var(--color-bg-bright-two);
     border-radius: var(--radius);
     border: 1px solid var(--color-line-light);
-    box-shadow: 0 0 20px var(--color-shadow);
+    box-shadow: 0 0 32px var(--color-shadow);
     z-index: 8;
     top: calc(100% + 5px);
     padding: 5px;

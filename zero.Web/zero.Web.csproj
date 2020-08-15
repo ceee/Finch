@@ -39,7 +39,7 @@
     </None>
 
     <BackofficeUI Include="..\zero.Web.UI\**\*" Exclude="..\zero.Web.UI\node_modules\**\*;..\zero.Web.UI\Assets\*.js;..\zero.Web.UI\package-lock.json" />
-    <None Include="@(BackofficeUI)" Link="Zero\%(RecursiveDir)%(Filename)%(Extension)" >
+    <None Include="@(BackofficeUI)" Link="Zero\%(RecursiveDir)%(Filename)%(Extension)">
       <Pack>true</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
       <PackagePath>content\zero\Web\</PackagePath>

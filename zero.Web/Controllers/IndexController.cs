@@ -23,7 +23,7 @@ namespace zero.Web.Controllers
         return RedirectToAction("Index", "Setup");
       }
 
-      return View("/Views/Index.cshtml", new ZeroBackofficeModel()
+      return View(new ZeroBackofficeModel()
       {
         Vue = ZeroVue
       });

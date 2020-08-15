@@ -1,8 +1,8 @@
 ﻿<template>
   <div class="page-container">
-    <div class="page-container-tree" v-resizable="resizable">
+    <div class="app-tree" v-resizable="resizable">
       <ui-tree ref="tree" :get="getItems" :config="treeConfig" :active="id" header="Pages" />
-      <div class="page-container-tree-resizable ui-resizable"></div>
+      <div class="app-tree-resizable ui-resizable"></div>
     </div>
 
     <router-view v-if="!isOverview"></router-view>
@@ -303,49 +303,13 @@
     height: 100vh;
   }
 
-  .page-container-tree
-  {
-    width: 340px;
-    background: var(--color-bg-light);
-    padding: 0;
-    position: relative;
-    overflow-y: auto;
-    height: 100vh;
-    border-right: 1px solid var(--color-line-mid);
-
-    .ui-header-bar + .ui-tree
-    {
-      margin-top: -10px;
-    }
-
-    .ui-dot-button
-    {
-      margin-right: -8px;
-    }
-  }
-
-  .page-container-tree-resizable
-  {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    background: var(--color-fg);
-    opacity: 0;
-    right: 0;
-    width: 6px;
-    cursor: ew-resize;
-    transition: opacity 0.15s ease 0s;
-
-    &:hover
-    {
-      transition-delay: 0.2s;
-      opacity: 0.04;
-    }
-  }
 
   .page-overview
   {
-    padding: 95px 0 0 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 80px;
   }
 
   .page-overview-action
@@ -370,7 +334,7 @@
     line-height: 89px !important;
     font-size: 22px;
     text-align: center;
-    background: var(--color-bg-light);
+    background: var(--color-bg-bright);
     border-radius: var(--radius);
     transition: box-shadow 0.2s ease;
     box-shadow: var(--color-shadow-short);
@@ -379,7 +343,7 @@
   .page-overview-action-text
   {
     line-height: 1.3;
-    color: var(--color-fg-light);
+    color: var(--color-fg-dim);
 
     strong
     {

@@ -2,13 +2,14 @@
 
 .app-nav
 {
-  background: var(--color-bg-light);
+  background: var(--color-bg-bright);
   width: 260px;
-  border-right: 1px solid var(--color-line-mid);
   color: white;
-  height: 100vh;
+  height: calc(100vh - 40px);
   display: grid;
+  margin: 20px;
   grid-template-rows: auto auto 1fr auto;
+  border-radius: var(--radius);
 
   a, button
   {
@@ -28,19 +29,12 @@
   align-items: center;
   padding: 0 var(--padding);
   padding-top: 8px;
-  font-size: 2.4em;
-  line-height: 1;
-  font-weight: 700;
   height: var(--height-top);
   margin: 0;
-  color: var(--color-fg);
-  background: var(--color-secondary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 
   img
   {
-    height: 32px;
+    height: 28px;
     margin-top: 10px;
   }
 }
@@ -52,10 +46,8 @@
 
   .ui-button.type-action
   {
-    background: var(--color-bg);
-    //background: rgba(white, 0.05);
+    background: var(--color-bg-bright-two);
     color: var(--color-fg);
-    //border-color: rgba(white, 0.1);
     padding-left: 20px;
   }
 }
@@ -69,7 +61,7 @@ a.app-nav-item
   font-size: var(--font-size);
   padding: 0 var(--padding);
   height: 52px;
-  color: var(--color-fg-mid);
+  color: var(--color-fg-dim);
 
   &:hover
   {
@@ -84,7 +76,7 @@ a.app-nav-item
   &.is-active:not([alias="dashboard"]), &.is-active-exact
   {
     color: var(--color-fg);
-    background: var(--color-bg-light);
+    background: var(--color-bg-bright-two);
     font-weight: 700;
 
     .app-nav-item-icon
@@ -106,7 +98,7 @@ a.app-nav-item
   font-weight: 400;
   position: relative;
   top: -2px;
-  color: var(--color-fg-mid);
+  color: var(--color-fg-dim);
   transition: color 0.2s ease;
 }
 
@@ -122,7 +114,7 @@ a.app-nav-child
   font-size: $font-size;
   padding: 0 var(--padding) 0 calc(var(--padding) + 36px);
   height: 40px;
-  color: var(--color-fg-mid);
+  color: var(--color-fg-dim);
 
   &:hover, &.is-active
   {
@@ -166,7 +158,7 @@ a.app-nav-child
   width: 100%;
   grid-template-columns: auto 1fr auto;
   grid-gap: 16px;
-  color: var(--color-fg-mid);
+  color: var(--color-fg-dim-two);
   align-items: center;
 
   .-image
@@ -176,7 +168,7 @@ a.app-nav-child
     border-radius: 18px;
     position: relative;
     top: -1px;
-    background: var(--color-bg-mid);
+    background: var(--color-bg-bright-two);
     text-align: center;
     line-height: 37px;
     font-size: 16px;
@@ -192,10 +184,5 @@ a.app-nav-child
       font-weight: 700;
       color: var(--color-fg);
     }
-  }
-
-  .-icon
-  {
-
   }
 }

@@ -4,8 +4,10 @@ h2.ui-headline
 {
   @extend %font;
   margin: 0;
-  font-size: var(--font-size-l);
+  font-size: var(--font-size);
+  letter-spacing: 1px;
   font-weight: 700;
+  text-transform: uppercase;
 
   &.xl
   {

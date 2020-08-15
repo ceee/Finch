@@ -124,8 +124,10 @@
     font-family: var(--font);
     color: var(--color-fg);
     margin: 0;
-    font-size: var(--font-size-l);
+    font-size: var(--font-size);
+    letter-spacing: 1px;
     font-weight: 700;
+    text-transform: uppercase;
 
     &.is-empty, .-minor
     {

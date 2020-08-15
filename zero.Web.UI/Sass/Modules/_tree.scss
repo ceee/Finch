@@ -1,0 +1,47 @@
+﻿
+
+.app-tree
+{
+  width: 340px;
+  background: var(--color-bg-bright);
+  padding: 0;
+  position: relative;
+  overflow-y: auto;
+  height: calc(100vh - 40px);
+  margin: 20px 0;
+  border-radius: var(--radius);
+
+  .ui-header-bar + .ui-tree
+  {
+    margin-top: -10px;
+  }
+
+  .ui-dot-button
+  {
+    margin-right: -8px;
+  }
+
+  .ui-tree-item.is-active:before
+  {
+    background: var(--color-bg-bright-two);
+  }
+}
+
+.app-tree-resizable
+{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--color-fg);
+  opacity: 0;
+  right: 0;
+  width: 6px;
+  cursor: ew-resize;
+  transition: opacity 0.15s ease 0s;
+
+  &:hover
+  {
+    transition-delay: 0.2s;
+    opacity: 0.04;
+  }
+}

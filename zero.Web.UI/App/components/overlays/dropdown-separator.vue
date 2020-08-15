@@ -13,7 +13,8 @@
 <style lang="scss">
   .ui-dropdown-separator
   {
-    border-bottom-color: var(--color-highlight);
+    border: none;
+    border-bottom: 1px solid var(--color-bg-bright-three);
     margin: 5px 0;
   }
 </style>
