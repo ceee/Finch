@@ -151,7 +151,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: var(--color-bg-light);
+    background: var(--color-bg);
     color: var(--color-fg);
     text-align: center;
     padding: var(--padding);
@@ -168,7 +168,7 @@
   .page-error-text
   {
     font-size: var(--font-size);
-    color: var(--color-fg-light);
+    color: var(--color-fg-dim);
     line-height: 1.4em;
   }
 

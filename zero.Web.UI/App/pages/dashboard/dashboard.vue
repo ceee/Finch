@@ -22,14 +22,15 @@
   .dashboard
   {
     position: relative;
-    padding-top: 68px;
+    padding-top: 0;
   }
 
   .dashboard-elements
   {
     display: grid;
-    padding: var(--padding);
-    grid-gap: var(--padding);
+    padding: 20px;
+    padding-left: 0;
+    grid-gap: 16px;
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     grid-auto-rows: minmax(240px, auto);
     grid-auto-flow: dense;

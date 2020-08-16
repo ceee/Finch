@@ -70,7 +70,7 @@
   {
     display: grid;
     grid-template-columns: 1fr auto;
-    grid-gap: var(--padding);
+    grid-gap: 16px;
   }
 
   .ui-box, .ui-blank-box
@@ -80,7 +80,7 @@
 
   .ui-box + .ui-box
   {
-    margin-top: var(--padding);
+    margin-top: 16px;
   }
 }
 

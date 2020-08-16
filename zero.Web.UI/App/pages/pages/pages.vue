@@ -308,8 +308,8 @@
   {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     margin-left: 80px;
+    padding-top: 115px;
   }
 
   .page-overview-action
@@ -323,7 +323,7 @@
 
     & + .page-overview-action
     {
-      margin-top: 60px;
+      margin-top: var(--padding);
     }
   }
 
