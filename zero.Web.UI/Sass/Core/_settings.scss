@@ -99,7 +99,6 @@
   --color-overlay-shade: rgba(0,0,0,0.3);
 }*/
 
-
 :root
 {
   // accent colors
@@ -113,13 +112,15 @@
   --color-fg: #fff;
   --color-fg-dim: #b6b7b8;
   --color-fg-dim-two: #898b8c;
+
   
   // background colors
-  --color-bg: #191b1c;
-  --color-bg-bright: #242526;
-  --color-bg-bright-two: #2b2c2e;
-  --color-bg-bright-three: #343638;
-  --color-bg-dim: #1e1f21;
+  $bg-color-base: #141617;
+  --color-bg: #{$bg-color-base};
+  --color-bg-bright: #{lighten($bg-color-base, 5%)};
+  --color-bg-bright-two: #{lighten($bg-color-base, 8%)};
+  --color-bg-bright-three: #{lighten($bg-color-base, 11%)};
+  --color-bg-dim: #{lighten($bg-color-base, 2.5%)};
 
   // misc colors
   //--color-box: #242526;
