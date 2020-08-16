@@ -140,11 +140,11 @@
   &.selected
   {
     font-weight: 700;
-    color: var(--color-secondary-fg);
+    color: var(--color-primary-fg);
 
     &:after
     {
-      background: var(--color-secondary);
+      background: var(--color-primary);
     }
   }
 

@@ -325,7 +325,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-bg-light);
+    background: var(--color-bg-bright);
     height: 160px;
     border-radius: var(--radius);
     overflow: hidden;

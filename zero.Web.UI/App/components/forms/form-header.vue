@@ -73,7 +73,7 @@
     align-items: center;
     padding: 0 14px 0 20px;
     height: 42px;
-    /*background: var(--color-box);
+    /*background: var(--color-bg-bright);
     color: var(--color-fg);
     border: none;
     box-shadow: var(--color-shadow-short);

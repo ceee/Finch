@@ -151,13 +151,13 @@
 
     &:hover, &.is-active
     {
-      background: var(--color-box);
+      background: var(--color-bg-bright);
       box-shadow: 0 0 20px var(--color-shadow);
     }
 
     &.is-active
     {
-      //color: var(--color-secondary);
+      //color: var(--color-primary);
     }
   }
 

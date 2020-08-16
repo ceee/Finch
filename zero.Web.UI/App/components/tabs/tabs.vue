@@ -122,7 +122,7 @@
     position: relative;
     transition: color 0.2s ease;
     border-radius: var(--radius) var(--radius) 0 0;
-    background: var(--color-bg-xxlight);
+    background: var(--color-bg-dim);
     //border: 1px solid transparent;
     //border-bottom: none;
 
@@ -136,21 +136,10 @@
       color: var(--color-fg);
     }
 
-    &:before
-    {
-      content: '';
-      width: 100%;
-      height: 16px;
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      background: linear-gradient(0deg, var(--color-bg-xlight), transparent);
-    }
-
     &[disabled]
     {
       cursor: default;
-      color: var(--color-fg-light);
+      color: var(--color-fg-dim);
     }
 
     &:after
@@ -167,8 +156,7 @@
     {
       font-weight: 700;
       color: var(--color-fg);
-      background: var(--color-bg-light);
-      border-color: var(--color-line-mid);
+      background: var(--color-bg-bright);
 
       .ui-tabs-list-item-count
       {
@@ -182,7 +170,7 @@
 
       &:after
       {
-        background: var(--color-bg-light);
+        background: var(--color-bg-bright);
       }
     }
 
@@ -209,7 +197,7 @@
     overflow: hidden;
     float: right;
     padding: 2px 6px;
-    background: var(--color-bg-light);
+    background: var(--color-bg-bright-two);
     border-radius: 10px;
     margin-left: 8px;
     margin-right: -4px;

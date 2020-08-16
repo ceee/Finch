@@ -52,7 +52,7 @@
   {
     padding-top: 30px;
     margin-top: 30px;
-    border-top: 1px solid var(--color-line-light);
+    //border-top: 1px solid var(--color-line);
   }
 
   .ui-property.is-vertical
@@ -107,7 +107,7 @@
     font-weight: 400;
     line-height: 1.4;
     text-decoration: none;
-    color: var(--color-fg-light);
+    color: var(--color-fg-dim);
     letter-spacing: 0.3px;
 
     &:empty
@@ -118,7 +118,7 @@
 
   .ui-property-required
   {
-    color: var(--color-negative);
+    color: var(--color-fg-dim);
     margin-left: 0.2em;
     font-weight: 400;
   }
@@ -134,7 +134,7 @@
   {
     max-width: 800px;
     font-size: var(--font-size-xs);
-    color: var(--color-fg-light);
+    color: var(--color-fg-dim);
     margin: 15px 0 0;
     letter-spacing: 0.3px;
 
@@ -142,7 +142,7 @@
     {
       content: "\e87f";
       @extend %font-icon;
-      color: var(--color-secondary);
+      color: var(--color-primary);
       font-size: var(--font-size-l);
       float: left;
       position: relative;

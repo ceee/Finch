@@ -95,6 +95,8 @@
   {
     display: grid;
     grid-template-columns: 1fr auto;
+    background: var(--color-bg-dim);
+    border-radius: var(--radius);
 
     & + .ui-input-list-item, & + .ui-button
     {
@@ -104,7 +106,6 @@
     .ui-input
     {
       border-radius: var(--radius) 0 0 var(--radius);
-      border-right: none;
     }
 
     .ui-icon-button
@@ -112,7 +113,6 @@
       border-radius: 0 var(--radius) var(--radius) 0;
       height: 42px;
       width: 42px;
-      border: 1px solid var(--color-line);
       border-left: none;
       background: transparent !important;
     }

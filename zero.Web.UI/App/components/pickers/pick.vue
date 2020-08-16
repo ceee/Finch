@@ -561,7 +561,7 @@
 
     .ui-input
     {
-      background: var(--color-highlight);
+      background: var(--color-bg-bright);
       min-width: 0;
     }
   }
@@ -642,7 +642,7 @@
 
     &:hover
     {
-      background: var(--color-highlight);
+      background: var(--color-bg-bright-three);
     }
 
     &.is-selected
@@ -660,7 +660,7 @@
       font-family: "Feather";
       content: "\e83e";
       font-size: 16px;
-      color: var(--color-secondary);
+      color: var(--color-primary);
       position: absolute;
       right: 20px;
     }
@@ -675,7 +675,7 @@
 
     .-text
     {
-      color: var(--color-fg-light);
+      color: var(--color-fg-dim);
       
     }
   }

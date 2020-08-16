@@ -36,8 +36,8 @@ button::-moz-focus-inner
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
-  color: var(--color-secondary-fg);
-  background: var(--color-secondary);
+  color: var(--color-primary-fg);
+  background: var(--color-primary);
   padding: 0 20px;
   height: 42px;
   border-radius: var(--radius);
@@ -80,7 +80,7 @@ button::-moz-focus-inner
   &.type-outline
   {
     height: 43px;
-    background: var(--color-box);
+    background: transparent;
     color: var(--color-fg);
     border: 1px solid var(--color-line);
     box-sizing: border-box;
@@ -90,7 +90,7 @@ button::-moz-focus-inner
 
   &.type-secondary
   {
-    background: var(--color-secondary);
+    background: var(--color-primary);
   }
 
   &.type-big
@@ -101,7 +101,7 @@ button::-moz-focus-inner
 
   &.type-light
   {
-    background: var(--color-bg);
+    background: var(--color-bg-bright-two);
     color: var(--color-fg);
     border: none;
   }
@@ -115,7 +115,7 @@ button::-moz-focus-inner
 
   &.type-white
   {
-    background: var(--color-box);
+    background: var(--color-bg-bright-two);
     color: var(--color-fg);
     border: none;
     box-shadow: var(--color-shadow-short);
@@ -210,7 +210,7 @@ button::-moz-focus-inner
 
   .type-light &, .type-blank &
   {
-    border-color: var(--color-bg-mid);
+    border-color: var(--color-bg-bright);
     border-left-color: var(--color-fg);
   }
 }
@@ -254,7 +254,7 @@ button::-moz-focus-inner
 
   &:hover
   {
-    background: var(--color-bg-mid);
+    background: var(--color-bg-bright-two);
   }
 
   .ui-button-icon
@@ -268,7 +268,7 @@ button::-moz-focus-inner
 .ui-icon-button
 {
   @extend .ui-button;
-  background: var(--color-bg-mid);
+  background: var(--color-bg-bright);
   padding: 0;
   height: 32px;
   width: 32px;
@@ -317,7 +317,7 @@ button::-moz-focus-inner
   justify-content: center;
   align-items: center;
   border-radius: var(--radius);
-  background: var(--color-bg-xlight);
+  background: var(--color-bg-bright-two);
   color: var(--color-fg);
   text-align: center;
   font-size: 16px;
@@ -341,7 +341,7 @@ button::-moz-focus-inner
 
 .ui-select-button-description
 {
-  color: var(--color-fg-mid);
+  color: var(--color-fg-dim);
   margin-top: 3px;
   font-size: var(--font-size-xs);
 }

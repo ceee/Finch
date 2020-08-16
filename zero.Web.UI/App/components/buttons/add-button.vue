@@ -104,6 +104,7 @@
     align-items: center;
     padding: 20px 10px;
     font-size: var(--font-size);
+    border-radius: var(--radius);
 
     i
     {
@@ -120,7 +121,7 @@
 
     &:hover
     {
-      background: var(--color-bg-xxlight);
+      background: var(--color-bg-bright-three);
     }
   }
 
@@ -128,6 +129,6 @@
   {
     display: block;
     height: 100%;
-    background: var(--color-line-light);
+    background: var(--color-line);
   }
 </style>

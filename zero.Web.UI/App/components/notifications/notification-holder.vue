@@ -47,8 +47,8 @@
     grid-template-columns: 1fr auto;
     grid-gap: 20px;
     align-items: center;
-    background: var(--color-secondary);
-    color: var(--color-secondary-fg);
+    background: var(--color-primary);
+    color: var(--color-primary-fg);
     border-radius: var(--radius);
     padding: 10px 12px;
     font-size: var(--font-size);
@@ -79,7 +79,7 @@
     
     .ui-button-icon
     {
-      color: var(--color-secondary-fg);
+      color: var(--color-primary-fg);
     }
 
     & + .app-notification

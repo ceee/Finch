@@ -1,13 +1,13 @@
 ﻿<template>
   <div class="app-auth">
     <i class="fth-home app-auth-font-trigger"></i>
-    <h1 class="app-auth-headline">zero</h1>
+    <span></span>
     <ui-form class="app-auth-inner" v-slot="form" @submit="onSubmit">
       <div>
-        <h2 v-localize="'@login.headline'"></h2>
+        <img class="app-auth-image" src="/Assets/zero-2.png" v-localize:alt="'@zero.name'" />
 
         <ui-error :catch-remaining="true" />
-        <ui-message type="warn" v-if="rejectReason" :text="rejectReason" />
+        <ui-message type="info" v-if="rejectReason" :text="rejectReason" />
 
         <ui-property field="email" label="@login.fields.email" :vertical="true">
           <input v-model="model.email" type="text" class="ui-input" maxlength="120" v-localize:placeholder="'@login.fields.email_placeholder'" />
@@ -108,7 +108,7 @@
     align-items: stretch;
     max-width: 100%;
     width: 520px;
-    background: var(--color-box);
+    background: var(--color-bg-bright);
     border-radius: var(--radius);
     /*border: 1px solid var(--color-line);*/
     position: relative;
@@ -116,21 +116,14 @@
     padding: var(--padding);
     color: var(--color-fg);
     /*box-shadow: 0 0 60px var(--color-shadow);*/
-
-    h2
-    {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
   }
 
-  .app-auth-headline
+  .app-auth-image
   {
-    text-align: center;
-    font-size: 58px;
-    font-weight: 700;
-    margin: 0;
-    color: var(--color-fg);
+    height: 32px;
+    display: block;
+    position: relative;
+    margin: 0 auto 3rem;
   }
 
   .app-auth .ui-property + .ui-property

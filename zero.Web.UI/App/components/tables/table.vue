@@ -306,7 +306,7 @@
     -webkit-box-direction: normal;
     flex-direction: column;
     position: relative;
-    background: var(--color-box);
+    background: var(--color-bg-dim);
     flex-wrap: nowrap;
     -webkit-box-pack: justify;
     justify-content: space-between;
@@ -328,20 +328,14 @@
     -webkit-box-align: center;
     align-items: stretch;
     width: 100%;
-    border-bottom: 1px solid var(--color-line-light);
+    //border-bottom: 1px solid var(--color-line);
     position: relative;
-    //min-height: 60px;
     outline: 1px solid transparent;
     transition: outline 0.1s ease, box-shadow 0.1s ease;
 
     &:last-child
     {
       border-bottom: none;
-    }
-
-    &.is-selected .ui-table-cell
-    {
-      background: var(--color-bg-xxlight);
     }
   }
 
@@ -360,10 +354,9 @@
     color: var(--color-fg);
     position: sticky;
     top: 0;
-    border-bottom: 1px solid var(--color-line-light);
+    //border-bottom: 1px solid var(--color-line);
     z-index: 2;
-    background: var(--color-box);
-    //box-shadow: inset 0 -3px 3px rgba(0,0,0,0.02);
+    background: var(--color-bg-bright);
 
     .ui-table-cell
     {
@@ -380,7 +373,7 @@
     position: relative;
     text-align: left;
     padding: 18px 20px 17px 20px;
-    border-left: 1px solid var(--color-line-light);
+    border-left: 1px solid var(--color-bg-bright);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -416,7 +409,7 @@
 
   .ui-table-row:not(.is-selected) .ui-table-cell:not(.is-head).is-selectable i
   {
-    color: var(--color-fg-xlight);
+    color: var(--color-fg);
     margin-right: 1px;
 
     &:before
@@ -432,9 +425,8 @@
    
     &:hover
     {
-      //text-decoration: underline;
-      color: var(--color-secondary);
-      background: var(--color-bg-xxlight);
+      color: var(--color-primary);
+      background: var(--color-bg-bright);
     }
   }
 
@@ -507,7 +499,7 @@
   .ui-table-field-bool
   {
     font-family: var(--font-icon);
-    color: var(--color-fg-xlight);
+    color: var(--color-fg-dim);
 
     &:before
     {
@@ -551,7 +543,7 @@
 
   .ui-table-field-shared-2
   {
-    color: var(--color-fg-light);
+    color: var(--color-fg-dim);
     font-style: normal;
     font-weight: 400;
     font-size: 0.85em;

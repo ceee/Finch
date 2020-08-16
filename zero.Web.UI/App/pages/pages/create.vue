@@ -85,10 +85,10 @@
     margin: 30px 0 -10px 0;
     border-radius: var(--radius);
     /*border: 1px solid var(--color-line-light);*/
-    background: var(--color-bg-xlight);
+    background: var(--color-bg-dim);
     line-height: 1.4;
     color: var(--color-fg-mid);
-    padding: 14px 12px;
+    padding: 14px 16px;
     font-size: var(--font-size);
 
     strong
@@ -107,23 +107,13 @@
   .page-create-item
   {
     display: grid;
+    width: 100%;
     grid-template-columns: 30px 1fr auto;
     grid-gap: 6px;
     align-items: center;
     position: relative;
     color: var(--color-fg);
     padding: 13px 0;
-
-    &.is-active
-    {
-      font-weight: bold;
-      color: var(--color-secondary);
-
-      .page-create-item-text span
-      {
-        font-weight: 400;
-      }
-    }
   }
 
   .page-create-item-text
@@ -133,7 +123,7 @@
 
     span
     {
-      color: var(--color-fg-light);
+      color: var(--color-fg-dim);
       margin-top: 3px;
     }
   }
@@ -145,7 +135,7 @@
     font-weight: 400;
     position: relative;
     top: -2px;
-    color: var(--color-fg-reverse-mid);
+    color: var(--color-fg);
     transition: color 0.2s ease;
   }
 </style>

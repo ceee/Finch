@@ -135,8 +135,7 @@
     .pell,
     .pell-raw
     {
-      border: 1px solid var(--color-line);
-      background: var(--color-bg-light);
+      background: var(--color-bg-dim);
       max-width: 800px;
       min-height: 42px;
       display: flex;
@@ -195,7 +194,7 @@
 
     .pell-actionbar
     {
-      background: var(--color-bg-light);
+      background: var(--color-bg-dim);
       border-radius: var(--radius) var(--radius) 0 0;
       padding: 5px;
     }
@@ -221,13 +220,13 @@
 
     .pell-button:hover
     {
-      background: var(--color-bg);
+      background: var(--color-bg-bright);
     }
 
     .pell-button-selected
     {
-      background-color: var(--color-highlight);
-      color: var(--color-secondary);
+      background-color: var(--color-bg-bright-two);
+      color: var(--color-primary);
     }
   }
 </style>

@@ -150,7 +150,7 @@
 
     .ui-tree-item.is-selected, .ui-tree-item:hover:not(.is-disabled)
     {
-      background: var(--color-bg-xxlight);
+      background: var(--color-bg-bright-two);
     }
 
     .ui-tree-item.is-selected
@@ -160,7 +160,7 @@
         font-family: "Feather";
         content: "\e83e";
         font-size: 16px;
-        color: var(--color-secondary);
+        color: var(--color-primary);
       }
       
       .ui-tree-item-text

@@ -60,7 +60,7 @@
   {
     min-height: 100%;
     position: relative;
-    padding: 100px var(--padding);
+    padding: 58px var(--padding);
     width: 100%;
     max-width: 2000px;
     display: grid;

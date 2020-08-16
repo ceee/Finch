@@ -92,7 +92,7 @@
     align-items: stretch;
     max-width: 100%;
     width: 520px;
-    background: var(--color-box);
+    background: var(--color-bg-bright);
     border-radius: 3px;
     min-height: 600px;
     position: relative;

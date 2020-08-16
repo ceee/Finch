@@ -104,11 +104,11 @@
     grid-gap: 6px;
     align-items: center;
     font-size: var(--font-size);
-    height: 42px;
+    height: 46px;
     color: var(--color-fg);
     position: relative;
     padding: 0 8px;
-    background: var(--color-bg-light);
+    background: var(--color-bg-bright);
     border-radius: var(--radius);
 
     i

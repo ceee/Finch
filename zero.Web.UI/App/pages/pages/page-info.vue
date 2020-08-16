@@ -9,7 +9,7 @@
           <ui-toggle v-model="value.isActive" class="is-primary" />
         </ui-property>
       </div>
-      <div class="ui-box is-light is-connected">
+      <div class="ui-box">
         <ui-property v-if="value.id" label="@ui.id" :is-text="true">
           {{value.id}}
         </ui-property>

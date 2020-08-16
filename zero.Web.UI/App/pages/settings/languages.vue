@@ -26,7 +26,6 @@
         labelPrefix: '@language.fields.',
         allowOrder: false,
         search: null,
-        selectable: true,
         columns: {
           name: {
             label: '@ui.name',

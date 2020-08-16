@@ -142,7 +142,7 @@
       bottom: 0;
       left: -300px;
       right: 0;
-      background: var(--color-bg-xlight);
+      background: var(--color-bg-bright-two);
     }
   }
 
@@ -165,14 +165,14 @@
     {
       color: var(--color-fg);
       font-weight: bold;
-      //color: var(--color-secondary);
+      //color: var(--color-primary);
     }
   }
 
   .ui-tree-item-toggle
   {
     position: absolute;
-    color: var(--color-fg-mid);
+    color: var(--color-fg-dim);
     height: 100%;
     top: 0;
     left: 0;

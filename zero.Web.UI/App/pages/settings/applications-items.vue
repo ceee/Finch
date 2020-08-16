@@ -62,7 +62,7 @@
   {
     display: flex;
     flex-direction: column;
-    background: var(--color-box);
+    background: var(--color-bg-bright);
     border-radius: var(--radius);
     padding: var(--padding-s);
     text-align: center;
@@ -84,7 +84,7 @@
 
   .apps-item-minor
   {
-    color: var(--color-fg-mid);
+    color: var(--color-fg-dim);
   }
 
   .apps-item-image

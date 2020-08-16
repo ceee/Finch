@@ -45,7 +45,7 @@
   .ui-state-button
   {
     display: inline-flex;
-    border: 1px solid var(--color-line);
+    border: 2px solid var(--color-line);
     border-radius: var(--radius);
   }
 
@@ -56,10 +56,9 @@
 
   button.ui-state-button-item
   {
-    background: var(--color-bg-light);
-    //border: 1px solid var(--color-line); // var(--color-line);
+    background: var(--color-bg-bright-two);
     padding: 10px 16px;
-    color: var(--color-fg-mid);
+    color: var(--color-fg-dim-two);
 
     & + .ui-state-button-item
     {
@@ -81,8 +80,8 @@
     &.is-active
     {
       background: var(--color-bg-mid);
-      /*background: var(--color-secondary);
-      border-color: var(--color-secondary);*/
+      /*background: var(--color-primary);
+      border-color: var(--color-primary);*/
       color: var(--color-fg);
       font-weight: bold;
     }

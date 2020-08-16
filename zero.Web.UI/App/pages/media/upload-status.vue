@@ -163,8 +163,8 @@
 
     /*&.is-upload .-preview
     {
-      background: var(--color-secondary);
-      color: var(--color-secondary-fg);
+      background: var(--color-primary);
+      color: var(--color-primary-fg);
     }*/
 
     .-extension
@@ -198,7 +198,7 @@
       top: 0;
       height: 100%;
       border-radius: 2px;
-      background: var(--color-secondary);
+      background: var(--color-primary);
     }
   }
 </style>

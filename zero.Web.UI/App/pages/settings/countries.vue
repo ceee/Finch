@@ -35,7 +35,6 @@
         labelPrefix: '@country.fields.',
         allowOrder: false,
         search: null,
-        selectable: true,
         columns: {
           flag: {
             label: '',

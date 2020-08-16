@@ -10,8 +10,8 @@ input[type="password"], input[type="range"], input[type="search"], input[type="t
 textarea, .ui-native-select
 {
   @extend %font;
-  background: var(--color-bg-light);
-  border: 1px solid var(--color-line);
+  background: var(--color-bg-dim);
+  border: none;
   font-size: $font-size;
   display: inline-block;
   height: 42px;
@@ -62,6 +62,7 @@ textarea
     border: none;
     font-size: var(--font-size);
     background: none;
+    color: var(--color-fg);
   }
 
   &:after
@@ -133,11 +134,11 @@ textarea
 
   input:checked ~ &
   {
-    background: var(--color-secondary);
+    background: var(--color-primary);
 
     &:before
     {
-      color: var(--color-secondary-fg);
+      color: var(--color-primary-fg);
     }
   }
 }

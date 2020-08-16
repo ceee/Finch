@@ -21,7 +21,7 @@
             <slot name="settings-after"></slot>
           </slot>
         </div>
-        <div class="ui-box is-light is-connected">
+        <div class="ui-box">
           <slot name="infos">
             <ui-property v-if="value.id" label="@ui.id" :is-text="true">
               {{value.id}}
@@ -236,7 +236,7 @@
 
   .editor-infos
   {
-    margin: 58px 0 0;
+    margin: 50px 0 0;
 
     .ui-box
     {
@@ -323,13 +323,13 @@
       margin-top: -28px;
       right: -3px;
       font-size: 42px;
-      color: var(--color-fg-xlight);
+      color: var(--color-fg-dim);
       opacity: 0.2;
     }
 
     a
     {
-      color: var(--color-fg-light);
+      color: var(--color-fg-dim);
       text-decoration: underline dotted;
       font-size: var(--font-size-s);
     }
@@ -338,7 +338,7 @@
     {
       margin-top: 32px;
       padding-top: 32px;
-      border-top: 1px solid var(--color-line-light);
+      border-top: 1px solid var(--color-line);
     }
 
     &.is-block
@@ -346,7 +346,7 @@
       padding: 20px;
       padding-right: 70px;
       border-radius: var(--radius);
-      background: var(--color-bg-xlight);
+      background: var(--color-bg-bright-two);
       margin-bottom: var(--padding);
 
       i

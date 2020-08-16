@@ -139,7 +139,7 @@
   {
     display: flex;
     flex-direction: column;
-    background: var(--color-box);
+    background: var(--color-bg-bright);
     border-radius: var(--radius);
     padding: var(--padding-s) var(--padding);
     text-align: center;

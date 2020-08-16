@@ -205,7 +205,7 @@
     border-radius: var(--radius) 0 0 var(--radius);
     margin-right: -32px;
     padding-right: var(--padding);
-    background: var(--color-box);
+    background: var(--color-bg-bright);
     box-shadow: var(--color-shadow-short);
   }
 

@@ -5,8 +5,8 @@
   --color-primary: #04bfbf; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
   --color-primary-fg: #fff;
   --color-primary-low: rgba(4, 191, 191, 0.15);
-  --color-secondary: #04bfbf;
-  --color-secondary-fg: #fff;
+  --color-primary: #04bfbf;
+  --color-primary-fg: #fff;
   --color-primary-two: #3d72c4;
   --color-negative: #d82853; 
 
@@ -102,27 +102,42 @@
 
 :root
 {
+  // accent colors
+  --color-primary: #e7ecee; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
+  --color-primary-fg: #191b1c;
+  --color-primary-low: rgba(229, 225, 221, 0.3);
+  --color-primary-two: #3d72c4;
+  --color-negative: #d82853;
+
   // foreground colors
   --color-fg: #fff;
-  --color-fg-dim: #b2b5b8;
-  --color-fg-dim-two: #87898c;
+  --color-fg-dim: #b6b7b8;
+  --color-fg-dim-two: #898b8c;
   
   // background colors
-  --color-bg: #1c1e1f;
+  --color-bg: #191b1c;
   --color-bg-bright: #242526;
   --color-bg-bright-two: #2b2c2e;
   --color-bg-bright-three: #343638;
+  --color-bg-dim: #1e1f21;
 
   // misc colors
   //--color-box: #242526;
   --color-shadow: rgba(0,0,0,0.3);
   --color-shadow-short: 0 1px 1px 0 rgba(0,0,0,0.05);
   --color-overlay-shade: rgba(0,0,0,0.3);
+
+  // lines
+  --color-line: #2a2d2e;
 }
 
 
+// theme-agnostic colors
 :root
 {
+  // image background
+  --color-bg-image: #e7ecee;
+
   // message colors
   --color-accent-info: rgb(44, 162, 212);
   --color-accent-info-bg: rgba(44, 162, 212, 0.1);

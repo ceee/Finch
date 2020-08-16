@@ -73,7 +73,7 @@
   {
     width: auto;
     height: auto;
-    background: var(--color-box);
+    background: var(--color-bg-bright);
     border-radius: var(--radius);
     border: none !important;
     box-shadow: 0 0 20px var(--color-shadow);

@@ -37,7 +37,7 @@
       display: flex;
       justify-content: flex-end;
       padding: 20px var(--padding);
-      border-top: 1px solid var(--color-line);
+      background: var(--color-bg-dim);
     }
 
     > content
