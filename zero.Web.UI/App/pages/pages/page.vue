@@ -6,6 +6,8 @@
       </template>
     </ui-form-header>
 
+    <!-- <ui-daterangepicker :value="{ from: model.releaseDate, to: model.unreleaseDate }" @input="onRangeChange" /> -->
+
     <ui-editor v-if="!loading" :config="renderer" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" />
   </ui-form>
 </template>

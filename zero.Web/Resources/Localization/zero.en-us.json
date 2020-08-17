@@ -41,10 +41,14 @@
       "max": "max. {count}"
     },
     "date": {
+      "set": "Set date",
       "select": "Select date...",
       "xtoy": "{x} to {y}",
       "x": "from {x}",
-      "y": "until {y}"
+      "y": "until {y}",
+      "range_header": "Select date range",
+      "range_from": "Date from",
+      "range_to": "Date to"
     },
     "price": {
       "free": "Free",
@@ -330,6 +334,12 @@
     },
     "history": {
       "name": "History"
+    },
+    "schedule": {
+      "label": "Schedule",
+      "header": "Schedule publishing",
+      "publish": "Publish",
+      "unpublish": "Unpublish"
     }
   },
 
