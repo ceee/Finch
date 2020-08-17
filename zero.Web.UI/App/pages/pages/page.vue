@@ -6,7 +6,7 @@
       </template>
     </ui-form-header>
 
-    <ui-editor v-if="!loading" :config="renderer" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" />
+    <ui-editor v-if="!loading" :config="renderer" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" :active-tab="2" />
   </ui-form>
 </template>
 
@@ -82,11 +82,6 @@
 
       onLoad(form)
       {
-        PagesApi.getRevisions(this.id).then(response =>
-        {
-          console.info(response);
-        });
-
         form.load(!this.id ? PagesApi.getEmpty(this.type, this.parent) : PagesApi.getById(this.id)).then(response =>
         {
           this.renderer = 'page.' + response.entity.pageTypeAlias;

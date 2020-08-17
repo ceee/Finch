@@ -18,6 +18,10 @@
       format: {
         type: String,
         default: null
+      },
+      split: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -47,10 +51,24 @@
           return;
         }
 
-        this.output = Strings.date(this.value, this.format);
+        if (!this.split)
+        {
+          this.output = Strings.date(this.value, this.format);
+        }
+        else
+        {
+          this.output = Strings.date(this.value, 'short') + ' <span class="-minor">' + Strings.date(this.value, 'time') + '</span>';
+        }
       }
 
     }
 
   }
 </script>
+
+<style lang="scss">
+  .ui-date .-minor
+  {
+    color: var(--color-fg-dim);
+  }
+</style>

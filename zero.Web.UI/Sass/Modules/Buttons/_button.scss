@@ -99,6 +99,12 @@ button::-moz-focus-inner
     padding: 0 30px;
   }
 
+  &.type-small
+  {
+    height: 32px;
+    padding: 0 12px;
+  }
+
   &.type-light
   {
     background: var(--color-bg-bright-two);

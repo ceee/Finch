@@ -3,5 +3,6 @@
 .ui-link
 {
   color: var(--color-primary);
-  text-decoration: underline dotted;
+  text-decoration: underline dotted var(--color-fg-dim-two);
+  text-underline-offset: 3px;
 }

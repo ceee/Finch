@@ -1,29 +1,24 @@
-﻿//using System;
+﻿using System;
 
-//namespace zero.Core.Entities
-//{
-//  public class Revision : ZeroEntity, IRevision
-//  {
-//    /// <inheritdoc />
-//    public string Content { get; set; }
-//  }
+namespace zero.Core.Entities
+{
+  public class Revision
+  {
+    public RevisionUser User { get; set; }
 
+    public DateTimeOffset Date { get; set; }
 
-//  public interface IRevision : IZeroEntity, IZeroDbConventions
-//  {
-//    /// <summary>
-//    /// Id of the affected entity
-//    /// </summary>
-//    string EntityId { get; set; }
+    public string ChangeVector { get; set; }
 
-//    /// <summary>
-//    /// Id of the affected entity
-//    /// </summary>
-//    string EntityId { get; set; }
+    public string Json { get; set; }
+  }
 
-//    /// <summary>
-//    /// Contains the content as JSON
-//    /// </summary>
-//    string Content { get; set; }
-//  }
-//}
+  public class RevisionUser
+  {
+    public string Id { get; set; }
+
+    public string Name { get; set; }
+
+    public string AvatarId { get; set; }
+  }
+}

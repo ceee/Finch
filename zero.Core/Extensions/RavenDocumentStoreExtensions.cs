@@ -12,7 +12,7 @@ using zero.Core.Utils;
 
 namespace zero.Core.Extensions
 {
-  public static class DocumentStoreExtensions
+  public static class RavenDocumentStoreExtensions
   {
     /// <summary>
     /// Setup conventions for the document store

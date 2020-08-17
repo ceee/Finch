@@ -8,10 +8,12 @@ namespace zero.Web.Controllers
   public class PagesController<T> : BackofficeController where T : IPage, new()
   {
     IPagesApi<T> Api;
+    IRevisionsApi RevisionsApi;
 
-    public PagesController(IPagesApi<T> api)
+    public PagesController(IPagesApi<T> api, IRevisionsApi revisionsApi)
     {
       Api = api;
+      RevisionsApi = revisionsApi;
     }
 
 
@@ -28,7 +30,7 @@ namespace zero.Web.Controllers
       ParentId = parent
     });
 
-    public async Task<IActionResult> GetRevisions([FromQuery] string id) => Json(await Api.GetRevisions(id));
+    public async Task<IActionResult> GetRevisions([FromQuery] string id) => Json(await RevisionsApi.GetPaged<T>(id));
 
     public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
 

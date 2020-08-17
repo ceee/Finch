@@ -2,8 +2,9 @@ import dayjs from 'dayjs';
 
 const BYTE_UNIT = 'B';
 const UNITS = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-const DATETIME_FORMAT = 'DD.MM.YY HH:mm';
 const DATE_FORMAT = 'DD.MM.YY';
+const TIME_FORMAT = 'HH:mm';
+const DATETIME_FORMAT = DATE_FORMAT + ' ' + TIME_FORMAT;
 
 export default {
   /// <summary>
@@ -58,6 +59,10 @@ export default {
     else if (format === 'short' || format === 'default')
     {
       format = DATE_FORMAT;
+    }
+    else if (format === 'time')
+    {
+      format = TIME_FORMAT;
     }
 
     return dayjs(value).format(format);

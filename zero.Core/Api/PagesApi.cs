@@ -72,18 +72,6 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<T>> GetRevisions(string id, int pageNumber = 1, int pageSize = 30)
-    {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-
-        List<T> revisions = await session.Advanced.Revisions.GetForAsync<T>(id, pageNumber - 1, pageSize);
-        return new ListResult<T>(revisions, revisions.Count, pageNumber, pageSize);
-      }
-    }
-
-
-    /// <inheritdoc />
     public async Task<EntityResult<T>> Save(T model)
     {
       return await SaveModel(model, null);
@@ -309,11 +297,6 @@ namespace zero.Core.Api
     /// Get a specific page type by alias
     /// </summary>
     PageType GetPageType(string alias);
-
-    /// <summary>
-    /// Get revisions of a page (if activated in RavenDB configuration)
-    /// </summary>
-    Task<ListResult<T>> GetRevisions(string id, int pageNumber = 1, int pageSize = 30);
 
     /// <summary>
     /// Creates or updates a page
