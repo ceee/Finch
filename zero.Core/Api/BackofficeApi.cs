@@ -168,12 +168,16 @@ namespace zero.Core.Api
         }
       }
 
+      // get current user
+      string userId = Backoffice.Auth.GetUserId();
+
       // set default properties
       if (model.Id.IsNullOrEmpty())
       {
         if (zeroEntity != null)
         {
           zeroEntity.CreatedDate = DateTimeOffset.Now;
+          zeroEntity.CreatedById = userId;
         }
 
         if (model is ILanguageAwareEntity)
@@ -182,10 +186,12 @@ namespace zero.Core.Api
         }
       }
 
-      // update name alias
+      // update name alias and last modified
       if (zeroEntity != null)
       {
         zeroEntity.Alias = Safenames.Alias(zeroEntity.Name);
+        zeroEntity.LastModifiedById = userId;
+        zeroEntity.CreatedById ??= userId;
       }
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())

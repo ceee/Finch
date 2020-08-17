@@ -20,7 +20,6 @@ namespace zero.Web.Controllers
  
     public IActionResult GetPageType([FromQuery] string alias) => Json(Api.GetPageType(alias));
 
-
     public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
     public IActionResult GetEmpty(string type, string parent = null) => Edit(new T()
@@ -29,6 +28,7 @@ namespace zero.Web.Controllers
       ParentId = parent
     });
 
+    public async Task<IActionResult> GetRevisions([FromQuery] string id) => Json(await Api.GetRevisions(id));
 
     public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
 

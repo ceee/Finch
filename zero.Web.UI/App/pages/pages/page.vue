@@ -82,6 +82,11 @@
 
       onLoad(form)
       {
+        PagesApi.getRevisions(this.id).then(response =>
+        {
+          console.info(response);
+        });
+
         form.load(!this.id ? PagesApi.getEmpty(this.type, this.parent) : PagesApi.getById(this.id)).then(response =>
         {
           this.renderer = 'page.' + response.entity.pageTypeAlias;

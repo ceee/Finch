@@ -22,6 +22,12 @@ namespace zero.Core.Entities
     public bool IsActive { get; set; }
 
     /// <inheritdoc/>
+    public string LastModifiedById { get; set; }
+
+    /// <inheritdoc/>
+    public string CreatedById { get; set; }
+
+    /// <inheritdoc/>
     public DateTimeOffset CreatedDate { get; set; }
   }
 
@@ -48,6 +54,16 @@ namespace zero.Core.Entities
     /// Whether the entity is visible in the frontend
     /// </summary>
     bool IsActive { get; set; }
+
+    /// <summary>
+    /// Backoffice user who last modified this content
+    /// </summary>
+    public string LastModifiedById { get; set; }
+
+    /// <summary>
+    /// Backoffice user who created this content
+    /// </summary>
+    public string CreatedById { get; set; }
 
     /// <summary>
     /// Date of creation

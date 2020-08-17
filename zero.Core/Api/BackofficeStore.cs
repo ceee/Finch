@@ -11,12 +11,15 @@ namespace zero.Core.Api
 
     public IZeroOptions Options { get; private set; }
 
+    public IAuthenticationApi Auth { get; private set; }
 
-    public BackofficeStore(IDocumentStore raven, IApplicationContext appContext, IZeroOptions options)
+
+    public BackofficeStore(IDocumentStore raven, IApplicationContext appContext, IZeroOptions options, IAuthenticationApi authenticationApi)
     {
       Raven = raven;
       AppContext = appContext;
       Options = options;
+      Auth = authenticationApi;
     }
   }
 
@@ -28,5 +31,7 @@ namespace zero.Core.Api
     IApplicationContext AppContext { get; }
 
     IZeroOptions Options { get; }
+
+    IAuthenticationApi Auth { get; }
   }
 }
