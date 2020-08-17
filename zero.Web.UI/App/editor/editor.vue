@@ -18,8 +18,8 @@
             <ui-property v-if="activeToggle" label="@ui.active" :is-text="true" class="is-toggle">
               <ui-toggle v-model="value.isActive" class="is-primary" />
             </ui-property>
-            <slot name="settings-after"></slot>
           </slot>
+          <slot name="settings-properties"></slot>
         </div>
         <div class="ui-box">
           <slot name="infos">

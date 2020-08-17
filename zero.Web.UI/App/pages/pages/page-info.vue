@@ -8,6 +8,9 @@
         <ui-property label="@ui.active" :is-text="true" class="is-toggle">
           <ui-toggle v-model="value.isActive" class="is-primary" />
         </ui-property>
+        <ui-property label="@page.schedule.label" :is-text="true">
+          <ui-daterangepicker :value="{ from: value.publishDate, to: value.unpublishDate }" @input="onRangeChange" />
+        </ui-property>
       </div>
       <div class="ui-box">
         <ui-property v-if="value.id" label="@ui.id" :is-text="true">
@@ -45,6 +48,17 @@
       {
         this.pageType = pageType;
       });
+    },
+
+
+    methods: {
+
+      onRangeChange(value)
+      {
+        this.value.publishDate = value.from;
+        this.value.unpublishDate = value.to;
+      },
+
     }
   }
 </script>

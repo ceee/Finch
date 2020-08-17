@@ -1,4 +1,6 @@
-﻿namespace zero.Core.Entities
+﻿using System;
+
+namespace zero.Core.Entities
 {
   /// <summary>
   /// A page can consist of unlimited properties and be rendered as you wish
@@ -17,6 +19,12 @@
 
     /// <inheritdoc />
     public bool IsRecycled { get; set; }
+
+    /// <inheritdoc />
+    public DateTimeOffset? PublishDate { get; set; }
+
+    /// <inheritdoc />
+    public DateTimeOffset? UnpublishDate { get; set; }
   }
 
 
@@ -36,5 +44,15 @@
     /// Whether this page is recycled or not
     /// </summary>
     bool IsRecycled { get; set; }
+
+    /// <summary>
+    /// Date when the page is published
+    /// </summary>
+    DateTimeOffset? PublishDate { get; set; }
+
+    /// <summary>
+    /// Date when the page is unpublished
+    /// </summary>
+    DateTimeOffset? UnpublishDate { get; set; }
   }
 }
