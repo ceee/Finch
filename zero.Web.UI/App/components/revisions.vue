@@ -1,14 +1,14 @@
 ﻿<template>
   <div class="ui-revisions" :class="{ 'is-empty': value.items.length < 1 }">
     <div class="ui-revision" v-for="revision in value.items">
-      <span class="ui-revision-action">updated</span>
+      <span class="ui-revision-action"  v-localize="'@revisions.actions.updated'"></span>
       <ui-date class="ui-revision-date" v-model="revision.date" format="long" :split="true" />
       <router-link :to="{ name: userRoute, params: { id: revision.user.id }}" v-if="revision.user" class="ui-revision-user">
         <img class="ui-revision-user-image" v-if="revision.user" :src="getImage(revision.user.avatarId)" :alt="revision.user.name" />
         <span v-if="revision.user" class="ui-revision-user-name">{{revision.user.name}}</span>
       </router-link>
       <div v-else></div>
-      <button class="ui-link">View</button>
+      <button type="button" class="ui-link" v-localize="'@revisions.view'"></button>
     </div>
   </div>
 </template>
@@ -76,8 +76,8 @@
     font-size: 9px;
     font-weight: 700;
     text-transform: uppercase;
-    background: var(--color-accent-info-bg);
-    color: var(--color-accent-info);
+    background: var(--color-bg-bright-two);
+    color: var(--color-fg-dim);
     height: 22px;
     line-height: 22px;
     padding: 0 10px;
@@ -93,7 +93,7 @@
       top: -30px;
       height: 30px;
       width: 3px;
-      background: var(--color-accent-info-bg);
+      background: var(--color-bg-bright-two);
     }
   }
 

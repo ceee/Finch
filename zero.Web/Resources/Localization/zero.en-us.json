@@ -79,6 +79,16 @@
     "nonbinary": "Non-binary"
   },
 
+  "revisions": {
+    "label": "Revisions",
+    "actions": {
+      "updated": "Updated",
+      "created": "Created",
+      "deleted": "Deleted"
+    },
+    "view": "View"
+  },
+
   "rte": {
     "bold": "Bold",
     "italic": "Italic",
@@ -318,6 +328,8 @@
   "page": {
     "name": "Page",
 
+    "type": "Type",
+
     "overview": {
       "actions": {
         "continue": "Continue",
@@ -331,9 +343,6 @@
     "recyclebin": {
       "name": "Recycle bin",
       "description": "View recently deleted entities"
-    },
-    "history": {
-      "name": "History"
     },
     "schedule": {
       "label": "Schedule",

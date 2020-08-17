@@ -118,8 +118,8 @@
   $bg-color-base: #141617;
   --color-bg: #{$bg-color-base};
   --color-bg-bright: #{lighten($bg-color-base, 5%)};
-  --color-bg-bright-two: #{lighten($bg-color-base, 8%)};
-  --color-bg-bright-three: #{lighten($bg-color-base, 11%)};
+  --color-bg-bright-two: #{lighten($bg-color-base, 10%)};
+  --color-bg-bright-three: #{lighten($bg-color-base, 14%)};
   --color-bg-dim: #{lighten($bg-color-base, 2%)};
 
   // misc colors

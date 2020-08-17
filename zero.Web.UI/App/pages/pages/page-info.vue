@@ -1,9 +1,10 @@
 ﻿<template>
   <div class="page-editor-info ui-view-box has-sidebar">
     <div>
-      <div class="ui-box"></div>
       <div class="ui-box">
-        <h3 class="ui-headline">Revisions</h3>
+        <h3 class="ui-headline" v-localize="'Links'"></h3>
+        <div><ui-button type="light" label="Open page" /><br /><br /><br /><br /></div>
+        <h3 class="ui-headline" v-localize="'@revisions.label'"></h3>
         <ui-revisions v-model="revisions" />
       </div>
     </div>
@@ -23,7 +24,7 @@
         <ui-property v-if="!isCreate" label="@ui.createdDate" :is-text="true">
           <ui-date v-model="value.createdDate" />
         </ui-property>
-        <ui-property label="Type" :is-text="true" v-if="pageType">
+        <ui-property label="@page.type" :is-text="true" v-if="pageType">
           <i :class="pageType.icon"></i> &nbsp;{{pageType.name}}
         </ui-property>
       </div>
