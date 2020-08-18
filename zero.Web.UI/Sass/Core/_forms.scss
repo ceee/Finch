@@ -2,7 +2,7 @@
 
 ::placeholder
 {
-  color: var(--color-fg-light);
+  color: var(--color-fg-dim);
 }
 
 input[type="text"], input[type="color"], input[type="date"], input[type="datetime"], input[type="email"], input[type="file"], input[type="month"], input[type="number"],
@@ -11,6 +11,7 @@ textarea, .ui-native-select
 {
   @extend %font;
   background: var(--color-bg-dim);
+  //border: 1px solid var(--color-bg-bright-three);
   border: none;
   font-size: $font-size;
   display: inline-block;

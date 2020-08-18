@@ -8,7 +8,7 @@
         <span v-if="revision.user" class="ui-revision-user-name">{{revision.user.name}}</span>
       </router-link>
       <div v-else></div>
-      <button type="button" class="ui-link" v-localize="'@revisions.view'"></button>
+      <button type="button" class="ui-link is-minor" v-localize="'@revisions.view'"></button>
     </div>
   </div>
 </template>

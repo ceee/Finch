@@ -110,6 +110,11 @@
     //margin-left: -1px;
   }
 
+  .ui-tabs-items > .ui-tab:first-child.ui-box:not(.is-blank)
+  {
+    border-top-left-radius: 0;
+  }
+
   .ui-tabs-list-item
   {
     display: inline-flex;
@@ -125,7 +130,6 @@
     background: var(--color-bg-dim);
     //border: 1px solid transparent;
     //border-bottom: none;
-
     & + .ui-tabs-list-item
     {
       margin-left: 4px;

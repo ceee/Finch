@@ -3,7 +3,7 @@
     <div class="ui-form-header-aside">
       <slot></slot>
       <div v-if="activeToggle" class="ui-form-header-toggle">
-        <ui-toggle v-model="value.isActive" class="is-primary" off-content="@ui.inactive" on-content="@ui.active" :content-left="true" />
+        <ui-toggle v-model="value.isActive" class="is-primary" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" />
       </div>
       <ui-dropdown v-if="!isCreate" align="right">
         <template v-slot:button>

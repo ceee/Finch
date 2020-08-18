@@ -96,7 +96,7 @@ namespace zero.Core.Api
             HasActions = true,
             Modifier = !folder.IsActive ? new TreeItemModifier()
             {
-              Icon = "fth-minus-circle color-red",
+              Icon = "fth-minus-circle color-orange",
               Name = "Inactive"
             } : null
           });

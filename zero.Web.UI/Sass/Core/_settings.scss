@@ -102,26 +102,34 @@
 :root
 {
   // accent colors
-  --color-primary: #efeee9; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
-  --color-primary-fg: #191b1c;
+  --color-primary: #ff662b; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
+  --color-primary-fg: #fff;
   --color-primary-low: rgba(229, 225, 221, 0.3);
   --color-primary-two: #e5e4df;
   --color-primary-line: #e0dfda;
+  --color-secondary: #f9e0c4;
+  --color-secondary-fg: #20242a;
   --color-negative: #d82853;
 
   // foreground colors
   --color-fg: #fff;
-  --color-fg-dim: #b6b7b8;
+  --color-fg-dim: #b0b4b8;
   --color-fg-dim-two: #898b8c;
 
   
   // background colors
-  $bg-color-base: #141617;
-  --color-bg: #{$bg-color-base};
-  --color-bg-bright: #{lighten($bg-color-base, 5%)};
-  --color-bg-bright-two: #{lighten($bg-color-base, 10%)};
-  --color-bg-bright-three: #{lighten($bg-color-base, 14%)};
-  --color-bg-dim: #{lighten($bg-color-base, 2%)};
+  $color-shade-base: #262c34;
+  --color-bg: #191e25;
+  --color-bg-bright: #{darken($color-shade-base, 2%)};
+  --color-bg-bright-two: #{desaturate(lighten($color-shade-base, 2%), 3%)};
+  --color-bg-bright-three: #{desaturate(lighten($color-shade-base, 6%), 3%)};
+  --color-bg-dim: #{darken($color-shade-base, 4%)};
+  /*$color-shade-base: #141617;
+  --color-bg: #141617;
+  --color-bg-bright: #{lighten($color-shade-base, 5%)};
+  --color-bg-bright-two: #{lighten($color-shade-base, 10%)};
+  --color-bg-bright-three: #{lighten($color-shade-base, 14%)};
+  --color-bg-dim: #{lighten($color-shade-base, 2%)};*/
 
   // misc colors
   //--color-box: #242526;
@@ -239,7 +247,7 @@ $accent-colors: (
   "green": "#2fbb98",
   "lime": "#a0db61",
   "yellow": "#ffd100",
-  "orange": "#f6b226",
+  "orange": "#ff662b",
   "red": "#d82853"
 );
 

@@ -60,7 +60,7 @@
       padding-right: 40px;
       border: none;
       box-shadow: var(--color-shadow-short);
-      background: var(--color-bg-bright-two);
+      background: var(--color-bg-bright);
     }
 
     .ui-searchinput-button

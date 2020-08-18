@@ -3,6 +3,17 @@
 .ui-link
 {
   color: var(--color-primary);
-  text-decoration: underline dotted var(--color-fg-dim-two);
+  text-decoration: underline dotted var(--color-primary);
   text-underline-offset: 3px;
+
+  &.is-minor
+  {
+    color: var(--color-fg-dim);
+    text-decoration: none;
+
+    &:hover
+    {
+      color: var(--color-fg);
+    }
+  }
 }
