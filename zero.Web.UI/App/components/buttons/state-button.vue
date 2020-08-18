@@ -45,8 +45,6 @@
   .ui-state-button
   {
     display: inline-flex;
-    border: 2px solid var(--color-line);
-    border-radius: var(--radius);
   }
 
   .ui-state-button.is-disabled button
@@ -79,7 +77,7 @@
 
     &.is-active
     {
-      background: var(--color-bg-mid);
+      background: var(--color-bg-bright-three);
       /*background: var(--color-primary);
       border-color: var(--color-primary);*/
       color: var(--color-fg);

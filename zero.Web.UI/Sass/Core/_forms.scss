@@ -99,16 +99,6 @@ textarea
     -webkit-appearance: none;
     border: none;
   }
-
-  &.is-primary input:checked ~ .ui-native-check-toggle
-  {
-    background: var(--color-primary);
-
-    &:before
-    {
-      color: var(--color-primary-fg);
-    }
-  }
 }
 
 .ui-native-check-toggle
@@ -119,7 +109,7 @@ textarea
   line-height: 20px;
   text-align: center;
   border-radius: var(--radius);
-  background: var(--color-bg-mid);
+  background: var(--color-bg-bright-three);
   margin-right: 10px;
   position: relative;
   top: -1px;
