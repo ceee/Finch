@@ -124,12 +124,12 @@
 
     &.is-active
     {
-      background: var(--color-primary);
+      //background: var(--color-primary);
     }
 
     &.is-active  i
     {
-      background: var(--color-primary-fg);
+      //background: var(--color-primary-fg);
       transform: translateX(14px);
     }
   }

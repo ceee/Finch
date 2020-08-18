@@ -4,14 +4,12 @@
     <div v-if="activeToggle" class="ui-header-bar-toggle">
       <ui-toggle v-model="value.isActive" class="is-primary" off-content="@ui.inactive" on-content="@ui.active" :content-left="true" />
     </div>
-    <ui-dropdown v-if="!isCreate" align="right">
-      <template v-slot:button>
-        <ui-button type="white" label="@ui.actions" caret="down" />
-      </template>
-      <slot name="actions"></slot>
-      <ui-dropdown-button v-if="canDelete" label="@ui.delete" icon="fth-trash" @click="onDelete" :disabled="disabled" />
-    </ui-dropdown>
-    <ui-button :submit="true" label="@ui.save" :state="state" v-if="!disabled" />
+    <ui-context-button :state="state">
+      <div v-if="!isCreate">
+        <slot name="actions"></slot>
+        <ui-dropdown-button v-if="canDelete" label="@ui.delete" icon="fth-trash" @click="onDelete" :disabled="disabled" />
+      </div>
+    </ui-context-button>
   </ui-header-bar>
 </template>
 
