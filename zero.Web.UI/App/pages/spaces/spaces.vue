@@ -264,7 +264,7 @@
   .spaces-tree-item-toggle
   {
     position: absolute;
-    color: var(--color-fg-mid);
+    color: var(--color-fg-dim);
     height: 100%;
     top: 0;
     left: 0;
@@ -295,6 +295,6 @@
   {
     transition: opacity 0.2s ease 0;
     opacity: 0;
-    color: var(--color-fg-mid);
+    color: var(--color-fg-dim);
   }
 </style>

@@ -153,7 +153,7 @@ button::-moz-focus-inner
     position: relative;
     font-size: var(--font-size-l);
     top: -1px;
-    /*color: var(--color-fg-mid);*/
+    /*color: var(--color-fg-dim);*/
   }
 
   &.no-label .ui-button-icon
@@ -274,7 +274,7 @@ button::-moz-focus-inner
 .ui-icon-button
 {
   @extend .ui-button;
-  background: var(--color-bg-bright);
+  background: var(--color-bg-bright-two);
   padding: 0;
   height: 32px;
   width: 32px;

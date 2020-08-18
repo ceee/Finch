@@ -157,7 +157,7 @@
     .-desc
     {
       font-weight: 400;
-      color: var(--color-fg-mid);
+      color: var(--color-fg-dim);
       margin-top: 3px;
       font-size: var(--font-size-xs);
     }
@@ -166,7 +166,7 @@
   .editor-nested-item-header-toggle
   {
     position: absolute;
-    color: var(--color-fg-mid);
+    color: var(--color-fg-dim);
     height: 100%;
     top: 0;
     left: 0;

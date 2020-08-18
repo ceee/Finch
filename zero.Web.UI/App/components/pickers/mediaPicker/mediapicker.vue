@@ -348,7 +348,7 @@
 
     .is-filesize
     {
-      color: var(--color-fg-mid);
+      color: var(--color-fg-dim);
       margin-top: 3px;
       font-size: var(--font-size-xs);
     }

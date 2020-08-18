@@ -236,7 +236,7 @@
     border-radius: 50%;
     width: 14px;
     height: 14px;
-    /*color: var(--color-fg-mid);*/
+    /*color: var(--color-fg-dim);*/
     font-size: 11px;
     font-style: normal;
     text-align: center;
@@ -247,6 +247,6 @@
   {
     transition: opacity 0.2s ease 0;
     opacity: 0;
-    color: var(--color-fg-mid);
+    color: var(--color-fg-dim);
   }
 </style>

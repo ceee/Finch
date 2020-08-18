@@ -1,5 +1,8 @@
 ﻿export default {
   alias: 'text.module',
+  label: '@dbg.modules.text.label',
+  description: '@dbg.modules.text.description',
+  icon: 'fth-text',
 
   // define layouts users can switch between
   layouts: [

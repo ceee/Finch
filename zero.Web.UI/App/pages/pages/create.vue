@@ -87,7 +87,7 @@
     /*border: 1px solid var(--color-line-light);*/
     background: var(--color-bg-dim);
     line-height: 1.4;
-    color: var(--color-fg-mid);
+    color: var(--color-fg-dim);
     padding: 14px 16px;
     font-size: var(--font-size);
 

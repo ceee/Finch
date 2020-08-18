@@ -120,7 +120,7 @@
 
     .ui-property-content
     {
-      color: var(--color-fg-mid);   
+      color: var(--color-fg-dim);   
     }
   }
 

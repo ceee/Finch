@@ -160,10 +160,6 @@
         {
           classes.push('full-width');
         }
-        if (this.config.hideLabel)
-        {
-          classes.push('hide-label');
-        }
         if (this.depth > 0)
         {
           classes.push('is-nested');

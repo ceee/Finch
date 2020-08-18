@@ -1,12 +1,12 @@
 ﻿<template>
   <div class="ui-context-button">
-    <ui-button :submit="true" label="@ui.save" :state="state" />
     <ui-dropdown ref="dropdown" align="right">
       <template v-slot:button>
-        <ui-button icon="fth-chevron-down" />
+        <ui-button type="light" icon="fth-chevron-down" />
       </template>
       <slot></slot>
     </ui-dropdown>
+    <ui-button :submit="true" label="@ui.save" :state="state" />
   </div>
 </template>
 
@@ -54,19 +54,14 @@
   .ui-context-button
   {
     display: flex;
-
-    > .ui-button
-    {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
+    background: var(--color-bg-bright-two);
+    border-radius: 10px;
+    padding: 5px;
 
     .ui-dropdown-toggle .ui-button
     {
-      padding: 0 14px;
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      border-left: 1px solid var(--color-primary-line);
+      padding: 0 26px 0 12px;
+      margin-right: -6px;
     }
   }
 

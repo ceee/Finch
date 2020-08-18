@@ -108,7 +108,7 @@
     font-size: var(--font-size);
     padding: 0 16px;
     height: 46px;
-    color: var(--color-fg-mid);
+    color: var(--color-fg-dim);
     border-radius: var(--radius);
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -163,7 +163,7 @@
     font-weight: 400;
     position: relative;
     top: -1px;
-    color: var(--color-fg-mid);
+    color: var(--color-fg-dim);
     transition: color 0.2s ease;
   }
 

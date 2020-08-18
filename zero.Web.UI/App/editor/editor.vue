@@ -46,7 +46,7 @@
 
 <script>
   import EditorComponent from 'zero/editor/editor-component';
-  import { each as _each, map as _map, filter as _filter } from 'underscore';
+  import { each as _each, map as _map, filter as _filter, isArray as _isArray } from 'underscore';
 
   export default {
     name: 'uiEditor',

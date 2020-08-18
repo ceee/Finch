@@ -157,7 +157,7 @@
 
   .users-role-minor
   {
-    color: var(--color-fg-mid);
+    color: var(--color-fg-dim);
   }
 
   .users-role-icon
