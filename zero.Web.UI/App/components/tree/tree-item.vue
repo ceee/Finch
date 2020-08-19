@@ -109,7 +109,7 @@
     &.is-inactive .ui-tree-item-text
     //&.is-inactive .ui-tree-item-icon
     {
-      opacity: .8;
+      color: var(--color-fg-dim);
     }
 
     .ui-tree-item-arrow

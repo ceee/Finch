@@ -1,8 +1,5 @@
 ﻿export default {
-  alias: 'text.module',
-  label: '@dbg.modules.text.label',
-  description: '@dbg.modules.text.description',
-  icon: 'fth-text',
+  alias: 'module.richtext',
 
   // define layouts users can switch between
   layouts: [
@@ -28,6 +25,11 @@
       label: 'Text',
       description: 'Enter rich-text',
       required: true
+    },
+    {
+      field: 'isBigger',
+      display: 'toggle',
+      label: 'Is bigger'
     }
   ]
 };

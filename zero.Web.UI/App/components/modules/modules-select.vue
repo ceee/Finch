@@ -15,7 +15,7 @@
           </button>
         </nav>
         <div class="ui-modules-select-items">
-          <button v-for="item in activeGroup.items" :key="item.alias" type="button" class="ui-modules-select-item" :disabled="item.isDisabled">
+          <button v-for="item in activeGroup.items" :key="item.alias" type="button" class="ui-modules-select-item" :disabled="item.isDisabled" @click="editModule(item, true)">
             <div class="ui-modules-select-item-icon">
               <i :class="item.icon"></i>
             </div>
@@ -33,6 +33,8 @@
 
 <script>
   import ModulesApi from 'zero/resources/modules.js';
+  import EditModuleOverlay from './edit-module';
+  import Overlay from 'zero/services/overlay.js';
   import { groupBy as _groupBy, keys as _keys, each as _each } from 'underscore';
 
   export default {
@@ -80,6 +82,22 @@
       selectGroup(group)
       {
         this.activeGroup = group;
+      },
+
+
+      editModule(module, isAdd)
+      {
+        return Overlay.open({
+          component: EditModuleOverlay,
+          display: 'editor',
+          module: module,
+          renderer: 'module.' + module.alias,
+          model: {},
+          width: 1100
+        }).then(value =>
+        {
+          
+        });
       }
 
     }
@@ -149,7 +167,7 @@
   {
     display: flex;
     margin-bottom: var(--padding);
-    //margin-left: -12px;
+    padding-right: 50px;
   }
 
   .ui-modules-select-group
@@ -163,7 +181,7 @@
 
     & + .ui-modules-select-group
     {
-      margin-left: 20px;
+      margin-left: 16px;
     }
 
     .ui-modules-select-group-count
