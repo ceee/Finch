@@ -32,17 +32,18 @@
 
 
 <script>
-  import ModulesApi from 'zero/resources/modules.js';
-  import EditModuleOverlay from './edit-module';
-  import Overlay from 'zero/services/overlay.js';
   import { groupBy as _groupBy, keys as _keys, each as _each } from 'underscore';
 
   export default {
     name: 'uiModulesSelect',
 
     props: {
-      value: [String, Object, Array],
-      config: Object
+      value: Array,
+      config: Object,
+      types: {
+        type: Array,
+        default: () => []
+      }
     },
 
 
@@ -54,11 +55,25 @@
     }),
 
 
+    watch: {
+      types(val)
+      {
+        this.rebuildGroups(val);
+      }
+    },
+
+
     created()
     {
-      ModulesApi.getModuleTypes().then(res =>
+      this.rebuildGroups(this.types);
+    },
+
+
+    methods: {
+
+      rebuildGroups(value)
       {
-        let groups = _groupBy(res, val => val.group);
+        let groups = _groupBy(value, val => val.group);
         let index = 0;
 
         _each(groups, (items, key) =>
@@ -73,11 +88,7 @@
         });
 
         this.activeGroup = this.moduleTypes[0];
-      });
-    },
-
-
-    methods: {
+      },
 
       selectGroup(group)
       {
@@ -87,17 +98,11 @@
 
       editModule(module, isAdd)
       {
-        return Overlay.open({
-          component: EditModuleOverlay,
-          display: 'editor',
-          module: module,
-          renderer: 'module.' + module.alias,
-          model: {},
-          width: 1100
-        }).then(value =>
+        this.$emit('selected', module, isAdd);
+        if (isAdd)
         {
-          
-        });
+          this.isSelecting = false;
+        }
       }
 
     }

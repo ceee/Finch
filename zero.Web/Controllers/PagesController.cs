@@ -30,7 +30,7 @@ namespace zero.Web.Controllers
       ParentId = parent
     });
 
-    public async Task<IActionResult> GetRevisions([FromQuery] string id) => Json(await RevisionsApi.GetPaged<T>(id));
+    public async Task<IActionResult> GetRevisions([FromQuery] string id, [FromQuery] int page = 1) => Json(await RevisionsApi.GetPaged<T>(id, page));
 
     public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
 

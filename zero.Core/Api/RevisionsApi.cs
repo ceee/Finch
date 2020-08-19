@@ -28,11 +28,15 @@ namespace zero.Core.Api
     /// <summary>
     /// Get revision list for an entity
     /// </summary>
-    public async Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 30, bool includeContent = false) where T : IZeroEntity
+    public async Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10, bool includeContent = false) where T : IZeroEntity
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
 
       List<T> items = await session.Advanced.Revisions.GetForAsync<T>(id, pageNumber - 1, pageSize);
+
+      List<T> continuedItems = await session.Advanced.Revisions.GetForAsync<T>(id, pageNumber, 1);
+      bool hasMore = continuedItems.Count > 0;
+
       List<Revision> revisions = new List<Revision>();
 
       string[] userIds = items.Select(x => x.LastModifiedById).Distinct().ToArray();
@@ -62,7 +66,7 @@ namespace zero.Core.Api
         revisions.Add(revision);
       }
 
-      return new ListResult<Revision>(revisions, revisions.Count, pageNumber, pageSize);
+      return new ListResult<Revision>(revisions, hasMore ? revisions.Count + 1 : revisions.Count, pageNumber, pageSize);
     }
   }
 
@@ -72,6 +76,6 @@ namespace zero.Core.Api
     /// <summary>
     /// Get revision list (without content JSON) for an entity
     /// </summary>
-    Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 30, bool includeContent = false) where T : IZeroEntity;
+    Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10, bool includeContent = false) where T : IZeroEntity;
   }
 }

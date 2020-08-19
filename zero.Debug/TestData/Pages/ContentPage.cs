@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using zero.Core.Entities;
 
 namespace zero.TestData
@@ -10,5 +11,7 @@ namespace zero.TestData
     public OptionsPagePartial Options { get; set; } = new OptionsPagePartial();
 
     public string Text { get; set; }
+
+    public List<Module> Modules { get; set; } = new List<Module>();
   }
 }

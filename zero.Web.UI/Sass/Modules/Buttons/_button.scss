@@ -41,6 +41,8 @@ button::-moz-focus-inner
   padding: 0 20px;
   height: 42px;
   border-radius: var(--radius);
+  //border-bottom-left-radius: 15px;
+  //border-top-right-radius: 15px;
   font-size: var(--font-size);
   font-weight: 700;
   margin: 0;

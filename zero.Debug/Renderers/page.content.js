@@ -16,14 +16,8 @@ export default {
   ],
 
   fields: [
-    //{
-    //  field: 'name',
-    //  display: 'text',
-    //  label: '@ui.name',
-    //  required: true
-    //},
     {
-      field: 'name',
+      field: 'modules',
       display: 'modules',
       label: '@ui.name',
       required: true,

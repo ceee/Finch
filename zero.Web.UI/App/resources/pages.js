@@ -24,9 +24,9 @@ export default {
     return Axios.get(base + 'getEmpty', { params: { type, parent } }).then(res => Promise.resolve(res.data));
   },
 
-  getRevisions(id)
+  getRevisions(id, page)
   {
-    return Axios.get(base + 'getRevisions', { params: { id } }).then(res => Promise.resolve(res.data));
+    return Axios.get(base + 'getRevisions', { params: { id, page } }).then(res => Promise.resolve(res.data));
   },
 
   getAll(query)

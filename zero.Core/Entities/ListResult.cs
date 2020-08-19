@@ -23,6 +23,8 @@ namespace zero.Core.Entities
       {
         TotalPages = 1;
       }
+
+      HasMore = TotalPages > Page;
     }
 
     public ListResult(IList<T> items, long totalItems, long pageNumber, long pageSize) : this(totalItems, pageNumber, pageSize)
@@ -45,6 +47,8 @@ namespace zero.Core.Entities
     public long TotalPages { get; private set; }
 
     public long TotalItems { get; private set; }
+
+    public bool HasMore { get; private set; }
 
     public IList<T> Items { get; set; }
 

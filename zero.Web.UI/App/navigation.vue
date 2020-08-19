@@ -38,7 +38,7 @@
           <button type="button" class="app-nav-account-button">
             <img class="-image" v-if="userAvatar" :src="userAvatar" :alt="user.name" />
             <span class="-image" v-if="!userAvatar"><i class="fth-user"></i></span>
-            <p class="-text"><strong>{{user.name}}</strong><br>{{user.email}}</p>
+            <p class="-text"><strong>{{user.name}}</strong></p>
             <i class="-arrow fth-chevron-down"></i>
           </button>
         </template>

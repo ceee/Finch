@@ -12,5 +12,10 @@ export default {
   getModuleType(alias)
   {
     return Axios.get(base + 'getModuleType', { params: { alias } }).then(res => Promise.resolve(res.data));
-  }
+  },
+
+  getEmpty(alias)
+  {
+    return Axios.get(base + 'getEmpty', { params: { alias } }).then(res => Promise.resolve(res.data));
+  },
 };
