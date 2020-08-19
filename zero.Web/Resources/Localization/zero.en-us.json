@@ -161,7 +161,6 @@
     "success": "Deleted",
     "success_text": "You have successfully deleted this entity",
     "page_text": "This will delete the page and all its descendants. Are you sure?",
-    "success": "Deleted",
     "page_success_text": "You have successfully deleted this page"
   },
 
@@ -323,6 +322,14 @@
       "price": "Price",
       "status": "Status"
     }
+  },
+
+  "modules": {
+    "add": {
+      "title": "Add content",
+      "text": "Compose the page by adding modules"
+    },
+    "default_group": "Default"
   },
 
   "page": {

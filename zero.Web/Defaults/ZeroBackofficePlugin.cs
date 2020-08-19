@@ -48,6 +48,7 @@ namespace zero.Web.Defaults
       services.AddTransient<IMediaFolderApi, MediaFolderApi>();
       services.AddTransient<IMediaUploadApi, MediaUploadApi>();
       services.AddTransient<IMediaUpload, MediaUpload>();
+      services.AddTransient<IModulesApi, ModulesApi>();
     }
     
     public void Configure(IZeroPluginOptions plugin, IZeroOptions zero)
