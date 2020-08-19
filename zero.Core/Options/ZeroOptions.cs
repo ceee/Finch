@@ -19,6 +19,7 @@ namespace zero.Core.Options
       Sections = new SectionOptions();
       Features = new FeatureOptions();
       Pages = new PageOptions();
+      Modules = new ModuleOptions();
       Permissions = new PermissionOptions();
       Settings = new SettingsOptions();
       Spaces = new SpaceOptions();
@@ -59,6 +60,9 @@ namespace zero.Core.Options
 
     /// <inheritdoc />
     public PageOptions Pages { get; private set; }
+
+    /// <inheritdoc />
+    public ModuleOptions Modules { get; private set; }
 
     /// <inheritdoc />
     public PermissionOptions Permissions { get; private set; }
@@ -136,6 +140,11 @@ namespace zero.Core.Options
     /// 
     /// </summary>
     PageOptions Pages { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    ModuleOptions Modules { get; }
 
     /// <summary>
     /// 

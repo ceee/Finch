@@ -30,6 +30,12 @@ namespace zero.TestData
       zero.Pages.Add<ContentPage>("content", "Page", "Page consisting of modules", "fth-box", allowAsRoot: true, allowAllChildrenTypes: true);
       zero.Pages.Add<ContentPage>("root", "Homepage", "Entry point for the website", "fth-home", allowAsRoot: true, allowAllChildrenTypes: true);
       zero.Pages.Add<RedirectPage>("redirect", "Redirect", "Redirect to another page or an external URL", "fth-external-link", allowAsRoot: true, allowedChildrenTypes: new List<string>() { "content", "redirect" });
+
+      zero.Modules.Add<RichtextModule>("richtext", "Richtext", "Simple richtext block editor", "fth-align-left", "Texts");
+      zero.Modules.Add<HeadlineModule>("headline", "Headline", "Headline with optional subline", "fth-underline", "Texts");
+      zero.Modules.Add<TextWithImageModule>("textWithImage", "Text with image", "Short textblock with image", "fth-layers", "Texts", new List<string>() { "root" });
+      zero.Modules.Add<GalleryModule>("gallery", "Gallery", "Image gallery grid", "fth-image", "Media");
+      zero.Modules.Add<DownloadModule>("download", "Downloads", "List containing downloads", "fth-download", "Lists");
     }
 
     public void ConfigureServices(IServiceCollection services)

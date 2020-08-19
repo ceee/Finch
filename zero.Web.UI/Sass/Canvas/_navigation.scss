@@ -60,7 +60,7 @@ a.app-nav-item
   align-items: center;
   font-size: var(--font-size);
   padding: 0 var(--padding);
-  height: 52px;
+  height: 50px;
   color: var(--color-fg-dim);
 
   &:hover
@@ -78,6 +78,7 @@ a.app-nav-item
     color: var(--color-fg);
     background: var(--color-bg-bright-two);
     font-weight: 700;
+    border-right: 3px solid var(--color-primary);
 
     .app-nav-item-icon
     {
