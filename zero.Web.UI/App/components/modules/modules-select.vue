@@ -90,6 +90,7 @@
         this.activeGroup = this.moduleTypes[0];
       },
 
+
       selectGroup(group)
       {
         this.activeGroup = group;
@@ -99,12 +100,14 @@
       editModule(module, isAdd)
       {
         this.$emit('selected', module, isAdd);
-        if (isAdd)
-        {
-          this.isSelecting = false;
-        }
-      }
+      },
 
+
+      reset()
+      {
+        this.isSelecting = false;
+        this.activeGroup = this.moduleTypes[0];
+      }
     }
   }
 </script>

@@ -5,7 +5,7 @@ namespace zero.TestData
 {
   public class NewsPage : Page
   {
-    public DateTimeOffset PublishDate { get; set; }
+    public DateTimeOffset Date { get; set; }
 
     public string Text { get; set; }
   }

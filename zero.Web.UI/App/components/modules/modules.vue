@@ -1,9 +1,7 @@
 ﻿<template>
   <div class="ui-modules-inner">
-    <div class="ui-module-item" v-for="item in items">
-      <header class="ui-module-item-header"><i :class="getModule(item.moduleTypeAlias).icon"></i> {{getModule(item.moduleTypeAlias).name}}</header>
-    </div>
-    <ui-modules-select :types="moduleTypes" :value="value" v-if="canAdd" @selected="onSelected" />
+    <ui-module-preview v-for="item in items" :key="item.id" :types="moduleTypes" :value="item" />
+    <ui-modules-select ref="moduleSelect" :types="moduleTypes" :value="value" v-if="canAdd" @selected="onSelected" />
   </div>
 </template>
 
@@ -12,7 +10,6 @@
   import ModulesApi from 'zero/resources/modules.js';
   import EditModuleOverlay from './edit-module';
   import Overlay from 'zero/services/overlay.js';
-  import { find as _find } from 'underscore';
 
   export default {
     name: 'uiModules',
@@ -43,11 +40,10 @@
 
     created()
     {
-      this.setup(this.value);
-
       ModulesApi.getModuleTypes().then(res =>
       {
         this.moduleTypes = res;
+        this.setup(this.value);
       });
     },
 
@@ -57,12 +53,6 @@
       setup(value)
       {
         this.items = JSON.parse(JSON.stringify(value || []));
-      },
-
-
-      getModule(alias)
-      {
-        return _find(this.moduleTypes, x => x.alias == alias);
       },
 
 
@@ -79,6 +69,7 @@
         {
           this.items.push(value);
           this.onChange();
+          this.$refs.moduleSelect.reset();
         });
       },
 
@@ -155,6 +146,21 @@
       margin-bottom: 5px;
       color: var(--color-fg);
     }
+  }
 
+  .ui-module-item-header
+  {
+    display: flex;
+    align-items: center;
+    color: var(--color-fg-dim);
+    font-size: var(--font-size-s);
+
+    i
+    {
+      font-size: var(--font-size-l);
+      margin-right: 10px;
+      position: relative;
+      top: -1px;
+    }
   }
 </style>

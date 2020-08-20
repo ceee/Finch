@@ -143,6 +143,7 @@
       left: -300px;
       right: 0;
       background: var(--color-bg-bright-two);
+      border-right: 3px solid var(--color-primary);
     }
   }
 
