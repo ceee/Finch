@@ -5,10 +5,10 @@
     <div v-if="!value.isActive" class="ui-module-item-disabled"></div>
     <!--<pre><code>{{value}}</code></pre>-->
     <div class="ui-module-item-actions">
-      <ui-icon-button v-if="!value.isActive" class="ui-module-item-disabled-icon" icon="fth-lock" title="Disabled" @click="value.isActive = true" />
-      <ui-dropdown v-else align="right">
+      <ui-dropdown align="right">
         <template v-slot:button>
-          <ui-icon-button icon="fth-more-horizontal" title="Actions" />
+          <ui-icon-button v-if="!value.isActive" class="ui-module-item-disabled-icon" icon="fth-lock" title="Disabled" />
+          <ui-icon-button v-else icon="fth-more-horizontal" title="Actions" />
         </template>
         <ui-dropdown-button label="Edit" icon="fth-edit-2" @click="$emit('edit', module, value)" />
         <ui-dropdown-button v-if="value.isActive" label="Disable" icon="fth-lock" @click="value.isActive = false" />
@@ -120,7 +120,6 @@
   {
     position: relative;
     z-index: 1;
-    background: var(--color-accent-error-bg);
 
     .ui-button-icon
     {

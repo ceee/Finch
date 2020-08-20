@@ -3,7 +3,7 @@
 
   // define a preview which is rendered in the overview
   preview: {
-    template: '<ui-module-preview-text :text="model.text" />'
+    template: '<ui-module-preview-figure :text="model.headline" :subline="model.text" :image="model.imageId" />'
   },
 
   fields: [

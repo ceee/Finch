@@ -7,7 +7,7 @@
 
 <script>
   export default {
-    name: 'uiModulePreviewText',
+    name: 'uiModulePreviewHeadline',
 
     props: {
       text: {
