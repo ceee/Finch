@@ -92,6 +92,7 @@
       remove(module, model)
       {
         Arrays.remove(this.items, model);
+        this.onChange();
       },
 
 

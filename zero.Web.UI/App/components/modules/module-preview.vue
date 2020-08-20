@@ -131,7 +131,7 @@
   {
     grid-column: 1;
     grid-row: 2;
-    margin-top: 20px;
+    margin-top: 12px;
     max-width: 1060px;
 
     p

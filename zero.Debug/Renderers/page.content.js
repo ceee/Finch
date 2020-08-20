@@ -7,7 +7,8 @@ export default {
     {
       name: 'general',
       label: '@ui.tab_content',
-      class: 'is-blank'
+      class: 'is-blank',
+      count: x => x.modules.length
     },
     {
       name: 'meta',

@@ -129,6 +129,7 @@
   .app-auth .ui-property + .ui-property
   {
     padding-top: 0;
+    margin-top: var(--padding);
     border-top: none;
   }
 

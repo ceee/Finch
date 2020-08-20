@@ -126,7 +126,7 @@
 
   .ui-modules-start-button
   {
-    color: var(--color-fg);
+    color: var(--color-primary);
     font-size: var(--font-size);
     display: inline-grid;
     grid-template-columns: auto 1fr;
@@ -136,9 +136,9 @@
 
   .ui-modules-start-button-icon
   {
-    width: 70px;
-    height: 70px;
-    line-height: 68px !important;
+    width: 52px;
+    height: 52px;
+    line-height: 50px !important;
     font-size: 20px;
     text-align: center;
     background: var(--color-bg-bright-two);
@@ -149,6 +149,7 @@
   {
     line-height: 1.3;
     color: var(--color-fg-dim);
+    margin: 0;
 
     strong
     {

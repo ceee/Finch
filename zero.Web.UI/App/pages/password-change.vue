@@ -73,7 +73,7 @@
 
     .ui-property + .ui-property, .ui-split + .ui-property
     {
-      margin-top: 0;
+      margin-top: var(--padding);
     }
   }
 

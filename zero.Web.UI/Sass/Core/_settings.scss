@@ -102,8 +102,8 @@
 :root
 {
   // accent colors
-  --color-primary: #2f90e2; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
-  --color-primary-fg: #fff;
+  --color-primary: #fdd330; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
+  --color-primary-fg: #191e25;
   --color-primary-low: rgba(229, 225, 221, 0.3);
   --color-primary-two: #e5e4df;
   --color-primary-line: #e0dfda;
@@ -246,7 +246,7 @@ $accent-colors: (
   "teal": "#3bb1c0",
   "green": "#2fbb98",
   "lime": "#a0db61",
-  "yellow": "#ffd100",
+  "yellow": "#fdd330",
   "orange": "#ff662b",
   "red": "#d82853"
 );
