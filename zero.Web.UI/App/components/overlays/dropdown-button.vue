@@ -41,6 +41,10 @@
       disabled: {
         type: Boolean,
         default: false
+      },
+      prevent: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -63,7 +67,7 @@
       }
       while (current = current.$parent);
 
-      if (false && !this.dropdown)
+      if (!this.dropdown)
       {
         warn('ui-dropdown-button: Could not find parent <ui-dropdown />');
       }
@@ -77,6 +81,11 @@
 
         if (!this.loading && !this.disabled)
         {
+          if (!this.prevent)
+          {
+            this.dropdown.hide();
+          }
+
           this.$emit('click', this.value, {
             dropdown: this.dropdown,
             hide()

@@ -57,17 +57,15 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Creates an edit model with appropriate options and permissions
     /// </summary>
-    public JsonResult Edit<T>(T data, bool typed = true, Action<dynamic> transform = null) where T : IZeroIdEntity
+    public JsonResult Edit<T>(T data, bool typed = true, Action<EditModel<T>> transform = null) where T : IZeroIdEntity
     {
       Type type = typeof(T);
       bool canBeShared = AppAwareShareableType.IsAssignableFrom(type);
 
       //ControllerContext.ActionDescriptor.FilterDescriptors[0].
 
-      dynamic model = new ExpandoObject();
+      EditModel<T> model = new EditModel<T>();
       model.Entity = data;
-
-      model.Meta = new ExpandoObject();
       model.Meta.Token = Token.Get(data);
       model.Meta.IsAppAware = AppAwareType.IsAssignableFrom(type);
       model.Meta.CanBeShared = canBeShared;
@@ -79,6 +77,32 @@ namespace zero.Web.Controllers
       transform?.Invoke(model);
 
       return Json(model, typed);
+    }
+
+
+    /// <summary>
+    /// Creates an edit model with appropriate options and permissions
+    /// </summary>
+    public JsonResult Edit<T, TWrapper>(TWrapper data, bool typed = true, Action<EditModel<T>> transform = null) 
+      where T : IZeroIdEntity
+      where TWrapper : EditModel<T>, new() 
+    {
+      Type type = typeof(T);
+      bool canBeShared = AppAwareShareableType.IsAssignableFrom(type);
+
+      //ControllerContext.ActionDescriptor.FilterDescriptors[0].
+
+      data.Meta.Token = Token.Get(data.Entity);
+      data.Meta.IsAppAware = AppAwareType.IsAssignableFrom(type);
+      data.Meta.CanBeShared = canBeShared;
+      data.Meta.CanCreate = true;
+      data.Meta.CanCreateShared = canBeShared;
+      data.Meta.CanEdit = true;
+      data.Meta.CanDelete = true;
+
+      transform?.Invoke(data);
+
+      return Json(data, typed);
     }
 
 

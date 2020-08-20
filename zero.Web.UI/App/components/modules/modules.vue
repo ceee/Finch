@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-modules-inner">
-    <ui-module-preview v-for="item in items" :key="item.id" :types="moduleTypes" :value="item" />
-    <ui-modules-select ref="moduleSelect" :types="moduleTypes" :value="value" v-if="canAdd" @selected="onSelected" />
+    <ui-module-preview v-for="item in items" :key="item.id" :types="moduleTypes" :value="item" @edit="edit" @remove="remove" />
+    <ui-modules-select ref="moduleSelect" :types="moduleTypes" :value="value" v-if="canAdd" @selected="onAdd" />
   </div>
 </template>
 
@@ -10,6 +10,7 @@
   import ModulesApi from 'zero/resources/modules.js';
   import EditModuleOverlay from './edit-module';
   import Overlay from 'zero/services/overlay.js';
+  import Arrays from 'zero/services/arrays.js';
 
   export default {
     name: 'uiModules',
@@ -56,21 +57,41 @@
       },
 
 
-      onSelected(module, isAdd)
+      onAdd(module)
+      {
+        this.edit(module, null, true);
+      },
+
+
+      edit(module, model, isAdd)
       {
         return Overlay.open({
           component: EditModuleOverlay,
           display: 'editor',
           module: module,
           renderer: 'module.' + module.alias,
-          model: {},
+          model: model,
           width: 1100
         }).then(value =>
         {
-          this.items.push(value);
+          if (isAdd)
+          {
+            this.items.push(value);
+            this.$refs.moduleSelect.reset();
+          }
+          else
+          {
+            Arrays.replace(this.items, model, value);
+          }
+
           this.onChange();
-          this.$refs.moduleSelect.reset();
         });
+      },
+
+
+      remove(module, model)
+      {
+        Arrays.remove(this.items, model);
       },
 
 

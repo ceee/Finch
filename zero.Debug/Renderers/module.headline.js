@@ -15,7 +15,7 @@
 
   // define a preview which is rendered in the overview
   preview: {
-    template: '<div v-html="model.headline"></div>{{model.subline}}<ui-button label="Click" />'
+    template: '<ui-module-preview-headline :text="model.headline" :subline="model.subline" />'
   },
 
   fields: [

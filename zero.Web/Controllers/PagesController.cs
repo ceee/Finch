@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
+using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
@@ -22,7 +23,17 @@ namespace zero.Web.Controllers
  
     public IActionResult GetPageType([FromQuery] string alias) => Json(Api.GetPageType(alias));
 
-    public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
+    public async Task<IActionResult> GetById([FromQuery] string id)
+    {
+      T entity = await Api.GetById(id);
+
+      return Edit<T, PageEditModel<T>>(new PageEditModel<T>()
+      {
+        Entity = entity,
+        Revisions = await RevisionsApi.GetPaged<T>(id),
+        PageType = Api.GetPageType(entity.PageTypeAlias)
+      });
+    }
 
     public IActionResult GetEmpty(string type, string parent = null) => Edit(new T()
     {

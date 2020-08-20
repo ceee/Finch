@@ -3,7 +3,7 @@
 
   // define a preview which is rendered in the overview
   preview: {
-    template: '<div v-html="model.text"></div>'
+    template: '<ui-module-preview-text :text="model.text" />'
   },
 
   fields: [

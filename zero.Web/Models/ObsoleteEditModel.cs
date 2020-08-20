@@ -4,7 +4,6 @@ namespace zero.Web.Models
 {
   public class EditModel : EditModel<object> { }
 
-
   public class EditModel<T>
   {
     /// <summary>
@@ -12,6 +11,15 @@ namespace zero.Web.Models
     /// </summary>
     public T Entity { get; set; }
 
+    /// <summary>
+    /// Meta data
+    /// </summary>
+    public EditMetaModel Meta { get; set; } = new EditMetaModel();
+  }
+
+
+  public class EditMetaModel
+  {
     /// <summary>
     /// Whether an entity of this type can be created
     /// </summary>

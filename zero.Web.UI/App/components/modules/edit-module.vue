@@ -35,6 +35,7 @@
     components: { UiEditor },
 
     data: () => ({
+      isAdd: true,
       disabled: false,
       id: null,
       loading: true,
@@ -48,11 +49,21 @@
 
       onLoad(form)
       {
-        form.load(!this.id ? ModulesApi.getEmpty(this.config.module.alias) : null).then(response =>
+        if (this.config.model)
+        {
+          this.isAdd = false;
+          this.model = JSON.parse(JSON.stringify(this.config.model));
+        }
+
+        form.load(ModulesApi.getEmpty(this.config.module.alias)).then(response =>
         {
           this.disabled = !response.meta.canEdit;
           this.meta = response.meta;
-          this.model = response.entity;
+
+          if (this.isAdd)
+          {
+            this.model = response.entity;
+          }
           this.loading = false;
         });
       },
