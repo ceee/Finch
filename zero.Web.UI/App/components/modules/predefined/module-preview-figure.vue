@@ -41,7 +41,7 @@
     mounted()
     {
       this.loadImageSource();
-    },
+    }, 
 
     methods: {
 
@@ -90,14 +90,14 @@
     {
       overflow: hidden;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 4;
+      -webkit-line-clamp: 2;
       display: -webkit-box;
     }
 
     .-image
     {
       border-radius: var(--radius);
-      max-width: 64px;
+      max-width: 128px;
       max-height: 64px;
     }
   }

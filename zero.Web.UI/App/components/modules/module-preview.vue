@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-module-item" v-if="!loading" :data-module="module.alias">
-    <header class="ui-module-item-header"><i :class="module.icon"></i> {{module.name}}</header>
+    <button type="button" class="ui-module-item-header" @click="$emit('edit', module, value)"><i :class="module.icon"></i> {{module.name}}</button>
     <ui-module-preview-inner v-if="renderer.preview && renderer.preview.template" :template="renderer.preview.template" :value="value" />
     <div v-if="!value.isActive" class="ui-module-item-disabled"></div>
     <!--<pre><code>{{value}}</code></pre>-->

@@ -124,8 +124,9 @@ namespace zero.Web.Controllers
     /// </summary>
     bool CanReadSpace(string alias)
     {
-      Permission permission = AuthenticationApi.GetPermission(Permissions.Spaces.PREFIX + alias);
-      return permission != null && permission.CanRead;
+      return true;
+      //Permission permission = AuthenticationApi.GetPermission(Permissions.Spaces.PREFIX + alias);
+      //return permission != null && permission.CanRead;
     }
 
 
@@ -134,8 +135,9 @@ namespace zero.Web.Controllers
     /// </summary>
     bool CanWriteSpace(string alias)
     {
-      Permission permission = AuthenticationApi.GetPermission(Permissions.Spaces.PREFIX + alias);
-      return permission != null && permission.CanWrite;
+      return true;
+      //Permission permission = AuthenticationApi.GetPermission(Permissions.Spaces.PREFIX + alias);
+      //return permission != null && permission.CanWrite;
     }
   }
 }

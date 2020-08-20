@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="spaces">
-    <div class="spaces-tree" v-resizable="resizable">
+    <div class="app-tree spaces-tree" v-resizable="resizable">
       <ui-header-bar title="Spaces" />
       <div class="spaces-tree-items">
         <div v-for="item in spaces" class="spaces-tree-item" :class="getClasses(item)">
@@ -135,7 +135,8 @@
         return {
           'has-children': item.hasChildren,
           'has-line': item.lineBelow,
-          'is-open': item.isOpen
+          'is-open': item.isOpen,
+          'is-active': item.alias == this.$route.params.alias
         };
       }
     }
@@ -153,50 +154,15 @@
     height: 100vh;
   }
 
-  .spaces-tree
-  {
-    width: 340px;
-    background: var(--color-bg-light);
-    padding: 0;
-    position: relative;
-    overflow-y: auto;
-    height: 100vh;
-
-    .ui-header-bar + .ui-tree
-    {
-      margin-top: 2px;
-    }
-  }
-
-  .spaces-tree-actions
-  {
-    padding: var(--padding);
-  }
-
-  .spaces-tree-resizable
-  {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    background: var(--color-fg);
-    opacity: 0;
-    right: 0;
-    width: 6px;
-    cursor: ew-resize;
-    transition: opacity 0.15s ease 0s;
-
-    &:hover
-    {
-      transition-delay: 0.2s;
-      opacity: 0.04;
-    }
-  }
-
   .spaces-overview
   {
     padding: 95px 0 0 60px;
   }
 
+  .spaces-tree-items
+  {
+    margin-top: -13px;
+  }
 
   .spaces-tree-item
   {
@@ -204,7 +170,7 @@
     grid-template-columns: 1fr auto;
     align-items: center;
     font-size: var(--font-size);
-    padding: 10px var(--padding);
+    padding: 15px var(--padding);
     color: var(--color-fg);
     position: relative;
     transition: color 0.2s ease;
@@ -215,15 +181,25 @@
       opacity: 1;
     }
 
-    & + .spaces-tree-item
+    /*&.has-line
     {
-      margin-top: 15px;
+      margin-bottom: 25px;
     }
 
-    &.has-line
+    &.has-line:after
     {
-      border-bottom: 1px solid var(--color-bg);
-      padding-bottom: 25px;
+      content: '';
+      position: absolute;
+      bottom: -25px;
+      left: 0;
+      right: 0;
+      border-bottom: 2px solid var(--color-bg);
+    }*/
+
+    &.is-active
+    {
+      background: var(--color-bg-bright-two);
+      border-right: 3px solid var(--color-primary);
     }
   }
 
@@ -240,7 +216,6 @@
     &.is-active
     {
       font-weight: bold;
-      color: var(--color-primary);
 
       .spaces-tree-item-text span
       {
@@ -256,7 +231,7 @@
 
     span
     {
-      color: var(--color-fg-light);
+      color: var(--color-fg-dim);
       margin-top: 3px;
     }
   }

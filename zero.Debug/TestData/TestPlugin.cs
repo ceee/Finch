@@ -15,8 +15,8 @@ namespace zero.TestData
     {
       plugin.Name = "Test Plugin";
 
-      ISection spaceSection = zero.Sections.GetAllItems().FirstOrDefault(x => x.Alias == Constants.Sections.Spaces);
-      zero.Sections.Remove(spaceSection);
+      //ISection spaceSection = zero.Sections.GetAllItems().FirstOrDefault(x => x.Alias == Constants.Sections.Spaces);
+      //zero.Sections.Remove(spaceSection);
 
       zero.Spaces.AddList<TeamMember>("team", "Team", "Our team members", "fth-users");
       zero.Spaces.AddList<News>("news", "News", "Articles about the company", "fth-edit");
