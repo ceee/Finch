@@ -26,6 +26,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<T> GetById(string id)
     {
+      var res = await GetById<IPage>(id); // this works
       return await GetById<T>(id);
     }
 

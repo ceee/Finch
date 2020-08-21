@@ -3,7 +3,7 @@
     <img v-if="imageSource" :src="imageSource" class="-image" />
     <figcaption>
       <article class="-text" v-if="text" v-html="text"></article>
-      <article class="-subline" v-if="subline" v-html="subline"></article>
+      <article class="-subline" v-if="subline">{{subline.replace(/<\/?[^>]+>/ig, " ")}}</article>
     </figcaption>
   </figure>
 </template>
