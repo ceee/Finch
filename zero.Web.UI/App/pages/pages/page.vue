@@ -49,20 +49,6 @@
     },
 
 
-    watch: {
-      '$route': function ()
-      {
-        this.initialize();
-      }
-    },
-
-
-    mounted()
-    {
-      this.initialize();
-    },
-
-
     methods: {
 
       initialize()
@@ -82,6 +68,8 @@
 
       onLoad(form)
       {
+        this.loading = true;
+
         form.load(!this.id ? PagesApi.getEmpty(this.type, this.parent) : PagesApi.getById(this.id)).then(response =>
         {
           this.renderer = 'page.' + response.entity.pageTypeAlias;
