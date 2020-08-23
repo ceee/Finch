@@ -97,6 +97,17 @@
         color: var(--color-primary-fg);
       }
     }
+
+    &[type="error"]
+    {
+      background: var(--color-accent-error);
+      color: white;
+
+      .ui-button-icon
+      {
+        color: white;
+      }
+    }
   }
 
   .app-notification.app-notifications-enter,

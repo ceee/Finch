@@ -26,7 +26,6 @@
 
     data: () => ({
       items: [],
-      canAdd: true,
       moduleTypes: []
     }),
 
@@ -35,6 +34,14 @@
       value(val)
       {
         this.setup(val);
+      }
+    },
+
+
+    computed: {
+      canAdd()
+      {
+        return true;
       }
     },
 

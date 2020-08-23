@@ -1,21 +1,25 @@
 ﻿<template>
-  <div class="ui-module-item" v-if="!loading" :data-module="module.alias">
-    <button type="button" class="ui-module-item-header" @click="$emit('edit', module, value)"><i :class="module.icon"></i> {{module.name}}</button>
-    <ui-module-preview-inner v-if="renderer.preview && renderer.preview.template" :template="renderer.preview.template" :value="value" />
+  <div class="ui-module-item" v-if="!loading" :data-module="alias">
+    <button type="button" v-if="module" class="ui-module-item-header" @click="$emit('edit', module, value)"><i :class="module.icon"></i> {{module.name}}</button>
+    
+    <button v-if="!module" type="button" class="ui-module-item-header is-error" disabled><i class="fth-alert-circle"></i> {{alias}}</button>
+    <p v-if="!module" class="ui-module-item-error">Could not find a registered module <code>[{{alias}}]</code> in the code.</p>
+
+    <ui-module-preview-inner v-if="tryRender" :template="renderer.preview.template" :value="value" />
+
     <div v-if="!value.isActive" class="ui-module-item-disabled"></div>
-    <!--<pre><code>{{value}}</code></pre>-->
+
     <div class="ui-module-item-actions">
       <ui-dropdown align="right">
         <template v-slot:button>
           <ui-icon-button v-if="!value.isActive" class="ui-module-item-disabled-icon" icon="fth-lock" title="Disabled" />
           <ui-icon-button v-else icon="fth-more-horizontal" title="Actions" />
         </template>
-        <ui-dropdown-button label="Edit" icon="fth-edit-2" @click="$emit('edit', module, value)" />
+        <ui-dropdown-button v-if="canEdit" label="Edit" icon="fth-edit-2" @click="$emit('edit', module, value)" />
         <ui-dropdown-button v-if="value.isActive" label="Disable" icon="fth-lock" @click="value.isActive = false" />
         <ui-dropdown-button v-else label="Enable" icon="fth-unlock" @click="value.isActive = true" />
         <ui-dropdown-button label="Remove" icon="fth-trash" @click="$emit('remove', module, value)" />
       </ui-dropdown>
-      
     </div>
   </div>
 </template>
@@ -55,6 +59,22 @@
     },
 
 
+    computed: {
+      alias()
+      {
+        return this.value.moduleTypeAlias;
+      },
+      tryRender()
+      {
+        return this.module && this.renderer && this.renderer.preview && this.renderer.preview.template;
+      },
+      canEdit()
+      {
+        return this.module && this.renderer;
+      }
+    },
+
+
     mounted()
     {
       this.render(this.value);
@@ -66,11 +86,9 @@
       render(value)
       {
         this.loading = true;
-
-        this.module = _find(this.types, x => x.alias == this.value.moduleTypeAlias);
-        this.renderer = zero.renderers['module.' + this.value.moduleTypeAlias];
-
-        this.loading = false;
+        this.module = _find(this.types, x => x.alias == this.alias);
+        this.renderer = zero.renderers['module.' + this.alias];
+        this.$nextTick(() => this.loading = false);
       }
     }
   }
@@ -101,6 +119,11 @@
       margin-right: 10px;
       position: relative;
       top: -1px;
+    }
+
+    &.is-error
+    {
+      color: var(--color-accent-error);
     }
   }
 
@@ -164,5 +187,13 @@
     {
       margin-left: 10px;
     }
+  }
+
+  .ui-module-item-error
+  {
+    margin: 0;
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 12px;
   }
 </style>

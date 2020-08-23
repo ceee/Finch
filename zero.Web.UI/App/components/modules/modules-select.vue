@@ -1,7 +1,7 @@
 ﻿<template>
     <div class="ui-modules-start">
 
-      <button v-if="!isSelecting" type="button" class="ui-modules-start-button" @click="isSelecting=true">
+      <button v-if="!isSelecting" type="button" class="ui-modules-start-button" @click="startSelection">
         <i class="ui-modules-start-button-icon fth-plus"></i>
         <p class="ui-modules-start-button-text"><strong>Add content</strong> <br>Compose the page by adding modules</p>
       </button>
@@ -33,6 +33,7 @@
 
 <script>
   import { groupBy as _groupBy, keys as _keys, each as _each } from 'underscore';
+  import Notification from 'zero/services/notification';
 
   export default {
     name: 'uiModulesSelect',
@@ -88,6 +89,23 @@
         });
 
         this.activeGroup = this.moduleTypes[0];
+      },
+
+
+      startSelection()
+      {
+        if (this.types.length > 1)
+        {
+          this.isSelecting = true;
+        }
+        else if (this.types.length === 1)
+        {
+          this.$emit('selected', this.types[0], true);
+        }
+        else
+        {
+          Notification.error('No modules allowed', 'There are no modules configured which are allowed for this data type.', { duration: 5000 });
+        }
       },
 
 

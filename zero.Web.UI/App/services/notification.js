@@ -10,23 +10,23 @@ export default new Vue({
 
   methods: {
 
-    success(label, text)
+    success(label, text, options)
     {
-      this.show({
+      this.show(_extend({
         type: 'success',
         label: label,
         text: text
-      });
+      }, options || {}));
     },
 
 
-    error(label, text)
+    error(label, text, options)
     {
-      this.show({
+      this.show(_extend({
         type: 'error',
         label: label,
         text: text
-      });
+      }, options || {}));
     },
 
 
