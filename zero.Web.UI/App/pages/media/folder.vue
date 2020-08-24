@@ -88,17 +88,5 @@
   .mediafolder-items
   {
     margin-top: var(--padding);
-
-    .ui-property + .ui-property,
-    .ui-split + .ui-property
-    {
-      margin-top: 0;
-    }
-
-    .ui-input
-    {
-      background: var(--color-bg-mid);
-      border: none;
-    }
   }
 </style>
