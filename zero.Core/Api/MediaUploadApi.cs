@@ -29,7 +29,7 @@ namespace zero.Core.Api
 
     private const string UPLOAD_PREFIX = "upload:";
 
-    private string[] ImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".bmp", ".webp", ".jfif" };
+    private string[] ImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".bmp", ".webp", ".jfif", ".gif" };
 
 
     public MediaUploadApi(IPaths paths)
@@ -66,6 +66,10 @@ namespace zero.Core.Api
         await file.CopyToAsync(stream, cancellationToken);
       }
 
+      // set new properties
+      media.Source = Path.Combine(PATH_PREFIX, media.FileId, media.Name).Replace(Path.DirectorySeparatorChar, PATH_SEPARATOR);
+      media.Size = file.Length;
+
       // write additional image data + thumbnail
       if (media.Type == MediaType.Image)
       {
@@ -73,36 +77,44 @@ namespace zero.Core.Api
         {
           media.ImageMeta = GetImageMeta(image);
 
-          image.Mutate(x => x.Resize(new ResizeOptions()
+          Image<Rgba32> imageFrame = media.ImageMeta.Frames > 1 ? image.Frames.CloneFrame(0) : image;
+
+          media.PreviewSource = SaveThumbnail(media, imageFrame, PREVIEW_EXTENSION, new ResizeOptions()
           {
             Size = new Size(210, 210),
             Mode = ResizeMode.Min
-          }));
+          });
 
-          string thumbFileName = media.Name.TrimEnd(extension) + PREVIEW_EXTENSION + extension;
-          image.Save(Path.Combine(Paths.Media, media.FileId, thumbFileName));
-          media.PreviewSource = Path.Combine(PATH_PREFIX, media.FileId, thumbFileName).Replace(Path.DirectorySeparatorChar, PATH_SEPARATOR);
-
-          image.Mutate(x => x.Resize(new ResizeOptions()
+          media.ThumbnailSource = SaveThumbnail(media, imageFrame, THUMB_EXTENSION, new ResizeOptions()
           {
             Size = new Size(100, 100),
             Mode = ResizeMode.Max
-          }));
-
-          thumbFileName = media.Name.TrimEnd(extension) + THUMB_EXTENSION + extension;
-          image.Save(Path.Combine(Paths.Media, media.FileId, thumbFileName));
-          media.ThumbnailSource = Path.Combine(PATH_PREFIX, media.FileId, thumbFileName).Replace(Path.DirectorySeparatorChar, PATH_SEPARATOR);
+          });
         }
       }
-
-      // set new properties
-      media.Source = Path.Combine(PATH_PREFIX, media.FileId, media.Name).Replace(Path.DirectorySeparatorChar, PATH_SEPARATOR);
-      media.Size = file.Length;
 
       return media;
     }
 
 
+    /// <summary>
+    /// Saves a thumbnail of an image
+    /// </summary>
+    string SaveThumbnail(IMedia media, Image<Rgba32> image, string extensionPrefix, ResizeOptions resizeOptions)
+    {
+      string extension = Path.GetExtension(media.Source);
+
+      image.Mutate(x => x.Resize(resizeOptions));
+
+      string thumbFileName = media.Name.TrimEnd(extension) + extensionPrefix + extension;
+      image.Save(Path.Combine(Paths.Media, media.FileId, thumbFileName));
+      return Path.Combine(PATH_PREFIX, media.FileId, thumbFileName).Replace(Path.DirectorySeparatorChar, PATH_SEPARATOR);
+    }
+
+
+    /// <summary>
+    /// Create image data if available
+    /// </summary>
     MediaImageMeta GetImageMeta(Image<Rgba32> image)
     {
       var pngMetadata = image.Metadata.GetPngMetadata();
@@ -115,7 +127,7 @@ namespace zero.Core.Api
         DPI = image.Metadata.HorizontalResolution,
         ColorSpace = image.Metadata.IccProfile?.Header?.DataColorSpace.ToString(),
         HasTransparency = pngMetadata?.HasTransparency ?? false,
-        IsAnimated = image.Frames.Count > 1
+        Frames = image.Frames.Count
       };
     }
   }

@@ -78,10 +78,9 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Save a media item
     /// </summary>
-    public async Task<IActionResult> Save([FromBody] MediaEditModel model)
+    public async Task<IActionResult> Save([FromBody] Media model)
     {
-      Media entity = await Mapper.Map(model, await Api.GetById(model.Id));
-      return await As<Media, MediaEditModel>(await Api.Save(entity));
+      return Json(await Api.Save(model));
     }
 
 
@@ -92,6 +91,16 @@ namespace zero.Web.Controllers
     {
       Media media = await MediaUploadApi.Upload(file, folderId);
       return Json(await Api.Save(media));
+    }
+
+
+    /// <summary>
+    /// Upload a file
+    /// </summary>
+    public async Task<IActionResult> UploadTemporary(IFormFile file, string folderId)
+    {
+      Media media = await MediaUploadApi.Upload(file, folderId);
+      return Json(media);
     }
 
 

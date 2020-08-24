@@ -38,8 +38,8 @@ namespace zero.Core.Entities
     public bool HasTransparency { get; set; }
 
     /// <summary>
-    /// Whether this image contains multiple frames
+    /// How many frames contains this image (for animation)
     /// </summary>
-    public bool IsAnimated { get; set; }
+    public int Frames { get; set; } = 1;
   }
 }

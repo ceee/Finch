@@ -13,6 +13,12 @@
 
   fields: [
     {
+      field: 'source',
+      display: 'custom',
+      required: true,
+      path: '@zero/pages/media/upload.vue'
+    },
+    {
       field: 'name',
       display: 'text',
       label: '@ui.name',

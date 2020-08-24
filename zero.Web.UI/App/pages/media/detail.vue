@@ -21,6 +21,9 @@
           <ui-property v-if="model.imageMeta.colorSpace" label="@media.fields.colorSpace" :is-text="true">
             {{model.imageMeta.colorSpace}}
           </ui-property>
+          <ui-property v-if="model.imageMeta.frames > 1" label="@media.fields.frames" :is-text="true">
+            {{model.imageMeta.frames}}
+          </ui-property>
         </div>
       </template>
     </ui-editor>

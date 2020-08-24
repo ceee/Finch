@@ -208,7 +208,14 @@
 
       onChange(value)
       {
-        Objects.setValue(this.value, this.selector, value);
+        if (typeof value === 'function')
+        {
+          value(this.value);
+        }
+        else
+        {
+          Objects.setValue(this.value, this.selector, value);
+        }
         this.$emit('input', this.value);
       }
     }

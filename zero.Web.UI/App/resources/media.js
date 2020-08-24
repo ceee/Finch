@@ -45,13 +45,13 @@ export default {
   },
 
   // uploads a file
-  upload(file, folderId, onProgress)
+  upload(file, folderId, onProgress, isTemporary)
   {
     var data = new FormData();
     data.append('file', file);
     data.append('folderId', folderId);
 
-    return Axios.post(base + 'upload', data, {
+    return Axios.post(base + (isTemporary ? 'uploadTemporary' : 'upload'), data, {
       onUploadProgress: (progressEvent) =>
       {
         if (typeof onProgress === 'function')
