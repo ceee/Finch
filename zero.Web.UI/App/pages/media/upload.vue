@@ -2,8 +2,11 @@
   <div class="media-upload">
 
     <div v-if="entity.source" class="media-upload-preview" :data-type="entity.type">
-      <img v-if="entity.type === 'image'" :src="entity.previewSource" class="media-upload-preview-image" />
-      <a href="#" v-if="entity.type === 'file'" class="media-upload-preview-file">
+      <a :href="entity.source" target="_blank" v-if="entity.type === 'image'" class="media-upload-preview-image">
+        <img :src="entity.previewSource" :alt="entity.name" />
+      </a>
+      
+      <a :href="entity.source" target="_blank" v-if="entity.type === 'file'" class="media-upload-preview-file">
         <i :class="icons[entity.type]" :data-extension="entity.source.split('.').pop()"></i>
         <div>
           <span>{{entity.source.split('/').pop()}}</span><br />
@@ -87,22 +90,22 @@
   .media-upload-preview
   {
     display: block;
-
-    &[data-type="image"]
-    {
-      padding: var(--radius);
-      border-radius: var(--radius);
-      background: var(--color-bg-dim);
-      display: inline-block;
-    }
   }
 
   .media-upload-preview-image
   {
-    display: block;
-    max-width: 100%;
-    max-height: 400px;
+    padding: var(--radius);
     border-radius: var(--radius);
+    background: var(--color-bg-dim);
+    display: inline-block;
+
+    img
+    {
+      display: block;
+      max-width: 100%;
+      max-height: 400px;
+      border-radius: var(--radius);
+    }
   }
 
   .media-upload-preview-file
