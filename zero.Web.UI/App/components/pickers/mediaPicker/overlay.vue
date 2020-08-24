@@ -235,7 +235,7 @@
 
   .ui-mediapicker-overlay-search.ui-searchinput .ui-input
   {
-    background: var(--color-bg-mid);
+    background: var(--color-bg-dim);
     margin-top: 25px;
   }
 
