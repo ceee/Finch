@@ -29,7 +29,7 @@
       link()
       {
         return {
-          name: 'commerce-channels-edit',
+          name: 'mediaitem',
           params: { id: this.value.id }
         };
       }

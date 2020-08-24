@@ -109,12 +109,12 @@ namespace zero.Core.Api
     Task<ListResult<Media>> GetByQuery(MediaListQuery query);
 
     /// <summary>
-    /// Creates or updates a application
+    /// Creates or updates a media item
     /// </summary>
     Task<EntityResult<Media>> Save(Media model);
 
     /// <summary>
-    /// Deletes a application by Id
+    /// Deletes a media item by Id
     /// </summary>
     Task<EntityResult<Media>> Delete(string id);
 

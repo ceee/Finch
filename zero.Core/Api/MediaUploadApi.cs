@@ -5,6 +5,7 @@ using SixLabors.ImageSharp.Processing;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using zero.Core.Entities;
@@ -70,11 +71,7 @@ namespace zero.Core.Api
       {
         using (Image<Rgba32> image = Image.Load<Rgba32>(filePath))
         {
-          media.Dimension = new MediaDimension()
-          {
-            Width = image.Width,
-            Height = image.Height
-          };
+          media.ImageMeta = GetImageMeta(image);
 
           image.Mutate(x => x.Resize(new ResizeOptions()
           {
@@ -99,11 +96,27 @@ namespace zero.Core.Api
       }
 
       // set new properties
-      media.LastModifiedDate = DateTimeOffset.Now;
       media.Source = Path.Combine(PATH_PREFIX, media.FileId, media.Name).Replace(Path.DirectorySeparatorChar, PATH_SEPARATOR);
       media.Size = file.Length;
 
       return media;
+    }
+
+
+    MediaImageMeta GetImageMeta(Image<Rgba32> image)
+    {
+      var pngMetadata = image.Metadata.GetPngMetadata();
+
+      return new MediaImageMeta()
+      {
+        Width = image.Width,
+        Height = image.Height,
+        CreatedDate = new DateTimeOffset(image.Metadata.IccProfile?.Header?.CreationDate ?? DateTime.Now),
+        DPI = image.Metadata.HorizontalResolution,
+        ColorSpace = image.Metadata.IccProfile?.Header?.DataColorSpace.ToString(),
+        HasTransparency = pngMetadata?.HasTransparency ?? false,
+        IsAnimated = image.Frames.Count > 1
+      };
     }
   }
 

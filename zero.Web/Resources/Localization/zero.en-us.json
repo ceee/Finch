@@ -443,11 +443,17 @@
     "fields": {
       "foldername_placeholder": "Enter a name ...",
       "caption": "Caption",
+      "caption_text": "Additional caption text",
       "dimension": "Dimension",
       "size": "Size",
-      "date": "Date",
+      "date": "Last modified at",
       "filename": "Filename",
-      "alternativeText": "Alternative text"
+      "alternativeText": "Alternative text",
+      "alternativeText_text": "Text which is used when the image can't be loaded",
+      "dpi": "DPI",
+      "colorSpace": "Color space",
+      "hasTransparency": "Has transparency",
+      "isAnimated": "Is animated"
     }
   },
 

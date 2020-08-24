@@ -36,7 +36,7 @@ namespace zero.Core.Entities
     public long Size { get; set; }
 
     /// <inheritdoc />
-    public MediaDimension Dimension { get; set; }
+    public MediaImageMeta ImageMeta { get; set; }
 
     /// <inheritdoc />
     public DateTimeOffset LastModifiedDate { get; set; }
@@ -93,14 +93,9 @@ namespace zero.Core.Entities
     long Size { get; set; }
 
     /// <summary>
-    /// Dimension (width + height) in pixels
+    /// Meta data for images
     /// </summary>
-    MediaDimension Dimension { get; set; }
-
-    /// <summary>
-    /// Time the file has last changed
-    /// </summary>
-    DateTimeOffset LastModifiedDate { get; set; }
+    MediaImageMeta ImageMeta { get; set; }
 
     /// <summary>
     /// Optional focal point for an image

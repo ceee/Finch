@@ -16,17 +16,14 @@ namespace zero.Core.Api
   {
     protected IDocumentStore Raven { get; set; }
 
-    protected IMediaUpload Media { get; set; }
-
     protected const string ASTERISK = "*";
 
     protected const string NEW_ID = "new:";
 
 
-    public ApiBase(IDocumentStore raven, IMediaUpload media)
+    public ApiBase(IDocumentStore raven)
     {
       Raven = raven;
-      Media = media;
     }
 
 
@@ -66,31 +63,6 @@ namespace zero.Core.Api
           return EntityResult<T>.Fail(validation);
         }
       }
-
-      // find all media items in model
-      List<ObjectTraverser.Result<Media>> media = ObjectTraverser.Find<Media>(model);
-
-      // upload media items
-      Dictionary<string, Media> mediaItems = new Dictionary<string, Media>();
-
-      foreach (ObjectTraverser.Result<Media> item in media)
-      {
-        string id = item.Item?.Id;
-
-        if (!Media.Upload(item.Item, out bool uploaded, out string uploadError))
-        {
-          return EntityResult<T>.Fail(item.Path, uploadError);
-        }
-        else
-        {
-          mediaItems.Add(id, item.Item);
-        }
-      }
-
-      //if (operation.Media != null)
-      //{
-      //  operation.Media?.Invoke(operation.Model, mediaItems);
-      //}
 
       // find all Raven Ids
       List<ObjectTraverser.Result<GenerateIdAttribute>> ravenIds = ObjectTraverser.FindAttribute<GenerateIdAttribute>(model);

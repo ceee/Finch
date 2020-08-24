@@ -5,7 +5,9 @@
       <div class="app-tree-resizable ui-resizable"></div>
     </div>
 
-    <div class="media-content">
+    <router-view v-if="!isOverview"></router-view>
+
+    <div v-if="isOverview" class="media-content">
       <ui-header-bar :title="title" :back-button="!!id">
         <ui-search />
         <ui-button type="white" label="Add folder" @click="addFolder(id)" />
@@ -136,6 +138,8 @@
 
         return actions;
       };
+
+      //this.addFile('mediaFolders.1-A');
     },
 
     watch: {
@@ -147,7 +151,7 @@
         {
           this.getItems();
         }
-        else
+        else if (this.isOverview)
         {
           this.$nextTick(() =>
           {
@@ -166,6 +170,10 @@
       title()
       {
         return this.current ? this.current.name : '@media.list';
+      },
+      isOverview()
+      {
+        return this.$route.name !== 'mediaitem' && this.$route.name !== 'recyclebin';
       }
     },
 
@@ -339,12 +347,18 @@
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
+      border-radius: var(--radius);
     }
 
     &.is-blank
     {
       border: 2px dotted var(--color-line);
       background: transparent;
+    }
+
+    &.is-folder
+    {
+      background: var(--color-bg-bright);
     }
 
     &.is-folder, &.is-blank

@@ -8,6 +8,7 @@
         </ui-tab>
       </ui-tabs>
       <aside v-if="!nested && infos && infos != 'none'" class="editor-infos">
+        <slot name="info-boxes"></slot>
         <div class="ui-box editor-active-toggle" v-if="isShared || activeToggle" :class="{'is-active': value.isActive }">
           <slot name="settings">
             <div v-if="isShared" class="editor-global-flag">
@@ -29,8 +30,10 @@
             <ui-property v-if="value.id" label="@ui.createdDate" :is-text="true">
               <ui-date v-model="value.createdDate" />
             </ui-property>
+            <slot name="infos-more"></slot>
           </slot>
         </div>
+        <slot name="infos-after"></slot>
       </aside>
     </div>
     <div class="page page-error editor-error" v-if="loaded && rendererNotFound">

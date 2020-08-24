@@ -59,38 +59,35 @@ let addRoutesPerContext = (context, isPlugin) =>
     const definition = routesDefinition.default || routesDefinition;
     let _routes = _isArray(definition) ? definition : definition.routes;
 
-    // append routes to a section
-    if (typeof definition.section === 'string')
+    _routes.forEach(route =>
     {
-      const route = _find(routes, r => r.meta.alias === definition.section);
+      const parentAlias = route.section || definition.section;
+      const isChild = typeof parentAlias === 'string';
+      const parentRoute = isChild ? _find(routes, r => r.meta.alias === parentAlias) : null;
 
-      if (!route)
+      // could not append routes to a section
+      if (isChild && !parentRoute)
       {
         if (_routes.length > 0)
         {
           warn(`router: Could not find section "${definition.section}" in route definition file ${path}`);
         }
       }
+      // append routes to a section
+      else if (isChild)
+      {
+        if (!parentRoute.children)
+        {
+          parentRoute.children = [];
+        }
+        parentRoute.children.push(route);
+      }
+        // add routes to root
       else
       {
-        if (!route.children)
-        {
-          route.children = [];
-        }
-        _routes.forEach(r =>
-        {
-          route.children.push(r);
-        });
+        routes.push(route);
       }
-    }
-    // add routes to root
-    else
-    {
-      _routes.forEach(r =>
-      {
-        routes.push(r);
-      });
-    }
+    });
   });
 };
 

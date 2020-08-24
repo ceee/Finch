@@ -7,13 +7,14 @@ let routes = [];
 if (section)
 {
   routes.push({
-    path: 'folder/:id',
+    path: section.url + '/folder/:id',
     props: true,
     name: 'mediafolder',
     component: () => import('zero/pages/' + alias + '/media')
   });
 
   routes.push({
+    section: alias,
     path: 'edit/:id',
     props: true,
     name: 'mediaitem',
@@ -21,6 +22,7 @@ if (section)
   });
 
   routes.push({
+    section: alias,
     path: 'recyclebin',
     name: 'mediarecyclebin',
     component: () => import('zero/pages/' + alias + '/recyclebin'),
@@ -40,6 +42,5 @@ if (section)
 }
 
 export default {
-  section: alias,
   routes: routes
 };
