@@ -11,6 +11,8 @@
 
 
 <script>
+  import Overlay from 'zero/services/overlay';
+
   export default {
     name: 'uiDropdown',
 
@@ -69,6 +71,7 @@
 
       show()
       {
+        Overlay.setDropdown(this);
         this.open = true;
         this.$emit('opened');
       },

@@ -10,7 +10,7 @@
       <ui-tree v-if="item.hasChildren && item.isOpen && status != 'loading'" :get="get" :parent="item.id" :depth="depth + 1" :active="active" :config="config" @select="onSelect" />
     </template>
     <slot name="bottom"></slot>
-    <div ref="dropdown" class="ui-dropdown ui-tree-dropdown theme-dark align-top" role="dialog" v-click-outside="hideActions" v-if="actionsOpen">
+    <div ref="dropdown" class="ui-dropdown ui-tree-dropdown theme-dark align-top" role="dialog" v-click-outside="hideActions" v-show="actionsOpen">
       <ui-dropdown-list v-model="actions" @hide="hideActions" />
     </div>
   </div>
@@ -19,6 +19,7 @@
 
 <script>
   import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
+  import Overlay from 'zero/services/overlay';
 
   const defaultConfig = {
     // return actions for an item
@@ -159,6 +160,11 @@
           return;
         }
 
+        if (!this.actionsOpen)
+        {
+          Overlay.setDropdown({ hide: () => this.actionsOpen = false });
+        }
+
         this.actionsOpen = !this.actionsOpen;
 
         this.$nextTick(() =>
@@ -183,6 +189,8 @@
             x: rect.left - width + rect.width,
             y: rect.top + rect.height
           };
+
+          console.info(position);
 
           dropdown.style.top = position.y + 'px';
           dropdown.style.left = position.x + 'px';

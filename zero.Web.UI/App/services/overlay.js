@@ -6,10 +6,22 @@ import { find as _find, extend as _extend } from 'underscore';
 export default new Vue({
 
   data: () => ({
+    dropdownInstance: null,
     instances: []
   }),
 
   methods: {
+
+    // sets a new active dropdown so the old one gets auto-closed
+    setDropdown(instance)
+    {
+      if (this.dropdownInstance != null)
+      {
+        this.dropdownInstance.hide();
+      }
+
+      this.dropdownInstance = instance;
+    },
 
     // open a deletion confirm dialog with the given options
     confirmDelete(title, text)
