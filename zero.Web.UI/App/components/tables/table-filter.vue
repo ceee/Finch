@@ -6,7 +6,7 @@
       <template v-slot:button>
         <ui-button type="white" :label="selectedText" caret="down" />
       </template>
-      <ui-dropdown-list v-model="selectActions" />
+      <slot name="actions"></slot>
     </ui-dropdown>
   </div>
 </template>
@@ -30,10 +30,6 @@
         }
       },
       selection: {
-        type: Array,
-        default: () => []
-      },
-      selectActions: {
         type: Array,
         default: () => []
       }

@@ -119,7 +119,7 @@
     align-items: center;
     font-size: var(--font-size);
     padding: 0 16px;
-    height: 46px;
+    height: 42px;
     color: var(--color-fg);
     border-radius: var(--radius);
     white-space: nowrap;

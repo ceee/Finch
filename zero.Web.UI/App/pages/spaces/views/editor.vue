@@ -5,7 +5,7 @@
         <template v-slot:button>
           <ui-button type="white" label="@ui.actions" caret="down" />
         </template>
-        <ui-dropdown-list v-model="actions" />
+        <ui-dropdown-separator />
       </ui-dropdown>
       <ui-button :submit="true" label="@ui.save" :state="form.state" v-if="!disabled" />
     </ui-header-bar>
@@ -27,7 +27,6 @@
     data: () => ({
       disabled: false,
       renderer: {},
-      actions: [],
       model: null,
       fullModel: null
     }),
@@ -41,15 +40,6 @@
       {
         return this.isList ? 'My item' : this.space.name;
       }
-    },
-
-    created()
-    {
-      this.actions.push({
-        name: 'Delete',
-        icon: 'fth-trash',
-        action: this.onDelete
-      });
     },
 
     beforeRouteLeave(to, from, next) 
