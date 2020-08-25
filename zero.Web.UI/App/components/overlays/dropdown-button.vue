@@ -81,7 +81,7 @@
 
         if (!this.loading && !this.disabled)
         {
-          if (!this.prevent)
+          if (!this.prevent && this.dropdown)
           {
             this.dropdown.hide();
           }

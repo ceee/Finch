@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-dropdown-container">
-    <div class="ui-dropdown-toggle" @click.stop="toggle">
+    <div v-if="hasButton" class="ui-dropdown-toggle" @click.stop="toggle">
       <slot name="button"></slot>
     </div>
     <div class="ui-dropdown" role="dialog" v-if="open" v-click-outside="hide" :class="dropdownClasses">
@@ -36,6 +36,11 @@
     },
 
     computed: {
+
+      hasButton()
+      {
+        return this.$scopedSlots.hasOwnProperty('button');
+      },
 
       dropdownClasses()
       {

@@ -7,12 +7,16 @@
     <span v-if="status === 'loading'" class="ui-tree-item-loading"><i></i></span>
     <template v-for="item in items">
       <ui-tree-item :value="item" @rightclick="onRightClicked" @click="onSelect(item, $event)" @actions="onActionsClicked" @open="toggle" />
-      <ui-tree v-if="item.hasChildren && item.isOpen && status != 'loading'" :get="get" :parent="item.id" :depth="depth + 1" :active="active" :config="config" @select="onSelect" />
+      <ui-tree v-if="item.hasChildren && item.isOpen && status != 'loading'" :get="get" :parent="item.id" :depth="depth + 1" :active="active" :config="config" @select="onSelect">
+        <template v-slot:actions="props">
+          <slot name="actions" v-bind="props"></slot>
+        </template>
+      </ui-tree>
     </template>
     <slot name="bottom"></slot>
-    <div ref="dropdown" class="ui-dropdown ui-tree-dropdown theme-dark align-top" role="dialog" v-click-outside="hideActions" v-show="actionsOpen">
-      <ui-dropdown-list v-model="actions" @hide="hideActions" />
-    </div>
+    <ui-dropdown ref="dropdown" align="top" theme="dark" class="ui-tree-dropdown">
+      <slot name="actions" v-bind="actionProps"></slot>
+    </ui-dropdown>
   </div>
 </template>
 
@@ -50,6 +54,10 @@
         type: Function,
         required: true
       },
+      hasActions: {
+        type: Function,
+        default: null
+      },
       config: {
         type: Object,
         default: () =>
@@ -62,11 +70,18 @@
     data: () => ({
       items: [],
       status: 'none',
-      actionsOpen: false,
-      actionsLoaded: false,
-      actions: [],
+      actionProps: {
+        item: null
+      },
       configuration: {}
     }),
+
+    computed: {
+      actionsDefined()
+      {
+        return this.$scopedSlots.hasOwnProperty('actions');
+      }
+    },
 
     mounted()
     {
@@ -114,15 +129,6 @@
         this.$emit('onStatusChange', status);
       },
 
-      // hide actions overlay
-      hideActions()
-      {
-        if (this.actionsLoaded)
-        {
-          this.actionsOpen = false;
-        }
-      },
-
       // toggles children of an item
       toggle(item)
       {
@@ -137,9 +143,9 @@
       // right clicked on an item
       onRightClicked(item, ev)
       {
-        if (item.hasActions && this.configuration.onActionsRequested)
+        if (this.actionsDefined && (!item || item.hasActions))
         {
-          ev.preventDefault();  
+          ev.preventDefault();
           this.onActionsClicked(item, ev);
         }
       },
@@ -147,29 +153,25 @@
       // actions button clicked on item
       onActionsClicked(item, ev)
       {
-        this.actionsLoaded = false;
+        let dropdown = this.$refs.dropdown;
 
-        if (!this.actionsOpen)
+        if (!this.actionsDefined || (item && !item.hasActions) || (typeof this.hasActions === 'function' && !this.hasActions(item)))
         {
-          this.actions = this.configuration.onActionsRequested(item);
-        }
-
-        if (!this.actions || this.actions.length < 1 || this.actionsOpen)
-        {
-          this.actionsLoaded = true;
           return;
         }
 
-        if (!this.actionsOpen)
-        {
-          Overlay.setDropdown({ hide: () => this.actionsOpen = false });
-        }
+        this.actionProps.item = item;
+        this.actionProps.event = ev;
 
-        this.actionsOpen = !this.actionsOpen;
+        dropdown.toggle();
+
+        if (!dropdown.open)
+        {
+          return;
+        }
 
         this.$nextTick(() =>
         {
-          let dropdown = this.$refs.dropdown;
           let target = ev.target;
           do
           {
@@ -190,16 +192,11 @@
             y: rect.top + rect.height
           };
 
-          console.info(position);
+          let element = dropdown.$el.querySelector('.ui-dropdown');
 
-          dropdown.style.top = position.y + 'px';
-          dropdown.style.left = position.x + 'px';
-          dropdown.style.width = width + 'px';
-
-          setTimeout(() =>
-          {
-            this.actionsLoaded = true;
-          }, 300);
+          element.style.top = position.y + 'px';
+          element.style.left = position.x + 'px';
+          element.style.width = width + 'px';
         });
       }
 
@@ -219,7 +216,7 @@
     margin-top: -18px;
   }
 
-  .ui-tree-dropdown
+  .ui-tree-dropdown .ui-dropdown
   {
     position: fixed;
     min-width: 200px;

@@ -1,7 +1,17 @@
 ﻿<template>
   <div class="page-container">
     <div class="app-tree" v-resizable="resizable">
-      <ui-tree ref="tree" :get="getItems" :config="treeConfig" :active="id" header="Pages" />
+      <ui-tree ref="tree" :get="getItems" :config="treeConfig" :active="id" header="Pages">
+        <template v-slot:actions="props">
+          <ui-dropdown-button v-if="props.item && props.item.id === 'recyclebin'" :value="props.item" label="Empty recycle bin" icon="fth-trash-2" />
+          <ui-dropdown-button label="Create" icon="fth-plus" @click="create(props.item)" />
+          <ui-dropdown-button v-if="props.item" label="Move" icon="fth-corner-down-right" @click="move(props.item)" />
+          <ui-dropdown-button v-if="props.item" label="Copy" icon="fth-copy" @click="copy(props.item)" />
+          <ui-dropdown-button label="Sort" icon="fth-arrow-down" @click="sort(props.item)" />
+          <ui-dropdown-separator v-if="props.item" />
+          <ui-dropdown-button v-if="props.item" label="Delete" icon="fth-x" @click="delete(props.item)" />
+        </template>
+      </ui-tree>
       <div class="app-tree-resizable ui-resizable"></div>
     </div>
 
@@ -91,79 +101,6 @@
         icon: 'fth-clock'
       });
 
-      this.treeConfig.onActionsRequested = item =>
-      {
-        let actions = [];
-
-        if (item && item.id === 'recyclebin')
-        {
-          return [{
-            name: 'Empty recycle bin',
-            icon: 'fth-trash-2'
-          }];
-        }
-
-        actions.push({
-          name: 'Create',
-          icon: 'fth-plus',
-          action(action, dropdown)
-          {
-            dropdown.hide();
-            instance.create(item);
-          }
-        });
-
-        if (item)
-        {
-          actions.push({
-            name: 'Move',
-            icon: 'fth-corner-down-right',
-            action(action, dropdown)
-            {
-              dropdown.hide();
-              instance.move(item);
-            }
-          });
-          actions.push({
-            name: 'Copy',
-            icon: 'fth-copy',
-            action(action, dropdown)
-            {
-              dropdown.hide();
-              instance.copy(item);
-            }
-          });
-        }
-
-        actions.push({
-          name: 'Sort',
-          icon: 'fth-arrow-down',
-          action(action, dropdown)
-          {
-            dropdown.hide();
-            instance.sort(item);
-          }
-        });
-
-        if (item)
-        {
-          actions.push({
-            type: 'separator'
-          });
-          actions.push({
-            name: 'Delete',
-            icon: 'fth-x',
-            action(action, dropdown)
-            {
-              dropdown.hide();
-              instance.delete(item);
-            }
-          });
-        }
-
-        return actions;
-      };
-
       EventHub.$on('page.update', page =>
       {
         this.cache = [];
@@ -250,6 +187,7 @@
 
       copy(item)
       {
+        console.info(item);
         return Overlay.open({
           component: CopyOverlay,
           display: 'editor',
