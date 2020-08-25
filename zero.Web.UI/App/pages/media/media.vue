@@ -1,7 +1,17 @@
 ﻿<template>
   <div class="media">
     <div class="app-tree media-tree" v-resizable="resizable">
-      <ui-tree ref="tree" :get="getTree" :config="treeConfig" :active="id" header="@media.list" />
+      <ui-tree ref="tree" :get="getTree" :config="treeConfig" :active="id" header="@media.list">
+        <template v-slot:actions="props">
+          <ui-dropdown-button v-if="props.item && props.item.id === 'recyclebin'" :value="props.item" label="Empty recycle bin" icon="fth-trash-2" />
+          <template v-if="!props.item || props.item.id !== 'recyclebin'">
+            <ui-dropdown-button label="Create" icon="fth-plus" @click="addFolder(props.item)" />
+            <ui-dropdown-button v-if="props.item" label="Move" icon="fth-corner-down-right" @click="move(props.item)" />
+            <ui-dropdown-separator v-if="props.item" />
+            <ui-dropdown-button v-if="props.item" label="Delete" icon="fth-trash" @click="remove(props.item)" />
+          </template>
+        </template>
+      </ui-tree>
       <div class="app-tree-resizable ui-resizable"></div>
     </div>
 
@@ -94,52 +104,6 @@
       {
         this.getItems();
       }
-
-      this.treeConfig.onActionsRequested = item =>
-      {
-        let actions = [];
-
-        if (item && item.id === 'recyclebin')
-        {
-          return [{
-            name: 'Empty recycle bin',
-            icon: 'fth-trash-2'
-          }];
-        }
-
-        actions.push({
-          name: 'Create',
-          icon: 'fth-plus',
-          action(action, dropdown)
-          {
-            dropdown.hide();
-            instance.addFolder();
-          }
-        });
-
-        if (item)
-        {
-          actions.push({
-            name: 'Move',
-            icon: 'fth-corner-down-right'
-          });
-        }
-
-        if (item)
-        {
-          actions.push({
-            type: 'separator'
-          });
-          actions.push({
-            name: 'Delete',
-            icon: 'fth-x'
-          });
-        }
-
-        return actions;
-      };
-
-      //this.addFile('mediaFolders.1-A');
     },
 
     watch: {

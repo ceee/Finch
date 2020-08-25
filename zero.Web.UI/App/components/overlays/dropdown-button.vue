@@ -130,6 +130,16 @@
     &.has-icon
     {
       grid-template-columns: 30px 1fr auto;
+
+      &:not([disabled]):hover .ui-dropdown-button-icon
+      {
+        color: var(--color-primary);
+      }
+    }
+
+    &.has-icon.is-negative:not([disabled]):hover .ui-dropdown-button-icon
+    {
+      color: var(--color-accent-error);
     }
 
     &.is-multiline
@@ -181,7 +191,6 @@
     position: relative;
     top: -1px;
     color: var(--color-fg);
-    transition: color 0.2s ease;
   }
 
   .ui-dropdown-button-progress

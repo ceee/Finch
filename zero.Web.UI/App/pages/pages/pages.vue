@@ -4,12 +4,14 @@
       <ui-tree ref="tree" :get="getItems" :config="treeConfig" :active="id" header="Pages">
         <template v-slot:actions="props">
           <ui-dropdown-button v-if="props.item && props.item.id === 'recyclebin'" :value="props.item" label="Empty recycle bin" icon="fth-trash-2" />
-          <ui-dropdown-button label="Create" icon="fth-plus" @click="create(props.item)" />
-          <ui-dropdown-button v-if="props.item" label="Move" icon="fth-corner-down-right" @click="move(props.item)" />
-          <ui-dropdown-button v-if="props.item" label="Copy" icon="fth-copy" @click="copy(props.item)" />
-          <ui-dropdown-button label="Sort" icon="fth-arrow-down" @click="sort(props.item)" />
-          <ui-dropdown-separator v-if="props.item" />
-          <ui-dropdown-button v-if="props.item" label="Delete" icon="fth-x" @click="delete(props.item)" />
+          <template v-if="!props.item || props.item.id !== 'recyclebin'">
+            <ui-dropdown-button label="Create" icon="fth-plus" @click="create(props.item)" />
+            <ui-dropdown-button v-if="props.item" label="Move" icon="fth-corner-down-right" @click="move(props.item)" />
+            <ui-dropdown-button v-if="props.item" label="Copy" icon="fth-copy" @click="copy(props.item)" />
+            <ui-dropdown-button label="Sort" icon="fth-arrow-down" @click="sort(props.item)" />
+            <ui-dropdown-separator v-if="props.item" />
+            <ui-dropdown-button v-if="props.item" label="Delete" icon="fth-trash" @click="remove(props.item)" />
+          </template>
         </template>
       </ui-tree>
       <div class="app-tree-resizable ui-resizable"></div>
@@ -134,6 +136,7 @@
               item.url = {
                 name: 'recyclebin'
               };
+              console.info(item, this.$route);
             }
           });
           this.cache[key] = response;
@@ -203,7 +206,7 @@
       },
 
 
-      delete(item)
+      remove(item)
       {
         Overlay.confirmDelete(item.name, '@deleteoverlay.page_text').then(opts =>
         {
