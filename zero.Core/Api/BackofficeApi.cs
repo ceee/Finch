@@ -1,7 +1,10 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using Raven.Client;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
+using Raven.Client.Documents.Operations;
+using Raven.Client.Documents.Queries;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
@@ -236,6 +239,21 @@ namespace zero.Core.Api
         return EntityResult<T>.Success();
       }
     }
+
+
+    /// <inheritdoc />
+    public async Task Purge<T>(string querySuffix = null, Parameters parameters = null)
+    {
+      var collectionName = Raven.Conventions.FindCollectionName(typeof(T));
+
+      Operation operation = await Raven.Operations.SendAsync(new DeleteByQueryOperation(new IndexQuery()
+      {
+        Query = $"from {collectionName} {querySuffix ?? String.Empty}",
+        QueryParameters = parameters
+      }));
+
+      await operation.WaitForCompletionAsync(TimeSpan.FromSeconds(30));
+    }
   }
 
 
@@ -262,6 +280,11 @@ namespace zero.Core.Api
     /// Deletes an entity by Id
     /// </summary>
     Task<EntityResult<T>> DeleteById<T>(string id) where T : IZeroIdEntity;
+
+    /// <summary>
+    /// Delete a whole collection (with an optional query suffix, i.e. a where statement)
+    /// </summary>
+    Task Purge<T>(string querySuffix = null, Parameters parameters = null);
   }
 
 

@@ -88,6 +88,8 @@ namespace zero.Core.Entities
     public static EntityResult<T> Fail(ValidationResult validation) => new EntityResult<T>(validation);
 
     public static EntityResult<T> Fail(EntityResultError error) => Fail(error.Property, error.Message);
+
+    public static EntityResult<T> Fail(IEnumerable<EntityResultError> errors) => new EntityResult<T>() { IsSuccess = !errors.Any(), Errors = errors.ToList() };
   }
 
 

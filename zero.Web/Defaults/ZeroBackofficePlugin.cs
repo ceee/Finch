@@ -24,6 +24,7 @@ namespace zero.Web.Defaults
       services.AddTransient<ILanguage, Language>();
       services.AddTransient<ITranslation, Translation>();
       services.AddTransient<IPage, Page>();
+      services.AddTransient<IRecycledEntity, RecycledEntity>();
 
       services.AddTransient(typeof(IApplicationsApi<>), typeof(ApplicationsApi<>));
       services.AddTransient(typeof(ICountriesApi<>), typeof(CountriesApi<>));
@@ -34,6 +35,7 @@ namespace zero.Web.Defaults
       services.AddTransient(typeof(IPagesApi<>), typeof(PagesApi<>));
       services.AddTransient(typeof(IPageTreeApi<>), typeof(PageTreeApi<>));
       services.AddTransient(typeof(IUserApi<>), typeof(UserApi<>));
+      services.AddTransient(typeof(IRecycleBinApi<>), typeof(RecycleBinApi<>));
 
       services.AddTransient<ISetupApi, SetupApi>();
       services.AddTransient<ISectionsApi, SectionsApi>();
