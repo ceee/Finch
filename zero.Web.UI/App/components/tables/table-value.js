@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { warn } from 'zero/services/debug';
 import MediaApi from 'zero/resources/media';
+import Strings from 'zero/services/strings';
 
 export default function (el, binding)
 {
@@ -48,11 +49,15 @@ export default function (el, binding)
 
     render(html, isHtml);
   }
-  // formatted date with optional time
-  else if (column.as === 'date' || column.as === 'datetime')
+  // formatted date
+  else if (column.as === 'date')
   {
-    let format = column.as === 'datetime' ? 'DD.MM.YY HH:mm' : 'DD.MM.YY';
-    render(dayjs(value).format(format));
+    render(Strings.date(value, 'short'));
+  }
+  // formatted date with time
+  else if (column.as === 'datetime')
+  {
+    render(Strings.date(value, 'short') + ' <span class="-minor">' + Strings.date(value, 'time') + '</span>', true);
   }
   // render formatted price
   else if (column.as === 'price')

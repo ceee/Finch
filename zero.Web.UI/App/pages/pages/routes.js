@@ -25,7 +25,7 @@ if (section)
     name: 'recyclebin',
     component: () => import('zero/pages/' + alias + '/recyclebin'),
     meta: {
-      name: '@page.recyclebin.name'
+      name: '@recyclebin.name'
     }
   });
 

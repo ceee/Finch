@@ -347,15 +347,24 @@
         "history_text": "View page editing history"
       }
     },
-    "recyclebin": {
-      "name": "Recycle bin",
-      "description": "View recently deleted entities"
-    },
     "schedule": {
       "label": "Schedule",
       "header": "Schedule publishing",
       "publish": "Publish",
       "unpublish": "Unpublish"
+    }
+  },
+
+  "recyclebin": {
+    "name": "Recycle bin",
+    "description": "View recently deleted entities",
+    "purge": "Purge",
+    "fields": {
+      "originalId": "Page Id",
+      "createdDate": "Deleted"
+    },
+    "overlay": {
+      "title": "Actions"
     }
   },
 

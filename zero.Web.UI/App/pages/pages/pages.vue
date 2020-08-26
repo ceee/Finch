@@ -136,7 +136,6 @@
               item.url = {
                 name: 'recyclebin'
               };
-              console.info(item, this.$route);
             }
           });
           this.cache[key] = response;

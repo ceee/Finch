@@ -14,8 +14,8 @@
       </header>
 
       <div class="ui-table-row" v-for="item in items" :class="{ 'is-selected': configuration.selectable && selected.indexOf(item) > -1 }">
-        <component :is="column.tag" :to="getLink(column, item)" @click="onClick($event, column, item)" v-for="column in columns" :key="column.key" 
-                   class="ui-table-cell" :style="column.flex" :table-field="column.field" v-table-value="{ item, column }"></component>
+        <component :is="column.tag" type="button" :to="getLink(column, item)" @click="onClick($event, column, item)" v-for="column in columns" :key="column.key" 
+                   class="ui-table-cell" :style="column.flex" :table-field="column.field" :field-type="column.as" v-table-value="{ item, column }"></component>
         <button type="button" v-if="configuration.selectable" table-field="table_selectable" class="ui-table-cell is-selectable" @click="select(item)">
           <i class="fth-check-square"></i>
         </button>
@@ -224,7 +224,7 @@
 
           this.columns.push(_extend(data, {
             key: key,
-            tag: typeof data.link !== 'undefined' ? 'router-link' : (typeof data.action !== 'undefined' ? 'a' : 'div'),
+            tag: typeof data.link !== 'undefined' ? 'router-link' : (typeof data.action !== 'undefined' ? 'button' : 'div'),
             label: typeof data.label !== 'undefined' ? data.label : (this.configuration.labelPrefix + key),
             field: key,
             canSort: typeof data.sort === 'boolean' ? data.sort : this.configuration.order.enabled,
@@ -418,7 +418,8 @@
     }
   }
 
-  a.ui-table-cell
+  a.ui-table-cell,
+  button.ui-table-cell
   {
     color: var(--color-fg);
     transition: none;
@@ -552,6 +553,15 @@
     {
       margin-left: 0.5em;
       position: relative;
+    }
+  }
+
+  .ui-table-cell[field-type="datetime"]
+  {
+    display: inline;
+    .-minor
+    {
+      color: var(--color-fg-dim);
     }
   }
 </style>

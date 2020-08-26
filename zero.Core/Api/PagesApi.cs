@@ -199,26 +199,30 @@ namespace zero.Core.Api
     }
 
 
-    /// <inheritdoc />
-    //public async Task<EntityResult<string[]>> Restore(string id)
-    //{
-    //  IList<T> pages = await GetByIdWithDescendants(id);
+    /// <summary>
+    /// Restores a page from the recycle bin
+    /// </summary>
+    public async Task<EntityResult<string[]>> Restore(string id, bool includeDescendants = false)
+    {
+      IRecycledEntity entity = await RecycleBinApi.GetById(id);
 
-    //  using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-    //  {
-    //    session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
+      if (entity == null || entity.Group != RECYCLE_BIN_GROUP || !(entity.Content is IPage))
+      {
+        return EntityResult<string[]>.Fail(); // TODO correct error message
+      }
 
-    //    foreach (T page in pages)
-    //    {
-    //      page.IsRecycled = false;
-    //      await session.StoreAsync(page);
-    //    }
+      IPage page = entity.Content as IPage;
+      page.IsActive = false;
 
-    //    await session.SaveChangesAsync();
-    //  }
+      EntityResult<IPage> result = await SaveModel(page);
 
-    //  return EntityResult<string[]>.Success(pages.Select(x => x.Id).ToArray());
-    //}
+      if (includeDescendants && !entity.OperationId.IsNullOrEmpty())
+      {
+        IList<IRecycledEntity> operationEntities = await RecycleBinApi.GetByOperation(entity.OperationId);
+      }
+
+      return null;
+    }
 
 
     /// <summary>
@@ -321,6 +325,6 @@ namespace zero.Core.Api
     /// <summary>
     /// Restores a page from the recycle bin
     /// </summary>
-    //Task<EntityResult<string[]>> Restore(string id);
+    Task<EntityResult<string[]>> Restore(string id, bool includeDescendants = false);
   }
 }

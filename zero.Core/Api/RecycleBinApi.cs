@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Entities;
@@ -11,18 +11,18 @@ namespace zero.Core.Api
 {
   public class RecycleBinApi : AppAwareBackofficeApi, IRecycleBinApi
   {
-    Type Type;
+    IRecycledEntity Blueprint;
 
-    public RecycleBinApi(IBackofficeStore store, IRecycledEntity entity) : base(store)
+    public RecycleBinApi(IBackofficeStore store, IRecycledEntity blueprint) : base(store)
     {
-      Type = entity.GetType();
+      Blueprint = blueprint;
     }
 
 
     /// <inheritdoc />
     public async Task<EntityResult<IRecycledEntity>> Add<TEntity>(TEntity model, string group = null, string operationId = null) where TEntity : IZeroEntity
     {
-      IRecycledEntity entity = Activator.CreateInstance(Type) as IRecycledEntity;
+      IRecycledEntity entity = Blueprint.Clone();
       entity.Group = group;
       entity.Content = model;
       entity.OriginalId = model.Id;
@@ -56,7 +56,14 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<IRecycledEntity>> GetByQuery(RecycleBinListQuery<IRecycledEntity> query)
+    public async Task<IRecycledEntity> GetById(string id)
+    {
+      return await GetById<IRecycledEntity>(id);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<ListResult<IRecycledEntity>> GetByQuery(RecycleBinListQuery query)
     {
       query.SearchSelector = x => x.Name;
 
@@ -67,6 +74,34 @@ namespace zero.Core.Api
           .WhereIf(x => x.Group == query.Group, !query.Group.IsNullOrWhiteSpace())
           .WhereIf(x => x.OperationId == query.OperationId, !query.OperationId.IsNullOrWhiteSpace())
           .ToQueriedListAsync(query);
+      }
+    }
+
+
+    /// <inheritdoc />
+    public async Task<IList<IRecycledEntity>> GetByOperation(string operationId)
+    {
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        return await session.Query<IRecycledEntity>()
+          .Scope(Scope)
+          .Where(x => x.OperationId == operationId)
+          .ToListAsync();
+      }
+    }
+
+
+    /// <summary>
+    /// Get affected entity count from a specific operation
+    /// </summary>
+    public async Task<int> GetCountByOperation(string operationId)
+    {
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        return await session.Query<IRecycledEntity>()
+          .Scope(Scope)
+          .Where(x => x.OperationId == operationId)
+          .CountAsync();
       }
     }
 
@@ -113,12 +148,27 @@ namespace zero.Core.Api
     Task<EntityResult<IEnumerable<IRecycledEntity>>> Add<TEntity>(IEnumerable<TEntity> models, string group = null) where TEntity : IZeroEntity;
 
     /// <summary>
+    /// Get recycled entity by Id
+    /// </summary>
+    Task<IRecycledEntity> GetById(string id);
+
+    /// <summary>
     /// Get all recycled items
     /// </summary>
-    Task<ListResult<IRecycledEntity>> GetByQuery(RecycleBinListQuery<IRecycledEntity> query);
+    Task<ListResult<IRecycledEntity>> GetByQuery(RecycleBinListQuery query);
+
+    /// <summary>
+    /// Get affected entities from a specific operation
+    /// </summary>
+    Task<IList<IRecycledEntity>> GetByOperation(string operationId);
+
+    /// <summary>
+    /// Get affected entity count from a specific operation
+    /// </summary>
+    Task<int> GetCountByOperation(string operationId);
 
     // <summary>
-    /// Deletes a country by Id
+    /// Deletes a recycled entity by Id
     /// </summary>
     Task Delete(string id);
 

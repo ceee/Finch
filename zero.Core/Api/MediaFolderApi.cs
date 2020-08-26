@@ -110,7 +110,7 @@ namespace zero.Core.Api
           Id = "recyclebin",
           ParentId = null,
           Sort = 99999,
-          Name = "@page.recyclebin.name",
+          Name = "@recyclebin.name",
           Icon = "fth-trash",
           HasChildren = false
         });
