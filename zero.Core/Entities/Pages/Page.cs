@@ -18,9 +18,6 @@ namespace zero.Core.Entities
     public string AppId { get; set; }
 
     /// <inheritdoc />
-    public bool IsRecycled { get; set; }
-
-    /// <inheritdoc />
     public DateTimeOffset? PublishDate { get; set; }
 
     /// <inheritdoc />
@@ -39,11 +36,6 @@ namespace zero.Core.Entities
     /// Alias of the used page type
     /// </summary>
     string PageTypeAlias { get; set; }
-
-    /// <summary>
-    /// Whether this page is recycled or not
-    /// </summary>
-    bool IsRecycled { get; set; }
 
     /// <summary>
     /// Date when the page is published

@@ -1,4 +1,6 @@
-﻿namespace zero.Core.Entities
+﻿using zero.Core.Attributes;
+
+namespace zero.Core.Entities
 {
   public class Translation : ZeroEntity, ITranslation
   {
@@ -26,6 +28,7 @@
   }
 
 
+  [Collection("Translations")]
   public interface ITranslation : IZeroEntity, ILanguageAwareEntity, IAppAwareShareableEntity, IZeroDbConventions
   {
     /// <summary>

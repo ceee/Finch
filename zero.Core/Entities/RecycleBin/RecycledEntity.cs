@@ -17,7 +17,7 @@ namespace zero.Core.Entities
     public string Group { get; set; }
 
     /// <inheritdoc />
-    public string Content { get; set; }
+    public IZeroEntity Content { get; set; }
   }
 
 
@@ -35,9 +35,9 @@ namespace zero.Core.Entities
     string OperationId { get; set; }
 
     /// <summary>
-    /// Contains the entity content as JSON
+    /// Contains the entity content
     /// </summary>
-    string Content { get; set; }
+    IZeroEntity Content { get; set; }
 
     /// <summary>
     /// Recycled entities can be grouped together (e.g. pages, media, ...)

@@ -15,11 +15,17 @@ namespace zero.Core.Api
 {
   public class PagesApi<T> : AppAwareBackofficeApi, IPagesApi<T> where T : IPage
   {
+    const string RECYCLE_BIN_GROUP = "pages";
+
     protected IZeroOptions Options { get; private set; }
 
-    public PagesApi(IZeroOptions options, IBackofficeStore store) : base(store)
+    protected IRecycleBinApi RecycleBinApi { get; private set; }
+    
+
+    public PagesApi(IZeroOptions options, IBackofficeStore store, IRecycleBinApi recycleBinApi) : base(store)
     {
       Options = options;
+      RecycleBinApi = recycleBinApi;
     }
 
 
@@ -180,51 +186,39 @@ namespace zero.Core.Api
     public async Task<EntityResult<string[]>> Delete(string id, bool moveToRecycleBin = true)
     {
       IList<T> pages = await GetByIdWithDescendants(id);
+      string[] ids = pages.Select(x => x.Id).ToArray();
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      if (moveToRecycleBin)
       {
-        session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
-
-        foreach (T page in pages)
-        {
-          if (moveToRecycleBin)
-          {
-            page.IsRecycled = true;
-            await session.StoreAsync(page);
-          }
-          else
-          {
-            session.Delete(page.Id);
-          }
-        }
-
-        await session.SaveChangesAsync();
+        await RecycleBinApi.Add(pages, RECYCLE_BIN_GROUP);
       }
 
-      return EntityResult<string[]>.Success(pages.Select(x => x.Id).ToArray());
+      await DeleteByIds<T>(ids);
+
+      return EntityResult<string[]>.Success(ids);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<string[]>> Restore(string id)
-    {
-      IList<T> pages = await GetByIdWithDescendants(id);
+    //public async Task<EntityResult<string[]>> Restore(string id)
+    //{
+    //  IList<T> pages = await GetByIdWithDescendants(id);
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
+    //  using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+    //  {
+    //    session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
 
-        foreach (T page in pages)
-        {
-          page.IsRecycled = false;
-          await session.StoreAsync(page);
-        }
+    //    foreach (T page in pages)
+    //    {
+    //      page.IsRecycled = false;
+    //      await session.StoreAsync(page);
+    //    }
 
-        await session.SaveChangesAsync();
-      }
+    //    await session.SaveChangesAsync();
+    //  }
 
-      return EntityResult<string[]>.Success(pages.Select(x => x.Id).ToArray());
-    }
+    //  return EntityResult<string[]>.Success(pages.Select(x => x.Id).ToArray());
+    //}
 
 
     /// <summary>
@@ -327,6 +321,6 @@ namespace zero.Core.Api
     /// <summary>
     /// Restores a page from the recycle bin
     /// </summary>
-    Task<EntityResult<string[]>> Restore(string id);
+    //Task<EntityResult<string[]>> Restore(string id);
   }
 }

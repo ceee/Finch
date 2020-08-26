@@ -55,7 +55,7 @@ namespace zero.Web.Controllers
     public async Task<IActionResult> Copy([FromBody] CopyModel model) => Json(await Api.Copy(model.Id, model.DestinationId, model.IncludeDescendants));
 
 
-    public async Task<IActionResult> Delete([FromQuery] string id, [FromQuery] bool moveToRecycleBin = false) => Json(await Api.Delete(id, moveToRecycleBin));
+    public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id, true));
 
 
     public class CopyModel

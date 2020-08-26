@@ -242,15 +242,32 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public async Task<int> DeleteByIds<T>(params string[] ids) where T : IZeroIdEntity
+    {
+      int successCount = 0;
+
+      foreach (string id in ids)
+      {
+        EntityResult<T> result = await DeleteById<T>(id);
+        successCount += result.IsSuccess ? 1 : 0;
+      }
+
+      return successCount;
+    }
+
+
+    /// <inheritdoc />
     public async Task Purge<T>(string querySuffix = null, Parameters parameters = null)
     {
       var collectionName = Raven.Conventions.FindCollectionName(typeof(T));
 
-      Operation operation = await Raven.Operations.SendAsync(new DeleteByQueryOperation(new IndexQuery()
+      var operationQuery = new DeleteByQueryOperation(new IndexQuery()
       {
-        Query = $"from {collectionName} {querySuffix ?? String.Empty}",
+        Query = $"from {collectionName} c {querySuffix ?? String.Empty}",
         QueryParameters = parameters
-      }));
+      });
+
+      Operation operation = await Raven.Operations.SendAsync(operationQuery);
 
       await operation.WaitForCompletionAsync(TimeSpan.FromSeconds(30));
     }
@@ -280,6 +297,11 @@ namespace zero.Core.Api
     /// Deletes an entity by Id
     /// </summary>
     Task<EntityResult<T>> DeleteById<T>(string id) where T : IZeroIdEntity;
+
+    /// <summary>
+    /// Deletes entities by Id
+    /// </summary>
+    Task<int> DeleteByIds<T>(params string[] ids) where T : IZeroIdEntity;
 
     /// <summary>
     /// Delete a whole collection (with an optional query suffix, i.e. a where statement)

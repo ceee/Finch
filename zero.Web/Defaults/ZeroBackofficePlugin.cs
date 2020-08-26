@@ -35,7 +35,8 @@ namespace zero.Web.Defaults
       services.AddTransient(typeof(IPagesApi<>), typeof(PagesApi<>));
       services.AddTransient(typeof(IPageTreeApi<>), typeof(PageTreeApi<>));
       services.AddTransient(typeof(IUserApi<>), typeof(UserApi<>));
-      services.AddTransient(typeof(IRecycleBinApi<>), typeof(RecycleBinApi<>));
+      services.AddTransient(typeof(IRecycleBinApi), typeof(RecycleBinApi));
+     // services.AddTransient(typeof(IRecycleBinApi), typeof(RecycleBinApi<RecycledEntity>));
 
       services.AddTransient<ISetupApi, SetupApi>();
       services.AddTransient<ISectionsApi, SectionsApi>();
