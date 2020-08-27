@@ -12,38 +12,38 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class LanguagesApi<T> : AppAwareBackofficeApi, ILanguagesApi<T> where T : ILanguage
+  public class LanguagesApi : AppAwareBackofficeApi, ILanguagesApi
   {
-    protected IValidator<T> Validator { get; private set; }
+    protected IValidator<ILanguage> Validator { get; private set; }
 
 
-    public LanguagesApi(IBackofficeStore store, IValidator<T> validator = null) : base(store)
+    public LanguagesApi(IBackofficeStore store) : base(store)
     {
       Scope.IncludeShared = true;
-      Validator = validator;
+      Validator = null;
     }
 
 
     /// <inheritdoc />
-    public async Task<T> GetById(string id)
+    public async Task<ILanguage> GetById(string id)
     {
-      return await GetById<T>(id);
+      return await GetById<ILanguage>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<string, T>> GetByIds(params string[] ids)
+    public async Task<Dictionary<string, ILanguage>> GetByIds(params string[] ids)
     {
-      return await GetByIds<T>(ids);
+      return await GetByIds<ILanguage>(ids);
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<T>> GetAll()
+    public async Task<IList<ILanguage>> GetAll()
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
 
-      return await session.Query<T>()
+      return await session.Query<ILanguage>()
         .Scope(Scope)
         .OrderByDescending(x => x.CreatedDate)
         .ToListAsync();
@@ -68,47 +68,47 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<T>> GetByQuery(ListQuery<T> query)
+    public async Task<ListResult<ILanguage>> GetByQuery(ListQuery<ILanguage> query)
     {
       query.SearchFor(entity => entity.Name);
 
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
 
-      return await session.Query<T>().Scope(Scope).ToQueriedListAsync(query);
+      return await session.Query<ILanguage>().Scope(Scope).ToQueriedListAsync(query);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Save(T model)
+    public async Task<EntityResult<ILanguage>> Save(ILanguage model)
     {
       return await SaveModel(model, Validator);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Delete(string id)
+    public async Task<EntityResult<ILanguage>> Delete(string id)
     {
-      return await DeleteById<T>(id);
+      return await DeleteById<ILanguage>(id);
     }
   }
 
 
-  public interface ILanguagesApi<T> where T : ILanguage
+  public interface ILanguagesApi
   {
     /// <summary>
     /// Get language by Id
     /// </summary>
-    Task<T> GetById(string id);
+    Task<ILanguage> GetById(string id);
 
     /// <summary>
     /// Get countries by ids
     /// </summary>
-    Task<Dictionary<string, T>> GetByIds(params string[] ids);
+    Task<Dictionary<string, ILanguage>> GetByIds(params string[] ids);
 
     /// <summary>
     /// Get all available languages
     /// </summary>
-    Task<IList<T>> GetAll();
+    Task<IList<ILanguage>> GetAll();
 
     /// <summary>
     /// Get all available cultures
@@ -118,16 +118,16 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all available languages (with query)
     /// </summary>
-    Task<ListResult<T>> GetByQuery(ListQuery<T> query);
+    Task<ListResult<ILanguage>> GetByQuery(ListQuery<ILanguage> query);
 
     /// <summary>
     /// Creates or updates a language
     /// </summary>
-    Task<EntityResult<T>> Save(T model);
+    Task<EntityResult<ILanguage>> Save(ILanguage model);
 
     /// <summary>
     /// Deletes a language by Id
     /// </summary>
-    Task<EntityResult<T>> Delete(string id);
+    Task<EntityResult<ILanguage>> Delete(string id);
   }
 }

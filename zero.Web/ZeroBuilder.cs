@@ -93,7 +93,6 @@ namespace zero.Web
       {
         Mvc.AddRazorRuntimeCompilation();
       }
-      Mvc.PartManager.FeatureProviders.Add(new ApiControllerFeatureProvider(Services));
 
 
       // configure Raven + Identity

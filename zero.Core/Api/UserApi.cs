@@ -9,38 +9,38 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class UserApi<T> : AppAwareBackofficeApi, IUserApi<T> where T : class, IUser
+  public class UserApi : AppAwareBackofficeApi, IUserApi
   {
-    protected UserManager<T> UserManager { get; private set; }
+    protected UserManager<User> UserManager { get; private set; }
 
-    public UserApi(IBackofficeStore store, UserManager<T> userManager) : base(store)
+    public UserApi(IBackofficeStore store, UserManager<User> userManager) : base(store)
     {
       UserManager = userManager;
     }
 
 
     /// <inheritdoc />
-    public async Task<T> GetUserById(string id)
+    public async Task<IUser> GetUserById(string id)
     {
-      T user = await UserManager.FindByIdAsync(id);
+      IUser user = await UserManager.FindByIdAsync(id);
       return user;
     }
 
 
     /// <inheritdoc />
-    public async Task<T> GetUserByEmail(string email)
+    public async Task<IUser> GetUserByEmail(string email)
     {
-      T user = await UserManager.FindByEmailAsync(email);
+      IUser user = await UserManager.FindByEmailAsync(email);
       return user;
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<T>> GetAll(string appId = null)
+    public async Task<IList<IUser>> GetAll(string appId = null)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<T>()
+        return await session.Query<IUser>()
           .Scope(appId)
           .OrderByDescending(x => x.CreatedDate)
           .ToListAsync();
@@ -49,13 +49,13 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<T>> GetByQuery(ListQuery<T> query, string appId = null)
+    public async Task<ListResult<IUser>> GetByQuery(ListQuery<IUser> query, string appId = null)
     {
       query.SearchSelector = user => user.Name;
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<T>()
+        return await session.Query<IUser>()
           .Scope(appId)
           .ToQueriedListAsync(query);
       }
@@ -63,37 +63,37 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Save(T model)
+    public async Task<EntityResult<IUser>> Save(IUser model)
     {
       return await SaveModel(model); //, new UserValidator<User>());
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Delete(string id)
+    public async Task<EntityResult<IUser>> Delete(string id)
     {
-      return await DeleteById<T>(id);
+      return await DeleteById<IUser>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> UpdatePassword(T user, string currentPassword, string newPassword)
+    public async Task<EntityResult<IUser>> UpdatePassword(IUser user, string currentPassword, string newPassword)
     {
       if (currentPassword.IsNullOrWhiteSpace() || newPassword.IsNullOrWhiteSpace())
       {
-        return EntityResult<T>.Fail(nameof(currentPassword), "@errors.changepassword.emptyfields");
+        return EntityResult<IUser>.Fail(nameof(currentPassword), "@errors.changepassword.emptyfields");
       }
 
       if (user == null)
       {
-        return EntityResult<T>.Fail("@errors.changepassword.nouser");
+        return EntityResult<IUser>.Fail("@errors.changepassword.nouser");
       }
 
-      IdentityResult identityResult = await UserManager.ChangePasswordAsync(user, currentPassword, newPassword);
+      IdentityResult identityResult = await UserManager.ChangePasswordAsync(user as User, currentPassword, newPassword);
 
       if (!identityResult.Succeeded)
       {
-        EntityResult<T> result = EntityResult<T>.Fail();
+        EntityResult<IUser> result = EntityResult<IUser>.Fail();
         
         foreach (IdentityError error in identityResult.Errors)
         {
@@ -103,19 +103,19 @@ namespace zero.Core.Api
         return result;
       }
 
-      return EntityResult<T>.Success(user);
+      return EntityResult<IUser>.Success(user);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Enable(T user)
+    public async Task<EntityResult<IUser>> Enable(IUser user)
     {
       return await UpdateActiveState(user, true);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Disable(T user)
+    public async Task<EntityResult<IUser>> Disable(IUser user)
     {
       return await UpdateActiveState(user, false);
     }
@@ -125,15 +125,15 @@ namespace zero.Core.Api
     /// Updates the active state of user.
     /// If IsActive=false, the user cannot login anymore
     /// </summary>
-    async Task<EntityResult<T>> UpdateActiveState(T user, bool isActive)
+    async Task<EntityResult<IUser>> UpdateActiveState(IUser user, bool isActive)
     {
       user.IsActive = isActive;
 
-      IdentityResult identityResult = await UserManager.UpdateAsync(user);
+      IdentityResult identityResult = await UserManager.UpdateAsync(user as User);
 
       if (!identityResult.Succeeded)
       {
-        EntityResult<T> result = EntityResult<T>.Fail();
+        EntityResult<IUser> result = EntityResult<IUser>.Fail();
 
         foreach (IdentityError error in identityResult.Errors)
         {
@@ -143,59 +143,59 @@ namespace zero.Core.Api
         return result;
       }
 
-      await UserManager.UpdateSecurityStampAsync(user);
+      await UserManager.UpdateSecurityStampAsync(user as User);
 
-      return EntityResult<T>.Success(user);
+      return EntityResult<IUser>.Success(user);
     }
   }
 
 
-  public interface IUserApi<T> : IAppAwareBackofficeApi where T : class, IUser
+  public interface IUserApi : IAppAwareBackofficeApi
   {
     /// <summary>
     /// Find user by id
     /// </summary>
-    Task<T> GetUserById(string id);
+    Task<IUser> GetUserById(string id);
 
     /// <summary>
     /// Find user by email
     /// </summary>
-    Task<T> GetUserByEmail(string email);  
+    Task<IUser> GetUserByEmail(string email);  
 
     /// <summary>
     /// Get all users for the selected application
     /// </summary>
-    Task<IList<T>> GetAll(string appId = null);
+    Task<IList<IUser>> GetAll(string appId = null);
 
     /// <summary>
     /// Get all available users (with query)
     /// </summary>
-    Task<ListResult<T>> GetByQuery(ListQuery<T> query, string appId = null);
+    Task<ListResult<IUser>> GetByQuery(ListQuery<IUser> query, string appId = null);
 
     /// <summary>
     /// Creates or updates a user
     /// </summary>
-    Task<EntityResult<T>> Save(T model);
+    Task<EntityResult<IUser>> Save(IUser model);
 
     /// <summary>
     /// Deletes a user
     /// </summary>
-    Task<EntityResult<T>> Delete(string id);
+    Task<EntityResult<IUser>> Delete(string id);
 
     /// <summary>
     /// Changes the password of the current user.
     /// User is logged out if this operation succeeds.
     /// </summary>
-    Task<EntityResult<T>> UpdatePassword(T user, string currentPassword, string newPassword);
+    Task<EntityResult<IUser>> UpdatePassword(IUser user, string currentPassword, string newPassword);
 
     /// <summary>
     /// Enables a user
     /// </summary>
-    Task<EntityResult<T>> Enable(T user);
+    Task<EntityResult<IUser>> Enable(IUser user);
 
     /// <summary>
     /// Disables a user
     /// </summary>
-    Task<EntityResult<T>> Disable(T user);
+    Task<EntityResult<IUser>> Disable(IUser user);
   }
 }

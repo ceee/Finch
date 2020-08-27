@@ -40,6 +40,7 @@ namespace zero.Web.Controllers
 
     public IActionResult GetEmpty(string type, string parent = null)
     {
+      // TODO this will return an instance of Page, but the subclass with type=$type is needed
       IPage entity = Blueprint.Clone();
       entity.PageTypeAlias = type;
       entity.ParentId = parent;

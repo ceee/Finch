@@ -2,25 +2,28 @@
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Core.Identity;
 
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Applications, PermissionsValue.Read)]
-  public class ApplicationsController<T> : BackofficeController where T : IApplication, new()
+  public class ApplicationsController : BackofficeController
   {
-    IApplicationsApi<T> Api;
+    IApplicationsApi Api;
+    IApplication Blueprint;
 
-    public ApplicationsController(IApplicationsApi<T> api)
+    public ApplicationsController(IApplicationsApi api, IApplication blueprint)
     {
       Api = api;
+      Blueprint = blueprint;
     }
 
 
     /// <summary>
     /// Get translation by id
     /// </summary>  
-    public IActionResult GetEmpty() => Edit(new T());
+    public IActionResult GetEmpty() => Edit(Blueprint.Clone());
 
 
     /// <summary>
@@ -32,7 +35,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get all translations
     /// </summary>    
-    public async Task<IActionResult> GetAll([FromQuery] ListQuery<T> query = null)
+    public async Task<IActionResult> GetAll([FromQuery] ListQuery<IApplication> query = null)
     {
       if (query == null)
       {
@@ -53,7 +56,7 @@ namespace zero.Web.Controllers
     /// Save translation
     /// </summary>
     [ZeroAuthorize(Permissions.Settings.Applications, PermissionsValue.Update)]
-    public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
+    public async Task<IActionResult> Save([FromBody] IApplication model) => Json(await Api.Save(model));
 
 
     /// <summary>

@@ -8,31 +8,31 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class ApplicationsApi<T> : BackofficeApi, IApplicationsApi<T> where T : IApplication
+  public class ApplicationsApi : BackofficeApi, IApplicationsApi
   {
-    IValidator<T> Validator;
+    IValidator<IApplication> Validator;
 
 
-    public ApplicationsApi(IBackofficeStore store, IValidator<T> validator) : base(store)
+    public ApplicationsApi(IBackofficeStore store) : base(store)
     {
-      Validator = validator;
+      Validator = null;
     }
 
 
     /// <inheritdoc />
-    public async Task<T> GetById(string id)
+    public async Task<IApplication> GetById(string id)
     {
-      return await GetById<T>(id);
+      return await GetById<IApplication>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<T>> GetAll()
+    public async Task<IList<IApplication>> GetAll()
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session
-          .Query<T>()
+          .Query<IApplication>()
           .OrderByDescending(x => x.CreatedDate)
           .ToListAsync();
       }
@@ -40,58 +40,58 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<T>> GetByQuery(ListQuery<T> query)
+    public async Task<ListResult<IApplication>> GetByQuery(ListQuery<IApplication> query)
     {
       query.SearchFor(entity => entity.Name);
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<T>()
+        return await session.Query<IApplication>()
           .ToQueriedListAsync(query);
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Save(T model)
+    public async Task<EntityResult<IApplication>> Save(IApplication model)
     {
       return await SaveModel(model, Validator);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Delete(string id)
+    public async Task<EntityResult<IApplication>> Delete(string id)
     {
-      return await DeleteById<T>(id);
+      return await DeleteById<IApplication>(id);
     }
   }
 
 
-  public interface IApplicationsApi<T> where T : IApplication
+  public interface IApplicationsApi
   {
     /// <summary>
     /// Get application by Id
     /// </summary>
-    Task<T> GetById(string id);
+    Task<IApplication> GetById(string id);
 
     /// <summary>
     /// Get all available zero applications
     /// </summary>
-    Task<IList<T>> GetAll();
+    Task<IList<IApplication>> GetAll();
 
     /// <summary>
     /// Get all available applications (with query)
     /// </summary>
-    Task<ListResult<T>> GetByQuery(ListQuery<T> query);
+    Task<ListResult<IApplication>> GetByQuery(ListQuery<IApplication> query);
 
     /// <summary>
     /// Creates or updates a application
     /// </summary>
-    Task<EntityResult<T>> Save(T model);
+    Task<EntityResult<IApplication>> Save(IApplication model);
 
     /// <summary>
     /// Deletes a application by Id
     /// </summary>
-    Task<EntityResult<T>> Delete(string id);
+    Task<EntityResult<IApplication>> Delete(string id);
   }
 }

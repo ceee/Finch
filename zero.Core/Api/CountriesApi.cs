@@ -11,38 +11,38 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class CountriesApi<T> : AppAwareBackofficeApi, ICountriesApi<T> where T : ICountry
+  public class CountriesApi : AppAwareBackofficeApi, ICountriesApi
   {
-    IValidator<T> Validator;
+    IValidator<ICountry> Validator;
 
 
-    public CountriesApi(IBackofficeStore store, IValidator<T> validator) : base(store)
+    public CountriesApi(IBackofficeStore store) : base(store)
     {
       Scope.IncludeShared = true;
-      Validator = validator;
+      Validator = null;
     }
 
 
     /// <inheritdoc />
-    public async Task<T> GetById(string id)
+    public async Task<ICountry> GetById(string id)
     {
-      return await GetById<T>(id);
+      return await GetById<ICountry>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<string, T>> GetByIds(params string[] ids)
+    public async Task<Dictionary<string, ICountry>> GetByIds(params string[] ids)
     {
-      return await GetByIds<T>(ids);
+      return await GetByIds<ICountry>(ids);
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<T>> GetAll(string languageId)
+    public async Task<IList<ICountry>> GetAll(string languageId)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<T>()
+        return await session.Query<ICountry>()
           .Scope(Scope)
           .Where(x => x.LanguageId == languageId)
           .OrderByDescending(x => x.IsPreferred)
@@ -53,13 +53,13 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<T>> GetByQuery(string languageId, ListQuery<T> query)
+    public async Task<ListResult<ICountry>> GetByQuery(string languageId, ListQuery<ICountry> query)
     {
       query.SearchSelector = country => country.Name;
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<T>()
+        return await session.Query<ICountry>()
           .Scope(Scope)
           .Where(x => x.LanguageId == languageId)
           .OrderByDescending(x => x.IsPreferred)
@@ -70,50 +70,50 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Save(T model)
+    public async Task<EntityResult<ICountry>> Save(ICountry model)
     {
       return await SaveModel(model, Validator);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Delete(string id)
+    public async Task<EntityResult<ICountry>> Delete(string id)
     {
-      return await DeleteById<T>(id);
+      return await DeleteById<ICountry>(id);
     }
   }
 
 
-  public interface ICountriesApi<T> where T : ICountry
+  public interface ICountriesApi
   {
     /// <summary>
     /// Get country by Id
     /// </summary>
-    Task<T> GetById(string id);
+    Task<ICountry> GetById(string id);
 
     /// <summary>
     /// Get countries by ids
     /// </summary>
-    Task<Dictionary<string, T>> GetByIds(params string[] ids);
+    Task<Dictionary<string, ICountry>> GetByIds(params string[] ids);
 
     /// <summary>
     /// Get all available countries
     /// </summary>
-    Task<IList<T>> GetAll(string languageId);
+    Task<IList<ICountry>> GetAll(string languageId);
 
     /// <summary>
     /// Get all available countries (with query)
     /// </summary>
-    Task<ListResult<T>> GetByQuery(string languageId, ListQuery<T> query);
+    Task<ListResult<ICountry>> GetByQuery(string languageId, ListQuery<ICountry> query);
 
     /// <summary>
     /// Creates or updates a country
     /// </summary>
-    Task<EntityResult<T>> Save(T model);
+    Task<EntityResult<ICountry>> Save(ICountry model);
 
     /// <summary>
     /// Deletes a country by Id
     /// </summary>
-    Task<EntityResult<T>> Delete(string id);
+    Task<EntityResult<ICountry>> Delete(string id);
   }
 }

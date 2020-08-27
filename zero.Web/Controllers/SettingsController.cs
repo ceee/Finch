@@ -14,10 +14,10 @@ namespace zero.Web.Controllers
   {
     IAuthenticationApi AuthApi;
 
-    IApplicationsApi<Application> ApplicationsApi;
+    IApplicationsApi ApplicationsApi;
 
 
-    public SettingsController(IAuthenticationApi authApi, IApplicationsApi<Application> applicationsApi)
+    public SettingsController(IAuthenticationApi authApi, IApplicationsApi applicationsApi)
     {
       AuthApi = authApi;
       ApplicationsApi = applicationsApi;
@@ -68,7 +68,7 @@ namespace zero.Web.Controllers
         }
       }
 
-      IList<Application> applications = new List<Application>();
+      IList<IApplication> applications = new List<IApplication>();
 
       if (Permission.CanReadKey(permissions, Permissions.Settings.Applications, false))
       {

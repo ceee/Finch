@@ -4,27 +4,28 @@ using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Core.Identity;
-using zero.Web.Filters;
 
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Read)]
-  public class LanguagesController<T> : BackofficeController where T : ILanguage, new()
+  public class LanguagesController : BackofficeController
   {
-    ILanguagesApi<T> Api;
+    ILanguagesApi Api;
+    ILanguage Blueprint;
 
-
-    public LanguagesController(ILanguagesApi<T> api)
+    public LanguagesController(ILanguagesApi api, ILanguage blueprint)
     {
       Api = api;
+      Blueprint = blueprint;
     }
 
 
     /// <summary>
     /// Get empty language model
     /// </summary>  
-    public IActionResult GetEmpty() => Edit(new T());
+    public IActionResult GetEmpty() => Edit(Blueprint.Clone());
 
 
     /// <summary>
@@ -36,7 +37,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get all languages
     /// </summary>    
-    public async Task<IActionResult> GetAll([FromQuery] ListQuery<T> query) => Json(await Api.GetByQuery(query));
+    public async Task<IActionResult> GetAll([FromQuery] ListQuery<ILanguage> query) => Json(await Api.GetByQuery(query));
 
 
     /// <summary>
@@ -74,7 +75,7 @@ namespace zero.Web.Controllers
     /// Save language
     /// </summary>
     [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Update)]
-    public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
+    public async Task<IActionResult> Save([FromBody] ILanguage model) => Json(await Api.Save(model));
 
 
     /// <summary>

@@ -27,7 +27,7 @@ namespace zero.Web
 
     protected IWebHostEnvironment Environment { get; private set; }
 
-    protected IApplicationsApi<Application> ApplicationsApi { get; private set; }
+    protected IApplicationsApi ApplicationsApi { get; private set; }
 
     protected IAuthenticationApi AuthenticationApi { get; private set; }
 
@@ -38,7 +38,7 @@ namespace zero.Web
     protected IApplicationContext AppContext { get; private set; }
 
 
-    public ZeroVue(IZeroOptions options, IWebHostEnvironment env, IApplicationsApi<Application> applicationsApi, IAuthenticationApi authenticationApi, IMapper mapper, IEnumerable<IZeroPlugin> plugins, IApplicationContext appContext)
+    public ZeroVue(IZeroOptions options, IWebHostEnvironment env, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IMapper mapper, IEnumerable<IZeroPlugin> plugins, IApplicationContext appContext)
     {
       Environment = env;
       Options = options;
@@ -219,7 +219,7 @@ namespace zero.Web
     /// </summary>
     async Task<List<ZeroVueApplication>> CreateApplications()
     {
-      IList<Application> applications = await ApplicationsApi.GetAll();
+      IList<IApplication> applications = await ApplicationsApi.GetAll();
 
       return applications.OrderBy(app => app.Sort).Select(app => new ZeroVueApplication()
       {

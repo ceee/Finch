@@ -31,7 +31,12 @@ namespace zero.Core.Extensions
       {
         IEnumerable<(Type, TypeInfo)> matches = AssemblyDiscovery.Current.GetAllClassTypes().SelectMany(type =>
         {
-          IEnumerable<Type> genericTypes = type.GetInterfaces().Select(x => x.GetTypeInfo()).Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == serviceType);
+          var interfaces = type.GetInterfaces().Select(x => x.GetTypeInfo());
+          IEnumerable<Type> genericTypes = interfaces.Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == serviceType);
+          if (genericTypes.Any())
+          {
+            var genericTypeDefinitions = genericTypes.First();
+          }
           return genericTypes.Select(x => (x, type));
         });
 

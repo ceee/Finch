@@ -10,37 +10,9 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class TranslationsApiFacade : ITranslationsApiFacade
+  public class TranslationsApi : AppAwareBackofficeApi, ITranslationsApi
   {
-    IServiceProvider Services;
-
-    public TranslationsApiFacade(IServiceProvider services)
-    {
-      Services = services;
-    }
-
-    public ITranslationsApi<T> As<T>() where T : ITranslation
-    {
-      return Services.GetService(typeof(ITranslationsApi<T>)) as ITranslationsApi<T>;
-    }
-  }
-
-
-  public interface ITranslationsApiFacade
-  {
-    ITranslationsApi<T> As<T>() where T : ITranslation;
-  }
-
-
-  public class TranslationsApi : TranslationsApi<ITranslation>, ITranslationsApi
-  {
-    public TranslationsApi(IBackofficeStore store) : base(store) { }
-  }
-
-
-  public class TranslationsApi<T> : AppAwareBackofficeApi, ITranslationsApi<T> where T : ITranslation
-  {
-    //IValidator<T> Validator;
+    //IValidator<ITranslation> Validator;
 
 
     public TranslationsApi(IBackofficeStore store) : base(store)
@@ -52,23 +24,23 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<string> GetStringById(string id)
     {
-      return (await GetById<T>(id))?.Value;
+      return (await GetById<ITranslation>(id))?.Value;
     }
 
 
     /// <inheritdoc />
-    public async Task<T> GetById(string id)
+    public async Task<ITranslation> GetById(string id)
     {
-      return await GetById<T>(id);
+      return await GetById<ITranslation>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<T>> GetAll()
+    public async Task<IList<ITranslation>> GetAll()
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<T>()
+        return await session.Query<ITranslation>()
           .OrderByDescending(x => x.CreatedDate)
           .Scope(Scope)
           .ToListAsync();
@@ -77,38 +49,38 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<T>> GetByQuery(ListQuery<T> query)
+    public async Task<ListResult<ITranslation>> GetByQuery(ListQuery<ITranslation> query)
     {
       query.SearchFor(entity => entity.Key, entity => entity.Value);
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<T>().Scope(Scope).ToQueriedListAsync(query);
+        return await session.Query<ITranslation>().Scope(Scope).ToQueriedListAsync(query);
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Save(T model)
+    public async Task<EntityResult<ITranslation>> Save(ITranslation model)
     {
       return await SaveModel(model, null);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Delete(string id)
+    public async Task<EntityResult<ITranslation>> Delete(string id)
     {
-      return await DeleteById<T>(id);
+      return await DeleteById<ITranslation>(id);
     }
   }
 
 
-  public interface ITranslationsApi<T> where T : ITranslation
+  public interface ITranslationsApi
   {
     /// <summary>
     /// Get translation by id
     /// </summary>
-    Task<T> GetById(string id);
+    Task<ITranslation> GetById(string id);
 
     /// <summary>
     /// Get a translated string by id
@@ -118,27 +90,21 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all available translations
     /// </summary>
-    Task<IList<T>> GetAll();
+    Task<IList<ITranslation>> GetAll();
 
     /// <summary>
     /// Get all available translations (with query)
     /// </summary>
-    Task<ListResult<T>> GetByQuery(ListQuery<T> query);
+    Task<ListResult<ITranslation>> GetByQuery(ListQuery<ITranslation> query);
 
     /// <summary>
     /// Creates or updates a translation
     /// </summary>
-    Task<EntityResult<T>> Save(T model);
+    Task<EntityResult<ITranslation>> Save(ITranslation model);
 
     /// <summary>
     /// Deletes a translation by id
     /// </summary>
-    Task<EntityResult<T>> Delete(string id);
-  }
-
-
-  public interface ITranslationsApi : ITranslationsApi<ITranslation>
-  {
-
+    Task<EntityResult<ITranslation>> Delete(string id);
   }
 }

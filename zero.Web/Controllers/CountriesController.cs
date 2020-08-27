@@ -5,28 +5,31 @@ using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Core.Identity;
 
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Read)]
-  public class CountriesController<T> : BackofficeController where T : ICountry, new()
+  public class CountriesController : BackofficeController
   {
-    ICountriesApi<T> Api;
+    ICountriesApi Api;
+    ICountry Blueprint;
 
-    public CountriesController(ICountriesApi<T> api)
+    public CountriesController(ICountriesApi api, ICountry blueprint)
     {
       Api = api;
+      Blueprint = blueprint;
     }
 
 
     public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
 
-    public IActionResult GetEmpty() => Edit(new T());
+    public IActionResult GetEmpty() => Edit(Blueprint.Clone());
 
 
-    public async Task<IActionResult> GetAll([FromQuery] ListQuery<T> query) => Json(await Api.GetByQuery("languages.1-A", query)); // TODO correct language
+    public async Task<IActionResult> GetAll([FromQuery] ListQuery<ICountry> query) => Json(await Api.GetByQuery("languages.1-A", query)); // TODO correct language
 
 
     public async Task<IActionResult> GetForPicker() => Json((await Api.GetAll("languages.1-A")).Select(x => new SelectModel()
@@ -49,7 +52,7 @@ namespace zero.Web.Controllers
 
 
     [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Update)]
-    public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
+    public async Task<IActionResult> Save([FromBody] ICountry model) => Json(await Api.Save(model));
 
 
     [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Update)]

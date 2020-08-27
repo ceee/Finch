@@ -1,4 +1,6 @@
-﻿namespace zero.Core.Entities
+﻿using zero.Core.Attributes;
+
+namespace zero.Core.Entities
 {
   public class Country : ZeroEntity, ICountry
   {
@@ -16,6 +18,7 @@
   }
 
 
+  [Collection("Countries")]
   public interface ICountry : IZeroEntity, IAppAwareShareableEntity, ILanguageAwareEntity, IZeroDbConventions
   {
     /// <summary>

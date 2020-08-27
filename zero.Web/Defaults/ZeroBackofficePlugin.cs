@@ -7,6 +7,7 @@ using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Options;
 using zero.Core.Plugins;
+using zero.Core.Validation;
 using zero.Web.Mapper;
 using zero.Web.Sections;
 
@@ -20,24 +21,19 @@ namespace zero.Web.Defaults
       services.AddAll(typeof(IValidator), ServiceLifetime.Scoped);
 
       services.AddTransient<IApplication, Application>();
+      //services.AddTransient<IValidator<IApplication>, ApplicationValidator>();
       services.AddTransient<ICountry, Country>();
       services.AddTransient<ILanguage, Language>();
       services.AddTransient<ITranslation, Translation>();
       services.AddTransient<IPage, Page>();
       services.AddTransient<IRecycledEntity, RecycledEntity>();
 
-      services.AddTransient(typeof(IApplicationsApi<>), typeof(ApplicationsApi<>));
-      services.AddTransient(typeof(ICountriesApi<>), typeof(CountriesApi<>));
-      services.AddTransient(typeof(ILanguagesApi<>), typeof(LanguagesApi<>));
-      services.AddTransient(typeof(ITranslationsApi), typeof(TranslationsApi));
-      services.AddTransient(typeof(ITranslationsApi<>), typeof(TranslationsApi<>));
-      services.AddTransient(typeof(ITranslationsApiFacade), typeof(TranslationsApiFacade));
-      //services.AddTransient(typeof(IPagesApi<>), typeof(PagesApi<>));
-      //services.AddTransient(typeof(IPageTreeApi<>), typeof(PageTreeApi<>));
-      services.AddTransient(typeof(IUserApi<>), typeof(UserApi<>));
-      services.AddTransient(typeof(IRecycleBinApi), typeof(RecycleBinApi));
-      // services.AddTransient(typeof(IRecycleBinApi), typeof(RecycleBinApi<RecycledEntity>));
 
+      services.AddTransient<IApplicationsApi, ApplicationsApi>();
+      services.AddTransient<ICountriesApi, CountriesApi>();
+      services.AddTransient<ILanguagesApi, LanguagesApi>();
+      services.AddTransient<ITranslationsApi, TranslationsApi>();
+      services.AddTransient<IUserApi, UserApi>();
       services.AddTransient<IPagesApi, PagesApi>();
       services.AddTransient<IPageTreeApi, PageTreeApi>();
 
@@ -54,6 +50,7 @@ namespace zero.Web.Defaults
       services.AddTransient<IMediaFolderApi, MediaFolderApi>();
       services.AddTransient<IMediaUploadApi, MediaUploadApi>();
       services.AddTransient<IModulesApi, ModulesApi>();
+      services.AddTransient<IRecycleBinApi, RecycleBinApi>();
     }
     
     public void Configure(IZeroPluginOptions plugin, IZeroOptions zero)
