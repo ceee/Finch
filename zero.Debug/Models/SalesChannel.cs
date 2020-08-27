@@ -1,9 +1,9 @@
-﻿//using zero.Commerce.Entities;
+﻿using zero.Commerce.Entities;
 
-//namespace zero.Debug.Models
-//{
-//  public class SalesChannel : Channel
-//  {
-//    public string Description { get; set; }
-//  }
-//}
+namespace zero.Debug.Models
+{
+  public class SalesChannel : Channel
+  {
+    public string Description { get; set; }
+  }
+}

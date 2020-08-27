@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
+using zero.Commerce.Entities;
 using zero.Core;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Core.Options;
 using zero.Core.Plugins;
+using zero.Debug.Models;
 using zero.Debug.TestData;
 
 namespace zero.TestData
@@ -41,6 +44,7 @@ namespace zero.TestData
 
     public void ConfigureServices(IServiceCollection services)
     {
+      //services.Replace<IChannel, SalesChannel>();
       services.AddTransient<ITestService, TestService>();
     }
   }
