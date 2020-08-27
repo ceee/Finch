@@ -9,9 +9,11 @@ using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Utils;
+using zero.Web.Filters;
 
 namespace zero.Debug.Controllers
 {
+  [ServiceFilter(typeof(ModelStateValidationFilterAttribute))]
   public class TestController : Controller
   {
     private readonly IActionDescriptorCollectionProvider _actionDescriptorCollectionProvider;
@@ -73,6 +75,10 @@ namespace zero.Debug.Controllers
       IRecycledEntity entity = blueprint.Clone();
       return Json(entity);
     }
+
+
+    [HttpPost]
+    public IActionResult SaveTest([FromBody] IPage model) => Json(model);
 
 
 

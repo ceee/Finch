@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using zero.Core.Attributes;
 
 namespace zero.Core.Entities

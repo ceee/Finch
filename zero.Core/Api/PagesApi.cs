@@ -13,7 +13,7 @@ using zero.Core.Options;
 
 namespace zero.Core.Api
 {
-  public class PagesApi<T> : AppAwareBackofficeApi, IPagesApi<T> where T : IPage
+  public class PagesApi : AppAwareBackofficeApi, IPagesApi
   {
     const string RECYCLE_BIN_GROUP = "pages";
 
@@ -30,10 +30,9 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<T> GetById(string id)
+    public async Task<IPage> GetById(string id)
     {
-      var res = await GetById<IPage>(id); // this works
-      return await GetById<T>(id);
+      return await GetById<IPage>(id);
     }
 
 
@@ -79,16 +78,16 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Save(T model)
+    public async Task<EntityResult<IPage>> Save(IPage model)
     {
       return await SaveModel(model, null);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> SaveSorting(string[] sortedIds)
+    public async Task<EntityResult<IPage>> SaveSorting(string[] sortedIds)
     {
-      Dictionary<string, T> items = await GetByIds<T>(sortedIds);
+      Dictionary<string, IPage> items = await GetByIds<IPage>(sortedIds);
       uint index = 0;
 
       // TODO check if all items are valid
@@ -108,23 +107,23 @@ namespace zero.Core.Api
         await session.SaveChangesAsync();
       }
 
-      return EntityResult<T>.Success();
+      return EntityResult<IPage>.Success();
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Move(string id, string parentId)
+    public async Task<EntityResult<IPage>> Move(string id, string parentId)
     {
-      T model = await GetById<T>(id);
+      IPage model = await GetById<IPage>(id);
       model.ParentId = parentId;
       return await Save(model);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Copy(string id, string destinationId, bool includeDescendants = false)
+    public async Task<EntityResult<IPage>> Copy(string id, string destinationId, bool includeDescendants = false)
     {
-      T model = await GetById<T>(id);
+      IPage model = await GetById<IPage>(id);
 
       string baseId = model.Id;
 
@@ -143,7 +142,7 @@ namespace zero.Core.Api
         {
           Pages_WithChildren.Result childrenResult = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
             .ProjectInto<Pages_WithChildren.Result>()
-            .Include<Pages_WithChildren.Result, T>(x => x.Id)
+            .Include<Pages_WithChildren.Result, IPage>(x => x.Id)
             .Scope(Scope)
             .Where(x => x.Id == oldParentId)
             .FirstOrDefaultAsync();
@@ -153,11 +152,11 @@ namespace zero.Core.Api
             return;
           }
 
-          Dictionary<string, T> childrenPages = await session.LoadAsync<T>(childrenResult.ChildrenIds);
+          Dictionary<string, IPage> childrenPages = await session.LoadAsync<IPage>(childrenResult.ChildrenIds);
 
           foreach (var child in childrenPages)
           {
-            T childPage = child.Value.Clone();
+            IPage childPage = child.Value.Clone();
             childPage.Id = null;
             childPage.IsActive = false;
             childPage.ParentId = newParentId;
@@ -178,14 +177,14 @@ namespace zero.Core.Api
         await session.SaveChangesAsync();
       }
 
-      return EntityResult<T>.Success(model);
+      return EntityResult<IPage>.Success(model);
     }
 
 
     /// <inheritdoc />
     public async Task<EntityResult<string[]>> Delete(string id, bool moveToRecycleBin = true)
     {
-      IList<T> pages = await GetByIdWithDescendants(id);
+      IList<IPage> pages = await GetByIdWithDescendants(id);
       string[] ids = pages.Select(x => x.Id).ToArray();
 
       if (moveToRecycleBin)
@@ -193,7 +192,7 @@ namespace zero.Core.Api
         await RecycleBinApi.Add(pages, RECYCLE_BIN_GROUP);
       }
 
-      await DeleteByIds<T>(ids);
+      await DeleteByIds<IPage>(ids);
 
       return EntityResult<string[]>.Success(ids);
     }
@@ -268,11 +267,11 @@ namespace zero.Core.Api
     /// <summary>
     /// Get a page with all its descendants
     /// </summary>
-    async Task<List<T>> GetByIdWithDescendants(string id)
+    async Task<List<IPage>> GetByIdWithDescendants(string id)
     {
-      List<T> items = new List<T>();
+      List<IPage> items = new List<IPage>();
 
-      T model = await GetById<T>(id);
+      IPage model = await GetById<IPage>(id);
 
       if (model == null)
       {
@@ -288,7 +287,7 @@ namespace zero.Core.Api
         {
           Pages_WithChildren.Result childrenResult = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
             .ProjectInto<Pages_WithChildren.Result>()
-            .Include<Pages_WithChildren.Result, T>(x => x.Id)
+            .Include<Pages_WithChildren.Result, IPage>(x => x.Id)
             .Scope(Scope)
             .Where(x => x.Id == parentId)
             .FirstOrDefaultAsync();
@@ -298,7 +297,7 @@ namespace zero.Core.Api
             return;
           }
 
-          Dictionary<string, T> childrenPages = await session.LoadAsync<T>(childrenResult.ChildrenIds);
+          Dictionary<string, IPage> childrenPages = await session.LoadAsync<IPage>(childrenResult.ChildrenIds);
 
           foreach (var child in childrenPages)
           {
@@ -315,12 +314,12 @@ namespace zero.Core.Api
   }
 
 
-  public interface IPagesApi<T> where T : IPage
+  public interface IPagesApi
   {
     /// <summary>
     /// Get page by Id
     /// </summary>
-    Task<T> GetById(string id);
+    Task<IPage> GetById(string id);
 
     /// <summary>
     /// Get all available page types
@@ -340,22 +339,22 @@ namespace zero.Core.Api
     /// <summary>
     /// Creates or updates a page
     /// </summary>
-    Task<EntityResult<T>> Save(T model);
+    Task<EntityResult<IPage>> Save(IPage model);
 
     /// <summary>
     /// Update sorting of pages on a specific level
     /// </summary>
-    Task<EntityResult<T>> SaveSorting(string[] sortedIds);
+    Task<EntityResult<IPage>> SaveSorting(string[] sortedIds);
 
     /// <summary>
     /// Move a page to a new parent
     /// </summary>
-    Task<EntityResult<T>> Move(string id, string parentId);
+    Task<EntityResult<IPage>> Move(string id, string parentId);
 
     /// <summary>
     /// Copies a page (with optional descendants) to a new location
     /// </summary>
-    Task<EntityResult<T>> Copy(string id, string destinationId, bool includeDescendants = false);
+    Task<EntityResult<IPage>> Copy(string id, string destinationId, bool includeDescendants = false);
 
     /// <summary>
     /// Deletes a page by Id (with all it's descendants)

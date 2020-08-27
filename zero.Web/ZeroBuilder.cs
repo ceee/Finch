@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
 using System;
@@ -42,7 +45,10 @@ namespace zero.Web
     public ZeroBuilder(IServiceCollection services, IConfiguration configuration, Action<IZeroStartupOptions> setupAction)
     {
       Services = services;
-      Mvc = services.AddMvc();
+      Mvc = services.AddMvc(opts =>
+      {
+        //opts.ModelBinderProviders.Insert(0, new ZeroEntityInterfaceBinderProvider());
+      });
       Configuration = configuration;
 
       // create startup options
@@ -74,7 +80,15 @@ namespace zero.Web
 
 
       // configure MVC
-      Mvc.AddNewtonsoftJson();
+      Mvc.AddNewtonsoftJson(x =>
+      {
+        // TODO this shall only be configurated for backoffice controllers
+        x.SerializerSettings.Converters.Add(new IsoDateTimeConverter() { DateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'" });
+        x.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+        x.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        x.SerializerSettings.TypeNameHandling = TypeNameHandling.Objects;
+      });
       if (Environment.GetEnvironmentVariable("DOTNET_WATCH") == "1")
       {
         Mvc.AddRazorRuntimeCompilation();

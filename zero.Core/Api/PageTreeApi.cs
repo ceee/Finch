@@ -12,7 +12,7 @@ using zero.Core.Options;
 
 namespace zero.Core.Api
 {
-  public class PageTreeApi<T> : AppAwareBackofficeApi, IPageTreeApi<T> where T : IPage
+  public class PageTreeApi : AppAwareBackofficeApi, IPageTreeApi
   {
     public PageTreeApi(IBackofficeStore store) : base(store) { }
 
@@ -26,8 +26,8 @@ namespace zero.Core.Api
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        IList<T> pages = await session
-          .Query<T>()
+        IList<IPage> pages = await session
+          .Query<IPage>()
           .Scope(Scope)
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .ToListAsync();
@@ -60,7 +60,7 @@ namespace zero.Core.Api
 
 
         // build tree
-        foreach (T page in pages)
+        foreach (IPage page in pages)
         {
           PageType pageType = pageTypes.FirstOrDefault(x => x.Alias == page.PageTypeAlias);
 
@@ -112,7 +112,7 @@ namespace zero.Core.Api
   }
 
 
-  public interface IPageTreeApi<T> where T : IPage
+  public interface IPageTreeApi
   {
     /// <summary>
     /// Get all children for the current parent page (or root if empty)

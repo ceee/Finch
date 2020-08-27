@@ -5,11 +5,11 @@ using zero.Core.Entities;
 
 namespace zero.Web.Controllers
 {
-  public class PageTreeController<T> : BackofficeController where T : IPage
+  public class PageTreeController : BackofficeController
   {
-    IPageTreeApi<T> Api;
+    IPageTreeApi Api;
 
-    public PageTreeController(IPageTreeApi<T> api)
+    public PageTreeController(IPageTreeApi api)
     {
       Api = api;
     }

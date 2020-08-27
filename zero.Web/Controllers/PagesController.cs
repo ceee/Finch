@@ -2,19 +2,22 @@
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
-  public class PagesController<T> : BackofficeController where T : IPage, new()
+  public class PagesController : BackofficeController
   {
-    IPagesApi<T> Api;
+    IPagesApi Api;
     IRevisionsApi RevisionsApi;
+    IPage Blueprint;
 
-    public PagesController(IPagesApi<T> api, IRevisionsApi revisionsApi)
+    public PagesController(IPagesApi api, IRevisionsApi revisionsApi, IPage blueprint)
     {
       Api = api;
       RevisionsApi = revisionsApi;
+      Blueprint = blueprint;
     }
 
 
@@ -25,25 +28,28 @@ namespace zero.Web.Controllers
 
     public async Task<IActionResult> GetById([FromQuery] string id)
     {
-      T entity = await Api.GetById(id);
+      IPage entity = await Api.GetById(id);
 
-      return Edit<T, PageEditModel<T>>(new PageEditModel<T>()
+      return Edit<IPage, PageEditModel<IPage>>(new PageEditModel<IPage>()
       {
         Entity = entity,
-        Revisions = await RevisionsApi.GetPaged<T>(id),
+        Revisions = await RevisionsApi.GetPaged<IPage>(id),
         PageType = Api.GetPageType(entity.PageTypeAlias)
       });
     }
 
-    public IActionResult GetEmpty(string type, string parent = null) => Edit(new T()
+    public IActionResult GetEmpty(string type, string parent = null)
     {
-      PageTypeAlias = type,
-      ParentId = parent
-    });
+      IPage entity = Blueprint.Clone();
+      entity.PageTypeAlias = type;
+      entity.ParentId = parent;
 
-    public async Task<IActionResult> GetRevisions([FromQuery] string id, [FromQuery] int page = 1) => Json(await RevisionsApi.GetPaged<T>(id, page));
+      return Edit(entity);
+    }
 
-    public async Task<IActionResult> Save([FromBody] T model) => Json(await Api.Save(model));
+    public async Task<IActionResult> GetRevisions([FromQuery] string id, [FromQuery] int page = 1) => Json(await RevisionsApi.GetPaged<IPage>(id, page));
+
+    public async Task<IActionResult> Save([FromBody] IPage model) => Json(await Api.Save(model));
 
     [HttpPost]
     public async Task<IActionResult> SaveSorting([FromBody] string[] ids) => Json(await Api.SaveSorting(ids));

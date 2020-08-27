@@ -28,30 +28,14 @@ namespace zero.Web.Controllers
     protected IZeroOptions Options => _options ?? (_options = HttpContext?.RequestServices?.GetService<IZeroOptions>());
     protected IToken Token => _token ?? (_token = HttpContext?.RequestServices?.GetService<IToken>());
 
-    static JsonSerializerSettings JsonSettings;
-    static JsonSerializerSettings TypedJsonSettings;
-
     static Type AppAwareType = typeof(IAppAwareEntity);
     static Type AppAwareShareableType = typeof(IAppAwareShareableEntity);
 
 
-    static BackofficeController()
-    {
-      JsonSettings = new BackofficeJsonSerlializerSettings(false);
-      TypedJsonSettings = new BackofficeJsonSerlializerSettings(true);
-    }
-
-
     /// <summary>
     /// Creates a Microsoft.AspNetCore.Mvc.JsonResult object that serializes the specified data object to JSON.
     /// </summary>
-    public override JsonResult Json(object data) => Json(data, false);
-
-
-    /// <summary>
-    /// Creates a Microsoft.AspNetCore.Mvc.JsonResult object that serializes the specified data object to JSON.
-    /// </summary>
-    public JsonResult Json(object data, bool typed) => Json(data, typed ? TypedJsonSettings : JsonSettings);
+    public JsonResult Json(object data, bool typed) => Json(data);
 
 
     /// <summary>
