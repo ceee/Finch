@@ -1,6 +1,8 @@
 ﻿<template>
   <div class="ui-modules-inner">
-    <ui-module-preview v-for="item in items" :key="item.id" :types="moduleTypes" :value="item" @edit="edit" @remove="remove" />
+    <div v-if="items.length" class="ui-modules-inner-sortable" v-sortable="{ onUpdate: onSortingUpdated }">
+      <ui-module-preview v-for="item in items" :key="item.id" :types="moduleTypes" :value="item" @edit="edit" @remove="remove" />
+    </div>
     <ui-modules-select ref="moduleSelect" :types="moduleTypes" :value="value" v-if="canAdd" @selected="onAdd" />
   </div>
 </template>
@@ -67,6 +69,15 @@
       onAdd(module)
       {
         this.edit(module, null, true);
+      },
+
+
+      onSortingUpdated(ev)
+      {
+        this.items = Arrays.move(this.items, ev.oldIndex, ev.newIndex);
+        let sort = 0;
+        this.items.forEach(x => x.sort = sort++);
+        this.onChange();
       },
 
 
@@ -138,7 +149,7 @@
   }
 
   .ui-module-item + .ui-module-item,
-  .ui-module-item + .ui-modules-start
+  .ui-modules-inner-sortable + .ui-modules-start
   {
     margin-top: 3px;
   }
