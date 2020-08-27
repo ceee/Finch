@@ -51,7 +51,7 @@ namespace zero.Core.Api
 
       if (parentId.IsNullOrEmpty())
       {
-        return types.Where(x => x.AllowAsRoot).ToList();
+        return types.Where(x => x.AllowAsRoot || x.OnlyAtRoot).ToList();
       }
 
       Page page = await GetById<Page>(parentId);
@@ -64,10 +64,10 @@ namespace zero.Core.Api
 
       if (pageType.AllowAllChildrenTypes)
       {
-        return types.ToList();
+        return types.Where(x => !x.OnlyAtRoot).ToList();
       }
 
-      return types.Where(x => pageType.AllowedChildrenTypes.Contains(x.Alias)).ToList();
+      return types.Where(x => !x.OnlyAtRoot && pageType.AllowedChildrenTypes.Contains(x.Alias)).ToList();
     }
 
 

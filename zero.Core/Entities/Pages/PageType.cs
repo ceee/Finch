@@ -48,6 +48,11 @@ namespace zero.Core.Entities
     public bool AllowAsRoot { get; set; }
 
     /// <summary>
+    /// This page type is only allowed at the root level (ignoring other properties)
+    /// </summary>
+    public bool OnlyAtRoot { get; set; }
+
+    /// <summary>
     /// Whether all page types can be created as children of this type
     /// </summary>
     public bool AllowAllChildrenTypes { get; set; }
@@ -73,7 +78,8 @@ namespace zero.Core.Entities
         Icon = model.Icon,
         AllowAllChildrenTypes = model.AllowAllChildrenTypes,
         AllowedChildrenTypes = model.AllowedChildrenTypes,
-        AllowAsRoot = model.AllowAsRoot
+        AllowAsRoot = model.AllowAsRoot,
+        OnlyAtRoot = model.OnlyAtRoot
       };
     }
   }

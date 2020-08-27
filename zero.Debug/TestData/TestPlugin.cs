@@ -28,7 +28,7 @@ namespace zero.TestData
 
       zero.Pages.Add<NewsPage>("news", "News", "News about the company", "fth-file-text");
       zero.Pages.Add<ContentPage>("content", "Page", "Page consisting of modules", "fth-box", allowAsRoot: true, allowAllChildrenTypes: true);
-      zero.Pages.Add<ContentPage>("root", "Homepage", "Entry point for the website", "fth-home", allowAsRoot: true, allowAllChildrenTypes: true);
+      zero.Pages.Add<ContentPage>("root", "Homepage", "Entry point for the website", "fth-home", allowAsRoot: true, allowAllChildrenTypes: true, onlyAtRoot: true);
       zero.Pages.Add<RedirectPage>("redirect", "Redirect", "Redirect to another page or an external URL", "fth-external-link", allowAsRoot: true, allowedChildrenTypes: new List<string>() { "content", "redirect" });
 
       zero.Modules.Add<RichtextModule>("richtext", "Richtext", "Simple richtext block editor", "fth-align-left", "Texts");

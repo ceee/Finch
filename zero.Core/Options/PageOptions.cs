@@ -18,7 +18,7 @@ namespace zero.Core.Options
     }
 
 
-    public void Add<T>(string alias, string name, string description, string icon, bool allowAsRoot = false, bool allowAllChildrenTypes = false, List<string> allowedChildrenTypes = null) where T : Page, new()
+    public void Add<T>(string alias, string name, string description, string icon, bool allowAsRoot = false, bool allowAllChildrenTypes = false, List<string> allowedChildrenTypes = null, bool onlyAtRoot = false) where T : Page, new()
     {
       Items.Add(new PageType(typeof(T))
       {
@@ -28,12 +28,13 @@ namespace zero.Core.Options
         Icon = icon,
         AllowAsRoot = allowAsRoot,
         AllowAllChildrenTypes = allowAllChildrenTypes,
-        AllowedChildrenTypes = allowedChildrenTypes ?? new List<string>()
+        AllowedChildrenTypes = allowedChildrenTypes ?? new List<string>(),
+        OnlyAtRoot = onlyAtRoot
       });
     }
 
 
-    public void Add(Type type, string alias, string name, string description, string icon, bool allowAsRoot = false, bool allowAllChildrenTypes = false, List<string> allowedChildrenTypes = null)
+    public void Add(Type type, string alias, string name, string description, string icon, bool allowAsRoot = false, bool allowAllChildrenTypes = false, List<string> allowedChildrenTypes = null, bool onlyAtRoot = false)
     {
       Items.Add(new PageType(type)
       {
@@ -43,7 +44,8 @@ namespace zero.Core.Options
         Icon = icon,
         AllowAsRoot = allowAsRoot,
         AllowAllChildrenTypes = allowAllChildrenTypes,
-        AllowedChildrenTypes = allowedChildrenTypes ?? new List<string>()
+        AllowedChildrenTypes = allowedChildrenTypes ?? new List<string>(),
+        OnlyAtRoot = onlyAtRoot
       });
     }
   }
