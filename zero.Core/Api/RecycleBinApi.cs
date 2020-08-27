@@ -107,31 +107,31 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task Delete(string id)
+    public async Task<EntityResult<IRecycledEntity>> Delete(string id)
     {
-      await DeleteById<IRecycledEntity>(id);
+      return await DeleteById<IRecycledEntity>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task DeleteAll()
+    public async Task<EntityResult<IRecycledEntity>> DeleteAll()
     {
       // TODO make Purge operations app-aware
-      await Purge<IRecycledEntity>();
+      return await Purge<IRecycledEntity>();
     }
 
 
     /// <inheritdoc />
-    public async Task DeleteByOperation(string operationId)
+    public async Task<EntityResult<IRecycledEntity>> DeleteByOperation(string operationId)
     {
-      await Purge<IRecycledEntity>("where c.OperationId = $id", new Raven.Client.Parameters() { { "id", operationId } });
+      return await Purge<IRecycledEntity>("where c.OperationId = $id", new Raven.Client.Parameters() { { "id", operationId } });
     }
 
 
     /// <inheritdoc />
-    public async Task DeleteByGroup(string group)
+    public async Task<EntityResult<IRecycledEntity>> DeleteByGroup(string group)
     {
-      await Purge<IRecycledEntity>("where c.Group = $group", new Raven.Client.Parameters() { { "group", group } });
+      return await Purge<IRecycledEntity>("where c.Group = $group", new Raven.Client.Parameters() { { "group", group } });
     }
   }
 
@@ -170,21 +170,21 @@ namespace zero.Core.Api
     // <summary>
     /// Deletes a recycled entity by Id
     /// </summary>
-    Task Delete(string id);
+    Task<EntityResult<IRecycledEntity>> Delete(string id);
 
     /// <summary>
     /// Purges the recycle bin
     /// </summary>
-    Task DeleteAll();
+    Task<EntityResult<IRecycledEntity>> DeleteAll();
 
     /// <summary>
     /// Deletes all recycled items from a specific operation
     /// </summary>
-    Task DeleteByOperation(string operationId);
+    Task<EntityResult<IRecycledEntity>> DeleteByOperation(string operationId);
 
     /// <summary>
     /// Deletes all recycled items from a specific group
     /// </summary>
-    Task DeleteByGroup(string group);
+    Task<EntityResult<IRecycledEntity>> DeleteByGroup(string group);
   }
 }

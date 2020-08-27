@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Core.Utils;
 
 namespace zero.Debug.Controllers
@@ -65,7 +66,16 @@ namespace zero.Debug.Controllers
     }
 
 
-    
+
+    [HttpGet]
+    public IActionResult Clone([FromServices] IRecycledEntity blueprint)
+    {
+      IRecycledEntity entity = blueprint.Clone();
+      return Json(entity);
+    }
+
+
+
 
     [HttpGet]
     public IActionResult Routes()

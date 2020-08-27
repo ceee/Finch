@@ -204,24 +204,64 @@ namespace zero.Core.Api
     /// </summary>
     public async Task<EntityResult<string[]>> Restore(string id, bool includeDescendants = false)
     {
-      IRecycledEntity entity = await RecycleBinApi.GetById(id);
+      EntityResult<string[]> result = new EntityResult<string[]>();
+      IRecycledEntity recycledEntity = await RecycleBinApi.GetById(id);
+      List<IRecycledEntity> entities = new List<IRecycledEntity>() { recycledEntity };
 
-      if (entity == null || entity.Group != RECYCLE_BIN_GROUP || !(entity.Content is IPage))
+      if (recycledEntity == null)
       {
         return EntityResult<string[]>.Fail(); // TODO correct error message
       }
 
-      IPage page = entity.Content as IPage;
-      page.IsActive = false;
-
-      EntityResult<IPage> result = await SaveModel(page);
-
-      if (includeDescendants && !entity.OperationId.IsNullOrEmpty())
+      // get descendants from the operation
+      if (includeDescendants && !recycledEntity.OperationId.IsNullOrEmpty())
       {
-        IList<IRecycledEntity> operationEntities = await RecycleBinApi.GetByOperation(entity.OperationId);
+        entities = (await RecycleBinApi.GetByOperation(recycledEntity.OperationId)).ToList();
       }
 
-      return null;
+      // fill ids
+      string[] ids = entities.Select(x => x.OriginalId).ToArray();
+
+      // check if parents are available
+      string[] parentIds = entities.Select(x => x.Content as IPage).Where(x => x != null).Select(x => x.ParentId).ToArray();
+      parentIds = (await GetByIds<IPage>(parentIds)).Where(x => x.Value != null).Select(x => x.Value.Id).ToArray();
+
+      // validate and restore all items
+      foreach (IRecycledEntity entity in entities)
+      {
+        // check if it contains page data
+        if (entity.Group != RECYCLE_BIN_GROUP || !(entity.Content is IPage))
+        {
+          //result.AddError("Cannot parse recycled entity as an IPage in group \"" + RECYCLE_BIN_GROUP + "\""); // TODO correct error message
+          continue;
+        }
+
+        // get page
+        IPage page = entity.Content as IPage;
+        page.IsActive = false;
+
+        // validate app and parent
+        if (!Scope.IsAllowed(page.AppId) || (!page.ParentId.IsNullOrEmpty() && !ids.Contains(page.ParentId) && !parentIds.Contains(page.ParentId)))
+        {
+          // TODO correct error message
+          continue;
+        }
+
+        // restore to pages
+        EntityResult<IPage> saveResult = await SaveModel(page);
+      }
+
+      // delete affected entities from recycle bin
+      if (!recycledEntity.OperationId.IsNullOrEmpty())
+      {
+        await RecycleBinApi.DeleteByOperation(recycledEntity.OperationId);
+      }
+
+      // set result
+      result.Model = ids;
+      result.IsSuccess = true;
+
+      return result;
     }
 
 

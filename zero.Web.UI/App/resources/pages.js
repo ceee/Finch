@@ -54,6 +54,11 @@ export default {
     return Axios.post(base + 'copy', { id, destinationId, includeDescendants }).then(res => Promise.resolve(res.data));
   },
 
+  restore(id, includeDescendants)
+  {
+    return Axios.post(base + 'restore', { id, includeDescendants }).then(res => Promise.resolve(res.data));
+  },
+
   delete(id, moveToRecycleBin)
   {
     return Axios.delete(base + 'delete', { params: { id, moveToRecycleBin } }).then(res => Promise.resolve(res.data));

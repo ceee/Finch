@@ -1,4 +1,5 @@
 ﻿using System;
+using zero.Core.Attributes;
 
 namespace zero.Core.Entities
 {
@@ -25,6 +26,7 @@ namespace zero.Core.Entities
   }
 
 
+  [Collection("Pages")]
   public interface IPage : IZeroEntity, IAppAwareEntity, IZeroDbConventions
   {
     /// <summary>

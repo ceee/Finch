@@ -257,7 +257,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task Purge<T>(string querySuffix = null, Parameters parameters = null)
+    public async Task<EntityResult<T>> Purge<T>(string querySuffix = null, Parameters parameters = null)
     {
       var collectionName = Raven.Conventions.FindCollectionName(typeof(T));
 
@@ -270,6 +270,8 @@ namespace zero.Core.Api
       Operation operation = await Raven.Operations.SendAsync(operationQuery);
 
       await operation.WaitForCompletionAsync(TimeSpan.FromSeconds(30));
+
+      return EntityResult<T>.Success();
     }
   }
 
@@ -306,7 +308,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Delete a whole collection (with an optional query suffix, i.e. a where statement)
     /// </summary>
-    Task Purge<T>(string querySuffix = null, Parameters parameters = null);
+    Task<EntityResult<T>> Purge<T>(string querySuffix = null, Parameters parameters = null);
   }
 
 

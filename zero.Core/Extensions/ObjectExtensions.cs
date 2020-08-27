@@ -19,7 +19,8 @@ namespace zero.Core.Extensions
 
     public static T Clone<T>(this T obj)
     {
-      return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj));
+      Type type = obj.GetType();
+      return (T)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(obj), type);
     }
   }
 }

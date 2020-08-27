@@ -7,7 +7,7 @@
       <ui-button type="white" label="@ui.close" @click="config.hide"></ui-button>
     </template>
 
-    <button class="pages-recyclebin-action">
+    <button class="pages-recyclebin-action" @click="restore(false)">
       <i class="pages-recyclebin-action-icon fth-rotate-ccw"></i>
       <p class="pages-recyclebin-action-text">
         <strong>Restore page</strong>
@@ -15,7 +15,7 @@
       </p>
     </button>
 
-    <button class="pages-recyclebin-action" v-if="model.operationId">
+    <button class="pages-recyclebin-action" v-if="model.operationId" @click="restore(true)">
       <i class="pages-recyclebin-action-icon fth-zap"></i>
       <p class="pages-recyclebin-action-text">
         <strong>Undo operation</strong>
@@ -36,9 +36,7 @@
 
 <script>
   import RecycleBinApi from 'zero/resources/recycle-bin.js'
-  import PageTreeApi from 'zero/resources/page-tree.js'
   import PagesApi from 'zero/resources/pages';
-  import Arrays from 'zero/services/arrays.js'
 
   export default {
 
@@ -68,20 +66,34 @@
 
     methods: {
 
-      onSelect(item)
-      {
-        
-      },
-
-      onSave()
+      restore(includeDescendants)
       {
         this.state = 'loading';
 
-        PagesApi.copy(this.model.id, this.selected.id, this.includeDescendants).then(res =>
+        PagesApi.restore(this.model.id, includeDescendants).then(res =>
         {
           if (res.success)
           {
             this.state = 'success';
+            this.config.confirm(res.model);
+          }
+          else
+          {
+            this.state = 'error';
+          }
+        });
+      },
+
+      delete()
+      {
+        this.state = 'loading';
+
+        RecycleBinApi.delete(this.model.id).then(res =>
+        {
+          if (res.success)
+          {
+            this.state = 'success';
+            res.model.deleted = true;
             this.config.confirm(res.model);
           }
           else
@@ -154,68 +166,8 @@
     }
   }
 
-  .pages-recyclebin-actions .ui-property
-  {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .pages-recyclebin-actions .ui-property-content
-  {
-    display: inline;
-    flex: 0 0 auto;
-  }
-
-  .pages-recyclebin-actions .ui-property-label
-  {
-    padding-top: 1px;
-  }
-
-  .pages-recyclebin-actions .ui-box
-  {
-    margin: 0;    
-    padding: 20px var(--padding) 18px;
-
-    & + .ui-box
-    {
-      padding: 16px 0;
-      margin-top: 26px;
-    }
-
-    .ui-tree-item.is-disabled
-    {
-      opacity: .5;
-    }
-
-    .ui-tree-item.is-selected, .ui-tree-item:hover:not(.is-disabled)
-    {
-      background: var(--color-bg-bright-two);
-    }
-
-    .ui-tree-item.is-selected
-    {
-      &:after
-      {
-        font-family: "Feather";
-        content: "\e83e";
-        font-size: 16px;
-        color: var(--color-primary);
-      }
-      
-      .ui-tree-item-text
-      {
-        font-weight: bold;
-      }
-    }
-  }
-
   .pages-recyclebin-actions content
   {
     padding-top: 0;
-  }
-
-  .pages-copy-text
-  {
-    margin: 0 0 20px;
   }
 </style>
