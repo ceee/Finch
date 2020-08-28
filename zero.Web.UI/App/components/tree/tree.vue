@@ -7,7 +7,7 @@
     <span v-if="status === 'loading'" class="ui-tree-item-loading"><i></i></span>
     <template v-for="item in items">
       <ui-tree-item :value="item" @rightclick="onRightClicked" @click="onSelect(item, $event)" @actions="onActionsClicked" @open="toggle" />
-      <ui-tree v-if="item.hasChildren && item.isOpen && status != 'loading'" :get="get" :parent="item.id" :depth="depth + 1" :active="active" :config="config" @select="onSelect">
+      <ui-tree v-if="item.hasChildren && item.isOpen && status != 'loading'" :get="get" :parent="item.id" :depth="depth + 1" :active="active" @select="onSelect">
         <template v-slot:actions="props">
           <slot name="actions" v-bind="props"></slot>
         </template>
@@ -23,12 +23,6 @@
 
 <script>
   import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
-  import Overlay from 'zero/services/overlay';
-
-  const defaultConfig = {
-    // return actions for an item
-    onActionsRequested: null
-  };
 
   export default {
     name: 'uiTree',
@@ -57,13 +51,6 @@
       hasActions: {
         type: Function,
         default: null
-      },
-      config: {
-        type: Object,
-        default: () =>
-        {
-          return defaultConfig;
-        }
       }
     },
 
@@ -72,8 +59,7 @@
       status: 'none',
       actionProps: {
         item: null
-      },
-      configuration: {}
+      }
     }),
 
     computed: {
@@ -85,22 +71,18 @@
 
     mounted()
     {
-      this.initialize();
-      this.load(this.parent);
+      this.refresh();
     },
 
     methods: {
 
-      initialize()
-      {
-        this.configuration = _extend(defaultConfig, this.config || {});
-      },
 
+      // refreshes the whole tree
       refresh()
       {
-        this.initialize();
         this.load(this.parent);
       },
+
 
       // loads children of the given parent id or on root if empty
       load(parent)
@@ -129,16 +111,20 @@
         this.$emit('onStatusChange', status);
       },
 
+
       // toggles children of an item
       toggle(item)
       {
         item.isOpen = !item.isOpen;
       },
 
+
+      // selected an item
       onSelect(item, ev)
       {
         this.$emit('select', item, ev);
       },
+
 
       // right clicked on an item
       onRightClicked(item, ev)
@@ -149,6 +135,7 @@
           this.onActionsClicked(item, ev);
         }
       },
+
 
       // actions button clicked on item
       onActionsClicked(item, ev)

@@ -211,7 +211,7 @@
 
     i
     {
-      background-color: var(--color-line);
+      background-color: var(--color-bg-bright-three);
       transform: translateX(-100%) scaleX(1);
       animation: treeitemloading 1s linear infinite;
       width: 100%;
