@@ -33,7 +33,7 @@ namespace zero.Web.Controllers
       return Edit<IPage, PageEditModel<IPage>>(new PageEditModel<IPage>()
       {
         Entity = entity,
-        Revisions = await RevisionsApi.GetPaged<IPage>(id),
+        //Revisions = await RevisionsApi.GetPaged<IPage>(id),
         PageType = Api.GetPageType(entity.PageTypeAlias)
       });
     }

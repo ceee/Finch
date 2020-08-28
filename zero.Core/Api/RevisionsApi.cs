@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Commands;
+using Raven.Client.Documents.Operations;
 using Raven.Client.Documents.Session;
+using Sparrow.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,16 +35,25 @@ namespace zero.Core.Api
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
 
-      List<T> items = await session.Advanced.Revisions.GetForAsync<T>(id, pageNumber - 1, pageSize);
+      // get paged revisions
+      List<T> items = await session.Advanced.Revisions.GetForAsync<T>(id, (pageNumber - 1) * pageSize, pageSize);
+      double totalResults = items.Count;
 
-      List<T> continuedItems = await session.Advanced.Revisions.GetForAsync<T>(id, pageNumber, 1);
-      bool hasMore = continuedItems.Count > 0;
+      // get total results in case items count equals page size
+      if (pageSize <= items.Count || pageNumber > 1)
+      {
+        GetRevisionsCommand command = new GetRevisionsCommand(id, 0, 1, true);
+        session.Advanced.RequestExecutor.Execute(command, session.Advanced.Context);
+        command.Result.Results.Parent.TryGet("TotalResults", out totalResults);
+      }
 
       List<Revision> revisions = new List<Revision>();
 
+      // load affected users as the revisions could have been edited by other users too
       string[] userIds = items.Select(x => x.LastModifiedById).Distinct().ToArray();
       Dictionary<string, User> users = await session.LoadAsync<User>(userIds);
 
+      // create revision objects
       foreach (T item in items)
       {
         DateTime? date = session.Advanced.GetLastModifiedFor(item);
@@ -66,7 +78,7 @@ namespace zero.Core.Api
         revisions.Add(revision);
       }
 
-      return new ListResult<Revision>(revisions, hasMore ? revisions.Count + 1 : revisions.Count, pageNumber, pageSize);
+      return new ListResult<Revision>(revisions, Convert.ToInt64(totalResults), pageNumber, pageSize);
     }
   }
 

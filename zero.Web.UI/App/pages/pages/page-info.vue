@@ -5,7 +5,7 @@
         <h3 class="ui-headline" v-localize="'Links'"></h3>
         <div><ui-button type="light" label="Open page" /><br /><br /><br /><br /></div>
         <h3 class="ui-headline" v-localize="'@revisions.label'"></h3>
-        <ui-revisions v-model="revisions" />
+        <ui-revisions v-if="!isCreate" :get="getRevisions" />
       </div>
     </div>
     <div class="ui-view-box-aside editor-infos">
@@ -44,11 +44,7 @@
     },
 
     data: () => ({
-      pageType: null,
-      revisions: {
-        totalItems: 0,
-        items: []
-      }
+      pageType: null
     }),
 
     computed: {
@@ -64,18 +60,15 @@
       {
         this.pageType = pageType;
       });
-
-      if (!this.isCreate)
-      {
-        PagesApi.getRevisions(this.value.id).then(response =>
-        {
-          this.revisions = response;
-        });
-      }
     },
 
 
     methods: {
+
+      getRevisions(page)
+      {
+        return PagesApi.getRevisions(this.value.id, page);
+      },
 
       onRangeChange(value)
       {

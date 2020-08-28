@@ -1,7 +1,7 @@
 ﻿<template>
-  <div class="ui-revisions" :class="{ 'is-empty': value.items.length < 1 }">
-    <div class="ui-revision" v-for="revision in value.items">
-      <span class="ui-revision-action"  v-localize="'@revisions.actions.updated'"></span>
+  <div class="ui-revisions" :class="{ 'is-empty': items.length < 1 }">
+    <div class="ui-revision" v-for="revision in items">
+      <span class="ui-revision-action" v-localize="'@revisions.actions.updated'"></span>
       <ui-date class="ui-revision-date" v-model="revision.date" format="long" :split="true" />
       <router-link :to="{ name: userRoute, params: { id: revision.user.id }}" v-if="revision.user" class="ui-revision-user">
         <img class="ui-revision-user-image" v-if="revision.user" :src="getImage(revision.user.avatarId)" :alt="revision.user.name" />
@@ -10,6 +10,7 @@
       <div v-else></div>
       <button type="button" class="ui-link is-minor" v-localize="'@revisions.view'"></button>
     </div>
+    <ui-pagination v-if="pages > 1" :pages="pages" :page="page" @change="setPage" />
   </div>
 </template>
 
@@ -23,28 +24,43 @@
     name: 'uiRevisions',
 
     props: {
-      value: {
-        type: Object,
-        default: () => ({
-          totalItems: 0,
-          items: []
-        })
+      get: {
+        type: Function,
+        required: true
       }
     },
 
 
     data: () => ({
-      userRoute: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit'
+      userRoute: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
+      items: [],
+      page: 1,
+      pages: 0
     }),
+
+
+    mounted()
+    {
+      this.setPage(this.page);
+    },
 
 
     methods: {
       getImage(id)
       {
         return MediaApi.getImageSource(id);
+      },
+
+      setPage(page)
+      {
+        this.page = page;
+        this.get(page).then(res =>
+        {
+          this.items = res.items;
+          this.pages = res.totalPages;
+        });
       }
     }
-
   }
 </script>
 
