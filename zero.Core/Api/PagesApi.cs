@@ -85,12 +85,16 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IPage>> SaveSorting(string[] sortedIds)
+    public async Task<EntityResult<IList<IPage>>> SaveSorting(string[] sortedIds)
     {
       Dictionary<string, IPage> items = await GetByIds<IPage>(sortedIds);
       uint index = 0;
 
-      // TODO check if all items are valid
+      // contains multiple parents, therefore fail
+      if (items.Select(x => x.Value?.ParentId).Distinct().Count() > 1)
+      {
+        return EntityResult<IList<IPage>>.Fail("@errors.page.sortingmultipleparents");
+      }
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
@@ -99,7 +103,7 @@ namespace zero.Core.Api
         foreach (var item in items)
         {
           item.Value.Sort = index;
-          index += 23;
+          index += 10;
           await session.StoreAsync(item.Value);
           //session.Advanced.Patch<T, uint>(item.Value.Id, x => x.Sort, index++);
         }
@@ -107,7 +111,7 @@ namespace zero.Core.Api
         await session.SaveChangesAsync();
       }
 
-      return EntityResult<IPage>.Success();
+      return EntityResult<IList<IPage>>.Success(items.Select(x => x.Value).ToList());
     }
 
 
@@ -115,7 +119,22 @@ namespace zero.Core.Api
     public async Task<EntityResult<IPage>> Move(string id, string parentId)
     {
       IPage model = await GetById<IPage>(id);
+      IPage parent = await GetById<IPage>(parentId);
+
+      if (model == null || parent == null)
+      {
+        return EntityResult<IPage>.Fail("@errors.idnotfound");
+      }
+
+      IList<PageType> pageTypes = await GetAllowedPageTypes(parentId);
+
+      if (!pageTypes.Any(x => x.Alias == model.PageTypeAlias))
+      {
+        return EntityResult<IPage>.Fail("@errors.page.parentnotallowed");
+      }
+
       model.ParentId = parentId;
+
       return await Save(model);
     }
 
@@ -124,6 +143,12 @@ namespace zero.Core.Api
     public async Task<EntityResult<IPage>> Copy(string id, string destinationId, bool includeDescendants = false)
     {
       IPage model = await GetById<IPage>(id);
+      IPage parent = await GetById<IPage>(destinationId);
+
+      if (model == null || parent == null)
+      {
+        return EntityResult<IPage>.Fail("@errors.idnotfound");
+      }
 
       string baseId = model.Id;
 
@@ -132,6 +157,14 @@ namespace zero.Core.Api
       model.ParentId = destinationId;
       model.IsActive = false;
       model.CreatedDate = DateTimeOffset.Now;
+
+      // check if new parent is allowed
+      IList<PageType> pageTypes = await GetAllowedPageTypes(destinationId);
+
+      if (!pageTypes.Any(x => x.Alias == model.PageTypeAlias))
+      {
+        return EntityResult<IPage>.Fail("@errors.page.parentnotallowed");
+      }
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
@@ -186,6 +219,11 @@ namespace zero.Core.Api
     {
       IList<IPage> pages = await GetByIdWithDescendants(id);
       string[] ids = pages.Select(x => x.Id).ToArray();
+
+      if (pages.Count < 1)
+      {
+        return EntityResult<string[]>.Fail("@errors.ondelete.idnotfound");
+      }
 
       if (moveToRecycleBin)
       {
@@ -344,7 +382,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Update sorting of pages on a specific level
     /// </summary>
-    Task<EntityResult<IPage>> SaveSorting(string[] sortedIds);
+    Task<EntityResult<IList<IPage>>> SaveSorting(string[] sortedIds);
 
     /// <summary>
     /// Move a page to a new parent

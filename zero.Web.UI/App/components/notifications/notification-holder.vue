@@ -39,6 +39,7 @@
     bottom: var(--padding);
     width: 420px;
     max-width: 100%;
+    z-index: 6;
   }
 
   .app-notification

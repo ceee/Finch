@@ -23,7 +23,7 @@ if (section)
   routes.push({
     path: 'recyclebin',
     name: 'recyclebin',
-    component: () => import('zero/pages/' + alias + '/recyclebin'),
+    component: () => import('zero/pages/' + alias + '/recyclebin/recyclebin'),
     meta: {
       name: '@recyclebin.name'
     }

@@ -1,20 +1,15 @@
 ﻿<template>
-  <ui-overlay-editor class="pages-copy">
+  <ui-overlay-editor class="pages-move">
     <template v-slot:header>
-      <ui-header-bar title="@ui.copy.title" :back-button="false" :close-button="true" />
+      <ui-header-bar title="@ui.move.title" :back-button="false" :close-button="true" />
     </template>
     <template v-slot:footer>
-      <ui-button type="white" label="@ui.close" @click="config.hide"></ui-button>
-      <ui-button label="@ui.copy.action" @click="onSave" :state="state" :disabled="selected == null"></ui-button>
+      <ui-button type="white" label="@ui.close" @click="config.hide" />
+      <ui-button label="@ui.move.action" @click="onSave" :state="state" />
     </template>
 
-    <p class="pages-copy-text" v-localize:html="{ key: '@ui.copy.text', tokens: { name: model.name } }"></p>
-    <div class="ui-box">
-      <ui-property label="Include descendants">
-        <ui-toggle v-model="includeDescendants" class="is-primary" />
-      </ui-property>
-    </div>
-    <div class="ui-box pages-copy-items">
+    <p class="pages-move-text" v-localize:html="{ key: '@ui.move.text', tokens: { name: model.name } }"></p>
+    <div class="ui-box pages-move-items">
       <ui-tree ref="tree" :get="getItems" @select="onSelect" />
     </div>
   </ui-overlay-editor>
@@ -24,7 +19,7 @@
 <script>
   import PageTreeApi from 'zero/resources/page-tree.js'
   import PagesApi from 'zero/resources/pages';
-  import Arrays from 'zero/services/arrays.js'
+  import Notification from 'zero/services/notification.js'
 
   export default {
 
@@ -39,18 +34,17 @@
 
     data: () => ({
       items: [],
-      selected: [],
+      selected: null,
       state: 'default',
       cache: {},
       prevItem: null,
-      selected: null,
-      includeDescendants: true
+      selected: null
     }),
 
 
     mounted()
     {
-      
+      this.selected = this.model;
     },
 
 
@@ -87,7 +81,7 @@
               id: null,
               parentId: null,
               sort: 0,
-              name: 'Root',
+              name: '@page.root',
               icon: 'fth-arrow-down-circle',
               isOpen: false,
               modifier:	null,
@@ -101,7 +95,12 @@
           response.forEach(item =>
           {
             //item.disabled = true;
-            item.isSelected = false;
+            item.isSelected = this.model.parentId == item.id;
+
+            if (item.isSelected)
+            {
+              this.prevItem = item;
+            }
             item.disabled = item.id === 'recyclebin' || item.id == this.model.id;
             item.hasActions = false;
           });
@@ -113,9 +112,15 @@
 
       onSave()
       {
+        if (this.model.parentId == this.selected.id)
+        {
+          this.config.close();
+          return;
+        }
+
         this.state = 'loading';
 
-        PagesApi.copy(this.model.id, this.selected.id, this.includeDescendants).then(res =>
+        PagesApi.move(this.model.id, this.selected.id).then(res =>
         {
           if (res.success)
           {
@@ -125,6 +130,7 @@
           else
           {
             this.state = 'error';
+            Notification.error(res.errors[0].message);
           }
         });
       }
@@ -133,33 +139,10 @@
 </script>
 
 <style lang="scss">
-  .pages-copy .ui-property
+  .pages-move .ui-box
   {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .pages-copy .ui-property-content
-  {
-    display: inline;
-    flex: 0 0 auto;
-  }
-
-  .pages-copy .ui-property-label
-  {
-    padding-top: 1px;
-  }
-
-  .pages-copy .ui-box
-  {
-    margin: 0;    
-    padding: 20px var(--padding) 18px;
-
-    & + .ui-box
-    {
-      padding: 16px 0;
-      margin-top: 26px;
-    }
+    margin: 0;
+    padding: 16px 0;
 
     .ui-tree-item.is-disabled
     {
@@ -188,12 +171,12 @@
     }
   }
 
-  .pages-copy content
+  .pages-move content
   {
     padding-top: 0;
   }
 
-  .pages-copy-text
+  .pages-move-text
   {
     margin: 0 0 20px;
   }

@@ -3,14 +3,14 @@
     <div class="app-tree" v-resizable="resizable">
       <ui-tree ref="tree" :get="getItems" :config="treeConfig" :active="id" header="Pages">
         <template v-slot:actions="props">
-          <ui-dropdown-button v-if="props.item && props.item.id === 'recyclebin'" :value="props.item" label="Empty recycle bin" icon="fth-trash-2" />
+          <ui-dropdown-button v-if="props.item && props.item.id === 'recyclebin'" :value="props.item" label="@page.actions.emptyrecyclebin" icon="fth-trash-2" />
           <template v-if="!props.item || props.item.id !== 'recyclebin'">
-            <ui-dropdown-button label="Create" icon="fth-plus" @click="create(props.item)" />
-            <ui-dropdown-button v-if="props.item" label="Move" icon="fth-corner-down-right" @click="move(props.item)" />
-            <ui-dropdown-button v-if="props.item" label="Copy" icon="fth-copy" @click="copy(props.item)" />
-            <ui-dropdown-button label="Sort" icon="fth-arrow-down" @click="sort(props.item)" />
+            <ui-dropdown-button label="@ui.create" icon="fth-plus" @click="create(props.item)" />
+            <ui-dropdown-button v-if="props.item" label="@ui.move.title" icon="fth-corner-down-right" @click="move(props.item)" />
+            <ui-dropdown-button v-if="props.item" label="@ui.copy.title" icon="fth-copy" @click="copy(props.item)" />
+            <ui-dropdown-button label="@ui.sort.title" icon="fth-arrow-down" @click="sort(props.item)" />
             <ui-dropdown-separator v-if="props.item" />
-            <ui-dropdown-button v-if="props.item" label="Delete" icon="fth-trash" @click="remove(props.item)" />
+            <ui-dropdown-button v-if="props.item" label="@ui.delete" icon="fth-trash" @click="remove(props.item)" />
           </template>
         </template>
       </ui-tree>
@@ -37,10 +37,10 @@
   import PageTreeApi from 'zero/resources/page-tree.js'
   import PagesApi from 'zero/resources/pages.js'
   import Overlay from 'zero/services/overlay.js'
-  import CreateOverlay from './create'
-  import SortOverlay from './sort'
-  import MoveOverlay from './move'
-  import CopyOverlay from './copy'
+  import CreateOverlay from './overlays/create'
+  import SortOverlay from './overlays/sort'
+  import MoveOverlay from './overlays/move'
+  import CopyOverlay from './overlays/copy'
   import EventHub from 'zero/services/eventhub'
   import Notification from 'zero/services/notification.js'
 
@@ -169,6 +169,7 @@
           model: item
         }).then(value =>
         {
+          EventHub.$emit('page.sort', value);
           EventHub.$emit('page.update');
         });
       },
@@ -182,6 +183,7 @@
           model: item
         }).then(value =>
         {
+          EventHub.$emit('page.move', value);
           EventHub.$emit('page.update');
         });
       },
@@ -217,7 +219,7 @@
             {
               opts.state('success');
               opts.hide();
-              //this.$router.go(-1);
+              EventHub.$emit('page.delete', response.model);
               EventHub.$emit('page.update');
               Notification.success('@deleteoverlay.success', '@deleteoverlay.page_success_text');
             }

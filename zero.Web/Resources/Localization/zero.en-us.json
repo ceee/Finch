@@ -63,12 +63,13 @@
     "move": {
       "title": "Move",
       "action": "Move",
-      "text": " Choose where to move <b>{name}</b> to in the tree structure below."
+      "text": "Select the new parent for <b>{name}</b> in the tree structure below."
     },
     "copy": {
       "title": "Copy",
       "action": "Copy",
-      "text": " Choose where to copy <b>{name}</b> to in the tree structure below."
+      "text": "Copy <b>{name}</b> to the selected page in the tree structure below.",
+      "includeDescendants": "Include descendants"
     }
   },
 
@@ -111,6 +112,7 @@
   },
 
   "errors": {
+    "idnotfound": "Could not find an entity for the given ID",
     "onsave": {
       "notallowed": "You are not allowed to edit this resource"
     },
@@ -143,6 +145,10 @@
     "preview": {
       "notfound": "Not found",
       "notfound_text": "Could not find entity with ID \"{id}\""
+    },
+    "page": {
+      "parentnotallowed": "The page is not allowed as a children of the selected parent",
+      "sortingmultipleparents": "Sorting pages is only allowed for a specific parent page"
     }
   },
 
@@ -334,8 +340,10 @@
 
   "page": {
     "name": "Page",
-
     "type": "Type",
+    "root": "Root",
+
+    "info_tab": "Info",
 
     "overview": {
       "actions": {
@@ -352,6 +360,20 @@
       "header": "Schedule publishing",
       "publish": "Publish",
       "unpublish": "Unpublish"
+    },
+
+    "actions": {
+      "emptyrecyclebin": "Empty recycle bin"
+    },
+
+    "create": {
+      "title": "Create page",
+      "parent": "Parent",
+      "nonavailable": "There are no page types allowed here"
+    },
+
+    "preview": {
+      "title": "Preview"
     }
   },
 

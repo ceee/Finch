@@ -25,6 +25,7 @@
   import PageTreeApi from 'zero/resources/page-tree.js'
   import PagesApi from 'zero/resources/pages';
   import Arrays from 'zero/services/arrays.js'
+  import Notification from 'zero/services/notification.js'
 
   export default {
 
@@ -68,11 +69,12 @@
           if (res.success)
           {
             this.state = 'success';
-            this.config.confirm();
+            this.config.confirm(res.model);
           }
           else
           {
             this.state = 'error';
+            Notification.error(res.errors[0].message);
           }
         });
       },

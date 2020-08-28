@@ -1,8 +1,8 @@
 ﻿<template>
   <div v-if="!loading" class="page-create">
-    <h2 class="ui-headline">Create page</h2>
-    <div class="page-create-parent" v-if="config.parent">
-      Parent: <strong>{{config.parent.name}}</strong>
+    <h2 class="ui-headline" v-localize="'@page.create.title'"></h2>
+    <div v-if="pageTypes.length && config.parent" class="page-create-parent">
+      <span v-localize="'@page.create.parent'"></span>: <strong>{{config.parent.name}}</strong>
     </div>
     <div class="page-create-items">
       <button type="button" v-for="item in pageTypes" class="page-create-item" @click="onSelect(item)">
@@ -11,9 +11,9 @@
           {{item.name | localize}}
           <span v-if="item.description" v-localize="item.description"></span>
         </span>
-      </button>
-      
+      </button>     
     </div>
+    <ui-message type="error" v-if="!pageTypes.length" text="@page.create.nonavailable" />
     <div class="app-confirm-buttons">
       <ui-button type="light" :label="config.closeLabel" :disabled="loading" @click="config.close"></ui-button>
     </div>
@@ -78,6 +78,11 @@
   .page-create
   {
     text-align: left;
+
+    .ui-message
+    {
+      margin: 0;
+    }
   }
 
   .page-create-parent
@@ -113,7 +118,7 @@
     align-items: center;
     position: relative;
     color: var(--color-fg);
-    padding: 13px 0;
+    padding: 16px 0;
   }
 
   .page-create-item-text
