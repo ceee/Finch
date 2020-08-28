@@ -3,8 +3,7 @@
     <div class="app-tree" v-resizable="resizable">
       <ui-tree ref="tree" :get="getItems" :config="treeConfig" :active="id" header="Pages">
         <template v-slot:actions="props">
-          <ui-dropdown-button v-if="props.item && props.item.id === 'recyclebin'" :value="props.item" label="@page.actions.emptyrecyclebin" icon="fth-trash-2" />
-          <template v-if="!props.item || props.item.id !== 'recyclebin'">
+          <template v-if="!props.item || props.id !== 'recyclebin'">
             <ui-dropdown-button label="@ui.create" icon="fth-plus" @click="create(props.item)" />
             <ui-dropdown-button v-if="props.item" label="@ui.move.title" icon="fth-corner-down-right" @click="move(props.item)" />
             <ui-dropdown-button v-if="props.item" label="@ui.copy.title" icon="fth-copy" @click="copy(props.item)" />
@@ -133,6 +132,7 @@
 
             if (item.id === "recyclebin")
             {
+              item.hasActions = false;
               item.url = {
                 name: 'recyclebin'
               };
