@@ -5,7 +5,7 @@
     <button v-if="!module" type="button" class="ui-module-item-header is-error" disabled><i class="fth-alert-circle"></i> {{alias}}</button>
     <p v-if="!module" class="ui-module-item-error">Could not find a registered module <code>[{{alias}}]</code> in the code.</p>
 
-    <ui-module-preview-inner v-if="tryRender" :template="renderer.preview.template" :value="value" />
+    <ui-module-preview-inner v-if="module && tryRender" :template="renderer.preview.template" :value="value" />
 
     <div v-if="!value.isActive" class="ui-module-item-disabled"></div>
 
