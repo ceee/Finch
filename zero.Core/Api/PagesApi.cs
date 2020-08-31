@@ -121,7 +121,7 @@ namespace zero.Core.Api
       IPage model = await GetById<IPage>(id);
       IPage parent = await GetById<IPage>(parentId);
 
-      if (model == null || parent == null)
+      if (model == null || (!parentId.IsNullOrEmpty() && parent == null))
       {
         return EntityResult<IPage>.Fail("@errors.idnotfound");
       }
@@ -133,7 +133,7 @@ namespace zero.Core.Api
         return EntityResult<IPage>.Fail("@errors.page.parentnotallowed");
       }
 
-      model.ParentId = parentId;
+      model.ParentId = parent?.Id;
 
       return await Save(model);
     }
@@ -145,7 +145,7 @@ namespace zero.Core.Api
       IPage model = await GetById<IPage>(id);
       IPage parent = await GetById<IPage>(destinationId);
 
-      if (model == null || parent == null)
+      if (model == null || (!destinationId.IsNullOrEmpty() && parent == null))
       {
         return EntityResult<IPage>.Fail("@errors.idnotfound");
       }
@@ -154,7 +154,7 @@ namespace zero.Core.Api
 
       // update new page properties
       model.Id = null;
-      model.ParentId = destinationId;
+      model.ParentId = parent?.Id;
       model.IsActive = false;
       model.CreatedDate = DateTimeOffset.Now;
 
