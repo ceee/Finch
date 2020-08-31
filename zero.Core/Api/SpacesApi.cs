@@ -30,6 +30,14 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public Space GetBy<T>() where T : ISpaceContent
+    {
+      Type type = typeof(T);
+      return GetAll().FirstOrDefault(x => x.Type == type);
+    }
+
+
+    /// <inheritdoc />
     public IReadOnlyCollection<Space> GetAll()
     {
       return Backoffice.Options.Spaces.GetAllItems();
@@ -44,6 +52,22 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<ISpaceContent>()
+          .Scope(Scope)
+          .Where(x => x.SpaceAlias == space.Alias)
+          .WhereIf(x => x.Id == id, !id.IsNullOrEmpty())
+          .FirstOrDefaultAsync();
+      }
+    }
+
+
+    /// <inheritdoc />
+    public async Task<T> GetItem<T>(string id = null) where T : ISpaceContent
+    {
+      Space space = GetBy<T>();
+
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        return await session.Query<T>()
           .Scope(Scope)
           .Where(x => x.SpaceAlias == space.Alias)
           .WhereIf(x => x.Id == id, !id.IsNullOrEmpty())
@@ -68,15 +92,30 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<ISpaceContent>> Save(string alias, ISpaceContent model)
+    public async Task<ListResult<T>> GetListByQuery<T>(ListQuery<T> query) where T : ISpaceContent
     {
-      model.SpaceAlias = GetByAlias(alias)?.Alias;
+      Space space = GetBy<T>();
+      query.SearchSelector = item => item.Name;
+
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        return await session.Query<T>()
+          .Scope(Scope)
+          .Where(x => x.SpaceAlias == space.Alias)
+          .ToQueriedListAsync(query);
+      }
+    }
+
+
+    /// <inheritdoc />
+    public async Task<EntityResult<ISpaceContent>> Save(ISpaceContent model)
+    {
       return await SaveModel(model, null);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<ISpaceContent>> Delete(string alias, string id)
+    public async Task<EntityResult<ISpaceContent>> Delete(string id)
     {
       return await DeleteById<ISpaceContent>(id);
     }
@@ -91,6 +130,11 @@ namespace zero.Core.Api
     Space GetByAlias(string alias);
 
     /// <summary>
+    /// Returns a space by a defined generic
+    /// </summary>
+    Space GetBy<T>() where T : ISpaceContent;
+
+    /// <summary>
     /// Get all spaces
     /// </summary>
     IReadOnlyCollection<Space> GetAll();
@@ -101,18 +145,28 @@ namespace zero.Core.Api
     Task<ISpaceContent> GetItem(string alias, string id = null);
 
     /// <summary>
+    /// Get editor item for a space
+    /// </summary>
+    Task<T> GetItem<T>(string id = null) where T : ISpaceContent;
+
+    /// <summary>
     /// Get all list items for a space (with query)
     /// </summary>
     Task<ListResult<ISpaceContent>> GetListByQuery(string alias, ListQuery<ISpaceContent> query);
 
     /// <summary>
+    /// Get all list items for a space (with query)
+    /// </summary>
+    Task<ListResult<T>> GetListByQuery<T>(ListQuery<T> query) where T : ISpaceContent;
+
+    /// <summary>
     /// Saves a content item in a space
     /// </summary>
-    Task<EntityResult<ISpaceContent>> Save(string alias, ISpaceContent model);
+    Task<EntityResult<ISpaceContent>> Save(ISpaceContent model);
 
     /// <summary>
     /// Deletes a space content item
     /// </summary>
-    Task<EntityResult<ISpaceContent>> Delete(string alias, string id);
+    Task<EntityResult<ISpaceContent>> Delete(string id);
   }
 }

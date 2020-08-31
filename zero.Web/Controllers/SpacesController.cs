@@ -101,7 +101,7 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(403);
       }
 
-      return Json(await Api.Save(model.SpaceAlias, model));
+      return Json(await Api.Save(model));
     }
 
 
@@ -115,7 +115,7 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(403);
       }
 
-      return Json(await Api.Delete(alias, id));
+      return Json(await Api.Delete(id));
     }
 
 
