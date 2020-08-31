@@ -240,7 +240,7 @@
   {
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-gap: 2px;
+    gap: 2px;
     justify-content: stretch;
     height: 100vh;
   }
@@ -260,7 +260,7 @@
     font-size: var(--font-size);
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-gap: 35px;
+    gap: 35px;
     align-items: center;
 
     & + .page-overview-action

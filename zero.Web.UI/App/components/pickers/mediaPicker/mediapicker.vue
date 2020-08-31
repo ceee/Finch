@@ -268,7 +268,7 @@
     .display-grid &
     {
       display: flex;
-      grid-gap: 10px;
+      gap: 10px;
 
       .ui-mediapicker-preview + .ui-mediapicker-preview
       {

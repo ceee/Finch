@@ -334,7 +334,7 @@
     .display-grid &
     {
       display: flex;
-      grid-gap: 10px;
+      gap: 10px;
 
       .ui-media-preview + .ui-media-preview
       {

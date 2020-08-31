@@ -273,7 +273,7 @@
     overflow-y: auto;
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-gap: 2px;
+    gap: 2px;
     justify-content: stretch;
   }
 
@@ -287,7 +287,7 @@
   {
     /*display: grid;
     flex-wrap: wrap;*/
-    grid-gap: 15px;
+    gap: 15px;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
     align-items: stretch;
   }

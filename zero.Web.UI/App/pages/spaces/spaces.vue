@@ -149,7 +149,7 @@
   {
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-gap: 2px;
+    gap: 2px;
     justify-content: stretch;
     height: 100vh;
   }
@@ -207,7 +207,7 @@
   {
     display: grid;
     grid-template-columns: 30px 1fr auto;
-    grid-gap: 6px;
+    gap: 6px;
     height: 100%;
     align-items: center;
     position: relative;

@@ -64,7 +64,7 @@
     width: 100%;
     max-width: 2000px;
     display: grid;
-    grid-gap: 80px 40px;
+    gap: 80px 40px;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     padding-left: 80px;
   }
@@ -72,7 +72,7 @@
   .settings-group-items
   {
     display: grid;
-    grid-gap: 30px 20px;
+    gap: 30px 20px;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     align-items: stretch;
     margin-top: 40px;
@@ -84,7 +84,7 @@
     font-size: var(--font-size);
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-gap: 20px;
+    gap: 20px;
     align-items: center;
   }
 

@@ -56,7 +56,7 @@ a.app-nav-item
 {
   display: grid;
   grid-template-columns: 30px 1fr auto;
-  grid-gap: 6px;
+  gap: 6px;
   align-items: center;
   font-size: var(--font-size);
   padding: 0 var(--padding);
@@ -158,7 +158,7 @@ a.app-nav-child
   display: grid;
   width: 100%;
   grid-template-columns: auto 1fr auto;
-  grid-gap: 16px;
+  gap: 16px;
   color: var(--color-fg-dim-two);
   align-items: center;
 

@@ -73,6 +73,7 @@ namespace zero.Web.Defaults
       zero.Mapper.Add<SpaceMapperConfig>();
 
       zero.Permissions.AddCollection<SectionPermissions>();
+      zero.Permissions.AddCollection<ModulePermissions>();
       zero.Permissions.AddCollection<SettingsPermissions>();
       zero.Permissions.AddCollection<SpacePermissions>();
     }

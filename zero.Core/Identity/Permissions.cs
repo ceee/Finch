@@ -39,6 +39,12 @@
     {
       public const string PREFIX = "space.";
     }
+
+
+    public struct Modules
+    {
+      public const string PREFIX = "module.";
+    }
   }
 
 

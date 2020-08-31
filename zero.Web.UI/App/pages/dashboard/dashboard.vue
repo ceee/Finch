@@ -30,7 +30,7 @@
     display: grid;
     padding: 20px;
     padding-left: 0;
-    grid-gap: 16px;
+    gap: 16px;
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     grid-auto-rows: minmax(240px, auto);
     grid-auto-flow: dense;

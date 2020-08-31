@@ -64,6 +64,8 @@
       public const string Spaces = "permissionCollectionSpaces";
 
       public const string Settings = "permisssionCollectionSettings";
+
+      public const string Modules = "permissionCollectionModules";
     }
   }
 }

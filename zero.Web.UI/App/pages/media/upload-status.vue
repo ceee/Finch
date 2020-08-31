@@ -136,7 +136,7 @@
     height: 70px;
     display: grid;
     grid-template-columns: 70px 1fr;
-    grid-gap: 15px;
+    gap: 15px;
     align-items: center;
     line-height: 1.4;
 

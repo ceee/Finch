@@ -71,7 +71,7 @@
     display: inline-grid;
     padding: 8px 12px 7px 12px;
     grid-template-columns: auto 1fr;
-    grid-gap: 12px;
+    gap: 12px;
     border-radius: var(--radius);
     position: relative;
     line-height: 20px;

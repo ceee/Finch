@@ -148,7 +148,7 @@
     font-size: var(--font-size);
     display: inline-grid;
     grid-template-columns: auto 1fr;
-    grid-gap: 25px;
+    gap: 25px;
     align-items: center;
   }
 
@@ -241,7 +241,7 @@
   .ui-modules-select-items
   {
     display: grid;
-    grid-gap: 10px;
+    gap: 10px;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     align-items: stretch;
   }

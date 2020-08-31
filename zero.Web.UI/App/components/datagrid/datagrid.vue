@@ -181,7 +181,7 @@
   .ui-datagrid-items
   {
     display: grid;
-    grid-gap: var(--padding);
+    gap: var(--padding);
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     align-items: stretch;
   }

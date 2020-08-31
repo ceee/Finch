@@ -61,7 +61,7 @@ body
 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-gap: var(--padding);
+  gap: var(--padding);
   align-items: stretch;
   justify-content: stretch;
 

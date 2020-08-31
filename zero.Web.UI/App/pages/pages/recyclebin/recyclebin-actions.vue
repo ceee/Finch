@@ -111,7 +111,7 @@
   {
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-gap: var(--padding);
+    gap: var(--padding);
     align-items: center;
     width: 100%;
     background: var(--color-bg-bright);

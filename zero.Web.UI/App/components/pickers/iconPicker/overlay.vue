@@ -135,7 +135,7 @@
   .ui-iconpicker-overlay-items
   {
     display: grid;
-    grid-gap: 0;
+    gap: 0;
     grid-template-columns: repeat(auto-fill, 61px);
     align-items: stretch;
   }

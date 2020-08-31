@@ -151,7 +151,7 @@
   {
     display: grid;
     grid-template-columns: 30px 1fr auto;
-    grid-gap: 6px;
+    gap: 6px;
     height: 100%;
     align-items: center;
     position: relative;    

@@ -46,7 +46,7 @@
   {
     display: grid;
     grid-template-columns: 1fr auto;
-    grid-gap: 20px;
+    gap: 20px;
     align-items: center;
     background: var(--color-primary);
     color: var(--color-primary-fg);

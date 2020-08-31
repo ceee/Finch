@@ -103,7 +103,7 @@
     display: grid;
     width: 100%;
     grid-template-columns: 1fr auto;
-    grid-gap: 6px;
+    gap: 6px;
     align-items: center;
     font-size: var(--font-size);
     height: 46px;

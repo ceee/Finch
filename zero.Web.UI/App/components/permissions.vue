@@ -1,23 +1,25 @@
 ﻿<template>
-  <div class="ui-permissions ui-box">
-    <ui-property v-for="(permissionCollection, index) in permissions" :key="index" :label="permissionCollection.label" :description="permissionCollection.description">
-      <ui-error field="Claims" />
-      <ui-property v-for="(permission, index) in permissionCollection.items" :key="index" class="role-permission-toggle" :label="permission.label" :description="permission.description">
-        <ui-toggle v-if="permission.valueType === 'boolean'" :disabled="disabled" v-model="permission.value" @input="onChange" />
-        <div class="ui-permissions-crud" v-if="permission.valueType === 'crud'">
-          <ui-toggle :value="permission.value != 'none'" :disabled="disabled" @input="onPermissionToggle($event, permission)" />
-          <ui-check-list :value="permission.value.split(',')" :items="stateItems" v-if="permission.value != 'none'" :inline="true" @input="onPermissionCRUDChecked($event, permission)" />
-        </div>
-        <!--<ui-state-button v-if="permission.valueType === 'crud'" :disabled="disabled" :items="stateItems" v-model="permission.value" @input="onChange" />-->
-        <input v-if="permission.valueType === 'string'" :disabled="disabled" v-model="permission.value" type="text" class="ui-input" @input="onChange" />
-      </ui-property>
-    </ui-property>
+  <div>
+    <ui-inline-tabs v-if="permissions.length" class="ui-permissions" :force-count="true">
+      <ui-tab v-for="(permissionCollection, index) in permissions" :key="index" :label="permissionCollection.label" :title="permissionCollection.description" :count="getCount(permissionCollection)">
+        <ui-error field="Claims" />
+        <ui-property v-for="(permission, index) in permissionCollection.items" :key="index" class="role-permission-toggle" :label="permission.label" :description="permission.description">
+          <ui-toggle v-if="permission.valueType === 'boolean'" :disabled="disabled" v-model="permission.value" @input="onChange" />
+          <div class="ui-permissions-crud" v-if="permission.valueType === 'crud'">
+            <ui-toggle :value="permission.value != 'none'" :disabled="disabled" @input="onPermissionToggle($event, permission)" />
+            <ui-check-list :value="permission.value.split(',')" :items="stateItems" v-if="permission.value != 'none'" :inline="true" @input="onPermissionCRUDChecked($event, permission)" />
+          </div>
+          <!--<input v-if="permission.valueType === 'string'" :disabled="disabled" v-model="permission.value" type="text" class="ui-input" @input="onChange" />-->
+        </ui-property>
+      </ui-tab>
+    </ui-inline-tabs>
   </div>
 </template>
 
 
 <script>
   import UserRolesApi from 'zero/resources/userRoles';
+  import { filter as _filter } from 'underscore';
 
   export default {
     name: 'uiPermissions',
@@ -85,6 +87,16 @@
           });
         });
       },
+
+
+      getCount(permissionGroup)
+      {
+        return _filter(permissionGroup.items, claim =>
+        {
+          return claim.value !== 'none' && claim.value !== 'false' && !!claim.value;
+        }).length;
+      },
+
 
       onChange()
       {
@@ -167,6 +179,15 @@
   .ui-permissions > .ui-property > .ui-property-label
   {
     width: 300px;
+  }
+
+  .ui-permissions .ui-tab
+  {
+    border-top: 2px solid var(--color-line);
+    padding-top: var(--padding);
+    //background: var(--color-bg-dim);
+    //border-radius: var(--radius);
+    //padding: var(--padding);
   }
 
   .role-permission-toggle

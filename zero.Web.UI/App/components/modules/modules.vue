@@ -160,7 +160,7 @@
     font-size: var(--font-size);
     display: inline-grid;
     grid-template-columns: auto 1fr;
-    grid-gap: 25px;
+    gap: 25px;
     align-items: center;
   }
 

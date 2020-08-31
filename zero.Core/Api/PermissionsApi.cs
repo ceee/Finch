@@ -10,7 +10,6 @@ namespace zero.Core.Api
   {
     protected IZeroOptions Options { get; set; }
 
-
     public PermissionsApi(IZeroOptions options)
     {
       Options = options;
@@ -22,6 +21,7 @@ namespace zero.Core.Api
     {
       List<PermissionCollection> result = Options.Permissions.GetAllItems().ToList();
       PermissionCollection spaceCollection = result.FirstOrDefault(x => x.Alias == Constants.PermissionCollections.Spaces);
+      PermissionCollection moduleCollection = result.FirstOrDefault(x => x.Alias == Constants.PermissionCollections.Modules);
 
       if (spaceCollection != null)
       {
@@ -30,6 +30,16 @@ namespace zero.Core.Api
         foreach (Space space in Options.Spaces.GetAllItems())
         {
           spaceCollection.Items.Add(new Permission(Permissions.Spaces.PREFIX + space.Alias, space.Name, null, PermissionValueType.CRUD));
+        }
+      }
+
+      if (moduleCollection != null)
+      {
+        moduleCollection.Items.Clear();
+
+        foreach (ModuleType module in Options.Modules.GetAllItems())
+        {
+          moduleCollection.Items.Add(new Permission(Permissions.Modules.PREFIX + module.Alias, module.Name, module.Description, PermissionValueType.CRUD));
         }
       }
 

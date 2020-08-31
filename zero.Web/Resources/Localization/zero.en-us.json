@@ -286,12 +286,14 @@
       "none": "None"
     },
     "collections": {
-      "sections": "Access to sections",
+      "sections": "Sections",
       "sections_description": "Allow access to the following sections",
-      "settings": "Access to settings",
+      "settings": "Settings",
       "settings_description": "Define read and write access for settings areas",
-      "spaces": "Access to spaces",
-      "spaces_description": "Granular control of spaces"
+      "spaces": "Spaces",
+      "spaces_description": "Granular control of spaces",
+      "modules": "Modules",
+      "modules_description": "Availability of composing block modules"
     }
   },
 

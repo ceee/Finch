@@ -70,7 +70,7 @@
   {
     display: grid;
     grid-template-columns: auto 3fr 2fr auto;
-    grid-gap: 20px;
+    gap: 20px;
     align-items: center;
     min-height: 28px;
 

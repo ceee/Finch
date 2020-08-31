@@ -129,7 +129,7 @@
   .users-roles
   {
     display: grid;
-    grid-gap: var(--padding);
+    gap: var(--padding);
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     align-items: stretch;
     margin-bottom: calc(var(--padding) * 2);

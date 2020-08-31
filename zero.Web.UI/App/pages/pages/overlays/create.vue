@@ -114,7 +114,7 @@
     display: grid;
     width: 100%;
     grid-template-columns: 30px 1fr auto;
-    grid-gap: 6px;
+    gap: 6px;
     align-items: center;
     position: relative;
     color: var(--color-fg);
