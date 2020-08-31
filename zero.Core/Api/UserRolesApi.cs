@@ -35,30 +35,30 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IList<UserRole>> GetAll()
+    public async Task<IList<IUserRole>> GetAll()
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<UserRole>().OrderBy(x => x.Sort).ThenBy(x => x.Name).ToListAsync();
+        return await session.Query<IUserRole>().OrderBy(x => x.Sort).ThenBy(x => x.Name).ToListAsync();
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<UserRole> GetById(string id)
+    public async Task<IUserRole> GetById(string id)
     {
       return await RoleManager.FindByIdAsync(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<UserRole>> Save(UserRole model)
+    public async Task<EntityResult<IUserRole>> Save(IUserRole model)
     {
       ValidationResult validation = await new UserRoleValidator().ValidateAsync(model);
 
       if (!validation.IsValid)
       {
-        return EntityResult<UserRole>.Fail(validation);
+        return EntityResult<IUserRole>.Fail(validation);
       }
 
       if (model.Id.IsNullOrEmpty())
@@ -83,12 +83,12 @@ namespace zero.Core.Api
         }
       }
 
-      return EntityResult<UserRole>.Success(model);
+      return EntityResult<IUserRole>.Success(model);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<UserRole>> Delete(string id)
+    public async Task<EntityResult<IUserRole>> Delete(string id)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
@@ -96,7 +96,7 @@ namespace zero.Core.Api
 
         if (country == null)
         {
-          return EntityResult<UserRole>.Fail("@errors.ondelete.idnotfound");
+          return EntityResult<IUserRole>.Fail("@errors.ondelete.idnotfound");
         }
 
         session.Delete(country);
@@ -104,7 +104,7 @@ namespace zero.Core.Api
         await session.SaveChangesAsync();
       }
 
-      return EntityResult<UserRole>.Success();
+      return EntityResult<IUserRole>.Success();
     }
   }
 
@@ -114,21 +114,21 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all user roles
     /// </summary>
-    Task<IList<UserRole>> GetAll();
+    Task<IList<IUserRole>> GetAll();
 
     /// <summary>
     /// Get role by id
     /// </summary>
-    Task<UserRole> GetById(string id);
+    Task<IUserRole> GetById(string id);
 
     /// <summary>
     /// Create or update a role
     /// </summary>
-    Task<EntityResult<UserRole>> Save(UserRole model);
+    Task<EntityResult<IUserRole>> Save(IUserRole model);
 
     /// <summary>
     /// Deletes a role
     /// </summary>
-    Task<EntityResult<UserRole>> Delete(string id);
+    Task<EntityResult<IUserRole>> Delete(string id);
   }
 }

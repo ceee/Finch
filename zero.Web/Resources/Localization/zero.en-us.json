@@ -283,6 +283,7 @@
       "update": "Update",
       "delete": "Delete",
       "write": "Edit",
+      "createdelete": "Create/delete",
       "none": "None"
     },
     "collections": {

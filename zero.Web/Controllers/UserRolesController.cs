@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
-using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
@@ -21,51 +20,20 @@ namespace zero.Web.Controllers
     }
 
 
-    /// <summary>
-    /// Get role by id
-    /// </summary>  
-    public async Task<IActionResult> GetById([FromQuery] string id)
-    {
-      return Edit(await Api.GetById(id));
-    }
+    public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
 
-    /// <summary>
-    /// Get all roles
-    /// </summary>    
-    public async Task<IActionResult> GetAll()
-    {
-      return await As<UserRole, UserRoleListModel>(await Api.GetAll());
-    }
+    public async Task<IActionResult> GetAll() => Json(await Api.GetAll());
+   
+
+    public IActionResult GetAllPermissions() => Json(PermissionsApi.GetAll());
 
 
-    /// <summary>
-    /// Get all permissions for selection
-    /// </summary>    
-    public IActionResult GetAllPermissions()
-    {
-      return Json(PermissionsApi.GetAll());
-    }
-
-
-    /// <summary>
-    /// Save country
-    /// </summary>
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<IActionResult> Save([FromBody] UserRoleEditModel model)
-    {
-      UserRole role = await Mapper.Map(model, await Api.GetById(model.Id));
-      return await As<UserRole, UserRoleEditModel>(await Api.Save(role));
-    }
+    public async Task<IActionResult> Save([FromBody] IUserRole model) => Json(await Api.Save(model));
 
 
-    /// <summary>
-    /// Deletes a country
-    /// </summary>
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<IActionResult> Delete([FromQuery] string id)
-    {
-      return await As<UserRole, UserRoleEditModel>(await Api.Delete(id));
-    }
+    public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
   }
 }

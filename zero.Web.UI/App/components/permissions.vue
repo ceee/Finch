@@ -46,9 +46,8 @@
       claims: [],
       stateItems: [
         { name: '@permission.states.read', id: 'read' },
-        { name: '@permission.states.create', id: 'create' },
         { name: '@permission.states.update', id: 'update' },
-        { name: '@permission.states.delete', id: 'delete' }
+        { name: '@permission.states.create', id: 'create' }
       ],
       permissions: []
     }),
@@ -207,11 +206,6 @@
     .ui-check-list
     {
       margin-top: 1px;
-    }
-
-    .ui-native-check:first-child
-    {
-      display: none;
     }
   }
 </style>
