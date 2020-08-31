@@ -104,6 +104,7 @@
 
   .page-create-items
   {
+    margin: 0 -16px;
     margin-top: var(--padding);
     max-height: 600px;
     overflow-y: auto;
@@ -118,7 +119,13 @@
     align-items: center;
     position: relative;
     color: var(--color-fg);
-    padding: 16px 0;
+    padding: 16px;
+    border-radius: var(--radius); 
+
+    &:hover, &:focus
+    {
+      background: var(--color-bg-bright-two);
+    }
   }
 
   .page-create-item-text

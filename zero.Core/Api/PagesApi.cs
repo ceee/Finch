@@ -71,7 +71,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public PageType GetPageType(string alias)
+    public PageType GetPageType(string alias) 
     {
       return Options.Pages.GetAllItems().FirstOrDefault(x => x.Alias == alias);
     }
