@@ -1,11 +1,13 @@
 ﻿<template>
   <div class="ui-module-item" v-if="!loading" :data-module="alias">
-    <button type="button" v-if="module" class="ui-module-item-header" @click="$emit('edit', module, value)"><i :class="module.icon"></i> {{module.name}}</button>
-    
-    <button v-if="!module" type="button" class="ui-module-item-header is-error" disabled><i class="fth-alert-circle"></i> {{alias}}</button>
-    <p v-if="!module" class="ui-module-item-error">Could not find a registered module <code>[{{alias}}]</code> in the code.</p>
-
-    <ui-module-preview-inner v-if="module && tryRender" :template="renderer.preview.template" :value="value" />
+    <div class="ui-module-item-content" v-if="module" @click="emit('edit')">
+      <button type="button" class="ui-module-item-header"><i :class="module.icon"></i> {{module.name}}</button>
+      <ui-module-preview-inner v-if="tryRender" :template="renderer.preview.template" :value="value" @click="emit('edit')" />
+    </div>
+    <div class="ui-module-item-content" v-else>
+      <button type="button" class="ui-module-item-header is-error" disabled><i class="fth-alert-circle"></i> {{alias}}</button>
+      <p class="ui-module-item-error" v-localize:html="{ key: '@modules.notfound', tokens: { alias: alias } }"></p>
+    </div>
 
     <div v-if="!value.isActive" class="ui-module-item-disabled"></div>
 
@@ -15,10 +17,10 @@
           <ui-icon-button v-if="!value.isActive" class="ui-module-item-disabled-icon" icon="fth-lock" title="Disabled" />
           <ui-icon-button v-else icon="fth-more-horizontal" title="Actions" />
         </template>
-        <ui-dropdown-button v-if="canEdit" label="Edit" icon="fth-edit-2" @click="$emit('edit', module, value)" />
-        <ui-dropdown-button v-if="value.isActive" label="Disable" icon="fth-lock" @click="value.isActive = false" />
-        <ui-dropdown-button v-else label="Enable" icon="fth-unlock" @click="value.isActive = true" />
-        <ui-dropdown-button label="Remove" icon="fth-trash" @click="$emit('remove', module, value)" />
+        <ui-dropdown-button v-if="canEdit" label="Edit" icon="fth-edit-2" @click="emit('edit')" />
+        <ui-dropdown-button v-if="value.isActive" label="Disable" icon="fth-lock" @click="toggleStatus(false)" />
+        <ui-dropdown-button v-else label="Enable" icon="fth-unlock" @click="toggleStatus(true)" />
+        <ui-dropdown-button label="Remove" icon="fth-trash" @click="emit('remove')" />
       </ui-dropdown>
     </div>
   </div>
@@ -89,6 +91,17 @@
         this.module = _find(this.types, x => x.alias == this.alias);
         this.renderer = zero.renderers['module.' + this.alias];
         this.$nextTick(() => this.loading = false);
+      },
+
+      emit(ev)
+      {
+        this.$emit(ev, this.module, this.value);
+      },
+
+      toggleStatus(isActive)
+      {
+        this.value.isActive = isActive;
+        this.emit('isActive');
       }
     }
   }
@@ -98,20 +111,25 @@
   .ui-module-item
   {
     display: grid !important;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto auto;
+    grid-template-columns: 1fr auto 0;
     grid-column-gap: var(--padding);
     position: relative;
   }
 
+  .ui-module-item-content
+  {
+    padding: var(--padding);
+    padding-right: 0;
+    cursor: pointer;
+  }
+
   .ui-module-item-header
   {
-    grid-column: 1;
-    grid-row: 1;
     display: flex;
     align-items: center;
     color: var(--color-fg-dim);
     font-size: var(--font-size-s);
+    width: 100%;
 
     i
     {
@@ -152,9 +170,7 @@
 
   .ui-module-preview-inner
   {
-    grid-column: 1;
-    grid-row: 2;
-    margin-top: 12px;
+    padding-top: 12px;
     max-width: 1060px;
 
     p
@@ -179,7 +195,6 @@
   {
     display: flex;
     grid-column: 2;
-    grid-row: span 2 / auto;
     align-self: center;
     margin: -10px 0;
 
@@ -193,7 +208,6 @@
   {
     margin: 0;
     grid-column: 1;
-    grid-row: 2;
     margin-top: 12px;
   }
 </style>

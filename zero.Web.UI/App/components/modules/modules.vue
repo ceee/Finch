@@ -146,6 +146,7 @@
   .ui-module-item
   {
     display: block;
+    padding: 0;
   }
 
   .ui-module-item + .ui-module-item,
