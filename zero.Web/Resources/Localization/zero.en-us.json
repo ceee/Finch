@@ -493,6 +493,11 @@
     }
   },
 
+  "space": {
+    "list": "Spaces",
+    "name": "Space"
+  },
+
   "_test": {
     "fields": {
       "name": "Name",

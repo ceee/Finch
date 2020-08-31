@@ -22,7 +22,7 @@
           </slot>
           <slot name="settings-properties"></slot>
         </div>
-        <div class="ui-box">
+        <div class="ui-box" v-if="value.id">
           <slot name="infos">
             <ui-property v-if="value.id" label="@ui.id" :is-text="true">
               {{value.id}}

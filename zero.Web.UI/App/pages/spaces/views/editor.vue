@@ -1,15 +1,7 @@
 ﻿<template>
-  <ui-form ref="form" class="space-editor" v-slot="form" @submit="onSubmit" @load="onLoad">
-    <ui-header-bar :back-button="isList" :title="title" title-empty="Space">
-      <ui-dropdown v-if="isList && !disabled" align="right">
-        <template v-slot:button>
-          <ui-button type="white" label="@ui.actions" caret="down" />
-        </template>
-        <ui-dropdown-separator />
-      </ui-dropdown>
-      <ui-button :submit="true" label="@ui.save" :state="form.state" v-if="!disabled" />
-    </ui-header-bar>
-    <ui-editor v-if="renderer" :config="renderer" v-model="model" />
+  <ui-form ref="form" class="space-editor" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
+    <ui-form-header v-model="model" title="@space.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
+    <ui-editor v-if="renderer" :config="renderer" v-model="model" :meta="meta" />
   </ui-form>
 </template>
 
@@ -26,15 +18,24 @@
 
     data: () => ({
       disabled: false,
-      renderer: {},
-      model: null,
-      fullModel: null
+      renderer: null,
+      meta: {},
+      route: null, //zero.alias.sections.settings + '-' + zero.alias.settings.countries + '-edit',
+      model: { name: null }
     }),
 
     computed: {
+      id()
+      {
+        return this.$route.params.id;
+      },
+      alias()
+      {
+        return this.$route.params.alias;
+      },
       isList()
       {
-        return !!this.$route.params.id;
+        return !!this.id;
       },
       title()
       {
@@ -42,59 +43,33 @@
       }
     },
 
-    beforeRouteLeave(to, from, next) 
-    {
-      this.$refs.form.beforeRouteLeave(to, from, next);
-    },
 
     methods: {
 
       onLoad(form)
       {
-        form.load(SpacesApi.getContent(this.$route.params.alias, this.$route.params.id)).then(response =>
+        form.load(SpacesApi.getContent(this.alias, this.id)).then(response =>
         {
-          this.renderer = response.config;
-          this.model = response.model;
-          this.fullModel = response;
+          this.disabled = !response.meta.canEdit;
+          this.renderer = 'space.' + response.entity.spaceAlias;
+          this.meta = response.meta;
+          this.model = response.entity;
+          this.route = { name: 'space-item', params: { alias: this.alias } };
         });
       },
 
 
       onSubmit(form)
       {
-        this.fullModel.model = this.model;
-
-        form.handle(SpacesApi.save(this.fullModel)).then(response =>
-        {
-          console.info(response);
-        });
+        form.handle(SpacesApi.save(this.model));
       },
 
 
       onDelete(item, opts)
       {
         opts.hide();
-
-        Overlay.confirmDelete().then((opts) =>
-        {
-          opts.state('loading');
-
-          SpacesApi.delete(this.$route.params.alias, this.$route.params.id).then(response =>
-          {
-            if (response.success)
-            {
-              opts.state('success');
-              opts.hide();
-              this.$router.go(-1);
-              // TODO show message
-            }
-            else
-            {
-              opts.errors(response.errors);
-            }
-          });
-        });
-      }
+        this.$refs.form.onDelete(SpacesApi.delete.bind(this, this.alias, this.id));
+      }  
     }
   }
 </script>

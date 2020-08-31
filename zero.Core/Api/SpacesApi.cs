@@ -1,6 +1,4 @@
-﻿using FluentValidation.Results;
-using Microsoft.Extensions.Options;
-using Raven.Client.Documents;
+﻿using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System;
@@ -9,90 +7,60 @@ using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
-using zero.Core.Options;
-using zero.Core.Plugins;
 
 namespace zero.Core.Api
 {
-  public class SpacesApi : ISpacesApi
+  public class SpacesApi : AppAwareBackofficeApi, ISpacesApi
   {
-    protected IDocumentStore Raven { get; private set; }
-
     protected IPermissionsApi PermissionsApi { get; private set; }
 
-    protected IZeroOptions Options { get; set; }
 
-
-    public SpacesApi(IDocumentStore raven, IPermissionsApi permissionsApi, IZeroOptions options)
+    public SpacesApi(IBackofficeStore store, IPermissionsApi permissionsApi) : base(store)
     {
-      Raven = raven;
+      Scope.IncludeShared = true;
       PermissionsApi = permissionsApi;
-      Options = options;
     }
 
 
     /// <inheritdoc />
     public Space GetByAlias(string alias)
     {
-      return Options.Spaces.GetAllItems().FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
+      return GetAll().FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
     }
 
 
     /// <inheritdoc />
     public IReadOnlyCollection<Space> GetAll()
     {
-      return Options.Spaces.GetAllItems();
+      return Backoffice.Options.Spaces.GetAllItems();
     }
 
 
     /// <inheritdoc />
-    public async Task<T> GetItem<T>(string alias) where T : SpaceContent
+    public async Task<ISpaceContent> GetItem(string alias, string id = null)
     {
+      Space space = GetByAlias(alias);
+
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<SpaceContent>()
-          .Where(x => x.SpaceAlias == alias)
-          .ProjectInto<T>()
+        return await session.Query<ISpaceContent>()
+          .Scope(Scope)
+          .Where(x => x.SpaceAlias == space.Alias)
+          .WhereIf(x => x.Id == id, !id.IsNullOrEmpty())
           .FirstOrDefaultAsync();
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<T> GetItem<T>(string alias, string id) where T : SpaceContent
-    {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.Query<SpaceContent>()
-          .Where(x => x.SpaceAlias == alias && x.Id == id)
-          .ProjectInto<T>()
-          .FirstOrDefaultAsync();
-      }
-    }
-
-
-    /// <inheritdoc />
-    public async Task<IList<T>> GetList<T>(string alias) where T : SpaceContent
-    {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.Query<SpaceContent>()
-          .Where(x => x.SpaceAlias == alias)
-          .ProjectInto<T>()
-          .ToListAsync();
-      }
-    }
-
-
-    /// <inheritdoc />
-    public async Task<ListResult<T>> GetListByQuery<T>(string alias, ListQuery<T> query, string appId = null) where T : SpaceContent
+    public async Task<ListResult<ISpaceContent>> GetListByQuery(string alias, ListQuery<ISpaceContent> query)
     {
       query.SearchSelector = item => item.Name;
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<T>()
-          .Scope(appId)
+        return await session.Query<ISpaceContent>()
+          .Scope(Scope)
           .Where(x => x.SpaceAlias == alias)
           .ToQueriedListAsync(query);
       }
@@ -100,58 +68,17 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Save<T>(string alias, T model) where T : SpaceContent
+    public async Task<EntityResult<ISpaceContent>> Save(string alias, ISpaceContent model)
     {
-      Space space = GetByAlias(alias);
-      //RendererConfig config = GetEditorConfig(alias); 
-
-      //if (config.Validator != null)
-      //{
-      //  ValidationResult validation = await config.Validator.ValidateAsync(model);
-
-      //  if (!validation.IsValid)
-      //  {
-      //    return EntityResult<T>.Fail(validation);
-      //  }
-      //}
-
-      if (model.Id.IsNullOrEmpty())
-      {
-        model.AppId = "zero.applications.1-A"; // TODO real app id
-        model.CreatedDate = DateTimeOffset.Now;
-      }
-
-      model.SpaceAlias = alias;
-      model.Alias = Safenames.Alias(model.Name);
-
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        await session.StoreAsync(model);
-        await session.SaveChangesAsync();
-      }
-
-      return EntityResult<T>.Success(model);
+      model.SpaceAlias = GetByAlias(alias)?.Alias;
+      return await SaveModel(model, null);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<object>> Delete(string alias, string id)
+    public async Task<EntityResult<ISpaceContent>> Delete(string alias, string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        SpaceContent spaceContent = await session.LoadAsync<SpaceContent>(id);
-
-        if (spaceContent == null || !spaceContent.SpaceAlias.Equals(alias, StringComparison.InvariantCultureIgnoreCase))
-        {
-          return EntityResult.Fail("@errors.ondelete.idnotfound");
-        }
-
-        session.Delete(spaceContent);
-
-        await session.SaveChangesAsync();
-      }
-
-      return EntityResult.Success();
+      return await DeleteById<ISpaceContent>(id);
     }
   }
 
@@ -171,31 +98,21 @@ namespace zero.Core.Api
     /// <summary>
     /// Get editor item for a space
     /// </summary>
-    Task<T> GetItem<T>(string alias) where T : SpaceContent;
-
-    /// <summary>
-    /// Get editor item for a space
-    /// </summary>
-    Task<T> GetItem<T>(string alias, string id) where T : SpaceContent;
-
-    /// <summary>
-    /// Get all list items by space alias
-    /// </summary>
-    Task<IList<T>> GetList<T>(string alias) where T : SpaceContent;
+    Task<ISpaceContent> GetItem(string alias, string id = null);
 
     /// <summary>
     /// Get all list items for a space (with query)
     /// </summary>
-    Task<ListResult<T>> GetListByQuery<T>(string alias, ListQuery<T> query, string appId = null) where T : SpaceContent;
+    Task<ListResult<ISpaceContent>> GetListByQuery(string alias, ListQuery<ISpaceContent> query);
 
     /// <summary>
     /// Saves a content item in a space
     /// </summary>
-    Task<EntityResult<T>> Save<T>(string alias, T model) where T : SpaceContent;
+    Task<EntityResult<ISpaceContent>> Save(string alias, ISpaceContent model);
 
     /// <summary>
     /// Deletes a space content item
     /// </summary>
-    Task<EntityResult<object>> Delete(string alias, string id);
+    Task<EntityResult<ISpaceContent>> Delete(string alias, string id);
   }
 }

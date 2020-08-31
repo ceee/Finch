@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Core.Identity;
-using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
@@ -14,12 +14,10 @@ namespace zero.Web.Controllers
   public class SpacesController : BackofficeController
   {
     ISpacesApi Api;
-    IAuthenticationApi AuthenticationApi;
 
-    public SpacesController(ISpacesApi api, IAuthenticationApi authenticationApi)
+    public SpacesController(ISpacesApi api)
     {
       Api = api;
-      AuthenticationApi = authenticationApi;
     }
 
 
@@ -50,7 +48,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get list items in a space
     /// </summary>    
-    public async Task<IActionResult> GetList([FromQuery] string alias, [FromQuery] ListQuery<SpaceContent> query = null)
+    public async Task<IActionResult> GetList([FromQuery] string alias, [FromQuery] ListQuery<ISpaceContent> query = null)
     {
       if (!CanReadSpace(alias))
       {
@@ -64,44 +62,46 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get list items in a space
     /// </summary>    
-    public IActionResult GetContent([FromQuery] string alias, [FromQuery] string contentId = null)
+    public async Task<IActionResult> GetContent([FromQuery] string alias, [FromQuery] string contentId = null)
     {
       if (!CanReadSpace(alias))
       {
         return new StatusCodeResult(403);
       }
 
-      //TeamMember model = new TeamMember();
+      Space space = Api.GetByAlias(alias);
+      ISpaceContent model;
 
-      //if (!contentId.IsNullOrEmpty())
-      //{
-      //  model = await Api.GetItem<TeamMember>(alias, contentId);
-      //}
-
-      JsonSerializerSettings settings = JsonConvert.DefaultSettings();
-      settings.TypeNameHandling = TypeNameHandling.Objects;
-
-      return Json(new SpaceContentEditModel()
+      if (space == null)
       {
-        //Id = model.Id,
-        Alias = alias,
-        //Model = model,
-        //Config = Api.GetEditorConfig(alias)
-      }, settings);
+        return new StatusCodeResult(404);
+      }
+
+      if (space.View != SpaceView.List || !contentId.IsNullOrEmpty())
+      {
+        model = await Api.GetItem(alias, contentId);
+      }
+      else
+      {
+        model = Activator.CreateInstance(space.Type) as SpaceContent;
+        model.SpaceAlias = space.Alias;
+      }
+
+      return Edit(model);
     }
 
 
     /// <summary>
     /// Save content item
     /// </summary>
-    public async Task<IActionResult> Save([FromBody] SpaceContentEditModel model)
+    public async Task<IActionResult> Save([FromBody] ISpaceContent model)
     {
-      if (!CanWriteSpace(model.Alias))
+      if (!CanWriteSpace(model.SpaceAlias))
       {
         return new StatusCodeResult(403);
       }
 
-      return Json(await Api.Save(model.Alias, model.Model));
+      return Json(await Api.Save(model.SpaceAlias, model));
     }
 
 

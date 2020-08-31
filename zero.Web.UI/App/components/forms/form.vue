@@ -27,7 +27,7 @@
         default: () => [ 'uiProperty' ]
       },
       route: {
-        type: String,
+        type: [String, Object],
         default: null
       }
     },
@@ -173,10 +173,11 @@
 
                   if (response.model && this.route && this.$route.name !== this.route)
                   {
-                    this.$router.replace({
-                      name: this.route,
-                      params: { id: response.model.id }
-                    });
+                    let routeObj = typeof this.route === 'object' ? this.route : { name: this.route };
+                    routeObj.params = routeObj.params || {};
+                    routeObj.params.id = response.model.id;
+
+                    this.$router.replace(routeObj);
                   }
                 }
                 else

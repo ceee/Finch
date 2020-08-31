@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="spaces">
     <div class="app-tree spaces-tree" v-resizable="resizable">
-      <ui-header-bar title="Spaces" />
+      <ui-header-bar title="@space.list" />
       <div class="spaces-tree-items">
         <div v-for="item in spaces" class="spaces-tree-item" :class="getClasses(item)">
           <router-link :to="{ name: 'space', params: { alias: item.alias } }" class="spaces-tree-item-link">
@@ -113,7 +113,7 @@
 
         this.space = _find(this.spaces, space => space.alias === this.$route.params.alias);
 
-        if (this.space.view === 'editor' || this.$route.params.id)
+        if (this.space.view === 'editor' || this.$route.params.id || this.$route.meta.create)
         {
           this.component = SpaceEditor;
         }

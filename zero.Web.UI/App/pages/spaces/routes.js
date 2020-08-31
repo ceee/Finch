@@ -20,6 +20,16 @@ if (section)
     component: () => import('zero/pages/' + alias + '/spaces')
   });
 
+  routes.push({
+    path: ':alias/create',
+    props: true,
+    name: 'space-create',
+    component: () => import('zero/pages/' + alias + '/spaces'),
+    meta: {
+      create: true
+    }
+  });
+
   //routes.push({
   //  path: 'list/:id',
   //  props: true,

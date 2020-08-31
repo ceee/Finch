@@ -2,7 +2,7 @@
   <div class="list">
     <ui-header-bar :title="space.name" title-empty="List">
       <ui-table-filter v-model="tableConfig" />
-      <ui-button label="Add item" icon="fth-plus" />
+      <ui-button label="@ui.add" icon="fth-plus" @click="add" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table v-model="tableConfig" />
@@ -61,8 +61,16 @@
             }
           }
         };
-      }
+      },
 
+
+      add()
+      {
+        this.$router.push({
+          name: 'space-create',
+          params: { alias: this.space.alias }
+        });
+      }
     }
   }
 </script>
