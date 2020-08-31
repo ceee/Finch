@@ -105,11 +105,11 @@ textarea
 .ui-native-check-toggle
 {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
   text-align: center;
-  border-radius: var(--radius);
+  border-radius: 2px;
   background: var(--color-bg-bright-three);
   margin-right: 10px;
   position: relative;
@@ -125,11 +125,11 @@ textarea
 
   input:checked ~ &
   {
-    background: var(--color-primary);
+    background: var(--color-fg);
 
     &:before
     {
-      color: var(--color-primary-fg);
+      color: var(--color-bg);
     }
   }
 }
