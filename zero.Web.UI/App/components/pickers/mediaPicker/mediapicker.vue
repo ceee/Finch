@@ -2,14 +2,17 @@
   <div class="ui-mediapicker">
     <div v-if="previews.length > 0" class="ui-mediapicker-previews">
       <div v-for="item in previews" class="ui-mediapicker-preview">
-        <div class="ui-mediapicker-preview-image">
+        <div v-if="!item.error" class="ui-mediapicker-preview-image">
           <img v-if="item.thumbnailSource" :src="item.thumbnailSource" :alt="item.name" />
           <button v-if="!disabled" type="button" class="ui-mediapicker-preview-image-delete" @click="remove(item)" v-localize:title="'@ui.remove'"><i class="fth-x"></i></button>
           <button v-if="!disabled" type="button" class="ui-mediapicker-preview-image-edit" @click="edit(item)" v-localize:title="'@ui.edit'"><i class="fth-edit-2"></i></button>
         </div>
-        <div class="ui-mediapicker-preview-text">
+        <div v-if="!item.error" class="ui-mediapicker-preview-text">
           <b :title="item.name">{{getFilename(item.name)}}</b>
           <span class="is-filesize">{{getFileinfo(item)}}</span>
+        </div>
+        <div v-if="item.error">
+          <span class="is-filesize">{{item.error}}</span>
         </div>
       </div>
     </div>
@@ -146,12 +149,14 @@
 
         MediaApi.getByIds(ids).then(res =>
         {
-          _each(res, (value, id) =>
+          _each(ids, id =>
           {
+            let value = res[id];
+
             if (!value)
             {
               this.previews.push({
-                error: 'Could not load'
+                error: 'Could not load' // TODO output style + translation
               });
             }
             else
