@@ -66,6 +66,7 @@ namespace zero.Core.Api
       {
         if (typeof(T).Is<IAppAwareEntity>())
         {
+          // TODO use LoadAsync() and check Scope afterwards so we don't call an index
           return await session.Query<T>()
             .Where(x => x.Id == id)
             .Scope(Scope)
@@ -82,6 +83,7 @@ namespace zero.Core.Api
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
+        // TODO use LoadAsync() and check Scope afterwards so we don't call an index
         IList<T> items = await session.Query<T>()
           .Scope(Scope)
           .Where(x => x.Id.In(ids))
