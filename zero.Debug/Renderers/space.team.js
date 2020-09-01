@@ -20,5 +20,38 @@ export default {
       label: 'Email',
       required: true
     }
-  ]
+  ],
+
+  list: {
+    search: null,
+    columns: {
+      name: {
+        as: 'text',
+        label: '@ui.name',
+        bold: true,
+        link: item =>
+        {
+          return {
+            name: 'space-item',
+            params: { alias: 'team', id: item.id }
+          };
+        }
+      },
+      email: {
+        as: 'text',
+        label: 'Email',
+        width: 250
+      },
+      position: {
+        as: 'text',
+        label: 'Position',
+        width: 150
+      },
+      createdDate: {
+        as: 'date',
+        label: '@ui.createdDate',
+        width: 150
+      }
+    }
+  }
 };

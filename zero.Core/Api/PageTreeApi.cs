@@ -24,73 +24,83 @@ namespace zero.Core.Api
       IReadOnlyCollection<PageType> pageTypes = Backoffice.Options.Pages.GetAllItems();
       string[] openIds = new string[0] { };
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+
+      IList<IPage> pages = await session
+        .Query<IPage>()
+        .Scope(Scope)
+        .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
+        .ToListAsync();
+
+
+      // get hierarchy so we know if we should set the page to open
+      if (!activeId.IsNullOrEmpty())
       {
-        IList<IPage> pages = await session
-          .Query<IPage>()
+        Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
+          .ProjectInto<Pages_ByHierarchy.Result>()
+          .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
           .Scope(Scope)
-          .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
-          .ToListAsync();
+          .FirstOrDefaultAsync(x => x.Id == activeId);
 
-
-        // get hierarchy so we know if we should set the page to open
-        if (!activeId.IsNullOrEmpty())
+        if (result != null)
         {
-          Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
-            .ProjectInto<Pages_ByHierarchy.Result>()
-            .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
-            .Scope(Scope)
-            .FirstOrDefaultAsync(x => x.Id == activeId);
+          openIds = result.Path.Select(x => x.Id).ToArray(); // .Union(new string[1] { activeId })
+        }
+      }
 
-          if (result != null)
-          {
-            openIds = result.Path.Select(x => x.Id).ToArray(); // .Union(new string[1] { activeId })
-          }
+
+      // get children for all pages
+      string[] pageIds = pages.Select(x => x.Id).ToArray();
+
+      IList<Pages_WithChildren.Result> children = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
+        .ProjectInto<Pages_WithChildren.Result>()
+        .Scope(Scope)
+        .Where(x => x.Id.In(pageIds))
+        .ToListAsync();
+
+
+      // function to get modifier icon
+      TreeItemModifier GetModifier(IPage page)
+      {
+        if (page.PublishDate > DateTimeOffset.Now || page.UnpublishDate > DateTimeOffset.Now)
+        {
+          return new TreeItemModifier("@page.schedule.scheduled", "fth-clock color-primary");
+        }
+        if (!page.IsActive)
+        {
+          return new TreeItemModifier("@ui.inactive", "fth-minus-circle color-yellow");
+        }
+        return null;
+      }
+
+
+      // build tree
+      foreach (IPage page in pages)
+      {
+        PageType pageType = pageTypes.FirstOrDefault(x => x.Alias == page.PageTypeAlias);
+
+        if (pageType == null)
+        {
+          continue;
+          // TODO the page type does not exist anymore
         }
 
+        int childCount = children.Count(x => x.Id == page.Id);      
 
-        // get children for all pages
-        string[] pageIds = pages.Select(x => x.Id).ToArray();
-
-        IList<Pages_WithChildren.Result> children = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
-          .ProjectInto<Pages_WithChildren.Result>()
-          .Scope(Scope)
-          .Where(x => x.Id.In(pageIds))
-          .ToListAsync();
-
-
-        // build tree
-        foreach (IPage page in pages)
+        items.Add(new TreeItem()
         {
-          PageType pageType = pageTypes.FirstOrDefault(x => x.Alias == page.PageTypeAlias);
-
-          if (pageType == null)
-          {
-            continue;
-            // TODO the page type does not exist anymore
-          }
-
-          int childCount = children.Count(x => x.Id == page.Id);
-
-          items.Add(new TreeItem()
-          {
-            Id = page.Id,
-            Name = page.Name,
-            HasChildren = childCount > 0,
-            ChildCount = childCount,
-            ParentId = page.ParentId,
-            Sort = page.Sort,
-            Icon = pageType.Icon,
-            IsOpen = openIds.Contains(page.Id),
-            IsInactive = !page.IsActive,
-            HasActions = true,
-            Modifier = !page.IsActive ? new TreeItemModifier()
-            {
-              Icon = "fth-minus-circle color-yellow",
-              Name = "Inactive"
-            } : null
-          });
-        }
+          Id = page.Id,
+          Name = page.Name,
+          HasChildren = childCount > 0,
+          ChildCount = childCount,
+          ParentId = page.ParentId,
+          Sort = page.Sort,
+          Icon = pageType.Icon,
+          IsOpen = openIds.Contains(page.Id),
+          IsInactive = !page.IsActive,
+          HasActions = true,
+          Modifier = GetModifier(page)
+        });
       }
 
       if (parentId.IsNullOrEmpty())

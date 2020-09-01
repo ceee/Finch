@@ -83,11 +83,26 @@
 
       edit(module, model, isAdd)
       {
+        const alias = 'module.' + module.alias;
+        let renderer = zero.renderers[alias];
+
+        // some modules can have no fields for editing, so we add them directly
+        if (!renderer.fields || renderer.fields.length < 1)
+        {
+          return ModulesApi.getEmpty(module.alias).then(res =>
+          {
+            this.items.push(res.entity);
+            this.$refs.moduleSelect.reset();
+            this.onChange();
+          });
+        }
+
+        // open editing overlay
         return Overlay.open({
           component: EditModuleOverlay,
           display: 'editor',
           module: module,
-          renderer: 'module.' + module.alias,
+          renderer: alias,
           model: model,
           width: 1100
         }).then(value =>

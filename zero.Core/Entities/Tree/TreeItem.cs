@@ -81,5 +81,13 @@
     /// Icon to display
     /// </summary>
     public string Icon { get; set; }
+
+    public TreeItemModifier() { }
+
+    public TreeItemModifier(string name, string icon)
+    {
+      Name = name;
+      Icon = icon;
+    }
   }
 }

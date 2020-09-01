@@ -18,7 +18,7 @@
       get
       {
         Api.Scope.AppId = AppContext.AppId;
-        Api.Scope.Global = false;
+        Api.Scope.IsShared = false;
         return Api;
       }
     }
@@ -30,7 +30,7 @@
       get
       {
         Api.Scope.AppId = null;
-        Api.Scope.Global = true;
+        Api.Scope.IsShared = true;
         return Api;
       }
     }
@@ -42,7 +42,7 @@
       get
       {
         Api.Scope.AppId = Constants.Database.SharedAppId;
-        Api.Scope.Global = false;
+        Api.Scope.IsShared = false;
         return Api;
       }
     }
@@ -52,7 +52,7 @@
     public T App(string id)
     {
       Api.Scope.AppId = id;
-      Api.Scope.Global = false;
+      Api.Scope.IsShared = false;
       return Api;
     }
   }

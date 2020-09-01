@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-module-item" v-if="!loading" :data-module="alias">
+  <div class="ui-module-item" v-if="!loading" :data-module="alias" :class="{'can-edit': canEdit }">
     <div class="ui-module-item-content" v-if="module" @click="emit('edit')">
       <button type="button" class="ui-module-item-header"><i :class="module.icon"></i> {{module.name}}</button>
       <ui-module-preview-inner v-if="tryRender" :template="renderer.preview.template" :value="value" @click="emit('edit')" />
@@ -72,7 +72,7 @@
       },
       canEdit()
       {
-        return this.module && this.renderer;
+        return this.module && this.renderer && this.renderer.fields && this.renderer.fields.length > 0;
       }
     },
 
@@ -95,6 +95,10 @@
 
       emit(ev)
       {
+        if (!this.canEdit && ev === 'edit')
+        {
+          return;
+        }
         this.$emit(ev, this.module, this.value);
       },
 
@@ -114,13 +118,22 @@
     grid-template-columns: 1fr auto 0;
     grid-column-gap: var(--padding);
     position: relative;
+
+    &.can-edit .ui-module-item-content
+    {
+      cursor: pointer;
+    }
+
+    &:not(.can-edit) .ui-module-item-header
+    {
+      cursor: default;
+    }
   }
 
   .ui-module-item-content
   {
     padding: var(--padding);
     padding-right: 0;
-    cursor: pointer;
   }
 
   .ui-module-item-header

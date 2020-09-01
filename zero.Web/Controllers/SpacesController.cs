@@ -70,7 +70,7 @@ namespace zero.Web.Controllers
       }
 
       Space space = Api.GetByAlias(alias);
-      ISpaceContent model;
+      ISpaceContent model = null;
 
       if (space == null)
       {
@@ -81,7 +81,8 @@ namespace zero.Web.Controllers
       {
         model = await Api.GetItem(alias, contentId);
       }
-      else
+      
+      if (model == null && contentId.IsNullOrEmpty())
       {
         model = Activator.CreateInstance(space.Type) as SpaceContent;
         model.SpaceAlias = space.Alias;

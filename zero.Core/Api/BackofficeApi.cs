@@ -2,13 +2,11 @@
 using FluentValidation.Results;
 using Raven.Client;
 using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Operations;
 using Raven.Client.Documents.Queries;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Attributes;
 using zero.Core.Entities;
@@ -49,7 +47,7 @@ namespace zero.Core.Api
       Backoffice = store;
       Scope = new ApiScope()
       {
-        Global = true
+        IsShared = true
       };
     }
 
@@ -62,35 +60,52 @@ namespace zero.Core.Api
         return default;
       }
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        if (typeof(T).Is<IAppAwareEntity>())
-        {
-          // TODO use LoadAsync() and check Scope afterwards so we don't call an index
-          return await session.Query<T>()
-            .Where(x => x.Id == id)
-            .Scope(Scope)
-            .FirstOrDefaultAsync();
-        }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
 
-        return await session.LoadAsync<T>(id);
+      T model = await session.LoadAsync<T>(id);
+      IAppAwareEntity appAwareModel = model as IAppAwareEntity;
+
+      if (model == null || appAwareModel == null)
+      {
+        return model;
       }
+
+      if (!Scope.IsAllowed(appAwareModel.AppId))
+      {
+        return default;
+      }
+
+      return model;
     }
 
 
     /// <inheritdoc />
     public async Task<Dictionary<string, T>> GetByIds<T>(params string[] ids) where T : IZeroIdEntity
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        // TODO use LoadAsync() and check Scope afterwards so we don't call an index
-        IList<T> items = await session.Query<T>()
-          .Scope(Scope)
-          .Where(x => x.Id.In(ids))
-          .ToListAsync();
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      Dictionary<string, T> models = await session.LoadAsync<T>(ids);
+      Dictionary<string, T> result = new Dictionary<string, T>();
 
-        return ids.ToDictionary(x => x, x => items.FirstOrDefault(item => item.Id == x));
+      foreach (string id in ids)
+      {
+        if (!models.TryGetValue(id, out T model))
+        {
+          result.Add(id, default);
+          continue;
+        }
+
+        IAppAwareEntity appAwareModel = model as IAppAwareEntity;
+
+        if (appAwareModel == null || !Scope.IsAllowed(appAwareModel.AppId))
+        {
+          result.Add(id, default);
+          continue;
+        }
+
+        result.Add(id, model);
       }
+
+      return result;
     }
 
 
@@ -199,17 +214,11 @@ namespace zero.Core.Api
         zeroEntity.CreatedById ??= userId;
       }
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
 
-        // store entity
-        await session.StoreAsync(model);
-
-        // store media
-
-        await session.SaveChangesAsync();
-      }
+      await session.StoreAsync(model);
+      await session.SaveChangesAsync();
 
       return EntityResult<T>.Success(model);
     }
@@ -219,27 +228,26 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> DeleteById<T>(string id) where T : IZeroIdEntity
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+
+      T entity = await session.LoadAsync<T>(id);
+      IAppAwareEntity appAwareEntity = entity as IAppAwareEntity;
+
+      if (entity == null)
       {
-        T entity = await session.LoadAsync<T>(id);
-        IAppAwareEntity appAwareEntity = entity as IAppAwareEntity;
-
-        if (entity == null)
-        {
-          return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
-        }
-
-        if (appAwareEntity != null && Scope.IsAppAware && !Scope.IsAllowed(appAwareEntity.AppId))
-        {
-          return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
-        }
-
-        session.Delete(entity);
-
-        await session.SaveChangesAsync();
-
-        return EntityResult<T>.Success();
+        return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
       }
+
+      if (appAwareEntity != null && Scope.IsAppAware && !Scope.IsAllowed(appAwareEntity.AppId))
+      {
+        return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
+      }
+
+      session.Delete(entity);
+
+      await session.SaveChangesAsync();
+
+      return EntityResult<T>.Success();
     }
 
 

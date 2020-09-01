@@ -3,6 +3,12 @@
     <ui-form-header v-model="model" title="@page.name" :disabled="disabled" :is-create="!id" :state="form.state" :active-toggle="true" :can-delete="meta.canDelete" @delete="onDelete">
       <template v-slot:actions>
         <ui-dropdown-button label="@page.preview.title" icon="fth-eye" :disabled="disabled" />
+        <template v-if="id">
+          <ui-dropdown-separator />
+          <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(model)" />
+          <ui-dropdown-button label="@ui.copy.title" icon="fth-copy" @click="copy(model)" />
+        </template>
+        <ui-dropdown-separator />
       </template>
     </ui-form-header>
 
@@ -16,6 +22,9 @@
   import PagesApi from 'zero/resources/pages';
   import EventHub from 'zero/services/eventhub';
   import InfoTab from './page-info';
+  import Overlay from 'zero/services/overlay.js'
+  import MoveOverlay from './overlays/move'
+  import CopyOverlay from './overlays/copy'
   import { find as _find } from 'underscore';
 
   export default {
@@ -103,6 +112,9 @@
           {
             EventHub.$emit('page.update', response.model);
             this.model = response.model;
+
+            // store last edited page in localstorage
+            localStorage.setItem('zero.last-page.' + response.model.appId, response.model.id);
           }
         });
       },
@@ -125,7 +137,34 @@
           component: InfoTab,
           count: () => null
         });
-      }
+      },
+
+
+      move(item)
+      {
+        return Overlay.open({
+          component: MoveOverlay,
+          display: 'editor',
+          model: item
+        }).then(value =>
+        {
+          EventHub.$emit('page.move', value);
+          EventHub.$emit('page.update');
+        });
+      },
+
+
+      copy(item)
+      {
+        return Overlay.open({
+          component: CopyOverlay,
+          display: 'editor',
+          model: item
+        }).then(value =>
+        {
+          EventHub.$emit('page.update');
+        });
+      },
 
     }
   }

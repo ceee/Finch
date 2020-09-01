@@ -36,10 +36,6 @@
       isList()
       {
         return !!this.id;
-      },
-      title()
-      {
-        return this.isList ? 'My item' : this.space.name;
       }
     },
 
