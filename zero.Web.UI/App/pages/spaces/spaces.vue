@@ -2,31 +2,20 @@
   <div class="spaces">
     <div class="app-tree spaces-tree" v-resizable="resizable">
       <ui-header-bar title="@space.list" />
+
       <div class="spaces-tree-items">
-        <div v-for="item in spaces" class="spaces-tree-item" :class="getClasses(item)">
-          <router-link :to="{ name: 'space', params: { alias: item.alias } }" class="spaces-tree-item-link">
-            <i class="spaces-tree-item-icon" :class="item.icon"></i>
-            <span class="spaces-tree-item-text">
-              {{item.name | localize}}
-              <span v-if="item.description" v-localize="item.description"></span>
-            </span>
-          </router-link>
-          <ui-dot-button class="spaces-tree-item-actions" />
-        </div>
+        <router-link :to="{ name: 'space', params: { alias: item.alias } }" v-for="item in spaces" class="spaces-tree-item" :class="{ 'has-line': item.lineBelow }">
+          <i class="spaces-tree-item-icon" :class="item.icon"></i>
+          <span class="spaces-tree-item-text">
+            <span v-localize="item.name"></span>
+            <span class="-minor" v-if="item.description" v-localize="item.description"></span>
+          </span>
+        </router-link>
       </div>
-      <!--<div class="spaces-tree-actions">
-        <ui-button label="Add list" icon="fth-plus" />
-      </div>-->
       <div class="spaces-tree-resizable ui-resizable"></div>
     </div>
 
-    <!--<router-view v-if="!isOverview"></router-view>-->
     <component v-if="!isOverview && loaded && component" ref="comp" :is="component" :space="space" :config="spaceConfig"></component>
-
-    <div v-if="isOverview" class="spaces-overview">
-      
-    </div>
-
   </div>
 </template>
 
@@ -127,17 +116,6 @@
         }
 
         this.loaded = true;
-      },
-
-      // get all classes for a tree item
-      getClasses(item)
-      {
-        return {
-          'has-children': item.hasChildren,
-          'has-line': item.lineBelow,
-          'is-open': item.isOpen,
-          'is-active': item.alias == this.$route.params.alias
-        };
       }
     }
   }
@@ -167,12 +145,14 @@
   .spaces-tree-item
   {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 30px 1fr auto;
+    gap: 6px;
+    height: 100%;
     align-items: center;
-    font-size: var(--font-size);
-    padding: 15px var(--padding);
-    color: var(--color-fg);
     position: relative;
+    padding: 15px var(--padding);
+    font-size: var(--font-size);
+    color: var(--color-fg);
     transition: color 0.2s ease;
 
     &:hover > .spaces-tree-item-actions
@@ -181,40 +161,10 @@
       opacity: 1;
     }
 
-    /*&.has-line
-    {
-      margin-bottom: 25px;
-    }
-
-    &.has-line:after
-    {
-      content: '';
-      position: absolute;
-      bottom: -25px;
-      left: 0;
-      right: 0;
-      border-bottom: 2px solid var(--color-bg);
-    }*/
-
     &.is-active
     {
       background: var(--color-bg-bright-two);
       border-right: 3px solid var(--color-primary);
-    }
-  }
-
-  .spaces-tree-item-link
-  {
-    display: grid;
-    grid-template-columns: 30px 1fr auto;
-    gap: 6px;
-    height: 100%;
-    align-items: center;
-    position: relative;
-    color: var(--color-fg);
-
-    &.is-active
-    {
       font-weight: bold;
 
       .spaces-tree-item-text span
@@ -229,29 +179,10 @@
     display: flex;
     flex-direction: column;
 
-    span
+    .-minor
     {
       color: var(--color-fg-dim);
       margin-top: 3px;
-    }
-  }
-
-  .spaces-tree-item-toggle
-  {
-    position: absolute;
-    color: var(--color-fg-dim);
-    height: 100%;
-    top: 0;
-    left: 0;
-    width: 30px;
-    text-align: right;
-    padding-right: 5px;
-    outline: none !important;
-    transition: color 0.2s ease;
-
-    &:hover
-    {
-      color: var(--color-fg);
     }
   }
 
@@ -264,12 +195,5 @@
     top: -2px;
     color: var(--color-fg-reverse-mid);
     transition: color 0.2s ease;
-  }
-
-  .spaces-tree-item-actions
-  {
-    transition: opacity 0.2s ease 0;
-    opacity: 0;
-    color: var(--color-fg-dim);
   }
 </style>
