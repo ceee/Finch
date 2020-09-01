@@ -363,7 +363,8 @@
       "label": "Schedule",
       "header": "Schedule publishing",
       "publish": "Publish",
-      "unpublish": "Unpublish"
+      "unpublish": "Unpublish",
+      "scheduled": "Scheduled"
     },
 
     "actions": {
