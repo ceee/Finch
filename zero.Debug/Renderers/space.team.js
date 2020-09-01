@@ -23,6 +23,7 @@ export default {
   ],
 
   list: {
+    search: null,
     columns: {
       name: {
         as: 'text',

@@ -50,6 +50,7 @@
         this.createRoute.params.alias = this.space.alias;
 
         this.tableConfig = renderer && typeof renderer.list === 'object' ? renderer.list : {
+          search: null,
           columns: {
             name: {
               as: 'text',
