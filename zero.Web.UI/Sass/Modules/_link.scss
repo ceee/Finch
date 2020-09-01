@@ -5,4 +5,10 @@
   color: var(--color-fg-dim);
   text-decoration: underline dotted var(--color-fg-dim);
   text-underline-offset: 3px;
+
+  &.is-primary
+  {
+    color: var(--color-primary);
+    text-decoration-color: var(--color-primary);
+  }
 }

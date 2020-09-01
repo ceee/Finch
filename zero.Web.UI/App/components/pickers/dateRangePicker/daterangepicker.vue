@@ -126,5 +126,9 @@
 </script>
 
 <style lang="scss">
-  
+  .ui-daterangepicker.is-primary .ui-link
+  {
+    color: var(--color-primary);
+    text-decoration-color: var(--color-primary);
+  }
 </style>

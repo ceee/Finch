@@ -14,7 +14,7 @@
           <ui-toggle v-model="value.isActive" class="is-primary" />
         </ui-property>
         <ui-property label="@page.schedule.label" :is-text="true">
-          <ui-daterangepicker :value="{ from: value.publishDate, to: value.unpublishDate }" @input="onRangeChange" />
+          <ui-daterangepicker :value="{ from: value.publishDate, to: value.unpublishDate }" @input="onRangeChange" :class="{ 'is-primary': value.publishDate || value.unpublishDate }" />
         </ui-property>
       </div>
       <div class="ui-box">
