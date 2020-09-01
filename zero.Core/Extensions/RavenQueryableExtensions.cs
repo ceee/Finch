@@ -35,7 +35,7 @@ namespace zero.Core.Extensions
 
     public static IRavenQueryable<T> Scope<T>(this IRavenQueryable<T> source, ApiScope scope)
     {
-      if (scope == null || scope.Global)
+      if (scope == null || scope.IsShared)
       {
         return source;
       }

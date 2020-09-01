@@ -211,15 +211,15 @@ button::-moz-focus-inner
   z-index: 2;
   border-radius: 40px;
   border: 2px solid rgba(white, 0.2);
-  border-left-color: var(--color-bg);
+  border-left-color: var(--color-primary-fg);
   opacity: 1;
   will-change: transform;
   animation: rotating .5s linear infinite;
   transition: opacity .25s ease;
 
-  .type-light &, .type-blank &
+  .type-light &, .type-blank &, .type-white &
   {
-    border-color: var(--color-bg-bright);
+    //border-color: rgba(white, 0.2);
     border-left-color: var(--color-fg);
   }
 }
