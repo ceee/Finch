@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="list">
+  <div v-if="!loading" class="list">
     <ui-header-bar :title="space.name" title-empty="List">
       <ui-table-filter v-model="tableConfig" />
       <ui-button label="@ui.add" icon="fth-plus" @click="add" />
@@ -18,6 +18,7 @@
     props: [ 'space', 'config' ],
 
     data: () => ({
+      loading: true,
       tableConfig: {}
     }),
 
@@ -35,8 +36,14 @@
 
       load()
       {
-        this.tableConfig = {
-          items: SpacesApi.getList.bind(this, this.space.alias),
+        this.loading = true;
+
+        const alias = 'space.' + this.space.alias;
+        let renderer = zero.renderers[alias];
+
+        this.loading = false;
+
+        this.tableConfig = renderer && typeof renderer.list === 'object' ? renderer.list : {
           columns: {
             name: {
               as: 'text',
@@ -61,6 +68,8 @@
             }
           }
         };
+
+        this.tableConfig.items = SpacesApi.getList.bind(this, this.space.alias);
       },
 
 
