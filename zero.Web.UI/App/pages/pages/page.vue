@@ -103,6 +103,9 @@
           {
             EventHub.$emit('page.update', response.model);
             this.model = response.model;
+
+            // store last edited page in localstorage
+            localStorage.setItem('zero.last-page.' + response.model.appId, response.model.id);
           }
         });
       },

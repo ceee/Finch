@@ -352,7 +352,7 @@
     "overview": {
       "actions": {
         "continue": "Continue",
-        "continue_text": "You have last edited \"{page}\" on {date}",
+        "continue_text": "You have last edited \"{page}\"",
         "new": "New page",
         "new_text": "Create a new page on root",
         "history": "History",

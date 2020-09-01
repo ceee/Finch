@@ -42,6 +42,7 @@
   import CopyOverlay from './overlays/copy'
   import EventHub from 'zero/services/eventhub'
   import Notification from 'zero/services/notification.js'
+  import Strings from 'zero/services/strings';
 
   export default {
 
@@ -74,34 +75,10 @@
     },
 
 
-    created()
+    mounted()
     {
-      var instance = this;
-
-      this.actions.push({
-        alias: 'continue',
-        icon: 'fth-corner-down-right',
-        tokens: {
-          page: 'Products',
-          date: 'March 3rd, 2020'
-        }
-      });
-      this.actions.push({
-        alias: 'new',
-        icon: 'fth-plus',
-        tokens: {
-          root: 'Home'
-        },
-        action()
-        {
-          instance.create();
-        }
-      });
-      this.actions.push({
-        alias: 'history',
-        icon: 'fth-clock'
-      });
-
+      this.buildActions();
+      EventHub.$off('page.update');
       EventHub.$on('page.update', page =>
       {
         this.cache = [];
@@ -230,6 +207,61 @@
           });
         });
       },
+
+
+      buildActions()
+      {
+        this.actions = [];
+
+        var instance = this;
+
+        let lastEditedPageId = localStorage.getItem('zero.last-page.' + zero.appId);
+
+        if (lastEditedPageId)
+        {
+          PagesApi.getById(lastEditedPageId).then(res =>
+          {
+            this.actions.push({
+              alias: 'continue',
+              icon: 'fth-corner-down-right',
+              tokens: {
+                page: res.entity.name
+              },
+              action()
+              {
+                instance.$router.push({
+                  name: 'page',
+                  params: { id: res.entity.id }
+                });
+              }
+            });
+          });
+        }
+
+
+        this.actions.push({
+          alias: 'new',
+          icon: 'fth-plus',
+          tokens: {
+            root: 'Home'
+          },
+          action()
+          {
+            instance.create();
+          }
+        });
+
+        this.actions.push({
+          alias: 'history',
+          icon: 'fth-clock',
+          action()
+          {
+            Notification.error('Not implemented', 'Page editing history has not been implemented yet');
+          }
+        });
+
+        
+      }
     }
   }
 </script>

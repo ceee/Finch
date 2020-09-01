@@ -119,10 +119,11 @@
     grid-column-gap: var(--padding);
     position: relative;
 
-    &.can-edit .ui-module-item
+    &.can-edit .ui-module-item-content
     {
       cursor: pointer;
     }
+
     &:not(.can-edit) .ui-module-item-header
     {
       cursor: default;
