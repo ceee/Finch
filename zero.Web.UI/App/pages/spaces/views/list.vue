@@ -1,8 +1,8 @@
 ﻿<template>
-  <div v-if="!loading" class="list">
+  <div v-if="!loading" class="space-list">
     <ui-header-bar :title="space.name" title-empty="List">
       <ui-table-filter v-model="tableConfig" />
-      <ui-button label="@ui.add" icon="fth-plus" @click="add" />
+      <ui-add-button :route="createRoute" :decision="canCreateShared" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table v-model="tableConfig" />
@@ -19,7 +19,12 @@
 
     data: () => ({
       loading: true,
-      tableConfig: {}
+      tableConfig: {},
+      createRoute: {
+        name: 'space-create',
+        params: { alias: null }
+      },
+      canCreateShared: false
     }),
 
     watch: {
@@ -41,7 +46,8 @@
         const alias = 'space.' + this.space.alias;
         let renderer = zero.renderers[alias];
 
-        this.loading = false;
+        this.canCreateShared = this.space.allowShared;
+        this.createRoute.params.alias = this.space.alias;
 
         this.tableConfig = renderer && typeof renderer.list === 'object' ? renderer.list : {
           columns: {
@@ -70,6 +76,11 @@
         };
 
         this.tableConfig.items = SpacesApi.getList.bind(this, this.space.alias);
+
+        const firstKey = Object.keys(this.tableConfig.columns)[0];
+        this.tableConfig.columns[firstKey].shared = true;
+
+        this.loading = false;
       },
 
 

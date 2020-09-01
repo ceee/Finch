@@ -19,6 +19,8 @@ namespace zero.Core.Entities
     public string Icon { get; set; }
 
     public bool LineBelow { get; set; }
+
+    public bool AllowShared { get; set; }
   }
 
   public interface ISpace
@@ -38,5 +40,7 @@ namespace zero.Core.Entities
     Type Type { get; set; }
 
     SpaceView View { get; set; }
+  
+    bool AllowShared { get; set; }
   }
 }

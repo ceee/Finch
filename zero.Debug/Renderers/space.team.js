@@ -36,17 +36,20 @@ export default {
           };
         }
       },
-      position: {
-        as: 'text',
-        label: 'Position'
-      },
       email: {
         as: 'text',
-        label: 'Email'
+        label: 'Email',
+        width: 250
+      },
+      position: {
+        as: 'text',
+        label: 'Position',
+        width: 150
       },
       createdDate: {
         as: 'date',
-        label: '@ui.createdDate'
+        label: '@ui.createdDate',
+        width: 150
       }
     }
   }

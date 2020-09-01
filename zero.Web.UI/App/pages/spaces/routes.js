@@ -21,7 +21,7 @@ if (section)
   });
 
   routes.push({
-    path: ':alias/create',
+    path: ':alias/create/:scope?',
     props: true,
     name: 'space-create',
     component: () => import('zero/pages/' + alias + '/spaces'),

@@ -39,7 +39,7 @@
         default: 'action'
       },
       route: {
-        type: String,
+        type: [String, Object],
         default: null
       },
       disabled: {
@@ -70,10 +70,11 @@
 
         if (!!this.route)
         {
-          this.$router.push({
-            name: this.route,
-            params: { scope: isShared ? zero.sharedAppId : null }
-          });
+          let routeObj = typeof this.route === 'object' ? this.route : { name: this.route };
+          routeObj.params = routeObj.params || {};
+          routeObj.params.scope = isShared ? zero.sharedAppId : null;
+
+          this.$router.push(routeObj);
         }
 
         this.$emit('click', false);
