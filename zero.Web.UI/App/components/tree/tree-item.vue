@@ -106,8 +106,8 @@
     transition: color 0.2s ease;
     position: relative;
 
-    &.is-inactive .ui-tree-item-text
-    //&.is-inactive .ui-tree-item-icon
+    &.is-inactive .ui-tree-item-text,
+    &.is-inactive .ui-tree-item-icon
     {
       color: var(--color-fg-dim);
     }

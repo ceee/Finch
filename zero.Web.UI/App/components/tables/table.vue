@@ -559,9 +559,15 @@
   .ui-table-cell[field-type="datetime"]
   {
     display: inline;
+
     .-minor
     {
       color: var(--color-fg-dim);
     }
+  }
+
+  .ui-table-field-image
+  {
+    border-radius: 3px;
   }
 </style>

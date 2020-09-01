@@ -114,8 +114,8 @@
   {
     display: grid;
     width: 100%;
-    grid-template-columns: 30px 1fr auto;
-    gap: 6px;
+    grid-template-columns: 42px 1fr auto;
+    gap: 12px;
     align-items: center;
     position: relative;
     color: var(--color-fg);
@@ -125,6 +125,16 @@
     &:hover, &:focus
     {
       background: var(--color-bg-bright-two);
+
+      .page-create-item-icon
+      {
+        color: var(--color-fg);
+      }
+    }
+
+    & + .page-create-item
+    {
+      margin-top: 10px;
     }
   }
 
@@ -142,12 +152,12 @@
 
   .page-create-item-icon
   {
-    font-size: 18px;
+    font-size: 22px;
     line-height: 1;
     font-weight: 400;
     position: relative;
     top: -2px;
-    color: var(--color-fg);
+    color: var(--color-fg-dim);
     transition: color 0.2s ease;
   }
 </style>
