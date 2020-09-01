@@ -34,6 +34,7 @@ namespace zero.TestData
       zero.Modules.Add<GalleryModule>("gallery", "Gallery", "Image gallery grid", "fth-image", "Media");
       zero.Modules.Add<DownloadModule>("download", "Downloads", "List containing downloads", "fth-download", "Misc");
       zero.Modules.Add<OffsetModule>("offset", "Offset", "Offset between two modules", "fth-code", "Misc");
+      zero.Modules.Add<NestedModule>("nested", "Nested", "Add nested modules", "fth-layers", "Misc");
     }
 
     public void ConfigureServices(IServiceCollection services)
