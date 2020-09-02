@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-datagrid-outer">
     <div class="ui-datagrid">
-      <div class="ui-datagrid-items" :style="'grid-template-columns: repeat(auto-fill, minmax(' + configuration.width + 'px, 1fr))'">
+      <div class="ui-datagrid-items" :style="'grid-template-columns: repeat(auto-fill, minmax(' + configuration.width + 'px, 1fr))'" :class="{'is-block': configuration.block }">
         <component v-for="(item, index) in items" :is="configuration.component" :key="index" :value="item" class="ui-datagrid-cell"></component>
       </div>
 
@@ -43,7 +43,9 @@
     // scroll to top on page change
     scrollToTop: true,
     // promise which returns items based on the current filter and sorting
-    items: null
+    items: null,
+    // for block items
+    block: false
   };
 
   export default {
@@ -63,6 +65,7 @@
     components: { UiPagination },
 
     watch: {
+      '$route': 'load',
       'value.search': function (val)
       {
         this.filter.search = val;
@@ -184,6 +187,11 @@
     gap: var(--padding);
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     align-items: stretch;
+
+    &.is-block
+    {
+      display: block;
+    }
   }
 
   .ui-datagrid-empty, .ui-datagrid-loading

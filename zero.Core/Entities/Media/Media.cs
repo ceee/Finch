@@ -3,9 +3,7 @@ using zero.Core.Attributes;
 
 namespace zero.Core.Entities
 {
-  /// <summary>
-  /// A media file (can contain an image or other media like videos and documents)
-  /// </summary>
+  /// <inheritdoc />
   public class Media : ZeroEntity, IMedia
   {
     /// <inheritdoc />
@@ -49,6 +47,9 @@ namespace zero.Core.Entities
   }
 
 
+  /// <summary>
+  /// A media file (can contain an image or other media like videos and documents)
+  /// </summary>
   [Collection("Media")]
   public interface IMedia : IZeroEntity, IAppAwareEntity, IZeroDbConventions
   {

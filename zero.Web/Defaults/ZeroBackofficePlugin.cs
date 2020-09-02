@@ -24,6 +24,8 @@ namespace zero.Web.Defaults
       services.AddTransient<ITranslation, Translation>();
       services.AddTransient<IPage, Page>();
       services.AddTransient<IRecycledEntity, RecycledEntity>();
+      services.AddTransient<IMedia, Media>();
+      services.AddTransient<IMediaFolder, MediaFolder>();
 
 
       services.AddTransient<IApplicationsApi, ApplicationsApi>();
@@ -45,7 +47,6 @@ namespace zero.Web.Defaults
       services.AddTransient<IRevisionsApi, RevisionsApi>();
       services.AddTransient<IMediaApi, MediaApi>();
       services.AddTransient<IMediaFolderApi, MediaFolderApi>();
-      services.AddTransient<IMediaUploadApi, MediaUploadApi>();
       services.AddTransient<IModulesApi, ModulesApi>();
       services.AddTransient<IRecycleBinApi, RecycleBinApi>();
     }

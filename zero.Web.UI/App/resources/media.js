@@ -28,6 +28,12 @@ export default {
     return Axios.get(base + 'getAll', { params: query }).then(res => Promise.resolve(res.data));
   },
 
+  // get all media items (including folders)
+  getListByQuery(query)
+  {
+    return Axios.get(base + 'getListByQuery', { params: query }).then(res => Promise.resolve(res.data));
+  },
+
   // get path to thumbnail source
   getImageSource(id)
   {

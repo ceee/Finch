@@ -1,20 +1,5 @@
 ﻿<template>
   <div class="media">
-    <div class="app-tree media-tree" v-resizable="resizable">
-      <ui-tree ref="tree" :get="getTree" :config="treeConfig" :active="id" header="@media.list">
-        <template v-slot:actions="props">
-          <ui-dropdown-button v-if="props.item && props.item.id === 'recyclebin'" :value="props.item" label="Empty recycle bin" icon="fth-trash-2" />
-          <template v-if="!props.item || props.item.id !== 'recyclebin'">
-            <ui-dropdown-button label="Create" icon="fth-plus" @click="addFolder(props.item)" />
-            <ui-dropdown-button v-if="props.item" label="Move" icon="fth-corner-down-right" @click="move(props.item)" />
-            <ui-dropdown-separator v-if="props.item" />
-            <ui-dropdown-button v-if="props.item" label="Delete" icon="fth-trash" @click="remove(props.item)" />
-          </template>
-        </template>
-      </ui-tree>
-      <div class="app-tree-resizable ui-resizable"></div>
-    </div>
-
     <router-view v-if="!isOverview"></router-view>
 
     <div v-if="isOverview" class="media-content">
@@ -29,26 +14,7 @@
 
       <div class="ui-view-box">
         <div class="media-items">
-
-          <!-- upload field -->
-          <!--<div v-if="id" class="media-item is-blank">
-            <input class="media-item-upload" type="file" multiple @change="onUpload" />
-            <span class="media-item-content">
-              <i class="fth-plus"></i>
-            </span>
-          </div>-->
-
-          <!-- folder list -->
-          <div v-if="!id" class="ui-datagrid-items">
-            <router-link :to="getLink(item)" class="media-item is-folder" v-for="item in folders" :key="item.id">
-              <span class="media-item-content is-folder">
-                <i class="fth-folder"></i>
-                <span>{{item.name}}</span>
-              </span>
-            </router-link>
-          </div>
-
-          <ui-datagrid v-if="id" ref="grid" v-model="gridConfig" />
+          <ui-datagrid ref="grid" v-model="gridConfig" />
         </div>
       </div>
     </div>
@@ -58,35 +24,18 @@
 
 <script>
   import MediaApi from 'zero/resources/media.js'
-  import MediaFolderApi from 'zero/resources/media-folder.js'
   import Overlay from 'zero/services/overlay.js';
   import AddFolderOverlay from './folder';
   import MediaItemOverlay from './media-overlay-item';
   import MediaItem from './media-item';
   import UploadStatusOverlay from './upload-status';
-  import Strings from 'zero/services/strings.js';
   import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
 
   export default {
 
     data: () => ({
-      cache: {},
       items: [],
-      folders: [],
-      treeConfig: {},
-      current: null,
-      icons: {
-        image: 'fth-image',
-        video: 'fth-video',
-        file: 'fth-file'
-      },
-      resizable: {
-        axis: 'x',
-        min: 260,
-        max: 520,
-        save: 'media-tree',
-        handle: '.ui-resizable'
-      }
+      current: null
     }),
 
     created()
@@ -95,7 +44,7 @@
 
       this.gridConfig = {
         search: null,
-        width: 160,
+        width: 280,
         component: MediaItem,
         items: this.getItems
       };
@@ -103,26 +52,6 @@
       if (!this.id)
       {
         this.getItems();
-      }
-    },
-
-    watch: {
-      '$route'()
-      {
-        this.cache = {};
-
-        if (!this.id)
-        {
-          this.getItems();
-        }
-        else if (this.isOverview)
-        {
-          this.$nextTick(() =>
-          {
-            this.$refs.grid.load();
-          });
-        }
-        //this.getItems();
       }
     },
 
@@ -153,50 +82,10 @@
 
         query.folderId = this.$route.params.id;
 
-        return MediaApi.getAll(query).then(response =>
+        return MediaApi.getListByQuery(query).then(response =>
         {
           this.items = response.items;
-          this.folders = response.folders;
-          this.current = response.folder;
-
           return Promise.resolve(response);
-        });
-      },
-
-
-      // get link for folder or media item
-      getLink(item, isMediaItem)
-      {
-        if (item.id === 'recyclebin')
-        {
-          return { name: 'mediarecyclebin' };
-        }
-
-        return {
-          name: 'mediafolder',
-          params: { id: item.id }
-        };
-      },
-
-
-      // load folders in tree
-      getTree(parent)
-      {
-        const key = !parent ? '__root' : parent;
-
-        if (this.cache[key])
-        {
-          return Promise.resolve(this.cache[key]);
-        }
-
-        return MediaFolderApi.getAllAsTree(parent, this.id).then(response =>
-        {
-          response.forEach(item =>
-          {
-            item.url = this.getLink(item);
-          });
-          this.cache[key] = response;
-          return response;
         });
       },
 
@@ -210,11 +99,7 @@
           theme: 'dark'
         }).then(item =>
         {
-          setTimeout(() =>
-          {
-            this.$refs.tree.refresh();
-            this.$router.push({ name: 'mediafolder', params: { id: item.model.id } });
-          }, 500);
+          this.$router.push({ name: 'mediafolder', params: { id: item.model.id } });
         }, () => { });
       },
 
@@ -237,7 +122,6 @@
         return Overlay.open(options).then(value =>
         {
           console.info(value);
-          //this.onChange(value);
         }, () => { });
       },
 
@@ -271,10 +155,6 @@
     height: 100vh;
     background: var(--color-bg);
     overflow-y: auto;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 2px;
-    justify-content: stretch;
   }
 
   .media-content
@@ -285,109 +165,7 @@
 
   .media-items .ui-datagrid-items
   {
-    /*display: grid;
-    flex-wrap: wrap;*/
-    gap: 15px;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
-    align-items: stretch;
-  }
-
-  a.media-item, .media-item
-  {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-bg-bright);
-    height: 160px;
-    border-radius: var(--radius);
-    overflow: hidden;
-    color: var(--color-fg);
-    font-size: var(--font-size-xs);
-    position: relative;
-    padding: 10px;
-
-    img
-    {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      border-radius: var(--radius);
-    }
-
-    &.is-blank
-    {
-      border: 2px dotted var(--color-line);
-      background: transparent;
-    }
-
-    &.is-folder
-    {
-      background: var(--color-bg-bright);
-    }
-
-    &.is-folder, &.is-blank
-    {
-      flex: 0 1 auto;
-    }
-  }
-
-  .media-item-content
-  {
-    display: grid;
-    width: 100%;
-    grid-template-rows: 1fr auto;
-    text-align: center;
-    height: 100%;
-  
-    /*&.is-folder, &.is-file
-    {
-      box-shadow: var(--color-shadow-short);
-    }*/
-
-    i
-    {
-      display: flex;
-      width: 100%;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      position: relative;
-
-      &:after
-      {
-        font-family: var(--font);
-        content: attr(data-extension);
-        font-size: 12px;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        margin-top: 25px;
-        background: var(--color-bg);
-        display: inline-block;
-        padding: 4px 8px;
-        border-radius: 3px;
-        font-weight: 600;
-        transform: translateX(-50%);
-      }
-    }
-
-    .is-blank & i:after,
-    &.is-folder i:after
-    {
-      display: none;
-    }
-
-    span
-    {
-      display: block;
-      /*border-top: 1px solid var(--color-line);*/
-      padding: 10px 20px 12px;
-    }
-
-    &.is-folder span
-    {
-      font-weight: bold;
-    }
+    gap: 16px var(--padding);
   }
 
   input[type="file"].media-item-upload

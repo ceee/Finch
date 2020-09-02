@@ -17,18 +17,18 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<MediaFolder> GetById(string id)
+    public async Task<IMediaFolder> GetById(string id)
     {
-      return await GetById<MediaFolder>(id);
+      return await GetById<IMediaFolder>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<MediaFolder>> GetAll(string parentId = null)
+    public async Task<IList<IMediaFolder>> GetAll(string parentId = null)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<MediaFolder>()
+        return await session.Query<IMediaFolder>()
           .Scope(Scope)
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .OrderByDescending(x => x.Name)
@@ -45,7 +45,7 @@ namespace zero.Core.Api
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        IList<MediaFolder> folders = await session.Query<MediaFolder>()
+        IList<IMediaFolder> folders = await session.Query<IMediaFolder>()
           .Scope(Scope)
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .OrderByDescending(x => x.Name)
@@ -57,7 +57,7 @@ namespace zero.Core.Api
         {
           MediaFolder_ByHierarchy.Result result = await session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
             .ProjectInto<MediaFolder_ByHierarchy.Result>()
-            .Include<MediaFolder_ByHierarchy.Result, MediaFolder>(x => x.Path.Select(p => p.Id))
+            .Include<MediaFolder_ByHierarchy.Result, IMediaFolder>(x => x.Path.Select(p => p.Id))
             .Scope(Scope)
             .FirstOrDefaultAsync(x => x.Id == activeId);
 
@@ -78,7 +78,7 @@ namespace zero.Core.Api
           .ToListAsync();
 
 
-        foreach (MediaFolder folder in folders)
+        foreach (IMediaFolder folder in folders)
         {
           int childCount = children.Count(x => x.Id == folder.Id);
 
@@ -121,28 +121,28 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IList<MediaFolder>> GetHierarchy(string id)
+    public async Task<IList<IMediaFolder>> GetHierarchy(string id)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         MediaFolder_ByHierarchy.Result result = await session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
           .ProjectInto<MediaFolder_ByHierarchy.Result>()
-          .Include<MediaFolder_ByHierarchy.Result, MediaFolder>(x => x.Path.Select(p => p.Id))
+          .Include<MediaFolder_ByHierarchy.Result, IMediaFolder>(x => x.Path.Select(p => p.Id))
           .Scope(Scope)
           .FirstOrDefaultAsync(x => x.Id == id);
 
         if (result == null)
         {
-          return new List<MediaFolder>();
+          return new List<IMediaFolder>();
         }
 
-        return (await session.LoadAsync<MediaFolder>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
+        return (await session.LoadAsync<IMediaFolder>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<MediaFolder>> Save(MediaFolder model)
+    public async Task<EntityResult<IMediaFolder>> Save(IMediaFolder model)
     {
       model.IsActive = true;
       return await SaveModel(model, new MediaFolderValidator());
@@ -150,9 +150,9 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<MediaFolder>> Delete(string id)
+    public async Task<EntityResult<IMediaFolder>> Delete(string id)
     {
-      return await DeleteById<MediaFolder>(id);
+      return await DeleteById<IMediaFolder>(id);
     }
   }
 
@@ -162,17 +162,17 @@ namespace zero.Core.Api
     /// <summary>
     /// Get application by Id
     /// </summary>
-    Task<MediaFolder> GetById(string id);
+    Task<IMediaFolder> GetById(string id);
 
     /// <summary>
     /// Get hierarchy for a folder
     /// </summary>
-    Task<IList<MediaFolder>> GetHierarchy(string id);
+    Task<IList<IMediaFolder>> GetHierarchy(string id);
 
     /// <summary>
     /// Get all folders with the specified parent or on root
     /// </summary>
-    Task<IList<MediaFolder>> GetAll(string parentId = null);
+    Task<IList<IMediaFolder>> GetAll(string parentId = null);
 
     /// <summary>
     /// Get all folders with the specified parent or on root for tree output
@@ -182,11 +182,11 @@ namespace zero.Core.Api
     /// <summary>
     /// Creates or updates a folder
     /// </summary>
-    Task<EntityResult<MediaFolder>> Save(MediaFolder model);
+    Task<EntityResult<IMediaFolder>> Save(IMediaFolder model);
 
     /// <summary>
     /// Deletes a folder
     /// </summary>
-    Task<EntityResult<MediaFolder>> Delete(string id);
+    Task<EntityResult<IMediaFolder>> Delete(string id);
   }
 }

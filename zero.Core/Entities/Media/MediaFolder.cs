@@ -1,16 +1,27 @@
-﻿namespace zero.Core.Entities
+﻿using zero.Core.Attributes;
+
+namespace zero.Core.Entities
 {
-  /// <summary>
-  /// A media folder contains media and other folders
-  /// </summary>
-  public class MediaFolder : ZeroEntity, IAppAwareEntity, IZeroDbConventions
+  /// <inheritdoc />
+  public class MediaFolder : ZeroEntity, IMediaFolder
   {
     /// <inheritdoc />
     public string AppId { get; set; }
 
+    /// <inheritdoc />
+    public string ParentId { get; set; }
+  }
+
+
+  /// <summary>
+  /// A media folder contains media and other folders
+  /// </summary>
+  [Collection("MediaFolders")]
+  public interface IMediaFolder : IZeroEntity, IAppAwareEntity, IZeroDbConventions
+  {
     /// <summary>
     /// Parent folder id
     /// </summary>
-    public string ParentId { get; set; }
+    string ParentId { get; set; }
   }
 }

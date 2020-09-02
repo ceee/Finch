@@ -3,7 +3,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Validation
 {
-  public class MediaFolderValidator : AbstractValidator<MediaFolder>
+  public class MediaFolderValidator : AbstractValidator<IMediaFolder>
   {
     public MediaFolderValidator()
     {
