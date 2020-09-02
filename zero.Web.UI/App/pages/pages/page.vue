@@ -3,11 +3,9 @@
     <ui-form-header v-model="model" title="@page.name" :disabled="disabled" :is-create="!id" :state="form.state" :active-toggle="true" :can-delete="meta.canDelete" @delete="onDelete">
       <template v-slot:actions>
         <ui-dropdown-button label="@page.preview.title" icon="fth-eye" :disabled="disabled" />
-        <template v-if="id">
-          <ui-dropdown-separator />
-          <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(model)" />
-          <ui-dropdown-button label="@ui.copy.title" icon="fth-copy" @click="copy(model)" />
-        </template>
+        <ui-dropdown-separator />
+        <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(model)" />
+        <ui-dropdown-button label="@ui.copy.title" icon="fth-copy" @click="copy(model)" />
         <ui-dropdown-separator />
       </template>
     </ui-form-header>

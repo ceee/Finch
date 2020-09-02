@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
@@ -11,13 +12,11 @@ namespace zero.Web.Controllers
   {
     IPagesApi Api;
     IRevisionsApi RevisionsApi;
-    IPage Blueprint;
 
-    public PagesController(IPagesApi api, IRevisionsApi revisionsApi, IPage blueprint)
+    public PagesController(IPagesApi api, IRevisionsApi revisionsApi)
     {
       Api = api;
       RevisionsApi = revisionsApi;
-      Blueprint = blueprint;
     }
 
 
@@ -40,12 +39,13 @@ namespace zero.Web.Controllers
 
     public IActionResult GetEmpty(string type, string parent = null)
     {
-      // TODO this will return an instance of Page, but the subclass with type=$type is needed
-      IPage entity = Blueprint.Clone();
-      entity.PageTypeAlias = type;
-      entity.ParentId = parent;
+      PageType pageType = Api.GetPageType(type);
+      IPage model = Activator.CreateInstance(pageType.ContentType) as IPage;
 
-      return Edit(entity);
+      model.PageTypeAlias = type;
+      model.ParentId = parent;
+
+      return Edit(model);
     }
 
     public async Task<IActionResult> GetRevisions([FromQuery] string id, [FromQuery] int page = 1) => Json(await RevisionsApi.GetPaged<IPage>(id, page));

@@ -171,7 +171,8 @@
       cursor: default;
       pointer-events: none;
 
-      .ui-dropdown-list-item-icon
+      .ui-dropdown-list-item-icon,
+      .ui-dropdown-button-icon
       {
         color: var(--color-fg-dim);
       }
