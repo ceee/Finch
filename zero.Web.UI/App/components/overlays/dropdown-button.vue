@@ -133,7 +133,7 @@
 
       &:not([disabled]):hover .ui-dropdown-button-icon
       {
-        color: var(--color-primary);
+        color: var(--color-fg);
       }
     }
 
@@ -191,7 +191,7 @@
     font-weight: 400;
     position: relative;
     top: -1px;
-    color: var(--color-fg);
+    color: var(--color-fg-dim);
   }
 
   .ui-dropdown-button-progress

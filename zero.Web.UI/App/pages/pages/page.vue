@@ -10,6 +10,17 @@
       </template>
     </ui-form-header>
 
+    <div v-if="preview" class="page-editor-preview-message">
+      <div class="-text">
+        <span>To update the <b>preview</b> with your unsaved changes click the <b>Refresh</b> button.</span>
+      </div>
+      <div class="-buttons">
+        <ui-button type="small blank" label="Exit" />
+        <ui-button type="small blank" label="Open" />
+        <ui-button type="small" label="Refresh" icon="fth-rotate-cw" />
+      </div>
+    </div>
+
     <ui-editor v-if="!loading" :config="renderer" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" />
   </ui-form>
 </template>
@@ -45,7 +56,8 @@
           hideInNavigation: false
         },
         link: null
-      }
+      },
+      preview: false
     }),
 
 
@@ -180,6 +192,32 @@
     {
       margin: 0;
       padding: 0;
+    }
+  }
+
+  .page-editor-preview-message
+  {
+    margin: -10px var(--padding) var(--padding);
+    background: var(--color-primary-low);
+    color: var(--color-primary);
+    font-size: var(--font-size);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    position: relative;
+    line-height: 20px;
+    text-align: left;
+
+    .-buttons
+    {
+      display: flex;
+    }
+
+    .ui-button.type-blank
+    {
+      background: var(--color-primary-low);
     }
   }
 </style>

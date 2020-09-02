@@ -64,10 +64,14 @@
 
 :root
 {
+  $color-primary: #18a471;
+  $color-shade-base: #262c34;
+  $color-bg: #191e25;
+
   // accent colors
-  --color-primary: #18a471; // #fdd330; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
+  --color-primary: #{$color-primary}; // #fdd330; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
   --color-primary-fg: #fff;
-  --color-primary-low: rgba(229, 225, 221, 0.3);
+  --color-primary-low: #{rgba($color-primary, 0.2)};
   --color-primary-two: #e5e4df;
   --color-primary-line: #e0dfda;
   --color-secondary: #f9e0c4;
@@ -80,8 +84,8 @@
   --color-fg-dim-two: #898b8c;
   
   // background colors
-  $color-shade-base: #262c34;
-  --color-bg: #191e25;
+  
+  --color-bg: #{$color-bg};
   --color-bg-bright: #{darken($color-shade-base, 2%)};
   --color-bg-bright-two: #{desaturate(lighten($color-shade-base, 2%), 3%)};
   --color-bg-bright-three: #{desaturate(lighten($color-shade-base, 6%), 5%)};

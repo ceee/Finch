@@ -16,7 +16,7 @@ Vue.directive('click-outside', {
       var elements = e.path || (e.composedPath && e.composedPath());
       elements && elements.length > 0 && elements.unshift(e.target);
 
-      if (el.contains(e.target) || Helpers.isPopup(vNode.context.popupItem, elements))
+      if (el.contains(e.target) || Helpers.isPopup(vNode.context.popupItem, elements) || !el.__vueClickOutside__)
       {
         return;
       }

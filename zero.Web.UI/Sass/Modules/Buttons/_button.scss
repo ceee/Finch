@@ -159,6 +159,13 @@ button::-moz-focus-inner
     /*color: var(--color-fg-dim);*/
   }
 
+  &.type-small .ui-button-icon
+  {
+    margin-left: 10px;
+    margin-right: -2px;
+    font-size: var(--font-size);
+  }
+
   &.no-label .ui-button-icon
   {
     margin: 0 -5px !important;

@@ -10,6 +10,7 @@
   const TYPE_ICONS = {
     neutral: 'fth-info',
     info: 'fth-info',
+    primary: 'fth-info',
     warn: 'fth-alert-circle',
     error: 'fth-alert-circle',
     success: 'fth-check-circle'
@@ -99,6 +100,12 @@
     {
       background: var(--color-bg);
       color: var(--color-fg);
+    }
+
+    &.type-primary
+    {
+      background: var(--color-primary-low);
+      color: var(--color-primary);
     }
 
     &.block
