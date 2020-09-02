@@ -3,13 +3,21 @@
     <router-view v-if="!isOverview"></router-view>
 
     <div v-if="isOverview" class="media-content">
-      <ui-header-bar :title="title" :back-button="!!id">
-        <ui-search />
-        <ui-button type="white" label="Add folder" @click="addFolder(id)" />
-        <div type="button" class="ui-button has-state type-action state-default has-icon">
-          <span class="ui-button-text">Add</span>
-          <input class="media-item-upload" type="file" multiple @change="onUpload" />
-        </div>
+      <ui-header-bar :back-button="!!id">
+        <template v-slot:title>
+          <h2 class="ui-header-bar-title">
+            <router-link :to="{ name: 'media' }" class="media-items-hierarchy-item" v-if="!!id"><i class="fth-home"></i></router-link>
+            <router-link :to="{ name: 'mediafolder', params: { id: item.id } }" v-for="(item, index) in hierarchy" :key="item.id" class="media-items-hierarchy-item" v-localize="item.name"></router-link>
+          </h2>
+        </template>
+        <template>
+          <ui-search />
+          <ui-button type="white" label="Add folder" @click="addFolder(id)" />
+          <div type="button" class="ui-button has-state type-action state-default has-icon">
+            <span class="ui-button-text">Add</span>
+            <input class="media-item-upload" type="file" multiple @change="onUpload" />
+          </div>
+        </template>
       </ui-header-bar>
 
       <div class="ui-view-box">
@@ -23,7 +31,8 @@
 
 
 <script>
-  import MediaApi from 'zero/resources/media.js'
+  import MediaApi from 'zero/resources/media.js';
+  import MediaFolderApi from 'zero/resources/media-folder.js';
   import Overlay from 'zero/services/overlay.js';
   import AddFolderOverlay from './folder';
   import MediaItemOverlay from './media-overlay-item';
@@ -33,9 +42,11 @@
 
   export default {
 
+    props: ['id'],
+
     data: () => ({
-      items: [],
-      current: null
+      current: null,
+      hierarchy: []
     }),
 
     created()
@@ -48,22 +59,9 @@
         component: MediaItem,
         items: this.getItems
       };
-
-      if (!this.id)
-      {
-        this.getItems();
-      }
     },
 
     computed: {
-      id()
-      {
-        return this.$route.params.id;
-      },
-      title()
-      {
-        return this.current ? this.current.name : '@media.list';
-      },
       isOverview()
       {
         return this.$route.name !== 'mediaitem' && this.$route.name !== 'recyclebin';
@@ -82,10 +80,41 @@
 
         query.folderId = this.$route.params.id;
 
+        this.getFolderHierarchy(query.folderId);
+
         return MediaApi.getListByQuery(query).then(response =>
         {
-          this.items = response.items;
           return Promise.resolve(response);
+        });
+      },
+
+
+      getFolderHierarchy(id)
+      {
+        if (!id)
+        {
+          this.current = {
+            id: null,
+            name: '@media.list'
+          };
+          this.hierarchy = [this.current];
+          return;
+        }
+
+        MediaFolderApi.getHierarchy(id).then(res =>
+        {
+          this.hierarchy = res;
+          this.current = res[res.length - 1];
+        });
+      },
+
+
+      // navigate to a folder
+      goToFolder(id)
+      {
+        this.$router.push({
+          name: 'mediafolder',
+          params: !id ? {} : { id: id }
         });
       },
 
@@ -97,10 +126,7 @@
           component: AddFolderOverlay,
           model: { parentId },
           theme: 'dark'
-        }).then(item =>
-        {
-          this.$router.push({ name: 'mediafolder', params: { id: item.model.id } });
-        }, () => { });
+        }).then(item => this.goToFolder(item.model.id));
       },
 
 
@@ -179,5 +205,33 @@
     bottom: 0;
     opacity: 0.001;
     cursor: pointer;
+  }
+
+  .media-items-hierarchy-item
+  {
+    font-family: var(--font);
+    margin: 0;
+    font-size: var(--font-size-l);
+    font-weight: 400;
+    color: var(--color-fg-dim);
+
+    &:last-child
+    {
+      font-weight: 700;
+      color: var(--color-fg);
+    }
+
+    & + .media-items-hierarchy-item:before
+    {
+      content: '/';
+      margin: 0 0.5em;
+      color: var(--color-fg-dim);
+      font-weight: 400;
+    }
+
+    &:hover
+    {
+      color: var(--color-fg);
+    }
   }
 </style>

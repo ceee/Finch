@@ -6,7 +6,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Database.Indexes
 {
-  public class MediaFolder_ByHierarchy : AbstractIndexCreationTask<MediaFolder, MediaFolder_ByHierarchy.Result>
+  public class MediaFolder_ByHierarchy : AbstractIndexCreationTask<IMediaFolder, MediaFolder_ByHierarchy.Result>
   {
     public class Result : IZeroIdEntity, IAppAwareEntity, IZeroDbConventions
     {
@@ -35,7 +35,7 @@ namespace zero.Core.Database.Indexes
         Id = item.Id,
         Name = item.Name,
         AppId = item.AppId,
-        Path = Recurse(item, x => LoadDocument<MediaFolder>(x.ParentId))
+        Path = Recurse(item, x => LoadDocument<IMediaFolder>(x.ParentId))
                 .Where(x => x != null && x.Id != null && x.Id != item.Id)
                 .Reverse()
                 .Select(current => new PathResult()

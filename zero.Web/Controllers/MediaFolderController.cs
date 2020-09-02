@@ -22,7 +22,10 @@ namespace zero.Web.Controllers
 
     public IActionResult GetEmpty([FromServices] IMediaFolder blueprint) => Edit(blueprint);
 
- 
+
+    public async Task<IActionResult> GetHierarchy([FromQuery] string id) => Json(await Api.GetHierarchy(id));
+
+
     public async Task<IActionResult> GetAllAsTree([FromQuery] string parent = null, [FromQuery] string active = null) => Json(await Api.GetAllAsTree(parent, active));
 
 

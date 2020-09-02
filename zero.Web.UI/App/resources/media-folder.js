@@ -16,6 +16,12 @@ export default {
     return Axios.get(base + 'getEmpty').then(res => Promise.resolve(res.data));
   },
 
+  // get media folder hierarchy by id
+  getHierarchy(id)
+  {
+    return Axios.get(base + 'getHierarchy', { params: { id } }).then(res => Promise.resolve(res.data));
+  },
+
   // get all folder with a certain parent (can be empty) as tree
   getAllAsTree(parent, active)
   {

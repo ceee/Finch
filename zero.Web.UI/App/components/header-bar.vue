@@ -4,11 +4,13 @@
       <div class="ui-header-bar-main">
         <ui-icon-button v-if="backButton" type="white" @click="onBack" />
         <div>
-          <h2 class="ui-header-bar-title" :class="{'is-empty': !title && titleEmpty}">
-            <span v-if="prefix" class="-minor" v-localize:html="prefix"></span>
-            <span v-localize="title || titleEmpty"></span>
-            <span v-if="suffix" class="-minor" v-localize:html="suffix"></span>
-          </h2>
+          <slot name="title">
+            <h2 class="ui-header-bar-title" :class="{'is-empty': !title && titleEmpty}">
+              <span v-if="prefix" class="-minor" v-localize:html="prefix"></span>
+              <span v-localize="title || titleEmpty"></span>
+              <span v-if="suffix" class="-minor" v-localize:html="suffix"></span>
+            </h2>
+          </slot>
           <p v-if="description" class="ui-header-bar-description" v-localize="description"></p>
         </div>
       </div>

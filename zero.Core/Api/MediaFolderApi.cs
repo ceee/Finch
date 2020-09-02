@@ -136,7 +136,10 @@ namespace zero.Core.Api
           return new List<IMediaFolder>();
         }
 
-        return (await session.LoadAsync<IMediaFolder>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
+        List<string> ids = result.Path.Select(x => x.Id).ToList();
+        ids.Add(id);
+
+        return (await session.LoadAsync<IMediaFolder>(ids)).Select(x => x.Value).ToList();
       }
     }
 
