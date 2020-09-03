@@ -6,7 +6,7 @@
 
     <nav class="ui-mediapicker-overlay-hierarchy">
       <button type="button" class="ui-mediapicker-overlay-hierarchy-item" @click="selectFolder(null)"><i class="fth-home"></i></button>
-      <button type="button" v-for="item in hierarchy" class="ui-mediapicker-overlay-hierarchy-item" @click="selectFolder(item.id)">{{item.name}}</button>
+      <button type="button" v-for="item in hierarchy" class="ui-mediapicker-overlay-hierarchy-item" @click="selectFolder(item.id)" v-localize="item.name"></button>
       <button type="button" class="ui-mediapicker-overlay-hierarchy-item" @click="addFolder"><i class="fth-plus"></i></button>
     </nav>
 
@@ -20,8 +20,8 @@
       </div>
 
       <button type="button" v-for="item in items" class="ui-mediapicker-overlay-item" @click="select(item)">
-        <img class="-preview" v-if="item.type === 'image'" :src="item.source" />
-        <span class="-preview" v-if="item.type !== 'image'"><i :class="item.type !== 'folder' ? 'fth-file' : 'fth-folder'"></i></span>
+        <img class="-preview" v-if="item.image" :src="item.image" />
+        <span class="-preview" v-if="!item.image"><i :class="item.isFolder ? 'fth-folder' : 'fth-file'"></i></span>
         <p class="ui-mediapicker-overlay-item-text">
           {{item.name}}
           <span class="-minor" v-if="item.size"><br><span v-filesize="item.size"></span></span>
@@ -39,6 +39,7 @@
 
 <script>
   import MediaApi from 'zero/resources/media.js'
+  import MediaFolderApi from 'zero/resources/media-folder.js';
   import Overlay from 'zero/services/overlay.js'
   import AddFolderOverlay from 'zero/pages/media/overlays/folder'
   import UploadStatusOverlay from 'zero/pages/media/overlays/upload-status'
@@ -107,62 +108,21 @@
 
         query.folderId = this.folderId;
 
-        return MediaApi.getAll(query).then(response =>
+        this.getFolderHierarchy(query.folderId);
+
+        return MediaApi.getListByQuery(query).then(response =>
         {
-          this.current = response.folder;
-
-          this.items = [];
-
-          response.folders.forEach(item =>
-          {
-            this.items.push({
-              id: item.id,
-              name: item.name,
-              type: 'folder'
-            });
-          });
-
-          response.items.forEach(item =>
-          {
-            this.items.push({
-              id: item.id,
-              source: item.source,
-              name: item.name,
-              size: item.size,
-              type: item.type
-            });
-          });
-
-          this.buildHierarchy(response.folderHierarchy);
-
-          return Promise.resolve(response);
+          this.items = response.items;
         });
       },
 
-      buildHierarchy(folders)
+      getFolderHierarchy(id)
       {
-        let items = [];
-
-        if (folders)
+        MediaFolderApi.getHierarchy(id).then(res =>
         {
-          folders.forEach(item =>
-          {
-            items.push({
-              id: item.id,
-              name: item.name
-            });
-          });
-        }
-
-        if (this.current)
-        {
-          items.push({
-            id: this.current.id,
-            name: this.current.name
-          })
-        }
-
-        this.hierarchy = items;
+          this.hierarchy = res;
+          this.current = res[res.length - 1];
+        });
       },
 
       // switches view to the selected folder
@@ -214,7 +174,7 @@
       // select an item, this can either be a folder or a media item
       select(item)
       {
-        if (item.type === 'folder')
+        if (item.isFolder)
         {
           return this.selectFolder(item.id);
         }
@@ -288,18 +248,12 @@
       height: 70px;
       width: 70px;
       object-fit: cover;
-      background: var(--color-bg-mid);
+      background: var(--color-bg-bright-two);
       border-radius: var(--radius);
       position: relative;
       text-align: center;
-      font-size: 22px;
+      font-size: 20px;
     }
-
-    /*&.is-upload .-preview
-    {
-      background: var(--color-primary);
-      color: var(--color-primary-fg);
-    }*/
 
     &.is-upload
     {
@@ -315,7 +269,7 @@
 
     .-minor
     {
-      color: var(--color-fg-light);
+      color: var(--color-fg-dim);
       font-size: var(--font-size-s);
     }
   }
