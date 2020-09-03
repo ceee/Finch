@@ -51,16 +51,7 @@
     color: var(--color-fg);
     font-size: var(--font-size);
     border-radius: var(--radius);
-
-    &:hover
-    {
-      background: var(--color-bg-bright);
-
-      .media-item-preview
-      {
-        background: var(--color-bg-bright-two);
-      }
-    }
+    background: var(--color-bg-bright);
   }
 
   .media-item-preview
@@ -71,7 +62,7 @@
     flex-direction: column;
     height: $media-item-size;
     width: $media-item-size;
-    background: var(--color-bg-bright);
+    background: var(--color-bg-bright-two);
     border-radius: var(--radius);
     overflow: hidden;
     position: relative;
@@ -111,7 +102,7 @@
     background: transparent;
 
     $media-pattern-size: 10px;
-    $media-pattern-color-a: #ccc;
+    $media-pattern-color-a: #ddd;
     $media-pattern-color-b: #aaa;
 
     &:before

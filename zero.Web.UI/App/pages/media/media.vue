@@ -12,7 +12,7 @@
         </template>
         <template>
           <ui-search />
-          <ui-dropdown v-if="isOverview && current" align="right">
+          <ui-dropdown v-if="isOverview && !!id" align="right">
             <template v-slot:button>
               <ui-button type="white" label="Folder" caret="down" />
             </template>
