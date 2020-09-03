@@ -47,6 +47,10 @@ namespace zero.Web.Controllers
     public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
 
 
+    [HttpPost]
+    public async Task<IActionResult> Move([FromBody] ActionCopyModel model) => Json(await Api.Move(model.Id, model.DestinationId));
+
+
     public async Task<IActionResult> GetAll([FromQuery] MediaListQuery query)
     {
       ListResult<MediaListModel> items = await Mapper.Map<IMedia, MediaListModel>(await Api.GetByQuery(query));

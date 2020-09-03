@@ -74,6 +74,11 @@ export default {
     //return Axios.post(base + 'save', model).then(res => Promise.resolve(res.data));
   },
 
+  move(id, destinationId)
+  {
+    return Axios.post(base + 'move', { id, destinationId }).then(res => Promise.resolve(res.data));
+  },
+
   // deletes a media
   delete(id)
   {

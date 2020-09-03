@@ -40,8 +40,8 @@
 <script>
   import MediaApi from 'zero/resources/media.js'
   import Overlay from 'zero/services/overlay.js'
-  import AddFolderOverlay from 'zero/pages/media/folder'
-  import UploadStatusOverlay from 'zero/pages/media/upload-status'
+  import AddFolderOverlay from 'zero/pages/media/overlays/folder'
+  import UploadStatusOverlay from 'zero/pages/media/overlays/upload-status'
   import { debounce as _debounce, filter as _filter } from 'underscore'
 
   export default {

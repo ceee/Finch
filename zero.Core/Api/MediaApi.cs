@@ -112,6 +112,23 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public async Task<EntityResult<IMedia>> Move(string id, string parentId)
+    {
+      IMedia model = await GetById<IMedia>(id);
+      IMediaFolder parent = await GetById<IMediaFolder>(parentId);
+
+      if (model == null || (!parentId.IsNullOrEmpty() && parent == null))
+      {
+        return EntityResult<IMedia>.Fail("@errors.idnotfound");
+      }
+
+      model.FolderId = parent?.Id;
+
+      return await Save(model);
+    }
+
+
+    /// <inheritdoc />
     public async Task<EntityResult<IMedia>> Delete(string id)
     {
       return await DeleteById<IMedia>(id);
@@ -251,6 +268,11 @@ namespace zero.Core.Api
     /// Creates or updates a media item
     /// </summary>
     Task<EntityResult<IMedia>> Save(IMedia model);
+
+    /// <summary>
+    /// Move a file to a new parent
+    /// </summary>
+    Task<EntityResult<IMedia>> Move(string id, string parentId);
 
     /// <summary>
     /// Deletes a media item by Id

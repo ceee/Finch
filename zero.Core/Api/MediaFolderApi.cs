@@ -48,7 +48,7 @@ namespace zero.Core.Api
         IList<IMediaFolder> folders = await session.Query<IMediaFolder>()
           .Scope(Scope)
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
-          .OrderByDescending(x => x.Name)
+          .OrderByDescending(x => x.CreatedDate).ThenBy(x => x.Name)
           .ToListAsync();
 
 
@@ -103,18 +103,18 @@ namespace zero.Core.Api
         } 
       }
 
-      if (parentId.IsNullOrEmpty())
-      {
-        items.Add(new TreeItem()
-        {
-          Id = "recyclebin",
-          ParentId = null,
-          Sort = 99999,
-          Name = "@recyclebin.name",
-          Icon = "fth-trash",
-          HasChildren = false
-        });
-      }
+      //if (parentId.IsNullOrEmpty())
+      //{
+      //  items.Add(new TreeItem()
+      //  {
+      //    Id = "recyclebin",
+      //    ParentId = null,
+      //    Sort = 99999,
+      //    Name = "@recyclebin.name",
+      //    Icon = "fth-trash",
+      //    HasChildren = false
+      //  });
+      //}
 
       return items;
     }
@@ -153,6 +153,23 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public async Task<EntityResult<IMediaFolder>> Move(string id, string parentId)
+    {
+      IMediaFolder model = await GetById<IMediaFolder>(id);
+      IMediaFolder parent = await GetById<IMediaFolder>(parentId);
+
+      if (model == null || (!parentId.IsNullOrEmpty() && parent == null))
+      {
+        return EntityResult<IMediaFolder>.Fail("@errors.idnotfound");
+      }
+
+      model.ParentId = parent?.Id;
+
+      return await Save(model);
+    }
+
+
+    /// <inheritdoc />
     public async Task<EntityResult<IMediaFolder>> Delete(string id)
     {
       return await DeleteById<IMediaFolder>(id);
@@ -186,6 +203,11 @@ namespace zero.Core.Api
     /// Creates or updates a folder
     /// </summary>
     Task<EntityResult<IMediaFolder>> Save(IMediaFolder model);
+
+    /// <summary>
+    /// Move a folder to a new parent
+    /// </summary>
+    Task<EntityResult<IMediaFolder>> Move(string id, string parentId);
 
     /// <summary>
     /// Deletes a folder

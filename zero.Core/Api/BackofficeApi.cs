@@ -229,6 +229,7 @@ namespace zero.Core.Api
     public async Task<EntityResult<T>> DeleteById<T>(string id) where T : IZeroIdEntity
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
 
       T entity = await session.LoadAsync<T>(id);
       IAppAwareEntity appAwareEntity = entity as IAppAwareEntity;

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
@@ -27,6 +28,10 @@ namespace zero.Web.Controllers
 
 
     public async Task<IActionResult> GetAllAsTree([FromQuery] string parent = null, [FromQuery] string active = null) => Json(await Api.GetAllAsTree(parent, active));
+
+
+    [HttpPost]
+    public async Task<IActionResult> Move([FromBody] ActionCopyModel model) => Json(await Api.Move(model.Id, model.DestinationId));
 
 
     public async Task<IActionResult> Save([FromBody] IMediaFolder model) => Json(await Api.Save(model));

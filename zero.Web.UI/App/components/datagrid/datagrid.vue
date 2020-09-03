@@ -2,7 +2,9 @@
   <div class="ui-datagrid-outer">
     <div class="ui-datagrid">
       <div class="ui-datagrid-items" :style="'grid-template-columns: repeat(auto-fill, minmax(' + configuration.width + 'px, 1fr))'" :class="{'is-block': configuration.block }">
-        <component v-for="(item, index) in items" :is="configuration.component" :key="index" :value="item" class="ui-datagrid-cell"></component>
+        <div v-for="(item, index) in items" :key="index" v-on:contextmenu="onRightClicked(item, $event)">
+          <component :is="configuration.component" :value="item" class="ui-datagrid-cell"></component>
+        </div>  
       </div>
 
       <div class="ui-datagrid-empty" v-if="!isLoading && items.length < 1">
@@ -18,6 +20,10 @@
     <footer class="ui-datagrid-pagination" v-if="pages > 1">
       <ui-pagination :pages="pages" :page="filter.page" @change="setPage" />
     </footer>
+
+    <ui-dropdown ref="dropdown" align="top" theme="dark" class="ui-datagrid-dropdown">
+      <slot name="actions" v-bind="actionProps"></slot>
+    </ui-dropdown>
 
   </div>
 </template>
@@ -93,13 +99,26 @@
         pageSize: 30,
         search: null
       },
-      debouncedUpdate: null
+      debouncedUpdate: null,
+      actionProps: {
+        item: null
+      }
     }),
+
+
+    computed: {
+      actionsDefined()
+      {
+        return this.$scopedSlots.hasOwnProperty('actions');
+      }
+    },
+
 
     mounted()
     {
       this.initialize();
     },
+
 
     methods: {
 
@@ -175,6 +194,65 @@
         }
 
         this.debouncedUpdate();
+      },
+
+
+      // right clicked on an item
+      onRightClicked(item, ev)
+      {
+        if (this.actionsDefined)
+        {
+          ev.preventDefault();
+          this.onActionsClicked(item, ev);
+        }
+      },
+
+
+      // actions button clicked on item
+      onActionsClicked(item, ev)
+      {
+        let dropdown = this.$refs.dropdown;
+
+        if (!this.actionsDefined || (typeof this.hasActions === 'function' && !this.hasActions(item)))
+        {
+          return;
+        }
+
+        this.actionProps.item = item;
+        this.actionProps.event = ev;
+
+        dropdown.toggle();
+
+        if (!dropdown.open)
+        {
+          return;
+        }
+
+        this.$nextTick(() =>
+        {
+          let target = ev.target;
+          do
+          {
+            if (target.classList.contains('ui-datagrid-cell'))
+            {
+              break;
+            }
+          }
+          while (target = target.parentElement);
+
+          var width = 240;
+
+          var position = {
+            x: ev.pageX,
+            y: ev.pageY
+          };
+
+          let element = dropdown.$el.querySelector('.ui-dropdown');
+
+          element.style.top = position.y + 'px';
+          element.style.left = position.x + 'px';
+          element.style.width = width + 'px';
+        });
       }
     }
   }
@@ -210,5 +288,11 @@
   {
     font-size: 34px;
     margin-bottom: 20px;
+  }
+
+  .ui-datagrid-dropdown .ui-dropdown
+  {
+    position: fixed;
+    min-width: 200px;
   }
 </style>

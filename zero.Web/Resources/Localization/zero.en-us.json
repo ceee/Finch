@@ -70,6 +70,15 @@
       "action": "Copy",
       "text": "Copy <b>{name}</b> to the selected page in the tree structure below.",
       "includeDescendants": "Include descendants"
+    },
+    "open": {
+      "title": "Open"
+    },
+    "rename": {
+      "title": "Rename"
+    },
+    "edit": {
+      "title": "Edit"
     }
   },
 
@@ -476,6 +485,7 @@
     "list": "Media",
     "name": "Media",
     "addfolder": "Add a new folder",
+    "editfolder": "Edit folder",
     "fields": {
       "foldername_placeholder": "Enter a name ...",
       "caption": "Caption",
@@ -491,6 +501,10 @@
       "colorSpace": "Color space",
       "hasTransparency": "Has transparency",
       "frames": "Frames"
+    },
+    "deleteoverlay": {
+      "folder_text": "This will delete the folder and all its descendants including subfolders and files. Are you sure?",
+      "folder_success_text": "You have successfully deleted this folder"
     }
   },
 

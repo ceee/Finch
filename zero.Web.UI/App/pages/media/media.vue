@@ -12,9 +12,18 @@
         </template>
         <template>
           <ui-search />
+          <ui-dropdown v-if="isOverview && current" align="right">
+            <template v-slot:button>
+              <ui-button type="white" label="Folder" caret="down" />
+            </template>
+            <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(current, true)" />
+            <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(current, true)" />
+            <ui-dropdown-separator />
+            <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove(current, true)" />
+          </ui-dropdown>
           <ui-button type="white" label="Add folder" @click="addFolder(id)" />
           <div type="button" class="ui-button has-state type-action state-default has-icon">
-            <span class="ui-button-text">Add</span>
+            <span class="ui-button-text" v-localize="'@ui.add'"></span>
             <input class="media-item-upload" type="file" multiple @change="onUpload" />
           </div>
         </template>
@@ -22,7 +31,15 @@
 
       <div class="ui-view-box">
         <div class="media-items">
-          <ui-datagrid ref="grid" v-model="gridConfig" />
+          <ui-datagrid ref="grid" v-model="gridConfig">
+            <template v-slot:actions="props">
+              <ui-dropdown-button v-if="props.item && props.item.isFolder" label="@ui.open.title" icon="fth-chevrons-right" @click="goToFolder(props.item.id)" />
+              <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(props.item, props.item.isFolder)" />
+              <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(props.item, props.item.isFolder)" />
+              <ui-dropdown-separator />
+              <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove(props.item, props.item.isFolder)" />
+            </template>
+          </ui-datagrid>
         </div>
       </div>
     </div>
@@ -34,10 +51,13 @@
   import MediaApi from 'zero/resources/media.js';
   import MediaFolderApi from 'zero/resources/media-folder.js';
   import Overlay from 'zero/services/overlay.js';
-  import AddFolderOverlay from './folder';
+  import FolderOverlay from './overlays/folder';
+  import MoveOverlay from './overlays/move';
   import MediaItemOverlay from './media-overlay-item';
   import MediaItem from './media-item';
-  import UploadStatusOverlay from './upload-status';
+  import UploadStatusOverlay from './overlays/upload-status';
+  import EventHub from 'zero/services/eventhub';
+  import Notification from 'zero/services/notification.js';
   import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
 
   export default {
@@ -123,7 +143,7 @@
       addFolder(parentId)
       {
         Overlay.open({
-          component: AddFolderOverlay,
+          component: FolderOverlay,
           model: { parentId },
           theme: 'dark'
         }).then(item => this.goToFolder(item.model.id));
@@ -170,6 +190,88 @@
           console.info(value);
         }, () => { });
       },
+
+
+      edit(item, isFolder)
+      {
+        if (!isFolder)
+        {
+          return this.$router.push({
+            name: 'mediaitem',
+            params: { id: item.id }
+          });
+        }
+
+        Overlay.open({
+          component: FolderOverlay,
+          model: item,
+          theme: 'dark'
+        }).then(res =>
+        {
+          if (res.deleted === true)
+          {
+            return this.remove(item, true);
+          }
+          else
+          {
+            EventHub.$emit('media.update');
+            this.$refs.grid.update();
+          }
+        });
+      },
+
+
+      move(item, isFolder)
+      {
+        return Overlay.open({
+          component: MoveOverlay,
+          display: 'editor',
+          model: item,
+          isFolder: isFolder
+        }).then(value =>
+        {
+          EventHub.$emit('page.move', value);
+          EventHub.$emit('page.update');
+          this.$refs.grid.update();
+        });
+      },
+
+
+      remove(item, isFolder)
+      {
+        Overlay.confirmDelete(item.name, isFolder ? '@media.deleteoverlay.folder_text' : '@deleteoverlay.text').then(opts =>
+        {
+          opts.state('loading');
+
+          (isFolder ? MediaFolderApi : MediaApi).delete(item.id).then(response =>
+          {
+            if (response.success)
+            {
+              opts.state('success');
+              opts.hide();
+
+              EventHub.$emit('media.delete', response.model);
+              EventHub.$emit('media.update');
+
+              Notification.success('@deleteoverlay.success', isFolder ? '@media.deleteoverlay.folder_success_text' : '@deleteoverlay.success_text');
+              this.$refs.grid.update();
+
+              if (isFolder && item.id === this.id)
+              {
+                this.$router.go(-1);
+              }
+              else
+              {
+                this.$refs.grid.update();
+              }
+            }
+            else
+            {
+              opts.errors(response.errors);
+            }
+          });
+        });
+      }
     }
   }
 </script>

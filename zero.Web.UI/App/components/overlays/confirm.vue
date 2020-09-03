@@ -70,4 +70,9 @@
   {
     margin-top: 30px;
   }
+
+  .app-confirm p
+  {
+    line-height: 1.4;
+  }
 </style>

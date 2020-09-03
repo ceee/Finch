@@ -1,12 +1,12 @@
 ﻿<template>
   <ui-form v-if="!loading" ref="form" class="mediafolder" v-slot="form" @submit="onSubmit" @load="onLoad">
-    <h2 class="ui-headline" v-localize="'@media.addfolder'"></h2>
+    <h2 class="ui-headline" v-localize="model.id ? '@media.editfolder' : '@media.addfolder'"></h2>
     <div class="mediafolder-items">
       <input v-model="item.name" type="text" class="ui-input" maxlength="200" v-localize:placeholder="'@media.fields.foldername_placeholder'" :readonly="disabled" />
       <!-- // TODO add parent selector -->
     </div>
     <div class="app-confirm-buttons">
-      <ui-button v-if="!disabled" :submit="true" :state="form.state" label="@ui.create"></ui-button>
+      <ui-button v-if="!disabled" :submit="true" :state="form.state" :label="model.id ? '@ui.save' : '@ui.create'"></ui-button>
       <ui-button type="light" :label="config.closeLabel" :disabled="loading" @click="config.close"></ui-button>
       <ui-button v-if="!disabled && model.id" type="light" label="@ui.delete" @click="onDelete" style="float:right;"></ui-button>
     </div>
@@ -55,24 +55,7 @@
 
       onDelete()
       {
-        Overlay.confirmDelete().then((opts) =>
-        {
-          opts.state('loading');
-
-          MediaFolderApi.delete(this.model.id).then(response =>
-          {
-            if (response.success)
-            {
-              opts.state('success');
-              opts.hide();
-              this.config.close();
-            }
-            else
-            {
-              opts.errors(response.errors);
-            }
-          });
-        }); 
+        this.config.confirm({ deleted: true });
       }
 
     }

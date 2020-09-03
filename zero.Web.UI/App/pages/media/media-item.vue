@@ -122,8 +122,8 @@
       height: 100%;
       left: 0;
       top: 0;
-      background-position: 0px 0px, 10px 10px;
-      background-size: 20px 20px;
+      background-position: 0px 0px, #{$media-pattern-size / 2} #{$media-pattern-size / 2};
+      background-size: #{$media-pattern-size} #{$media-pattern-size};
       background-image: linear-gradient(45deg, #{$media-pattern-color-b} 25%, transparent 25%, transparent 75%, #{$media-pattern-color-b} 75%, #{$media-pattern-color-b} 100%),
         linear-gradient(45deg, #{$media-pattern-color-b} 25%, #{$media-pattern-color-a} 25%, #{$media-pattern-color-a} 75%, #{$media-pattern-color-b} 75%, #{$media-pattern-color-b} 100%);
     }
