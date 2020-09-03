@@ -21,9 +21,9 @@
             <ui-dropdown-separator />
             <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove(current, true)" />
           </ui-dropdown>
-          <ui-button type="white" label="Add folder" @click="addFolder(id)" />
-          <div type="button" class="ui-button has-state type-action state-default has-icon">
-            <span class="ui-button-text" v-localize="'@ui.add'"></span>
+          <ui-button type="action" label="Add folder" @click="addFolder(id)" />
+          <div v-if="!!id" type="button" class="ui-button has-state type-action state-default has-icon">
+            <span class="ui-button-text" v-localize="'Add file'"></span>
             <input class="media-item-upload" type="file" multiple @change="onUpload" />
           </div>
         </template>

@@ -1,7 +1,7 @@
 ﻿<template>
   <ui-form ref="form" class="role" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
     <ui-form-header v-model="model" title="@role.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
-    <ui-editor config="userRole" v-model="model" :meta="meta" :active-toggle="false" :active-tab="1" />
+    <ui-editor config="userRole" v-model="model" :meta="meta" :active-toggle="false" />
   </ui-form>
 </template>
 
