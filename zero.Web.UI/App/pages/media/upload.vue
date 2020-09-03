@@ -2,7 +2,7 @@
   <div class="media-upload">
 
     <div v-if="entity.source" class="media-upload-preview" :data-type="entity.type">
-      <a :href="entity.source" target="_blank" v-if="entity.type === 'image'" class="media-upload-preview-image">
+      <a :href="entity.source" target="_blank" v-if="entity.type === 'image'" class="media-upload-preview-image media-bg-pattern">
         <img :src="entity.previewSource" :alt="entity.name" />
       </a>
       
@@ -94,7 +94,7 @@
 
   .media-upload-preview-image
   {
-    padding: var(--radius);
+    padding: 0;
     border-radius: var(--radius);
     background: var(--color-bg-dim);
     display: inline-block;
@@ -105,6 +105,8 @@
       max-width: 100%;
       max-height: 400px;
       border-radius: var(--radius);
+      position: relative;
+      z-index: 1;
     }
   }
 

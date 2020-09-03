@@ -1,9 +1,7 @@
 ﻿using System;
-using zero.Core.Attributes;
 
 namespace zero.Core.Entities
 {
-  /// <inheritdoc />
   public class MediaListItem : IZeroIdEntity, IAppAwareEntity, IZeroDbConventions
   {
     public string Id { get; set; }
@@ -21,5 +19,7 @@ namespace zero.Core.Entities
     public string Image { get; set; }
 
     public long Size { get; set; }
+
+    public bool HasTransparency { get; set; }
   }
 }
