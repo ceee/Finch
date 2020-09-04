@@ -2,7 +2,7 @@
   <ui-form ref="form" class="page page-editor" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
     <ui-form-header v-model="model" title="@page.name" :disabled="disabled" :is-create="!id" :state="form.state" :active-toggle="true" :can-delete="meta.canDelete" @delete="onDelete">
       <template v-slot:actions>
-        <ui-dropdown-button label="@page.preview.title" icon="fth-eye" :disabled="disabled" />
+        <ui-dropdown-button label="@page.preview.title" icon="fth-eye" :disabled="disabled" @click="openPreview" />
         <ui-dropdown-separator />
         <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(model)" />
         <ui-dropdown-button label="@ui.copy.title" icon="fth-copy" @click="copy(model)" />
@@ -10,14 +10,14 @@
       </template>
     </ui-form-header>
 
-    <div v-if="preview" class="page-editor-preview-message">
+    <div v-if="preview.open" class="page-editor-preview-message">
       <div class="-text">
         <span>To update the <b>preview</b> with your unsaved changes click the <b>Refresh</b> button.</span>
       </div>
       <div class="-buttons">
-        <ui-button type="small blank" label="Exit" />
-        <ui-button type="small blank" label="Open" />
-        <ui-button type="small" label="Refresh" icon="fth-rotate-cw" />
+        <ui-button type="small blank" label="Exit" @click="exitPreview()" />
+        <ui-button type="small blank" label="Open" @click="focusPreview" />
+        <ui-button type="small" label="Refresh" icon="fth-rotate-cw" @click="refreshPreview" />
       </div>
     </div>
 
@@ -34,7 +34,8 @@
   import Overlay from 'zero/services/overlay.js'
   import MoveOverlay from './overlays/move'
   import CopyOverlay from './overlays/copy'
-  import { find as _find } from 'underscore';
+  import Strings from 'zero/services/strings';
+  import { find as _find, debounce as _debounce } from 'underscore';
 
   export default {
 
@@ -57,7 +58,11 @@
         },
         link: null
       },
-      preview: false
+      preview: {
+        open: false,
+        window: null
+      },
+      debouncedUpdatePreview: null
     }),
 
 
@@ -69,8 +74,21 @@
     },
 
 
+    watch: {
+      model: {
+        deep: true,
+        handler(value)
+        {
+          this.debouncedUpdatePreview(value);
+        }
+      }
+    },
+
+
     mounted()
     {
+      this.debouncedUpdatePreview = _debounce(this.updatePreview, 1000);
+
       EventHub.$on('page.sort', items =>
       {
         let item = _find(items, x => x.id === this.id);
@@ -176,6 +194,67 @@
         });
       },
 
+
+      openPreview()
+      {
+        if (this.preview.open)
+        {
+          return this.focusPreview();
+        }
+
+        const id = Strings.guid();
+
+        this.preview.window = window.open(window.location.origin + '/zero/preview?id=' + id, 'blank');
+        this.preview.window.focus();
+
+        window.addEventListener("message", event =>
+        {
+          this.preview.window.postMessage({
+            id: id,
+            preview: true,
+            model: this.model
+          }, window.location.origin);
+        }, false);
+
+        this.preview.window.onbeforeunload = () => this.exitPreview(true);
+
+        this.preview.open = true;
+      },
+
+      updatePreview(value)
+      {
+        if (!this.preview.open)
+        {
+          return;
+        }
+
+        this.preview.window.postMessage({
+          preview: true,
+          update: true,
+          model: value
+        }, window.location.origin);
+      },
+
+      focusPreview()
+      {
+        this.preview.window.focus();
+      },
+
+      refreshPreview()
+      {
+        this.focusPreview();
+        //this.preview.window.location.reload();
+      },
+
+      exitPreview(external)
+      {
+        if (!external)
+        {
+          this.preview.window.close();
+        }
+        this.preview.window = null;
+        this.preview.open = false;
+      }
     }
   }
 </script>

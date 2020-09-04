@@ -48,6 +48,17 @@ zero.sections.forEach(section =>
 });
 
 
+// add additional routes
+
+routes.push({
+  path: '/preview',
+  component: () => import('zero/pages/preview'),
+  name: 'preview',
+  meta: {
+    name: '@preview.name'
+  }
+});
+
 
 // find internal route definitions per section
 

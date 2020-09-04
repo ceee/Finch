@@ -513,6 +513,10 @@
     "name": "Space"
   },
 
+  "preview": {
+    "name": "Preview"
+  },
+
   "_test": {
     "fields": {
       "name": "Name",

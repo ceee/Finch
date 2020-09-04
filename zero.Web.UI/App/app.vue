@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="app">
+  <div class="app" :class="getClassList()">
     <template v-if="isAuthenticated">
       <app-navigation />
       <div class="app-main">
@@ -44,6 +44,17 @@
       });
 
       AuthApi.setUser(zero.user);
+    },
+
+
+    methods: {
+
+      getClassList()
+      {
+        return {
+          'is-preview': this.$route.name === 'preview'
+        };
+      }
     }
   }
 
