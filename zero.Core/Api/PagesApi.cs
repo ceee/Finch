@@ -236,9 +236,7 @@ namespace zero.Core.Api
     }
 
 
-    /// <summary>
-    /// Restores a page from the recycle bin
-    /// </summary>
+    /// <inheritdoc />
     public async Task<EntityResult<string[]>> Restore(string id, bool includeDescendants = false)
     {
       EntityResult<string[]> result = new EntityResult<string[]>();

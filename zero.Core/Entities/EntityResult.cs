@@ -29,6 +29,17 @@ namespace zero.Core.Entities
       }).ToList();
     }
 
+    public static EntityResult<T> From<TOrigin>(EntityResult<TOrigin> with, T model = default)
+    {
+      EntityResult<T> result = new EntityResult<T>();
+
+      result.IsSuccess = with.IsSuccess;
+      result.Errors = with.Errors;
+      result.Model = model;
+
+      return result;
+    }
+
     public void AddError(string property, string message)
     {
       IsSuccess = false;

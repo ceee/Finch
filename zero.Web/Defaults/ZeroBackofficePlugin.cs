@@ -26,6 +26,7 @@ namespace zero.Web.Defaults
       services.AddTransient<IRecycledEntity, RecycledEntity>();
       services.AddTransient<IMedia, Media>();
       services.AddTransient<IMediaFolder, MediaFolder>();
+      services.AddTransient<IPreview, Preview>();
 
 
       services.AddTransient<IApplicationsApi, ApplicationsApi>();
@@ -35,6 +36,7 @@ namespace zero.Web.Defaults
       services.AddTransient<IUserApi, UserApi>();
       services.AddTransient<IPagesApi, PagesApi>();
       services.AddTransient<IPageTreeApi, PageTreeApi>();
+      services.AddTransient<IPreviewApi, PreviewApi>();
 
       services.AddTransient<ISetupApi, SetupApi>();
       services.AddTransient<ISectionsApi, SectionsApi>();
