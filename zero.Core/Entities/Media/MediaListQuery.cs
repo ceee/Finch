@@ -9,5 +9,7 @@
   public class MediaListItemQuery : ListQuery<MediaListItem>
   {
     public string FolderId { get; set; }
+
+    public bool SearchIsGlobal { get; set; }
   }
 }

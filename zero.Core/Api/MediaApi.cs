@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading;
 using zero.Core.Database.Indexes;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 
 namespace zero.Core.Api
 {
@@ -94,11 +95,16 @@ namespace zero.Core.Api
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<MediaListItem, Media_ByParent>()
+        IRavenQueryable<MediaListItem> dbQuery = session.Query<MediaListItem, Media_ByParent>()
           .ProjectInto<MediaListItem>()
-          .Scope(Scope)
-          .WhereIf(x => x.ParentId == query.FolderId, !query.FolderId.IsNullOrEmpty(), x => x.ParentId == null)
-          .ToQueriedListAsync(query);
+          .Scope(Scope);
+
+        if (query.Search.IsNullOrWhiteSpace() || !query.SearchIsGlobal)
+        {
+          dbQuery = dbQuery.WhereIf(x => x.ParentId == query.FolderId, !query.FolderId.IsNullOrEmpty(), x => x.ParentId == null);
+        }
+
+        return await dbQuery.ToQueriedListAsync(query);
       }
     }
 

@@ -11,10 +11,10 @@
           </h2>
         </template>
         <template>
-          <ui-search />
-          <ui-dropdown v-if="isOverview && !!id" align="right">
+          <ui-search v-model="gridConfig.search" />
+          <ui-dropdown v-if="isOverview && !!id" align="right" :disabled="!!gridConfig.search">
             <template v-slot:button>
-              <ui-button type="white" label="Folder" caret="down" />
+              <ui-button type="white" label="Folder" caret="down" :disabled="!!gridConfig.search" />
             </template>
             <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(current, true)" />
             <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(current, true)" />
@@ -66,25 +66,30 @@
 
     data: () => ({
       current: null,
-      hierarchy: []
+      hierarchy: [],
+      gridConfig: {
+        search: null,
+        width: 280,
+        component: MediaItem
+      }
     }),
 
     created()
     {
-      var instance = this;
-
-      this.gridConfig = {
-        search: null,
-        width: 280,
-        component: MediaItem,
-        items: this.getItems
-      };
+      this.gridConfig.items = this.getItems;
     },
 
     computed: {
       isOverview()
       {
         return this.$route.name !== 'mediaitem' && this.$route.name !== 'recyclebin';
+      }
+    },
+
+    watch: {
+      search(value)
+      {
+        this.$refs.grid.debouncedUpdate();
       }
     },
 
@@ -98,9 +103,11 @@
           query = {};
         }
 
+        query.search = this.gridConfig.search;
         query.folderId = this.$route.params.id;
+        query.searchIsGlobal = true;
 
-        this.getFolderHierarchy(query.folderId);
+        this.getFolderHierarchy(query.folderId, !!query.search);
 
         return MediaApi.getListByQuery(query).then(response =>
         {
@@ -109,13 +116,22 @@
       },
 
 
-      getFolderHierarchy(id)
+      getFolderHierarchy(id, isSearch)
       {
         if (!id)
         {
           this.current = {
             id: null,
             name: '@media.list'
+          };
+          this.hierarchy = [this.current];
+          return;
+        }
+        if (isSearch)
+        {
+          this.current = {
+            id: null,
+            name: 'Search results' // TODO translate
           };
           this.hierarchy = [this.current];
           return;

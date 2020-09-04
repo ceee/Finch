@@ -68,7 +68,7 @@
         {
           this.hide();
         }
-        else
+        else if (!this.disabled)
         {
           this.show();
         }
@@ -76,6 +76,10 @@
 
       show()
       {
+        if (this.disabled)
+        {
+          return;
+        }
         Overlay.setDropdown(this);
         this.open = true;
         this.$emit('opened');
