@@ -106,11 +106,11 @@
     transition: color 0.2s ease;
     position: relative;
 
-    &.is-inactive .ui-tree-item-text,
+    /*&.is-inactive .ui-tree-item-text,
     &.is-inactive .ui-tree-item-icon
     {
       color: var(--color-fg-dim);
-    }
+    }*/
 
     .ui-tree-item-arrow
     {
@@ -142,8 +142,8 @@
       bottom: 0;
       left: -300px;
       right: 0;
-      background: var(--color-bg-bright-two);
-      border-right: 3px solid var(--color-primary);
+      background: var(--color-bg-dim);
+      //border-right: 3px solid var(--color-bg-bright-three);
     }
   }
 
@@ -196,7 +196,7 @@
     font-weight: 400;
     position: relative;
     top: -2px;
-    color: var(--color-fg-reverse-mid);
+    color: var(--color-fg-bright);
     transition: color 0.2s ease;
   }
 
@@ -242,6 +242,11 @@
     font-style: normal;
     text-align: center;
     line-height: 14px;
+
+    .ui-tree-item.is-active 
+    {
+      background: var(--color-bg-dim);
+    }
   }
 
   .ui-tree-item-actions

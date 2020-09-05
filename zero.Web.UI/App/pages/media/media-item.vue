@@ -51,7 +51,7 @@
     color: var(--color-fg);
     font-size: var(--font-size);
     border-radius: var(--radius);
-    background: var(--color-bg-bright);
+    //background: var(--color-bg-bright);
   }
 
   .media-item-preview
@@ -62,12 +62,13 @@
     flex-direction: column;
     height: $media-item-size;
     width: $media-item-size;
-    background: var(--color-bg-bright-two);
+    background: var(--color-bg-bright);
     border-radius: var(--radius);
     overflow: hidden;
     position: relative;
     text-align: center;
     font-size: 20px;
+    box-shadow: var(--color-shadow-short);
   }
 
   .media-item-image

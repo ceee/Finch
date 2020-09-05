@@ -2,7 +2,7 @@
   <div class="ui-toggle" :class="{'is-disabled': disabled, 'is-negative': negative, 'is-active': value, 'is-content-left': contentLeft }">
     <input type="checkbox" :value="value" @input="onChange" :disabled="disabled" />
     <span class="ui-toggle-switch" :class="{ 'is-active': value }"><i></i></span>
-    <i class="fth-minus-circle ui-toggle-off-warning color-yellow" v-if="offContent && !value && offWarning"></i>
+    <i class="fth-minus-circle ui-toggle-off-warning" v-if="offContent && !value && offWarning"></i>
     <span class="ui-toggle-text" v-if="onContent && value" v-localize="onContent"></span>
     <span class="ui-toggle-text" v-if="offContent && !value" v-localize="offContent"></span>
   </div>

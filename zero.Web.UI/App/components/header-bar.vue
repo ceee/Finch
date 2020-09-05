@@ -105,7 +105,7 @@
 
     .ui-icon-button
     {
-      margin-right: var(--padding);
+      margin-right: 16px;
     }
   }
 

@@ -163,13 +163,18 @@
 
     &.is-active
     {
-      background: var(--color-bg-bright-two);
-      border-right: 3px solid var(--color-primary);
+      background: var(--color-bg-dim);
+      //border-right: 3px solid var(--color-primary);
       font-weight: bold;
 
       .spaces-tree-item-text span
       {
         font-weight: 400;
+      }
+
+      .spaces-tree-item-text span:first-child
+      {
+        font-weight: 700;
       }
     }
   }

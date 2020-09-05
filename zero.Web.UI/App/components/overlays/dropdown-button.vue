@@ -150,7 +150,7 @@
 
     &:not([disabled]):hover, &.is-active, &:focus
     {
-      background: var(--color-bg-bright-three);
+      background: var(--color-bg-bright-two);
       color: var(--color-fg);
       //font-weight: 700;
 

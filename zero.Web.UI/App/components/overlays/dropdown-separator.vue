@@ -14,7 +14,7 @@
   .ui-dropdown-separator
   {
     border: none;
-    border-bottom: 1px solid var(--color-bg-bright-three);
+    border-bottom: 1px solid var(--color-line-dim);
     margin: 5px 0;
   }
 </style>

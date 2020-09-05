@@ -109,7 +109,7 @@
   {
     display: inline-flex;
     align-items: center;
-    padding: 6px 16px 6px 16px;
+    padding: 6px 6px 6px 12px;
     background: transparent;
     border-radius: 30px;
     font-size: var(--font-size-s);

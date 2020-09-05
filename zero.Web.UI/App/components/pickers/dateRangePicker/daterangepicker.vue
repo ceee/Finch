@@ -129,6 +129,7 @@
   .ui-daterangepicker.is-primary .ui-link
   {
     color: var(--color-primary);
+    font-weight: 700;
     text-decoration-color: var(--color-primary);
   }
 </style>

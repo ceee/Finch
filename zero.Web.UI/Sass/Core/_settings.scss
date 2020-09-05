@@ -62,15 +62,15 @@
   --font-size-xl: 18px;
 }*/
 
-:root
+.theme-dark
 {
-  $color-primary: #f9c202;
+  $color-primary: transparent;
   $color-shade-base: #252b33;
   $color-bg: #15191f;
 
   // accent colors
   --color-primary: #{$color-primary}; // #fdd330; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
-  --color-primary-fg: #16181a;
+  --color-primary-fg: #15191f;
   --color-primary-low: #{rgba($color-primary, 0.2)};
   --color-primary-two: #e5e4df;
   --color-primary-line: #e0dfda;
@@ -98,6 +98,48 @@
 
   // lines
   --color-line: #2a2d2e;
+  --color-line-dim: #{rgba(#2a2d2e, 0.8)};
+}
+
+
+
+:root
+{
+  $color-primary: #15191f;
+  $color-shade-base: #f4f8fb;
+  $color-bg: #f4f4f6;
+
+  // accent colors
+  --color-primary: #{$color-primary}; // #fdd330; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
+  --color-primary-fg: #fff;
+  --color-primary-low: #{rgba($color-primary, 0.2)};
+  --color-primary-two: #e5e4df;
+  --color-primary-line: #e0dfda;
+  --color-secondary: #f9e0c4;
+  --color-secondary-fg: #20242a;
+  --color-negative: #d82853;
+
+  // foreground colors
+  --color-fg: #2c3036;
+  --color-fg-dim: #92969c;
+  --color-fg-dim-two: #c8cbcf;
+  
+  // background colors
+  
+  --color-bg: #{$color-bg};
+  --color-bg-bright: #fff;
+  --color-bg-bright-two: #f5f5f6;
+  --color-bg-bright-three: #efeff1;
+  --color-bg-dim: #f8f8fa;
+
+  // misc colors
+  --color-shadow: rgba(0, 0, 0, 0.07);
+  --color-shadow-short: 0.5px 1px 1.5px 0 rgba(0, 0, 0, 0.05);
+  --color-overlay-shade: rgba(0, 0, 0, 0.3);
+
+  // lines
+  --color-line: #e7eaec;
+  --color-line-dim: #{rgba(#e7eaec, 0.5)};
 }
 
 

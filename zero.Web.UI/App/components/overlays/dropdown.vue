@@ -23,7 +23,7 @@
       },
       theme: {
         type: String,
-        default: null
+        default: 'dark'
       },
       locked: {
         type: Boolean,
@@ -46,10 +46,10 @@
       {
         let classes = 'align-' + this.align.split(' ').join(' align-');
 
-        if (!!this.theme)
-        {
-          classes += ' theme-' + this.theme;
-        }
+        //if (!!this.theme)
+        //{
+        //  classes += ' theme-' + this.theme;
+        //}
 
         return classes;
       }
@@ -111,10 +111,10 @@
     position: absolute;
     min-width: 300px;
     min-height: 20px;
-    background: var(--color-bg-bright-two);
+    background: var(--color-bg-bright);
     border-radius: var(--radius);
-    border: 1px solid var(--color-line-light);
-    box-shadow: 0 0 32px var(--color-shadow);
+    border: 1px solid var(--color-line-dim);
+    box-shadow: 3px 6px 16px var(--color-shadow);
     z-index: 8;
     top: calc(100% + 5px);
     padding: 5px;

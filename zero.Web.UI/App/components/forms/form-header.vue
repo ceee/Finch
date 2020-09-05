@@ -110,5 +110,15 @@
     {
       margin-right: 20px !important;
     }*/
+    .ui-toggle-switch
+    {
+      background: var(--color-bg-bright);
+      box-shadow: var(--color-shadow-short);
+    }
+
+    .ui-toggle-off-warning
+    {
+      color: var(--color-accent-red);
+    }
   }
 </style>

@@ -64,11 +64,11 @@ namespace zero.Core.Api
       {
         if (page.PublishDate > DateTimeOffset.Now || page.UnpublishDate > DateTimeOffset.Now)
         {
-          return new TreeItemModifier("@page.schedule.scheduled", "fth-clock color-primary");
+          return new TreeItemModifier("@page.schedule.scheduled", "fth-clock");
         }
         if (!page.IsActive)
         {
-          return new TreeItemModifier("@ui.inactive", "fth-minus-circle color-yellow");
+          return new TreeItemModifier("@ui.inactive", "fth-minus-circle color-red");
         }
         return null;
       }

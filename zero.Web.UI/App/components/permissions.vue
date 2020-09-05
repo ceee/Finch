@@ -182,7 +182,7 @@
 
   .ui-permissions .ui-tab
   {
-    border-top: 2px solid var(--color-line);
+    border-top: 1px solid var(--color-line);
     padding-top: var(--padding);
     //background: var(--color-bg-dim);
     //border-radius: var(--radius);
