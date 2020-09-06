@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="app-overlays" :class="{ 'has-multiple': instances.length > 1 }">
     <transition-group name="overlay" :duration="600">
-      <div class="app-overlay-outer" :display="instance.display" v-for="(instance, index) in instances" :key="instance.id" :style="{ transform: 'translateX(' + (instances.length - index - 1) * -60 + 'px)' }">
+      <div class="app-overlay-outer" :display="instance.display" v-for="(instance, index) in instances" :key="instance.id" :style="{ transform: 'translateX(' + (editorLength - index - 1) * -60 + 'px)' }">
         <div class="app-overlay-bg" @click="close(instance)"></div>
         <dialog open class="app-overlay" :style="{ width: instance.width + 'px' }" :class="'theme-' + instance.theme" :display="instance.display">
           <component :is="instance.component" :model.sync="instance.model" :config="instance"></component>
@@ -14,11 +14,19 @@
 
 <script>
   import Overlay from 'zero/services/overlay.js'
+  import { filter as _filter } from 'underscore';
 
   export default {
     data: () => ({
       instances: Overlay.instances
     }),
+
+    computed: {
+      editorLength()
+      {
+        return this.instances.filter(x => x.display === 'editor').length;
+      }
+    },
 
     methods: {
       close(instance)
