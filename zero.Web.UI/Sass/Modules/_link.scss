@@ -1,14 +1,14 @@
 ﻿
 
-.ui-link
+.ui-link, a.ui-link
 {
   color: var(--color-fg-dim);
-  text-decoration: underline dotted var(--color-fg-dim);
+  text-decoration: underline dotted var(--color-fg-dim) !important;
   text-underline-offset: 3px;
 
   &.is-primary
   {
     color: var(--color-primary);
-    text-decoration-color: var(--color-primary);
+    text-decoration-color: var(--color-primary) !important;
   }
 }
