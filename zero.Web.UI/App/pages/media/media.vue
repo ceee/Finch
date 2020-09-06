@@ -11,8 +11,8 @@
           </h2>
         </template>
         <template>
-          <ui-search v-model="gridConfig.search" />
-          <ui-dropdown v-if="isOverview && !!id" align="right" :disabled="!!gridConfig.search">
+          <ui-search v-if="!selecting" v-model="gridConfig.search" />
+          <ui-dropdown v-if="isOverview && !!id && !selecting" align="right" :disabled="!!gridConfig.search">
             <template v-slot:button>
               <ui-button type="white" label="Folder" caret="down" :disabled="!!gridConfig.search" />
             </template>
@@ -21,8 +21,14 @@
             <ui-dropdown-separator />
             <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove(current, true)" />
           </ui-dropdown>
-          <ui-button type="action" label="Add folder" @click="addFolder(id)" />
-          <div v-if="!!id" type="button" class="ui-button has-state type-action state-default has-icon">
+          <ui-dropdown v-if="selecting" align="right">
+            <template v-slot:button>
+              <ui-button type="white" :label="selectedText" caret="down" />
+            </template>
+            <!--<slot name="actions"></slot>-->
+          </ui-dropdown>
+          <ui-button v-if="!selecting" type="action" label="Add folder" @click="addFolder(id)" />
+          <div v-if="!!id && !selecting" type="button" class="ui-button has-state type-action state-default has-icon">
             <span class="ui-button-text" v-localize="'Add file'"></span>
             <input class="media-item-upload" type="file" multiple @change="onUpload" />
           </div>
@@ -31,11 +37,12 @@
 
       <div class="ui-view-box">
         <div class="media-items">
-          <ui-datagrid ref="grid" v-model="gridConfig">
+          <ui-datagrid ref="grid" v-model="gridConfig" @select="onSelected">
             <template v-slot:actions="props">
-              <ui-dropdown-button v-if="props.item && props.item.isFolder" label="@ui.open.title" icon="fth-chevrons-right" @click="goToFolder(props.item.id)" />
+              <ui-dropdown-button v-if="props.item && props.item.isFolder" label="@ui.open.title" icon="fth-arrow-right" @click="goToFolder(props.item.id)" />
               <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(props.item, props.item.isFolder)" />
               <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(props.item, props.item.isFolder)" />
+              <ui-dropdown-button label="Select" icon="fth-check-circle" @click="$refs.grid.select(props.item)" />
               <ui-dropdown-separator />
               <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove(props.item, props.item.isFolder)" />
             </template>
@@ -70,8 +77,10 @@
       gridConfig: {
         search: null,
         width: 280,
-        component: MediaItem
-      }
+        component: MediaItem,
+        selectable: true
+      },
+      selectedCount: 0
     }),
 
     created()
@@ -83,6 +92,14 @@
       isOverview()
       {
         return this.$route.name !== 'mediaitem' && this.$route.name !== 'recyclebin';
+      },
+      selectedText()
+      {
+        return this.selectedCount + ' selected';
+      },
+      selecting()
+      {
+        return this.selectedCount > 0;
       }
     },
 
@@ -208,6 +225,12 @@
       },
 
 
+      onSelected(items)
+      {
+        this.selectedCount = items.length;
+      },
+
+
       edit(item, isFolder)
       {
         if (!isFolder)
@@ -308,7 +331,7 @@
 
   .media-items .ui-datagrid-items
   {
-    gap: 16px var(--padding);
+    gap: var(--padding);
   }
 
   input[type="file"].media-item-upload

@@ -73,7 +73,7 @@
   {
     width: 100%;
     height: 100px;
-    padding: 0 var(--padding) 10px;
+    padding: 0 var(--padding) 0; //10px;
     /*background: var(--color-bg-light);*/
     //border-bottom: 1px solid var(--color-line);
 
@@ -85,6 +85,12 @@
     & + .ui-view-box
     {
       padding-top: 0;
+    }
+
+    .app-tree &
+    {
+      height: 90px;
+      margin-bottom: 10px;
     }
   }
 

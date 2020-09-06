@@ -1,6 +1,7 @@
 ﻿<template>
   <router-link :to="link" class="media-item">
     <div class="media-item-preview" :class="{'media-bg-pattern': value.image }">
+      <span class="media-item-check"><i class="fth-check"></i></span>
       <img class="media-item-image" v-if="value.image" :src="value.image" />
       <span class="media-item-icon" v-if="!value.image"><i :class="value.isFolder ? 'fth-folder' : 'fth-file'"></i></span>
     </div>
@@ -18,6 +19,10 @@
       value: {
         type: Object,
         default: () => { }
+      },
+      selected: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -65,7 +70,7 @@
     width: $media-item-size;
     background: var(--color-bg-bright);
     border-radius: var(--radius);
-    overflow: hidden;
+    overflow: visible !important;
     position: relative;
     text-align: center;
     font-size: 20px;
@@ -80,6 +85,29 @@
     position: relative;
     border-radius: var(--radius);
     z-index: 1;
+  }
+
+  .media-item-check
+  {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    position: absolute;
+    z-index: 2;
+    left: -8px;
+    top: -8px;
+    background: var(--color-bg-bright);
+    color: var(--color-fg);
+    box-shadow: 1px 1px 0 1px var(--color-shadow);
+    font-size: 12px;
+
+    .is-selected &
+    {
+      display: inline-flex;
+    }
   }
 
   .media-item-text

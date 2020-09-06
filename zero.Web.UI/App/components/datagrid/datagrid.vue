@@ -2,8 +2,9 @@
   <div class="ui-datagrid-outer">
     <div class="ui-datagrid">
       <div class="ui-datagrid-items" :style="'grid-template-columns: repeat(auto-fill, minmax(' + configuration.width + 'px, 1fr))'" :class="{'is-block': configuration.block }">
-        <div v-for="(item, index) in items" :key="index" v-on:contextmenu="onRightClicked(item, $event)">
-          <component :is="configuration.component" :value="item" class="ui-datagrid-cell"></component>
+        <div class="ui-datagrid-item" v-for="(item, index) in items" :key="index" v-on:contextmenu="onRightClicked(item, $event)">
+          <button v-if="configuration.selectable && selected.length > 0" type="button" class="ui-datagrid-cell-select" @click="select(item)"></button>
+          <component :is="configuration.component" :value="item" class="ui-datagrid-cell" :class="{ 'is-selected': configuration.selectable && selected.indexOf(item) > -1 }"></component>
         </div>  
       </div>
 
@@ -51,7 +52,9 @@
     // promise which returns items based on the current filter and sorting
     items: null,
     // for block items
-    block: false
+    block: false,
+    // ability to select items
+    selectable: false
   };
 
   export default {
@@ -105,7 +108,8 @@
       debouncedUpdate: null,
       actionProps: {
         item: null
-      }
+      },
+      selected: []
     }),
 
 
@@ -262,6 +266,41 @@
           element.style.left = position.x + 'px';
           element.style.width = width + 'px';
         });
+      },
+
+      // toggle selection of an item
+      select(item)
+      {
+        if (!item)
+        {
+          if (this.selected.length >= this.items.length)
+          {
+            this.selected = [];
+          }
+          else
+          {
+            this.selected = [];
+            this.items.forEach(item =>
+            {
+              this.selected.push(item);
+            });
+          }
+        }
+        else
+        {
+          const index = this.selected.indexOf(item);
+
+          if (index > -1)
+          {
+            this.selected.splice(index, 1);
+          }
+          else
+          {
+            this.selected.push(item);
+          }
+        }
+
+        this.$emit('select', this.selected, this);
       }
     }
   }
@@ -279,6 +318,11 @@
     {
       display: block;
     }
+  }
+
+  .ui-datagrid-item
+  {
+    position: relative;
   }
 
   .ui-datagrid-empty, .ui-datagrid-loading
@@ -303,5 +347,17 @@
   {
     position: fixed;
     min-width: 200px;
+  }
+
+  .ui-datagrid-cell-select
+  {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    z-index: 2;
   }
 </style>
