@@ -12,7 +12,7 @@
           <span class="is-filesize">{{getFileinfo(item)}}</span>
         </div>
         <div v-if="item.error">
-          <span class="is-filesize">{{item.error}}</span>
+          <ui-select-button icon="fth-alert-circle color-red" label="@errors.preview.notfound" description="@errors.preview.notfound_text" @click="remove({ id: item.id })" :tokens="{ id: item.id }" />
         </div>
       </div>
     </div>
@@ -156,7 +156,8 @@
             if (!value)
             {
               this.previews.push({
-                error: 'Could not load' // TODO output style + translation
+                id: id,
+                error: true
               });
             }
             else
@@ -328,6 +329,20 @@
       font-size: 0;
       position: relative;
       z-index: 2;
+    }
+
+    &.is-icon
+    {
+      width: 42px;
+      height: 42px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: var(--radius);
+      background: var(--color-bg-bright-two);
+      color: var(--color-fg);
+      text-align: center;
+      font-size: 16px;
     }
 
     &:hover .ui-mediapicker-preview-image-delete,

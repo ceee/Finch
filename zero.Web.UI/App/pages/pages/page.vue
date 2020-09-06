@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <ui-editor v-if="!loading" :config="renderer" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" />
+    <ui-editor v-if="!loading" :config="renderer" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" :active-tab="1" />
   </ui-form>
 </template>
 
