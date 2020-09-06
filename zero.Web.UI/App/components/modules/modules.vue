@@ -167,7 +167,7 @@
   .ui-module-item + .ui-module-item,
   .ui-modules-inner-sortable + .ui-modules-start
   {
-    margin-top: 3px;
+    margin-top: 10px;
   }
 
   .ui-modules-start-button

@@ -71,7 +71,10 @@
     components: { UiPagination },
 
     watch: {
-      '$route': 'load',
+      '$route': function (val)
+      {
+        this.load(true);
+      },
       'value.search': function (val)
       {
         this.filter.search = val;
@@ -140,6 +143,12 @@
       // load items based on the current filter
       load(initial)
       {
+        if (initial)
+        {
+          this.filter.page = 1;
+          this.filter.search = null;
+        }
+
         this.configuration.items(this.filter).then(result =>
         {
           this.pages = result.totalPages;

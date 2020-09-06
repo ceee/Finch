@@ -297,7 +297,6 @@
   {
     width: 100%;
     height: 100vh;
-    background: var(--color-bg);
     overflow-y: auto;
   }
 

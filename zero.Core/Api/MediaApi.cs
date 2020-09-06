@@ -93,19 +93,29 @@ namespace zero.Core.Api
         .OrderByDescending(x => x.IsFolder)
         .ThenBy(query.OrderBy, query.OrderIsDescending, query.OrderType == ListQueryOrderType.String ? OrderingType.String : OrderingType.Double);
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      session.Advanced.MaxNumberOfRequestsPerSession = query.PageSize + 1;
+
+      IRavenQueryable<MediaListItem> dbQuery = session.Query<MediaListItem, Media_ByParent>()
+        .ProjectInto<MediaListItem>()
+        .Scope(Scope);
+
+      if (query.Search.IsNullOrWhiteSpace() || !query.SearchIsGlobal)
       {
-        IRavenQueryable<MediaListItem> dbQuery = session.Query<MediaListItem, Media_ByParent>()
-          .ProjectInto<MediaListItem>()
-          .Scope(Scope);
-
-        if (query.Search.IsNullOrWhiteSpace() || !query.SearchIsGlobal)
-        {
-          dbQuery = dbQuery.WhereIf(x => x.ParentId == query.FolderId, !query.FolderId.IsNullOrEmpty(), x => x.ParentId == null);
-        }
-
-        return await dbQuery.ToQueriedListAsync(query);
+        dbQuery = dbQuery.WhereIf(x => x.ParentId == query.FolderId, !query.FolderId.IsNullOrEmpty(), x => x.ParentId == null);
       }
+
+      ListResult<MediaListItem> result = await dbQuery.ToQueriedListAsync(query);
+
+      foreach (MediaListItem item in result.Items)
+      {
+        if (item.IsFolder)
+        {
+          item.Children = await session.Query<MediaListItem, Media_ByParent>().CountAsync(x => x.ParentId == item.Id);
+        }
+      }
+
+      return result;
     }
 
 

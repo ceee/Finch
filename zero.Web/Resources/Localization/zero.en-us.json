@@ -505,7 +505,9 @@
     "deleteoverlay": {
       "folder_text": "This will delete the folder and all its descendants including subfolders and files. Are you sure?",
       "folder_success_text": "You have successfully deleted this folder"
-    }
+    },
+    "child_count_1": "{count} item",
+    "child_count_x": "{count} items"
   },
 
   "space": {

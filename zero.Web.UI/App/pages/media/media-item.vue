@@ -6,7 +6,8 @@
     </div>
     <p class="media-item-text">
       <span :title="value.name">{{value.name}}</span>
-      <span class="-minor" v-if="value.size"><br><span v-filesize="value.size"></span></span>
+      <span class="-minor" v-if="!value.isFolder"><br><span v-filesize="value.size"></span></span>
+      <span class="-minor" v-if="value.isFolder"><br><span v-localize="{ key: value.children === 1 ? '@media.child_count_1' : '@media.child_count_x', tokens: { count: value.children }}"></span></span>
     </p>
   </router-link>
 </template>
@@ -75,7 +76,7 @@
   {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     position: relative;
     border-radius: var(--radius);
     z-index: 1;
@@ -88,10 +89,12 @@
     text-overflow: ellipsis;
     margin: 0;
     padding-right: 16px;
+    font-weight: bold;
 
     .-minor
     {
-      color: var(--color-fg-dim-two);
+      font-weight: 400;
+      color: var(--color-fg-dim);
     }
   }
 

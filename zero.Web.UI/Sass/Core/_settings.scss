@@ -64,7 +64,7 @@
 
 .theme-dark
 {
-  $color-primary: transparent;
+  $color-primary: #fff;
   $color-shade-base: #252b33;
   $color-bg: #15191f;
 
@@ -107,7 +107,7 @@
 {
   $color-primary: #15191f;
   $color-shade-base: #f4f8fb;
-  $color-bg: #f4f4f6;
+  $color-bg: #f1f1f4;
 
   // accent colors
   --color-primary: #{$color-primary}; // #fdd330; //linear-gradient(75deg, #48da9c, #3eb8ad); //#484c5b; // #292b2c; // #00aea2
@@ -134,7 +134,7 @@
 
   // misc colors
   --color-shadow: rgba(0, 0, 0, 0.07);
-  --color-shadow-short: 0.5px 1px 1.5px 0 rgba(0, 0, 0, 0.05);
+  --color-shadow-short: 0.5px 0.5px 2px 0 rgba(0, 0, 0, 0.06);
   --color-overlay-shade: rgba(0, 0, 0, 0.3);
 
   // lines

@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="app-auth">
+  <div class="app-auth theme-dark">
     <i class="fth-home app-auth-font-trigger"></i>
     <span></span>
     <ui-form class="app-auth-inner" v-slot="form" @submit="onSubmit">

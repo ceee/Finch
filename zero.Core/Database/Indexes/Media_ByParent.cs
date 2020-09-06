@@ -18,6 +18,7 @@ namespace zero.Core.Database.Indexes
         IsFolder = true,
         Name = item.Name,
         Image = null,
+        Children = 0,
         Size = 0
       }));
 
@@ -30,6 +31,7 @@ namespace zero.Core.Database.Indexes
         IsFolder = false,
         Name = item.Name,
         Image = item.PreviewSource,
+        Children = 0,
         Size = item.Size
       }));
 

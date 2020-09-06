@@ -20,6 +20,8 @@ namespace zero.Core.Entities
 
     public long Size { get; set; }
 
+    public int Children { get; set; }
+
     public bool HasTransparency { get; set; }
   }
 }
