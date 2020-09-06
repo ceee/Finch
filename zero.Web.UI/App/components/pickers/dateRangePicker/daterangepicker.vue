@@ -130,6 +130,6 @@
   {
     color: var(--color-primary);
     font-weight: 700;
-    text-decoration-color: var(--color-primary);
+    text-decoration-color: var(--color-primary) !important;
   }
 </style>

@@ -9,6 +9,6 @@
   &.is-primary
   {
     color: var(--color-primary);
-    text-decoration-color: var(--color-primary) !important;
+    text-decoration: underline dotted var(--color-primary) !important;
   }
 }

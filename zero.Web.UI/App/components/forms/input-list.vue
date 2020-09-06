@@ -115,6 +115,7 @@
       width: 42px;
       border-left: none;
       background: transparent !important;
+      box-shadow: none;
     }
   }
 </style>
