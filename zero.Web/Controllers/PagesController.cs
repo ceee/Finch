@@ -29,6 +29,11 @@ namespace zero.Web.Controllers
     {
       IPage entity = await Api.GetById(id);
 
+      if (entity == null)
+      {
+        return NotFound();
+      }
+
       return Edit<IPage, PageEditModel<IPage>>(new PageEditModel<IPage>()
       {
         Entity = entity,

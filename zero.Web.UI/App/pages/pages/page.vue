@@ -124,7 +124,7 @@
 
         form.load(!this.id ? PagesApi.getEmpty(this.type, this.parent) : PagesApi.getById(this.id)).then(response =>
         {
-          this.renderer = 'page.' + response.entity.pageTypeAlias;
+          this.renderer = response.entity ? 'page.' + response.entity.pageTypeAlias : null;
           this.model = response.entity;
           this.meta = response.meta;
           this.loading = false;

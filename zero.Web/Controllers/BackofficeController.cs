@@ -40,12 +40,17 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Creates an edit model with appropriate options and permissions
     /// </summary>
-    public JsonResult Edit<T>(T data, bool typed = true, Action<EditModel<T>> transform = null) where T : IZeroIdEntity
+    public IActionResult Edit<T>(T data, bool typed = true, Action<EditModel<T>> transform = null) where T : IZeroIdEntity
     {
       Type type = typeof(T);
       bool canBeShared = AppAwareShareableType.IsAssignableFrom(type);
 
       //ControllerContext.ActionDescriptor.FilterDescriptors[0].
+
+      if (data == null)
+      {
+        return NotFound();
+      }
 
       EditModel<T> model = new EditModel<T>();
       model.Entity = data;
@@ -66,7 +71,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Creates an edit model with appropriate options and permissions
     /// </summary>
-    public JsonResult Edit<T, TWrapper>(TWrapper data, bool typed = true, Action<EditModel<T>> transform = null) 
+    public IActionResult Edit<T, TWrapper>(TWrapper data, bool typed = true, Action<EditModel<T>> transform = null) 
       where T : IZeroIdEntity
       where TWrapper : EditModel<T>, new() 
     {
