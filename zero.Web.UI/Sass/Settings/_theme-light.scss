@@ -23,8 +23,6 @@
   $color-bg-shade-6: #d2d2d7;
 
   // misc colors
-  $color-shadow: rgba(0, 0, 0, 0.07);
-  $color-shadow-short: 0.5px 0.5px 2px 0 rgba(0, 0, 0, 0.06);
   $color-overlay-shade: rgba(0, 0, 0, 0.15);
 
 
@@ -85,6 +83,7 @@
   // dropdowns
   --color-dropdown: #{$color-bg-shade-1};
   --color-dropdown-line: #{$color-bg-shade-3};
+  --color-dropdown-border: #{$color-bg-shade-3};
   --color-dropdown-selected: #{$color-bg-shade-2};
 
   // overlays

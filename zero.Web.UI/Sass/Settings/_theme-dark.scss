@@ -1,0 +1,101 @@
+
+:root
+{
+  // accent colors
+  $color-primary: #fff;
+  $color-primary-fg: #2c3036;
+  $color-primary-low: #{rgba(#2c3036, 0.2)};
+  $color-secondary: #f9e0c4;
+  $color-secondary-fg: #20242a;
+
+  // foreground colors
+  $color-fg: #fff;
+  $color-fg-shade-1: #b0b4b8; // dim
+  $color-fg-shade-2: #8c9094; // dim-two
+  
+  // background colors  
+  $color-bg: #191e25;
+  $color-bg-shade-1: #22272e; // bright
+  $color-bg-shade-2: #1d2229; // dim
+  $color-bg-shade-3: #2a2f36; // bright-two
+  $color-bg-shade-4: #3b3f45; // bright-three
+  $color-bg-shade-5: #43484f;
+  $color-bg-shade-6: #43484f;
+
+  // misc colors
+  $color-overlay-shade: rgba(0, 0, 0, 0.3);
+
+
+  // ----------------------------------------------------------------------------------
+
+  // accent colors
+  --color-primary: #{$color-primary};
+  --color-primary-text: #{$color-primary-fg};
+
+  // generic shades 
+  // (try to avoid them)
+  --color-bg: #{$color-bg};
+  --color-bg-shade-1: #{$color-bg-shade-1};
+  --color-bg-shade-2: #{$color-bg-shade-2};
+  --color-bg-shade-3: #{$color-bg-shade-3};
+  --color-bg-shade-4: #{$color-bg-shade-4};
+  --color-bg-shade-5: #{$color-bg-shade-5};
+
+  // texts
+  --color-text: #{$color-fg};
+  --color-text-dim: #{$color-fg-shade-1};
+  --color-text-dim-one: #{$color-fg-shade-2};
+
+  // page background
+  --color-page: #{$color-bg};
+
+  // boxes
+  --color-box: #{$color-bg-shade-1};
+  --color-box-light: #{$color-bg-shade-2};
+  --color-box-nested: #{$color-bg-shade-2};
+
+  // buttons
+  --color-button: #{$color-primary};
+  --color-button-text: #{$color-primary-fg};
+  --color-button-light: #{$color-bg-shade-3};
+  --color-button-light-onbg: #{$color-bg-shade-3};
+
+  // forms
+  --color-input: #{$color-bg-shade-2};
+  --color-input-placeholder: #{$color-fg-shade-1};
+  --color-check: #{$color-bg-shade-3};
+  --color-checked: #{$color-bg-shade-3};
+  --color-checked-fg: #{$color-fg};
+  --color-toggle: #{$color-bg-shade-3};
+  --color-toggle-fg: #{$color-fg};
+  --color-toggled: #{$color-bg-shade-3};
+  --color-toggled-fg: #{$color-fg};
+
+  // lines
+  --color-line: #{$color-bg-shade-3};
+  --color-line-onbg: #{$color-bg-shade-5};
+  --color-line-dashed: #{$color-bg-shade-6};
+
+  // trees
+  --color-tree: #{$color-bg-shade-1};
+  --color-tree-selected: #{$color-bg-shade-3};
+
+  // dropdowns
+  --color-dropdown: #{$color-bg-shade-3};
+  --color-dropdown-line: #{$color-bg-shade-4};
+  --color-dropdown-border: transparent;
+  --color-dropdown-selected: #{$color-bg-shade-4};
+
+  // overlays
+  --color-overlay-shade: #{$color-overlay-shade};
+  --color-overlay: #{$color-bg-shade-1};
+  --color-overlay-editor: #{$color-bg};
+  --color-overlay-footer: #{$color-bg-shade-2};
+
+  // tables
+  --color-table: #{$color-bg-shade-1};
+  --color-table-line-horizontal: #{$color-bg-shade-3};
+  --color-table-line-vertical: transparent;
+  --color-table-head: #{$color-bg-shade-2};
+  --color-table-hover: #{$color-bg-shade-2};
+}

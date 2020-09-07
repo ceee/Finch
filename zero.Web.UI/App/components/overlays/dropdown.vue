@@ -113,7 +113,7 @@
     min-height: 20px;
     background: var(--color-dropdown);
     border-radius: var(--radius);
-    border: 1px solid var(--color-dropdown-line);
+    border: 1px solid var(--color-dropdown-border);
     box-shadow: var(--shadow-dropdown);
     z-index: 8;
     top: calc(100% + 5px);
