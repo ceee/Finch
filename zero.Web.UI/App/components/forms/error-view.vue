@@ -5,8 +5,8 @@
       <strong class="page-error-headline" v-localize="{ key: errorDetails.headline, tokens: tokens }"></strong><br>
       <span v-localize:html="{ key: errorDetails.text, tokens: tokens }"></span>
     </p>
-    <ui-button v-if="errorDetails.code === 404" class="page-error-button" type="light" :label="detailsText" @click="details = !details" />
-    <ui-button v-if="errorDetails.code !== 404 && errorDetails.category === 4" class="page-error-button" type="light" label="@ui.back" @click="$router.go(-1)" />
+    <ui-button v-if="errorDetails.code === 404" class="page-error-button" type="light onbg" :label="detailsText" @click="details = !details" />
+    <ui-button v-if="errorDetails.code !== 404 && errorDetails.category === 4" class="page-error-button" type="light onbg" label="@ui.back" @click="$router.go(-1)" />
     <!--<ui-button v-if="errorDetails.code !== 404 && errorDetails.category === 5" class="page-error-button" type="light" label="@ui.back" @click="$router.go(-1)" />-->
     <template v-if="errorDetails.code === 404 && details">
       <br><br>

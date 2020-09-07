@@ -9,7 +9,7 @@
       <div class="ui-modules-select" v-if="isSelecting">
         <ui-icon-button class="ui-modules-select-close" @click="isSelecting=false" icon="fth-x" title="@ui.close" />
         <ui-inline-tabs class="ui-modules-select-groups">
-          <ui-tab v-for="group in moduleTypes" :label="group.name" :count="group.count">
+          <ui-tab v-for="group in moduleTypes" :key="group.key" :label="group.name" :count="group.count">
             <div class="ui-modules-select-items">
               <button v-for="item in group.items" :key="item.alias" type="button" class="ui-modules-select-item" :disabled="item.isDisabled" @click="editModule(item, true)">
                 <div class="ui-modules-select-item-icon">
