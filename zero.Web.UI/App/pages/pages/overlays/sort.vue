@@ -4,8 +4,8 @@
       <ui-header-bar title="@ui.sort.title" :back-button="false" :close-button="true" />
     </template>
     <template v-slot:footer>
-      <ui-button type="white" label="@ui.close" @click="config.hide"></ui-button>
-      <ui-button label="@ui.save" @click="onSave" :state="state"></ui-button>
+      <ui-button type="light onbg" label="@ui.close" @click="config.hide"></ui-button>
+      <ui-button type="primary" label="@ui.save" @click="onSave" :state="state"></ui-button>
     </template>
 
     <p class="pages-sort-text" v-localize="'@ui.sort.text'"></p>
@@ -107,10 +107,10 @@
     align-items: center;
     font-size: var(--font-size);
     height: 46px;
-    color: var(--color-fg);
+    color: var(--color-text);
     position: relative;
     padding: 0 8px;
-    background: var(--color-bg-bright);
+    background: var(--color-box);
     border-radius: var(--radius);
 
     i
@@ -118,7 +118,7 @@
       font-size: var(--font-size-l);
       position: relative;
       top: -1px;
-      color: var(--color-fg-light);
+      color: var(--color-text-dim);
     }
 
     span
@@ -128,7 +128,7 @@
 
     &.is-selected
     {
-      color: var(--color-fg-light);
+      color: var(--color-text-dim);
     }
 
     & + .pages-sort-item
@@ -165,7 +165,7 @@
   i.pages-sort-item-icon
   {
     top: 0;
-    color: var(--color-fg);
+    color: var(--color-text);
     margin-right: 8px;
   }
 </style>

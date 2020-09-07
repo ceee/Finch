@@ -1,10 +1,10 @@
 ﻿<template>
-  <div class="app-auth theme-dark">
+  <div class="app-auth">
     <i class="fth-home app-auth-font-trigger"></i>
     <span></span>
     <ui-form class="app-auth-inner" v-slot="form" @submit="onSubmit">
       <div>
-        <img class="app-auth-image" src="/Assets/zero-2.png" v-localize:alt="'@zero.name'" />
+        <img class="app-auth-image" src="/Assets/zero-2-light.png" v-localize:alt="'@zero.name'" />
 
         <ui-error :catch-remaining="true" />
         <ui-message type="info" v-if="rejectReason" :text="rejectReason" />
@@ -20,7 +20,7 @@
       </div>
 
       <div class="app-auth-bottom">
-        <ui-button :submit="true" label="@login.button" :state="form.state" />
+        <ui-button type="primary" :submit="true" label="@login.button" :state="form.state" />
         <ui-button type="blank" label="@login.button_forgot" />
       </div>
     </ui-form>
@@ -76,7 +76,7 @@
     grid-template-rows: 1fr auto 1fr;
     align-items: center;
     justify-content: center;
-    background: var(--color-bg);
+    background: var(--color-page);
 
     /*&:before
     {
@@ -108,13 +108,14 @@
     align-items: stretch;
     max-width: 100%;
     width: 520px;
-    background: var(--color-bg-bright);
+    background: var(--color-box);
+    box-shadow: var(--shadow-short);
     border-radius: var(--radius);
     /*border: 1px solid var(--color-line);*/
     position: relative;
     z-index: 2;
     padding: var(--padding);
-    color: var(--color-fg);
+    color: var(--color-text);
     /*box-shadow: 0 0 60px var(--color-shadow);*/
   }
 

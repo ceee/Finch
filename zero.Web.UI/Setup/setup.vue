@@ -113,7 +113,7 @@
 
   .setup-step p
   {
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
     font-size: 0.9rem;
     line-height: 1.6;
     margin: 0 0 2rem;
@@ -121,7 +121,7 @@
 
   .setup-step p b
   {
-    color: var(--color-fg);
+    color: var(--color-text);
     font-weight: 600;
   }
 

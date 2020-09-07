@@ -111,14 +111,14 @@
     position: absolute;
     min-width: 300px;
     min-height: 20px;
-    background: var(--color-bg-bright);
+    background: var(--color-dropdown);
     border-radius: var(--radius);
-    border: 1px solid var(--color-line-dim);
-    box-shadow: 3px 6px 16px var(--color-shadow);
+    border: 1px solid var(--color-dropdown-line);
+    box-shadow: var(--shadow-dropdown);
     z-index: 8;
     top: calc(100% + 5px);
     padding: 5px;
-    color: var(--color-fg);
+    color: var(--color-text);
 
     &.align-right
     {

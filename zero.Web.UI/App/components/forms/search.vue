@@ -59,8 +59,13 @@
       min-width: 320px;
       padding-right: 40px;
       border: none;
-      box-shadow: var(--color-shadow-short);
-      background: var(--color-bg-bright);
+      background: var(--color-input);
+    }
+
+    &.onbg .ui-input
+    {
+      box-shadow: var(--shadow-short);
+      background: var(--color-button-light-onbg);
     }
 
     .ui-searchinput-button

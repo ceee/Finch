@@ -15,7 +15,7 @@ h2.ui-headline
   .-minor
   {
     font-size: var(--font-size);
-    color: var(--color-fg-light);
+    color: var(--color-text-dim);
     font-weight: 400;
   }
 }
@@ -33,7 +33,7 @@ h3.ui-headline
     display: block;
     margin-top: 4px;
     font-size: var(--font-size);
-    color: var(--color-fg-light);
+    color: var(--color-text-dim);
     font-weight: 400;
   }
 }

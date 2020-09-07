@@ -16,7 +16,7 @@
 {
   width: 14px;
   height: 14px;
-  fill: var(--color-fg);
+  fill: var(--color-text);
 }
 
 .flatpickr-prev-month,
@@ -41,12 +41,12 @@
 {
   @extend .ui-native-select;
   border: none;
-  background: var(--color-bg-bright-three);
+  background: var(--color-button-light);
 
   select
   {
     background: transparent;
-    color: var(--color-fg);
+    color: var(--color-text);
   }
 
   &:after
@@ -69,7 +69,7 @@
 
     input
     {
-      background: var(--color-bg-bright-three);
+      background: var(--color-button-light);
       border: none;
     }
   }
@@ -93,7 +93,7 @@
 
 .flatpickr-weekday
 {
-  color: var(--color-fg-dim-two);
+  color: var(--color-text-dim-one);
   font-size: var(--font-size-xs);
   margin-bottom: 20px;
 }
@@ -124,7 +124,7 @@
 
   &:hover:after
   {
-    background: var(--color-bg-bright);
+    background: var(--color-button-light);
   }
 
   &.today
@@ -133,14 +133,14 @@
 
     &:after
     {
-      background: var(--color-bg-bright-three);
+      background: var(--color-button-light);
     }
   }
 
   &.selected
   {
     font-weight: 700;
-    color: var(--color-primary-fg) !important;
+    color: var(--color-primary-text) !important;
 
     &:after
     {
@@ -150,7 +150,7 @@
 
   &.nextMonthDay, &.prevMonthDay
   {
-    color: var(--color-fg-dim-two);
+    color: var(--color-text-dim-one);
   }
 }
 
@@ -210,7 +210,7 @@
 .flatpickr-time
 {
   border-top: 1px solid var(--color-line);
-  background: var(--color-bg-bright);
+  background: var(--color-button-light);
   padding: 20px 15px;
   display: flex;
   align-items: center;
@@ -219,7 +219,8 @@
   {
     padding-left: 20px;
     border: none;
-    background: var(--color-bg-bright-two);
+    background: var(--color-dropdown);
+    box-shadow: var(--shadow-short);
   }
 }
 

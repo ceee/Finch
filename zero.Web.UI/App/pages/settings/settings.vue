@@ -80,7 +80,7 @@
 
   a.settings-group-item
   {
-    color: var(--color-fg);
+    color: var(--color-text);
     font-size: var(--font-size);
     display: grid;
     grid-template-columns: auto 1fr;
@@ -95,23 +95,22 @@
     line-height: 59px !important;
     font-size: 18px;
     text-align: center;
-    background: var(--color-bg-bright);
+    background: var(--color-box);
     border-radius: var(--radius);
-    transition: box-shadow 0.2s ease;
-    box-shadow: var(--color-shadow-short);
+    box-shadow: var(--shadow-short);
   }
 
   .settings-group-item-text
   {
     line-height: 1.3;
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
     margin: 0;
 
     strong
     {
       display: inline-block;
       margin-bottom: 5px;
-      color: var(--color-fg);
+      color: var(--color-text);
     }
   }
 </style>

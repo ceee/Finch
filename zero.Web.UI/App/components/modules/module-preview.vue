@@ -140,7 +140,7 @@
   {
     display: flex;
     align-items: center;
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
     font-size: var(--font-size-s);
     width: 100%;
 
@@ -160,8 +160,9 @@
 
   .ui-module-item-disabled
   {
-    background: var(--color-bg-bright);
-    opacity: .6;
+    background: var(--color-box);
+    border-radius: var(--radius);
+    opacity: .5;
     position: absolute;
     left: 0;
     right: 0;
@@ -198,8 +199,8 @@
 
     a
     {
-      color: var(--color-fg);
-      text-decoration: underline dotted var(--color-fg-dim);
+      color: var(--color-text);
+      text-decoration: underline dotted var(--color-text-dim);
       text-underline-offset: 3px;
     }
   }

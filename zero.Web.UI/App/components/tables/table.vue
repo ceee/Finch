@@ -306,7 +306,7 @@
     -webkit-box-direction: normal;
     flex-direction: column;
     position: relative;
-    background: var(--color-bg-bright);
+    background: var(--color-table);
     flex-wrap: nowrap;
     -webkit-box-pack: justify;
     justify-content: space-between;
@@ -316,7 +316,7 @@
     word-wrap: break-word;
     font-size: var(--font-size);
     width: 100%;
-    box-shadow: var(--color-shadow-short);
+    box-shadow: var(--shadow-short);
   }
 
   .ui-table-row
@@ -328,11 +328,10 @@
     -webkit-box-align: center;
     align-items: stretch;
     width: 100%;
-    border-bottom: 1px solid var(--color-bg-bright-two);
+    border-bottom: 1px solid var(--color-table-line-horizontal);
     position: relative;
     outline: 1px solid transparent;
     transition: outline 0.1s ease, box-shadow 0.1s ease;
-
     &:last-child
     {
       border-bottom: none;
@@ -351,12 +350,12 @@
   {
     font-weight: 700;
     border-radius: 5px 5px 0 0;
-    color: var(--color-fg);
+    color: var(--color-text);
     position: sticky;
     top: 0;
     //border-bottom: 1px solid var(--color-line);
     z-index: 2;
-    background: var(--color-bg-dim);
+    background: var(--color-table-head);
 
     .ui-table-cell
     {
@@ -373,7 +372,7 @@
     position: relative;
     text-align: left;
     padding: 18px 20px 17px 20px;
-    border-left: 1px solid var(--color-bg-bright-two);
+    border-left: 1px solid var(--color-table-line-vertical);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -409,7 +408,7 @@
 
   .ui-table-row:not(.is-selected) .ui-table-cell:not(.is-head).is-selectable i
   {
-    color: var(--color-fg);
+    color: var(--color-text);
     margin-right: 1px;
 
     &:before
@@ -421,13 +420,13 @@
   a.ui-table-cell,
   button.ui-table-cell
   {
-    color: var(--color-fg);
+    color: var(--color-text);
     transition: none;
    
     &:hover
     {
       color: var(--color-primary);
-      background: var(--color-bg-bright);
+      background: var(--color-table-hover);
     }
   }
 
@@ -451,7 +450,7 @@
 
     .arrow
     {
-      border-top-color: var(--color-fg);
+      border-top-color: var(--color-text);
       transition: opacity 0.2s ease, transform 0.3s ease;
       opacity: 0.2;
     }
@@ -500,7 +499,7 @@
   .ui-table-field-bool
   {
     font-family: var(--font-icon);
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
 
     &:before
     {
@@ -509,7 +508,7 @@
 
     &.is-checked
     {
-      color: var(--color-fg);
+      color: var(--color-text);
 
       &:before
       {
@@ -544,7 +543,7 @@
 
   .ui-table-field-shared-2
   {
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
     font-style: normal;
     font-weight: 400;
     font-size: 0.85em;
@@ -562,7 +561,7 @@
 
     .-minor
     {
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
     }
   }
 

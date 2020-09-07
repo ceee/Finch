@@ -61,8 +61,8 @@
     position: relative;
     background: var(--color-bg-bright);
     border-radius: var(--radius);
-    box-shadow: var(--color-shadow-short);
-    color: var(--color-fg);
+    box-shadow: var(--shadow-short);
+    color: var(--color-text);
 
     &.is-wide
     {

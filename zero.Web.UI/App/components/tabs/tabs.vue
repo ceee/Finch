@@ -123,11 +123,11 @@
     //overflow: hidden;
     padding: 0 var(--padding);
     font-size: var(--font-size);
-    color: var(--color-fg);
+    color: var(--color-text);
     position: relative;
     transition: color 0.2s ease;
     border-radius: var(--radius) var(--radius) 0 0;
-    background: var(--color-bg-dim);
+    background: var(--color-box-light);
     //border: 1px solid transparent;
     //border-bottom: none;
     & + .ui-tabs-list-item
@@ -137,44 +137,29 @@
 
     &:hover
     {
-      color: var(--color-fg);
+      color: var(--color-text);
     }
 
     &[disabled]
     {
       cursor: default;
-      color: var(--color-fg-dim);
-    }
-
-    &:after
-    {
-      content: '';
-      height: 4px;
-      width: 4px;      
-      position: absolute;
-      left: 0;
-      bottom: -4px;
+      color: var(--color-text-dim);
     }
 
     &.is-active
     {
       font-weight: 700;
-      color: var(--color-fg);
-      background: var(--color-bg-bright);
+      color: var(--color-text);
+      background: var(--color-box);
 
       .ui-tabs-list-item-count
       {
-        background: var(--color-bg);
+        background: var(--color-box-light);
       }
 
       &:before
       {
         display: none;
-      }
-
-      &:after
-      {
-        background: var(--color-bg-bright);
       }
     }
 
@@ -193,22 +178,17 @@
       }
     }
 
-    &:first-child:before
+    &:first-child.is-active:before
     {
       content: '';
       position: absolute;
       display: inline-block;
-      background: var(--color-bg-dim);
+      background: var(--color-box);
       left: 0;
       bottom: -8px;
       height: 8px;
       width: 8px;
-      z-index: -1;
-    }
-
-    &.is-active:first-child:before
-    {
-      background: var(--color-bg-bright);
+      z-index: 0;
     }
   }
 
@@ -219,13 +199,13 @@
     overflow: hidden;
     float: right;
     padding: 2px 6px;
-    background: var(--color-bg-bright-two);
+    background: var(--color-box);
     border-radius: 10px;
     margin-left: 8px;
     margin-right: -4px;
     margin-top: -1px;
     font-weight: bold;
-    color: var(--color-fg);
+    color: var(--color-text);
   }
 
   .ui-tabs-list-item-error

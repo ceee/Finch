@@ -8,24 +8,22 @@
 
       <div class="ui-modules-select" v-if="isSelecting">
         <ui-icon-button class="ui-modules-select-close" @click="isSelecting=false" icon="fth-x" title="@ui.close" />
-        <nav class="ui-modules-select-groups">
-          <button v-for="group in moduleTypes" type="button" class="ui-modules-select-group" :class="{'is-active': activeGroup.index === group.index }" @click="selectGroup(group)">
-            {{group.name}}
-            <span class="ui-modules-select-group-count">{{group.count}}</span>
-          </button>
-        </nav>
-        <div class="ui-modules-select-items">
-          <button v-for="item in activeGroup.items" :key="item.alias" type="button" class="ui-modules-select-item" :disabled="item.isDisabled" @click="editModule(item, true)">
-            <div class="ui-modules-select-item-icon">
-              <i :class="item.icon"></i>
+        <ui-inline-tabs class="ui-modules-select-groups">
+          <ui-tab v-for="group in moduleTypes" :label="group.name" :count="group.count">
+            <div class="ui-modules-select-items">
+              <button v-for="item in group.items" :key="item.alias" type="button" class="ui-modules-select-item" :disabled="item.isDisabled" @click="editModule(item, true)">
+                <div class="ui-modules-select-item-icon">
+                  <i :class="item.icon"></i>
+                </div>
+                <div class="ui-modules-select-item-text">
+                  <strong>{{item.name}}</strong>
+                  <span class="is-minor">{{item.description}}</span>
+                </div>
+                <span v-if="item.isDisabled" class="ui-modules-select-item-disabled">Not allowed <i class="fth-slash"></i></span>
+              </button>
             </div>
-            <div class="ui-modules-select-item-text">
-              <strong>{{item.name}}</strong>
-              <span class="is-minor">{{item.description}}</span>
-            </div>
-            <span v-if="item.isDisabled" class="ui-modules-select-item-disabled">Not allowed <i class="fth-slash"></i></span>
-          </button>
-        </div>
+          </ui-tab>
+        </ui-inline-tabs>
       </div>
     </div>
 </template>
@@ -135,9 +133,9 @@
   {
     margin: 0;
     padding: var(--padding);
-    background: var(--color-bg-bright);
+    background: var(--color-box);
     border-radius: var(--radius);
-    box-shadow: var(--color-shadow-short);
+    box-shadow: var(--shadow-short);
     display: flex;
     justify-content: center;
   }
@@ -159,21 +157,21 @@
     line-height: 50px !important;
     font-size: 20px;
     text-align: center;
-    background: var(--color-bg-bright-two);
+    background: var(--color-button-light);
     border-radius: var(--radius);
   }
 
   .ui-modules-start-button-text
   {
     line-height: 1.3;
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
     margin: 0;
 
     strong
     {
       display: inline-block;
       margin-bottom: 5px;
-      color: var(--color-fg);
+      color: var(--color-text);
     }
   }
 
@@ -188,54 +186,13 @@
     position: absolute;
     right: 0;
     top: 0;
+    background: none !important;
   }
 
   .ui-modules-select-groups
   {
-    display: flex;
     margin-bottom: var(--padding);
     padding-right: 50px;
-  }
-
-  .ui-modules-select-group
-  {
-    display: inline-flex;
-    align-items: center;
-    padding: 6px 6px 6px 16px;
-    background: transparent;
-    border-radius: 30px;
-    font-size: var(--font-size-s);
-
-    & + .ui-modules-select-group
-    {
-      margin-left: 16px;
-    }
-
-    .ui-modules-select-group-count
-    {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      width: 20px;
-      height: 20px;
-      border-radius: 10px;
-      background: var(--color-bg-dim);
-      margin-left: 12px;
-      font-size: 10px;
-      line-height: 1;
-      color: var(--color-fg-dim);
-    }
-
-    &.is-active
-    {
-      background: var(--color-bg-bright-two);
-
-      .ui-modules-select-group-count
-      {
-        background: var(--color-bg-bright);
-        color: var(--color-fg);
-      }
-    }
   }
 
   .ui-modules-select-items
@@ -253,7 +210,7 @@
     align-items: center;
     height: 100px;
     border-radius: var(--radius);
-    background: var(--color-bg-bright-two);
+    background: var(--color-button-light);
     padding: 10px var(--padding) 10px 0;
     position: relative;
 
@@ -261,18 +218,13 @@
     {
       opacity: .6;
     }
-
-    &:hover
-    {
-      background: var(--color-bg-bright-three);
-    }
   }
 
   .ui-modules-select-item-icon
   {
     display: inline-flex;
     justify-content: center;
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
     font-size: 26px;
   }
 
@@ -286,7 +238,7 @@
 
     .is-minor
     {
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       font-size: var(--font-size-s);
     }
   }
@@ -300,7 +252,7 @@
     align-items: center;
     font-size: 8px;
     text-transform: uppercase;
-    color: var(--color-fg-dim-two);
+    color: var(--color-text-dim-one);
     line-height: 1;
     font-weight: 600;
 

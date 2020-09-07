@@ -69,6 +69,6 @@
 <style lang="scss">
   .ui-date .-minor
   {
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
   }
 </style>

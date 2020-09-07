@@ -4,8 +4,8 @@
       <ui-header-bar title="@ui.move.title" :back-button="false" :close-button="true" />
     </template>
     <template v-slot:footer>
-      <ui-button type="white" label="@ui.close" @click="config.hide" />
-      <ui-button label="@ui.move.action" @click="onSave" :state="state" />
+      <ui-button type="light onbg" label="@ui.close" @click="config.hide" />
+      <ui-button type="primary" label="@ui.move.action" @click="onSave" :state="state" />
     </template>
 
     <p class="pages-move-text" v-localize:html="{ key: '@ui.move.text', tokens: { name: model.name } }"></p>
@@ -147,7 +147,7 @@
 
     .ui-tree-item.is-selected, .ui-tree-item:hover:not(.is-disabled)
     {
-      background: var(--color-bg-bright-two);
+      background: var(--color-tree-selected);
     }
 
     .ui-tree-item.is-selected

@@ -92,10 +92,10 @@
   .ui-property-label
   {
     display: block;
-    color: var(--color-fg);
+    color: var(--color-text);
     width: 260px;
     padding-right: 60px;
-    font-size: $font-size;
+    font-size: var(--font-size);
     line-height: 1.5;
     font-weight: 700;
   }
@@ -108,7 +108,7 @@
     font-weight: 400;
     line-height: 1.4;
     text-decoration: none;
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
     letter-spacing: 0.3px;
 
     &:empty
@@ -119,7 +119,7 @@
 
   .ui-property-required
   {
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
     margin-left: 0.2em;
     font-weight: 400;
   }
@@ -135,7 +135,7 @@
   {
     max-width: 800px;
     font-size: var(--font-size-xs);
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
     margin: 15px 0 0;
     letter-spacing: 0.3px;
 

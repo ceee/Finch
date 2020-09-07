@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-pagination" v-if="pages > 1">
-    <ui-icon-button class="ui-pagination-prev ui-pagination-button" type="white" title="@ui.pagination.previous" icon="fth-chevron-left" :disabled="page < 2" @click="set(page - 1)" />
+    <ui-icon-button class="ui-pagination-prev ui-pagination-button" type="light onbg" title="@ui.pagination.previous" icon="fth-chevron-left" :disabled="page < 2" @click="set(page - 1)" />
     <div class="ui-pagination-select">
       <select :value="page" @change="selectChanged">
         <option v-for="value in values" v-bind:value="value">{{value}}</option>
@@ -10,7 +10,7 @@
         <i class="ui-button-caret fth-chevron-down"></i>
       </button>
     </div>
-    <ui-icon-button class="ui-pagination-next ui-pagination-button" type="white" title="@ui.pagination.next" icon="fth-chevron-right" :disabled="page >= pages" @click="set(page + 1)" />
+    <ui-icon-button class="ui-pagination-next ui-pagination-button" type="light onbg" title="@ui.pagination.next" icon="fth-chevron-right" :disabled="page >= pages" @click="set(page + 1)" />
   </div>
 </template>
 
@@ -88,6 +88,6 @@
 
   .ui-pagination-button[disabled] .ui-button-icon
   {
-    color: var(--color-fg-light);
+    color: var(--color-text-dim);
   }
 </style>

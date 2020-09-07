@@ -52,7 +52,7 @@
     display: grid;
     grid-template-columns: auto 1fr;
     background: var(--color-bg);
-    color: var(--color-fg);
+    color: var(--color-text);
   }
 
   .app.is-preview 
@@ -71,7 +71,7 @@
   {
     background: var(--color-bg-bright);
     width: 80px;
-    color: var(--color-fg);
+    color: var(--color-text);
     height: 100vh;
     box-shadow: 0 0 20px rgba(0,0,0,0.15);
     position: relative;

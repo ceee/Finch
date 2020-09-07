@@ -308,22 +308,21 @@
     line-height: 89px !important;
     font-size: 22px;
     text-align: center;
-    background: var(--color-bg-bright);
+    background: var(--color-box);
     border-radius: var(--radius);
-    transition: box-shadow 0.2s ease;
-    box-shadow: var(--color-shadow-short);
+    box-shadow: var(--shadow-short);
   }
 
   .page-overview-action-text
   {
     line-height: 1.3;
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
 
     strong
     {
       display: inline-block;
       margin-bottom: 8px;
-      color: var(--color-fg);
+      color: var(--color-text);
       font-size: var(--font-size-l);
     }
   }

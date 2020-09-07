@@ -8,7 +8,7 @@ body, html
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: var(--color-bg);
+  background: var(--color-page);
 }
 
 html
@@ -20,8 +20,8 @@ html
 body
 {
   height: 100vh;
-  background: var(--color-bg);
-  color: var(--color-fg);
+  background: var(--color-page);
+  color: var(--color-text);
   font-size: 16px;
   @extend %font;
 }

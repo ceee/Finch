@@ -23,8 +23,8 @@
   width: 28px;
   height: 28px;
   border-radius: 40px;
-  border: 2px solid var(--color-bg-bright-two);
-  border-left-color: var(--color-fg);
+  border: 2px solid var(--color-box);
+  border-left-color: var(--color-text);
   will-change: transform;
   animation: loadingRotation 0.8s linear infinite;
 

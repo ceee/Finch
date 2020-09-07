@@ -152,7 +152,7 @@
     position: relative;
     padding: 15px var(--padding);
     font-size: var(--font-size);
-    color: var(--color-fg);
+    color: var(--color-text);
     transition: color 0.2s ease;
 
     &:hover > .spaces-tree-item-actions
@@ -163,8 +163,7 @@
 
     &.is-active
     {
-      background: var(--color-bg-dim);
-      //border-right: 3px solid var(--color-primary);
+      background: var(--color-tree-selected);
       font-weight: bold;
 
       .spaces-tree-item-text span
@@ -177,6 +176,14 @@
         font-weight: 700;
       }
     }
+
+    &.is-active, &:hover
+    {
+      .spaces-tree-item-icon
+      {
+        color: var(--color-text);
+      }
+    }
   }
 
   .spaces-tree-item-text
@@ -186,7 +193,7 @@
 
     .-minor
     {
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       margin-top: 3px;
     }
   }
@@ -198,7 +205,7 @@
     font-weight: 400;
     position: relative;
     top: -2px;
-    color: var(--color-fg-reverse-mid);
+    color: var(--color-text-dim);
     transition: color 0.2s ease;
   }
 </style>

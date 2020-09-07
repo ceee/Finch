@@ -1,10 +1,10 @@
 ﻿<template>
   <div class="ui-table-filter">
-    <ui-search v-if="!hideSearch" v-model="value.search" />
-    <ui-button v-if="!hideFilter" type="light" label="Filter" caret="down" />
+    <ui-search v-if="!hideSearch" v-model="value.search" class="onbg" />
+    <ui-button v-if="!hideFilter" type="light onbg" label="Filter" caret="down" />
     <ui-dropdown v-if="!hideSelection && selection.length > 0" align="right">
       <template v-slot:button>
-        <ui-button type="white" :label="selectedText" caret="down" />
+        <ui-button type="light" :label="selectedText" caret="down" />
       </template>
       <slot name="actions"></slot>
     </ui-dropdown>

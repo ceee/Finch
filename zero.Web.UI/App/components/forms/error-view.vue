@@ -151,8 +151,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: var(--color-bg);
-    color: var(--color-fg);
+    color: var(--color-text);
     text-align: center;
     padding: var(--padding);
     overflow-y: auto;
@@ -161,14 +160,14 @@
   .page-error-icon
   {
     font-size: 82px;
-    color: var(--color-fg);
+    color: var(--color-text);
     margin-bottom: 20px;
   }
 
   .page-error-text
   {
     font-size: var(--font-size);
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
     line-height: 1.4em;
   }
 
@@ -177,7 +176,7 @@
     display: inline-block;
     margin-bottom: 10px;
     font-size: var(--font-size-l);
-    color: var(--color-fg);
+    color: var(--color-text);
   }
 
   .page-error-button
@@ -207,7 +206,7 @@
 
       &:nth-child(3n+1)
       {
-        color: var(--color-fg-light);
+        color: var(--color-text-dim);
       }
     }
   }

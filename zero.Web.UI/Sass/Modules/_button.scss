@@ -3,7 +3,7 @@
 button
 {
   @extend %font;
-  color: var(--color-fg);
+  color: var(--color-text);
   outline: 0 solid transparent !important;
   display: inline-block;
   font-size: var(--font-size);
@@ -36,13 +36,11 @@ button::-moz-focus-inner
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
-  color: var(--color-primary-fg);
-  background: var(--color-primary);
+  background: var(--color-button);
+  color: var(--color-button-text);
   padding: 0 20px;
   height: 42px;
   border-radius: var(--radius);
-  //border-bottom-left-radius: 15px;
-  //border-top-right-radius: 15px;
   font-size: var(--font-size);
   font-weight: 700;
   margin: 0;
@@ -79,23 +77,6 @@ button::-moz-focus-inner
     pointer-events: none;
   }
 
-  &.type-outline
-  {
-    height: 43px;
-    background: transparent;
-    color: var(--color-fg);
-    border: 1px solid var(--color-line);
-    box-sizing: border-box;
-    position: relative;
-    top: 1px;
-  }
-
-  &.type-secondary
-  {
-    background: var(--color-secondary);
-    color: var(--color-secondary-fg);
-  }
-
   &.type-big
   {
     height: 50px;
@@ -108,33 +89,32 @@ button::-moz-focus-inner
     padding: 0 12px;
   }
 
-  &.type-light
+  &.type-light, &.type-action
   {
-    background: var(--color-bg-bright);
-    color: var(--color-fg);
+    background: var(--color-button-light);
+    color: var(--color-text);
     border: none;
-    box-shadow: var(--color-shadow-short);
+  }
+
+  &.type-light.type-onbg, &.type-action.type-onbg
+  {
+    background: var(--color-button-light-onbg);
+    color: var(--color-text);
+    border: none;
+    box-shadow: var(--shadow-short);
   }
 
   &.type-danger
   {
-    background: var(--color-negative);
+    background: var(--color-accent-error);
     color: white;
     border: none;
-  }
-
-  &.type-white
-  {
-    background: var(--color-bg-bright);
-    color: var(--color-fg);
-    border: none;
-    box-shadow: var(--color-shadow-short);
   }
 
   &.type-blank
   {
     background: transparent;
-    color: var(--color-fg);
+    color: var(--color-text);
     border: none;
     padding: 0 16px;
   }
@@ -157,7 +137,7 @@ button::-moz-focus-inner
     position: relative;
     font-size: var(--font-size-l);
     top: -1px;
-    /*color: var(--color-fg-dim);*/
+    /*color: var(--color-text-dim);*/
   }
 
   &.type-small .ui-button-icon
@@ -219,16 +199,16 @@ button::-moz-focus-inner
   z-index: 2;
   border-radius: 40px;
   border: 2px solid rgba(white, 0.2);
-  border-left-color: var(--color-primary-fg);
+  border-left-color: var(--color-button-text);
   opacity: 1;
   will-change: transform;
   animation: rotating .5s linear infinite;
   transition: opacity .25s ease;
 
-  .type-light &, .type-blank &, .type-white &
+  .type-light &, .type-blank &
   {
     //border-color: rgba(white, 0.2);
-    border-left-color: var(--color-fg);
+    border-left-color: var(--color-text);
   }
 }
 
@@ -271,7 +251,7 @@ button::-moz-focus-inner
 
   &:hover
   {
-    background: var(--color-bg-bright-two);
+    background: var(--color-button-light);
   }
 
   .ui-button-icon
@@ -285,7 +265,7 @@ button::-moz-focus-inner
 .ui-icon-button
 {
   @extend .ui-button;
-  background: var(--color-bg-bright-two);
+  background: var(--color-button-light);
   padding: 0;
   height: 32px;
   width: 32px;
@@ -301,7 +281,7 @@ button::-moz-focus-inner
 
   .ui-button-icon
   {
-    color: var(--color-fg);
+    color: var(--color-text);
     margin: 0;
     top: 0;
   }
@@ -321,7 +301,7 @@ button::-moz-focus-inner
 
 .ui-select-button
 {
-  olor: var(--color-fg);
+  olor: var(--color-text);
   display: inline-flex;
   align-items: center;
 }
@@ -334,8 +314,8 @@ button::-moz-focus-inner
   justify-content: center;
   align-items: center;
   border-radius: var(--radius);
-  background: var(--color-bg-bright-two);
-  color: var(--color-fg);
+  background: var(--color-button-light);
+  color: var(--color-text);
   text-align: center;
   font-size: 16px;
 
@@ -358,7 +338,7 @@ button::-moz-focus-inner
 
 .ui-select-button-description
 {
-  color: var(--color-fg-dim);
+  color: var(--color-text-dim);
   margin-top: 3px;
   font-size: var(--font-size-xs);
 }

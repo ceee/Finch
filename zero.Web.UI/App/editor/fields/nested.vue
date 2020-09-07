@@ -125,7 +125,7 @@
     align-items: center;
     font-size: var(--font-size);
     padding: 5px 0;
-    color: var(--color-fg);
+    color: var(--color-text);
     position: relative;
     transition: color 0.2s ease;
     line-height: 1.5;
@@ -145,7 +145,7 @@
     height: 100%;
     align-items: center;
     position: relative;
-    color: var(--color-fg);
+    color: var(--color-text);
   }
 
   .editor-nested-item-header-text
@@ -157,7 +157,7 @@
     .-desc
     {
       font-weight: 400;
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       margin-top: 3px;
       font-size: var(--font-size-xs);
     }
@@ -166,7 +166,7 @@
   .editor-nested-item-header-toggle
   {
     position: absolute;
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
     height: 100%;
     top: 0;
     left: 0;
@@ -178,7 +178,7 @@
 
     &:hover
   {
-    color: var(--color-fg);
+    color: var(--color-text);
   }
 
   }
@@ -190,7 +190,7 @@
     font-weight: 400;
     position: relative;
     top: -1px;
-    color: var(--color-fg);
+    color: var(--color-text);
     transition: color 0.2s ease;
   }
 
@@ -206,7 +206,7 @@
     margin-right: -32px;
     padding-right: var(--padding);
     background: var(--color-bg-bright);
-    box-shadow: var(--color-shadow-short);
+    box-shadow: var(--shadow-short);
   }
 
   .editor-nested .ui-property-label

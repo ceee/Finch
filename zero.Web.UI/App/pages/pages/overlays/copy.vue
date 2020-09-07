@@ -4,8 +4,8 @@
       <ui-header-bar title="@ui.copy.title" :back-button="false" :close-button="true" />
     </template>
     <template v-slot:footer>
-      <ui-button type="white" label="@ui.close" @click="config.hide" />
-      <ui-button label="@ui.copy.action" @click="onSave" :state="state" :disabled="selected == null" />
+      <ui-button type="light onbg" label="@ui.close" @click="config.hide" />
+      <ui-button type="primary" label="@ui.copy.action" @click="onSave" :state="state" :disabled="selected == null" />
     </template>
 
     <p class="pages-copy-text" v-localize:html="{ key: '@ui.copy.text', tokens: { name: model.name } }"></p>
@@ -169,7 +169,7 @@
 
     .ui-tree-item.is-selected, .ui-tree-item:hover:not(.is-disabled)
     {
-      background: var(--color-bg-bright-two);
+      background: var(--color-tree-selected);
     }
 
     .ui-tree-item.is-selected

@@ -135,7 +135,7 @@
     .pell,
     .pell-raw
     {
-      background: var(--color-bg-dim);
+      background: var(--color-input);
       max-width: 800px;
       min-height: 42px;
       display: flex;
@@ -144,7 +144,7 @@
       font-size: var(--font-size);
       display: inline-block;
       line-height: 1.5;
-      color: var(--color-fg);
+      color: var(--color-text);
       border-radius: var(--radius);
     }
 
@@ -171,6 +171,7 @@
       word-wrap: normal;
       white-space: normal;
       font-family: Monaco,Menlo,Consolas,Courier New,monospace;
+      font-size: var(--font-size);
     }
 
     u-rte.-oneline .pell-content
@@ -189,12 +190,11 @@
     .pell-content a, .pell-content a:hover, .pell-content a:visited, .pell-content a:focus
     {
       text-decoration: underline;
-      color: var(--color-fg);
+      color: var(--color-text);
     }
 
     .pell-actionbar
     {
-      background: var(--color-bg-dim);
       border-radius: var(--radius) var(--radius) 0 0;
       padding: 5px;
     }
@@ -220,13 +220,13 @@
 
     .pell-button:hover
     {
-      background: var(--color-bg-bright);
+      background: var(--color-box);
     }
 
     .pell-button-selected
     {
-      background-color: var(--color-bg-bright-two);
-      color: var(--color-primary);
+      background-color: var(--color-box);
+      color: var(--color-text);
     }
   }
 </style>

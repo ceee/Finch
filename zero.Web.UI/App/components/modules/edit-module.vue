@@ -7,8 +7,8 @@
       </template>
 
       <template v-slot:footer>
-        <ui-button type="white" label="@ui.close" @click="config.hide"></ui-button>
-        <ui-button :submit="true" label="Confirm" :state="form.state" :disabled="loading || disabled"></ui-button>
+        <ui-button type="light onbg" label="@ui.close" @click="config.hide"></ui-button>
+        <ui-button type="primary" :submit="true" label="Confirm" :state="form.state" :disabled="loading || disabled"></ui-button>
       </template>
 
       <ui-loading v-if="loading" :is-big="true" />

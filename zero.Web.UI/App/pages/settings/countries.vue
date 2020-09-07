@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="countries">
     <ui-header-bar title="@country.list" :back-button="true">
-      <ui-table-filter v-model="tableConfig" :selection="selection">
+      <ui-table-filter v-model="tableConfig">
         <template v-slot:actions>
           <ui-dropdown-button label="Delete" icon="fth-trash" />
         </template>
@@ -9,7 +9,7 @@
       <ui-add-button :route="createRoute" />
     </ui-header-bar>
     <div class="ui-blank-box">
-      <ui-table ref="table" v-model="tableConfig" @select="onSelect" />
+      <ui-table ref="table" v-model="tableConfig" />
     </div>
   </div>
 </template>
@@ -23,8 +23,7 @@
   export default {
     data: () => ({
       createRoute: baseRoute + '-create',
-      tableConfig: {},
-      selection: []
+      tableConfig: {}
     }),
 
     created()
@@ -33,7 +32,6 @@
         labelPrefix: '@country.fields.',
         allowOrder: false,
         search: null,
-        selectable: true,
         columns: {
           flag: {
             label: '',
@@ -75,11 +73,6 @@
       goBack()
       {
         this.$router.go(-1);
-      },
-
-      onSelect(items)
-      {
-        this.selection = items;
       }
     }
   }

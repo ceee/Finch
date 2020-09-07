@@ -4,10 +4,10 @@
       <ui-header-bar :title="config.title" :back-button="false" :close-button="true" />
     </template>
     <template v-slot:footer>
-      <ui-button type="white" :label="config.closeLabel" @click="config.hide"></ui-button>
+      <ui-button type="light onbg" :label="config.closeLabel" @click="config.hide"></ui-button>
     </template>
 
-    <ui-search class="ui-iconpicker-overlay-search" v-model="query" />
+    <ui-search class="ui-iconpicker-overlay-search onbg" v-model="query" />
 
     <div class="ui-iconpicker-overlay-colors" v-if="config.colors">
       <i v-for="col in colors" :class="{ 'is-active': ('color-' + col) === color || (col === 'default' && !color), ['bg-color-' + col]: true }" @click="selectColor(col)" :title="col"></i>
@@ -149,10 +149,11 @@
     border-radius: var(--radius);
     /*border: 2px solid transparent;*/
 
-    &:hover, &.is-active
+    &.is-active
     {
-      background: var(--color-bg-bright);
-      box-shadow: 0 0 20px var(--color-shadow);
+      background: var(--color-box);
+      color: var(--color-text);
+      box-shadow: var(--shadow-short);
     }
 
     &.is-active

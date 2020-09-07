@@ -146,23 +146,24 @@
   .media-upload-preview-file
   {
     display: flex;
-    background: var(--color-bg-bright-two);
+    background: var(--color-box-nested);
     border-radius: var(--radius);
     align-items: center;
     justify-content: flex-start;
-    color: var(--color-fg);
-    padding: 15px 30px 15px 15px;
+    color: var(--color-text);
+    padding: var(--padding-s);
+    padding-right: var(--padding);
 
     i
     {
-      font-size: 28px;
+      font-size: 22px;
       position: relative;
-      margin-right: 12px;
+      margin-right: var(--padding-s);
     }
 
     .is-minor
     {
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       font-size: var(--font-size-xs);
       text-transform: uppercase;
     }

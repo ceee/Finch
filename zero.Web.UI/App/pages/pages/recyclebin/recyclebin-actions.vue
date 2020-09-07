@@ -4,7 +4,7 @@
       <ui-header-bar :title="model.name" :back-button="false" :close-button="true" />
     </template>
     <template v-slot:footer>
-      <ui-button type="white" label="@ui.close" @click="config.hide"></ui-button>
+      <ui-button type="light onbg" label="@ui.close" @click="config.hide"></ui-button>
     </template>
 
     <button class="pages-recyclebin-action" @click="restore(false)">
@@ -114,7 +114,8 @@
     gap: var(--padding);
     align-items: center;
     width: 100%;
-    background: var(--color-bg-bright);
+    background: var(--color-box);
+    box-shadow: var(--shadow-short);
     border-radius: var(--radius);
     padding: 16px;
 
@@ -122,11 +123,6 @@
     {
       margin-top: 16px;
     }
-
-    /*&:hover
-    {
-      background: var(--color-bg-bright-two);
-    }*/
   }
 
   .pages-recyclebin-action-text
@@ -142,7 +138,7 @@
 
     span
     {
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
     }
   }
 
@@ -151,14 +147,14 @@
     font-size: 18px;
     margin-right: -6px;
     align-self: stretch;
-    background: var(--color-bg-dim);
+    background: var(--color-box-nested);
     padding: 10px;
     width: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: var(--radius);
-    color: var(--color-fg);
+    color: var(--color-text);
 
     &.is-negative
     {

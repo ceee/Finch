@@ -428,8 +428,8 @@
     height: 32px;
     z-index: 2;
     border-radius: 40px;
-    border: 2px solid var(--color-bg-mid);
-    border-left-color: var(--color-fg);
+    border: 2px solid var(--color-bg-shade-3);
+    border-left-color: var(--color-text);
     opacity: 1;
     will-change: transform;
     animation: rotating .5s linear infinite;

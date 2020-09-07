@@ -36,7 +36,7 @@
       },
       type: {
         type: String,
-        default: 'action'
+        default: 'primary'
       },
       route: {
         type: [String, Object],
@@ -122,7 +122,7 @@
 
     &:hover
     {
-      background: var(--color-bg-bright-three);
+      background: var(--color-button-light);
     }
   }
 

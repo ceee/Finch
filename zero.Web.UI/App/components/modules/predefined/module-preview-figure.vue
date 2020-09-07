@@ -82,7 +82,7 @@
 
     .-subline
     {
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       font-size: var(--font-size-s);
     }
 

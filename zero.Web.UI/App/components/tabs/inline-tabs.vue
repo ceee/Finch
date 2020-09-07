@@ -122,22 +122,22 @@
       width: 20px;
       height: 20px;
       border-radius: 10px;
-      background: var(--color-bg-dim);
+      background: var(--color-button-light);
       margin-left: 12px;
       font-size: 11px;
       line-height: 1;
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       font-style: normal;
     }
 
     &.is-active
     {
-      background: var(--color-bg-bright-two);
+      background: var(--color-button-light);
 
       .ui-inline-tabs-list-item-count
       {
-        background: var(--color-bg-bright);
-        color: var(--color-fg);
+        background: var(--color-box);
+        color: var(--color-text);
       }
     }
   }

@@ -49,7 +49,7 @@
     gap: 20px;
     align-items: center;
     background: var(--color-primary);
-    color: var(--color-primary-fg);
+    color: var(--color-primary-text);
     border-radius: var(--radius);
     padding: 10px 12px;
     font-size: var(--font-size);
@@ -80,7 +80,7 @@
     
     .ui-button-icon
     {
-      color: var(--color-primary-fg);
+      color: var(--color-primary-text);
     }
 
     & + .app-notification
@@ -91,11 +91,11 @@
     &[type="success"], &[type="primary"]
     {
       background: var(--color-primary);
-      color: var(--color-primary-fg);
+      color: var(--color-primary-text);
 
       .ui-button-icon
       {
-        color: var(--color-primary-fg);
+        color: var(--color-primary-text);
       }
     }
 

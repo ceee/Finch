@@ -2,7 +2,7 @@
   <div class="ui-header-bar">
     <div class="ui-header-bar-inner">
       <div class="ui-header-bar-main">
-        <ui-icon-button v-if="backButton" type="white" @click="onBack" />
+        <ui-icon-button v-if="backButton" type="light onbg" @click="onBack" />
         <div class="ui-header-bar-main-title">
           <slot name="title">
             <h2 class="ui-header-bar-title" :class="{'is-empty': !title && titleEmpty}">
@@ -74,8 +74,6 @@
     width: 100%;
     height: 100px;
     padding: 0 var(--padding) 0; //10px;
-    /*background: var(--color-bg-light);*/
-    //border-bottom: 1px solid var(--color-line);
 
     & + .ui-blank-box, & + .ui-box, & + .ui-view-box
     {
@@ -138,14 +136,14 @@
   .ui-header-bar-title
   {
     font-family: var(--font);
-    color: var(--color-fg);
+    color: var(--color-text);
     margin: 0;
     font-size: var(--font-size-l);
     font-weight: 700;
 
     &.is-empty, .-minor
     {
-      color: var(--color-fg-light);
+      color: var(--color-text-dim);
       font-weight: 400;
     }
   }
@@ -153,7 +151,7 @@
   .ui-header-bar-description
   {
     font-size: var(--font-size-s);
-    color: var(--color-fg-light);
+    color: var(--color-text-dim);
     margin: 2px 0 0;
   }
 </style>

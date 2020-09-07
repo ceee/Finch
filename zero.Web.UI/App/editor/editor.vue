@@ -326,13 +326,13 @@
       margin-top: -28px;
       right: -3px;
       font-size: 42px;
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       opacity: 0.2;
     }
 
     a
     {
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       text-decoration: underline dotted;
       font-size: var(--font-size-s);
     }
@@ -349,7 +349,7 @@
       padding: 20px;
       padding-right: 70px;
       border-radius: var(--radius);
-      background: var(--color-bg-bright-two);
+      background: var(--color-box-nested);
       margin-bottom: var(--padding);
 
       i

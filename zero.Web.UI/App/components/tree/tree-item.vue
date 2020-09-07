@@ -101,7 +101,7 @@
     font-size: var(--font-size);
     padding: 0 var(--padding);
     height: 50px;
-    color: var(--color-fg);
+    color: var(--color-text);
     position: relative;
     transition: color 0.2s ease;
     position: relative;
@@ -109,7 +109,7 @@
     /*&.is-inactive .ui-tree-item-text,
     &.is-inactive .ui-tree-item-icon
     {
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
     }*/
 
     .ui-tree-item-arrow
@@ -140,10 +140,9 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      left: -300px;
+      left: -100px;
       right: 0;
-      background: var(--color-bg-dim);
-      //border-right: 3px solid var(--color-bg-bright-three);
+      background: var(--color-tree-selected);
     }
   }
 
@@ -155,16 +154,16 @@
     height: 100%;
     align-items: center;
     position: relative;    
-    color: var(--color-fg);
+    color: var(--color-text);
 
     &:hover
     {
-      color: var(--color-fg);
+      color: var(--color-text);
     }
 
     &.is-active
     {
-      color: var(--color-fg);
+      color: var(--color-text);
       font-weight: bold;
       //color: var(--color-primary);
     }
@@ -173,7 +172,7 @@
   .ui-tree-item-toggle
   {
     position: absolute;
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
     height: 100%;
     top: 0;
     left: 0;
@@ -185,7 +184,7 @@
 
     &:hover
     {
-      color: var(--color-fg);
+      color: var(--color-text);
     }
   }
 
@@ -196,7 +195,7 @@
     font-weight: 400;
     position: relative;
     top: -2px;
-    color: var(--color-fg-bright);
+    color: var(--color-text);
     transition: color 0.2s ease;
   }
 
@@ -211,7 +210,7 @@
 
     i
     {
-      background-color: var(--color-bg-bright-three);
+      background-color: var(--color-bg-shade-4);
       transform: translateX(-100%) scaleX(1);
       animation: treeitemloading 1s linear infinite;
       width: 100%;
@@ -233,19 +232,19 @@
     position: absolute;
     left: 10px;
     bottom: 12px;
-    background: var(--color-bg-bright);
+    background: var(--color-tree);
     border-radius: 50%;
     width: 14px;
     height: 14px;
-    /*color: var(--color-fg-dim);*/
+    /*color: var(--color-text-dim);*/
     font-size: 11px;
     font-style: normal;
     text-align: center;
     line-height: 14px;
 
-    .ui-tree-item.is-active 
+    .ui-tree-item.is-active &
     {
-      background: var(--color-bg-dim);
+      background: var(--color-tree-selected);
     }
   }
 
@@ -253,6 +252,6 @@
   {
     transition: opacity 0.2s ease 0;
     opacity: 0;
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
   }
 </style>

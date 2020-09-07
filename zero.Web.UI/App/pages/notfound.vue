@@ -7,7 +7,7 @@
       <br>
       ({{path}})
     </p>
-    <ui-button class="page-error-button" type="white" :label="detailsText" @click="details = !details" />
+    <ui-button class="page-error-button" type="light onbg" :label="detailsText" @click="details = !details" />
     <template v-if="details">
       <br><br>
       <div class="page-error-routes">
@@ -94,8 +94,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: var(--color-bg);
-    color: var(--color-fg);
+    color: var(--color-text);
     text-align: center;
     padding: var(--padding);
     overflow-y: auto;
@@ -104,14 +103,14 @@
   .page-error-icon
   {
     font-size: 82px;
-    color: var(--color-fg);
+    color: var(--color-text);
     margin-bottom: 20px;
   }
 
   .page-error-text
   {
     font-size: var(--font-size);
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
     line-height: 1.4em;
   }
 
@@ -120,7 +119,7 @@
     display: inline-block;
     margin-bottom: 10px;
     font-size: var(--font-size-l);
-    color: var(--color-fg);
+    color: var(--color-text);
   }
 
   .page-error-button
@@ -135,13 +134,13 @@
     width: 100%;
     max-width: 100%;
     text-align: left;
-    border-top: 1px solid var(--color-line);
-    border-left: 1px solid var(--color-line);
+    border-top: 1px solid var(--color-line-onbg);
+    border-left: 1px solid var(--color-line-onbg);
     margin-top: 30px;
 
     span, b
     {
-      border: 1px solid var(--color-line);
+      border: 1px solid var(--color-line-onbg);
       border-left: none;
       border-top: none;
       padding: 8px 10px 6px;
@@ -150,7 +149,7 @@
 
       &:nth-child(3n+1)
       {
-        color: var(--color-fg-dim);
+        color: var(--color-text-dim);
       }
     }
   }

@@ -2,8 +2,8 @@
   <div class="users">
     <ui-header-bar title="Users & Permissions" :back-button="true">
       <ui-table-filter v-model="usersConfig" />
-      <ui-add-button type="white" :route="createRoleRoute" label="Add role" />
-      <ui-button label="Add user" icon="fth-plus" />
+      <ui-add-button type="light onbg" :route="createRoleRoute" label="Add role" />
+      <ui-button type="primary" label="Add user" icon="fth-plus" />
     </ui-header-bar>
 
     <div class="ui-blank-box">
@@ -139,25 +139,19 @@
   {
     display: flex;
     flex-direction: column;
-    background: var(--color-bg-bright);
+    background: var(--color-box);
     border-radius: var(--radius);
-    padding: var(--padding-s) var(--padding);
+    padding: var(--padding-m) var(--padding);
     text-align: center;
-    color: var(--color-fg);
+    color: var(--color-text);
     font-size: var(--font-size);
     line-height: 1.5;
-    transition: box-shadow 0.2s ease;
-    box-shadow: var(--color-shadow-short);
-
-    &:hover
-    {
-      box-shadow: 0 0 20px var(--color-shadow);
-    }
+    box-shadow: var(--shadow-short);
   }
 
   .users-role-minor
   {
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
   }
 
   .users-role-icon
@@ -165,7 +159,7 @@
     font-size: 26px;
     text-align: center;
     display: inline-block;
-    margin: 0 auto var(--padding-s);
+    margin: 0 auto var(--padding-m);
     position: relative;
   }
 </style>

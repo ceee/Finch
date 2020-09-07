@@ -2,7 +2,7 @@
   <div class="pages-recyclebin">
     <ui-header-bar title="@recyclebin.name" :back-button="true">
       <ui-table-filter v-model="tableConfig" />
-      <ui-button type="light" label="@recyclebin.purge" @click="purge" />
+      <ui-button type="light onbg" label="@recyclebin.purge" @click="purge" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table ref="table" v-model="tableConfig" />

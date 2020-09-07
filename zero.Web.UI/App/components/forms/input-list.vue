@@ -95,7 +95,7 @@
   {
     display: grid;
     grid-template-columns: 1fr auto;
-    background: var(--color-bg-dim);
+    background: var(--color-input);
     border-radius: var(--radius);
 
     & + .ui-input-list-item, & + .ui-button

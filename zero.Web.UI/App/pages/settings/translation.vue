@@ -15,15 +15,16 @@
           <ui-state-button :disabled="disabled" :items="displayItems" v-model="item.display" />
         </ui-property>
       </div>
+      <br />
       <ui-property label="@translation.fields.value" :required="true" :vertical="true">
         <textarea v-if="item.display === 'text'" v-model="item.value" class="ui-input" :readonly="disabled"></textarea>
         <ui-rte v-if="item.display === 'html'" v-model="item.value" :disabled="disabled" />
       </ui-property>
     </div>
     <div class="app-confirm-buttons">
-      <ui-button v-if="!disabled" :submit="true" :state="form.state" label="@ui.save"></ui-button>
+      <ui-button type="primary" v-if="!disabled" :submit="true" :state="form.state" label="@ui.save"></ui-button>
       <ui-button type="light" :label="config.closeLabel" :disabled="loading" @click="config.close"></ui-button>
-      <ui-button v-if="!disabled && model.id" type="light" label="@ui.delete" @click="onDelete" style="float:right;"></ui-button>
+      <ui-button type="light" v-if="!disabled && model.id" label="@ui.delete" @click="onDelete" style="float:right;"></ui-button>
     </div>
   </ui-form>
 </template>

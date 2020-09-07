@@ -54,9 +54,9 @@
 
   button.ui-state-button-item
   {
-    background: var(--color-bg-bright-two);
+    background: var(--color-input);
     padding: 10px 16px;
-    color: var(--color-fg-dim-two);
+    color: var(--color-text-dim);
 
     & + .ui-state-button-item
     {
@@ -77,10 +77,8 @@
 
     &.is-active
     {
-      background: var(--color-bg-bright-three);
-      /*background: var(--color-primary);
-      border-color: var(--color-primary);*/
-      color: var(--color-fg);
+      //background: var(--color-bg-bright-three);
+      color: var(--color-text);
       font-weight: bold;
     }
    

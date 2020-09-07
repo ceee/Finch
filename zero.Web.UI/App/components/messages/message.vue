@@ -98,8 +98,8 @@
 
     &.type-neutral
     {
-      background: var(--color-bg);
-      color: var(--color-fg);
+      background: var(--color-box-nested);
+      color: var(--color-text);
     }
 
     &.type-primary

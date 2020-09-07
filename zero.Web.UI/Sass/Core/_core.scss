@@ -33,7 +33,7 @@ object, embed
 
 a, a:visited, a:link
 {
-  /*color: var(--color-fg);*/
+  /*color: var(--color-text);*/
   text-decoration: none;
   transition: color .2s, transform .2s, background .2s;
 }
@@ -109,7 +109,7 @@ ul li:before
   width: 4px;
   height: 4px;
   border-radius: 12px;
-  background: var(--color-fg);
+  background: var(--color-text);
   position: absolute;
   left: 1px;
   top: 9px;

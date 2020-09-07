@@ -1,24 +1,31 @@
 ﻿
 
+// placeholder
+// --------------------------------
+
 ::placeholder
 {
-  color: var(--color-fg-dim);
+  color: var(--color-input-placeholder);
 }
+
+
+// inputs
+// --------------------------------
 
 input[type="text"], input[type="color"], input[type="date"], input[type="datetime"], input[type="email"], input[type="file"], input[type="month"], input[type="number"],
 input[type="password"], input[type="range"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], input[type="week"],
 textarea, .ui-native-select
 {
   @extend %font;
-  background: var(--color-bg-dim);
+  background: var(--color-input);
   //border: 1px solid var(--color-bg-bright-three);
   border: none;
-  font-size: $font-size;
+  font-size: var(--font-size);
   display: inline-block;
   height: 42px;
   padding: 6px 12px;
   line-height: 1.5;
-  color: var(--color-fg);
+  color: var(--color-text);
   border-radius: var(--radius);
   vertical-align: middle;
   box-sizing: border-box;
@@ -38,11 +45,19 @@ textarea, .ui-native-select
   }
 }
 
+
+// textarea
+// --------------------------------
+
 textarea
 {
   resize: vertical;
   min-height: 80px;
 }
+
+
+// select
+// --------------------------------
 
 .ui-native-select
 {
@@ -63,7 +78,7 @@ textarea
     border: none;
     font-size: var(--font-size);
     background: none;
-    color: var(--color-fg);
+    color: var(--color-text);
   }
 
   &:after
@@ -77,6 +92,10 @@ textarea
     line-height: 40px;
   }
 }
+
+
+// checkbox
+// --------------------------------
 
 .ui-native-check
 {
@@ -110,7 +129,7 @@ textarea
   line-height: 18px;
   text-align: center;
   border-radius: 2px;
-  background: var(--color-bg-bright-three);
+  background: var(--color-check);
   margin-right: 10px;
   position: relative;
   top: -1px;
@@ -125,11 +144,11 @@ textarea
 
   input:checked ~ &
   {
-    background: var(--color-fg);
+    background: var(--color-checked);
 
     &:before
     {
-      color: var(--color-bg);
+      color: var(--color-checked-fg);
     }
   }
 }

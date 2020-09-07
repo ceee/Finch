@@ -561,7 +561,6 @@
 
     .ui-input
     {
-      background: var(--color-bg-bright);
       min-width: 0;
     }
   }
@@ -589,6 +588,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .ui-icon-button
+    {
+      background: none;
+    }
   }
 
   .ui-pick-overlay-head-title
@@ -600,7 +604,7 @@
     {
       font-size: var(--font-size-s);
       font-weight: 400;
-      color: var(--color-fg-light);
+      color: var(--color-text-dim);
       margin-left: .6em;
     }
   }
@@ -642,7 +646,7 @@
 
     &:hover
     {
-      background: var(--color-bg-bright-three);
+      background: var(--color-tree-selected);
     }
 
     &.is-selected
@@ -675,7 +679,7 @@
 
     .-text
     {
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       
     }
   }

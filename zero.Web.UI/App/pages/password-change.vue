@@ -16,7 +16,7 @@
     </div>
 
     <div class="app-confirm-buttons">
-      <ui-button type="action" :submit="true" :state="form.state" :label="config.confirmLabel"></ui-button>
+      <ui-button type="primary" :submit="true" :state="form.state" :label="config.confirmLabel"></ui-button>
       <ui-button type="light" :label="config.closeLabel" :disabled="loading" @click="config.close"></ui-button>
     </div>
   </ui-form>

@@ -195,7 +195,6 @@
 
   .ui-mediapicker-overlay-search.ui-searchinput .ui-input
   {
-    background: var(--color-bg-dim);
     margin-top: 25px;
   }
 
@@ -213,7 +212,7 @@
     {
       content: '/';
       margin: 0 0.5em;
-      color: var(--color-fg-light);
+      color: var(--color-text-dim);
     }
   }
 
@@ -248,7 +247,7 @@
       height: 70px;
       width: 70px;
       object-fit: cover;
-      background: var(--color-bg-bright-two);
+      background: var(--color-box-nested);
       border-radius: var(--radius);
       position: relative;
       text-align: center;
@@ -269,7 +268,7 @@
 
     .-minor
     {
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       font-size: var(--font-size-s);
     }
   }

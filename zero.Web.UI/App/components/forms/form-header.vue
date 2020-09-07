@@ -13,12 +13,12 @@
       </div>
       <ui-dropdown v-if="!isCreate" align="right">
         <template v-slot:button>
-          <ui-button type="white" label="@ui.actions" caret="down" />
+          <ui-button type="light onbg" label="@ui.actions" caret="down" />
         </template>
         <slot name="actions"></slot>
         <ui-dropdown-button v-if="canDelete" label="@ui.delete" icon="fth-trash" @click="onDelete" :disabled="disabled" />
       </ui-dropdown>
-      <ui-button :submit="true" label="@ui.save" :state="state" v-if="!disabled" />
+      <ui-button :submit="true" type="primary" label="@ui.save" :state="state" v-if="!disabled" />
     </div>
   </ui-header-bar>
 </template>
@@ -70,33 +70,14 @@
 <style lang="scss">
   .ui-form-header-aside
   {
-    //background: var(--color-bg-bright);
-    //border-radius: var(--radius);
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    //padding: 5px 5px 5px 24px;
 
     > * + *
     {
       margin-left: 16px;
     }
-    
-    /*.ui-dropdown-toggle > button
-    {
-      background: none;
-
-      > .ui-button-caret
-      {
-        margin-left: 10px;
-      }
-    }*/
-  }
-
-  .ui-dropdown-separator
-  {
-    border-bottom-color: var(--color-highlight);
-    margin: 5px 0;
   }
 
   .ui-form-header-toggle
@@ -106,20 +87,16 @@
     align-items: center;
     position: relative;
     top: -1px;
-    /*background: var(--color-bg-bright);
-    color: var(--color-fg);
-    border: none;
-    box-shadow: var(--color-shadow-short);
-    border-radius: var(--radius);
 
-    .ui-toggle-text
+    .ui-toggle-switch, .ui-toggle-switch.is-active
     {
-      margin-right: 20px !important;
-    }*/
-    .ui-toggle-switch
-    {
-      background: var(--color-bg-bright);
-      box-shadow: var(--color-shadow-short);
+      background: var(--color-button-light-onbg);
+      box-shadow: var(--shadow-short);
+
+      i
+      {
+        background: var(--color-text);
+      }
     }
 
     .ui-toggle-off-warning
@@ -131,7 +108,7 @@
   input[type="text"].ui-form-header-title-input
   {
     font-family: var(--font);
-    color: var(--color-fg);
+    color: var(--color-text);
     font-size: var(--font-size-l);
     font-weight: 700;
     background: none;
@@ -139,8 +116,7 @@
 
     &:hover, &:focus, .ui-header-bar-title.is-empty &
     {
-      background: var(--color-bg-dim);
-      border: 1px dashed var(--color-fg-dim-two);
+      border: 1px dashed var(--color-text-dim-one);
     }
   }
 </style>

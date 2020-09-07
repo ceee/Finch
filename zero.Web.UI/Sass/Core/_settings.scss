@@ -1,4 +1,4 @@
-
+/*
 :root
 {
   $color-primary: #2c3036;
@@ -16,9 +16,9 @@
   --color-negative: #d82853;
 
   // foreground colors
-  --color-fg: #2c3036;
-  --color-fg-dim: #92969c;
-  --color-fg-dim-two: #c8cbcf;
+  --color-text: #2c3036;
+  --color-text-dim: #92969c;
+  --color-text-dim-one: #c8cbcf;
   
   // background colors
   
@@ -56,9 +56,9 @@
   --color-negative: #d82853;
 
   // foreground colors
-  --color-fg: #fff;
-  --color-fg-dim: #b0b4b8;
-  --color-fg-dim-two: #898b8c;
+  --color-text: #fff;
+  --color-text-dim: #b0b4b8;
+  --color-text-dim-one: #898b8c;
   
   // background colors
   
@@ -78,94 +78,7 @@
   --color-line-dim: #{rgba(#2a2d2e, 0.8)};
 }
 
-
-// theme-agnostic colors
 :root
 {
-  // image background
-  --color-bg-image: #e7ecee;
 
-  // message colors
-  --color-accent-info: rgb(44, 162, 212);
-  --color-accent-info-bg: rgba(44, 162, 212, 0.1);
-  --color-accent-success: rgb(47, 187, 152);
-  --color-accent-success-bg: rgba(47, 187, 152, 0.15);
-  --color-accent-warn: rgb(211, 172, 35);
-  --color-accent-warn-bg: rgba(233, 193, 56, 0.1);
-  --color-accent-error: rgb(216, 40, 83);
-  --color-accent-error-bg: rgba(216, 40, 83, 0.15);
-
-  // sizes
-
-  --padding: 32px;
-  --padding-s: 24px;
-  --height-top: 74px;
-  --radius: 6px;
-
-  --font-size-xs: 12px;
-  --font-size-s: 13px;
-  --font-size: 14px;
-  --font-size-m: 15px;
-  --font-size-l: 16px;
-  --font-size-xl: 18px;
-}
-
-
-$accent-color-prefix: --color-accent;
-$accent-colors: (
-  "blue-gray": "#527281",
-  "gray": "#8a9598",
-  "brown": "#795548",
-  "blue": "#429be2",
-  "purple": "#9f3f9d",
-  "teal": "#3bb1c0",
-  "green": "#2fbb98",
-  "lime": "#a0db61",
-  "yellow": "#fdd330",
-  "orange": "#ff662b",
-  "red": "#d82853"
-);
-
-:root
-{
-  @each $name, $hex in $accent-colors
-  {
-    #{$accent-color-prefix}-#{$name}: unquote($hex);
-  }
-}
-
-@each $name, $hex in $accent-colors
-{
-  $var: #{$accent-color-prefix}-#{$name};
-
-  .color-#{$name}
-  {
-    color: var(#{$var});
-  }
-
-  .bg-color-#{$name}
-  {
-    background: var(#{$var});
-  }
-}
-
-.color-default
-{
-  color: var(--color-fg);
-}
-
-.bg-color-default
-{
-  background: var(--color-fg);
-}
-
-.color-primary
-{
-  color: var(--color-primary);
-}
-
-
-// font sizes
-
-$font-size: 14px;
-$font-size-s: 12px;
+}*/

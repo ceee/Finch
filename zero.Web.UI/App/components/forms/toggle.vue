@@ -110,7 +110,7 @@
     display: inline-block;
     height: 22px;
     width: 36px;
-    background: var(--color-bg-bright-three);
+    background: var(--color-toggle);
     border-radius: 20px;
     transition: all 0.2s ease;
     z-index: 1;
@@ -123,18 +123,18 @@
       width: 16px;
       border-radius: 20px;
       margin: 3px;
-      background: var(--color-fg);
+      background: var(--color-toggle-fg);
       transition: all 0.2s ease;
     }
 
     &.is-active
     {
-      //background: var(--color-primary);
+      background: var(--color-toggled);
     }
 
     &.is-active  i
     {
-      //background: var(--color-primary-fg);
+      background: var(--color-toggled-fg);
       transform: translateX(14px);
     }
   }

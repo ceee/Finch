@@ -164,7 +164,7 @@
     /*&.is-upload .-preview
     {
       background: var(--color-primary);
-      color: var(--color-primary-fg);
+      color: var(--color-primary-text);
     }*/
 
     .-extension
@@ -176,7 +176,7 @@
 
     .-minor
     {
-      color: var(--color-fg-light);
+      color: var(--color-text-light);
       font-size: var(--font-size-s);
     }
   }

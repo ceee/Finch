@@ -378,7 +378,7 @@
     border: 1px solid var(--color-line-light);
     padding: 3px;
     border-radius: var(--radius);
-    color: var(--color-fg);
+    color: var(--color-text);
     position: relative;
     overflow: hidden;
 
@@ -419,7 +419,7 @@
 
     .is-filesize
     {
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       margin-top: 3px;
       font-size: var(--font-size-xs);
     }
@@ -444,7 +444,7 @@
     line-height: 26px;
     border-radius: 20px;
     background: var(--color-negative);
-    color: var(--color-primary-fg);
+    color: var(--color-primary-text);
     z-index: 2;
     text-align: center;
     font-size: 13px;
@@ -461,7 +461,7 @@
   {
     right: 30px;
     background: var(--color-bg);
-    color: var(--color-fg);
+    color: var(--color-text);
 
     .ui-media.display-default &
     {

@@ -311,10 +311,10 @@
     width: 50px;
     height: 50px;
     /*background: var(--color-bg);*/
-    border: 1px solid var(--color-line-light);
+    border: 1px solid var(--color-line);
     padding: 3px;
     border-radius: var(--radius);
-    color: var(--color-fg);
+    color: var(--color-text);
     position: relative;
     overflow: hidden;
 
@@ -340,8 +340,8 @@
       justify-content: center;
       align-items: center;
       border-radius: var(--radius);
-      background: var(--color-bg-bright-two);
-      color: var(--color-fg);
+      background: var(--color-box);
+      color: var(--color-text);
       text-align: center;
       font-size: 16px;
     }
@@ -369,7 +369,7 @@
 
     .is-filesize
     {
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       margin-top: 3px;
       font-size: var(--font-size-xs);
     }
@@ -394,7 +394,7 @@
     line-height: 26px;
     border-radius: 20px;
     background: var(--color-negative);
-    color: var(--color-primary-fg);
+    color: var(--color-primary-text);
     z-index: 2;
     text-align: center;
     font-size: 13px;
@@ -410,8 +410,8 @@
   .ui-mediapicker-preview-image-edit
   {
     right: 30px;
-    background: var(--color-bg);
-    color: var(--color-fg);
+    background: var(--color-box);
+    color: var(--color-text);
 
     .ui-media.display-default &
     {

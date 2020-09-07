@@ -82,28 +82,17 @@
   {
     width: auto;
     height: auto;
-    background: var(--color-bg-bright);
+    background: var(--color-overlay);
     border-radius: var(--radius);
     border: none !important;
-    box-shadow: 0 0 20px var(--color-shadow);
+    box-shadow: var(--shadow-overlay-dialog);
     padding: var(--padding);
-   // max-width: 460px;
     text-align: center;
     position: relative;
     -webkit-backface-visibility: hidden;
     z-index: 3;
-    color: var(--color-fg);
+    color: var(--color-text);
     font-size: var(--font-size);
-
-    &.theme-dark
-    {
-      box-shadow: none;
-    }
-  }
-
-  .theme-dark .app-overlay.theme-dark
-  {
-    box-shadow: 0 0 20px var(--color-shadow);
   }
 
   .app-overlay[display="dialog"] .ui-form-loading
@@ -120,7 +109,8 @@
     top: 0;
     bottom: 0;
     border-radius: 0;
-    box-shadow: -30px 0 40px var(--color-shadow);
+    box-shadow: var(--shadow-overlay);
+    background: var(--color-overlay-editor);
     text-align: left;
     padding: 0;
     max-width: 100%;

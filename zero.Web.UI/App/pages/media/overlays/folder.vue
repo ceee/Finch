@@ -6,7 +6,7 @@
       <!-- // TODO add parent selector -->
     </div>
     <div class="app-confirm-buttons">
-      <ui-button v-if="!disabled" :submit="true" :state="form.state" :label="model.id ? '@ui.save' : '@ui.create'"></ui-button>
+      <ui-button type="primary" v-if="!disabled" :submit="true" :state="form.state" :label="model.id ? '@ui.save' : '@ui.create'"></ui-button>
       <ui-button type="light" :label="config.closeLabel" :disabled="loading" @click="config.close"></ui-button>
       <ui-button v-if="!disabled && model.id" type="light" label="@ui.delete" @click="onDelete" style="float:right;"></ui-button>
     </div>

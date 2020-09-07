@@ -62,20 +62,14 @@
   {
     display: flex;
     flex-direction: column;
-    background: var(--color-bg-bright);
+    background: var(--color-box);
     border-radius: var(--radius);
-    padding: var(--padding-s);
+    padding: var(--padding-m);
     text-align: center;
-    color: var(--color-fg);
+    color: var(--color-text);
     font-size: var(--font-size);
     line-height: 1.5;
-    transition: box-shadow 0.2s ease;
-    box-shadow: var(--color-shadow-short);
-
-    &:hover
-    {
-      box-shadow: 0 0 20px var(--color-shadow);
-    }
+    box-shadow: var(--shadow-short);
   }
 
   .apps-item-name
@@ -84,14 +78,14 @@
 
   .apps-item-minor
   {
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
   }
 
   .apps-item-image
   {
     text-align: center;
     display: inline-block;
-    margin: 0 auto var(--padding-s);
+    margin: 0 auto var(--padding-m);
     position: relative;
     max-width: 120px;
     max-height: 50px;
@@ -105,26 +99,20 @@
     font-weight: 700;
     margin-top: 15px;
     text-transform: uppercase;
-    background: var(--color-bg);
-    color: var(--color-fg);
+    background: var(--color-box-nested);
+    color: var(--color-text);
     height: 22px;
     line-height: 22px;
     padding: 0 10px;
     border-radius: 16px;
     letter-spacing: .5px;
-
-    &.is-active
-    {
-      background: var(--color-bg);
-      color: var(--color-fg);
-    }
   }
 
   .apps-items-add
   {
     background: transparent;
-    border: 2px dotted var(--color-line);
-    color: var(--color-fg);
+    border: 1px dashed var(--color-text-dim-one);
+    color: var(--color-text);
     border-radius: var(--radius);
     text-align: center;
     display: inline-flex;

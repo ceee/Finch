@@ -7,7 +7,7 @@
 
     <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">
       <template v-slot:button>
-        <ui-button type="action block" :label="currentApplication.name" caret="down" />
+        <ui-button type="light block" :label="currentApplication.name" caret="down" />
       </template>
       <ui-dropdown-button v-for="app in applications" :value="app" :key="app.id" :label="app.name" :selected="app.id === appId" @click="applicationChanged" />
       <ui-dropdown-separator />

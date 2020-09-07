@@ -170,7 +170,7 @@
 <style lang="scss">
   .ui-permissions > .ui-property + .ui-property
   {
-    border-top: 1px solid var(--color-line-light);
+    border-top: 1px solid var(--color-line);
     padding-top: 40px;
     margin-top: 40px;
   }

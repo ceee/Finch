@@ -120,7 +120,7 @@
     font-size: var(--font-size);
     padding: 0 16px;
     height: 42px;
-    color: var(--color-fg);
+    color: var(--color-text);
     border-radius: var(--radius);
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -133,7 +133,7 @@
 
       &:not([disabled]):hover .ui-dropdown-button-icon
       {
-        color: var(--color-fg);
+        color: var(--color-text);
       }
     }
 
@@ -150,13 +150,13 @@
 
     &:not([disabled]):hover, &.is-active, &:focus
     {
-      background: var(--color-bg-bright-two);
-      color: var(--color-fg);
+      background: var(--color-dropdown-selected);
+      color: var(--color-text);
       //font-weight: 700;
 
       .ui-dropdown-list-item-icon
       {
-        color: var(--color-fg);
+        color: var(--color-text);
       }
     }
 
@@ -167,14 +167,14 @@
 
     &[disabled]
     {
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       cursor: default;
       pointer-events: none;
 
       .ui-dropdown-list-item-icon,
       .ui-dropdown-button-icon
       {
-        color: var(--color-fg-dim);
+        color: var(--color-text-dim);
       }
     }
 
@@ -191,7 +191,7 @@
     font-weight: 400;
     position: relative;
     top: -1px;
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
   }
 
   .ui-dropdown-button-progress
@@ -201,7 +201,7 @@
     z-index: 2;
     border-radius: 40px;
     border: 2px solid transparent;
-    border-left-color: var(--color-fg);
+    border-left-color: var(--color-text);
     opacity: 1;
     will-change: transform;
     animation: rotating .5s linear infinite;

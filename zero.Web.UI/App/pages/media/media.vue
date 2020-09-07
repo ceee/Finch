@@ -11,10 +11,10 @@
           </h2>
         </template>
         <template>
-          <ui-search v-if="!selecting" v-model="gridConfig.search" />
+          <ui-search v-if="!selecting" v-model="gridConfig.search" class="onbg" />
           <ui-dropdown v-if="isOverview && !!id && !selecting" align="right" :disabled="!!gridConfig.search">
             <template v-slot:button>
-              <ui-button type="white" label="Folder" caret="down" :disabled="!!gridConfig.search" />
+              <ui-button type="light onbg" label="Folder" caret="down" :disabled="!!gridConfig.search" />
             </template>
             <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(current, true)" />
             <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(current, true)" />
@@ -23,12 +23,12 @@
           </ui-dropdown>
           <ui-dropdown v-if="selecting" align="right">
             <template v-slot:button>
-              <ui-button type="white" :label="selectedText" caret="down" />
+              <ui-button type="light onbg" :label="selectedText" caret="down" />
             </template>
             <!--<slot name="actions"></slot>-->
           </ui-dropdown>
-          <ui-button v-if="!selecting" type="action" label="Add folder" @click="addFolder(id)" />
-          <div v-if="!!id && !selecting" type="button" class="ui-button has-state type-action state-default has-icon">
+          <ui-button v-if="!selecting" type="primary" label="Add folder" @click="addFolder(id)" />
+          <div v-if="!!id && !selecting" type="button" class="ui-button has-state type-primary state-default has-icon">
             <span class="ui-button-text" v-localize="'Add file'"></span>
             <input class="media-item-upload" type="file" multiple @change="onUpload" />
           </div>
@@ -353,25 +353,25 @@
     margin: 0;
     font-size: var(--font-size-l);
     font-weight: 400;
-    color: var(--color-fg-dim);
+    color: var(--color-text-dim);
 
     &:last-child
     {
       font-weight: 700;
-      color: var(--color-fg);
+      color: var(--color-text);
     }
 
     & + .media-items-hierarchy-item:before
     {
       content: '/';
       margin: 0 0.5em;
-      color: var(--color-fg-dim);
+      color: var(--color-text-dim);
       font-weight: 400;
     }
 
     &:hover
     {
-      color: var(--color-fg);
+      color: var(--color-text);
     }
   }
 </style>

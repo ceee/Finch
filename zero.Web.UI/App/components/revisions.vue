@@ -92,8 +92,8 @@
     font-size: 9px;
     font-weight: 700;
     text-transform: uppercase;
-    background: var(--color-bg-bright-two);
-    color: var(--color-fg-dim);
+    background: var(--color-box-nested);
+    color: var(--color-text-dim);
     height: 22px;
     line-height: 22px;
     padding: 0 10px;
@@ -109,13 +109,13 @@
       top: -30px;
       height: 30px;
       width: 3px;
-      background: var(--color-bg-bright-two);
+      background: var(--color-box-nested);
     }
   }
 
   .ui-revision-user
   {
-    color: var(--color-fg);
+    color: var(--color-text);
   }
 
   .ui-revision-user-image
