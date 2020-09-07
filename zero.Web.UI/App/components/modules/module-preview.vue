@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-module-item" v-if="!loading" :data-module="alias" :class="{'can-edit': canEdit }">
     <div class="ui-module-item-content" v-if="module" @click="emit('edit')">
-      <button type="button" class="ui-module-item-header"><i :class="module.icon"></i> {{module.name}}</button>
+      <button v-if="!hasPreviewSettings || renderer.preview.label !== false" type="button" class="ui-module-item-header">{{module.name}}</button>
       <ui-module-preview-inner v-if="tryRender" :template="renderer.preview.template" :value="value" @click="emit('edit')" />
     </div>
     <div class="ui-module-item-content" v-else>
@@ -66,9 +66,13 @@
       {
         return this.value.moduleTypeAlias;
       },
+      hasPreviewSettings()
+      {
+        return this.module && this.renderer && typeof this.renderer.preview === 'object';
+      },
       tryRender()
       {
-        return this.module && this.renderer && this.renderer.preview && this.renderer.preview.template;
+        return this.hasPreviewSettings && this.renderer.preview.template;
       },
       canEdit()
       {
@@ -187,9 +191,13 @@
   }
 
   .ui-module-preview-inner
-  {
-    padding-top: 12px;
+  {   
     max-width: 1060px;
+
+    .ui-module-item-header + &
+    {
+      padding-top: 6px;
+    }
 
     p
     {

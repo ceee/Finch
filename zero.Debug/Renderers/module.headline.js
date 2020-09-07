@@ -15,6 +15,7 @@
 
   // define a preview which is rendered in the overview
   preview: {
+    label: false,
     template: '<ui-module-preview-headline :text="model.headline" :subline="model.subline" />'
   },
 
