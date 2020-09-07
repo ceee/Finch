@@ -306,7 +306,7 @@
     -webkit-box-direction: normal;
     flex-direction: column;
     position: relative;
-    background: var(--color-bg-dim);
+    background: var(--color-bg-bright);
     flex-wrap: nowrap;
     -webkit-box-pack: justify;
     justify-content: space-between;
@@ -328,7 +328,7 @@
     -webkit-box-align: center;
     align-items: stretch;
     width: 100%;
-    //border-bottom: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-bg-bright-two);
     position: relative;
     outline: 1px solid transparent;
     transition: outline 0.1s ease, box-shadow 0.1s ease;
@@ -356,7 +356,7 @@
     top: 0;
     //border-bottom: 1px solid var(--color-line);
     z-index: 2;
-    background: var(--color-bg-bright);
+    background: var(--color-bg-dim);
 
     .ui-table-cell
     {
@@ -373,7 +373,7 @@
     position: relative;
     text-align: left;
     padding: 18px 20px 17px 20px;
-    border-left: 1px solid var(--color-bg-bright);
+    border-left: 1px solid var(--color-bg-bright-two);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

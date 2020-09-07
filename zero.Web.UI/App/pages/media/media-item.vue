@@ -97,10 +97,10 @@
     border-radius: 20px;
     position: absolute;
     z-index: 2;
-    left: -8px;
-    top: -8px;
-    background: var(--color-bg-bright);
-    color: var(--color-fg);
+    left: -5px;
+    top: -5px;
+    background: var(--color-primary);
+    color: white;
     box-shadow: 1px 1px 0 1px var(--color-shadow);
     font-size: 12px;
 
