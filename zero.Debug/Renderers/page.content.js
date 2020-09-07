@@ -7,7 +7,6 @@ export default {
     {
       name: 'general',
       label: '@ui.tab_content',
-      class: 'is-blank',
       count: x => x.modules.length
     },
     {
@@ -22,8 +21,7 @@ export default {
       display: 'modules',
       label: '@ui.name',
       required: true,
-      hideLabel: true,
-      class: 'ui-modules'
+      hideLabel: true
     }
   ].concat(MetaFields)
 };

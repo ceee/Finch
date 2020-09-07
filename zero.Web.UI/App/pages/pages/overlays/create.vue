@@ -90,7 +90,7 @@
     margin: 30px 0 -10px 0;
     border-radius: var(--radius);
     /*border: 1px solid var(--color-line-light);*/
-    background: var(--color-bg-dim);
+    background: var(--color-box-nested);
     line-height: 1.4;
     color: var(--color-text-dim);
     padding: 14px 16px;

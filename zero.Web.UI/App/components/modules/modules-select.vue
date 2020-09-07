@@ -3,7 +3,7 @@
 
       <button v-if="!isSelecting" type="button" class="ui-modules-start-button" @click="startSelection">
         <i class="ui-modules-start-button-icon fth-plus"></i>
-        <p class="ui-modules-start-button-text"><strong>Add content</strong> <br>Compose the page by adding modules</p>
+        <p class="ui-modules-start-button-text"><strong>Add content</strong> <!--<br>Compose the page by adding modules--></p>
       </button>
 
       <div class="ui-modules-select" v-if="isSelecting">
@@ -132,12 +132,12 @@
   .ui-modules-start
   {
     margin: 0;
-    padding: var(--padding);
-    background: var(--color-box);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-short);
     display: flex;
-    justify-content: center;
+
+    .ui-modules-inner-sortable + &
+    {
+      margin-top: var(--padding);
+    }
   }
 
   .ui-modules-start-button
@@ -166,12 +166,14 @@
     line-height: 1.3;
     color: var(--color-text-dim);
     margin: 0;
+    font-size: var(--font-size-s);
 
     strong
     {
       display: inline-block;
-      margin-bottom: 5px;
+      margin-bottom: 2px;
       color: var(--color-text);
+      font-size: var(--font-size);
     }
   }
 
@@ -179,6 +181,11 @@
   {
     width: 100%;
     position: relative;
+
+    .ui-inline-tabs-list
+    {
+      padding-right: 50px;
+    }
   }
 
   .ui-modules-select-close
@@ -187,12 +194,6 @@
     right: 0;
     top: 0;
     background: none !important;
-  }
-
-  .ui-modules-select-groups
-  {
-    margin-bottom: var(--padding);
-    padding-right: 50px;
   }
 
   .ui-modules-select-items

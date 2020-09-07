@@ -138,51 +138,8 @@
 </script>
 
 <style lang="scss">
-  @import './Sass/Modules/box';
-
-  .ui-property.ui-modules
+  .ui-modules-inner-sortable
   {
-    width: 100%;
-    margin: 0;
-    margin-top: var(--padding);
-  }
-
-  .ui-modules-start, .ui-module-item
-  {
-    margin: 0;
-    padding: var(--padding);
-    background: var(--color-box);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-short);
-    display: flex;
-    justify-content: center;
-  }
-
-  .ui-module-item
-  {
-    display: block;
-    padding: 0;
-  }
-
-  .ui-module-item + .ui-module-item,
-  .ui-modules-inner-sortable + .ui-modules-start
-  {
-    margin-top: 10px;
-  }
-
-  .ui-module-item-header
-  {
-    display: flex;
-    align-items: center;
-    color: var(--color-text-dim);
-    font-size: var(--font-size-s);
-
-    i
-    {
-      font-size: var(--font-size-l);
-      margin-right: 10px;
-      position: relative;
-      top: -1px;
-    }
+    margin-top: -32px;
   }
 </style>

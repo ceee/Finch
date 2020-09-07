@@ -15,8 +15,8 @@
         <span>To update the <b>preview</b> with your unsaved changes click the <b>Refresh</b> button.</span>
       </div>
       <div class="-buttons">
-        <ui-button type="small blank" label="Exit" @click="exitPreview()" />
-        <ui-button type="small blank" label="Open" @click="focusPreview" />
+        <ui-button type="small light onbg" label="Exit" @click="exitPreview()" />
+        <ui-button type="small light onbg" label="Open" @click="focusPreview" />
         <ui-button type="small" label="Refresh" icon="fth-rotate-cw" @click="refreshPreview" />
       </div>
     </div>
@@ -277,7 +277,7 @@
   .page-editor-preview-message
   {
     margin: -10px var(--padding) var(--padding);
-    background: var(--color-primary-low);
+    background: var(--color-box-light);
     color: var(--color-primary);
     font-size: var(--font-size);
     display: flex;
@@ -292,11 +292,6 @@
     .-buttons
     {
       display: flex;
-    }
-
-    .ui-button.type-blank
-    {
-      background: var(--color-primary-low);
     }
   }
 </style>

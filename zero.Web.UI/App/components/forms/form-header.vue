@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-header-bar class="ui-form-header" :back-button="true">
+  <ui-header-bar class="ui-form-header" :back-button="false">
     <template v-slot:title>
       <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name}">
         <input class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" />
@@ -112,11 +112,11 @@
     font-size: var(--font-size-l);
     font-weight: 700;
     background: none;
-    border: 1px solid transparent;
+    border: 1px dashed var(--color-line-dashed);
 
-    &:hover, &:focus, .ui-header-bar-title.is-empty &
+    /*&:hover, &:focus, .ui-header-bar-title.is-empty &
     {
       border: 1px dashed var(--color-text-dim-one);
-    }
+    }*/
   }
 </style>

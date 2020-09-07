@@ -115,9 +115,14 @@
   .ui-module-item
   {
     display: grid !important;
-    grid-template-columns: 1fr auto 0;
+    grid-template-columns: 1fr auto;
     grid-column-gap: var(--padding);
     position: relative;
+    margin: 0 -32px;
+    padding: var(--padding);
+    /*margin-top: var(--padding);
+    padding-top: var(--padding);*/
+    border-bottom: 1px solid var(--color-line);
 
     &.can-edit .ui-module-item-content
     {
@@ -128,12 +133,11 @@
     {
       cursor: default;
     }
-  }
 
-  .ui-module-item-content
-  {
-    padding: var(--padding);
-    padding-right: 0;
+    /*&:first-child
+    {
+      border-top: none;
+    }*/
   }
 
   .ui-module-item-header

@@ -111,7 +111,7 @@
   .apps-items-add
   {
     background: transparent;
-    border: 1px dashed var(--color-text-dim-one);
+    border: 1px dashed var(--color-line-dashed);
     color: var(--color-text);
     border-radius: var(--radius);
     text-align: center;
