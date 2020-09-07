@@ -1,12 +1,12 @@
 ﻿<template>
   <div class="dashboard">
-    <div class="dashboard-elements">
+    <!--<div class="dashboard-elements">
       <dashboard-element :high="true" />
       <dashboard-element :wide="true" />
       <dashboard-element />
       <dashboard-element />
       <dashboard-element />
-    </div>
+    </div>-->
   </div>
 </template>
 

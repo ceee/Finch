@@ -3,7 +3,7 @@
     <div class="ui-header-bar-inner">
       <div class="ui-header-bar-main">
         <ui-icon-button v-if="backButton" type="white" @click="onBack" />
-        <div>
+        <div class="ui-header-bar-main-title">
           <slot name="title">
             <h2 class="ui-header-bar-title" :class="{'is-empty': !title && titleEmpty}">
               <span v-if="prefix" class="-minor" v-localize:html="prefix"></span>
@@ -108,11 +108,17 @@
     display: flex;
     align-items: center;
     height: 100%;
+    flex: 1 0 auto;
 
     .ui-icon-button
     {
       margin-right: 16px;
     }
+  }
+
+  .ui-header-bar-main-title
+  {
+    flex: 1 0 auto;
   }
 
   .ui-header-bar-aside
@@ -121,6 +127,7 @@
     align-items: center;
     height: 100%;
     flex-shrink: 0;
+    padding-left: 40px;
 
     > * + *
     {

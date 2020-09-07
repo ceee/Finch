@@ -47,6 +47,16 @@ namespace zero.Core.Api
         command.Result.Results.Parent.TryGet("TotalResults", out totalResults);
       }
 
+      // add creation for last page
+      if (!items.Any() && pageNumber >= (int)Math.Ceiling((decimal)totalResults / pageSize))
+      {
+        T currentRevision = await session.LoadAsync<T>(id);
+        if (currentRevision != null)
+        {
+          items.Add(currentRevision);
+        }
+      }
+
       List<Revision> revisions = new List<Revision>();
 
       // load affected users as the revisions could have been edited by other users too

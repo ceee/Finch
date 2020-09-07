@@ -1,5 +1,11 @@
 ﻿<template>
-  <ui-header-bar class="ui-form-header" :title="value.name" :title-empty="title" :back-button="true">
+  <ui-header-bar class="ui-form-header" :back-button="true">
+    <template v-slot:title>
+      <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name}">
+        <input class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" />
+        <!--<span v-localize="value.name || title"></span>-->
+      </h2>
+    </template>
     <div class="ui-form-header-aside">
       <slot></slot>
       <div v-if="activeToggle" class="ui-form-header-toggle">
@@ -119,6 +125,22 @@
     .ui-toggle-off-warning
     {
       color: var(--color-accent-red);
+    }
+  }
+
+  input[type="text"].ui-form-header-title-input
+  {
+    font-family: var(--font);
+    color: var(--color-fg);
+    font-size: var(--font-size-l);
+    font-weight: 700;
+    background: none;
+    border: 1px solid transparent;
+
+    &:hover, &:focus, .ui-header-bar-title.is-empty &
+    {
+      background: var(--color-bg-dim);
+      border: 1px dashed var(--color-fg-dim-two);
     }
   }
 </style>
