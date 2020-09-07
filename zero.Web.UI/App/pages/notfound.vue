@@ -5,7 +5,7 @@
       <strong class="page-error-headline">Not found</strong><br>
       The requested resource could not be found
       <br>
-      ({{path}})
+      <code>{{path}}</code>
     </p>
     <ui-button class="page-error-button" type="light onbg" :label="detailsText" @click="details = !details" />
     <template v-if="details">

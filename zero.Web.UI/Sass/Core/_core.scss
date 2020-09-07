@@ -178,6 +178,15 @@ iframe, video
 	margin-top: 20px;
 }
 
+code
+{
+  border-radius: 3px;
+  padding: 1px 4px;
+  border: 1px dashed var(--color-line-dashed);
+  background: var(--color-bg-shade-2);
+  color: var(--color-text);
+}
+
 
 // screenreader
 
