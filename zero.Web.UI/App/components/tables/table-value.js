@@ -1,7 +1,7 @@
-import dayjs from 'dayjs';
 import { warn } from 'zero/services/debug';
 import MediaApi from 'zero/resources/media';
 import Strings from 'zero/services/strings';
+import Localization from 'zero/services/localization';
 
 export default function (el, binding)
 {
@@ -40,6 +40,11 @@ export default function (el, binding)
 
     let html = hasFunc ? column.render(item, column) : value;
     let isHtml = column.as === 'html' || hasSharedIndicator;
+
+    if (column.localize === true)
+    {
+      html = Localization.localize(html, column.tokens || {});
+    }
 
     if (hasSharedIndicator)
     {

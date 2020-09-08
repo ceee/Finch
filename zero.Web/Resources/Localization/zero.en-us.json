@@ -79,6 +79,9 @@
     },
     "edit": {
       "title": "Edit"
+    },
+    "export": {
+      "action": "Export"
     }
   },
 
