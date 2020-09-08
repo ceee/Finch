@@ -35,5 +35,29 @@
       field: 'isOptional',
       display: 'toggle'
     }
-  ]
+  ],
+
+  list: {
+    labelPrefix: '@language.fields.',
+    search: null,
+    columns: {
+      name: {
+        label: '@ui.name',
+        as: 'text',
+        bold: true,
+        link: item =>
+        {
+          return {
+            name: zero.alias.sections.settings + '-' + zero.alias.settings.languages + '-edit',
+            params: { id: item.id }
+          };
+        }
+      },
+      code: 'text',
+      isDefault: {
+        as: 'bool',
+        width: 200
+      }
+    }
+  }
 };

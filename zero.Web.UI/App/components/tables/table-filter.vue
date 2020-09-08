@@ -65,7 +65,7 @@
       reload()
       {
         this.hideFilter = typeof this.value.filter === 'undefined';
-        this.hideSearch = typeof this.value.search === 'undefined';
+        this.hideSearch = typeof this.value.search === false;
         this.hideSelection = this.value.selectable !== true;
       }
     }

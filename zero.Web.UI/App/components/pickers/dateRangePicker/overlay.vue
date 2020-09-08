@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="app-confirm-buttons">
-      <ui-button type="action" label="@ui.confirm" @click="confirm"></ui-button>
+      <ui-button type="primary" label="@ui.confirm" @click="confirm"></ui-button>
       <ui-button type="light" label="@ui.close" @click="config.close"></ui-button>
     </div>
   </ui-form>

@@ -3,7 +3,7 @@
     <ui-header-bar title="Users & Permissions" :back-button="true">
       <ui-table-filter v-model="usersConfig" />
       <ui-add-button type="light onbg" :route="createRoleRoute" label="Add role" />
-      <ui-button type="primary" label="Add user" icon="fth-plus" />
+      <ui-button type="primary" label="Add user" />
     </ui-header-bar>
 
     <div class="ui-blank-box">
@@ -12,7 +12,7 @@
         <router-link v-for="role in roles" :key="role.id" :to="getRoleLink(role)" class="users-role">
           <i class="users-role-icon" :class="role.icon"></i>
           <strong>{{role.name}}</strong>
-          <span class="users-role-minor" v-localize="{ key: role.countClaims !== 1 ? '@user.count_permissions' : '@user.one_permission', tokens: { count: role.countClaims }}"></span>
+          <span class="users-role-minor" v-localize="{ key: role.countClaims !== 1 ? '@user.count_permissions' : '@user.one_permission', tokens: { count: role.claims.length }}"></span>
         </router-link>
       </div>
     </div>
@@ -26,17 +26,15 @@
 
 
 <script>
-  import AuthApi from 'zero/services/auth.js'
   import UserRolesApi from 'zero/resources/userRoles.js';
   import UsersApi from 'zero/resources/users.js';
-  import MediaApi from 'zero/resources/media.js';
   import { filter as _filter, map as _map } from 'underscore';
 
   export default {
     data: () => ({
       createRoleRoute: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-role-create',
       roles: [],
-      usersConfig: {}
+      usersConfig: zero.renderers.user.list
     }),
 
     created()
@@ -46,40 +44,16 @@
         this.roles = items;
       });
 
-      this.usersConfig = {
-        labelPrefix: '@user.fields.',
-        search: null,
-        columns: {
-          avatarId: {
-            label: '',
-            as: 'image',
-            width: 70,
-            link: this.getUserLink,
-            sort: false
-          },
-          name: {
-            label: '@ui.name',
-            as: 'text',
-            bold: true,
-            link: this.getUserLink,
-            shared: true
-          },
-          email: 'text',
-          roles: {
-            as: 'text',
-            render: item =>
-            {
-              const roles = _filter(this.roles, role => item.roles.indexOf(role.alias) > -1);
-              return _map(roles, role => role.name).join(', ');
-            }
-          },
-          isActive: {
-            as: 'bool',
-            width: 200
-          }
-        },
-        items: UsersApi.getAll
-      };
+      this.usersConfig.items = UsersApi.getAll;
+      let roleColumn = this.usersConfig.columns.roles;
+      if (roleColumn)
+      {
+        roleColumn.render = item =>
+        {
+          const roles = _filter(this.roles, role => item.roles.indexOf(role.alias) > -1);
+          return _map(roles, role => role.name).join(', ');
+        };
+      }
     },
 
     methods: {
@@ -90,15 +64,7 @@
           name: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-role',
           params: { id: item.id }
         };
-      },
-
-      getUserLink(item)
-      {
-        return {
-          name: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
-          params: { id: item.id }
-        };
-      },
+      }
     }
   }
 </script>

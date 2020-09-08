@@ -1,9 +1,9 @@
 ﻿<template>
   <div class="ui-add-button">
-    <ui-button v-if="!hasDropdown" :type="type" :label="label" icon="fth-plus" @click="onClick(false)" :disabled="disabled" />
+    <ui-button v-if="!hasDropdown" :type="type" :label="label" @click="onClick(shared)" :disabled="disabled" />
     <ui-dropdown v-else ref="dropdown" align="right">
       <template v-slot:button>
-        <ui-button :label="label" :type="type" icon="fth-plus" :disabled="disabled" />
+        <ui-button :label="label" :type="type" :disabled="disabled" />
       </template>
       <div class="ui-add-button-items">
         <button type="button" class="ui-add-button-item" @click="onClick(true)" :disabled="disabled">
@@ -29,6 +29,10 @@
       decision: {
         type: Boolean,
         default: true
+      },
+      shared: {
+        type: Boolean,
+        default: false
       },
       label: {
         type: String,

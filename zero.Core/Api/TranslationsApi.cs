@@ -38,13 +38,8 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<ITranslation>> GetAll()
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.Query<ITranslation>()
-          .OrderByDescending(x => x.CreatedDate)
-          .Scope(Scope)
-          .ToListAsync();
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session.Query<ITranslation>().OrderByDescending(x => x.CreatedDate).Scope(Scope).ToListAsync();
     }
 
 
@@ -53,10 +48,8 @@ namespace zero.Core.Api
     {
       query.SearchFor(entity => entity.Key, entity => entity.Value);
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.Query<ITranslation>().Scope(Scope).ToQueriedListAsync(query);
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session.Query<ITranslation>().OrderByDescending(x => x.CreatedDate).Scope(Scope).ToQueriedListAsync(query);
     }
 
 

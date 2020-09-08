@@ -125,7 +125,7 @@
                       response.entity.appId = zero.sharedAppId;
                     }
 
-                    this.isShared = response.entity.appId === zero.sharedAppId || !response.entity.appId;
+                    this.isShared = response.entity.appId === zero.sharedAppId; // || !response.entity.appId;
                   }
                 }
 

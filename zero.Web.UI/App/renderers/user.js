@@ -61,5 +61,46 @@ export default {
       hideLabel: true,
       path: '@zero/components/permissions.vue'
     }
-  ]
+  ],
+
+  list: {
+    labelPrefix: '@user.fields.',
+    search: null,
+    columns: {
+      avatarId: {
+        label: '',
+        as: 'image',
+        width: 70,
+        link: item =>
+        {
+          return {
+            name: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
+            params: { id: item.id }
+          };
+        },
+        sort: false
+      },
+      name: {
+        label: '@ui.name',
+        as: 'text',
+        bold: true,
+        link: item =>
+        {
+          return {
+            name: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
+            params: { id: item.id }
+          };
+        },
+        shared: true
+      },
+      email: 'text',
+      roles: {
+        as: 'text'
+      },
+      isActive: {
+        as: 'bool',
+        width: 200
+      }
+    },
+  }
 };

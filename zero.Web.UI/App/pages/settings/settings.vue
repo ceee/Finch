@@ -72,7 +72,7 @@
   .settings-group-items
   {
     display: grid;
-    gap: 30px 20px;
+    gap: 20px;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     align-items: stretch;
     margin-top: 40px;

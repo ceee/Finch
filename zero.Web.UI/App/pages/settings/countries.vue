@@ -1,11 +1,7 @@
 ﻿<template>
   <div class="countries">
     <ui-header-bar title="@country.list" :back-button="true">
-      <ui-table-filter v-model="tableConfig">
-        <template v-slot:actions>
-          <ui-dropdown-button label="Delete" icon="fth-trash" />
-        </template>
-      </ui-table-filter>
+      <ui-table-filter v-model="tableConfig" />
       <ui-add-button :route="createRoute" />
     </ui-header-bar>
     <div class="ui-blank-box">
@@ -18,62 +14,15 @@
 <script>
   import CountriesApi from 'zero/resources/countries.js';
 
-  const baseRoute = zero.alias.sections.settings + '-' + zero.alias.settings.countries;
-
   export default {
     data: () => ({
-      createRoute: baseRoute + '-create',
-      tableConfig: {}
+      createRoute: zero.alias.sections.settings + '-' + zero.alias.settings.countries + '-create',
+      tableConfig: zero.renderers.country.list
     }),
 
     created()
     {
-      this.tableConfig = {
-        labelPrefix: '@country.fields.',
-        allowOrder: false,
-        search: null,
-        columns: {
-          flag: {
-            label: '',
-            as: 'html',
-            render: item => `<i class="flag flag-${item.code.toLowerCase()}"></i>`,
-            width: 62,
-            sort: false
-          },
-          name: {
-            label: '@ui.name',
-            as: 'text',
-            bold: true,
-            link: item =>
-            {
-              return {
-                name: baseRoute + '-edit',
-                params: { id: item.id }
-              };
-            },
-            shared: true
-          },
-          code: 'text',
-          isPreferred: {
-            as: 'bool',
-            width: 200
-          },
-          isActive: {
-            as: 'bool',
-            label: '@ui.active',
-            width: 200
-          }
-        },
-        items: CountriesApi.getAll
-      };
-    },
-
-
-    methods: {
-      goBack()
-      {
-        this.$router.go(-1);
-      }
+      this.tableConfig.items = CountriesApi.getAll;
     }
   }
 </script>

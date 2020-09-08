@@ -16,12 +16,10 @@
   import Overlay from 'zero/services/overlay.js';
   import AddOverlay from './translation';
 
-  const baseRoute = zero.alias.sections.settings + '-' + zero.alias.settings.translations;
-
   export default {
     data: () => ({
-      createRoute: baseRoute + '-create',
-      tableConfig: {}
+      createRoute: zero.alias.sections.settings + '-' + zero.alias.settings.translations + '-create',
+      tableConfig: zero.renderers.translation.list
     }),
 
     props: ['id'],
@@ -35,33 +33,7 @@
 
     created()
     {
-      let link = item =>
-      {
-        return {
-          name: baseRoute + '-edit',
-          params: { id: item.id }
-        };
-      };
-
-      this.tableConfig = {
-        labelPrefix: '@translation.fields.',
-        order: {
-          enabled: false
-        },
-        search: null,
-        columns: {
-          key: {
-            as: 'text',
-            shared: true,
-            link: link
-          },
-          value: {
-            as: 'text',
-            link: link
-          }
-        },
-        items: TranslationsApi.getAll
-      };
+      this.tableConfig.items = TranslationsApi.getAll;
 
       this.handleRouteChange();
     },

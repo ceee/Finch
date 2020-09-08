@@ -9,6 +9,8 @@ namespace zero.Core.Api
 
     public bool IncludeShared { get; set; }
 
+    //public bool OnlyShared { get; set; }
+
     public bool IsShared { get; set; }
 
     public bool IsAppAware => !IsShared && !AppId.IsNullOrEmpty();
