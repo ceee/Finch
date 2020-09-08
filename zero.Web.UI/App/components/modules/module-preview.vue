@@ -1,11 +1,11 @@
 ﻿<template>
   <div class="ui-module-item" v-if="!loading" :data-module="alias" :class="{'can-edit': canEdit }">
     <div class="ui-module-item-content" v-if="module" @click="emit('edit')">
-      <button v-if="!hasPreviewSettings || renderer.preview.label !== false" type="button" class="ui-module-item-header">{{module.name}}</button>
-      <ui-module-preview-inner v-if="tryRender" :template="renderer.preview.template" :value="value" @click="emit('edit')" />
+      <span v-if="!hasPreviewSettings || renderer.preview.label !== false" class="ui-module-item-header">{{module.name}}</span>
+      <ui-module-preview-inner v-if="tryRender" :template="renderer.preview.template" :value="value" />
     </div>
     <div class="ui-module-item-content" v-else>
-      <button type="button" class="ui-module-item-header is-error" disabled><i class="fth-alert-circle"></i> {{alias}}</button>
+      <span class="ui-module-item-header is-error"><i class="fth-alert-circle"></i> {{alias}}</span>
       <p class="ui-module-item-error" v-localize:html="{ key: '@modules.notfound', tokens: { alias: alias } }"></p>
     </div>
 
@@ -119,11 +119,11 @@
   .ui-module-item
   {
     display: grid !important;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto 0;
     grid-column-gap: var(--padding);
     position: relative;
     margin: 0 -32px;
-    padding: var(--padding);
+    padding: 0; //var(--padding);
     /*margin-top: var(--padding);
     padding-top: var(--padding);*/
     border-bottom: 1px solid var(--color-line);
@@ -142,6 +142,12 @@
     {
       border-top: none;
     }*/
+  }
+
+  .ui-module-item-content
+  {
+    padding: var(--padding);
+    padding-right: 0;
   }
 
   .ui-module-item-header
