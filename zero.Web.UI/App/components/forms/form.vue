@@ -313,6 +313,10 @@
                 handledGroups.push(field);
                 component.set(errorGroup);
               }
+              else
+              {
+                component.clear();
+              }
             }
             else
             {

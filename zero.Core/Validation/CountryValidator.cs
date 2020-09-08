@@ -1,11 +1,9 @@
 ﻿using FluentValidation;
 using zero.Core.Entities;
-using zero.Core.Entities.Setup;
-using zero.Core.Extensions;
 
 namespace zero.Core.Validation
 {
-  public class CountryValidator : AbstractValidator<Country>
+  public class CountryValidator : ZeroValidator<ICountry, Country>
   {
     public CountryValidator()
     {

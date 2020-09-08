@@ -16,10 +16,10 @@ namespace zero.Core.Api
     IValidator<ICountry> Validator;
 
 
-    public CountriesApi(IBackofficeStore store) : base(store)
+    public CountriesApi(IBackofficeStore store, IValidator<ICountry> validator) : base(store)
     {
       Scope.IncludeShared = true;
-      Validator = null;
+      Validator = validator;
     }
 
 

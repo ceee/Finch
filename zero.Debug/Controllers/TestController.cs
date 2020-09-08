@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,6 +50,9 @@ namespace zero.Debug.Controllers
       {
         count = items.Count,
         items
+      }, new JsonSerializerSettings()
+      {
+        TypeNameHandling = TypeNameHandling.None
       });
     }
 

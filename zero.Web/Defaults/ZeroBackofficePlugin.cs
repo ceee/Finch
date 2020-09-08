@@ -5,6 +5,7 @@ using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Options;
 using zero.Core.Plugins;
+using zero.Core.Validation;
 using zero.Web.Mapper;
 using zero.Web.Sections;
 
@@ -15,7 +16,7 @@ namespace zero.Web.Defaults
     public void ConfigureServices(IServiceCollection services) 
     {
       services.AddAll(typeof(IValidator<>), ServiceLifetime.Scoped);
-      services.AddAll(typeof(IValidator), ServiceLifetime.Scoped);
+      //services.AddAll(typeof(IValidator), ServiceLifetime.Scoped);
 
       services.AddTransient<IApplication, Application>();
       //services.AddTransient<IValidator<IApplication>, ApplicationValidator>();
@@ -27,7 +28,6 @@ namespace zero.Web.Defaults
       services.AddTransient<IMedia, Media>();
       services.AddTransient<IMediaFolder, MediaFolder>();
       services.AddTransient<IPreview, Preview>();
-
 
       services.AddTransient<IApplicationsApi, ApplicationsApi>();
       services.AddTransient<ICountriesApi, CountriesApi>();
