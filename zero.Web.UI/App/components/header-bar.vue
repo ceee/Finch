@@ -16,7 +16,7 @@
       </div>
       <div class="ui-header-bar-aside">
         <slot></slot>
-        <ui-icon-button v-if="closeButton" @click="onClose" icon="fth-x" title="@ui.close" />
+        <ui-icon-button class="ui-header-bar-close" v-if="closeButton" @click="onClose" icon="fth-x" title="@ui.close" />
       </div>
     </div>
   </div>
@@ -153,5 +153,10 @@
     font-size: var(--font-size-s);
     color: var(--color-text-dim);
     margin: 2px 0 0;
+  }
+
+  .ui-header-bar-close
+  {
+    background: transparent !important;
   }
 </style>
