@@ -3,14 +3,22 @@ using FluentValidation;
 using FluentValidation.Results;
 using System.Threading;
 using System.Threading.Tasks;
+using zero.Core.Api;
+using Raven.Client.Documents;
 
 namespace zero.Core.Validation
 {
   public abstract class ZeroValidator<TInterface, TImplementation> : AbstractValidator<TImplementation>, IValidator<TInterface> where TImplementation : TInterface
   {
-    public ZeroValidator()
+    protected IBackofficeStore Store { get; private set; }
+
+    protected IDocumentStore Raven { get; private set; }
+
+
+    public ZeroValidator(IBackofficeStore store)
     {
-      
+      Store = store;
+      Raven = store.Raven;
     }
 
     public ValidationResult Validate(TInterface instance)

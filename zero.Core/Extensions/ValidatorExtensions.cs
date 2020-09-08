@@ -1,8 +1,12 @@
 ﻿using FluentValidation;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using zero.Core.Api;
+using zero.Core.Entities;
 
 namespace zero.Core.Extensions
 {
@@ -19,7 +23,7 @@ namespace zero.Core.Extensions
     /// </summary>
     public static IRuleBuilderOptions<T, string> Hex<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
-      return ruleBuilder.Matches(HEX_REGEX).WithMessage("@errors/format_hex");
+      return ruleBuilder.Matches(HEX_REGEX).WithMessage("@errors.forms.hex_format");
     }
 
 
@@ -31,7 +35,7 @@ namespace zero.Core.Extensions
       return ruleBuilder.Must((root, value, context) =>
       {
         return value.IsNullOrWhiteSpace() || Uri.IsWellFormedUriString(value, UriKind.Absolute);
-      }).WithMessage("@errors/invalid_uri");
+      }).WithMessage("@errors.forms.url_format");
     }
 
 
@@ -55,7 +59,7 @@ namespace zero.Core.Extensions
         }
 
         return true;
-      }).WithMessage("@errors/invalid_mail");
+      }).WithMessage("@errors.forms.email_invalid");
     }
 
 
@@ -89,7 +93,27 @@ namespace zero.Core.Extensions
         }
 
         return true;
-      }).WithMessage("@errors/invalid_mails");
+      }).WithMessage("@errors.forms.emails_invalid");
+    }
+
+
+    /// <summary>
+    /// Check if this value is unique within a collection
+    /// </summary>
+    public static IRuleBuilderOptions<T, object> Unique<T>(this IRuleBuilder<T, object> ruleBuilder, IBackofficeStore store, bool includeShared = true) where T : IZeroIdEntity
+    {
+      return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
+      {
+        using IAsyncDocumentSession session = store.Raven.OpenAsyncSession();
+
+        int count = await session.Advanced.AsyncDocumentQuery<T>()
+          .WhereNotEquals("Id", ((T)entity).Id, true)
+          .WhereEquals(context.Rule.PropertyName, value, true)
+          .CountAsync();
+
+        return count < 1;
+          //.Scope(store.AppContext.AppId, includeShared)
+      }).WithMessage("@errors.forms.not_unique");
     }
   }
 }

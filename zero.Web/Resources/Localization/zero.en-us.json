@@ -161,6 +161,13 @@
     "page": {
       "parentnotallowed": "The page is not allowed as a children of the selected parent",
       "sortingmultipleparents": "Sorting pages is only allowed for a specific parent page"
+    },
+    "forms": {
+      "email_invalid": "The email address is not valid",
+      "emails_invalid": "The email address(es) is/are not valid",
+      "hex_format": "The input is not in a valid HEX #aabbcc format",
+      "url_format": "The input is no well-formed URL",
+      "not_unique": "The property \"{PropertyName}\" must be unique in this collection"
     }
   },
 
