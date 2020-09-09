@@ -12,7 +12,7 @@
 <script>
   import Overlay from 'zero/services/overlay.js'
   import Notification from 'zero/services/notification.js'
-  import { isArray as _isArray, filter as _filter, groupBy as _groupBy, each as _each } from 'underscore'
+  import { isArray as _isArray, filter as _filter, groupBy as _groupBy, each as _each, difference as _difference } from 'underscore'
 
   export default {
     name: 'uiForm',
@@ -153,7 +153,6 @@
 
         let handleError = (errors, reject) =>
         {
-          console.info(errors);
           this.setState('error');
           this.setErrors(errors);
           reject(errors);
@@ -165,11 +164,12 @@
             .then(
               response =>
               {
+                this.clearErrors();
+
                 if (response.success)
                 {
                   this.setState('success');
                   this.setDirty(false);
-                  this.setErrors(null);
                   resolve(response);
 
                   if (response.model && this.route && this.$route.name !== this.route)
@@ -194,7 +194,6 @@
             .catch(exception =>
             {
               this.setState('error');
-              console.info('catch', exception);
 
               // TODO should we throw here, probably show an error overlay
               throw exception;
@@ -271,25 +270,65 @@
       },
 
 
+      // clears all errors from the form
+      clearErrors()
+      {
+        this.getErrorComponents().forEach(component =>
+        {
+          component.clear();
+        });
+      },
+
+
       // tries to find matching fields for the given errors and displays them
       setErrors(errors)
       {
-        if (typeof errors === 'undefined')
+        if (typeof errors === 'undefined' || !errors)
         {
           this.errors = [];
         }
-        else if (!_isArray(errors))
-        {
-          this.errors = [errors];
-        }
         else
         {
-          this.errors = errors;
+          this.errors = !_isArray(errors) ? [errors] : errors;
         }
 
+        // get all components + grouped errors
+        let errorComponents = this.getErrorComponents();
         let errorGroups = _groupBy(this.errors, 'property');
         let handledGroups = [];
 
+        // set errors
+        errorComponents.forEach(component =>
+        {
+          let field = component.field;
+
+          if (field && errorGroups[field])
+          {
+            handledGroups.push(field);
+            component.set(errorGroups[field]);
+          }
+        });
+
+        // fill leftovers
+        _each(errorGroups, (errorGroup, field) =>
+        {
+          if (handledGroups.indexOf(field) < 0)
+          {
+            errorComponents.forEach(component =>
+            {
+              if (component.catchRemaining || component.catchAll)
+              {
+                component.set(errorGroup, true);
+              }
+            });
+          }
+        });
+      },
+
+
+      // find all error components in form
+      getErrorComponents()
+      {
         let errorComponents = [];
 
         // find components which can output errors
@@ -297,27 +336,9 @@
         {
           parent.$children.forEach(component =>
           {
-            const isErrorComponent = this.errorComponents.indexOf(component.$options.name) > -1;
-            const field = component.field;
-
-            if (isErrorComponent)
+            if (this.errorComponents.indexOf(component.$options.name) > -1)
             {
               errorComponents.push(component);
-            }
-
-            if (isErrorComponent && field)
-            {
-              let errorGroup = errorGroups[field];
-
-              if (errorGroup)
-              {
-                handledGroups.push(field);
-                component.set(errorGroup);
-              }
-              else
-              {
-                component.clear();
-              }
             }
             else
             {
@@ -326,39 +347,9 @@
           });
         };
 
-        traverseChildren(this);  
+        traverseChildren(this); 
 
-
-        // fill leftovers
-        _each(errorGroups, (group, field) =>
-        {
-          if (handledGroups.indexOf(field) < 0)
-          {
-            errorComponents.forEach(component =>
-            {
-              if (component.catchRemaining)
-              {
-                component.set(group);
-              }
-            });
-          }
-        });
-
-
-        //_each(_groupBy(this.errors, 'property'), (group, field) =>
-        //{
-        //  let affectedComponents = _filter(errorComponents, component =>
-        //  {
-        //    return component.catchAll || component
-        //  });
-        //});
-
-        //errorComponents.forEach(component =>
-        //{
-        //  const field = component.field;
-        //  const catchAll = component.catchAll;
-        //  const catchRemaining = component.catchRemaining;
-        //});
+        return errorComponents;
       },
 
 

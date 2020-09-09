@@ -2,8 +2,10 @@
   <ui-form v-if="!loading" ref="form" class="mediafolder" v-slot="form" @submit="onSubmit" @load="onLoad">
     <h2 class="ui-headline" v-localize="model.id ? '@media.editfolder' : '@media.addfolder'"></h2>
     <div class="mediafolder-items">
-      <input v-model="item.name" type="text" class="ui-input" maxlength="200" v-localize:placeholder="'@media.fields.foldername_placeholder'" :readonly="disabled" />
-      <!-- // TODO add parent selector -->
+      <ui-property :required="true">
+        <input v-model="item.name" type="text" class="ui-input" maxlength="80" v-localize:placeholder="'@media.fields.foldername_placeholder'" :readonly="disabled" />
+        <ui-error :catch-all="true" />
+      </ui-property>
     </div>
     <div class="app-confirm-buttons">
       <ui-button type="primary" v-if="!disabled" :submit="true" :state="form.state" :label="model.id ? '@ui.save' : '@ui.create'"></ui-button>
@@ -57,7 +59,6 @@
       {
         this.config.confirm({ deleted: true });
       }
-
     }
   }
 </script>

@@ -46,8 +46,13 @@
     methods: {
 
       // set and display errors
-      set(errors)
+      set(errors, append)
       {
+        if (!errors)
+        {
+          return this.clear();
+        }
+
         if (!_isArray(errors))
         {
           errors = [errors];
@@ -58,7 +63,17 @@
           error.id = Strings.guid();
         });
 
-        this.errors = errors;
+        if (append)
+        {
+          errors.forEach(error =>
+          {
+            this.errors.push(error);
+          });
+        }
+        else
+        {
+          this.errors = errors;
+        }
       },
 
 

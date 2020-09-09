@@ -136,17 +136,58 @@ namespace zero.Core.Extensions
           .WhereNotEquals(nameof(IZeroIdEntity.Id), entity.Id)
           .WhereEquals(context.Rule.PropertyName.ToPascalCaseId(), expectedValue)
           .AnyAsync(cancellation);
-      }).WithMessage("@errors.forms.not_unique");
+      }).WithMessage("@errors.forms.not_unique_alone");
     }
 
 
     /// <summary>
-    /// Validate one or multiple emails
+    /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
+    /// </summary>
+    public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IBackofficeStore store) where T : IZeroIdEntity
+    {
+      return ruleBuilder.Exists<T, T>(store);
+    }
+
+
+    /// <summary>
+    /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
+    /// </summary>
+    public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IBackofficeStore store) where T : IZeroIdEntity where TReference : IZeroIdEntity
+    {
+      return ruleBuilder.MustAsync(async (entity, id, context, cancellation) =>
+      {
+        if (id.IsNullOrWhiteSpace())
+        {
+          return true;
+        }
+
+        bool includeShared = typeof(IAppAwareShareableEntity).IsAssignableFrom(typeof(T));
+
+        using IAsyncDocumentSession session = store.Raven.OpenAsyncSession();
+        TReference model = await session.LoadAsync<TReference>(id);
+
+        if (typeof(IAppAwareEntity).IsAssignableFrom(typeof(TReference)))
+        {
+          return model != null && ((IAppAwareEntity)model).InScope(store.AppContext.AppId);
+        }
+
+        return model != null;
+      }).WithMessage("@errors.forms.reference_notfound");
+    }
+
+
+    /// <summary>
+    /// Validates a culture identifier
     /// </summary>
     public static IRuleBuilderOptions<T, string> Culture<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
       return ruleBuilder.Must((root, value, context) =>
       {
+        if (value.IsNullOrWhiteSpace())
+        {
+          return true;
+        }
+
         try
         {
           CultureInfo info = CultureInfo.GetCultureInfo(value);

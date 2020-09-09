@@ -16,12 +16,14 @@
       field: 'name',
       display: 'text',
       label: '@ui.name',
-      required: true
+      required: true,
+      maxLength: 120
     },
     {
       field: 'code',
       display: 'text',
-      required: true
+      required: true,
+      maxLength: 2
     },
     {
       field: 'isPreferred',

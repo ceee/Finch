@@ -6,7 +6,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Validation
 {
-  public class LanguageValidator : ZeroValidator<ILanguage, Language>
+  public class LanguageValidator : ZeroValidator<ILanguage>
   {
     public LanguageValidator(IBackofficeStore store)
     {
@@ -16,6 +16,7 @@ namespace zero.Core.Validation
       RuleFor(x => x.IsDefault).ExpectAnyUnique(store, expectedValue: true).When(x => !x.IsDefault).WithMessage("@language.errors.needs_default");
       RuleFor(x => x.InheritedLanguageId).Must((entity, value) => !entity.Id.Equals(value, StringComparison.InvariantCultureIgnoreCase)).WithMessage("@language.errors.fallback_invalid");
       RuleFor(x => x.InheritedLanguageId).Equal((string)null).When(x => x.IsDefault).WithMessage("@language.errors.default_no_fallback");
+      RuleFor(x => x.InheritedLanguageId).Exists(store);
       RuleFor(x => x.IsOptional).Equal(false).When(x => x.IsDefault).WithMessage("@language.errors.default_not_optional");
     }
   }

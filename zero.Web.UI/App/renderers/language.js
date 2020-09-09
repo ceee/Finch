@@ -16,12 +16,14 @@
       field: 'name',
       display: 'text',
       label: '@ui.name',
-      required: true
+      required: true,
+      maxLength: 60
     },
     {
       field: 'code',
       display: 'text',
-      required: true
+      required: true,
+      maxLength: 10
     },
     {
       field: 'inheritedLanguageId',

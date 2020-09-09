@@ -168,7 +168,9 @@
       "hex_format": "The input is not in a valid HEX #aabbcc format",
       "url_format": "The input is no well-formed URL",
       "not_unique": "The property must be unique in this collection",
-      "culture": "Could not find a culture for the given ISO code"
+      "not_unique_alone": "There must be at least one entity in this collection which fulfills this condition",
+      "culture": "Could not find a culture for the given ISO code",
+      "reference_notfound": "The reference could not be found"
     }
   },
 

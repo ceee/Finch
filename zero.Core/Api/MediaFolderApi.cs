@@ -1,4 +1,5 @@
-﻿using Raven.Client.Documents;
+﻿using FluentValidation;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System.Collections.Generic;
@@ -13,7 +14,13 @@ namespace zero.Core.Api
 {
   public class MediaFolderApi : AppAwareBackofficeApi, IMediaFolderApi
   {
-    public MediaFolderApi(IBackofficeStore store) : base(store) { }
+    IValidator<IMediaFolder> Validator;
+
+
+    public MediaFolderApi(IBackofficeStore store, IValidator<IMediaFolder> validator) : base(store)
+    {
+      Validator = validator;
+    }
 
 
     /// <inheritdoc />
@@ -148,7 +155,7 @@ namespace zero.Core.Api
     public async Task<EntityResult<IMediaFolder>> Save(IMediaFolder model)
     {
       model.IsActive = true;
-      return await SaveModel(model, new MediaFolderValidator());
+      return await SaveModel(model, Validator);
     }
 
 

@@ -8,7 +8,7 @@
 
     <div class="ui-property-content">    
       <slot></slot>
-      <ui-error :field="field" />
+      <ui-error v-if="field" :field="field" />
     </div>
 
   </div>
