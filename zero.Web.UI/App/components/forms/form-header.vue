@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-header-bar class="ui-form-header" :back-button="false">
+  <ui-header-bar class="ui-form-header" :back-button="true">
     <template v-slot:title>
       <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name}">
         <input class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" />
@@ -76,7 +76,7 @@
 
     > * + *
     {
-      margin-left: 16px;
+      margin-left: var(--padding-s);
     }
   }
 
@@ -87,6 +87,8 @@
     align-items: center;
     position: relative;
     top: -1px;
+    margin-left: var(--padding-s);
+    margin-right: var(--padding-s);
 
     .ui-toggle-switch, .ui-toggle-switch.is-active
     {

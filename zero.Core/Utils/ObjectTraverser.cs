@@ -143,7 +143,7 @@ namespace zero.Core.Utils
       }
 
       // check if our property is a primitive type
-      if (value == null || value.GetType().IsPrimitive || value is string || value is DateTime || value is DateTimeOffset)
+      if (value == null || value.GetType().IsPrimitive || value is string || value is DateTime || value is DateTimeOffset || value is Uri)
       {
         return;
       }

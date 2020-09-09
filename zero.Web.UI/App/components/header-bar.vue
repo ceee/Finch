@@ -110,7 +110,7 @@
 
     .ui-icon-button
     {
-      margin-right: 16px;
+      margin-right: var(--padding-s);
     }
   }
 
@@ -125,11 +125,11 @@
     align-items: center;
     height: 100%;
     flex-shrink: 0;
-    padding-left: 40px;
+    padding-left: var(--padding-s);
 
     > * + *
     {
-      margin-left: 15px;
+      margin-left: var(--padding-s);
     }
   }
 
