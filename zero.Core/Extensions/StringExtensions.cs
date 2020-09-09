@@ -89,6 +89,15 @@ namespace zero.Core.Extensions
       return input;
     }
 
+    public static string ToPascalCase(this string input)
+    {
+      if (!String.IsNullOrEmpty(input) && input.Length > 1)
+      {
+        return Char.ToUpperInvariant(input[0]) + input.Substring(1);
+      }
+      return input;
+    }
+
     public static string ToCamelCaseId(this string input)
     {
       if (String.IsNullOrEmpty(input))
@@ -104,6 +113,24 @@ namespace zero.Core.Extensions
       string[] parts = input.Split('.');
 
       return String.Join(".", parts.Select(x => x.ToCamelCase()));
+    }
+
+
+    public static string ToPascalCaseId(this string input)
+    {
+      if (String.IsNullOrEmpty(input))
+      {
+        return input;
+      }
+
+      if (input.Length < 2)
+      {
+        return input.ToUpperInvariant();
+      }
+
+      string[] parts = input.Split('.');
+
+      return String.Join(".", parts.Select(x => x.ToPascalCase()));
     }
   }
 }

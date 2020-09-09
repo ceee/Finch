@@ -10,17 +10,6 @@ namespace zero.Core.Validation
 {
   public abstract class ZeroValidator<TInterface, TImplementation> : AbstractValidator<TImplementation>, IValidator<TInterface> where TImplementation : TInterface
   {
-    protected IBackofficeStore Store { get; private set; }
-
-    protected IDocumentStore Raven { get; private set; }
-
-
-    public ZeroValidator(IBackofficeStore store)
-    {
-      Store = store;
-      Raven = store.Raven;
-    }
-
     public ValidationResult Validate(TInterface instance)
     {
       if (!(instance is TImplementation))

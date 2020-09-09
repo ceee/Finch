@@ -100,19 +100,21 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this value is unique within a collection
     /// </summary>
-    public static IRuleBuilderOptions<T, object> Unique<T>(this IRuleBuilder<T, object> ruleBuilder, IBackofficeStore store, bool includeShared = true) where T : IZeroIdEntity
+    public static IRuleBuilderOptions<T, object> Unique<T>(this IRuleBuilder<T, object> ruleBuilder, IBackofficeStore store) where T : IZeroIdEntity
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
+        bool includeShared = typeof(IAppAwareShareableEntity).IsAssignableFrom(typeof(T));
+
         using IAsyncDocumentSession session = store.Raven.OpenAsyncSession();
 
-        int count = await session.Advanced.AsyncDocumentQuery<T>()
-          .WhereNotEquals("Id", ((T)entity).Id, true)
-          .WhereEquals(context.Rule.PropertyName, value, true)
-          .CountAsync();
+        bool any = await session.Advanced.AsyncDocumentQuery<T>()
+          .Scope(store.AppContext.AppId, includeShared)
+          .WhereNotEquals(nameof(IZeroIdEntity.Id), entity.Id)
+          .WhereEquals(context.Rule.PropertyName.ToPascalCaseId(), value)
+          .AnyAsync(cancellation);
 
-        return count < 1;
-          //.Scope(store.AppContext.AppId, includeShared)
+        return !any;
       }).WithMessage("@errors.forms.not_unique");
     }
   }

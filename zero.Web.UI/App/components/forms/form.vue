@@ -169,6 +169,7 @@
                 {
                   this.setState('success');
                   this.setDirty(false);
+                  this.setErrors(null);
                   resolve(response);
 
                   if (response.model && this.route && this.$route.name !== this.route)
