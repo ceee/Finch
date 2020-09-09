@@ -146,6 +146,15 @@
       line-height: 1.5;
       color: var(--color-text);
       border-radius: var(--radius);
+      border: 1px solid transparent;
+
+      &:focus-within
+      {
+        background: var(--color-input-focus-bg) !important;
+        border: var(--color-input-focus-border);
+        box-shadow: var(--color-input-focus-shadow);
+        outline: none;
+      }
     }
 
     .pell, .pell-content, .pell-raw
