@@ -70,6 +70,9 @@
   --color-toggle-fg: #{$color-fg};
   --color-toggled: #{$color-bg-shade-3};
   --color-toggled-fg: #{$color-fg};
+  --color-input-focus-bg: #{$color-bg-shade-1};
+  --color-input-focus-border: 1px solid #{$color-bg-shade-5}; 
+  --color-input-focus-shadow: 0 0 0 4px #{$color-bg-shade-2};
 
   // lines
   --color-line: #{$color-bg-shade-3};

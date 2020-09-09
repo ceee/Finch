@@ -18,8 +18,7 @@ textarea, .ui-native-select
 {
   @extend %font;
   background: var(--color-input);
-  //border: 1px solid var(--color-bg-bright-three);
-  border: none;
+  border: 1px solid transparent;
   font-size: var(--font-size);
   display: inline-block;
   height: 42px;
@@ -33,8 +32,10 @@ textarea, .ui-native-select
 
   &:focus
   {
-    /*border-color: var(--color-accent-info-bg);
-    box-shadow: 0 0 0 4px var(--color-accent-info-bg);*/
+    background-color: var(--color-input-focus-bg);
+    border: var(--color-input-focus-border);
+    box-shadow: var(--color-input-focus-shadow);
+    outline: none;
   }
 
   &[disabled], &[readonly]
@@ -43,6 +44,14 @@ textarea, .ui-native-select
     padding: 0;
     height: auto;
   }
+}
+
+select:focus
+{
+  /*background-color: #fff;
+  border: 1px solid var(--color-line-onbg);
+  box-shadow: 0 0 0 4px var(--color-input);*/
+  outline: none;
 }
 
 
@@ -78,7 +87,17 @@ textarea
     border: none;
     font-size: var(--font-size);
     background: none;
+    border: 1px solid transparent;
     color: var(--color-text);
+    border-radius: var(--radius);
+  }
+
+  select:focus
+  {
+    background-color: var(--color-input-focus-bg);
+    border: var(--color-input-focus-border);
+    box-shadow: var(--color-input-focus-shadow);
+    outline: none;
   }
 
   &:after
@@ -129,6 +148,7 @@ textarea
   line-height: 18px;
   text-align: center;
   border-radius: 2px;
+  border: 1px solid transparent;
   background: var(--color-check);
   margin-right: 10px;
   position: relative;
@@ -140,6 +160,14 @@ textarea
     @extend %font-icon;
     color: transparent;
     font-size: var(--font-size-xs);
+  }
+
+  input:focus ~ &
+  {
+    background: var(--color-input-focus-bg) !important;
+    border: var(--color-input-focus-border);
+    box-shadow: var(--color-input-focus-shadow);
+    outline: none;
   }
 
   input:checked ~ &

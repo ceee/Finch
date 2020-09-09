@@ -112,6 +112,7 @@
     width: 36px;
     background: var(--color-toggle);
     border-radius: 20px;
+    border: 1px solid transparent;
     transition: all 0.2s ease;
     z-index: 1;
     pointer-events: none;
@@ -122,7 +123,7 @@
       height: 16px;
       width: 16px;
       border-radius: 20px;
-      margin: 3px;
+      margin: 2px;
       background: var(--color-toggle-fg);
       transition: all 0.2s ease;
     }
@@ -136,6 +137,14 @@
     {
       background: var(--color-toggled-fg);
       transform: translateX(14px);
+    }
+
+    input:focus + &
+    {
+      background-color: var(--color-input-focus-bg);
+      border: var(--color-input-focus-border);
+      box-shadow: var(--color-input-focus-shadow);
+      outline: none;
     }
   }
 
