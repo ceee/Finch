@@ -1,10 +1,10 @@
 ﻿<template>
   <div class="ui-colorpicker" :class="{'is-disabled': disabled }">
     <label class="ui-colorpicker-color" :for="id">
-      <span class="ui-colorpicker-color-preview" :style="{ 'background-color': value }"></span>
+      <span class="ui-colorpicker-color-preview" :style="{ 'background-color': value || 'var(--color-box)' }"></span>
       <input :id="id" type="color" :value="value" :disabled="disabled" @input="onChange" />
     </label>
-    <input type="text" maxlength="7" class="ui-colorpicker-input" :value="value" @input="onChange" :disabled="disabled" />
+    <input type="text" maxlength="7" class="ui-colorpicker-input" :value="value" @input="onChange" :disabled="disabled" v-localize:placeholder="'@colorpicker.placeholder'" />
   </div>
 </template>
 
@@ -75,10 +75,10 @@
     position: absolute;
     overflow: hidden;
     width: 32px;
-    height: 32px;
+    height: 100%;
     border-radius: 3px;
     left: 0;
-    top: 0;
+    top: -1px;
     padding: 0 !important;
     cursor: pointer;
   }
@@ -87,17 +87,12 @@
   {
     position: absolute;
     left: 12px;
-    top: 8px;
+    top: 50%;
+    margin-top: -8px;
     width: 16px;
     height: 16px;
     border-radius: 2px;
-  }
-
-  .ui-colorpicker-color-preview[style="background-color: #ffffff;"],
-  .ui-colorpicker-color-preview[style="background-color: #fff;"],
-  .ui-colorpicker-color-preview[style="background-color: rgb(255, 255, 255);"]
-  {
-    box-shadow: 0 0 2px 0 #d2d2d2;
+    box-shadow: var(--shadow-short);
   }
 
   .ui-colorpicker-color input
