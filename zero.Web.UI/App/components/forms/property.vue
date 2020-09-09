@@ -98,6 +98,11 @@
     font-size: var(--font-size);
     line-height: 1.5;
     font-weight: 700;
+
+    /*.ui-property:focus-within &
+    {
+      color: var(--color-accent-info);
+    }*/
   }
 
   .ui-property-label small

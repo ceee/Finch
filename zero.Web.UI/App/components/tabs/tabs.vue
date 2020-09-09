@@ -151,6 +151,7 @@
       font-weight: 700;
       color: var(--color-text);
       background: var(--color-box);
+      box-shadow: var(--shadow-short);
 
       .ui-tabs-list-item-count
       {
@@ -178,17 +179,16 @@
       }
     }
 
-    &:first-child.is-active:before
+    &.is-active:after
     {
       content: '';
       position: absolute;
-      display: inline-block;
-      background: var(--color-box);
       left: 0;
-      bottom: -8px;
-      height: 8px;
-      width: 8px;
-      z-index: 0;
+      right: 0;
+      bottom: -4px;
+      height: 5px;
+      background: var(--color-box);
+      z-index: 1;
     }
   }
 
