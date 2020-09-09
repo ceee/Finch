@@ -66,9 +66,9 @@
           component: AddOverlay,
           width: 700,
           model: { id }
-        }).then(() =>
+        }).then(res =>
         {
-
+          this.$router.go(-1);
         }, () =>
         {
           this.$router.go(-1);

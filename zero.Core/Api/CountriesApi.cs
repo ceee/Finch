@@ -1,9 +1,7 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Entities;

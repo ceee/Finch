@@ -1,13 +1,15 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Results;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using zero.Core.Api;
-using Raven.Client.Documents;
 
 namespace zero.Core.Validation
 {
+  public abstract class ZeroValidator<TInterface> : ZeroValidator<TInterface, TInterface>
+  {
+  }
+
   public abstract class ZeroValidator<TInterface, TImplementation> : AbstractValidator<TImplementation>, IValidator<TInterface> where TImplementation : TInterface
   {
     public ValidationResult Validate(TInterface instance)

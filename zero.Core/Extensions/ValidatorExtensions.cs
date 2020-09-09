@@ -2,6 +2,7 @@
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -100,7 +101,7 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this value is unique within a collection
     /// </summary>
-    public static IRuleBuilderOptions<T, object> Unique<T>(this IRuleBuilder<T, object> ruleBuilder, IBackofficeStore store) where T : IZeroIdEntity
+    public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IBackofficeStore store) where T : IZeroIdEntity
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
@@ -116,6 +117,46 @@ namespace zero.Core.Extensions
 
         return !any;
       }).WithMessage("@errors.forms.not_unique");
+    }
+
+
+    /// <summary>
+    /// Check if this value is at least set once to the expected value within a collection
+    /// </summary>
+    public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IBackofficeStore store, TProperty expectedValue) where T : IZeroIdEntity
+    {
+      return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
+      {
+        bool includeShared = typeof(IAppAwareShareableEntity).IsAssignableFrom(typeof(T));
+
+        using IAsyncDocumentSession session = store.Raven.OpenAsyncSession();
+
+        return await session.Advanced.AsyncDocumentQuery<T>()
+          .Scope(store.AppContext.AppId, includeShared)
+          .WhereNotEquals(nameof(IZeroIdEntity.Id), entity.Id)
+          .WhereEquals(context.Rule.PropertyName.ToPascalCaseId(), expectedValue)
+          .AnyAsync(cancellation);
+      }).WithMessage("@errors.forms.not_unique");
+    }
+
+
+    /// <summary>
+    /// Validate one or multiple emails
+    /// </summary>
+    public static IRuleBuilderOptions<T, string> Culture<T>(this IRuleBuilder<T, string> ruleBuilder)
+    {
+      return ruleBuilder.Must((root, value, context) =>
+      {
+        try
+        {
+          CultureInfo info = CultureInfo.GetCultureInfo(value);
+          return info != null && !info.EnglishName.Equals(value, StringComparison.InvariantCultureIgnoreCase);
+        }
+        catch
+        {
+          return false;
+        }
+      }).WithMessage("@errors.forms.culture");
     }
   }
 }

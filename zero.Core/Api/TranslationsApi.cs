@@ -12,12 +12,13 @@ namespace zero.Core.Api
 {
   public class TranslationsApi : AppAwareBackofficeApi, ITranslationsApi
   {
-    //IValidator<ITranslation> Validator;
+    IValidator<ITranslation> Validator;
 
 
-    public TranslationsApi(IBackofficeStore store) : base(store)
+    public TranslationsApi(IBackofficeStore store, IValidator<ITranslation> validator) : base(store)
     {
       Scope.IncludeShared = true;
+      Validator = validator;
     }
 
 
@@ -56,7 +57,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<ITranslation>> Save(ITranslation model)
     {
-      return await SaveModel(model, null);
+      return await SaveModel(model, Validator);
     }
 
 

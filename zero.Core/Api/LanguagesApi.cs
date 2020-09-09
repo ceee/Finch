@@ -17,10 +17,10 @@ namespace zero.Core.Api
     protected IValidator<ILanguage> Validator { get; private set; }
 
 
-    public LanguagesApi(IBackofficeStore store) : base(store)
+    public LanguagesApi(IBackofficeStore store, IValidator<ILanguage> validator) : base(store)
     {
       Scope.IncludeShared = true;
-      Validator = null;
+      Validator = validator;
     }
 
 

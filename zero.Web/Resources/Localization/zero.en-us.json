@@ -167,7 +167,8 @@
       "emails_invalid": "The email address(es) is/are not valid",
       "hex_format": "The input is not in a valid HEX #aabbcc format",
       "url_format": "The input is no well-formed URL",
-      "not_unique": "The property must be unique in this collection"
+      "not_unique": "The property must be unique in this collection",
+      "culture": "Could not find a culture for the given ISO code"
     }
   },
 
@@ -438,6 +439,13 @@
       "isOptional_text": "Values for an optional language must not be entered, even if the field is required",
       "inheritedLanguageId": "Fallback",
       "inheritedLanguageId_text": "To allow multi-lingual content to fall back to another language if not present in the requested language, select it here"
+    },
+    "errors": {
+      "fallback_invalid": "Select a different language as a fallback",
+      "default_unique": "There is already another language which is set as the default",
+      "default_not_optional": "The default language can't be set as optional",
+      "default_no_fallback": "The default language can't have a fallback",
+      "needs_default": "At least one language has to be set as the default"
     }
   },
 

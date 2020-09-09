@@ -1,16 +1,16 @@
 ﻿using FluentValidation;
+using zero.Core.Api;
 using zero.Core.Entities;
-using zero.Core.Entities.Setup;
 using zero.Core.Extensions;
 
 namespace zero.Core.Validation
 {
-  public class TranslationValidator : AbstractValidator<Translation>
+  public class TranslationValidator : ZeroValidator<ITranslation>
   {
-    public TranslationValidator()
+    public TranslationValidator(IBackofficeStore store)
     {
-      //RuleFor(x => x.Code).Length(2);
-      //RuleFor(x => x.Name).Length(2, 120);
+      RuleFor(x => x.Key).Length(2, 300).Unique(store);
+      RuleFor(x => x.Value).MaximumLength(10 * 1000);
     }
   }
 }
