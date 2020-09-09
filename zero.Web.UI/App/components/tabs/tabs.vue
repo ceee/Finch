@@ -1,9 +1,9 @@
 ﻿<template>
   <div class="ui-tabs">
     <div role="tablist" class="ui-tabs-list">
-      <button type="button" v-for="(tab, index) in tabs" class="ui-tabs-list-item" :key="index" :class="{ 'is-active': tab.active, 'has-errors': tab.error }" :disabled="tab.disabled" 
+      <button type="button" v-for="(tab, index) in tabs" class="ui-tabs-list-item" :key="index" :class="{ 'is-active': tab.active, 'has-errors': tab.hasErrors }" :disabled="tab.disabled" 
               :aria-selected="tab.active" role="tab" @click="select(index)">
-        <i v-if="tab.error" class="ui-tabs-list-item-error fth-alert-circle"></i>
+        <i v-if="tab.hasErrors" class="ui-tabs-list-item-error fth-alert-circle"></i>
         {{ tab.label | localize }}
         <i v-if="tab.count > 0" class="ui-tabs-list-item-count">{{tab.count}}</i>
       </button>

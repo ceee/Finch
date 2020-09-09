@@ -12,25 +12,18 @@ namespace zero.Web.Controllers
   {
     IUserApi Api;
     IAuthenticationApi AuthenticationApi;
-    IUserRolesApi RolesApi;
-    ILanguagesApi LanguagesApi;
     IPermissionsApi PermissionsApi;
 
 
-    public UsersController(IUserApi api, IAuthenticationApi authenticationApi, IUserRolesApi rolesApi, ILanguagesApi languagesApi, IPermissionsApi permissionsApi)
+    public UsersController(IUserApi api, IAuthenticationApi authenticationApi, IPermissionsApi permissionsApi)
     {
       Api = api;
       AuthenticationApi = authenticationApi;
-      RolesApi = rolesApi;
-      LanguagesApi = languagesApi;
       PermissionsApi = permissionsApi;
     }
 
 
     public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetUserById(id));
-
-
-    public IActionResult GetSupportedCultures() => Json(LanguagesApi.GetAllCultures(Options.SupportedLanguages));
 
 
     public async Task<IActionResult> GetAll([FromQuery] ListQuery<IUser> query) => Json(await Api.GetByQuery(query));

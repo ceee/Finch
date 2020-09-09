@@ -6,6 +6,8 @@
 
 
 <script>
+  import Strings from 'zero/services/strings';
+
   export default {
     name: 'uiTab',
 
@@ -25,8 +27,10 @@
     },
 
     data: () => ({
+      id: null,
       loaded: false,
-      active: false
+      active: false,
+      hasErrors: false
     }),
 
     watch: {
@@ -38,10 +42,23 @@
 
     mounted ()
     {
+      this.id = Strings.guid();
       this.loaded = this.active;
     },
 
     methods: {
+
+      // set and display errors
+      setErrors(errors, append)
+      {
+        this.hasErrors = !!errors;
+      },
+
+      // clear errors and hide
+      clearErrors()
+      {
+        this.hasErrors = false;
+      }
 
     }
   }

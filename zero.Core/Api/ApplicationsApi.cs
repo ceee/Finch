@@ -13,9 +13,9 @@ namespace zero.Core.Api
     IValidator<IApplication> Validator;
 
 
-    public ApplicationsApi(IBackofficeStore store) : base(store)
+    public ApplicationsApi(IBackofficeStore store, IValidator<IApplication> validator) : base(store)
     {
-      Validator = null;
+      Validator = validator;
     }
 
 

@@ -275,7 +275,12 @@
       {
         this.getErrorComponents().forEach(component =>
         {
-          component.clear();
+          component.clearErrors();
+
+          if (component.tab)
+          {
+            component.tab.clearErrors();
+          }
         });
       },
 
@@ -305,7 +310,12 @@
           if (field && errorGroups[field])
           {
             handledGroups.push(field);
-            component.set(errorGroups[field]);
+            component.setErrors(errorGroups[field]);
+
+            if (component.tab)
+            {
+              component.tab.setErrors(true);
+            }
           }
         });
 
@@ -318,7 +328,12 @@
             {
               if (component.catchRemaining || component.catchAll)
               {
-                component.set(errorGroup, true);
+                component.setErrors(errorGroup, true);
+
+                if (component.tab)
+                {
+                  component.tab.setErrors(true);
+                }
               }
             });
           }
@@ -332,17 +347,26 @@
         let errorComponents = [];
 
         // find components which can output errors
-        let traverseChildren = parent =>
+        let traverseChildren = (parent, tab) =>
         {
           parent.$children.forEach(component =>
           {
             if (this.errorComponents.indexOf(component.$options.name) > -1)
             {
-              errorComponents.push(component);
+              errorComponents.push({
+                name: component.$options.name,
+                field: component.field,
+                catchAll: component.catchAll,
+                catchRemaining: component.catchRemaining,
+                component: component,
+                setErrors: component.setErrors,
+                clearErrors: component.clearErrors,
+                tab: tab
+              });
             }
             else
             {
-              traverseChildren(component);
+              traverseChildren(component, tab || (component.$options.name === 'uiTab' ? component : null));
             }
           });
         };

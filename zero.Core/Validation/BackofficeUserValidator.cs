@@ -4,14 +4,14 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Validation
 {
-  public class BackofficeUserValidator : AbstractValidator<IUser>
+  public class BackofficeUserValidator : ZeroValidator<IUser>
   {
     public BackofficeUserValidator(bool isCreate = false)
     {
-      RuleFor(x => x.Name).NotEmpty();
-      RuleFor(x => x.Email).Email();
+      RuleFor(x => x.Name).Length(2, 80);
+      RuleFor(x => x.Email).NotEmpty().Email().MaximumLength(120);
       RuleFor(x => x.PasswordHash).NotEmpty();
-      RuleFor(x => x.LanguageId).NotEmpty(); // TODO only allow available languages
+      RuleFor(x => x.LanguageId).NotEmpty();
       RuleFor(x => x.Roles).NotEmpty();
 
       if (isCreate)

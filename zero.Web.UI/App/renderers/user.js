@@ -37,12 +37,14 @@ export default {
       field: 'name',
       display: 'text',
       label: '@ui.name',
-      required: true
+      required: true,
+      maxLength: 80
     },
     {
       field: 'email',
       display: 'text',
-      required: true
+      required: true,
+      maxLength: 120
     },
     {
       field: 'languageId',

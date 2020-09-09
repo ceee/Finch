@@ -46,11 +46,11 @@
     methods: {
 
       // set and display errors
-      set(errors, append)
+      setErrors(errors, append)
       {
         if (!errors)
         {
-          return this.clear();
+          return this.clearErrors();
         }
 
         if (!_isArray(errors))
@@ -78,7 +78,7 @@
 
 
       // clear errors and hide
-      clear()
+      clearErrors()
       {
         this.errors = [];
       }

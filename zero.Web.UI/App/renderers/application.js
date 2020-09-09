@@ -33,16 +33,19 @@
       field: 'name',
       display: 'text',
       label: '@ui.name',
-      required: true
+      required: true,
+      maxLength: 50
     },
     {
       field: 'fullName',
-      display: 'text'
+      display: 'text',
+      maxLength: 120
     },
     {
       field: 'email',
       display: 'text',
-      required: true
+      required: true,
+      maxLength: 120
     },
     {
       field: 'imageId',
@@ -59,6 +62,7 @@
       tab: 'domains',
       field: 'domains',
       display: 'inputList',
+      required: true,
       limit: 10,
       addLabel: '@application.fields.domains_add',
       helpText: '@application.fields.domains_help'
