@@ -154,6 +154,13 @@
         border: var(--color-input-focus-border);
         box-shadow: var(--color-input-focus-shadow);
         outline: none;
+
+        .pell-button:hover,
+        .pell-button-selected
+        {
+          background: var(--color-box-nested);
+          color: var(--color-text);
+        }
       }
     }
 
@@ -227,14 +234,10 @@
       margin-left: 15px;
     }
 
-    .pell-button:hover
-    {
-      background: var(--color-box);
-    }
-
+    .pell-button:hover,
     .pell-button-selected
     {
-      background-color: var(--color-box);
+      background: var(--color-box);
       color: var(--color-text);
     }
   }

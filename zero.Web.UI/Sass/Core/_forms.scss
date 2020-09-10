@@ -143,23 +143,23 @@ textarea
 .ui-native-check-toggle
 {
   display: inline-block;
-  width: 18px;
-  height: 18px;
-  line-height: 18px;
+  width: 22px;
+  height: 22px;
+  line-height: 21px;
   text-align: center;
-  border-radius: 2px;
+  border-radius: var(--radius);
   border: 1px solid transparent;
   background: var(--color-check);
   margin-right: 10px;
   position: relative;
-  top: -1px;
+  top: 0;
 
   &:before
   {
     content: "\e83f";
     @extend %font-icon;
     color: transparent;
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-s);
   }
 
   input:focus ~ &

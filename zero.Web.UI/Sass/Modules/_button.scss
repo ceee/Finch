@@ -332,8 +332,14 @@ button::-moz-focus-inner
   margin-left: 16px;
 }
 
-.ui-select-button-label
+strong.ui-select-button-label
 {
+  font-weight: 400;
+
+  b, strong
+  {
+    font-weight: 400;
+  }
 }
 
 .ui-select-button-description
