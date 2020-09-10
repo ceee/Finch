@@ -38,17 +38,11 @@ a, a:visited, a:link
   //transition: color .2s, transform .2s, background .2s;
 }
 
-a:focus
-{
-  /*outline: 1px dotted #c3184e;*/
-  outline: none;
-}
 
 button
 {
   -webkit-appearance: none;
   border: none;
-  outline: none;
   background: transparent;
   cursor: pointer;
   padding: 0;
@@ -145,6 +139,17 @@ li > *
 	margin: 0 !important;
 	padding: 0 !important;
 	display: inline;
+}
+
+// remove outline from active elements
+
+a[href], button
+{
+  &:focus
+  {
+    outline: var(--color-button-focus-outline);
+    outline-offset: 2px;
+  }
 }
 
 

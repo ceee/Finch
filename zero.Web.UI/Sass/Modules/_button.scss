@@ -4,18 +4,12 @@ button
 {
   @extend %font;
   color: var(--color-text);
-  outline: 0 solid transparent !important;
   display: inline-block;
   font-size: var(--font-size);
 
   &:visited, &:link
   {
     text-decoration: none;
-  }
-
-  &:focus, &:active
-  {
-    outline: 0 solid transparent !important;
   }
 
   &[disabled]
@@ -48,11 +42,8 @@ button::-moz-focus-inner
   -webkit-appearance: none;
   cursor: pointer;
   user-select: none;
-  border: 1px solid transparent;
-  will-change: transform, background, border-color;
-  transition: background .2s, transform .2s, opacity .2s;
+  border: none;
   overflow: hidden;
-  outline: 0 solid transparent !important;
   @extend %font;
 
   &:hover
@@ -63,13 +54,6 @@ button::-moz-focus-inner
   &:active
   {
     opacity: 1;
-  }
-
-  &:focus
-  {
-    border: var(--color-button-focus-border) !important;
-    box-shadow: var(--color-button-focus-shadow) !important;
-    outline: none !important;
   }
 
   &[disabled]
@@ -98,25 +82,12 @@ button::-moz-focus-inner
     border: 1px solid transparent;
   }
 
-  &.type-light:focus
-  {
-    border: var(--color-button-light-focus-border) !important;
-    box-shadow: var(--color-button-light-focus-shadow) !important;
-    outline: none !important;
-  }
 
   &.type-light.type-onbg, &.type-action.type-onbg
   {
     background: var(--color-button-light-onbg);
     color: var(--color-text);
     box-shadow: var(--shadow-short);
-  }
-
-  &.type-light.type-onbg:focus
-  {
-    border: var(--color-button-light-onbg-focus-border) !important;
-    box-shadow: var(--color-button-light-onbg-focus-shadow) !important;
-    outline: none !important;
   }
 
   &.type-danger

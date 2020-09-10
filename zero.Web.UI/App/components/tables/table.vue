@@ -330,21 +330,14 @@
     width: 100%;
     border-bottom: 1px solid var(--color-table-line-horizontal);
     position: relative;
-    outline: 1px solid transparent;
     transition: outline 0.1s ease, box-shadow 0.1s ease;
+
     &:last-child
     {
       border-bottom: none;
     }
   }
 
-  /*.ui-table-row:not(.ui-table-head):hover
-  {
-    box-shadow: 0 0 5px 4px var(--color-shadow);
-    z-index: 1;
-    outline: 1px solid var(--color-line);
-    border-bottom-color: transparent;
-  }*/
 
   .ui-table-head
   {

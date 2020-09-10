@@ -173,7 +173,7 @@
     .pell-raw-content
     {
       min-height: 60px;
-      outline: 0;
+      outline: none;
       overflow-y: auto;
       padding: 6px 12px 12px;
       max-height: 400px;
@@ -218,22 +218,13 @@
     .pell-button
     {
       background-color: transparent;
-      border: 1px solid transparent;
       cursor: pointer;
       height: 30px;
-      outline: 0;
       width: 30px;
       text-align: center;
       border-radius: 5px;
       font-size: 14px;
       vertical-align: bottom;
-
-      &:focus
-      {
-        border: var(--color-button-light-focus-border) !important;
-        box-shadow: var(--color-button-light-focus-shadow) !important;
-        outline: none !important;
-      }
     }
 
     .pell-button + .pell-button

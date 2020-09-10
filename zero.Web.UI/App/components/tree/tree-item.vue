@@ -179,7 +179,6 @@
     width: 30px;
     text-align: right;
     padding-right: 5px;
-    outline: none !important;
     transition: color 0.2s ease;
 
     &:hover
@@ -253,5 +252,10 @@
     transition: opacity 0.2s ease 0;
     opacity: 0;
     color: var(--color-text-dim);
+
+    &:focus
+    {
+      opacity: 1;
+    }
   }
 </style>

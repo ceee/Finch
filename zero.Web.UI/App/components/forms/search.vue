@@ -82,18 +82,12 @@
       border-radius: var(--radius);
     }
 
-    .ui-input:focus, .ui-searchinput-button:focus
+    .ui-input:focus
     {
-      border: var(--color-button-light-focus-border);
-      box-shadow: var(--color-button-light-focus-shadow);
-      outline: none !important;
-    }
-
-    &.onbg .ui-input:focus,
-    &.onbg .ui-searchinput-button:focus
-    {
-      border: var(--color-button-light-onbg-focus-border);
-      box-shadow: var(--color-button-light-onbg-focus-shadow);
+      background-color: var(--color-input-focus-bg);
+      border: var(--color-input-focus-border);
+      box-shadow: var(--color-input-focus-shadow);
+      outline: none;
     }
   }
 </style>

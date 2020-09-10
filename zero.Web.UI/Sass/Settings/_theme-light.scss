@@ -21,6 +21,7 @@
   $color-bg-shade-4: #efeff1; // bright-three
   $color-bg-shade-5: #e6e6e8;
   $color-bg-shade-6: #d2d2d7;
+  $color-bg-shade-7: #87878a;
 
   // misc colors
   $color-overlay-shade: rgba(0, 0, 0, 0.15);
@@ -56,15 +57,10 @@
 
   // buttons
   --color-button: #{$color-primary};
-  --color-button-focus-border: 1px solid transparent; 
-  --color-button-focus-shadow: 0 0 0 4px #{$color-primary-low};
   --color-button-text: #{$color-primary-fg};
   --color-button-light: #{$color-bg-shade-2};
-  --color-button-light-focus-border: 1px solid #{$color-bg-shade-5}; 
-  --color-button-light-focus-shadow: 0 0 0 4px #{$color-bg-shade-3};
   --color-button-light-onbg: #{$color-bg-shade-1};
-  --color-button-light-onbg-focus-border: 1px solid #{$color-bg-shade-6}; 
-  --color-button-light-onbg-focus-shadow: 0 0 0 4px #{$color-bg-shade-5};
+  --color-button-focus-outline: 1px dotted #{$color-bg-shade-7};
 
   // forms
   --color-input: #{$color-bg-shade-2};

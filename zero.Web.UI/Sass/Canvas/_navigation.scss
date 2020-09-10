@@ -13,17 +13,14 @@
   grid-template-rows: auto auto 1fr auto;
   border-radius: var(--radius);
   box-shadow: var(--shadow-short);
-
-  a, button
-  {
-    outline: 0 solid transparent !important;
-  }
 }
 
 .app-nav-inner
 {
   overflow-y: auto;
   overflow-x: hidden;
+  padding-top: 3px;
+  margin-top: -3px;
 }
 
 .app-nav-headline
