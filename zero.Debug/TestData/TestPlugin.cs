@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using zero.Core.Options;
 using zero.Core.Plugins;
@@ -37,7 +38,7 @@ namespace zero.TestData
       zero.Modules.Add<NestedModule>("nested", "Nested", "Add nested modules", "fth-layers", "Misc");
     }
 
-    public void ConfigureServices(IServiceCollection services)
+    public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
       //services.Replace<IChannel, SalesChannel>();
       services.AddTransient<ITestService, TestService>();

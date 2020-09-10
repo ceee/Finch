@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using zero.Core.Api;
 using zero.Core.Entities;
@@ -13,7 +14,7 @@ namespace zero.Web.Defaults
 {
   internal class ZeroBackofficePlugin : IZeroPlugin
   {
-    public void ConfigureServices(IServiceCollection services) 
+    public void ConfigureServices(IServiceCollection services, IConfiguration configuration) 
     {
       services.AddAll(typeof(IValidator<>), ServiceLifetime.Scoped);
       //services.AddAll(typeof(IValidator), ServiceLifetime.Scoped);

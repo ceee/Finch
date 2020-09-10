@@ -48,7 +48,7 @@ button::-moz-focus-inner
   -webkit-appearance: none;
   cursor: pointer;
   user-select: none;
-  border: none;
+  border: 1px solid transparent;
   will-change: transform, background, border-color;
   transition: background .2s, transform .2s, opacity .2s;
   overflow: hidden;
@@ -60,14 +60,16 @@ button::-moz-focus-inner
     opacity: 0.9;
   }
 
-  &:focus, &:active
-  {
-    outline: none !important;
-  }
-
   &:active
   {
     opacity: 1;
+  }
+
+  &:focus
+  {
+    border: var(--color-button-focus-border) !important;
+    box-shadow: var(--color-button-focus-shadow) !important;
+    outline: none !important;
   }
 
   &[disabled]
@@ -93,29 +95,40 @@ button::-moz-focus-inner
   {
     background: var(--color-button-light);
     color: var(--color-text);
-    border: none;
+    border: 1px solid transparent;
+  }
+
+  &.type-light:focus
+  {
+    border: var(--color-button-light-focus-border) !important;
+    box-shadow: var(--color-button-light-focus-shadow) !important;
+    outline: none !important;
   }
 
   &.type-light.type-onbg, &.type-action.type-onbg
   {
     background: var(--color-button-light-onbg);
     color: var(--color-text);
-    border: none;
     box-shadow: var(--shadow-short);
+  }
+
+  &.type-light.type-onbg:focus
+  {
+    border: var(--color-button-light-onbg-focus-border) !important;
+    box-shadow: var(--color-button-light-onbg-focus-shadow) !important;
+    outline: none !important;
   }
 
   &.type-danger
   {
     background: var(--color-accent-error);
     color: white;
-    border: none;
   }
 
   &.type-blank
   {
     background: transparent;
     color: var(--color-text);
-    border: none;
     padding: 0 16px;
   }
 

@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-property v-if="fulfillsCondition" :field="config.field" :label="label" :hide-label="config.hideLabel" :description="description" :required="config.required" :class="classList" :is-text="view === 'output'">
+  <ui-property v-if="!isHidden" :field="config.field" :label="label" :hide-label="config.hideLabel" :description="description" :required="config.required" :class="classList" :is-text="view === 'output'">
     <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" :entity="value" @input="onChange" :meta="meta" :disabled="config.disabled" :depth="depth" />
     <p v-if="config.helpText" class="ui-property-help" v-localize="config.helpText"></p>
   </ui-property>
@@ -20,7 +20,11 @@
       },
       config: {
         type: Object,
-        required: true
+        required: true,
+        default: () =>
+        {
+          hidden: false
+        }
       },
       renderer: {
         type: Object,
@@ -83,9 +87,9 @@
       {
         
       },
-      fulfillsCondition()
+      isHidden()
       {
-        return typeof this.config.condition !== 'function' || this.config.condition(this.value);
+        return this.config.hidden || (typeof this.config.condition === 'function' && !this.config.condition(this.value));
       }
     },
 

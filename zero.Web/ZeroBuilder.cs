@@ -253,7 +253,7 @@ namespace zero.Web
       {
         T plugin = new T();
 
-        plugin.ConfigureServices(Services);
+        plugin.ConfigureServices(Services, Configuration);
 
         Services.Configure<ZeroOptions>(opts => plugin.Configure(new ZeroPluginOptions(), opts));
       }

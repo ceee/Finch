@@ -218,7 +218,7 @@
     .pell-button
     {
       background-color: transparent;
-      border: none;
+      border: 1px solid transparent;
       cursor: pointer;
       height: 30px;
       outline: 0;
@@ -227,6 +227,13 @@
       border-radius: 5px;
       font-size: 14px;
       vertical-align: bottom;
+
+      &:focus
+      {
+        border: var(--color-button-light-focus-border) !important;
+        box-shadow: var(--color-button-light-focus-shadow) !important;
+        outline: none !important;
+      }
     }
 
     .pell-button + .pell-button

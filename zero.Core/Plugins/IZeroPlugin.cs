@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using zero.Core.Options;
 
 namespace zero.Core.Plugins
@@ -17,7 +18,7 @@ namespace zero.Core.Plugins
 
   public interface IZeroPlugin
   {
-    void ConfigureServices(IServiceCollection services);
+    void ConfigureServices(IServiceCollection services, IConfiguration configuration);
 
     void Configure(IZeroPluginOptions plugin, IZeroOptions zero);
   }

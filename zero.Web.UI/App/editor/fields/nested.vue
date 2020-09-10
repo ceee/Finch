@@ -6,7 +6,7 @@
         <ui-icon-button v-if="!disabled" icon="fth-x" title="@ui.close" @click="removeItem(index)" />
       </div>
     </div>
-    <ui-select-button icon="fth-plus" :label="config.addLabel || '@ui.add'" @click="addItem" :disabled="disabled" />
+    <ui-select-button v-if="limit > items.length" icon="fth-plus" :label="config.addLabel || '@ui.add'" @click="addItem" :disabled="disabled" />
   </div>
 </template>
 
@@ -40,13 +40,15 @@
 
 
     data: () => ({
-      items: []
+      items: [],
+      limit: 100
     }),
 
 
     mounted()
     {
       this.items = JSON.parse(JSON.stringify(this.value));
+      this.limit = this.config.limit || this.limit;
     },
 
 
@@ -59,6 +61,10 @@
 
       addItem()
       {
+        if (this.limit <= this.items.length)
+        {
+          return;
+        }
         this.editItem(this.getNewItem(), true);
         this.onChange();
       },
@@ -77,7 +83,6 @@
           create: isAdd
         }).then(value =>
         {
-          console.info(JSON.parse(JSON.stringify(value)));
           if (isAdd)
           {
             this.items.push(value);
