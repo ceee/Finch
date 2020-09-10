@@ -171,7 +171,7 @@
           if (JSON.stringify(newval) !== JSON.stringify(oldval))
           {
             this.buildConfig();
-            this.loaded = false;
+            this.loaded = false;          
           }
         }
       },
@@ -247,6 +247,12 @@
 
 
     methods: {
+
+      refresh()
+      {
+        this.buildConfig();
+        this.loaded = false;
+      },
 
       onValueChanged(val)
       {

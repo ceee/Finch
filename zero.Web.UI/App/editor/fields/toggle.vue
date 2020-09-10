@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-toggle :value="value" @input="$emit('input', $event)" :disabled="disabled" />
+  <ui-toggle :value="value" @input="$emit('input', $event)" :disabled="disabled" :negative="config.negative || false" />
 </template>
 
 

@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-box">
-    <input :value="value" @input="$emit('input', $event.target.value)" type="text" class="ui-input" v-localize:placeholder="" :maxlength="maxLength" />
+    <input :value="value" @input="$emit('input', $event.target.value)" type="text" class="ui-input" v-localize:placeholder="config.placeholder" :maxlength="maxLength" />
   </div>
 </template>
 

@@ -151,6 +151,12 @@
   .ui-toggle.is-negative .ui-toggle-switch.is-active
   {
     background: var(--color-negative);
+    border-color: transparent !important;
+
+    i
+    {
+      background: white;
+    }
   }
 
   .ui-toggle-off-warning
