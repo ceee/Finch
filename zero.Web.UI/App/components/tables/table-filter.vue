@@ -8,6 +8,12 @@
       </template>
       <slot name="actions"></slot>
     </ui-dropdown>
+    <ui-dropdown v-if="value.actions && value.actions.length > 0" align="right">
+      <template v-slot:button>
+        <ui-button type="light onbg" icon="fth-more-horizontal" />
+      </template>
+      <ui-dropdown-button v-for="(action, index) in value.actions" :key="index" :label="action.label" :icon="action.icon" @click="onActionClicked(action)" />
+    </ui-dropdown>
   </div>
 </template>
 
@@ -24,6 +30,7 @@
         {
           return {
             filter: {},
+            actions: [],
             selectable: false,
             search: null
           }
@@ -67,6 +74,11 @@
         this.hideFilter = typeof this.value.filter === 'undefined';
         this.hideSearch = typeof this.value.search === false;
         this.hideSelection = this.value.selectable !== true;
+      },
+
+      onActionClicked(action)
+      {
+        action.action();
       }
     }
   }
