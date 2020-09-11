@@ -149,8 +149,33 @@ a[href], button
   {
     outline: var(--color-button-focus-outline);
     outline-offset: 2px;
+    outline: none; // TODO deactivated for now as it always shows on clicks
   }
 }
+
+/*a[href], button
+{
+  position: relative;
+  overflow: visible !important;
+
+  &:focus
+  {
+    outline: none;
+  }
+
+  &:focus:after
+  {
+    content: '';
+    position: absolute;
+    z-index: 10;
+    left: -4px;
+    top: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 7px;
+    border: var(--color-button-focus-outline);
+  }
+}*/
 
 
 // tables
