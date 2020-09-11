@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-property v-if="!isHidden" :field="config.field" :label="label" :hide-label="config.hideLabel" :description="description" :required="config.required" :class="classList" :is-text="view === 'output'">
-    <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" :entity="value" @input="onChange" :meta="meta" :disabled="config.disabled" :depth="depth" />
+    <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" :entity="value" @input="onChange" :meta="meta" :disabled="isDisabled" :depth="depth" />
     <p v-if="config.helpText" class="ui-property-help" v-localize="config.helpText"></p>
   </ui-property>
 </template>
@@ -90,6 +90,10 @@
       isHidden()
       {
         return this.config.hidden || (typeof this.config.condition === 'function' && !this.config.condition(this.value));
+      },
+      isDisabled()
+      {
+        return (typeof this.config.disabled === 'boolean' && this.config.disabled) || (typeof this.config.disabled === 'function' && this.config.disabled(this.value));
       }
     },
 
