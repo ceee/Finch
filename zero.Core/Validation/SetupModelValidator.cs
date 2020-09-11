@@ -4,7 +4,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Validation
 {
-  public class SetupModelValidator : AbstractValidator<SetupModel>
+  public class SetupModelValidator : ZeroValidator<SetupModel>
   {
     public SetupModelValidator()
     {

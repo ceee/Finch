@@ -17,7 +17,7 @@
           <ui-daterangepicker :value="{ from: value.publishDate, to: value.unpublishDate }" @input="onRangeChange" :class="{ 'is-primary': value.publishDate || value.unpublishDate }" />
         </ui-property>
       </div>
-      <div class="ui-box">
+      <div class="ui-box is-light">
         <ui-property v-if="!isCreate" label="@ui.id" :is-text="true">
           {{value.id}}
         </ui-property>

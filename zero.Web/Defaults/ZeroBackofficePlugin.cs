@@ -16,11 +16,10 @@ namespace zero.Web.Defaults
   {
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration) 
     {
-      services.AddAll(typeof(IValidator<>), ServiceLifetime.Scoped);
+      //services.AddAll(typeof(IValidator<>), ServiceLifetime.Scoped);
       //services.AddAll(typeof(IValidator), ServiceLifetime.Scoped);
 
       services.AddTransient<IApplication, Application>();
-      //services.AddTransient<IValidator<IApplication>, ApplicationValidator>();
       services.AddTransient<ICountry, Country>();
       services.AddTransient<ILanguage, Language>();
       services.AddTransient<ITranslation, Translation>();
@@ -29,6 +28,16 @@ namespace zero.Web.Defaults
       services.AddTransient<IMedia, Media>();
       services.AddTransient<IMediaFolder, MediaFolder>();
       services.AddTransient<IPreview, Preview>();
+
+      services.AddTransient<IValidator<IApplication>, ApplicationValidator>();
+      services.AddTransient<IValidator<ICountry>, CountryValidator>();
+      services.AddTransient<IValidator<ILanguage>, LanguageValidator>();
+      services.AddTransient<IValidator<ITranslation>, TranslationValidator>();
+      services.AddTransient<IValidator<IPage>, PageValidator>();
+      services.AddTransient<IValidator<IMedia>, MediaValidator>();
+      services.AddTransient<IValidator<IMediaFolder>, MediaFolderValidator>();
+      services.AddTransient<IValidator<IUserRole>, UserRoleValidator>();
+      services.AddTransient<IValidator<IUser>, BackofficeUserValidator>();
 
       services.AddTransient<IApplicationsApi, ApplicationsApi>();
       services.AddTransient<ICountriesApi, CountriesApi>();
