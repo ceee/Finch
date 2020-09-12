@@ -2,7 +2,7 @@
   <div>
     <div class="editor-outer" v-if="loaded && !rendererNotFound" :class="{ 'has-tabs': hasTabs, '-infos-aside': !nested, 'is-page': isPage }" :renderer="config">
       <ui-tabs class="editor" :active="activeTab">
-        <ui-tab class="ui-box" :class="tab.class" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index" :depth="depth" :name="tab.name">
+        <ui-tab v-if="!disabled(tab)" class="ui-box" :class="tab.class" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index" :depth="depth" :name="tab.name">
           <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" @input="onChange" :meta="meta" :depth="depth" />
           <component v-if="tab.component" :is="tab.component" v-model="value" />
         </ui-tab>
@@ -195,6 +195,17 @@
       onChange()
       {
         this.$emit('input', this.value);
+      },
+
+
+      disabled(tab)
+      {
+        if (typeof tab.disabled !== 'function')
+        {
+          return false;
+        }
+
+        return tab.disabled(this.value);
       }
     }
   }
