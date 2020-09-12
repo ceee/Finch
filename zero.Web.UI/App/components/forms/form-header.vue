@@ -11,7 +11,7 @@
       <div v-if="activeToggle" class="ui-form-header-toggle">
         <ui-toggle v-model="value.isActive" class="is-primary" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" />
       </div>
-      <ui-dropdown v-if="!isCreate" align="right">
+      <ui-dropdown v-if="actionsDefined" align="right">
         <template v-slot:button>
           <ui-button type="light onbg" label="@ui.actions" caret="down" />
         </template>
@@ -54,6 +54,13 @@
       activeToggle: {
         type: Boolean,
         default: false
+      }
+    },
+
+    computed: {
+      actionsDefined()
+      {
+        return !this.isCreate && (this.canDelete || this.$scopedSlots.hasOwnProperty('actions'));
       }
     },
 
