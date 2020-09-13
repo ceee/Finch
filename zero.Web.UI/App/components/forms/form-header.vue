@@ -2,7 +2,7 @@
   <ui-header-bar class="ui-form-header" :back-button="true">
     <template v-slot:title>
       <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name}">
-        <input class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" />
+        <input class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" :readonly="titleDisabled" />
         <!--<span v-localize="value.name || title"></span>-->
       </h2>
     </template>
@@ -41,6 +41,10 @@
         default: true
       },
       disabled: {
+        type: Boolean,
+        default: false
+      },
+      titleDisabled: {
         type: Boolean,
         default: false
       },

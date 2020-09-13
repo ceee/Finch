@@ -30,7 +30,7 @@ textarea, .ui-native-select
   box-sizing: border-box;
   width: 100%;
 
-  &:focus
+  &:not(:disabled):not([readonly]):focus
   {
     background-color: var(--color-input-focus-bg);
     border: var(--color-input-focus-border);

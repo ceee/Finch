@@ -13,6 +13,7 @@
     "save": "Save",
     "create": "Create",
     "createdDate": "Created at",
+    "modifiedDate": "Last modified at",
     "id": "ID",
     "active": "Active",
     "inactive": "Inactive",

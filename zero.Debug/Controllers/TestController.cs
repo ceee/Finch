@@ -142,6 +142,8 @@ namespace zero.Debug.Controllers
 
       Order order = new Order()
       {
+        ChannelId = "channels.1-A",
+        Name = "23-0001",
         Number = "23-0001",
         LanguageId = "languages.2-A",
         CurrencyId = "currencies.33-A",
