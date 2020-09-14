@@ -23,6 +23,7 @@ using zero.Core.Identity;
 using zero.Core.Mapper;
 using zero.Core.Options;
 using zero.Core.Plugins;
+using zero.Core.Utils;
 using zero.Core.Validation;
 using zero.Web.Defaults;
 using zero.Web.Filters;
@@ -83,9 +84,8 @@ namespace zero.Web
       Mvc.AddNewtonsoftJson(x =>
       {
         // TODO this shall only be configurated for backoffice controllers
-        x.SerializerSettings.Converters.Add(new IsoDateTimeConverter() { DateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'" });
         x.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-        x.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        x.SerializerSettings.ContractResolver = new ZeroJsonContractResolver();
         x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
         x.SerializerSettings.TypeNameHandling = TypeNameHandling.Objects;
       });

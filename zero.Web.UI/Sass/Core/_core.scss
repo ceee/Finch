@@ -55,7 +55,6 @@ button
 
 h1
 {
-  @extend %font-headline;
   font-size: calc(1.4rem + 0.1vmin);
   font-weight: 400;
   margin: -0.3rem 0 3rem;
@@ -63,15 +62,9 @@ h1
 
 h2
 {
-  @extend %font-headline;
   font-size: calc(1.4rem + 0.1vmin);
   font-weight: 400;
   margin: 0 0 2rem;
-}
-
-h3
-{
-  @extend %font-headline;
 }
 
 

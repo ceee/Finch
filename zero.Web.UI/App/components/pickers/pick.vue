@@ -17,10 +17,14 @@
     </div>
 
     <!-- add button -->
-    <ui-select-button v-if="canAdd && configuration.addButton.enabled && !configuration.preview.combined" icon="fth-plus" :label="configuration.addButton.label" @click="pick()" :disabled="disabled" />
+    <div class="ui-pick-add" v-if="canAdd && configuration.addButton.enabled && !configuration.preview.combined">
+      <slot name="add">
+        <ui-select-button icon="fth-plus" :label="configuration.addButton.label" @click="pick()" :disabled="disabled" />
+      </slot>
+    </div>    
 
     <!-- overlay -->
-    <ui-dropdown ref="overlay" class="ui-pick-overlay theme-dark" @opened="overlayOpened">
+    <ui-dropdown ref="overlay" class="ui-pick-overlay" @opened="overlayOpened">
 
       <!-- headline -->
       <div class="ui-pick-overlay-head">
@@ -400,17 +404,18 @@
           if (needsFilter)
           {
             this.previews = [];
-
             this.selected.forEach(id =>
             {
-              let res = _find(this.items, item => item.id === id);
+              let res = _find(items, item => item.id === id);
 
               if (!res)
               {
                 // TODO push error output
               }
-
-              this.previews.push(_clone(res));
+              else
+              {
+                this.previews.push(_clone(res));
+              }
             });
           }
           else
@@ -432,7 +437,7 @@
         }
         else
         {
-          let promise = this.configuration.previews || this.configuration.items;
+          let promise = (_isArray(this.configuration.previews) && this.configuration.previews.length) || typeof this.configuration.previews === 'function' ? this.configuration.previews : this.configuration.items;
           let isFunc = typeof promise === 'function';
 
           if (isFunc && this.selected.length > 0)
@@ -674,6 +679,12 @@
       position: absolute;
       right: 20px;
     }
+
+    .-icon
+    {
+      font-size: var(--font-size-l);
+      margin-right: var(--padding-s);
+    }
   }
 
   .ui-pick-overlay-item-title
@@ -685,8 +696,10 @@
 
     .-text
     {
+      display: block;
       color: var(--color-text-dim);
-      
+      font-size: var(--font-size-s);
+      margin-top: 3px;
     }
   }
 

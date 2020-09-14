@@ -143,19 +143,19 @@ namespace zero.Debug.Controllers
       Order order = new Order()
       {
         ChannelId = "channels.1-A",
-        Name = "23-0001",
-        Number = "23-0001",
+        Name = "23-0002",
+        Number = "23-0002",
         LanguageId = "languages.2-A",
         CurrencyId = "currencies.33-A",
-        State = OrderState.Open,
-        DetailStateId = "orderDetailStates.33-A",
+        State = OrderState.Completed,
+        DetailStateId = "orderDetailStates.3-A",
         StateHistory = new List<IOrderStateHistoryItem>()
         {
           new OrderStateHistoryItem()
           {
             CreatedDate = DateTimeOffset.Now,
             State = OrderState.Open,
-            DetailStateId = "orderDetailStates.33-A"
+            DetailStateId = "orderDetailStates.3-A"
           }
         },
         IsRequest = false,
@@ -163,21 +163,6 @@ namespace zero.Debug.Controllers
         CustomerNote = "Danke für die Hilfe. Das war wirklich dringend nötig <3",
         AssignedToUserId = "users.1-A",
         Address = address,
-        Shipments = new List<IOrderShipment>()
-        {
-          new OrderShipment()
-          {
-            Name = "Österreichische Post",
-            ShipmentId = "shippingOptions.2-A",
-            Price = 7.99m,
-            Lines = new Dictionary<string, string>()
-            {
-              { "Postfach", "7-A" }
-            },
-            Address = shippingAddress,
-            CreatedDate = DateTimeOffset.Now
-          }
-        },
         Positions = new List<IOrderPosition>()
         {
           new OrderPosition()
@@ -218,6 +203,43 @@ namespace zero.Debug.Controllers
           }
         },
         Price = 72.98m
+      };
+
+      order.Shipping = new OrderShipping()
+      {
+        Name = "Österreichische Post",
+        ShippingOptionId = "shippingOptions.1-A",
+        Price = 7.99m,
+        Lines = new Dictionary<string, string>()
+        {
+          { "Postfach", "7-A" }
+        },
+        Address = shippingAddress,
+        Deliveries = new List<IOrderDelivery>()
+        {
+          new OrderDelivery()
+          {
+            CreatedDate = DateTimeOffset.Now,
+            TrackingNumber = "1035304005500970252807",
+            TrackingUrl = "https://www.post.at/sv/sendungsdetails?snr=1035304005500970252807",
+            Description = "Waren sind im Lager 2 (Regal 23)",
+            ShipmentDate = DateTimeOffset.Now.AddDays(2),
+            Items = new Dictionary<string, int>()
+            {
+              { order.Items[0].Id, 2 },
+              { order.Items[1].Id, 1 }
+            }
+          },
+          new OrderDelivery()
+          {
+            CreatedDate = DateTimeOffset.Now,
+            ShipmentDate = DateTimeOffset.Now.AddDays(4),
+            Items = new Dictionary<string, int>()
+            {
+              { order.Items[0].Id, 1 }
+            }
+          }
+        }
       };
 
       return Json(await ordersApi.Save(order));

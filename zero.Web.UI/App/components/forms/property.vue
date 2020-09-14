@@ -3,6 +3,7 @@
     <label v-if="label" class="ui-property-label" :for="field">
       <span v-localize="label"></span>
       <strong class="ui-property-required" v-if="required">*</strong>
+      <slot name="label-after"></slot>
       <small v-if="description" v-localize="description"></small>
     </label>
 

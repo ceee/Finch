@@ -10,6 +10,7 @@
       <strong class="ui-select-button-label" v-localize:html="{ key: label, tokens: tokens }"></strong>
       <span class="ui-select-button-description" v-if="description" v-localize:html="{ key: description, tokens: tokens }"></span>
     </content>
+    <slot></slot>
   </button>
 </template>
 
