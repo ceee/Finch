@@ -35,13 +35,13 @@ export default {
   },
 
   // get path to thumbnail source
-  getImageSource(id)
+  getImageSource(id, thumb)
   {
     if (!id || id.indexOf('http') === 0)
     {
       return id;
     }
-    return zero.apiPath + base + 'streamThumbnail/' + id;
+    return zero.apiPath + base + 'streamThumbnail/' + id + (typeof thumb === 'boolean' ? '?thumb=' + (thumb ? 'true' : 'false') : '');
   },
 
   // save a media

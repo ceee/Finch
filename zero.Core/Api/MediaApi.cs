@@ -55,7 +55,7 @@ namespace zero.Core.Api
         return null;
       }
 
-      return media.ThumbnailSource ?? media.Source;
+      return thumb ? (media.ThumbnailSource ?? media.Source) : media.Source;
     }
 
 
