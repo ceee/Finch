@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-property v-if="!isHidden" :field="config.field" :label="label" :hide-label="config.hideLabel" :description="description" :required="config.required" :class="classList" :is-text="view === 'output'">
+  <ui-property v-if="!isHidden" :field="config.field" :label="label" :hide-label="config.hideLabel || isStatic" :description="description" :required="config.required" :class="classList" :is-text="view === 'output'">
     <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" :entity="value" @input="onChange" :meta="meta" :disabled="isDisabled" :depth="depth" />
     <p v-if="config.helpText" class="ui-property-help" v-localize="config.helpText"></p>
   </ui-property>
@@ -10,6 +10,8 @@
   import Strings from 'zero/services/strings';
   import Objects from 'zero/services/objects';
   import Localization from 'zero/services/localization';
+
+  const staticViews = ['line'];
 
   export default {
     name: 'uiEditorComponent',
@@ -83,10 +85,6 @@
       {
         return this.config.display;
       },
-      classes()
-      {
-        
-      },
       isHidden()
       {
         return this.config.hidden || (typeof this.config.condition === 'function' && !this.config.condition(this.value));
@@ -94,6 +92,10 @@
       isDisabled()
       {
         return (typeof this.config.disabled === 'boolean' && this.config.disabled) || (typeof this.config.disabled === 'function' && this.config.disabled(this.value));
+      },
+      isStatic()
+      {
+        return staticViews.indexOf(this.config.display) > -1;
       }
     },
 
@@ -119,6 +121,10 @@
         else if (this.view === 'renderer')
         {
           return import(`zero/editor/editor`);
+        }
+        else if (this.isStatic)
+        {
+          return import(`zero/editor/fields/static/${this.view.toLowerCase()}`);
         }
         else
         {
@@ -171,6 +177,10 @@
         if (this.depth > 0)
         {
           classes.push('is-nested');
+        }
+        if (this.isStatic)
+        {
+          classes.push('is-static');
         }
         this.classList = classes;
 

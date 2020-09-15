@@ -71,6 +71,10 @@ export default {
 
   selectorToArray(selector)
   {
+    if (!selector)
+    {
+      return selector;
+    }
     selector = selector.replace(/\[(\w+)\]/g, '.$1');
     selector = selector.replace(/^\./, '');
     return selector.split('.');

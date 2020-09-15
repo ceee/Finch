@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText, 'hide-label': hideLabel }">
-    <label v-if="label" class="ui-property-label" :for="field">
+    <label v-if="label && !hideLabel" class="ui-property-label" :for="field">
       <span v-localize="label"></span>
       <strong class="ui-property-required" v-if="required">*</strong>
       <slot name="label-after"></slot>
@@ -80,14 +80,22 @@
   }
 
   .ui-property.full-width > .ui-property-content,
-  .ui-property.hide-label > .ui-property-content
+  .ui-property.hide-label > .ui-property-content,
+  .ui-property.is-static > .ui-property-content
   {
     max-width: 100%;
   }
 
-  .ui-property.hide-label > .ui-property-label
+  .ui-property.hide-label > .ui-property-label,
+  .ui-property.is-static > .ui-property-label
   {
     display: none;
+  }
+
+  .ui-property.is-static,
+  .ui-property.is-static + .ui-property
+  {
+    margin-top: 0 !important;
   }
 
   .ui-property-label
