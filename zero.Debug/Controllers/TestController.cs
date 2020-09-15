@@ -179,7 +179,7 @@ namespace zero.Debug.Controllers
           {
             Id = IdGenerator.Create(),
             ProductId = "products.1-A",
-            VariationId = "4a5ddabc-8158-43f5-90eb-1d115cc062cc",
+            VariantId = "4a5ddabc-8158-43f5-90eb-1d115cc062cc",
             Name = "Nike Jersey 2.0",
             Description = "Polyester / XS",
             Sort = 0,
@@ -192,7 +192,7 @@ namespace zero.Debug.Controllers
           {
             Id = IdGenerator.Create(),
             ProductId = "products.1-A",
-            VariationId = "4a5ddabc-8158-43f5-90eb-1d115cc062cc",
+            VariantId = "4a5ddabc-8158-43f5-90eb-1d115cc062cc",
             Name = "Nike Jersey 2.0",
             Description = "Polyester / s",
             Sort = 1,

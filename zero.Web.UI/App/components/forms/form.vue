@@ -114,7 +114,7 @@
               {
                 this.loadingState = 'default';
 
-                if (typeof response.meta.canEdit === 'boolean')
+                if (response.meta && typeof response.meta.canEdit === 'boolean')
                 {
                   this.canEdit = response.meta.canEdit;
 

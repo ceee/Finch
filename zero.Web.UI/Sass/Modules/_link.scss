@@ -12,3 +12,15 @@
     text-decoration: underline dotted var(--color-primary) !important;
   }
 }
+
+.ui-silent-link
+{
+  color: var(--color-text);
+}
+
+.ui-silent-link:hover
+{
+  color: var(--color-text);
+  text-decoration: underline dotted var(--color-text) !important;
+  text-underline-offset: 3px;
+}
