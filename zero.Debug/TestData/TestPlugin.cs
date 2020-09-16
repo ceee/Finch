@@ -44,6 +44,7 @@ namespace zero.TestData
       services.Configure<ZeroCommerceOptions>(opts =>
       {
         opts.Documents.Add<InvoiceDocument>();
+        opts.Documents.Add<PrintDocument>();
       });
 
       //services.Replace<IChannel, SalesChannel>();

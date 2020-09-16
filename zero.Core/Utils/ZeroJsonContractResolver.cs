@@ -3,11 +3,12 @@ using System;
 
 namespace zero.Core.Utils
 {
-  public class ZeroJsonContractResolver : CamelCasePropertyNamesContractResolver
+  public class ZeroJsonContractResolver : DefaultContractResolver
   {
     public override JsonContract ResolveContract(Type type)
     {
-      return base.ResolveContract(type);
+      var resolver = new CamelCasePropertyNamesContractResolver();
+      return resolver.ResolveContract(type);
     }
   }
 }

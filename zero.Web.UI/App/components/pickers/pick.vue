@@ -4,8 +4,8 @@
     <!-- previews -->
     <div class="ui-pick-previews" v-if="configuration.preview.enabled && previews.length > 0 && !configuration.preview.combined">
       <div v-for="preview in previews" class="ui-pick-preview">
-        <ui-select-button :icon="getPreviewIcon(preview)" :icon-as-image="configuration.preview.iconAsImage" :label="preview[configuration.keys.name]" :description="getPreviewDescription(preview)" :disabled="disabled" @click="pick(preview.id)" :tokens="preview" />
-        <ui-icon-button v-if="!disabled && configuration.preview.delete" @click="remove(preview.id)" icon="fth-x" title="@ui.close" />
+        <ui-select-button :icon="getPreviewIcon(preview)" :icon-as-image="configuration.preview.iconAsImage" :label="preview[configuration.keys.name]" :description="getPreviewDescription(preview)" :disabled="disabled" @click="pick(preview[configuration.keys.id])" :tokens="preview" />
+        <ui-icon-button v-if="!disabled && configuration.preview.delete" @click="remove(preview[configuration.keys.id])" icon="fth-x" title="@ui.close" />
       </div>
     </div>
 
@@ -44,7 +44,7 @@
 
       <!-- items -->
       <div class="ui-pick-overlay-items">
-        <button v-for="item in items" :key="item.id" type="button" class="ui-pick-overlay-item" @click="select(item)" :class="{'is-selected': isSelected(item) }">
+        <button v-for="item in items" :key="item[configuration.keys.id]" type="button" class="ui-pick-overlay-item" @click="select(item)" :class="{'is-selected': isSelected(item) }">
           <i v-if="item[configuration.keys.icon]" class="-icon" :class="item[configuration.keys.icon]" />
           <div class="ui-pick-overlay-item-title">
             <span class="-name" v-localize="item[configuration.keys.name]"></span>
@@ -92,6 +92,8 @@
     autoOpen: false,
 
     keys: {
+      // id key
+      id: 'id',
       // name key
       name: 'name',
       // description key
@@ -370,7 +372,7 @@
         {
           if (this.configuration.excludedIds && this.configuration.excludedIds.length)
           {
-            res = _filter(res, (item) => this.configuration.excludedIds.indexOf(item.id) < 0);
+            res = _filter(res, (item) => this.configuration.excludedIds.indexOf(item[this.configuration.keys.id]) < 0);
           }
 
           this.items = res;
@@ -406,7 +408,7 @@
             this.previews = [];
             this.selected.forEach(id =>
             {
-              let res = _find(items, item => item.id === id);
+              let res = _find(items, item => item[this.configuration.keys.id] === id);
 
               if (!res)
               {
@@ -430,7 +432,8 @@
         {
           onLoaded(_map(this.selected, s =>
           {
-            let item = { id: s };
+            let item = { };
+            item[this.configuration.keys.id] = s;
             item[this.configuration.keys.name] = s;
             return item;
           }), false);
@@ -474,7 +477,7 @@
       {
         let value = this.searchValue.trim();
         let item = {};
-        item.id = value;
+        item[this.configuration.keys.id] = value;
         item[this.configuration.keys.name] = value;
         this.select(item);
       },
@@ -482,7 +485,7 @@
 
       select(item)
       {
-        let value = this.configuration.autocomplete ? item[this.configuration.keys.name] : item.id;
+        let value = this.configuration.autocomplete ? item[this.configuration.keys.name] : item[this.configuration.keys.id];
 
         if (this.multiple)
         {
@@ -546,7 +549,7 @@
 
       isSelected(item)
       {
-        let value = this.configuration.autocomplete ? item[this.configuration.keys.name] : item.id;
+        let value = this.configuration.autocomplete ? item[this.configuration.keys.name] : item[this.configuration.keys.id];
         return this.selected.indexOf(value) > -1;
       },
 
