@@ -251,6 +251,8 @@
   .editor-infos
   {
     margin: 50px 0 0;
+    position: sticky;
+    top: var(--padding);
 
     .ui-box
     {

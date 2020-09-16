@@ -139,7 +139,7 @@
       // sets the current model as the search input when opened
       setDefaultValue: false,
       // focus search input on open
-      focus: true,
+      focus: false,
       // placeholder key in search input
       placeholder: null //vm.options.autocomplete ? 'ui_search_autocomplete' : 'ui_search',
     }
