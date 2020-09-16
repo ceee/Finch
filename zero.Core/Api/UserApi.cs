@@ -36,12 +36,19 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IList<IUser>> GetAll(string appId = null)
+    public async Task<Dictionary<string, IUser>> GetByIds(params string[] ids)
+    {
+      return await GetByIds<IUser>(ids);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<IList<IUser>> GetAll()
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<IUser>()
-          .Scope(appId)
+          .Scope(Scope)
           .OrderByDescending(x => x.CreatedDate)
           .ToListAsync();
       }
@@ -49,14 +56,14 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<IUser>> GetByQuery(ListQuery<IUser> query, string appId = null)
+    public async Task<ListResult<IUser>> GetByQuery(ListQuery<IUser> query)
     {
       query.SearchSelector = user => user.Name;
 
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<IUser>()
-          .Scope(appId)
+          .Scope(Scope)
           .ToQueriedListAsync(query);
       }
     }
@@ -160,17 +167,22 @@ namespace zero.Core.Api
     /// <summary>
     /// Find user by email
     /// </summary>
-    Task<IUser> GetUserByEmail(string email);  
+    Task<IUser> GetUserByEmail(string email);
+
+    /// <summary>
+    /// Get users by ids
+    /// </summary>
+    Task<Dictionary<string, IUser>> GetByIds(params string[] ids);
 
     /// <summary>
     /// Get all users for the selected application
     /// </summary>
-    Task<IList<IUser>> GetAll(string appId = null);
+    Task<IList<IUser>> GetAll();
 
     /// <summary>
     /// Get all available users (with query)
     /// </summary>
-    Task<ListResult<IUser>> GetByQuery(ListQuery<IUser> query, string appId = null);
+    Task<ListResult<IUser>> GetByQuery(ListQuery<IUser> query);
 
     /// <summary>
     /// Creates or updates a user

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
@@ -30,6 +32,25 @@ namespace zero.Web.Controllers
 
 
     public IActionResult GetAllPermissions() => Json(PermissionsApi.GetAll());
+
+
+    public async Task<IActionResult> GetForPicker() => Json((await Api.GetAll()).Select(x => new SelectModel()
+    {
+      Id = x.Id,
+      Name = x.Name,
+      IsActive = x.IsActive
+    }));
+
+
+    public async Task<IActionResult> GetPreviews(List<string> ids)
+    {
+      return JsonPreviews(await Api.GetByIds(ids.ToArray()), item => new PreviewModel()
+      {
+        Id = item.Id,
+        Icon = item.AvatarId,
+        Name = item.Name
+      });
+    }
 
 
     [ZeroAuthorize]
