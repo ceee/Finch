@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using zero.Commerce.Options;
 using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Debug.TestData;
@@ -40,6 +41,11 @@ namespace zero.TestData
 
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
+      services.Configure<ZeroCommerceOptions>(opts =>
+      {
+        opts.Documents.Add<InvoiceDocument>();
+      });
+
       //services.Replace<IChannel, SalesChannel>();
       services.AddTransient<ITestService, TestService>();
     }

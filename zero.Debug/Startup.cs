@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using zero.Commerce;
 using zero.TestData;
 using zero.Web;
 
@@ -39,7 +40,7 @@ namespace zero.Debug
 
       ZeroBuilder zero = services
         .AddZero(Configuration)
-        .AddPlugin<Commerce.CommercePlugin>()
+        .AddCommerce()
         .AddPlugin<TestPlugin>();
 
       services.Configure<IISOptions>(opts => opts.AutomaticAuthentication = false);
