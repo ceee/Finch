@@ -29,7 +29,7 @@ namespace zero.Debug.Controllers
         apps = await session.Query<IApplication>().ToListAsync();
       }
 
-      async Task<object> Handle<T>() where T : IZeroIdEntity
+      async Task<object> Handle<T>() where T : IZeroEntity
       {
         return await CreateBlueprintsForAll<T>(apps);
       }
@@ -64,7 +64,7 @@ namespace zero.Debug.Controllers
     }
 
 
-    async Task<HashSet<string>> CreateBlueprintsForAll<T>(IList<IApplication> apps) where T : IZeroIdEntity
+    async Task<HashSet<string>> CreateBlueprintsForAll<T>(IList<IApplication> apps) where T : IZeroEntity
     {
       HashSet<string> ids = new HashSet<string>();
       IList<T> items;
@@ -87,29 +87,64 @@ namespace zero.Debug.Controllers
             {
               ((IZeroEntity)variant).BlueprintId = item.Id;
 
-              // find all references
-              List<ObjectTraverser.Result<ReferenceAttribute>> references = ObjectTraverser.FindAttribute<ReferenceAttribute>(variant);
+              //await UpdateReferences(variant);
 
-              foreach (ObjectTraverser.Result<ReferenceAttribute> reference in references)
-              {
-                object value = reference.Property.GetValue(reference.Parent, null);
-
-                //if (String.IsNullOrWhiteSpace(id) || id.StartsWith(NEW_ID))
-                //{
-                //  item.Property.SetValue(item.Parent, item.Item.Length.HasValue ? Raven.Id(item.Item.Length.Value) : Raven.Id());
-                //}
-              }
-
-              //await session.StoreAsync(variant);
+              await session.StoreAsync(variant);
               ids.Add(variant.Id);
             }
           }
         }
 
-        //await session.SaveChangesAsync();
+        await session.SaveChangesAsync();
+      }
+
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        session.Advanced.MaxNumberOfRequestsPerSession = 10000;
+
+        items = await session.Query<T>().ToListAsync(); //.Where(x => x.BlueprintId != null).ToListAsync();
+
+        foreach (T item in items)
+        {
+          await UpdateReferences(item, session);
+
+          ids.Add(item.Id);
+        }
+
+        await session.SaveChangesAsync();
       }
 
       return ids;
+    }
+
+
+    async Task UpdateReferences(IZeroIdEntity entity, IAsyncDocumentSession session)
+    {
+      await Task.Delay(1);
+
+      List<ObjectTraverser.Result<Refs>> references = ObjectTraverser.Find<Refs>(entity);
+
+      foreach (ObjectTraverser.Result<Refs> reference in references)
+      {
+        if (reference.Item != null && reference.Item.Ids.Length > 0)
+        {
+          Type type = reference.Item.GetType();
+          Type generic = type.GetGenericArguments().FirstOrDefault();
+
+          string collection = session.Advanced.DocumentStore.Conventions.FindCollectionName(generic);
+
+          for (int idx = 0; idx < reference.Item.Ids.Length; idx++)
+          {
+            string id = reference.Item.Ids[idx];
+            IZeroEntity xentity = await session.Query<IZeroEntity>(collectionName: collection).FirstOrDefaultAsync(x => x.BlueprintId == id);
+
+            if (xentity != null)
+            {
+              reference.Item.Ids[idx] = xentity.Id;
+            }
+          }
+        }
+      }
     }
 
 

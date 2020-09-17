@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using zero.Core.Utils;
 
 namespace zero.Core.Extensions
 {
@@ -20,7 +21,7 @@ namespace zero.Core.Extensions
     public static T Clone<T>(this T obj)
     {
       Type type = obj.GetType();
-      return (T)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(obj), type);
+      return (T)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(obj, new RefJsonConverter(), new RefsJsonConverter()), type, new RefJsonConverter(), new RefsJsonConverter());
     }
   }
 }

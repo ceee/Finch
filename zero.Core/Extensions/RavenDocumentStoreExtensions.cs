@@ -29,10 +29,12 @@ namespace zero.Core.Extensions
       (store.Conventions.Serialization as NewtonsoftJsonSerializationConventions).CustomizeJsonDeserializer = x =>
       {
         x.Converters.Add(new RefJsonConverter());
+        x.Converters.Add(new RefsJsonConverter());
       };
       (store.Conventions.Serialization as NewtonsoftJsonSerializationConventions).CustomizeJsonSerializer = x =>
       {
         x.Converters.Add(new RefJsonConverter());
+        x.Converters.Add(new RefsJsonConverter());
       };
 
       store.Conventions.FindCollectionName = type =>

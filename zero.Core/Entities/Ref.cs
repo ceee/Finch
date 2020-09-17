@@ -2,7 +2,21 @@
 
 namespace zero.Core.Entities
 {
-  public class Ref<T> where T : IZeroIdEntity
+  public class Ref<T> : Ref where T : IZeroIdEntity
+  {
+    public Ref() : base() { }
+    public Ref(string id) : base(id) { }
+  }
+
+
+  public class Refs<T> : Refs where T : IZeroIdEntity
+  {
+    public Refs() : base() { }
+    public Refs(params string[] ids) : base(ids) { }
+  }
+
+
+  public class Ref
   {
     public Ref() { }
 
@@ -11,7 +25,7 @@ namespace zero.Core.Entities
       Id = id;
     }
 
-    public string Id { get; private set; }
+    public string Id { get; set; }
 
 
     public override string ToString()
@@ -21,7 +35,7 @@ namespace zero.Core.Entities
   }
 
 
-  public class Refs<T> where T : IZeroIdEntity
+  public class Refs
   {
     public Refs() { }
 
@@ -30,6 +44,6 @@ namespace zero.Core.Entities
       Ids = ids;
     }
 
-    public string[] Ids { get; private set; } = new string[0] { };
+    public string[] Ids { get; set; } = new string[0] { };
   }
 }
