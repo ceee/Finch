@@ -42,7 +42,7 @@ namespace zero.Core.Api
       {
         return await session.Query<ICountry>()
           .Scope(Scope)
-          .Where(x => x.LanguageId == languageId)
+          //.Where(x => x.LanguageId == languageId)
           .OrderByDescending(x => x.IsPreferred)
           .ThenBy(x => x.Name)
           .ToListAsync();
@@ -59,7 +59,7 @@ namespace zero.Core.Api
       {
         return await session.Query<ICountry>()
           .Scope(Scope)
-          .Where(x => x.LanguageId == languageId)
+          //.Where(x => x.LanguageId == languageId)
           .OrderByDescending(x => x.IsPreferred)
           .ThenBy(x => x.Name)
           .ToQueriedListAsync(query);

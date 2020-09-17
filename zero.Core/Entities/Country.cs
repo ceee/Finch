@@ -12,14 +12,11 @@ namespace zero.Core.Entities
 
     /// <inheritdoc />
     public string Code { get; set; }
-
-    /// <inheritdoc />
-    public string LanguageId { get; set; }
   }
 
 
   [Collection("Countries")]
-  public interface ICountry : IZeroEntity, IAppAwareShareableEntity, ILanguageAwareEntity, IZeroDbConventions
+  public interface ICountry : IZeroEntity, IAppAwareShareableEntity, IZeroDbConventions
   {
     /// <summary>
     /// Preferred countries are displayed on top in lists

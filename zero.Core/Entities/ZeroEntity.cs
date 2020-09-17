@@ -29,6 +29,9 @@ namespace zero.Core.Entities
 
     /// <inheritdoc/>
     public DateTimeOffset CreatedDate { get; set; }
+
+    /// <inheritdoc/>
+    public string OriginId { get; set; }
   }
 
 
@@ -63,11 +66,18 @@ namespace zero.Core.Entities
     /// <summary>
     /// Backoffice user who created this content
     /// </summary>
+    [Overwrite]
     public string CreatedById { get; set; }
 
     /// <summary>
     /// Date of creation
     /// </summary>
+    [Overwrite]
     DateTimeOffset CreatedDate { get; set; }
+
+    /// <summary>
+    /// Id of the original base entity (which this one inherits from)
+    /// </summary>
+    string OriginId { get; set; }
   }
 }

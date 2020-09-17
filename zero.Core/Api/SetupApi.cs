@@ -211,7 +211,7 @@ namespace zero.Core.Api
           IsActive = true,
           AppId = Constants.Database.SharedAppId,
           Alias = Safenames.Alias(country.Value),
-          LanguageId = defaultLanguage.Id,
+          //LanguageId = defaultLanguage.Id,
           Code = country.Key.ToLowerInvariant(),
           Name = country.Value
         }).ToList());

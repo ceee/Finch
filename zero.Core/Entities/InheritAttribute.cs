@@ -2,7 +2,7 @@
 
 namespace zero.Core.Entities
 {
-  internal class InheritAttribute : Attribute
+  public class OverwriteAttribute : Attribute
   {
   }
 }

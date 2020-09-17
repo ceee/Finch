@@ -17,7 +17,7 @@ namespace zero.Web.Mapper
         target.IsActive = source.IsActive;
         target.CreatedDate = source.CreatedDate;
         target.IsPreferred = source.IsPreferred;
-        target.LanguageId = source.LanguageId;
+        //target.LanguageId = source.LanguageId;
         target.Code = source.Code;
       });
 
@@ -28,7 +28,7 @@ namespace zero.Web.Mapper
         target.IsActive = source.IsActive;
         target.CreatedDate = source.CreatedDate;
         target.IsPreferred = source.IsPreferred;
-        target.LanguageId = source.LanguageId;
+       // target.LanguageId = source.LanguageId;
         target.Code = source.Code;
       });
 
