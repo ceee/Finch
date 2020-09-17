@@ -211,6 +211,7 @@ namespace zero.Core.Api
       {
         zeroEntity.Alias = Safenames.Alias(zeroEntity.Name);
         zeroEntity.LastModifiedById = userId;
+        zeroEntity.LastModifiedDate = DateTimeOffset.Now;
         zeroEntity.CreatedById ??= userId;
       }
 

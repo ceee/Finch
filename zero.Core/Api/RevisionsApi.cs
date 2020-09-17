@@ -66,12 +66,10 @@ namespace zero.Core.Api
       // create revision objects
       foreach (T item in items)
       {
-        DateTime? date = session.Advanced.GetLastModifiedFor(item);
-
         Revision revision = new Revision()
         {
           ChangeVector = session.Advanced.GetChangeVectorFor(item),
-          Date = date.HasValue ? new DateTimeOffset(date.Value) : item.CreatedDate,
+          Date = item.LastModifiedDate,
           Json = includeContent ? JsonConvert.SerializeObject(item) : null
         };
 

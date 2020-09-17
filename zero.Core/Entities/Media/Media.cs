@@ -37,9 +37,6 @@ namespace zero.Core.Entities
     public MediaImageMeta ImageMeta { get; set; }
 
     /// <inheritdoc />
-    public DateTimeOffset LastModifiedDate { get; set; }
-
-    /// <inheritdoc />
     public MediaFocalPoint FocalPoint { get; set; }
 
     /// <inheritdoc />

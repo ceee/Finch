@@ -25,6 +25,9 @@ namespace zero.Core.Entities
     public string LastModifiedById { get; set; }
 
     /// <inheritdoc/>
+    public DateTimeOffset LastModifiedDate { get; set; }
+
+    /// <inheritdoc/>
     public string CreatedById { get; set; }
 
     /// <inheritdoc/>
@@ -64,6 +67,11 @@ namespace zero.Core.Entities
     public string LastModifiedById { get; set; }
 
     /// <summary>
+    /// Date of last modification
+    /// </summary>
+    DateTimeOffset LastModifiedDate { get; set; }
+
+    /// <summary>
     /// Backoffice user who created this content
     /// </summary>
     [Overwrite]
@@ -72,7 +80,6 @@ namespace zero.Core.Entities
     /// <summary>
     /// Date of creation
     /// </summary>
-    [Overwrite]
     DateTimeOffset CreatedDate { get; set; }
 
     /// <summary>

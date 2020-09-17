@@ -14,7 +14,7 @@ namespace zero.Core.Database.Indexes
 
       public string AppId { get; set; }
 
-      public DateTime LastModified { get; set; }
+      public DateTimeOffset LastModified { get; set; }
     }
 
 
@@ -25,7 +25,7 @@ namespace zero.Core.Database.Indexes
         {
           Id = x.Id,
           AppId = x.AppId,
-          LastModified = MetadataFor(x).Value<DateTime>("@last-modified")
+          LastModified = x.LastModifiedDate
         });
 
       StoreAllFields(FieldStorage.Yes);

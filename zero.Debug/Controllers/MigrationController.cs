@@ -1,16 +1,10 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using zero.Commerce.Api;
 using zero.Commerce.Entities;
 using zero.Core;
 using zero.Core.Api;
@@ -18,7 +12,6 @@ using zero.Core.Attributes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Utils;
-using zero.Web.Filters;
 
 namespace zero.Debug.Controllers
 {
@@ -78,21 +71,23 @@ namespace zero.Debug.Controllers
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         items = await session.Query<T>().ToListAsync();
-      }
 
-      foreach (T item in items)
-      {
-        if (await Save(item))
+        foreach (T item in items)
         {
-          changedIds.Add(item.Id);
+          if (Update(item, session.Advanced.GetLastModifiedFor(item)))
+          {
+            changedIds.Add(item.Id);
+          }
         }
+
+        await session.SaveChangesAsync();
       }
 
       return changedIds;
     }
 
 
-    async Task<bool> Save<T>(T model) where T : IZeroIdEntity
+    bool Update<T>(T model, DateTime? modifiedDate) where T : IZeroIdEntity
     {
       IAppAwareEntity appAwareEntity = model as IAppAwareEntity;
       IZeroEntity zeroEntity = model as IZeroEntity;
@@ -119,40 +114,37 @@ namespace zero.Debug.Controllers
 
       string userId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == Constants.Auth.Claims.UserId)?.Value;
 
-      // set default properties
-      if (zeroEntity != null && zeroEntity.CreatedById == null)
+      if (zeroEntity != null)
       {
-        hasChange = true;
-        zeroEntity.CreatedDate = zeroEntity.CreatedDate == default ? DateTimeOffset.Now : zeroEntity.CreatedDate;
-        zeroEntity.CreatedById = userId;
+        if (zeroEntity.CreatedById == null)
+        {
+          hasChange = true;
+          zeroEntity.CreatedDate = zeroEntity.CreatedDate == default ? DateTimeOffset.Now : zeroEntity.CreatedDate;
+          zeroEntity.CreatedById = userId;
+        }
+        if (model is ITranslation && zeroEntity.Name.IsNullOrEmpty())
+        {
+          hasChange = true;
+          zeroEntity.Name = ((ITranslation)model).Key;
+        }
+        if (zeroEntity.Alias.IsNullOrEmpty())
+        {
+          hasChange = true;
+          zeroEntity.Alias = Safenames.Alias(zeroEntity.Name);
+        }
+        if (zeroEntity.LastModifiedById == default)
+        {
+          hasChange = true;
+          zeroEntity.LastModifiedById = userId;
+        }
+        if (zeroEntity.LastModifiedDate == default)
+        {
+          hasChange = true;
+          zeroEntity.LastModifiedDate = modifiedDate.HasValue ? new DateTimeOffset(modifiedDate.Value) : zeroEntity.CreatedDate;
+        }
       }
 
-      if (zeroEntity != null && model is ITranslation)
-      {
-        zeroEntity.Name = ((ITranslation)model).Key;
-      }
-
-      // update name alias and last modified
-      if (zeroEntity != null && zeroEntity.Alias.IsNullOrEmpty())
-      {
-        hasChange = true;
-        zeroEntity.Alias = Safenames.Alias(zeroEntity.Name);
-      }
-      if (zeroEntity != null && zeroEntity.LastModifiedById == default)
-      {
-        hasChange = true;
-        zeroEntity.LastModifiedById = userId;
-      }
-
-      if (!hasChange)
-      {
-        return false;
-      }
-
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-      await session.StoreAsync(model);
-      await session.SaveChangesAsync();
-      return true;
+      return hasChange;
     }
   }
 }
