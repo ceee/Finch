@@ -85,6 +85,7 @@ namespace zero.Web
       {
         // TODO this shall only be configurated for backoffice controllers
         x.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+        x.SerializerSettings.Converters.Add(new RefJsonConverter());
         x.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
         x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
         x.SerializerSettings.TypeNameHandling = TypeNameHandling.Objects;

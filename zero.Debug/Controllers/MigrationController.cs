@@ -15,7 +15,7 @@ using zero.Core.Utils;
 
 namespace zero.Debug.Controllers
 {
-  public class MigrationController : Controller
+  public partial class MigrationController : Controller
   {
     private IDocumentStore Raven { get; set; }
 

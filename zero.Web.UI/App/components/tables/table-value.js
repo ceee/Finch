@@ -36,7 +36,7 @@ export default function (el, binding)
   if (!column.as || column.as === 'text' || column.as === 'html')
   {
     const hasFunc = typeof column.render === 'function';
-    const hasSharedIndicator = column.shared === true && item.appId === zero.sharedAppId;
+    const hasSharedIndicator = column.shared === true && !!item.blueprintId;
 
     let html = hasFunc ? column.render(item, column) : value;
     let isHtml = column.as === 'html' || hasSharedIndicator;
@@ -87,7 +87,7 @@ export default function (el, binding)
   // render global flag
   else if (column.as === 'shared')
   {
-    render(value === zero.sharedAppId ? '<i class="ui-table-field-shared fth-radio"></i>' : '', true);
+    render(!!item.blueprintId ? '<i class="ui-table-field-shared fth-radio"></i>' : '', true);
   }
   else
   {

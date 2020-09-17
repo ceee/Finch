@@ -1,6 +1,7 @@
 ﻿using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
 using Raven.Client.Documents.Operations.CompareExchange;
+using Raven.Client.Json.Serialization.NewtonsoftJson;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -24,6 +25,15 @@ namespace zero.Core.Extensions
       Type dbConventionType = typeof(IZeroDbConventions);
 
       store.Conventions.IdentityPartsSeparator = '.';
+
+      (store.Conventions.Serialization as NewtonsoftJsonSerializationConventions).CustomizeJsonDeserializer = x =>
+      {
+        x.Converters.Add(new RefJsonConverter());
+      };
+      (store.Conventions.Serialization as NewtonsoftJsonSerializationConventions).CustomizeJsonSerializer = x =>
+      {
+        x.Converters.Add(new RefJsonConverter());
+      };
 
       store.Conventions.FindCollectionName = type =>
       {

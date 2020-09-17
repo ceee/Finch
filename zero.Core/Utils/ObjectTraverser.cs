@@ -110,24 +110,10 @@ namespace zero.Core.Utils
 
       exploredObjects.Add(key);
 
-      System.Collections.ICollection enumerable = value as System.Collections.ICollection;
-
-      // this property is a list
-      if (enumerable != null && !(value is string))
-      {
-        int idx = 0;
-        foreach (object item in enumerable)
-        {
-          FindAttribute<T>(item, value, CombineKey(String.Empty, key, SQBKT_OPEN + idx + SQBKT_CLOSE), null, exploredObjects, found);
-          idx += 1;
-        }
-        return;
-      }
-
       // check if the current property contains the attribute
       if (property != null)
       {
-        T attribute = property.GetCustomAttribute<T>();
+        T attribute = property.GetCustomAttribute<T>(true);
 
         if (attribute != null)
         {
@@ -140,6 +126,20 @@ namespace zero.Core.Utils
           });
           return;
         }
+      }
+
+      System.Collections.ICollection enumerable = value as System.Collections.ICollection;
+
+      // this property is a list
+      if (enumerable != null && !(value is string))
+      {
+        int idx = 0;
+        foreach (object item in enumerable)
+        {
+          FindAttribute<T>(item, value, CombineKey(String.Empty, key, SQBKT_OPEN + idx + SQBKT_CLOSE), null, exploredObjects, found);
+          idx += 1;
+        }
+        return;
       }
 
       // check if our property is a primitive type
