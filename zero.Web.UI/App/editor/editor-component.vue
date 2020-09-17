@@ -39,6 +39,10 @@
       depth: {
         type: Number,
         default: 0
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -91,7 +95,7 @@
       },
       isDisabled()
       {
-        return (typeof this.config.disabled === 'boolean' && this.config.disabled) || (typeof this.config.disabled === 'function' && this.config.disabled(this.value));
+        return this.disabled || (typeof this.config.disabled === 'boolean' && this.config.disabled) || (typeof this.config.disabled === 'function' && this.config.disabled(this.value));
       },
       isStatic()
       {

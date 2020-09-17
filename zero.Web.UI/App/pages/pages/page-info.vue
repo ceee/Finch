@@ -11,10 +11,10 @@
     <div class="ui-view-box-aside editor-infos">
       <div class="ui-box editor-active-toggle" :class="{'is-active': value.isActive }">
         <ui-property label="@ui.active" :is-text="true" class="is-toggle">
-          <ui-toggle v-model="value.isActive" class="is-primary" />
+          <ui-toggle v-model="value.isActive" class="is-primary" :disabled="disabled" />
         </ui-property>
         <ui-property label="@page.schedule.label" :is-text="true">
-          <ui-daterangepicker :value="{ from: value.publishDate, to: value.unpublishDate }" @input="onRangeChange" :class="{ 'is-primary': value.publishDate || value.unpublishDate }" />
+          <ui-daterangepicker :value="{ from: value.publishDate, to: value.unpublishDate }" @input="onRangeChange" :class="{ 'is-primary': value.publishDate || value.unpublishDate }" :disabled="disabled" />
         </ui-property>
       </div>
       <div class="ui-box is-light">
@@ -40,6 +40,10 @@
     props: {
       value: {
         type: [ Object, Array ]
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       }
     },
 

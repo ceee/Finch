@@ -1,5 +1,5 @@
 ﻿<template>
-  <input :value="value" @input="onChange($event.target.value)" type="text" class="ui-input" v-localize:placeholder="" :maxlength="maxLength" />
+  <input :value="value" @input="onChange($event.target.value)" type="text" class="ui-input" v-localize:placeholder="" :maxlength="maxLength" :disabled="disabled" />
 </template>
 
 
@@ -10,7 +10,11 @@
         type: Number,
         default: null
       },
-      config: Object
+      config: Object,
+      disabled: {
+        type: Boolean,
+        default: false
+      }
     },
 
     computed: {

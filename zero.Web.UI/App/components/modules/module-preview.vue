@@ -11,7 +11,7 @@
 
     <div v-if="!value.isActive" class="ui-module-item-disabled"></div>
 
-    <div class="ui-module-item-actions">
+    <div class="ui-module-item-actions" v-if="!disabled">
       <ui-dropdown align="right">
         <template v-slot:button>
           <ui-icon-button v-if="!value.isActive" class="ui-module-item-disabled-icon" icon="fth-lock" title="Disabled" />
@@ -41,6 +41,10 @@
       types: {
         type: Array,
         default: () => []
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       },
       config: Object
     },

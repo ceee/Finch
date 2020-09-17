@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-rte :value="value" @input="$emit('input', $event)" />
+  <ui-rte :value="value" @input="$emit('input', $event)" :disabled="disabled" />
 </template>
 
 
@@ -9,6 +9,10 @@
       value: {
         type: String,
         default: null
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       },
       config: Object
     }

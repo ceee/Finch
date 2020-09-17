@@ -18,10 +18,10 @@
 
     <div v-if="entity.source">
       <a :href="entity.source" target="_blank" v-if="entity.type === 'image'" class="ui-link media-upload-preview-remove">Open</a>
-      <button type="button" class="ui-link media-upload-preview-remove" @click="removeFile">Remove file</button>
+      <button type="button" class="ui-link media-upload-preview-remove" @click="removeFile" v-if="!disabled">Remove file</button>
     </div>
 
-    <div v-if="!entity.source" class="ui-select-button type-light">
+    <div v-if="!entity.source && !disabled" class="ui-select-button type-light">
       <span class="ui-select-button-icon"><i class="fth-plus"></i></span>
       <content class="ui-select-button-content">
         <strong class="ui-select-button-label">Upload file</strong>
@@ -96,6 +96,11 @@
 
       setFocalPoint(ev)
       {
+        if (this.disabled)
+        {
+          return;
+        }
+
         let image = this.$refs.image.getBoundingClientRect();
         let point = { x: ev.pageX - image.x, y: ev.pageY - image.y };
         const left = +(point.x / image.width).toFixed(2);

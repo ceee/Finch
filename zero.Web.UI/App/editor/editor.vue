@@ -2,9 +2,9 @@
   <div>
     <div class="editor-outer" v-if="loaded && !rendererNotFound" :class="{ 'has-tabs': hasTabs, '-infos-aside': !nested, 'is-page': isPage }" :renderer="config">
       <ui-tabs class="editor" :active="activeTab">
-        <ui-tab v-if="!disabled(tab)" class="ui-box" :class="tab.class" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index" :depth="depth" :name="tab.name">
-          <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" @input="onChange" :meta="meta" :depth="depth" />
-          <component v-if="tab.component" :is="tab.component" v-model="value" />
+        <ui-tab v-if="!tabDisabled(tab)" class="ui-box" :class="tab.class" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index" :depth="depth" :name="tab.name">
+          <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" @input="onChange" :meta="meta" :depth="depth" :disabled="disabled" />
+          <component v-if="tab.component" :is="tab.component" v-model="value" :disabled="disabled" />
         </ui-tab>
       </ui-tabs>
       <aside v-if="!nested && infos && infos != 'none'" class="editor-infos">
@@ -17,7 +17,7 @@
               <i class="fth-radio"></i>
             </div>
             <ui-property v-if="activeToggle" label="@ui.active" :is-text="true" class="is-toggle">
-              <ui-toggle v-model="value.isActive" class="is-primary" />
+              <ui-toggle v-model="value.isActive" class="is-primary" :disabled="disabled" />
             </ui-property>
           </slot>
           <slot name="settings-properties"></slot>
@@ -93,6 +93,10 @@
       activeTab: {
         type: Number,
         default: 0
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -198,7 +202,7 @@
       },
 
 
-      disabled(tab)
+      tabDisabled(tab)
       {
         if (typeof tab.disabled !== 'function')
         {

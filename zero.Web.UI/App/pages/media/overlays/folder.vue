@@ -3,7 +3,7 @@
     <h2 class="ui-headline" v-localize="model.id ? '@media.editfolder' : '@media.addfolder'"></h2>
     <div class="mediafolder-items">
       <ui-property :required="true">
-        <input v-model="item.name" type="text" class="ui-input" maxlength="80" v-localize:placeholder="'@media.fields.foldername_placeholder'" :readonly="disabled" />
+        <input v-model="item.name" type="text" class="ui-input" maxlength="80" v-localize:placeholder="'@media.fields.foldername_placeholder'" :disabled="disabled" />
         <ui-error :catch-all="true" />
       </ui-property>
     </div>
@@ -39,7 +39,7 @@
       {
         form.load(!this.model.id ? MediaFolderApi.getEmpty() : MediaFolderApi.getById(this.model.id)).then(response =>
         {
-          this.disabled = false; //!response.canEdit;
+          this.disabled = !response.canEdit;
           this.item = response.entity;
           this.item.parentId = this.model.parentId;
           this.loading = false;

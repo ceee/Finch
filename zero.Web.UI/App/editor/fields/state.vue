@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-state-button :items="config.items" :value="value" @input="$emit('input', $event)" />
+  <ui-state-button :items="config.items" :value="value" @input="$emit('input', $event)" :disabled="disabled" />
 </template>
 
 
@@ -8,6 +8,10 @@
     props: {
       value: {
         type: [ String, Number ]
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       },
       config: Object
     },

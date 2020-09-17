@@ -3,7 +3,7 @@
     <div class="ui-pick-previews" v-if="items.length">
       <div v-for="(item, index) in items" class="ui-pick-preview">
         <ui-select-button :icon="config.icon" :label="getName(item)" :description="getDescription(item)" :disabled="disabled" @click="editItem(item)" />
-        <ui-icon-button v-if="!disabled" icon="fth-x" title="@ui.close" @click="removeItem(index)" />
+        <ui-icon-button v-if="!disabled" icon="fth-x" title="@ui.close" @click="removeItem(index)" :disabled="disabled" />
       </div>
     </div>
     <ui-select-button v-if="limit > items.length" icon="fth-plus" :label="config.addLabel || '@ui.add'" @click="addItem" :disabled="disabled" />

@@ -1,7 +1,7 @@
 ﻿ <template>
   <div class="ui-check-list" :class="{'is-disabled': disabled, 'is-inline': inline }">
     <label v-for="item in list" class="ui-native-check ui-check-list-item">
-      <input type="checkbox" :checked="isChecked(item)" @input="onChange(item)" />
+      <input type="checkbox" :checked="isChecked(item)" @input="onChange(item)" :disabled="disabled" />
       <span class="ui-native-check-toggle"></span>
       <span v-localize="item.name"></span>
     </label>

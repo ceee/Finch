@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-native-select">
+  <div class="ui-native-select" :disabled="disabled">
     <select :value="value" @input="onChange($event)" :disabled="disabled">
       <option :value="null"></option>
       <option v-for="item in items" :value="item.id">{{item.name}}</option>

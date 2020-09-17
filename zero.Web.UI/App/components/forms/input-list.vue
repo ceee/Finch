@@ -103,6 +103,11 @@
       margin-top: 6px;
     }
 
+    .ui-input-list.is-disabled &
+    {
+      background: transparent;
+    }
+
     .ui-input
     {
       border-radius: var(--radius) 0 0 var(--radius);

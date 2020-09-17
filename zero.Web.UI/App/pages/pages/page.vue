@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <ui-editor v-if="!loading" :config="renderer" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" />
+    <ui-editor v-if="!loading" :config="renderer" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" :disabled="disabled" />
   </ui-form>
 </template>
 
@@ -38,6 +38,8 @@
   import { find as _find, debounce as _debounce } from 'underscore';
 
   export default {
+
+    name: 'page',
 
     props: ['id', 'type', 'parent'],
 
@@ -124,6 +126,7 @@
 
         form.load(!this.id ? PagesApi.getEmpty(this.type, this.parent) : PagesApi.getById(this.id)).then(response =>
         {
+          this.disabled = !response.meta.canEdit;
           this.renderer = response.entity ? 'page.' + response.entity.pageTypeAlias : null;
           this.model = response.entity;
           this.meta = response.meta;

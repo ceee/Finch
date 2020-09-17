@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-modules-inner">
     <div v-if="items.length" class="ui-modules-inner-sortable" v-sortable="{ onUpdate: onSortingUpdated }">
-      <ui-module-preview v-for="item in items" :key="item.id" :types="moduleTypes" :value="item" @edit="edit" @remove="remove" />
+      <ui-module-preview v-for="item in items" :key="item.id" :types="moduleTypes" :value="item" @edit="edit" @remove="remove" :disabled="disabled" />
     </div>
     <ui-modules-select ref="moduleSelect" :types="moduleTypes" :value="value" v-if="canAdd" @selected="onAdd" />
   </div>
@@ -21,6 +21,10 @@
       value: {
         type: Array,
         default: () => []
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       },
       config: Object
     },
@@ -43,7 +47,7 @@
     computed: {
       canAdd()
       {
-        return true;
+        return !this.disabled;
       }
     },
 

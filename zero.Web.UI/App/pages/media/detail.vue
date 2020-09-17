@@ -1,7 +1,7 @@
 ﻿<template>
   <ui-form ref="form" class="mediaitem" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
     <ui-form-header v-model="model" title="@media.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
-    <ui-editor config="media" v-model="model" :meta="meta" :active-toggle="false">
+    <ui-editor config="media" v-model="model" :meta="meta" :active-toggle="false" :disabled="disabled">
       <template v-slot:infos-more>
         <ui-property v-if="model.imageMeta" label="@media.fields.date" :is-text="true">
           <ui-date v-model="model.imageMeta.createdDate" />

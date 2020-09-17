@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-daterangepicker" :class="{'is-disabled': disabled }">
-    <button type="button" class="ui-link" @click="schedule" v-localize="scheduleLocalize"></button>
+    <button type="button" class="ui-link" @click="schedule" v-localize="scheduleLocalize" :disabled="disabled"></button>
   </div>
 </template>
 

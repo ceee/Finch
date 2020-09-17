@@ -9,7 +9,7 @@
       </div>
       <div class="ui-split">
         <ui-property label="@translation.fields.key" :required="true" :vertical="true" field="key">
-          <input v-model="item.key" type="text" class="ui-input" maxlength="300" :readonly="disabled" />
+          <input v-model="item.key" type="text" class="ui-input" maxlength="300" :disabled="disabled" />
         </ui-property>
         <ui-property label="@translation.fields.display" :vertical="true" field="display">
           <ui-state-button :disabled="disabled" :items="displayItems" v-model="item.display" />
@@ -17,7 +17,7 @@
       </div>
       <br />
       <ui-property label="@translation.fields.value" :required="true" :vertical="true" field="value">
-        <textarea v-if="item.display === 'text'" v-model="item.value" class="ui-input" :readonly="disabled"></textarea>
+        <textarea v-if="item.display === 'text'" v-model="item.value" class="ui-input" :disabled="disabled"></textarea>
         <ui-rte v-if="item.display === 'html'" v-model="item.value" :disabled="disabled" />
       </ui-property>
     </div>

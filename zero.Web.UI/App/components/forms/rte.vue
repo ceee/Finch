@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-rte">
+  <div class="ui-rte" :disabled="disabled">
     <div ref="editor" :id="id" class="pell" v-show="!raw"></div>
     <div class="pell-raw" v-show="raw">
       <div class="pell-actionbar">

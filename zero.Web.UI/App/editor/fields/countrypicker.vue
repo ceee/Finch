@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-countrypicker :value="value" @input="$emit('input', $event)" :limit="config.limit || 1" />
+  <ui-countrypicker :value="value" @input="$emit('input', $event)" :limit="config.limit || 1" :disabled="disabled" />
 </template>
 
 
@@ -8,6 +8,10 @@
     props: {
       value: {
         type: [String, Array]
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       },
       config: Object
     }

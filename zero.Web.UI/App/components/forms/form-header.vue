@@ -2,16 +2,16 @@
   <ui-header-bar class="ui-form-header" :back-button="true">
     <template v-slot:title>
       <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name}">
-        <input class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" :readonly="titleDisabled" />
+        <input class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" :readonly="titleDisabled || disabled" />
         <!--<span v-localize="value.name || title"></span>-->
       </h2>
     </template>
     <div class="ui-form-header-aside">
       <slot></slot>
       <div v-if="activeToggle" class="ui-form-header-toggle">
-        <ui-toggle v-model="value.isActive" class="is-primary" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" />
+        <ui-toggle v-model="value.isActive" class="is-primary" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" :disabled="disabled" />
       </div>
-      <ui-dropdown v-if="actionsDefined" align="right">
+      <ui-dropdown v-if="actionsDefined && !disabled" align="right">
         <template v-slot:button>
           <ui-button type="light onbg" label="@ui.actions" caret="down" />
         </template>

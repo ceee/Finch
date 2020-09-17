@@ -7,7 +7,7 @@
           <ui-toggle v-if="permission.valueType === 'boolean'" :disabled="disabled" v-model="permission.value" @input="onChange" />
           <div class="ui-permissions-crud" v-if="permission.valueType === 'crud'">
             <ui-toggle :value="permission.value != 'none'" :disabled="disabled" @input="onPermissionToggle($event, permission)" />
-            <ui-check-list :value="permission.value.split(',')" :items="stateItems" v-if="permission.value != 'none'" :inline="true" @input="onPermissionCRUDChecked($event, permission)" />
+            <ui-check-list :value="permission.value.split(',')" :items="stateItems" v-if="permission.value != 'none'" :inline="true" @input="onPermissionCRUDChecked($event, permission)" :disabled="disabled" />
           </div>
           <!--<input v-if="permission.valueType === 'string'" :disabled="disabled" v-model="permission.value" type="text" class="ui-input" @input="onChange" />-->
         </ui-property>

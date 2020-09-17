@@ -8,13 +8,13 @@
 
       <template v-slot:footer>
         <ui-button type="light onbg" label="@ui.close" @click="config.hide"></ui-button>
-        <ui-button type="primary" :submit="true" label="Confirm" :state="form.state" :disabled="loading || disabled"></ui-button>
+        <ui-button v-if="!disabled" type="primary" :submit="true" label="Confirm" :state="form.state" :disabled="loading"></ui-button>
       </template>
 
       <ui-loading v-if="loading" :is-big="true" />
 
       <div v-if="!loading" class="ui-module-overlay-editor">
-        <ui-editor :config="config.renderer" v-model="model" :meta="meta" :is-page="false" infos="none" />
+        <ui-editor :config="config.renderer" v-model="model" :meta="meta" :is-page="false" infos="none" :disabled="disabled" />
       </div>
 
     </ui-overlay-editor>
@@ -57,7 +57,7 @@
 
         form.load(ModulesApi.getEmpty(this.config.module.alias)).then(response =>
         {
-          this.disabled = !response.meta.canEdit;
+          this.disabled = !response.meta.canEdit || this.config.disabled;
           this.meta = response.meta;
 
           if (this.isAdd)

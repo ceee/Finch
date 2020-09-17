@@ -7,10 +7,10 @@
         <ui-dropdown-button label="Change password" icon="fth-lock" :disabled="disabled" />
       </template>
     </ui-form-header>
-    <ui-editor config="user" v-model="model" :meta="meta">
+    <ui-editor config="user" v-model="model" :meta="meta" :disabled="disabled">
       <template v-slot:settings>
         <ui-property label="@user.fields.isLockedOut" :is-text="true" class="is-toggle">
-          <ui-toggle :value="isLockedOut" :negative="true" @input="onLockoutChange" />
+          <ui-toggle :value="isLockedOut" :negative="true" @input="onLockoutChange" :disabled="disabled" />
         </ui-property>
         <p v-if="isLockedOut" class="ui-message type-error block user-aside-error">
           <i class="ui-message-icon fth-alert-circle"></i>

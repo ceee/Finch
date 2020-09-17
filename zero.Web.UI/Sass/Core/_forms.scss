@@ -40,6 +40,7 @@ textarea, .ui-native-select
 
   &[disabled], &[readonly]
   {
+    background-color: transparent;
     border-color: transparent !important;
     padding: 0;
     height: auto;
@@ -110,6 +111,22 @@ textarea
     height: 42px;
     line-height: 40px;
   }
+
+  &[disabled], &[readonly]
+  {
+    min-height: 23px;
+
+    &:after
+    {
+      display: none;
+    }
+
+    select
+    {
+      text-indent: -2px;
+      padding-left: 0;
+    }
+  }
 }
 
 
@@ -137,6 +154,11 @@ textarea
     visibility: hidden;
     -webkit-appearance: none;
     border: none;
+  }
+
+  .is-disabled &
+  {
+    cursor: default;
   }
 }
 

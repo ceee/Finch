@@ -1,7 +1,7 @@
 ﻿<template>
   <ui-form ref="form" class="country" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
     <ui-form-header v-model="model" title="@country.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
-    <ui-editor config="country" v-model="model" :meta="meta" />
+    <ui-editor config="country" v-model="model" :meta="meta" :disabled="disabled" />
   </ui-form>
 </template>
 
