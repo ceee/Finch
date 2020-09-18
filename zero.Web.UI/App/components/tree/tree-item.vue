@@ -23,6 +23,10 @@
       value: {
         type: Object,
         required: true
+      },
+      activeId: {
+        type: String,
+        default: null
       }
     },
 
@@ -59,7 +63,7 @@
           'is-open': item.isOpen,
           'is-selected': item.isSelected,
           'is-disabled': item.disabled,
-          'is-active': this.isLink && (item.id == this.$route.params.id || (item.url && !item.url.params && item.url.name === this.$route.name))
+          'is-active': this.isLink && ((!!item.id && item.id === this.activeId) || item.id == this.$route.params.id || (item.url && !item.url.params && item.url.name === this.$route.name))
         };
       },
 
