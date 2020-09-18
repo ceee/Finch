@@ -165,6 +165,11 @@
       font-weight: 700;
     }
 
+    &.is-active .ui-dropdown-button-icon
+    {
+      color: var(--color-text);
+    }
+
     &[disabled]
     {
       color: var(--color-text-dim);
