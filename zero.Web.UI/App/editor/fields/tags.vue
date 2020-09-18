@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-input-list :value="value" @input="$emit('input', $event)" :add-label="config.addLabel || '@ui.add'" :disabled="disabled" :inline="true" />
+  <ui-tags :value="value" @input="$emit('input', $event)" :add-label="config.addLabel || '@ui.add'" :disabled="disabled" />
 </template>
 
 <script>

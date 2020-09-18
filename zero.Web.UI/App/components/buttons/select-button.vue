@@ -31,7 +31,8 @@
         default: false
       },
       label: {
-        type: String
+        type: String,
+        default: null
       },
       description: {
         type: String,

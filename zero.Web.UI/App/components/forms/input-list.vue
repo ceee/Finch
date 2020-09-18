@@ -1,10 +1,11 @@
 ﻿ <template>
   <div class="ui-input-list" :class="{'is-disabled': disabled }">
     <div v-for="item in items" class="ui-input-list-item">
-      <input v-model="item.value" type="text" class="ui-input" :maxlength="maxLength" :readonly="disabled" @input="onChange" />
+      <input v-model="item.value" type="text" class="ui-input" :maxlength="maxLength" :readonly="disabled" @input="onChange" size="5" />
       <ui-icon-button type="light" icon="fth-x" @click="removeItem(item)" v-if="!disabled" />
     </div>
-    <ui-button v-if="!disabled" type="light" :label="addLabel" @click="addItem" />
+    <ui-button v-if="!disabled && !plusButton" type="light" :label="addLabel" @click="addItem" />
+    <ui-select-button v-if="!disabled && plusButton" icon="fth-plus" :label="items.length > 0 ? null : addLabel" @click="addItem" />
   </div>
 </template>
 
@@ -35,7 +36,11 @@
       maxLength: {
         type: Number,
         default: 200
-      }
+      },
+      plusButton: {
+        type: Boolean,
+        default: false
+      },
     },
 
     data: () => ({
@@ -73,6 +78,11 @@
           value: null
         });
         this.onChange();
+
+        this.$nextTick(() =>
+        {
+          this.$el.querySelector('.ui-input-list-item:last-of-type input').focus();
+        });
       },
 
       removeItem(item)
@@ -98,7 +108,7 @@
     background: var(--color-input);
     border-radius: var(--radius);
 
-    & + .ui-input-list-item, & + .ui-button
+    & + .ui-input-list-item, & + .ui-button, & + .ui-select-button
     {
       margin-top: 6px;
     }
