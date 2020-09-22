@@ -32,8 +32,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "zero.Web.UI", "zero.Web.UI\
 		SlnRelativePath = "zero.Web.UI\"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hofbauer.To.Zero", "Hofbauer.To.Zero\Hofbauer.To.Zero.csproj", "{F6ECD591-4D06-4C36-A41E-29148B9E42D7}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{1CE271AD-3D9F-46EA-9938-066560A77E54}"
 	ProjectSection(SolutionItems) = preProject
 		build\build-bootstrap.ps1 = build\build-bootstrap.ps1
@@ -69,10 +67,6 @@ Global
 		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{F6ECD591-4D06-4C36-A41E-29148B9E42D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6ECD591-4D06-4C36-A41E-29148B9E42D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6ECD591-4D06-4C36-A41E-29148B9E42D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6ECD591-4D06-4C36-A41E-29148B9E42D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
