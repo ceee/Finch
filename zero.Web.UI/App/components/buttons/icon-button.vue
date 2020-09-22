@@ -25,7 +25,7 @@
       },
       title: {
         type: String,
-        default: '@ui.back'
+        default: ''
       },
       disabled: Boolean
     },
