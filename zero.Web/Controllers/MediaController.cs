@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
@@ -17,12 +19,14 @@ namespace zero.Web.Controllers
   {
     IMediaApi Api;
     IMediaFolderApi MediaFolderApi;
+    IPaths Paths;
 
 
-    public MediaController(IMediaApi api, IMediaFolderApi mediaFolderApi)
+    public MediaController(IMediaApi api, IMediaFolderApi mediaFolderApi, IPaths paths)
     {
       Api = api;
       MediaFolderApi = mediaFolderApi;
+      Paths = paths;
     }
 
   
@@ -77,8 +81,9 @@ namespace zero.Web.Controllers
     public async Task<IActionResult> StreamThumbnail(string id, [FromQuery] bool thumb = true)
     {
       string path = await Api.GetSourceById(id, thumb);
+      string fullPath = Path.Combine(Paths.Root, path?.Trim('/') ?? String.Empty);
 
-      if (path == null)
+      if (path == null || !System.IO.File.Exists(fullPath))
       {
         return NotFound();
       }
@@ -90,7 +95,7 @@ namespace zero.Web.Controllers
         contentType = "application/octet-stream";
       }
 
-      return File(path, contentType);
+      return File(path, contentType, DateTimeOffset.Now, EntityTagHeaderValue.Any);
     }
   }
 }
