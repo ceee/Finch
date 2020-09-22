@@ -136,6 +136,7 @@
     &.is-disabled
     {
       cursor: not-allowed;
+      opacity: .5;
     }
 
     &.is-active:before
