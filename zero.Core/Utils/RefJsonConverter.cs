@@ -28,10 +28,14 @@ namespace zero.Core.Utils
 
     public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
     {
-      JToken t = JToken.FromObject(value);
-      string id = t?.Value<string>(idProperty);
+      string id = null;
 
-      if (t.Type != JTokenType.Object || id.IsNullOrEmpty())
+      if (value is Ref)
+      {
+        id = (value as Ref).Id;
+      }
+
+      if (id.IsNullOrEmpty())
       {
         writer.WriteNull();
       }
