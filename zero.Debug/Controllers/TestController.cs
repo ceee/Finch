@@ -210,9 +210,9 @@ namespace zero.Debug.Controllers
         Name = "Österreichische Post",
         ShippingOptionId = "shippingOptions.1-A",
         Price = 7.99m,
-        Lines = new Dictionary<string, string>()
+        Lines = new List<OrderShippingLine>()
         {
-          { "Postfach", "7-A" }
+          new OrderShippingLine() { Key = "Postfach",  Value = "7-A" }
         },
         Address = shippingAddress,
         Deliveries = new List<IOrderDelivery>()

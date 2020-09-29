@@ -4,6 +4,8 @@
   },
 
   "ui": {
+    "yes": "Yes",
+    "no": "No",
     "more": "More",
     "add": "Add",
     "actions": "Actions",

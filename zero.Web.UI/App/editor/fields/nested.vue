@@ -41,7 +41,8 @@
 
     data: () => ({
       items: [],
-      limit: 100
+      limit: 100,
+      multiple: false
     }),
 
 
@@ -49,6 +50,11 @@
     {
       this.items = JSON.parse(JSON.stringify(this.value));
       this.limit = this.config.limit || this.limit;
+      this.multiple = this.limit > 1;
+      if (!this.multiple)
+      {
+        this.items = this.items ? [this.items] : [];
+      }
     },
 
 
@@ -107,7 +113,7 @@
 
       onChange()
       {
-        this.$emit('input', this.items);
+        this.$emit('input', this.multiple ? this.items : (this.items.length > 0 ? this.items[0] : null));
       },
 
 
