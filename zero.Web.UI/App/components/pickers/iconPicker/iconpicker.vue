@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-iconpicker" :class="{'is-disabled': disabled }">
+  <div v-if="output" class="ui-iconpicker" :class="{'is-disabled': disabled }">
     <input ref="input" type="hidden" :value="value" />
     <ui-select-button :icon="previewIcon" label="@ui.icon" :description="buttonDescription" @click="pick" :disabled="disabled" />
   </div>
@@ -28,6 +28,10 @@
       colors: {
         type: Boolean,
         default: false
+      },
+      output: {
+        type: Boolean,
+        default: true
       },
       options: {
         type: Object,

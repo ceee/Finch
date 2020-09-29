@@ -84,10 +84,11 @@
     },
 
 
-    created()
+    mounted()
     {
       this.id = 'datepicker-' + Strings.guid();
       this.updateOptions();
+      this.updateOutput();
     },
 
 

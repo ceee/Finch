@@ -30,6 +30,11 @@
           </div>
         </transition>
       </template>
+      <!-- // TODO this is only for development -->
+      <button type="button" class="app-nav-item" @click="$refs.iconpicker.pick()">
+        <i class="app-nav-item-icon fth-droplet"></i> Icons
+      </button>
+      <icon-picker ref="iconpicker" :output="false" />
     </nav>
 
     <footer class="app-nav-account" v-if="user">     
@@ -56,6 +61,7 @@
   import { map as _map, find as _find } from 'underscore';
   import AuthApi from 'zero/services/auth.js'
   import MediaApi from 'zero/resources/media.js'
+  import IconPicker from 'zero/components/pickers/iconPicker/iconpicker';
 
   export default {
     name: 'app-navigation',
@@ -67,6 +73,9 @@
       user: null,
       userAvatar: null
     }),
+
+
+    components: { IconPicker },
 
 
     computed: {
@@ -161,7 +170,6 @@
           }
         });
       }
-
     }
   }
 
