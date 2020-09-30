@@ -5,6 +5,7 @@ using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
@@ -81,18 +82,26 @@ namespace zero.Web.Controllers
     public async Task<IActionResult> StreamThumbnail(string id, [FromQuery] bool thumb = true)
     {
       string path = await Api.GetSourceById(id, thumb);
+
+      var provider = new FileExtensionContentTypeProvider();
+      string contentType;
+      if (path == null || !provider.TryGetContentType(Path.GetFileName(path), out contentType))
+      {
+        contentType = "application/octet-stream";
+      }
+
+      if (path.StartsWith("http"))
+      {
+        using var client = new WebClient();
+        var content = client.DownloadData(path);
+        return File(content, contentType, DateTimeOffset.Now, EntityTagHeaderValue.Any);
+      }
+
       string fullPath = Path.Combine(Paths.Root, path?.Trim('/') ?? String.Empty);
 
       if (path == null || !System.IO.File.Exists(fullPath))
       {
         return NotFound();
-      }
-
-      var provider = new FileExtensionContentTypeProvider();
-      string contentType;
-      if (!provider.TryGetContentType(Path.GetFileName(path), out contentType))
-      {
-        contentType = "application/octet-stream";
       }
 
       return File(path, contentType, DateTimeOffset.Now, EntityTagHeaderValue.Any);

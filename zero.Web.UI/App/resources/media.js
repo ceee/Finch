@@ -42,7 +42,7 @@ export default {
     {
       return id;
     }
-    return zero.apiPath + base + 'streamThumbnail/' + id + '?cache=' + Strings.guid(6) +  (typeof thumb === 'boolean' ? '&thumb=' + (thumb ? 'true' : 'false') : '');
+    return zero.apiPath + base + 'streamThumbnail/' + id +  (typeof thumb === 'boolean' ? '?thumb=' + (thumb ? 'true' : 'false') : '');
   },
 
   // save a media

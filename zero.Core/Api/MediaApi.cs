@@ -57,6 +57,11 @@ namespace zero.Core.Api
         return null;
       }
 
+      if (media.Source.StartsWith("url://"))
+      {
+        return media.Source.Substring(6) + "?preset=productMini";
+      }
+
       return thumb ? (media.ThumbnailSource ?? media.Source) : media.Source;
     }
 

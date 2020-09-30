@@ -174,6 +174,14 @@
     }
   }
 
+  .ui-tree-item-text
+  {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
   .ui-tree-item-toggle
   {
     position: absolute;

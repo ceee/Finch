@@ -149,15 +149,6 @@ namespace zero.Debug.Controllers
         CurrencyId = "currencies.33-A",
         State = OrderState.Completed,
         DetailStateId = "orderDetailStates.3-A",
-        StateHistory = new List<IOrderStateHistoryItem>()
-        {
-          new OrderStateHistoryItem()
-          {
-            CreatedDate = DateTimeOffset.Now,
-            State = OrderState.Open,
-            DetailStateId = "orderDetailStates.3-A"
-          }
-        },
         IsRequest = false,
         CustomerId = "customers.1-A",
         CustomerNote = "Danke für die Hilfe. Das war wirklich dringend nötig <3",
