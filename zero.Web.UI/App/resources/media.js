@@ -42,6 +42,10 @@ export default {
     {
       return id;
     }
+    if (id.indexOf('url://') === 0)
+    {
+      return id.substring(6) + "?preset=productListing";
+    }
     return zero.apiPath + base + 'streamThumbnail/' + id +  (typeof thumb === 'boolean' ? '?thumb=' + (thumb ? 'true' : 'false') : '');
   },
 
