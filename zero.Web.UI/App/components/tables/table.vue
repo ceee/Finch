@@ -54,7 +54,7 @@
       isDescending: true
     },
     // default items per page
-    pageSize: 30,
+    pageSize: 25,
     // define columns and how they are displayed
     columns: {},
     // prefix for column header translations
@@ -103,6 +103,10 @@
       'filter.search': function (val)
       {
         this.debouncedUpdate();
+      },
+      $route(to, from)
+      {
+        this.initialize();
       }
     },
 
@@ -117,7 +121,7 @@
         orderBy: null,
         orderIsDescending: true,
         page: 1,
-        pageSize: 30,
+        pageSize: 1,
         search: null
       },
       debouncedUpdate: null,
