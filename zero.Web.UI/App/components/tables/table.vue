@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-table-outer">
-    <div class="ui-table">
+    <div class="ui-table" :class="{'is-inline': inline }">
       <header class="ui-table-row ui-table-head">      
         <div v-for="column in columns" :key="column.key" class="ui-table-cell" :table-field="column.field" :style="column.flex">
           {{ column.label | localize }}
@@ -32,7 +32,7 @@
     </div>
 
     <footer class="ui-table-pagination" v-if="pages > 1">
-      <ui-pagination :pages="pages" :page="filter.page" @change="setPage" />
+      <ui-pagination :pages="pages" :page="filter.page" @change="setPage" :inline="inline" />
     </footer>
 
   </div>
@@ -53,6 +53,8 @@
       // order is descending
       isDescending: true
     },
+    // default items per page
+    pageSize: 30,
     // define columns and how they are displayed
     columns: {},
     // prefix for column header translations
@@ -76,6 +78,10 @@
         {
           return defaultConfig;
         }
+      },
+      inline: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -154,6 +160,8 @@
         this.debouncedUpdate = _debounce(this.update, 300);
 
         this.configuration = _extend(defaultConfig, this.value);
+
+        this.filter.pageSize = this.configuration.pageSize;
 
         if (this.configuration.order.enabled)
         {
@@ -317,6 +325,12 @@
     font-size: var(--font-size);
     width: 100%;
     box-shadow: var(--shadow-short);
+
+    &.is-inline
+    {
+      box-shadow: none;
+      border: 1px solid var(--color-line);
+    }
   }
 
   .ui-table-row

@@ -1,6 +1,6 @@
 ﻿<template>
-  <div class="ui-pagination" v-if="pages > 1">
-    <ui-icon-button class="ui-pagination-prev ui-pagination-button" type="light onbg" title="@ui.pagination.previous" icon="fth-chevron-left" :disabled="page < 2" @click="set(page - 1)" />
+  <div class="ui-pagination" v-if="pages > 1" :class="{'is-inline': inline }">
+    <ui-icon-button class="ui-pagination-prev ui-pagination-button" :type="buttonType" title="@ui.pagination.previous" icon="fth-chevron-left" :disabled="page < 2" @click="set(page - 1)" />
     <div class="ui-pagination-select">
       <select :value="page" @change="selectChanged">
         <option v-for="value in values" v-bind:value="value">{{value}}</option>
@@ -10,7 +10,7 @@
         <i class="ui-button-caret fth-chevron-down"></i>
       </button>
     </div>
-    <ui-icon-button class="ui-pagination-next ui-pagination-button" type="light onbg" title="@ui.pagination.next" icon="fth-chevron-right" :disabled="page >= pages" @click="set(page + 1)" />
+    <ui-icon-button class="ui-pagination-next ui-pagination-button" :type="buttonType" title="@ui.pagination.next" icon="fth-chevron-right" :disabled="page >= pages" @click="set(page + 1)" />
   </div>
 </template>
 
@@ -27,6 +27,10 @@
       page: {
         type: Number,
         default: 1
+      },
+      inline: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -34,6 +38,10 @@
       values: function ()
       {
         return Array.apply(null, Array(this.pages)).map(function (_, i) { return i + 1; });
+      },
+      buttonType()
+      {
+        return this.inline ? 'light' : 'light onbg';
       }
     },
 
