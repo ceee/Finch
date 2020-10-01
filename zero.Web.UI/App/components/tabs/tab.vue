@@ -30,23 +30,34 @@
       id: null,
       loaded: false,
       active: false,
-      hasErrors: false
+      hasErrors: false,
+      countOutput: 0
     }),
 
     watch: {
       active(val)
       {
         this.loaded = true;
+      },
+      count(val)
+      {
+        this.countOutput = val;
       }
     },
 
-    mounted ()
+    created()
     {
       this.id = Strings.guid();
       this.loaded = this.active;
+      this.countOutput = this.count;
     },
 
     methods: {
+
+      setCount(count)
+      {
+        this.countOutput = count;
+      },
 
       // set and display errors
       setErrors(errors, append)

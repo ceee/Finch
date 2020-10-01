@@ -5,7 +5,7 @@
               :aria-selected="tab.active" role="tab" @click="select(index)">
         <i v-if="tab.hasErrors" class="ui-tabs-list-item-error fth-alert-circle"></i>
         {{ tab.label | localize }}
-        <i v-if="tab.count > 0" class="ui-tabs-list-item-count">{{tab.count}}</i>
+        <i v-if="tab.countOutput > 0" class="ui-tabs-list-item-count">{{tab.countOutput}}</i>
       </button>
     </div>
     <div class="ui-tabs-items">

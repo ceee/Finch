@@ -183,6 +183,7 @@
       {
         this.configuration.items(this.filter).then(result =>
         {
+          this.$emit('loaded', result);
           this.pages = result.totalPages;
           this.count = result.totalItems;
 
@@ -574,6 +575,11 @@
     {
       color: var(--color-text-dim);
     }
+  }
+
+  .ui-table-cell .-minor
+  {
+    color: var(--color-text-dim);
   }
 
   .ui-table-field-image

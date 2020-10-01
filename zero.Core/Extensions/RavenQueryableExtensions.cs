@@ -70,13 +70,13 @@ namespace zero.Core.Extensions
       {
         if (!query.Search.IsNullOrEmpty() && query.SearchSelector != null)
         {
-          rawQuery = rawQuery.SearchIf(query.SearchSelector, query.Search, "*", "*");
+          rawQuery = rawQuery.SearchIf(query.SearchSelector, query.Search, "*", "*", Raven.Client.Documents.Queries.SearchOperator.And);
         }
         if (!query.Search.IsNullOrEmpty() && query.SearchSelectors.Length > 0)
         {
           foreach (var selector in query.SearchSelectors)
           {
-            rawQuery = rawQuery.SearchIf(selector, query.Search, "*", "*", Raven.Client.Documents.Queries.SearchOperator.Or);
+            rawQuery = rawQuery.SearchIf(selector, query.Search, "*", "*", Raven.Client.Documents.Queries.SearchOperator.And);
           }
         }
 
