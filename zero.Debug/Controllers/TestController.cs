@@ -215,19 +215,19 @@ namespace zero.Debug.Controllers
             TrackingUrl = "https://www.post.at/sv/sendungsdetails?snr=1035304005500970252807",
             Description = "Waren sind im Lager 2 (Regal 23)",
             ShipmentDate = DateTimeOffset.Now.AddDays(2),
-            Items = new Dictionary<string, int>()
+            Items = new List<OrderDeliveryProduct>()
             {
-              { order.Items[0].Id, 2 },
-              { order.Items[1].Id, 1 }
+              new OrderDeliveryProduct() { Id = order.Items[0].Id, Quantity = 2 },
+              new OrderDeliveryProduct() { Id = order.Items[1].Id, Quantity = 1 }
             }
           },
           new OrderDelivery()
           {
             CreatedDate = DateTimeOffset.Now,
             ShipmentDate = DateTimeOffset.Now.AddDays(4),
-            Items = new Dictionary<string, int>()
+            Items = new List<OrderDeliveryProduct>()
             {
-              { order.Items[0].Id, 1 }
+              new OrderDeliveryProduct() { Id = order.Items[0].Id, Quantity = 1 }
             }
           }
         }

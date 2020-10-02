@@ -250,7 +250,7 @@ button::-moz-focus-inner
 {
   @extend .ui-button;
   background: var(--color-button-light);
-  padding: 0;
+  padding: 0 !important;
   height: 32px;
   width: 32px;
   border-radius: 16px;
@@ -278,6 +278,7 @@ button::-moz-focus-inner
     .ui-button-icon
     {
       font-size: 13px;
+      margin: 0 !important;
     }
   }
 }
