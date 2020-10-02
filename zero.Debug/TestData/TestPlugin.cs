@@ -45,6 +45,9 @@ namespace zero.TestData
       {
         opts.Documents.Add<InvoiceDocument>();
         opts.Documents.Add<PrintDocument>();
+         
+        opts.ChannelFeatures.Add("channel.printingMail", "Printing mail", "Send printing mail when order contains labels");
+        opts.ChannelFeatures.Add("channel.altFrontend", "Alternative header", "Render a simplified header in the frontend");
       });
 
       //services.Replace<IChannel, SalesChannel>();
