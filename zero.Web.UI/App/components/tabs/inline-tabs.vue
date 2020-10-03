@@ -109,10 +109,10 @@
   {
     display: inline-flex;
     align-items: center;
-    padding: 6px 6px 6px 12px;
+    padding: 6px 12px;
     background: transparent;
     border-radius: 30px;
-    font-size: var(--font-size-s);
+    font-size: var(--font-size);
 
     .ui-inline-tabs-list-item-count
     {
@@ -124,6 +124,7 @@
       border-radius: 10px;
       background: var(--color-button-light);
       margin-left: 12px;
+      margin-right: -6px;
       font-size: 11px;
       line-height: 1;
       color: var(--color-text-dim);
@@ -133,6 +134,7 @@
     &.is-active
     {
       background: var(--color-button-light);
+      font-weight: 600;
 
       .ui-inline-tabs-list-item-count
       {
