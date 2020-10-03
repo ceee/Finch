@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using zero.Core.Utils;
 
 namespace zero.Core.Options
 {
@@ -10,11 +11,19 @@ namespace zero.Core.Options
 
     public BackofficeJsonSerlializerSettings(bool typed)
     {
-      Converters.Add(new IsoDateTimeConverter() { DateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'" });
-      Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-      ContractResolver = new CamelCasePropertyNamesContractResolver();
-      ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-      TypeNameHandling = typed ? TypeNameHandling.Objects : TypeNameHandling.None;
+      Setup(this, typed);
+    }
+
+
+    public static void Setup(JsonSerializerSettings settings, bool typed = false)
+    {
+      settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+      settings.Converters.Add(new RefJsonConverter());
+      settings.Converters.Add(new RefsJsonConverter());
+      settings.ContractResolver = new ZeroJsonContractResolver();
+      settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+      settings.TypeNameHandling = TypeNameHandling.Objects;
+      //settings.SerializationBinder = new ZeroInterfaceBinder();
     }
   }
 }

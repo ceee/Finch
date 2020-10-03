@@ -48,6 +48,7 @@
     }
   }
 
+  .ui-property + .ui-split,
   .ui-split + .ui-property,
   .ui-property + .ui-property
   {

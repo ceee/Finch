@@ -46,10 +46,10 @@
       {
         let classes = 'align-' + this.align.split(' ').join(' align-');
 
-        //if (!!this.theme)
-        //{
-        //  classes += ' theme-' + this.theme;
-        //}
+        if (!!this.theme)
+        {
+          classes += ' theme-' + this.theme;
+        }
 
         return classes;
       }

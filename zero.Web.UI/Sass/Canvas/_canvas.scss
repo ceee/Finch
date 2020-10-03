@@ -65,6 +65,11 @@ body
   align-items: stretch;
   justify-content: stretch;
 
+  & + .ui-split
+  {
+    margin-top: 50px;
+  }
+
   .ui-property + .ui-property
   {
     margin-top: 0;
@@ -76,4 +81,10 @@ body
 {
   @extend .ui-split;
   grid-template-columns: 1fr 1fr 1fr;
+}
+
+.ui-split-four
+{
+  @extend .ui-split;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }

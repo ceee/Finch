@@ -84,14 +84,7 @@ namespace zero.Web
       Mvc.AddNewtonsoftJson(x =>
       {
         // TODO this shall only be configurated for backoffice controllers
-        x.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-        x.SerializerSettings.Converters.Add(new RefJsonConverter());
-        x.SerializerSettings.Converters.Add(new RefsJsonConverter());
-        x.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-        x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        x.SerializerSettings.TypeNameHandling = TypeNameHandling.Objects;
-
-        //JsonConvert.DefaultSettings = () => x.SerializerSettings;
+        BackofficeJsonSerlializerSettings.Setup(x.SerializerSettings, true);
       });
 
       if (Environment.GetEnvironmentVariable("DOTNET_WATCH") == "1")
