@@ -1,11 +1,19 @@
 ﻿<template>
-  <button :disabled="disabled" type="button" @click="onClick" 
-          class="ui-dropdown-button" :class="{ 'has-icon': icon, 'is-active': selected, 'is-multiline': multiline }">
-    <i v-if="icon" class="ui-dropdown-button-icon" :class="icon"></i>
-    {{label | localize}}
-    <i v-if="selected" class="ui-dropdown-button-selected fth-check"></i>
-    <i v-if="loading" class="ui-dropdown-button-progress"></i>
-  </button>
+  <!-- // TODO remove surrounding div as soon as we can have multiple roots (vue 3) -->
+  <div @click="onClickShim">
+    <button v-if="!confirming" :disabled="disabled" type="button" @click="onClick" class="ui-dropdown-button" :class="{ 'has-icon': icon, 'is-active': selected, 'is-multiline': multiline }">
+      <i v-if="icon" class="ui-dropdown-button-icon" :class="icon"></i>
+      {{label | localize}}
+      <i v-if="selected" class="ui-dropdown-button-selected fth-check"></i>
+      <i v-if="loading" class="ui-dropdown-button-progress"></i>
+    </button>
+    <div v-if="confirming" class="ui-dropdown-button-confirmation">
+      <i v-if="icon" class="ui-dropdown-button-icon" :class="icon"></i>
+      {{label | localize}}
+      <ui-button type="small primary" label="OK" @click="onClick($event, true)" />
+      <ui-button type="small light" label="Cancel" @click="confirming=false" />
+    </div>
+  </div>
 </template>
 
 
@@ -38,6 +46,10 @@
         type: Function,
         default: () => { }
       },
+      confirm: {
+        type: Boolean,
+        default: false
+      },
       disabled: {
         type: Boolean,
         default: false
@@ -50,7 +62,8 @@
 
     data: () => ({
       dropdown: null,
-      loading: false
+      loading: false,
+      confirming: false
     }),
 
     mounted ()
@@ -75,12 +88,23 @@
 
     methods: {
 
-      onClick()
+      onClick(e, confirmed)
       {
         var instance = this;
 
         if (!this.loading && !this.disabled)
         {
+          if (this.confirm && !confirmed)
+          {
+            this.confirming = true;
+            //var confirmed = window.confirm('confirm?');
+            return;
+          }
+          else
+          {
+            this.confirming = false;
+          }
+
           if (!this.prevent && this.dropdown)
           {
             this.dropdown.hide();
@@ -102,6 +126,12 @@
             }
           });
         }
+      },
+
+      onClickShim(e)
+      {
+        e.preventDefault();
+        e.stopPropagation();
       }
 
     }
@@ -114,7 +144,7 @@
   {
     display: grid;
     width: 100%;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 6px;
     align-items: center;
     font-size: var(--font-size);
@@ -129,7 +159,7 @@
 
     &.has-icon
     {
-      grid-template-columns: 30px 1fr auto;
+      grid-template-columns: 30px minmax(0, 1fr) auto;
 
       &:not([disabled]):hover .ui-dropdown-button-icon
       {
@@ -211,6 +241,29 @@
     will-change: transform;
     animation: rotating .5s linear infinite;
     transition: opacity .25s ease;
+  }
+
+  .ui-dropdown-button-confirmation
+  {
+    display: grid;
+    flex-grow: 0;
+    width: 100%;
+    grid-template-columns: 30px minmax(0, 1fr) auto auto;
+    gap: 6px;
+    align-items: center;
+    font-size: var(--font-size);
+    padding: 0 6px 0 16px;
+    height: 42px;
+    color: var(--color-text);
+    border-radius: var(--radius);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 300px;
+    .ui-button + .ui-button
+    {
+      margin-left: 4px;
+    }
   }
 
   @keyframes rotating

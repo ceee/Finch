@@ -154,16 +154,6 @@ namespace zero.Debug.Controllers
         CustomerNote = "Danke für die Hilfe. Das war wirklich dringend nötig <3",
         AssignedToUserId = "users.1-A",
         Address = address,
-        Positions = new List<IOrderPosition>()
-        {
-          new OrderPosition()
-          {
-            Label = "Flex-Druck",
-            Price = 1.99m,
-            Quantity = 2,
-            TaxRate = 12
-          }
-        },
         Items = new List<IOrderItem>()
         {
           new OrderItem()
@@ -191,6 +181,15 @@ namespace zero.Debug.Controllers
             Discount = 5,
             Price = 12,
             TaxRate = 20
+          },
+          new OrderItem()
+          {
+            Id = IdGenerator.Create(),
+            Name = "Flex-Druck",
+            Sort = 2,
+            Price = 1.99m,
+            Quantity = 2,
+            TaxRate = 12
           }
         },
         Price = 72.98m
