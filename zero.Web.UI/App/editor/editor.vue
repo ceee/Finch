@@ -9,13 +9,18 @@
       </ui-tabs>
       <aside v-if="!nested && infos && infos != 'none'" class="editor-infos">
         <slot name="info-boxes"></slot>
-        <div class="ui-box editor-active-toggle" v-if="isShared || activeToggle" :class="{'is-active': value.isActive }">
+        <div class="ui-box" v-if="isShared" :class="{'is-active': value.isActive }">
+          <div class="editor-global-flag">
+            <i class="fth-git-pull-request"></i>
+            <p>
+              <b>This entity is bound to a parent</b> and automatically synchronised.<br>
+              <!--<a href="/">Edit parent</a>-->
+            </p>
+          </div>
+          <ui-button type="light" label="Edit parent" @click="editBlueprint(value.blueprint)" />
+        </div>
+        <div class="ui-box editor-active-toggle" v-if="activeToggle" :class="{'is-active': value.isActive }">
           <slot name="settings">
-            <div v-if="isShared" class="editor-global-flag">
-              <b>This entity is shared</b> and can be used by all applications.<br>
-              <a href="/">More info</a>
-              <i class="fth-radio"></i>
-            </div>
             <ui-property v-if="activeToggle" label="@ui.active" :is-text="true" class="is-toggle">
               <ui-toggle v-model="value.isActive" class="is-primary" :disabled="disabled" />
             </ui-property>
@@ -118,7 +123,7 @@
     computed: {
       isShared()
       {
-        return this.meta.canBeShared && this.value && this.value.appId === zero.sharedAppId;
+        return this.value && this.value.blueprint != null;
       }
     },
 
@@ -213,6 +218,18 @@
         }
 
         return tab.disabled(this.value);
+      },
+
+
+      editBlueprint(blueprint)
+      {
+        let params = this.$route.params;
+        params.id = blueprint.id;
+
+        this.$router.replace({
+          name: this.$route.name,
+          params: params
+        });
       }
     }
   }
@@ -334,27 +351,28 @@
 
   .editor-global-flag
   {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-gap: 20px;
+    align-items: center;
     font-size: var(--font-size);
     line-height: 1.5;
-    padding-right: 70px;
     position: relative;
+
+    p
+    {
+      margin: 0;
+    }
 
     i
     {
-      position: absolute;
-      top: 50%;
-      margin-top: -28px;
-      right: -3px;
-      font-size: 42px;
-      color: var(--color-text-dim);
-      opacity: 0.2;
+      font-size: 32px;
+      color: var(--color-text);
     }
 
-    a
+    & + .ui-button
     {
-      color: var(--color-text-dim);
-      text-decoration: underline dotted;
-      font-size: var(--font-size-s);
+      margin-top: 1.2rem;
     }
 
     & + .ui-property

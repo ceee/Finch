@@ -27,7 +27,7 @@ namespace zero.Core.Api
         return false;
       }
 
-      if (IncludeShared && appId.Equals(Constants.Database.SharedAppId, StringComparison.OrdinalIgnoreCase))
+      if (appId.Equals(Constants.Database.SharedAppId, StringComparison.OrdinalIgnoreCase))
       {
         return true;
       }
