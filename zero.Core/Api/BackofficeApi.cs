@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using zero.Core.Attributes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Sync;
 using zero.Core.Utils;
 
 namespace zero.Core.Api

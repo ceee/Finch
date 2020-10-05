@@ -37,7 +37,7 @@ namespace zero.Core.Entities
     public DateTimeOffset CreatedDate { get; set; }
 
     /// <inheritdoc/>
-    public string BlueprintId { get; set; }
+    public BlueprintConfiguration Blueprint { get; set; }
   }
 
 
@@ -86,8 +86,8 @@ namespace zero.Core.Entities
     DateTimeOffset CreatedDate { get; set; }
 
     /// <summary>
-    /// Id of the original base entity (which this one inherits from)
+    /// Configuration of the base entity (which this one inherits from)
     /// </summary>
-    string BlueprintId { get; set; }
+    BlueprintConfiguration Blueprint { get; set; }
   }
 }

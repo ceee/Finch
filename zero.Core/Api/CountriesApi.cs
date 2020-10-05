@@ -16,7 +16,6 @@ namespace zero.Core.Api
 
     public CountriesApi(IBackofficeStore store, IValidator<ICountry> validator) : base(store)
     {
-      Scope.IncludeShared = true;
       Validator = validator;
     }
 
@@ -38,15 +37,12 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<ICountry>> GetAll(string languageId)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.Query<ICountry>()
-          .Scope(Scope)
-          //.Where(x => x.LanguageId == languageId)
-          .OrderByDescending(x => x.IsPreferred)
-          .ThenBy(x => x.Name)
-          .ToListAsync();
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session.Query<ICountry>()
+        .Scope(Scope)
+        .OrderByDescending(x => x.IsPreferred)
+        .ThenBy(x => x.Name)
+        .ToListAsync();
     }
 
 
@@ -55,15 +51,12 @@ namespace zero.Core.Api
     {
       query.SearchSelector = country => country.Name;
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.Query<ICountry>()
-          .Scope(Scope)
-          //.Where(x => x.LanguageId == languageId)
-          .OrderByDescending(x => x.IsPreferred)
-          .ThenBy(x => x.Name)
-          .ToQueriedListAsync(query);
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session.Query<ICountry>()
+        .Scope(Scope)
+        .OrderByDescending(x => x.IsPreferred)
+        .ThenBy(x => x.Name)
+        .ToQueriedListAsync(query);
     }
 
 

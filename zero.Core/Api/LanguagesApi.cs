@@ -14,12 +14,11 @@ namespace zero.Core.Api
 {
   public class LanguagesApi : AppAwareBackofficeApi, ILanguagesApi
   {
-    protected IValidator<ILanguage> Validator { get; private set; }
+    IValidator<ILanguage> Validator;
 
 
     public LanguagesApi(IBackofficeStore store, IValidator<ILanguage> validator) : base(store)
     {
-      Scope.IncludeShared = true;
       Validator = validator;
     }
 

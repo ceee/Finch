@@ -29,13 +29,11 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<IApplication>> GetAll()
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session
-          .Query<IApplication>()
-          .OrderByDescending(x => x.CreatedDate)
-          .ToListAsync();
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session
+        .Query<IApplication>()
+        .OrderByDescending(x => x.CreatedDate)
+        .ToListAsync();
     }
 
 
@@ -44,11 +42,8 @@ namespace zero.Core.Api
     {
       query.SearchFor(entity => entity.Name);
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.Query<IApplication>()
-          .ToQueriedListAsync(query);
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session.Query<IApplication>().ToQueriedListAsync(query);
     }
 
 

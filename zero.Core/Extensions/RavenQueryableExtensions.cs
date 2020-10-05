@@ -21,15 +21,16 @@ namespace zero.Core.Extensions
         return source;
       }
 
-      HashSet<string> ids = new HashSet<string>();
-      ids.Add(appId);
+      //HashSet<string> ids = new HashSet<string>();
+      //ids.Add(appId);
 
-      if (includeShared)
-      {
-        ids.Add(Constants.Database.SharedAppId);
-      }
+      //if (includeShared)
+      //{
+      //  ids.Add(Constants.Database.SharedAppId);
+      //}
 
-      return source.Where(item => (item as IAppAwareEntity).AppId.In(ids));
+      return source.Where(item => ((IAppAwareEntity)item).AppId == appId);
+      //return source.Where(item => (item as IAppAwareEntity).AppId.In(ids));
     }
 
 
@@ -45,15 +46,16 @@ namespace zero.Core.Extensions
         return source;
       }
 
-      HashSet<string> ids = new HashSet<string>();
-      ids.Add(scope.AppId);
+      //HashSet<string> ids = new HashSet<string>();
+      //ids.Add(scope.AppId);
 
-      if (scope.IncludeShared)
-      {
-        ids.Add(Constants.Database.SharedAppId);
-      } 
+      //if (scope.IncludeShared)
+      //{
+      //  ids.Add(Constants.Database.SharedAppId);
+      //}
 
-      return source.Where(item => ((IAppAwareEntity)item).AppId.In(ids));
+      return source.Where(item => ((IAppAwareEntity)item).AppId == scope.AppId);
+      //return source.Where(item => ((IAppAwareEntity)item).AppId.In(ids));
     }
 
 

@@ -7,7 +7,7 @@ using zero.Core;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 
-namespace zero.Core
+namespace zero.Core.Sync
 {
   public class SyncPseudo
   {
@@ -44,7 +44,7 @@ namespace zero.Core
       if (!isCreate)
       {
         string id = model.Id;
-        inheritedModels = await session.Query<T>().Where(x => x.BlueprintId == id).ToListAsync();
+        inheritedModels = await session.Query<T>().Where(x => x.Blueprint != null && x.Blueprint.Id == id).ToListAsync();
       }
 
       foreach (IApplication app in apps)
@@ -71,7 +71,10 @@ namespace zero.Core
         }
         
         inheritedModel.AppId = app.Id;
-        inheritedModel.BlueprintId = model.Id;
+        inheritedModel.Blueprint = new BlueprintConfiguration()
+        {
+          Id = model.Id
+        };
 
         await session.StoreAsync(inheritedModel);
       }
