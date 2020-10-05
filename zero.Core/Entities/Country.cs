@@ -5,9 +5,6 @@ namespace zero.Core.Entities
   public class Country : ZeroEntity, ICountry
   {
     /// <inheritdoc />
-    public string AppId { get; set; }
-
-    /// <inheritdoc />
     public bool IsPreferred { get; set; }
 
     /// <inheritdoc />

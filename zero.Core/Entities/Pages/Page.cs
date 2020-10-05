@@ -17,9 +17,6 @@ namespace zero.Core.Entities
     public string PageTypeAlias { get; set; }
 
     /// <inheritdoc />
-    public string AppId { get; set; }
-
-    /// <inheritdoc />
     public DateTimeOffset? PublishDate { get; set; }
 
     /// <inheritdoc />

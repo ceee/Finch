@@ -111,8 +111,9 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> SaveModel<T>(T model, IValidator<T> validator = null, Action<IMetadataDictionary> meta = null) where T : IZeroIdEntity
+    public async Task<EntityResult<T>> SaveModel<T>(T model, IValidator<T> validator = null, Action<IMetadataDictionary> meta = null) where T : IZeroEntity
     {
+      bool isCreate = false;
       // check for alias
       //if (model is IUrlAliasEntity)
       //{
@@ -122,7 +123,6 @@ namespace zero.Core.Api
 
       // get specifics 
       IAppAwareEntity appAwareEntity = model as IAppAwareEntity;
-      IZeroEntity zeroEntity = model as IZeroEntity;
 
       // run validator
       if (validator != null)
@@ -194,11 +194,10 @@ namespace zero.Core.Api
       // set default properties
       if (model.Id.IsNullOrEmpty())
       {
-        if (zeroEntity != null)
-        {
-          zeroEntity.CreatedDate = DateTimeOffset.Now;
-          zeroEntity.CreatedById = userId;
-        }
+        isCreate = true;
+
+        model.CreatedDate = DateTimeOffset.Now;
+        model.CreatedById = userId;
 
         if (model is ILanguageAwareEntity)
         {
@@ -207,21 +206,26 @@ namespace zero.Core.Api
       }
 
       // update name alias and last modified
-      if (zeroEntity != null)
-      {
-        zeroEntity.Alias = Safenames.Alias(zeroEntity.Name);
-        zeroEntity.LastModifiedById = userId;
-        zeroEntity.LastModifiedDate = DateTimeOffset.Now;
-        zeroEntity.CreatedById ??= userId;
-      }
+      model.Alias = Safenames.Alias(model.Name);
+      model.LastModifiedById = userId;
+      model.LastModifiedDate = DateTimeOffset.Now;
+      model.CreatedById ??= userId;
 
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-
       session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
 
       await session.StoreAsync(model);
 
       meta?.Invoke(session.Advanced.GetMetadataFor(model));
+
+      if (isCreate)
+      {
+        await new SyncPseudo().OnCreate(session, model);
+      }
+      else
+      {
+        await new SyncPseudo().OnUpdate(session, model);
+      }
 
       await session.SaveChangesAsync();
 
@@ -309,7 +313,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Updates or creates an entity with an optional validator
     /// </summary>
-    Task<EntityResult<T>> SaveModel<T>(T model, IValidator<T> validator = null, Action<IMetadataDictionary> meta = null) where T : IZeroIdEntity;
+    Task<EntityResult<T>> SaveModel<T>(T model, IValidator<T> validator = null, Action<IMetadataDictionary> meta = null) where T : IZeroEntity;
 
     /// <summary>
     /// Deletes an entity by Id

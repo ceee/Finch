@@ -7,9 +7,6 @@ namespace zero.Core.Entities
   public class Media : ZeroEntity, IMedia
   {
     /// <inheritdoc />
-    public string AppId { get; set; }
-
-    /// <inheritdoc />
     public string FileId { get; set; }
 
     /// <inheritdoc />

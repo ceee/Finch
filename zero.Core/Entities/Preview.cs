@@ -5,9 +5,6 @@ namespace zero.Core.Entities
   public class Preview : ZeroEntity, IPreview
   {
     /// <inheritdoc />
-    public string AppId { get; set; }
-
-    /// <inheritdoc />
     public string OriginalId { get; set; }
 
     /// <inheritdoc />

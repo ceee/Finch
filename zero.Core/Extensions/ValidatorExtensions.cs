@@ -101,7 +101,7 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this value is unique within a collection
     /// </summary>
-    public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IBackofficeStore store) where T : IZeroIdEntity
+    public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IBackofficeStore store) where T : IZeroEntity
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
@@ -110,7 +110,7 @@ namespace zero.Core.Extensions
         using IAsyncDocumentSession session = store.Raven.OpenAsyncSession();
 
         bool any = await session.Advanced.AsyncDocumentQuery<T>()
-          .Scope(store.AppContext.AppId, includeShared)
+          .Scope(entity.AppId, false)
           .WhereNotEquals(nameof(IZeroIdEntity.Id), entity.Id)
           .WhereEquals(context.Rule.PropertyName.ToPascalCaseId(), value)
           .AnyAsync(cancellation);
@@ -123,7 +123,7 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this value is at least set once to the expected value within a collection
     /// </summary>
-    public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IBackofficeStore store, TProperty expectedValue) where T : IZeroIdEntity
+    public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IBackofficeStore store, TProperty expectedValue) where T : IZeroEntity
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
@@ -132,7 +132,7 @@ namespace zero.Core.Extensions
         using IAsyncDocumentSession session = store.Raven.OpenAsyncSession();
 
         return await session.Advanced.AsyncDocumentQuery<T>()
-          .Scope(store.AppContext.AppId, includeShared)
+          .Scope(entity.AppId, includeShared)
           .WhereNotEquals(nameof(IZeroIdEntity.Id), entity.Id)
           .WhereEquals(context.Rule.PropertyName.ToPascalCaseId(), expectedValue)
           .AnyAsync(cancellation);
@@ -143,7 +143,7 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
     /// </summary>
-    public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IBackofficeStore store) where T : IZeroIdEntity
+    public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IBackofficeStore store) where T : IZeroEntity
     {
       return ruleBuilder.Exists<T, T>(store);
     }
@@ -152,7 +152,7 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
     /// </summary>
-    public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IBackofficeStore store) where T : IZeroIdEntity where TReference : IZeroIdEntity
+    public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IBackofficeStore store) where T : IZeroEntity where TReference : IZeroEntity
     {
       return ruleBuilder.MustAsync(async (entity, id, context, cancellation) =>
       {
@@ -168,7 +168,7 @@ namespace zero.Core.Extensions
 
         if (typeof(IAppAwareEntity).IsAssignableFrom(typeof(TReference)))
         {
-          return model != null && ((IAppAwareEntity)model).InScope(store.AppContext.AppId);
+          return model != null && ((IAppAwareEntity)model).InScope(entity.AppId);
         }
 
         return model != null;

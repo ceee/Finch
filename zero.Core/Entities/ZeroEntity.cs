@@ -10,6 +10,9 @@ namespace zero.Core.Entities
     public string Id { get; set; }
 
     /// <inheritdoc/>
+    public string AppId { get; set; }
+
+    /// <inheritdoc/>
     public string Name { get; set; }
 
     /// <inheritdoc/>
@@ -38,7 +41,7 @@ namespace zero.Core.Entities
   }
 
 
-  public interface IZeroEntity : IZeroIdEntity
+  public interface IZeroEntity : IZeroIdEntity, IAppAwareEntity
   {
     /// <summary>
     /// Full name of the entity

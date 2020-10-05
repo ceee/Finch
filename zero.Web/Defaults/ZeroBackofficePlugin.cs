@@ -75,7 +75,7 @@ namespace zero.Web.Defaults
       zero.Sections.Add<SettingsSection>();
 
       zero.Settings.AddGroup<SystemSettings>();
-      zero.Settings.AddGroup<PluginSettings>();
+      //zero.Settings.AddGroup<PluginSettings>();
 
       zero.Mapper.Add<UserMapperConfig>();
       zero.Mapper.Add<CountryMapperConfig>();

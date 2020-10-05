@@ -5,9 +5,6 @@ namespace zero.Core.Entities
   public class Translation : ZeroEntity, ITranslation
   {
     /// <inheritdoc />
-    public string AppId { get; set; }
-
-    /// <inheritdoc />
     public string LanguageId { get; set; }
 
     /// <inheritdoc />

@@ -5,9 +5,6 @@ namespace zero.Core.Entities
   public class Language : ZeroEntity, ILanguage
   {
     /// <inheritdoc />
-    public string AppId { get; set; }
-
-    /// <inheritdoc />
     public string Code { get; set; }
 
     /// <inheritdoc />

@@ -10,9 +10,6 @@ namespace zero.Core.Entities
   {
     /// <inheritdoc />
     public string SpaceAlias { get; set; }
-
-    /// <inheritdoc />
-    public string AppId { get; set; }
   }
 
 
