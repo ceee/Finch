@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +15,12 @@ namespace zero.Core.Api
   {
     protected UserManager<User> UserManager { get; private set; }
 
-    public UserApi(IBackofficeStore store, UserManager<User> userManager) : base(store)
+    protected IHttpContextAccessor HttpContextAccessor { get; set; }
+
+    public UserApi(IBackofficeStore store, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor) : base(store)
     {
       UserManager = userManager;
+      HttpContextAccessor = httpContextAccessor;
     }
 
 
@@ -45,27 +50,26 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<IUser>> GetAll()
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.Query<IUser>()
-          .Scope(Scope)
-          .OrderByDescending(x => x.CreatedDate)
-          .ToListAsync();
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session.Query<IUser>()
+        .Scope(Scope)
+        .OrderByDescending(x => x.CreatedDate)
+        .ToListAsync();
     }
 
 
     /// <inheritdoc />
     public async Task<ListResult<IUser>> GetByQuery(ListQuery<IUser> query)
     {
+      string currentUserId = (await UserManager.GetUserAsync(HttpContextAccessor.HttpContext.User))?.Id;
+      HashSet<string> appIds = new HashSet<string>() { Constants.Database.SharedAppId, Scope.AppId };
+
       query.SearchSelector = user => user.Name;
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.Query<IUser>()
-          .Scope(Scope)
-          .ToQueriedListAsync(query);
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session.Query<IUser>()
+        .Where(x => x.AppId.In(appIds) || x.Id == currentUserId)
+        .ToQueriedListAsync(query);
     }
 
 
