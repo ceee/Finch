@@ -36,7 +36,7 @@ export default function (el, binding)
   if (!column.as || column.as === 'text' || column.as === 'html')
   {
     const hasFunc = typeof column.render === 'function';
-    const hasSharedIndicator = column.shared === true && item.appId === zero.sharedAppId;
+    const hasSharedIndicator = column.shared === true && item.blueprint != null; //item.appId === zero.sharedAppId;
 
     let html = hasFunc ? column.render(item, column) : value;
     let isHtml = column.as === 'html' || hasSharedIndicator;
@@ -49,7 +49,7 @@ export default function (el, binding)
     if (hasSharedIndicator)
     {
       //html = html + ' <i class="ui-table-field-shared is-inline fth-radio"></i>';
-      html = html + ' <i class="ui-table-field-shared-2 is-inline">(shared)</i>';
+      html = html + ' <i class="ui-table-field-shared-2 is-inline">SYNCED</i>';
     }
 
     render(html, isHtml);

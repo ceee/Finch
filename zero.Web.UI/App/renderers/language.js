@@ -47,6 +47,7 @@
         label: '@ui.name',
         as: 'text',
         bold: true,
+        shared: true,
         link: item =>
         {
           return {

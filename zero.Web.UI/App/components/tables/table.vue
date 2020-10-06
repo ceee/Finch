@@ -542,7 +542,7 @@
   .ui-table-field-shared
   {
     font-size: 16px;
-    color: var(--color-accent-info);
+    color: var(--color-text-dim-one);
 
     &.is-inline
     {
@@ -555,16 +555,26 @@
 
   .ui-table-field-shared-2
   {
-    color: var(--color-text-dim);
+    align-self: center;
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: var(--color-box-nested);
+    color: var(--color-text-dim-one);
+    height: 22px;
+    line-height: 22px;
+    padding: 0 10px;
+    border-radius: 16px;
+    letter-spacing: .5px;
     font-style: normal;
-    font-weight: 400;
-    font-size: 0.85em;
+    margin-left: 12px;
 
-    &.is-inline
+    /*&.is-inline
     {
       margin-left: 0.5em;
       position: relative;
-    }
+    }*/
   }
 
   .ui-table-cell[field-type="datetime"]
