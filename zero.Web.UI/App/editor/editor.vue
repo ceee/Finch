@@ -11,13 +11,14 @@
         <slot name="info-boxes"></slot>
         <div class="ui-box" v-if="isShared" :class="{'is-active': value.isActive }">
           <div class="editor-global-flag">
-            <i class="fth-git-pull-request"></i>
+            <i class="fth-rotate-cw"></i>
             <p>
               <b>This entity is bound to a parent</b> and automatically synchronised.<br>
               <!--<a href="/">Edit parent</a>-->
             </p>
           </div>
-          <ui-button type="light" label="Edit parent" @click="editBlueprint(value.blueprint)" />
+          <ui-button type="light small" label="Edit parent" @click="editBlueprint(value.blueprint)" />
+          <ui-button type="light small" label="Settings" @click="editBlueprint(value.blueprint)" />
         </div>
         <div class="ui-box editor-active-toggle" v-if="activeToggle" :class="{'is-active': value.isActive }">
           <slot name="settings">
@@ -353,7 +354,8 @@
   {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    grid-gap: 20px;
+    grid-gap: 16px;
+    padding-bottom: 10px;
     align-items: center;
     font-size: var(--font-size);
     line-height: 1.5;
@@ -366,8 +368,9 @@
 
     i
     {
-      font-size: 32px;
+      font-size: 28px;
       color: var(--color-text);
+      margin-top: -2px;
     }
 
     & + .ui-button

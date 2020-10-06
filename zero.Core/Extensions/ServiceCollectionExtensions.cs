@@ -13,13 +13,13 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Adds all found implementations based on the service type and assembly discovery rules
     /// </summary>
-    public static void AddAll<TService>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Transient) => services.AddAll(typeof(TService), lifetime);
+    public static void AddAll<TService>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Transient, bool asSelf = false) => services.AddAll(typeof(TService), lifetime, asSelf);
 
 
     /// <summary>
     /// Adds all found implementations based on the service type and assembly discovery rules
     /// </summary>
-    public static void AddAll(this IServiceCollection services, Type serviceType, ServiceLifetime lifetime = ServiceLifetime.Transient)
+    public static void AddAll(this IServiceCollection services, Type serviceType, ServiceLifetime lifetime = ServiceLifetime.Transient, bool asSelf = false)
     {
       if (AssemblyDiscovery.Current == null)
       {
@@ -42,7 +42,7 @@ namespace zero.Core.Extensions
 
         foreach ((Type, Type) match in matches)
         {
-          services.Add(new ServiceDescriptor(match.Item1, match.Item2, lifetime));
+          services.Add(new ServiceDescriptor(asSelf ? match.Item2 : match.Item1, match.Item2, lifetime));
         }
       }
       // add implementations with specific service types
@@ -50,7 +50,7 @@ namespace zero.Core.Extensions
       {
         foreach (Type type in AssemblyDiscovery.Current.GetTypes(serviceType))
         {
-          services.Add(new ServiceDescriptor(serviceType, type, lifetime));
+          services.Add(new ServiceDescriptor(asSelf ? type : serviceType, type, lifetime));
         }
       }
     }

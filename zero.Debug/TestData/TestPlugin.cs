@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using zero.Commerce.Options;
 using zero.Core.Options;
 using zero.Core.Plugins;
+using zero.Core.Extensions;
 using zero.Debug.Sync;
 using zero.Debug.TestData;
+using zero.Core.Messages;
 
 namespace zero.TestData
 {
@@ -52,8 +54,10 @@ namespace zero.TestData
         opts.ChannelFeatures.Add("channel.altFrontend", "Alternative header", "Render a simplified header in the frontend");
       });
 
-      services.AddTransient<CountryBlueprintHandler>(); // TODO auto-register handlers
-      services.AddTransient<PropertyBlueprintHandler>();
+      services.AddAll(typeof(IMessageHandler<>), ServiceLifetime.Transient, true);
+
+      //services.AddTransient<CountryBlueprintHandler>(); // TODO auto-register handlers
+      //services.AddTransient<PropertyBlueprintHandler>();
       services.AddTransient<ITestService, TestService>();
     }
   }
