@@ -11,14 +11,14 @@
         <slot name="info-boxes"></slot>
         <div class="ui-box" v-if="isShared" :class="{'is-active': value.isActive }">
           <div class="editor-global-flag">
-            <i class="fth-rotate-cw"></i>
+            <i class="fth-radio"></i>
             <p>
               <b>This entity is bound to a parent</b> and automatically synchronised.<br>
               <!--<a href="/">Edit parent</a>-->
             </p>
           </div>
-          <ui-button type="light small" label="Edit parent" @click="editBlueprint(value.blueprint)" />
           <ui-button type="light small" label="Settings" @click="editBlueprint(value.blueprint)" />
+          <ui-button type="light small" label="Edit parent" @click="editBlueprint(value.blueprint)" />
         </div>
         <div class="ui-box editor-active-toggle" v-if="activeToggle" :class="{'is-active': value.isActive }">
           <slot name="settings">
@@ -364,12 +364,13 @@
     p
     {
       margin: 0;
+      color: var(--color-text);
     }
 
     i
     {
-      font-size: 28px;
-      color: var(--color-text);
+      font-size: 24px;
+      color: var(--color-primary);
       margin-top: -2px;
     }
 
