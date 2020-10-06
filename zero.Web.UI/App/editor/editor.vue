@@ -226,7 +226,7 @@
         let params = this.$route.params;
         params.id = blueprint.id;
 
-        this.$router.replace({
+        this.$router.push({
           name: this.$route.name,
           params: params
         });

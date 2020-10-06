@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System;
 using System.IO;
-using zero.Core;
 using zero.Core.Extensions;
 using zero.Core.Middlewares;
 using zero.Core.Options;

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Attributes;
 using zero.Core.Entities;
+using zero.Core.Entities.Messages;
 using zero.Core.Extensions;
 using zero.Core.Sync;
 using zero.Core.Utils;
@@ -219,14 +220,14 @@ namespace zero.Core.Api
 
       meta?.Invoke(session.Advanced.GetMetadataFor(model));
 
-      if (isCreate)
+      await Backoffice.Messages.Publish(new EntitySavedMessage<T>()
       {
-        await new SyncPseudo().OnCreate(session, model);
-      }
-      else
-      {
-        await new SyncPseudo().OnUpdate(session, model);
-      }
+        Id = model.Id,
+        IsCreate = isCreate,
+        IsDelete = false,
+        Model = model,
+        Session = session
+      });
 
       await session.SaveChangesAsync();
 

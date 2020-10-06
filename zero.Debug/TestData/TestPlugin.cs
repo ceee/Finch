@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using zero.Commerce.Options;
 using zero.Core.Options;
 using zero.Core.Plugins;
+using zero.Debug.Sync;
 using zero.Debug.TestData;
 
 namespace zero.TestData
@@ -13,7 +14,6 @@ namespace zero.TestData
     public void Configure(IZeroPluginOptions plugin, IZeroOptions zero)
     {
       plugin.Name = "Test Plugin";
-
       //ISection spaceSection = zero.Sections.GetAllItems().FirstOrDefault(x => x.Alias == Constants.Sections.Spaces);
       //zero.Sections.Remove(spaceSection);
 
@@ -41,6 +41,8 @@ namespace zero.TestData
 
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
+      services.AddHostedService<TestPluginStartup>();
+
       services.Configure<ZeroCommerceOptions>(opts =>
       {
         opts.Documents.Add<InvoiceDocument>();
@@ -50,7 +52,7 @@ namespace zero.TestData
         opts.ChannelFeatures.Add("channel.altFrontend", "Alternative header", "Render a simplified header in the frontend");
       });
 
-      //services.Replace<IChannel, SalesChannel>();
+      services.AddTransient<CountryBlueprintHandler>(); // TODO auto-register handlers
       services.AddTransient<ITestService, TestService>();
     }
   }

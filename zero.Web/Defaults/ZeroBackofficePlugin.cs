@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Messages;
 using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Core.Validation;
@@ -18,6 +19,7 @@ namespace zero.Web.Defaults
     {
       //services.AddAll(typeof(IValidator<>), ServiceLifetime.Scoped);
       //services.AddAll(typeof(IValidator), ServiceLifetime.Scoped);
+      services.AddSingleton<IMessageAggregator, MessageAggregator>();
 
       services.AddTransient<IApplication, Application>();
       services.AddTransient<ICountry, Country>();

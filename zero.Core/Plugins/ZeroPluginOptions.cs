@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace zero.Core.Plugins
 {
@@ -19,5 +21,11 @@ namespace zero.Core.Plugins
     string Description { get; set; }
 
     List<string> LocalizationPaths { get; }
+  }
+
+
+  public interface IZeroPluginStartup
+  {
+    Task Startup();
   }
 }
