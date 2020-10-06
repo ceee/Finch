@@ -2,6 +2,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using zero.Commerce.Entities;
 using zero.Core.Entities;
 using zero.Core.Entities.Messages;
 using zero.Core.Messages;
@@ -22,6 +23,7 @@ namespace zero.TestData
     public Task StartAsync(CancellationToken cancellationToken)
     {
       Messages.Subscribe<EntitySavedMessage<ICountry>, CountryBlueprintHandler>();
+      Messages.Subscribe<EntitySavedMessage<IProperty>, PropertyBlueprintHandler>();
       return Task.CompletedTask;
     }
 

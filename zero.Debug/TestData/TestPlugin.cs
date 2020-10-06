@@ -53,6 +53,7 @@ namespace zero.TestData
       });
 
       services.AddTransient<CountryBlueprintHandler>(); // TODO auto-register handlers
+      services.AddTransient<PropertyBlueprintHandler>();
       services.AddTransient<ITestService, TestService>();
     }
   }
