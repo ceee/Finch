@@ -1,11 +1,11 @@
 ﻿<template>
   <div class="countries">
-    <ui-header-bar title="@country.list" :back-button="true">
+    <ui-header-bar title="@country.list" :count="count" :back-button="true">
       <ui-table-filter v-model="tableConfig" />
       <ui-add-button :route="createRoute" />
     </ui-header-bar>
     <div class="ui-blank-box">
-      <ui-table ref="table" v-model="tableConfig" />
+      <ui-table ref="table" v-model="tableConfig" @count="count = $event" />
     </div>
   </div>
 </template>
@@ -16,6 +16,7 @@
 
   export default {
     data: () => ({
+      count: 0,
       createRoute: zero.alias.sections.settings + '-' + zero.alias.settings.countries + '-create',
       tableConfig: zero.renderers.country.list
     }),

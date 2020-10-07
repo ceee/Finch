@@ -1,11 +1,11 @@
 ﻿<template>
   <div v-if="!loading" class="space-list">
-    <ui-header-bar :title="space.name" title-empty="List">
+    <ui-header-bar :title="space.name" :count="count" title-empty="List">
       <ui-table-filter v-model="tableConfig" />
       <ui-add-button :route="createRoute" :decision="canCreateShared" />
     </ui-header-bar>
     <div class="ui-blank-box">
-      <ui-table v-model="tableConfig" />
+      <ui-table v-model="tableConfig" @count="count = $event" />
     </div>
   </div>
 </template>
@@ -18,6 +18,7 @@
     props: [ 'space', 'config' ],
 
     data: () => ({
+      count: 0,
       loading: true,
       tableConfig: {},
       createRoute: {

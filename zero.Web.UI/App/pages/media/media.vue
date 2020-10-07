@@ -3,7 +3,7 @@
     <router-view v-if="!isOverview"></router-view>
 
     <div v-if="isOverview" class="media-content">
-      <ui-header-bar :back-button="!!id">
+      <ui-header-bar :back-button="!!id" :count="count">
         <template v-slot:title>
           <h2 class="ui-header-bar-title">
             <router-link :to="{ name: 'media' }" class="media-items-hierarchy-item" v-if="!!id"><i class="fth-home"></i></router-link>
@@ -37,7 +37,7 @@
 
       <div class="ui-view-box">
         <div class="media-items">
-          <ui-datagrid ref="grid" v-model="gridConfig" @select="onSelected">
+          <ui-datagrid ref="grid" v-model="gridConfig" @select="onSelected" @count="count = $event">
             <template v-slot:actions="props">
               <ui-dropdown-button v-if="props.item && props.item.isFolder" label="@ui.open.title" icon="fth-arrow-right" @click="goToFolder(props.item.id)" />
               <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(props.item, props.item.isFolder)" />
@@ -72,6 +72,7 @@
     props: ['id'],
 
     data: () => ({
+      count: 0,
       current: null,
       hierarchy: [],
       gridConfig: {

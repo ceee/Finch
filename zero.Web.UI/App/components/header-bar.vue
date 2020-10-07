@@ -9,6 +9,7 @@
               <span v-if="prefix" class="-minor" v-localize:html="prefix"></span>
               <span v-localize="title || titleEmpty"></span>
               <span v-if="suffix" class="-minor" v-localize:html="suffix"></span>
+              <span v-if="count > 0" class="-minor -count">{{count}}</span>
             </h2>
           </slot>
           <p v-if="description" class="ui-header-bar-description" v-localize="description"></p>
@@ -41,6 +42,10 @@
       },
       suffix: {
         type: String
+      },
+      count: {
+        type: Number,
+        default: 0
       },
       description: {
         type: String
@@ -140,11 +145,34 @@
     margin: 0;
     font-size: var(--font-size-l);
     font-weight: 700;
+    //display: flex;
+    //align-items: center;
 
     &.is-empty, .-minor
     {
       color: var(--color-text-dim);
       font-weight: 400;
+    }
+
+    .-count
+    {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: var(--color-bg-shade-5);
+      //box-shadow: var(--shadow-short);
+      color: var(--color-text);
+      height: 22px;
+      line-height: 22px;
+      padding: 0 10px;
+      border-radius: 16px;
+      letter-spacing: .5px;
+      font-style: normal;
+      margin-left: 12px;
+      margin-top: 2px;
+      position: relative;
+      top: -1px;
     }
   }
 

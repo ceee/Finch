@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="apps">
-    <ui-header-bar title="@application.list" :back-button="true" />
+    <ui-header-bar title="@application.list" :count="count" :back-button="true" />
     <div class="ui-blank-box">
       <applications-items v-model="apps" />
     </div>
@@ -14,6 +14,7 @@
 
   export default {
     data: () => ({
+      count: 0,
       apps: []
     }),
 
@@ -24,6 +25,7 @@
       ApplicationsApi.getAll().then(response =>
       {
         this.apps = response.items;
+        this.count = response.totalItems;
       });
     }
   }

@@ -1,11 +1,11 @@
 ﻿<template>
   <div class="pages-recyclebin">
-    <ui-header-bar title="@recyclebin.name" :back-button="true">
+    <ui-header-bar title="@recyclebin.name" :count="count" :back-button="true">
       <ui-table-filter v-model="tableConfig" />
       <ui-button type="light onbg" label="@recyclebin.purge" @click="purge" />
     </ui-header-bar>
     <div class="ui-blank-box">
-      <ui-table ref="table" v-model="tableConfig" />
+      <ui-table ref="table" v-model="tableConfig" @count="count = $event" />
     </div>
   </div>
 </template>
@@ -21,6 +21,7 @@
 
   export default {
     data: () => ({
+      count: 0,
       tableConfig: {}
     }),
 

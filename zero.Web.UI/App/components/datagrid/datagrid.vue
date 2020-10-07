@@ -157,6 +157,7 @@
         {
           this.pages = result.totalPages;
           this.count = result.totalItems;
+          this.$emit('count', this.count);
 
           this.isLoading = false;
           this.items = result.items;
@@ -310,8 +311,8 @@
   .ui-datagrid-items
   {
     display: grid;
-    gap: var(--padding);
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--padding-s);
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     align-items: stretch;
 
     &.is-block

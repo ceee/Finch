@@ -187,6 +187,8 @@
           this.pages = result.totalPages;
           this.count = result.totalItems;
 
+          this.$emit('count', this.count);
+
           this.isLoading = false;
           this.items = result.items;
           this.selected = [];

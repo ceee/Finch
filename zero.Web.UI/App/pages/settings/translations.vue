@@ -1,11 +1,11 @@
 ﻿<template>
   <div class="translations">
-    <ui-header-bar title="@translation.list" :back-button="true">
+    <ui-header-bar title="@translation.list" :count="count" :back-button="true">
       <ui-table-filter v-model="tableConfig" />
       <ui-add-button :route="createRoute" />
     </ui-header-bar>
     <div class="ui-blank-box">
-      <ui-table v-model="tableConfig" />
+      <ui-table v-model="tableConfig" @count="count = $event" />
     </div>
   </div>
 </template>
@@ -18,6 +18,7 @@
 
   export default {
     data: () => ({
+      count: 0,
       createRoute: zero.alias.sections.settings + '-' + zero.alias.settings.translations + '-create',
       tableConfig: zero.renderers.translation.list
     }),
