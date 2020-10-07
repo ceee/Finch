@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
+using System.IO;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
@@ -150,6 +150,30 @@ namespace zero.Web.Controllers
       }
 
       return Json(previews);
+    }
+
+
+    protected IActionResult Download(Stream stream, string filename)
+    {
+      if (stream == null)
+      {
+        // TODO add success property + return error response
+      }
+
+      if (filename.Contains("{date}"))
+      {
+        filename = filename.Replace("{date}", DateTimeOffset.Now.ToString("yyyy-MM-dd"));
+      }
+
+      var provider = new FileExtensionContentTypeProvider();
+      if (filename == null || !provider.TryGetContentType(Path.GetFileName(filename), out string contentType))
+      {
+        contentType = "application/octet-stream";
+      }
+
+      Response.Headers.Add("zero-filename", filename);
+
+      return base.File(stream, contentType, filename, true);
     }
 
 

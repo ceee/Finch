@@ -12,7 +12,7 @@
       <template v-slot:button>
         <ui-button type="light onbg" icon="fth-more-horizontal" />
       </template>
-      <ui-dropdown-button v-for="(action, index) in value.actions" :key="index" :label="action.label" :icon="action.icon" @click="onActionClicked(action)" />
+      <ui-dropdown-button v-for="(action, index) in value.actions" :key="index" :value="action" :prevent="action.autoclose === false" :label="action.label" :icon="action.icon" @click="onActionClicked" />
     </ui-dropdown>
   </div>
 </template>
@@ -76,9 +76,9 @@
         this.hideSelection = this.value.selectable !== true;
       },
 
-      onActionClicked(action)
+      onActionClicked(action, opts)
       {
-        action.action();
+        action.action(opts);
       }
     }
   }

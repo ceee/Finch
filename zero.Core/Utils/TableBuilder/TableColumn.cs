@@ -1,0 +1,55 @@
+﻿using System;
+
+namespace zero.Core.Utils
+{
+  public class TableColumn<T>
+  {
+    public string Name { get; set; }
+
+    public bool IsSeparator { get; set; }
+
+    public Func<T, object> FieldSelector { get; set; }
+
+    public double Width { get; set; }
+
+    public TableColumnType ColumnType { get; set; }
+
+    public TableColumn<T> Type(TableColumnType type)
+    {
+      ColumnType = type;
+      return this;
+    }
+
+    public TableColumn<T> Size(double width)
+    {
+      Width = width;
+      return this;
+    }
+
+    public TableColumn<T> For(Func<T, object> fieldSelector)
+    {
+      FieldSelector = fieldSelector;
+      return this;
+    }
+
+    public TableColumn<T> Currency()
+    {
+      ColumnType = TableColumnType.Currency;
+      return this;
+    }
+
+    public TableColumn<T> Link()
+    {
+      ColumnType = TableColumnType.Link;
+      return this;
+    }
+  }
+
+
+  public enum TableColumnType
+  {
+    Default,
+    Currency,
+    Link
+  }
+}
