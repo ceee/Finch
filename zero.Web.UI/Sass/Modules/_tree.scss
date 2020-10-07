@@ -8,10 +8,14 @@
   position: relative;
   overflow-y: auto;
   height: 100vh;
-  height: calc(100vh - 20px);
-  margin: 10px 0 10px 10px;
-  border-radius: var(--radius);
   box-shadow: var(--shadow-short);
+
+  .theme-rounded &
+  {
+    height: calc(100vh - 20px);
+    margin: 10px 0 10px 10px;
+    border-radius: var(--radius);
+  }
 
   .ui-header-bar + .ui-tree
   {
