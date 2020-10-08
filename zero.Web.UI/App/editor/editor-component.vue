@@ -30,11 +30,17 @@
       },
       renderer: {
         type: Object,
-        required: true
+        default: () =>
+        {
+          return {};
+        }
       },
       meta: {
         type: Object,
-        default: () => { }
+        default: () =>
+        {
+          return {};
+        }
       },
       depth: {
         type: Number,

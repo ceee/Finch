@@ -1,6 +1,20 @@
 ﻿<template>
   <div class="ui-daterangepicker" :class="{'is-disabled': disabled }">
-    <button type="button" class="ui-link" @click="schedule" v-localize="scheduleLocalize" :disabled="disabled"></button>
+    <button v-if="!inline" type="button" class="ui-link" @click="schedule" v-localize="scheduleLocalize" :disabled="disabled"></button>
+    <div v-if="inline" class="ui-daterangepicker-inline">
+      <div class="ui-split">
+        <div class="ui-daterangepicker-group">
+          <ui-property :label="fromText" :vertical="true">
+            <ui-datepicker v-model="value.from" :time="time" />
+          </ui-property>
+        </div>
+        <div class="ui-daterangepicker-group">
+          <ui-property :label="toText" :vertical="true">
+            <ui-datepicker v-model="value.to" :time="time" />
+          </ui-property>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -57,6 +71,10 @@
         default: '@page.schedule.unpublish'
       },
       amPm: {
+        type: Boolean,
+        default: false
+      },
+      inline: {
         type: Boolean,
         default: false
       },

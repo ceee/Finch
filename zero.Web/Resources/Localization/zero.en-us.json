@@ -57,7 +57,9 @@
       "free": "Free",
       "xtoy": "from {x} to {y}",
       "x": "from {x}",
-      "y": "to {y}"
+      "y": "to {y}",
+      "range_from": "Price from",
+      "range_to": "Price to"
     },
     "sort": {
       "title": "Sort",
