@@ -74,10 +74,7 @@
       value: {
         type: Object,
         required: true,
-        default: () =>
-        {
-          return defaultConfig;
-        }
+        default: () => { }
       },
       inline: {
         type: Boolean,
@@ -163,7 +160,7 @@
       {
         this.debouncedUpdate = _debounce(this.update, 300);
 
-        this.configuration = _extend(defaultConfig, this.value);
+        this.configuration = _extend(JSON.parse(JSON.stringify(defaultConfig)), this.value);
 
         this.filter.pageSize = this.configuration.pageSize;
 
