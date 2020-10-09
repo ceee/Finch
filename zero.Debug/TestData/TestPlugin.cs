@@ -8,6 +8,7 @@ using zero.Core.Extensions;
 using zero.Debug.Sync;
 using zero.Debug.TestData;
 using zero.Core.Messages;
+using zero.Commerce.Depots.Providers.Bits;
 
 namespace zero.TestData
 {
@@ -59,6 +60,7 @@ namespace zero.TestData
       //services.AddTransient<CountryBlueprintHandler>(); // TODO auto-register handlers
       //services.AddTransient<PropertyBlueprintHandler>();
       services.AddTransient<ITestService, TestService>();
+      services.AddTransient<BitsDepotProvider>();
     }
   }
 }

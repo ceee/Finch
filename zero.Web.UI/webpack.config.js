@@ -30,7 +30,7 @@ module.exports = {
       'zero': path.join(__dirname, 'App'),
       'zerosetup': path.join(__dirname, 'Setup'),
       '@': __dirname,
-      'shop': path.join(__dirname, '..', 'zero.Commerce/Plugins/zero.Commerce') // TODO dynPATH
+      'shop': path.join(__dirname, '..', 'commerce/zero.Commerce/Plugins/zero.Commerce') // TODO dynPATH
     }
   },
 

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using zero.Commerce.Api;
+using zero.Commerce.Depots.Providers.Bits;
 using zero.Commerce.Entities;
 using zero.Core.Api;
 using zero.Core.Entities;
@@ -87,6 +88,17 @@ namespace zero.Debug.Controllers
 
     [HttpPost]
     public IActionResult SaveTest([FromBody] IPage model) => Json(model);
+
+
+    [HttpPost]
+    public async Task<IActionResult> TestBitsIntegration([FromBody] BitsSettings settings, [FromServices] BitsDepotProvider provider)
+    {
+      provider.Set(settings);
+      return Json(await provider.Run(new Commerce.Depots.DepotOperation()
+      {
+        AppId = "applications.1-A"
+      }));
+    }
 
 
 
