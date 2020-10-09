@@ -8,6 +8,7 @@
 
       <template v-slot:footer>
         <ui-button type="light onbg" label="@ui.close" @click="config.hide"></ui-button>
+        <ui-button v-if="!config.isCreate" type="light onbg" label="@ui.remove" @click="onRemove"></ui-button>
         <ui-button type="primary" :submit="true" label="@ui.confirm" :state="form.state" :disabled="loading || disabled"></ui-button>
       </template>
 
@@ -31,6 +32,12 @@
         </div>
       </div>
 
+      <div v-if="!loading && config.canSave" class="ui-box ui-table-filter-overlay-filtername">
+        <ui-property label="Save as..." description="You can optionally save this filter for future reference" :vertical="true">
+          <input v-model="filterName" type="text" class="ui-input" maxlength="40" />
+        </ui-property>
+      </div>
+
     </ui-overlay-editor>
   </ui-form>
 </template>
@@ -52,7 +59,8 @@
       defaults: {},
       model: {},
       activeGroup: null,
-      groups: []
+      groups: [],
+      filterName: null
     }),
 
     components: { EditorComponent },
@@ -77,14 +85,25 @@
       onLoad()
       {
         this.groups = this.config.fields;
-        this.model = JSON.parse(JSON.stringify(this.config.model || {}));
+        this.model = JSON.parse(JSON.stringify(this.config.model.filter || {}));
         this.defaults = JSON.parse(JSON.stringify(this.config.defaults || {}));
+        this.filterName = this.config.model.name;
         this.loading = false;
       },
 
       onSubmit()
       {
-        this.config.confirm(this.model);
+        this.config.confirm({
+          model: this.model,
+          filterName: this.filterName
+        });
+      },
+
+      onRemove()
+      {
+        this.config.confirm({
+          remove: true
+        });
       }
     }
 
@@ -131,8 +150,8 @@
   .ui-table-filter-overlay-group-content
   {
     background: var(--color-box);
-    margin: var(--padding-s) -32px;
-    padding: var(--padding-m) var(--padding);
+    margin: var(--padding-s) 0;
+    padding: var(--padding-m) 0;
     border-top: 1px solid var(--color-line);
     border-bottom: 1px solid var(--color-line);
 
@@ -140,5 +159,10 @@
     {
       display: none;
     }
+  }
+
+  .ui-table-filter-overlay-filtername .ui-property-content
+  {
+    margin-top: 12px !important;
   }
 </style>

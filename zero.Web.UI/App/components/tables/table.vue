@@ -4,7 +4,7 @@
       <header class="ui-table-row ui-table-head">      
         <div v-for="column in columns" :key="column.key" class="ui-table-cell" :table-field="column.field" :style="column.flex">
           {{ column.label | localize }}
-          <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="filter.orderBy == column.field ? 'sort-' + (filter.orderIsDescending ? 'desc' : 'asc') : null">
+          <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="tableFilter.orderBy == column.field ? 'sort-' + (tableFilter.orderIsDescending ? 'desc' : 'asc') : null">
             <i class="arrow arrow-down"></i>
           </button>
         </div>
@@ -32,7 +32,7 @@
     </div>
 
     <footer class="ui-table-pagination" v-if="pages > 1">
-      <ui-pagination :pages="pages" :page="filter.page" @change="setPage" :inline="inline" />
+      <ui-pagination :pages="pages" :page="tableFilter.page" @change="setPage" :inline="inline" />
     </footer>
 
   </div>
@@ -79,6 +79,17 @@
       inline: {
         type: Boolean,
         default: false
+      },
+      filter: {
+        type: Object,
+        default: () =>
+        {
+          return {};
+        }
+      },
+      search: {
+        type: String,
+        default: null
       }
     },
 
@@ -91,15 +102,27 @@
       },
       'value.search': function (val)
       {
-        this.filter.search = val;
+        this.tableFilter.search = val;
       },
       'value.items': function (val)
       {
         this.initialize();
       },
-      'filter.search': function (val)
+      'tableFilter.search': function (val)
       {
         this.debouncedUpdate();
+      },
+      'filter': {
+        deep: true,
+        handler: function (val)
+        {
+          this.tableFilter.filter = val;
+          this.debouncedUpdate();
+        }
+      },
+      'search': function (val)
+      {
+        this.tableFilter.search = val;
       },
       $route(to, from)
       {
@@ -114,7 +137,7 @@
       isLoading: true,
       pages: 1,
       count: 0,
-      filter: {
+      tableFilter: {
         orderBy: null,
         orderIsDescending: true,
         page: 1,
@@ -162,12 +185,12 @@
 
         this.configuration = _extend(JSON.parse(JSON.stringify(defaultConfig)), this.value);
 
-        this.filter.pageSize = this.configuration.pageSize;
+        this.tableFilter.pageSize = this.configuration.pageSize;
 
         if (this.configuration.order.enabled)
         {
-          this.filter.orderBy = this.configuration.order.by;
-          this.filter.orderIsDescending = this.configuration.order.isDescending;
+          this.tableFilter.orderBy = this.configuration.order.by;
+          this.tableFilter.orderIsDescending = this.configuration.order.isDescending;
         }
 
         this.generateColumns(this.configuration.columns);
@@ -178,7 +201,9 @@
       // load items based on the current filter
       load(initial)
       {
-        this.configuration.items(this.filter).then(result =>
+        this.tableFilter.filter = this.filter;
+
+        this.configuration.items(this.tableFilter).then(result =>
         {
           this.$emit('loaded', result);
           this.pages = result.totalPages;
@@ -248,25 +273,25 @@
       // set the active page
       setPage(index)
       {
-        this.filter.page = index;
+        this.tableFilter.page = index;
         this.debouncedUpdate();
       },
 
       // sort by a column
       sort(column)
       {
-        if (this.filter.orderBy === column.field && this.filter.orderIsDescending)
+        if (this.tableFilter.orderBy === column.field && this.tableFilter.orderIsDescending)
         {
-          this.filter.orderIsDescending = false;
+          this.tableFilter.orderIsDescending = false;
         }
-        else if (this.filter.orderBy === column.field)
+        else if (this.tableFilter.orderBy === column.field)
         {
-          this.filter.orderBy = null;
+          this.tableFilter.orderBy = null;
         }
         else
         {
-          this.filter.orderBy = column.field;
-          this.filter.orderIsDescending = true;
+          this.tableFilter.orderBy = column.field;
+          this.tableFilter.orderIsDescending = true;
         }
 
         this.debouncedUpdate();
