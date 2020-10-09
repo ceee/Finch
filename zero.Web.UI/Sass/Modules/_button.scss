@@ -115,6 +115,26 @@ button::-moz-focus-inner
     margin-left: 15px;
   }
 
+  &.is-attached
+  {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+
+    & + .ui-button
+    {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      margin-left: -1px;
+      border-left: 1px solid rgba(0,0,0,0.1);
+      padding: 0 9px 0 8px;
+
+      .ui-button-icon
+      {
+        margin: 0 !important;
+      }
+    }
+  }
+
   .ui-button-icon, .ui-button-caret
   {
     margin-left: 18px;

@@ -1,6 +1,7 @@
 ﻿<template>
   <div class="ui-add-button">
-    <ui-button v-if="!hasDropdown" :type="type" :label="label" @click="onClick(shared)" :disabled="disabled" />
+    <ui-button v-if="!hasDropdown" :type="type" :label="label" @click="onClick(shared)" :disabled="disabled" /> <!-- :attach="true"-->
+    <!--<ui-button v-if="!hasDropdown" :type="type" icon="fth-chevron-down" />-->
     <ui-dropdown v-else ref="dropdown" align="right">
       <template v-slot:button>
         <ui-button :label="label" :type="type" :disabled="disabled" />
@@ -90,6 +91,10 @@
 </script>
 
 <style lang="scss">
+  .ui-add-button
+  {
+    display: flex;
+  }
   /*.ui-add-button .ui-dropdown-button
   {
     font-weight: 700;

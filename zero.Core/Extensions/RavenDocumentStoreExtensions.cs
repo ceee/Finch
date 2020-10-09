@@ -1,6 +1,9 @@
-﻿using Raven.Client.Documents;
+﻿using Raven.Client;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
+using Raven.Client.Documents.Operations;
 using Raven.Client.Documents.Operations.CompareExchange;
+using Raven.Client.Documents.Queries;
 using Raven.Client.Json.Serialization.NewtonsoftJson;
 using System;
 using System.Linq;
@@ -142,6 +145,23 @@ namespace zero.Core.Extensions
 
       CompareExchangeResult<string> result = await store.Operations.SendAsync(operation).ConfigureAwait(false);
       return result.Successful;
+    }
+
+
+    /// <inheritdoc />
+    public static async Task PurgeAsync<T>(this IDocumentStore store, string querySuffix = null, Parameters parameters = null)
+    {
+      var collectionName = store.Conventions.FindCollectionName(typeof(T));
+
+      var operationQuery = new DeleteByQueryOperation(new IndexQuery()
+      {
+        Query = $"from {collectionName} c {querySuffix ?? String.Empty}",
+        QueryParameters = parameters
+      });
+
+      Operation operation = await store.Operations.SendAsync(operationQuery);
+
+      await operation.WaitForCompletionAsync(TimeSpan.FromSeconds(30));
     }
   }
 }

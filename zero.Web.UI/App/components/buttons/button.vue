@@ -54,6 +54,10 @@
       ellipsis: {
         type: Boolean,
         default: false
+      },
+      attach: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -93,6 +97,10 @@
         if (!this.label)
         {
           classes.push('no-label');
+        }
+        if (this.attach)
+        {
+          classes.push('is-attached');
         }
 
         return classes;

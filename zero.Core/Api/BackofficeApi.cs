@@ -281,18 +281,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> Purge<T>(string querySuffix = null, Parameters parameters = null)
     {
-      var collectionName = Raven.Conventions.FindCollectionName(typeof(T));
-
-      var operationQuery = new DeleteByQueryOperation(new IndexQuery()
-      {
-        Query = $"from {collectionName} c {querySuffix ?? String.Empty}",
-        QueryParameters = parameters
-      });
-
-      Operation operation = await Raven.Operations.SendAsync(operationQuery);
-
-      await operation.WaitForCompletionAsync(TimeSpan.FromSeconds(30));
-
+      await Raven.PurgeAsync<T>(querySuffix, parameters);
       return EntityResult<T>.Success();
     }
   }
