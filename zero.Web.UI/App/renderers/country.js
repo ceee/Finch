@@ -20,6 +20,12 @@
       maxLength: 120
     },
     {
+      field: 'alias',
+      display: 'alias',
+      label: '@ui.alias',
+      required: true
+    },
+    {
       field: 'code',
       display: 'text',
       required: true,

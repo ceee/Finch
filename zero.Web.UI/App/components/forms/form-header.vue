@@ -3,6 +3,7 @@
     <template v-slot:title>
       <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name}">
         <input class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" :readonly="titleDisabled || disabled" />
+        <!--<ui-alias class="ui-form-header-title-alias" v-if="hasAlias" v-model="value.alias" :name="value.name" :disabled="disabled" />-->
         <!--<span v-localize="value.name || title"></span>-->
       </h2>
     </template>
@@ -58,6 +59,10 @@
       activeToggle: {
         type: Boolean,
         default: false
+      },
+      hasAlias: {
+        type: Boolean,
+        default: true
       }
     },
 
@@ -118,6 +123,11 @@
     }
   }
 
+  .ui-header-bar-title
+  {
+    position: relative;
+  }
+
   input[type="text"].ui-form-header-title-input
   {
     font-family: var(--font);
@@ -131,5 +141,18 @@
     {
       border: 1px dashed var(--color-text-dim-one);
     }*/
+  }
+
+  .ui-form-header-title-alias
+  {
+    position: absolute;
+    right: 10px;
+    top: 11px;
+    z-index: 2;
+
+    .ui-alias-lock
+    {
+      background: none;
+    }
   }
 </style>
