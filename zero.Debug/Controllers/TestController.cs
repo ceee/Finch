@@ -116,136 +116,136 @@ namespace zero.Debug.Controllers
     }
 
 
-    [HttpGet]
-    public async Task<IActionResult> AddOrder([FromServices] IOrdersApi ordersApi)
-    {
-      OrderAddress address = new OrderAddress()
-      {
-        Email = "cee@live.at",
-        FirstName = "Tobias",
-        LastName = "Klika",
-        Company = "brothers Klika OG",
-        Gender = Gender.Male,
-        VatNo = "ATU68334803",
-        PhoneNumber = "+43 660 2594892",
-        Address = "Laabstraße 9",
-        AddressLine1 = "Top 2",
-        Zip = "5280",
-        City = "Braunau am Inn",
-        Country = "Österreich",
-        CountryId = "countries.256-A"
-      };
+    //[HttpGet]
+    //public async Task<IActionResult> AddOrder([FromServices] IOrdersApi ordersApi)
+    //{
+    //  OrderAddress address = new OrderAddress()
+    //  {
+    //    Email = "cee@live.at",
+    //    FirstName = "Tobias",
+    //    LastName = "Klika",
+    //    Company = "brothers Klika OG",
+    //    Gender = Gender.Male,
+    //    VatNo = "ATU68334803",
+    //    PhoneNumber = "+43 660 2594892",
+    //    Address = "Laabstraße 9",
+    //    AddressLine1 = "Top 2",
+    //    Zip = "5280",
+    //    City = "Braunau am Inn",
+    //    Country = "Österreich",
+    //    CountryId = "countries.256-A"
+    //  };
 
-      OrderAddress shippingAddress = new OrderAddress()
-      {
-        Email = "cee@live.at",
-        FirstName = "Tobias",
-        LastName = "Klika",
-        Company = "brothers Klika OG",
-        Gender = Gender.Male,
-        VatNo = "ATU68334803",
-        PhoneNumber = "+43 660 2594892",
-        Address = "Salzburger Strasse 44",
-        Zip = "5280",
-        City = "Braunau am Inn",
-        Country = "Österreich",
-        CountryId = "countries.256-A"
-      };
+    //  OrderAddress shippingAddress = new OrderAddress()
+    //  {
+    //    Email = "cee@live.at",
+    //    FirstName = "Tobias",
+    //    LastName = "Klika",
+    //    Company = "brothers Klika OG",
+    //    Gender = Gender.Male,
+    //    VatNo = "ATU68334803",
+    //    PhoneNumber = "+43 660 2594892",
+    //    Address = "Salzburger Strasse 44",
+    //    Zip = "5280",
+    //    City = "Braunau am Inn",
+    //    Country = "Österreich",
+    //    CountryId = "countries.256-A"
+    //  };
 
-      Order order = new Order()
-      {
-        ChannelId = "channels.1-A",
-        Name = "23-0002",
-        Number = "23-0002",
-        LanguageId = "languages.2-A",
-        CurrencyId = "currencies.33-A",
-        State = OrderState.Completed,
-        DetailStateId = "orderDetailStates.3-A",
-        IsRequest = false,
-        CustomerId = "customers.1-A",
-        CustomerNote = "Danke für die Hilfe. Das war wirklich dringend nötig <3",
-        AssignedToUserId = "users.1-A",
-        Address = address,
-        Items = new List<IOrderItem>()
-        {
-          new OrderItem()
-          {
-            Id = IdGenerator.Create(),
-            ProductId = "products.1-A",
-            VariantId = "4a5ddabc-8158-43f5-90eb-1d115cc062cc",
-            Name = "Nike Jersey 2.0",
-            Description = "Polyester / XS",
-            Sort = 0,
-            Quantity = 3,
-            Discount = 0,
-            Price = 17,
-            TaxRate = 20
-          },
-          new OrderItem()
-          {
-            Id = IdGenerator.Create(),
-            ProductId = "products.1-A",
-            VariantId = "4a5ddabc-8158-43f5-90eb-1d115cc062cc",
-            Name = "Nike Jersey 2.0",
-            Description = "Polyester / s",
-            Sort = 1,
-            Quantity = 1,
-            Discount = 5,
-            Price = 12,
-            TaxRate = 20
-          },
-          new OrderItem()
-          {
-            Id = IdGenerator.Create(),
-            Name = "Flex-Druck",
-            Sort = 2,
-            Price = 1.99m,
-            Quantity = 2,
-            TaxRate = 12
-          }
-        },
-        Price = 72.98m
-      };
+    //  Order order = new Order()
+    //  {
+    //    ChannelId = "channels.1-A",
+    //    Name = "23-0002",
+    //    Number = "23-0002",
+    //    LanguageId = "languages.2-A",
+    //    CurrencyId = "currencies.33-A",
+    //    State = OrderState.Completed,
+    //    DetailStateId = "orderDetailStates.3-A",
+    //    IsRequest = false,
+    //    CustomerId = "customers.1-A",
+    //    CustomerNote = "Danke für die Hilfe. Das war wirklich dringend nötig <3",
+    //    AssignedToUserId = "users.1-A",
+    //    Address = address,
+    //    Items = new List<IOrderItem>()
+    //    {
+    //      new OrderItem()
+    //      {
+    //        Id = IdGenerator.Create(),
+    //        ProductId = "products.1-A",
+    //        VariantId = "4a5ddabc-8158-43f5-90eb-1d115cc062cc",
+    //        Name = "Nike Jersey 2.0",
+    //        Description = "Polyester / XS",
+    //        Sort = 0,
+    //        Quantity = 3,
+    //        Discount = 0,
+    //        Price = 17,
+    //        TaxRate = 20
+    //      },
+    //      new OrderItem()
+    //      {
+    //        Id = IdGenerator.Create(),
+    //        ProductId = "products.1-A",
+    //        VariantId = "4a5ddabc-8158-43f5-90eb-1d115cc062cc",
+    //        Name = "Nike Jersey 2.0",
+    //        Description = "Polyester / s",
+    //        Sort = 1,
+    //        Quantity = 1,
+    //        Discount = 5,
+    //        Price = 12,
+    //        TaxRate = 20
+    //      },
+    //      new OrderItem()
+    //      {
+    //        Id = IdGenerator.Create(),
+    //        Name = "Flex-Druck",
+    //        Sort = 2,
+    //        Price = 1.99m,
+    //        Quantity = 2,
+    //        TaxRate = 12
+    //      }
+    //    },
+    //    Price = 72.98m
+    //  };
 
-      order.Shipping = new OrderShipping()
-      {
-        Name = "Österreichische Post",
-        ShippingOptionId = "shippingOptions.1-A",
-        Price = 7.99m,
-        Lines = new List<OrderShippingLine>()
-        {
-          new OrderShippingLine() { Key = "Postfach",  Value = "7-A" }
-        },
-        Address = shippingAddress,
-        Deliveries = new List<IOrderDelivery>()
-        {
-          new OrderDelivery()
-          {
-            CreatedDate = DateTimeOffset.Now,
-            TrackingNumber = "1035304005500970252807",
-            TrackingUrl = "https://www.post.at/sv/sendungsdetails?snr=1035304005500970252807",
-            Description = "Waren sind im Lager 2 (Regal 23)",
-            ShipmentDate = DateTimeOffset.Now.AddDays(2),
-            Items = new List<OrderDeliveryProduct>()
-            {
-              new OrderDeliveryProduct() { Id = order.Items[0].Id, Quantity = 2 },
-              new OrderDeliveryProduct() { Id = order.Items[1].Id, Quantity = 1 }
-            }
-          },
-          new OrderDelivery()
-          {
-            CreatedDate = DateTimeOffset.Now,
-            ShipmentDate = DateTimeOffset.Now.AddDays(4),
-            Items = new List<OrderDeliveryProduct>()
-            {
-              new OrderDeliveryProduct() { Id = order.Items[0].Id, Quantity = 1 }
-            }
-          }
-        }
-      };
+    //  order.Shipping = new OrderShipping()
+    //  {
+    //    Name = "Österreichische Post",
+    //    ShippingOptionId = "shippingOptions.1-A",
+    //    Price = 7.99m,
+    //    Lines = new List<OrderShippingLine>()
+    //    {
+    //      new OrderShippingLine() { Key = "Postfach",  Value = "7-A" }
+    //    },
+    //    Address = shippingAddress,
+    //    Deliveries = new List<IOrderDelivery>()
+    //    {
+    //      new OrderDelivery()
+    //      {
+    //        CreatedDate = DateTimeOffset.Now,
+    //        TrackingNumber = "1035304005500970252807",
+    //        TrackingUrl = "https://www.post.at/sv/sendungsdetails?snr=1035304005500970252807",
+    //        Description = "Waren sind im Lager 2 (Regal 23)",
+    //        ShipmentDate = DateTimeOffset.Now.AddDays(2),
+    //        Items = new List<OrderDeliveryProduct>()
+    //        {
+    //          new OrderDeliveryProduct() { Id = order.Items[0].Id, Quantity = 2 },
+    //          new OrderDeliveryProduct() { Id = order.Items[1].Id, Quantity = 1 }
+    //        }
+    //      },
+    //      new OrderDelivery()
+    //      {
+    //        CreatedDate = DateTimeOffset.Now,
+    //        ShipmentDate = DateTimeOffset.Now.AddDays(4),
+    //        Items = new List<OrderDeliveryProduct>()
+    //        {
+    //          new OrderDeliveryProduct() { Id = order.Items[0].Id, Quantity = 1 }
+    //        }
+    //      }
+    //    }
+    //  };
 
-      return Json(await ordersApi.Save(order));
-    }
+    //  return Json(await ordersApi.Save(order));
+    //}
   }
 
   internal class RouteModel

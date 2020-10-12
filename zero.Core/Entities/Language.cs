@@ -14,7 +14,7 @@ namespace zero.Core.Entities
     public bool IsOptional { get; set; }
 
     /// <inheritdoc />
-    public string InheritedLanguageId { get; set; }
+    public Ref<ILanguage> InheritedLanguageId { get; set; }
   }
 
   [Collection("Languages")]
@@ -38,6 +38,6 @@ namespace zero.Core.Entities
     /// <summary>
     /// If this language is inherited it gets all missing properties from its parent
     /// </summary>
-    string InheritedLanguageId { get; set; }
+    Ref<ILanguage> InheritedLanguageId { get; set; }
   }
 }

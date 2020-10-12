@@ -48,7 +48,7 @@ namespace zero.Web.Controllers
       IPage model = Activator.CreateInstance(pageType.ContentType) as IPage;
 
       model.PageTypeAlias = type;
-      model.ParentId = parent;
+      model.ParentId = parent.Ref<IPage>();
 
       return Edit(model);
     }

@@ -152,6 +152,15 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
     /// </summary>
+    public static IRuleBuilderOptions<T, Ref<TRef>> Exists<T, TRef>(this IRuleBuilder<T, Ref> ruleBuilder, IBackofficeStore store) where T : IZeroEntity where TRef : IZeroIdEntity
+    {
+      return ruleBuilder.Exists<T, TRef>(store);
+    }
+
+
+    /// <summary>
+    /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
+    /// </summary>
     public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IBackofficeStore store) where T : IZeroEntity where TReference : IZeroEntity
     {
       return ruleBuilder.MustAsync(async (entity, id, context, cancellation) =>
@@ -168,7 +177,34 @@ namespace zero.Core.Extensions
 
         if (typeof(IAppAwareEntity).IsAssignableFrom(typeof(TReference)))
         {
-          return model != null && ((IAppAwareEntity)model).InScope(entity.AppId);
+          return model != null && ((IAppAwareEntity)model).InScope(store.AppContext.AppId);
+        }
+
+        return model != null;
+      }).WithMessage("@errors.forms.reference_notfound");
+    }
+
+
+    /// <summary>
+    /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
+    /// </summary>
+    public static IRuleBuilderOptions<T, Ref<TReference>> Exists<T, TReference>(this IRuleBuilder<T, Ref<TReference>> ruleBuilder, IBackofficeStore store) where T : IZeroEntity where TReference : IZeroEntity
+    {
+      return ruleBuilder.MustAsync(async (entity, id, context, cancellation) =>
+      {
+        if (id is null || id.Id.IsNullOrWhiteSpace())
+        {
+          return true;
+        }
+
+        bool includeShared = typeof(IAppAwareShareableEntity).IsAssignableFrom(typeof(T));
+
+        using IAsyncDocumentSession session = store.Raven.OpenAsyncSession();
+        TReference model = await session.LoadAsync<TReference>(id.Id);
+
+        if (typeof(IAppAwareEntity).IsAssignableFrom(typeof(TReference)))
+        {
+          return model != null && ((IAppAwareEntity)model).InScope(store.AppContext.AppId);
         }
 
         return model != null;

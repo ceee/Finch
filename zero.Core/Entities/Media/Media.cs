@@ -10,7 +10,7 @@ namespace zero.Core.Entities
     public string FileId { get; set; }
 
     /// <inheritdoc />
-    public string FolderId { get; set; }
+    public Ref<IMediaFolder> FolderId { get; set; }
 
     /// <inheritdoc />
     public string AlternativeText { get; set; }
@@ -55,7 +55,7 @@ namespace zero.Core.Entities
     /// <summary>
     /// Id of the media folder
     /// </summary>
-    public string FolderId { get; set; }
+    public Ref<IMediaFolder> FolderId { get; set; }
 
     /// <summary>
     /// Alternative text which is used when the image can't be loaded

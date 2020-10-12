@@ -10,6 +10,6 @@
     /// <summary>
     /// Language of the entity
     /// </summary>
-    string LanguageId { get; set; }
+    Ref<ILanguage> LanguageId { get; set; }
   }
 }

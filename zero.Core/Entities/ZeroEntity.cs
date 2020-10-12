@@ -25,13 +25,13 @@ namespace zero.Core.Entities
     public bool IsActive { get; set; }
 
     /// <inheritdoc/>
-    public string LastModifiedById { get; set; }
+    public Ref<IUser> LastModifiedById { get; set; }
 
     /// <inheritdoc/>
     public DateTimeOffset LastModifiedDate { get; set; }
 
     /// <inheritdoc/>
-    public string CreatedById { get; set; }
+    public Ref<IUser> CreatedById { get; set; }
 
     /// <inheritdoc/>
     public DateTimeOffset CreatedDate { get; set; }
@@ -67,7 +67,7 @@ namespace zero.Core.Entities
     /// <summary>
     /// Backoffice user who last modified this content
     /// </summary>
-    public string LastModifiedById { get; set; }
+    public Ref<IUser> LastModifiedById { get; set; }
 
     /// <summary>
     /// Date of last modification
@@ -77,8 +77,7 @@ namespace zero.Core.Entities
     /// <summary>
     /// Backoffice user who created this content
     /// </summary>
-    [Overwrite]
-    public string CreatedById { get; set; }
+    public Ref<IUser> CreatedById { get; set; }
 
     /// <summary>
     /// Date of creation

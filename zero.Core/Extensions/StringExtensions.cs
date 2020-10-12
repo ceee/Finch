@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using zero.Core.Entities;
 
 namespace zero.Core.Extensions
 {
@@ -78,6 +79,18 @@ namespace zero.Core.Extensions
     public static bool IsNullOrWhiteSpace(this string input)
     {
       return String.IsNullOrWhiteSpace(input);
+    }
+
+
+    public static bool IsNullOrEmpty(this Ref input)
+    {
+      return input == null || String.IsNullOrEmpty(input);
+    }
+
+
+    public static bool IsNullOrWhiteSpace(this Ref input)
+    {
+      return input == null || String.IsNullOrWhiteSpace(input);
     }
 
     public static string ToCamelCase(this string input)

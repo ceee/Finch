@@ -120,7 +120,7 @@ namespace zero.Debug.Controllers
         {
           hasChange = true;
           zeroEntity.CreatedDate = zeroEntity.CreatedDate == default ? DateTimeOffset.Now : zeroEntity.CreatedDate;
-          zeroEntity.CreatedById = userId;
+          zeroEntity.CreatedById = userId.Ref<IUser>();
         }
         if (model is ITranslation && zeroEntity.Name.IsNullOrEmpty())
         {
@@ -135,7 +135,7 @@ namespace zero.Debug.Controllers
         if (zeroEntity.LastModifiedById == default)
         {
           hasChange = true;
-          zeroEntity.LastModifiedById = userId;
+          zeroEntity.LastModifiedById = userId.Ref<IUser>();
         }
         if (zeroEntity.LastModifiedDate == default)
         {

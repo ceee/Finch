@@ -133,7 +133,7 @@ namespace zero.Core.Api
         return EntityResult<IPage>.Fail("@errors.page.parentnotallowed");
       }
 
-      model.ParentId = parent?.Id;
+      model.ParentId = parent?.Id.Ref<IPage>();
 
       return await Save(model);
     }
@@ -154,7 +154,7 @@ namespace zero.Core.Api
 
       // update new page properties
       model.Id = null;
-      model.ParentId = parent?.Id;
+      model.ParentId = parent?.Id.Ref<IPage>();
       model.IsActive = false;
       model.CreatedDate = DateTimeOffset.Now;
 
@@ -192,7 +192,7 @@ namespace zero.Core.Api
             IPage childPage = child.Value.Clone();
             childPage.Id = null;
             childPage.IsActive = false;
-            childPage.ParentId = newParentId;
+            childPage.ParentId = newParentId.Ref<IPage>();
             childPage.CreatedDate = DateTimeOffset.Now;
 
             await session.StoreAsync(childPage);
@@ -258,7 +258,7 @@ namespace zero.Core.Api
       string[] ids = entities.Select(x => x.OriginalId).ToArray();
 
       // check if parents are available
-      string[] parentIds = entities.Select(x => x.Content as IPage).Where(x => x != null).Select(x => x.ParentId).ToArray();
+      string[] parentIds = entities.Select(x => x.Content as IPage).Where(x => x != null && x.ParentId != null).Select(x => x.ParentId?.Id).ToArray();
       parentIds = (await GetByIds<IPage>(parentIds)).Where(x => x.Value != null).Select(x => x.Value.Id).ToArray();
 
       // validate and restore all items
@@ -276,7 +276,7 @@ namespace zero.Core.Api
         page.IsActive = false;
 
         // validate app and parent
-        if (!Scope.IsAllowed(page.AppId) || (!page.ParentId.IsNullOrEmpty() && !ids.Contains(page.ParentId) && !parentIds.Contains(page.ParentId)))
+        if (!Scope.IsAllowed(page.AppId) || (!page.ParentId.Id.IsNullOrEmpty() && !ids.Contains(page.ParentId) && !parentIds.Contains(page.ParentId)))
         {
           // TODO correct error message
           continue;

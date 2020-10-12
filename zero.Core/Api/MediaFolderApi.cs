@@ -170,7 +170,7 @@ namespace zero.Core.Api
         return EntityResult<IMediaFolder>.Fail("@errors.idnotfound");
       }
 
-      model.ParentId = parent?.Id;
+      model.ParentId = parent?.Id.Ref<IMediaFolder>();
 
       return await Save(model);
     }

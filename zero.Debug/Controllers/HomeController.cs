@@ -77,7 +77,7 @@ namespace zero.Debug.Controllers
           Text = "What the fuckk",
           PublishDate = DateTimeOffset.Now.AddDays(3),
           AppId = app.Id,
-          ParentId = newsPage.Id
+          ParentId = newsPage.Id.Ref<IPage>()
         });
 
         await session.StoreAsync(new NewsPage()
@@ -90,7 +90,7 @@ namespace zero.Debug.Controllers
           Text = "What the fuckkii",
           PublishDate = DateTimeOffset.Now.AddDays(-20),
           AppId = app.Id,
-          ParentId = newsPage.Id
+          ParentId = newsPage.Id.Ref<IPage>()
         });
 
         await session.StoreAsync(new RedirectPage()
@@ -101,7 +101,7 @@ namespace zero.Debug.Controllers
           IsActive = true,
           PageTypeAlias = "redirect",
           AppId = app.Id,
-          ParentId = newsPage.Id,
+          ParentId = newsPage.Id.Ref<IPage>(),
           Link = "https://brothers.studio"
         });
 

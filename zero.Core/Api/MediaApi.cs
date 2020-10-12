@@ -145,7 +145,7 @@ namespace zero.Core.Api
         return EntityResult<IMedia>.Fail("@errors.idnotfound");
       }
 
-      model.FolderId = parent?.Id;
+      model.FolderId = parent?.Id.Ref<IMediaFolder>();
 
       return await Save(model);
     }
@@ -172,7 +172,7 @@ namespace zero.Core.Api
 
       // generate file id which is used as the folder name on disk
       media.FileId = Guid.NewGuid().ToString();
-      media.FolderId = folderId;
+      media.FolderId = folderId.Ref<IMediaFolder>();
 
       // generate file name
       media.Name = Safenames.File(file.FileName);

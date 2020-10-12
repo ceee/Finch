@@ -24,6 +24,7 @@ namespace zero.TestData
     {
       Messages.Subscribe<EntitySavedMessage<ICountry>, CountryBlueprintHandler>();
       Messages.Subscribe<EntitySavedMessage<IProperty>, PropertyBlueprintHandler>();
+      Messages.Subscribe<EntitySavedMessage<ILanguage>, LanguageBlueprintHandler>();
       return Task.CompletedTask;
     }
 
