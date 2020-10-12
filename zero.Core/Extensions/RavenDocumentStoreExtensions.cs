@@ -155,11 +155,14 @@ namespace zero.Core.Extensions
       {
         Query = $"from {collectionName} c {querySuffix ?? String.Empty}",
         QueryParameters = parameters
+      }, new QueryOperationOptions
+      {
+        AllowStale = true
       });
 
       Operation operation = await store.Operations.SendAsync(operationQuery);
 
-      await operation.WaitForCompletionAsync(TimeSpan.FromSeconds(30));
+      await operation.WaitForCompletionAsync();
     }
   }
 }
