@@ -13,16 +13,16 @@ plugins.keys().forEach(path =>
   zero.plugins.push(definition);
 });
 
-plugins = require.context('@/../zero.Debug', true, /plugin\.js$/); // TODO dynPATH
+//plugins = require.context('@/../zero.Debug', true, /plugin\.js$/); // TODO dynPATH
 
-plugins.keys().forEach(path =>
-{
-  const routesDefinition = plugins(path);
-  const definition = routesDefinition.default || routesDefinition;
+//plugins.keys().forEach(path =>
+//{
+//  const routesDefinition = plugins(path);
+//  const definition = routesDefinition.default || routesDefinition;
 
-  definition.name = 'project'; // TODO
-  zero.plugins.push(definition);
-});
+//  definition.name = 'project'; // TODO
+//  zero.plugins.push(definition);
+//});
 
 
 // run setup action directly

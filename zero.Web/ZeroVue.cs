@@ -65,15 +65,19 @@ namespace zero.Web
       config.SharedAppId = Constants.Database.SharedAppId;
 
       User user = await AuthenticationApi.GetUser();
-      config.User = new UserEditModel()
+
+      if (user != null)
       {
-        Id = user.Id,
-        AvatarId = user.AvatarId,
-        Email = user.Email,
-        IsSuper = user.IsSuper,
-        Name = user.Name,
-        Roles = user.Roles
-      };
+        config.User = new UserEditModel()
+        {
+          Id = user.Id,
+          AvatarId = user.AvatarId,
+          Email = user.Email,
+          IsSuper = user.IsSuper,
+          Name = user.Name,
+          Roles = user.Roles
+        };
+      }
 
       return JsonSerializer.Serialize(config, new JsonSerializerOptions()
       {

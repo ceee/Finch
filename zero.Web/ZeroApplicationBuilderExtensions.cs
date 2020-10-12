@@ -59,11 +59,11 @@ namespace zero.Web
     }
 
 
-    public static IApplicationBuilder UseZeroDevEnvironment(this IApplicationBuilder app)
+    public static IApplicationBuilder UseZeroDevEnvironment(this IApplicationBuilder app, string path = null)
     {
       app.UseDeveloperExceptionPage();
 
-      string webUiPath = Path.Combine(Environment.CurrentDirectory, "..", "zero.Web.UI"); // TODO dynPATH
+      string webUiPath = path ?? Path.Combine(Environment.CurrentDirectory, "..", "zero.Web.UI"); // TODO dynPATH
 
       //app.UseSpa(spa =>
       //{
