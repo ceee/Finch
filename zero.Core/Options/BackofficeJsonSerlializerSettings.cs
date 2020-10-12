@@ -19,7 +19,6 @@ namespace zero.Core.Options
     {
       settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
       settings.Converters.Add(new RefJsonConverter());
-      settings.Converters.Add(new RefsJsonConverter());
       settings.ContractResolver = new ZeroJsonContractResolver();
       settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
       settings.TypeNameHandling = TypeNameHandling.Objects;

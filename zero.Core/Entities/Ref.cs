@@ -9,13 +9,6 @@ namespace zero.Core.Entities
   }
 
 
-  public class Refs<T> : Refs where T : IZeroIdEntity
-  {
-    public Refs() : base() { }
-    public Refs(params string[] ids) : base(ids) { }
-  }
-
-
   public class Ref
   {
     public Ref() { }
@@ -32,18 +25,5 @@ namespace zero.Core.Entities
     {
       return Id;
     }
-  }
-
-
-  public class Refs
-  {
-    public Refs() { }
-
-    public Refs(params string[] ids)
-    {
-      Ids = ids;
-    }
-
-    public string[] Ids { get; set; } = new string[0] { };
   }
 }

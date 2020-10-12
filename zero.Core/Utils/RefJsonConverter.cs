@@ -10,12 +10,9 @@ namespace zero.Core.Utils
   {
     private readonly Type type;
 
-    private readonly string idProperty;
-
     public RefJsonConverter()
     {
       type = typeof(Ref<>);
-      idProperty = nameof(Ref<IZeroIdEntity>.Id);
     }
 
 
