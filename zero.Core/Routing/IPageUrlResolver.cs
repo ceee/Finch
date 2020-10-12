@@ -7,11 +7,11 @@ using zero.Core.Entities;
 
 namespace zero.Core.Routing
 {
-  public interface IPageUrlProvider
+  public interface IPageUrlResolver
   {
     /// <summary>
     /// Get URL for a page
     /// </summary>
-    UrlInfo GetUrl(ApplicationContext context, IPage page, IEnumerable<IPage> parents);
+    UrlInfo GetUrl(IApplicationContext context, IPage page, IEnumerable<IPage> parents);
   }
 }

@@ -158,6 +158,20 @@ namespace zero.Core.Api
     }
 
 
+    /// <inheritdoc />
+    public async Task<IApplicationContext> ForId(string appId)
+    {
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      IApplication app = await session.LoadAsync<Application>(appId);
+
+      return new ApplicationContext(Raven, Options, UserManager)
+      {
+        App = app,
+        AppId = appId
+      };
+    }
+
+
     /// <summary>
     /// Get matching application from an URI
     /// </summary>
@@ -293,5 +307,10 @@ namespace zero.Core.Api
     /// This method won't return apps the user has no access to.
     /// </summary>
     Task<IApplication> ResolveFromUser(User user);
+
+    /// <summary>
+    /// Creates a new application context for the specified application.
+    /// </summary>
+    Task<IApplicationContext> ForId(string appId);
   }
 }

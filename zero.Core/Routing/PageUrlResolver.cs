@@ -7,7 +7,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Routing
 {
-  public class PageUrlProvider : IPageUrlProvider
+  public class PageUrlResolver : IPageUrlResolver
   {
     const char PATH_SEPARATOR = '/';
 
@@ -15,7 +15,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public UrlInfo GetUrl(ApplicationContext context, IPage page, IEnumerable<IPage> parents)
+    public UrlInfo GetUrl(IApplicationContext context, IPage page, IEnumerable<IPage> parents)
     {
       StringBuilder stringBuilder = new StringBuilder();
 
