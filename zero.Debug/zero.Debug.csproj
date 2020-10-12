@@ -5,8 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\commerce\zero.Commerce.Depots.Providers.Bits\zero.Commerce.Depots.Providers.Bits.csproj" />
-    <ProjectReference Include="..\commerce\zero.Commerce\zero.Commerce.csproj" />
+    <ProjectReference Include="..\zero.Commerce\zero.Commerce.csproj" />
     <ProjectReference Include="..\zero.Core\zero.Core.csproj" />
     <ProjectReference Include="..\zero.Web\zero.Web.csproj" />
   </ItemGroup>

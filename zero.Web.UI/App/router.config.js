@@ -110,7 +110,7 @@ addRoutesPerContext(require.context('zero/pages', true, /routes\.js$/));
 // add plugin route extensions
 try
 {
-  addRoutesPerContext(require.context('@/../commerce/zero.Commerce/Plugins/zero.Commerce', true, /routes\.js$/), true); // TODO dynPATH
+  addRoutesPerContext(require.context('@/../zero.Commerce/Plugins/zero.Commerce', true, /routes\.js$/), true); // TODO dynPATH
 }
 catch (exc)
 {

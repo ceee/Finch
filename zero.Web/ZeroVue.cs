@@ -241,7 +241,7 @@ namespace zero.Web
     Dictionary<string, string> CreateTranslations()
     {
       var zeroTranslations = CreateTranslationsForFile("O:/zero/zero.Web/Resources/Localization/zero.en-us.json"); // TODO
-      var commerceTranslations = CreateTranslationsForFile("O:/zero/commerce/zero.Commerce/Resources/Localization/zero.commerce.en-us.json");
+      var commerceTranslations = CreateTranslationsForFile("O:/zero/zero.Commerce/Resources/Localization/zero.commerce.en-us.json");
 
       foreach (var translation in commerceTranslations)
       {
