@@ -3,13 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using zero.Core.Api;
 using zero.Core.Entities;
-using zero.Core.Extensions;
 using zero.Core.Messages;
 using zero.Core.Options;
 using zero.Core.Plugins;
-using zero.Core.Utils;
 using zero.Core.Validation;
-using zero.Web.Mapper;
 using zero.Web.Sections;
 
 namespace zero.Web.Defaults
@@ -79,14 +76,6 @@ namespace zero.Web.Defaults
 
       zero.Settings.AddGroup<SystemSettings>();
       //zero.Settings.AddGroup<PluginSettings>();
-
-      zero.Mapper.Add<UserMapperConfig>();
-      zero.Mapper.Add<CountryMapperConfig>();
-      zero.Mapper.Add<TranslationMapperConfig>();
-      zero.Mapper.Add<LanguageMapperConfig>();
-      zero.Mapper.Add<ApplicationMapperConfig>();
-      zero.Mapper.Add<MediaMapperConfig>();
-      zero.Mapper.Add<SpaceMapperConfig>();
 
       zero.Permissions.AddCollection<SectionPermissions>();
       zero.Permissions.AddCollection<ModulePermissions>();

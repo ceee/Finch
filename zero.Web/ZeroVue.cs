@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -13,11 +11,9 @@ using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Identity;
-using zero.Core.Mapper;
 using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Web.Models;
-using zero.Web.Sections;
 
 namespace zero.Web
 {
@@ -31,20 +27,17 @@ namespace zero.Web
 
     protected IAuthenticationApi AuthenticationApi { get; private set; }
 
-    protected IMapper Mapper { get; private set; }
-
     protected IEnumerable<IZeroPlugin> Plugins { get; private set; }
 
     protected IApplicationContext AppContext { get; private set; }
 
 
-    public ZeroVue(IZeroOptions options, IWebHostEnvironment env, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IMapper mapper, IEnumerable<IZeroPlugin> plugins, IApplicationContext appContext)
+    public ZeroVue(IZeroOptions options, IWebHostEnvironment env, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IEnumerable<IZeroPlugin> plugins, IApplicationContext appContext)
     {
       Environment = env;
       Options = options;
       ApplicationsApi = applicationsApi;
       AuthenticationApi = authenticationApi;
-      Mapper = mapper;
       Plugins = plugins;
       AppContext = appContext;
       //zero.path = "@Model.BackofficePath.EnsureEndsWith('/')";
@@ -71,7 +64,16 @@ namespace zero.Web
       config.AppId = AppContext.AppId;
       config.SharedAppId = Constants.Database.SharedAppId;
 
-      config.User = await Mapper.Map<User, UserEditModel>(await AuthenticationApi.GetUser());
+      User user = await AuthenticationApi.GetUser();
+      config.User = new UserEditModel()
+      {
+        Id = user.Id,
+        AvatarId = user.AvatarId,
+        Email = user.Email,
+        IsSuper = user.IsSuper,
+        Name = user.Name,
+        Roles = user.Roles
+      };
 
       return JsonSerializer.Serialize(config, new JsonSerializerOptions()
       {

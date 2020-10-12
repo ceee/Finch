@@ -23,7 +23,6 @@ namespace zero.Core.Options
       Permissions = new PermissionOptions();
       Settings = new SettingsOptions();
       Spaces = new SpaceOptions();
-      Mapper = new MapperOptions();
     }
 
     /// <inheritdoc />
@@ -72,9 +71,6 @@ namespace zero.Core.Options
 
     /// <inheritdoc />
     public SpaceOptions Spaces { get; private set; }
-
-    /// <inheritdoc />
-    public MapperOptions Mapper { get; private set; }
   }
 
 
@@ -160,10 +156,5 @@ namespace zero.Core.Options
     /// 
     /// </summary>
     SpaceOptions Spaces { get; }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    MapperOptions Mapper { get; }
   }
 }

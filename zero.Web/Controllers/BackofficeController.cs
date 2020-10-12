@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
-using zero.Core.Mapper;
 using zero.Core.Options;
 using zero.Web.Filters;
 using zero.Web.Models;
@@ -19,11 +18,9 @@ namespace zero.Web.Controllers
   [ServiceFilter(typeof(ModelStateValidationFilterAttribute))]
   public abstract class BackofficeController : Controller
   {
-    IMapper _mapper;
     IZeroOptions _options;
     IToken _token;
 
-    protected IMapper Mapper => _mapper ?? (_mapper = HttpContext?.RequestServices?.GetService<IMapper>());
     protected IZeroOptions Options => _options ?? (_options = HttpContext?.RequestServices?.GetService<IZeroOptions>());
     protected IToken Token => _token ?? (_token = HttpContext?.RequestServices?.GetService<IToken>());
 
@@ -174,68 +171,6 @@ namespace zero.Web.Controllers
       Response.Headers.Add("zero-filename", filename);
 
       return base.File(stream, contentType, filename, true);
-    }
-
-
-
-    protected async Task<IActionResult> As<T, TTarget>(T model) where TTarget : class, new() where T : IZeroEntity
-    {
-      if (model == null)
-      {
-        return new StatusCodeResult(404);
-      }
-
-      if (Mapper == null)
-      {
-        // TODO show error with help on how to inject mapper in constructor + base constructor
-      }
-
-      TTarget result = await Mapper.Map<T, TTarget>(model);
-
-      if (result is ObsoleteEditModel)
-      {
-        ObsoleteEditModel editModel = result as ObsoleteEditModel;
-        //model.CanEdit = 
-      }
-
-      return Json(result);
-    }
-
-
-    protected async Task<IActionResult> As<T, TTarget>(IEnumerable<T> model) where TTarget : class, new() where T : IZeroEntity
-    {
-      if (model == null)
-      {
-        return new StatusCodeResult(404);
-      }
-
-      return Json(await Mapper.Map<T, TTarget>(model));
-    }
-
-
-    protected async Task<IActionResult> As<T, TTarget>(ListResult<T> model) where TTarget : class, new() where T : IZeroEntity
-    {
-      if (model == null)
-      {
-        return new StatusCodeResult(404);
-      }
-
-      return Json(await Mapper.Map<T, TTarget>(model));
-    }
-
-    protected async Task<IActionResult> As<T, TTarget>(EntityResult<T> model) where TTarget : class, new() where T : IZeroEntity
-    {
-      if (model == null)
-      {
-        return new StatusCodeResult(404);
-      }
-
-      return Json(await Mapper.Map<T, TTarget>(model));
-    }
-
-    protected async Task<TTarget> Map<T, TTarget>(T model) where TTarget : class, new()
-    {
-      return await Mapper.Map<T, TTarget>(model);
     }
   }
 }

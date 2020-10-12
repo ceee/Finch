@@ -58,15 +58,18 @@ namespace zero.Web.Controllers
 
     public async Task<IActionResult> GetAll([FromQuery] MediaListQuery query)
     {
-      ListResult<MediaListModel> items = await Mapper.Map<IMedia, MediaListModel>(await Api.GetByQuery(query));
-      IList<IMediaFolder> hierarchy = null;
-      IEnumerable<IMediaFolder> folders = new List<IMediaFolder>();
-      IMediaFolder folder = null;
-
-      if (query.Page < 2)
+      ListResult<MediaListModel> items = (await Api.GetByQuery(query)).MapTo(x => new MediaListModel()
       {
-        folders = await MediaFolderApi.GetAll(query.FolderId);
-      }
+        Id = x.Id,
+        IsFolder = false,
+        Name = x.Name,
+        Size = x.Size,
+        Source = x.PreviewSource ?? x.Source,
+        Type = x.Type
+      });
+
+      IList<IMediaFolder> hierarchy = null;
+      IMediaFolder folder = null;
 
       if (!String.IsNullOrEmpty(query.FolderId))
       {

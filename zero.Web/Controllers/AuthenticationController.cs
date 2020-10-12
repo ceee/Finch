@@ -26,7 +26,7 @@ namespace zero.Web.Controllers
     /// </summary>
     public async Task<IActionResult> GetUser()
     {
-      return await As<User, UserEditModel>(await Api.GetUser());
+      return Edit(await Api.GetUser());
     }
 
 

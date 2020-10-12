@@ -20,7 +20,6 @@ using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Identity;
-using zero.Core.Mapper;
 using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Core.Utils;
@@ -99,10 +98,6 @@ namespace zero.Web
 
       // configure FluentValidation
       ValidatorOptions.Global.PropertyNameResolver = ValidatorCamelCasePropertyResolver.ResolvePropertyName;
-
-
-      // add default mapper
-      Services.AddMapper();
 
 
       // add default services
