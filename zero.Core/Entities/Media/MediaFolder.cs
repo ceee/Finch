@@ -6,7 +6,7 @@ namespace zero.Core.Entities
   public class MediaFolder : ZeroEntity, IMediaFolder
   {
     /// <inheritdoc />
-    public Ref<IMediaFolder> ParentId { get; set; }
+    public string ParentId { get; set; }
   }
 
 
@@ -19,6 +19,6 @@ namespace zero.Core.Entities
     /// <summary>
     /// Parent folder id
     /// </summary>
-    Ref<IMediaFolder> ParentId { get; set; }
+    string ParentId { get; set; }
   }
 }

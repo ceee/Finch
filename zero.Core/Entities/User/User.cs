@@ -25,10 +25,10 @@ namespace zero.Core.Entities
     public string SecurityStamp { get; set; }
 
     /// <inheritdoc/>
-    public Ref<IMedia> AvatarId { get; set; }
+    public string AvatarId { get; set; }
 
     /// <inheritdoc/>
-    public Ref<ILanguage> LanguageId { get; set; }
+    public string LanguageId { get; set; }
 
 
 
@@ -107,12 +107,12 @@ namespace zero.Core.Entities
     /// <summary>
     /// Avatar image
     /// </summary>
-    Ref<IMedia> AvatarId { get; set; }
+    string AvatarId { get; set; }
 
     /// <summary>
     /// Backoffice display language
     /// </summary>
-    Ref<ILanguage> LanguageId { get; set; }
+    string LanguageId { get; set; }
 
 
 

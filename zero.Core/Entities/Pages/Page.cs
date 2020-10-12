@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using zero.Core.Attributes;
 
 namespace zero.Core.Entities
@@ -10,7 +11,7 @@ namespace zero.Core.Entities
   public class Page : ZeroEntity, IPage
   {
     /// <inheritdoc />
-    public Ref<IPage> ParentId { get; set; }
+    public string ParentId { get; set; }
 
     /// <inheritdoc />
     public string PageTypeAlias { get; set; }
@@ -29,7 +30,7 @@ namespace zero.Core.Entities
     /// <summary>
     /// Id of the parent page
     /// </summary>
-    Ref<IPage> ParentId { get; set; }
+    string ParentId { get; set; }
 
     /// <summary>
     /// Alias of the used page type

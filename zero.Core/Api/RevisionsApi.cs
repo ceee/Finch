@@ -60,7 +60,7 @@ namespace zero.Core.Api
       List<Revision> revisions = new List<Revision>();
 
       // load affected users as the revisions could have been edited by other users too
-      string[] userIds = items.Where(x => x.LastModifiedById != null).Select(x => x.LastModifiedById.Id).Distinct().ToArray();
+      string[] userIds = items.Select(x => x.LastModifiedById).Distinct().ToArray();
       Dictionary<string, User> users = await session.LoadAsync<User>(userIds);
 
       // create revision objects

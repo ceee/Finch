@@ -75,7 +75,7 @@ namespace zero.Core.Api
           Email = model.User.Email,
           Name = model.User.Name,
           IsActive = true,
-          LanguageId = Options.DefaultLanguage.Ref<ILanguage>(),
+          LanguageId = Options.DefaultLanguage,
           Alias = Safenames.Alias(model.User.Name),
           IsEmailConfirmed = true
         };

@@ -199,19 +199,19 @@ namespace zero.Core.Api
         isCreate = true;
 
         model.CreatedDate = DateTimeOffset.Now;
-        model.CreatedById = userId.Ref<IUser>();
+        model.CreatedById = userId;
 
         if (model is ILanguageAwareEntity)
         {
-          (model as ILanguageAwareEntity).LanguageId = "languages.1-A".Ref<ILanguage>(); // TODO correct language id
+          (model as ILanguageAwareEntity).LanguageId = "languages.1-A"; // TODO correct language id
         }
       }
 
       // update name alias and last modified
       model.Alias = Safenames.Alias(model.Name);
-      model.LastModifiedById = userId.Ref<IUser>();
+      model.LastModifiedById = userId;
       model.LastModifiedDate = DateTimeOffset.Now;
-      model.CreatedById ??= userId.Ref<IUser>();
+      model.CreatedById ??= userId;
 
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
       session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
