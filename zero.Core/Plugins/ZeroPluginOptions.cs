@@ -11,6 +11,8 @@ namespace zero.Core.Plugins
     public string Description { get; set; }
 
     public List<string> LocalizationPaths { get; private set; } = new List<string>();
+
+    public string PluginPath { get; set; }
   }
 
 
@@ -21,6 +23,8 @@ namespace zero.Core.Plugins
     string Description { get; set; }
 
     List<string> LocalizationPaths { get; }
+
+    string PluginPath { get; set; }
   }
 
 

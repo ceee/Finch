@@ -19,6 +19,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="5.0.0-preview.8.20414.8" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.0-preview.8.20414.8" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+    <PackageReference Include="VueCliMiddleware" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,18 +33,13 @@
       <PackageCopyToOutput>true</PackageCopyToOutput>
       <PackagePath>content\zero\Resources\</PackagePath>
     </None>
-    
-    <None Include="zero.Web.targets">
-      <Pack>true</Pack>
-      <PackagePath>build\</PackagePath>
-    </None>
 
-    <BackofficeUI Include="..\zero.Web.UI\**\*" Exclude="..\zero.Web.UI\node_modules\**\*;..\zero.Web.UI\Assets\*.js;..\zero.Web.UI\package-lock.json" />
+    <!--<BackofficeUI Include="..\zero.Web.UI\**\*" Exclude="..\zero.Web.UI\node_modules\**\*;..\zero.Web.UI\Assets\*.js;..\zero.Web.UI\Output\*.js;..\zero.Web.UI\package-lock.json" />
     <None Include="@(BackofficeUI)" Link="Zero\%(RecursiveDir)%(Filename)%(Extension)">
       <Pack>true</Pack>
       <PackageCopyToOutput>true</PackageCopyToOutput>
       <PackagePath>content\zero\Web\</PackagePath>
-    </None>
+    </None>-->
   </ItemGroup>
 
 </Project>

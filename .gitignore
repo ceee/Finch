@@ -266,8 +266,8 @@ App_Data/
 **/wwwroot/Media/
 **/wwwroot/Uploads/
 Temp/
-**/Assets/app.*
-**/Assets/setup.*
-**/Assets/*.js
+**/Assets/**/app.*
+**/Assets/**/setup.*
+**/Assets/**/*.js
 deps/*.dll
 zero.Commerce/

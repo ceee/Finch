@@ -12,16 +12,17 @@
   <meta http-equiv="expires" content="0">
   <base href="~/">
   <environment exclude="Development">
-    <link href="~/Assets/app.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/zero/Assets/app.css" rel="stylesheet" asp-append-version="true" />
   </environment>
   <title>zero</title>
 </head>
-<body class="theme-light theme-rounded">
+<body class="theme-light theme-rounded x-test">
   <div id="app"></div>
   <script>
     window.zero = window.zero || {};
     zero = @Html.Raw(await Model.Vue.ConfigAsJson());
   </script>
-  <script src="~/Assets/app.js" asp-append-version="true"></script>
+  <script src="~/zero/vue-cli/js/chunk-vendors.js" asp-append-version="true"></script>
+  <script src="~/zero/vue-cli/js/app.js" asp-append-version="true"></script>
 </body>
 </html>
