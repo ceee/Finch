@@ -1,13 +1,9 @@
-﻿import Vue from 'vue';
-import VueRouter from 'vue-router';
+﻿import { createRouter, createWebHistory } from "vue-router";
 import Localization from 'zero/services/localization';
 import { isArray as _isArray, find as _find, map as _map, filter as _filter } from 'underscore';
 import { warn } from 'zero/services/debug';
 
-Vue.use(VueRouter);
-
 const routes = [];
-
 
 
 // add defined backoffice sections (with their children) to the router
@@ -123,15 +119,15 @@ catch (exc)
 
 // add fallback route (this should probably by 404 page)
 
-routes.push({ name: '404', path: '*', component: () => import('zero/pages/notfound') });
+routes.push({ name: '404', path: '/:pathMatch(.*)*', component: () => import('zero/pages/notfound') });
 
 
 
 
 // create the router with history mode
 
-const router = new VueRouter({
-  mode: 'history',
+const router = createRouter({
+  history: createWebHistory(),
   routes: routes,
   base: zero.path,
   linkActiveClass: 'is-active',

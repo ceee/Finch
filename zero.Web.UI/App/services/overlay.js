@@ -1,9 +1,9 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
 import AppConfirm from 'zero/components/overlays/confirm';
 import Strings from 'zero/services/strings';
 import { find as _find, extend as _extend } from 'underscore';
 
-export default new Vue({
+export default createApp({
 
   data: () => ({
     dropdownInstance: null,
