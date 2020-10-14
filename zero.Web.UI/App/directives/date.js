@@ -4,6 +4,8 @@ import Strings from 'zero/services/strings';
 /// Outputs a formatted date
 /// </summary>
 export default {
+  name: 'date',
+
   beforeMount(el, binding)
   {
     if (binding.value !== binding.oldValue)

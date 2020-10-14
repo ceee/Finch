@@ -7,8 +7,8 @@ zero.apps = {
 
 import Router from 'zero/router.config.js';
 //import 'zero/components/globals';
-import 'zero/directives/globals';
-import 'zero/filters/globals';
+import registerDirectives from 'zero/directives/register';
+//import 'zero/filters/globals';
 //import 'zero/renderers/globals';
 //import 'zero/pages/register';
 
@@ -16,4 +16,7 @@ import 'zero/filters/globals';
 
 const app = createApp(App);
 app.use(Router);
+registerDirectives(app);
+
+console.info(app);
 app.mount('#app');
