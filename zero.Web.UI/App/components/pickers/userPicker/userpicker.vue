@@ -12,6 +12,8 @@
   export default {
     name: 'uiUserpicker',
 
+    emits: ['input'],
+
     props: {
       value: {
         type: [String, Array],

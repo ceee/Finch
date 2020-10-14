@@ -9,6 +9,8 @@
   export default {
     name: 'uiTags',
 
+    emits: ['input'],
+
     props: {
       addLabel: {
         type: String,

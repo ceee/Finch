@@ -12,6 +12,8 @@
   export default {
     name: 'uiCountrypicker',
 
+    emits: ['input'],
+
     props: {
       value: {
         type: [String, Array],

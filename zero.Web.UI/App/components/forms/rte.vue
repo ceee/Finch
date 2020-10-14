@@ -19,6 +19,8 @@
   export default {
     name: 'uiRte',
 
+    emits: ['input'],
+
     props: {
       value: {
         type: String,

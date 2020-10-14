@@ -16,6 +16,8 @@
   export default {
     name: 'uiDropdown',
 
+    emits: ['opened', 'closed'],
+
     props: {
       align: {
         type: String,
@@ -39,7 +41,7 @@
 
       hasButton()
       {
-        return this.$scopedSlots.hasOwnProperty('button');
+        return typeof this.$slots.button === 'function';
       },
 
       dropdownClasses()

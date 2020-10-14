@@ -67,6 +67,8 @@
   export default {
     name: 'uiMediapicker',
 
+    emits: ['change', 'input'],
+
     props: {
       value: {
         type: [Array, String],

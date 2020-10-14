@@ -11,6 +11,8 @@
   import LanguagesApi from 'zero/resources/languages';
 
   export default {
+    emits: ['input'],
+
     props: {
       value: {
         type: String

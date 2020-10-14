@@ -53,6 +53,8 @@
       }
     },
 
+    emits: ['click'],
+
     computed: {
       application()
       {

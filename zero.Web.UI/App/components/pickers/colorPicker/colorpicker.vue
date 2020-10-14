@@ -16,6 +16,8 @@
   export default {
     name: 'uiColorpicker',
 
+    emits: ['change', 'input'],
+
     props: {
       value: {
         type: String,

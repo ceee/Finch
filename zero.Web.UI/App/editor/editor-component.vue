@@ -16,6 +16,8 @@
   export default {
     name: 'uiEditorComponent',
 
+    emits: ['input'],
+
     props: {
       value: {
         type: [ Object, Array ]

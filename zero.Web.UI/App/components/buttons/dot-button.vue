@@ -1,5 +1,5 @@
 ﻿<template>
-  <button type="button" class="ui-dot-button" :disabled="disabled" @click="tryClick" :title="title | localize">
+  <button type="button" class="ui-dot-button" :disabled="disabled" @click="tryClick" v-localize:title="title">
     <span class="sr-only" v-localize="title"></span>
     <i class="ui-button-icon fth-more-horizontal"></i>
   </button>
@@ -9,6 +9,8 @@
 <script>
   export default {
     name: 'uiDotButton',
+
+    emits: ['click'],
 
     props: {
       state: {

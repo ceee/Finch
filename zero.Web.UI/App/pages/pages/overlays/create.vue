@@ -8,7 +8,7 @@
       <button type="button" v-for="item in pageTypes" class="page-create-item" @click="onSelect(item)">
         <i class="page-create-item-icon" :class="item.icon"></i>
         <span class="page-create-item-text">
-          {{item.name | localize}}
+          <span v-localize="item.name"></span>
           <span v-if="item.description" v-localize="item.description"></span>
         </span>
       </button>     

@@ -17,6 +17,8 @@
       }
     },
 
+    emits: ['change'],
+
     data: () => ({
       date: null,
       initialized: false

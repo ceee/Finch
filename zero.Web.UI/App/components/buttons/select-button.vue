@@ -21,6 +21,8 @@
   export default {
     name: 'uiSelectButton',
 
+    emits: ['click'],
+
     props: {
       icon: {
         type: String,

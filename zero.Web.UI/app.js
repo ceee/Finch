@@ -6,17 +6,20 @@ zero.apps = {
 };
 
 import Router from 'zero/router.config.js';
-//import 'zero/components/globals';
+import registerComponents from 'zero/components/register';
 import registerDirectives from 'zero/directives/register';
-//import 'zero/filters/globals';
-//import 'zero/renderers/globals';
-//import 'zero/pages/register';
+import registerRenderers from 'zero/renderers/register';
 
-//import 'zero/zero.plugins.js';
+import 'zero/zero.plugins.js';
+//import ZeroPlugin from 'zero/plugin.js';
 
 const app = createApp(App);
 app.use(Router);
-registerDirectives(app);
 
-console.info(app);
+registerDirectives(app);
+registerComponents(app);
+registerRenderers(app);
+
 app.mount('#app');
+
+//console.info(ZeroPlugin);

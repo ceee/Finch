@@ -13,6 +13,8 @@
   export default {
     name: 'uiToggle',
 
+    emits: ['input'],
+
     props: {
       value: {
         type: Boolean,

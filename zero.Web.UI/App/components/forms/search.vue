@@ -23,6 +23,8 @@
       }
     },
 
+    emits: ['input', 'change', 'submit'],
+
     computed: {
       
     },

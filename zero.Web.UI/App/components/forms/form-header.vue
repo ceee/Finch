@@ -29,6 +29,8 @@
   export default {
     name: 'uiFormHeader',
 
+    emits: ['delete'],
+
     props: {
       title: {
         type: String,
@@ -69,7 +71,7 @@
     computed: {
       actionsDefined()
       {
-        return !this.isCreate && (this.canDelete || this.$scopedSlots.hasOwnProperty('actions'));
+        return !this.isCreate && (this.canDelete || typeof this.$slots.actions === 'function');
       }
     },
 

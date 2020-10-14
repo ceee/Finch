@@ -16,6 +16,8 @@
   export default {
     name: 'uiInputList',
 
+    emits: ['input'],
+
     props: {
       addLabel: {
         type: String,

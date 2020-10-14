@@ -2,10 +2,10 @@
   <div class="apps">
     <ui-header-bar title="@application.list" :count="count" :back-button="true" />
     <div class="ui-blank-box">
-      <applications-items v-model="apps" />
+      <applications-items v-model:items="apps" />
     </div>
   </div>
-</template>
+</template> 
 
 
 <script>

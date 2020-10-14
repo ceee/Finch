@@ -13,12 +13,12 @@
 
 
 <script>
-  import Overlay from 'zero/services/overlay.js'
+  import EventHub from 'zero/services/eventhub';
   import { filter as _filter } from 'underscore';
 
   export default {
     data: () => ({
-      instances: Overlay.instances
+      instances: []
     }),
 
     computed: {
@@ -26,6 +26,19 @@
       {
         return this.instances.filter(x => x.display === 'editor').length;
       }
+    },
+
+    mounted()
+    {
+      EventHub.on('overlay:open', instances =>
+      {
+        console.info('open');
+        this.instances = instances;
+      });
+      EventHub.on('overlay:close', instances =>
+      {
+        this.instances = instances;
+      });
     },
 
     methods: {

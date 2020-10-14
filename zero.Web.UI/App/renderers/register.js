@@ -1,4 +1,6 @@
 
+zero.renderers = zero.renderers || {};
+
 export default function (app)
 {
   const requireComponent = require.context('.', true, /[\w-]+\.js/);
@@ -15,8 +17,8 @@ export default function (app)
 
     const componentConfig = requireComponent(path);
     const config = componentConfig.default || componentConfig;
-    const name = config.name || fileName;
+    const alias = config.alias;
 
-    app.directive(name, config);
+    zero.renderers[alias] = config;
   });
 };

@@ -32,6 +32,8 @@
       }
     },
 
+    emits: ['load', 'submit'],
+
     data: () => ({
       dirty: false,
       loadingState: 'default',
