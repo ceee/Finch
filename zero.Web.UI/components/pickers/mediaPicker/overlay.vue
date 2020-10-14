@@ -1,0 +1,296 @@
+﻿<template>
+  <ui-form ref="form" class="ui-mediapicker-overlay" v-slot="form">
+    <h2 class="ui-headline">Select or upload media</h2>
+
+    <ui-search class="ui-mediapicker-overlay-search" v-model="query" />
+
+    <nav class="ui-mediapicker-overlay-hierarchy">
+      <button type="button" class="ui-mediapicker-overlay-hierarchy-item" @click="selectFolder(null)"><i class="fth-home"></i></button>
+      <button type="button" v-for="item in hierarchy" class="ui-mediapicker-overlay-hierarchy-item" @click="selectFolder(item.id)" v-localize="item.name"></button>
+      <button type="button" class="ui-mediapicker-overlay-hierarchy-item" @click="addFolder"><i class="fth-plus"></i></button>
+    </nav>
+
+    <div class="ui-mediapicker-overlay-items">
+      <div v-if="folderId" class="ui-mediapicker-overlay-item is-upload">
+        <input class="ui-mediapicker-overlay-upload" type="file" multiple @change="onUpload" />
+        <span class="-preview"><i class="fth-plus"></i></span>
+        <p class="ui-mediapicker-overlay-item-text">
+          Upload media
+        </p>
+      </div>
+
+      <button type="button" v-for="item in items" class="ui-mediapicker-overlay-item" @click="select(item)">
+        <img class="-preview" v-if="item.image" :src="item.image" />
+        <span class="-preview" v-if="!item.image"><i :class="item.isFolder ? 'fth-folder' : 'fth-file'"></i></span>
+        <p class="ui-mediapicker-overlay-item-text">
+          {{item.name}}
+          <span class="-minor" v-if="item.size"><br><span v-filesize="item.size"></span></span>
+        </p>
+      </button>
+    </div>
+
+    <!--<div class="app-confirm-buttons">
+      <ui-button v-if="!disabled" type="light" :submit="true" :state="form.state" label="@ui.save"></ui-button>
+      <ui-button type="light" :label="config.closeLabel" :disabled="loading" @click="config.close"></ui-button>
+    </div>-->
+  </ui-form>
+</template>
+
+
+<script>
+  import MediaApi from '@zero/resources/media.js'
+  import MediaFolderApi from '@zero/resources/media-folder.js';
+  import Overlay from '@zero/services/overlay.js'
+  import AddFolderOverlay from '@zero/pages/media/overlays/folder.vue'
+  import UploadStatusOverlay from '@zero/pages/media/overlays/upload-status.vue'
+  import { debounce as _debounce, filter as _filter } from 'underscore'
+
+  export default {
+
+    props: {
+      model: String,
+      config: Object
+    },
+
+    data: () => ({
+      folderId: null,
+      icon: null,
+      query: '',
+      items: [],
+      hierarchy: []
+    }),
+
+    watch: {
+      'config.folderId': function (id)
+      {
+        this.folderId = id;
+      },
+      model()
+      {
+        //this.init();
+      },
+      query()
+      {
+        this.debouncedSearch();
+      }
+    },
+
+    created()
+    {
+      this.folderId = this.config.folderId;
+
+      this.debouncedSearch = _debounce(this.search, 100);
+      //this.items = this.config.items;
+      //this.init();
+
+      //this.gridConfig = {
+      //  search: null,
+      //  width: 160,
+      //  component: MediaItem,
+      //  items: this.getItems
+      //};
+    },
+
+    mounted()
+    {
+      this.getItems();
+    },
+
+    methods: {
+
+      // get items (media + subfolders) in the current folder
+      getItems(query)
+      {
+        if (!query)
+        {
+          query = {};
+        }
+
+        query.folderId = this.folderId;
+
+        this.getFolderHierarchy(query.folderId);
+
+        return MediaApi.getListByQuery(query).then(response =>
+        {
+          this.items = response.items;
+        });
+      },
+
+      getFolderHierarchy(id)
+      {
+        MediaFolderApi.getHierarchy(id).then(res =>
+        {
+          this.hierarchy = res;
+          this.current = res[res.length - 1];
+        });
+      },
+
+      // switches view to the selected folder
+      selectFolder(id)
+      {
+        this.folderId = id;
+        this.getItems();
+      },
+
+      // adds a new folder within the current parent
+      addFolder()
+      {
+        Overlay.open({
+          component: AddFolderOverlay,
+          model: { parentId: this.folderId },
+          theme: 'dark'
+        }).then(() => { }, () =>
+        {
+          setTimeout(() =>
+          {
+            this.selectFolder(item.model.id);
+          }, 1000);
+        });
+      },
+
+      // uploads a new media item within the current parent
+      onUpload(event)
+      {
+        let options = {
+          title: 'Upload status',
+          closeLabel: '@ui.close',
+          component: UploadStatusOverlay,
+          isCreate: true,
+          model: event.target.files,
+          folderId: this.folderId,
+          theme: 'dark',
+          width: 520
+        };
+
+        return Overlay.open(options).then(value =>
+        {
+          setTimeout(() =>
+          {
+            this.getItems();
+          }, 500);
+        }, () => { });
+      },
+
+      // select an item, this can either be a folder or a media item
+      select(item)
+      {
+        if (item.isFolder)
+        {
+          return this.selectFolder(item.id);
+        }
+        else
+        {
+          this.config.confirm(item, this.config);
+        }
+      }
+    }
+  }
+</script>
+
+<style lang="scss">
+  .ui-mediapicker-overlay
+  {
+    text-align: left;
+  }
+
+  .ui-mediapicker-overlay-search.ui-searchinput .ui-input
+  {
+    margin-top: 25px;
+  }
+
+  .ui-mediapicker-overlay-hierarchy
+  {
+    text-align: left;
+    margin-top: 20px;
+  }
+
+  .ui-mediapicker-overlay-hierarchy-item
+  {
+    line-height: 1.4;
+
+    & + .ui-mediapicker-overlay-hierarchy-item:before
+    {
+      content: '/';
+      margin: 0 0.5em;
+      color: var(--color-text-dim);
+    }
+  }
+
+  .ui-mediapicker-overlay-items
+  {
+    margin-top: 25px;
+    max-height: 495px;
+    overflow-y: auto;
+  }
+
+  .ui-mediapicker-overlay-item
+  {
+    width: 100%;
+    height: 70px;
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 15px;
+    align-items: center;
+    line-height: 1.4;
+
+    & + .ui-mediapicker-overlay-item
+    {
+      margin-top: 15px;
+    }
+
+    .-preview
+    {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      height: 70px;
+      width: 70px;
+      object-fit: cover;
+      background: var(--color-box-nested);
+      border-radius: var(--radius);
+      position: relative;
+      text-align: center;
+      font-size: 20px;
+    }
+
+    &.is-upload
+    {
+      position: relative;
+    }
+
+    .-extension
+    {
+      font-size: 12px;
+      font-style: normal;
+      margin-top: 8px;
+    }
+
+    .-minor
+    {
+      color: var(--color-text-dim);
+      font-size: var(--font-size-s);
+    }
+  }
+
+  .ui-mediapicker-overlay-item-text
+  {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+
+  input[type="file"].ui-mediapicker-overlay-upload
+  {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    bottom: 0;
+    opacity: 0.001;
+    cursor: pointer;
+  }
+</style>
