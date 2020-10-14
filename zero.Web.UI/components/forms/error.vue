@@ -1,4 +1,5 @@
 ﻿<template>
+  formData: {{formData}}
   <div class="ui-error" v-if="visible">
     <ui-message v-for="error in errors" :key="error.id" type="error" :text="error.message" :title="error.field" />
   </div>
@@ -30,6 +31,8 @@
     data: () => ({
       errors: []
     }),
+
+    inject: [ 'formData' ],
 
     mounted ()
     {

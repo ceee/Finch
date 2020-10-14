@@ -1,25 +1,23 @@
 import { createApp } from 'vue';
-import App from '@zero/app.vue';
+import App from './app.vue';
 
 zero.apps = {
   shared: true
 };
 
-import registerDirectives from '@zero/directives/register.js';
-//import Router from '@zero/config/router.config.js';
-//import registerComponents from '@zero/components/register.js';
-//import registerRenderers from '@zero/renderers/register.js';
+import registerDirectives from './directives/register.js';
+import Router from './config/router.config.js';
+import registerComponents from './components/register.js';
+//import registerRenderers from './renderers/register.js';
 
 //import '@zero/config/zero.plugins.js';
 //import ZeroPlugin from '@zero/plugin.js';
 
 const app = createApp(App);
-//app.use(Router);
+app.use(Router);
 
 registerDirectives(app);
-//registerComponents(app);
+registerComponents(app);
 //registerRenderers(app);
-
-console.info(app);
 
 app.mount('#app');

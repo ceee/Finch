@@ -13,7 +13,7 @@ Axios.defaults.withCredentials = true;
 
 Axios.defaults.paramsSerializer = (params) =>
 {
-  return stringify(params, { allowDots: true });
+  return Qs.stringify(params, { allowDots: true });
 };
 
 Axios.interceptors.response.use(response => response, error =>

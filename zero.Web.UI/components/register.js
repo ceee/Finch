@@ -1,61 +1,91 @@
-// Globally register all base components for convenience, because they
-// will be used very frequently. Components are registered using the
-// PascalCased version of their file name.
+let imports = [
+  // buttons
+  () => import('./buttons/add-button.vue'),
+  () => import('./buttons/button.vue'),
+  () => import('./buttons/dot-button.vue'),
+  () => import('./buttons/icon-button.vue'),
+  () => import('./buttons/select-button.vue'),
+  () => import('./buttons/state-button.vue'),
 
-let components = [];
-//const directories = ['buttons', 'forms', 'messages', 'tables', 'tabs'];
+  // forms
+  () => import('./forms/alias.vue'),
+  () => import('./forms/check-list.vue'),
+  () => import('./forms/error-view.vue'),
+  () => import('./forms/error.vue'),
+  () => import('./forms/form-header.vue'),
+  () => import('./forms/form.vue'),
+  () => import('./forms/input-list.vue'),
+  () => import('./forms/media-old.vue'),
+  () => import('./forms/property.vue'),
+  () => import('./forms/rte.vue'),
+  () => import('./forms/search.vue'),
+  () => import('./forms/tags.vue'),
+  () => import('./forms/toggle.vue'),
 
-// TODO this file will import all vue component files with subdirectories
-// if it contains a file "overlay.vue" it will create an "ui-overlay" component
-// if another folder contains a file "overlay.vue" it is not used anymore or overridden.
-// we don't want to add all files but only files where we define global component access in its settings
+  // modules
+  () => import('./modules/modules.vue'),
 
-// https://webpack.js.org/guides/dependency-management/#require-context
-const requireComponent = require.context(
-  // Look for files in the current directory
-  '.',
-  // Do look in subdirectories
-  true,
-  // .vue files
-  /[\w-]+\.vue$/
-);
+  // overlays
+  () => import('./overlays/confirm.vue'),
+  () => import('./overlays/dropdown-button.vue'),
+  () => import('./overlays/dropdown-separator.vue'),
+  () => import('./overlays/dropdown.vue'),
+  () => import('./overlays/overlay-editor.vue'),
 
-// For each matching file name...
-requireComponent.keys().forEach((path) =>
+  // pickers
+  () => import('./pickers/colorPicker/colorpicker.vue'),
+  () => import('./pickers/countryPicker/countrypicker.vue'),
+  () => import('./pickers/datePicker/datepicker.vue'),
+  () => import('./pickers/dateRangePicker/daterangepicker.vue'),
+  () => import('./pickers/iconPicker/iconpicker.vue'),
+  () => import('./pickers/mediaPicker/mediapicker.vue'),
+  () => import('./pickers/userPicker/userpicker.vue'),
+  () => import('./pickers/pick.vue'),
+
+  // tables
+  () => import('./tables/table.vue'),
+  () => import('./tables/table-filter.vue'),
+
+  // tabs
+  () => import('./tabs/tab.vue'),
+  () => import('./tabs/tabs.vue'),
+  () => import('./tabs/inline-tabs.vue'),
+
+  // tabs
+  () => import('./tree/tree.vue'),
+  () => import('./tree/tree-item.vue'),
+
+  // misc
+  () => import('./datagrid/datagrid.vue'),
+  () => import('./messages/message.vue'),
+  () => import('./date.vue'),
+  () => import('./header-bar.vue'),
+  () => import('./loading.vue'),
+  () => import('./pagination.vue'),
+  () => import('./permissions.vue'),
+  () => import('./revisions.vue')
+];
+
+const resolveFilename = path =>
 {
   let pathParts = path.split('/');
-  let fileName = pathParts[pathParts.length - 1];
-
-  // Get the component config
-  const componentConfig = requireComponent(path);
-  // Get the PascalCase version of the component name
-  const componentName = 'ui' + fileName
-    // Remove the "./_" from the beginning
+  return 'ui' + pathParts[pathParts.length - 1]
     .replace(/^\.\/_/, '')
-    // Remove the file extension from the end
     .replace(/\.\w+$/, '')
-    // Split up kebabs
     .split('-')
-    // Upper case
     .map((kebab) => kebab.charAt(0).toUpperCase() + kebab.slice(1))
-    // Concatenated
     .join('');
-
-  if (componentName === 'uiOverlay')
-  {
-    return;
-  }
-
-  components.push({
-    name: componentName,
-    config: componentConfig.default || componentConfig
-  })
-});
+};
 
 export default function (app)
 {
-  components.forEach(component =>
+  imports.forEach(path =>
   {
-    app.component(component.name, component.config);
+    path().then(resolved =>
+    {
+      const config = resolved.default || resolved;
+      const name = config.name || resolveFilename(config.__hmrId);
+      app.component(name, config);
+    });
   });
 };
