@@ -24,6 +24,6 @@ export default {
   }],
 
   optimizeDeps: {
-    include: ["qs"],
+    include: ['qs'],
   },
 };

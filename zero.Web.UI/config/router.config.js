@@ -186,8 +186,6 @@ const beforeEach = (to, from, next) =>
   }
 };
 
-
-
 // create the router with history mode
 export default createRouter({
   history: createWebHistory(zero.path),
