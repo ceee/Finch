@@ -71,7 +71,7 @@
       tab: 'features',
       field: 'features',
       display: 'custom',
-      path: '@zero/pages/settings/application-features.vue'
+      path: '/pages/settings/application-features.vue'
     }
   ]
 };

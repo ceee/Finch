@@ -61,7 +61,7 @@
     name: 'uiDatagrid',
 
     props: {
-      value: {
+      config: {
         type: Object,
         required: true,
         default: () =>
@@ -80,11 +80,11 @@
       {
         this.load(true);
       },
-      'value.search': function (val)
+      'config.search': function (val)
       {
         this.filter.search = val;
       },
-      'value.items': function (val)
+      'config.items': function (val)
       {
         this.initialize();
       },
@@ -135,7 +135,7 @@
       {
         this.debouncedUpdate = _debounce(this.update, 300);
 
-        this.configuration = _extend(defaultConfig, this.value);
+        this.configuration = _extend(defaultConfig, this.config);
 
         if (this.configuration.order.enabled)
         {

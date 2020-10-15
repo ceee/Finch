@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="users">
     <ui-header-bar title="Users & Permissions" :back-button="true">
-      <ui-table-filter v-model="usersConfig" />
+      <ui-table-filter :config="usersConfig" />
       <ui-add-button type="light onbg" :route="createRoleRoute" label="Add role" />
       <ui-button type="primary" label="Add user" />
     </ui-header-bar>
@@ -19,7 +19,7 @@
 
     <div class="ui-blank-box">
       <h2 class="ui-headline users-group-headline" v-localize="'@user.users'"></h2>
-      <ui-table v-model="usersConfig" />
+      <ui-table :config="usersConfig" />
     </div>
   </div>
 </template>

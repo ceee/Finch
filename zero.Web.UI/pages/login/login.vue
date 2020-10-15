@@ -2,7 +2,7 @@
   <div class="app-auth">
     <i class="fth-home app-auth-font-trigger"></i>
     <span></span>
-    <ui-form class="app-auth-inner" v-slot="form" @submit="onSubmit">
+    <ui-form v-slot="{ state }" class="app-auth-inner" @submit="onSubmit">
       <div>
         <img class="app-auth-image" src="/Assets/zero-2-light.png" v-localize:alt="'@zero.name'" />
 
@@ -20,7 +20,7 @@
       </div>
 
       <div class="app-auth-bottom">
-        <ui-button type="primary" :submit="true" label="@login.button" :state="form.state" />
+        <ui-button type="primary" :submit="true" label="@login.button" :state="state" />
         <ui-button type="blank" label="@login.button_forgot" />
       </div>
     </ui-form>

@@ -2,31 +2,36 @@
   <div class="apps">
     <ui-header-bar title="@application.list" :count="count" :back-button="true" />
     <div class="ui-blank-box">
-      <applications-items v-model:items="apps" />
+      <applications-items v-model:items="items" />
     </div>
   </div>
 </template> 
 
 
 <script>
-  import ApplicationsItems from '@zero/pages/settings/applications-items.vue'
-  import ApplicationsApi from '@zero/resources/applications.js'
+  import ApplicationsItems from '@zero/pages/settings/applications-items.vue';
+  import ApplicationsApi from '@zero/resources/applications.js';
+  import { ref, onBeforeMount } from 'vue';
 
   export default {
-    data: () => ({
-      count: 0,
-      apps: []
-    }),
-
     components: { ApplicationsItems },
 
-    mounted()
+    setup()
     {
-      ApplicationsApi.getAll().then(response =>
+      const count = ref(0);
+      const items = ref([]);
+
+      onBeforeMount(async () =>
       {
-        this.apps = response.items;
-        this.count = response.totalItems;
+        const res = await ApplicationsApi.getAll();
+        count.value = res.totalItems;
+        items.value = res.items;
       });
+
+      return {
+        count,
+        items
+      };
     }
   }
 </script>

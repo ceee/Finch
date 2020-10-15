@@ -1,16 +1,16 @@
 ﻿<template>
   <ui-header-bar class="ui-form-header" :back-button="true">
     <template v-slot:title>
-      <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name}">
-        <input class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" :readonly="titleDisabled || disabled" />
-        <!--<ui-alias class="ui-form-header-title-alias" v-if="hasAlias" v-model="value.alias" :name="value.name" :disabled="disabled" />-->
-        <!--<span v-localize="value.name || title"></span>-->
+      <h2 class="ui-header-bar-title" :class="{'is-empty': title && !modelValue.name}">
+        <input class="ui-form-header-title-input" type="text" v-model="modelValue.name" v-localize:placeholder="title" :readonly="titleDisabled || disabled" />
+        <!--<ui-alias class="ui-form-header-title-alias" v-if="hasAlias" v-model="modelValue.alias" :name="modelValue.name" :disabled="disabled" />-->
+        <!--<span v-localize="modelValue.name || title"></span>-->
       </h2>
     </template>
     <div class="ui-form-header-aside">
       <slot></slot>
       <div v-if="activeToggle" class="ui-form-header-toggle">
-        <ui-toggle v-model="value.isActive" class="is-primary" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" :disabled="disabled" />
+        <ui-toggle v-model="modelValue.isActive" class="is-primary" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" :disabled="disabled" />
       </div>
       <ui-dropdown v-if="actionsDefined && !disabled" align="right">
         <template v-slot:button>
@@ -32,35 +32,16 @@
     emits: ['delete'],
 
     props: {
-      title: {
-        type: String,
-        default: null
-      },
-      value: {
-        type: Object
-      },
+      title: String,
+      modelValue: Object,
+      disabled: Boolean,
+      titleDisabled: Boolean,
+      state: String,
+      isCreate: Boolean,
+      activeToggle: Boolean,
       canDelete: {
         type: Boolean,
         default: true
-      },
-      disabled: {
-        type: Boolean,
-        default: false
-      },
-      titleDisabled: {
-        type: Boolean,
-        default: false
-      },
-      state: {
-        type: String
-      },
-      isCreate: {
-        type: Boolean,
-        default: false
-      },
-      activeToggle: {
-        type: Boolean,
-        default: false
       },
       hasAlias: {
         type: Boolean,

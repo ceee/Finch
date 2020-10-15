@@ -1,11 +1,11 @@
 ﻿<template>
   <div class="translations">
     <ui-header-bar title="@translation.list" :count="count" :back-button="true">
-      <ui-table-filter v-model="tableConfig" />
+      <ui-table-filter :config="tableConfig" />
       <ui-add-button :route="createRoute" />
     </ui-header-bar>
     <div class="ui-blank-box">
-      <ui-table v-model="tableConfig" @count="count = $event" />
+      <ui-table :config="tableConfig" @count="count = $event" />
     </div>
   </div>
 </template>

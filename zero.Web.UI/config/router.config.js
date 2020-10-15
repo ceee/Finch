@@ -1,10 +1,12 @@
 ﻿
-import { createRouter, createWebHistory } from "vue-router";
 import Localization from '@zero/services/localization.js';
+import SettingsRoutes from '@zero/pages/settings/routes.js';
+import { createRouter, createWebHistory } from "vue-router";
 import { isArray as _isArray, find as _find, map as _map, filter as _filter } from 'underscore';
 import { warn } from '@zero/services/debug.js';
 
 const routes = [];
+const routePrefix = '/pages';
 
 
 // add defined backoffice sections (with their children) to the router
@@ -32,13 +34,13 @@ zero.sections.forEach(section =>
 {
   if (!section.isExternal)
   {
-    addSection(section, () => import('@zero/pages/' + section.alias + '/' + section.alias + '.vue'));
+    addSection(section, () => import(routePrefix + '/' + section.alias + '/' + section.alias + '.vue'));
 
     if (section.children.length > 0)
     {
       section.children.forEach(child =>
       {
-        addSection(child, () => import('@zero/pages/' + section.alias + '/' + section.alias + '/' + child.alias + '.vue'), section);
+        addSection(child, () => import(routePrefix + '/' + section.alias + '/' + section.alias + '/' + child.alias + '.vue'), section);
       });
     }
   }
@@ -49,7 +51,7 @@ zero.sections.forEach(section =>
 
 routes.push({
   path: '/preview',
-  component: () => import('@zero/pages/preview.vue'),
+  component: () => import(routePrefix + '/preview.vue'),
   name: 'preview',
   meta: {
     name: '@preview.name'
@@ -59,50 +61,44 @@ routes.push({
 
 // find internal route definitions per section
 
-let addRoutesPerContext = (context, isPlugin) =>
+let addRouteTable = (config, isPlugin) =>
 {
-  context.keys().forEach((path) =>
+  let _routes = _isArray(config) ? config : config.routes;
+
+  _routes.forEach(route =>
   {
-    const routesDefinition = context(path);
-    const definition = routesDefinition.default || routesDefinition;
-    let _routes = _isArray(definition) ? definition : definition.routes;
+    const parentAlias = route.section || config.section;
+    const isChild = typeof parentAlias === 'string';
+    const parentRoute = isChild ? _find(routes, r => r.meta.alias === parentAlias) : null;
 
-    _routes.forEach(route =>
+    // could not append routes to a section
+    if (isChild && !parentRoute)
     {
-      const parentAlias = route.section || definition.section;
-      const isChild = typeof parentAlias === 'string';
-      const parentRoute = isChild ? _find(routes, r => r.meta.alias === parentAlias) : null;
-
-      // could not append routes to a section
-      if (isChild && !parentRoute)
+      if (_routes.length > 0)
       {
-        if (_routes.length > 0)
-        {
-          warn(`router: Could not find section "${definition.section}" in route definition file ${path}`);
-        }
+        warn(`router: Could not find section "${config.section}" in route definition file ${path}`);
       }
-      // append routes to a section
-      else if (isChild)
+    }
+    // append routes to a section
+    else if (isChild)
+    {
+      if (!parentRoute.children)
       {
-        if (!parentRoute.children)
-        {
-          parentRoute.children = [];
-        }
-        parentRoute.children.push(route);
+        parentRoute.children = [];
       }
-        // add routes to root
-      else
-      {
-        routes.push(route);
-      }
-    });
+      parentRoute.children.push(route);
+    }
+      // add routes to root
+    else
+    {
+      routes.push(route);
+    }
   });
 };
 
 
-
 // add internal route extensions
-//addRoutesPerContext(require.context('zero/pages', true, /routes\.js$/));
+addRouteTable(SettingsRoutes);
 
 // add plugin route extensions
 //try
@@ -120,7 +116,7 @@ let addRoutesPerContext = (context, isPlugin) =>
 
 // add fallback route (this should probably by 404 page)
 
-routes.push({ name: '404', path: '/:pathMatch(.*)*', component: () => import('@zero/pages/notfound.vue') });
+routes.push({ name: '404', path: '/:pathMatch(.*)*', component: () => import(routePrefix + '/notfound.vue') });
 
 
 
@@ -186,6 +182,7 @@ const beforeEach = (to, from, next) =>
   }
 };
 
+
 // create the router with history mode
 export default createRouter({
   history: createWebHistory(zero.path),
@@ -195,6 +192,6 @@ export default createRouter({
   beforeEach: beforeEach,
   scrollBehavior(to, from, savedPosition)
   {
-    return savedPosition ? savedPosition : { x: 0, y: 0 };
+    return savedPosition ? savedPosition : { top: 0, left: 0 };
   }
 });

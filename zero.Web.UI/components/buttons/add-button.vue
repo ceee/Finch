@@ -62,7 +62,7 @@
       },
       hasDropdown()
       {
-        return this.decision && zero.apps.shared;
+        return this.decision && zero.config.shared;
       }
     },
 

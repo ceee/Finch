@@ -119,11 +119,11 @@
         {
           if (this.config.path.indexOf('@zero') === 0)
           {
-            return import(`zero/` + this.config.path.substring(6));
+            return import(`/` + this.config.path.substring(6));
           }
           else if (this.config.path.indexOf('@shop') === 0) // TODO common system for plugins
           {
-            return import(`shop/` + this.config.path.substring(6));
+            return import(`/` + this.config.path.substring(6));
           }
           else
           {
@@ -132,15 +132,15 @@
         }
         else if (this.view === 'renderer')
         {
-          return import(`zero/editor/editor`);
+          return import(`/editor/editor.vue`);
         }
         else if (this.isStatic)
         {
-          return import(`zero/editor/fields/static/${this.view.toLowerCase()}`);
+          return import(`/editor/fields/static/${this.view.toLowerCase()}.vue`);
         }
         else
         {
-          return import(`zero/editor/fields/${this.view.toLowerCase()}`);
+          return import(`/editor/fields/${this.view.toLowerCase()}.vue`);
         }
       }
 

@@ -27,22 +27,19 @@
       },
       title: {
         type: String,
-        default: ''
+        default: '' 
       },
       disabled: Boolean
     },
 
-    mounted ()
+    setup(props, context)
     {
-      
-    },
-
-    methods: {
-
-      tryClick(ev)
-      {
-        this.$emit('click', ev);
-      }
+      return {
+        tryClick(ev)
+        {
+          context.emit('click', ev);
+        }
+      };
     }
   }
 </script>

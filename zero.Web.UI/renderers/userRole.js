@@ -1,4 +1,5 @@
-﻿import { filter as _filter } from 'underscore';
+﻿
+import { filter as _filter } from 'underscore';
 
 export default {
   alias: 'userRole',

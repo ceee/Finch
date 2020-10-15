@@ -1,11 +1,11 @@
 ﻿<template>
   <div class="apps-items">
-    <router-link v-for="app in items" :key="app.id" :to="getAppLink(app)" class="apps-item">
+    <router-link v-for="app in apps" :key="app.id" :to="app.link" class="apps-item">
       <strong class="apps-item-name">{{app.name}}</strong>
       <span class="apps-item-minor">{{app.domains[0]}}</span>
-      <span class="apps-item-status" :class="{ 'is-active': app.isActive }" v-localize="getStatus(app)"></span>
+      <span class="apps-item-status" :class="{ 'is-active': app.isActive }" v-localize="app.statusLocalization"></span>
     </router-link>
-    <router-link :to="getAddLink()" class="apps-items-add">
+    <router-link :to="{ name: addLink }" class="apps-items-add">
       <i class="fth-plus"></i>
     </router-link>
   </div>
@@ -13,36 +13,42 @@
 
 
 <script>
-  const baseRoute = zero.alias.sections.settings + '-' + zero.alias.settings.applications;
+  import { ref, computed, watch } from 'vue';
 
   export default {
+
     props: {
-      items: {
-        type: Array,
-        default: () => []
-      }
+      items: Array
     },
 
-    methods: {
+    setup(props)
+    {
+      const baseRoute = zero.alias.sections.settings + '-' + zero.alias.settings.applications;
+      const addLink = computed(() => baseRoute + '-create');
+      const apps = ref();
 
-      getAppLink(item)
+      const buildItems = items =>
       {
-        return {
-          name: baseRoute + '-edit',
-          params: { id: item.id }
-        };
-      },
+        apps.value = props.items.map(x =>
+        {
+          return {
+            ...x,
+            link: {
+              name: baseRoute + '-edit',
+              params: { id: x.id }
+            },
+            statusLocalization: x.isActive ? '@ui.active' : '@ui.inactive'
+          };
+        });
+      };
 
-      getStatus(item)
-      {
-        return item.isActive ? '@ui.active' : '@ui.inactive';
-      },
+      buildItems(props.items);
+      watch(() => props.items, val => buildItems(val));
 
-      getAddLink()
-      {
-        return { name: baseRoute + '-create' };
-      }
-
+      return {
+        apps,
+        addLink
+      };
     }
   }
 </script>

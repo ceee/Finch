@@ -1,6 +1,8 @@
-﻿import { map as _map, find as _find, isArray as _isArray } from 'underscore';
+﻿
+import { map as _map, find as _find, isArray as _isArray } from 'underscore';
 
 const alias = zero.alias.sections.settings;
+const routePrefix = '/pages';
 const section = _find(zero.sections, section => section.alias === alias);
 let routes = [];
 
@@ -37,7 +39,7 @@ if (section)
       routes.push({
         path: area.url,
         name: alias + '-' + area.alias,
-        component: () => import(`zero/pages/${alias}/${area.alias}.vue`),
+        component: () => import(`/pages/${alias}/${area.alias}.vue`),
         meta: {
           name: [area.name, section.name]
         }
@@ -74,7 +76,7 @@ if (section)
         routes.push({
           path: area.url + '/' + path + (!isCreate ? '/:id' : '/:scope?'),
           name: alias + '-' + area.alias + '-' + path.replace('/', '-'),
-          component: () => import(`zero/pages/${alias}/${detail.view}.vue`),
+          component: () => import(`${routePrefix}/${alias}/${detail.view}.vue`),
           props: true,
           meta: {
             create: isCreate,

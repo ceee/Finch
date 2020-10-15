@@ -2,6 +2,8 @@
 window.zero = window.zero || {};
 window.zero.config = window.zero.config || {};
 
+window.zero.config.shared = true;
+
 window.zero.config.media = {
   defaults: {
     images: ['.jpg', '.jpeg', '.png', '.webp', '.svg'],

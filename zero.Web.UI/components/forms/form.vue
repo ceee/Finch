@@ -1,6 +1,6 @@
 ﻿<template>
   <form class="ui-form" @keydown="onKeydown" @submit.prevent="onSubmit" @change="onChange">
-    <slot v-if="loadingState === 'default'" v-bind="slotProps" />
+    <slot v-if="loadingState === 'default'" :state="state" :is-shared="isShared" />
     <div v-if="loadingState == 'loading'" class="ui-form-loading">
       <i class="ui-form-loading-progress"></i>
     </div>
@@ -43,10 +43,6 @@
       errors: [],
       canEdit: true,
       isShared: false,
-      slotProps: {
-        state: null,
-        isShared: false
-      },
       submitBlocked: false
     }),
 
@@ -58,14 +54,6 @@
       '$route': function ()
       {
         this.$emit('load', this);
-      },
-      state(val)
-      {
-        this.slotProps.state = val;
-      },
-      isShared(val)
-      {
-        this.slotProps.isShared = val;
       },
       canEdit(val)
       {
@@ -79,7 +67,6 @@
 
     created()
     {
-      this.slotProps.state = this.state;
       this.$emit('load', this);
     },
 
@@ -351,6 +338,7 @@
       // find all error components in form
       getErrorComponents()
       {
+        return []; // TODO parent.$children does not exist anymore in vue3
         let errorComponents = [];
 
         // find components which can output errors
