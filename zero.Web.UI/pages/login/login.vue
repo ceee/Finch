@@ -52,6 +52,7 @@
       onSubmit(form)
       {
         this.rejectReason = null;
+        console.info(form);
         form.handle(AuthApi.login(this.model)).then(res =>
         {
           window.location.reload();

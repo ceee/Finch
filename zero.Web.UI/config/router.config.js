@@ -32,13 +32,13 @@ zero.sections.forEach(section =>
 {
   if (!section.isExternal)
   {
-    addSection(section, () => import('@zero/pages/' + section.alias + '/' + section.alias + '.vue'));
+    addSection(section, () => import('@zero/pages/' + section.alias + '/' + section.alias));
 
     if (section.children.length > 0)
     {
       section.children.forEach(child =>
       {
-        addSection(child, () => import('@zero/pages/' + section.alias + '/' + section.alias + '/' + child.alias + '.vue'), section);
+        addSection(child, () => import('@zero/pages/' + section.alias + '/' + section.alias + '/' + child.alias), section);
       });
     }
   }
@@ -49,7 +49,7 @@ zero.sections.forEach(section =>
 
 routes.push({
   path: '/preview',
-  component: () => import('@zero/pages/preview.vue'),
+  component: () => import('@zero/pages/preview'),
   name: 'preview',
   meta: {
     name: '@preview.name'
@@ -120,7 +120,7 @@ let addRoutesPerContext = (context, isPlugin) =>
 
 // add fallback route (this should probably by 404 page)
 
-routes.push({ name: '404', path: '/:pathMatch(.*)*', component: () => import('@zero/pages/notfound.vue') });
+routes.push({ name: '404', path: '/:pathMatch(.*)*', component: () => import('@zero/pages/notfound') });
 
 
 

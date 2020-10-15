@@ -2,7 +2,7 @@
   <div class="ui-module-item" v-if="!loading" :data-module="alias" :class="{'can-edit': canEdit }">
     <div class="ui-module-item-content" v-if="module" @click="emit('edit')">
       <span v-if="!hasPreviewSettings || renderer.preview.label !== false" class="ui-module-item-header">{{module.name}}</span>
-      <module-preview-inner v-if="tryRender" :template="renderer.preview.template" :value="value" />
+      <ui-module-preview-inner v-if="tryRender" :template="renderer.preview.template" :value="value" />
     </div>
     <div class="ui-module-item-content" v-else>
       <span class="ui-module-item-header is-error"><i class="fth-alert-circle"></i> {{alias}}</span>
@@ -29,14 +29,11 @@
 
 <script>
   import { find as _find } from 'underscore';
-  import ModulePreviewInner from './module-preview-inner.vue';
 
   export default {
     name: 'uiModulePreview',
 
     emits: ['edit', 'remove', 'isActive'],
-
-    components: { ModulePreviewInner },
 
     props: {
       value: {

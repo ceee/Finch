@@ -8,7 +8,7 @@ export default {
 
   outDir: 'Assets/',
 
-  base: 'zero-cli/',
+  base: '/zero/vue-cli',
 
   resolvers: [{
     alias(path)
@@ -20,11 +20,7 @@ export default {
           return path.replace(alias, resolved);
         }
       }
-    },
-    //resolveRelativeRequest(publicPath, relativePublicPath)
-    //{
-    //  console.info(publicPath + " | " + relativePublicPath);
-    //}
+    }
   }],
 
   optimizeDeps: {

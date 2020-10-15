@@ -55,25 +55,15 @@ namespace zero.Web
             pattern: path + "/api/{controller}/{action}/{id?}"
           );
 
+          if (devPath != null)
+          {
+            endpoints.MapFallback(path + "/vue-cli/{**path}", CreateVueProxyDelegate(endpoints, new SpaOptions { SourcePath = devPath }));
+          }
+
           // fallbacks for SPA
           endpoints.MapFallbackToController(path + "/{**path}", "Index", "Index");
         });
       });
-
-
-      if (devPath != null)
-      {
-        app.UseWhen(ctx => !ctx.Request.Path.ToString().StartsWith(path), builder =>
-        {
-          builder.UseRouting();
-
-          builder.UseEndpoints(endpoints =>
-          {
-            RequestDelegate vueDelegate = CreateVueProxyDelegate(endpoints, new SpaOptions { SourcePath = devPath });
-            endpoints.MapFallback("/{**path}", vueDelegate);
-          });
-        });
-      }
 
       return app;
     }
@@ -98,7 +88,7 @@ namespace zero.Web
           opt.Options.StartupTimeout = options.StartupTimeout;
         }
 
-        opt.UseVueCli(npmScript: "vite-dev", port: 3000);
+        opt.UseVueCli();
       });
 
       return app.Build();

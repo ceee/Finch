@@ -15,14 +15,14 @@
 
 <script>
   import './sass/app.scss'
-  import AppNavigation from './navigation.vue'
-  import AppLogin from './pages/login/login.vue'
-  import AppOverlays from './components/overlays/overlay-holder.vue'
-  import AppNotifications from './components/notifications/notification-holder.vue'
-  import AuthApi from './services/auth.js'
-  import EventHub from './services/eventhub.js'
-  import './config/zero.config.js'
-  import './config/axios.config.js'
+  import AppNavigation from '@zero/navigation.vue'
+  import AppLogin from '@zero/pages/login/login.vue'
+  import AppOverlays from '@zero/components/overlays/overlay-holder.vue'
+  import AppNotifications from '@zero/components/notifications/notification-holder.vue'
+  import AuthApi from '@zero/services/auth.js'
+  import EventHub from '@zero/services/eventhub.js'
+  import '@zero/config/zero.config.js'
+  import '@zero/config/axios.config.js'
 
   export default {
     name: 'app',

@@ -17,7 +17,7 @@
 
 <script>
   export default {
-    name: 'uiInlineTabs',
+    name: 'uiTabs',
 
     props: {
       cache: {

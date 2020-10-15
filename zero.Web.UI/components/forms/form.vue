@@ -13,7 +13,6 @@
   import Overlay from '@zero/services/overlay.js'
   import Notification from '@zero/services/notification.js'
   import { isArray as _isArray, filter as _filter, groupBy as _groupBy, each as _each, difference as _difference } from 'underscore'
-  import { computed } from 'vue'
 
   export default {
     name: 'uiForm',
@@ -48,10 +47,6 @@
         isShared: false
       },
       submitBlocked: false
-    }),
-
-    provide: () => ({
-      formData: 'my-state'
     }),
 
     watch: {
