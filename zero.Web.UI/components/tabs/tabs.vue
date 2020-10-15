@@ -37,12 +37,11 @@
     created()
     {
       this.cacheKey = this.cache ? `zero.ui-tabs.cache.${this.cache}` : null;
+      this.tabs = this.$children;
     },
 
     mounted()
     {
-      this.tabs = this.$slots.default()[0].children.filter(x => x.type.name === 'uiTab');
-
       if (this.cache)
       {
         const cachedActiveTab = localStorage.getItem(this.cacheKey);

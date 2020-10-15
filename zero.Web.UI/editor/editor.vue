@@ -2,16 +2,14 @@
   <div>
     <div class="editor-outer" v-if="loaded && !rendererNotFound" :class="{ 'has-tabs': hasTabs, '-infos-aside': !nested, 'is-page': isPage }" :renderer="config">
       <ui-tabs class="editor" :active="activeTab">
-        <ui-tab class="ui-box" :class="tab.class" :label="tab.label" :count="tab.count(modelValue)" v-for="(tab, index) in tabs" :key="index" :depth="depth" :name="tab.name">
-          <div v-if="!tabDisabled(tab)">
-            <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="modelValue" @input="onChange" :meta="meta" :depth="depth" :disabled="disabled" />
-            <component v-if="tab.component" :is="tab.component" v-model="modelValue" :disabled="disabled" />
-          </div>
+        <ui-tab v-if="!tabDisabled(tab)" class="ui-box" :class="tab.class" :label="tab.label" :count="tab.count(value)" v-for="(tab, index) in tabs" :key="index" :depth="depth" :name="tab.name">
+          <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" :renderer="configuration" v-model="value" @input="onChange" :meta="meta" :depth="depth" :disabled="disabled" />
+          <component v-if="tab.component" :is="tab.component" v-model="value" :disabled="disabled" />
         </ui-tab>
       </ui-tabs>
       <aside v-if="!nested && infos && infos != 'none'" class="editor-infos">
         <slot name="info-boxes"></slot>
-        <div class="ui-box" v-if="isShared" :class="{'is-active': modelValue.isActive }">
+        <div class="ui-box" v-if="isShared" :class="{'is-active': value.isActive }">
           <div class="editor-global-flag">
             <i class="fth-radio"></i>
             <p>
@@ -19,27 +17,27 @@
               <!--<a href="/">Edit parent</a>-->
             </p>
           </div>
-          <ui-button type="light small" label="Settings" @click="editBlueprint(modelValue.blueprint)" />
-          <ui-button type="light small" label="Edit parent" @click="editBlueprint(modelValue.blueprint)" />
+          <ui-button type="light small" label="Settings" @click="editBlueprint(value.blueprint)" />
+          <ui-button type="light small" label="Edit parent" @click="editBlueprint(value.blueprint)" />
         </div>
-        <div class="ui-box editor-active-toggle" v-if="activeToggle" :class="{'is-active': modelValue.isActive }">
+        <div class="ui-box editor-active-toggle" v-if="activeToggle" :class="{'is-active': value.isActive }">
           <slot name="settings">
             <ui-property v-if="activeToggle" label="@ui.active" :is-text="true" class="is-toggle">
-              <ui-toggle v-model="modelValue.isActive" class="is-primary" :disabled="disabled" />
+              <ui-toggle v-model="value.isActive" class="is-primary" :disabled="disabled" />
             </ui-property>
           </slot>
           <slot name="settings-properties"></slot>
         </div>
-        <div class="ui-box is-light" v-if="modelValue.id">
+        <div class="ui-box is-light" v-if="value.id">
           <slot name="infos">
-            <ui-property v-if="modelValue.id" label="@ui.id" :is-text="true">
-              {{modelValue.id}}
+            <ui-property v-if="value.id" label="@ui.id" :is-text="true">
+              {{value.id}}
             </ui-property>
-            <ui-property v-if="modelValue.id && modelValue.lastModifiedDate" label="@ui.modifiedDate" :is-text="true">
-              <ui-date v-model="modelValue.lastModifiedDate" />
+            <ui-property v-if="value.id && value.lastModifiedDate" label="@ui.modifiedDate" :is-text="true">
+              <ui-date v-model="value.lastModifiedDate" />
             </ui-property>
-            <ui-property v-if="modelValue.id" label="@ui.createdDate" :is-text="true">
-              <ui-date v-model="modelValue.createdDate" />
+            <ui-property v-if="value.id" label="@ui.createdDate" :is-text="true">
+              <ui-date v-model="value.createdDate" />
             </ui-property>
             <slot name="infos-more"></slot>
           </slot>
@@ -76,7 +74,7 @@
         type: Object,
         default: () => { }
       },
-      modelValue: {
+      value: {
         type: Object
       },
       infos: {
@@ -128,7 +126,7 @@
     computed: {
       isShared()
       {
-        return this.modelValue && this.modelValue.blueprint != null;
+        return this.value && this.value.blueprint != null;
       }
     },
 
@@ -211,8 +209,7 @@
 
       onChange()
       {
-        this.$emit('input', this.modelValue);
-        this.$emit('update:modelValue', this.modelValue);
+        this.$emit('input', this.value);
       },
 
 
@@ -223,7 +220,7 @@
           return false;
         }
 
-        return tab.disabled(this.modelValue);
+        return tab.disabled(this.value);
       },
 
 

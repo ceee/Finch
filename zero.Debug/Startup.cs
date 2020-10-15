@@ -42,7 +42,7 @@ namespace zero.Debug
 
       ZeroBuilder zero = services
         .AddZero(Configuration)
-        //.AddCommerce()
+        .AddCommerce()
         .AddPlugin<TestPlugin>();
 
       services.Configure<IISOptions>(opts => opts.AutomaticAuthentication = false);

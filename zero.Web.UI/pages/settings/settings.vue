@@ -2,7 +2,7 @@
   <div class="settings">
     <div class="settings-group" v-if="false && apps.length > 0">
       <h2 class="ui-headline settings-group-headline" v-localize="'@application.list'"></h2>
-      <applications-items :items="apps" />
+      <applications-items v-model="apps" />
     </div>
     <div class="settings-group" v-for="group in groups">
       <h2 class="ui-headline settings-group-headline" v-localize="group.name"></h2>
@@ -25,34 +25,31 @@
 
 
 <script>
-  import ApplicationsItems from '@zero/pages/settings/applications-items.vue';
+  import ApplicationsItems from '@zero/pages/settings/applications-items.vue'
   import SettingsApi from '@zero/resources/settings.js';
-  import { ref, onBeforeMount } from 'vue';
 
   export default {
+    name: 'app-settings',
+
     components: { ApplicationsItems },
 
-    setup()
-    {
-      const groups = ref();
-      const apps = ref();
-      const tokens = ref({
+    data: () => ({
+      page: true,
+      groups: [],
+      apps: [],
+      tokens: {
         'zero_version': zero.version,
         'plugin_count': zero.pluginCount
-      });
-
-      onBeforeMount(async () =>
-      {
-        const areas = await SettingsApi.getAreas();
-        groups.value = areas.groups;
-        apps.value = areas.applications;
-      });
-
-      return {
-        groups,
-        apps,
-        tokens
       }
+    }),
+
+    mounted()
+    {
+      SettingsApi.getAreas().then(response =>
+      {
+        this.groups = response.groups;
+        this.apps = response.applications;
+      });
     }
   }
 </script>

@@ -1,23 +1,24 @@
 
-let imports = [
-  () => import(`./application.js`),
-  () => import('./country.js'),
-  () => import('./language.js'),
-  () => import('./media.js'),
-  () => import('./translation.js'),
-  () => import('./user.js'),
-  () => import('./userRole.js')
-];
+zero.renderers = zero.renderers || {};
 
-export default function (renderers)
+export default function (app)
 {
-  imports.forEach(path =>
+  const requireComponent = require.context('.', true, /[\w-]+\.js/);
+
+  requireComponent.keys().forEach(path =>
   {
-    path().then(resolved =>
+    let pathParts = path.split('/');
+    let fileName = pathParts[pathParts.length - 1].split('.')[0];
+
+    if (fileName === 'register')
     {
-      const config = resolved.default || resolved;
-      const alias = config.alias;
-      renderers[alias] = config;
-    });
+      return;
+    }
+
+    const componentConfig = requireComponent(path);
+    const config = componentConfig.default || componentConfig;
+    const alias = config.alias;
+
+    zero.renderers[alias] = config;
   });
 };

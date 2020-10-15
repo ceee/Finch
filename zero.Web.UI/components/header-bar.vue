@@ -26,36 +26,49 @@
 
 <script>
   import Overlay from '@zero/services/overlay.js';
-  import { useRouter } from 'vue-router';
 
   export default {
     name: 'uiHeaderBar',
 
     props: {
-      title: String,
-      titleEmpty: String,
-      prefix: String,
-      suffix: String,
-      count: Number,
-      description: String,
-      backButton: Boolean,
-      closeButton: Boolean
+      title: {
+        type: String
+      },
+      titleEmpty: {
+        type: String
+      },
+      prefix: {
+        type: String
+      },
+      suffix: {
+        type: String
+      },
+      count: {
+        type: Number,
+        default: 0
+      },
+      description: {
+        type: String
+      },
+      backButton: {
+        type: Boolean,
+        default: false
+      },
+      closeButton: {
+        type: Boolean,
+        default: false
+      }
     },
 
-    setup()
-    {
-      const router = useRouter();
-
-      return {
-        onBack()
-        {
-          router.go(-1);
-        },
-        onClose()
-        {
-          Overlay.close();
-        }
-      };
+    methods: {
+      onBack()
+      {
+        this.$router.go(-1);
+      },
+      onClose()
+      {
+        Overlay.close();
+      }
     }
   }
 </script>
