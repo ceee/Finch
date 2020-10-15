@@ -13,8 +13,6 @@
   export default {
     name: 'uiSelect',
 
-    emits: ['input'],
-
     props: {
       value: {
         type: [String, Number, Object],

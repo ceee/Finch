@@ -36,8 +36,6 @@
   export default {
     name: 'uiModulesSelect',
 
-    emits: ['selected'],
-
     props: {
       value: Array,
       config: Object,

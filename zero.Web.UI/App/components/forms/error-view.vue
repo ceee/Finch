@@ -1,5 +1,4 @@
 ﻿<template>
-  <!-- // TODO notfound view works and can be used here -->
   <div class="page page-error" :class="{'theme-dark': dark }">
     <i class="page-error-icon fth-cloud-snow"></i>
     <p class="page-error-text">

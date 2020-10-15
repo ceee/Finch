@@ -1,15 +1,18 @@
 ﻿<template>
-  <button v-if="!confirming" :disabled="disabled" type="button" @click="onClick" class="ui-dropdown-button" :class="{ 'has-icon': icon, 'is-active': selected, 'is-multiline': multiline }">
-    <i v-if="icon" class="ui-dropdown-button-icon" :class="icon"></i>
-    <span v-localize="label"></span>
-    <i v-if="selected" class="ui-dropdown-button-selected fth-check"></i>
-    <i v-if="loading" class="ui-dropdown-button-progress"></i>
-  </button>
-  <div v-if="confirming" class="ui-dropdown-button-confirmation">
-    <i v-if="icon" class="ui-dropdown-button-icon" :class="icon"></i>
-    <span v-localize="label"></span>
-    <ui-button type="small primary" label="OK" @click="onClick($event, true)" />
-    <ui-button type="small light" label="Cancel" @click="confirming=false" />
+  <!-- // TODO remove surrounding div as soon as we can have multiple roots (vue 3) -->
+  <div @click="onClickShim">
+    <button v-if="!confirming" :disabled="disabled" type="button" @click="onClick" class="ui-dropdown-button" :class="{ 'has-icon': icon, 'is-active': selected, 'is-multiline': multiline }">
+      <i v-if="icon" class="ui-dropdown-button-icon" :class="icon"></i>
+      {{label | localize}}
+      <i v-if="selected" class="ui-dropdown-button-selected fth-check"></i>
+      <i v-if="loading" class="ui-dropdown-button-progress"></i>
+    </button>
+    <div v-if="confirming" class="ui-dropdown-button-confirmation">
+      <i v-if="icon" class="ui-dropdown-button-icon" :class="icon"></i>
+      {{label | localize}}
+      <ui-button type="small primary" label="OK" @click="onClick($event, true)" />
+      <ui-button type="small light" label="Cancel" @click="confirming=false" />
+    </div>
   </div>
 </template>
 
@@ -19,8 +22,6 @@
 
   export default {
     name: 'uiDropdownButton',
-
-    emits: ['click', 'hide'],
 
     props: {
       value: {
@@ -125,7 +126,14 @@
             }
           });
         }
+      },
+
+      onClickShim(e)
+      {
+        e.preventDefault();
+        e.stopPropagation();
       }
+
     }
   }
 </script>

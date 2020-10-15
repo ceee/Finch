@@ -19,12 +19,14 @@
       <template v-for="section in sections">
         <router-link :to="section.url" class="app-nav-item" :alias="section.alias" :class="{ 'has-children': hasChildren(section) }">
           <i class="app-nav-item-icon" :class="section.icon"></i>
-          <span v-localize="section.name"></span>
+          {{section.name | localize}}
           <i v-if="hasChildren(section)" class="app-nav-item-arrow fth-chevron-down"></i>
         </router-link>
         <transition name="app-nav-children">
           <div class="app-nav-children" v-if="hasChildren(section) && $route.path.indexOf('/' + section.alias) === 0">
-            <router-link v-for="child in section.children" v-bind:key="child.alias" :to="child.url" class="app-nav-child" v-localize="child.name" />
+            <router-link v-for="child in section.children" v-bind:key="child.alias" :to="child.url" class="app-nav-child">
+              {{child.name | localize}}
+            </router-link>
           </div>
         </transition>
       </template>

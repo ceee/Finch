@@ -22,8 +22,6 @@
   export default {
     name: 'uiButton',
 
-    emits: ['click'],
-
     props: {
       label: {
         type: String
@@ -132,6 +130,17 @@
         {
           this.stateTimeout = setTimeout(() =>
           {
+            //const stateUpdate = 'update:state';
+
+            //// check if :state property has .sync modifier
+            //let listeners = this.$options._parentListeners;
+            //const hasSyncModifier = listeners && listeners[stateUpdate];
+
+            //if (!hasSyncModifier)
+            //{
+            //  console.warn(`ui-button: Add the .sync modifier to the "state" property, as changing the state to "${STATE_SUCCESS}" or "${STATE_ERROR}" will automatically set it back to "${STATE_DEFAULT}" after the state duration timeout`);
+            //}
+
             this.stateDisplay = STATE_DEFAULT;
           }, this.stateDuration);
         }
@@ -139,6 +148,7 @@
     },
 
     methods: {
+
       tryClick(ev)
       {
         if (this.isDefaultState)
@@ -146,6 +156,7 @@
           this.$emit('click', ev);
         }
       }
+
     }
   }
 </script>

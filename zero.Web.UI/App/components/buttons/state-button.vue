@@ -26,8 +26,6 @@
       }
     },
 
-    emits: ['input'],
-
     methods: {
 
       select(value)

@@ -66,8 +66,6 @@
   export default {
     name: 'uiMediaOld',
 
-    emits: ['input'],
-
     props: {
       disabled: {
         type: Boolean,

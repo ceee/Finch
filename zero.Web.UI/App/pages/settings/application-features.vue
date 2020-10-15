@@ -23,7 +23,6 @@
       },
     },
 
-    emits: ['input'],
 
     data: () => ({
       features: []

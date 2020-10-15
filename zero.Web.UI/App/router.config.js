@@ -123,9 +123,27 @@ routes.push({ name: '404', path: '/:pathMatch(.*)*', component: () => import('ze
 
 
 
+
+// create the router with history mode
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: routes,
+  base: zero.path,
+  linkActiveClass: 'is-active',
+  linkExactActiveClass: 'is-active-exact',
+  scrollBehavior(to, from, savedPosition)
+  {
+    return savedPosition ? savedPosition : { x: 0, y: 0 };
+  }
+});
+
+
+
+
 // set meta title before routing
 
-const beforeEach = (to, from, next) =>
+router.beforeEach((to, from, next) =>
 {
   let isGuarded = false;
 
@@ -183,19 +201,7 @@ const beforeEach = (to, from, next) =>
   {
     callback();
   }
-};
-
-
-
-// create the router with history mode
-export default createRouter({
-  history: createWebHistory(zero.path),
-  routes: routes,
-  linkActiveClass: 'is-active',
-  linkExactActiveClass: 'is-active-exact',
-  beforeEach: beforeEach,
-  scrollBehavior(to, from, savedPosition)
-  {
-    return savedPosition ? savedPosition : { x: 0, y: 0 };
-  }
 });
+
+
+export default router;

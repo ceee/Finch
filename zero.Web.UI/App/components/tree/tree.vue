@@ -27,8 +27,6 @@
   export default {
     name: 'uiTree',
 
-    emits: ['select', 'onStatusChange'],
-
     props: {
       depth: {
         type: Number,
@@ -67,7 +65,7 @@
     computed: {
       actionsDefined()
       {
-        return typeof this.$slots.actions === 'function';
+        return this.$scopedSlots.hasOwnProperty('actions');
       }
     },
 

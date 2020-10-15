@@ -15,8 +15,6 @@
   export default {
     name: 'uiAlias',
 
-    emits: ['input'],
-
     props: {
       value: {
         type: String,

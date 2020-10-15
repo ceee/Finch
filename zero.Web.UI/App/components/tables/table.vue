@@ -3,7 +3,7 @@
     <div class="ui-table" :class="{'is-inline': inline }">
       <header class="ui-table-row ui-table-head">      
         <div v-for="column in columns" :key="column.key" class="ui-table-cell" :table-field="column.field" :style="column.flex">
-          <span v-localize="column.label"></span>
+          {{ column.label | localize }}
           <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="tableFilter.orderBy == column.field ? 'sort-' + (tableFilter.orderIsDescending ? 'desc' : 'asc') : null">
             <i class="arrow arrow-down"></i>
           </button>
@@ -70,10 +70,8 @@
   export default {
     name: 'uiTable',
 
-    emits: ['loaded', 'count', 'select'],
-
     props: {
-      config: {
+      value: {
         type: Object,
         required: true,
         default: () => { }
@@ -98,15 +96,15 @@
     components: { UiPagination },
 
     watch: {
-      'config.columns': function (val)
+      'value.columns': function (val)
       {
         this.generateColumns(val);
       },
-      'config.search': function (val)
+      'value.search': function (val)
       {
         this.tableFilter.search = val;
       },
-      'config.items': function (val)
+      'value.items': function (val)
       {
         this.initialize();
       },
@@ -185,7 +183,7 @@
       {
         this.debouncedUpdate = _debounce(this.update, 300);
 
-        this.configuration = _extend(JSON.parse(JSON.stringify(defaultConfig)), this.config);
+        this.configuration = _extend(JSON.parse(JSON.stringify(defaultConfig)), this.value);
 
         this.tableFilter.pageSize = this.configuration.pageSize;
 

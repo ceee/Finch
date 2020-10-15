@@ -17,8 +17,6 @@
   export default {
     name: 'uiModules',
 
-    emits: ['input'],
-
     props: {
       value: {
         type: Array,

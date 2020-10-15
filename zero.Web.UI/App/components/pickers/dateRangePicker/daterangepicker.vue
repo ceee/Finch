@@ -32,8 +32,6 @@
   export default {
     name: 'uiDaterangepicker',
 
-    emits: ['change', 'input'],
-
     components: { DaterangepickerOverlay },
 
     props: {

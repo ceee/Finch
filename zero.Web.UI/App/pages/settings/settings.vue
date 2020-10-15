@@ -13,7 +13,7 @@
             <strong v-localize="item.name"></strong>
             <template v-if="item.description">
               <br>
-              <span v-localize="{ key: item.description, tokens: tokens }"></span>
+              {{item.description | localize({ tokens: tokens })}}
             </template>
           </p>
         </router-link>

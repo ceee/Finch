@@ -23,8 +23,6 @@
   export default {
     name: 'uiDatepicker',
 
-    emits: ['change', 'input'],
-
     components: { DatepickerOverlay },
 
     props: {

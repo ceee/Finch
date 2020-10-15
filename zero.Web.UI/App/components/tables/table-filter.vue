@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-table-filter">
-    <ui-search v-if="!hideSearch" v-model="config.search" class="onbg" />
+    <ui-search v-if="!hideSearch" v-model="value.search" class="onbg" />
     <ui-dropdown v-if="!hideFilter && filters.length" align="right">
       <template v-slot:button>
         <ui-button v-if="!hideFilter" type="light onbg" :label="filterLabel" caret="down" />
@@ -18,11 +18,11 @@
       </template>
       <slot name="actions"></slot>
     </ui-dropdown>
-    <ui-dropdown v-if="config.actions && config.actions.length > 0" align="right">
+    <ui-dropdown v-if="value.actions && value.actions.length > 0" align="right">
       <template v-slot:button>
         <ui-button type="light onbg" icon="fth-more-horizontal" />
       </template>
-      <ui-dropdown-button v-for="(action, index) in config.actions" :key="index" :value="action" :prevent="action.autoclose === false" :label="action.label" :icon="action.icon" @click="onActionClicked" />
+      <ui-dropdown-button v-for="(action, index) in value.actions" :key="index" :value="action" :prevent="action.autoclose === false" :label="action.label" :icon="action.icon" @click="onActionClicked" />
     </ui-dropdown>
   </div>
 </template>
@@ -37,10 +37,8 @@
   export default {
     name: 'uiTableFilter',
 
-    emits: ['filter'],
-
     props: {
-      config: {
+      value: {
         type: Object,
         required: true,
         default: () =>
@@ -64,7 +62,7 @@
     },
 
     watch: {
-      config: function (value)
+      value: function (value)
       {
         this.reload();
       }
@@ -102,9 +100,9 @@
 
       reload()
       {
-        this.hideFilter = typeof this.config.filter !== 'object';
-        this.hideSearch = typeof this.config.search === false;
-        this.hideSelection = this.config.selectable !== true;
+        this.hideFilter = typeof this.value.filter !== 'object';
+        this.hideSearch = typeof this.value.search === false;
+        this.hideSelection = this.value.selectable !== true;
         this.filters = JSON.parse(localStorage.getItem(this.storageKey) || "[]");
       },
 
@@ -127,7 +125,7 @@
       {
         let model = {
           name: null,
-          filter: this.config.filter.model
+          filter: this.value.filter.model
         };
 
         if (id)
@@ -139,9 +137,9 @@
           component: FilterOverlay,
           display: 'editor',
           title: 'Filter',
-          defaults: this.config.filter.model,
+          defaults: this.value.filter.model,
           model: model,
-          fields: this.config.filter.fields,
+          fields: this.value.filter.fields,
           canSave: !!this.alias,
           isCreate: !id
         }).then(value =>

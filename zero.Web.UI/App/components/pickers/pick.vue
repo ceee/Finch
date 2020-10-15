@@ -150,8 +150,6 @@
   export default {
     name: 'uiPick',
 
-    emits: ['change', 'input', 'select', 'deselect'],
-
     props: {
       value: {
         type: [String, Array],

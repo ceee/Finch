@@ -19,8 +19,6 @@
   export default {
     name: 'uiPagination',
 
-    emits: ['update:page', 'change'],
-
     props: {
       pages: {
         type: Number,

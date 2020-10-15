@@ -15,8 +15,6 @@
   export default {
     name: 'uiCheckList',
 
-    emits: ['input'],
-
     props: {
       value: {
         type: Array,

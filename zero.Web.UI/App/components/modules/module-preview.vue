@@ -33,8 +33,6 @@
   export default {
     name: 'uiModulePreview',
 
-    emits: ['edit', 'remove', 'isActive'],
-
     props: {
       value: {
         type: Object,

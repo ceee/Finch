@@ -6,7 +6,7 @@
     <component :disabled="value.disabled" :is="tag" type="button" :to="value.url" class="ui-tree-item-link" @click="onClick(value, $event)">
       <i class="ui-tree-item-icon" :class="value.icon"></i>
       <i v-if="value.modifier" :title="value.modifier.name" class="ui-tree-item-modifier" :class="value.modifier.icon"></i>
-      <span class="ui-tree-item-text" v-localize="value.name"></span>
+      <span class="ui-tree-item-text">{{value.name | localize}}</span>
     </component>
     <ui-dot-button :disabled="value.disabled" class="ui-tree-item-actions" v-if="value.hasActions" @click="onActionsClicked(value, $event)" />
   </div>
@@ -18,8 +18,6 @@
 
   export default {
     name: 'uiTreeItem',
-
-    emits: ['click', 'open', 'rightclick', 'actions'],
 
     props: {
       value: {

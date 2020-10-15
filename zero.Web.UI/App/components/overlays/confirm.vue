@@ -12,6 +12,8 @@
 
 
 <script>
+  import Overlay from 'zero/services/overlay.js'
+
   export default {
 
     props: {

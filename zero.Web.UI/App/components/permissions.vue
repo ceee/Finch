@@ -24,8 +24,6 @@
   export default {
     name: 'uiPermissions',
 
-    emits: ['input'],
-
     props: {
       value: {
         type: Array,

@@ -71,8 +71,6 @@
       }
     },
 
-    emits: ['count', 'select'],
-
     components: { UiPagination },
 
     watch: {
@@ -118,7 +116,7 @@
     computed: {
       actionsDefined()
       {
-        return typeof this.$slots.actions === 'function';
+        return this.$scopedSlots.hasOwnProperty('actions');
       }
     },
 

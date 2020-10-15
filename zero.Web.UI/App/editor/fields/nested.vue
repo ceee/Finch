@@ -19,8 +19,6 @@
 
     components: { UiEditor },
 
-    emits: ['input'],
-
     props: {
       value: {
         type: [Array, Object]

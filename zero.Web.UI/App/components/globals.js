@@ -2,7 +2,8 @@
 // will be used very frequently. Components are registered using the
 // PascalCased version of their file name.
 
-let components = [];
+import Vue from 'vue';
+
 //const directories = ['buttons', 'forms', 'messages', 'tables', 'tabs'];
 
 // TODO this file will import all vue component files with subdirectories
@@ -41,21 +42,6 @@ requireComponent.keys().forEach((path) =>
     // Concatenated
     .join('');
 
-  if (componentName === 'uiOverlay')
-  {
-    return;
-  }
-
-  components.push({
-    name: componentName,
-    config: componentConfig.default || componentConfig
-  })
+  // Globally register the component
+  Vue.component(componentName, componentConfig.default || componentConfig);
 });
-
-export default function (app)
-{
-  components.forEach(component =>
-  {
-    app.component(component.name, component.config);
-  });
-};

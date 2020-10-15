@@ -16,8 +16,6 @@
   export default {
     name: 'uiIconpicker',
 
-    emits: ['change', 'input'],
-
     props: {
       value: {
         type: String,

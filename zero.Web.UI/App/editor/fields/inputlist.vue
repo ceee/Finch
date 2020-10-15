@@ -4,8 +4,6 @@
 
 <script>
   export default {
-    emits: ['input'],
-
     props: {
       value: {
         type: Array,

@@ -63,8 +63,6 @@
   export default {
     name: 'uiEditor',
 
-    emits: ['input'],
-
     props: {
       config: {
         type: [ String, Object ],

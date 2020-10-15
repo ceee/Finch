@@ -44,8 +44,6 @@
       disabled: Boolean
     },
 
-    emits: ['input'],
-
     data: () => ({
       icons: {
         image: 'fth-image',
