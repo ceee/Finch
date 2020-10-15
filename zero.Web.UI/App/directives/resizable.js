@@ -1,3 +1,27 @@
+import Vue from 'vue';
+
+
+
+/// resize an element
+Vue.directive('resizable', {
+  bind(el, binding)
+  {
+    let resizable = new Resizable(el, binding.value);
+    resizable.listen();
+  },
+
+  update(el, binding)
+  {
+    
+  },
+
+  unbind(el, binding)
+  {
+
+  }
+});
+
+
 
 // object (new) that handles resizing of an element
 var Resizable = function (element, params)
@@ -123,17 +147,5 @@ var Resizable = function (element, params)
       this.update(+localStorage.getItem(cacheKey));
       this.value = newValue;
     }
-  }
-};
-
-
-/// resize an element
-export default {
-  name: 'resizable',
-
-  beforeMount(el, binding)
-  {
-    let resizable = new Resizable(el, binding.value);
-    resizable.listen();
   }
 };

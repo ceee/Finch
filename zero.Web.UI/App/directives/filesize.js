@@ -1,16 +1,13 @@
+import Vue from 'vue';
 import Strings from 'zero/services/strings';
 
 /// <summary>
 /// Outputs a filesize
 /// </summary>
-export default {
-  name: 'filesize',
-
-  beforeMount(el, binding)
+Vue.directive('filesize', (el, binding) =>
+{
+  if (binding.value !== binding.oldValue)
   {
-    if (binding.value !== binding.oldValue)
-    {
-      el.innerText = Strings.filesize(binding.value);
-    }
+    el.innerText = Strings.filesize(binding.value);
   }
-};
+});
