@@ -1,6 +1,9 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@model zero.Web.Models.ZeroBackofficeModel
-@{ Layout = null; }
+﻿@using zero.Core.Extensions
+@inject zero.Core.Options.IZeroOptions Options
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+  Layout = null;
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,16 +15,16 @@
   <meta http-equiv="expires" content="0">
   <base href="~/">
   <environment exclude="Development">
-    <link href="~/Assets/app.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/Assets/setup.css" rel="stylesheet" asp-append-version="true" />
   </environment>
   <title>zero</title>
 </head>
-<body class="theme-light theme-rounded">
-  <div id="app"></div>
+<body>
+  <div id="application"></div>
   <script>
     window.zero = window.zero || {};
-    zero = @Html.Raw(await Model.Vue.ConfigAsJson());
+    zero.path = "@Options.BackofficePath.EnsureEndsWith('/')";
   </script>
-  <script src="~/Assets/app.js" asp-append-version="true"></script>
+  <script src="~/Assets/setup.js" asp-append-version="true"></script>
 </body>
 </html>

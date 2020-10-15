@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.IO;
 using zero.Commerce;
 using zero.TestData;
 using zero.Web;
@@ -60,7 +58,7 @@ namespace zero.Debug
       app.UseRouting();
       app.UseAuthentication();
 
-      app.UseZero(devPath: Path.Combine(Environment.CurrentDirectory, "..", "zero.Web.UI"));
+      app.UseZero();
 
       app.UseEndpoints(endpoints =>
       {

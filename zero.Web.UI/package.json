@@ -1,15 +1,11 @@
 {
-  "name": "zero",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "build-dev": "vue-cli-service build --mode development",
-    "watch": "vue-cli-service build --mode development --watch"
+  "name": "zero.web",
+  "version": "1.0.0",
+  "description": "",
+  "bin": {
+    "zero.web": "app.js"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
     "axios": "^0.19.2",
     "dayjs": "^1.8.26",
     "flatpickr": "^4.6.3",
@@ -17,14 +13,43 @@
     "sortablejs": "^1.10.2",
     "underscore": "^1.10.2",
     "vue": "^2.6.11",
-    "vue-router": "^3.2.0"
+    "vue-router": "^3.1.6"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "sass": "^1.26.5",
-    "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11"
-  }
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "aspnet-webpack": "*",
+    "babel-loader": "*",
+    "css-loader": "^3.5.3",
+    "html-webpack-plugin": "^4.3.0",
+    "mini-css-extract-plugin": "*",
+    "node-sass": "^4.14.1",
+    "optimize-css-assets-webpack-plugin": "*",
+    "sass-loader": "*",
+    "style-loader": "*",
+    "uglifyjs-webpack-plugin": "*",
+    "vue-loader": "*",
+    "vue-template-compiler": "*",
+    "webpack": "^4.43.0",
+    "webpack-cli": "*",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-hot-middleware": "*",
+    "webpack-merge": "*"
+  },
+  "peerDependencies": {
+    "vue-template-compiler": "2.6.10"
+  },
+  "scripts": {
+    "dev": "webpack-dev-server -port 8999 --progress --hot --open",
+    "debug": "webpack --progress",
+    "build": "webpack --progress --config webpack.prod.js",
+    "updatepackages": "node wipe.js && rm -rf node_modules && npm update --save-dev && npm update --save"
+  },
+  "babel": {
+    "presets": [
+      "@babel/env"
+    ]
+  },
+  "author": "",
+  "license": "ISC"
 }
