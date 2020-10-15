@@ -1,22 +1,22 @@
 
-let imports = [
-  () => import('./clickoutside.js'),
-  () => import('./currency.js'),
-  () => import('./date.js'),
-  () => import('./filesize.js'),
-  () => import('./localize.js'),
-  () => import('./resizable.js'),
-  () => import('./sortable.js')
-];
-
 export default function (app)
 {
-  imports.forEach(path =>
+  const requireComponent = require.context('.', true, /[\w-]+\.js/);
+
+  requireComponent.keys().forEach(path =>
   {
-    path().then(resolved =>
+    let pathParts = path.split('/');
+    let fileName = pathParts[pathParts.length - 1].split('.')[0];
+
+    if (fileName === 'register')
     {
-      const config = resolved.default || resolved;
-      app.directive(config.name, config);
-    });
+      return;
+    }
+
+    const componentConfig = requireComponent(path);
+    const config = componentConfig.default || componentConfig;
+    const name = config.name || fileName;
+
+    app.directive(name, config);
   });
 };
