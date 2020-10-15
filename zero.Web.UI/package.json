@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "vite-dev": "vite",
-    "vite-build": "vite build",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build-dev": "vue-cli-service build --mode development",
@@ -22,7 +20,6 @@
     "vue-router": "4.0.0-beta.13"
   },
   "devDependencies": {
-    "vite": "1.0.0-rc.4",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-service": "~4.5.0",

@@ -14,7 +14,7 @@
 
 <script>
   import Sass from '../Sass/setup.scss'
-  import UiButton from '@zero/components/buttons/button.vue'
+  import UiButton from 'zero/components/buttons/button.vue'
   import StepUser from './Steps/step-user.vue'
   import StepApplication from './Steps/step-application.vue'
   import StepDatabase from './Steps/step-database.vue'
