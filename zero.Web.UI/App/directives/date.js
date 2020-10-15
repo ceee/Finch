@@ -1,20 +1,19 @@
+import Vue from 'vue';
 import Strings from 'zero/services/strings';
 
 /// <summary>
 /// Outputs a formatted date
 /// </summary>
-export default {
-  beforeMount(el, binding)
+Vue.directive('date', (el, binding) =>
+{
+  if (binding.value !== binding.oldValue)
   {
-    if (binding.value !== binding.oldValue)
+    if (!binding.value)
     {
-      if (!binding.value)
-      {
-        el.innerHTML = '-';
-        return;
-      }
-
-      el.innerHTML = Strings.date(binding.value);
+      el.innerHTML = '-';
+      return;
     }
+
+    el.innerHTML = Strings.date(binding.value);
   }
-};
+});

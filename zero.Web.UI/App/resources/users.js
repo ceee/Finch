@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import AuthApi from 'zero/services/auth';
 
 const base = 'users/';
 

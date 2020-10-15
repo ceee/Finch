@@ -1,5 +1,8 @@
-import mitt from 'mitt';
+import Vue from 'vue';
 
-const emitter = mitt();
+let hub = new Vue();
 
-export default emitter;
+hub.name = "tobi";
+hub.count = 7;
+
+export default hub;

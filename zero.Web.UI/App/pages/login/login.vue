@@ -45,7 +45,7 @@
 
     created()
     {
-      //this.rejectReason = AuthApi.rejectReason;
+      this.rejectReason = AuthApi.rejectReason;
     },
 
     methods: {

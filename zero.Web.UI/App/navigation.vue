@@ -62,7 +62,6 @@
   import AuthApi from 'zero/services/auth.js'
   import MediaApi from 'zero/resources/media.js'
   import IconPicker from 'zero/components/pickers/iconPicker/iconpicker';
-  import EventHub from 'zero/services/eventhub';
 
   export default {
     name: 'app-navigation',
@@ -89,9 +88,9 @@
 
     created()
     {
-      this.buildUser(AuthApi.getUser());
+      this.buildUser(AuthApi.user);
 
-      EventHub.on('user', user =>
+      AuthApi.$on('user', user =>
       {
         this.buildUser(user);
       });

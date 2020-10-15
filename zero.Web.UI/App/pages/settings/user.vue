@@ -73,11 +73,10 @@
       {
         form.handle(UsersApi.save(this.model)).then(res =>
         {
-          // TODO update user
-          //if (res.entity.id === AuthApi.user.id)
-          //{ 
-          //  AuthApi.setUser(res.entity);
-          //}
+          if (res.entity.id === AuthApi.user.id)
+          { 
+            AuthApi.setUser(res.entity);
+          }
         });
       },
 
