@@ -271,3 +271,5 @@ Temp/
 **/Assets/**/*.js
 deps/*.dll
 zero.Commerce/
+zero.Web.UI/package.json
+zero.Web.UI/package-lock.json
