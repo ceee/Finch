@@ -11,7 +11,7 @@ const beforeEach = () => (to, from, next) =>
   {
     let title = Localization.localize('@zero.name');
 
-    if (to.meta.name && to.meta.alias !== zero.alias.sections.dashboard)
+    if (to.meta.name && to.meta.alias !== __zero.alias.sections.dashboard)
     {
       let name = to.meta.name;
       let nameParts = _isArray(name) ? name : [name];
@@ -64,7 +64,7 @@ const beforeEach = () => (to, from, next) =>
 
 export default {
   mode: 'history',
-  base: zero.path,
+  base: __zero.path,
   linkActiveClass: 'is-active',
   linkExactActiveClass: 'is-active-exact',
   beforeEach: beforeEach,

@@ -32,7 +32,7 @@
 
   export default {
     data: () => ({
-      createRoleRoute: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-role-create',
+      createRoleRoute: 'roles-create',
       roles: [],
       usersConfig: zero.renderers.user.list
     }),
@@ -61,7 +61,7 @@
       getRoleLink(item)
       {
         return {
-          name: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-role',
+          name: 'roles-edit',
           params: { id: item.id }
         };
       }

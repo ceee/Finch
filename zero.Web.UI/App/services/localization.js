@@ -23,7 +23,7 @@ export default {
     }
 
     key = hasAtSign ? key.slice(1) : key;
-    const value = zero.translations[key.toLowerCase()];
+    const value = __zero.translations[key.toLowerCase()];
 
     // TODO only return key if in debug mode
     if (!params.hideEmpty && (!value || typeof value !== 'string'))

@@ -1,46 +1,36 @@
-﻿import { find as _find } from 'underscore';
+﻿
+import Media from './detail.vue';
+import Medias from './media.vue';
 
-const alias = zero.alias.sections.media;
-const section = _find(zero.sections, section => section.alias === alias);
-let routes = [];
+const alias = __zero.alias.sections.media;
+const section = __zero.sections.find(x => x.alias === alias);
 
-if (section)
-{
-  routes.push({
+export default section ? [
+  {
+    name: section.alias,
+    path: section.url,
+    component: Medias,
+    meta: {
+      name: section.name,
+      alias: section.alias,
+      section: section
+    },
+    children: [
+      {
+        name: 'mediaitem',
+        path: 'edit/:id',
+        props: true,
+        component: Media
+      }
+    ]
+  },
+  {
+    name: 'mediafolder',
     path: section.url + '/folder/:id',
     props: true,
-    name: 'mediafolder',
-    component: () => import('zero/pages/' + alias + '/media')
-  });
-
-  routes.push({
-    section: alias,
-    path: 'edit/:id',
-    props: true,
-    name: 'mediaitem',
-    component: () => import('zero/pages/' + alias + '/detail')
-  });
-
-  routes.push({
-    section: alias,
-    path: 'recyclebin',
-    name: 'mediarecyclebin',
-    component: () => import('zero/pages/' + alias + '/recyclebin'),
+    component: Medias,
     meta: {
-      name: '@recyclebin.name'
+      name: section.name
     }
-  });
-
-  //routes.push({
-  //  path: 'history',
-  //  name: 'history',
-  //  component: () => import('zero/pages/' + alias + '/history'),
-  //  meta: {
-  //    name: '@page.history.name'
-  //  }
-  //});
-}
-
-export default {
-  routes: routes
-};
+  }
+] : [];

@@ -47,7 +47,7 @@
       meta: {},
       item: { key: null, value: null },
       disabled: false,
-      route: zero.alias.sections.settings + '-' + zero.alias.settings.translations + '-edit',
+      route: zero.alias.settings.translations + '-edit',
       displayItems: [
         { label: '@translation.display.text', value: 'text' },
         { label: '@translation.display.html', value: 'html' }

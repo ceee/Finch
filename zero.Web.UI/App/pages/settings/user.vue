@@ -43,7 +43,7 @@
         email: null,
         lockoutEnd: null
       },
-      route: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
+      route: zero.alias.settings.users + '-edit',
       disabled: false,
       originalLockoutEnd: null
     }),

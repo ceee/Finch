@@ -6,9 +6,9 @@ import 'zero/components/globals';
 import 'zero/directives/globals';
 import 'zero/filters/globals';
 
-zero.apps = {
-  shared: true
-};
+//zero.apps = {
+//  shared: true
+//};
 
 //import 'zero/pages/register';
 
@@ -17,6 +17,6 @@ zero.apps = {
 Vue.use(VueRouter);
 Vue.use(Zero);
 
-import 'zero/config/zero.plugins.js';
+var app = new Vue(App);
 
-new Vue(App).$mount('#app'); 
+app.$mount('#app');

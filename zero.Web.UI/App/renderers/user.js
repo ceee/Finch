@@ -76,7 +76,7 @@ export default {
         link: item =>
         {
           return {
-            name: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
+            name: zero.alias.settings.users + '-edit',
             params: { id: item.id }
           };
         },
@@ -89,7 +89,7 @@ export default {
         link: item =>
         {
           return {
-            name: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
+            name: zero.alias.settings.users + '-edit',
             params: { id: item.id }
           };
         },

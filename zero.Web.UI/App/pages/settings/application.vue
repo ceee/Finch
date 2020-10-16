@@ -18,7 +18,7 @@
     data: () => ({
       meta: {},
       model: { name: null, features: [], domains: [] },
-      route: zero.alias.sections.settings + '-' + zero.alias.settings.applications + '-edit',
+      route: zero.alias.settings.applications + '-edit',
       disabled: false
     }),
 

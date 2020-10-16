@@ -18,6 +18,16 @@ namespace zero.Debug.Controllers
     }
 
     [HttpGet]
+    public async Task<IActionResult> Test()
+    {
+      await Task.Delay(3000);
+      return Json(new
+      {
+        result = "okay"
+      });
+    }
+
+    [HttpGet]
     public async Task<IActionResult> SavePages([FromServices] IDocumentStore raven)
     {
       using (IAsyncDocumentSession session = raven.OpenAsyncSession())

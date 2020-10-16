@@ -61,7 +61,7 @@ class Plugin
    */
   addRoutes(routes)
   {
-    this.routes.forEach(route => this.addRoute(route));
+    routes.forEach(route => this.addRoute(route));
   }
 };
 

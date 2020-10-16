@@ -19,15 +19,13 @@
   import AppLogin from 'zero/pages/login/login.vue'
   import AppOverlays from 'zero/components/overlays/overlay-holder.vue'
   import AppNotifications from 'zero/components/notifications/notification-holder.vue'
-  //import Router from 'zero/router.config.js'
+  import EventHub from './services/eventhub.js';
   import AuthApi from 'zero/services/auth.js'
   import 'zero/config/vue.config.js'
   import 'zero/config/axios.config.js'
 
   export default {
     name: 'app',
-
-   // router: Router,
 
     components: { AppNavigation, AppOverlays, AppLogin, AppNotifications },
 
@@ -37,13 +35,12 @@
 
     created()
     {
-      console.info(this.zero);
+      AuthApi.setUser(__zero.user);
+
       AuthApi.$on('authenticated', isAuthenticated =>
       {
         this.isAuthenticated = isAuthenticated;
       });
-
-      AuthApi.setUser(zero.user);
     },
 
 

@@ -1,89 +1,122 @@
-﻿import { map as _map, find as _find, isArray as _isArray } from 'underscore';
+﻿
+import Settings from './settings.vue';
+import Applications from './applications.vue';
+import Application from './application.vue';
+import Countries from './countries.vue';
+import Country from './country.vue';
+import Languages from './languages.vue';
+import Language from './language.vue';
+import Users from './users.vue';
+import User from './user.vue';
+import UserRole from './role.vue';
+import Translations from './translations.vue';
+import Translation from './translation.vue';
 
-const alias = zero.alias.sections.settings;
-const section = _find(zero.sections, section => section.alias === alias);
+const alias = __zero.alias.sections.settings;
+const section = __zero.sections.find(x => x.alias === alias);
+let settings = [];
 let routes = [];
 
-const detailPages = [];
-detailPages[zero.alias.settings.users] = [
-  { view: 'user' },
-  { view: 'role', path: 'role' },
-  { view: 'role', path: 'role/create', isCreate: true }
-];
-detailPages[zero.alias.settings.countries] = [
-  { view: 'country' },
-  { view: 'country', path: 'create', isCreate: true }
-];
-detailPages[zero.alias.settings.translations] = [
-  { view: 'translations' },
-  { view: 'translations', path: 'create', isCreate: true }
-];
-detailPages[zero.alias.settings.languages] = [
-  { view: 'language' },
-  { view: 'language', path: 'create', isCreate: true }
-];
-detailPages[zero.alias.settings.applications] = [
-  { view: 'application' },
-  { view: 'application', path: 'create', isCreate: true }
-];
+__zero.settingsAreas.forEach(group => group.items.forEach(area =>
+{
+  if (!area.isPlugin)
+  {
+    settings.push(area);
+  }
+}));
+
+const addArea = (areaAlias, component, detailComponent, hasCreate, postCreate) =>
+{
+  let area = typeof areaAlias === 'object' ? areaAlias : settings.find(x => x.alias === areaAlias);
+
+  routes.push({
+    name: area.alias,
+    path: area.url,
+    component: component,
+    meta: {
+      name: [area.name, section.name]
+    }
+  });
+
+  if (detailComponent && hasCreate)
+  {
+    routes.push({
+      name: area.alias + '-create',
+      path: area.url + '/create/:scope?',
+      component: detailComponent,
+      meta: {
+        create: true,
+        name: [area.name, section.name]
+      }
+    });
+  }
+
+  if (detailComponent)
+  {
+    routes.push({
+      name: area.alias + '-edit',
+      path: area.url + '/edit/:id',
+      component: detailComponent,
+      meta: {
+        name: [area.name, section.name]
+      }
+    });
+  }
+
+  if (typeof postCreate === 'function')
+  {
+    postCreate(area);
+  }
+};
+
 
 if (section)
 {
-  zero.settingsAreas.forEach(group => group.items.forEach(area => 
+  // add overview page
+  routes.push({
+    name: section.alias,
+    path: section.url,
+    component: Settings,
+    meta: {
+      name: section.name,
+      alias: section.alias,
+      section: section
+    }
+  });
+
+
+  // add details
+
+  addArea(__zero.alias.settings.applications, Applications, Application, true);
+
+  addArea(__zero.alias.settings.countries, Countries, Country, true);
+
+  addArea(__zero.alias.settings.languages, Languages, Language, true);
+
+  addArea(__zero.alias.settings.translations, Translations, Translation, true);
+
+  addArea(__zero.alias.settings.users, Users, User, true, area =>
   {
-    // add settings area page
-    if (!area.isPlugin)
-    {
-      routes.push({
-        path: area.url,
-        name: alias + '-' + area.alias,
-        component: () => import(`zero/pages/${alias}/${area.alias}`),
-        meta: {
-          name: [area.name, section.name]
-        }
-      });
-    }
-
-    // add details page
-    if (detailPages[area.alias])
-    {
-      var config = detailPages[area.alias];
-      var details = [];
-
-      if (typeof config === 'string')
-      {
-        details.push({
-          view: config,
-          path: 'edit'
-        });
+    routes.push({
+      name: 'roles-create',
+      path: '/' + section.alias + '/roles/create/:scope?',
+      component: UserRole,
+      meta: {
+        create: true,
+        name: [area.name, section.name]
       }
-      else if (_isArray(config))
-      {
-        details = config;
-      }
-      else if (typeof config === 'object')
-      {
-        details.push(config);
-      }
+    });
 
-      details.forEach(detail =>
-      {
-        const path = detail.path || 'edit';
-        const isCreate = typeof detail.isCreate === 'boolean' ? detail.isCreate : false;
-
-        routes.push({
-          path: area.url + '/' + path + (!isCreate ? '/:id' : '/:scope?'),
-          name: alias + '-' + area.alias + '-' + path.replace('/', '-'),
-          component: () => import(`zero/pages/${alias}/${detail.view}`),
-          props: true,
-          meta: {
-            create: isCreate,
-            name: [area.name, section.name]
-          }
-        });
-      });
-    }
-  }));
+    routes.push({
+      name: 'roles-edit',
+      path: '/' + section.alias + '/roles/edit/:id',
+      component: UserRole,
+      meta: {
+        name: [area.name, section.name]
+      }
+    });
+  });
 }
 
-export default { routes };
+
+export default routes;

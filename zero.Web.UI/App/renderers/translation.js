@@ -1,7 +1,7 @@
 ﻿let link = item =>
 {
   return {
-    name: zero.alias.sections.settings + '-' + zero.alias.settings.translations + '-edit',
+    name: zero.alias.settings.translations + '-edit',
     params: { id: item.id }
   };
 };

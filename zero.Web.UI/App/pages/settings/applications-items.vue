@@ -13,7 +13,7 @@
 
 
 <script>
-  const baseRoute = zero.alias.sections.settings + '-' + zero.alias.settings.applications;
+  const baseRoute = __zero.alias.settings.applications;
 
   export default {
     props: {

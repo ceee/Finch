@@ -46,7 +46,7 @@ namespace zero.Web
 
 
     /// <inheritdoc/>
-    public async Task<string> ConfigAsJson()
+    public async Task<ZeroVueConfig> Config()
     {
       ZeroVueConfig config = new ZeroVueConfig();
 
@@ -79,7 +79,14 @@ namespace zero.Web
         };
       }
 
-      return JsonSerializer.Serialize(config, new JsonSerializerOptions()
+      return config;
+    }
+
+
+    /// <inheritdoc/>
+    public async Task<string> ConfigAsJson()
+    {
+      return JsonSerializer.Serialize(await Config(), new JsonSerializerOptions()
       {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
       });
@@ -270,6 +277,11 @@ namespace zero.Web
 
   public interface IZeroVue
   {
+    /// <summary>
+    /// Creates the zero configuration for vue
+    /// </summary>
+    Task<ZeroVueConfig> Config();
+
     /// <summary>
     /// Creates the zero configuration for vue
     /// </summary>

@@ -19,7 +19,7 @@
     data: () => ({
       meta: {},
       model: { name: null, features: [], domains: [], claims: [] },
-      route: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-role',
+      route: zero.alias.settings.users + '-role',
       disabled: false
     }),
 

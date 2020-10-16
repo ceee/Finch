@@ -1,45 +1,45 @@
-﻿import { find as _find } from 'underscore';
+﻿
+import Page from './page.vue';
+import Pages from './pages.vue';
+import RecycleBin from './recyclebin/recyclebin.vue';
 
-const alias = zero.alias.sections.pages;
-const section = _find(zero.sections, section => section.alias === alias);
-let routes = [];
+const alias = __zero.alias.sections.pages;
+const section = __zero.sections.find(x => x.alias === alias);
 
-if (section)
-{
-  routes.push({
-    path: 'edit/:id',
-    props: true,
-    name: 'page',
-    component: () => import('zero/pages/' + alias + '/page')
-  });
-
-  routes.push({
-    path: 'create/:type/:parent?',
-    props: true,
-    name: 'page-create',
-    component: () => import('zero/pages/' + alias + '/page')
-  });
-
-  routes.push({
-    path: 'recyclebin',
-    name: 'recyclebin',
-    component: () => import('zero/pages/' + alias + '/recyclebin/recyclebin'),
+export default section ? [
+  {
+    name: section.alias,
+    path: section.url,
+    component: Pages,
     meta: {
-      name: '@recyclebin.name'
-    }
-  });
-
-  routes.push({
-    path: 'history',
-    name: 'history',
-    component: () => import('zero/pages/' + alias + '/history'),
-    meta: {
-      name: '@page.history.name'
-    }
-  });
-}
-
-export default {
-  section: alias,
-  routes: routes
-};
+      name: section.name,
+      alias: section.alias,
+      section: section
+    },
+    children: [
+      {
+        name: 'page',
+        path: 'edit/:id',
+        section: alias,
+        props: true,
+        component: Page
+      },
+      {
+        name: 'page-create',
+        path: 'create/:type/:parent?',
+        section: alias,
+        props: true,
+        component: Page
+      },
+      {
+        name: 'recyclebin',
+        path: 'recyclebin',
+        section: alias,
+        component: RecycleBin,
+        meta: {
+          name: '@recyclebin.name'
+        }
+      }
+    ]
+  } 
+] : [];

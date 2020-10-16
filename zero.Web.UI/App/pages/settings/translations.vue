@@ -19,7 +19,7 @@
   export default {
     data: () => ({
       count: 0,
-      createRoute: zero.alias.sections.settings + '-' + zero.alias.settings.translations + '-create',
+      createRoute: zero.alias.settings.translations + '-create',
       tableConfig: zero.renderers.translation.list
     }),
 

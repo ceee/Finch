@@ -51,7 +51,7 @@
         link: item =>
         {
           return {
-            name: zero.alias.sections.settings + '-' + zero.alias.settings.languages + '-edit',
+            name: zero.alias.settings.languages + '-edit',
             params: { id: item.id }
           };
         }

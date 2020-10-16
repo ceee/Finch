@@ -2,12 +2,12 @@
 import Auth from 'zero/services/auth';
 import Qs from 'qs';
 
-if (!zero || !zero.apiPath)
+if (!__zero || !__zero.apiPath)
 {
   throw Exception('window.zero and zero.apiPath (= base path to the backoffice API) have to be configured');
 }
 
-Axios.defaults.baseURL = zero.apiPath;
+Axios.defaults.baseURL = __zero.apiPath;
 Axios.defaults.withCredentials = true;
 
 Axios.defaults.paramsSerializer = (params) =>
