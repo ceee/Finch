@@ -18,12 +18,12 @@
     data: () => ({
       count: 0,
       createRoute: zero.alias.settings.languages + '-create',
-      tableConfig: zero.renderers.language.list
+      tableConfig: null
     }),
 
     created()
     {
-      this.tableConfig.items = LanguagesApi.getAll;
+      this.tableConfig = this.zero.getRenderer('language').list;
     }
   }
 </script>

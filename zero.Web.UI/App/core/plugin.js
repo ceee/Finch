@@ -5,7 +5,7 @@ class Plugin
   #onInstall;
 
   routes = [];
-  renderers = {};
+  renderers = [];
 
 
   constructor(name)
@@ -35,7 +35,8 @@ class Plugin
    */
   addRenderer(alias, config)
   {
-    this.renderers[alias] = config;
+    config.alias = alias;
+    this.renderers.push(config);
   }
 
   /*

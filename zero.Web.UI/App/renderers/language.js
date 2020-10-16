@@ -1,4 +1,7 @@
-﻿export default {
+﻿
+import LanguagesApi from 'zero/resources/languages';
+
+export default {
   alias: 'language',
 
   labelTemplate(field)
@@ -40,6 +43,7 @@
   ],
 
   list: {
+    items: LanguagesApi.getAll,
     labelPrefix: '@language.fields.',
     search: null,
     columns: {

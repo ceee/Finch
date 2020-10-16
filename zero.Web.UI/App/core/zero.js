@@ -19,6 +19,7 @@ class Zero
 
   #vue = null;
   #plugins = [];
+  #renderers = [];
   #routes = [];
   #router = null;
 
@@ -69,8 +70,6 @@ class Zero
       routes: this.#routes
     });
 
-    console.info(this.#routes);
-
     //const result = await Axios.get('zerovue/config');
     //this.config = { ...this.config, ...result.data };
 
@@ -94,12 +93,28 @@ class Zero
     this.#plugins.push(plugin);
 
     // append routes
-    plugin.routes.forEach(route =>
-    {
-      this.#routes.push(route);
-    });
+    plugin.routes.forEach(x => this.#routes.push(x));
+
+    // append renderers
+    plugin.renderers.forEach(x => this.#renderers.push(x));
 
     console.log(`[zero] Installed %c${plugin.name}%cplugin`, 'font-style:italic;');
+  }
+
+
+  /*
+   * Returns a renderer
+   */
+  getRenderer(alias)
+  {
+    const renderer = this.#renderers.find(x => x.alias === alias);
+
+    if (!renderer)
+    {
+      console.warn(`[zero] Could not find renderer ${alias}`);
+    }
+
+    return renderer;
   }
 };
 
