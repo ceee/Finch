@@ -2,29 +2,27 @@
 import Editor from '../core/editor.js';
 import ApplicationFeatures from '../pages/settings/application-features.vue';
 
-//import Text from 'text.vue';
-
 const editor = new Editor('application');
+const prefix = '@application.fields.';
 
-editor.onLabelCreate = field => '@application.fields.' + field;
-editor.onDescriptionCreate = field => '@application.fields.' + field + '_text';
+editor.onLabelCreate = x => prefix + x;
+editor.onDescriptionCreate = x => prefix + x + '_text';
 
 editor.tab('general', '@ui.tab_general');
 const domains = editor.tab('domains', '@application.tab_domains', x => x.domains.length);
 const features = editor.tab('features', '@application.tab_features', x => x.features.length);
 
-editor.field('name', new Text(50), { label: '@ui.name' });
-editor.field('fullName', new Text(120));
-editor.field('email', new Text(120));
-editor.field('imageId', new Image());
-editor.field('iconId', new Image());
+editor.field('name', { label: '@ui.name' }).text(50);
+editor.field('fullName').text(120);
+editor.field('email').text(120);
+editor.field('imageId').image();
+editor.field('iconId').image();
 
-domains.field('domains', new InputList({
+domains.field('domains', { helpText: prefix + 'domains_help' }).inputList({
   limit: 10,
-  addLabel: '@application.fields.domains_add',
-  helpText: '@application.fields.domains_help'
-}));
+  addLabel: prefix + 'domains_add'
+});
 
-features.field('features', ApplicationFeatures);
+features.field('features').component(ApplicationFeatures);
 
 export default editor;

@@ -1,4 +1,5 @@
 ﻿
+
 class Editor
 {
   #alias;
@@ -6,6 +7,7 @@ class Editor
   #templateDescription = field => field;
 
   tabs = [];
+  fields = [];
 
 
   constructor(alias)
@@ -49,11 +51,21 @@ class Editor
 
 
   /**
+   * A tab within an editor
+   * @typedef {object} EditorTab
+   * @param {string} alias - Alias for the tab
+   * @param {string} name - Name of the tab (can be a translation)
+   * @param {number|function} [count] - Output a count indicator
+   * @param {boolean|function} [disabled] - Conditionally disable the tab and its content
+   */
+
+  /**
    * Add a new tab to the editor
    * @param {string} alias - Alias for the tab
    * @param {string} name - Name of the tab (can be a translation)
    * @param {number|function} [count] - Output a count indicator
    * @param {boolean|function} [disabled] - Conditionally disable the tab and its content
+   * @returns {EditorTab}
    */
   tab(alias, name, count, disabled)
   {
@@ -75,8 +87,7 @@ class Editor
       return;
     }
 
-    const tab = { alias, name, disabled, count };
-
+    const tab = this._createTab(alias, name, disabled, count);
     this.tabs.push(tab);
 
     return tab;
@@ -86,19 +97,85 @@ class Editor
   /**
    * Add a new tab to the editor
    * @param {string} path - Model path
-   * @param {object} renderer - Can either be a renderer object or a vue component
    * @param {object} [options] - Custom options
    * @param {string} [options.label] - A custom label for this field (otherwise it's generated via `onLabelCreate`)
    * @param {string} [options.description] - A custom description for this field (otherwise it's generated via `onDescriptionCreate`)
    * @param {string} [options.helpText] - Display a help text below the field
    * @param {boolean|function} [options.condition] - Conditionally hide the field
    * @param {boolean|function} [options.disabled=false] - Conditionally disable the field
+   * @param {string|object} [options.tab] - Add this field to a tab (by passing the alias or the tab instance)
    * @param {string} [options.class] - Append HTML class to the generated property
+   * @returns {EditorField}
    */
-  field(path, renderer, options)
+  field(path, options)
   {
-    
+    const field = new EditorField(path, options);
+    return field;
+  }
+
+
+  /**
+   * Create a new tab instance
+   * @returns {EditorTab}
+   */
+  _createTab(alias, name, disabled, count)
+  {
+    return {
+      alias,
+      name,
+      disabled,
+      count,
+      field: (path, options) =>
+      {
+        options = options || {};
+        options.tab = alias;
+        return this.field(path, options);
+      }
+    };
   }
 };
+
+
+class EditorField
+{
+  path = null;
+  options = {
+    label: null,
+    description: null,
+    helpText: null,
+    condition: null,
+    disabled: false,
+    tab: null,
+    class: ''
+  };
+
+  constructor(path, options)
+  {
+    this.path = path;
+    this.options = { ...this.options, ...options };
+  }
+
+
+  /**
+   * Render a text input field
+   * @param {callback} [maxLength] - Maximum length of the input
+   * @param {string} [placeholder] - Placeholder text (can be a translation)
+   */
+  text(maxLength, placeholder)
+  {
+    return this;
+  }
+
+
+  /**
+   * Set this field as required
+   * @param {function} [condition] - Optionally only require this field when a condition is fulfilled
+   */
+  required(condition)
+  {
+    return this;
+  }
+}
+
 
 export default Editor;
