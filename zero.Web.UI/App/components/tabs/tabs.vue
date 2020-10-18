@@ -34,14 +34,11 @@
       tabs: []
     }),
 
-    created()
+    mounted()
     {
       this.cacheKey = this.cache ? `zero.ui-tabs.cache.${this.cache}` : null;
       this.tabs = this.$children;
-    },
 
-    mounted()
-    {
       if (this.cache)
       {
         const cachedActiveTab = localStorage.getItem(this.cacheKey);

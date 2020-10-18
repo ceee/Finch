@@ -5,7 +5,7 @@ class Plugin
   #onInstall;
 
   routes = [];
-  renderers = [];
+  editors = [];
 
 
   constructor(name)
@@ -33,20 +33,19 @@ class Plugin
   /*
    * Add a new vue form renderer to the global configuration 
    */
-  addRenderer(alias, config)
+  addEditor(config)
   {
-    config.alias = alias;
-    this.renderers.push(config);
+    this.editors.push(config);
   }
 
   /*
    * Adds new form renderers to the global configuration 
    * Can either by an array (where a key of the child object is `alias`) or an object where the key is the renderer alias
    */
-  addRenderers(renderers)
+  addEditors(editors)
   {
-    let items = !Array.isArray(renderers) ? Object.values(renderers) : renderers;
-    items.forEach(item => this.addRenderer(item.alias, item));
+    let items = !Array.isArray(editors) ? Object.values(editors) : editors;
+    items.forEach(item => this.addEditor(item));
   }
 
   /*

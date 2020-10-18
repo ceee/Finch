@@ -19,7 +19,7 @@ class Zero
 
   #vue = null;
   #plugins = [];
-  #renderers = [];
+  #editors = [];
   #routes = [];
   #router = null;
 
@@ -95,8 +95,8 @@ class Zero
     // append routes
     plugin.routes.forEach(x => this.#routes.push(x));
 
-    // append renderers
-    plugin.renderers.forEach(x => this.#renderers.push(x));
+    // append editors
+    plugin.editors.forEach(x => this.#editors.push(x));
 
     console.log(`[zero] Installed %c${plugin.name}%cplugin`, 'font-style:italic;');
   }
@@ -105,9 +105,9 @@ class Zero
   /*
    * Returns a renderer
    */
-  getRenderer(alias)
+  getEditor(alias)
   {
-    const renderer = this.#renderers.find(x => x.alias === alias);
+    const renderer = this.#editors.find(x => x.alias === alias);
 
     if (!renderer)
     {

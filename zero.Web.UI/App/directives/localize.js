@@ -8,11 +8,12 @@ Vue.directive('localize', (el, binding) =>
 {
   if (binding.value !== binding.oldValue || !el.innerText)
   {
+    const hasValue = !!binding.value;
     const isObject = typeof binding.value === 'object';
-    let key = isObject ? binding.value.key : binding.value;
-    let options = isObject ? binding.value : null;
+    let key = hasValue ? (isObject ? binding.value.key : binding.value) : null;
+    let options = hasValue && isObject ? binding.value : null;
 
-    const result = Localization.localize(key, options);
+    const result = hasValue ? Localization.localize(key, options) : '';
 
     // set content as html
     if (binding.arg === 'html')

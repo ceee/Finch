@@ -1,7 +1,7 @@
 ﻿<template>
   <ui-form ref="form" class="application" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
     <ui-form-header v-model="model" title="@application.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
-    <ui-editor config="application" v-model="model" :meta="meta" :disabled="disabled" />
+    <ui-editor editor="application" v-model="model" :meta="meta" :disabled="disabled" />
   </ui-form>
 </template>
 
@@ -26,7 +26,8 @@
 
       onLoad(form)
       {
-        form.load(!this.id ? ApplicationsApi.getEmpty() : ApplicationsApi.getById(this.id)).then(response =>
+        const id = this.$route.params.id;
+        form.load(!id ? ApplicationsApi.getEmpty() : ApplicationsApi.getById(id)).then(response =>
         {
           this.disabled = !response.meta.canEdit;
           this.meta = response.meta;

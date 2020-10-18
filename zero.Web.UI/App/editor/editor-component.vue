@@ -1,7 +1,8 @@
 ﻿<template>
-  <ui-property v-if="!isHidden" :field="config.field" :label="label" :hide-label="config.hideLabel || isStatic" :description="description" :required="config.required" :class="classList" :is-text="view === 'output'">
-    <component v-if="fieldComponent" :is="fieldComponent" :config="config" :value="model" :entity="value" @input="onChange" :meta="meta" :disabled="isDisabled" :depth="depth" />
-    <p v-if="config.helpText" class="ui-property-help" v-localize="config.helpText"></p>
+  <ui-property v-if="!isHidden" :field="config.path" :label="label" :hide-label="config.options.hideLabel" 
+               :description="description" :required="isRequired">
+    <component :is="config.component" v-bind="config.componentOptions" :value="model" @input="onChange" />
+    <p v-if="config.options.helpText" class="ui-property-help" v-localize="config.options.helpText"></p>
   </ui-property>
 </template>
 
@@ -9,46 +10,31 @@
 <script>
   import Strings from 'zero/services/strings';
   import Objects from 'zero/services/objects';
+  import Editor from 'zero/core/editor.js';
+  import EditorField from 'zero/core/editor-field.js';
   import Localization from 'zero/services/localization';
-
-  const staticViews = ['line'];
 
   export default {
     name: 'uiEditorComponent',
 
+    inject: [ 'meta', 'disabled' ],
+
     props: {
-      value: {
-        type: [ Object, Array ]
-      },
       config: {
-        type: Object,
-        required: true,
-        default: () =>
-        {
-          hidden: false
-        }
+        type: EditorField,
+        required: true
       },
-      renderer: {
-        type: Object,
-        default: () =>
-        {
-          return {};
-        }
+      editor: {
+        type: Editor,
+        required: true
       },
       meta: {
         type: Object,
-        default: () =>
-        {
-          return {};
-        }
+        default: () => { }
       },
-      depth: {
-        type: Number,
-        default: 0
-      },
-      disabled: {
-        type: Boolean,
-        default: false
+      value: {
+        type: Object,
+        required: true
       }
     },
 
@@ -67,7 +53,7 @@
           this.rebuildConfig();
         }
       },
-      renderer: {
+      editor: {
         deep: true,
         handler: function ()
         {
@@ -77,13 +63,14 @@
     },
 
     data: () => ({
-      fieldComponent: null,
-      model: null,
-      selector: [],
-      classList: [],
-      label: null,
-      description: null
+      model: null
     }),
+
+    created()
+    {
+      this.rebuildModel();
+      this.rebuildConfig();
+    },
 
     mounted()
     {
@@ -91,70 +78,39 @@
     },
 
     computed: {
-      view()
-      {
-        return this.config.display;
-      },
       isHidden()
       {
-        return this.config.hidden || (typeof this.config.condition === 'function' && !this.config.condition(this.value));
+        return typeof this.config.options.condition === 'function' && !this.config.options.condition(this.value);
+      },
+      isRequired()
+      {
+        return typeof this.config.isRequired === 'function' ? this.config.isRequired(this.value) : this.config.isRequired;
       },
       isDisabled()
       {
-        return this.disabled || (typeof this.config.disabled === 'boolean' && this.config.disabled) || (typeof this.config.disabled === 'function' && this.config.disabled(this.value));
+        return this.disabled || (typeof this.config.options.disabled === 'boolean' && this.config.options.disabled) || (typeof this.config.options.disabled === 'function' && this.config.options.disabled(this.value));
       },
-      isStatic()
+      label()
       {
-        return staticViews.indexOf(this.config.display) > -1;
-      }
-    },
-
-    created()
-    {
-      this.fieldComponent = () =>
+        return this.config.options.label || this.editor.templateLabel(this.config.path);
+      },
+      description()
       {
-        if (this.view === 'custom')
-        {
-          if (this.config.path.indexOf('@zero') === 0)
-          {
-            return import(`zero/` + this.config.path.substring(6));
-          }
-          else if (this.config.path.indexOf('@shop') === 0) // TODO common system for plugins
-          {
-            return import(`shop/` + this.config.path.substring(6));
-          }
-          else
-          {
-            // TODO external imports
-          }
-        }
-        else if (this.view === 'renderer')
-        {
-          return import(`zero/editor/editor`);
-        }
-        else if (this.isStatic)
-        {
-          return import(`zero/editor/fields/static/${this.view.toLowerCase()}`);
-        }
-        else
-        {
-          return import(`zero/editor/fields/${this.view.toLowerCase()}`);
-        }
+        return this.config.options.description || this.editor.templateDescription(this.config.path);
       }
-
-      this.rebuildModel();
-      this.rebuildConfig();
     },
 
     methods: {
 
       rebuildModel()
       {
-        this.selector = Strings.selectorToArray(this.config.field);
-        var currentValue = this.value;
+        this.selector = Strings.selectorToArray(this.config.path);
+        let currentValue = this.value;
+        let found = false;
 
         if (!this.selector || !this.selector.length || !currentValue)
         {
+          found = true;
           this.model = null;
         }
         else
@@ -163,6 +119,7 @@
           {
             if (key in currentValue)
             {
+              found = true;
               currentValue = currentValue[key];
             }
             else
@@ -171,7 +128,7 @@
             }
           }
 
-          this.model = currentValue;
+          this.model = found ? currentValue : null;
         }
       },
 
@@ -179,58 +136,58 @@
       rebuildConfig()
       {
         // build class list
-        let classes = typeof this.config.class === 'string' ? this.config.class.split(' ') : (this.config.class || []);
-        if (this.view === 'renderer' || this.view === 'nested')
-        {
-          classes.push('full-width');
-        }
-        if (this.depth > 0)
-        {
-          classes.push('is-nested');
-        }
-        if (this.isStatic)
-        {
-          classes.push('is-static');
-        }
-        this.classList = classes;
+        //let classes = typeof this.config.class === 'string' ? this.config.class.split(' ') : (this.config.class || []);
+        //if (this.view === 'renderer' || this.view === 'nested')
+        //{
+        //  classes.push('full-width');
+        //}
+        //if (this.depth > 0)
+        //{
+        //  classes.push('is-nested');
+        //}
+        //if (this.isStatic)
+        //{
+        //  classes.push('is-static');
+        //}
+        //this.classList = classes;
 
 
-        // build label
-        let label = null;
-        if (this.config.label && this.config.label.indexOf('@') === 0)
-        {
-          label = this.config.label;
-        }
-        else if (this.renderer.labelTemplate)
-        {
-          label = this.renderer.labelTemplate(this.config.label || this.config.field);
-        }
-        else
-        {
-          label = this.config.label || this.config.field;
-        }
-        this.label = Localization.localize(label);
+        //// build label
+        //let label = null;
+        //if (this.config.label && this.config.label.indexOf('@') === 0)
+        //{
+        //  label = this.config.label;
+        //}
+        //else if (this.renderer.labelTemplate)
+        //{
+        //  label = this.renderer.labelTemplate(this.config.label || this.config.field);
+        //}
+        //else
+        //{
+        //  label = this.config.label || this.config.field;
+        //}
+        //this.label = Localization.localize(label);
 
 
-        // build description
-        let description = null;
-        if (this.config.description && this.config.description.indexOf('@') === 0)
-        {
-          description = this.config.description;
-        }
-        else if (this.config.description === null)
-        {
-          description = null;
-        }
-        else if (this.renderer.descriptionTemplate)
-        {
-          description = this.renderer.descriptionTemplate(this.config.description || this.config.field);
-        }
-        else
-        {
-          description = this.config.description;
-        }
-        this.description = Localization.localize(description, { hideEmpty: true });
+        //// build description
+        //let description = null;
+        //if (this.config.description && this.config.description.indexOf('@') === 0)
+        //{
+        //  description = this.config.description;
+        //}
+        //else if (this.config.description === null)
+        //{
+        //  description = null;
+        //}
+        //else if (this.renderer.descriptionTemplate)
+        //{
+        //  description = this.renderer.descriptionTemplate(this.config.description || this.config.field);
+        //}
+        //else
+        //{
+        //  description = this.config.description;
+        //}
+        //this.description = Localization.localize(description, { hideEmpty: true });
       },
 
 

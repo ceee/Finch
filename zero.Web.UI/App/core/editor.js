@@ -4,8 +4,15 @@ import EditorField from './editor-field.js';
 class Editor
 {
   #alias;
-  #templateLabel = field => field;
-  #templateDescription = field => field;
+
+  /**
+   * Overrides the string generation for the label
+   */
+  templateLabel = field => field;
+  /**
+   * Overrides the string generation for the description
+   */
+  templateDescription = field => field;
 
   tabs = [];
   fields = [];
@@ -20,34 +27,6 @@ class Editor
   get alias()
   {
     return this.#alias;
-  }
-
-  /**
-   * Overrides the string generation for the label
-   * @param {function} callback - Called when a label is constructed
-   */
-  set onLabelCreate(callback)
-  {
-    if (typeof callback !== 'function')
-    {
-      console.warn(`[zero] onLabelCreate excepts a function as the first parameter`);
-      return;
-    }
-    this.#templateLabel = callback;
-  }
-
-  /**
-   * Overrides the string generation for the label description
-   * @param {function} callback - Called when a description is constructed
-   */
-  set onDescriptionCreate(callback)
-  {
-    if (typeof callback !== 'function')
-    {
-      console.warn(`[zero] onDescriptionCreate excepts a function as the first parameter`);
-      return;
-    }
-    this.#templateDescription = callback;
   }
 
 
@@ -100,6 +79,7 @@ class Editor
    * @param {string} path - Model path
    * @param {object} [options] - Custom options
    * @param {string} [options.label] - A custom label for this field (otherwise it's generated via `onLabelCreate`)
+   * @param {string} [options.hideLabel] - Hide the field label and make the content full-width
    * @param {string} [options.description] - A custom description for this field (otherwise it's generated via `onDescriptionCreate`)
    * @param {string} [options.helpText] - Display a help text below the field
    * @param {boolean|function} [options.condition] - Conditionally hide the field
@@ -111,7 +91,20 @@ class Editor
   field(path, options)
   {
     const field = new EditorField(path, options);
+    this.fields.push(field);
     return field;
+  }
+
+
+  /**
+   * Get fields for the specified tab
+   * @param {string|EditorTab} [tab] - Pass the tab or its alias
+   * @returns {EditorField[]}
+   */
+  getFields(tab)
+  {
+    const alias = typeof tab === 'undefined' ? null : (typeof tab === 'string' ? tab : tab.alias);
+    return this.fields.filter(x => !alias ? true : x.options.tab === alias);
   }
 
 

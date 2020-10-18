@@ -6,21 +6,21 @@ import Rte from '../editor/fields/rte.vue';
 import Select from '../editor/fields/select.vue';
 import Textarea from '../editor/fields/textarea.vue';
 import Toggle from '../editor/fields/toggle.vue';
-import Alias from '../editor/fields/toggle.vue';
-import Output from '../editor/fields/toggle.vue';
-import Checklist from '../editor/fields/toggle.vue';
-import ColorPicker from '../editor/fields/toggle.vue';
-import CountryPicker from '../editor/fields/toggle.vue';
-import CulturePicker from '../editor/fields/toggle.vue';
-import DateRangePicker from '../editor/fields/toggle.vue';
-import IconPicker from '../editor/fields/toggle.vue';
-import LanguagePicker from '../editor/fields/toggle.vue';
-import InputList from '../editor/fields/toggle.vue';
-import Media from '../editor/fields/toggle.vue';
-import Modules from '../editor/fields/toggle.vue';
-import Nested from '../editor/fields/toggle.vue';
-import State from '../editor/fields/toggle.vue';
-import Tags from '../editor/fields/toggle.vue';
+import Alias from '../editor/fields/alias.vue';
+import Output from '../editor/fields/output.vue';
+import Checklist from '../editor/fields/checklist.vue';
+import ColorPicker from '../editor/fields/colorpicker.vue';
+import CountryPicker from '../editor/fields/countrypicker.vue';
+import CulturePicker from '../editor/fields/culturepicker.vue';
+import DateRangePicker from '../editor/fields/daterangepicker.vue';
+import IconPicker from '../editor/fields/iconPicker.vue';
+import LanguagePicker from '../editor/fields/language.vue';
+import InputList from '../editor/fields/inputlist.vue';
+import Media from '../editor/fields/media.vue';
+import Modules from '../editor/fields/modules.vue';
+import Nested from '../editor/fields/nested.vue';
+import State from '../editor/fields/state.vue';
+import Tags from '../editor/fields/tags.vue';
 
 
 class EditorField
@@ -28,6 +28,7 @@ class EditorField
   path = null;
   options = {
     label: null,
+    hideLabel: false,
     description: null,
     helpText: null,
     condition: null,
@@ -45,6 +46,22 @@ class EditorField
   {
     this.path = path;
     this.options = { ...this.options, ...options };
+  }
+
+
+  get component()
+  {
+    return this.#component;
+  }
+
+  get componentOptions()
+  {
+    return this.#componentOptions;
+  }
+
+  get isRequired()
+  {
+    return this.#required;
   }
 
 
@@ -87,7 +104,7 @@ class EditorField
    * @param {object} [options] - Custom options
    * @returns {EditorField}
    */
-  component(component, options)
+  custom(component, options)
   {
     return this._setComponent(component, { ...options });
   }
@@ -281,7 +298,7 @@ class EditorField
    * @param {string} [addLabel] - Label for the add button
    * @returns {EditorField}
    */
-  inputList(limit, maxItemLength)
+  inputList(limit, maxItemLength, addLabel)
   {
     return this._setComponent(InputList, { limit, maxItemLength, addLabel });
   }
