@@ -17,12 +17,7 @@ editor.field('fullName').text(120);
 editor.field('email').text(120);
 editor.field('imageId').image();
 editor.field('iconId').image();
-
-domains.field('domains', { helpText: prefix + 'domains_help' }).inputList({
-  limit: 10,
-  addLabel: prefix + 'domains_add'
-});
-
+domains.field('domains', { helpText: prefix + 'domains_help' }).inputList(10, null, prefix + 'domains_add');
 features.field('features').component(ApplicationFeatures);
 
 export default editor;

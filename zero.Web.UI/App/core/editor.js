@@ -1,4 +1,5 @@
 ﻿
+import EditorField from './editor-field.js';
 
 class Editor
 {
@@ -134,48 +135,5 @@ class Editor
     };
   }
 };
-
-
-class EditorField
-{
-  path = null;
-  options = {
-    label: null,
-    description: null,
-    helpText: null,
-    condition: null,
-    disabled: false,
-    tab: null,
-    class: ''
-  };
-
-  constructor(path, options)
-  {
-    this.path = path;
-    this.options = { ...this.options, ...options };
-  }
-
-
-  /**
-   * Render a text input field
-   * @param {callback} [maxLength] - Maximum length of the input
-   * @param {string} [placeholder] - Placeholder text (can be a translation)
-   */
-  text(maxLength, placeholder)
-  {
-    return this;
-  }
-
-
-  /**
-   * Set this field as required
-   * @param {function} [condition] - Optionally only require this field when a condition is fulfilled
-   */
-  required(condition)
-  {
-    return this;
-  }
-}
-
 
 export default Editor;

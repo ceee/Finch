@@ -1,0 +1,385 @@
+﻿
+import Text from '../editor/fields/text.vue';
+import Currency from '../editor/fields/currency.vue';
+import Number from '../editor/fields/number.vue';
+import Rte from '../editor/fields/rte.vue';
+import Select from '../editor/fields/select.vue';
+import Textarea from '../editor/fields/textarea.vue';
+import Toggle from '../editor/fields/toggle.vue';
+import Alias from '../editor/fields/toggle.vue';
+import Output from '../editor/fields/toggle.vue';
+import Checklist from '../editor/fields/toggle.vue';
+import ColorPicker from '../editor/fields/toggle.vue';
+import CountryPicker from '../editor/fields/toggle.vue';
+import CulturePicker from '../editor/fields/toggle.vue';
+import DateRangePicker from '../editor/fields/toggle.vue';
+import IconPicker from '../editor/fields/toggle.vue';
+import LanguagePicker from '../editor/fields/toggle.vue';
+import InputList from '../editor/fields/toggle.vue';
+import Media from '../editor/fields/toggle.vue';
+import Modules from '../editor/fields/toggle.vue';
+import Nested from '../editor/fields/toggle.vue';
+import State from '../editor/fields/toggle.vue';
+import Tags from '../editor/fields/toggle.vue';
+
+
+class EditorField
+{
+  path = null;
+  options = {
+    label: null,
+    description: null,
+    helpText: null,
+    condition: null,
+    disabled: false,
+    tab: null,
+    class: ''
+  };
+
+  #component = null;
+  #componentOptions = {};
+  #required = false;
+  #isReadOnly = false;
+
+  constructor(path, options)
+  {
+    this.path = path;
+    this.options = { ...this.options, ...options };
+  }
+
+
+  /**
+   * 
+   */
+  _setComponent(component, options)
+  {
+    this.#component = component;
+    this.#componentOptions = options || {};
+    return this;
+  }
+
+
+  /**
+   * Set this field as required
+   * @param {function|boolean} [condition] - Optionally only require this field when a condition is fulfilled or reset the required state with true/false
+   */
+  required(condition)
+  {
+    if (typeof condition === 'function')
+    {
+      this.#required = condition;
+    }
+    else if (typeof condition === 'boolean')
+    {
+      this.#required = condition;
+    }
+    else
+    {
+      this.#required = true;
+    }
+    return this;
+  }
+
+
+  /**
+   * Render a custom component
+   * @param {object} component - The custom vue component
+   * @param {object} [options] - Custom options
+   * @returns {EditorField}
+   */
+  component(component, options)
+  {
+    return this._setComponent(component, { ...options });
+  }
+
+
+  /**
+   * Render a text input field
+   * @param {number} [maxLength] - Maximum length of the input
+   * @param {string} [placeholder] - Placeholder text (can be a translation)
+   * @returns {EditorField}
+   */
+  text(maxLength, placeholder)
+  {
+    return this._setComponent(Text, { maxLength, placeholder });
+  }
+
+
+  /**
+   * Render a currency input field
+   * @param {string} [placeholder] - Placeholder text (can be a translation)
+   * @returns {EditorField}
+   */
+  currency(placeholder)
+  {
+    return this._setComponent(Currency, { placeholder });
+  }
+
+
+  /**
+   * Render a number input field
+   * @param {number} [maxLength] - Maximum length of the input
+   * @param {string} [placeholder] - Placeholder text (can be a translation)
+   * @returns {EditorField}
+   */
+  number(maxLength, placeholder)
+  {
+    return this._setComponent(Number, { maxLength, placeholder });
+  }
+
+
+  /**
+   * Render a rich-text editor field
+   * @returns {EditorField}
+   */
+  rte()
+  {
+    return this._setComponent(Rte);
+  }
+
+
+  /**
+   * @typedef {object} EditorSelectItem
+   * @param {object} key - Key/Id of the item
+   * @param {string} value - Label/Value of the item (can be a translation)
+   */
+
+  /**
+   * Render a select dropdown with the specified items
+   * @param {EditorSelectItem[]} items - Set items to pick from
+   * @returns {EditorField}
+   */
+  select(items)
+  {
+    return this._setComponent(Select, { items });
+  }
+
+
+  /**
+   * Render a text area
+   * @param {number} [maxLength] - Maximum length of the input
+   * @returns {EditorField}
+   */
+  textarea(maxLength)
+  {
+    return this._setComponent(Textarea, { maxLength });
+  }
+
+
+  /**
+   * Render a toggle
+   * @param {boolean} [negative] - Toggle with a negative color / red background
+   * @returns {EditorField}
+   */
+  toggle(negative)
+  {
+    return this._setComponent(Toggle, { negative });
+  }
+
+
+  /**
+   * Renders the field value
+   * @param {function} [render] - Render the output based on the given function
+   * @returns {EditorField}
+   */
+  output(render)
+  {
+    this.#isReadOnly = true;
+    return this._setComponent(Output, { render });
+  }
+
+
+  /**
+   * Renders an input which generates an alias for a given name or an alternative custom alias
+   * @param {string} [namePath] - Optional path to the name value which is used to auto-generate the alias
+   * @returns {EditorField}
+   */
+  alias(namePath)
+  {
+    return this._setComponent(Alias, { namePath });
+  }
+
+
+  /**
+   * Renders an input which generates an alias for a given name or an alternative custom alias
+   * @param {EditorSelectItem[]|function} items - Set items to choose from, either via an array or a promise which returns such array
+   * @param {number} [limit=100] - Maximum items to be checked
+   * @param {boolean} [reverse] - Reverse the checklist behaviour, so all items are checked by default and unchecking them adds them to the result list
+   * @returns {EditorField}
+   */
+  checkList(items, limit)
+  {
+    return this._setComponent(Checklist, { items, limit, reverse });
+  }
+
+
+  /**
+   * Renders a HEX color picker
+   * @returns {EditorField}
+   */
+  colorPicker()
+  {
+    return this._setComponent(ColorPicker);
+  }
+
+
+  /**
+   * Renders a country picker
+   * @param {number} [limit=1] - Maximum items to be selected
+   * @returns {EditorField}
+   */
+  countryPicker(limit)
+  {
+    return this._setComponent(CountryPicker, { limit });
+  }
+
+
+  /**
+   * Renders a culture picker
+   * @returns {EditorField}
+   */
+  culturePicker(limit)
+  {
+    return this._setComponent(CulturePicker);
+  }
+
+
+  /**
+   * Renders a date range picker
+   * @param {object} [options] - Custom options
+   * @param {string} [options.format] - Format the date output
+   * @param {boolean} [options.time=false] - Allow time input 
+   * @param {string|Date} [options.maxDate] - Maximum selectable date
+   * @param {string|Date} [options.minDate] - Minimum selectable date
+   * @param {string} [options.fromLabel] - Label next to the "from" date input
+   * @param {string} [options.toLabel] - Label next to the "to" date input
+   * @param {string} [options.amPm] - Render time as AM/PM
+   * @param {string} [options.inline] - Don't render the range picker on an overlay
+   * @returns {EditorField}
+   */
+  dateRangePicker(options)
+  {
+    return this._setComponent(DateRangePicker, { ...options });
+  }
+
+
+  /**
+   * Pick an icon from the specified icon collection
+   * @param {string[]} [icons] - Custom icon set with icon class names
+   * @returns {EditorField}
+   */
+  iconPicker(icons)
+  {
+    return this._setComponent(IconPicker, { icons });
+  }
+
+
+  /**
+   * Create a list of strings
+   * @param {number} [limit=10] - Limit the inputs
+   * @param {number} [maxItemLength=200] - Maximum length for an item input
+   * @param {string} [addLabel] - Label for the add button
+   * @returns {EditorField}
+   */
+  inputList(limit, maxItemLength)
+  {
+    return this._setComponent(InputList, { limit, maxItemLength, addLabel });
+  }
+
+
+  /**
+   * Append tags to an entity
+   * @param {number} [limit=10] - Limit the tags
+   * @param {number} [maxItemLength=200] - Maximum length for a tag
+   * @returns {EditorField}
+   */
+  tags(limit, maxItemLength)
+  {
+    return this._setComponent(Tags, { limit, maxItemLength });
+  }
+
+
+  /**
+   * Pick a language
+   * @returns {EditorField}
+   */
+  languagePicker()
+  {
+    return this._setComponent(LanguagePicker);
+  }
+
+
+  /**
+   * Display a module renderer which allows you to select from defined modules
+   * @returns {EditorField}
+   */
+  modules()
+  {
+    return this._setComponent(Modules);
+  }
+
+
+  /**
+   * Display a module renderer which allows you to select from defined modules
+   * @param {Editor} [editor] - Use the specified editor for each item
+   * @param {object} [options] - Custom options
+   * @param {number} [options.limit=100] - Limit the creation of items
+   * @param {string} [options.title] - Headline in the editor overlay
+   * @param {string} [options.addLabel] - Label for the add button
+   * @param {function} [options.itemLabel] - Function which generates the label for the current item
+   * @param {function} [options.itemDescription] - Function which generates the description for the current item
+   * @param {string|function} [options.itemIcon] - Static icon or function which generates the icon for the current item
+   * @param {object} [options.template] - Template which is used when adding an item
+   * @returns {EditorField}
+   */
+  nested(editor, options)
+  {
+    return this._setComponent(Nested, { editor, ...options });
+  }
+
+
+  /**
+   * Render a select as a button group
+   * @param {EditorSelectItem[]} items - Set items to choose from
+   * @returns {EditorField}
+   */
+  state(items)
+  {
+    return this._setComponent(State, { items });
+  }
+
+
+  /**
+   * Render a media upload + picker
+   * @param {object} [options] - Custom options
+   * @param {number} [options.limit=1] - Limit the media select count
+   * @param {boolean} [options.disallowSelect=false] - Disallow the selection (only upload) of media items
+   * @param {boolean} [options.disallowUpload=false] - Disallow upload (only selection) of media items
+   * @param {string[]} [options.fileExtensions] - Allow upload + selection only for the specified file extensions
+   * @param {number} [options.maxFileSize=10] - Maximum allowed file size for uploads in Mibibytes
+   * @returns {EditorField}
+   */
+  media(options)
+  {
+    return this._setComponent(Media, { ...options });
+  }
+
+
+  /**
+   * Render a media upload + picker
+   * @param {object} [options] - Custom options
+   * @param {number} [options.limit=1] - Limit the media select count
+   * @param {boolean} [options.disallowSelect=false] - Disallow the selection (only upload) of media items
+   * @param {boolean} [options.disallowUpload=false] - Disallow upload (only selection) of media items
+   * @param {string[]} [options.fileExtensions] - Allow upload + selection only for the specified file extensions
+   * @param {number} [options.maxFileSize=10] - Maximum allowed file size for uploads in Mibibytes
+   * @returns {EditorField}
+   */
+  image(options)
+  {
+    return this._setComponent(Media, { ...options, fileExtensions: ['.jpg', '.jpeg', '.png', '.webp', '.svg'] });
+  }
+}
+
+
+export default EditorField;
