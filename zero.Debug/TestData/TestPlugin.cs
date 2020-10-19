@@ -2,20 +2,24 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using zero.Commerce.Options;
+using zero.Core.Extensions;
+using zero.Core.Messages;
 using zero.Core.Options;
 using zero.Core.Plugins;
-using zero.Core.Extensions;
-using zero.Debug.Sync;
 using zero.Debug.TestData;
-using zero.Core.Messages;
 
 namespace zero.TestData
 {
-  public class TestPlugin : IZeroPlugin
+  public class TestPlugin : ZeroPlugin
   {
-    public void Configure(IZeroPluginOptions plugin, IZeroOptions zero)
+    public TestPlugin()
     {
-      plugin.Name = "Test Plugin";
+      Options.Name = "Test plugin";
+    }
+
+
+    public override void Configure(IZeroOptions zero)
+    {
       //ISection spaceSection = zero.Sections.GetAllItems().FirstOrDefault(x => x.Alias == Constants.Sections.Spaces);
       //zero.Sections.Remove(spaceSection);
 
@@ -41,7 +45,7 @@ namespace zero.TestData
       zero.Modules.Add<NestedModule>("nested", "Nested", "Add nested modules", "fth-layers", "Misc");
     }
 
-    public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
       services.AddHostedService<TestPluginStartup>();
 

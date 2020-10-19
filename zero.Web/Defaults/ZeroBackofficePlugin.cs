@@ -11,9 +11,34 @@ using zero.Web.Sections;
 
 namespace zero.Web.Defaults
 {
-  internal class ZeroBackofficePlugin : IZeroPlugin
+  internal class ZeroBackofficePlugin : ZeroPlugin
   {
-    public void ConfigureServices(IServiceCollection services, IConfiguration configuration) 
+    public ZeroBackofficePlugin()
+    {
+      Options.Name = "zero.Defaults";
+      Options.LocalizationPaths.Add("~/Resources/Localization/zero.{lang}.json");
+    }
+
+
+    public override void Configure(IZeroOptions zero)
+    {
+      zero.Sections.Add<DashboardSection>();
+      zero.Sections.Add<PagesSection>();
+      zero.Sections.Add<SpacesSection>();
+      zero.Sections.Add<MediaSection>();
+      zero.Sections.Add<SettingsSection>();
+
+      zero.Settings.AddGroup<SystemSettings>();
+      //zero.Settings.AddGroup<PluginSettings>();
+
+      zero.Permissions.AddCollection<SectionPermissions>();
+      zero.Permissions.AddCollection<ModulePermissions>();
+      zero.Permissions.AddCollection<SettingsPermissions>();
+      zero.Permissions.AddCollection<SpacePermissions>();
+    }
+
+
+    public override void ConfigureServices(IServiceCollection services, IConfiguration configuration) 
     {
       //services.AddAll(typeof(IValidator<>), ServiceLifetime.Scoped);
       //services.AddAll(typeof(IValidator), ServiceLifetime.Scoped);
@@ -61,26 +86,6 @@ namespace zero.Web.Defaults
       services.AddTransient<IMediaFolderApi, MediaFolderApi>();
       services.AddTransient<IModulesApi, ModulesApi>();
       services.AddTransient<IRecycleBinApi, RecycleBinApi>();
-    }
-    
-    public void Configure(IZeroPluginOptions plugin, IZeroOptions zero)
-    {
-      plugin.Name = "zero.Defaults";
-      plugin.LocalizationPaths.Add("~/Resources/Localization/zero.{lang}.json");
-
-      zero.Sections.Add<DashboardSection>();
-      zero.Sections.Add<PagesSection>();
-      zero.Sections.Add<SpacesSection>();
-      zero.Sections.Add<MediaSection>();
-      zero.Sections.Add<SettingsSection>();
-
-      zero.Settings.AddGroup<SystemSettings>();
-      //zero.Settings.AddGroup<PluginSettings>();
-
-      zero.Permissions.AddCollection<SectionPermissions>();
-      zero.Permissions.AddCollection<ModulePermissions>();
-      zero.Permissions.AddCollection<SettingsPermissions>();
-      zero.Permissions.AddCollection<SpacePermissions>();
     }
   }
 }

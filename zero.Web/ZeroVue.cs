@@ -54,7 +54,7 @@ namespace zero.Web
       config.ApiPath = config.Path + "api/";
       config.PluginPath = "@/Plugins";
       config.Version = Options.ZeroVersion;
-      config.PluginCount = 2; // TODO Plugins.Count();
+      config.PluginCount = Plugins.Count();
       config.ErrorFieldNone = Constants.ErrorFieldNone;
       config.Sections = CreateSections();
       config.Translations = CreateTranslations();
@@ -78,6 +78,13 @@ namespace zero.Web
           Roles = user.Roles
         };
       }
+
+      config.Plugins = Plugins.Select(x => new ZeroVuePlugin()
+      {
+        Name = x.Options.Name,
+        Description = x.Options.Description,
+        PluginPath = x.Options.PluginPath
+      }).ToList();
 
       return config;
     }
@@ -297,6 +304,8 @@ namespace zero.Web
 
     public string PluginPath { get; set; }
 
+    public IList<ZeroVuePlugin> Plugins { get; set; } = new List<ZeroVuePlugin>();
+
     public string Version { get; set; }
 
     public int PluginCount { get; set; }
@@ -336,6 +345,16 @@ namespace zero.Web
     public bool IsExternal { get; set; }
 
     public IList<ZeroVueSection> Children { get; set; }
+  }
+
+
+  public class ZeroVuePlugin
+  {
+    public string Name { get; set; }
+
+    public string Description { get; set; }
+
+    public string PluginPath { get; set; }
   }
 
 

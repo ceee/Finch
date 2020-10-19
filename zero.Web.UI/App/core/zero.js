@@ -14,6 +14,7 @@ import routerConfig from '../config/router.config.js'
 class Zero
 {
   static install;
+  static instance;
 
   config = { ...options };
 
@@ -23,6 +24,7 @@ class Zero
   #lists = [];
   #routes = [];
   #router = null;
+  #setupDone = false;
 
 
   constructor(vue, opts)
@@ -76,7 +78,21 @@ class Zero
 
     //console.info(this.#vue.router);
 
+    this.#setupDone = true;
     //EventHub.$emit('zero.setup');
+  }
+
+
+  /*
+   * Installs a zero plugin by a given path
+   * Each plugin is a superset of a vue (client) plugin and can therefore hook into the vue system
+   */
+  useByPath(pluginPath)
+  {
+    //const plugin = import('../../../' + pluginPath + '/plugin.js').then(res =>
+    //{
+    //  this.use(res.default);
+    //});
   }
 
 
@@ -94,7 +110,14 @@ class Zero
     this.#plugins.push(plugin);
 
     // append routes
-    plugin.routes.forEach(x => this.#routes.push(x));
+    if (this.#setupDone)
+    {
+      this.#router.addRoutes(plugin.routes);
+    }
+    else
+    {
+      plugin.routes.forEach(x => this.#routes.push(x));
+    }
 
     // append editors
     plugin.editors.forEach(x => this.#editors.push(x));
@@ -146,16 +169,31 @@ Zero.install = (vue, opts) =>
 {
   const zero = new Zero(vue, opts);
 
+  Zero.instance = zero;
+
   Object.defineProperty(vue.prototype, 'zero', {
     get: () => zero
   });
 
   zero.setup();
 
+  // router mixin
   Vue.mixin({
     router: zero.router
   });
+
+  // add plugins
+  //__zero.plugins.filter(x => !!x.pluginPath).forEach(x =>
+  //{
+  //  zero.useByPath(x.pluginPath);
+  //});
+
+  //import('@/../zero.Commerce/Plugins/zero.Commerce/plugin.js').then(res =>
+  //{
+  //  zero.use(res.default);
+  //});
 };
 
+window.XZERO = Zero;
 
 export default Zero;

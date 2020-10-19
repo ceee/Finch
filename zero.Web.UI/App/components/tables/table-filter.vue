@@ -80,7 +80,6 @@
         }
 
         this.loaded = true;
-        console.info(this.attach);
       }
     }
 

@@ -1,3 +1,9 @@
+
+//console.log(process.env);
+// TODO
+// maybe we can make an HTTP request here to get plugin paths and install them
+// as well as set other fields in config as aliases.
+
 module.exports = {
 
   // disable hashes in filenames
