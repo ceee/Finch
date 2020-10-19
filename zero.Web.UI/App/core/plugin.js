@@ -6,6 +6,7 @@ class Plugin
 
   routes = [];
   editors = [];
+  lists = [];
 
 
   constructor(name)
@@ -38,6 +39,7 @@ class Plugin
     this.editors.push(config);
   }
 
+
   /*
    * Adds new form renderers to the global configuration 
    * Can either by an array (where a key of the child object is `alias`) or an object where the key is the renderer alias
@@ -48,6 +50,27 @@ class Plugin
     items.forEach(item => this.addEditor(item));
   }
 
+
+  /*
+   * Add a new vue list renderer to the global configuration 
+   */
+  addList(config)
+  {
+    this.lists.push(config);
+  }
+
+
+  /*
+   * Adds new list renderers to the global configuration
+   * Can either by an array (where a key of the child object is `alias`) or an object where the key is the renderer alias
+   */
+  addLists(lists)
+  {
+    let items = !Array.isArray(lists) ? Object.values(lists) : lists;
+    items.forEach(item => this.addList(item));
+  }
+
+
   /*
    * Add a new route to vue-router 
    */
@@ -55,6 +78,7 @@ class Plugin
   {
     this.routes.push(route);
   }
+
 
   /*
    * Adds new routes to vue-router 

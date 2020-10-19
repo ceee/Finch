@@ -1,29 +1,21 @@
 ﻿<template>
   <div class="countries">
     <ui-header-bar title="@country.list" :count="count" :back-button="true">
-      <ui-table-filter v-model="tableConfig" />
+      <ui-table-filter :attach="$refs.table" />
       <ui-add-button :route="createRoute" />
     </ui-header-bar>
     <div class="ui-blank-box">
-      <ui-table ref="table" v-model="tableConfig" @count="count = $event" />
+      <ui-table ref="table" config="countries" @count="count = $event" />
     </div>
   </div>
 </template>
 
 
 <script>
-  import CountriesApi from 'zero/resources/countries.js';
-
   export default {
     data: () => ({
       count: 0,
-      createRoute: zero.alias.settings.countries + '-create',
-      tableConfig: zero.renderers.country.list
-    }),
-
-    created()
-    {
-      this.tableConfig.items = CountriesApi.getAll;
-    }
+      createRoute: zero.alias.settings.countries + '-create'
+    })
   }
 </script>

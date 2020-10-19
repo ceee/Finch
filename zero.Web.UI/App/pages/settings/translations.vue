@@ -1,29 +1,25 @@
 ﻿<template>
   <div class="translations">
     <ui-header-bar title="@translation.list" :count="count" :back-button="true">
-      <ui-table-filter v-model="tableConfig" />
+      <ui-table-filter :attach="$refs.table" />
       <ui-add-button :route="createRoute" />
     </ui-header-bar>
     <div class="ui-blank-box">
-      <ui-table v-model="tableConfig" @count="count = $event" />
+      <ui-table ref="table" config="translations" @count="count = $event" />
     </div>
   </div>
 </template>
 
 
 <script>
-  import TranslationsApi from 'zero/resources/translations.js';
   import Overlay from 'zero/services/overlay.js';
   import AddOverlay from './translation';
 
   export default {
     data: () => ({
       count: 0,
-      createRoute: zero.alias.settings.translations + '-create',
-      tableConfig: zero.renderers.translation.list
+      createRoute: zero.alias.settings.translations + '-create'
     }),
-
-    props: ['id'],
 
     watch: {
       '$route': function (route)
@@ -34,8 +30,6 @@
 
     created()
     {
-      this.tableConfig.items = TranslationsApi.getAll;
-
       this.handleRouteChange();
     },
 
@@ -47,9 +41,9 @@
 
       handleRouteChange()
       {
-        if (this.id)
+        if (this.$route.params.id)
         {
-          this.edit(this.id);
+          this.edit(this.$route.params.id);
         }
         else if (this.$route.name === this.createRoute)
         {

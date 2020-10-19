@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="users">
     <ui-header-bar title="Users & Permissions" :back-button="true">
-      <ui-table-filter v-model="usersConfig" />
+      <ui-table-filter :attach="$refs.usersTable" />
       <ui-add-button type="light onbg" :route="createRoleRoute" label="Add role" />
       <ui-button type="primary" label="Add user" />
     </ui-header-bar>
@@ -19,7 +19,7 @@
 
     <div class="ui-blank-box">
       <h2 class="ui-headline users-group-headline" v-localize="'@user.users'"></h2>
-      <ui-table v-model="usersConfig" />
+      <ui-table ref="usersTable" config="users" />
     </div>
   </div>
 </template>
@@ -27,14 +27,12 @@
 
 <script>
   import UserRolesApi from 'zero/resources/userRoles.js';
-  import UsersApi from 'zero/resources/users.js';
   import { filter as _filter, map as _map } from 'underscore';
 
   export default {
     data: () => ({
       createRoleRoute: 'roles-create',
-      roles: [],
-      usersConfig: zero.renderers.user.list
+      roles: []
     }),
 
     created()
@@ -44,16 +42,15 @@
         this.roles = items;
       });
 
-      this.usersConfig.items = UsersApi.getAll;
-      let roleColumn = this.usersConfig.columns.roles;
-      if (roleColumn)
-      {
-        roleColumn.render = item =>
-        {
-          const roles = _filter(this.roles, role => item.roles.indexOf(role.alias) > -1);
-          return _map(roles, role => role.name).join(', ');
-        };
-      }
+      //let roleColumn = this.usersConfig.columns.roles;
+      //if (roleColumn)
+      //{
+      //  roleColumn.render = item =>
+      //  {
+      //    const roles = _filter(this.roles, role => item.roles.indexOf(role.alias) > -1);
+      //    return _map(roles, role => role.name).join(', ');
+      //  };
+      //}
     },
 
     methods: {
@@ -73,7 +70,7 @@
 <style lang="scss">
   h2.users-group-headline
   {
-    margin-bottom: 30px;
+    margin-bottom: 30px !important;
   }
 
   .users .ui-table-field-image

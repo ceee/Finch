@@ -2,23 +2,24 @@
   <div class="ui-table-outer">
     <div class="ui-table" :class="{'is-inline': inline }">
       <header class="ui-table-row ui-table-head">      
-        <div v-for="column in columns" :key="column.path" class="ui-table-cell" :table-field="column.path" :style="column.flex" :class="column.options.class">
+        <div v-for="column in columns" :key="column.key" class="ui-table-cell" :table-field="column.field" :style="column.flex">
           {{ column.label | localize }}
-          <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="filter.orderBy == column.path ? 'sort-' + (filter.orderIsDescending ? 'desc' : 'asc') : null">
+          <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="tableFilter.orderBy == column.field ? 'sort-' + (tableFilter.orderIsDescending ? 'desc' : 'asc') : null">
             <i class="arrow arrow-down"></i>
           </button>
         </div>
-        <!--<button type="button" v-if="configuration.selectable" table-field="table_selectable" class="ui-table-cell is-head is-selectable" @click="select()">
+        <button type="button" v-if="configuration.selectable" table-field="table_selectable" class="ui-table-cell is-head is-selectable" @click="select()">
           <i class="fth-check-square"></i>
-        </button>-->
+        </button>
       </header>
 
-      <component :is="component" v-for="item in items" :to="getLink(item)" class="ui-table-row" :class="{ 'is-selected': selected.indexOf(item) > -1 }">
-        <div v-for="column in columns" :key="column.path" class="ui-table-cell" :class="column.options.class" :style="column.flex" :table-field="column.path" :field-type="column.type" v-table-value="{ column, item }"></div>
-        <!--<button type="button" v-if="configuration.selectable" table-field="table_selectable" class="ui-table-cell is-selectable" @click="select(item)">
+      <div class="ui-table-row" v-for="item in items" :class="{ 'is-selected': configuration.selectable && selected.indexOf(item) > -1 }">
+        <component :is="column.tag" type="button" :to="getLink(column, item)" @click="onClick($event, column, item)" v-for="column in columns" :key="column.key" 
+                   class="ui-table-cell" :style="column.flex" :table-field="column.field" :field-type="column.as" v-table-value="{ item, column }"></component>
+        <button type="button" v-if="configuration.selectable" table-field="table_selectable" class="ui-table-cell is-selectable" @click="select(item)">
           <i class="fth-check-square"></i>
-        </button>-->
-      </component>
+        </button>
+      </div>
 
       <div class="ui-table-empty" v-if="!isLoading && items.length < 1">
         <i class="ui-table-empty-icon fth-list"></i>
@@ -31,7 +32,7 @@
     </div>
 
     <footer class="ui-table-pagination" v-if="pages > 1">
-      <ui-pagination :pages="pages" :page="filter.page" @change="setPage" :inline="inline" />
+      <ui-pagination :pages="pages" :page="tableFilter.page" @change="setPage" :inline="inline" />
     </footer>
 
   </div>
@@ -39,97 +40,170 @@
 
 
 <script>
+  import TableValueDirective from './table-value.js';
   import UiPagination from 'zero/components/pagination.vue';
-  import List from 'zero/core/list.js';
-  import TableValue from './table-value.js';
-  import { debounce as _debounce } from 'underscore';
+  import { each as _each, extend as _extend, debounce as _debounce } from 'underscore';
+
+  const defaultConfig = {
+    order: {
+      // allow sorting of columns (asc + desc)
+      enabled: true,
+      // default order by
+      by: 'createdDate',
+      // order is descending
+      isDescending: true
+    },
+    // default items per page
+    pageSize: 25,
+    // define columns and how they are displayed
+    columns: {},
+    // prefix for column header translations
+    labelPrefix: '',
+    // scroll to top on page change
+    scrollToTop: true,
+    // promise which returns items based on the current filter and sorting
+    items: null,
+    // ability to select items
+    selectable: false
+  };
 
   export default {
     name: 'uiTable',
 
     props: {
-      config: {
-        type: [String, List],
-        required: true
+      value: {
+        type: Object,
+        required: true,
+        default: () => { }
       },
       inline: {
         type: Boolean,
         default: false
+      },
+      filter: {
+        type: Object,
+        default: () =>
+        {
+          return {};
+        }
+      },
+      search: {
+        type: String,
+        default: null
       }
-    },
-
-    directives: {
-      'table-value': TableValue
     },
 
     components: { UiPagination },
 
+    watch: {
+      'value.columns': function (val)
+      {
+        this.generateColumns(val);
+      },
+      'value.search': function (val)
+      {
+        this.tableFilter.search = val;
+      },
+      'value.items': function (val)
+      {
+        this.initialize();
+      },
+      'tableFilter.search': function (val)
+      {
+        this.debouncedUpdate();
+      },
+      'filter': {
+        deep: true,
+        handler: function (val)
+        {
+          this.tableFilter.filter = val;
+          this.debouncedUpdate();
+        }
+      },
+      'search': function (val)
+      {
+        this.tableFilter.search = val;
+      },
+      $route(to, from)
+      {
+        this.initialize();
+      }
+    },
+
     data: () => ({
-      loaded: false,
-      listConfig: {},
+      configuration: {},
       columns: [],
-      filter: {},
-
       items: [],
-      component: 'div',
       isLoading: true,
-
       pages: 1,
       count: 0,
-
+      tableFilter: {
+        orderBy: null,
+        orderIsDescending: true,
+        page: 1,
+        pageSize: 1,
+        search: null
+      },
       debouncedUpdate: null,
       selected: []
     }),
 
-    created()
-    {
-      this.setup();
-    },
-
     mounted()
     {
-      this.load(true);
+      this.initialize();
     },
 
-    watch: {
-      filter: {
-        deep: true,
-        handler: function (val)
-        {
-          this.debouncedUpdate();
-        }
-      },
-      $route(to, from)
-      {
-        this.setup();
-      }
+    directives: {
+      'table-value': TableValueDirective
     },
 
     methods: {
 
-      setup()
+      getLink(column, item)
       {
-        this.debouncedUpdate = _debounce(this.update, 300);
-        this.listConfig = typeof this.config === 'string' ? this.zero.getList(this.config) : this.config;
-        this.columns = this.listConfig.columns.map(column =>
+        if (column.tag !== 'router-link')
         {
-          return {
-            ...column,
-            column: column,
-            label: column.options.hideLabel ? null : (column.options.label || this.listConfig.templateLabel(column.path)),
-            flex: column.options.width ? { 'flex': '0 1 ' + column.options.width + 'px' } : {}
-          };
-        });
-        this.filter = { ...this.listConfig.filter };
-        this.component = typeof !!this.listConfig.link ? 'router-link' : 'div';
-        this.loaded = true;
+          return null;
+        }
+
+        return column.link(item);
       },
 
+      onClick(e, column, item)
+      {
+        e.preventDefault();
+
+        if (typeof column.action === 'function')
+        {
+          column.action(item);
+        }
+      },
+
+      initialize()
+      {
+        this.debouncedUpdate = _debounce(this.update, 300);
+
+        this.configuration = _extend(JSON.parse(JSON.stringify(defaultConfig)), this.value);
+
+        this.tableFilter.pageSize = this.configuration.pageSize;
+
+        if (this.configuration.order.enabled)
+        {
+          this.tableFilter.orderBy = this.configuration.order.by;
+          this.tableFilter.orderIsDescending = this.configuration.order.isDescending;
+        }
+
+        this.generateColumns(this.configuration.columns);
+
+        this.load(true);
+      },
 
       // load items based on the current filter
       load(initial)
       {
-        this.listConfig.fetch(this.filter).then(result =>
+        this.tableFilter.filter = this.filter;
+
+        this.configuration.items(this.tableFilter).then(result =>
         {
           this.$emit('loaded', result);
           this.pages = result.totalPages;
@@ -141,18 +215,17 @@
           this.items = result.items;
           this.selected = [];
 
-          //if (!initial && this.configuration.scrollToTop)
-          //{
-          //  let container = document.querySelector('.app-main');
+          if (!initial && this.configuration.scrollToTop)
+          {
+            let container = document.querySelector('.app-main');
 
-          //  if (container)
-          //  {
-          //    this.$nextTick(() => container.scrollTo({ top: 0, behavior: 'smooth' }));
-          //  }
-          //}
+            if (container)
+            {
+              this.$nextTick(() => container.scrollTo({ top: 0, behavior: 'smooth' }));
+            }
+          }
         });
       },
-
 
       // updates the list (debounced)
       update()
@@ -163,48 +236,62 @@
         }
       },
 
-
-      getLink(item)
+      // generate columns from the given config
+      generateColumns(columns)
       {
-        if (!this.listConfig.link)
-        {
-          return null;
-        }
-        else if (typeof this.listConfig.link === 'function')
-        {
-          return this.listConfig.link(item);
-        }
-        return {
-          name: this.listConfig.link,
-          params: {
-            id: item.id
-          }
-        };
-      },
+        this.columns = [];
 
+        _each(columns, (column, key) =>
+        {
+          let data = column;
+
+          if (typeof column === 'string')
+          {
+            data = {
+              as: column
+            };
+          }
+
+          if (data.as === 'shared')
+          {
+            data.width = 56;
+            data.label = null;
+            data.sort = false;
+          }
+
+          this.columns.push(_extend(data, {
+            key: key,
+            tag: typeof data.link !== 'undefined' ? 'router-link' : (typeof data.action !== 'undefined' ? 'button' : 'div'),
+            label: typeof data.label !== 'undefined' ? data.label : (this.configuration.labelPrefix + key),
+            field: key,
+            canSort: typeof data.sort === 'boolean' ? data.sort : this.configuration.order.enabled,
+            flex: data.width ? { 'flex': '0 1 ' + data.width + 'px' } : {}
+          }));
+        });
+      },
 
       // set the active page
       setPage(index)
       {
-        this.filter.page = index;
+        this.tableFilter.page = index;
         this.debouncedUpdate();
       },
 
       // sort by a column
       sort(column)
       {
-        if (this.filter.orderBy === column.path && this.filter.orderIsDescending)
+        if (this.tableFilter.orderBy === column.field && this.tableFilter.orderIsDescending)
         {
-          this.filter.orderIsDescending = false;
+          this.tableFilter.orderIsDescending = false;
         }
-        else if (this.filter.orderBy === column.path)
+        else if (this.tableFilter.orderBy === column.field)
         {
-          this.filter.orderBy = null;
+          this.tableFilter.orderBy = null;
         }
         else
         {
-          this.filter.orderBy = column.path;
-          this.filter.orderIsDescending = true;
+          this.tableFilter.orderBy = column.field;
+          this.tableFilter.orderIsDescending = true;
         }
 
         this.debouncedUpdate();
@@ -287,18 +374,11 @@
     border-bottom: 1px solid var(--color-table-line-horizontal);
     position: relative;
     transition: outline 0.1s ease, box-shadow 0.1s ease;
-    color: var(--color-text);
 
     &:last-child
     {
       border-bottom: none;
     }
-  }
-
-  a.ui-table-row:hover
-  {
-    box-shadow: var(--shadow-mid);
-    z-index: 2;
   }
 
 
@@ -334,7 +414,6 @@
     text-overflow: ellipsis;
     min-width: 20px;
     line-height: 20px;
-    color: var(--color-text);
 
     &:first-child
     {
@@ -371,6 +450,19 @@
     &:before
     {
       content: "\e8cb";
+    }
+  }
+
+  a.ui-table-cell,
+  button.ui-table-cell
+  {
+    color: var(--color-text);
+    transition: none;
+   
+    &:hover
+    {
+      color: var(--color-primary);
+      background: var(--color-table-hover);
     }
   }
 

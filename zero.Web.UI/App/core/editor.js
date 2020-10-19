@@ -4,23 +4,25 @@ import EditorField from './editor-field.js';
 class Editor
 {
   #alias;
+  #prefix;
 
   /**
    * Overrides the string generation for the label
    */
-  templateLabel = field => field;
+  templateLabel = field => this.#prefix + field;
   /**
    * Overrides the string generation for the description
    */
-  templateDescription = field => field;
+  templateDescription = field => this.#prefix + field + '_text';
 
   tabs = [];
   fields = [];
 
 
-  constructor(alias)
+  constructor(alias, prefix)
   {
     this.#alias = alias;
+    this.#prefix = prefix || '';
   }
 
 

@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-form ref="form" class="country" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model="model" title="@country.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
+    <ui-form-header v-model="model" title="@country.name" :disabled="disabled" :is-create="!$route.params.id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
     <ui-editor config="country" v-model="model" :meta="meta" :disabled="disabled" />
   </ui-form>
 </template>
@@ -11,8 +11,6 @@
   import UiEditor from 'zero/editor/editor';
 
   export default {
-    props: ['id'],
-
     components: { UiEditor },
 
     data: () => ({
@@ -26,7 +24,7 @@
 
       onLoad(form)
       {
-        form.load(!this.id ? CountriesApi.getEmpty() : CountriesApi.getById(this.id)).then(response =>
+        form.load(!this.$route.params.id ? CountriesApi.getEmpty() : CountriesApi.getById(this.$route.params.id)).then(response =>
         {
           this.disabled = !response.meta.canEdit;
           this.meta = response.meta;
@@ -44,7 +42,7 @@
       onDelete(item, opts)
       {
         opts.hide();
-        this.$refs.form.onDelete(CountriesApi.delete.bind(this, this.id));
+        this.$refs.form.onDelete(CountriesApi.delete.bind(this, this.$route.params.id));
       }     
     }
   }

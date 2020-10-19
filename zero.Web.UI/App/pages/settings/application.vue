@@ -1,7 +1,7 @@
 ﻿<template>
   <ui-form ref="form" class="application" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model="model" title="@application.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
-    <ui-editor editor="application" v-model="model" :meta="meta" :disabled="disabled" />
+    <ui-form-header v-model="model" title="@application.name" :disabled="disabled" :is-create="!$route.params.id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
+    <ui-editor config="application" v-model="model" :meta="meta" :disabled="disabled" />
   </ui-form>
 </template>
 
@@ -45,7 +45,7 @@
       onDelete(item, opts)
       {
         opts.hide();
-        this.$refs.form.onDelete(ApplicationsApi.delete.bind(this, this.id));
+        this.$refs.form.onDelete(ApplicationsApi.delete.bind(this, this.$route.params.id));
       }
     }
   }

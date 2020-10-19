@@ -1,10 +1,9 @@
 ﻿<template>
   <div>
-    <div class="editor-outer" v-if="loaded" :class="{ 'has-tabs': true }">
+    <div class="editor-outer" v-if="loaded" :class="{ 'has-tabs': hasTabs }">
       <ui-tabs class="editor">
         <ui-tab v-if="!tab.disabled(value)" v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :key="index">
           <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value" />
-          <!--<component v-if="tab.component" :is="tab.component" v-model="value" :disabled="disabled" />-->
         </ui-tab>
       </ui-tabs>
     </div>
@@ -28,7 +27,7 @@
     },
 
     props: {
-      editor: {
+      config: {
         type: [String, Editor],
         required: true
       },
@@ -46,21 +45,36 @@
     data: () => ({
       editorConfig: null,
       loaded: false,
+      hasTabs: false,
       tabs: []
     }),
 
     created()
     {
-      this.editorConfig = typeof this.editor === 'string' ? this.zero.getEditor(this.editor) : this.editor;
-      this.tabs = this.editorConfig.tabs.map(tab =>
+      this.editorConfig = typeof this.config === 'string' ? this.zero.getEditor(this.config) : this.config;
+
+      if (this.editorConfig.tabs.length > 0)
       {
-        return {
-          ...tab,
-          count: value => typeof tab.count === 'number' ? tab.count : (typeof tab.count === 'function' ? tab.count(value) : 0),
-          disabled: value => typeof tab.disabled === 'boolean' ? tab.disabled : (typeof tab.disabled === 'function' ? tab.disabled(value) : false),
-          fields: this.editorConfig.getFields(tab)
-        };
-      });
+        this.hasTabs = true;
+        this.tabs = this.editorConfig.tabs.map(tab =>
+        {
+          return {
+            ...tab,
+            count: value => typeof tab.count === 'number' ? tab.count : (typeof tab.count === 'function' ? tab.count(value) : 0),
+            disabled: value => typeof tab.disabled === 'boolean' ? tab.disabled : (typeof tab.disabled === 'function' ? tab.disabled(value) : false),
+            fields: this.editorConfig.getFields(tab)
+          };
+        });
+      }
+      else
+      {
+        this.tabs = [{
+          name: '_',
+          count: value => 0,
+          disabled: value => false,
+          fields: this.editorConfig.getFields()
+        }];
+      }
 
       this.loaded = true;
     },

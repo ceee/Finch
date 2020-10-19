@@ -20,6 +20,7 @@ class Zero
   #vue = null;
   #plugins = [];
   #editors = [];
+  #lists = [];
   #routes = [];
   #router = null;
 
@@ -98,12 +99,15 @@ class Zero
     // append editors
     plugin.editors.forEach(x => this.#editors.push(x));
 
+    // append lists
+    plugin.lists.forEach(x => this.#lists.push(x));
+
     console.log(`[zero] Installed %c${plugin.name}%cplugin`, 'font-style:italic;');
   }
 
 
   /*
-   * Returns a renderer
+   * Returns an editor renderer
    */
   getEditor(alias)
   {
@@ -111,7 +115,23 @@ class Zero
 
     if (!renderer)
     {
-      console.warn(`[zero] Could not find renderer ${alias}`);
+      console.warn(`[zero] Could not find editor renderer ${alias}`);
+    }
+
+    return renderer;
+  }
+
+
+  /*
+  * Returns a list renderer
+  */
+  getList(alias)
+  {
+    const renderer = this.#lists.find(x => x.alias === alias);
+
+    if (!renderer)
+    {
+      console.warn(`[zero] Could not find list renderer ${alias}`);
     }
 
     return renderer;

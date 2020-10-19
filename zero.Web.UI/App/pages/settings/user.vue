@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-form ref="form" class="user" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model="model" title="@user.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete">
+    <ui-form-header v-model="model" title="@user.name" :disabled="disabled" :is-create="!$route.params.id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete">
       <template v-slot:actions>
         <ui-dropdown-button v-if="model.isActive" label="Disable" icon="fth-minus-circle" @click="onActiveChange" :disabled="disabled" />
         <ui-dropdown-button v-if="!model.isActive" label="Enable" icon="fth-plus-circle" @click="onActiveChange" :disabled="disabled" />
@@ -31,8 +31,6 @@
   import UiEditor from 'zero/editor/editor';
 
   export default {
-    props: ['id'],
-
     components: { UiEditor },
 
     data: () => ({
@@ -59,7 +57,7 @@
 
       onLoad(form)
       {
-        form.load(!this.id ? UsersApi.getEmpty() : UsersApi.getById(this.id)).then(response =>
+        form.load(!this.$route.params.id ? UsersApi.getEmpty() : UsersApi.getById(this.$route.params.id)).then(response =>
         {
           this.disabled = !response.meta.canEdit;
           this.meta = response.meta;
@@ -84,7 +82,7 @@
       onDelete(item, opts)
       {
         opts.hide();
-        this.$refs.form.onDelete(UsersApi.delete.bind(this, this.id));
+        this.$refs.form.onDelete(UsersApi.delete.bind(this, this.$route.params.id));
       },
 
 

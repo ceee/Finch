@@ -60,7 +60,7 @@
       },
       hasDropdown()
       {
-        return this.decision && zero.apps.shared;
+        return this.decision && true; // TODO zero.apps.shared; moved to zero instance afaik
       }
     },
 

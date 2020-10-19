@@ -96,7 +96,7 @@
       },
       description()
       {
-        return this.config.options.description || this.editor.templateDescription(this.config.path);
+        return Localization.localize(this.config.options.description || this.editor.templateDescription(this.config.path), { hideEmpty: true });
       }
     },
 

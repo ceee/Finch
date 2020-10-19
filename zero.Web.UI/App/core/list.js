@@ -1,0 +1,110 @@
+﻿
+import Editor from './editor.js';
+import ListColumn from './list-column.js';
+
+class List
+{
+  #alias;
+  #fetch;
+  #filterOptions;
+
+  /**
+   * Set the default filter options which are passed to the fetch function.
+   * You can extend it to your needs
+   */
+  filter = {
+    // default order by
+    orderBy: 'createdDate',
+    // order is descending
+    isDescending: true,
+    // current page index
+    page: 1,
+    // default items per page
+    pageSize: 25,
+    // search term
+    search: null,
+    // custom filter 
+    filter: null
+  };
+
+  /**
+   * Overrides the string generation for the label
+   */
+  templateLabel = field => field;
+
+  /**
+   * Build a link for a row (returns options passed to <router-link /> or a route name where id-param is automatically inserted)
+   */
+  link = null;
+
+  columns = [];
+
+
+  constructor(alias)
+  {
+    this.#alias = alias;
+  }
+
+
+  get alias()
+  {
+    return this.#alias;
+  }
+
+  get filterOptions()
+  {
+    return this.#filterOptions;
+  }
+
+
+  /**
+   * Specify a list column
+   * @param {string} path - Model path
+   * @param {object} [options] - Custom options
+   * @param {string} [options.label] - A custom label for this column (otherwise it's generated via `templateLabel`)
+   * @param {boolean} [options.hideLabel=false] - Hide the column label
+   * @param {number} [options.width] - Custom width of the column in px
+   * @param {boolean} [options.canSort=true] - Disable/enable sorting within this column
+   * @param {string} [options.class] - Append HTML class to the generated cells
+   * @returns {ListColumn}
+   */
+  column(path, options)
+  {
+    const column = new ListColumn(path, options);
+    this.columns.push(column);
+    return column;
+  }
+
+
+  /**
+   * Get list items with this function
+   * @param {function} callback - This function is called when the list is requested (parameter is the filter object). You should either return a Promise or an Array here.
+   */
+  onFetch(callback)
+  {
+    this.#fetch = callback;
+  }
+
+
+  /**
+   * Fetch items with the specified filter
+   */
+  fetch(filter)
+  {
+    return this.#fetch(filter);
+  }
+
+
+  /**
+   * Filter a list by providing an editor renderer and a default template.
+   * This activates the Filter button and overlay in the <ui-table-filter /> component.
+   * @param {Editor} editor - An editor renderer which opens in an overlay
+   * @param {object} template - The default template to use when creating a new filter
+   */
+  useFilter(editor, template)
+  {
+    this.#filterOptions = { editor, template };
+  }
+};
+
+export default List;

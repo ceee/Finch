@@ -255,7 +255,7 @@ class EditorField
    * Renders a culture picker
    * @returns {EditorField}
    */
-  culturePicker(limit)
+  culturePicker()
   {
     return this._setComponent(CulturePicker);
   }
