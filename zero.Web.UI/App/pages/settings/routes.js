@@ -43,6 +43,7 @@ const addArea = (areaAlias, component, detailComponent, hasCreate, postCreate) =
     routes.push({
       name: area.alias + '-create',
       path: area.url + '/create/:scope?',
+      props: true,
       component: detailComponent,
       meta: {
         create: true,
@@ -56,6 +57,7 @@ const addArea = (areaAlias, component, detailComponent, hasCreate, postCreate) =
     routes.push({
       name: area.alias + '-edit',
       path: area.url + '/edit/:id',
+      props: true,
       component: detailComponent,
       meta: {
         name: [area.name, section.name]
@@ -100,6 +102,7 @@ if (section)
     routes.push({
       name: 'roles-create',
       path: '/' + section.alias + '/roles/create/:scope?',
+      props: true,
       component: UserRole,
       meta: {
         create: true,
@@ -110,6 +113,7 @@ if (section)
     routes.push({
       name: 'roles-edit',
       path: '/' + section.alias + '/roles/edit/:id',
+      props: true,
       component: UserRole,
       meta: {
         name: [area.name, section.name]

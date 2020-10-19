@@ -39,6 +39,7 @@
 
 
 <script>
+  import './table.scss'
   import UiPagination from 'zero/components/pagination.vue';
   import List from 'zero/core/list.js';
   import TableValue from './table-value.js';
@@ -96,7 +97,7 @@
         deep: true,
         handler: function (val)
         {
-          this.debouncedUpdate();
+          if (this.loaded) this.debouncedUpdate();
         }
       },
       $route(to, from)
@@ -122,13 +123,18 @@
         });
         this.filter = { ...this.listConfig.filter };
         this.component = typeof !!this.listConfig.link ? 'router-link' : 'div';
-        this.loaded = true;
+        this.$nextTick(() =>
+        {
+          this.loaded = true;
+        });
       },
 
 
       // load items based on the current filter
       load(initial)
       {
+        this.isLoading = true;
+
         this.listConfig.fetch(this.filter).then(result =>
         {
           this.$emit('loaded', result);
@@ -247,285 +253,3 @@
     }
   }
 </script>
-
-<style lang="scss">
-  .ui-table
-  {
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    flex-direction: column;
-    position: relative;
-    background: var(--color-table);
-    flex-wrap: nowrap;
-    -webkit-box-pack: justify;
-    justify-content: space-between;
-    min-width: auto;
-    border-radius: var(--radius);
-    table-layout: fixed;
-    word-wrap: break-word;
-    font-size: var(--font-size);
-    width: 100%;
-    box-shadow: var(--shadow-short);
-
-    &.is-inline
-    {
-      box-shadow: none;
-      border: 1px solid var(--color-line);
-    }
-  }
-
-  .ui-table-row
-  {
-    display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    flex-flow: row nowrap;
-    -webkit-box-align: center;
-    align-items: stretch;
-    width: 100%;
-    border-bottom: 1px solid var(--color-table-line-horizontal);
-    position: relative;
-    transition: outline 0.1s ease, box-shadow 0.1s ease;
-    color: var(--color-text);
-
-    &:last-child
-    {
-      border-bottom: none;
-    }
-  }
-
-  a.ui-table-row:hover
-  {
-    box-shadow: var(--shadow-mid);
-    z-index: 2;
-  }
-
-
-  .ui-table-head
-  {
-    font-weight: 700;
-    border-radius: 5px 5px 0 0;
-    color: var(--color-text);
-    position: sticky;
-    top: 0;
-    //border-bottom: 1px solid var(--color-line);
-    z-index: 2;
-    background: var(--color-table-head);
-
-    .ui-table-cell
-    {
-      display: inline-flex;
-      justify-content: space-between;
-    }
-  }
-
-  .ui-table-cell
-  {
-    display: inline-flex;
-    align-items: center;
-    flex: 1 1 5%;
-    position: relative;
-    text-align: left;
-    padding: 18px 20px 17px 20px;
-    border-left: 1px solid var(--color-table-line-vertical);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    min-width: 20px;
-    line-height: 20px;
-    color: var(--color-text);
-
-    &:first-child
-    {
-      border-left: none;
-    }
-
-    &.is-multiline
-    {
-      white-space: normal;
-      overflow: auto;
-      text-overflow: initial;
-    }
-
-    &.is-bold
-    {
-      font-weight: bold;
-    }
-
-    &.is-selectable
-    {
-      font-size: var(--font-size-l);
-      flex: 0 1 40px;
-      text-align: center;
-      padding: 0;
-      justify-content: center;
-    }
-  }
-
-  .ui-table-row:not(.is-selected) .ui-table-cell:not(.is-head).is-selectable i
-  {
-    color: var(--color-text);
-    margin-right: 1px;
-
-    &:before
-    {
-      content: "\e8cb";
-    }
-  }
-
-  .ui-table-sort
-  {
-    height: 20px;
-    width: 20px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: -10px;
-    border-radius: 15px;
-    transition: background 0.2s ease;
-
-    &[disabled]
-    {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .arrow
-    {
-      border-top-color: var(--color-text);
-      transition: opacity 0.2s ease, transform 0.3s ease;
-      opacity: 0.2;
-    }
-
-    /*&:hover
-    {
-      background: var(--color-bg);
-    }*/
-
-    &:hover .arrow
-    {
-      opacity: 0.5;
-    }
-
-    &.sort-desc .arrow, &.sort-asc .arrow, 
-    {
-      opacity: 1;
-    }
-
-    &.sort-asc .arrow
-    {
-      transform: scaleY(-1) translateY(5px);
-    }
-  }
-
-  .ui-table-empty, .ui-table-loading
-  {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 250px;
-    text-align: center;
-    padding: 0 20px;
-  }
-
-  .ui-table-empty-icon
-  {
-    font-size: 34px;
-    margin-bottom: 20px;
-  }
-
-
-  /* special styling for display types */
-
-  .ui-table-field-bool
-  {
-    font-family: var(--font-icon);
-    color: var(--color-text-dim);
-
-    &:before
-    {
-      content: "\e8f6";
-    }
-
-    &.is-checked
-    {
-      color: var(--color-text);
-
-      &:before
-      {
-        content: "\e83f";
-      }
-    }
-
-    &.is-colored
-    {
-      color: var(--color-accent-error);
-
-      &.is-checked
-      {
-        color: var(--color-accent-success);
-      }
-    }
-  }
-
-  .ui-table-field-shared
-  {
-    font-size: 16px;
-    color: var(--color-text-dim-one);
-
-    &.is-inline
-    {
-      margin-left: 0.5em;
-      font-size: 18px;
-      position: relative;
-      top: -1px;
-    }
-  }
-
-  .ui-table-field-shared-2
-  {
-    align-self: center;
-    display: inline-block;
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-    background: var(--color-box-nested);
-    color: var(--color-text-dim-one);
-    height: 22px;
-    line-height: 22px;
-    padding: 0 10px;
-    border-radius: 16px;
-    letter-spacing: .5px;
-    font-style: normal;
-    margin-left: 12px;
-
-    /*&.is-inline
-    {
-      margin-left: 0.5em;
-      position: relative;
-    }*/
-  }
-
-  .ui-table-cell[field-type="datetime"]
-  {
-    display: inline;
-
-    .-minor
-    {
-      color: var(--color-text-dim);
-    }
-  }
-
-  .ui-table-cell .-minor
-  {
-    color: var(--color-text-dim);
-  }
-
-  .ui-table-field-image
-  {
-    border-radius: 3px;
-  }
-</style>

@@ -193,8 +193,20 @@ class ListColumn
   active()
   {
     this.options.label = '@ui.active';
-    this.options.width = 200;
+    this.options.width = 150;
     return this.boolean();
+  }
+
+
+  /**
+   * Shortcut for date() with predefined label and width
+   * @returns {ListColumn}
+   */
+  created()
+  {
+    this.options.label = '@ui.createdDate';
+    this.options.width = 150;
+    return this.date();
   }
 }
 

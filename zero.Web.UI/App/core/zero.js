@@ -7,7 +7,7 @@ import ZeroPlugin from './plugin.zero.js';
 import EventHub from '../services/eventhub.js';
 import VueRouter from 'vue-router';
 import Vue from 'vue';
-//import CommercePlugin from '../../../zero.Commerce/Plugins/zero.Commerce/plugin.js'; // TODO dynPath
+import CommercePlugin from '../../../zero.Commerce/Plugins/zero.Commerce/plugin.js'; // TODO dynPath
 import options from './options.js';
 import routerConfig from '../config/router.config.js'
 
@@ -33,7 +33,7 @@ class Zero
     this.#vue = vue;
 
     this.use(ZeroPlugin);
-    //this.use(CommercePlugin);
+    this.use(CommercePlugin);
   }
 
 
