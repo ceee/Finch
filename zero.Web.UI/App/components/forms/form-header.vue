@@ -1,10 +1,10 @@
 ﻿<template>
   <ui-header-bar class="ui-form-header" :back-button="true">
     <template v-slot:title>
-      <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name}">
-        <input class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" :readonly="titleDisabled || disabled" />
+      <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name && !titleDisabled}">
+        <input v-if="!titleDisabled" class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" :readonly="titleDisabled || disabled" />
         <!--<ui-alias class="ui-form-header-title-alias" v-if="hasAlias" v-model="value.alias" :name="value.name" :disabled="disabled" />-->
-        <!--<span v-localize="value.name || title"></span>-->
+        <span v-if="titleDisabled" v-localize="value.name || title"></span>
       </h2>
     </template>
     <div class="ui-form-header-aside">

@@ -256,8 +256,13 @@ namespace zero.Web
     {
       var zeroTranslations = CreateTranslationsForFile("O:/zero/zero.Web/Resources/Localization/zero.en-us.json"); // TODO
       var commerceTranslations = CreateTranslationsForFile("O:/zero/zero.Commerce/Resources/Localization/zero.commerce.en-us.json");
+      var debugTranslations = CreateTranslationsForFile("O:/Laola/Laola.Backoffice/Resources/laola.en-us.json"); // TODO move into project
 
       foreach (var translation in commerceTranslations)
+      {
+        zeroTranslations.Add(translation.Key, translation.Value);
+      }
+      foreach (var translation in debugTranslations)
       {
         zeroTranslations.Add(translation.Key, translation.Value);
       }
@@ -268,6 +273,10 @@ namespace zero.Web
 
     Dictionary<string, string> CreateTranslationsForFile(string path)
     {
+      if (!File.Exists(path))
+      {
+        return new Dictionary<string, string>();
+      }
       string text = File.ReadAllText(path, Encoding.UTF8);
 
       JObject json = JObject.Parse(text);

@@ -24,7 +24,6 @@
   import SpaceList from 'zero/pages/spaces/views/list';
   import SpaceCustom from 'zero/pages/spaces/views/custom';
   import SpacesApi from 'zero/resources/spaces.js';
-  import { find as _find } from 'underscore';
 
   export default {
     data: () => ({
@@ -90,32 +89,35 @@
 
       loadSpace()
       {
-        if (this.isOverview)
-        {
-          this.space = null;
-          this.component = null;
-          this.loaded = true;
-          return;
-        }
-
         this.loaded = false;
 
-        this.space = _find(this.spaces, space => space.alias === this.$route.params.alias);
+        this.$nextTick(() =>
+        {
+          if (this.isOverview)
+          {
+            this.space = null;
+            this.component = null;
+            this.loaded = true;
+            return;
+          }
 
-        if (this.space.view === 'editor' || this.$route.params.id || this.$route.meta.create)
-        {
-          this.component = SpaceEditor;
-        }
-        else if (this.space.view === 'list')
-        {
-          this.component = SpaceList;
-        }
-        else
-        {
-          throw "Not implemented. Custom space view";
-        }
+          this.space = this.spaces.find(space => space.alias === this.$route.params.alias);
 
-        this.loaded = true;
+          if (this.space.view === 'editor' || this.$route.params.id || this.$route.meta.create)
+          {
+            this.component = SpaceEditor;
+          }
+          else if (this.space.view === 'list')
+          {
+            this.component = SpaceList;
+          }
+          else
+          {
+            throw "Not implemented. Custom space view";
+          }
+
+          this.loaded = true;
+        });
       }
     }
   }

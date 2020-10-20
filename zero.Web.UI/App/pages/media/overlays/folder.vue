@@ -39,7 +39,7 @@
       {
         form.load(!this.model.id ? MediaFolderApi.getEmpty() : MediaFolderApi.getById(this.model.id)).then(response =>
         {
-          this.disabled = !response.canEdit;
+          this.disabled = false; //!response.canEdit;
           this.item = response.entity;
           this.item.parentId = this.model.parentId;
           this.loading = false;

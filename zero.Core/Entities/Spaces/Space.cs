@@ -6,6 +6,8 @@ namespace zero.Core.Entities
   {
     public string Alias { get; set; }
 
+    public string EditorAlias { get; set; }
+
     public Type Type { get; set; }
 
     public SpaceView View { get; set; }
@@ -26,6 +28,8 @@ namespace zero.Core.Entities
   public interface ISpace
   {
     string Alias { get; set; }
+
+    string EditorAlias { get; set; }
 
     string ComponentPath { get; set; }
 

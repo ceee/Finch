@@ -1,11 +1,11 @@
 ﻿<template>
   <div v-if="!loading" class="space-list">
     <ui-header-bar :title="space.name" :count="count" title-empty="List">
-      <ui-table-filter v-model="tableConfig" />
+      <ui-table-filter :attach="$refs.table" />
       <ui-add-button :route="createRoute" :decision="canCreateShared" />
     </ui-header-bar>
     <div class="ui-blank-box">
-      <ui-table v-model="tableConfig" @count="count = $event" />
+      <ui-table ref="table" :config="listRenderer" @count="count = $event" />
     </div>
   </div>
 </template>
@@ -13,6 +13,7 @@
 
 <script>
   import SpacesApi from 'zero/resources/spaces.js';
+  import SpacesDefaultList from 'zero/renderers/lists/spaces.default.js';
 
   export default {
     props: [ 'space', 'config' ],
@@ -20,7 +21,7 @@
     data: () => ({
       count: 0,
       loading: true,
-      tableConfig: {},
+      listRenderer: null,
       createRoute: {
         name: 'space-create',
         params: { alias: null }
@@ -44,43 +45,23 @@
       {
         this.loading = true;
 
-        const alias = 'space.' + this.space.alias;
-        let renderer = zero.renderers[alias];
+        const alias = 'spaces.' + this.space.alias;
+        const listRenderer = this.zero.getList(alias) || SpacesDefaultList;
 
         this.canCreateShared = this.space.allowShared;
         this.createRoute.params.alias = this.space.alias;
 
-        this.tableConfig = renderer && typeof renderer.list === 'object' ? renderer.list : {
-          search: null,
-          columns: {
-            name: {
-              as: 'text',
-              label: '@ui.name',
-              bold: true,
-              link: item =>
-              {
-                return {
-                  name: 'space-item',
-                  params: { alias: this.space.alias, id: item.id }
-                };
-              }
-            },
-            createdDate: {
-              as: 'date',
-              label: '@ui.createdDate'
-            },
-            isActive: {
-              as: 'bool',
-              label: '@ui.active',
-              width: 200
-            }
-          }
+        listRenderer.link = item =>
+        {
+          return {
+            name: 'space-item',
+            params: { alias: this.space.alias, id: item.id }
+          };
         };
 
-        this.tableConfig.items = SpacesApi.getList.bind(this, this.space.alias);
+        listRenderer.onFetch(q => SpacesApi.getList(this.space.alias, q));
 
-        const firstKey = Object.keys(this.tableConfig.columns)[0];
-        this.tableConfig.columns[firstKey].shared = true;
+        this.listRenderer = listRenderer;
 
         this.loading = false;
       },

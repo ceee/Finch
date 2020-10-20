@@ -41,7 +41,6 @@
 <script>
   import './table.scss'
   import UiPagination from 'zero/components/pagination.vue';
-  import List from 'zero/core/list.js';
   import TableValue from './table-value.js';
   import { debounce as _debounce } from 'underscore';
 
@@ -50,7 +49,7 @@
 
     props: {
       config: {
-        type: [String, List],
+        type: [String, Object],
         required: true
       },
       inline: {
