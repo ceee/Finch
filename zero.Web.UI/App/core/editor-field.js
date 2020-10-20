@@ -27,6 +27,7 @@ import Tags from '../editor/fields/tags.vue';
 class EditorField
 {
   path = null;
+
   options = {
     label: null,
     hideLabel: false,
@@ -36,6 +37,12 @@ class EditorField
     disabled: false,
     tab: null,
     class: ''
+  };
+
+  #preview = {
+    icon: 'fth-filter',
+    preview: x => x,
+    hasValue: x => !!x
   };
 
   #component = null;
@@ -63,6 +70,11 @@ class EditorField
   get isRequired()
   {
     return this.#required;
+  }
+
+  get previewOptions()
+  {
+    return this.#preview;
   }
 
 
@@ -427,6 +439,22 @@ class EditorField
   image(options)
   {
     return this._setComponent(Media, { ...options, fileExtensions: ['.jpg', '.jpeg', '.png', '.webp', '.svg'] });
+  }
+
+
+  /**
+   * Create a preview for this field
+   * This is only used in list filters, ...
+   * @param {object} options - Custom options
+   * @param {number} options.icon - Custom icon
+   * @param {number} options.preview - Render the preview when this filter has been filled out
+   * @param {number} options.hasValue - Determine if the filter has a value or not
+   * @returns {EditorField}
+   */
+  preview(options)
+  {
+    this.#preview = { ...this.preview, ...options };
+    return this;
   }
 }
 

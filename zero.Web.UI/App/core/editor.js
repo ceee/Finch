@@ -7,6 +7,10 @@ class Editor
   #prefix;
 
   /**
+   * Set the template object which is used when creating a new model (only used for list filter, ...)
+   */
+  template = {};
+  /**
    * Overrides the string generation for the label
    */
   templateLabel = field => this.#prefix + field;
@@ -129,6 +133,7 @@ class Editor
       }
     };
   }
+
 };
 
 export default Editor;
