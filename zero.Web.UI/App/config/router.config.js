@@ -67,7 +67,7 @@ export default {
   base: __zero.path,
   linkActiveClass: 'is-active',
   linkExactActiveClass: 'is-active-exact',
-  beforeEach: beforeEach,
+  //beforeEach: beforeEach,
   scrollBehavior(to, from, savedPosition)
   {
     return savedPosition ? savedPosition : { x: 0, y: 0 };

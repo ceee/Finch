@@ -3,7 +3,7 @@
     <label v-for="item in list" class="ui-native-check ui-check-list-item">
       <input type="checkbox" :checked="isChecked(item)" @input="onChange(item)" :disabled="disabled" />
       <span class="ui-native-check-toggle"></span>
-      <span v-localize="item.name"></span>
+      <span v-localize="item[labelKey]"></span>
     </label>
   </div>
 </template>
@@ -32,13 +32,18 @@
         type: Boolean,
         default: false
       },
-      maxItems: {
+      limit: {
         type: Number,
         default: 100
       },
-      reverse: {
-        type: Boolean,
-        default: false
+      reverse: Boolean,
+      labelKey: {
+        type: String,
+        default: 'value'
+      },
+      idKey: {
+        type: String,
+        default: 'key'
       }
     },
 
@@ -81,18 +86,18 @@
 
       isChecked(item)
       {
-        let index = this.value.indexOf(item.id);
+        let index = this.value.indexOf(item[this.idKey]);
         return (!this.reverse && index > -1) || (this.reverse && index < 0);
       },
 
       onChange(item)
       {
-        let index = this.value.indexOf(item.id);
+        let index = this.value.indexOf(item[this.idKey]);
         let value = JSON.parse(JSON.stringify(this.value));
 
         if (index < 0)
         {
-          value.push(item.id);
+          value.push(item[this.idKey]);
         }
         else
         {

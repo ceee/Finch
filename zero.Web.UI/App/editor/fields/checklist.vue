@@ -1,5 +1,11 @@
 ﻿<template>
-  <ui-check-list :value="value" @input="$emit('input', $event)" :reverse="config.reverse" :items="config.items" :disabled="disabled" />
+  <ui-check-list :value="value" @input="$emit('input', $event)" 
+                 :reverse="reverse" 
+                 :items="items" 
+                 :limit="limit"
+                 :label-key="labelKey"
+                 :id-key="idKey"
+                 :disabled="disabled" />
 </template>
 
 <script>
@@ -13,7 +19,23 @@
         type: Boolean,
         default: false
       },
-      config: Object
+      items: {
+        type: [Array, Function, Promise],
+        required: true
+      },
+      limit: {
+        type: Number,
+        default: 100
+      },
+      reverse: Boolean,
+      labelKey: {
+        type: String,
+        default: 'value'
+      },
+      idKey: {
+        type: String,
+        default: 'key'
+      }
     },
   }
 </script>

@@ -1,27 +1,15 @@
 ﻿<template>
-  <input :value="value" @input="onChange($event.target.value)" type="text" class="ui-input" v-localize:placeholder="" :maxlength="maxLength" :disabled="disabled" />
+  <input :value="value" @input="onChange($event.target.value)" type="text" class="ui-input" v-localize:placeholder="placeholder" :maxlength="maxLength" :disabled="disabled" />
 </template>
 
 
 <script>
   export default {
     props: {
-      value: {
-        type: Number,
-        default: null
-      },
-      config: Object,
-      disabled: {
-        type: Boolean,
-        default: false
-      }
-    },
-
-    computed: {
-      maxLength()
-      {
-        return this.config.maxLength > 0 ? this.config.maxLength : null;
-      },
+      value: Number,
+      maxLength: Number,
+      placeholder: String,
+      disabled: Boolean
     },
 
     methods: {

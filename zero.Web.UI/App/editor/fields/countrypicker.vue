@@ -1,19 +1,17 @@
 ﻿<template>
-  <ui-countrypicker :value="value" @input="$emit('input', $event)" :limit="config.limit || 1" :disabled="disabled" />
+  <ui-countrypicker :value="value" @input="$emit('input', $event)" :limit="limit" :disabled="disabled" />
 </template>
 
 
 <script>
   export default {
     props: {
-      value: {
-        type: [String, Array]
-      },
-      disabled: {
-        type: Boolean,
-        default: false
-      },
-      config: Object
+      value: [String, Array],
+      disabled: Boolean,
+      limit: {
+        type: Number,
+        default: 1
+      }
     }
   }
 </script>

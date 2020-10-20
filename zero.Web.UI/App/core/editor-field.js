@@ -99,6 +99,17 @@ class EditorField
 
 
   /**
+   * Conditionally render this field (this is an alternative method to the field options 'condition')
+   * @param {function} condition - function which returns a boolean and gets passed the current model
+   */
+  when(condition)
+  {
+    this.options.condition = condition;
+    return this;
+  }
+
+
+  /**
    * Render a custom component
    * @param {object} component - The custom vue component
    * @param {object} [options] - Custom options
@@ -220,13 +231,16 @@ class EditorField
   /**
    * Renders an input which generates an alias for a given name or an alternative custom alias
    * @param {EditorSelectItem[]|function} items - Set items to choose from, either via an array or a promise which returns such array
-   * @param {number} [limit=100] - Maximum items to be checked
-   * @param {boolean} [reverse] - Reverse the checklist behaviour, so all items are checked by default and unchecking them adds them to the result list
+   * @param {object} [options] - Custom options
+   * @param {number} [options.limit=100] - Maximum items to be checked
+   * @param {boolean} [options.reverse=false] - Reverse the checklist behaviour, so all items are checked by default and unchecking them adds them to the result list
+   * @param {string} [options.labelKey=value] - Object key to get the label
+   * @param {string} [options.idKey=key] - Object key to get the id
    * @returns {EditorField}
    */
-  checkList(items, limit)
+  checkList(items, options)
   {
-    return this._setComponent(Checklist, { items, limit, reverse });
+    return this._setComponent(Checklist, { items, ...options });
   }
 
 

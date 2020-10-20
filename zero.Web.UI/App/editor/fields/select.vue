@@ -1,28 +1,18 @@
 ﻿ <template>
   <div class="ui-native-select" :disabled="disabled">
     <select :value="value" @input="$emit('input', $event.target.value)" :disabled="disabled">
-      <option v-for="item in config.items" :value="item.value" v-localize="item.label"></option>
+      <option v-for="item in items" :value="item.key" v-localize="item.value"></option>
     </select>
   </div>
 </template>
 
 
 <script>
-  import { map as _map, filter as _filter } from 'underscore';
-
   export default {
-    name: 'uiSelect',
-
     props: {
-      value: {
-        type: [String, Number, Object],
-        default: null
-      },
-      config: Object,
-      disabled: {
-        type: Boolean,
-        default: false
-      }
+      value: [String, Number, Object],
+      items: Array,
+      disabled: Boolean
     },
   }
 </script>

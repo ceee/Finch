@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-box">
-    <input :value="value" @input="$emit('input', $event.target.value)" type="text" class="ui-input" v-localize:placeholder="config.placeholder" :maxlength="maxLength" :disabled="disabled" />
+    <input :value="value" @input="$emit('input', +$event.target.value)" type="text" class="ui-input" v-localize:placeholder="placeholder" :disabled="disabled" />
   </div>
 </template>
 
@@ -12,18 +12,11 @@
         type: Number,
         default: null
       },
-      config: Object,
       disabled: {
         type: Boolean,
         default: false
-      }
+      },
+      placeholder: String
     },
-
-    computed: {
-      maxLength()
-      {
-        return this.config.maxLength > 0 ? this.config.maxLength : null;
-      }
-    }
   }
 </script>

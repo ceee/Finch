@@ -6,13 +6,14 @@
   export default {
     props: {
       value: [Object, String, Array, Number, Boolean],
-      config: Object
+      entity: Object,
+      render: Function
     },
 
     computed: {
       output()
       {
-        return typeof this.config.render === 'function' ? this.config.render(this.value, this.config) : this.value;
+        return typeof this.render === 'function' ? this.render(this.value, this.entity) : this.value;
       }
     }
   }

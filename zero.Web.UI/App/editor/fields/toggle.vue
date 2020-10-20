@@ -6,18 +6,9 @@
 <script>
   export default {
     props: {
-      value: {
-        type: Boolean,
-        default: false
-      },
-      disabled: {
-        type: Boolean,
-        default: false
-      },
-      negative: {
-        type: Boolean,
-        default: false
-      }
+      value: Boolean,
+      disabled: Boolean,
+      negative: Boolean
     }
   }
 </script>

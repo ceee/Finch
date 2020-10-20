@@ -2,11 +2,11 @@
   <div class="editor-nested" :depth="depth">
     <div class="ui-pick-previews" v-if="items.length">
       <div v-for="(item, index) in items" class="ui-pick-preview">
-        <ui-select-button :icon="config.icon" :label="getName(item)" :description="getDescription(item)" :disabled="disabled" @click="editItem(item)" />
+        <ui-select-button :icon="getIcon(item)" :label="getName(item)" :description="getDescription(item)" :disabled="disabled" @click="editItem(item)" />
         <ui-icon-button v-if="!disabled" icon="fth-x" title="@ui.close" @click="removeItem(index)" :disabled="disabled" />
       </div>
     </div>
-    <ui-select-button v-if="limit > items.length" icon="fth-plus" :label="config.addLabel || '@ui.add'" @click="addItem" :disabled="disabled" />
+    <ui-select-button v-if="limit > items.length" icon="fth-plus" :label="addLabel || '@ui.add'" @click="addItem" :disabled="disabled" />
   </div>
 </template>
 
@@ -14,55 +14,74 @@
   import UiEditor from 'zero/editor/editor';
   import UiEditorOverlay from 'zero/editor/editor-overlay';
   import Overlay from 'zero/services/overlay';
+  import Editor from 'zero/core/editor.js';
 
   export default {
 
     components: { UiEditor },
 
     props: {
-      value: {
-        type: [Array, Object]
+      value: [Array, Object],
+      meta: Object,
+      depth: Number,
+      disabled: Boolean,
+      editor: {
+        type: Editor,
+        required: true
       },
-      meta: {
-        type: Object,
-        default: () => { }
-      },
-      depth: {
+      limit: {
         type: Number,
-        default: 0
+        default: 100
       },
-      disabled: {
-        type: Boolean,
-        default: false
-      },
-      config: Object
+      title: String,
+      addLabel: String,
+      itemLabel: Function,
+      itemDescription: Function,
+      itemIcon: [String, Function],
+      template: {
+        type: Object,
+        required: true
+      }
+    },
+
+    watch: {
+      value: {
+        deep: true,
+        handler(val)
+        {
+          this.setup();
+        }
+      }
     },
 
 
     data: () => ({
       items: [],
-      limit: 100,
       multiple: false
     }),
 
 
     mounted()
     {
-      this.items = JSON.parse(JSON.stringify(this.value));
-      this.limit = this.config.limit || this.limit;
-      this.multiple = this.limit > 1;
-      if (!this.multiple)
-      {
-        this.items = this.items ? [this.items] : [];
-      }
+      this.setup();
     },
 
 
     methods: {
 
+      setup()
+      {
+        this.items = JSON.parse(JSON.stringify(this.value)) || [];
+        this.multiple = this.limit > 1;
+        if (!this.multiple)
+        {
+          this.items = this.items ? [this.items] : [];
+        }
+      },
+
       getNewItem()
       {
-        return JSON.parse(JSON.stringify(this.config.template || {}));
+        return JSON.parse(JSON.stringify(this.template || {}));
       },
 
       addItem()
@@ -82,8 +101,8 @@
         return Overlay.open({
           component: UiEditorOverlay,
           display: 'editor',
-          renderer: this.config.renderer,
-          title: this.config.title || '@ui.edit.title',
+          editor: this.editor,
+          title: this.title || '@ui.edit.title',
           model: item,
           width: 1100,
           create: isAdd
@@ -119,13 +138,19 @@
 
       getName(item)
       {
-        return this.config.item && typeof this.config.item.label === 'function' ? this.config.item.label(item) : 'Item';
+        return typeof this.itemLabel === 'function' ? this.itemLabel(item) : 'Item';
       },
 
 
       getDescription(item)
       {
-        return this.config.item && typeof this.config.item.description === 'function' ? this.config.item.description(item) : '';
+        return typeof this.itemDescription === 'function' ? this.itemDescription(item) : '';
+      },
+
+
+      getIcon(item)
+      {
+        return typeof this.itemIcon === 'function' ? this.itemIcon(item) : this.itemIcon;
       }
     }
   }

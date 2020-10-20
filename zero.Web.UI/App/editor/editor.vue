@@ -13,7 +13,6 @@
 
 <script>
   import EditorComponent from 'zero/editor/editor-component.vue';
-  import Editor from 'zero/core/editor.js';
 
   export default {
     name: 'uiEditor',
@@ -28,7 +27,7 @@
 
     props: {
       config: {
-        type: [String, Editor],
+        type: [String, Object],
         required: true
       },
       meta: {

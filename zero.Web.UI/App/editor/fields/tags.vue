@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-tags :value="value" @input="$emit('input', $event)" :add-label="config.addLabel || '@ui.add'" :disabled="disabled" />
+  <ui-tags :value="value" @input="$emit('input', $event)" :max-items="limit" :max-length="maxItemLength" :disabled="disabled" />
 </template>
 
 <script>
@@ -9,11 +9,15 @@
         type: Array,
         default: () => []
       },
-      disabled: {
-        type: Boolean,
-        default: false
+      disabled: Boolean,
+      limit: {
+        type: Number,
+        default: 10
       },
-      config: Object
+      maxItemLength: {
+        type: Number,
+        default: 200
+      }
     },
   }
 </script>

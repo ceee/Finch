@@ -1,7 +1,7 @@
 ﻿<template>
   <ui-property v-if="!isHidden" :field="config.path" :label="label" :hide-label="config.options.hideLabel" 
                :description="description" :required="isRequired">
-    <component :is="config.component" v-bind="config.componentOptions" :value="model" @input="onChange" />
+    <component :is="config.component" v-bind="config.componentOptions" :value="model" :entity="value" @input="onChange" />
     <p v-if="config.options.helpText" class="ui-property-help" v-localize="config.options.helpText"></p>
   </ui-property>
 </template>
