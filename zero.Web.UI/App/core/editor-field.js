@@ -12,6 +12,7 @@ import Checklist from '../editor/fields/checklist.vue';
 import ColorPicker from '../editor/fields/colorpicker.vue';
 import CountryPicker from '../editor/fields/countrypicker.vue';
 import CulturePicker from '../editor/fields/culturepicker.vue';
+import DatePicker from '../editor/fields/datepicker.vue';
 import DateRangePicker from '../editor/fields/daterangepicker.vue';
 import IconPicker from '../editor/fields/iconPicker.vue';
 import LanguagePicker from '../editor/fields/language.vue';
@@ -276,6 +277,22 @@ class EditorField
 
 
   /**
+   * Renders a date picker
+   * @param {object} [options] - Custom options
+   * @param {string} [options.format] - Format the date output
+   * @param {boolean} [options.time=false] - Allow time input 
+   * @param {string|Date} [options.maxDate] - Maximum selectable date
+   * @param {string|Date} [options.minDate] - Minimum selectable date
+   * @param {string} [options.amPm] - Render time as AM/PM
+   * @returns {EditorField}
+   */
+  datePicker(options)
+  {
+    return this._setComponent(DatePicker, { ...options });
+  }
+
+
+  /**
    * Renders a date range picker
    * @param {object} [options] - Custom options
    * @param {string} [options.format] - Format the date output
@@ -342,11 +359,12 @@ class EditorField
 
   /**
    * Display a module renderer which allows you to select from defined modules
+   * @param {string[]} [tags] - Only allow selection of modules which match defined tags
    * @returns {EditorField}
    */
-  modules()
+  modules(tags)
   {
-    return this._setComponent(Modules);
+    return this._setComponent(Modules, { tags });
   }
 
 

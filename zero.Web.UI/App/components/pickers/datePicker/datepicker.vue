@@ -46,21 +46,17 @@
         type: Boolean,
         default: false,
       },
-      max: {
+      maxDate: {
         type: [String, Date],
         default: null
       },
-      min: {
+      minDate: {
         type: [String, Date],
         default: null
       },
       amPm: {
         type: Boolean,
         default: false
-      },
-      options: {
-        type: Object,
-        default: () => { }
       }
     },
 
@@ -104,8 +100,8 @@
       {
         this.pickerOptions = {
           enableTime: this.time,
-          maxDate: this.max,
-          minDate: this.min,
+          maxDate: this.maxDate,
+          minDate: this.minDate,
           time_24hr: !this.amPm
         };
       },

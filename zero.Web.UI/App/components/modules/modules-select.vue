@@ -16,8 +16,8 @@
                   <i :class="item.icon"></i>
                 </div>
                 <div class="ui-modules-select-item-text">
-                  <strong>{{item.name}}</strong>
-                  <span class="is-minor">{{item.description}}</span>
+                  <strong v-localize="item.name"></strong>
+                  <span class="is-minor" v-localize="item.description"></span>
                 </div>
                 <span v-if="item.isDisabled" class="ui-modules-select-item-disabled">Not allowed <i class="fth-slash"></i></span>
               </button>
@@ -82,7 +82,7 @@
         _each(groups, (items, key) =>
         {
           this.moduleTypes.push({
-            name: key || '@modules.default_group',
+            name: !key || key === 'null' ? '@modules.default_group' : key,
             index: index++,
             count: items.length,
             items: items,

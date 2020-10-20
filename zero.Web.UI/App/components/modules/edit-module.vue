@@ -14,7 +14,7 @@
       <ui-loading v-if="loading" :is-big="true" />
 
       <div v-if="!loading" class="ui-module-overlay-editor">
-        <ui-editor :config="config.renderer" v-model="model" :meta="meta" :is-page="false" infos="none" :disabled="disabled" />
+        <ui-editor :config="editor" v-model="model" :meta="meta" :is-page="false" infos="none" :disabled="disabled" />
       </div>
 
     </ui-overlay-editor>
@@ -41,9 +41,14 @@
       loading: true,
       state: 'default',
       meta: {},
+      editor: null,
       model: {}
     }),
 
+    created()
+    {
+      this.editor = this.config.editor;
+    },
 
     methods: {
 

@@ -4,9 +4,9 @@ const base = 'modules/';
 
 export default {
 
-  getModuleTypes()
+  getModuleTypes(tags)
   {
-    return Axios.get(base + 'getModuleTypes').then(res => Promise.resolve(res.data));
+    return Axios.get(base + 'getModuleTypes', { params: { tags } }).then(res => Promise.resolve(res.data));
   },
 
   getModuleType(alias)

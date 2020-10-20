@@ -38,7 +38,7 @@ namespace zero.TestData
 
       zero.Modules.Add<RichtextModule>("richtext", "Richtext", "Simple richtext block editor", "fth-align-left", "Texts");
       zero.Modules.Add<HeadlineModule>("headline", "Headline", "Headline with optional subline", "fth-underline", "Texts");
-      zero.Modules.Add<TextWithImageModule>("textWithImage", "Text with image", "Short textblock with image", "fth-layers", "Texts", new List<string>() { "root" });
+      zero.Modules.Add<TextWithImageModule>("textWithImage", "Text with image", "Short textblock with image", "fth-layers", "Texts", disallowedPageTypes: new List<string>() { "root" });
       zero.Modules.Add<GalleryModule>("gallery", "Gallery", "Image gallery grid", "fth-image", "Media");
       zero.Modules.Add<DownloadModule>("download", "Downloads", "List containing downloads", "fth-download", "Misc");
       zero.Modules.Add<OffsetModule>("offset", "Offset", "Offset between two modules", "fth-code", "Misc");

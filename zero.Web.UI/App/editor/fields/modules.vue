@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-modules :value="value" @input="$emit('input', $event)" :config="config" :disabled="disabled" />
+  <ui-modules :value="value" @input="$emit('input', $event)" :config="config" :tags="tags" :disabled="disabled" />
 </template>
 
 
@@ -12,6 +12,10 @@
       disabled: {
         type: Boolean,
         default: false
+      },
+      tags: {
+        type: Array,
+        default: () => []
       },
       config: Object
     }

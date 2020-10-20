@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-module-item" v-if="!loading" :data-module="alias" :class="{'can-edit': canEdit }">
     <div class="ui-module-item-content" v-if="module" @click="emit('edit')">
-      <span v-if="!hasPreviewSettings || renderer.preview.label !== false" class="ui-module-item-header">{{module.name}}</span>
+      <span v-if="!hasPreviewSettings || renderer.preview.label !== false" class="ui-module-item-header" v-localize="module.name"></span>
       <ui-module-preview-inner v-if="tryRender" :template="renderer.preview.template" :value="value" />
     </div>
     <div class="ui-module-item-content" v-else>
@@ -97,7 +97,7 @@
       {
         this.loading = true;
         this.module = _find(this.types, x => x.alias == this.alias);
-        this.renderer = zero.renderers['module.' + this.alias];
+        this.renderer = null; // TODO zero.renderers['module.' + this.alias];
         this.$nextTick(() => this.loading = false);
       },
 

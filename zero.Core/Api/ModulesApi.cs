@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using zero.Core.Entities;
 using zero.Core.Options;
@@ -16,9 +17,16 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public IList<ModuleType> GetModuleTypes()
+    public IList<ModuleType> GetModuleTypes(string[] tags = default)
     {
-      return Options.Modules.GetAllItems().ToList();
+      IEnumerable<ModuleType> modules = Options.Modules.GetAllItems();
+
+      if (tags?.Length > 0)
+      {
+        modules = modules.Where(x => x.Tags.Any(t => tags.Contains(t, StringComparer.InvariantCultureIgnoreCase)));
+      }
+
+      return modules.ToList();
     }
 
 
@@ -33,9 +41,9 @@ namespace zero.Core.Api
   public interface IModulesApi
   {
     /// <summary>
-    /// Get all available module types
+    /// Get all available module types (can be limited to the passed tags)
     /// </summary>
-    IList<ModuleType> GetModuleTypes();
+    IList<ModuleType> GetModuleTypes(string[] tags = default);
 
     /// <summary>
     /// Get a specific module type by alias

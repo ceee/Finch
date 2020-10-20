@@ -4,12 +4,12 @@
     <div v-if="inline" class="ui-daterangepicker-inline">
       <div class="ui-split">
         <div class="ui-daterangepicker-group">
-          <ui-property :label="fromText" :vertical="true">
+          <ui-property :label="fromLabel" :vertical="true">
             <ui-datepicker v-model="value.from" :time="time" />
           </ui-property>
         </div>
         <div class="ui-daterangepicker-group">
-          <ui-property :label="toText" :vertical="true">
+          <ui-property :label="toLabel" :vertical="true">
             <ui-datepicker v-model="value.to" :time="time" />
           </ui-property>
         </div>
@@ -54,19 +54,19 @@
         type: Boolean,
         default: false,
       },
-      max: {
+      maxDate: {
         type: [String, Date],
         default: null
       },
-      min: {
+      minDate: {
         type: [String, Date],
         default: null
       },
-      fromText: {
+      fromLabel: {
         type: String,
         default: '@page.schedule.publish'
       },
-      toText: {
+      toLabel: {
         type: String,
         default: '@page.schedule.unpublish'
       },
@@ -123,10 +123,10 @@
           options: {
             format: this.format,
             time: this.time,
-            max: this.max,
-            min: this.min,
-            fromText: this.fromText,
-            toText: this.toText,
+            max: this.maxDate,
+            min: this.minDate,
+            fromText: this.fromLabel,
+            toText: this.toLabel,
             amPm: this.amPm
           },
           model: {

@@ -48,6 +48,11 @@ namespace zero.Core.Entities
     public string Group { get; set; }
 
     /// <summary>
+    /// Defining tags for a module type allows you to query for them
+    /// </summary>
+    public List<string> Tags { get; set; } = new List<string>();
+
+    /// <summary>
     /// Page types where this module type is not allowed.
     /// This will only work when operating within the page context.
     /// </summary>
@@ -68,6 +73,7 @@ namespace zero.Core.Entities
         Description = model.Description,
         Icon = model.Icon,
         Group = model.Group,
+        Tags = model.Tags,
         DisallowedPageTypes = model.DisallowedPageTypes
       };
     }

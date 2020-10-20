@@ -26,6 +26,10 @@
         type: Boolean,
         default: false
       },
+      tags: {
+        type: Array,
+        default: () => []
+      },
       config: Object
     },
 
@@ -54,7 +58,7 @@
 
     created()
     {
-      ModulesApi.getModuleTypes().then(res =>
+      ModulesApi.getModuleTypes(this.tags).then(res =>
       {
         this.moduleTypes = res;
         this.setup(this.value);
@@ -87,11 +91,16 @@
 
       edit(module, model, isAdd)
       {
-        const alias = 'module.' + module.alias;
-        let renderer = zero.renderers[alias];
+        const alias = 'modules.' + module.alias;
+        const editor = this.zero.getEditor(alias);
+
+        if (!editor)
+        {
+          // TODO throw error
+        }
 
         // some modules can have no fields for editing, so we add them directly
-        if (!renderer.fields || renderer.fields.length < 1)
+        if (!editor.fields || editor.fields.length < 1)
         {
           return ModulesApi.getEmpty(module.alias).then(res =>
           {
@@ -106,7 +115,7 @@
           component: EditModuleOverlay,
           display: 'editor',
           module: module,
-          renderer: alias,
+          editor: editor,
           model: model,
           width: 1100
         }).then(value =>

@@ -17,7 +17,7 @@ namespace zero.Web.Controllers
     }
 
 
-    public IActionResult GetModuleTypes() => Json(Api.GetModuleTypes());
+    public IActionResult GetModuleTypes([FromQuery] string[] tags = default) => Json(Api.GetModuleTypes(tags));
  
     public IActionResult GetModuleType([FromQuery] string alias) => Json(Api.GetModuleType(alias));
 

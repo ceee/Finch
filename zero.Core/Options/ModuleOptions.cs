@@ -18,7 +18,7 @@ namespace zero.Core.Options
     }
 
 
-    public void Add<T>(string alias, string name, string description, string icon, string group = null, List<string> disallowedPageTypes = null) where T : Module, new()
+    public void Add<T>(string alias, string name, string description, string icon, string group = null, List<string> tags = null, List<string> disallowedPageTypes = null) where T : Module, new()
     {
       Items.Add(new ModuleType(typeof(T))
       {
@@ -27,12 +27,13 @@ namespace zero.Core.Options
         Description = description,
         Icon = icon,
         Group = group,
+        Tags = tags ?? new List<string>(),
         DisallowedPageTypes = disallowedPageTypes ?? new List<string>()
       });
     }
 
 
-    public void Add(Type type, string alias, string name, string description, string icon, string group = null, List<string> disallowedPageTypes = null)
+    public void Add(Type type, string alias, string name, string description, string icon, string group = null, List<string> tags = null, List<string> disallowedPageTypes = null)
     {
       Items.Add(new ModuleType(type)
       {
@@ -41,6 +42,7 @@ namespace zero.Core.Options
         Description = description,
         Icon = icon,
         Group = group,
+        Tags = tags ?? new List<string>(),
         DisallowedPageTypes = disallowedPageTypes ?? new List<string>()
       });
     }

@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-box">
-    <ui-daterangepicker :value="value" @input="$emit('input', $event.target.value)" :disabled="disabled"
-      v-bind="{ format, time, maxDate, minDate, fromLabel, toLabel, amPm, inline }" />
+    <ui-datepicker :value="value" @input="$emit('input', $event.target.value)" :disabled="disabled"
+      v-bind="{ format, time, maxDate, minDate, amPm }" />
   </div>
 </template>
 
@@ -10,7 +10,7 @@
   export default {
     props: {
       value: {
-        type: Object,
+        type: [String, Date],
         default: {
           from: null,
           to: null
@@ -32,19 +32,7 @@
         type: [String, Date],
         default: null
       },
-      fromLabel: {
-        type: String,
-        default: null
-      },
-      toLabel: {
-        type: String,
-        default: null
-      },
       amPm: {
-        type: Boolean,
-        default: false
-      },
-      inline: {
         type: Boolean,
         default: false
       },
