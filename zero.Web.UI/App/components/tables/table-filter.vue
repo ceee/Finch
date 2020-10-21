@@ -1,6 +1,6 @@
 ﻿<template>
   <div v-if="loaded" class="ui-table-filter">
-    <ui-search v-if="!hideSearch" v-model="attach.filter.search" class="onbg" />
+    <ui-search v-if="!hideSearch" v-model="attach.query.search" class="onbg" />
 
     <ui-dropdown v-if="hasFilter && storedFilters.length" align="right">
       <template v-slot:button>
@@ -216,69 +216,6 @@
         });
       }
     }
-
-    //computed: {
-    //  selectedText()
-    //  {
-    //    return this.selection.length + ' selected'; 
-    //  }
-    //},
-
-    //methods: {
-
-    //  reload()
-    //  {
-    //    this.hideFilter = typeof this.value.filter !== 'object';
-    //    this.hideSelection = this.value.selectable !== true;
-    //    this.filters = JSON.parse(localStorage.getItem(this.storageKey) || "[]");
-    //  },
-
-    //  onActionClicked(action, opts)
-    //  {
-    //    action.action(opts);
-    //  },
-
-    //  openFilter(id)
-    //  {
-    //    let model = {
-    //      name: null,
-    //      filter: this.value.filter.model
-    //    };
-
-    //    if (id)
-    //    {
-    //      model = this.filters.find(x => x.id === id);
-    //    }
-
-    //    return Overlay.open({
-    //      component: FilterOverlay,
-    //      display: 'editor',
-    //      title: 'Filter',
-    //      defaults: this.value.filter.model,
-    //      model: model,
-    //      fields: this.value.filter.fields,
-    //      canSave: !!this.alias,
-    //      isCreate: !id
-    //    }).then(value =>
-    //    {
-    //      if (value.remove && id)
-    //      {
-    //        this.removeFilter(id);
-    //        return;
-    //      }
-
-    //      if (!!value.filterName)
-    //      {
-    //        id = this.saveFilter(value.filterName, value.model, id);
-    //      }
-
-    //      this.updateFilter({
-    //        id: id,
-    //        name: value.filterName,
-    //        filter: value.model
-    //      });
-    //    });
-    //  },
   }
 </script>
 
