@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace zero.Core.Routing
 {
-  public interface IUrlProvider<T> where T : IRouteResolved
+  public interface IUrlProvider<T> where T : IResolvedRoute
   {
     string Alias { get; }
 

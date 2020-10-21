@@ -5,11 +5,11 @@ using zero.Core.Entities;
 
 namespace zero.Core.Routing
 {
-  public class PageRouteResolved : IRouteResolved
+  public class PageRoute : IResolvedRoute
   {
-    public PageRouteResolved() { }
+    public PageRoute() { }
 
-    public PageRouteResolved(IRoute route)
+    public PageRoute(IRoute route)
     {
       Route = route;
     }

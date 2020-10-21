@@ -4,7 +4,7 @@ using System.Text;
 
 namespace zero.Core.Routing
 {
-  public interface IRouteResolved
+  public interface IResolvedRoute
   {
     IRoute Route { get; set; }
   }

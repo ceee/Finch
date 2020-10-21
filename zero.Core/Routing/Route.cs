@@ -5,7 +5,7 @@ using zero.Core.Entities;
 namespace zero.Core.Routing
 {
   [Collection("Routes")]
-  public class Route : IZeroIdEntity, IRoute
+  public class Route : IRoute
   {
     /// <inheritdoc />
     public string Id { get; set; }
@@ -49,18 +49,9 @@ namespace zero.Core.Routing
   }
 
 
-  public interface IRoute
+  [Collection("Routes")]
+  public interface IRoute : IZeroIdEntity, IZeroDbConventions, IAppAwareEntity
   {
-    /// <summary>
-    /// Generated id
-    /// </summary>
-    string Id { get; set; }
-
-    /// <summary>
-    /// Affected application id
-    /// </summary>
-    string AppId { get; set; }
-
     /// <summary>
     /// Generated URL based on the URL provider
     /// </summary>

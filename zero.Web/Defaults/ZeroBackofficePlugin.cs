@@ -54,6 +54,7 @@ namespace zero.Web.Defaults
       services.AddTransient<IMedia, Media>();
       services.AddTransient<IMediaFolder, MediaFolder>();
       services.AddTransient<IPreview, Preview>();
+      services.AddTransient<IRoute, Route>();
 
       services.AddTransient<IValidator<IApplication>, ApplicationValidator>();
       services.AddTransient<IValidator<ICountry>, CountryValidator>();

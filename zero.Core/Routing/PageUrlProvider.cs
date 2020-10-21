@@ -15,7 +15,7 @@ using zero.Core.Utils;
 
 namespace zero.Core.Routing
 {
-  public class PageUrlProvider : IUrlProvider<PageRouteResolved>
+  public class PageUrlProvider : IUrlProvider<PageRoute>
   {
     public string Alias => "zero.pages";
 
@@ -42,9 +42,9 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<PageRouteResolved> Resolve(IRoute route)
+    public async Task<PageRoute> Resolve(IRoute route)
     {
-      PageRouteResolved resolved = new PageRouteResolved(route);
+      PageRoute resolved = new PageRoute(route);
 
       List<string> ids = new List<string>();
       RouteReference reference = route.References.SingleOrDefault(x => x.Collection == PAGE_COLLECTION);
