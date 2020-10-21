@@ -17,10 +17,19 @@ namespace zero.Core.Routing
     public string Url { get; set; }
 
     /// <inheritdoc />
+    public string ProviderAlias { get; set; }
+
+    /// <inheritdoc />
+    public bool AllowSuffix { get; set; }
+
+    /// <inheritdoc />
     public Dictionary<string, object> Params { get; set; } = new Dictionary<string, object>();
 
     /// <inheritdoc />
     public IList<RouteReference> References { get; set; } = new List<RouteReference>();
+
+    /// <inheritdoc />
+    public IList<string> Dependencies { get; set; } = new List<string>();
   }
 
 
@@ -58,6 +67,16 @@ namespace zero.Core.Routing
     string Url { get; set; }
 
     /// <summary>
+    /// Alias of the URL provider which generated this route
+    /// </summary>
+    string ProviderAlias { get; set; }
+
+    /// <summary>
+    /// Enable this property so all routes are catched which start with this Url
+    /// </summary>
+    public bool AllowSuffix { get; set; }
+
+    /// <summary>
     /// Additional parameters
     /// </summary>
     Dictionary<string, object> Params { get; set; }
@@ -66,5 +85,10 @@ namespace zero.Core.Routing
     /// Contains references to the resolved collection entities
     /// </summary>
     IList<RouteReference> References { get; set; }
+
+    /// <summary>
+    /// Route dependencies can be used for cache busting
+    /// </summary>
+    IList<string> Dependencies { get; set; }
   }
 }

@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace zero.Core.Routing
 {
-  public interface IUrlProvider
+  public interface IUrlProvider<T> where T : IRouteResolved
   {
+    string Alias { get; }
 
+    Task<T> Resolve(IRoute route);
+
+    Task<IList<IRoute>> Run();
   }
 }

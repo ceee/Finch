@@ -19,10 +19,13 @@ namespace zero.Core.Routing
     {
       StringBuilder stringBuilder = new StringBuilder();
 
-      foreach(IPage parent in parents)
+      if (parents != null)
       {
-        stringBuilder.Append(parent.Alias);
-        stringBuilder.Append(PATH_SEPARATOR);
+        foreach (IPage parent in parents)
+        {
+          stringBuilder.Append(parent.Alias);
+          stringBuilder.Append(PATH_SEPARATOR);
+        }
       }
 
       stringBuilder.Append(page.Alias);

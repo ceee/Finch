@@ -6,6 +6,7 @@ using zero.Core.Entities;
 using zero.Core.Messages;
 using zero.Core.Options;
 using zero.Core.Plugins;
+using zero.Core.Routing;
 using zero.Core.Validation;
 using zero.Web.Sections;
 
@@ -86,6 +87,10 @@ namespace zero.Web.Defaults
       services.AddTransient<IMediaFolderApi, MediaFolderApi>();
       services.AddTransient<IModulesApi, ModulesApi>();
       services.AddTransient<IRecycleBinApi, RecycleBinApi>();
+
+      services.AddTransient<IPageUrlResolver, PageUrlResolver>();
+      //services.AddTransient<IUrlProvider, PageUrlProvider>();
+      services.AddTransient<PageUrlProvider>();
     }
   }
 }
