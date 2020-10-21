@@ -1,6 +1,7 @@
 ﻿
 import Editor from './editor.js';
 import ListColumn from './list-column.js';
+import ListAction from './list-action.js';
 
 class List
 {
@@ -39,6 +40,8 @@ class List
 
   columns = [];
 
+  actions = [];
+
 
   constructor(alias)
   {
@@ -73,6 +76,39 @@ class List
     const column = new ListColumn(path, options);
     this.columns.push(column);
     return column;
+  }
+
+
+  /**
+   * Add an action to the list header (only used when it is attached to <ui-table-filter />)
+   * @param {string} key - Alias to refer to
+   * @param {string} label - Dropdown-item label
+   * @param {string} icon - Displayed dropdown-item icon
+   * @param {function} callback - Called when the action button is clicked (including dropdown options as parameter)
+   * @param {boolean} [autoclose=true] - Autoclose the actions overlay when this action is clicked
+   * @returns {ListAction}
+   */
+  action(key, label, icon, callback, autoclose)
+  {
+    const action = new ListAction(key, label, icon, callback);
+    action.autoclose = typeof autoclose === 'undefined' ? true : autoclose;
+    this.actions.push(action);
+    return action;
+  }
+
+
+  /**
+   * Shortcut for an "export" action with predefined key, label and icon
+   * @param {Promise} callback - A promise which is called when the action button is clicked (including dropdown options as parameter)
+   * @returns {ListColumn}
+   */
+  export(callback)
+  {
+    return this.action('export', '@ui.export.action', 'fth-share', opts =>
+    {
+      opts.loading(true);
+      callback().then(_ => opts.hide());
+    }, false);
   }
 
 

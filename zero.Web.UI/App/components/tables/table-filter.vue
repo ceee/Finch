@@ -21,12 +21,12 @@
       <slot name="actions"></slot>
     </ui-dropdown>-->
 
-    <!--<ui-dropdown v-if="value.actions && value.actions.length > 0" align="right">
+    <ui-dropdown v-if="actions && actions.length > 0" align="right">
       <template v-slot:button>
         <ui-button type="light onbg" icon="fth-more-horizontal" />
       </template>
-      <ui-dropdown-button v-for="(action, index) in value.actions" :key="index" :value="action" :prevent="action.autoclose === false" :label="action.label" :icon="action.icon" @click="onActionClicked" />
-    </ui-dropdown>-->
+      <ui-dropdown-button v-for="(action, index) in actions" :key="index" :value="action" :prevent="action.autoclose === false" :label="action.label" :icon="action.icon" @click="onActionClicked" />
+    </ui-dropdown>
   </div>
 </template>
 
@@ -64,7 +64,8 @@
       //hideFilter: true,
       //hideSelection: true,
       storedFilters: [],
-      currentFilter: null
+      currentFilter: null,
+      actions: []
     }),
 
     created()
@@ -97,8 +98,16 @@
         this.filterOptions = { ...this.attach.filter };
         this.hasFilter = this.filterOptions && this.filterOptions.editor;
         this.storedFilters = this.getStoredFilters();
+        this.actions = this.attach.listConfig.actions;
 
         this.loaded = true;
+      },
+
+
+      // called when an action has been clicked
+      onActionClicked(action, opts)
+      {
+        action.call(opts);
       },
 
 
