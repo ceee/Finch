@@ -11,6 +11,9 @@ namespace zero.Core.Entities
   public class Page : ZeroEntity, IPage
   {
     /// <inheritdoc />
+    public string Url { get; set; }
+
+    /// <inheritdoc />
     public string ParentId { get; set; }
 
     /// <inheritdoc />
@@ -25,7 +28,7 @@ namespace zero.Core.Entities
 
 
   [Collection("Pages")]
-  public interface IPage : IZeroEntity, IAppAwareEntity, IZeroDbConventions
+  public interface IPage : IZeroEntity, IAppAwareEntity, IZeroDbConventions, IRoutedEntity
   {
     /// <summary>
     /// Id of the parent page
