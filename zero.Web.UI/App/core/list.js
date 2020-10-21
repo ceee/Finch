@@ -9,10 +9,10 @@ class List
   #filterOptions;
 
   /**
-   * Set the default filter options which are passed to the fetch function.
+   * Set the default query options which are passed to the fetch function.
    * You can extend it to your needs
    */
-  filter = {
+  query = {
     // default order by
     orderBy: 'createdDate',
     // order is descending

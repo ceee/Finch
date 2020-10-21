@@ -1,23 +1,26 @@
 ﻿<template>
   <div v-if="loaded" class="ui-table-filter">
     <ui-search v-if="!hideSearch" v-model="attach.filter.search" class="onbg" />
-    <!--<ui-dropdown v-if="!hideFilter && filters.length" align="right">
+
+    <ui-dropdown v-if="hasFilter && storedFilters.length" align="right">
       <template v-slot:button>
-        <ui-button v-if="!hideFilter" type="light onbg" :label="filterLabel" caret="down" />
+        <ui-button type="light onbg" :label="filterLabel" caret="down" />
       </template>
-      <ui-dropdown-button v-if="filters.length" v-for="(filter, index) in filters" :key="index" :value="filter" :label="filter.name" @click="onFiltered" />
-      <ui-dropdown-separator v-if="filters.length" />
-      <ui-dropdown-button label="@ui.add" icon="fth-plus" @click="openFilter()" />
-      <ui-dropdown-button v-if="filter" label="Edit filter" icon="fth-edit-2" @click="openFilter(filter.id)" />
-      <ui-dropdown-button label="Clear filter" icon="fth-x" @click="onFilterClear" />
+      <ui-dropdown-button v-if="storedFilters.length" v-for="(filter, index) in storedFilters" :key="index" :value="filter" :label="filter.name" @click="setFilter" />
+      <ui-dropdown-separator v-if="storedFilters.length" />
+      <ui-dropdown-button label="@ui.add" icon="fth-plus" @click="addOrEditFilter()" />
+      <ui-dropdown-button v-if="currentFilter" label="Edit filter" icon="fth-edit-2" @click="addOrEditFilter(currentFilter.id)" />
+      <ui-dropdown-button label="Clear filter" icon="fth-x" @click="setFilter(null)" />
     </ui-dropdown>
-    <ui-button v-if="!hideFilter && !filters.length" type="light onbg" label="Filter" @click="openFilter()" />
-    <ui-dropdown v-if="!hideSelection && selection.length > 0" align="right">
+    <ui-button v-if="hasFilter && !storedFilters.length" type="light onbg" label="Filter" @click="addOrEditFilter()" />
+
+    <!--<ui-dropdown v-if="!hideSelection && selection.length > 0" align="right">
       <template v-slot:button>
         <ui-button type="light" :label="selectedText" caret="down" />
       </template>
       <slot name="actions"></slot>
     </ui-dropdown>-->
+
     <!--<ui-dropdown v-if="value.actions && value.actions.length > 0" align="right">
       <template v-slot:button>
         <ui-button type="light onbg" icon="fth-more-horizontal" />
@@ -33,6 +36,8 @@
   import Strings from 'zero/services/strings';
   import FilterOverlay from './table-filter-overlay';
   import { isArray as _isArray } from 'underscore';
+
+  const KEY_PREFIX = 'zero.ui-table-filter.';
 
   export default {
     name: 'uiTableFilter',
@@ -53,11 +58,13 @@
     },
 
     data: () => ({
-      loaded: false
+      loaded: false,
+      hasFilter: false,
+      filterOptions: null,
       //hideFilter: true,
       //hideSelection: true,
-      //filters: [],
-      //filter: null
+      storedFilters: [],
+      currentFilter: null
     }),
 
     created()
@@ -70,8 +77,16 @@
       this.setup();
     },
 
+    computed: {
+      filterLabel()
+      {
+        return this.currentFilter ? 'Filter: <span>' + this.currentFilter.name + "</span>" : 'Filter';
+      }
+    },
+
     methods: {
 
+      // attach table data
       setup()
       {
         if (!this.attach)
@@ -79,7 +94,117 @@
           return;
         }
 
+        this.filterOptions = { ...this.attach.filter };
+        this.hasFilter = this.filterOptions && this.filterOptions.editor;
+        this.storedFilters = this.getStoredFilters();
+
         this.loaded = true;
+      },
+
+
+      // load stored filters from local storage
+      getStoredFilters()
+      {
+        if (!this.hasFilter)
+        {
+          return [];
+        }
+        return JSON.parse(localStorage.getItem(KEY_PREFIX + this.filterOptions.editor.alias) || "[]");
+      },
+
+
+      // set the current filter
+      setFilter(value, two)
+      {
+        if (!value)
+        {
+          this.currentFilter = null;
+          this.$emit('filter', null);
+          this.attach.setFilter(null);
+        }
+        else
+        {
+          this.currentFilter = JSON.parse(JSON.stringify(value));
+          this.$emit('filter', this.currentFilter.filter);
+          this.attach.setFilter(this.currentFilter.filter);
+        }
+      },
+
+
+      // removes a filter from the storage
+      removeFilter(id)
+      {
+        let savedFilter = this.storedFilters.find(x => x.id === id);
+        this.storedFilters.splice(this.storedFilters.indexOf(savedFilter), 1);
+        localStorage.setItem(KEY_PREFIX + this.filterOptions.editor.alias, JSON.stringify(this.storedFilters));
+
+        if (this.currentFilter && this.currentFilter.id === id)
+        {
+          this.setFilter(null);
+        }
+      },
+
+
+      // persist a filter in local storage
+      saveFilter(name, filter, id)
+      {
+        id = id || Strings.guid();
+
+        let savedFilter = this.storedFilters.find(x => x.id === id);
+        let index = this.storedFilters.indexOf(savedFilter);
+        let model = { id, name, filter };
+
+        if (index > -1)
+        {
+          this.storedFilters.splice(index, 1, model);
+        }
+        else
+        {
+          this.storedFilters.push(model);
+        }
+
+        localStorage.setItem(KEY_PREFIX + this.filterOptions.editor.alias, JSON.stringify(this.storedFilters));
+
+        return id;
+      },
+
+
+      addOrEditFilter(id)
+      {
+        let model = { name: null, filter: this.filterOptions.template };
+
+        if (id)
+        {
+          model = this.storedFilters.find(x => x.id === id);
+        }
+
+        return Overlay.open({
+          component: FilterOverlay,
+          display: 'editor',
+          title: 'Filter',
+          editor: this.filterOptions.editor,
+          template: this.filterOptions.template,
+          model: model,
+          isCreate: !id
+        }).then(value =>
+        {
+          if (value.remove && id)
+          {
+            this.removeFilter(id);
+            return;
+          }
+
+          if (value.filterName)
+          {
+            id = this.saveFilter(value.filterName, value.model, id);
+          }
+
+          this.setFilter({
+            id,
+            name: value.filterName,
+            filter: value.model
+          });
+        });
       }
     }
 
@@ -87,14 +212,6 @@
     //  selectedText()
     //  {
     //    return this.selection.length + ' selected'; 
-    //  },
-    //  storageKey()
-    //  {
-    //    return 'zero.ui-table-filter.' + this.alias;
-    //  },
-    //  filterLabel()
-    //  {
-    //    return this.filter ? 'Filter: <span>' + this.filter.name + "</span>" : 'Filter';
     //  }
     //},
 
@@ -110,16 +227,6 @@
     //  onActionClicked(action, opts)
     //  {
     //    action.action(opts);
-    //  },
-
-    //  onFilterClear()
-    //  {
-    //    this.updateFilter(null);
-    //  },
-
-    //  onFiltered(value)
-    //  {
-    //    this.updateFilter(value);
     //  },
 
     //  openFilter(id)
@@ -163,64 +270,6 @@
     //      });
     //    });
     //  },
-
-
-    //  saveFilter(name, filter, id)
-    //  {
-    //    id = id || Strings.guid();
-
-    //    let savedFilter = this.filters.find(x => x.id === id);
-    //    let index = this.filters.indexOf(savedFilter);
-
-    //    let model = {
-    //      id: id,
-    //      name: name,
-    //      filter: filter
-    //    };
-
-    //    if (index > -1)
-    //    {
-    //      this.filters.splice(index, 1, model);
-    //    }
-    //    else
-    //    {
-    //      this.filters.push(model);
-    //    }
-
-    //    localStorage.setItem(this.storageKey, JSON.stringify(this.filters));
-
-    //    return id;
-    //  },
-
-
-    //  removeFilter(id)
-    //  {
-    //    let savedFilter = this.filters.find(x => x.id === id);
-    //    let index = this.filters.indexOf(savedFilter);
-    //    this.filters.splice(index, 1);
-    //    localStorage.setItem(this.storageKey, JSON.stringify(this.filters));
-
-    //    if (this.filter && this.filter.id === id)
-    //    {
-    //      this.updateFilter(null);
-    //    }
-    //  },
-
-
-    //  updateFilter(value)
-    //  {
-    //    if (!value)
-    //    {
-    //      this.filter = null;
-    //      this.$emit('filter', null);
-    //    }
-    //    else
-    //    {
-    //      this.filter = JSON.parse(JSON.stringify(value));
-    //      this.$emit('filter', this.filter.filter);
-    //    }
-    //  }
-    //}
   }
 </script>
 

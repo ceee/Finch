@@ -2,7 +2,7 @@
   <div class="app-nav">
 
     <h1 class="app-nav-headline">
-      <img src="/Assets/zero-2.png" v-localize:alt="'@zero.name'" />
+      <img src="/Assets/zero-2-light.png" v-localize:alt="'@zero.name'" />
     </h1>
 
     <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">

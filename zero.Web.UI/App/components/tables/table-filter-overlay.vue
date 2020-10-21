@@ -21,18 +21,18 @@
       </div>-->
 
       <div v-if="!loading" class="ui-box">
-        <div v-for="(group, index) in groups" class="ui-table-filter-overlay-group" :class="{ 'is-open': activeGroup === index, 'has-value': typeof group.hasValue === 'function' ? group.hasValue(model[group.field]) : null }">
+        <div v-for="(field, index) in fields" class="ui-table-filter-overlay-group" :class="{ 'is-open': activeFilter === index, 'has-value': field.hasValue(model[field.path]) }">
           <div class="ui-table-filter-overlay-group-head">
-            <ui-select-button :label="group.label" :icon="group.icon" :description="typeof group.preview === 'function' ? group.preview(model[group.field]) : null" @click="toggleGroup(group, index)" />
-            <ui-button class="ui-table-filter-overlay-group-clear" type="blank" label="Clear" @click="clearGroup(group, index)" />
+            <ui-select-button :label="getFieldLabel(field.field)" :icon="field.icon" :description="field.preview(model[field.path])" @click="toggleFilter(field, index)" />
+            <ui-button class="ui-table-filter-overlay-group-clear" type="blank" label="Clear" @click="clearFilter(field, index)" />
           </div>
-          <div v-show="activeGroup === index" class="ui-table-filter-overlay-group-content">
-            <editor-component :config="group" v-model="model" @input="onFieldChange" :disabled="disabled" />
+          <div v-show="activeFilter === index" class="ui-table-filter-overlay-group-content">
+            <editor-component :config="field.field" :editor="editor" v-model="model" @input="onFieldChange" :disabled="disabled" />
           </div>
         </div>
       </div>
 
-      <div v-if="!loading && config.canSave" class="ui-box ui-table-filter-overlay-filtername">
+      <div v-if="!loading" class="ui-box ui-table-filter-overlay-filtername">
         <ui-property label="Save as..." description="You can optionally save this filter for future reference" :vertical="true">
           <input v-model="filterName" type="text" class="ui-input" maxlength="40" />
         </ui-property>
@@ -53,23 +53,32 @@
       config: Object
     },
 
+    provide: function ()
+    {
+      return {
+        meta: {},
+        disabled: false
+      };
+    },
+
     data: () => ({
       loading: false,
       disabled: false,
-      defaults: {},
       model: {},
-      activeGroup: null,
-      groups: [],
-      filterName: null
+      template: null,
+      editor: null,
+      fields: [],
+      filterName: null,
+      activeFilter: null
     }),
 
     components: { EditorComponent },
 
     methods: {
 
-      toggleGroup(group, index)
+      toggleFilter(filter, index)
       {
-        this.activeGroup = this.activeGroup === index ? null : index;
+        this.activeFilter = this.activeFilter === index ? null : index;
       },
 
       onFieldChange(value)
@@ -77,17 +86,31 @@
         //this.$emit('input', this.value);
       },
 
-      clearGroup(group, index)
+      clearFilter(filter, index)
       {
-        this.model[group.field] = JSON.parse(JSON.stringify(this.defaults[group.field]));
+        this.model[filter.path] = JSON.parse(JSON.stringify(this.template[filter.path]));
       },
 
+      getFieldLabel(field)
+      {
+        return field.options.label || this.editor.templateLabel(field.path);
+      },
+      
       onLoad()
       {
-        this.groups = this.config.fields;
         this.model = JSON.parse(JSON.stringify(this.config.model.filter || {}));
-        this.defaults = JSON.parse(JSON.stringify(this.config.defaults || {}));
+        this.template = JSON.parse(JSON.stringify(this.config.template || {}));
+        this.editor = this.config.editor;
         this.filterName = this.config.model.name;
+        this.fields = this.editor.fields.map(x =>
+        {
+          return {
+            field: x,
+            path: x.path,
+            ...x.previewOptions
+          };
+        });
+
         this.loading = false;
       },
 

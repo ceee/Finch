@@ -4,7 +4,7 @@
       <header class="ui-table-row ui-table-head">      
         <div v-for="column in columns" :key="column.path" class="ui-table-cell" :table-field="column.path" :style="column.flex" :class="column.options.class">
           {{ column.label | localize }}
-          <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="filter.orderBy == column.path ? 'sort-' + (filter.orderIsDescending ? 'desc' : 'asc') : null">
+          <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="query.orderBy == column.path ? 'sort-' + (query.orderIsDescending ? 'desc' : 'asc') : null">
             <i class="arrow arrow-down"></i>
           </button>
         </div>
@@ -31,7 +31,7 @@
     </div>
 
     <footer class="ui-table-pagination" v-if="pages > 1">
-      <ui-pagination :pages="pages" :page="filter.page" @change="setPage" :inline="inline" />
+      <ui-pagination :pages="pages" :page="query.page" @change="setPage" :inline="inline" />
     </footer>
 
   </div>
@@ -68,7 +68,8 @@
       loaded: false,
       listConfig: {},
       columns: [],
-      filter: {},
+      query: {},
+      filter: null,
 
       items: [],
       component: 'div',
@@ -92,7 +93,7 @@
     },
 
     watch: {
-      filter: {
+      query: {
         deep: true,
         handler: function (val)
         {
@@ -120,8 +121,9 @@
             flex: column.options.width ? { 'flex': '0 1 ' + column.options.width + 'px' } : {}
           };
         });
-        this.filter = { ...this.listConfig.filter };
+        this.query = { ...this.listConfig.query };
         this.component = typeof !!this.listConfig.link ? 'router-link' : 'div';
+        this.filter = { ...this.listConfig.filterOptions };
         this.$nextTick(() =>
         {
           this.loaded = true;
@@ -129,12 +131,12 @@
       },
 
 
-      // load items based on the current filter
+      // load items based on the current query
       load(initial)
       {
         this.isLoading = true;
 
-        this.listConfig.fetch(this.filter).then(result =>
+        this.listConfig.fetch(this.query).then(result =>
         {
           this.$emit('loaded', result);
           this.pages = result.totalPages;
@@ -191,25 +193,32 @@
       // set the active page
       setPage(index)
       {
-        this.filter.page = index;
+        this.query.page = index;
+        this.debouncedUpdate();
+      },
+
+      // set a new filter
+      setFilter(filter)
+      {
+        this.query.filter = filter;
         this.debouncedUpdate();
       },
 
       // sort by a column
       sort(column)
       {
-        if (this.filter.orderBy === column.path && this.filter.orderIsDescending)
+        if (this.query.orderBy === column.path && this.query.orderIsDescending)
         {
-          this.filter.orderIsDescending = false;
+          this.query.orderIsDescending = false;
         }
-        else if (this.filter.orderBy === column.path)
+        else if (this.query.orderBy === column.path)
         {
-          this.filter.orderBy = null;
+          this.query.orderBy = null;
         }
         else
         {
-          this.filter.orderBy = column.path;
-          this.filter.orderIsDescending = true;
+          this.query.orderBy = column.path;
+          this.query.orderIsDescending = true;
         }
 
         this.debouncedUpdate();
