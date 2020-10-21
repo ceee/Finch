@@ -1,7 +1,7 @@
 ﻿<template>
   <ui-form ref="form" class="space-editor" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model="model" :title="space.name" :title-disabled="space.view === 'editor'" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
-    <ui-editor v-if="editor" :config="editor" v-model="model" :meta="meta" :disabled="disabled" />
+    <ui-form-header v-model="model" :title="space.name" :title-disabled="space.view === 'editor'" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" :active-toggle="true" />
+    <ui-editor v-if="editor" :config="editor" v-model="model" :meta="meta" :disabled="disabled" :active-toggle="false" />
   </ui-form>
 </template>
 
@@ -83,5 +83,15 @@
   .space-editor .ui-header-bar + .editor > .ui-box
   {
     margin-top: 0;
+  }
+
+  .space-editor .editor-outer.-infos-aside
+  {
+    grid-template-columns: 1fr;
+
+    .editor-infos
+    {
+      margin: -31px var(--padding) 0;
+    }
   }
 </style>
