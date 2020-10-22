@@ -3,7 +3,11 @@
     <div>
       <div class="ui-box">
         <h3 class="ui-headline" v-localize="'Links'"></h3>
-        <div><ui-button type="light" label="Open page" /><br /><br /><br /><br /></div>
+        <div>
+        <a v-if="value.route" class="ui-button type-light" :href="value.route.url" target="_blank">
+          <span class="ui-button-text">Open page</span>
+        </a>
+        <br /><br /><br /><br /></div>
         <h3 class="ui-headline" v-localize="'@revisions.label'"></h3>
         <ui-revisions v-if="!isCreate" :get="getRevisions" />
       </div>

@@ -32,7 +32,7 @@
 
 
     data: () => ({
-      userRoute: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
+      userRoute: zero.alias.settings.users + '-edit',
       items: [],
       page: 1,
       pages: 0

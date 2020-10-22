@@ -31,10 +31,10 @@
         </transition>
       </template>
       <!-- // TODO this is only for development -->
-      <button type="button" class="app-nav-item" @click="$refs.iconpicker.pick()">
+      <!--<button type="button" class="app-nav-item" @click="$refs.iconpicker.pick()">
         <i class="app-nav-item-icon fth-droplet"></i> Icons
       </button>
-      <icon-picker ref="iconpicker" :output="false" />
+      <icon-picker ref="iconpicker" :output="false" />-->
     </nav>
 
     <footer class="app-nav-account" v-if="user">     
@@ -122,7 +122,7 @@
       {
         opts.hide();
         this.$router.push({
-          name: zero.alias.sections.settings + '-' + zero.alias.settings.users + '-edit',
+          name: zero.alias.settings.users + '-edit',
           params: { id: this.user.id }
         });
       },

@@ -45,9 +45,9 @@
     data: () => ({
       claims: [],
       stateItems: [
-        { name: '@permission.states.read', id: 'read' },
-        { name: '@permission.states.update', id: 'update' },
-        { name: '@permission.states.create', id: 'create' }
+        { value: '@permission.states.read', key: 'read' },
+        { value: '@permission.states.update', key: 'update' },
+        { value: '@permission.states.create', key: 'create' }
       ],
       permissions: []
     }),

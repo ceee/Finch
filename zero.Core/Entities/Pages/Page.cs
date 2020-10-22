@@ -11,7 +11,7 @@ namespace zero.Core.Entities
   public class Page : ZeroEntity, IPage
   {
     /// <inheritdoc />
-    public string Url { get; set; }
+    public UrlRoute Route { get; set; }
 
     /// <inheritdoc />
     public string ParentId { get; set; }

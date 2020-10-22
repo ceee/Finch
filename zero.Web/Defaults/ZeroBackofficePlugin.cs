@@ -92,6 +92,7 @@ namespace zero.Web.Defaults
       services.AddTransient<IPageUrlResolver, PageUrlResolver>();
       //services.AddTransient<IUrlProvider, PageUrlProvider>();
       services.AddTransient<PageUrlProvider>();
+      services.AddTransient<PageUrlProviderTest>();
     }
   }
 }

@@ -1,5 +1,7 @@
 ﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Commands.Batches;
 using Raven.Client.Documents.Linq;
+using Raven.Client.Documents.Operations;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
@@ -58,7 +60,60 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<IRoute> CreateRoute(IPage model)
+    public async Task<int> UpdateAll()
+    {
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+
+      IList<IPage> pages = await session.Query<IPage>().ToListAsync();
+      IEnumerable<IGrouping<string, IPage>> groupedPages = pages.GroupBy(x => x.AppId);
+
+      Dictionary<string, UrlRoute> map = new Dictionary<string, UrlRoute>();
+      HashSet<PatchCommandData> commands = new HashSet<PatchCommandData>();
+
+      async Task traversePageChildren(IPage parent, IEnumerable<IPage> parents, IEnumerable<IPage> allPages)
+      {
+        IEnumerable<IPage> currentPages = allPages.Where(x => x.ParentId == parent?.Id);
+
+        foreach (IPage page in currentPages)
+        {
+          UrlRoute route = new UrlRoute()
+          {
+            Url = GetUrl(page, parents),
+            Dependencies = parents.Select(x => x.Id).ToArray()
+          };
+
+          commands.Add(new PatchCommandData(
+            id: page.Id,
+            changeVector: null,
+            patchIfMissing: null,
+            patch: new PatchRequest()
+            {
+              Values = { { "route", route } },
+              Script = "this.Route = args.route"
+            }
+          ));
+
+          await traversePageChildren(page, parents.Union(new List<IPage>() { page }), allPages);
+        }
+      };
+
+      foreach (var group in groupedPages)
+      {
+        await traversePageChildren(null, new List<IPage>() { }, group);
+      }
+
+      using (IAsyncDocumentSession commandSession = Raven.OpenAsyncSession())
+      {
+        commandSession.Advanced.Defer(commands.ToArray());
+        await commandSession.SaveChangesAsync();
+      }
+
+      return commands.Count;
+    }
+
+
+    /// <inheritdoc />
+    public async Task<UrlRoute> CreateRoute(IPage model)
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
 
@@ -69,12 +124,10 @@ namespace zero.Core.Routing
 
       IList<IPage> parents = (await session.LoadAsync<IPage>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
 
-      return new Route()
+      return new UrlRoute()
       {
-        Id = String.Concat("routes.", IdGenerator.Create()),
-        AppId = model.AppId,
         Url = GetUrl(model, parents),
-        ProviderAlias = Alias
+        Dependencies = parents.Select(x => x.Id).ToArray()
       };
     }
 

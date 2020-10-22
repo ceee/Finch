@@ -111,6 +111,22 @@ class Editor
 
 
   /**
+   * Removes a field by path name
+   * @param {string} path - Model path
+   */
+  remove(path)
+  {
+    const field = this.fields.find(x => x.path === path);
+
+    if (field != null)
+    {
+      const index = this.fields.indexOf(field);
+      this.fields.splice(index, 1);
+    }
+  }
+
+
+  /**
    * Set another editor as the base for this editor (copies fields and tabs)
    * @param {Editor} editor - Base editor
    * @returns {Editor}
@@ -139,7 +155,8 @@ class Editor
         options = options || {};
         options.tab = alias;
         return this.field(path, options);
-      }
+      },
+      remove: path => this.remove(path)
     };
   }
 
