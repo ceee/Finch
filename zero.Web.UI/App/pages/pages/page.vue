@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <ui-editor v-if="!loading" :config="renderer" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" :disabled="disabled" />
+    <ui-editor v-if="!loading && editor" :config="editor" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" :disabled="disabled" />
   </ui-form>
 </template>
 
@@ -48,7 +48,7 @@
     data: () => ({
       loading: true,
       disabled: false,
-      renderer: null,
+      editor: null,
       actions: [],
       meta: {},
       pageType: {},
@@ -127,7 +127,7 @@
         form.load(!this.id ? PagesApi.getEmpty(this.type, this.parent) : PagesApi.getById(this.id)).then(response =>
         {
           this.disabled = !response.meta.canEdit;
-          this.renderer = response.entity ? 'page.' + response.entity.pageTypeAlias : null;
+          this.editor = response.entity ? this.zero.getEditor('pages.' + response.entity.pageTypeAlias)  : null;
           this.model = response.entity;
           this.meta = response.meta;
           this.loading = false;

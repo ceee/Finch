@@ -143,7 +143,7 @@
       {
         opts.hide();
         this.$router.push({
-          name: zero.alias.sections.settings + '-' + zero.alias.settings.applications + '-create'
+          name: zero.alias.settings.applications + '-create'
         });
       },
 
@@ -151,7 +151,7 @@
       {
         opts.hide();
         this.$router.push({
-          name: zero.alias.sections.settings + '-' + zero.alias.settings.applications
+          name: zero.alias.settings.applications
         });
       },
 

@@ -73,7 +73,7 @@
         return !this.$route.params.id && !this.$route.params.type && this.$route.name !== 'recyclebin';
       }
     },
-
+    
 
     mounted()
     {

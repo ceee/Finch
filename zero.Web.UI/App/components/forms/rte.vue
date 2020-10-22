@@ -201,6 +201,12 @@
       {
         margin: 0;
       }
+
+      h3, h2
+      {
+        margin-bottom: .5em;
+        margin-top: 1em;
+      }
     }
 
     .pell-content a, .pell-content a:hover, .pell-content a:visited, .pell-content a:focus

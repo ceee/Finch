@@ -179,10 +179,7 @@ Zero.install = (vue, opts) =>
 
   zero.setup();
 
-  // router mixin
-  Vue.mixin({
-    router: zero.router
-  });
+  console.log('[zero] Setup completed');
 
   // add plugins
   //__zero.plugins.filter(x => !!x.pluginPath).forEach(x =>
@@ -195,7 +192,5 @@ Zero.install = (vue, opts) =>
   //  zero.use(res.default);
   //});
 };
-
-window.XZERO = Zero;
 
 export default Zero;

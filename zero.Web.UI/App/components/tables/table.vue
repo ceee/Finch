@@ -82,14 +82,9 @@
       selected: []
     }),
 
-    created()
-    {
-      this.setup();
-    },
-
     mounted()
     {
-      this.load(true);
+      this.setup();
     },
 
     watch: {
@@ -127,6 +122,7 @@
         this.$nextTick(() =>
         {
           this.loaded = true;
+          this.load(true);
         });
       },
 
@@ -148,15 +144,15 @@
           this.items = result.items;
           this.selected = [];
 
-          //if (!initial && this.configuration.scrollToTop)
-          //{
-          //  let container = document.querySelector('.app-main');
+          if (!initial) //&& this.configuration.scrollToTop)
+          {
+            let container = document.querySelector('.app-main');
 
-          //  if (container)
-          //  {
-          //    this.$nextTick(() => container.scrollTo({ top: 0, behavior: 'smooth' }));
-          //  }
-          //}
+            if (container)
+            {
+              this.$nextTick(() => container.scrollTo({ top: 0, behavior: 'smooth' }));
+            }
+          }
         });
       },
 
