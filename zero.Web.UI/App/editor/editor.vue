@@ -4,6 +4,7 @@
       <ui-tabs class="editor">
         <ui-tab v-if="!tab.disabled(value)" v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :key="index">
           <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value" />
+          <component v-if="tab.component" :is="tab.component" v-model="value" />
         </ui-tab>
       </ui-tabs>
       <editor-aside :editor="editorConfig" :value="value" v-bind="{ infos, activeToggle, nested, isPage }" />
@@ -56,6 +57,10 @@
         type: Boolean,
         default: false
       },
+      onConfigure: {
+        type: Function,
+        default: () => { }
+      },
     },
 
     components: { EditorComponent, EditorAside },
@@ -93,6 +98,8 @@
           fields: this.editorConfig.getFields()
         }];
       }
+
+      this.onConfigure(this);
 
       this.loaded = true;
     },

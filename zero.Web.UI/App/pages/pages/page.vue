@@ -161,12 +161,13 @@
       onEditorConfigure(editor)
       {
         editor.tabs.push({
-          label: '@page.info_tab',
-          name: 'zero.info',
+          alias: 'zero.info',
+          name: '@page.info_tab',
           class: 'is-info is-blank',
-          fields: [],
+          count: value => null,
+          disabled: value => false,
           component: InfoTab,
-          count: () => null
+          fields: []
         });
       },
 

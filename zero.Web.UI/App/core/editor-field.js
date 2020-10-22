@@ -79,6 +79,23 @@ class EditorField
 
 
   /**
+   * Set another editor field as the base for this editor (copies properties)
+   * @param {EditorField} field - Base editor field
+   * @returns {EditorField}
+   */
+  setBase(field)
+  {
+    this.path = field.path;
+    this.options = { ...field.options };
+    this.#preview = { ...field.previewOptions };
+    this.#component = field.component;
+    this.#componentOptions = field.componentOptions;
+    this.#required = field.isRequired;
+    return this;
+  }
+
+
+  /**
    * 
    */
   _setComponent(component, options)

@@ -111,6 +111,19 @@ class Editor
 
 
   /**
+   * Set another editor as the base for this editor (copies fields and tabs)
+   * @param {Editor} editor - Base editor
+   * @returns {Editor}
+   */
+  setBase(editor)
+  {
+    this.fields = editor.fields.map(x => new EditorField(x.path).setBase(x));
+    this.tabs = editor.tabs.map(x => this._createTab(x.alias, x.name, x.disabled, x.count));
+    return this;
+  }
+
+
+  /**
    * Create a new tab instance
    * @returns {EditorTab}
    */
