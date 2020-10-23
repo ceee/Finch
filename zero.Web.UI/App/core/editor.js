@@ -114,7 +114,7 @@ class Editor
    * Removes a field by path name
    * @param {string} path - Model path
    */
-  remove(path)
+  removeField(path)
   {
     const field = this.fields.find(x => x.path === path);
 
@@ -122,6 +122,25 @@ class Editor
     {
       const index = this.fields.indexOf(field);
       this.fields.splice(index, 1);
+    }
+  }
+
+
+  /**
+   * Removes a tab from the editor
+   * @param {EditorTab|string} tab - The tab to remove
+   */
+  removeTab(tab)
+  {
+    const alias = typeof tab === 'object' ? tab.alias : tab;
+    const foundTab = this.tabs.find(x => x.alias === alias);
+
+    if (foundTab != null)
+    {
+      const index = this.tabs.indexOf(foundTab);
+      this.tabs.splice(index, 1);
+
+      this.fields.filter(x => x.tab === alias).forEach(field => this.removeField(field.path));
     }
   }
 
@@ -156,7 +175,7 @@ class Editor
         options.tab = alias;
         return this.field(path, options);
       },
-      remove: path => this.remove(path)
+      removeField: path => this.removeField(path)
     };
   }
 

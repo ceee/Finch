@@ -14,6 +14,9 @@ namespace zero.Core.Entities
     public UrlRoute Route { get; set; }
 
     /// <inheritdoc />
+    public string UrlAlias { get; set; }
+
+    /// <inheritdoc />
     public string ParentId { get; set; }
 
     /// <inheritdoc />
@@ -30,6 +33,11 @@ namespace zero.Core.Entities
   [Collection("Pages")]
   public interface IPage : IZeroEntity, IAppAwareEntity, IZeroDbConventions, IRoutedEntity
   {
+    /// <summary>
+    /// Use this field (when filled out) instead of the alias for URL generation
+    /// </summary>
+    string UrlAlias { get; set; }
+
     /// <summary>
     /// Id of the parent page
     /// </summary>
