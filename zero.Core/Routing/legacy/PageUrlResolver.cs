@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Database.Indexes;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 
 namespace zero.Core.Routing
 {
@@ -44,12 +45,12 @@ namespace zero.Core.Routing
       {
         foreach (IPage parent in parents)
         {
-          stringBuilder.Append(parent.Alias);
+          stringBuilder.Append(GetUrlPart(parent));
           stringBuilder.Append(PATH_SEPARATOR);
         }
       }
 
-      stringBuilder.Append(page.Alias);
+      stringBuilder.Append(GetUrlPart(page));
       stringBuilder.Append(PATH_SEPARATOR);
 
       if (!TRAILING_SLASH)
@@ -62,28 +63,62 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public UrlInfo GetUrl(IApplicationContext context, IPage page, IEnumerable<IPage> parents)
+    public string GetUrl(IPage page, IEnumerable<IPage> parents)
     {
       StringBuilder stringBuilder = new StringBuilder();
+      stringBuilder.Append(PATH_SEPARATOR);
+
+      void AddPart(IPage page)
+      {
+        string part = GetUrlPart(page);
+
+        if (!part.IsNullOrEmpty())
+        {
+          stringBuilder.Append(part);
+          stringBuilder.Append(PATH_SEPARATOR);
+        }
+      }
 
       if (parents != null)
       {
         foreach (IPage parent in parents)
         {
-          stringBuilder.Append(parent.Alias);
-          stringBuilder.Append(PATH_SEPARATOR);
+          AddPart(parent);
         }
       }
 
-      stringBuilder.Append(page.Alias);
-      stringBuilder.Append(PATH_SEPARATOR);
+      AddPart(page);
 
       if (!TRAILING_SLASH)
       {
         stringBuilder.Remove(stringBuilder.Length - 1, 1);
       }
 
-      return new UrlInfo(stringBuilder.ToString(), true, "en-US");
+      return stringBuilder.ToString();
+    }
+
+
+    /// <summary>
+    /// Get the part of the URL (by querying UrlAlias and Alias) for this page
+    /// </summary>
+    protected virtual string GetUrlPart(IPage page)
+    {
+      string alias;
+
+      if (!page.UrlAlias.IsNullOrWhiteSpace())
+      {
+        alias = page.UrlAlias;
+      }
+      else if (!page.Alias.IsNullOrWhiteSpace())
+      {
+        alias = page.Alias;
+      }
+      else
+      {
+        alias = Safenames.Alias(page.Name);
+      }
+
+      return alias.Trim().Trim(PATH_SEPARATOR);
     }
   }
 }

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using zero.Core.Entities;
 
 namespace zero.Core.Routing
 {
   public class PageRoute : IResolvedRoute
   {
-    public PageRoute() { }
-
     public PageRoute(IRoute route)
     {
       Route = route;

@@ -18,6 +18,6 @@ namespace zero.Core.Routing
     /// <summary>
     /// Get URL for a page
     /// </summary>
-    UrlInfo GetUrl(IApplicationContext context, IPage page, IEnumerable<IPage> parents);
+    string GetUrl(IPage page, IEnumerable<IPage> parents);
   }
 }

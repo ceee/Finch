@@ -212,6 +212,7 @@ namespace zero.Core.Api
       model.LastModifiedById = userId;
       model.LastModifiedDate = DateTimeOffset.Now;
       model.CreatedById ??= userId;
+      model.Hash ??= IdGenerator.Create();
 
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
       session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);

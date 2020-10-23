@@ -28,9 +28,9 @@ namespace zero.Core.Routing
     /// </summary>
     public UrlInfo(string text, bool isUrl, string culture)
     {
-      if (text.IsNullOrEmpty())
+      if (text == null)
       {
-        throw new ArgumentException("Value cannot be null or whitespace.", nameof(text));
+        throw new ArgumentException("Value cannot be null.", nameof(text));
       }
       IsUrl = isUrl;
       Text = text;

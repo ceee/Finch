@@ -4,12 +4,9 @@ using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
-using zero.Core.Entities.Messages;
-using zero.Core.Extensions;
 using zero.Core.Messages;
 using zero.Core.Utils;
 
@@ -81,9 +78,7 @@ namespace zero.Core.Routing
 
       foreach (var group in groupedPages)
       {
-        IApplicationContext context = await Context.ForId(group.Key);
-
-        IList<IRoute> routes = TraversePageChildren(context, null, new List<IPage>() { }, group);
+        IList<IRoute> routes = TraversePageChildren(null, new List<IPage>() { }, group);
         allRoutes.AddRange(routes);
       }
 
@@ -91,15 +86,13 @@ namespace zero.Core.Routing
     }
 
 
-    protected IRoute BuildRoute(IApplicationContext context, IPage page, IEnumerable<IPage> parents)
+    protected IRoute BuildRoute(IPage page, IEnumerable<IPage> parents)
     {
-      UrlInfo info = PageUrlResolver.GetUrl(context, page, parents);
-
       IRoute route = new Route()
       {
         Id = String.Concat("routes.", IdGenerator.Create()),
-        AppId = context.AppId,
-        Url = info.IsUrl ? info.Text.EnsureStartsWith('/') : null,
+        AppId = page.AppId,
+        Url = PageUrlResolver.GetUrl(page, parents),
         ProviderAlias = Alias
       };
 
@@ -118,16 +111,16 @@ namespace zero.Core.Routing
     }
 
 
-    IList<IRoute> TraversePageChildren(IApplicationContext context, IPage parent, IEnumerable<IPage> parents, IEnumerable<IPage> allPages)
+    IList<IRoute> TraversePageChildren(IPage parent, IEnumerable<IPage> parents, IEnumerable<IPage> allPages)
     {
       List<IRoute> routes = new List<IRoute>();
       IEnumerable<IPage> currentPages = allPages.Where(x => x.ParentId == parent?.Id);
 
       foreach (IPage page in currentPages)
       {
-        IRoute route = BuildRoute(context, page, parents);
+        IRoute route = BuildRoute(page, parents);
         routes.Add(route);
-        routes.AddRange(TraversePageChildren(context, page, parents.Union(new List<IPage>() { page }), allPages));
+        routes.AddRange(TraversePageChildren(page, parents.Union(new List<IPage>() { page }), allPages));
       }
 
       return routes;

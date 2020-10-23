@@ -25,6 +25,9 @@ namespace zero.Core.Entities
     public bool IsActive { get; set; }
 
     /// <inheritdoc/>
+    public string Hash { get; set; }
+
+    /// <inheritdoc/>
     public string LastModifiedById { get; set; }
 
     /// <inheritdoc/>
@@ -63,6 +66,11 @@ namespace zero.Core.Entities
     /// Whether the entity is visible in the frontend
     /// </summary>
     bool IsActive { get; set; }
+
+    /// <summary>
+    /// Unique hash for this entity (primarily used for routing)
+    /// </summary>
+    string Hash { get; set; }
 
     /// <summary>
     /// Backoffice user who last modified this content
