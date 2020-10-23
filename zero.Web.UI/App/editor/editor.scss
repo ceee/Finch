@@ -170,3 +170,24 @@
   background: transparent;
   min-height: calc(100vh - 100px);
 }
+
+
+/// tabs as boxes
+
+.editor-outer.as-boxes
+{
+  .ui-tabs-list
+  {
+    display: none !important;
+  }
+
+  .ui-tab
+  {
+    display: block !important;
+  }
+
+  .ui-tab:first-child
+  {
+    margin-top: 0;
+  }
+}

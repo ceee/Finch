@@ -18,6 +18,10 @@ class Editor
   tabs = [];
   fields = [];
 
+  options = {
+    boxes: false
+  };
+
 
   constructor(alias, prefix)
   {

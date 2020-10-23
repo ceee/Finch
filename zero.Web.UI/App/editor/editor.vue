@@ -1,8 +1,9 @@
 ﻿<template>
   <div>
-    <div class="editor-outer" v-if="loaded" :class="{ 'has-tabs': hasTabs, '-infos-aside': !nested, 'is-page': isPage }">
+    <div class="editor-outer" v-if="loaded" :class="{ 'has-tabs': hasTabs, '-infos-aside': !nested, 'is-page': isPage, 'as-boxes': asBoxes }">
       <ui-tabs class="editor">
         <ui-tab v-if="!tab.disabled(value)" v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :key="index">
+          <h3 v-if="asBoxes && index > 0" class="ui-headline" v-localize="tab.name"></h3>
           <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value" />
           <component v-if="tab.component" :is="tab.component" v-model="value" />
         </ui-tab>
@@ -69,6 +70,7 @@
       editorConfig: null,
       loaded: false,
       hasTabs: false,
+      asBoxes: false,
       tabs: []
     }),
 
@@ -99,6 +101,7 @@
         }];
       }
 
+      this.asBoxes = this.editorConfig.options.boxes;
       this.onConfigure(this);
 
       this.loaded = true;
