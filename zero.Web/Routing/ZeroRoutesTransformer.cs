@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using System.Threading.Tasks;
+using zero.Core.Api;
 using zero.Core.Routing;
 
 namespace zero.Web.Routing
@@ -9,10 +10,12 @@ namespace zero.Web.Routing
   public class ZeroRoutesTransformer : DynamicRouteValueTransformer
 	{
 		IRoutes Routes;
+		IApplicationContext Context;
 
-		public ZeroRoutesTransformer(IRoutes routes)
+		public ZeroRoutesTransformer(IRoutes routes, IApplicationContext context)
     {
 			Routes = routes;
+			Context = context;
     }
 
 
@@ -27,7 +30,8 @@ namespace zero.Web.Routing
 
 			RouteProviderEndpoint endpoint = Routes.GetEndpoint(route.Route);
 
-			values["route"] = route;
+			values["zero.app"] = await Context.Resolve(httpContext);
+			values["zero.route"] = route;
 			values["controller"] = endpoint.Controller;
 			values["action"] = endpoint.Action;
 
