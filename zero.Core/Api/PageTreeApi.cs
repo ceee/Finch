@@ -30,6 +30,7 @@ namespace zero.Core.Api
         .Query<IPage>()
         .Scope(Scope)
         .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
+        .OrderBy(x => x.Sort)
         .ToListAsync();
 
 

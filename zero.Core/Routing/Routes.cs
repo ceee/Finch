@@ -1,11 +1,16 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
+using Raven.Client.Documents.BulkInsert;
+using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using zero.Core.Api;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 
 namespace zero.Core.Routing
 {
@@ -14,13 +19,15 @@ namespace zero.Core.Routing
     protected IDocumentStore Raven { get; set; }
     protected ILogger<Routes> Logger { get; set; }
     protected IEnumerable<IRouteProvider> Providers { get; set; }
+    protected IApplicationContext Context { get; set; }
 
 
-    public Routes(IDocumentStore raven, ILogger<Routes> logger, IEnumerable<IRouteProvider> providers)
+    public Routes(IDocumentStore raven, ILogger<Routes> logger, IEnumerable<IRouteProvider> providers, IApplicationContext context)
     {
       Raven = raven;
       Logger = logger;
       Providers = providers;
+      Context = context;
     }
 
 
@@ -55,11 +62,28 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public async Task<IResolvedRoute> ResolveUrl(string appId, string path)
     {
+      path = path.Length > 1 ? path.TrimEnd('/') : path;
+
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+
+      string[] pathParts = path.Trim('/').Split('/');
+      string[] parts = new string[pathParts.Length];
+
+      int min = parts.Length;
+      foreach (string pathPart in pathParts)
+      {
+        for (int i = 0; i < min; i++)
+        {
+          parts[i] += '/' + pathPart;
+        }
+        min -= 1;
+      }
 
       IList<IRoute> routes = await session.Query<IRoute>()
         .Where(x => x.AppId == appId)
-        .Where(x => (!x.AllowSuffix && x.Url == path) || (x.AllowSuffix && path.StartsWith(x.Url)))
+        .Where(x => (!x.AllowSuffix && x.Url == path) || (x.AllowSuffix && x.Url.In(parts)))
+        .Include("References[].Id")
+        .Include("Dependencies")
         .ToListAsync();
 
       if (routes.Count > 1)
@@ -76,10 +100,68 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
+    public async Task<IResolvedRoute> ResolveUrl(HttpContext context)
+    {
+      IApplication app = await Context.ResolveFromRequest(context);
+      string path = context.Request.Path;
+
+      return await ResolveUrl(app.Id, path);
+    }
+
+
+    /// <inheritdoc />
     public async Task<IResolvedRoute> ResolveRoute(IRoute route)
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
       return await ResolveRouteInternal(session, route);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<IList<IRoute>> RebuildAllRoutes()
+    {
+      int count = 0;
+      List<IRoute> all = new List<IRoute>();
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      session.Advanced.MaxNumberOfRequestsPerSession = 1000;
+
+      foreach (IRouteProvider provider in Providers)
+      {
+        // get all routes for this provider
+        IList<IRoute> routes = await provider.GetAllRoutes(session);
+
+        // delete all registered routes in the database for this provider
+        await Raven.PurgeAsync<IRoute>($"where {nameof(IRoute.ProviderAlias)} = $alias", new Raven.Client.Parameters()
+        {
+          { "alias", provider.Alias }
+        });
+
+        // store new routes
+        using (BulkInsertOperation bulkInsert = Raven.BulkInsert())
+        {
+          foreach (IRoute route in routes)
+          {
+            await bulkInsert.StoreAsync(route, route.Id);
+            count += 1;
+          }
+        }
+
+        all.AddRange(routes);
+      }
+
+      return all;
+    }
+
+
+    /// <inheritdoc />
+    public RouteProviderEndpoint GetEndpoint(IRoute route)
+    {
+      IRouteProvider routeProvider = FindProvider(route.ProviderAlias);
+      return routeProvider != null ? new RouteProviderEndpoint()
+      {
+        Controller = routeProvider.Controller,
+        Action = routeProvider.Action
+      } : null;
     }
 
 
@@ -88,15 +170,24 @@ namespace zero.Core.Routing
     /// </summary>
     async Task<IResolvedRoute> ResolveRouteInternal(IAsyncDocumentSession session, IRoute route)
     {
-      IRouteProvider routeProvider = Providers.FirstOrDefault(x => x.Alias == route.ProviderAlias);
+      IRouteProvider routeProvider = FindProvider(route.ProviderAlias);
+      return await routeProvider?.ResolveRoute(session, route);
+    }
+
+
+    /// <summary>
+    /// Find registered route provider for the specified alias
+    /// </summary>
+    IRouteProvider FindProvider(string alias)
+    {
+      IRouteProvider routeProvider = Providers.FirstOrDefault(x => x.Alias == alias);
 
       if (routeProvider == null)
       {
-        Logger.LogWarning("Could not locate URL provider {provider}", route.ProviderAlias);
-        return null;
+        Logger.LogWarning("Could not locate URL provider {provider}", alias);
       }
 
-      return await routeProvider.ResolveRoute(session, route);
+      return routeProvider;
     }
   }
 
@@ -129,8 +220,23 @@ namespace zero.Core.Routing
     Task<IResolvedRoute> ResolveUrl(string appId, string path);
 
     /// <summary>
+    /// Resolve an URL from an http context
+    /// </summary>
+    Task<IResolvedRoute> ResolveUrl(HttpContext context);
+
+    /// <summary>
     /// Resolve a route object by passing it to the specified provider
     /// </summary>
     Task<IResolvedRoute> ResolveRoute(IRoute route);
+
+    /// <summary>
+    /// Purges all routes and rebuilds them by iterating over all registered providers
+    /// </summary>
+    Task<IList<IRoute>> RebuildAllRoutes();
+
+    /// <summary>
+    /// Get endpoint the route maps to
+    /// </summary>
+    RouteProviderEndpoint GetEndpoint(IRoute route);
   }
 }

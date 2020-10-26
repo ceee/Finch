@@ -1,5 +1,7 @@
 ﻿using Raven.Client.Documents.Session;
 using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace zero.Core.Routing
@@ -12,7 +14,7 @@ namespace zero.Core.Routing
     Task<IRoute> GetRoute(IAsyncDocumentSession session, T model);
 
     /// <summary>
-    /// Generate non-random route ID for a model
+    /// Generate unique route ID for a model
     /// </summary>
     string GetRouteId(T model);
   }
@@ -23,6 +25,10 @@ namespace zero.Core.Routing
     string Alias { get; }
 
     Type[] AffectedTypes { get; }
+
+    string Controller { get; }
+
+    string Action { get; }
 
     /// <summary>
     /// Resolve a route and load optional dependencies into it.
@@ -36,7 +42,12 @@ namespace zero.Core.Routing
     Task<IRoute> GetRoute(IAsyncDocumentSession session, object model);
 
     /// <summary>
-    /// Generate non-random route ID for a model
+    /// Rebuild all routes for this provider so they can be hydrated into the database
+    /// </summary>
+    Task<IList<IRoute>> GetAllRoutes(IAsyncDocumentSession session);
+
+    /// <summary>
+    /// Generate unique route ID for a model
     /// </summary>
     string GetRouteId(object model);
   }

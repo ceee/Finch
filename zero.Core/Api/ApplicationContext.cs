@@ -29,6 +29,8 @@ namespace zero.Core.Api
 
     protected UserManager<User> UserManager { get; private set; }
 
+    static IList<IApplication> Apps { get; set; }
+
 
 
     public ApplicationContext(IDocumentStore raven, IZeroOptions options, UserManager<User> userManager)
@@ -172,16 +174,24 @@ namespace zero.Core.Api
     }
 
 
+    /// <inheritdoc />
+    public bool IsBackofficeRequest(HttpContext context)
+    {
+      string path = Options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
+      return context.Request.Path.ToString().StartsWith(path);
+    }
+
+
     /// <summary>
     /// Get matching application from an URI
     /// </summary>
-    IApplication ResolveFromUriInternal(Uri uri, IList<Application> apps)
+    IApplication ResolveFromUriInternal(Uri uri, IList<IApplication> apps)
     {
       string[] protocols = new string[3] { "https://", "http://", "//" };
 
       IApplication currentApp = null;
 
-      foreach (Application app in apps)
+      foreach (IApplication app in apps)
       {
         if (app.Domains?.Length < 1)
         {
@@ -221,11 +231,16 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all applications to choose from
     /// </summary>
-    async Task<IList<Application>> GetApplications()
+    async Task<IList<IApplication>> GetApplications()
     {
+      if (Apps != null)
+      {
+        return Apps;
+      }
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<Application>().ToListAsync();
+        Apps = await session.Query<IApplication>().ToListAsync();
+        return Apps;
       }
     }
 
@@ -242,16 +257,6 @@ namespace zero.Core.Api
       string[] appIds = permissions.Where(x => x.IsTrue).Select(x => x.NormalizedKey).ToArray();
 
       return appIds;
-    }
-
-
-    /// <summary>
-    /// Whether the current request is a backoffice request
-    /// </summary>
-    bool IsBackofficeRequest(HttpContext context)
-    {
-      string path = Options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
-      return context.Request.Path.ToString().StartsWith(path);
     }
   }
 
@@ -312,5 +317,10 @@ namespace zero.Core.Api
     /// Creates a new application context for the specified application.
     /// </summary>
     Task<IApplicationContext> ForId(string appId);
+
+    /// <summary>
+    /// Whether the current request is a backoffice request
+    /// </summary>
+    bool IsBackofficeRequest(HttpContext context);
   }
 }

@@ -13,40 +13,22 @@ namespace zero.Core.Routing
   public class PageRouteProvider : AbtractRouteProvider<IPage>
   {
     protected const string REF_KEY = "page";
+    protected const string PAGE_TYPE_KEY = "pageType";
 
     protected ILogger<PageRouteProvider> Logger { get; set; }
 
+    protected IPageUrlBuilder UrlBuilder { get; set; }
 
-    public PageRouteProvider(ILogger<PageRouteProvider> logger) : base("zero.pages")
+
+    public PageRouteProvider(ILogger<PageRouteProvider> logger, IPageUrlBuilder urlBuilder) : base("zero.pages")
     {
       Logger = logger;
-    }
-
-
-    public string GetRouteId(IPage model)
-    {
-      return Alias + "." + model.Hash;
+      UrlBuilder = urlBuilder;
     }
 
 
     /// <inheritdoc />
-    public override async Task<IRoute> GetRoute(IAsyncDocumentSession session, IPage model)
-    {
-      IList<IRoute> routes = await session.Query<IRoute>()
-        .Where(x => x.AppId == model.AppId && x.ProviderAlias == Alias && x.References[0].Collection == REF_KEY && x.References[0].Id == model.Id)
-        .ToListAsync();
-
-      if (routes.Count > 1)
-      {
-        Logger.LogWarning("Multiple routes {routes} were found for page {id}", routes.Select(x => x.Id), model.Id);
-      }
-      else if (routes.Count < 1)
-      {
-        return null;
-      }
-
-      return routes.First();
-    }
+    public override string GetRouteId(IPage model) => ID_PREFIX + model.Hash;
 
 
     /// <inheritdoc />
@@ -76,6 +58,66 @@ namespace zero.Core.Routing
       resolved.Parents = pages.Where(x => x.Key != reference.Id).Select(x => x.Value).ToList();
 
       return resolved;
+    }
+
+
+    /// <inheritdoc />
+    public override async Task<IList<IRoute>> GetAllRoutes(IAsyncDocumentSession session)
+    {
+      IList<IRoute> TraversePageChildren(IPage parent, IEnumerable<IPage> parents, IEnumerable<IPage> allPages)
+      {
+        List<IRoute> routes = new List<IRoute>();
+        IEnumerable<IPage> currentPages = allPages.Where(x => x.ParentId == parent?.Id);
+
+        foreach (IPage page in currentPages)
+        {
+          IRoute route = BuildRoute(page, parents);
+          routes.Add(route);
+          routes.AddRange(TraversePageChildren(page, parents.Union(new List<IPage>() { page }), allPages));
+        }
+
+        return routes;
+      }
+
+      List<IRoute> allRoutes = new List<IRoute>();
+      IList<IPage> pages = await session.Query<IPage>().ToListAsync();
+      IEnumerable<IGrouping<string, IPage>> groupedPages = pages.GroupBy(x => x.AppId);
+
+      foreach (var group in groupedPages)
+      {
+        IList<IRoute> routes = TraversePageChildren(null, new List<IPage>() { }, group);
+        allRoutes.AddRange(routes);
+      }
+
+      return allRoutes;
+    }
+
+
+    /// <summary>
+    /// Build route entity from page
+    /// </summary>
+    protected IRoute BuildRoute(IPage page, IEnumerable<IPage> parents)
+    {
+      IRoute route = new Route()
+      {
+        Id = GetRouteId(page),
+        AppId = page.AppId,
+        Url = UrlBuilder.GetUrl(page, parents),
+        ProviderAlias = Alias
+      };
+
+      route.Params.Add(PAGE_TYPE_KEY, page.PageTypeAlias);
+      route.References.Add(new RouteReference(page.Id, REF_KEY));
+
+      if (parents != null)
+      {
+        foreach (IPage parent in parents)
+        {
+          route.Dependencies.Add(parent.Id);
+        }
+      }
+
+      return route;
     }
   }
 }

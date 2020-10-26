@@ -11,6 +11,7 @@ using VueCliMiddleware;
 using zero.Core.Extensions;
 using zero.Core.Middlewares;
 using zero.Core.Options;
+using zero.Web.Routing;
 
 namespace zero.Web
 {
@@ -62,6 +63,14 @@ namespace zero.Web
 
           // fallbacks for SPA
           endpoints.MapFallbackToController(path + "/{**path}", "Index", "Index");
+        });
+      });
+
+      app.UseWhen(ctx => !ctx.Request.Path.ToString().StartsWith(path), builder =>
+      {
+        app.UseEndpoints(endpoints =>
+        {
+          endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("/{**url}");
         });
       });
 

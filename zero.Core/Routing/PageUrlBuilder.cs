@@ -12,7 +12,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Routing
 {
-  public class PageUrlResolver : IPageUrlResolver
+  public class PageUrlBuilder : IPageUrlBuilder
   {
     const char PATH_SEPARATOR = '/';
 
@@ -21,7 +21,7 @@ namespace zero.Core.Routing
     protected IDocumentStore Raven { get; private set; }
 
 
-    public PageUrlResolver(IDocumentStore raven)
+    public PageUrlBuilder(IDocumentStore raven)
     {
       Raven = raven;
     }
@@ -89,7 +89,7 @@ namespace zero.Core.Routing
 
       AddPart(page);
 
-      if (!TRAILING_SLASH)
+      if (!TRAILING_SLASH && stringBuilder.Length > 1)
       {
         stringBuilder.Remove(stringBuilder.Length - 1, 1);
       }

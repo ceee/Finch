@@ -1,29 +1,43 @@
 ﻿using Raven.Client.Documents.Session;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace zero.Core.Routing
 {
-  public abstract class AbtractRouteProvider<T> : IRouteProvider<T>, IRouteProvider
+  public abstract class AbtractRouteProvider<T> : IRouteProvider<T>
   {
     public virtual string Alias { get; }
 
     public virtual Type[] AffectedTypes { get; }
+
+    public virtual string Controller { get; }
+
+    public virtual string Action { get; }
+
+    public const string ID_PREFIX = "routes.";
+
+    public const char SLASH = '/';
 
 
     public AbtractRouteProvider(string alias)
     {
       Alias = alias;
       AffectedTypes = new Type[1] { typeof(T) }; 
+      Controller = "DefaultRoute";
+      Action = "Index";
     }
 
 
     /// <inheritdoc />
-    public abstract Task<IRoute> GetRoute(IAsyncDocumentSession session, T model);
+    public virtual async Task<IRoute> GetRoute(IAsyncDocumentSession session, T model)
+    {
+      return await session.LoadAsync<IRoute>(GetRouteId(model));
+    }
 
 
     /// <inheritdoc />
-    public async Task<IRoute> GetRoute(IAsyncDocumentSession session, object model)
+    public virtual async Task<IRoute> GetRoute(IAsyncDocumentSession session, object model)
     {
       if (!(model is T))
       {
@@ -42,16 +56,22 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public string GetRouteId(T model)
-    {
-      throw new NotImplementedException();
-    }
+    public abstract Task<IList<IRoute>> GetAllRoutes(IAsyncDocumentSession session);
+
+
+    /// <inheritdoc />
+    public abstract string GetRouteId(T model);
 
 
     /// <inheritdoc />
     public string GetRouteId(object model)
     {
-      throw new NotImplementedException();
+      if (!(model is T))
+      {
+        throw new ArgumentException($"Parameter has to be of type {typeof(T)}", nameof(model));
+      }
+
+      return GetRouteId((T)model);
     }
   }
 }

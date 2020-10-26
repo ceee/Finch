@@ -8,6 +8,7 @@ using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Core.Routing;
 using zero.Core.Validation;
+using zero.Web.Routing;
 using zero.Web.Sections;
 
 namespace zero.Web.Defaults
@@ -89,10 +90,13 @@ namespace zero.Web.Defaults
       services.AddTransient<IModulesApi, ModulesApi>();
       services.AddTransient<IRecycleBinApi, RecycleBinApi>();
 
-      services.AddTransient<IPageUrlResolver, PageUrlResolver>();
+      services.AddScoped<IRoutes, Routes>();
+      services.AddScoped<IPageUrlBuilder, PageUrlBuilder>();
       //services.AddTransient<IUrlProvider, PageUrlProvider>();
-      services.AddTransient<PageUrlProvider>();
-      services.AddTransient<PageUrlProviderTest>();
+      services.AddScoped<IRouteProvider, PageRouteProvider>();
+      services.AddScoped<PageRouteProvider>();
+
+      services.AddScoped<ZeroRoutesTransformer>();
     }
   }
 }

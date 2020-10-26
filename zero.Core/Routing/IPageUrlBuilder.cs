@@ -8,7 +8,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Routing
 {
-  public interface IPageUrlResolver
+  public interface IPageUrlBuilder
   {
     /// <summary>
     /// Get URL for a page
