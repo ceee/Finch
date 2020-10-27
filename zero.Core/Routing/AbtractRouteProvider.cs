@@ -7,13 +7,13 @@ namespace zero.Core.Routing
 {
   public abstract class AbtractRouteProvider<T> : IRouteProvider<T>
   {
-    public virtual string Alias { get; }
+    public virtual string Alias { get; protected set; }
 
-    public virtual Type[] AffectedTypes { get; }
+    public virtual Type[] AffectedTypes { get; protected set; }
 
-    public virtual string Controller { get; }
+    public virtual string Controller { get; protected set; }
 
-    public virtual string Action { get; }
+    public virtual string Action { get; protected set; }
 
     public const string ID_PREFIX = "routes.";
 

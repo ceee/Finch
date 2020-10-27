@@ -66,12 +66,10 @@ namespace zero.Web
         });
       });
 
-      app.UseWhen(ctx => !ctx.Request.Path.ToString().StartsWith(path), builder =>
+
+      app.UseEndpoints(endpoints =>
       {
-        app.UseEndpoints(endpoints =>
-        {
-          endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("/{**url}");
-        });
+        endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}");
       });
 
       return app;
@@ -104,13 +102,11 @@ namespace zero.Web
     }
 
 
-    public static IApplicationBuilder UseZeroDevEnvironment(this IApplicationBuilder app, string path = null)
+    public static IApplicationBuilder UseZeroDevEnvironment(this IApplicationBuilder app)
     {
       //IZeroOptions options = app.ApplicationServices.GetService<IZeroOptions>();
       //string zeroPath = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
 
-
-      //app.UseDeveloperExceptionPage();
 
       //string webUiPath = path ?? Path.Combine(Environment.CurrentDirectory, "..", "zero.Web.UI"); // TODO dynPATH
 
