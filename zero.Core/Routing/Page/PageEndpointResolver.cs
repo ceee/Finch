@@ -9,7 +9,7 @@
     {
       DefaultEndpoint = new RouteProviderEndpoint()
       {
-        Controller = "DefaultRoute",
+        Controller = "ZeroFrontend",
         Action = "Index"
       };
     }

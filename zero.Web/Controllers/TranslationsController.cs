@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
-using zero.Core.Extensions;
 using zero.Core.Identity;
+using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
@@ -11,44 +11,27 @@ namespace zero.Web.Controllers
   public class TranslationsController : BackofficeController
   {
     ITranslationsApi Api;
-    ITranslation Blueprint;
 
-    public TranslationsController(ITranslationsApi api, ITranslation blueprint)
+    public TranslationsController(ITranslationsApi api)
     {
       Api = api;
-      Blueprint = blueprint;
     }
 
 
-    /// <summary>
-    /// Get translation by id
-    /// </summary>  
-    public IActionResult GetEmpty() => Edit(Blueprint.Clone());
+    public EditModel<ITranslation> GetEmpty([FromServices] ITranslation blueprint) => Edit(blueprint);
 
 
-    /// <summary>
-    /// Get translation by id
-    /// </summary>  
-    public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
+    public async Task<EditModel<ITranslation>> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
 
-    /// <summary>
-    /// Get all translations
-    /// </summary>    
-    public async Task<IActionResult> GetAll([FromQuery] ListQuery<ITranslation> query) => Json(await Api.GetByQuery(query));
+    public async Task<ListResult<ITranslation>> GetAll([FromQuery] ListQuery<ITranslation> query) => await Api.GetByQuery(query);
 
 
-    /// <summary>
-    /// Save translation
-    /// </summary>
     [ZeroAuthorize(Permissions.Settings.Translations, PermissionsValue.Update)]
-    public async Task<IActionResult> Save([FromBody] ITranslation model) => Json(await Api.Save(model));
+    public async Task<EntityResult<ITranslation>> Save([FromBody] ITranslation model) => await Api.Save(model);
 
 
-    /// <summary>
-    /// Deletes a translation
-    /// </summary>
     [ZeroAuthorize(Permissions.Settings.Translations, PermissionsValue.Update)]
-    public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
+    public async Task<EntityResult<ITranslation>> Delete([FromQuery] string id) => await Api.Delete(id);
   }
 }

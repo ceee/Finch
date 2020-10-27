@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
@@ -29,15 +30,18 @@ namespace zero.Core.Api
 
     protected UserManager<User> UserManager { get; private set; }
 
+    protected ILogger<ApplicationContext> Logger { get; private set; }
+
     static IList<IApplication> Apps { get; set; }
 
 
 
-    public ApplicationContext(IDocumentStore raven, IZeroOptions options, UserManager<User> userManager)
+    public ApplicationContext(IDocumentStore raven, IZeroOptions options, UserManager<User> userManager, ILogger<ApplicationContext> logger)
     {
       Raven = raven;
       Options = options;
       UserManager = userManager;
+      Logger = logger;
     }
 
 
@@ -62,7 +66,9 @@ namespace zero.Core.Api
 
       if (app == null)
       {
-        throw new NullReferenceException($"Could not resolve application for host {context.Request.Host}");
+        Logger.LogWarning($"Could not resolve application for host $host", context.Request.Host);
+        IList<IApplication> apps = await GetApplications();
+        app = apps.FirstOrDefault();
       }
 
       App = app;
@@ -171,7 +177,7 @@ namespace zero.Core.Api
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
       IApplication app = await session.LoadAsync<Application>(appId);
 
-      return new ApplicationContext(Raven, Options, UserManager)
+      return new ApplicationContext(Raven, Options, UserManager, Logger)
       {
         App = app,
         AppId = appId

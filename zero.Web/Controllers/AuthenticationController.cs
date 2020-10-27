@@ -21,59 +21,29 @@ namespace zero.Web.Controllers
     }
 
 
-    /// <summary>
-    /// Returns the current user
-    /// </summary>
-    public async Task<IActionResult> GetUser()
-    {
-      return Edit(await Api.GetUser());
-    }
+    public async Task<EditModel<User>> GetUser() => Edit(await Api.GetUser());
+
+ 
+    public EntityResult IsLoggedIn() => EntityResult.Maybe(Api.IsLoggedIn());
 
 
-    /// <summary>
-    /// If a user is logged in
-    /// </summary>    
-    public IActionResult IsLoggedIn()
-    {
-      return Json(EntityResult.Maybe(Api.IsLoggedIn()));
-    }
-
-
-    /// <summary>
-    /// Tries a login for a user with username/password
-    /// </summary>
     [HttpPost]
-    public async Task<IActionResult> LoginUser([FromBody] LoginModel model)
-    {
-      EntityResult result = await Api.Login(model.Email, model.Password, model.IsPersistent);
-      return Json(result);
-    }
+    public async Task<EntityResult> LoginUser([FromBody] LoginModel model) => await Api.Login(model.Email, model.Password, model.IsPersistent);
 
 
-    /// <summary>
-    /// Logout for the current user
-    /// </summary>
     [HttpPost, ZeroAuthorize]
-    public async Task<IActionResult> LogoutUser()
+    public async Task<EntityResult> LogoutUser()
     {
       await Api.Logout();
-      return Json(EntityResult.Success());
+      return EntityResult.Success();
     }
 
 
-    /// <summary>
-    /// Try to switch selected application for user
-    /// </summary>
     [HttpPost, ZeroAuthorize]
-    public async Task<IActionResult> SwitchApp(string appId)
+    public async Task<EntityResult> SwitchApp(string appId)
     {
       User user = await Api.GetUser();
-      bool isSuccess = await AppContext.TrySwitchForUser(user, appId);
-
-      return Json(new EntityResult() 
-      { 
-        IsSuccess = isSuccess 
-      });
+      return EntityResult.Maybe(await AppContext.TrySwitchForUser(user, appId));
     }
   }
 }

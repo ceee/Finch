@@ -21,9 +21,6 @@ namespace zero.Web.Controllers
     }
 
 
-    /// <summary>
-    /// Get space by alias
-    /// </summary>
     public IActionResult GetByAlias([FromQuery] string alias)
     {
       if (!CanReadSpace(alias))
@@ -31,23 +28,13 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(403);
       }
 
-      return Json(Api.GetByAlias(alias));
+      return Ok(Api.GetByAlias(alias));
     }
 
 
-    /// <summary>
-    /// Get all spaces
-    /// </summary>
-    public IActionResult GetAll()
-    {
-      IList<Space> spaces = Api.GetAll().Where(space => CanReadSpace(space.Alias)).ToList();
-      return Json(spaces);
-    }
+    public List<Space> GetAll() => Api.GetAll().Where(space => CanReadSpace(space.Alias)).ToList();
 
 
-    /// <summary>
-    /// Get list items in a space
-    /// </summary>    
     public async Task<IActionResult> GetList([FromQuery] string alias, [FromQuery] ListQuery<ISpaceContent> query = null)
     {
       if (!CanReadSpace(alias))
@@ -55,13 +42,10 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(403);
       }
 
-      return Json(await Api.GetListByQuery(alias, query));
+      return Ok(await Api.GetListByQuery(alias, query));
     }
 
 
-    /// <summary>
-    /// Get list items in a space
-    /// </summary>    
     public async Task<IActionResult> GetContent([FromQuery] string alias, [FromQuery] string contentId = null)
     {
       if (!CanReadSpace(alias))
@@ -88,7 +72,7 @@ namespace zero.Web.Controllers
         model.SpaceAlias = space.Alias;
       }
 
-      return Edit(model);
+      return Ok(Edit(model));
     }
 
 
@@ -102,7 +86,7 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(403);
       }
 
-      return Json(await Api.Save(model));
+      return Ok(await Api.Save(model));
     }
 
 
@@ -116,7 +100,7 @@ namespace zero.Web.Controllers
         return new StatusCodeResult(403);
       }
 
-      return Json(await Api.Delete(id));
+      return Ok(await Api.Delete(id));
     }
 
 

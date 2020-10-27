@@ -8,21 +8,23 @@ using zero.Core.Entities;
 using zero.Core.Entities.Setup;
 using zero.Core.Extensions;
 using zero.Core.Identity;
-using zero.Web.Controllers;
+using zero.Core.Options;
 
 namespace zero.Web.Setup
 {
   [ZeroAuthorize(false)]
-  public class SetupController : BackofficeController
+  public class ZeroSetupController : Controller
   {
     ISetupApi Api;
     IWebHostEnvironment Env;
+    IZeroOptions Options;
 
 
-    public SetupController(ISetupApi api, IWebHostEnvironment env)
+    public ZeroSetupController(ISetupApi api, IWebHostEnvironment env, IZeroOptions options)
     {
       Api = api;
       Env = env;
+      Options = options;
     }
 
 
@@ -33,7 +35,7 @@ namespace zero.Web.Setup
         return Redirect(Options.BackofficePath);
       }
 
-      return View("/Views/Setup.cshtml");
+      return View("/Views/Zero/Setup.cshtml");
     }
 
 

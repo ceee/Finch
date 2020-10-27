@@ -17,9 +17,15 @@ export default {
   },
 
   // get all applications
-  getAll(query)
+  getAll()
   {
-    return Axios.get(base + 'getAll', { params: query }).then(res => Promise.resolve(res.data));
+    return Axios.get(base + 'getAll').then(res => Promise.resolve(res.data));
+  },
+
+  // get applications by query
+  getByQuery(query)
+  {
+    return Axios.get(base + 'getByQuery', { params: query }).then(res => Promise.resolve(res.data));
   },
 
   // get all application features

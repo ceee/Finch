@@ -25,26 +25,26 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetUserById(id));
+    public async Task<EditModel<IUser>> GetById([FromQuery] string id) => Edit(await Api.GetUserById(id));
 
 
-    public async Task<IActionResult> GetAll([FromQuery] ListQuery<IUser> query) => Json(await Api.GetByQuery(query));
+    public async Task<ListResult<IUser>> GetAll([FromQuery] ListQuery<IUser> query) => await Api.GetByQuery(query);
 
 
-    public IActionResult GetAllPermissions() => Json(PermissionsApi.GetAll());
+    public IList<PermissionCollection> GetAllPermissions() => PermissionsApi.GetAll();
 
 
-    public async Task<IActionResult> GetForPicker() => Json((await Api.GetAll()).Select(x => new SelectModel()
+    public async Task<IEnumerable<SelectModel>> GetForPicker() => (await Api.GetAll()).Select(x => new SelectModel()
     {
       Id = x.Id,
       Name = x.Name,
       IsActive = x.IsActive
-    }));
+    });
 
 
-    public async Task<IActionResult> GetPreviews(List<string> ids)
+    public async Task<IList<PreviewModel>> GetPreviews(List<string> ids)
     {
-      return JsonPreviews(await Api.GetByIds(ids.ToArray()), item => new PreviewModel()
+      return Previews(await Api.GetByIds(ids.ToArray()), item => new PreviewModel()
       {
         Id = item.Id,
         Icon = item.AvatarId,
@@ -54,7 +54,7 @@ namespace zero.Web.Controllers
 
 
     [ZeroAuthorize]
-    public async Task<IActionResult> UpdatePassword([FromBody] UserPasswordEditModel model)
+    public async Task<EntityResult<IUser>> UpdatePassword([FromBody] UserPasswordEditModel model)
     {
       EntityResult<IUser> result;
 
@@ -73,36 +73,36 @@ namespace zero.Web.Controllers
         }
       }
 
-      return Json(result);
+      return result;
     }
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<IActionResult> Disable([FromBody] IUser model)
+    public async Task<EntityResult<IUser>> Disable([FromBody] IUser model)
     {
       IUser entity = await Api.GetUserById(model.Id);
-      return Json(await Api.Disable(entity));
+      return await Api.Disable(entity);
     }
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<IActionResult> Enable([FromBody] IUser model)
+    public async Task<EntityResult<IUser>> Enable([FromBody] IUser model)
     {
       IUser entity = await Api.GetUserById(model.Id);
-      return Json(await Api.Enable(entity));
+      return await Api.Enable(entity);
     }
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<IActionResult> Save([FromBody] IUser model) => Json(await Api.Save(model));
+    public async Task<EntityResult<IUser>> Save([FromBody] IUser model) => await Api.Save(model);
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
     // TODO do not need settings.users authorization for editing current user profiles
-    public async Task<IActionResult> SaveCurrent([FromBody] IUser model) => Json(await Api.Save(model));
+    public async Task<EntityResult<IUser>> SaveCurrent([FromBody] IUser model) => await Api.Save(model);
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
+    public async Task<EntityResult<IUser>> Delete([FromQuery] string id) => await Api.Delete(id);
   }
 }

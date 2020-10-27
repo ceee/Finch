@@ -7,19 +7,17 @@ namespace zero.Core.Options
 {
   public class BackofficeJsonSerlializerSettings : JsonSerializerSettings
   {
-    public BackofficeJsonSerlializerSettings() : this(false) { }
-
-    public BackofficeJsonSerlializerSettings(bool typed)
+    public BackofficeJsonSerlializerSettings()
     {
-      Setup(this, typed);
+      Setup(this);
     }
 
 
-    public static void Setup(JsonSerializerSettings settings, bool typed = false)
+    public static void Setup(JsonSerializerSettings settings)
     {
       settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-      settings.Converters.Add(new RefJsonConverter());
-      settings.ContractResolver = new ZeroJsonContractResolver();
+      //settings.Converters.Add(new RefJsonConverter());
+      //settings.ContractResolver = new ZeroJsonContractResolver();
       settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
       settings.TypeNameHandling = TypeNameHandling.Objects;
       //settings.SerializationBinder = new ZeroInterfaceBinder();

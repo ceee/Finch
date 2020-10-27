@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
@@ -15,9 +15,9 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<IActionResult> GetChildren(string parent = null, string active = null)
+    public async Task<IList<TreeItem>> GetChildren(string parent = null, string active = null)
     {
-      return Json(await Api.GetChildren(parent, active));
+      return await Api.GetChildren(parent, active);
     }
   }
 }

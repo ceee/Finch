@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Identity;
+using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
@@ -14,35 +16,33 @@ namespace zero.Web.Controllers
   public class CountriesController : BackofficeController
   {
     ICountriesApi Api;
-    ICountry Blueprint;
 
-    public CountriesController(ICountriesApi api, ICountry blueprint)
+    public CountriesController(ICountriesApi api)
     {
       Api = api;
-      Blueprint = blueprint;
     }
 
 
-    public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
+    public async Task<EditModel<ICountry>> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
 
-    public IActionResult GetEmpty() => Edit(Blueprint.Clone());
+    public EditModel<ICountry> GetEmpty([FromServices] ICountry blueprint) => Edit(blueprint);
 
 
-    public async Task<IActionResult> GetAll([FromQuery] ListQuery<ICountry> query) => Json(await Api.GetByQuery("languages.1-A", query)); // TODO correct language
+    public async Task<ListResult<ICountry>> GetAll([FromQuery] ListQuery<ICountry> query) => await Api.GetByQuery("languages.1-A", query); // TODO correct language
 
 
-    public async Task<IActionResult> GetForPicker() => Json((await Api.GetAll("languages.1-A")).Select(x => new SelectModel()
+    public async Task<IEnumerable<SelectModel>> GetForPicker() => (await Api.GetAll("languages.1-A")).Select(x => new SelectModel()
     {
       Id = x.Id,
       Name = x.Name,
       IsActive = x.IsActive
-    }));
+    });
 
 
-    public async Task<IActionResult> GetPreviews(List<string> ids)
+    public async Task<IList<PreviewModel>> GetPreviews(List<string> ids)
     {
-      return JsonPreviews(await Api.GetByIds(ids.ToArray()), item => new PreviewModel()
+      return Previews(await Api.GetByIds(ids.ToArray()), item => new PreviewModel()
       {
         Id = item.Id,
         Icon = "flag flag-" + item.Code.ToLowerInvariant(),
@@ -52,10 +52,10 @@ namespace zero.Web.Controllers
 
 
     [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Update)]
-    public async Task<IActionResult> Save([FromBody] ICountry model) => Json(await Api.Save(model));
+    public async Task<EntityResult<ICountry>> Save([FromBody] ICountry model) => await Api.Save(model);
 
 
     [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Update)]
-    public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
+    public async Task<EntityResult<ICountry>> Delete([FromQuery] string id) => await Api.Delete(id);
   }
 }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
@@ -20,20 +22,20 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
+    public async Task<EditModel<IUserRole>> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
 
-    public async Task<IActionResult> GetAll() => Json(await Api.GetAll());
+    public async Task<IList<IUserRole>> GetAll() => await Api.GetAll();
    
 
-    public IActionResult GetAllPermissions() => Json(PermissionsApi.GetAll());
+    public IList<PermissionCollection> GetAllPermissions() => PermissionsApi.GetAll();
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<IActionResult> Save([FromBody] IUserRole model) => Json(await Api.Save(model));
+    public async Task<EntityResult<IUserRole>> Save([FromBody] IUserRole model) => await Api.Save(model);
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
+    public async Task<EntityResult<IUserRole>> Delete([FromQuery] string id) => await Api.Delete(id);
   }
 }

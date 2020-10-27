@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
-using zero.Core.Identity;
 
 namespace zero.Web.Controllers
 {
@@ -18,14 +14,19 @@ namespace zero.Web.Controllers
       Api = api;
     }
 
-    public async Task<IActionResult> GetByQuery([FromQuery] RecycleBinListQuery query) => Json(await Api.GetByQuery(query));
 
-    public async Task<IActionResult> GetCountByOperation([FromQuery] string operationId) => Json(await Api.GetCountByOperation(operationId));
+    public async Task<ListResult<IRecycledEntity>> GetByQuery([FromQuery] RecycleBinListQuery query) => await Api.GetByQuery(query);
+
+
+    public async Task<int> GetCountByOperation([FromQuery] string operationId) => await Api.GetCountByOperation(operationId);
+
 
     [HttpDelete]
-    public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
+    public async Task<EntityResult<IRecycledEntity>> Delete([FromQuery] string id) => await Api.Delete(id);
+
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteByGroup([FromQuery] string group) => Json(await Api.DeleteByGroup(group));
+    public async Task<EntityResult<IRecycledEntity>> DeleteByGroup([FromQuery] string group) => await Api.DeleteByGroup(group);
+
   }
 }

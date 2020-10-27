@@ -31,32 +31,32 @@ namespace zero.Web.Controllers
     }
 
   
-    public async Task<IActionResult> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
+    public async Task<EditModel<IMedia>> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
 
-    public async Task<IActionResult> GetByIds([FromQuery] string[] ids) => Json(await Api.GetById(ids));
+    public async Task<Dictionary<string, IMedia>> GetByIds([FromQuery] string[] ids) => await Api.GetById(ids);
 
 
-    public async Task<IActionResult> GetListByQuery([FromQuery] MediaListItemQuery query) => Json(await Api.GetListByQuery(query));
+    public async Task<ListResult<MediaListItem>> GetListByQuery([FromQuery] MediaListItemQuery query) => await Api.GetListByQuery(query);
 
 
-    public async Task<IActionResult> Save([FromBody] IMedia model) => Json(await Api.Save(model));
+    public async Task<EntityResult<IMedia>> Save([FromBody] IMedia model) => await Api.Save(model);
 
 
-    public async Task<IActionResult> Upload(IFormFile file, string folderId) => Json(await Api.Save(await Api.Upload(file, folderId)));
+    public async Task<EntityResult<IMedia>> Upload(IFormFile file, string folderId) => await Api.Save(await Api.Upload(file, folderId));
 
 
-    public async Task<IActionResult> UploadTemporary(IFormFile file, string folderId) => Json(await Api.Upload(file, folderId));
+    public async Task<Media> UploadTemporary(IFormFile file, string folderId) => await Api.Upload(file, folderId);
 
 
-    public async Task<IActionResult> Delete([FromQuery] string id) => Json(await Api.Delete(id));
+    public async Task<EntityResult<IMedia>> Delete([FromQuery] string id) => await Api.Delete(id);
 
 
     [HttpPost]
-    public async Task<IActionResult> Move([FromBody] ActionCopyModel model) => Json(await Api.Move(model.Id, model.DestinationId));
+    public async Task<EntityResult<IMedia>> Move([FromBody] ActionCopyModel model) => await Api.Move(model.Id, model.DestinationId);
 
 
-    public async Task<IActionResult> GetAll([FromQuery] MediaListQuery query)
+    public async Task<MediaListResultModel> GetAll([FromQuery] MediaListQuery query)
     {
       ListResult<MediaListModel> items = (await Api.GetByQuery(query)).MapTo(x => new MediaListModel()
       {
@@ -77,7 +77,7 @@ namespace zero.Web.Controllers
         hierarchy = await MediaFolderApi.GetHierarchy(query.FolderId);
       }   
 
-      return Json(new MediaListResultModel(items, null, folder, hierarchy));
+      return new MediaListResultModel(items, null, folder, hierarchy);
     }
 
 

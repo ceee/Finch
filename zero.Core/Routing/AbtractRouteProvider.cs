@@ -25,7 +25,7 @@ namespace zero.Core.Routing
       AffectedTypes = new Type[1] { typeof(T) };
       DefaultEndpoint = new RouteProviderEndpoint()
       {
-        Controller = "DefaultRoute",
+        Controller = "ZeroFrontend",
         Action = "Index"
       };
     }

@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Utils;
+using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
@@ -17,11 +18,13 @@ namespace zero.Web.Controllers
     }
 
 
-    public IActionResult GetModuleTypes([FromQuery] string[] tags = default) => Json(Api.GetModuleTypes(tags));
+    public IList<ModuleType> GetModuleTypes([FromQuery] string[] tags = default) => Api.GetModuleTypes(tags);
  
-    public IActionResult GetModuleType([FromQuery] string alias) => Json(Api.GetModuleType(alias));
 
-    public IActionResult GetEmpty(string alias)
+    public ModuleType GetModuleType([FromQuery] string alias) => Api.GetModuleType(alias);
+
+
+    public EditModel<IModule> GetEmpty(string alias)
     {
       ModuleType moduleType = Api.GetModuleType(alias);
       IModule module = Activator.CreateInstance(moduleType.ContentType) as IModule;

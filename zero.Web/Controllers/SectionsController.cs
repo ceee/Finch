@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
 using zero.Core.Api;
+using zero.Core.Entities;
 
 namespace zero.Web.Controllers
 {
@@ -13,9 +14,6 @@ namespace zero.Web.Controllers
     }
 
 
-    public IActionResult GetAll()
-    {
-      return Json(Api.GetAll());
-    }
+    public IReadOnlyCollection<ISection> GetAll() => Api.GetAll();
   }
 }

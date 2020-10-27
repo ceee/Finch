@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
@@ -28,7 +27,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Get all settings areas
     /// </summary>    
-    public async Task<IActionResult> GetAreas()
+    public async Task<dynamic> GetAreas()
     {
       bool isSuperUser = AuthApi.IsSuper();
       IList<Permission> permissions = AuthApi.GetPermissions(Permissions.Settings.PREFIX);
@@ -75,11 +74,11 @@ namespace zero.Web.Controllers
         applications = await ApplicationsApi.GetAll();
       }
 
-      return Json(new
+      return new
       {
         groups,
         applications
-      });
+      };
     }
   }
 }

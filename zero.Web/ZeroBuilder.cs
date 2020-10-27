@@ -1,8 +1,10 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -24,6 +26,7 @@ using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Core.Utils;
 using zero.Core.Validation;
+using zero.Web.Controllers;
 using zero.Web.Defaults;
 using zero.Web.Filters;
 
@@ -45,10 +48,7 @@ namespace zero.Web
     public ZeroBuilder(IServiceCollection services, IConfiguration configuration, Action<IZeroStartupOptions> setupAction)
     {
       Services = services;
-      Mvc = services.AddMvc(opts =>
-      {
-        //opts.ModelBinderProviders.Insert(0, new ZeroEntityInterfaceBinderProvider());
-      });
+      Mvc = services.AddMvc();
       Configuration = configuration;
 
       // create startup options
@@ -80,16 +80,18 @@ namespace zero.Web
 
 
       // configure MVC
+      Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, ZeroBuilderMvcOptions>());
+
       Mvc.AddNewtonsoftJson(x =>
       {
         // TODO this shall only be configurated for backoffice controllers
-        BackofficeJsonSerlializerSettings.Setup(x.SerializerSettings, true);
+        BackofficeJsonSerlializerSettings.Setup(x.SerializerSettings);
       });
 
       if (Environment.GetEnvironmentVariable("DOTNET_WATCH") == "1")
       {
         Mvc.AddRazorRuntimeCompilation();
-      }
+      } 
 
       // configure Raven + Identity
       ConfigureDatabase();
@@ -252,6 +254,22 @@ namespace zero.Web
       catch
       {
         throw new Exception($"Plugin \"{nameof(T)}\" needs an additional parameterless constructor as ConfigureServices() is called before the DI container is built");
+      }
+    }
+
+
+    class ZeroBuilderMvcOptions : IConfigureOptions<MvcOptions>
+    {
+      IZeroOptions Options { get; set; }
+
+      public ZeroBuilderMvcOptions(IZeroOptions options)
+      {
+        Options = options;
+      }
+
+      public void Configure(MvcOptions options)
+      {
+        options.Conventions.Add(new ZeroBackofficeControllerModelConvention(Options.BackofficePath));
       }
     }
   }

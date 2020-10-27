@@ -16,7 +16,9 @@ namespace zero.Web.Controllers
 {
   [ZeroAuthorize]
   [ServiceFilter(typeof(ModelStateValidationFilterAttribute))]
-  public abstract class BackofficeController : Controller
+  [ApiController]
+  [Route("getsreplaced/[controller]/[action]")]
+  public abstract class BackofficeController : ControllerBase
   {
     IZeroOptions _options;
     IToken _token;
@@ -29,15 +31,9 @@ namespace zero.Web.Controllers
 
 
     /// <summary>
-    /// Creates a Microsoft.AspNetCore.Mvc.JsonResult object that serializes the specified data object to JSON.
-    /// </summary>
-    public JsonResult Json(object data, bool typed) => Json(data);
-
-
-    /// <summary>
     /// Creates an edit model with appropriate options and permissions
     /// </summary>
-    public IActionResult Edit<T>(T data, bool typed = true, Action<EditModel<T>> transform = null) where T : IZeroIdEntity
+    public EditModel<T> Edit<T>(T data, bool typed = true, Action<EditModel<T>> transform = null) where T : IZeroIdEntity
     {
       Type type = typeof(T);
       bool canBeShared = AppAwareShareableType.IsAssignableFrom(type);
@@ -46,7 +42,7 @@ namespace zero.Web.Controllers
 
       if (data == null)
       {
-        return NotFound();
+        return null;
       }
 
       EditModel<T> model = new EditModel<T>();
@@ -61,14 +57,14 @@ namespace zero.Web.Controllers
 
       transform?.Invoke(model);
 
-      return Json(model, typed);
+      return model;
     }
 
 
     /// <summary>
     /// Creates an edit model with appropriate options and permissions
     /// </summary>
-    public IActionResult Edit<T, TWrapper>(TWrapper data, bool typed = true, Action<EditModel<T>> transform = null) 
+    public TWrapper Edit<T, TWrapper>(TWrapper data, bool typed = true, Action<EditModel<T>> transform = null) 
       where T : IZeroIdEntity
       where TWrapper : EditModel<T>, new() 
     {
@@ -87,11 +83,11 @@ namespace zero.Web.Controllers
 
       transform?.Invoke(data);
 
-      return Json(data, typed);
+      return data;
     }
 
 
-    public IActionResult JsonPreviews<T>(Dictionary<string, T> items, Func<T, PreviewModel> transform)
+    public IList<PreviewModel> Previews<T>(Dictionary<string, T> items, Func<T, PreviewModel> transform)
     {
       IList<PreviewModel> previews = new List<PreviewModel>();
 
@@ -116,12 +112,12 @@ namespace zero.Web.Controllers
         }
       }
 
-      return Json(previews);
+      return previews;
     }
 
 
 
-    public async Task<IActionResult> JsonPreviews<T>(Dictionary<string, T> items, Func<T, Task<PreviewModel>> transform)
+    public async Task<IList<PreviewModel>> Previews<T>(Dictionary<string, T> items, Func<T, Task<PreviewModel>> transform)
     {
       IList<PreviewModel> previews = new List<PreviewModel>();
 
@@ -146,7 +142,7 @@ namespace zero.Web.Controllers
         }
       }
 
-      return Json(previews);
+      return previews;
     }
 
 

@@ -6,9 +6,9 @@ using zero.Core.Routing;
 
 namespace zero.Web.Controllers
 {
-  public class DefaultRouteController : ZeroController<PageRoute>
+  public class ZeroFrontendController : ZeroController<PageRoute>
   {
-    public DefaultRouteController()
+    public ZeroFrontendController()
     {
     }
 

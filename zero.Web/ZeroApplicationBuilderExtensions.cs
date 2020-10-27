@@ -40,21 +40,21 @@ namespace zero.Web
         builder.UseEndpoints(endpoints =>
         {
           // setup route
-          endpoints.MapControllerRoute(
-            name: "setup",
-            pattern: path + "/setup",
-            defaults: new
-            {
-              controller = "Setup",
-              action = "Index"
-            }
-          );
+          //endpoints.MapControllerRoute(
+          //  name: "setup",
+          //  pattern: path + "/setup",
+          //  defaults: new
+          //  {
+          //    controller = "ZeroSetup",
+          //    action = "Index"
+          //  }
+          //);
 
-          // routes for API
-          endpoints.MapControllerRoute(
-            name: "api",
-            pattern: path + "/api/{controller}/{action}/{id?}"
-          );
+          //// routes for API
+          //endpoints.MapControllerRoute(
+          //  name: "api",
+          //  pattern: path + "/api/{controller}/{action}/{id?}"
+          //);
 
           if (devPath != null)
           {
@@ -62,7 +62,7 @@ namespace zero.Web
           }
 
           // fallbacks for SPA
-          endpoints.MapFallbackToController(path + "/{**path}", "Index", "Index");
+          endpoints.MapFallbackToController(path + "/{**path}", "Index", "ZeroBackoffice");
         });
       });
 
