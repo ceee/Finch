@@ -26,9 +26,10 @@ namespace zero.Core.Routing
 
     Type[] AffectedTypes { get; }
 
-    string Controller { get; }
-
-    string Action { get; }
+    /// <summary>
+    /// Map a route to an MVC endpoint
+    /// </summary>
+    RouteProviderEndpoint MapEndpoint(IResolvedRoute route);
 
     /// <summary>
     /// Resolve a route and load optional dependencies into it.

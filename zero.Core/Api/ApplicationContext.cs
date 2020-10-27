@@ -60,6 +60,11 @@ namespace zero.Core.Api
         app = await ResolveFromRequest(context);
       }
 
+      if (app == null)
+      {
+        throw new NullReferenceException($"Could not resolve application for host {context.Request.Host}");
+      }
+
       App = app;
       AppId = app?.Id;
 

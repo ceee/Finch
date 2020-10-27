@@ -92,6 +92,7 @@ namespace zero.Web.Defaults
 
       services.AddScoped<IRoutes, Routes>();
       services.AddScoped<IPageUrlBuilder, PageUrlBuilder>();
+      services.AddScoped<IPageEndpointResolver, PageEndpointResolver>();
       //services.AddTransient<IUrlProvider, PageUrlProvider>();
       services.AddScoped<IRouteProvider, PageRouteProvider>();
       services.AddScoped<PageRouteProvider>();

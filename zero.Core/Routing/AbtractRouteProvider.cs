@@ -11,21 +11,32 @@ namespace zero.Core.Routing
 
     public virtual Type[] AffectedTypes { get; protected set; }
 
-    public virtual string Controller { get; protected set; }
-
-    public virtual string Action { get; protected set; }
-
     public const string ID_PREFIX = "routes.";
 
     public const char SLASH = '/';
+
+    protected RouteProviderEndpoint DefaultEndpoint { get; set; }
+
 
 
     public AbtractRouteProvider(string alias)
     {
       Alias = alias;
-      AffectedTypes = new Type[1] { typeof(T) }; 
-      Controller = "DefaultRoute";
-      Action = "Index";
+      AffectedTypes = new Type[1] { typeof(T) };
+      DefaultEndpoint = new RouteProviderEndpoint()
+      {
+        Controller = "DefaultRoute",
+        Action = "Index"
+      };
+    }
+
+
+    /// <summary>
+    /// Map a route to an MVC endpoint
+    /// </summary>
+    public virtual RouteProviderEndpoint MapEndpoint(IResolvedRoute route)
+    {
+      return DefaultEndpoint;
     }
 
 

@@ -19,11 +19,25 @@ namespace zero.Core.Routing
 
     protected IPageUrlBuilder UrlBuilder { get; set; }
 
+    protected IPageEndpointResolver EndpointResolver { get; set; }
 
-    public PageRouteProvider(ILogger<PageRouteProvider> logger, IPageUrlBuilder urlBuilder) : base("zero.pages")
+
+    public PageRouteProvider(ILogger<PageRouteProvider> logger, IPageUrlBuilder urlBuilder, IPageEndpointResolver endpointResolver) : base("zero.pages")
     {
       Logger = logger;
       UrlBuilder = urlBuilder;
+      EndpointResolver = endpointResolver;
+    }
+
+
+    /// <inheritdoc />
+    public override RouteProviderEndpoint MapEndpoint(IResolvedRoute route)
+    {
+      if (!(route is PageRoute))
+      {
+        return base.MapEndpoint(route);
+      }
+      return EndpointResolver.GetEndpoint(route as PageRoute);
     }
 
 

@@ -102,7 +102,7 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public async Task<IResolvedRoute> ResolveUrl(HttpContext context)
     {
-      IApplication app = await Context.ResolveFromRequest(context);
+      IApplication app = await Context.Resolve(context);
       string path = context.Request.Path;
 
       return await ResolveUrl(app.Id, path);
@@ -154,14 +154,10 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public RouteProviderEndpoint GetEndpoint(IRoute route)
+    public RouteProviderEndpoint MapEndpoint(IResolvedRoute route)
     {
-      IRouteProvider routeProvider = FindProvider(route.ProviderAlias);
-      return routeProvider != null ? new RouteProviderEndpoint()
-      {
-        Controller = routeProvider.Controller,
-        Action = routeProvider.Action
-      } : null;
+      IRouteProvider routeProvider = FindProvider(route.Route.ProviderAlias);
+      return routeProvider?.MapEndpoint(route);
     }
 
 
@@ -237,6 +233,6 @@ namespace zero.Core.Routing
     /// <summary>
     /// Get endpoint the route maps to
     /// </summary>
-    RouteProviderEndpoint GetEndpoint(IRoute route);
+    RouteProviderEndpoint MapEndpoint(IResolvedRoute route);
   }
 }
