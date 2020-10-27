@@ -24,8 +24,8 @@
     {
       ApplicationsApi.getAll().then(response =>
       {
-        this.apps = response.items;
-        this.count = response.totalItems;
+        this.apps = response;
+        this.count = response.length;
       });
     }
   }
