@@ -10,7 +10,6 @@ import Users from './users.vue';
 import User from './user.vue';
 import UserRole from './role.vue';
 import Translations from './translations.vue';
-import Translation from './translation.vue';
 
 const alias = __zero.alias.sections.settings;
 const section = __zero.sections.find(x => x.alias === alias);
@@ -95,7 +94,7 @@ if (section)
 
   addArea(__zero.alias.settings.languages, Languages, Language, true);
 
-  addArea(__zero.alias.settings.translations, Translations, Translation, true);
+  addArea(__zero.alias.settings.translations, Translations, Translations, true);
 
   addArea(__zero.alias.settings.users, Users, User, true, area =>
   {

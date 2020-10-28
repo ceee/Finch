@@ -10,6 +10,7 @@ using zero.Core.Routing;
 using zero.Core.Validation;
 using zero.Web.Routing;
 using zero.Web.Sections;
+using zero.Web.ViewHelpers;
 
 namespace zero.Web.Defaults
 {
@@ -98,6 +99,9 @@ namespace zero.Web.Defaults
       services.AddScoped<PageRouteProvider>();
 
       services.AddScoped<ZeroRoutesTransformer>();
+
+      services.AddScoped<IZeroViewContext, ZeroViewContext>();
+      services.AddScoped<IZeroMediaHelper, ZeroMediaHelper>();
     }
   }
 }
