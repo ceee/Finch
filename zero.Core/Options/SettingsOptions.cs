@@ -1,4 +1,5 @@
-﻿using zero.Core.Entities;
+﻿using System.Linq;
+using zero.Core.Entities;
 
 namespace zero.Core.Options
 {
@@ -38,15 +39,21 @@ namespace zero.Core.Options
 
     public void AddToDefaultGroup(SettingsArea item, int index = -1)
     {
-      // TODO find default group
-      //if (index > -1 && index < Items.Count)
-      //{
-      //  Items.Insert(index, item);
-      //}
-      //else
-      //{
-      //  Items.Add(item);
-      //}
+      SettingsGroup group = Items.FirstOrDefault(x => x.Name == "@settings.groups.system");
+
+      if (group == null)
+      {
+        return;
+      }
+
+      if (index > -1 && index < group.Items.Count)
+      {
+        group.Items.Insert(index, item);
+      }
+      else
+      {
+        group.Items.Add(item);
+      }
     }
   }
 }
