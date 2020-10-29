@@ -16,6 +16,7 @@ import DatePicker from '../editor/fields/datepicker.vue';
 import DateRangePicker from '../editor/fields/daterangepicker.vue';
 import IconPicker from '../editor/fields/iconPicker.vue';
 import LanguagePicker from '../editor/fields/language.vue';
+import PagePicker from '../editor/fields/pagepicker.vue';
 import InputList from '../editor/fields/inputlist.vue';
 import Media from '../editor/fields/media.vue';
 import Modules from '../editor/fields/modules.vue';
@@ -348,6 +349,18 @@ class EditorField
   iconPicker(icons)
   {
     return this._setComponent(IconPicker, { icons });
+  }
+
+
+  /**
+   * Renders a page picker
+   * @param {object} [options] - Custom options
+   * @param {number} [options.limit=1] - Limit of selection
+   * @returns {EditorField}
+   */
+  pagePicker(options)
+  {
+    return this._setComponent(PagePicker, { ...options });
   }
 
 

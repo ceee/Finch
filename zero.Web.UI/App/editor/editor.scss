@@ -11,6 +11,13 @@
   {
     padding-top: 0;
   }
+
+  .ui-tab > h3
+  {
+    border-bottom: 1px solid var(--color-line);
+    padding-bottom: var(--padding-m);
+    margin-bottom: var(--padding);
+  }
 }
 
 .editor-outer
@@ -187,6 +194,11 @@
   }
 
   .ui-tab:first-child
+  {
+    margin-top: 0;
+  }
+
+  .editor-infos
   {
     margin-top: 0;
   }

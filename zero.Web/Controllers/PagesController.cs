@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
@@ -53,6 +54,25 @@ namespace zero.Web.Controllers
       model.ParentId = parent;
 
       return Edit(model);
+    }
+
+
+    public async Task<IList<PreviewModel>> GetPreviews([FromQuery] List<string> ids)
+    {
+      IReadOnlyCollection<PageType> pageTypes = Options.Pages.GetAllItems();
+
+      return Previews(await Api.GetByIds(ids.ToArray()), item =>
+      {
+        PageType pageType = pageTypes.FirstOrDefault(x => x.Alias == item.PageTypeAlias);
+
+        return new PreviewModel()
+        {
+          Id = item.Id,
+          Icon = pageType?.Icon ?? "fth-folder",
+          Name = item.Name,
+          //Text = item.
+        };
+      });
     }
 
 

@@ -374,7 +374,6 @@
     "name": "Page",
     "type": "Type",
     "root": "Root",
-
     "info_tab": "Info",
 
     "overview": {
@@ -407,6 +406,10 @@
 
     "preview": {
       "title": "Preview"
+    },
+
+    "picker": {
+      "headline": "Select a page"
     }
   },
 

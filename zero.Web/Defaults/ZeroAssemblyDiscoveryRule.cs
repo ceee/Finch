@@ -8,7 +8,6 @@ namespace zero.Web.Defaults
   {
     const string ZERO_PREFIX = "zero.";
 
-
     /// <inheritdoc />
     public bool IsValid(RuntimeLibrary library, AssemblyDiscoveryContext context)
     {

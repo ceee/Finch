@@ -37,6 +37,13 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public async Task<Dictionary<string, IPage>> GetByIds(params string[] ids)
+    {
+      return await GetByIds<IPage>(ids);
+    }
+
+
+    /// <inheritdoc />
     public IList<PageType> GetPageTypes()
     {
       return Options.Pages.GetAllItems().ToList();
@@ -356,6 +363,11 @@ namespace zero.Core.Api
     /// Get page by Id
     /// </summary>
     Task<IPage> GetById(string id);
+
+    /// <summary>
+    /// Get pages by ids
+    /// </summary>
+    Task<Dictionary<string, IPage>> GetByIds(params string[] ids);
 
     /// <summary>
     /// Get all available page types
