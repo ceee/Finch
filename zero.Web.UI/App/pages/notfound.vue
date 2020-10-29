@@ -60,8 +60,6 @@
         this.path = this.$router.options.base + this.$route.path.substring(1);
         this.routes = [];
 
-        console.info(this.$router.options.routes);
-
         this.$router.options.routes.forEach(route =>
         {
           this.routes.push({

@@ -15,6 +15,11 @@ namespace zero.Web.ViewHelpers
 
     IMediaApi MediaApi;
 
+    /// <summary>
+    /// Media cache for repetitive queries within an HTTP request
+    /// </summary>
+    Dictionary<string, IMedia> Cache { get; set; } = new Dictionary<string, IMedia>();
+
 
     public ZeroMediaHelper(IHttpContextAccessor httpContextAccessor, IMediaApi mediaApi)
     {
@@ -30,14 +35,47 @@ namespace zero.Web.ViewHelpers
       {
         return null;
       }
-      return await MediaApi.GetById(id);
+
+      if (!Cache.TryGetValue(id, out IMedia media))
+      {
+        media = await MediaApi.GetById(id);
+        Cache.Add(id, media);
+      }
+
+      return media;
     }
 
 
     /// <inheritdoc />
     public async Task<Dictionary<string, IMedia>> GetByIds(string[] ids)
     {
-      return await MediaApi.GetById(ids);
+      HashSet<string> remoteIds = new HashSet<string>();
+      Dictionary<string, IMedia> items = new Dictionary<string, IMedia>();
+
+      foreach (string id in ids)
+      {
+        if (Cache.TryGetValue(id, out IMedia media))
+        {
+          items.Add(id, media);
+        }
+        else
+        {
+          remoteIds.Add(id);
+        }
+      }
+
+      if (remoteIds.Count > 0)
+      {
+        Dictionary<string, IMedia> remoteItems = await MediaApi.GetById(remoteIds);
+
+        foreach (var item in remoteItems)
+        {
+          items.Add(item.Key, item.Value);
+          Cache.Add(item.Key, item.Value);
+        }
+      }
+
+      return items;
     }
 
 
