@@ -1,8 +1,9 @@
 ﻿import Localization from 'zero/services/localization';
+import { isArray as _isArray } from 'underscore';
 
 
 // set meta title before routing
-const beforeEach = () => (to, from, next) =>
+const beforeEach = (to, from, next) =>
 {
   let isGuarded = false;
 
@@ -10,23 +11,38 @@ const beforeEach = () => (to, from, next) =>
   let callback = () =>
   {
     let title = Localization.localize('@zero.name');
+    let name = to.meta.name;
 
-    if (to.meta.name && to.meta.alias !== __zero.alias.sections.dashboard)
+    if (!name && to.matched.length > 1)
     {
-      let name = to.meta.name;
-      let nameParts = _isArray(name) ? name : [name];
-      let translations = [];
-
-      nameParts.forEach(part =>
+      to.matched.forEach(route =>
       {
-        if (part)
+        if (!name && route.meta.name)
         {
-          translations.push(Localization.localize(part));
+          name = route.meta.name;
         }
       });
-
-      title += ': ' + translations.join(' - ');
     }
+
+    if (!name || to.meta.alias === __zero.alias.sections.dashboard)
+    {
+      document.title = title;
+      next();
+      return;
+    }
+
+    let nameParts = _isArray(name) ? name : [name];
+    let translations = [];
+
+    nameParts.forEach(part =>
+    {
+      if (part)
+      {
+        translations.push(Localization.localize(part));
+      }
+    });
+
+    title += ': ' + translations.join(' - ');
 
     document.title = title;
 
@@ -67,7 +83,7 @@ export default {
   base: __zero.path,
   linkActiveClass: 'is-active',
   linkExactActiveClass: 'is-active-exact',
-  //beforeEach: beforeEach,
+  beforeEach: beforeEach,
   scrollBehavior(to, from, savedPosition)
   {
     return savedPosition ? savedPosition : { x: 0, y: 0 };

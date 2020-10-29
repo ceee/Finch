@@ -33,7 +33,7 @@ const addArea = (areaAlias, component, detailComponent, hasCreate, postCreate) =
     path: area.url,
     component: component,
     meta: {
-      name: [area.name, section.name]
+      name: area.name
     }
   });
 
@@ -46,7 +46,7 @@ const addArea = (areaAlias, component, detailComponent, hasCreate, postCreate) =
       component: detailComponent,
       meta: {
         create: true,
-        name: [area.name, section.name]
+        name: area.name
       }
     });
   }
@@ -59,7 +59,7 @@ const addArea = (areaAlias, component, detailComponent, hasCreate, postCreate) =
       props: true,
       component: detailComponent,
       meta: {
-        name: [area.name, section.name]
+        name: area.name
       }
     });
   }
@@ -105,7 +105,7 @@ if (section)
       component: UserRole,
       meta: {
         create: true,
-        name: [area.name, section.name]
+        name: area.name
       }
     });
 
@@ -115,7 +115,7 @@ if (section)
       props: true,
       component: UserRole,
       meta: {
-        name: [area.name, section.name]
+        name: area.name
       }
     });
   });

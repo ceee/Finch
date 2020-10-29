@@ -75,10 +75,10 @@ class Zero
       routes: this.#routes
     });
 
+    this.#router.beforeEach(routerConfig.beforeEach);
+
     //const result = await Axios.get('zerovue/config');
     //this.config = { ...this.config, ...result.data };
-
-    //console.info(this.#vue.router);
 
     this.#setupDone = true;
     //EventHub.$emit('zero.setup');

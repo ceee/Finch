@@ -66,7 +66,7 @@ namespace zero.Core.Api
 
       if (app == null)
       {
-        Logger.LogWarning($"Could not resolve application for host $host", context.Request.Host);
+        Logger.LogWarning("Could not resolve application for host {host}", context.Request.Host);
         IList<IApplication> apps = await GetApplications();
         app = apps.FirstOrDefault();
       }

@@ -27,6 +27,11 @@ module.exports = {
     app: "app.js"
   },
 
+  devServer: {
+    sockPath: '/zero/vue-cli/sockjs-node',
+    public: 'http://localhost:2310/zero/vue-cli'
+  },
+
   // webpack configuration
   chainWebpack: config =>
   {
