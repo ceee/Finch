@@ -42,7 +42,7 @@ namespace zero.Web.Controllers
     });
 
 
-    public async Task<IList<PreviewModel>> GetPreviews(List<string> ids)
+    public async Task<IList<PreviewModel>> GetPreviews([FromQuery] List<string> ids)
     {
       return Previews(await Api.GetByIds(ids.ToArray()), item => new PreviewModel()
       {

@@ -42,15 +42,14 @@ namespace zero.Web.Controllers
 
     public async Task<EntityResult<IMedia>> Save([FromBody] IMedia model) => await Api.Save(model);
 
-
+    [HttpPost]
     public async Task<EntityResult<IMedia>> Upload(IFormFile file, string folderId) => await Api.Save(await Api.Upload(file, folderId));
 
-
+    [HttpPost]
     public async Task<Media> UploadTemporary(IFormFile file, string folderId) => await Api.Upload(file, folderId);
 
-
+    [HttpDelete]
     public async Task<EntityResult<IMedia>> Delete([FromQuery] string id) => await Api.Delete(id);
-
 
     [HttpPost]
     public async Task<EntityResult<IMedia>> Move([FromBody] ActionCopyModel model) => await Api.Move(model.Id, model.DestinationId);
@@ -82,7 +81,7 @@ namespace zero.Web.Controllers
 
 
     [HttpGet]
-    public async Task<IActionResult> StreamThumbnail(string id, [FromQuery] bool thumb = true)
+    public async Task<IActionResult> StreamThumbnail([FromQuery] string id, [FromQuery] bool thumb = true)
     {
       string path = await Api.GetSourceById(id, thumb);
 

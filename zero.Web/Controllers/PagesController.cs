@@ -44,7 +44,7 @@ namespace zero.Web.Controllers
     }
 
 
-    public EditModel<IPage> GetEmpty(string type, string parent = null)
+    public EditModel<IPage> GetEmpty([FromQuery] string type, [FromQuery] string parent = null)
     {
       PageType pageType = Api.GetPageType(type);
       IPage model = Activator.CreateInstance(pageType.ContentType) as IPage;
