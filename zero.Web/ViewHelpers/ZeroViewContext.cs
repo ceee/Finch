@@ -7,9 +7,9 @@ namespace zero.Web.ViewHelpers
 {
   public class ZeroViewContext : IZeroViewContext
   {
-    IApplicationContext ApplicationContext;
+    protected IApplicationContext ApplicationContext { get; private set; }
 
-    HttpContext HttpContext;
+    protected HttpContext HttpContext { get; private set; }
 
 
     public ZeroViewContext(IApplicationContext applicationContext, IHttpContextAccessor httpContextAccessor, IZeroMediaHelper mediaHelper)
@@ -21,7 +21,8 @@ namespace zero.Web.ViewHelpers
       AppId = ApplicationContext.AppId;
       if (HttpContext.Request.RouteValues.TryGetValue("zero.route", out object route))
       {
-        Route = ((IResolvedRoute)route).Route;
+        ResolvedRoute = (IResolvedRoute)route;
+        Route = ResolvedRoute.Route;
       }
       Media = mediaHelper;
     }
@@ -35,6 +36,9 @@ namespace zero.Web.ViewHelpers
 
     /// <inheritdoc />
     public IRoute Route { get; }
+
+    /// <inheritdoc />
+    public IResolvedRoute ResolvedRoute { get; }
 
     /// <inheritdoc />
     public IZeroMediaHelper Media { get; }
@@ -57,6 +61,11 @@ namespace zero.Web.ViewHelpers
     /// Matching path route
     /// </summary>
     IRoute Route { get; }
+
+    /// <summary>
+    /// Matching resolved route
+    /// </summary>
+    IResolvedRoute ResolvedRoute { get; }
 
     /// <summary>
     /// Media helper functions
