@@ -7,6 +7,7 @@ import ZeroPlugin from './plugin.zero.js';
 import EventHub from '../services/eventhub.js';
 import VueRouter from 'vue-router';
 import Vue from 'vue';
+import plugins from './plugins.js';
 //import CommercePlugin from '../../../zero.Commerce/Plugins/zero.Commerce/plugin.js'; // TODO dynPath
 //import TestPlugin from '../../../../Laola/Laola.Backoffice/Plugin/plugin.js'; // TODO dynPath
 import options from './options.js';
@@ -181,16 +182,10 @@ Zero.install = (vue, opts) =>
 
   console.log('[zero] Setup completed');
 
-  // add plugins
-  //__zero.plugins.filter(x => !!x.pluginPath).forEach(x =>
-  //{
-  //  zero.useByPath(x.pluginPath);
-  //});
-
-  //import('@/../zero.Commerce/Plugins/zero.Commerce/plugin.js').then(res =>
-  //{
-  //  zero.use(res.default);
-  //});
+  plugins.forEach(plugin =>
+  {
+    zero.use(plugin);
+  });
 };
 
 export default Zero;

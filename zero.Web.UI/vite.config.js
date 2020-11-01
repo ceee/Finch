@@ -1,7 +1,48 @@
 const path = require('path');
+const fs = require('fs');
 const { createVuePlugin } = require('vite-plugin-vue2');
 
 let zeroPlugins = [];
+let _plugins = [
+  {
+    path: '../zero.Commerce/Plugin/vite.plugin.js',
+    root: '../zero.Commerce/Plugin'
+  },
+  {
+    path: '../../Laola/Laola.Backoffice/Plugin/vite.plugin.js',
+    root: '../../Laola/Laola.Backoffice/Plugin'
+  }
+];
+
+let pluginFileContent = '';
+let pluginAliases = {};
+let pluginNames = [];
+let idx = 0;
+
+_plugins.forEach(plugin =>
+{
+  const pluginConfig = require(plugin.path);
+  zeroPlugins.push(pluginConfig());
+
+  const name = 'zeroPlugin' + idx;
+  const alias = '/@zeroplugin' + (idx++) + '/';
+  pluginAliases[alias] = path.resolve(__dirname, plugin.root);
+  pluginNames.push(name);
+  pluginFileContent += "import " + name + " from '" + alias + "plugin.js';\n";
+});
+
+pluginFileContent += "export default [ " + pluginNames.join(', ') + " ];";
+
+fs.writeFile(path.resolve(__dirname, 'app/core/plugins.js'), pluginFileContent, err =>
+{
+  if (err)
+  {
+    console.error(err)
+    return
+  }
+  //file written successfully
+})
+
 //if (process.env.ZERO_PLUGINS)
 //{
 //  let plugins = JSON.parse(process.env.ZERO_PLUGINS);
@@ -20,7 +61,7 @@ let zeroPlugins = [];
 const aliasResolver = {
   alias(id)
   {
-    if (id.indexOf('zero/') === 0 || id.indexOf('shop/') === 0)
+    if (id.indexOf('zero/') === 0)
     {
       return '/@' + id;
     }
@@ -44,7 +85,8 @@ export default {
   emitManifest: true,
   plugins: [createVuePlugin(), ...zeroPlugins],
   alias: {
-    '/@zero/': path.resolve(__dirname, 'app/')
+    '/@zero/': path.resolve(__dirname, 'app/'),
+    ...pluginAliases
   },
   resolvers: [aliasResolver]
 }
