@@ -1,8 +1,8 @@
 import Vue from 'vue';
-import Overlay from 'zero/services/overlay';
+import Overlay from 'zero/services/overlay.js';
 import { find as _find, extend as _extend } from 'underscore';
 import Axios from 'axios';
-import PasswordChangeOverlay from 'zero/pages/password-change';
+import PasswordChangeOverlay from 'zero/pages/password-change.vue';
 
 export default new Vue({
 

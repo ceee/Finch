@@ -28,7 +28,7 @@
   import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
   import Strings from 'zero/services/strings.js';
   import Overlay from 'zero/services/overlay.js';
-  import MediaOverlay from 'zero/pages/media/media-item';
+  import MediaOverlay from 'zero/pages/media/media-item.vue';
 
   const TYPES = {
     ALL: 'all',

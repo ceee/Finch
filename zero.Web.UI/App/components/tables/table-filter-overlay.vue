@@ -44,8 +44,8 @@
 
 
 <script>
-  import EditorComponent from 'zero/editor/editor-component';
-  import { find as _find } from 'deps/underscore';
+  import EditorComponent from 'zero/editor/editor-component.vue';
+  import { find as _find } from 'underscore';
 
   export default {
 

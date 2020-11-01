@@ -20,9 +20,9 @@
 
 
 <script>
-  import Strings from 'zero/services/strings';
+  import Strings from 'zero/services/strings.js';
   import { extend as _extend } from 'underscore';
-  import DaterangepickerOverlay from './overlay';
+  import DaterangepickerOverlay from './overlay.vue';
   import Overlay from 'zero/services/overlay.js';
   import dayjs from 'dayjs';
 

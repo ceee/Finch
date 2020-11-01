@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import Strings from 'zero/services/strings';
+import Strings from 'zero/services/strings.js';
 
 const base = 'media/';
 

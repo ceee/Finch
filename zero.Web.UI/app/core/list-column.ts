@@ -1,7 +1,7 @@
 ﻿
-import MediaApi from 'zero/resources/media';
-import Strings from 'zero/services/strings';
-import Localization from 'zero/services/localization';
+import MediaApi from 'zero/resources/media.js';
+import Strings from 'zero/services/strings.js';
+import Localization from 'zero/services/localization.js';
 
 class ListColumn
 {

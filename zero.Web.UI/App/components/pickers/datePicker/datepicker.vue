@@ -12,8 +12,8 @@
 
 
 <script>
-  import Strings from 'zero/services/strings';
-  import DatepickerOverlay from './overlay';
+  import Strings from 'zero/services/strings.js';
+  import DatepickerOverlay from './overlay.vue';
   import { extend as _extend } from 'underscore';
   import dayjs from 'dayjs';
 

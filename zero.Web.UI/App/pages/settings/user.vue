@@ -27,8 +27,8 @@
 
 <script>
   import { filter as _filter } from 'underscore';
-  import UsersApi from 'zero/resources/users';
-  import UiEditor from 'zero/editor/editor';
+  import UsersApi from 'zero/resources/users.js';
+  import UiEditor from 'zero/editor/editor.vue';
 
   export default {
     components: { UiEditor },

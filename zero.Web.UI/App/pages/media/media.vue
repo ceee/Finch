@@ -58,12 +58,12 @@
   import MediaApi from 'zero/resources/media.js';
   import MediaFolderApi from 'zero/resources/media-folder.js';
   import Overlay from 'zero/services/overlay.js';
-  import FolderOverlay from './overlays/folder';
-  import MoveOverlay from './overlays/move';
-  import MediaItemOverlay from './media-overlay-item';
-  import MediaItem from './media-item';
-  import UploadStatusOverlay from './overlays/upload-status';
-  import EventHub from 'zero/services/eventhub';
+  import FolderOverlay from './overlays/folder.vue';
+  import MoveOverlay from './overlays/move.vue';
+  import MediaItemOverlay from './media-overlay-item.vue';
+  import MediaItem from './media-item.vue';
+  import UploadStatusOverlay from './overlays/upload-status.vue';
+  import EventHub from 'zero/services/eventhub.js';
   import Notification from 'zero/services/notification.js';
   import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
 

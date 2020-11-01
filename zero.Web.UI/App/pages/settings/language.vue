@@ -7,8 +7,8 @@
 
 
 <script>
-  import LanguagesApi from 'zero/resources/languages';
-  import UiEditor from 'zero/editor/editor';
+  import LanguagesApi from 'zero/resources/languages.js';
+  import UiEditor from 'zero/editor/editor.vue';
 
   export default {
     props: ['id'],

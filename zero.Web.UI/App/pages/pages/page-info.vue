@@ -38,7 +38,7 @@
 
 
 <script>
-  import PagesApi from 'zero/resources/pages';
+  import PagesApi from 'zero/resources/pages.js';
 
   export default {
     props: {

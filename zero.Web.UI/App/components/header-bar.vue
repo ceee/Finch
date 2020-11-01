@@ -25,7 +25,7 @@
 
 
 <script>
-  import Overlay from 'zero/services/overlay';
+  import Overlay from 'zero/services/overlay.js';
 
   export default {
     name: 'uiHeaderBar',

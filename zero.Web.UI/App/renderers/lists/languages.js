@@ -1,6 +1,6 @@
 ﻿
 import List from 'zero/core/list.js';
-import LanguagesApi from 'zero/resources/languages';
+import LanguagesApi from 'zero/resources/languages.js';
 
 const list = new List('languages');
 const prefix = '@language.fields.';

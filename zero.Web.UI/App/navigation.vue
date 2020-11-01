@@ -61,7 +61,7 @@
   import { map as _map, find as _find } from 'underscore';
   import AuthApi from 'zero/services/auth.js'
   import MediaApi from 'zero/resources/media.js'
-  import IconPicker from 'zero/components/pickers/iconPicker/iconpicker';
+  import IconPicker from 'zero/components/pickers/iconPicker/iconpicker.vue';
 
   export default {
     name: 'app-navigation',

@@ -13,7 +13,7 @@
 
 <script>
   import Overlay from 'zero/services/overlay.js';
-  import AddOverlay from './translation';
+  import AddOverlay from './translation.vue';
 
   export default {
     data: () => ({

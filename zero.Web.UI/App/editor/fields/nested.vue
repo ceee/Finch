@@ -11,9 +11,9 @@
 </template>
 
 <script>
-  import UiEditor from 'zero/editor/editor';
-  import UiEditorOverlay from 'zero/editor/editor-overlay';
-  import Overlay from 'zero/services/overlay';
+  import UiEditor from 'zero/editor/editor.vue';
+  import UiEditorOverlay from 'zero/editor/editor-overlay.vue';
+  import Overlay from 'zero/services/overlay.js';
   import Editor from 'zero/core/editor.js';
 
   export default {

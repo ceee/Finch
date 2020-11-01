@@ -24,7 +24,7 @@
 
 <script>
   import ModulesApi from 'zero/resources/modules.js';
-  import UiEditor from 'zero/editor/editor';
+  import UiEditor from 'zero/editor/editor.vue';
 
   export default {
 

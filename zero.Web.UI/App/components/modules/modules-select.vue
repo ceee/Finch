@@ -31,7 +31,7 @@
 
 <script>
   import { groupBy as _groupBy, keys as _keys, each as _each } from 'underscore';
-  import Notification from 'zero/services/notification';
+  import Notification from 'zero/services/notification.js';
 
   export default {
     name: 'uiModulesSelect',

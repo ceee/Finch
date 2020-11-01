@@ -7,7 +7,7 @@
 
 <script>
   import UsersApi from 'zero/resources/users.js'
-  import { extend as _extend } from 'deps/underscore'
+  import { extend as _extend } from 'underscore'
 
   export default {
     name: 'uiUserpicker',

@@ -32,8 +32,8 @@
 
 
 <script>
-  import MediaApi from 'zero/resources/media';
-  import UiEditor from 'zero/editor/editor';
+  import MediaApi from 'zero/resources/media.js';
+  import UiEditor from 'zero/editor/editor.vue';
 
   export default {
     props: ['id'],

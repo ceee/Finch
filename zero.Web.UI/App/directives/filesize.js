@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Strings from 'zero/services/strings';
+import Strings from 'zero/services/strings.js';
 
 /// <summary>
 /// Outputs a filesize

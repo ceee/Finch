@@ -10,7 +10,7 @@
 
 <script>
   import ModulesApi from 'zero/resources/modules.js';
-  import EditModuleOverlay from './edit-module';
+  import EditModuleOverlay from './edit-module.vue';
   import Overlay from 'zero/services/overlay.js';
   import Arrays from 'zero/services/arrays.js';
 

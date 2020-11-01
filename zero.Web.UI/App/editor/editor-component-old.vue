@@ -7,9 +7,9 @@
 
 
 <script>
-  import Strings from 'zero/services/strings';
-  import Objects from 'zero/services/objects';
-  import Localization from 'zero/services/localization';
+  import Strings from 'zero/services/strings.js';
+  import Objects from 'zero/services/objects.js';
+  import Localization from 'zero/services/localization.js';
 
   const staticViews = ['line'];
 

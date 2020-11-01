@@ -32,9 +32,9 @@
 
 
 <script>
-  import Overlay from 'zero/services/overlay';
-  import Strings from 'zero/services/strings';
-  import FilterOverlay from './table-filter-overlay';
+  import Overlay from 'zero/services/overlay.js';
+  import Strings from 'zero/services/strings.js';
+  import FilterOverlay from './table-filter-overlay.vue';
   import { isArray as _isArray } from 'underscore';
 
   const KEY_PREFIX = 'zero.ui-table-filter.';

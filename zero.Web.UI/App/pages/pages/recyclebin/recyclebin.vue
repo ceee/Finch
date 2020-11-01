@@ -16,8 +16,8 @@
 
   import RecycleBinApi from 'zero/resources/recycle-bin.js'
   import Overlay from 'zero/services/overlay.js'
-  import RecycleBinActionsOverlay from './recyclebin-actions'
-  import EventHub from 'zero/services/eventhub'
+  import RecycleBinActionsOverlay from './recyclebin-actions.vue'
+  import EventHub from 'zero/services/eventhub.js'
 
   export default {
     data: () => ({

@@ -26,8 +26,8 @@
 
 <script>
   import MediaApi from 'zero/resources/media.js'
-  import PickMediaOverlay from './overlay';
-  import Overlay from 'zero/services/overlay';
+  import PickMediaOverlay from './overlay.vue';
+  import Overlay from 'zero/services/overlay.js';
   import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
   import Strings from 'zero/services/strings.js';
 

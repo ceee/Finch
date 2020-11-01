@@ -23,7 +23,7 @@
 
 
 <script>
-  import UiEditor from 'zero/editor/editor';
+  import UiEditor from 'zero/editor/editor.vue';
 
   export default {
 

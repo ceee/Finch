@@ -7,7 +7,7 @@
 
 <script>
   import CountriesApi from 'zero/resources/countries.js'
-  import { extend as _extend } from 'deps/underscore'
+  import { extend as _extend } from 'underscore'
 
   export default {
     name: 'uiCountrypicker',

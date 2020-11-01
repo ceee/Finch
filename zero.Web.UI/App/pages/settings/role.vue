@@ -8,8 +8,8 @@
 
 <script>
   import { filter as _filter } from 'underscore';
-  import UserRolesApi from 'zero/resources/userRoles';
-  import UiEditor from 'zero/editor/editor';
+  import UserRolesApi from 'zero/resources/userRoles.js';
+  import UiEditor from 'zero/editor/editor.vue';
 
   export default {
     components: { UiEditor },

@@ -9,7 +9,7 @@
 
 
 <script>
-  import ApplicationsItems from 'zero/pages/settings/applications-items'
+  import ApplicationsItems from 'zero/pages/settings/applications-items.vue'
   import ApplicationsApi from 'zero/resources/applications.js'
 
   export default {

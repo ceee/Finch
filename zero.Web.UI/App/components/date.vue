@@ -5,7 +5,7 @@
 
 <script>
   import dayjs from 'dayjs';
-  import Strings from 'zero/services/strings';
+  import Strings from 'zero/services/strings.js';
 
   export default {
     name: 'uiDate',

@@ -25,7 +25,7 @@
 
 
 <script>
-  import ApplicationsItems from 'zero/pages/settings/applications-items'
+  import ApplicationsItems from 'zero/pages/settings/applications-items.vue'
   import SettingsApi from 'zero/resources/settings.js';
 
   export default {

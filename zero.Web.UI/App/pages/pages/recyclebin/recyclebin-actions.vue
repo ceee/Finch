@@ -36,7 +36,7 @@
 
 <script>
   import RecycleBinApi from 'zero/resources/recycle-bin.js'
-  import PagesApi from 'zero/resources/pages';
+  import PagesApi from 'zero/resources/pages.js';
 
   export default {
 

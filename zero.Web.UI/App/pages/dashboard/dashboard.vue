@@ -11,10 +11,9 @@
 </template>
 
 <script>
-  import DashboardElement from 'zero/dashboard/element';
 
   export default {
-    components: { DashboardElement },
+    
   }
 </script>
 

@@ -16,7 +16,7 @@
 
 
 <script>
-  import MediaApi from 'zero/resources/media';
+  import MediaApi from 'zero/resources/media.js';
 
   export default {
     name: 'uiSelectButton',

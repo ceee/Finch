@@ -27,14 +27,14 @@
 
 
 <script>
-  import UiEditor from 'zero/editor/editor';
-  import PagesApi from 'zero/resources/pages';
-  import EventHub from 'zero/services/eventhub';
-  import InfoTab from './page-info';
+  import UiEditor from 'zero/editor/editor.vue';
+  import PagesApi from 'zero/resources/pages.js';
+  import EventHub from 'zero/services/eventhub.js';
+  import InfoTab from './page-info.vue';
   import Overlay from 'zero/services/overlay.js'
-  import MoveOverlay from './overlays/move'
-  import CopyOverlay from './overlays/copy'
-  import Strings from 'zero/services/strings';
+  import MoveOverlay from './overlays/move.vue'
+  import CopyOverlay from './overlays/copy.vue'
+  import Strings from 'zero/services/strings.js';
   import { find as _find, debounce as _debounce } from 'underscore';
 
   export default {

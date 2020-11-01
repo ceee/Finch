@@ -8,7 +8,7 @@
 
 <script>
   import SpacesApi from 'zero/resources/spaces.js';
-  import UiEditor from 'zero/editor/editor';
+  import UiEditor from 'zero/editor/editor.vue';
   import Overlay from 'zero/services/overlay.js';
 
   export default {

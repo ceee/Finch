@@ -7,8 +7,8 @@
 
 
 <script>
-  import CountriesApi from 'zero/resources/countries';
-  import UiEditor from 'zero/editor/editor';
+  import CountriesApi from 'zero/resources/countries.js';
+  import UiEditor from 'zero/editor/editor.vue';
 
   export default {
     components: { UiEditor },

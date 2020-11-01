@@ -1,9 +1,9 @@
 
-import './date';
-import './localize';
-import './resizable';
-import './dropdown';
-import './clickoutside';
-import './filesize';
-import './currency';
-import './sortable';
+import './date.js';
+import './localize.js';
+import './resizable.js';
+import './dropdown.js';
+import './clickoutside.js';
+import './filesize.js';
+import './currency.js';
+import './sortable.js';

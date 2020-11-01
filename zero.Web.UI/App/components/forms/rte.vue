@@ -13,7 +13,7 @@
 
 
 <script>
-  import Strings from 'zero/services/strings';
+  import Strings from 'zero/services/strings.js';
   import Pell from './rte.pell.dependency.js';
 
   export default {

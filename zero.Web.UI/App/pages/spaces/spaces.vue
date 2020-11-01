@@ -20,9 +20,9 @@
 </template>
 
 <script>
-  import SpaceEditor from 'zero/pages/spaces/views/editor';
-  import SpaceList from 'zero/pages/spaces/views/list';
-  import SpaceCustom from 'zero/pages/spaces/views/custom';
+  import SpaceEditor from 'zero/pages/spaces/views/editor.vue';
+  import SpaceList from 'zero/pages/spaces/views/list.vue';
+  import SpaceCustom from 'zero/pages/spaces/views/custom.vue';
   import SpacesApi from 'zero/resources/spaces.js';
 
   export default {
