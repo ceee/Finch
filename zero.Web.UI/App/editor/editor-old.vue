@@ -58,8 +58,8 @@
 
 <script>
   import EditorComponent from 'zero/editor/editor-component.vue';
-  //import Editor from '@zero/core/editor.js';
-  //import EditorField from '@zero/core/editor-field.js';
+  //import Editor from '@zero/core/editor.ts';
+  //import EditorField from '@zero/core/editor-field.ts';
   import { each as _each, map as _map, filter as _filter, isArray as _isArray } from 'underscore';
 
   export default {

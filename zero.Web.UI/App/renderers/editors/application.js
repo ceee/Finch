@@ -1,5 +1,5 @@
 ﻿
-import Editor from 'zero/core/editor.js';
+import Editor from 'zero/core/editor.ts';
 import ApplicationFeatures from 'zero/pages/settings/application-features.vue';
 
 const editor = new Editor('application', '@application.fields.');

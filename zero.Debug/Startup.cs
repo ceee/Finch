@@ -52,15 +52,10 @@ namespace zero.Debug
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-      if (env.IsDevelopment())
-      {
-        app.UseZeroDevEnvironment();
-      }
-
       app.UseRouting();
       app.UseAuthentication();
 
-      app.UseZero(devPath: Path.Combine(Environment.CurrentDirectory, "..", "zero.Web.UI"));
+      app.UseZero();
 
       app.UseEndpoints(endpoints =>
       {

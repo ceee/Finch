@@ -17,7 +17,7 @@ namespace zero.Web
 {
   public static class ZeroApplicationBuilderExtensions
   {
-    public static IApplicationBuilder UseZero(this IApplicationBuilder app, string devPath = null)
+    public static IApplicationBuilder UseZero(this IApplicationBuilder app)
     {
       IZeroOptions options = app.ApplicationServices.GetService<IZeroOptions>();
 
@@ -56,11 +56,6 @@ namespace zero.Web
           //  pattern: path + "/api/{controller}/{action}/{id?}"
           //);
 
-          if (devPath != null)
-          {
-            endpoints.MapFallback(path + "/vue-cli/{**path}", CreateVueProxyDelegate(endpoints, new SpaOptions { SourcePath = devPath }));
-          }
-
           // fallbacks for SPA
           endpoints.MapFallbackToController(path + "/{**path}", "Index", "ZeroBackoffice");
         });
@@ -71,65 +66,6 @@ namespace zero.Web
       {
         endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}");
       });
-
-      return app;
-    }
-
-
-    static RequestDelegate CreateVueProxyDelegate(IEndpointRouteBuilder endpoints, SpaOptions options = null)
-    {
-      var app = endpoints.CreateApplicationBuilder();
-      app.Use(next => context =>
-      {
-        context.SetEndpoint(null);
-        return next(context);
-      });
-
-      app.UseSpa(opt =>
-      {
-        if (options != null)
-        {
-          opt.Options.DefaultPage = options.DefaultPage;
-          opt.Options.DefaultPageStaticFileOptions = options.DefaultPageStaticFileOptions;
-          opt.Options.SourcePath = options.SourcePath;
-          opt.Options.StartupTimeout = options.StartupTimeout;
-        }
-
-        opt.UseVueCli();
-      });
-
-      return app.Build();
-    }
-
-
-    public static IApplicationBuilder UseZeroDevEnvironment(this IApplicationBuilder app)
-    {
-      //IZeroOptions options = app.ApplicationServices.GetService<IZeroOptions>();
-      //string zeroPath = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
-
-
-      //string webUiPath = path ?? Path.Combine(Environment.CurrentDirectory, "..", "zero.Web.UI"); // TODO dynPATH
-
-      // map backoffice
-      //app.UseWhen(ctx => ctx.Request.Path.ToString().StartsWith(zeroPath), builder =>
-      //{
-      //  builder.UseRouting();
-
-
-      //});
-
-      //#pragma warning disable CS0618
-      //app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions()
-      //{
-      //  HotModuleReplacement = true,
-      //  ProjectPath = webUiPath,
-      //  HotModuleReplacementServerPort = 8999,
-      //  EnvironmentVariables = new Dictionary<string, string>()
-      //  {
-      //    { "ZERO", "hi from zero 0.1" }
-      //  }
-      //});
-      //#pragma warning restore CS0618
 
       return app;
     }

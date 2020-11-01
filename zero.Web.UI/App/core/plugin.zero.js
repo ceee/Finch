@@ -1,5 +1,5 @@
 ﻿
-import Plugin from './plugin.js';
+import Plugin from './plugin.ts';
 import editors from '../renderers/editors/all.js';
 import lists from '../renderers/lists/all.js';
 import routes from './routes.js';

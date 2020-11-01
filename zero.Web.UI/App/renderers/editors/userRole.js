@@ -1,5 +1,5 @@
 ﻿
-import Editor from 'zero/core/editor.js';
+import Editor from 'zero/core/editor.ts';
 import Permissions from 'zero/components/permissions.vue';
 
 const editor = new Editor('userRole', '@role.fields.');

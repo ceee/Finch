@@ -14,7 +14,7 @@
   import UiEditor from 'zero/editor/editor.vue';
   import UiEditorOverlay from 'zero/editor/editor-overlay.vue';
   import Overlay from 'zero/services/overlay.js';
-  import Editor from 'zero/core/editor.js';
+  import Editor from 'zero/core/editor.ts';
 
   export default {
 
@@ -26,7 +26,7 @@
       depth: Number,
       disabled: Boolean,
       editor: {
-        type: Editor,
+        type: Object,
         required: true
       },
       limit: {

@@ -1,5 +1,5 @@
 ﻿
-import List from 'zero/core/list.js';
+import List from 'zero/core/list.ts';
 import LanguagesApi from 'zero/resources/languages.js';
 
 const list = new List('languages');

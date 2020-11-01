@@ -1,5 +1,5 @@
 ﻿
-import List from 'zero/core/list.js';
+import List from 'zero/core/list.ts';
 
 const list = new List('spaces.default');
 

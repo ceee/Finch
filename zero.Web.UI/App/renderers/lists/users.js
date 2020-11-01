@@ -1,5 +1,5 @@
 ﻿
-import List from 'zero/core/list.js';
+import List from 'zero/core/list.ts';
 import UsersApi from 'zero/resources/users.js';
 
 const list = new List('users');

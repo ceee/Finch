@@ -12,6 +12,7 @@ using Newtonsoft.Json.Serialization;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -29,6 +30,7 @@ using zero.Core.Validation;
 using zero.Web.Controllers;
 using zero.Web.Defaults;
 using zero.Web.Filters;
+using Zero.Web.DevServer;
 
 namespace zero.Web
 {
@@ -74,7 +76,6 @@ namespace zero.Web
           opts.ZeroVersion = "0.0.1.0"; // TODO
         });
 
-
       // add transient options to DI
       Services.AddTransient<IZeroOptions>(factory => factory.GetService<IOptionsMonitor<ZeroOptions>>().CurrentValue);
 
@@ -118,6 +119,17 @@ namespace zero.Web
         IWebHostEnvironment env = factory.GetService<IWebHostEnvironment>();
         return new Paths(env.WebRootPath, true);
       });
+
+
+      // add dev server
+      Services.AddOptions<ZeroDevOptions>()
+        .Bind(Configuration.GetSection("Zero:DevServer"))
+        .Configure<IWebHostEnvironment>((opts, env) =>
+        {
+          opts.WorkingDirectory = Path.Combine(env.ContentRootPath, "..", "Zero.Web.UI", "App");
+        });
+
+      Services.AddHostedService<ZeroDevService>();
     }
 
 

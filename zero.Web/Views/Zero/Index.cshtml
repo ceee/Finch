@@ -25,7 +25,7 @@
     window.__zero = @Html.Raw(await Model.Vue.ConfigAsJson());
     window.zero = window.__zero;
   </script>
-  <script src="~/zero/vue-cli/js/chunk-vendors.js" asp-append-version="true"></script>
-  <script src="~/zero/vue-cli/js/app.js" asp-append-version="true"></script>
+  <script type="module" src="http://localhost:@(Model.Port)/vite/client"></script>
+  <script type="module" src="http://localhost:@(Model.Port)/app/app.js"></script>
 </body>
 </html>

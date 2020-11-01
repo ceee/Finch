@@ -1,5 +1,5 @@
 ﻿
-import EditorField from './editor-field.js';
+import EditorField from './editor-field.ts';
 
 class Editor
 {

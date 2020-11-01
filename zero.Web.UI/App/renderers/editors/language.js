@@ -1,5 +1,5 @@
 ﻿
-import Editor from 'zero/core/editor.js';
+import Editor from 'zero/core/editor.ts';
 
 const editor = new Editor('language', '@language.fields.');
 

@@ -9,8 +9,8 @@
 <script>
   import Strings from 'zero/services/strings.js';
   import Objects from 'zero/services/objects.js';
-  import Editor from 'zero/core/editor.js';
-  import EditorField from 'zero/core/editor-field.js';
+  import Editor from 'zero/core/editor.ts';
+  import EditorField from 'zero/core/editor-field.ts';
   import Localization from 'zero/services/localization.js';
 
   export default {
@@ -20,11 +20,11 @@
 
     props: {
       config: {
-        type: EditorField,
+        type: Object,
         required: true
       },
       editor: {
-        type: Editor,
+        type: Object,
         required: true
       },
       value: {

@@ -1,7 +1,7 @@
 ﻿
-import Editor from './editor.js';
-import ListColumn from './list-column.js';
-import ListAction from './list-action.js';
+import Editor from './editor.ts';
+import ListColumn from './list-column.ts';
+import ListAction from './list-action.ts';
 
 class List
 {

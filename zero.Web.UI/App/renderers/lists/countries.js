@@ -1,5 +1,5 @@
 ﻿
-import List from 'zero/core/list.js';
+import List from 'zero/core/list.ts';
 import CountriesApi from 'zero/resources/countries.js';
 
 const list = new List('countries');

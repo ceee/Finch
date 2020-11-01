@@ -1,5 +1,5 @@
 ﻿
-import Editor from 'zero/core/editor.js';
+import Editor from 'zero/core/editor.ts';
 import MediaUpload from 'zero/pages/media/upload.vue';
 
 const editor = new Editor('media', '@media.fields.');
