@@ -6,9 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
 using System;
@@ -19,13 +16,11 @@ using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
 using zero.Core.Assemblies;
-using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Identity;
 using zero.Core.Options;
 using zero.Core.Plugins;
-using zero.Core.Utils;
 using zero.Core.Validation;
 using zero.Web.Controllers;
 using zero.Web.Defaults;
@@ -195,6 +190,7 @@ namespace zero.Web
       {
         //opts.Cookie.Path = // TODO use backoffice path
         opts.Cookie.Name = Constants.Auth.CookieName;
+        //opts.Cookie.Path = "/zero"; // TODO dynamic
         opts.SlidingExpiration = true;
         opts.ExpireTimeSpan = TimeSpan.FromMinutes(60);
 
@@ -231,7 +227,7 @@ namespace zero.Web
     public ZeroBuilder AddPlugin<T>() where T : class, IZeroPlugin, new()
     {
       AssemblyDiscovery.Current.AddAssembly(typeof(T).Assembly);
-      Services.AddScoped<IZeroPlugin, T>();
+      Services.AddSingleton<IZeroPlugin, T>();
       AddPluginServices<T>();
       return this;
     }
@@ -243,7 +239,7 @@ namespace zero.Web
     public ZeroBuilder AddPlugin<T>(Func<IServiceProvider, T> implementationFactory) where T : class, IZeroPlugin, new()
     {
       AssemblyDiscovery.Current.AddAssembly(typeof(T).Assembly);
-      Services.AddScoped<IZeroPlugin, T>(implementationFactory);
+      Services.AddSingleton<IZeroPlugin, T>(implementationFactory);
       AddPluginServices<T>();
       return this;
     }

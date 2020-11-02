@@ -13,7 +13,7 @@
         </button>-->
       </header>
 
-      <component :is="component" v-for="item in items" :to="getLink(item)" class="ui-table-row" :class="{ 'is-selected': selected.indexOf(item) > -1 }">
+      <component :is="component" v-for="(item, index) in items" :key="index" :to="getLink(item)" class="ui-table-row" :class="{ 'is-selected': selected.indexOf(item) > -1 }">
         <div v-for="column in columns" :key="column.path" class="ui-table-cell" :class="column.options.class" :style="column.flex" :table-field="column.path" :field-type="column.type" v-table-value="{ column, item }"></div>
         <!--<button type="button" v-if="configuration.selectable" table-field="table_selectable" class="ui-table-cell is-selectable" @click="select(item)">
           <i class="fth-check-square"></i>

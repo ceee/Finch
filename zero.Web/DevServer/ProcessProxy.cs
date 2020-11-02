@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Zero.Web.DevServer
 {
-  public class ZeroDevProcess
+  public class ProcessProxy
   {
     string workingDirectory = null;
     string script = null;
@@ -27,7 +27,7 @@ namespace Zero.Web.DevServer
 
 
 
-    public ZeroDevProcess(string workingDirectory, string script, bool forwardLog = true)
+    public ProcessProxy(string workingDirectory, string script, bool forwardLog = false)
     {
       this.workingDirectory = workingDirectory;
       this.script = script;
@@ -38,7 +38,7 @@ namespace Zero.Web.DevServer
     /// <summary>
     /// Adds an environment variable
     /// </summary>
-    public ZeroDevProcess EnvVar(string key, string value)
+    public ProcessProxy EnvVar(string key, string value)
     {
       envVars.Add(key, value);
       return this;
@@ -48,7 +48,7 @@ namespace Zero.Web.DevServer
     /// <summary>
     /// Adds an argument
     /// </summary>
-    public ZeroDevProcess Argument(string argument)
+    public ProcessProxy Argument(string argument)
     {
       arguments.Add(argument);
       return this;
@@ -58,7 +58,7 @@ namespace Zero.Web.DevServer
     /// <summary>
     /// Configures the process start info
     /// </summary>
-    public ZeroDevProcess Configure(Action<ProcessStartInfo> onProcessConfigure)
+    public ProcessProxy Configure(Action<ProcessStartInfo> onProcessConfigure)
     {
       this.onProcessConfigure = onProcessConfigure;
       return this;
@@ -68,13 +68,8 @@ namespace Zero.Web.DevServer
     /// <summary>
     /// Capture the log instead of outputting it to the console
     /// </summary>
-    public ZeroDevProcess Capture(Action<string, bool> action)
+    public ProcessProxy Capture(Action<string, bool> action)
     {
-      if (!forwardLog)
-      {
-        throw new InvalidOperationException("Set forwardLog=true (ctor) to enable log capturing");
-      }
-
       this.captureLog = action;
       return this;
     }
@@ -187,10 +182,7 @@ namespace Zero.Web.DevServer
         throw new InvalidOperationException(message, ex);
       }
 
-      if (forwardLog)
-      {
-        AttachLogger();
-      }
+      AttachLogger();
 
       AppDomain.CurrentDomain.DomainUnload += UnloadHandler;
       AppDomain.CurrentDomain.ProcessExit += UnloadHandler;
@@ -231,7 +223,7 @@ namespace Zero.Web.DevServer
       {
         captureLog(line, isError);
       }
-      else
+      if (forwardLog)
       {
         (isError ? Console.Error : Console.Out).WriteLine(line);
       }
@@ -251,7 +243,7 @@ namespace Zero.Web.DevServer
       {
         captureLog(new String(chunk.Array, chunk.Offset, chunk.Count), isError);
       }
-      else
+      if (forwardLog)
       {
         (isError ? Console.Error : Console.Out).Write(chunk.Array, chunk.Offset, chunk.Count);
       }

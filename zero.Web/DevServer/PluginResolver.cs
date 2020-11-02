@@ -3,12 +3,12 @@ using zero.Core.Plugins;
 
 namespace Zero.Web.DevServer
 {
-  public class ZeroPluginManager
+  public class PluginResolver
   {
     protected IEnumerable<IZeroPlugin> Plugins { get; set; }
 
 
-    public ZeroPluginManager(IEnumerable<IZeroPlugin> plugins)
+    public PluginResolver(IEnumerable<IZeroPlugin> plugins)
     {
       Plugins = plugins;
     }

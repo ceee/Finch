@@ -9,7 +9,7 @@ namespace Zero.Web.DevServer
   {
     public int Port { get; set; } = 3399;
 
-    public bool ForwardLog { get; set; } = true;
+    public bool ForwardLog { get; set; } = false;
 
     public string WorkingDirectory { get; set; }
   }

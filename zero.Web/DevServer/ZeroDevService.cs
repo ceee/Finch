@@ -6,8 +6,10 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using zero.Core.Plugins;
 
 namespace Zero.Web.DevServer
 {
@@ -15,13 +17,20 @@ namespace Zero.Web.DevServer
   {
     IWebHostEnvironment env;
     IOptions<ZeroDevOptions> options;
-    ZeroDevProcess viteProcess;
+    ProcessProxy viteProcess;
     ILogger<ZeroDevService> logger;
+    PluginResolver pluginResolver;
     string workingDirectory;
+    bool isRunning = false;
 
 
-    public ZeroDevService(IWebHostEnvironment env, IOptions<ZeroDevOptions> options, ILogger<ZeroDevService> logger)
+    public ZeroDevService(IWebHostEnvironment env, IOptions<ZeroDevOptions> options, ILogger<ZeroDevService> logger, IEnumerable<IZeroPlugin> plugins)
     {
+      //foreach (IZeroPlugin plugin in plugins)
+      //{
+      //  string location = Assembly.GetAssembly(plugin.GetType()). ;
+      //}
+      this.pluginResolver = new PluginResolver(plugins);
       this.env = env;
       this.options = options;
       this.workingDirectory = options.Value.WorkingDirectory;
@@ -38,16 +47,17 @@ namespace Zero.Web.DevServer
         return;
       }
 
+      // locate npm version and throw if it is not installed
       Version npmVersion = await FindNpmVersion();
 
       if (npmVersion == null)
       {
-        // TODO report and return
+        throw new Exception("Please install node+npm to use the zero dev service (https://www.npmjs.com/)");
       }
 
-      logger.LogDebug("Found npm version {version}", npmVersion);
-
+      // start vite server
       viteProcess = await StartDevServer(options.Value.Port);
+      logger.LogInformation("vite listening on: http://localhost:{port}", options.Value.Port);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -63,7 +73,7 @@ namespace Zero.Web.DevServer
     {
       Version version = null;
 
-      ZeroDevProcess process = new ZeroDevProcess(workingDirectory, "npm").Argument("-v").Capture((value, err) =>
+      ProcessProxy process = new ProcessProxy(workingDirectory, "npm").Argument("-v").Capture((value, err) =>
       {
         if (version == null && !value.Contains("not recognized") && Version.TryParse(value, out Version _version))
         {
@@ -80,7 +90,7 @@ namespace Zero.Web.DevServer
     /// <summary>
     /// Starts the vite dev server which also support HMR
     /// </summary>
-    async Task<ZeroDevProcess> StartDevServer(int port)
+    async Task<ProcessProxy> StartDevServer(int port)
     {
       // if the port we want to use is occupied, terminate the process utilizing that port.
       // this occurs when "stop" is used from the debugger and the middleware does not have the opportunity to kill the process
@@ -96,14 +106,35 @@ namespace Zero.Web.DevServer
       };
 
       // create and run the vite script
-      ZeroDevProcess process = new ZeroDevProcess(workingDirectory, "npm", options.Value.ForwardLog)
+      ProcessProxy process = new ProcessProxy(workingDirectory, "npm", options.Value.ForwardLog)
         .Argument("run dev")
-        .EnvVar("PORT", options.Value.Port.ToString())
-        .EnvVar("ZERO_PLUGINS", JsonConvert.SerializeObject(plugins));
+        .EnvVar("PORT", port.ToString())
+        .EnvVar("ZERO_PLUGINS", JsonConvert.SerializeObject(plugins))
+        .Capture(CaptureLog);
 
-      await process.RunAsync("running at", TimeSpan.FromMinutes(5));
+      await process.RunAsync("localhost:", TimeSpan.FromMinutes(1));
+
+      isRunning = true;
 
       return process;
+    }
+
+
+    void CaptureLog(string line, bool isError)
+    {
+      if (!isRunning)
+      {
+        return;
+      }
+
+      if (isError)
+      {
+        logger.LogWarning(line);
+      }
+      else
+      {
+        logger.LogInformation(line);
+      }
     }
   }
 }
