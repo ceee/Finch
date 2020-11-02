@@ -36,7 +36,7 @@ export default {
   },
 
   // get path to thumbnail source
-  getImageSource(id, thumb)
+  getImageSource(id, thumb, enforceAppId)
   {
     if (!id || id.indexOf('http') === 0)
     {
@@ -46,7 +46,7 @@ export default {
     {
       return id.substring(6) + "?preset=productListing";
     }
-    return zero.apiPath + base + 'streamThumbnail/' + id +  (typeof thumb === 'boolean' ? '?thumb=' + (thumb ? 'true' : 'false') : '');
+    return zero.apiPath + base + 'streamThumbnail/?id=' + id + (typeof thumb === 'boolean' ? '&thumb=' + (thumb ? 'true' : 'false') : '') + (enforceAppId === false ? '&enforceAppId=false' : '');
   },
 
   // save a media

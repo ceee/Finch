@@ -105,7 +105,7 @@
 
         if (user && user.avatarId)
         {
-          this.userAvatar = MediaApi.getImageSource(user.avatarId);
+          this.userAvatar = MediaApi.getImageSource(user.avatarId, false, false);
         }
         else
         {

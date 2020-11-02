@@ -46,13 +46,13 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<string> GetSourceById(string id, bool thumb = false)
+    public async Task<string> GetSourceById(string id, bool thumb = false, bool enforceAppId = true)
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
 
       IMedia media = await session.LoadAsync<IMedia>(id);
 
-      if (media == null || (media.AppId != Constants.Database.SharedAppId && media.AppId != Scope.AppId))
+      if (media == null || (enforceAppId && media.AppId != Constants.Database.SharedAppId && media.AppId != Scope.AppId))
       {
         return null;
       }
@@ -270,7 +270,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get media source by Id
     /// </summary>
-    Task<string> GetSourceById(string id, bool thumb = false);
+    Task<string> GetSourceById(string id, bool thumb = false, bool enforceAppId = true);
 
     /// <summary>
     /// Get media by ids

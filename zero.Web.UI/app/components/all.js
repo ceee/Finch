@@ -43,7 +43,7 @@ import uiTableFilter from './tables/table-filter.vue';
 
 import uiTabs from './tabs/tabs.vue';
 import uiTab from './tabs/tab.vue';
-import uiInlineTab from './tabs/inline-tabs.vue';
+import uiInlineTabs from './tabs/inline-tabs.vue';
 
 import uiTree from './tree/tree.vue';
 import uiTreeItem from './tree/tree-item.vue';
@@ -103,7 +103,7 @@ export default {
 
   uiTabs,
   uiTab,
-  uiInlineTab,
+  uiInlineTabs,
 
   uiTree,
   uiTreeItem,

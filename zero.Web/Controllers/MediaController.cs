@@ -81,9 +81,9 @@ namespace zero.Web.Controllers
 
 
     [HttpGet]
-    public async Task<IActionResult> StreamThumbnail([FromQuery] string id, [FromQuery] bool thumb = true)
+    public async Task<IActionResult> StreamThumbnail([FromQuery] string id, [FromQuery] bool thumb = true, [FromQuery] bool enforceAppId = true)
     {
-      string path = await Api.GetSourceById(id, thumb);
+      string path = await Api.GetSourceById(id, thumb, enforceAppId);
 
       var provider = new FileExtensionContentTypeProvider();
       string contentType;
