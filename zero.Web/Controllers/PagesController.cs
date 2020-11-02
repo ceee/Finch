@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +8,7 @@ using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Routing;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers
@@ -13,12 +16,14 @@ namespace zero.Web.Controllers
   public class PagesController : BackofficeController
   {
     IPagesApi Api;
+    IDocumentStore Raven;
     IRevisionsApi RevisionsApi;
 
-    public PagesController(IPagesApi api, IRevisionsApi revisionsApi)
+    public PagesController(IPagesApi api, IRevisionsApi revisionsApi, IDocumentStore raven)
     {
       Api = api;
       RevisionsApi = revisionsApi;
+      Raven = raven;
     }
 
 
@@ -61,16 +66,30 @@ namespace zero.Web.Controllers
     {
       IReadOnlyCollection<PageType> pageTypes = Options.Pages.GetAllItems();
 
-      return Previews(await Api.GetByIds(ids.ToArray()), item =>
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+
+      Dictionary<string, IPage> pages = await session.LoadAsync<IPage>(ids);
+      Dictionary<string, IRoute> routes = await session.LoadAsync<IRoute>(pages.Where(x => x.Value != null).Select(x => "routes." + x.Value.Hash));
+
+      return Previews(pages, item =>
       {
         PageType pageType = pageTypes.FirstOrDefault(x => x.Alias == item.PageTypeAlias);
+        IRoute route = null;
+
+        if (!routes.TryGetValue("routes." + item.Hash, out route))
+        {
+          route = new Route()
+          {
+            Url = "No URL found" // TODO translate
+          };
+        }
 
         return new PreviewModel()
         {
           Id = item.Id,
           Icon = pageType?.Icon ?? "fth-folder",
           Name = item.Name,
-          //Text = item.
+          Text = route.Url
         };
       });
     }

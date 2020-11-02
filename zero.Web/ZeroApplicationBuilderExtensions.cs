@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using VueCliMiddleware;
 using zero.Core.Extensions;
 using zero.Core.Middlewares;
 using zero.Core.Options;
