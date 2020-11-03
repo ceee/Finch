@@ -10,15 +10,15 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public class ZeroUserStore : UserStore<User>
-  {
-    public ZeroUserStore(IDocumentStore raven) : base(raven) { }
-  }
+  //public class ZeroUserStore : UserStore<IUser>
+  //{
+  //  public ZeroUserStore(IDocumentStore raven) : base(raven) { }
+  //}
 
-  public class ZeroRoleStore : RoleStore<UserRole>
-  {
-    public ZeroRoleStore(IDocumentStore raven, IdentityErrorDescriber describer = null) : base(raven, describer) { }
-  }
+  //public class ZeroRoleStore : RoleStore<IUserRole>
+  //{
+  //  public ZeroRoleStore(IDocumentStore raven, IdentityErrorDescriber describer = null) : base(raven, describer) { }
+  //}
 
 
   //public class ZeroUserManager : UserManager<User>

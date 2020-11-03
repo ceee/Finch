@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Core.Security;
 
 namespace zero.Core.Api
 {
@@ -19,14 +20,17 @@ namespace zero.Core.Api
 
     protected SignInManager<User> SignInManager { get; private set; }
 
+    protected IUserClaimsPrincipalFactory<User> ClaimsPrincipalFactory { get; private set; }
+
     protected ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
 
-    public AuthenticationApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, SignInManager<User> signInManager)
+    public AuthenticationApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, SignInManager<User> signInManager, IUserClaimsPrincipalFactory<User> claimsPrincipalFactory)
     {
       Raven = raven;
       HttpContextAccessor = httpContextAccessor;
       SignInManager = signInManager;
+      ClaimsPrincipalFactory = claimsPrincipalFactory;
     }
 
 
@@ -61,6 +65,8 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<User> GetUser()
     {
+      //var userIdClaim = Principal?.FindFirst(ClaimTypes.NameIdentifier);
+
       return await SignInManager.UserManager.GetUserAsync(HttpContextAccessor.HttpContext.User);
     }
 
@@ -105,7 +111,8 @@ namespace zero.Core.Api
       }
 
 
-      SignInResult signInResult = await SignInManager.PasswordSignInAsync(email, password, isPersistent, true);
+
+      SignInResult signInResult = await SignInManager.CheckPasswordSignInAsync(user, password, true);
 
       if (!signInResult.Succeeded)
       {
@@ -129,6 +136,26 @@ namespace zero.Core.Api
         return result;
       }
 
+
+
+      ClaimsPrincipal userPrincipal = await ClaimsPrincipalFactory.CreateAsync(user);
+      //var claims = new[] {new Claim(Constants.Auth.Claims.UserId, user.Id) };
+      //var claimsIdentity = new ClaimsIdentity(claims, Constants.Auth.Scheme);
+      //var userPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+      
+
+      userPrincipal.Identities.FirstOrDefault()?.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, Constants.Auth.Scheme));
+
+      await SignInManager.Context.SignInAsync(Constants.Auth.Scheme, userPrincipal, new AuthenticationProperties()
+      {
+        IsPersistent = isPersistent
+      });
+
+      var xuser = HttpContextAccessor.HttpContext.User;
+      var xuserid = GetUserId();
+      var yuser = await GetUser();
+
       return EntityResult.Success();
     }
 
@@ -136,15 +163,14 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task Logout()
     {
-      await SignInManager.SignOutAsync();
+      await SignInManager.Context.SignOutAsync(Constants.Auth.Scheme);
     }
 
 
     /// <inheritdoc />
     public string GetUserId()
     {
-      ClaimsPrincipal principal = HttpContextAccessor.HttpContext.User;
-      return principal.Claims.FirstOrDefault(x => x.Type == Constants.Auth.Claims.UserId)?.Value;
+      return HttpContextAccessor.HttpContext.User.FindFirstValue(Constants.Auth.Claims.UserId);
     }
   }
 

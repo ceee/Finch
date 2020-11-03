@@ -21,6 +21,7 @@ using zero.Core.Extensions;
 using zero.Core.Identity;
 using zero.Core.Options;
 using zero.Core.Plugins;
+using zero.Core.Security;
 using zero.Core.Validation;
 using zero.Web.Controllers;
 using zero.Web.Defaults;
@@ -99,6 +100,7 @@ namespace zero.Web
 
 
       // add default services
+      Services.AddHttpContextAccessor();
       Services.AddScoped<IApplicationContext, ApplicationContext>();
 
       Services.AddTransient<IBackofficeStore, BackofficeStore>();
@@ -165,49 +167,10 @@ namespace zero.Web
     /// </summary>
     void ConfigureIdentity()
     {
-      Services.AddIdentity<User, UserRole>(opts =>
-      {
-        opts.ClaimsIdentity.UserIdClaimType = Constants.Auth.Claims.UserId;
-        opts.ClaimsIdentity.UserNameClaimType = Constants.Auth.Claims.UserName;
-        opts.ClaimsIdentity.RoleClaimType = Constants.Auth.Claims.Role;
-        opts.ClaimsIdentity.SecurityStampClaimType = Constants.Auth.Claims.SecurityStamp;
-
-        opts.Password.RequireDigit = false;
-        opts.Password.RequireLowercase = false;
-        opts.Password.RequireUppercase = false;
-        opts.Password.RequireNonAlphanumeric = false;
-        opts.Password.RequiredLength = 8;
-        opts.Password.RequiredUniqueChars = 1;
-
-        opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-        opts.Lockout.MaxFailedAccessAttempts = 5;
-        opts.Lockout.AllowedForNewUsers = true;
-      })
-        .AddClaimsPrincipalFactory<ZeroClaimsPrinicipalFactory>()
-        .AddDefaultTokenProviders();
-
-      Services.ConfigureApplicationCookie(opts =>
-      {
-        //opts.Cookie.Path = // TODO use backoffice path
-        opts.Cookie.Name = Constants.Auth.CookieName;
-        //opts.Cookie.Path = "/zero"; // TODO dynamic
-        opts.SlidingExpiration = true;
-        opts.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-
-        // override redirect to login page (handled by vue frontend) and return a 401 instead
-        opts.Events.OnRedirectToLogin = (context) =>
-        {
-          context.Response.StatusCode = 401;
-          return Task.CompletedTask;
-        };
-      });
-
-      Services.AddTransient<IUserStore<User>, ZeroUserStore>();
-      Services.AddTransient<IRoleStore<UserRole>, ZeroRoleStore>();
-
-      Services.AddScoped<UserManager<User>>();
-      Services.AddScoped<SignInManager<User>>();
-      Services.AddScoped<RoleManager<UserRole>>();
+      Services.AddZeroIdentity<User, UserRole>();
+      Services.AddAuthentication(Constants.Auth.Scheme)
+        .AddCookie(Constants.Auth.Scheme);
+      Services.ConfigureOptions<ConfigureZeroCookieOptions<User>>();
     }
 
 
