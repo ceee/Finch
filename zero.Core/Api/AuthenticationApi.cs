@@ -20,31 +20,21 @@ namespace zero.Core.Api
 
     protected SignInManager<User> SignInManager { get; private set; }
 
-    protected IUserClaimsPrincipalFactory<User> ClaimsPrincipalFactory { get; private set; }
-
     protected ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
 
-    public AuthenticationApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, SignInManager<User> signInManager, IUserClaimsPrincipalFactory<User> claimsPrincipalFactory)
+    public AuthenticationApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, SignInManager<User> signInManager)
     {
       Raven = raven;
       HttpContextAccessor = httpContextAccessor;
       SignInManager = signInManager;
-      ClaimsPrincipalFactory = claimsPrincipalFactory;
     }
 
 
     /// <inheritdoc />
     public bool IsLoggedIn()
     {
-      ClaimsPrincipal principal = HttpContextAccessor.HttpContext.User;
-
-      bool isAuthenticated = principal.Identity.IsAuthenticated;
-      bool isZeroUser = principal.HasClaim(Constants.Auth.Claims.IsZero, PermissionsValue.True);
-
-      bool isSignedIn = SignInManager.IsSignedIn(principal);
-
-      return isAuthenticated && isZeroUser && isSignedIn;
+      return SignInManager.IsSignedIn(HttpContextAccessor.HttpContext.User);
     }
 
 
@@ -65,8 +55,6 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<User> GetUser()
     {
-      //var userIdClaim = Principal?.FindFirst(ClaimTypes.NameIdentifier);
-
       return await SignInManager.UserManager.GetUserAsync(HttpContextAccessor.HttpContext.User);
     }
 
@@ -85,7 +73,6 @@ namespace zero.Core.Api
     public Permission GetPermission(string key = null)
     {
       Claim claim = Principal.Claims.FirstOrDefault(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(key + ":"));
-
       return Permission.FromClaim(claim);
     }
 
@@ -99,7 +86,7 @@ namespace zero.Core.Api
 
       if (user == null)
       {
-        result.AddError("@login.errors.wrongcredentials");
+        result.AddError("@login.errors.wrongcredentials"); // TODO we don't need translations here, but return an enum, so the app itself can translate the error
         return result;
       }
       // TODO probably move this logic into a custom SignInManager which overrides CanSignInAsync()
@@ -110,9 +97,7 @@ namespace zero.Core.Api
         return result;
       }
 
-
-
-      SignInResult signInResult = await SignInManager.CheckPasswordSignInAsync(user, password, true);
+      SignInResult signInResult = await SignInManager.PasswordSignInAsync(user, password, isPersistent, true);
 
       if (!signInResult.Succeeded)
       {
@@ -136,26 +121,6 @@ namespace zero.Core.Api
         return result;
       }
 
-
-
-      ClaimsPrincipal userPrincipal = await ClaimsPrincipalFactory.CreateAsync(user);
-      //var claims = new[] {new Claim(Constants.Auth.Claims.UserId, user.Id) };
-      //var claimsIdentity = new ClaimsIdentity(claims, Constants.Auth.Scheme);
-      //var userPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-      
-
-      userPrincipal.Identities.FirstOrDefault()?.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, Constants.Auth.Scheme));
-
-      await SignInManager.Context.SignInAsync(Constants.Auth.Scheme, userPrincipal, new AuthenticationProperties()
-      {
-        IsPersistent = isPersistent
-      });
-
-      var xuser = HttpContextAccessor.HttpContext.User;
-      var xuserid = GetUserId();
-      var yuser = await GetUser();
-
       return EntityResult.Success();
     }
 
@@ -163,14 +128,14 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task Logout()
     {
-      await SignInManager.Context.SignOutAsync(Constants.Auth.Scheme);
+      await SignInManager.SignOutAsync();
     }
 
 
     /// <inheritdoc />
     public string GetUserId()
     {
-      return HttpContextAccessor.HttpContext.User.FindFirstValue(Constants.Auth.Claims.UserId);
+      return SignInManager.UserManager.GetUserId(HttpContextAccessor.HttpContext.User);
     }
   }
 

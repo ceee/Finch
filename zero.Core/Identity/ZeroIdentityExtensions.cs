@@ -57,15 +57,15 @@ namespace zero.Core.Identity
         services.Configure(setupAction);
       }
 
-      IdentityBuilder builder = new IdentityBuilder(typeof(TUser), services);
+      IdentityBuilder builder = new IdentityBuilder(typeof(TUser), typeof(TRole), services);
 
       builder.AddDefaultTokenProviders();
       builder.AddUserStore<UserStore<TUser>>();
       builder.AddUserManager<UserManager<TUser>>();
-      builder.AddSignInManager<SignInManager<TUser>>();
+      builder.AddSignInManager<ZeroSignInManager<TUser>>();
       builder.AddClaimsPrincipalFactory<ZeroClaimsPrinicipalFactory<TUser, TRole>>();
 
-      builder.AddRoles<TRole>();
+      builder.AddRoleValidator<RoleValidator<TRole>>();
       builder.AddRoleManager<RoleManager<TRole>>();
       builder.AddRoleStore<RoleStore<TRole>>();
 

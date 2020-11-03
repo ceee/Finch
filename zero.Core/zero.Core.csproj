@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -11,6 +11,10 @@
     <Description>// TODO</Description>
   </PropertyGroup>
 
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
   <!--<ItemGroup>
     <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
   </ItemGroup>-->
@@ -18,9 +22,8 @@
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.3" />
     <PackageReference Include="FluentValidation" Version="9.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.0-rc.2.20475.17" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0-rc.2.20475.5" />
     <PackageReference Include="RavenDB.Client" Version="5.0.3" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.1" />

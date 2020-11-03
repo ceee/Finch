@@ -11,7 +11,9 @@ using zero.Core.Identity;
 
 namespace zero.Core.Security
 {
-  public class ZeroClaimsPrinicipalFactory<TUser, TRole> : UserClaimsPrincipalFactory<TUser, TRole>, IUserClaimsPrincipalFactory<TUser> where TUser : class, IUser where TRole : class, IUserRole
+  public class ZeroClaimsPrinicipalFactory<TUser, TRole> : UserClaimsPrincipalFactory<TUser, TRole>, IUserClaimsPrincipalFactory<TUser> 
+    where TUser : class, IUser
+    where TRole : class, IUserRole
   {
     public ZeroClaimsPrinicipalFactory(UserManager<TUser> userManager, RoleManager<TRole> roleManager, IOptions<IdentityOptions> optionsAccessor) : base(userManager, roleManager, optionsAccessor)
     {
@@ -26,6 +28,12 @@ namespace zero.Core.Security
       }
 
       ClaimsIdentity principal = await GenerateClaimsAsync(user);
+
+      if (principal == null)
+      {
+        return null;
+      }
+
       return new ClaimsPrincipal(principal);
     }
 
@@ -72,6 +80,7 @@ namespace zero.Core.Security
       }
 
       claims.Add(new Claim(Constants.Auth.Claims.CurrentAppId, currentAppId));
+      claims.Add(new Claim(Constants.Auth.Claims.DefaultAppId, user.AppId));
 
       // add default role when user has none
       if (!claims.Any(x => x.Type == Constants.Auth.Claims.Role))

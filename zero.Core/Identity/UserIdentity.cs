@@ -14,7 +14,7 @@ namespace zero.Core.Identity
 
     public UserIdentity() { }
 
-    private UserIdentity(ClaimsIdentity identity) : base(identity.Claims, Issuer)
+    private UserIdentity(ClaimsIdentity identity) : base(identity, identity.Claims, Issuer, Constants.Auth.Claims.UserName, Constants.Auth.Claims.Role)
     {
 
     }
@@ -29,7 +29,7 @@ namespace zero.Core.Identity
         return false;
       }
 
-      if (!identity.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True))
+      if (!identity.HasClaim(Constants.Auth.Claims.IsZero, PermissionsValue.True))
       {
         return false;
       }
