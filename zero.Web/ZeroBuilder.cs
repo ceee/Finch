@@ -173,7 +173,7 @@ namespace zero.Web
       Services.AddZeroIdentity<User, UserRole>();
       Services.Replace<IUserClaimsPrincipalFactory<User>, ZeroBackofficeClaimsPrincipalFactory<User, UserRole>>();
 
-      Services.AddAuthentication()
+      Services.AddAuthentication(Constants.Auth.BackofficeScheme)
         .AddZeroBackofficeCookie<User, UserRole>();
 
       Services.AddAuthorization();
