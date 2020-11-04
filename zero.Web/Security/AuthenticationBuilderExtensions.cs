@@ -16,8 +16,8 @@ namespace zero.Web.Security
   public static class AuthenticationBuilderExtensions
   {
     public static AuthenticationBuilder AddZeroBackofficeCookie<TUser, TRole>(this AuthenticationBuilder builder, Action<OptionsBuilder<CookieAuthenticationOptions>> setupAction = null)
-      where TUser : class, IUser
-      where TRole : class, IUserRole
+      where TUser : class, IBackofficeUser
+      where TRole : class, IBackofficeUserRole
     {
       return builder.AddCookie<TUser>(Constants.Auth.BackofficeScheme, Constants.Auth.BackofficeDisplayName, true, b =>
       {

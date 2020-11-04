@@ -11,8 +11,8 @@ using zero.Core.Identity;
 namespace zero.Core.Security
 {
   public class ZeroBackofficeClaimsPrincipalFactory<TUser, TRole> : ZeroClaimsPrinicipalFactory<TUser, TRole>
-    where TUser : class, IUser
-    where TRole : class, IUserRole
+    where TUser : class, IBackofficeUser
+    where TRole : class, IBackofficeUserRole
   {
     public ZeroBackofficeClaimsPrincipalFactory(UserManager<TUser> userManager, RoleManager<TRole> roleManager, IOptions<IdentityOptions> optionsAccessor, IOptions<ZeroAuthOptions<TUser>> authOptions) 
       : base(userManager, roleManager, optionsAccessor, authOptions)
@@ -65,13 +65,6 @@ namespace zero.Core.Security
       claims.RemoveAll(x => x.Type == Constants.Auth.Claims.AppId);
       claims.Add(new Claim(Constants.Auth.Claims.AppId, currentAppId));
       claims.Add(new Claim(Constants.Auth.Claims.DefaultAppId, user.AppId));
-
-
-      // add default role when user has none
-      if (!claims.Any(x => x.Type == Constants.Auth.Claims.Role))
-      {
-        claims.Add(new Claim(Constants.Auth.Claims.Role, "userRoles.1-A")); // TODO this needs to be dynamic
-      }
 
       return claims;
     }

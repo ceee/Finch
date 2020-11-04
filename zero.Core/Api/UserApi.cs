@@ -12,11 +12,11 @@ namespace zero.Core.Api
 {
   public class UserApi : AppAwareBackofficeApi, IUserApi
   {
-    protected UserManager<User> UserManager { get; private set; }
+    protected UserManager<BackofficeUser> UserManager { get; private set; }
 
     protected IZeroContext Context { get; set; }
 
-    public UserApi(IBackofficeStore store, UserManager<User> userManager, IZeroContext context) : base(store)
+    public UserApi(IBackofficeStore store, UserManager<BackofficeUser> userManager, IZeroContext context) : base(store)
     {
       UserManager = userManager;
       Context = context;
@@ -24,33 +24,33 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IUser> GetUserById(string id)
+    public async Task<IBackofficeUser> GetUserById(string id)
     {
-      IUser user = await UserManager.FindByIdAsync(id);
+      IBackofficeUser user = await UserManager.FindByIdAsync(id);
       return user;
     }
 
 
     /// <inheritdoc />
-    public async Task<IUser> GetUserByEmail(string email)
+    public async Task<IBackofficeUser> GetUserByEmail(string email)
     {
-      IUser user = await UserManager.FindByEmailAsync(email);
+      IBackofficeUser user = await UserManager.FindByEmailAsync(email);
       return user;
     }
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<string, IUser>> GetByIds(params string[] ids)
+    public async Task<Dictionary<string, IBackofficeUser>> GetByIds(params string[] ids)
     {
-      return await GetByIds<IUser>(ids);
+      return await GetByIds<IBackofficeUser>(ids);
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<IUser>> GetAll()
+    public async Task<IList<IBackofficeUser>> GetAll()
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-      return await session.Query<IUser>()
+      return await session.Query<IBackofficeUser>()
         .Scope(Scope)
         .OrderByDescending(x => x.CreatedDate)
         .ToListAsync();
@@ -58,7 +58,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<IUser>> GetByQuery(ListQuery<IUser> query)
+    public async Task<ListResult<IBackofficeUser>> GetByQuery(ListQuery<IBackofficeUser> query)
     {
       string currentUserId = UserManager.GetUserId(Context.User);
       HashSet<string> appIds = new HashSet<string>() { Constants.Database.SharedAppId, Scope.AppId };
@@ -66,44 +66,44 @@ namespace zero.Core.Api
       query.SearchSelector = user => user.Name;
 
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-      return await session.Query<IUser>()
+      return await session.Query<IBackofficeUser>()
         .Where(x => x.AppId.In(appIds) || x.Id == currentUserId)
         .ToQueriedListAsync(query);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IUser>> Save(IUser model)
+    public async Task<EntityResult<IBackofficeUser>> Save(IBackofficeUser model)
     {
       return await SaveModel(model); //, new UserValidator<User>());
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IUser>> Delete(string id)
+    public async Task<EntityResult<IBackofficeUser>> Delete(string id)
     {
-      return await DeleteById<IUser>(id);
+      return await DeleteById<IBackofficeUser>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IUser>> UpdatePassword(IUser user, string currentPassword, string newPassword)
+    public async Task<EntityResult<IBackofficeUser>> UpdatePassword(IBackofficeUser user, string currentPassword, string newPassword)
     {
       if (currentPassword.IsNullOrWhiteSpace() || newPassword.IsNullOrWhiteSpace())
       {
-        return EntityResult<IUser>.Fail(nameof(currentPassword), "@errors.changepassword.emptyfields");
+        return EntityResult<IBackofficeUser>.Fail(nameof(currentPassword), "@errors.changepassword.emptyfields");
       }
 
       if (user == null)
       {
-        return EntityResult<IUser>.Fail("@errors.changepassword.nouser");
+        return EntityResult<IBackofficeUser>.Fail("@errors.changepassword.nouser");
       }
 
-      IdentityResult identityResult = await UserManager.ChangePasswordAsync(user as User, currentPassword, newPassword);
+      IdentityResult identityResult = await UserManager.ChangePasswordAsync(user as BackofficeUser, currentPassword, newPassword);
 
       if (!identityResult.Succeeded)
       {
-        EntityResult<IUser> result = EntityResult<IUser>.Fail();
+        EntityResult<IBackofficeUser> result = EntityResult<IBackofficeUser>.Fail();
         
         foreach (IdentityError error in identityResult.Errors)
         {
@@ -113,19 +113,19 @@ namespace zero.Core.Api
         return result;
       }
 
-      return EntityResult<IUser>.Success(user);
+      return EntityResult<IBackofficeUser>.Success(user);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IUser>> Enable(IUser user)
+    public async Task<EntityResult<IBackofficeUser>> Enable(IBackofficeUser user)
     {
       return await UpdateActiveState(user, true);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IUser>> Disable(IUser user)
+    public async Task<EntityResult<IBackofficeUser>> Disable(IBackofficeUser user)
     {
       return await UpdateActiveState(user, false);
     }
@@ -135,15 +135,15 @@ namespace zero.Core.Api
     /// Updates the active state of user.
     /// If IsActive=false, the user cannot login anymore
     /// </summary>
-    async Task<EntityResult<IUser>> UpdateActiveState(IUser user, bool isActive)
+    async Task<EntityResult<IBackofficeUser>> UpdateActiveState(IBackofficeUser user, bool isActive)
     {
       user.IsActive = isActive;
 
-      IdentityResult identityResult = await UserManager.UpdateAsync(user as User);
+      IdentityResult identityResult = await UserManager.UpdateAsync(user as BackofficeUser);
 
       if (!identityResult.Succeeded)
       {
-        EntityResult<IUser> result = EntityResult<IUser>.Fail();
+        EntityResult<IBackofficeUser> result = EntityResult<IBackofficeUser>.Fail();
 
         foreach (IdentityError error in identityResult.Errors)
         {
@@ -153,9 +153,9 @@ namespace zero.Core.Api
         return result;
       }
 
-      await UserManager.UpdateSecurityStampAsync(user as User);
+      await UserManager.UpdateSecurityStampAsync(user as BackofficeUser);
 
-      return EntityResult<IUser>.Success(user);
+      return EntityResult<IBackofficeUser>.Success(user);
     }
   }
 
@@ -165,52 +165,52 @@ namespace zero.Core.Api
     /// <summary>
     /// Find user by id
     /// </summary>
-    Task<IUser> GetUserById(string id);
+    Task<IBackofficeUser> GetUserById(string id);
 
     /// <summary>
     /// Find user by email
     /// </summary>
-    Task<IUser> GetUserByEmail(string email);
+    Task<IBackofficeUser> GetUserByEmail(string email);
 
     /// <summary>
     /// Get users by ids
     /// </summary>
-    Task<Dictionary<string, IUser>> GetByIds(params string[] ids);
+    Task<Dictionary<string, IBackofficeUser>> GetByIds(params string[] ids);
 
     /// <summary>
     /// Get all users for the selected application
     /// </summary>
-    Task<IList<IUser>> GetAll();
+    Task<IList<IBackofficeUser>> GetAll();
 
     /// <summary>
     /// Get all available users (with query)
     /// </summary>
-    Task<ListResult<IUser>> GetByQuery(ListQuery<IUser> query);
+    Task<ListResult<IBackofficeUser>> GetByQuery(ListQuery<IBackofficeUser> query);
 
     /// <summary>
     /// Creates or updates a user
     /// </summary>
-    Task<EntityResult<IUser>> Save(IUser model);
+    Task<EntityResult<IBackofficeUser>> Save(IBackofficeUser model);
 
     /// <summary>
     /// Deletes a user
     /// </summary>
-    Task<EntityResult<IUser>> Delete(string id);
+    Task<EntityResult<IBackofficeUser>> Delete(string id);
 
     /// <summary>
     /// Changes the password of the current user.
     /// User is logged out if this operation succeeds.
     /// </summary>
-    Task<EntityResult<IUser>> UpdatePassword(IUser user, string currentPassword, string newPassword);
+    Task<EntityResult<IBackofficeUser>> UpdatePassword(IBackofficeUser user, string currentPassword, string newPassword);
 
     /// <summary>
     /// Enables a user
     /// </summary>
-    Task<EntityResult<IUser>> Enable(IUser user);
+    Task<EntityResult<IBackofficeUser>> Enable(IBackofficeUser user);
 
     /// <summary>
     /// Disables a user
     /// </summary>
-    Task<EntityResult<IUser>> Disable(IUser user);
+    Task<EntityResult<IBackofficeUser>> Disable(IBackofficeUser user);
   }
 }

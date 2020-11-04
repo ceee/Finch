@@ -11,6 +11,9 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
+  // TODO this class still searches for role names in role IDs, which is not correct.
+  // we need a join here
+  // guess this code will only be used in certain Authorize attributes
   public partial class RavenUserStore<TUser, TRole> : IUserRoleStore<TUser> 
     where TUser : class, IIdentityUserWithRoles
     where TRole : class, IIdentityUserRole
@@ -18,7 +21,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
     {  
-      user.Roles.Add(roleName);
+      user.RoleIds.Add(roleName);
       return Task.CompletedTask;
     }
 
@@ -26,7 +29,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public Task<IList<string>> GetRolesAsync(TUser user, CancellationToken cancellationToken)
     {
-      return Task.FromResult((IList<string>)user.Roles.ToList());
+      return Task.FromResult((IList<string>)user.RoleIds.ToList());
     }
 
 
@@ -35,7 +38,7 @@ namespace zero.Core.Identity
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<TUser>().Where(x => roleName.In(x.Roles)).ToListAsync();
+        return await session.Query<TUser>().Where(x => roleName.In(x.RoleIds)).ToListAsync();
       }
     }
 
@@ -43,14 +46,14 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public Task<bool> IsInRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
     {
-      return Task.FromResult(user.Roles.Contains(roleName, StringComparer.InvariantCultureIgnoreCase));
+      return Task.FromResult(user.RoleIds.Contains(roleName, StringComparer.InvariantCultureIgnoreCase));
     }
 
 
     /// <inheritdoc />
     public Task RemoveFromRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
     {
-      user.Roles.Remove(roleName);
+      user.RoleIds.Remove(roleName);
       return Task.CompletedTask;
     }
   }

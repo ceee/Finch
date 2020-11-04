@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Handlers;
 using zero.Core.Identity;
 using zero.Core.Options;
 
@@ -28,20 +29,23 @@ namespace zero.Core.Api
 
     protected IZeroOptions Options { get; private set; }
 
-    protected UserManager<User> UserManager { get; private set; }
+    protected UserManager<BackofficeUser> UserManager { get; private set; }
 
     protected ILogger<ApplicationContext> Logger { get; private set; }
+
+    protected IApplicationResolverHandler Handler { get; private set; }
 
     static IList<IApplication> Apps { get; set; }
 
 
 
-    public ApplicationContext(IDocumentStore raven, IZeroOptions options, UserManager<User> userManager, ILogger<ApplicationContext> logger)
+    public ApplicationContext(IDocumentStore raven, IZeroOptions options, UserManager<BackofficeUser> userManager, ILogger<ApplicationContext> logger, IApplicationResolverHandler handler = null)
     {
       Raven = raven;
       Options = options;
       UserManager = userManager;
       Logger = logger;
+      Handler = handler;
     }
 
 
@@ -79,7 +83,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<bool> TrySwitchForUser(User user, string appId)
+    public async Task<bool> TrySwitchForUser(BackofficeUser user, string appId)
     {
       if (user == null || appId.IsNullOrEmpty())
       {
@@ -106,13 +110,13 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IApplication> ResolveFromUser(ClaimsPrincipal user)
     {
-      User userEntity = await UserManager.GetUserAsync(user);
+      BackofficeUser userEntity = await UserManager.GetUserAsync(user);
       return await ResolveFromUser(userEntity);
     }
 
 
     /// <inheritdoc />
-    public async Task<IApplication> ResolveFromUser(User user)
+    public async Task<IApplication> ResolveFromUser(BackofficeUser user)
     {
       if (user == null)
       {
@@ -153,7 +157,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IApplication> ResolveFromRequest(HttpContext context)
     {
-      return await ResolveFromUri(context.Request.GetEncodedUrl());
+      return Handler?.Resolve(context.Request, await GetApplications()) ?? await ResolveFromUri(context.Request.GetEncodedUrl());
     }
 
 
@@ -177,7 +181,7 @@ namespace zero.Core.Api
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
       IApplication app = await session.LoadAsync<Application>(appId);
 
-      return new ApplicationContext(Raven, Options, UserManager, Logger)
+      return new ApplicationContext(Raven, Options, UserManager, Logger, Handler)
       {
         App = app,
         AppId = appId
@@ -259,7 +263,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get applications the user has access to
     /// </summary>
-    string[] GetAllowedAppIdsForUser(User user)
+    string[] GetAllowedAppIdsForUser(BackofficeUser user)
     {
       IEnumerable<Permission> permissions = user.Claims
         .Where(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(Permissions.Applications))
@@ -295,7 +299,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Try to switch the current application for a user
     /// </summary>
-    Task<bool> TrySwitchForUser(User user, string appId);
+    Task<bool> TrySwitchForUser(BackofficeUser user, string appId);
 
     /// <summary>
     /// Resolves the current application from the request path
@@ -322,7 +326,7 @@ namespace zero.Core.Api
     /// Resolves the current application from a user.
     /// This method won't return apps the user has no access to.
     /// </summary>
-    Task<IApplication> ResolveFromUser(User user);
+    Task<IApplication> ResolveFromUser(BackofficeUser user);
 
     /// <summary>
     /// Creates a new application context for the specified application.

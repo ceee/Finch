@@ -15,10 +15,10 @@ namespace zero.Core.Api
 
     protected IZeroContext Context { get; set; }
 
-    protected SignInManager<User> SignInManager { get; private set; }
+    protected SignInManager<BackofficeUser> SignInManager { get; private set; }
 
 
-    public AuthenticationApi(IDocumentStore raven, IZeroContext context, SignInManager<User> signInManager)
+    public AuthenticationApi(IDocumentStore raven, IZeroContext context, SignInManager<BackofficeUser> signInManager)
     {
       Raven = raven;
       Context = context;
@@ -48,7 +48,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<User> GetUser()
+    public async Task<BackofficeUser> GetUser()
     {
       return await SignInManager.UserManager.GetUserAsync(Context.User);
     }
@@ -77,7 +77,7 @@ namespace zero.Core.Api
     {
       EntityResult result = new EntityResult();
 
-      User user = await SignInManager.UserManager.FindByNameAsync(email);
+      BackofficeUser user = await SignInManager.UserManager.FindByNameAsync(email);
 
       if (user == null)
       {
@@ -140,7 +140,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get currently logged-in user
     /// </summary>
-    Task<User> GetUser();
+    Task<BackofficeUser> GetUser();
 
     /// <summary>
     /// Whether a user is currently logged-in

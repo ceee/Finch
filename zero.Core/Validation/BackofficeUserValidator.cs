@@ -4,7 +4,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Validation
 {
-  public class BackofficeUserValidator : ZeroValidator<IUser>
+  public class BackofficeUserValidator : ZeroValidator<IBackofficeUser>
   {
     public BackofficeUserValidator(bool isCreate = false)
     {
@@ -12,7 +12,7 @@ namespace zero.Core.Validation
       RuleFor(x => x.Email).NotEmpty().Email().MaximumLength(120);
       RuleFor(x => x.PasswordHash).NotEmpty();
       RuleFor(x => x.LanguageId).NotEmpty();
-      RuleFor(x => x.Roles).NotEmpty();
+      RuleFor(x => x.RoleIds).NotEmpty();
 
       if (isCreate)
       {

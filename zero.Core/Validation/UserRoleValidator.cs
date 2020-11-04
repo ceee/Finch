@@ -6,7 +6,7 @@ using System;
 
 namespace zero.Core.Validation
 {
-  public class UserRoleValidator : ZeroValidator<IUserRole>
+  public class UserRoleValidator : ZeroValidator<IBackofficeUserRole>
   {
     const string SECTION_CLAIM = "section.";
 

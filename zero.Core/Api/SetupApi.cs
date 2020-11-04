@@ -23,10 +23,10 @@ namespace zero.Core.Api
   {
     protected IZeroOptions Options { get; private set; }
 
-    protected UserManager<User> UserManager { get; private set; }
+    protected UserManager<BackofficeUser> UserManager { get; private set; }
 
 
-    public SetupApi(IZeroOptions options, UserManager<User> userManager)
+    public SetupApi(IZeroOptions options, UserManager<BackofficeUser> userManager)
     {
       Options = options;
       UserManager = userManager;
@@ -68,7 +68,7 @@ namespace zero.Core.Api
         };
 
         // create user
-        User user = new User()
+        BackofficeUser user = new BackofficeUser()
         {
           IsSuper = true,
           CreatedDate = DateTimeOffset.Now,
@@ -117,16 +117,16 @@ namespace zero.Core.Api
           await session.StoreAsync(user);
 
           // save default user roles
-          IList<UserRole> roles = GetRoles(model);
+          IList<BackofficeUserRole> roles = GetRoles(model);
 
-          foreach (UserRole role in roles)
+          foreach (BackofficeUserRole role in roles)
           {
             await session.StoreAsync(role);
           }
 
           // add admin role to super user
-          user.Roles.Add(roles.First(role => role.Name == "Standard").Alias);
-          user.Roles.Add(roles.First(role => role.Name == "Administrator").Alias);
+          user.RoleIds.Add(roles.First(role => role.Name == "Standard").Alias);
+          user.RoleIds.Add(roles.First(role => role.Name == "Administrator").Alias);
 
           // create language
           await session.StoreAsync(language);
@@ -224,11 +224,11 @@ namespace zero.Core.Api
     /// <summary>
     /// Create default roles
     /// </summary>
-    IList<UserRole> GetRoles(SetupModel model)
+    IList<BackofficeUserRole> GetRoles(SetupModel model)
     {
       string type = Constants.Auth.Claims.Permission;
 
-      UserRole adminRole = new UserRole()
+      BackofficeUserRole adminRole = new BackofficeUserRole()
       {
         Name = "Administrator",
         Alias = Safenames.Alias("Administrator"),
@@ -254,7 +254,7 @@ namespace zero.Core.Api
         },
       };
 
-      UserRole editorRole = new UserRole()
+      BackofficeUserRole editorRole = new BackofficeUserRole()
       {
         Name = "Editor",
         Alias = Safenames.Alias("Editor"),
@@ -274,7 +274,7 @@ namespace zero.Core.Api
         }
       };
 
-      UserRole defaultRole = new UserRole()
+      BackofficeUserRole defaultRole = new BackofficeUserRole()
       {
         Name = "Standard",
         Alias = Safenames.Alias("Standard"),
@@ -289,7 +289,7 @@ namespace zero.Core.Api
         }
       };
 
-      return new List<UserRole>() { adminRole, editorRole, defaultRole };
+      return new List<BackofficeUserRole>() { adminRole, editorRole, defaultRole };
     }
   }
 

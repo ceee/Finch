@@ -3,7 +3,7 @@ using zero.Core.Attributes;
 
 namespace zero.Core.Entities
 {
-  public class UserRole : ZeroEntity, IUserRole, IZeroDbConventions
+  public class BackofficeUserRole : ZeroEntity, IBackofficeUserRole, IZeroDbConventions
   {
     /// <inheritdoc/>
     public string Description { get; set; }
@@ -16,8 +16,8 @@ namespace zero.Core.Entities
   }
 
 
-  [Collection("UserRoles")]
-  public interface IUserRole : IZeroEntity, IAppAwareShareableEntity, IZeroDbConventions, IIdentityUserRole
+  [Collection("BackofficeUserRoles")]
+  public interface IBackofficeUserRole : IZeroEntity, IAppAwareShareableEntity, IZeroDbConventions, IIdentityUserRole
   {
     /// <summary>
     /// Additional description

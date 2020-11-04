@@ -8,7 +8,7 @@ namespace zero.Core.Entities
     /// <summary>
     /// The roles (aliases) of the user
     /// </summary>
-    List<string> Roles { get; set; }
+    List<string> RoleIds { get; set; }
   }
 
 

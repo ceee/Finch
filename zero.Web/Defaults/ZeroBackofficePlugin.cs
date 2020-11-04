@@ -65,8 +65,8 @@ namespace zero.Web.Defaults
       services.AddTransient<IValidator<IPage>, PageValidator>();
       services.AddTransient<IValidator<IMedia>, MediaValidator>();
       services.AddTransient<IValidator<IMediaFolder>, MediaFolderValidator>();
-      services.AddTransient<IValidator<IUserRole>, UserRoleValidator>();
-      services.AddTransient<IValidator<IUser>, BackofficeUserValidator>();
+      services.AddTransient<IValidator<IBackofficeUserRole>, UserRoleValidator>();
+      services.AddTransient<IValidator<IBackofficeUser>, BackofficeUserValidator>();
 
       services.AddTransient<IApplicationsApi, ApplicationsApi>();
       services.AddTransient<ICountriesApi, CountriesApi>();

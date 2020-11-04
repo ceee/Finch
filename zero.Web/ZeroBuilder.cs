@@ -19,6 +19,7 @@ using zero.Core.Api;
 using zero.Core.Assemblies;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Handlers;
 using zero.Core.Identity;
 using zero.Core.Options;
 using zero.Core.Plugins;
@@ -119,7 +120,6 @@ namespace zero.Web
         return new Paths(env.WebRootPath, true);
       });
 
-
       // add dev server
       Services.AddOptions<ZeroDevOptions>()
         .Bind(Configuration.GetSection("Zero:DevServer"))
@@ -171,11 +171,11 @@ namespace zero.Web
     {
       Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<CookieAuthenticationOptions>, PostConfigureCookieAuthenticationOptions>());
 
-      Services.AddZeroIdentity<User, UserRole>();
-      Services.Replace<IUserClaimsPrincipalFactory<User>, ZeroBackofficeClaimsPrincipalFactory<User, UserRole>>();
+      Services.AddZeroIdentity<BackofficeUser, BackofficeUserRole>();
+      Services.Replace<IUserClaimsPrincipalFactory<BackofficeUser>, ZeroBackofficeClaimsPrincipalFactory<BackofficeUser, BackofficeUserRole>>();
 
       Services.AddAuthentication(Constants.Auth.BackofficeScheme)
-        .AddZeroBackofficeCookie<User, UserRole>();
+        .AddZeroBackofficeCookie<BackofficeUser, BackofficeUserRole>();
 
       Services.AddAuthorization();
     }

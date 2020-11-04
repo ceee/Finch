@@ -21,7 +21,7 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<EditModel<User>> GetUser() => Edit(await Api.GetUser());
+    public async Task<EditModel<BackofficeUser>> GetUser() => Edit(await Api.GetUser());
 
  
     public EntityResult IsLoggedIn() => EntityResult.Maybe(Api.IsLoggedIn());
@@ -42,7 +42,7 @@ namespace zero.Web.Controllers
     [HttpPost, ZeroAuthorize]
     public async Task<EntityResult> SwitchApp(string appId)
     {
-      User user = await Api.GetUser();
+      BackofficeUser user = await Api.GetUser();
       return EntityResult.Maybe(await AppContext.TrySwitchForUser(user, appId));
     }
   }

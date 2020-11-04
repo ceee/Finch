@@ -105,6 +105,11 @@ namespace zero.Core.Routing
       IApplication app = await Context.ResolveFromRequest(context);
       string path = context.Request.Path;
 
+      if (app == null)
+      {
+        return null;
+      }
+
       return await ResolveUrl(app.Id, path);
     }
 

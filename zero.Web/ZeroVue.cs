@@ -64,7 +64,7 @@ namespace zero.Web
       config.AppId = AppContext.AppId;
       config.SharedAppId = Constants.Database.SharedAppId;
 
-      User user = await AuthenticationApi.GetUser();
+      BackofficeUser user = await AuthenticationApi.GetUser();
 
       if (user != null)
       {
@@ -75,7 +75,7 @@ namespace zero.Web
           Email = user.Email,
           IsSuper = user.IsSuper,
           Name = user.Name,
-          Roles = user.Roles
+          Roles = user.RoleIds
         };
       }
 

@@ -19,14 +19,14 @@ namespace zero.Core.Api
   {
     protected IHttpContextAccessor HttpContextAccessor { get; set; }
 
-    protected UserManager<User> UserManager { get; private set; }
+    protected UserManager<BackofficeUser> UserManager { get; private set; }
 
-    protected RoleManager<UserRole> RoleManager { get; private set; }
+    protected RoleManager<BackofficeUserRole> RoleManager { get; private set; }
 
     private ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
 
-    public UserRolesApi(IHttpContextAccessor httpContextAccessor, UserManager<User> userManager, RoleManager<UserRole> roleManager, IBackofficeStore store) : base(store)
+    public UserRolesApi(IHttpContextAccessor httpContextAccessor, UserManager<BackofficeUser> userManager, RoleManager<BackofficeUserRole> roleManager, IBackofficeStore store) : base(store)
     {
       HttpContextAccessor = httpContextAccessor;
       UserManager = userManager;
@@ -35,30 +35,30 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IList<IUserRole>> GetAll()
+    public async Task<IList<IBackofficeUserRole>> GetAll()
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<IUserRole>().OrderBy(x => x.Sort).ThenBy(x => x.Name).ToListAsync();
+        return await session.Query<IBackofficeUserRole>().OrderBy(x => x.Sort).ThenBy(x => x.Name).ToListAsync();
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<IUserRole> GetById(string id)
+    public async Task<IBackofficeUserRole> GetById(string id)
     {
       return await RoleManager.FindByIdAsync(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IUserRole>> Save(IUserRole model)
+    public async Task<EntityResult<IBackofficeUserRole>> Save(IBackofficeUserRole model)
     {
       ValidationResult validation = await new UserRoleValidator().ValidateAsync(model);
 
       if (!validation.IsValid)
       {
-        return EntityResult<IUserRole>.Fail(validation);
+        return EntityResult<IBackofficeUserRole>.Fail(validation);
       }
 
       if (model.Id.IsNullOrEmpty())
@@ -83,20 +83,20 @@ namespace zero.Core.Api
         }
       }
 
-      return EntityResult<IUserRole>.Success(model);
+      return EntityResult<IBackofficeUserRole>.Success(model);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IUserRole>> Delete(string id)
+    public async Task<EntityResult<IBackofficeUserRole>> Delete(string id)
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        UserRole country = await session.LoadAsync<UserRole>(id);
+        BackofficeUserRole country = await session.LoadAsync<BackofficeUserRole>(id);
 
         if (country == null)
         {
-          return EntityResult<IUserRole>.Fail("@errors.ondelete.idnotfound");
+          return EntityResult<IBackofficeUserRole>.Fail("@errors.ondelete.idnotfound");
         }
 
         session.Delete(country);
@@ -104,7 +104,7 @@ namespace zero.Core.Api
         await session.SaveChangesAsync();
       }
 
-      return EntityResult<IUserRole>.Success();
+      return EntityResult<IBackofficeUserRole>.Success();
     }
   }
 
@@ -114,21 +114,21 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all user roles
     /// </summary>
-    Task<IList<IUserRole>> GetAll();
+    Task<IList<IBackofficeUserRole>> GetAll();
 
     /// <summary>
     /// Get role by id
     /// </summary>
-    Task<IUserRole> GetById(string id);
+    Task<IBackofficeUserRole> GetById(string id);
 
     /// <summary>
     /// Create or update a role
     /// </summary>
-    Task<EntityResult<IUserRole>> Save(IUserRole model);
+    Task<EntityResult<IBackofficeUserRole>> Save(IBackofficeUserRole model);
 
     /// <summary>
     /// Deletes a role
     /// </summary>
-    Task<EntityResult<IUserRole>> Delete(string id);
+    Task<EntityResult<IBackofficeUserRole>> Delete(string id);
   }
 }

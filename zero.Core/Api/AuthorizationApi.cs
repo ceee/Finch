@@ -18,7 +18,7 @@ namespace zero.Core.Api
 
     protected IHttpContextAccessor HttpContextAccessor { get; set; }
 
-    protected SignInManager<User> SignInManager { get; private set; }
+    protected SignInManager<BackofficeUser> SignInManager { get; private set; }
 
     protected ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
@@ -26,7 +26,7 @@ namespace zero.Core.Api
     static Type AppAwareShareableType = typeof(IAppAwareShareableEntity);
 
 
-    public AuthorizationApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, SignInManager<User> signInManager)
+    public AuthorizationApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, SignInManager<BackofficeUser> signInManager)
     {
       Raven = raven;
       HttpContextAccessor = httpContextAccessor;

@@ -61,7 +61,7 @@ namespace zero.Core.Api
 
       // load affected users as the revisions could have been edited by other users too
       string[] userIds = items.Select(x => x.LastModifiedById).Distinct().ToArray();
-      Dictionary<string, User> users = await session.LoadAsync<User>(userIds);
+      Dictionary<string, BackofficeUser> users = await session.LoadAsync<BackofficeUser>(userIds);
 
       // create revision objects
       foreach (T item in items)
@@ -73,7 +73,7 @@ namespace zero.Core.Api
           Json = includeContent ? JsonConvert.SerializeObject(item) : null
         };
 
-        if (!item.LastModifiedById.IsNullOrEmpty() && users.TryGetValue(item.LastModifiedById, out User user))
+        if (!item.LastModifiedById.IsNullOrEmpty() && users.TryGetValue(item.LastModifiedById, out BackofficeUser user))
         {
           revision.User = new RevisionUser()
           {

@@ -4,7 +4,7 @@ using zero.Core.Attributes;
 
 namespace zero.Core.Entities
 {
-  public class User : ZeroEntity, IUser
+  public class BackofficeUser : ZeroEntity, IBackofficeUser
   {
     /// <inheritdoc />
     public string Username { get; set; }
@@ -36,7 +36,7 @@ namespace zero.Core.Entities
 
 
     /// <inheritdoc/>
-    public List<string> Roles { get; set; } = new List<string>();
+    public List<string> RoleIds { get; set; } = new List<string>();
 
     /// <inheritdoc/>
     public List<IUserClaim> Claims { get; set; } = new List<IUserClaim>();
@@ -73,8 +73,8 @@ namespace zero.Core.Entities
   }
 
 
-  [Collection("Users")]
-  public interface IUser : IZeroEntity, IAppAwareEntity, IZeroDbConventions, IIdentityUserWithRoles
+  [Collection("BackofficeUsers")]
+  public interface IBackofficeUser : IZeroEntity, IAppAwareEntity, IZeroDbConventions, IIdentityUserWithRoles
   {
     /// <summary>
     /// Currently selected app id for the backoffice

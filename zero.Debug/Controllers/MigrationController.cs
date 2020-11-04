@@ -57,8 +57,8 @@ namespace zero.Debug.Controllers
         SpaceContents = await Handle<ISpaceContent>(),
         TaxRates = await Handle<ITaxRate>(),
         Translations = await Handle<ITranslation>(),
-        UserRoles = await Handle<IUserRole>(),
-        Users = await Handle<IUser>(),
+        UserRoles = await Handle<IBackofficeUserRole>(),
+        Users = await Handle<IBackofficeUser>(),
       });
     }
 
