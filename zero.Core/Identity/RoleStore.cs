@@ -8,14 +8,14 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class RoleStore<TRole> : IRoleStore<TRole> where TRole : class, IIdentityUserRole
+  public partial class RavenRoleStore<TRole> : IRoleStore<TRole> where TRole : class, IIdentityUserRole
   {
     protected IDocumentStore Raven { get; private set; }
 
     protected IdentityErrorDescriber ErrorDescriber { get; private set; }
 
 
-    public RoleStore(IDocumentStore raven, IdentityErrorDescriber describer = null)
+    public RavenRoleStore(IDocumentStore raven, IdentityErrorDescriber describer = null)
     {
       Raven = raven;
       ErrorDescriber = describer ?? new IdentityErrorDescriber();

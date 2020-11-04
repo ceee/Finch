@@ -12,7 +12,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class UserStore<TUser> : IUserClaimStore<TUser> where TUser : class, IIdentityUser
+  public partial class RavenUserStore<TUser> : IUserClaimStore<TUser> where TUser : class, IIdentityUser
   {
     /// <inheritdoc />
     public async Task AddClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)

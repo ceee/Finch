@@ -27,6 +27,7 @@ using zero.Core.Validation;
 using zero.Web.Controllers;
 using zero.Web.Defaults;
 using zero.Web.Filters;
+using zero.Web.Security;
 using Zero.Web.DevServer;
 
 namespace zero.Web
@@ -91,10 +92,9 @@ namespace zero.Web
         Mvc.AddRazorRuntimeCompilation();
       } 
 
-      // configure Raven + Identity
+      // configure Raven + identity
       ConfigureDatabase();
       ConfigureIdentity();
-
 
       // configure FluentValidation
       ValidatorOptions.Global.PropertyNameResolver = ValidatorCamelCasePropertyResolver.ResolvePropertyName;
@@ -164,14 +164,19 @@ namespace zero.Web
 
 
     /// <summary>
-    /// Configures user + roles
+    /// Configures identity
     /// </summary>
     void ConfigureIdentity()
     {
-      Services.AddZeroBackofficeIdentity<User, UserRole>();
-      Services.AddAuthentication(Constants.Auth.BackofficeScheme)
-        .AddCookie(Constants.Auth.BackofficeScheme);
-      Services.ConfigureOptions<ConfigureZeroBackofficeCookieOptions<User>>();
+      Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<CookieAuthenticationOptions>, PostConfigureCookieAuthenticationOptions>());
+
+      Services.AddZeroIdentity<User, UserRole>();
+      Services.Replace<IUserClaimsPrincipalFactory<User>, ZeroBackofficeClaimsPrincipalFactory<User, UserRole>>();
+
+      Services.AddAuthentication()
+        .AddZeroBackofficeCookie<User, UserRole>();
+
+      Services.AddAuthorization();
     }
 
 

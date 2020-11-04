@@ -48,7 +48,7 @@ namespace zero.Core.Identity
     public void OnAuthorization(AuthorizationFilterContext context)
     {
       // allow anonymous skips all authorization
-      if (!Enabled) // context.Filters.Any(item => item is IAllowAnonymousFilter) || 
+      if (true || !Enabled) // context.Filters.Any(item => item is IAllowAnonymousFilter) || 
       {
         return;
       }

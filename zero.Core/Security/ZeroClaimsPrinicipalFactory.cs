@@ -10,19 +10,54 @@ using zero.Core.Identity;
 namespace zero.Core.Security
 {
   public class ZeroClaimsPrinicipalFactory<TUser, TRole> : ZeroClaimsPrinicipalFactory<TUser>
-    where TUser : class, IIdentityUserWithRoles, IIdentityUser
+    where TUser : class, IIdentityUserWithRoles
     where TRole : class, IIdentityUserRole
   {
-    public ZeroClaimsPrinicipalFactory(UserManager<TUser> userManager, RoleManager<TRole> roleManager, IOptions<IdentityOptions> optionsAccessor) : base(userManager, optionsAccessor)
-    { }
+    public RoleManager<TRole> RoleManager { get; private set; }
+    
+    public ZeroClaimsPrinicipalFactory(UserManager<TUser> userManager, RoleManager<TRole> roleManager, IOptions<IdentityOptions> optionsAccessor, IOptions<ZeroAuthOptions<TUser>> authOptions) : base(userManager, optionsAccessor, authOptions)
+    {
+      RoleManager = roleManager;
+    }
+
+    protected override async Task<List<Claim>> CreateClaimList(TUser user)
+    {
+      var claims = await base.CreateClaimList(user);
+
+      if (UserManager.SupportsUserRole)
+      {
+        var roles = await UserManager.GetRolesAsync(user);
+
+        foreach (var roleName in roles)
+        {
+          claims.Add(new Claim(Constants.Auth.Claims.Role, roleName));
+
+          if (RoleManager.SupportsRoleClaims)
+          {
+            var role = await RoleManager.FindByNameAsync(roleName);
+            if (role != null)
+            {
+              claims.AddRange(await RoleManager.GetClaimsAsync(role));
+            }
+          }
+        }
+      }
+
+      return claims;
+    }
   }
 
 
   public class ZeroClaimsPrinicipalFactory<TUser> : UserClaimsPrincipalFactory<TUser>, IUserClaimsPrincipalFactory<TUser>
     where TUser : class, IIdentityUser
   {
-    public ZeroClaimsPrinicipalFactory(UserManager<TUser> userManager, IOptions<IdentityOptions> optionsAccessor) : base(userManager, optionsAccessor)
-    { }
+    protected ZeroAuthOptions<TUser> AuthOptions { get; private set; }
+
+    public ZeroClaimsPrinicipalFactory(UserManager<TUser> userManager, IOptions<IdentityOptions> optionsAccessor, IOptions<ZeroAuthOptions<TUser>> authOptions) : base(userManager, optionsAccessor)
+    {
+      AuthOptions = authOptions.Value;
+    }
+
 
     public async override Task<ClaimsPrincipal> CreateAsync(TUser user)
     {
@@ -47,9 +82,9 @@ namespace zero.Core.Security
       List<Claim> claims = await CreateClaimList(user);
 
       // create the user identity
-      ClaimsIdentity identity = new ClaimsIdentity(claims, UserIdentity.Issuer, Constants.Auth.Claims.UserName, Constants.Auth.Claims.Role); // "Identity.Application"
+      ClaimsIdentity identity = new ClaimsIdentity(claims, AuthOptions.Scheme, Constants.Auth.Claims.UserName, Constants.Auth.Claims.Role); // "Identity.Application"
 
-      if (UserIdentity.TryCreate(identity, out UserIdentity userIdentity))
+      if (UserIdentity.TryCreate(identity, AuthOptions.Scheme, out UserIdentity userIdentity))
       {
         return userIdentity;
       }
@@ -62,14 +97,12 @@ namespace zero.Core.Security
     {
       string userId = await UserManager.GetUserIdAsync(user);
       string userName = await UserManager.GetUserNameAsync(user);
-      string email = await UserManager.GetEmailAsync(user);
 
       List<Claim> claims = new List<Claim>();
 
       claims.Add(new Claim(Constants.Auth.Claims.IsZero, PermissionsValue.False));
       claims.Add(new Claim(Constants.Auth.Claims.UserId, userId));
       claims.Add(new Claim(Constants.Auth.Claims.UserName, userName));
-      claims.Add(new Claim(Constants.Auth.Claims.Email, email));
 
       if (UserManager.SupportsUserSecurityStamp)
       {
@@ -79,6 +112,11 @@ namespace zero.Core.Security
       if (UserManager.SupportsUserClaim)
       {
         claims.AddRange(await UserManager.GetClaimsAsync(user));
+      }
+
+      if (UserManager.SupportsUserEmail)
+      {
+        claims.Add(new Claim(Constants.Auth.Claims.Email, await UserManager.GetEmailAsync(user)));
       }
 
       claims.Add(new Claim(Constants.Auth.Claims.AppId, user.AppId));

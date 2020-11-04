@@ -8,7 +8,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class RoleStore<TRole> : IRoleClaimStore<TRole> where TRole : class, IIdentityUserRole
+  public partial class RavenRoleStore<TRole> : IRoleClaimStore<TRole> where TRole : class, IIdentityUserRole
   {
     /// <inheritdoc/>
     public Task AddClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken = default)

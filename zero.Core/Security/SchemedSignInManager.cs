@@ -9,30 +9,36 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Entities;
-using zero.Core.Identity;
 
 namespace zero.Core.Security
 {
-  public class ZeroSignInManager<TUser> : SignInManager<TUser> where TUser : class, IIdentityUser
+  public class SchemedSignInManager<TUser> : SignInManager<TUser> where TUser : class, IIdentityUser
   {
-    public ZeroSignInManager(UserManager<TUser> userManager, IHttpContextAccessor contextAccessor, IUserClaimsPrincipalFactory<TUser> claimsFactory,
-      IOptions<IdentityOptions> optionsAccessor, ILogger<SignInManager<TUser>> logger, IAuthenticationSchemeProvider schemes, IUserConfirmation<TUser> confirmation)
-      : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation) { }
+    protected ZeroAuthOptions<TUser> AuthOptions { get; private set; }
+
+    public SchemedSignInManager(UserManager<TUser> userManager, IHttpContextAccessor contextAccessor, IUserClaimsPrincipalFactory<TUser> claimsFactory,
+      IOptions<IdentityOptions> optionsAccessor, ILogger<SignInManager<TUser>> logger, IAuthenticationSchemeProvider schemes, IUserConfirmation<TUser> confirmation, IOptions<ZeroAuthOptions<TUser>> authOptions)
+      : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation)
+    {
+      AuthOptions = authOptions.Value;
+    }
 
 
+    /// <inheritdoc />
     public override bool IsSignedIn(ClaimsPrincipal principal)
     {
       if (principal == null)
       {
         throw new ArgumentNullException(nameof(principal));
       }
-      return principal?.Identities != null && principal.Identities.Any(i => i.AuthenticationType == Constants.Auth.BackofficeScheme && i.HasClaim(Constants.Auth.Claims.IsZero, PermissionsValue.True));
+      return principal?.Identities != null && principal.Identities.Any(i => i.AuthenticationType == AuthOptions.Scheme);
     }
 
 
+    /// <inheritdoc />
     public override async Task RefreshSignInAsync(TUser user)
     {
-      var auth = await Context.AuthenticateAsync(Constants.Auth.BackofficeScheme);
+      var auth = await Context.AuthenticateAsync(AuthOptions.Scheme);
       IList<Claim> claims = Array.Empty<Claim>();
 
       var authenticationMethod = auth?.Principal?.FindFirst(ClaimTypes.AuthenticationMethod);
@@ -54,21 +60,23 @@ namespace zero.Core.Security
       await SignInWithClaimsAsync(user, auth?.Properties, claims);
     }
 
+
+    /// <inheritdoc />
     public override async Task SignInWithClaimsAsync(TUser user, AuthenticationProperties authenticationProperties, IEnumerable<Claim> additionalClaims)
     {
       var userPrincipal = await CreateUserPrincipalAsync(user);
-
       foreach (var claim in additionalClaims)
       {
         userPrincipal.Identities.First().AddClaim(claim);
       }
-      await Context.SignInAsync(Constants.Auth.BackofficeScheme, userPrincipal, authenticationProperties ?? new AuthenticationProperties());
+      await Context.SignInAsync(AuthOptions.Scheme, userPrincipal, authenticationProperties ?? new AuthenticationProperties());
     }
 
 
+    /// <inheritdoc />
     public override async Task SignOutAsync()
     {
-      await Context.SignOutAsync(Constants.Auth.BackofficeScheme);
+      await Context.SignOutAsync(AuthOptions.Scheme);
     }
   }
 }

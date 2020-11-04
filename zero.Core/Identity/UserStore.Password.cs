@@ -7,7 +7,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Identity
 {
-  public partial class UserStore<TUser> : IUserPasswordStore<TUser> where TUser : class, IIdentityUser
+  public partial class RavenUserStore<TUser> : IUserPasswordStore<TUser> where TUser : class, IIdentityUser
   {
     /// <inheritdoc />
     public Task<string> GetPasswordHashAsync(TUser user, CancellationToken cancellationToken)

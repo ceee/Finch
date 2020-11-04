@@ -14,8 +14,25 @@ namespace zero.Core.Security
     where TUser : class, IUser
     where TRole : class, IUserRole
   {
-    public ZeroBackofficeClaimsPrincipalFactory(UserManager<TUser> userManager, RoleManager<TRole> roleManager, IOptions<IdentityOptions> optionsAccessor) : base(userManager, roleManager, optionsAccessor)
+    public ZeroBackofficeClaimsPrincipalFactory(UserManager<TUser> userManager, RoleManager<TRole> roleManager, IOptions<IdentityOptions> optionsAccessor, IOptions<ZeroAuthOptions<TUser>> authOptions) 
+      : base(userManager, roleManager, optionsAccessor, authOptions)
     { }
+
+
+    protected override async Task<ClaimsIdentity> GenerateClaimsAsync(TUser user)
+    {
+      List<Claim> claims = await CreateClaimList(user);
+
+      // create the user identity
+      ClaimsIdentity identity = new ClaimsIdentity(claims, AuthOptions.Scheme, Constants.Auth.Claims.UserName, Constants.Auth.Claims.Role); // "Identity.Application"
+
+      if (BackofficeUserIdentity.TryCreate(identity, out BackofficeUserIdentity userIdentity))
+      {
+        return userIdentity;
+      }
+
+      return null;
+    }
 
 
     protected override async Task<List<Claim>> CreateClaimList(TUser user)

@@ -9,55 +9,46 @@ namespace zero.Core.Identity
 {
   public static class ZeroIdentityExtensions
   {
-    public static IdentityBuilder AddZeroBackofficeIdentity<TUser, TRole>(this IServiceCollection services, Action<IdentityOptions> setupAction = null)
-      where TUser : class, IUser
-      where TRole : class, IUserRole
-    {
-      IdentityBuilder builder = services.AddZeroIdentity<TUser, TRole>(setupAction);
-      services.RemoveAll<IUserClaimsPrincipalFactory<TUser>>();
-      builder.AddClaimsPrincipalFactory<ZeroBackofficeClaimsPrincipalFactory<TUser, TRole>>();
-      return builder;
-    }
-
-    public static IdentityBuilder AddZeroIdentity<TUser, TRole>(this IServiceCollection services, Action<IdentityOptions> setupAction = null) 
+    public static IdentityBuilder AddZeroIdentity<TUser, TRole>(this IServiceCollection services) 
       where TUser : class, IIdentityUserWithRoles, IIdentityUser
       where TRole : class, IIdentityUserRole
     {
-      services.AddZeroIdentityCore<TUser>(setupAction);
+      services.AddZeroIdentityCore<TUser>();
 
       IdentityBuilder builder = new IdentityBuilder(typeof(TUser), typeof(TRole), services);
 
       builder.AddDefaultTokenProviders();
-      builder.AddUserStore<UserStore<TUser>>();
+      builder.AddUserStore<RavenUserStore<TUser, TRole>>();
       builder.AddUserManager<UserManager<TUser>>();
-      builder.AddSignInManager<ZeroSignInManager<TUser>>();
+      builder.AddSignInManager<SchemedSignInManager<TUser>>();
       builder.AddClaimsPrincipalFactory<ZeroClaimsPrinicipalFactory<TUser, TRole>>();
+
       builder.AddRoleValidator<RoleValidator<TRole>>();
       builder.AddRoleManager<RoleManager<TRole>>();
-      builder.AddRoleStore<RoleStore<TRole>>();
+      builder.AddRoleStore<RavenRoleStore<TRole>>();
 
       return builder;
     }
 
 
-    public static IdentityBuilder AddZeroIdentity<TUser>(this IServiceCollection services, Action<IdentityOptions> setupAction = null)
+    public static IdentityBuilder AddZeroIdentity<TUser>(this IServiceCollection services)
       where TUser : class, IIdentityUser
     {
-      services.AddZeroIdentityCore<TUser>(setupAction);
+      services.AddZeroIdentityCore<TUser>();
 
       IdentityBuilder builder = new IdentityBuilder(typeof(TUser), services);
 
       builder.AddDefaultTokenProviders();
-      builder.AddUserStore<UserStore<TUser>>();
+      builder.AddUserStore<RavenUserStore<TUser>>();
       builder.AddUserManager<UserManager<TUser>>();
-      builder.AddSignInManager<ZeroSignInManager<TUser>>();
+      builder.AddSignInManager<SchemedSignInManager<TUser>>();
       builder.AddClaimsPrincipalFactory<ZeroClaimsPrinicipalFactory<TUser>>();
 
       return builder;
     }
 
 
-    static IServiceCollection AddZeroIdentityCore<TUser>(this IServiceCollection services, Action<IdentityOptions> setupAction = null)
+    static IServiceCollection AddZeroIdentityCore<TUser>(this IServiceCollection services)
       where TUser : class, IIdentityUser
     {
       services.AddHttpContextAccessor();
@@ -98,11 +89,6 @@ namespace zero.Core.Identity
       {
         opts.ValidationInterval = TimeSpan.FromMinutes(30);
       });
-
-      if (setupAction != null)
-      {
-        services.Configure(setupAction);
-      }
 
       return services;
     }

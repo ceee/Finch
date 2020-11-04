@@ -11,8 +11,11 @@
 
     public static class Auth
     {
+      public const string DefaultScheme = "zeroScheme";
+      public const string BackofficeDisplayName = "Zero Bacckoffice";
       public const string BackofficeScheme = "zeroBackoffice";
-      public const string BackofficeCookieName = "zero.session";
+      public const string BackofficeCookieName = "zero.be.session";
+      public const string DefaultCookieName = "zero.session";
 
       public static class Claims
       {

@@ -10,11 +10,20 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Identity
 {
-  public partial class UserStore<TUser> : IUserStore<TUser>, IQueryableUserStore<TUser> where TUser : class, IIdentityUser
+  public partial class RavenUserStore<TUser, TRole> : RavenUserStore<TUser>
+    where TUser : class, IIdentityUserWithRoles
+    where TRole : class, IIdentityUserRole
+  {
+    public RavenUserStore(IDocumentStore raven) : base(raven) { }
+  }
+
+
+
+  public partial class RavenUserStore<TUser> : IUserStore<TUser>, IQueryableUserStore<TUser> where TUser : class, IIdentityUser
   {
     protected IDocumentStore Raven { get; private set; }
 
-    public UserStore(IDocumentStore raven)
+    public RavenUserStore(IDocumentStore raven)
     {
       Raven = raven;
     }
@@ -107,7 +116,7 @@ namespace zero.Core.Identity
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<TUser>().FirstOrDefaultAsync(x => x.Email == normalizedUserName, cancellationToken);
+        return await session.Query<TUser>().FirstOrDefaultAsync(x => x.Username == normalizedUserName, cancellationToken);
       }
     }
 
@@ -115,7 +124,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public Task<string> GetNormalizedUserNameAsync(TUser user, CancellationToken cancellationToken)
     {
-      return Task.FromResult(user.Email);
+      return Task.FromResult(user.Username);
     }
 
 
@@ -129,14 +138,14 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public Task<string> GetUserNameAsync(TUser user, CancellationToken cancellationToken)
     {
-      return Task.FromResult(user.Email);
+      return Task.FromResult(user.Username);
     }
 
 
     /// <inheritdoc />
     public Task SetNormalizedUserNameAsync(TUser user, string normalizedName, CancellationToken cancellationToken)
     {
-      user.Email = normalizedName.ToLowerInvariant();
+      user.Username = normalizedName.ToLowerInvariant();
       return Task.CompletedTask;
     }
 

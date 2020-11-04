@@ -6,7 +6,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class UserStore<TUser> : IUserSecurityStampStore<TUser> where TUser : class, IIdentityUser
+  public partial class RavenUserStore<TUser> : IUserSecurityStampStore<TUser> where TUser : class, IIdentityUser
   {
     /// <inheritdoc />
     public Task<string> GetSecurityStampAsync(TUser user, CancellationToken cancellationToken)

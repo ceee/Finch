@@ -55,7 +55,8 @@
 
         form.handle(AuthApi.login(this.model)).then(res =>
         {
-          window.location.reload();
+          console.info('login: success', res);
+          //window.location.reload();
         }, errors =>
         {
           console.info('login: error', errors);
