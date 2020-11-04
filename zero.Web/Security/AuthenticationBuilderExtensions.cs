@@ -4,14 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Entities;
 using zero.Core.Extensions;
-using zero.Core.Identity;
 using zero.Core.Options;
 using zero.Core.Security;
 
@@ -96,17 +92,6 @@ namespace zero.Web.Security
           options.LoginPath = opts.Path;
           options.LogoutPath = opts.Path;
           options.AccessDeniedPath = opts.Path;
-
-          options.Events.OnSignedIn = ctx =>
-          {
-            ctx.HttpContext.User = ctx.Principal;
-            return Task.CompletedTask;
-          };
-
-          options.Events.OnValidatePrincipal = ctx =>
-          {
-            return Task.CompletedTask;
-          };
         });
 
       if (setupAction != null)

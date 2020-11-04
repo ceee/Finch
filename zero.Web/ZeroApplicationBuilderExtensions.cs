@@ -24,7 +24,7 @@ namespace zero.Web
 
       app.UseStaticFiles();
 
-      app.UseMiddleware<ApplicationContextMiddleware>();
+      app.UseMiddleware<ZeroContextMiddleware>();
 
       // map backoffice
       app.UseWhen(ctx => ctx.Request.Path.ToString().StartsWith(path), builder =>

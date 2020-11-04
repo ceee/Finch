@@ -21,6 +21,11 @@ namespace zero.Web.Routing
 
 		public override async ValueTask<RouteValueDictionary> TransformAsync(HttpContext httpContext, RouteValueDictionary values)
 		{
+			if (Context.IsBackofficeRequest(httpContext))
+      {
+				return null;
+      }
+
 			IResolvedRoute route = await Routes.ResolveUrl(httpContext);
 
 			if (route == null)
@@ -30,7 +35,7 @@ namespace zero.Web.Routing
 
 			RouteProviderEndpoint endpoint = Routes.MapEndpoint(route);
 
-			values["zero.app"] = await Context.Resolve(httpContext);
+			values["zero.app"] = await Context.ResolveFromRequest(httpContext);
 			values["zero.route"] = route;
 			values["controller"] = endpoint.Controller;
 			values["action"] = endpoint.Action;

@@ -102,7 +102,7 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public async Task<IResolvedRoute> ResolveUrl(HttpContext context)
     {
-      IApplication app = await Context.Resolve(context);
+      IApplication app = await Context.ResolveFromRequest(context);
       string path = context.Request.Path;
 
       return await ResolveUrl(app.Id, path);

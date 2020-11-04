@@ -46,7 +46,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IApplication> Resolve(HttpContext context)
+    public async Task<IApplication> Resolve(HttpContext context, ClaimsPrincipal user)
     {
       if (context?.Request == null)
       {
@@ -57,7 +57,7 @@ namespace zero.Core.Api
 
       if (IsBackofficeRequest(context))
       {
-        app = await ResolveFromUser(context.User);
+        app = await ResolveFromUser(user);
       }
       else
       {
@@ -290,7 +290,7 @@ namespace zero.Core.Api
     /// or the domain (in case it is frontend request).
     /// The resolved data is stored in the App + AppId properties.
     /// </summary>
-    Task<IApplication> Resolve(HttpContext context);
+    Task<IApplication> Resolve(HttpContext context, ClaimsPrincipal user);
 
     /// <summary>
     /// Try to switch the current application for a user

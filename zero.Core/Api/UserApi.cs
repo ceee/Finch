@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
@@ -15,12 +14,12 @@ namespace zero.Core.Api
   {
     protected UserManager<User> UserManager { get; private set; }
 
-    protected IHttpContextAccessor HttpContextAccessor { get; set; }
+    protected IZeroContext Context { get; set; }
 
-    public UserApi(IBackofficeStore store, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor) : base(store)
+    public UserApi(IBackofficeStore store, UserManager<User> userManager, IZeroContext context) : base(store)
     {
       UserManager = userManager;
-      HttpContextAccessor = httpContextAccessor;
+      Context = context;
     }
 
 
@@ -61,7 +60,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<ListResult<IUser>> GetByQuery(ListQuery<IUser> query)
     {
-      string currentUserId = (await UserManager.GetUserAsync(HttpContextAccessor.HttpContext.User))?.Id;
+      string currentUserId = UserManager.GetUserId(Context.User);
       HashSet<string> appIds = new HashSet<string>() { Constants.Database.SharedAppId, Scope.AppId };
 
       query.SearchSelector = user => user.Name;

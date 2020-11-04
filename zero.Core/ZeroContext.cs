@@ -49,9 +49,6 @@ namespace zero.Core
         return;
       }
 
-      App = await AppContext.Resolve(context);
-      AppId = App.Id;
-
       AuthenticateResult authResult = await context.AuthenticateAsync(Constants.Auth.BackofficeScheme);
       if (authResult?.Principal != null)
       {
@@ -65,6 +62,9 @@ namespace zero.Core
       {
         User = new ClaimsPrincipal();
       }
+
+      App = await AppContext.Resolve(context, User);
+      AppId = App.Id;
     }
   }
 
