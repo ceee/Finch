@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +6,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Identity;
-using zero.Core.Security;
 
 namespace zero.Core.Api
 {
@@ -16,17 +13,15 @@ namespace zero.Core.Api
   {
     protected IDocumentStore Raven { get; private set; }
 
-    protected IHttpContextAccessor HttpContextAccessor { get; set; }
+    protected IZeroContext Context { get; set; }
 
     protected SignInManager<User> SignInManager { get; private set; }
 
-    protected ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
-
-    public AuthenticationApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, SignInManager<User> signInManager)
+    public AuthenticationApi(IDocumentStore raven, IZeroContext context, SignInManager<User> signInManager)
     {
       Raven = raven;
-      HttpContextAccessor = httpContextAccessor;
+      Context = context;
       SignInManager = signInManager;
     }
 
@@ -34,35 +29,35 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public bool IsLoggedIn()
     {
-      return SignInManager.IsSignedIn(HttpContextAccessor.HttpContext.User);
+      return SignInManager.IsSignedIn(Context.User);
     }
 
 
     /// <inheritdoc />
     public bool IsSuper()
     {
-      return Principal.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
+      return Context.User.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
     }
 
 
     /// <inheritdoc />
     public bool IsAdmin()
     {
-      return Principal.HasClaim(Constants.Auth.Claims.Role, "administrator"); // TODO use constant (in setup as well)
+      return Context.User.HasClaim(Constants.Auth.Claims.Role, "administrator"); // TODO use constant (in setup as well)
     }
 
 
     /// <inheritdoc />
     public async Task<User> GetUser()
     {
-      return await SignInManager.UserManager.GetUserAsync(HttpContextAccessor.HttpContext.User);
+      return await SignInManager.UserManager.GetUserAsync(Context.User);
     }
 
 
     /// <inheritdoc />
     public IList<Permission> GetPermissions(string prefix = null)
     {
-      return Principal.Claims
+      return Context.User.Claims
         .Where(claim => claim.Type == Constants.Auth.Claims.Permission && (prefix == null || claim.Value.StartsWith(prefix)))
         .Select(claim => Permission.FromClaim(claim, prefix))
         .ToList();
@@ -72,7 +67,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public Permission GetPermission(string key = null)
     {
-      Claim claim = Principal.Claims.FirstOrDefault(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(key + ":"));
+      Claim claim = Context.User.Claims.FirstOrDefault(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(key + ":"));
       return Permission.FromClaim(claim);
     }
 
@@ -135,7 +130,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public string GetUserId()
     {
-      return SignInManager.UserManager.GetUserId(HttpContextAccessor.HttpContext.User);
+      return SignInManager.UserManager.GetUserId(Context.User);
     }
   }
 

@@ -103,6 +103,7 @@ namespace zero.Web
       // add default services
       Services.AddHttpContextAccessor();
       Services.AddScoped<IApplicationContext, ApplicationContext>();
+      Services.AddScoped<IZeroContext, ZeroContext>();
 
       Services.AddTransient<IBackofficeStore, BackofficeStore>();
       Services.AddTransient(typeof(IAppScope<>), typeof(AppScope<>));

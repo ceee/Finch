@@ -40,12 +40,6 @@ namespace zero.Web.Security
             ctx.Response.StatusCode = 401;
             return Task.CompletedTask;
           };
-
-          options.Events.OnSignedIn = ctx =>
-          {
-            ctx.HttpContext.User = ctx.Principal;
-            return Task.CompletedTask;
-          };
         });
         
         if (setupAction != null)
@@ -106,6 +100,11 @@ namespace zero.Web.Security
           options.Events.OnSignedIn = ctx =>
           {
             ctx.HttpContext.User = ctx.Principal;
+            return Task.CompletedTask;
+          };
+
+          options.Events.OnValidatePrincipal = ctx =>
+          {
             return Task.CompletedTask;
           };
         });

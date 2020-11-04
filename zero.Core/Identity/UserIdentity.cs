@@ -29,6 +29,18 @@ namespace zero.Core.Identity
       user = new BackofficeUserIdentity(identity);
       return true;
     }
+
+
+    public static bool TryGet(IPrincipal principal, out BackofficeUserIdentity user)
+    {
+      if (TryGet(principal, out UserIdentity _user))
+      {
+        return TryCreate(_user, out user);
+      }
+
+      user = null;
+      return false;
+    }
   }
 
 
@@ -77,7 +89,7 @@ namespace zero.Core.Identity
 
       if (principal.Identity is ClaimsIdentity claimsIdentity && claimsIdentity.IsAuthenticated)
       {
-        if (UserIdentity.TryCreate(claimsIdentity, claimsIdentity.AuthenticationType, out user))
+        if (TryCreate(claimsIdentity, claimsIdentity.AuthenticationType, out user))
         {
           return true;
         }
