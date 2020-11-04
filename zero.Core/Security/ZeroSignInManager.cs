@@ -13,7 +13,7 @@ using zero.Core.Identity;
 
 namespace zero.Core.Security
 {
-  public class ZeroSignInManager<TUser> : SignInManager<TUser> where TUser : class, IUser
+  public class ZeroSignInManager<TUser> : SignInManager<TUser> where TUser : class, IIdentityUser
   {
     public ZeroSignInManager(UserManager<TUser> userManager, IHttpContextAccessor contextAccessor, IUserClaimsPrincipalFactory<TUser> claimsFactory,
       IOptions<IdentityOptions> optionsAccessor, ILogger<SignInManager<TUser>> logger, IAuthenticationSchemeProvider schemes, IUserConfirmation<TUser> confirmation)
@@ -26,13 +26,13 @@ namespace zero.Core.Security
       {
         throw new ArgumentNullException(nameof(principal));
       }
-      return principal?.Identities != null && principal.Identities.Any(i => i.AuthenticationType == Constants.Auth.Scheme && i.HasClaim(Constants.Auth.Claims.IsZero, PermissionsValue.True));
+      return principal?.Identities != null && principal.Identities.Any(i => i.AuthenticationType == Constants.Auth.BackofficeScheme && i.HasClaim(Constants.Auth.Claims.IsZero, PermissionsValue.True));
     }
 
 
     public override async Task RefreshSignInAsync(TUser user)
     {
-      var auth = await Context.AuthenticateAsync(Constants.Auth.Scheme);
+      var auth = await Context.AuthenticateAsync(Constants.Auth.BackofficeScheme);
       IList<Claim> claims = Array.Empty<Claim>();
 
       var authenticationMethod = auth?.Principal?.FindFirst(ClaimTypes.AuthenticationMethod);
@@ -62,13 +62,13 @@ namespace zero.Core.Security
       {
         userPrincipal.Identities.First().AddClaim(claim);
       }
-      await Context.SignInAsync(Constants.Auth.Scheme, userPrincipal, authenticationProperties ?? new AuthenticationProperties());
+      await Context.SignInAsync(Constants.Auth.BackofficeScheme, userPrincipal, authenticationProperties ?? new AuthenticationProperties());
     }
 
 
     public override async Task SignOutAsync()
     {
-      await Context.SignOutAsync(Constants.Auth.Scheme);
+      await Context.SignOutAsync(Constants.Auth.BackofficeScheme);
     }
   }
 }

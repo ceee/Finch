@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -167,10 +168,10 @@ namespace zero.Web
     /// </summary>
     void ConfigureIdentity()
     {
-      Services.AddZeroIdentity<User, UserRole>();
-      Services.AddAuthentication(Constants.Auth.Scheme)
-        .AddCookie(Constants.Auth.Scheme);
-      Services.ConfigureOptions<ConfigureZeroCookieOptions<User>>();
+      Services.AddZeroBackofficeIdentity<User, UserRole>();
+      Services.AddAuthentication(Constants.Auth.BackofficeScheme)
+        .AddCookie(Constants.Auth.BackofficeScheme);
+      Services.ConfigureOptions<ConfigureZeroBackofficeCookieOptions<User>>();
     }
 
 

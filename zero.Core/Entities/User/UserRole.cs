@@ -17,7 +17,7 @@ namespace zero.Core.Entities
 
 
   [Collection("UserRoles")]
-  public interface IUserRole : IZeroEntity, IAppAwareShareableEntity, IZeroDbConventions
+  public interface IUserRole : IZeroEntity, IAppAwareShareableEntity, IZeroDbConventions, IIdentityUserRole
   {
     /// <summary>
     /// Additional description
@@ -28,10 +28,5 @@ namespace zero.Core.Entities
     /// Displayed icon alongside name
     /// </summary>
     string Icon { get; set; }
-
-    /// <summary>
-    /// The user's claims, for use in claims-based authentication.
-    /// </summary>
-    List<IUserClaim> Claims { get; set; }
   }
 }

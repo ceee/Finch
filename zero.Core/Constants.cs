@@ -11,8 +11,8 @@
 
     public static class Auth
     {
-      public const string Scheme = "zeroBackoffice";
-      public const string CookieName = "zero.session";
+      public const string BackofficeScheme = "zeroBackoffice";
+      public const string BackofficeCookieName = "zero.session";
 
       public static class Claims
       {
@@ -22,9 +22,10 @@
         public const string UserName = "zero.claim.username";
         public const string Role = "zero.claim.rolealias";
         public const string SecurityStamp = "zero.claim.securitystamp";
+        public const string Email = "zero.claim.email";
         public const string Permission = "zero.claim.permission";
         public const string DefaultAppId = "zero.claim.defaultAppId";
-        public const string CurrentAppId = "zero.claim.currentAppId";
+        public const string AppId = "zero.claim.appId";
         public const string TicketExpires = "zero.claim.ticketExpires";
       }
     }

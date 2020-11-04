@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
-using System;
 using zero.Core.Extensions;
 using zero.Core.Options;
 
@@ -11,10 +9,13 @@ namespace zero.Core.Security
   {
     protected IZeroOptions Zero { get; set; }
 
+    protected bool IsBackoffice { get; private set; }
 
-    public ZeroCookieManager(IZeroOptions zero)
+
+    public ZeroCookieManager(IZeroOptions zero, bool isBackoffice = false)
     {
       Zero = zero;
+      IsBackoffice = isBackoffice;
     }
 
 
@@ -23,15 +24,16 @@ namespace zero.Core.Security
     /// </summary>
     string ICookieManager.GetRequestCookie(HttpContext context, string key)
     {
-      Uri requestUri = new Uri(context.Request.GetEncodedUrl(), UriKind.RelativeOrAbsolute);
       string path = Zero.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
+      bool isBackofficeRequest = context.Request.Path.ToString().StartsWith(path);
 
-      if (!context.Request.Path.ToString().StartsWith(path))
+      if ((IsBackoffice && !isBackofficeRequest) || (!IsBackoffice && isBackofficeRequest))
       {
         return null;
       }
 
-      return GetRequestCookie(context, key);
+      string cookie = GetRequestCookie(context, key);
+      return cookie;
     }
   }
 }

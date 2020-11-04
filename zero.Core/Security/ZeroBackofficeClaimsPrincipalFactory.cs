@@ -1,0 +1,62 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using zero.Core.Entities;
+using zero.Core.Identity;
+
+namespace zero.Core.Security
+{
+  public class ZeroBackofficeClaimsPrincipalFactory<TUser, TRole> : ZeroClaimsPrinicipalFactory<TUser, TRole>
+    where TUser : class, IUser
+    where TRole : class, IUserRole
+  {
+    public ZeroBackofficeClaimsPrincipalFactory(UserManager<TUser> userManager, RoleManager<TRole> roleManager, IOptions<IdentityOptions> optionsAccessor) : base(userManager, roleManager, optionsAccessor)
+    { }
+
+
+    protected override async Task<List<Claim>> CreateClaimList(TUser user)
+    {
+      List<Claim> claims = await base.CreateClaimList(user);
+
+      claims.RemoveAll(x => x.Type == Constants.Auth.Claims.IsZero);
+      claims.Add(new Claim(Constants.Auth.Claims.IsZero, PermissionsValue.True));
+
+      if (user.IsSuper)
+      {
+        claims.Add(new Claim(Constants.Auth.Claims.IsSuper, PermissionsValue.True));
+      }
+
+      // get all allowed app ids
+      string[] appIds = claims
+        .Where(x => x.Type == Constants.Auth.Claims.Permission && x.Value.StartsWith(Permissions.Applications))
+        .Select(x => Permission.FromClaim(x, Permissions.Applications))
+        .Where(x => x.IsTrue)
+        .Select(x => x.NormalizedKey)
+        .ToArray();
+
+      string currentAppId = user.CurrentAppId ?? user.AppId;
+
+      if (!user.IsSuper && !appIds.Contains(currentAppId))
+      {
+        currentAppId = user.AppId;
+      }
+
+      claims.RemoveAll(x => x.Type == Constants.Auth.Claims.AppId);
+      claims.Add(new Claim(Constants.Auth.Claims.AppId, currentAppId));
+      claims.Add(new Claim(Constants.Auth.Claims.DefaultAppId, user.AppId));
+
+
+      // add default role when user has none
+      if (!claims.Any(x => x.Type == Constants.Auth.Claims.Role))
+      {
+        claims.Add(new Claim(Constants.Auth.Claims.Role, "userRoles.1-A")); // TODO this needs to be dynamic
+      }
+
+      return claims;
+    }
+  }
+}

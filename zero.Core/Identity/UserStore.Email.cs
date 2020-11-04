@@ -7,7 +7,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class UserStore<TUser> : IUserEmailStore<TUser> where TUser : class, IUser
+  public partial class UserStore<TUser> : IUserEmailStore<TUser> where TUser : class, IIdentityUser
   {
     /// <inheritdoc />
     public async Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)

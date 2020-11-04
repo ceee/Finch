@@ -2,17 +2,13 @@
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using Raven.Client.Exceptions;
-using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using zero.Core.Api;
 using zero.Core.Entities;
-using zero.Core.Extensions;
 
 namespace zero.Core.Identity
 {
-  public partial class RoleStore<TRole> : IRoleStore<TRole> where TRole : class, IUserRole
+  public partial class RoleStore<TRole> : IRoleStore<TRole> where TRole : class, IIdentityUserRole
   {
     protected IDocumentStore Raven { get; private set; }
 
@@ -86,14 +82,14 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public Task<string> GetRoleNameAsync(TRole role, CancellationToken cancellationToken)
     {
-      return Task.FromResult(role.Alias);
+      return Task.FromResult(role.Name);
     }
 
 
     /// <inheritdoc/>
     public Task SetRoleNameAsync(TRole role, string roleName, CancellationToken cancellationToken)
     {
-      role.Alias = Safenames.Alias(roleName);
+      role.Name = roleName;
       return Task.CompletedTask;
     }
 
@@ -101,7 +97,7 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public Task<string> GetNormalizedRoleNameAsync(TRole role, CancellationToken cancellationToken)
     {
-      return Task.FromResult(role.Alias);
+      return Task.FromResult(role.Name);
     }
 
 
@@ -127,7 +123,7 @@ namespace zero.Core.Identity
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<TRole>().FirstOrDefaultAsync(x => x.Alias == normalizedRoleName, cancellationToken);
+        return await session.Query<TRole>().FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
       }
     }
 

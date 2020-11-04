@@ -7,7 +7,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class UserStore<TUser> : IUserLockoutStore<TUser> where TUser : class, IUser
+  public partial class UserStore<TUser> : IUserLockoutStore<TUser> where TUser : class, IIdentityUser
   {
     /// <inheritdoc />
     public Task<int> GetAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)

@@ -2,23 +2,27 @@
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using zero.Core;
 using zero.Core.Entities;
 using zero.Core.Identity;
 
 namespace zero.Core.Security
 {
-  public class ZeroClaimsPrinicipalFactory<TUser, TRole> : UserClaimsPrincipalFactory<TUser, TRole>, IUserClaimsPrincipalFactory<TUser> 
-    where TUser : class, IUser
-    where TRole : class, IUserRole
+  public class ZeroClaimsPrinicipalFactory<TUser, TRole> : ZeroClaimsPrinicipalFactory<TUser>
+    where TUser : class, IIdentityUserWithRoles, IIdentityUser
+    where TRole : class, IIdentityUserRole
   {
-    public ZeroClaimsPrinicipalFactory(UserManager<TUser> userManager, RoleManager<TRole> roleManager, IOptions<IdentityOptions> optionsAccessor) : base(userManager, roleManager, optionsAccessor)
-    {
+    public ZeroClaimsPrinicipalFactory(UserManager<TUser> userManager, RoleManager<TRole> roleManager, IOptions<IdentityOptions> optionsAccessor) : base(userManager, optionsAccessor)
+    { }
+  }
 
-    }
+
+  public class ZeroClaimsPrinicipalFactory<TUser> : UserClaimsPrincipalFactory<TUser>, IUserClaimsPrincipalFactory<TUser>
+    where TUser : class, IIdentityUser
+  {
+    public ZeroClaimsPrinicipalFactory(UserManager<TUser> userManager, IOptions<IdentityOptions> optionsAccessor) : base(userManager, optionsAccessor)
+    { }
 
     public async override Task<ClaimsPrincipal> CreateAsync(TUser user)
     {
@@ -40,13 +44,32 @@ namespace zero.Core.Security
 
     protected override async Task<ClaimsIdentity> GenerateClaimsAsync(TUser user)
     {
+      List<Claim> claims = await CreateClaimList(user);
+
+      // create the user identity
+      ClaimsIdentity identity = new ClaimsIdentity(claims, UserIdentity.Issuer, Constants.Auth.Claims.UserName, Constants.Auth.Claims.Role); // "Identity.Application"
+
+      if (UserIdentity.TryCreate(identity, out UserIdentity userIdentity))
+      {
+        return userIdentity;
+      }
+
+      return null;
+    }
+
+
+    protected virtual async Task<List<Claim>> CreateClaimList(TUser user)
+    {
       string userId = await UserManager.GetUserIdAsync(user);
       string userName = await UserManager.GetUserNameAsync(user);
+      string email = await UserManager.GetEmailAsync(user);
 
       List<Claim> claims = new List<Claim>();
-      claims.Add(new Claim(Constants.Auth.Claims.IsZero, PermissionsValue.True));
+
+      claims.Add(new Claim(Constants.Auth.Claims.IsZero, PermissionsValue.False));
       claims.Add(new Claim(Constants.Auth.Claims.UserId, userId));
       claims.Add(new Claim(Constants.Auth.Claims.UserName, userName));
+      claims.Add(new Claim(Constants.Auth.Claims.Email, email));
 
       if (UserManager.SupportsUserSecurityStamp)
       {
@@ -58,46 +81,9 @@ namespace zero.Core.Security
         claims.AddRange(await UserManager.GetClaimsAsync(user));
       }
 
-      if (user.IsSuper)
-      {
-        claims.Add(new Claim(Constants.Auth.Claims.IsSuper, PermissionsValue.True));
-      }
+      claims.Add(new Claim(Constants.Auth.Claims.AppId, user.AppId));
 
-
-      // get all allowed app ids
-      string[] appIds = claims
-        .Where(x => x.Type == Constants.Auth.Claims.Permission && x.Value.StartsWith(Permissions.Applications))
-        .Select(x => Permission.FromClaim(x, Permissions.Applications))
-        .Where(x => x.IsTrue)
-        .Select(x => x.NormalizedKey)
-        .ToArray();
-
-      string currentAppId = user.CurrentAppId ?? user.AppId;
-
-      if (!user.IsSuper && !appIds.Contains(currentAppId))
-      {
-        currentAppId = user.AppId;
-      }
-
-      claims.Add(new Claim(Constants.Auth.Claims.CurrentAppId, currentAppId));
-      claims.Add(new Claim(Constants.Auth.Claims.DefaultAppId, user.AppId));
-
-      // add default role when user has none
-      if (!claims.Any(x => x.Type == Constants.Auth.Claims.Role))
-      {
-        claims.Add(new Claim(Constants.Auth.Claims.Role, "userRoles.1-A")); // TODO this needs to be dynamic
-      }
-
-
-      // create the user identity
-      ClaimsIdentity identity = new ClaimsIdentity(claims, UserIdentity.Issuer, Constants.Auth.Claims.UserName, Constants.Auth.Claims.Role); // "Identity.Application"
-
-      if (UserIdentity.TryCreate(identity, out UserIdentity userIdentity))
-      {
-        return userIdentity;
-      }
-
-      return null;
+      return claims;
     }
   }
 }

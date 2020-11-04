@@ -7,7 +7,7 @@ namespace zero.Core.Identity
 {
   public class UserIdentity : ClaimsIdentity
   {
-    public const string Issuer = Constants.Auth.Scheme;
+    public const string Issuer = Constants.Auth.BackofficeScheme;
 
     public override string AuthenticationType => Issuer;
 
@@ -43,9 +43,9 @@ namespace zero.Core.Identity
     {
       Constants.Auth.Claims.UserId,
       Constants.Auth.Claims.UserName,
-      Constants.Auth.Claims.Role,
+      //Constants.Auth.Claims.Role,
       Constants.Auth.Claims.SecurityStamp,
-      Constants.Auth.Claims.CurrentAppId,
+      Constants.Auth.Claims.AppId,
       Constants.Auth.Claims.DefaultAppId,
       Constants.Auth.Claims.IsZero
     };

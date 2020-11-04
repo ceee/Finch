@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -9,7 +8,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class RoleStore<TRole> : IRoleClaimStore<TRole> where TRole : class, IUserRole
+  public partial class RoleStore<TRole> : IRoleClaimStore<TRole> where TRole : class, IIdentityUserRole
   {
     /// <inheritdoc/>
     public Task AddClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken = default)

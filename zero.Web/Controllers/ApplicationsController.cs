@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Api;
@@ -18,6 +19,7 @@ namespace zero.Web.Controllers
     {
       Api = api;
     }
+
 
     public EditModel<IApplication> GetEmpty([FromServices] IApplication blueprint) => Edit(blueprint);
 

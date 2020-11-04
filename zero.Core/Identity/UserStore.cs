@@ -10,7 +10,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Identity
 {
-  public partial class UserStore<TUser> : IUserStore<TUser>, IQueryableUserStore<TUser> where TUser : class, IUser
+  public partial class UserStore<TUser> : IUserStore<TUser>, IQueryableUserStore<TUser> where TUser : class, IIdentityUser
   {
     protected IDocumentStore Raven { get; private set; }
 

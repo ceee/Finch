@@ -13,7 +13,7 @@ using zero.Core.Options;
 
 namespace zero.Core.Security
 {
-  public class ZeroCookieAuthenticationEvents<TUser> : CookieAuthenticationEvents where TUser : class, IUser
+  public class ZeroCookieAuthenticationEvents<TUser> : CookieAuthenticationEvents where TUser : class, IIdentityUser
   {
     protected IZeroOptions Zero { get; set; }
 
@@ -25,9 +25,9 @@ namespace zero.Core.Security
       Zero = zero;
       SystemClock = systemClock;
 
-      OnValidatePrincipal = _ValidatePrincipal;
-      OnSigningIn = _OnSigningIn;
-      OnSignedIn = _OnSignedIn;
+      //OnValidatePrincipal = _ValidatePrincipal;
+      //OnSigningIn = _OnSigningIn;
+      //OnSignedIn = _OnSignedIn;
       OnSigningOut = _OnSigningOut;
       OnRedirectToLogin = _OnRedirectToLogin;
     }
@@ -46,7 +46,7 @@ namespace zero.Core.Security
       if (identity == null)
       {
         ctx.RejectPrincipal();
-        await signInManager.Context.SignOutAsync(Constants.Auth.Scheme);
+        await signInManager.Context.SignOutAsync(Constants.Auth.BackofficeScheme);
         return;
       }
 
@@ -94,7 +94,7 @@ namespace zero.Core.Security
     /// </summary>
     Task _OnSigningOut(CookieSigningOutContext ctx)
     {
-      ctx.Options.CookieManager.DeleteCookie(ctx.HttpContext, Constants.Auth.CookieName, new CookieOptions() { Path = "/" });
+      ctx.Options.CookieManager.DeleteCookie(ctx.HttpContext, Constants.Auth.BackofficeCookieName, new CookieOptions() { Path = "/" });
       return Task.CompletedTask;
     }
 
