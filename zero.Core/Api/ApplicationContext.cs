@@ -33,13 +33,13 @@ namespace zero.Core.Api
 
     protected ILogger<ApplicationContext> Logger { get; private set; }
 
-    protected IApplicationResolverHandler Handler { get; private set; }
+    protected IHandlerHolder Handler { get; private set; }
 
     static IList<IApplication> Apps { get; set; }
 
 
 
-    public ApplicationContext(IDocumentStore raven, IZeroOptions options, UserManager<BackofficeUser> userManager, ILogger<ApplicationContext> logger, IApplicationResolverHandler handler = null)
+    public ApplicationContext(IDocumentStore raven, IZeroOptions options, UserManager<BackofficeUser> userManager, ILogger<ApplicationContext> logger, IHandlerHolder handler = null)
     {
       Raven = raven;
       Options = options;
@@ -157,7 +157,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IApplication> ResolveFromRequest(HttpContext context)
     {
-      return Handler?.Resolve(context.Request, await GetApplications()) ?? await ResolveFromUri(context.Request.GetEncodedUrl());
+      return Handler.Get<IApplicationResolverHandler>()?.Resolve(context.Request, await GetApplications()) ?? await ResolveFromUri(context.Request.GetEncodedUrl());
     }
 
 

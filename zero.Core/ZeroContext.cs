@@ -25,6 +25,9 @@ namespace zero.Core
     /// <inheritdoc />
     public ClaimsIdentity Identity { get; protected set; }
 
+    /// <inheritdoc />
+    public bool IsBackofficeRequest { get; protected set; }
+
 
     protected IZeroOptions Options { get; private set; }
 
@@ -65,6 +68,8 @@ namespace zero.Core
 
       App = await AppContext.Resolve(context, User);
       AppId = App.Id;
+
+      IsBackofficeRequest = AppContext.IsBackofficeRequest(context);
     }
   }
 
@@ -90,6 +95,11 @@ namespace zero.Core
     /// Resolved backoffice user identity
     /// </summary>
     ClaimsIdentity Identity { get; }
+
+    /// <summary>
+    /// Whether the current request is a backoffice request or not
+    /// </summary>
+    bool IsBackofficeRequest { get; }
 
     /// <summary>
     /// Resolves the current application (for backoffice + frontend requests) and

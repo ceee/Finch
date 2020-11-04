@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+using zero.Core;
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Routing;
@@ -7,41 +9,51 @@ namespace zero.Web.ViewHelpers
 {
   public class ZeroViewContext : IZeroViewContext
   {
-    protected IApplicationContext ApplicationContext { get; private set; }
+    /// <inheritdoc />
+    public IApplication Application { get; private set; }
 
-    protected HttpContext HttpContext { get; private set; }
+    /// <inheritdoc />
+    public string AppId { get; private set; }
+
+    /// <inheritdoc />
+    public IRoute Route { get; private set; }
+
+    /// <inheritdoc />
+    public IResolvedRoute ResolvedRoute { get; private set; }
+
+    /// <inheritdoc />
+    public IZeroMediaHelper Media { get; private set; }
 
 
-    public ZeroViewContext(IApplicationContext applicationContext, IHttpContextAccessor httpContextAccessor, IZeroMediaHelper mediaHelper)
+    protected IZeroContext Context { get; private set; }
+
+
+    public ZeroViewContext(IZeroContext context, IZeroMediaHelper mediaHelper)
     {
-      ApplicationContext = applicationContext;
-      HttpContext = httpContextAccessor.HttpContext;
-
-      Application = ApplicationContext.App;
-      AppId = ApplicationContext.AppId;
-      if (HttpContext.Request.RouteValues.TryGetValue("zero.route", out object route))
-      {
-        ResolvedRoute = (IResolvedRoute)route;
-        Route = ResolvedRoute.Route;
-      }
+      Context = context;
       Media = mediaHelper;
     }
 
 
     /// <inheritdoc />
-    public IApplication Application { get; }
+    public Task Resolve(HttpContext context)
+    {
+      Application = Context.App;
+      AppId = Context.AppId;
 
-    /// <inheritdoc />
-    public string AppId { get; }
+      if (context?.Request == null || Context.IsBackofficeRequest)
+      {
+        return Task.CompletedTask;
+      }
 
-    /// <inheritdoc />
-    public IRoute Route { get; }
+      if (context.Request.RouteValues.TryGetValue("zero.route", out object route))
+      {
+        ResolvedRoute = (IResolvedRoute)route;
+        Route = ResolvedRoute.Route;
+      }
 
-    /// <inheritdoc />
-    public IResolvedRoute ResolvedRoute { get; }
-
-    /// <inheritdoc />
-    public IZeroMediaHelper Media { get; }
+      return Task.CompletedTask;
+    }
   }
 
 
@@ -71,5 +83,10 @@ namespace zero.Web.ViewHelpers
     /// Media helper functions
     /// </summary>
     public IZeroMediaHelper Media { get; }
+
+    /// <summary>
+    /// Resolve view context
+    /// </summary>
+    Task Resolve(HttpContext context);
   }
 }

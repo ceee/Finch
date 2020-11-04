@@ -1,15 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.SpaServices;
-using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using zero.Core.Extensions;
-using zero.Core.Middlewares;
 using zero.Core.Options;
+using zero.Web.Middlewares;
 using zero.Web.Routing;
 
 namespace zero.Web

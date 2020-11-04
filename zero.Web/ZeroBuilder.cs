@@ -120,6 +120,8 @@ namespace zero.Web
         return new Paths(env.WebRootPath, true);
       });
 
+      Services.AddTransient<IHandlerHolder, HandlerHolder>();
+
       // add dev server
       Services.AddOptions<ZeroDevOptions>()
         .Bind(Configuration.GetSection("Zero:DevServer"))
