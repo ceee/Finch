@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using zero.Core;
-using zero.Web.ViewHelpers;
 
 namespace zero.Web.Middlewares
 {
@@ -14,10 +13,9 @@ namespace zero.Web.Middlewares
       Next = next;
     }
 
-    public async Task Invoke(HttpContext httpContext, IZeroContext zeroContext, IZeroViewContext viewContext)
+    public async Task Invoke(HttpContext httpContext, IZeroContext zeroContext)
     {
       await zeroContext.Resolve(httpContext);
-      await viewContext.Resolve(httpContext);
       await Next(httpContext);
     }
   }

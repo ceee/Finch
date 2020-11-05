@@ -35,7 +35,6 @@ namespace zero.Web.Routing
 
 			RouteProviderEndpoint endpoint = Routes.MapEndpoint(route);
 
-			values["zero.app"] = await Context.ResolveFromRequest(httpContext);
 			values["zero.route"] = route;
 			values["controller"] = endpoint.Controller;
 			values["action"] = endpoint.Action;

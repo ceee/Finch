@@ -29,35 +29,35 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public bool IsLoggedIn()
     {
-      return SignInManager.IsSignedIn(Context.User);
+      return SignInManager.IsSignedIn(Context.BackofficeUser);
     }
 
 
     /// <inheritdoc />
     public bool IsSuper()
     {
-      return Context.User.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
+      return Context.BackofficeUser.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
     }
 
 
     /// <inheritdoc />
     public bool IsAdmin()
     {
-      return Context.User.HasClaim(Constants.Auth.Claims.Role, "administrator"); // TODO use constant (in setup as well)
+      return Context.BackofficeUser.HasClaim(Constants.Auth.Claims.Role, "administrator"); // TODO use constant (in setup as well)
     }
 
 
     /// <inheritdoc />
     public async Task<BackofficeUser> GetUser()
     {
-      return await SignInManager.UserManager.GetUserAsync(Context.User);
+      return await SignInManager.UserManager.GetUserAsync(Context.BackofficeUser);
     }
 
 
     /// <inheritdoc />
     public IList<Permission> GetPermissions(string prefix = null)
     {
-      return Context.User.Claims
+      return Context.BackofficeUser.Claims
         .Where(claim => claim.Type == Constants.Auth.Claims.Permission && (prefix == null || claim.Value.StartsWith(prefix)))
         .Select(claim => Permission.FromClaim(claim, prefix))
         .ToList();
@@ -67,7 +67,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public Permission GetPermission(string key = null)
     {
-      Claim claim = Context.User.Claims.FirstOrDefault(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(key + ":"));
+      Claim claim = Context.BackofficeUser.Claims.FirstOrDefault(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(key + ":"));
       return Permission.FromClaim(claim);
     }
 
@@ -130,7 +130,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public string GetUserId()
     {
-      return SignInManager.UserManager.GetUserId(Context.User);
+      return SignInManager.UserManager.GetUserId(Context.BackofficeUser);
     }
   }
 

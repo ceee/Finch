@@ -100,7 +100,6 @@ namespace zero.Web.Defaults
 
       services.AddScoped<ZeroRoutesTransformer>();
 
-      services.AddScoped<IZeroViewContext, ZeroViewContext>();
       services.AddScoped<IZeroMediaHelper, ZeroMediaHelper>();
     }
   }

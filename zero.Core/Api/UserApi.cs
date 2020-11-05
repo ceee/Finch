@@ -60,7 +60,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<ListResult<IBackofficeUser>> GetByQuery(ListQuery<IBackofficeUser> query)
     {
-      string currentUserId = UserManager.GetUserId(Context.User);
+      string currentUserId = UserManager.GetUserId(Context.BackofficeUser);
       HashSet<string> appIds = new HashSet<string>() { Constants.Database.SharedAppId, Scope.AppId };
 
       query.SearchSelector = user => user.Name;
