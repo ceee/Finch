@@ -41,6 +41,15 @@ namespace zero.Core.Api
 
 
     /// <summary>
+    /// Converts a term to a safe alias (suitable for URLs)
+    /// </summary>
+    public static string Alias(object value)
+    {
+      return Generate(value?.ToString(), Scope.Url);
+    }
+
+
+    /// <summary>
     /// 
     /// </summary>
     static string Generate(string value, Scope scope)

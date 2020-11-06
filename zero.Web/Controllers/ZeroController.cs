@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
+using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Routing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace zero.Web.Controllers
 {
@@ -21,10 +23,7 @@ namespace zero.Web.Controllers
 
     public override void OnActionExecuting(ActionExecutingContext filterContext)
     {
-      if (filterContext.RouteData.Values.TryGetValue("zero.app", out object app))
-      {
-        Application = (IApplication)app;
-      }
+      Application = filterContext.HttpContext.RequestServices.GetService<IApplicationContext>()?.App;
 
       if (filterContext.RouteData.Values.TryGetValue("zero.route", out object route))
       {

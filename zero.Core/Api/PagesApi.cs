@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Handlers;
 using zero.Core.Options;
 
 namespace zero.Core.Api
@@ -20,12 +22,48 @@ namespace zero.Core.Api
     protected IZeroOptions Options { get; private set; }
 
     protected IRecycleBinApi RecycleBinApi { get; private set; }
-    
 
-    public PagesApi(IZeroOptions options, IBackofficeStore store, IRecycleBinApi recycleBinApi) : base(store)
+    protected ILogger<PagesApi> Logger { get; private set; }
+
+    protected IHandlerHolder Handler { get; private set; }
+
+
+    public PagesApi(IZeroOptions options, IBackofficeStore store, IRecycleBinApi recycleBinApi, ILogger<PagesApi> logger, IHandlerHolder handler) : base(store)
     {
       Options = options;
       RecycleBinApi = recycleBinApi;
+      Logger = logger;
+      Handler = handler;
+    }
+
+
+    /// <inheritdoc />
+    public Task<IPage> GetEmpty(string pageType, string parentId = null)
+    {
+      PageType type = GetPageType(pageType);
+
+      if (type == null)
+      {
+        return Task.FromResult<IPage>(null);
+      }
+
+      try
+      {
+        IPage model = Activator.CreateInstance(type.ContentType) as IPage;
+
+        model.PageTypeAlias = type.Alias;
+        model.ParentId = parentId; // TODO validate if type is allowed and if parentid is allowed
+
+        Handler.Get<IPageCreationHandler>()?.OnCreate(model);
+
+        return Task.FromResult(model);
+      }
+      catch
+      {
+        Logger.LogWarning("Could not create page with type {type}", type);
+      }
+
+      return Task.FromResult<IPage>(null);
     }
 
 
@@ -359,6 +397,11 @@ namespace zero.Core.Api
 
   public interface IPagesApi
   {
+    /// <summary>
+    /// Get a new empty page with the specified type
+    /// </summary>
+    public Task<IPage> GetEmpty(string pageType, string parentId = null);
+
     /// <summary>
     /// Get page by Id
     /// </summary>

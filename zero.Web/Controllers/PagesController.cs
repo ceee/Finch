@@ -50,15 +50,9 @@ namespace zero.Web.Controllers
     }
 
 
-    public EditModel<IPage> GetEmpty([FromQuery] string type, [FromQuery] string parent = null)
+    public async Task<EditModel<IPage>> GetEmpty([FromQuery] string type, [FromQuery] string parent = null)
     {
-      PageType pageType = Api.GetPageType(type);
-      IPage model = Activator.CreateInstance(pageType.ContentType) as IPage;
-
-      model.PageTypeAlias = type;
-      model.ParentId = parent;
-
-      return Edit(model);
+      return Edit(await Api.GetEmpty(type, parent));
     }
 
 
