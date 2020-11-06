@@ -15,9 +15,9 @@ namespace zero.Web
 
       string path = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
 
-      app.UseStaticFiles();
-
       app.UseMiddleware<ZeroContextMiddleware>();
+
+      app.UseStaticFiles();
 
       // map backoffice
       app.UseWhen(ctx => ctx.Request.Path.ToString().StartsWith(path), builder =>
@@ -53,13 +53,16 @@ namespace zero.Web
         });
       });
 
+      return app;
+    }
 
-      app.UseEndpoints(endpoints =>
+
+    public static IApplicationBuilder UseZeroRoutes(this IApplicationBuilder app)
+    {
+      return app.UseEndpoints(endpoints =>
       {
         endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}");
       });
-
-      return app;
     }
   }
 }

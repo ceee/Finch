@@ -16,9 +16,14 @@ namespace zero.Core.Extensions
 
     public static IRavenQueryable<T> Scope<T>(this IRavenQueryable<T> source, string appId, bool includeShared = true)
     {
-      if (appId.IsNullOrEmpty() || !_appAwareEntity.IsAssignableFrom(source.ElementType))
+      if (!_appAwareEntity.IsAssignableFrom(source.ElementType))
       {
         return source;
+      }
+
+      if (appId.IsNullOrEmpty())
+      {
+        throw new ArgumentNullException("Application context did not successfully resolve yet");
       }
 
       //HashSet<string> ids = new HashSet<string>();
@@ -41,9 +46,14 @@ namespace zero.Core.Extensions
         return source;
       }
 
-      if (scope.AppId.IsNullOrEmpty() || !_appAwareEntity.IsAssignableFrom(source.ElementType))
+      if (!_appAwareEntity.IsAssignableFrom(source.ElementType))
       {
         return source;
+      }
+
+      if (scope.AppId.IsNullOrEmpty())
+      {
+        throw new ArgumentNullException("Application context did not successfully resolve yet");
       }
 
       //HashSet<string> ids = new HashSet<string>();
