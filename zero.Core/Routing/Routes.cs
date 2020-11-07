@@ -32,21 +32,17 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<string> GetUrl<T>(T model) where T : IZeroEntity => await GetUrl(model?.Id);
+    public async Task<string> GetUrl<T>(T model) => (await GetRoute(model))?.Url;
 
 
     /// <inheritdoc />
-    public async Task<string> GetUrl(string modelId) => (await GetRoute(modelId))?.Url;
+    public async Task<Dictionary<T, string>> GetUrls<T>(params T[] models) => (await GetRoutes(models)).ToDictionary(x => x.Key, x => x.Value?.Url);
 
 
     /// <inheritdoc />
-    public async Task<IRoute> GetRoute<T>(T model) where T : IZeroEntity => await GetRoute(model?.Id);
-
-
-    /// <inheritdoc />
-    public async Task<IRoute> GetRoute(string modelId)
+    public async Task<IRoute> GetRoute<T>(T model)
     {
-      Type type = null; // model.GetType();
+      Type type = model.GetType();
       IRouteProvider routeProvider = Providers.FirstOrDefault(x => x.AffectedTypes.Any(t => t.IsAssignableFrom(type)));
 
       if (routeProvider == null)
@@ -55,7 +51,36 @@ namespace zero.Core.Routing
       }
 
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-      return await routeProvider.GetRoute(session, null);
+      return await routeProvider.GetRoute(session, model);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<Dictionary<T, IRoute>> GetRoutes<T>(params T[] models)
+    {
+      if (models.Length < 1)
+      {
+        return new();
+      }
+
+      Type type = models[0].GetType();
+      IRouteProvider routeProvider = Providers.FirstOrDefault(x => x.AffectedTypes.Any(t => t.IsAssignableFrom(type)));
+
+      if (routeProvider == null)
+      {
+        return null;
+      }
+
+      Dictionary<T, IRoute> result = new Dictionary<T, IRoute>();
+
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+
+      foreach (T model in models)
+      {
+        result.TryAdd(model, await routeProvider.GetRoute(session, model));
+      }
+
+      return result;
     }
 
 
@@ -198,22 +223,22 @@ namespace zero.Core.Routing
     /// <summary>
     /// Get the URL for an entity
     /// </summary>
-    Task<string> GetUrl<T>(T model) where T : IZeroEntity;
+    Task<string> GetUrl<T>(T model);
 
-    /// <summary>
-    /// Get the URL for an entity
-    /// </summary>
-    Task<string> GetUrl(string modelId);
-
-    /// <summary>
+    /// <summary> 
     /// Get the route object for an entity
     /// </summary>
-    Task<IRoute> GetRoute<T>(T model) where T : IZeroEntity;
+    Task<IRoute> GetRoute<T>(T model);
 
     /// <summary>
-    /// Get the route object for an entity
+    /// Get URLs for multiple entities
     /// </summary>
-    Task<IRoute> GetRoute(string modelId);
+    Task<Dictionary<T, string>> GetUrls<T>(params T[] models);
+
+    /// <summary>
+    /// Get routes for multiple entities
+    /// </summary>
+    Task<Dictionary<T, IRoute>> GetRoutes<T>(params T[] models);
 
     /// <summary>
     /// Resolve an URL from the specified app-id and the path

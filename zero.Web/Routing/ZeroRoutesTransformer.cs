@@ -9,10 +9,10 @@ namespace zero.Web.Routing
 {
   public class ZeroRoutesTransformer : DynamicRouteValueTransformer
 	{
-		IRoutes Routes;
+    Core.Routing.IRoutes Routes;
 		IApplicationContext Context;
 
-		public ZeroRoutesTransformer(IRoutes routes, IApplicationContext context)
+		public ZeroRoutesTransformer(Core.Routing.IRoutes routes, IApplicationContext context)
     {
 			Routes = routes;
 			Context = context;

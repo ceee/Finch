@@ -5,6 +5,8 @@ namespace zero.Core.Routing
 {
   public class PageRoute : IResolvedRoute
   {
+    public PageRoute() { }
+
     public PageRoute(IRoute route)
     {
       Route = route;
