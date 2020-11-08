@@ -27,7 +27,7 @@ namespace zero.Core.Entities
     /// <summary>
     /// Whether the email address has been confirmed
     /// </summary>
-    public bool IsEmailConfirmed { get; set; }
+    bool IsEmailConfirmed { get; set; }
 
     /// <summary>
     /// The password hash
