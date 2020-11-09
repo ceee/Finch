@@ -23,5 +23,10 @@ namespace zero.Core.Extensions
       Type type = obj.GetType();
       return (T)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(obj, new RefJsonConverter()), type, new RefJsonConverter());
     }
+
+    public static T CloneLax<T>(this object obj)
+    {
+      return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj, new RefJsonConverter()), new RefJsonConverter());
+    }
   }
 }
