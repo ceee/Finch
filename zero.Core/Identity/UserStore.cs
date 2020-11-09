@@ -93,7 +93,9 @@ namespace zero.Core.Identity
       // Only if the deletion succeeds will we remove the cluseter-wide compare/exchange key.
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        session.Delete(user);
+        TUser source = await session.LoadAsync<TUser>(user.Id, cancellationToken);
+
+        session.Delete(source);
         await session.SaveChangesAsync(cancellationToken);
       }
 
