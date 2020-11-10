@@ -19,26 +19,13 @@ namespace zero.Core.Identity
 
 
 
-  public partial class RavenUserStore<TUser> : IUserStore<TUser>, IQueryableUserStore<TUser> where TUser : class, IIdentityUser
+  public partial class RavenUserStore<TUser> : IUserStore<TUser> where TUser : class, IIdentityUser
   {
     protected IDocumentStore Raven { get; private set; }
 
     public RavenUserStore(IDocumentStore raven)
     {
       Raven = raven;
-    }
-
-
-    /// <inheritdoc />
-    public IQueryable<TUser> Users
-    {
-      get
-      {
-        using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-        {
-          return session.Query<TUser>();
-        }
-      }
     }
 
 
