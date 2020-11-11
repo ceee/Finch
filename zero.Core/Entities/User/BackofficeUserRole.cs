@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using zero.Core.Attributes;
+using zero.Core.Identity;
 
 namespace zero.Core.Entities
 {

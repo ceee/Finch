@@ -23,8 +23,6 @@ namespace zero.Core.Identity
     IProtectedUserStore<TUser>
     where TUser : class, IIdentityUser
   {
-    const char COLON = ':';
-
     protected IDocumentStore Raven { get; private set; }
 
     public RavenUserStore(IDocumentStore raven)
@@ -34,18 +32,39 @@ namespace zero.Core.Identity
 
 
     /// <summary>
-    /// Get unique key for user (combined appId + email)
+    /// Get the Raven compare/exchange key for this user.
+    /// This should be unique within the store, otherwise you can't create users with the same email in different stores.
     /// </summary>
-    protected string UniqueKey(TUser user) => user.AppId + COLON + user.Email;
+    protected virtual string GetReservationKey(TUser user) => Constants.Database.ReservationPrefix + typeof(TUser) + ':' + user.Email;
+
+    // <summary>
+    /// Scope queries to an optional application or something else
+    /// </summary>
+    protected virtual IRavenQueryable<TUser> ScopeQuery(IRavenQueryable<TUser> query) => query;
+
+
+    // <summary>
+    /// Determines whether a passed user is part of this store and should be processed
+    /// </summary>
+    protected virtual bool IsUserPartOfStore(TUser role) => true;
 
 
     /// <inheritdoc />
     public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
     {
+      if (!IsUserPartOfStore(user))
+      {
+        return IdentityResult.Failed(new IdentityError()
+        {
+          Code = "NotPartOfStore",
+          Description = $"The affected user is is not part of this user store and can't be created."
+        });
+      }
+
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
 
       // try to reserve the key for the new user
-      if (!await Raven.ReserveAsync(Constants.Database.ReservationPrefix + UniqueKey(user), user.Id))
+      if (!await Raven.ReserveAsync(GetReservationKey(user), user.Id))
       {
         return IdentityResult.Failed(new IdentityError
         {
@@ -67,7 +86,7 @@ namespace zero.Core.Identity
       {
         // The compare/exchange email reservation is cluster-wide, outside of the session scope. 
         // We need to manually roll it back.
-        await Raven.RemoveReservationAsync(Constants.Database.ReservationPrefix + UniqueKey(user));
+        await Raven.RemoveReservationAsync(GetReservationKey(user));
         throw;
       }
 
@@ -78,8 +97,17 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
     {
+      if (!IsUserPartOfStore(user))
+      {
+        return IdentityResult.Failed(new IdentityError()
+        {
+          Code = "NotPartOfStore",
+          Description = $"The affected user is is not part of this user store and can't be deleted."
+        });
+      }
+
       // Remove the cluster-wide compare/exchange key.
-      await Raven.RemoveReservationAsync(Constants.Database.ReservationPrefix + UniqueKey(user));
+      await Raven.RemoveReservationAsync(GetReservationKey(user));
 
       // Delete the user and save it. We must save it because deleting is a cluster-wide operation.
       // Only if the deletion succeeds will we remove the cluster-wide compare/exchange key.
@@ -95,10 +123,62 @@ namespace zero.Core.Identity
 
 
     /// <inheritdoc />
+    public async Task<IdentityResult> UpdateAsync(TUser user, CancellationToken cancellationToken)
+    {
+      if (!IsUserPartOfStore(user))
+      {
+        return IdentityResult.Failed(new IdentityError()
+        {
+          Code = "NotPartOfStore",
+          Description = $"The affected user is is not part of this user store and can't be updated."
+        });
+      }
+
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        TUser source = await session.LoadAsync<TUser>(user.Id, cancellationToken);
+
+        if (source == null)
+        {
+          return IdentityResult.Failed(new IdentityError
+          {
+            Code = "UserNotFound",
+            Description = $"Could not find stored user with id {user.Id}."
+          });
+        }
+
+        if (source.Email != user.Email)
+        {
+          // try to reserve the key for the new user
+          if (!await Raven.ReserveAsync(GetReservationKey(user), user.Id))
+          {
+            return IdentityResult.Failed(new IdentityError
+            {
+              Code = "DuplicateEmail",
+              Description = $"The email address {user.Email} is already taken."
+            });
+          }
+
+          // Remove the cluster-wide compare/exchange key.
+          await Raven.RemoveReservationAsync(GetReservationKey(source));
+        }
+      }
+
+      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      {
+        await session.StoreAsync(user, cancellationToken);
+        await session.SaveChangesAsync(cancellationToken);
+      }
+
+      return IdentityResult.Success;
+    }
+
+
+    /// <inheritdoc />
     public async Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-      return await session.LoadAsync<TUser>(userId);
+      return await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
     }
 
 
@@ -106,7 +186,7 @@ namespace zero.Core.Identity
     public async Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-      return await session.Query<TUser>().FirstOrDefaultAsync(x => x.Username == normalizedUserName, cancellationToken); // TODO scope
+      return await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Username == normalizedUserName, cancellationToken);
     }
 
 
@@ -134,49 +214,6 @@ namespace zero.Core.Identity
     public async Task SetUserNameAsync(TUser user, string userName, CancellationToken cancellationToken)
     {
       await SetNormalizedUserNameAsync(user, userName, cancellationToken);
-    }
-
-
-    /// <inheritdoc />
-    public async Task<IdentityResult> UpdateAsync(TUser user, CancellationToken cancellationToken)
-    {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        TUser source = await session.LoadAsync<TUser>(user.Id, cancellationToken);
-
-        if (source == null)
-        {
-          return IdentityResult.Failed(new IdentityError
-          {
-            Code = "UserNotFound",
-            Description = $"Could not find stored user with id {user.Id}."
-          });
-        }
-
-        if (source.Email != user.Email)
-        {
-          // try to reserve the key for the new user
-          if (!await Raven.ReserveAsync(Constants.Database.ReservationPrefix + UniqueKey(user), user.Id))
-          {
-            return IdentityResult.Failed(new IdentityError
-            {
-              Code = "DuplicateEmail",
-              Description = $"The email address {user.Email} is already taken."
-            });
-          }
-
-          // Remove the cluster-wide compare/exchange key.
-          await Raven.RemoveReservationAsync(Constants.Database.ReservationPrefix + UniqueKey(source));
-        }
-      }
-
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        await session.StoreAsync(user, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
-
-      return IdentityResult.Success;
     }
 
 
@@ -217,7 +254,7 @@ namespace zero.Core.Identity
     public async Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-      return await session.Query<TUser>().FirstOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken); // TODO scope
+      return await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
     }
 
 
@@ -341,6 +378,12 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task AddClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
     {
+      if (!IsUserPartOfStore(user))
+      {
+        // TODO we should log this as we can't return an IdentityResult
+        return;
+      }
+
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
 
       user.Claims.AddRange(claims.Select(claim => new UserClaim(claim)));
@@ -361,13 +404,19 @@ namespace zero.Core.Identity
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
       UserClaim userClaim = new UserClaim(claim);
-      return await session.Query<TUser>().Where(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value)).ToListAsync(); // TODO scope
+      return await ScopeQuery(session.Query<TUser>()).Where(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value)).ToListAsync();
     }
 
 
     /// <inheritdoc />
     public async Task RemoveClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
     {
+      if (!IsUserPartOfStore(user))
+      {
+        // TODO we should log this as we can't return an IdentityResult
+        return;
+      }
+
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
 
       IEnumerable<UserClaim> userClaims = claims.Select(c => new UserClaim(c)).ToList();
@@ -383,6 +432,12 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task ReplaceClaimAsync(TUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
     {
+      if (!IsUserPartOfStore(user))
+      {
+        // TODO we should log this as we can't return an IdentityResult
+        return;
+      }
+
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
 
       UserClaim userClaim = new UserClaim(claim);

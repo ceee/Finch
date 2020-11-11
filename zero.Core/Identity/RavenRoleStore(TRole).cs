@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using Raven.Client.Exceptions;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class RavenRoleStore<TRole> : IRoleStore<TRole>, IRoleClaimStore<TRole> 
+  public class RavenRoleStore<TRole> : IRoleStore<TRole>, IRoleClaimStore<TRole> 
     where TRole : class, IIdentityUserRole
   {
     protected IDocumentStore Raven { get; private set; }
@@ -26,9 +27,29 @@ namespace zero.Core.Identity
     }
 
 
+    // <summary>
+    /// Scope queries to an optional application or something else
+    /// </summary>
+    protected virtual IRavenQueryable<TRole> ScopeQuery(IRavenQueryable<TRole> query) => query;
+
+
+    // <summary>
+    /// Determines whether a passed user role is part of this store and should be processed
+    /// </summary>
+    protected virtual bool IsRolePartOfStore(TRole role) => true;
+
+
     /// <inheritdoc/>
     public async Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
     {
+      if (!IsRolePartOfStore(role))
+      {
+        return IdentityResult.Failed(new IdentityError()
+        {
+          Code = "NotPartOfStore",
+          Description = $"The affected role is is not part of this role store and can't be created."
+        });
+      }
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         await session.StoreAsync(role);
@@ -41,6 +62,14 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public async Task<IdentityResult> UpdateAsync(TRole role, CancellationToken cancellationToken)
     {
+      if (!IsRolePartOfStore(role))
+      {
+        return IdentityResult.Failed(new IdentityError()
+        {
+          Code = "NotPartOfStore",
+          Description = $"The affected role is is not part of this role store and can't be updatd."
+        });
+      }
       try
       {
         using IAsyncDocumentSession session = Raven.OpenAsyncSession();
@@ -58,19 +87,25 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public async Task<IdentityResult> DeleteAsync(TRole role, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      if (!IsRolePartOfStore(role))
       {
-        try
+        return IdentityResult.Failed(new IdentityError()
         {
-          session.Delete(role);
-          await session.SaveChangesAsync(cancellationToken);
-        }
-        catch (ConcurrencyException)
-        {
-          return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
-        }
-        return IdentityResult.Success;
+          Code = "NotPartOfStore",
+          Description = $"The affected role is is not part of this role store and can't be deleted."
+        });
       }
+      try
+      {
+        using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+        session.Delete(role);
+        await session.SaveChangesAsync(cancellationToken);
+      }
+      catch (ConcurrencyException)
+      {
+        return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
+      }
+      return IdentityResult.Success;
     }
 
 
@@ -105,7 +140,7 @@ namespace zero.Core.Identity
     public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-      return await session.LoadAsync<TRole>(roleId);
+      return await ScopeQuery(session.Query<TRole>()).FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken);
     }
 
 
@@ -113,7 +148,7 @@ namespace zero.Core.Identity
     public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-      return await session.Query<TRole>().FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken); // TODO scope
+      return await ScopeQuery(session.Query<TRole>()).FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
     }
 
 

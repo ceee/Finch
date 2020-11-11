@@ -9,29 +9,44 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Entities;
+using zero.Core.Identity;
 
 namespace zero.Core.Security
 {
+  // TODO although the login per application works
+  // the authentication breaks when another application signs in a user
+  // they share one cookie on both sites/applications, maybe this is an issue
+
   public class SchemedSignInManager<TUser> : SignInManager<TUser> where TUser : class, IIdentityUser
   {
     protected ZeroAuthOptions<TUser> AuthOptions { get; private set; }
 
+    protected IZeroContext Zero { get; private set; }
+
     public SchemedSignInManager(UserManager<TUser> userManager, IHttpContextAccessor contextAccessor, IUserClaimsPrincipalFactory<TUser> claimsFactory,
-      IOptions<IdentityOptions> optionsAccessor, ILogger<SignInManager<TUser>> logger, IAuthenticationSchemeProvider schemes, IUserConfirmation<TUser> confirmation, IOptions<ZeroAuthOptions<TUser>> authOptions)
+      IOptions<IdentityOptions> optionsAccessor, ILogger<SignInManager<TUser>> logger, IAuthenticationSchemeProvider schemes, IUserConfirmation<TUser> confirmation, IOptions<ZeroAuthOptions<TUser>> authOptions,
+      IZeroContext zero)
       : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation)
     {
       AuthOptions = authOptions.Value;
+      Zero = zero;
     }
 
 
     /// <inheritdoc />
     public override bool IsSignedIn(ClaimsPrincipal principal)
     {
-      if (principal == null)
+      if (principal?.Identities == null)
       {
-        throw new ArgumentNullException(nameof(principal));
+        return false;
       }
-      return principal?.Identities != null && principal.Identities.Any(i => i.AuthenticationType == AuthOptions.Scheme);
+      if (!principal.Identities.Any(x => x.AuthenticationType == AuthOptions.Scheme))
+      {
+        return false;
+      }
+
+      string userAppId = principal.FindFirstValue(Constants.Auth.Claims.AppId);
+      return userAppId == null || userAppId == Constants.Database.SharedAppId || Zero.AppId.Equals(userAppId, StringComparison.InvariantCultureIgnoreCase);
     }
 
 

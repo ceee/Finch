@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Identity;
 using zero.Core.Options;
 using zero.Core.Security;
 
@@ -87,6 +88,7 @@ namespace zero.Web.Security
           options.ExpireTimeSpan = TimeSpan.FromDays(90);
           options.Cookie.HttpOnly = true;
           options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+          options.Cookie.SameSite = SameSiteMode.Strict;
           options.Cookie.Path = "/";
 
           options.LoginPath = opts.Path;

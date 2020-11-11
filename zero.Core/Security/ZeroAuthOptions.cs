@@ -1,4 +1,4 @@
-﻿using zero.Core.Entities;
+﻿using zero.Core.Identity;
 
 namespace zero.Core.Security
 {

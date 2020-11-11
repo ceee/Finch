@@ -5,10 +5,8 @@ using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
@@ -42,7 +40,7 @@ namespace zero.Core.Identity
     public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-      return await session.Query<TUser>().Where(x => roleName.In(x.RoleIds)).ToListAsync(); // TODO scope     
+      return await ScopeQuery(session.Query<TUser>()).Where(x => roleName.In(x.RoleIds)).ToListAsync(); // TODO scope     
     }
 
 

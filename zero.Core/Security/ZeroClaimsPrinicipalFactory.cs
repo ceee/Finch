@@ -15,7 +15,7 @@ namespace zero.Core.Security
   {
     public RoleManager<TRole> RoleManager { get; private set; }
     
-    public ZeroClaimsPrinicipalFactory(UserManager<TUser> userManager, RoleManager<TRole> roleManager, IOptions<IdentityOptions> optionsAccessor, IOptions<ZeroAuthOptions<TUser>> authOptions) : base(userManager, optionsAccessor, authOptions)
+    public ZeroClaimsPrinicipalFactory(UserManager<TUser> userManager, RoleManager<TRole> roleManager, IOptions<IdentityOptions> optionsAccessor, IOptions<ZeroAuthOptions<TUser>> authOptions, IZeroContext zero) : base(userManager, optionsAccessor, authOptions, zero)
     {
       RoleManager = roleManager;
     }
@@ -53,9 +53,13 @@ namespace zero.Core.Security
   {
     protected ZeroAuthOptions<TUser> AuthOptions { get; private set; }
 
-    public ZeroClaimsPrinicipalFactory(UserManager<TUser> userManager, IOptions<IdentityOptions> optionsAccessor, IOptions<ZeroAuthOptions<TUser>> authOptions) : base(userManager, optionsAccessor)
+    protected IZeroContext Zero { get; private set; }
+
+
+    public ZeroClaimsPrinicipalFactory(UserManager<TUser> userManager, IOptions<IdentityOptions> optionsAccessor, IOptions<ZeroAuthOptions<TUser>> authOptions, IZeroContext zero) : base(userManager, optionsAccessor)
     {
       AuthOptions = authOptions.Value;
+      Zero = zero;
     }
 
 
@@ -84,9 +88,23 @@ namespace zero.Core.Security
       // create the user identity
       ClaimsIdentity identity = new ClaimsIdentity(claims, AuthOptions.Scheme, Constants.Auth.Claims.UserName, Constants.Auth.Claims.Role); // "Identity.Application"
 
-      if (UserIdentity.TryCreate(identity, AuthOptions.Scheme, out UserIdentity userIdentity))
+      bool isUserIdentity = UserIdentity.TryCreate(identity, AuthOptions.Scheme, out UserIdentity userIdentity);
+      
+      if (isUserIdentity)
       {
-        return userIdentity;
+        Claim isZeroClaim = userIdentity.FindFirst(Constants.Auth.Claims.IsZero);
+        Claim appIdClaim = userIdentity.FindFirst(Constants.Auth.Claims.AppId);
+        string appId = appIdClaim?.Value;
+
+        if (appIdClaim is null || isZeroClaim is null or not { Value: PermissionsValue.False })
+        {
+          return null;
+        }
+
+        if (appId is not null or Constants.Database.SharedAppId || Zero.AppId.Equals(appId, StringComparison.InvariantCultureIgnoreCase))
+        {
+          return userIdentity;
+        }
       }
 
       return null;

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using zero.Core.Entities;
 
-namespace zero.Core.Entities
+namespace zero.Core.Identity
 {
   public interface IIdentityUserWithRoles : IIdentityUser
   {
@@ -12,7 +13,7 @@ namespace zero.Core.Entities
   }
 
 
-  public interface IIdentityUser : IAppAwareEntity, IZeroEntity
+  public interface IIdentityUser : IZeroEntity
   {
     /// <summary>
     /// Optional username (can also be used as login when configured)

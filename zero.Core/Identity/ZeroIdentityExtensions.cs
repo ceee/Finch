@@ -18,14 +18,14 @@ namespace zero.Core.Identity
       IdentityBuilder builder = new IdentityBuilder(typeof(TUser), typeof(TRole), services);
 
       builder.AddDefaultTokenProviders();
-      builder.AddUserStore<RavenUserStore<TUser, TRole>>();
-      builder.AddUserManager<UserManager<TUser>>();
+
+      builder.AddUserStore<RavenScopedUserStore<TUser, TRole>>();
       builder.AddSignInManager<SchemedSignInManager<TUser>>();
       builder.AddClaimsPrincipalFactory<ZeroClaimsPrinicipalFactory<TUser, TRole>>();
 
       builder.AddRoleValidator<RoleValidator<TRole>>();
       builder.AddRoleManager<RoleManager<TRole>>();
-      builder.AddRoleStore<RavenRoleStore<TRole>>();
+      builder.AddRoleStore<RavenScopedRoleStore<TRole>>();
 
       return builder;
     }
@@ -39,8 +39,7 @@ namespace zero.Core.Identity
       IdentityBuilder builder = new IdentityBuilder(typeof(TUser), services);
 
       builder.AddDefaultTokenProviders();
-      builder.AddUserStore<RavenUserStore<TUser>>();
-      builder.AddUserManager<UserManager<TUser>>();
+      builder.AddUserStore<RavenScopedUserStore<TUser>>();
       builder.AddSignInManager<SchemedSignInManager<TUser>>();
       builder.AddClaimsPrincipalFactory<ZeroClaimsPrinicipalFactory<TUser>>();
 
