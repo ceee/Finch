@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
@@ -29,8 +28,6 @@ namespace zero.Core.Api
 
     protected IZeroOptions Options { get; private set; }
 
-    protected UserManager<BackofficeUser> UserManager { get; private set; }
-
     protected ILogger<ApplicationContext> Logger { get; private set; }
 
     protected IHandlerHolder Handler { get; private set; }
@@ -39,11 +36,10 @@ namespace zero.Core.Api
 
 
 
-    public ApplicationContext(IDocumentStore raven, IZeroOptions options, UserManager<BackofficeUser> userManager, ILogger<ApplicationContext> logger, IHandlerHolder handler = null)
+    public ApplicationContext(IDocumentStore raven, IZeroOptions options, ILogger<ApplicationContext> logger, IHandlerHolder handler = null)
     {
       Raven = raven;
       Options = options;
-      UserManager = userManager;
       Logger = logger;
       Handler = handler;
     }
@@ -83,7 +79,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<bool> TrySwitchForUser(BackofficeUser user, string appId)
+    public async Task<bool> TrySwitchForUser(IBackofficeUser user, string appId)
     {
       if (user == null || appId.IsNullOrEmpty())
       {
@@ -99,8 +95,15 @@ namespace zero.Core.Api
       {
         user.CurrentAppId = appId;
 
-        IdentityResult updateResult = await UserManager.UpdateAsync(user);
-        return updateResult.Succeeded;
+        //byte[] bytes = new byte[20];
+        //RandomNumberGenerator.Fill(bytes);
+        //user.SecurityStamp = Base32.ToBase32(bytes); // TODO update security stamp but Base32 is .net core internal
+
+        using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+        await session.StoreAsync(user);
+        await session.SaveChangesAsync();
+
+        return true;
       }
 
       return false;
@@ -110,13 +113,13 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IApplication> ResolveFromUser(ClaimsPrincipal user)
     {
-      BackofficeUser userEntity = await UserManager.GetUserAsync(user);
+      IBackofficeUser userEntity = await GetBackofficeUser(user);
       return await ResolveFromUser(userEntity);
     }
 
 
     /// <inheritdoc />
-    public async Task<IApplication> ResolveFromUser(BackofficeUser user)
+    public async Task<IApplication> ResolveFromUser(IBackofficeUser user)
     {
       if (user == null)
       {
@@ -147,10 +150,8 @@ namespace zero.Core.Api
         throw new Exception($"User entity ${user.Id} needs a valid AppId");
       }
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.LoadAsync<Application>(appId);
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session.LoadAsync<Application>(appId);
     }
 
 
@@ -181,7 +182,7 @@ namespace zero.Core.Api
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
       IApplication app = await session.LoadAsync<Application>(appId);
 
-      return new ApplicationContext(Raven, Options, UserManager, Logger, Handler)
+      return new ApplicationContext(Raven, Options, Logger, Handler)
       {
         App = app,
         AppId = appId
@@ -261,9 +262,21 @@ namespace zero.Core.Api
 
 
     /// <summary>
+    /// Get backoffice user from claims principal
+    /// </summary>
+    async Task<IBackofficeUser> GetBackofficeUser(ClaimsPrincipal user)
+    {
+      string userId = user.FindFirstValue(Constants.Auth.Claims.UserId);
+
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session.LoadAsync<IBackofficeUser>(userId);
+    }
+
+
+    /// <summary>
     /// Get applications the user has access to
     /// </summary>
-    string[] GetAllowedAppIdsForUser(BackofficeUser user)
+    string[] GetAllowedAppIdsForUser(IBackofficeUser user)
     {
       IEnumerable<Permission> permissions = user.Claims
         .Where(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(Permissions.Applications))
@@ -299,7 +312,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Try to switch the current application for a user
     /// </summary>
-    Task<bool> TrySwitchForUser(BackofficeUser user, string appId);
+    Task<bool> TrySwitchForUser(IBackofficeUser user, string appId);
 
     /// <summary>
     /// Resolves the current application from the request path
@@ -326,7 +339,7 @@ namespace zero.Core.Api
     /// Resolves the current application from a user.
     /// This method won't return apps the user has no access to.
     /// </summary>
-    Task<IApplication> ResolveFromUser(BackofficeUser user);
+    Task<IApplication> ResolveFromUser(IBackofficeUser user);
 
     /// <summary>
     /// Creates a new application context for the specified application.

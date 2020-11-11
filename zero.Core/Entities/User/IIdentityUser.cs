@@ -75,19 +75,19 @@ namespace zero.Core.Entities
 
 
 
-    /// <summary>
-    /// Whether 2-factor authentication is enabled or not
-    /// </summary>
-    bool TwoFactorEnabled { get; set; }
+    ///// <summary>
+    ///// Whether 2-factor authentication is enabled or not
+    ///// </summary>
+    //bool TwoFactorEnabled { get; set; }
 
-    /// <summary>
-    /// The two-factor authenticator key
-    /// </summary>
-    string TwoFactorAuthenticatorKey { get; set; }
+    ///// <summary>
+    ///// The two-factor authenticator key
+    ///// </summary>
+    //string TwoFactorAuthenticatorKey { get; set; }
 
-    /// <summary>
-    /// The list of two factor authentication recovery codes
-    /// </summary>
-    List<string> TwoFactorRecoveryCodes { get; set; }
+    ///// <summary>
+    ///// The list of two factor authentication recovery codes
+    ///// </summary>
+    //List<string> TwoFactorRecoveryCodes { get; set; }
   }
 }

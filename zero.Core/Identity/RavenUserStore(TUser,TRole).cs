@@ -5,22 +5,27 @@ using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  // TODO this class still searches for role names in role IDs, which is not correct.
-  // we need a join here
-  // guess this code will only be used in certain Authorize attributes
-  public partial class RavenUserStore<TUser, TRole> : IUserRoleStore<TUser> 
+  // TODO we can't inject IZeroContext here for app-context as the IApplicationContext itself
+  // relies on UserManager and therefore this UserStore, i.e. circular dependency
+
+  public partial class RavenUserStore<TUser, TRole> : RavenUserStore<TUser>,
+    IUserRoleStore<TUser>
     where TUser : class, IIdentityUserWithRoles
     where TRole : class, IIdentityUserRole
   {
+    public RavenUserStore(IDocumentStore raven) : base(raven) { }
+
+
     /// <inheritdoc />
     public Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
-    {  
+    {
       user.RoleIds.Add(roleName);
       return Task.CompletedTask;
     }
@@ -36,10 +41,8 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.Query<TUser>().Where(x => roleName.In(x.RoleIds)).ToListAsync();
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session.Query<TUser>().Where(x => roleName.In(x.RoleIds)).ToListAsync(); // TODO scope     
     }
 
 

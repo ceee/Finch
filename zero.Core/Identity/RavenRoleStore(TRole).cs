@@ -2,13 +2,17 @@
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using Raven.Client.Exceptions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 
 namespace zero.Core.Identity
 {
-  public partial class RavenRoleStore<TRole> : IRoleStore<TRole> where TRole : class, IIdentityUserRole
+  public partial class RavenRoleStore<TRole> : IRoleStore<TRole>, IRoleClaimStore<TRole> 
+    where TRole : class, IIdentityUserRole
   {
     protected IDocumentStore Raven { get; private set; }
 
@@ -39,11 +43,9 @@ namespace zero.Core.Identity
     {
       try
       {
-        using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-        {
-          await session.StoreAsync(role, cancellationToken);
-          await session.SaveChangesAsync(cancellationToken);
-        }
+        using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+        await session.StoreAsync(role, cancellationToken);
+        await session.SaveChangesAsync(cancellationToken);
       }
       catch (ConcurrencyException)
       {
@@ -73,17 +75,11 @@ namespace zero.Core.Identity
 
 
     /// <inheritdoc/>
-    public Task<string> GetRoleIdAsync(TRole role, CancellationToken cancellationToken)
-    {
-      return Task.FromResult(role.Id);
-    }
+    public Task<string> GetRoleIdAsync(TRole role, CancellationToken cancellationToken) => Task.FromResult(role.Id);
 
 
     /// <inheritdoc/>
-    public Task<string> GetRoleNameAsync(TRole role, CancellationToken cancellationToken)
-    {
-      return Task.FromResult(role.Name);
-    }
+    public Task<string> GetRoleNameAsync(TRole role, CancellationToken cancellationToken) => Task.FromResult(role.Name);
 
 
     /// <inheritdoc/>
@@ -95,10 +91,7 @@ namespace zero.Core.Identity
 
 
     /// <inheritdoc/>
-    public Task<string> GetNormalizedRoleNameAsync(TRole role, CancellationToken cancellationToken)
-    {
-      return Task.FromResult(role.Name);
-    }
+    public Task<string> GetNormalizedRoleNameAsync(TRole role, CancellationToken cancellationToken) => Task.FromResult(role.Name);
 
 
     /// <inheritdoc/>
@@ -111,20 +104,16 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.LoadAsync<TRole>(roleId);
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session.LoadAsync<TRole>(roleId);
     }
 
 
     /// <inheritdoc/>
     public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
-      {
-        return await session.Query<TRole>().FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
-      }
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session.Query<TRole>().FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken); // TODO scope
     }
 
 
@@ -132,6 +121,37 @@ namespace zero.Core.Identity
     public void Dispose()
     {
       
+    }
+
+
+    /*
+     * ****************************************************
+     * CLAIM
+     * ****************************************************
+     */
+
+
+    /// <inheritdoc/>
+    public Task AddClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken = default)
+    {
+      role.Claims.Add(new UserClaim(claim));
+      return Task.CompletedTask;
+    }
+
+
+    /// <inheritdoc/>
+    public Task<IList<Claim>> GetClaimsAsync(TRole role, CancellationToken cancellationToken = default)
+    {
+      return Task.FromResult((IList<Claim>)role.Claims.Select(claim => claim.ToClaim()).ToList());
+    }
+
+
+    /// <inheritdoc/>
+    public Task RemoveClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken = default)
+    {
+      UserClaim userClaim = new UserClaim(claim);
+      role.Claims = role.Claims.Except(new List<UserClaim>() { userClaim }, new UserClaimComparer()).ToList();
+      return Task.CompletedTask;
     }
   }
 }

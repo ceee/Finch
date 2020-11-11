@@ -62,14 +62,14 @@ namespace zero.Core.Entities
 
 
 
-    /// <inheritdoc/>
-    public bool TwoFactorEnabled { get; set; }
+    ///// <inheritdoc/>
+    //public bool TwoFactorEnabled { get; set; }
 
-    /// <inheritdoc/>
-    public string TwoFactorAuthenticatorKey { get; set; }
+    ///// <inheritdoc/>
+    //public string TwoFactorAuthenticatorKey { get; set; }
 
-    /// <inheritdoc/>
-    public List<string> TwoFactorRecoveryCodes { get; set; } = new List<string>();
+    ///// <inheritdoc/>
+    //public List<string> TwoFactorRecoveryCodes { get; set; } = new List<string>();
   }
 
 
