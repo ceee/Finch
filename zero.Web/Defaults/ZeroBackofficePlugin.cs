@@ -60,6 +60,7 @@ namespace zero.Web.Defaults
 
       services.AddTransient<IValidator<IApplication>, ApplicationValidator>();
       services.AddTransient<IValidator<ICountry>, CountryValidator>();
+      services.AddTransient<IValidator<IMailTemplate>, MailTemplateValidator>();
       services.AddTransient<IValidator<ILanguage>, LanguageValidator>();
       services.AddTransient<IValidator<ITranslation>, TranslationValidator>();
       services.AddTransient<IValidator<IPage>, PageValidator>();
@@ -76,6 +77,7 @@ namespace zero.Web.Defaults
       services.AddTransient<IPagesApi, PagesApi>();
       services.AddTransient<IPageTreeApi, PageTreeApi>();
       services.AddTransient<IPreviewApi, PreviewApi>();
+      services.AddTransient<IMailTemplatesApi, MailTemplatesApi>();
 
       services.AddTransient<ISetupApi, SetupApi>();
       services.AddTransient<ISectionsApi, SectionsApi>();

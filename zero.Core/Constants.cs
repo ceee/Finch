@@ -57,6 +57,7 @@
       public const string Languages = "languages";
       public const string Translations = "translations";
       public const string Countries = "countries";
+      public const string Mails = "mailTemplates";
       public const string Logging = "logs";
       public const string Plugins = "plugins";
       public const string CreatePlugin = "createplugin";

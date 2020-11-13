@@ -249,6 +249,10 @@
         "name": "Countries",
         "text": "Manage list of countries"
       },
+      "mails": {
+        "name": "Mails",
+        "text": "Edit mail templates"
+      },
       "logs": {
         "name": "Logging",
         "text": "Debug und view logs"
@@ -541,6 +545,33 @@
     },
     "child_count_1": "{count} item",
     "child_count_x": "{count} items"
+  },
+
+  "mailTemplate": {
+    "name": "Mail template",
+    "list": "Mail templates",
+    "emailBox": "Email settings",
+    "tabs": {
+      "sender": "Sender",
+      "recipient": "Recipient"
+    },
+    "fields": {
+      "key": "Key",
+      "key_text": "Used to query for the template in code",
+      "subject": "Subject",
+      "body": "Body",
+      "body_text": "Additional body which is rendered into the mail template",
+      "senderEmail": "Sender email",
+      "senderEmail_text": "Leave empty to use application email",
+      "senderName": "Sender name",
+      "senderName_text": "Leave empty to use application name",
+      "recipientEmail": "Recipient email",
+      "recipientEmail_text": "Only used for mails which do not have a dynamic recipient (e.g. reports)",
+      "cc": "Send copy to (CC)",
+      "cc_text": "Comma-separated list of e-mails",
+      "bcc": "Send invisible copy to (BCC)",
+      "bcc_text": "Comma-separated list of e-mails"
+    }
   },
 
   "space": {

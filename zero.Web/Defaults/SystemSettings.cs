@@ -15,6 +15,7 @@ namespace zero.Web.Defaults
       AddInternal(Constants.Settings.Languages, "@settings.system.languages.name", "@settings.system.languages.text", "fth-globe");
       AddInternal(Constants.Settings.Countries, "@settings.system.countries.name", "@settings.system.countries.text", "fth-map-pin");
       AddInternal(Constants.Settings.Translations, "@settings.system.translations.name", "@settings.system.translations.text", "fth-type");
+      AddInternal(Constants.Settings.Mails, "@settings.system.mails.name", "@settings.system.mails.text", "fth-mail");
       //AddInternal(Constants.Settings.Logging, "@settings.system.logs.name", "@settings.system.logs.text", "fth-file-text");
     }
   }

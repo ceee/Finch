@@ -36,6 +36,7 @@ import uiIconpicker from './pickers/iconPicker/iconpicker.vue';
 import uiMediapicker from './pickers/mediaPicker/mediapicker.vue';
 import uiPagepicker from './pickers/pagePicker/pagepicker.vue';
 import uiUserpicker from './pickers/userPicker/userpicker.vue';
+import uiMailtemplatepicker from './pickers/mailPicker/mailpicker.vue';
 import uiPick from './pickers/pick.vue';
 
 import uiTable from './tables/table.vue';
@@ -96,6 +97,7 @@ export default {
   uiMediapicker,
   uiPagepicker,
   uiUserpicker,
+  uiMailtemplatepicker,
   uiPick,
 
   uiTable,

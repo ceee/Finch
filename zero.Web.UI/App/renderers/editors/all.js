@@ -6,6 +6,7 @@ import media from './media.js';
 //import translation from './translation.js';
 import user from './user.js';
 import userRole from './userRole.js';
+import mailTemplate from './mailTemplate.js';
 
 export default {
   application,
@@ -14,5 +15,6 @@ export default {
   media,
   //translation,
   user,
-  userRole
+  userRole,
+  mailTemplate
 };

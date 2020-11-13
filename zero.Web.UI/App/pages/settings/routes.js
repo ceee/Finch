@@ -9,6 +9,8 @@ import Language from './language.vue';
 import Users from './users.vue';
 import User from './user.vue';
 import UserRole from './role.vue';
+import MailTemplates from './mails.vue';
+import MailTemplate from './mail.vue';
 import Translations from './translations.vue';
 
 const alias = __zero.alias.sections.settings;
@@ -95,6 +97,8 @@ if (section)
   addArea(__zero.alias.settings.languages, Languages, Language, true);
 
   addArea(__zero.alias.settings.translations, Translations, Translations, true);
+
+  addArea(__zero.alias.settings.mails, MailTemplates, MailTemplate, true);
 
   addArea(__zero.alias.settings.users, Users, User, true, area =>
   {

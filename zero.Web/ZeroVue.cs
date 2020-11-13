@@ -174,6 +174,7 @@ namespace zero.Web
       settings.Add("logging", Constants.Settings.Logging);
       settings.Add("languages", Constants.Settings.Languages);
       settings.Add("translations", Constants.Settings.Translations);
+      settings.Add("mails", Constants.Settings.Mails);
       settings.Add("updates", Constants.Settings.Updates);
       settings.Add("users", Constants.Settings.Users);
 

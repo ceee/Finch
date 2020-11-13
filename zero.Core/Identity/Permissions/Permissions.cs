@@ -18,6 +18,7 @@
       public const string Languages = PREFIX + Constants.Settings.Languages;
       public const string Translations = PREFIX + Constants.Settings.Translations;
       public const string Countries = PREFIX + Constants.Settings.Countries;
+      public const string Mails = PREFIX + Constants.Settings.Mails;
       public const string Logging = PREFIX + Constants.Settings.Logging;
       public const string Plugins = PREFIX + Constants.Settings.Plugins;
       public const string CreatePlugin = PREFIX + Constants.Settings.CreatePlugin;

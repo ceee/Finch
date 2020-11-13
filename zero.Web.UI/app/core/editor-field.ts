@@ -11,6 +11,7 @@ import Output from '../editor/fields/output.vue';
 import Checklist from '../editor/fields/checklist.vue';
 import ColorPicker from '../editor/fields/colorpicker.vue';
 import CountryPicker from '../editor/fields/countrypicker.vue';
+import MailTemplatePicker from '../editor/fields/mailtemplatepicker.vue';
 import CulturePicker from '../editor/fields/culturepicker.vue';
 import DatePicker from '../editor/fields/datepicker.vue';
 import DateRangePicker from '../editor/fields/daterangepicker.vue';
@@ -99,7 +100,7 @@ class EditorField
   /**
    * 
    */
-  _setComponent(component, options)
+  _setComponent(component, options?)
   {
     this.#component = component;
     this.#componentOptions = options || {};
@@ -303,6 +304,17 @@ class EditorField
   culturePicker()
   {
     return this._setComponent(CulturePicker);
+  }
+
+
+  /**
+   * Renders a mail template picker
+   * @param {number} [limit=1] - Maximum items to be selected
+   * @returns {EditorField}
+   */
+  mailTemplatePicker(limit)
+  {
+    return this._setComponent(MailTemplatePicker, { limit });
   }
 
 
