@@ -37,6 +37,12 @@ namespace zero.Core.Extensions
     }
 
 
+    public static string Or(this string value, string fallback)
+    {
+      return String.IsNullOrWhiteSpace(value) ? fallback : value;
+    }
+
+
     public static string TrimEnd(this string value, string forRemoving)
     {
       if (String.IsNullOrEmpty(value)) return value;

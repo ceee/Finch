@@ -9,7 +9,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class MailTemplatesApi : BackofficeApi, IMailTemplatesApi
+  public class MailTemplatesApi : AppAwareBackofficeApi, IMailTemplatesApi
   {
     protected IValidator<IMailTemplate> Validator { get; private set; }
 
@@ -24,6 +24,14 @@ namespace zero.Core.Api
     public async Task<IMailTemplate> GetById(string id)
     {
       return await GetById<IMailTemplate>(id);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<IMailTemplate> GetByKey(string key)
+    {
+      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      return await session.Query<IMailTemplate>().Scope(Scope).FirstOrDefaultAsync(x => x.Key == key);
     }
 
 
@@ -81,6 +89,11 @@ namespace zero.Core.Api
     /// Get mail template by id
     /// </summary>
     Task<IMailTemplate> GetById(string id);
+
+    /// <summary>
+    /// Get mail template by associated key
+    /// </summary>
+    Task<IMailTemplate> GetByKey(string key);
 
     /// <summary>
     /// Get mail templates by ids
