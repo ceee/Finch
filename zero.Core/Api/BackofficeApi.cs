@@ -117,7 +117,7 @@ namespace zero.Core.Api
         string id = item.Property.GetValue(item.Parent, null) as string;
         if (String.IsNullOrWhiteSpace(id) || id.StartsWith(NEW_ID))
         {
-          item.Property.SetValue(item.Parent, item.Item.Length.HasValue ? Raven.Id(item.Item.Length.Value) : Raven.Id());
+          item.Property.SetValue(item.Parent, item.Item.Length.HasValue ? IdGenerator.Create(item.Item.Length.Value) : IdGenerator.Create());
         }
       }
 

@@ -14,6 +14,11 @@ namespace zero.Core.Entities
     public string Id { get; set; }
 
     /// <summary>
+    /// Name of the database
+    /// </summary>
+    public string Database { get; set; }
+
+    /// <summary>
     /// Properties which are not synced and have their own values
     /// </summary>
     public string[] Desync { get; set; } = new string[] { };

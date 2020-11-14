@@ -146,7 +146,7 @@ namespace zero.Web
         DocumentStore store = new DocumentStore()
         {
           Urls = new string[1] { options.Raven.Url },
-          Database = options.Raven.Database
+          //Database = options.Raven.Database // we do not specify a default database so every session + operation is forced to specify it
         };
 
         IDocumentStore raven = store.Setup(options).Initialize();
