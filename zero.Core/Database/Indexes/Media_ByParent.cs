@@ -12,7 +12,6 @@ namespace zero.Core.Database.Indexes
       AddMap<IMediaFolder>(items => items.Select(item => new MediaListItem
       {
         Id = item.Id,
-        AppId = item.AppId,
         ParentId = item.ParentId,
         CreatedDate = item.CreatedDate,
         IsFolder = true,
@@ -25,7 +24,6 @@ namespace zero.Core.Database.Indexes
       AddMap<IMedia>(items => items.Select(item => new MediaListItem
       {
         Id = item.Id,
-        AppId = item.AppId,
         ParentId = item.FolderId,
         CreatedDate = item.CreatedDate,
         IsFolder = false,
@@ -36,7 +34,6 @@ namespace zero.Core.Database.Indexes
       }));
 
       StoreAllFields(FieldStorage.Yes);
-      Index(x => x.AppId, FieldIndexing.Exact);
       Index(x => x.ParentId, FieldIndexing.Exact);
     }
   }

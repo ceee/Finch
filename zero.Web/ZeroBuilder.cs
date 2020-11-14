@@ -107,7 +107,6 @@ namespace zero.Web
       Services.AddScoped<IZeroContext, ZeroContext>();
 
       Services.AddScoped<IBackofficeStore, BackofficeStore>();
-      Services.AddTransient(typeof(Scoped<>));
 
       Services.AddScoped<ModelStateValidationFilterAttribute>();
 

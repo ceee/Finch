@@ -12,63 +12,6 @@ namespace zero.Core.Extensions
 {
   public static class RavenQueryableExtensions
   {
-    static Type _appAwareEntity = typeof(IAppAwareEntity);
-
-    public static IRavenQueryable<T> Scope<T>(this IRavenQueryable<T> source, string appId, bool includeShared = true)
-    {
-      if (!_appAwareEntity.IsAssignableFrom(source.ElementType))
-      {
-        return source;
-      }
-
-      if (appId.IsNullOrEmpty())
-      {
-        throw new ArgumentNullException("Application context did not successfully resolve yet");
-      }
-
-      //HashSet<string> ids = new HashSet<string>();
-      //ids.Add(appId);
-
-      //if (includeShared)
-      //{
-      //  ids.Add(Constants.Database.SharedAppId);
-      //}
-
-      return source.Where(item => ((IAppAwareEntity)item).AppId == appId);
-      //return source.Where(item => (item as IAppAwareEntity).AppId.In(ids));
-    }
-
-
-    public static IRavenQueryable<T> Scope<T>(this IRavenQueryable<T> source, ApiScope scope)
-    {
-      if (scope == null || scope.IsShared)
-      {
-        return source;
-      }
-
-      if (!_appAwareEntity.IsAssignableFrom(source.ElementType))
-      {
-        return source;
-      }
-
-      if (scope.AppId.IsNullOrEmpty())
-      {
-        throw new ArgumentNullException("Application context did not successfully resolve yet");
-      }
-
-      //HashSet<string> ids = new HashSet<string>();
-      //ids.Add(scope.AppId);
-
-      //if (scope.IncludeShared)
-      //{
-      //  ids.Add(Constants.Database.SharedAppId);
-      //}
-
-      return source.Where(item => ((IAppAwareEntity)item).AppId == scope.AppId);
-      //return source.Where(item => ((IAppAwareEntity)item).AppId.In(ids));
-    }
-
-
     /// <summary>
     /// 
     /// </summary>

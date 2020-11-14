@@ -1,6 +1,7 @@
 ﻿using Raven.Client.Documents.Session;
 using System.Threading.Tasks;
 using zero.Commerce.Entities;
+using zero.Core.Entities;
 using zero.Core.Validation;
 
 namespace zero.TestData

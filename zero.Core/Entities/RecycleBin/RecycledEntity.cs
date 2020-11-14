@@ -19,7 +19,7 @@ namespace zero.Core.Entities
 
 
   [Collection("RecycleBin")]
-  public interface IRecycledEntity : IZeroEntity, IAppAwareEntity, IZeroDbConventions
+  public interface IRecycledEntity : IZeroEntity, IZeroDbConventions
   {
     /// <summary>
     /// Id of the recycled entity

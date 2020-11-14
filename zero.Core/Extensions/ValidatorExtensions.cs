@@ -105,12 +105,9 @@ namespace zero.Core.Extensions
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
-        bool includeShared = typeof(IAppAwareShareableEntity).IsAssignableFrom(typeof(T));
-
         using IAsyncDocumentSession session = store.Raven.OpenAsyncSession();
 
         bool any = await session.Advanced.AsyncDocumentQuery<T>()
-          .Scope(entity.AppId, false)
           .WhereNotEquals(nameof(IZeroIdEntity.Id), entity.Id)
           .WhereEquals(context.Rule.PropertyName.ToPascalCaseId(), value)
           .AnyAsync(cancellation);
@@ -127,12 +124,9 @@ namespace zero.Core.Extensions
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
-        bool includeShared = typeof(IAppAwareShareableEntity).IsAssignableFrom(typeof(T));
-
         using IAsyncDocumentSession session = store.Raven.OpenAsyncSession();
 
         return await session.Advanced.AsyncDocumentQuery<T>()
-          .Scope(entity.AppId, includeShared)
           .WhereNotEquals(nameof(IZeroIdEntity.Id), entity.Id)
           .WhereEquals(context.Rule.PropertyName.ToPascalCaseId(), expectedValue)
           .AnyAsync(cancellation);
@@ -161,16 +155,8 @@ namespace zero.Core.Extensions
           return true;
         }
 
-        bool includeShared = typeof(IAppAwareShareableEntity).IsAssignableFrom(typeof(T));
-
         using IAsyncDocumentSession session = store.Raven.OpenAsyncSession();
         TReference model = await session.LoadAsync<TReference>(id);
-
-        if (typeof(IAppAwareEntity).IsAssignableFrom(typeof(TReference)))
-        {
-          return model != null && ((IAppAwareEntity)model).InScope(entity.AppId);
-        }
-
         return model != null;
       }).WithMessage("@errors.forms.reference_notfound");
     }

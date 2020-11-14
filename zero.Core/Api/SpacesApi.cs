@@ -10,14 +10,13 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class SpacesApi : AppAwareBackofficeApi, ISpacesApi
+  public class SpacesApi : BackofficeApi, ISpacesApi
   {
     protected IPermissionsApi PermissionsApi { get; private set; }
 
 
     public SpacesApi(IBackofficeStore store, IPermissionsApi permissionsApi) : base(store)
     {
-      Scope.IncludeShared = true;
       PermissionsApi = permissionsApi;
     }
 
@@ -52,7 +51,6 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<ISpaceContent>()
-          .Scope(Scope)
           .Where(x => x.SpaceAlias == space.Alias)
           .WhereIf(x => x.Id == id, !id.IsNullOrEmpty())
           .FirstOrDefaultAsync();
@@ -68,7 +66,6 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<T>()
-          .Scope(Scope)
           .Where(x => x.SpaceAlias == space.Alias)
           .WhereIf(x => x.Id == id, !id.IsNullOrEmpty())
           .FirstOrDefaultAsync();
@@ -84,7 +81,6 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<ISpaceContent>()
-          .Scope(Scope)
           .Where(x => x.SpaceAlias == alias)
           .ToQueriedListAsync(query);
       }
@@ -100,7 +96,6 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<T>()
-          .Scope(Scope)
           .Where(x => x.SpaceAlias == space.Alias)
           .ToQueriedListAsync(query);
       }

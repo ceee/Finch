@@ -101,7 +101,7 @@ namespace zero.Core.Security
           return null;
         }
 
-        if (appId is not null or Constants.Database.SharedAppId || Zero.AppId.Equals(appId, StringComparison.InvariantCultureIgnoreCase))
+        if (appId is not null || Zero.AppId.Equals(appId, StringComparison.InvariantCultureIgnoreCase))
         {
           return userIdentity;
         }
@@ -137,7 +137,7 @@ namespace zero.Core.Security
         claims.Add(new Claim(Constants.Auth.Claims.Email, await UserManager.GetEmailAsync(user)));
       }
 
-      claims.Add(new Claim(Constants.Auth.Claims.AppId, user.AppId));
+      //claims.Add(new Claim(Constants.Auth.Claims.AppId, user.AppId));  // TODO appx fix
 
       return claims;
     }

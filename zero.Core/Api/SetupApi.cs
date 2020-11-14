@@ -113,7 +113,7 @@ namespace zero.Core.Api
           await session.StoreAsync(app);
 
           // set app-id for user and store it
-          user.AppId = session.Advanced.GetDocumentId(app);
+          //user.AppId = session.Advanced.GetDocumentId(app); // TODO appx fix
           await session.StoreAsync(user);
 
           // save default user roles
@@ -146,11 +146,10 @@ namespace zero.Core.Api
           await session.SaveChangesAsync();
         }
       }
-      catch (Exception ex)
+      catch (Exception)
       {
         // TODO revert
-
-        throw ex;
+        throw;
       }
       finally
       {
@@ -209,7 +208,7 @@ namespace zero.Core.Api
         {
           CreatedDate = DateTimeOffset.Now,
           IsActive = true,
-          AppId = Constants.Database.SharedAppId,
+          //AppId = Constants.Database.SharedAppId, // TODO appx fix
           Alias = Safenames.Alias(country.Value),
           //LanguageId = defaultLanguage.Id,
           Code = country.Key.ToLowerInvariant(),
@@ -233,7 +232,7 @@ namespace zero.Core.Api
         Name = "Administrator",
         Alias = Safenames.Alias("Administrator"),
         Sort = 0,
-        AppId = Constants.Database.SharedAppId,
+        //AppId = Constants.Database.SharedAppId, // TODO appx fix
         Icon = "fth-award",
         CreatedDate = DateTimeOffset.Now,
         IsActive = true,
@@ -259,7 +258,6 @@ namespace zero.Core.Api
         Name = "Editor",
         Alias = Safenames.Alias("Editor"),
         Sort = 1,
-        AppId = Constants.Database.SharedAppId,
         Icon = "fth-feather",
         CreatedDate = DateTimeOffset.Now,
         IsActive = true,
@@ -279,7 +277,6 @@ namespace zero.Core.Api
         Name = "Standard",
         Alias = Safenames.Alias("Standard"),
         Sort = 2,
-        AppId = Constants.Database.SharedAppId,
         Icon = "fth-users",
         CreatedDate = DateTimeOffset.Now,
         IsActive = true,

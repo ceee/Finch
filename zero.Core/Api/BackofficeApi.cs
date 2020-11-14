@@ -2,8 +2,6 @@
 using FluentValidation.Results;
 using Raven.Client;
 using Raven.Client.Documents;
-using Raven.Client.Documents.Operations;
-using Raven.Client.Documents.Queries;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
@@ -12,30 +10,12 @@ using zero.Core.Attributes;
 using zero.Core.Entities;
 using zero.Core.Entities.Messages;
 using zero.Core.Extensions;
-using zero.Core.Sync;
 using zero.Core.Utils;
 
 namespace zero.Core.Api
 {
-  public abstract class AppAwareBackofficeApi : BackofficeApi, IAppAwareBackofficeApi
-  {
-    protected bool AllowShared { get; set; } = false;
-
-    public AppAwareBackofficeApi(IBackofficeStore store) : base(store)
-    {
-      Scope = new ApiScope()
-      {
-        AppId = store.AppContext.AppId,
-        IncludeShared = false // TODO based on user
-      };
-    }
-  }
-
-
   public abstract class BackofficeApi : IBackofficeApi
   {
-    public ApiScope Scope { get; protected set; }
-
     protected IDocumentStore Raven { get; private set; }
 
     const string NEW_ID = "new:";
@@ -47,10 +27,6 @@ namespace zero.Core.Api
     {
       Raven = store.Raven;
       Backoffice = store;
-      Scope = new ApiScope()
-      {
-        IsShared = true
-      };
     }
 
 
@@ -63,21 +39,7 @@ namespace zero.Core.Api
       }
 
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-
-      T model = await session.LoadAsync<T>(id);
-      IAppAwareEntity appAwareModel = model as IAppAwareEntity;
-
-      if (model == null || appAwareModel == null)
-      {
-        return model;
-      }
-
-      if (!Scope.IsAllowed(appAwareModel.AppId))
-      {
-        return default;
-      }
-
-      return model;
+      return await session.LoadAsync<T>(id);
     }
 
 
@@ -90,20 +52,7 @@ namespace zero.Core.Api
 
       foreach (string id in ids)
       {
-        if (!models.TryGetValue(id, out T model))
-        {
-          result.Add(id, default);
-          continue;
-        }
-
-        IAppAwareEntity appAwareModel = model as IAppAwareEntity;
-
-        if (appAwareModel == null || !Scope.IsAllowed(appAwareModel.AppId))
-        {
-          result.Add(id, default);
-          continue;
-        }
-
+        models.TryGetValue(id, out T model);
         result.Add(id, model);
       }
 
@@ -123,9 +72,6 @@ namespace zero.Core.Api
       //  entity.Alias = entity.Alias?.ToLower().ToUrlSegment();
       //}
 
-      // get specifics 
-      IAppAwareEntity appAwareEntity = model as IAppAwareEntity;
-
       // run validator
       if (validator != null)
       {
@@ -134,21 +80,6 @@ namespace zero.Core.Api
         if (!validation.IsValid)
         {
           return EntityResult<T>.Fail(validation);
-        }
-      }
-
-      // set app id
-      if (appAwareEntity != null && appAwareEntity.AppId.IsNullOrEmpty())
-      {
-        appAwareEntity.AppId = Scope.AppId; // Constants.Database.SharedAppId; // TODO correct app id
-      }
-
-      // check if current app id is valid
-      if (!model.Id.IsNullOrEmpty() && Scope.IsAppAware && appAwareEntity != null)
-      {
-        if (!Scope.IsAllowed(appAwareEntity.AppId))
-        {
-          return EntityResult<T>.Fail("@errors.onsave.notallowed");
         }
       }
 
@@ -244,14 +175,8 @@ namespace zero.Core.Api
       session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
 
       T entity = await session.LoadAsync<T>(id);
-      IAppAwareEntity appAwareEntity = entity as IAppAwareEntity;
 
       if (entity == null)
-      {
-        return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
-      }
-
-      if (appAwareEntity != null && Scope.IsAppAware && !Scope.IsAllowed(appAwareEntity.AppId))
       {
         return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
       }
@@ -321,11 +246,5 @@ namespace zero.Core.Api
     /// Delete a whole collection (with an optional query suffix, i.e. a where statement)
     /// </summary>
     Task<EntityResult<T>> Purge<T>(string querySuffix = null, Parameters parameters = null);
-  }
-
-
-  public interface IAppAwareBackofficeApi : IBackofficeApi
-  {
-    ApiScope Scope { get; }
   }
 }

@@ -63,7 +63,7 @@ namespace zero.Core.Routing
 
       Dictionary<string, IPage> pages = await session.LoadAsync<IPage>(ids);
 
-      if (!pages.TryGetValue(reference.Id, out IPage page) || page.AppId != route.AppId)
+      if (!pages.TryGetValue(reference.Id, out IPage page))
       {
         return null;
       }
@@ -95,13 +95,13 @@ namespace zero.Core.Routing
 
       List<IRoute> allRoutes = new List<IRoute>();
       IList<IPage> pages = await session.Query<IPage>().ToListAsync();
-      IEnumerable<IGrouping<string, IPage>> groupedPages = pages.GroupBy(x => x.AppId);
+      //IEnumerable<IGrouping<string, IPage>> groupedPages = pages. pages.GroupBy(x => x.AppId);
 
-      foreach (var group in groupedPages)
-      {
-        IList<IRoute> routes = TraversePageChildren(null, new List<IPage>() { }, group);
+      //foreach (var group in groupedPages)
+      //{
+        IList<IRoute> routes = TraversePageChildren(null, new List<IPage>() { }, pages);
         allRoutes.AddRange(routes);
-      }
+      //}
 
       return allRoutes;
     }
@@ -115,7 +115,6 @@ namespace zero.Core.Routing
       IRoute route = new Route()
       {
         Id = GetRouteId(page),
-        AppId = page.AppId,
         Url = UrlBuilder.GetUrl(page, parents),
         ProviderAlias = Alias
       };

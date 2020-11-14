@@ -105,7 +105,7 @@ namespace zero.Core.Routing
       }
 
       IList<IRoute> routes = await session.Query<IRoute>()
-        .Where(x => x.AppId == appId)
+        // TODO appx fix
         .Where(x => (!x.AllowSuffix && x.Url == path) || (x.AllowSuffix && x.Url.In(parts)))
         .Include("References[].Id")
         .Include("Dependencies")

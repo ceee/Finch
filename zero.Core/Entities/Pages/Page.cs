@@ -28,7 +28,7 @@ namespace zero.Core.Entities
 
 
   [Collection("Pages")]
-  public interface IPage : IZeroEntity, IAppAwareEntity, IZeroDbConventions
+  public interface IPage : IZeroEntity, IZeroDbConventions
   {
     /// <summary>
     /// Use this field (when filled out) instead of the alias for URL generation

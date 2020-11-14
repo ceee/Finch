@@ -12,7 +12,7 @@ using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class MediaFolderApi : AppAwareBackofficeApi, IMediaFolderApi
+  public class MediaFolderApi : BackofficeApi, IMediaFolderApi
   {
     IValidator<IMediaFolder> Validator;
 
@@ -36,7 +36,6 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<IMediaFolder>()
-          .Scope(Scope)
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .OrderByDescending(x => x.Name)
           .ToListAsync();
@@ -53,7 +52,6 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         IList<IMediaFolder> folders = await session.Query<IMediaFolder>()
-          .Scope(Scope)
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .OrderByDescending(x => x.CreatedDate).ThenBy(x => x.Name)
           .ToListAsync();
@@ -65,7 +63,6 @@ namespace zero.Core.Api
           MediaFolder_ByHierarchy.Result result = await session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
             .ProjectInto<MediaFolder_ByHierarchy.Result>()
             .Include<MediaFolder_ByHierarchy.Result, IMediaFolder>(x => x.Path.Select(p => p.Id))
-            .Scope(Scope)
             .FirstOrDefaultAsync(x => x.Id == activeId);
 
           if (result != null)
@@ -80,7 +77,6 @@ namespace zero.Core.Api
 
         IList<MediaFolders_WithChildren.Result> children = await session.Query<MediaFolders_WithChildren.Result, MediaFolders_WithChildren>()
           .ProjectInto<MediaFolders_WithChildren.Result>()
-          .Scope(Scope)
           .Where(x => x.Id.In(folderIds))
           .ToListAsync();
 
@@ -135,7 +131,6 @@ namespace zero.Core.Api
         MediaFolder_ByHierarchy.Result result = await session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
           .ProjectInto<MediaFolder_ByHierarchy.Result>()
           .Include<MediaFolder_ByHierarchy.Result, IMediaFolder>(x => x.Path.Select(p => p.Id))
-          .Scope(Scope)
           .FirstOrDefaultAsync(x => x.Id == id);
 
         if (result == null)
@@ -184,7 +179,7 @@ namespace zero.Core.Api
   }
 
 
-  public interface IMediaFolderApi : IAppAwareBackofficeApi
+  public interface IMediaFolderApi : IBackofficeApi
   {
     /// <summary>
     /// Get application by Id

@@ -22,9 +22,6 @@ namespace zero.Core.Api
 
     protected ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
-    static Type AppAwareType = typeof(IAppAwareEntity);
-    static Type AppAwareShareableType = typeof(IAppAwareShareableEntity);
-
 
     public AuthorizationApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, SignInManager<BackofficeUser> signInManager)
     {
@@ -93,8 +90,8 @@ namespace zero.Core.Api
       Type type = typeof(T);
       bool isSuperUser = Principal.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
 
-      result.IsAppAware = AppAwareType.IsAssignableFrom(type);
-      result.IsShareable = result.IsAppAware && AppAwareShareableType.IsAssignableFrom(type);
+      //result.IsAppAware = AppAwareType.IsAssignableFrom(type); // TODO appx
+      //result.IsShareable = result.IsAppAware && AppAwareShareableType.IsAssignableFrom(type);
       
       if (isSuperUser)
       {

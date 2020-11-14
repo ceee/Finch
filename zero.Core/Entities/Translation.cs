@@ -26,7 +26,7 @@ namespace zero.Core.Entities
 
 
   [Collection("Translations")]
-  public interface ITranslation : IZeroEntity, ILanguageAwareEntity, IAppAwareShareableEntity, IZeroDbConventions
+  public interface ITranslation : IZeroEntity, ILanguageAwareEntity, IZeroDbConventions
   {
     /// <summary>
     /// Key which can be used to query translations

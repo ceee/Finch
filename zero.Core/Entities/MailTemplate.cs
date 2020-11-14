@@ -32,7 +32,7 @@ namespace zero.Core.Entities
 
 
   [Collection("MailTemplates")]
-  public interface IMailTemplate : IZeroEntity, IAppAwareEntity, IZeroDbConventions
+  public interface IMailTemplate : IZeroEntity, IZeroDbConventions
   {
     /// <summary>
     /// Alias which is used to get the template in code

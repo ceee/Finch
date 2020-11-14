@@ -13,7 +13,7 @@ namespace zero.Core.Entities
 
 
   [Collection("Previews")]
-  public interface IPreview : IZeroEntity, IAppAwareEntity, IZeroDbConventions
+  public interface IPreview : IZeroEntity, IZeroDbConventions
   {
     /// <summary>
     /// Id of the original entity

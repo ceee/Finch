@@ -15,7 +15,7 @@ using zero.Core.Options;
 
 namespace zero.Core.Api
 {
-  public class PagesApi : AppAwareBackofficeApi, IPagesApi
+  public class PagesApi : BackofficeApi, IPagesApi
   {
     const string RECYCLE_BIN_GROUP = "pages";
 
@@ -221,7 +221,6 @@ namespace zero.Core.Api
           Pages_WithChildren.Result childrenResult = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
             .ProjectInto<Pages_WithChildren.Result>()
             .Include<Pages_WithChildren.Result, IPage>(x => x.Id)
-            .Scope(Scope)
             .Where(x => x.Id == oldParentId)
             .FirstOrDefaultAsync();
 
@@ -321,7 +320,7 @@ namespace zero.Core.Api
         page.IsActive = false;
 
         // validate app and parent
-        if (!Scope.IsAllowed(page.AppId) || (!page.ParentId.IsNullOrEmpty() && !ids.Contains(page.ParentId) && !parentIds.Contains(page.ParentId)))
+        if (!page.ParentId.IsNullOrEmpty() && !ids.Contains(page.ParentId) && !parentIds.Contains(page.ParentId))
         {
           // TODO correct error message
           continue;
@@ -369,7 +368,6 @@ namespace zero.Core.Api
           Pages_WithChildren.Result childrenResult = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
             .ProjectInto<Pages_WithChildren.Result>()
             .Include<Pages_WithChildren.Result, IPage>(x => x.Id)
-            .Scope(Scope)
             .Where(x => x.Id == parentId)
             .FirstOrDefaultAsync();
 

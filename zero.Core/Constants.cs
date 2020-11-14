@@ -28,14 +28,13 @@
         public const string Email = "zero.claim.email";
         public const string Permission = "zero.claim.permission";
         public const string DefaultAppId = "zero.claim.defaultAppId";
-        public const string AppId = "zero.claim.appId";
+        public const string AppId = "zero.claim.appId"; // TODO appx fix
         public const string TicketExpires = "zero.claim.ticketExpires";
       }
     }
 
     public static class Database
     {
-      public const string SharedAppId = "shared";
       public const string ReservationPrefix = "zero.";
       public const string Expires = Raven.Client.Constants.Documents.Metadata.Expires;
     }

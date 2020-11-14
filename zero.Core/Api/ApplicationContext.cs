@@ -88,7 +88,7 @@ namespace zero.Core.Api
 
       string[] allowedAppIds = GetAllowedAppIdsForUser(user);
 
-      bool isMainId = appId.Equals(user.AppId, StringComparison.InvariantCultureIgnoreCase);
+      bool isMainId = false; // appId.Equals(user.AppId, StringComparison.InvariantCultureIgnoreCase); // TODO appx fix
       bool isAllowedId = allowedAppIds.Contains(appId, StringComparer.InvariantCultureIgnoreCase);
 
       if (user.IsSuper || isMainId || isAllowedId)
@@ -137,12 +137,12 @@ namespace zero.Core.Api
         }
         else
         {
-          appId = user.AppId;
+          //appId = user.AppId; // TODO appx fix
         }
       }
       else
       {
-        appId = user.AppId;
+        //appId = user.AppId; // TODO appx fix
       }
 
       if (appId.IsNullOrEmpty())

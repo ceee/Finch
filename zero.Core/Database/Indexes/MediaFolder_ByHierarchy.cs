@@ -8,11 +8,9 @@ namespace zero.Core.Database.Indexes
 {
   public class MediaFolder_ByHierarchy : AbstractIndexCreationTask<IMediaFolder, MediaFolder_ByHierarchy.Result>
   {
-    public class Result : IZeroIdEntity, IAppAwareEntity, IZeroDbConventions
+    public class Result : IZeroIdEntity, IZeroDbConventions
     {
       public string Id { get; set; }
-
-      public string AppId { get; set; }
 
       public string Name { get; set; }
 
@@ -34,7 +32,6 @@ namespace zero.Core.Database.Indexes
       {
         Id = item.Id,
         Name = item.Name,
-        AppId = item.AppId,
         Path = Recurse(item, x => LoadDocument<IMediaFolder>(x.ParentId))
                 .Where(x => x != null && x.Id != null && x.Id != item.Id)
                 .Reverse()

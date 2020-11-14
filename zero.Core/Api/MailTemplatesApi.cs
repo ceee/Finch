@@ -9,7 +9,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class MailTemplatesApi : AppAwareBackofficeApi, IMailTemplatesApi
+  public class MailTemplatesApi : BackofficeApi, IMailTemplatesApi
   {
     protected IValidator<IMailTemplate> Validator { get; private set; }
 
@@ -31,7 +31,7 @@ namespace zero.Core.Api
     public async Task<IMailTemplate> GetByKey(string key)
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-      return await session.Query<IMailTemplate>().Scope(Scope).FirstOrDefaultAsync(x => x.Key == key);
+      return await session.Query<IMailTemplate>().FirstOrDefaultAsync(x => x.Key == key);
     }
 
 
@@ -49,7 +49,7 @@ namespace zero.Core.Api
     {
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
-        return await session.Query<IMailTemplate>().Scope(Scope).ToListAsync();
+        return await session.Query<IMailTemplate>().ToListAsync();
       }
     }
 
@@ -62,7 +62,6 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<IMailTemplate>()
-          .Scope(Scope)
           .ToQueriedListAsync(query);
       }
     }

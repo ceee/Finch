@@ -30,8 +30,7 @@ namespace zero.Commerce.Backoffice
     {
       Id = x.Id,
       Name = x.Name,
-      IsActive = x.IsActive,
-      IsShared = x.AppId == Constants.Database.SharedAppId
+      IsActive = x.IsActive
     });
 
 

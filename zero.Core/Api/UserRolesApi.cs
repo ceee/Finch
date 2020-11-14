@@ -15,7 +15,7 @@ using zero.Core.Validation;
 
 namespace zero.Core.Api
 {
-  public class UserRolesApi : AppAwareBackofficeApi, IUserRolesApi
+  public class UserRolesApi : BackofficeApi, IUserRolesApi
   {
     protected IHttpContextAccessor HttpContextAccessor { get; set; }
 
@@ -63,7 +63,6 @@ namespace zero.Core.Api
 
       if (model.Id.IsNullOrEmpty())
       {
-        model.AppId = Scope.AppId;
         model.CreatedDate = DateTimeOffset.Now;
       }
 
@@ -109,7 +108,7 @@ namespace zero.Core.Api
   }
 
 
-  public interface IUserRolesApi : IAppAwareBackofficeApi
+  public interface IUserRolesApi : IBackofficeApi
   {
     /// <summary>
     /// Get all user roles

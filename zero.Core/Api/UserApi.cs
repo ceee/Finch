@@ -10,7 +10,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class UserApi : AppAwareBackofficeApi, IUserApi
+  public class UserApi : BackofficeApi, IUserApi
   {
     protected UserManager<BackofficeUser> UserManager { get; private set; }
 
@@ -51,7 +51,6 @@ namespace zero.Core.Api
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
       return await session.Query<IBackofficeUser>()
-        .Scope(Scope)
         .OrderByDescending(x => x.CreatedDate)
         .ToListAsync();
     }
@@ -61,13 +60,11 @@ namespace zero.Core.Api
     public async Task<ListResult<IBackofficeUser>> GetByQuery(ListQuery<IBackofficeUser> query)
     {
       string currentUserId = UserManager.GetUserId(Context.BackofficeUser);
-      HashSet<string> appIds = new HashSet<string>() { Constants.Database.SharedAppId, Scope.AppId };
 
       query.SearchSelector = user => user.Name;
 
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
       return await session.Query<IBackofficeUser>()
-        .Where(x => x.AppId.In(appIds) || x.Id == currentUserId)
         .ToQueriedListAsync(query);
     }
 
@@ -160,7 +157,7 @@ namespace zero.Core.Api
   }
 
 
-  public interface IUserApi : IAppAwareBackofficeApi
+  public interface IUserApi : IBackofficeApi
   {
     /// <summary>
     /// Find user by id

@@ -13,7 +13,7 @@ namespace zero.Core.Entities
 
 
   [Collection("Countries")]
-  public interface ICountry : IZeroEntity, IAppAwareShareableEntity, IZeroDbConventions
+  public interface ICountry : IZeroEntity, IZeroDbConventions
   {
     /// <summary>
     /// Preferred countries are displayed on top in lists

@@ -46,7 +46,7 @@ namespace zero.Core.Security
       }
 
       string userAppId = principal.FindFirstValue(Constants.Auth.Claims.AppId);
-      return userAppId == null || userAppId == Constants.Database.SharedAppId || Zero.AppId.Equals(userAppId, StringComparison.InvariantCultureIgnoreCase);
+      return userAppId == null || Zero.AppId.Equals(userAppId, StringComparison.InvariantCultureIgnoreCase);
     }
 
 

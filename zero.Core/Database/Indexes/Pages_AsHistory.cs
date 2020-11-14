@@ -8,11 +8,9 @@ namespace zero.Core.Database.Indexes
 {
   public class Pages_AsHistory : AbstractIndexCreationTask<IPage, Pages_AsHistory.Result>
   {
-    public class Result : IZeroIdEntity, IAppAwareEntity, IZeroDbConventions
+    public class Result : IZeroIdEntity, IZeroDbConventions
     {
       public string Id { get; set; }
-
-      public string AppId { get; set; }
 
       public DateTimeOffset LastModified { get; set; }
     }
@@ -24,7 +22,6 @@ namespace zero.Core.Database.Indexes
         .Select(x => new Result()
         {
           Id = x.Id,
-          AppId = x.AppId,
           LastModified = x.LastModifiedDate
         });
 

@@ -26,9 +26,6 @@ namespace zero.Web.Controllers
     protected IZeroOptions Options => _options ?? (_options = HttpContext?.RequestServices?.GetService<IZeroOptions>());
     protected IToken Token => _token ?? (_token = HttpContext?.RequestServices?.GetService<IToken>());
 
-    static Type AppAwareType = typeof(IAppAwareEntity);
-    static Type AppAwareShareableType = typeof(IAppAwareShareableEntity);
-
 
     /// <summary>
     /// Creates an edit model with appropriate options and permissions
@@ -36,7 +33,6 @@ namespace zero.Web.Controllers
     public EditModel<T> Edit<T>(T data, bool typed = true, Action<EditModel<T>> transform = null) where T : IZeroIdEntity
     {
       Type type = typeof(T);
-      bool canBeShared = AppAwareShareableType.IsAssignableFrom(type);
 
       //ControllerContext.ActionDescriptor.FilterDescriptors[0].
 
@@ -48,10 +44,10 @@ namespace zero.Web.Controllers
       EditModel<T> model = new EditModel<T>();
       model.Entity = data;
       model.Meta.Token = Token.Get(data);
-      model.Meta.IsAppAware = AppAwareType.IsAssignableFrom(type);
-      model.Meta.CanBeShared = canBeShared;
+      //model.Meta.IsAppAware = AppAwareType.IsAssignableFrom(type); // TODO appx
+      //model.Meta.CanBeShared = canBeShared;
       model.Meta.CanCreate = true;
-      model.Meta.CanCreateShared = canBeShared;
+      //model.Meta.CanCreateShared = canBeShared;
       model.Meta.CanEdit = true;
       model.Meta.CanDelete = true;
 
@@ -69,15 +65,14 @@ namespace zero.Web.Controllers
       where TWrapper : EditModel<T>, new() 
     {
       Type type = typeof(T);
-      bool canBeShared = AppAwareShareableType.IsAssignableFrom(type);
 
       //ControllerContext.ActionDescriptor.FilterDescriptors[0].
 
       data.Meta.Token = Token.Get(data.Entity);
-      data.Meta.IsAppAware = AppAwareType.IsAssignableFrom(type);
-      data.Meta.CanBeShared = canBeShared;
+      //data.Meta.IsAppAware = AppAwareType.IsAssignableFrom(type); // TODO appx
+      //data.Meta.CanBeShared = canBeShared;
       data.Meta.CanCreate = true;
-      data.Meta.CanCreateShared = canBeShared;
+      //data.Meta.CanCreateShared = canBeShared;
       data.Meta.CanEdit = true;
       data.Meta.CanDelete = true;
 

@@ -9,7 +9,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class CountriesApi : AppAwareBackofficeApi, ICountriesApi
+  public class CountriesApi : BackofficeApi, ICountriesApi
   {
     IValidator<ICountry> Validator;
 
@@ -39,7 +39,6 @@ namespace zero.Core.Api
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
       return await session.Query<ICountry>()
-        .Scope(Scope)
         .OrderByDescending(x => x.IsPreferred)
         .ThenBy(x => x.Name)
         .ToListAsync();
@@ -53,7 +52,6 @@ namespace zero.Core.Api
 
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
       return await session.Query<ICountry>()
-        .Scope(Scope)
         .OrderByDescending(x => x.IsPreferred)
         .ThenBy(x => x.Name)
         .ToQueriedListAsync(query);

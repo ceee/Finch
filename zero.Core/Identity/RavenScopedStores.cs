@@ -8,7 +8,7 @@ using zero.Core.Extensions;
 namespace zero.Core.Identity
 {
   public class RavenScopedRoleStore<TRole> : RavenRoleStore<TRole> 
-    where TRole : class, IIdentityUserRole, IAppAwareEntity
+    where TRole : class, IIdentityUserRole
   {
     protected IZeroContext Context { get; private set; }
 
@@ -18,16 +18,16 @@ namespace zero.Core.Identity
     }
 
     /// <inheritdoc/>
-    protected override IRavenQueryable<TRole> ScopeQuery(IRavenQueryable<TRole> query) => query.Scope(Context.AppId, false);
+    protected override IRavenQueryable<TRole> ScopeQuery(IRavenQueryable<TRole> query) => query;
 
     /// <inheritdoc/>
-    protected override bool IsRolePartOfStore(TRole role) => role.AppId.Equals(Context.AppId, StringComparison.InvariantCultureIgnoreCase);
+    protected override bool IsRolePartOfStore(TRole role) => true;
   }
 
 
 
   public class RavenScopedUserStore<TUser> : RavenUserStore<TUser>
-    where TUser : class, IIdentityUser, IAppAwareEntity
+    where TUser : class, IIdentityUser
   {
     protected IZeroContext Context { get; private set; }
 
@@ -37,20 +37,20 @@ namespace zero.Core.Identity
     }
 
     /// <inheritdoc/>
-    protected override string GetReservationKey(TUser user) => Constants.Database.ReservationPrefix + typeof(TUser) + ':' + user.AppId + ':' + user.Email;
+    protected override string GetReservationKey(TUser user) => Constants.Database.ReservationPrefix + typeof(TUser) + ':' + user.Email;
 
     /// <inheritdoc/>
-    protected override IRavenQueryable<TUser> ScopeQuery(IRavenQueryable<TUser> query) => query.Scope(Context.AppId, false);
+    protected override IRavenQueryable<TUser> ScopeQuery(IRavenQueryable<TUser> query) => query;
 
     /// <inheritdoc/>
-    protected override bool IsUserPartOfStore(TUser user) => user.AppId.Equals(Context.AppId, StringComparison.InvariantCultureIgnoreCase);
+    protected override bool IsUserPartOfStore(TUser user) => true;
   }
 
 
 
   public class RavenScopedUserStore<TUser, TRole> : RavenUserStore<TUser, TRole>
-    where TUser : class, IIdentityUserWithRoles, IAppAwareEntity
-    where TRole : class, IIdentityUserRole, IAppAwareEntity
+    where TUser : class, IIdentityUserWithRoles
+    where TRole : class, IIdentityUserRole
   {
     protected IZeroContext Context { get; private set; }
 
@@ -60,12 +60,12 @@ namespace zero.Core.Identity
     }
 
     /// <inheritdoc/>
-    protected override string GetReservationKey(TUser user) => Constants.Database.ReservationPrefix + typeof(TUser) + ':' + user.AppId + ':' + user.Email;
+    protected override string GetReservationKey(TUser user) => Constants.Database.ReservationPrefix + typeof(TUser) + ':' + user.Email;
 
     /// <inheritdoc/>
-    protected override IRavenQueryable<TUser> ScopeQuery(IRavenQueryable<TUser> query) => query.Scope(Context.AppId, false);
+    protected override IRavenQueryable<TUser> ScopeQuery(IRavenQueryable<TUser> query) => query;
 
     /// <inheritdoc/>
-    protected override bool IsUserPartOfStore(TUser user) => user.AppId.Equals(Context.AppId, StringComparison.InvariantCultureIgnoreCase);
+    protected override bool IsUserPartOfStore(TUser user) => true;
   }
 }

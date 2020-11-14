@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using zero.Core.Attributes;
 using zero.Core.Entities;
-using zero.Core.Utils;
 
 namespace zero.Core.Routing
 {
@@ -11,9 +9,6 @@ namespace zero.Core.Routing
   {
     /// <inheritdoc />
     public string Id { get; set; }
-
-    /// <inheritdoc />
-    public string AppId { get; set; }
 
     /// <inheritdoc />
     public string Url { get; set; }
@@ -52,7 +47,7 @@ namespace zero.Core.Routing
 
 
   [Collection("Routes")]
-  public interface IRoute : IZeroIdEntity, IZeroDbConventions, IAppAwareEntity
+  public interface IRoute : IZeroIdEntity, IZeroDbConventions
   {
     /// <summary>
     /// Generated URL based on the URL provider

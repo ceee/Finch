@@ -18,7 +18,7 @@ namespace zero.Core.Entities
   }
 
   [Collection("Languages")]
-  public interface ILanguage : IZeroEntity, IAppAwareShareableEntity, IZeroDbConventions
+  public interface ILanguage : IZeroEntity, IZeroDbConventions
   {
     /// <summary>
     /// Language code (ISO 3166-1)

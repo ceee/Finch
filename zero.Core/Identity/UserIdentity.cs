@@ -107,7 +107,6 @@ namespace zero.Core.Identity
       Constants.Auth.Claims.Email,
       //Constants.Auth.Claims.Role,
       Constants.Auth.Claims.SecurityStamp,
-      Constants.Auth.Claims.AppId,
       Constants.Auth.Claims.IsZero
     };
   }

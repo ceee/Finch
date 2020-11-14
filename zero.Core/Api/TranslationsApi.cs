@@ -10,14 +10,13 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class TranslationsApi : AppAwareBackofficeApi, ITranslationsApi
+  public class TranslationsApi : BackofficeApi, ITranslationsApi
   {
     IValidator<ITranslation> Validator;
 
 
     public TranslationsApi(IBackofficeStore store, IValidator<ITranslation> validator) : base(store)
     {
-      Scope.IncludeShared = true;
       Validator = validator;
     }
 
@@ -40,7 +39,7 @@ namespace zero.Core.Api
     public async Task<IList<ITranslation>> GetAll()
     {
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-      return await session.Query<ITranslation>().OrderByDescending(x => x.CreatedDate).Scope(Scope).ToListAsync();
+      return await session.Query<ITranslation>().OrderByDescending(x => x.CreatedDate).ToListAsync();
     }
 
 
@@ -50,7 +49,7 @@ namespace zero.Core.Api
       query.SearchFor(entity => entity.Key, entity => entity.Value);
 
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
-      return await session.Query<ITranslation>().OrderByDescending(x => x.CreatedDate).Scope(Scope).ToQueriedListAsync(query);
+      return await session.Query<ITranslation>().OrderByDescending(x => x.CreatedDate).ToQueriedListAsync(query);
     }
 
 

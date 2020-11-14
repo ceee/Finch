@@ -75,7 +75,7 @@ namespace zero.Core.Entities
 
 
   [Collection("BackofficeUsers")]
-  public interface IBackofficeUser : IZeroEntity, IAppAwareEntity, IZeroDbConventions, IIdentityUserWithRoles
+  public interface IBackofficeUser : IZeroEntity, IZeroDbConventions, IIdentityUserWithRoles
   {
     /// <summary>
     /// Currently selected app id for the backoffice

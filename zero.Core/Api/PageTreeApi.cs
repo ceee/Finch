@@ -12,7 +12,7 @@ using zero.Core.Options;
 
 namespace zero.Core.Api
 {
-  public class PageTreeApi : AppAwareBackofficeApi, IPageTreeApi
+  public class PageTreeApi : BackofficeApi, IPageTreeApi
   {
     public PageTreeApi(IBackofficeStore store) : base(store) { }
 
@@ -28,7 +28,6 @@ namespace zero.Core.Api
 
       IList<IPage> pages = await session
         .Query<IPage>()
-        .Scope(Scope)
         .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
         .OrderBy(x => x.Sort)
         .ToListAsync();
@@ -40,7 +39,6 @@ namespace zero.Core.Api
         Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
           .ProjectInto<Pages_ByHierarchy.Result>()
           .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
-          .Scope(Scope)
           .FirstOrDefaultAsync(x => x.Id == activeId);
 
         if (result != null)
@@ -55,7 +53,6 @@ namespace zero.Core.Api
 
       IList<Pages_WithChildren.Result> children = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
         .ProjectInto<Pages_WithChildren.Result>()
-        .Scope(Scope)
         .Where(x => x.Id.In(pageIds))
         .ToListAsync();
 

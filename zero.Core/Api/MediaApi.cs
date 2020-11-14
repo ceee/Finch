@@ -17,7 +17,7 @@ using Raven.Client.Documents.Linq;
 
 namespace zero.Core.Api
 {
-  public class MediaApi : AppAwareBackofficeApi, IMediaApi
+  public class MediaApi : BackofficeApi, IMediaApi
   {
     protected const char PATH_SEPARATOR = '/';
 
@@ -52,7 +52,7 @@ namespace zero.Core.Api
 
       IMedia media = await session.LoadAsync<IMedia>(id);
 
-      if (media == null || (enforceAppId && media.AppId != Constants.Database.SharedAppId && media.AppId != Scope.AppId))
+      if (media == null) //|| (enforceAppId && media.AppId != Constants.Database.SharedAppId && media.AppId != Scope.AppId)) // TODO appx fix
       {
         return null;
       }
@@ -84,7 +84,6 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<IMedia>()
-          .Scope(Scope)
           .WhereIf(x => x.FolderId == query.FolderId, !query.FolderId.IsNullOrEmpty(), x => x.FolderId == null)
           .ToQueriedListAsync(query);
       }
@@ -103,9 +102,7 @@ namespace zero.Core.Api
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
       session.Advanced.MaxNumberOfRequestsPerSession = query.PageSize + 1;
 
-      IRavenQueryable<MediaListItem> dbQuery = session.Query<MediaListItem, Media_ByParent>()
-        .ProjectInto<MediaListItem>()
-        .Scope(Scope);
+      IRavenQueryable<MediaListItem> dbQuery = session.Query<MediaListItem, Media_ByParent>().ProjectInto<MediaListItem>();
 
       if (query.Search.IsNullOrWhiteSpace() || !query.SearchIsGlobal)
       {
@@ -260,7 +257,7 @@ namespace zero.Core.Api
   }
 
 
-  public interface IMediaApi : IAppAwareBackofficeApi
+  public interface IMediaApi : IBackofficeApi
   {
     /// <summary>
     /// Get media by Id

@@ -14,7 +14,7 @@ namespace zero.Core.Entities
   /// A media folder contains media and other folders
   /// </summary>
   [Collection("MediaFolders")]
-  public interface IMediaFolder : IZeroEntity, IAppAwareEntity, IZeroDbConventions
+  public interface IMediaFolder : IZeroEntity, IZeroDbConventions
   {
     /// <summary>
     /// Parent folder id

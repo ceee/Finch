@@ -18,7 +18,7 @@ namespace zero.Core.Entities
   /// The backoffice rendering is done by an IRenderer
   /// </summary>
   [Collection("SpaceContents")]
-  public interface ISpaceContent : IZeroEntity, IAppAwareShareableEntity, IZeroDbConventions
+  public interface ISpaceContent : IZeroEntity, IZeroDbConventions
   {
     /// <summary>
     /// Associated space

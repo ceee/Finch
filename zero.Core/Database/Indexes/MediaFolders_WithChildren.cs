@@ -7,13 +7,11 @@ namespace zero.Core.Database.Indexes
 {
   public class MediaFolders_WithChildren : AbstractIndexCreationTask<MediaFolder, MediaFolders_WithChildren.Result>
   {
-    public class Result : IZeroIdEntity, IAppAwareEntity, IZeroDbConventions
+    public class Result : IZeroIdEntity, IZeroDbConventions
     {
       public string Id { get; set; }
 
       public string ParentId { get; set; }
-
-      public string AppId { get; set; }
 
       public string Name { get; set; }
 
@@ -28,16 +26,14 @@ namespace zero.Core.Database.Indexes
         Id = item.Id,
         ParentId = item.ParentId,
         Name = item.Name,
-        AppId = item.AppId,
         ChildrenIds = new string[] { }
       });
 
-      Reduce = results => results.GroupBy(x => new { x.ParentId, x.AppId }).Select(group => new Result()
+      Reduce = results => results.GroupBy(x => new { x.ParentId }).Select(group => new Result()
       {
         Id = group.Key.ParentId,
         ParentId = group.Key.ParentId,
         Name = String.Empty,
-        AppId = group.Key.AppId,
         ChildrenIds = group.Select(x => x.Id).ToArray()
       });
 

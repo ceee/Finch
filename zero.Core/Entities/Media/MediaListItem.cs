@@ -2,13 +2,11 @@
 
 namespace zero.Core.Entities
 {
-  public class MediaListItem : IZeroIdEntity, IAppAwareEntity, IZeroDbConventions
+  public class MediaListItem : IZeroIdEntity, IZeroDbConventions
   {
     public string Id { get; set; }
 
     public string ParentId { get; set; }
-
-    public string AppId { get; set; }
 
     public string Name { get; set; }
 

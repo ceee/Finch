@@ -9,7 +9,7 @@ using zero.Core.Utils;
 
 namespace zero.Core.Api
 {
-  public class RecycleBinApi : AppAwareBackofficeApi, IRecycleBinApi
+  public class RecycleBinApi : BackofficeApi, IRecycleBinApi
   {
     IRecycledEntity Blueprint;
 
@@ -70,7 +70,6 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<IRecycledEntity>()
-          .Scope(Scope)
           .WhereIf(x => x.Group == query.Group, !query.Group.IsNullOrWhiteSpace())
           .WhereIf(x => x.OperationId == query.OperationId, !query.OperationId.IsNullOrWhiteSpace())
           .ToQueriedListAsync(query);
@@ -84,7 +83,6 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<IRecycledEntity>()
-          .Scope(Scope)
           .Where(x => x.OperationId == operationId)
           .ToListAsync();
       }
@@ -99,7 +97,6 @@ namespace zero.Core.Api
       using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
       {
         return await session.Query<IRecycledEntity>()
-          .Scope(Scope)
           .Where(x => x.OperationId == operationId)
           .CountAsync();
       }

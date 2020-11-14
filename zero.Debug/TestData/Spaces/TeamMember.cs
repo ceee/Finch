@@ -16,7 +16,6 @@ namespace zero.TestData
       Description = "Our team members";
       Icon = "fth-users";
       Type = typeof(TeamMember);
-      AllowShared = true;
     }
   }
 

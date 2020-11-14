@@ -12,7 +12,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Api
 {
-  public class LanguagesApi : AppAwareBackofficeApi, ILanguagesApi
+  public class LanguagesApi : BackofficeApi, ILanguagesApi
   {
     IValidator<ILanguage> Validator;
 
@@ -43,7 +43,6 @@ namespace zero.Core.Api
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
 
       return await session.Query<ILanguage>()
-        .Scope(Scope)
         .OrderByDescending(x => x.CreatedDate)
         .ToListAsync();
     }
@@ -73,7 +72,7 @@ namespace zero.Core.Api
 
       using IAsyncDocumentSession session = Raven.OpenAsyncSession();
 
-      return await session.Query<ILanguage>().Scope(Scope).ToQueriedListAsync(query);
+      return await session.Query<ILanguage>().ToQueriedListAsync(query);
     }
 
 

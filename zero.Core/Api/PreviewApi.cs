@@ -6,7 +6,7 @@ using Rc = Raven.Client;
 
 namespace zero.Core.Api
 {
-  public class PreviewApi : AppAwareBackofficeApi, IPreviewApi
+  public class PreviewApi : BackofficeApi, IPreviewApi
   {
     IPreview Blueprint;
 

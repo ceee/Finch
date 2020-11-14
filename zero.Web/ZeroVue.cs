@@ -62,7 +62,7 @@ namespace zero.Web
       config.Alias = CreateAliases();
       config.SettingsAreas = CreateSettingsAreas();
       config.AppId = AppContext.AppId;
-      config.SharedAppId = Constants.Database.SharedAppId;
+      //config.SharedAppId = Constants.Database.SharedAppId; // TODO appx
 
       BackofficeUser user = await AuthenticationApi.GetUser();
 
