@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Identity;
 
@@ -14,7 +15,7 @@ namespace zero.Core.Api
 {
   public class AuthorizationApi : IAuthorizationApi
   {
-    protected IDocumentStore Raven { get; private set; }
+    protected IZeroStore Store { get; private set; }
 
     protected IHttpContextAccessor HttpContextAccessor { get; set; }
 
@@ -23,9 +24,9 @@ namespace zero.Core.Api
     protected ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
 
-    public AuthorizationApi(IDocumentStore raven, IHttpContextAccessor httpContextAccessor, SignInManager<BackofficeUser> signInManager)
+    public AuthorizationApi(IZeroStore store, IHttpContextAccessor httpContextAccessor, SignInManager<BackofficeUser> signInManager)
     {
-      Raven = raven;
+      Store = store;
       HttpContextAccessor = httpContextAccessor;
       SignInManager = signInManager;
     }

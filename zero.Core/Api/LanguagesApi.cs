@@ -40,7 +40,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<ILanguage>> GetAll()
     {
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
       return await session.Query<ILanguage>()
         .OrderByDescending(x => x.CreatedDate)
@@ -70,7 +70,7 @@ namespace zero.Core.Api
     {
       query.SearchFor(entity => entity.Name);
 
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
       return await session.Query<ILanguage>().ToQueriedListAsync(query);
     }

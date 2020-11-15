@@ -30,7 +30,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IMailTemplate> GetByKey(string key)
     {
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       return await session.Query<IMailTemplate>().FirstOrDefaultAsync(x => x.Key == key);
     }
 
@@ -47,7 +47,7 @@ namespace zero.Core.Api
     /// </summary>
     public async Task<IList<IMailTemplate>> GetAll()
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         return await session.Query<IMailTemplate>().ToListAsync();
       }
@@ -59,7 +59,7 @@ namespace zero.Core.Api
     {
       query.SearchSelector = entity => entity.Name;
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         return await session.Query<IMailTemplate>()
           .ToQueriedListAsync(query);

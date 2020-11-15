@@ -48,7 +48,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<string> GetSourceById(string id, bool thumb = false, bool enforceAppId = true)
     {
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
       IMedia media = await session.LoadAsync<IMedia>(id);
 
@@ -69,7 +69,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<Dictionary<string, IMedia>> GetById(IEnumerable<string> ids)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         return await session.LoadAsync<IMedia>(ids);
       }
@@ -81,7 +81,7 @@ namespace zero.Core.Api
     {
       query.SearchFor(entity => entity.Name);
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         return await session.Query<IMedia>()
           .WhereIf(x => x.FolderId == query.FolderId, !query.FolderId.IsNullOrEmpty(), x => x.FolderId == null)
@@ -99,7 +99,7 @@ namespace zero.Core.Api
         .OrderByDescending(x => x.IsFolder)
         .ThenBy(query.OrderBy, query.OrderIsDescending, query.OrderType == ListQueryOrderType.String ? OrderingType.String : OrderingType.Double);
 
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       session.Advanced.MaxNumberOfRequestsPerSession = query.PageSize + 1;
 
       IRavenQueryable<MediaListItem> dbQuery = session.Query<MediaListItem, Media_ByParent>().ProjectInto<MediaListItem>();

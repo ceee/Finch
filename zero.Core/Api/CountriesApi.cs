@@ -37,7 +37,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<ICountry>> GetAll(string languageId)
     {
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       return await session.Query<ICountry>()
         .OrderByDescending(x => x.IsPreferred)
         .ThenBy(x => x.Name)
@@ -50,7 +50,7 @@ namespace zero.Core.Api
     {
       query.SearchSelector = country => country.Name;
 
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       return await session.Query<ICountry>()
         .OrderByDescending(x => x.IsPreferred)
         .ThenBy(x => x.Name)

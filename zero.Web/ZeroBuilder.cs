@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
 using zero.Core.Assemblies;
+using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Handlers;
@@ -139,14 +140,13 @@ namespace zero.Web
     void ConfigureDatabase()
     {
       // add raven
-      Services.AddSingleton(context =>
+      Services.AddSingleton<IZeroStore, ZeroStore>(context =>
       {
         IZeroOptions options = context.GetService<IZeroOptions>();
-         
-        DocumentStore store = new DocumentStore()
+
+        IDocumentStore store = new ZeroStore()
         {
-          Urls = new string[1] { options.Raven.Url },
-          //Database = options.Raven.Database // we do not specify a default database so every session + operation is forced to specify it
+          Urls = new string[1] { options.Raven.Url }
         };
 
         IDocumentStore raven = store.Setup(options).Initialize();
@@ -157,10 +157,10 @@ namespace zero.Web
         // TODO maybe we shouldn't use all auto-registered assemblies but specify them directly via options?
         foreach (Assembly assembly in assemblies)
         {
-          IndexCreation.CreateIndexes(assembly, store);
+          IndexCreation.CreateIndexes(assembly, store, database: "laola.hofbauer");
         }
 
-        return raven;
+        return (ZeroStore)raven;
       });
     }
 

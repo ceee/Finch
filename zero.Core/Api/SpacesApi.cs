@@ -48,7 +48,7 @@ namespace zero.Core.Api
     {
       Space space = GetByAlias(alias);
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         return await session.Query<ISpaceContent>()
           .Where(x => x.SpaceAlias == space.Alias)
@@ -63,7 +63,7 @@ namespace zero.Core.Api
     {
       Space space = GetBy<T>();
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         return await session.Query<T>()
           .Where(x => x.SpaceAlias == space.Alias)
@@ -78,7 +78,7 @@ namespace zero.Core.Api
     {
       query.SearchSelector = item => item.Name;
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         return await session.Query<ISpaceContent>()
           .Where(x => x.SpaceAlias == alias)
@@ -93,7 +93,7 @@ namespace zero.Core.Api
       Space space = GetBy<T>();
       query.SearchSelector = item => item.Name;
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         return await session.Query<T>()
           .Where(x => x.SpaceAlias == space.Alias)

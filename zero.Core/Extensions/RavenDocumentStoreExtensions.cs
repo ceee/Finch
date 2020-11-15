@@ -95,15 +95,6 @@ namespace zero.Core.Extensions
 
 
     /// <summary>
-    /// Create a new unique Id
-    /// </summary>
-    public static string Id(this IDocumentStore store, int length = -1)
-    {
-      return IdGenerator.Create(length);
-    }
-
-
-    /// <summary>
     /// Reserves a key cluster-wide
     /// </summary>
     public static async Task<bool> ReserveAsync(this IDocumentStore store, string key, string value = null)

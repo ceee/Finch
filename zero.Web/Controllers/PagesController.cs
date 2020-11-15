@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Api;
+using zero.Core.Database;
 using zero.Core.Entities;
-using zero.Core.Extensions;
 using zero.Core.Routing;
 using zero.Web.Models;
 
@@ -16,14 +15,14 @@ namespace zero.Web.Controllers
   public class PagesController : BackofficeController
   {
     IPagesApi Api;
-    IDocumentStore Raven;
+    IZeroStore Store;
     IRevisionsApi RevisionsApi;
 
-    public PagesController(IPagesApi api, IRevisionsApi revisionsApi, IDocumentStore raven)
+    public PagesController(IPagesApi api, IRevisionsApi revisionsApi, IZeroStore store)
     {
       Api = api;
       RevisionsApi = revisionsApi;
-      Raven = raven;
+      Store = store;
     }
 
 
@@ -60,7 +59,7 @@ namespace zero.Web.Controllers
     {
       IReadOnlyCollection<PageType> pageTypes = Options.Pages.GetAllItems();
 
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
       Dictionary<string, IPage> pages = await session.LoadAsync<IPage>(ids);
       Dictionary<string, IRoute> routes = await session.LoadAsync<IRoute>(pages.Where(x => x.Value != null).Select(x => "routes." + x.Value.Hash));

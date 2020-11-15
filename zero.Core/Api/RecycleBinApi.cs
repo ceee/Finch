@@ -67,7 +67,7 @@ namespace zero.Core.Api
     {
       query.SearchSelector = x => x.Name;
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         return await session.Query<IRecycledEntity>()
           .WhereIf(x => x.Group == query.Group, !query.Group.IsNullOrWhiteSpace())
@@ -80,7 +80,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<IRecycledEntity>> GetByOperation(string operationId)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         return await session.Query<IRecycledEntity>()
           .Where(x => x.OperationId == operationId)
@@ -94,7 +94,7 @@ namespace zero.Core.Api
     /// </summary>
     public async Task<int> GetCountByOperation(string operationId)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         return await session.Query<IRecycledEntity>()
           .Where(x => x.OperationId == operationId)

@@ -105,7 +105,7 @@ namespace zero.Core.Extensions
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
-        using IAsyncDocumentSession session = store.Raven.OpenAsyncSession();
+        using IAsyncDocumentSession session = store.Store.OpenAsyncSession();
 
         bool any = await session.Advanced.AsyncDocumentQuery<T>()
           .WhereNotEquals(nameof(IZeroIdEntity.Id), entity.Id)
@@ -124,7 +124,7 @@ namespace zero.Core.Extensions
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
-        using IAsyncDocumentSession session = store.Raven.OpenAsyncSession();
+        using IAsyncDocumentSession session = store.Store.OpenAsyncSession();
 
         return await session.Advanced.AsyncDocumentQuery<T>()
           .WhereNotEquals(nameof(IZeroIdEntity.Id), entity.Id)
@@ -155,7 +155,7 @@ namespace zero.Core.Extensions
           return true;
         }
 
-        using IAsyncDocumentSession session = store.Raven.OpenAsyncSession();
+        using IAsyncDocumentSession session = store.Store.OpenAsyncSession();
         TReference model = await session.LoadAsync<TReference>(id);
         return model != null;
       }).WithMessage("@errors.forms.reference_notfound");

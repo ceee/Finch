@@ -37,7 +37,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<IBackofficeUserRole>> GetAll()
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         return await session.Query<IBackofficeUserRole>().OrderBy(x => x.Sort).ThenBy(x => x.Name).ToListAsync();
       }
@@ -68,7 +68,7 @@ namespace zero.Core.Api
 
       model.Alias = Safenames.Alias(model.Name);
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         await session.StoreAsync(model);
 
@@ -89,7 +89,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<IBackofficeUserRole>> Delete(string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         BackofficeUserRole country = await session.LoadAsync<BackofficeUserRole>(id);
 

@@ -7,7 +7,7 @@ namespace zero.Core.Database
 {
   public interface IZeroStore
   {
-    IDocumentStore Store { get; }
+    IDocumentStore RavenStore { get; }
 
     BulkInsertOperation BulkInsert(CancellationToken token = default);
     BulkInsertOperation BulkInsert(string database, CancellationToken token = default);
@@ -23,13 +23,19 @@ namespace zero.Core.Database
   {
     public ZeroStore() : base()
     {
-
+      CurrentDatabase = "laola.hofbauer";
     }
 
     /// <summary>
     /// Get underlying raven document store
     /// </summary>
-    public IDocumentStore Store => this;
+    public IDocumentStore RavenStore => this;
+
+    /// <summary>
+    /// Database for the currently resolved application
+    /// </summary>
+    public string CurrentDatabase { get; private set; }
+
 
     /// <inheritdoc />
     public override IAsyncDocumentSession OpenAsyncSession(string database)
@@ -40,18 +46,20 @@ namespace zero.Core.Database
     /// <inheritdoc />
     public override IAsyncDocumentSession OpenAsyncSession(SessionOptions options)
     {
+      options.Database = options.Database ?? CurrentDatabase;
       return base.OpenAsyncSession(options);
     }
 
     /// <inheritdoc />
     public override IAsyncDocumentSession OpenAsyncSession()
     {
-      return base.OpenAsyncSession();
+      return base.OpenAsyncSession(CurrentDatabase);
     }
 
     /// <inheritdoc />
     public override IDocumentSession OpenSession(SessionOptions options)
     {
+      options.Database = options.Database ?? CurrentDatabase;
       return base.OpenSession(options);
     }
 
@@ -64,7 +72,7 @@ namespace zero.Core.Database
     /// <inheritdoc />
     public override IDocumentSession OpenSession()
     {
-      return base.OpenSession();
+      return base.OpenSession(CurrentDatabase);
     }
 
     /// <inheritdoc />
@@ -78,7 +86,7 @@ namespace zero.Core.Database
     /// </summary>
     public BulkInsertOperation BulkInsert(CancellationToken token = default)
     {
-      return base.BulkInsert(null, token);
+      return base.BulkInsert(CurrentDatabase, token);
     }
   }
 }

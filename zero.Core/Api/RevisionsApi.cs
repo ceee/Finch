@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Options;
@@ -18,13 +19,13 @@ namespace zero.Core.Api
   {
     protected IZeroOptions Options { get; set; }
 
-    protected IDocumentStore Raven { get; set; }
+    protected IZeroStore Store { get; set; }
 
 
-    public RevisionsApi(IZeroOptions options, IDocumentStore raven)
+    public RevisionsApi(IZeroOptions options, IZeroStore store)
     {
       Options = options;
-      Raven = raven;
+      Store = store;
     }
 
 
@@ -33,7 +34,7 @@ namespace zero.Core.Api
     /// </summary>
     public async Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10, bool includeContent = false) where T : IZeroEntity
     {
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
       // get paged revisions
       List<T> items = await session.Advanced.Revisions.GetForAsync<T>(id, (pageNumber - 1) * pageSize, pageSize);

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using zero.Core.Database;
 
 namespace zero.Core.Identity
 {
@@ -18,7 +19,7 @@ namespace zero.Core.Identity
     where TUser : class, IIdentityUserWithRoles
     where TRole : class, IIdentityUserRole
   {
-    public RavenUserStore(IDocumentStore raven) : base(raven) { }
+    public RavenUserStore(IZeroStore store) : base(store) { }
 
 
     /// <inheritdoc />
@@ -39,7 +40,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       return await ScopeQuery(session.Query<TUser>()).Where(x => roleName.In(x.RoleIds)).ToListAsync(); // TODO scope     
     }
 

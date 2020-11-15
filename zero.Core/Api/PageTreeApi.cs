@@ -24,7 +24,7 @@ namespace zero.Core.Api
       IReadOnlyCollection<PageType> pageTypes = Backoffice.Options.Pages.GetAllItems();
       string[] openIds = new string[0] { };
 
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
       IList<IPage> pages = await session
         .Query<IPage>()

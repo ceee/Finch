@@ -49,7 +49,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<IBackofficeUser>> GetAll()
     {
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       return await session.Query<IBackofficeUser>()
         .OrderByDescending(x => x.CreatedDate)
         .ToListAsync();
@@ -63,7 +63,7 @@ namespace zero.Core.Api
 
       query.SearchSelector = user => user.Name;
 
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       return await session.Query<IBackofficeUser>()
         .ToQueriedListAsync(query);
     }

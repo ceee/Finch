@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using Raven.Client;
-using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Attributes;
+using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Entities.Messages;
 using zero.Core.Extensions;
@@ -16,7 +16,7 @@ namespace zero.Core.Api
 {
   public abstract class BackofficeApi : IBackofficeApi
   {
-    protected IDocumentStore Raven { get; private set; }
+    protected IZeroStore Store { get; private set; }
 
     const string NEW_ID = "new:";
 
@@ -25,7 +25,7 @@ namespace zero.Core.Api
 
     public BackofficeApi(IBackofficeStore store)
     {
-      Raven = store.Raven;
+      Store = store.Store;
       Backoffice = store;
     }
 
@@ -38,7 +38,7 @@ namespace zero.Core.Api
         return default;
       }
 
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       return await session.LoadAsync<T>(id);
     }
 
@@ -46,7 +46,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<Dictionary<string, T>> GetByIds<T>(params string[] ids) where T : IZeroIdEntity
     {
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       Dictionary<string, T> models = await session.LoadAsync<T>(ids);
       Dictionary<string, T> result = new Dictionary<string, T>();
 
@@ -145,7 +145,7 @@ namespace zero.Core.Api
       model.CreatedById ??= userId;
       model.Hash ??= IdGenerator.Create();
 
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
 
       await session.StoreAsync(model);
@@ -171,7 +171,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> DeleteById<T>(string id) where T : IZeroIdEntity
     {
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
 
       T entity = await session.LoadAsync<T>(id);
@@ -207,7 +207,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> Purge<T>(string querySuffix = null, Parameters parameters = null)
     {
-      await Raven.PurgeAsync<T>(querySuffix, parameters);
+      await Store.RavenStore.PurgeAsync<T>(querySuffix, parameters);
       return EntityResult<T>.Success();
     }
   }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Identity;
 
@@ -11,16 +12,16 @@ namespace zero.Core.Api
 {
   public class AuthenticationApi : IAuthenticationApi
   {
-    protected IDocumentStore Raven { get; private set; }
+    protected IZeroStore Store { get; private set; }
 
     protected IZeroContext Context { get; set; }
 
     protected SignInManager<BackofficeUser> SignInManager { get; private set; }
 
 
-    public AuthenticationApi(IDocumentStore raven, IZeroContext context, SignInManager<BackofficeUser> signInManager)
+    public AuthenticationApi(IZeroStore store, IZeroContext context, SignInManager<BackofficeUser> signInManager)
     {
-      Raven = raven;
+      Store = store;
       Context = context;
       SignInManager = signInManager;
     }

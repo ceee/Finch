@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Api;
+using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 
@@ -16,15 +17,15 @@ namespace zero.Core.Routing
 {
   public class Routes : IRoutes
   {
-    protected IDocumentStore Raven { get; set; }
+    protected IZeroStore Store { get; set; }
     protected ILogger<Routes> Logger { get; set; }
     protected IEnumerable<IRouteProvider> Providers { get; set; }
     protected IApplicationContext Context { get; set; }
 
 
-    public Routes(IDocumentStore raven, ILogger<Routes> logger, IEnumerable<IRouteProvider> providers, IApplicationContext context)
+    public Routes(IZeroStore store, ILogger<Routes> logger, IEnumerable<IRouteProvider> providers, IApplicationContext context)
     {
-      Raven = raven;
+      Store = store;
       Logger = logger;
       Providers = providers;
       Context = context;
@@ -50,7 +51,7 @@ namespace zero.Core.Routing
         return null;
       }
 
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       return await routeProvider.GetRoute(session, model);
     }
 
@@ -73,7 +74,7 @@ namespace zero.Core.Routing
 
       Dictionary<T, IRoute> result = new Dictionary<T, IRoute>();
 
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
       foreach (T model in models)
       {
@@ -89,7 +90,7 @@ namespace zero.Core.Routing
     {
       path = path.Length > 1 ? path.TrimEnd('/') : path;
 
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
       string[] pathParts = path.Trim('/').Split('/');
       string[] parts = new string[pathParts.Length];
@@ -142,7 +143,7 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public async Task<IResolvedRoute> ResolveRoute(IRoute route)
     {
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       return await ResolveRouteInternal(session, route);
     }
 
@@ -152,7 +153,7 @@ namespace zero.Core.Routing
     {
       int count = 0;
       List<IRoute> all = new List<IRoute>();
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       session.Advanced.MaxNumberOfRequestsPerSession = 1000;
 
       foreach (IRouteProvider provider in Providers)
@@ -161,13 +162,13 @@ namespace zero.Core.Routing
         IList<IRoute> routes = await provider.GetAllRoutes(session);
 
         // delete all registered routes in the database for this provider
-        await Raven.PurgeAsync<IRoute>($"where {nameof(IRoute.ProviderAlias)} = $alias", new Raven.Client.Parameters()
+        await Store.RavenStore.PurgeAsync<IRoute>($"where {nameof(IRoute.ProviderAlias)} = $alias", new Raven.Client.Parameters()
         {
           { "alias", provider.Alias }
         });
 
         // store new routes
-        using (BulkInsertOperation bulkInsert = Raven.BulkInsert())
+        using (BulkInsertOperation bulkInsert = Store.BulkInsert())
         {
           foreach (IRoute route in routes)
           {

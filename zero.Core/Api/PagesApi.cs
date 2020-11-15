@@ -141,7 +141,7 @@ namespace zero.Core.Api
         return EntityResult<IList<IPage>>.Fail("@errors.page.sortingmultipleparents");
       }
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
 
@@ -211,7 +211,7 @@ namespace zero.Core.Api
         return EntityResult<IPage>.Fail("@errors.page.parentnotallowed");
       }
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
 
@@ -360,7 +360,7 @@ namespace zero.Core.Api
 
       items.Add(model);
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         // recursive function to store descendants
         async Task AddChildren(string parentId)

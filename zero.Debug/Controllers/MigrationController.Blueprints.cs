@@ -24,7 +24,7 @@
 //    {
 //      IList<IApplication> apps;
 
-//      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+//      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
 //      {
 //        apps = await session.Query<IApplication>().ToListAsync();
 //      }
@@ -69,7 +69,7 @@
 //      HashSet<string> ids = new HashSet<string>();
 //      IList<T> items;
 
-//      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+//      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
 //      {
 //        session.Advanced.MaxNumberOfRequestsPerSession = 10000;
 
@@ -98,7 +98,7 @@
 //        await session.SaveChangesAsync();
 //      }
 
-//      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+//      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
 //      {
 //        session.Advanced.MaxNumberOfRequestsPerSession = 10000;
 

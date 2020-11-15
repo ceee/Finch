@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using zero.Core.Api;
+using zero.Core.Database;
 using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -18,19 +19,19 @@ namespace zero.Core.Routing
 
     const bool TRAILING_SLASH = false;
 
-    protected IDocumentStore Raven { get; private set; }
+    protected IZeroStore Store { get; private set; }
 
 
-    public PageUrlBuilder(IDocumentStore raven)
+    public PageUrlBuilder(IZeroStore store)
     {
-      Raven = raven;
+      Store = store;
     }
 
 
     /// <inheritdoc />
     public async Task<string> GetUrl(IPage page)
     {
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
       Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
           .ProjectInto<Pages_ByHierarchy.Result>()

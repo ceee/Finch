@@ -33,7 +33,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<IMediaFolder>> GetAll(string parentId = null)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         return await session.Query<IMediaFolder>()
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
@@ -49,7 +49,7 @@ namespace zero.Core.Api
       List<TreeItem> items = new List<TreeItem>();
       string[] openIds = new string[0] { };
 
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         IList<IMediaFolder> folders = await session.Query<IMediaFolder>()
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
@@ -126,7 +126,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<IMediaFolder>> GetHierarchy(string id)
     {
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         MediaFolder_ByHierarchy.Result result = await session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
           .ProjectInto<MediaFolder_ByHierarchy.Result>()

@@ -3,6 +3,7 @@ using Raven.Client.Documents.Session;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Options;
@@ -11,16 +12,16 @@ namespace zero.Core.Api
 {
   public class Token : IToken
   {
-    protected IDocumentStore Raven { get; private set; }
+    protected IZeroStore Store { get; private set; }
 
     protected IZeroOptions Options { get; private set; }
 
     private const string PREFIX = "changeTokens";
 
 
-    public Token(IDocumentStore raven, IZeroOptions options)
+    public Token(IZeroStore store, IZeroOptions options)
     {
-      Raven = raven;
+      Store = store;
       Options = options;
     }
 
@@ -45,7 +46,7 @@ namespace zero.Core.Api
         return false;
       }
 
-      using (IDocumentSession session = Raven.OpenSession())
+      using (IDocumentSession session = Store.OpenSession())
       {
         return session.Query<ChangeToken>().Any(x => x.Id == token && x.ReferenceId == entityId);
       }
@@ -69,11 +70,11 @@ namespace zero.Core.Api
 
       ChangeToken token = new ChangeToken()
       {
-        Id = Options.Raven.CollectionPrefix.EnsureEndsWith(Raven.Conventions.IdentityPartsSeparator) + PREFIX.EnsureEndsWith(Raven.Conventions.IdentityPartsSeparator) + Guid.NewGuid(),
+        Id = Options.Raven.CollectionPrefix.EnsureEndsWith(Store.RavenStore.Conventions.IdentityPartsSeparator) + PREFIX.EnsureEndsWith(Store.RavenStore.Conventions.IdentityPartsSeparator) + Guid.NewGuid(),
         ReferenceId = entityId
       };
 
-      using (IDocumentSession session = Raven.OpenSession())
+      using (IDocumentSession session = Store.OpenSession())
       {
         session.Store(token);
         session.Advanced.GetMetadataFor(token)[Constants.Database.Expires] = DateTime.UtcNow.AddMinutes(Options.TokenExpiration);
