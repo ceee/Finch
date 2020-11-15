@@ -12,16 +12,13 @@ namespace zero.Core.Api
 {
   public class AuthenticationApi : IAuthenticationApi
   {
-    protected IZeroStore Store { get; private set; }
-
     protected IZeroContext Context { get; set; }
 
     protected SignInManager<BackofficeUser> SignInManager { get; private set; }
 
 
-    public AuthenticationApi(IZeroStore store, IZeroContext context, SignInManager<BackofficeUser> signInManager)
+    public AuthenticationApi(IZeroContext context, SignInManager<BackofficeUser> signInManager)
     {
-      Store = store;
       Context = context;
       SignInManager = signInManager;
     }

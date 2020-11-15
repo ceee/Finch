@@ -11,6 +11,9 @@ namespace zero.Core.Entities
     public string Username { get; set; }
 
     /// <inheritdoc />
+    public string AppId { get; set; }
+
+    /// <inheritdoc />
     public string CurrentAppId { get; set; }
 
     /// <inheritdoc/>
@@ -77,6 +80,11 @@ namespace zero.Core.Entities
   [Collection("BackofficeUsers")]
   public interface IBackofficeUser : IZeroEntity, IZeroDbConventions, IIdentityUserWithRoles
   {
+    /// <summary>
+    /// Application ID the user was created in
+    /// </summary>
+    public string AppId { get; set; }
+
     /// <summary>
     /// Currently selected app id for the backoffice
     /// </summary>

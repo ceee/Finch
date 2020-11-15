@@ -144,7 +144,7 @@ namespace zero.Web
       {
         IZeroOptions options = context.GetService<IZeroOptions>();
 
-        IDocumentStore store = new ZeroStore()
+        IDocumentStore store = new ZeroStore(options)
         {
           Urls = new string[1] { options.Raven.Url }
         };
@@ -157,7 +157,7 @@ namespace zero.Web
         // TODO maybe we shouldn't use all auto-registered assemblies but specify them directly via options?
         foreach (Assembly assembly in assemblies)
         {
-          IndexCreation.CreateIndexes(assembly, store, database: "laola.hofbauer");
+          IndexCreation.CreateIndexes(assembly, store, database: options.Raven.Database);
         }
 
         return (ZeroStore)raven;

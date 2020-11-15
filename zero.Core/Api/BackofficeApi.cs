@@ -22,11 +22,27 @@ namespace zero.Core.Api
 
     protected IBackofficeStore Backoffice { get; private set; }
 
+    protected bool IsCoreDatabase { get; private set; }
 
-    public BackofficeApi(IBackofficeStore store)
+
+    public BackofficeApi(IBackofficeStore store, bool isCoreDatabase = false)
     {
       Store = store.Store;
       Backoffice = store;
+      IsCoreDatabase = isCoreDatabase;
+    }
+
+
+    protected IAsyncDocumentSession Session()
+    {
+      if (!IsCoreDatabase)
+      {
+        return Store.OpenAsyncSession();
+      }
+      else
+      {
+        return Store.OpenAsyncSession(Backoffice.Options.Raven.Database);
+      }
     }
 
 
@@ -38,7 +54,7 @@ namespace zero.Core.Api
         return default;
       }
 
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = Session();
       return await session.LoadAsync<T>(id);
     }
 
@@ -46,7 +62,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<Dictionary<string, T>> GetByIds<T>(params string[] ids) where T : IZeroIdEntity
     {
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = Session();
       Dictionary<string, T> models = await session.LoadAsync<T>(ids);
       Dictionary<string, T> result = new Dictionary<string, T>();
 
@@ -145,7 +161,7 @@ namespace zero.Core.Api
       model.CreatedById ??= userId;
       model.Hash ??= IdGenerator.Create();
 
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = Session();
       session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
 
       await session.StoreAsync(model);
@@ -171,7 +187,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> DeleteById<T>(string id) where T : IZeroIdEntity
     {
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = Session();
       session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
 
       T entity = await session.LoadAsync<T>(id);
@@ -207,7 +223,8 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> Purge<T>(string querySuffix = null, Parameters parameters = null)
     {
-      await Store.RavenStore.PurgeAsync<T>(querySuffix, parameters);
+      string database = IsCoreDatabase ? Backoffice.Options.Raven.Database : null;
+      await Store.PurgeAsync<T>(database, querySuffix, parameters);
       return EntityResult<T>.Success();
     }
   }

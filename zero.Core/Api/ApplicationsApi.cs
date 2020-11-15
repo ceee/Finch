@@ -13,7 +13,7 @@ namespace zero.Core.Api
     IValidator<IApplication> Validator;
 
 
-    public ApplicationsApi(IBackofficeStore store, IValidator<IApplication> validator) : base(store)
+    public ApplicationsApi(IBackofficeStore store, IValidator<IApplication> validator) : base(store, isCoreDatabase: true)
     {
       Validator = validator;
     }
@@ -29,7 +29,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<IApplication>> GetAll()
     {
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = Session();
       return await session
         .Query<IApplication>()
         .OrderByDescending(x => x.CreatedDate)
@@ -42,7 +42,7 @@ namespace zero.Core.Api
     {
       query.SearchFor(entity => entity.Name);
 
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = Session();
       return await session.Query<IApplication>().ToQueriedListAsync(query);
     }
 

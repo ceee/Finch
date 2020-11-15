@@ -70,7 +70,7 @@ namespace zero.Core.Api
 
       ChangeToken token = new ChangeToken()
       {
-        Id = Options.Raven.CollectionPrefix.EnsureEndsWith(Store.RavenStore.Conventions.IdentityPartsSeparator) + PREFIX.EnsureEndsWith(Store.RavenStore.Conventions.IdentityPartsSeparator) + Guid.NewGuid(),
+        Id = Options.Raven.CollectionPrefix.EnsureEndsWith(Store.Raven.Conventions.IdentityPartsSeparator) + PREFIX.EnsureEndsWith(Store.Raven.Conventions.IdentityPartsSeparator) + Guid.NewGuid(),
         ReferenceId = entityId
       };
 

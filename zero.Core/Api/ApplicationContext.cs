@@ -89,7 +89,7 @@ namespace zero.Core.Api
 
       string[] allowedAppIds = GetAllowedAppIdsForUser(user);
 
-      bool isMainId = false; // appId.Equals(user.AppId, StringComparison.InvariantCultureIgnoreCase); // TODO appx fix
+      bool isMainId = appId.Equals(user.AppId, StringComparison.InvariantCultureIgnoreCase);
       bool isAllowedId = allowedAppIds.Contains(appId, StringComparer.InvariantCultureIgnoreCase);
 
       if (user.IsSuper || isMainId || isAllowedId)
@@ -100,7 +100,7 @@ namespace zero.Core.Api
         //RandomNumberGenerator.Fill(bytes);
         //user.SecurityStamp = Base32.ToBase32(bytes); // TODO update security stamp but Base32 is .net core internal
 
-        using IAsyncDocumentSession session = Store.OpenAsyncSession();
+        using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
         await session.StoreAsync(user);
         await session.SaveChangesAsync();
 
@@ -127,7 +127,7 @@ namespace zero.Core.Api
         return null;
       }
 
-      string appId = null;
+      string appId;
       string[] allowedAppIds = GetAllowedAppIdsForUser(user);
 
       if (!user.CurrentAppId.IsNullOrEmpty())
@@ -138,12 +138,12 @@ namespace zero.Core.Api
         }
         else
         {
-          //appId = user.AppId; // TODO appx fix
+          appId = user.AppId;
         }
       }
       else
       {
-        //appId = user.AppId; // TODO appx fix
+        appId = user.AppId;
       }
 
       if (appId.IsNullOrEmpty())
@@ -151,8 +151,8 @@ namespace zero.Core.Api
         throw new Exception($"User entity ${user.Id} needs a valid AppId");
       }
 
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-      return await session.LoadAsync<Application>(appId);
+      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      return await session.LoadAsync<IApplication>(appId);
     }
 
 
@@ -254,11 +254,10 @@ namespace zero.Core.Api
       {
         return Apps;
       }
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
-      {
-        Apps = await session.Query<IApplication>().ToListAsync();
-        return Apps;
-      }
+
+      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      Apps = await session.Query<IApplication>().ToListAsync();
+      return Apps;
     }
 
 
@@ -269,7 +268,7 @@ namespace zero.Core.Api
     {
       string userId = user.FindFirstValue(Constants.Auth.Claims.UserId);
 
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
       return await session.LoadAsync<IBackofficeUser>(userId);
     }
 
@@ -283,9 +282,7 @@ namespace zero.Core.Api
         .Where(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(Permissions.Applications))
         .Select(x => Permission.FromClaim(x.ToClaim(), Permissions.Applications));
 
-      string[] appIds = permissions.Where(x => x.IsTrue).Select(x => x.NormalizedKey).ToArray();
-
-      return appIds;
+      return permissions.Where(x => x.IsTrue).Select(x => x.NormalizedKey).ToArray();
     }
   }
 

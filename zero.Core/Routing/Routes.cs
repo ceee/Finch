@@ -162,7 +162,7 @@ namespace zero.Core.Routing
         IList<IRoute> routes = await provider.GetAllRoutes(session);
 
         // delete all registered routes in the database for this provider
-        await Store.RavenStore.PurgeAsync<IRoute>($"where {nameof(IRoute.ProviderAlias)} = $alias", new Raven.Client.Parameters()
+        await Store.PurgeAsync<IRoute>(null, $"where {nameof(IRoute.ProviderAlias)} = $alias", new Raven.Client.Parameters()
         {
           { "alias", provider.Alias }
         });

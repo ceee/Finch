@@ -10,6 +10,9 @@ namespace zero.Core.Entities
   public class Application : ZeroEntity, IApplication
   {
     /// <inheritdoc />
+    public string Database { get; set; }
+
+    /// <inheritdoc />
     public string FullName { get; set; }
 
     /// <inheritdoc />
@@ -32,6 +35,11 @@ namespace zero.Core.Entities
   [Collection("Applications")]
   public interface IApplication : IZeroEntity, IZeroDbConventions
   {
+    /// <summary>
+    /// Raven database name for application data
+    /// </summary>
+    string Database { get; set; }
+
     /// <summary>
     /// Full company or product name
     /// </summary>

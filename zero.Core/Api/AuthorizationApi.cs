@@ -15,8 +15,6 @@ namespace zero.Core.Api
 {
   public class AuthorizationApi : IAuthorizationApi
   {
-    protected IZeroStore Store { get; private set; }
-
     protected IHttpContextAccessor HttpContextAccessor { get; set; }
 
     protected SignInManager<BackofficeUser> SignInManager { get; private set; }
@@ -24,9 +22,8 @@ namespace zero.Core.Api
     protected ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
 
-    public AuthorizationApi(IZeroStore store, IHttpContextAccessor httpContextAccessor, SignInManager<BackofficeUser> signInManager)
+    public AuthorizationApi(IHttpContextAccessor httpContextAccessor, SignInManager<BackofficeUser> signInManager)
     {
-      Store = store;
       HttpContextAccessor = httpContextAccessor;
       SignInManager = signInManager;
     }

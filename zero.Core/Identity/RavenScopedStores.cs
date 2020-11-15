@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
-using System;
 using zero.Core.Database;
-using zero.Core.Entities;
-using zero.Core.Extensions;
+using zero.Core.Options;
 
 namespace zero.Core.Identity
 {
@@ -13,7 +10,7 @@ namespace zero.Core.Identity
   {
     protected IZeroContext Context { get; private set; }
 
-    public RavenScopedRoleStore(IZeroStore store, IZeroContext context, IdentityErrorDescriber describer = null) : base(store, describer)
+    public RavenScopedRoleStore(IZeroStore store, IZeroOptions options, IZeroContext context, IdentityErrorDescriber describer = null) : base(store, options, describer)
     {
       Context = context;
     }
@@ -32,7 +29,7 @@ namespace zero.Core.Identity
   {
     protected IZeroContext Context { get; private set; }
 
-    public RavenScopedUserStore(IZeroStore store, IZeroContext context) : base(store)
+    public RavenScopedUserStore(IZeroStore store, IZeroOptions options, IZeroContext context) : base(store, options)
     {
       Context = context;
     }
@@ -55,7 +52,7 @@ namespace zero.Core.Identity
   {
     protected IZeroContext Context { get; private set; }
 
-    public RavenScopedUserStore(IZeroStore store, IZeroContext context) : base(store)
+    public RavenScopedUserStore(IZeroStore store, IZeroOptions options, IZeroContext context) : base(store, options)
     {
       Context = context;
     }

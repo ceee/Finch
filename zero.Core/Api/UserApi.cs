@@ -16,7 +16,7 @@ namespace zero.Core.Api
 
     protected IZeroContext Context { get; set; }
 
-    public UserApi(IBackofficeStore store, UserManager<BackofficeUser> userManager, IZeroContext context) : base(store)
+    public UserApi(IBackofficeStore store, UserManager<BackofficeUser> userManager, IZeroContext context) : base(store, isCoreDatabase: true)
     {
       UserManager = userManager;
       Context = context;
@@ -49,7 +49,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<IBackofficeUser>> GetAll()
     {
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = Session();
       return await session.Query<IBackofficeUser>()
         .OrderByDescending(x => x.CreatedDate)
         .ToListAsync();
@@ -63,7 +63,7 @@ namespace zero.Core.Api
 
       query.SearchSelector = user => user.Name;
 
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = Session();
       return await session.Query<IBackofficeUser>()
         .ToQueriedListAsync(query);
     }

@@ -26,7 +26,7 @@ namespace zero.Core.Api
     private ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
 
-    public UserRolesApi(IHttpContextAccessor httpContextAccessor, UserManager<BackofficeUser> userManager, RoleManager<BackofficeUserRole> roleManager, IBackofficeStore store) : base(store)
+    public UserRolesApi(IHttpContextAccessor httpContextAccessor, UserManager<BackofficeUser> userManager, RoleManager<BackofficeUserRole> roleManager, IBackofficeStore store) : base(store, isCoreDatabase: true)
     {
       HttpContextAccessor = httpContextAccessor;
       UserManager = userManager;
@@ -37,10 +37,8 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<IBackofficeUserRole>> GetAll()
     {
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
-      {
-        return await session.Query<IBackofficeUserRole>().OrderBy(x => x.Sort).ThenBy(x => x.Name).ToListAsync();
-      }
+      using IAsyncDocumentSession session = Session();
+      return await session.Query<IBackofficeUserRole>().OrderBy(x => x.Sort).ThenBy(x => x.Name).ToListAsync();
     }
 
 
@@ -68,7 +66,7 @@ namespace zero.Core.Api
 
       model.Alias = Safenames.Alias(model.Name);
 
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Session())
       {
         await session.StoreAsync(model);
 
@@ -89,7 +87,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<IBackofficeUserRole>> Delete(string id)
     {
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Session())
       {
         BackofficeUserRole country = await session.LoadAsync<BackofficeUserRole>(id);
 

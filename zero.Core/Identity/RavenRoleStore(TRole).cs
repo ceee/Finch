@@ -10,6 +10,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using zero.Core.Database;
 using zero.Core.Entities;
+using zero.Core.Extensions;
+using zero.Core.Options;
 
 namespace zero.Core.Identity
 {
@@ -18,12 +20,15 @@ namespace zero.Core.Identity
   {
     protected IZeroStore Store { get; private set; }
 
+    protected IZeroOptions Options { get; private set; }
+
     protected IdentityErrorDescriber ErrorDescriber { get; private set; }
 
 
-    public RavenRoleStore(IZeroStore store, IdentityErrorDescriber describer = null)
+    public RavenRoleStore(IZeroStore store, IZeroOptions options, IdentityErrorDescriber describer = null)
     {
       Store = store;
+      Options = options;
       ErrorDescriber = describer ?? new IdentityErrorDescriber();
     }
 
@@ -51,7 +56,7 @@ namespace zero.Core.Identity
           Description = $"The affected role is is not part of this role store and can't be created."
         });
       }
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenCoreSession(Options))
       {
         await session.StoreAsync(role);
         await session.SaveChangesAsync(cancellationToken);
@@ -73,7 +78,7 @@ namespace zero.Core.Identity
       }
       try
       {
-        using IAsyncDocumentSession session = Store.OpenAsyncSession();
+        using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
         await session.StoreAsync(role, cancellationToken);
         await session.SaveChangesAsync(cancellationToken);
       }
@@ -98,7 +103,7 @@ namespace zero.Core.Identity
       }
       try
       {
-        using IAsyncDocumentSession session = Store.OpenAsyncSession();
+        using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
         session.Delete(role);
         await session.SaveChangesAsync(cancellationToken);
       }
@@ -140,7 +145,7 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
       return await ScopeQuery(session.Query<TRole>()).FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken);
     }
 
@@ -148,7 +153,7 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
       return await ScopeQuery(session.Query<TRole>()).FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
     }
 
