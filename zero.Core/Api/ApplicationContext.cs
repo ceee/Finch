@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Handlers;
@@ -24,7 +25,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public string AppId { get; protected set; }
 
-    protected IDocumentStore Raven { get; private set; }
+    protected IZeroStore Store { get; private set; }
 
     protected IZeroOptions Options { get; private set; }
 
@@ -36,9 +37,9 @@ namespace zero.Core.Api
 
 
 
-    public ApplicationContext(IDocumentStore raven, IZeroOptions options, ILogger<ApplicationContext> logger, IHandlerHolder handler = null)
+    public ApplicationContext(IZeroStore store, IZeroOptions options, ILogger<ApplicationContext> logger, IHandlerHolder handler = null)
     {
-      Raven = raven;
+      Store = store;
       Options = options;
       Logger = logger;
       Handler = handler;
@@ -99,7 +100,7 @@ namespace zero.Core.Api
         //RandomNumberGenerator.Fill(bytes);
         //user.SecurityStamp = Base32.ToBase32(bytes); // TODO update security stamp but Base32 is .net core internal
 
-        using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+        using IAsyncDocumentSession session = Store.OpenAsyncSession();
         await session.StoreAsync(user);
         await session.SaveChangesAsync();
 
@@ -150,7 +151,7 @@ namespace zero.Core.Api
         throw new Exception($"User entity ${user.Id} needs a valid AppId");
       }
 
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       return await session.LoadAsync<Application>(appId);
     }
 
@@ -179,10 +180,10 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IApplicationContext> ForId(string appId)
     {
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       IApplication app = await session.LoadAsync<Application>(appId);
 
-      return new ApplicationContext(Raven, Options, Logger, Handler)
+      return new ApplicationContext(Store, Options, Logger, Handler)
       {
         App = app,
         AppId = appId
@@ -253,7 +254,7 @@ namespace zero.Core.Api
       {
         return Apps;
       }
-      using (IAsyncDocumentSession session = Raven.OpenAsyncSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         Apps = await session.Query<IApplication>().ToListAsync();
         return Apps;
@@ -268,7 +269,7 @@ namespace zero.Core.Api
     {
       string userId = user.FindFirstValue(Constants.Auth.Claims.UserId);
 
-      using IAsyncDocumentSession session = Raven.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       return await session.LoadAsync<IBackofficeUser>(userId);
     }
 

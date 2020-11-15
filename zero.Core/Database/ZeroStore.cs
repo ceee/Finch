@@ -5,7 +5,21 @@ using System.Threading;
 
 namespace zero.Core.Database
 {
-  public class ZeroStore : DocumentStore
+  public interface IZeroStore
+  {
+    IDocumentStore Store { get; }
+
+    BulkInsertOperation BulkInsert(CancellationToken token = default);
+    BulkInsertOperation BulkInsert(string database, CancellationToken token = default);
+    IAsyncDocumentSession OpenAsyncSession();
+    IAsyncDocumentSession OpenAsyncSession(SessionOptions options);
+    IAsyncDocumentSession OpenAsyncSession(string database);
+    IDocumentSession OpenSession();
+    IDocumentSession OpenSession(SessionOptions options);
+    IDocumentSession OpenSession(string database);
+  }
+
+  public class ZeroStore : DocumentStore, IZeroStore
   {
     public ZeroStore() : base()
     {

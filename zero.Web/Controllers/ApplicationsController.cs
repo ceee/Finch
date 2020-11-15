@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Entities;
-using zero.Core.Extensions;
 using zero.Core.Identity;
 using zero.Web.Models;
 

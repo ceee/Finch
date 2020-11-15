@@ -48,7 +48,7 @@ namespace zero.Core.Entities
     string ImageId { get; set; }
 
     /// <summary>
-    /// Simple image of the application (used as favicon)
+    /// Simple image of the application (can be used as favicon)
     /// </summary>
     string IconId { get; set; }
 
