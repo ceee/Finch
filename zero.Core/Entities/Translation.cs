@@ -25,7 +25,7 @@ namespace zero.Core.Entities
   }
 
 
-  [Collection("Translations")]
+  [Collection("Translations", LongId = true)]
   public interface ITranslation : IZeroEntity, ILanguageAwareEntity, IZeroDbConventions
   {
     /// <summary>

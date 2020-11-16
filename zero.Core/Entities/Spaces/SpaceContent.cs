@@ -17,7 +17,7 @@ namespace zero.Core.Entities
   /// A list item can consist of unlimited properties and be rendered as you wish
   /// The backoffice rendering is done by an IRenderer
   /// </summary>
-  [Collection("SpaceContents")]
+  [Collection("SpaceContents", LongId = true)]
   public interface ISpaceContent : IZeroEntity, IZeroDbConventions
   {
     /// <summary>

@@ -15,6 +15,7 @@ namespace zero.Core.Extensions
 {
   public static class RavenDocumentStoreExtensions
   {
+    const char DOT = '.';
     /// <summary>
     /// Setup conventions for the document store
     /// </summary>
@@ -24,13 +25,14 @@ namespace zero.Core.Extensions
 
       Type dbConventionType = typeof(IZeroDbConventions);
 
-      store.Conventions.IdentityPartsSeparator = '.';
+      store.Conventions.IdentityPartsSeparator = DOT;
 
-      store.Conventions.RegisterAsyncIdConvention<IZeroEntity>((database, entity) =>
+      store.Conventions.RegisterAsyncIdConvention<IZeroEntity>((_, entity) =>
       {
-        var typeTagName = store.Conventions.GetCollectionName(entity);
-        var tag = store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix(typeTagName);
-        return Task.FromResult(tag + store.Conventions.IdentityPartsSeparator + IdGenerator.Create());
+        string collection = store.Conventions.GetCollectionName(entity);
+        CollectionAttribute collectionAttribute = entity.GetType().GetCustomAttribute<CollectionAttribute>(true);
+        string tag = store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix(collection);
+        return Task.FromResult(tag + store.Conventions.IdentityPartsSeparator + IdGenerator.Create((collectionAttribute?.LongId ?? false) ? -1 : 8));
       });
 
       (store.Conventions.Serialization as NewtonsoftJsonSerializationConventions).CustomizeJsonDeserializer = x =>

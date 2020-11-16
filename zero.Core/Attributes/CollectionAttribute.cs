@@ -10,9 +10,12 @@ namespace zero.Core.Attributes
   {
     public string Name { get; set; }
 
-    public CollectionAttribute(string name)
+    public bool LongId { get; set; } = false;
+
+    public CollectionAttribute(string name, bool longId = false)
     {
       Name = name;
+      LongId = longId;
     }
   }
 }

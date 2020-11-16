@@ -21,11 +21,14 @@ namespace zero.Core.Api
 
     protected IZeroStore Store { get; set; }
 
+    protected IUserApi UserApi { get; set; }
 
-    public RevisionsApi(IZeroOptions options, IZeroStore store)
+
+    public RevisionsApi(IZeroOptions options, IZeroStore store, IUserApi userApi)
     {
       Options = options;
       Store = store;
+      UserApi = userApi;
     }
 
 
@@ -62,7 +65,7 @@ namespace zero.Core.Api
 
       // load affected users as the revisions could have been edited by other users too
       string[] userIds = items.Select(x => x.LastModifiedById).Distinct().ToArray();
-      Dictionary<string, BackofficeUser> users = await session.LoadAsync<BackofficeUser>(userIds);
+      Dictionary<string, IBackofficeUser> users = await UserApi.GetByIds(userIds);
 
       // create revision objects
       foreach (T item in items)
@@ -74,7 +77,7 @@ namespace zero.Core.Api
           Json = includeContent ? JsonConvert.SerializeObject(item) : null
         };
 
-        if (!item.LastModifiedById.IsNullOrEmpty() && users.TryGetValue(item.LastModifiedById, out BackofficeUser user))
+        if (!item.LastModifiedById.IsNullOrEmpty() && users.TryGetValue(item.LastModifiedById, out IBackofficeUser user) && user != null)
         {
           revision.User = new RevisionUser()
           {

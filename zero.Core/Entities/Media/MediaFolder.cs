@@ -13,7 +13,7 @@ namespace zero.Core.Entities
   /// <summary>
   /// A media folder contains media and other folders
   /// </summary>
-  [Collection("MediaFolders")]
+  [Collection("MediaFolders", LongId = true)]
   public interface IMediaFolder : IZeroEntity, IZeroDbConventions
   {
     /// <summary>
