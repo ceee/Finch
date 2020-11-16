@@ -40,9 +40,7 @@ namespace zero.Web.Controllers
     [HttpPost, ZeroAuthorize]
     public async Task<EntityResult> SwitchApp(string appId)
     {
-      BackofficeUser user = await Api.GetUser();
-      return EntityResult.Fail();
-      //return EntityResult.Maybe(await AppContext.TrySwitchForUser(user, appId)); // TODO appx
+      return EntityResult.Maybe(await Api.TrySwitchApp(appId));
     }
   }
 }

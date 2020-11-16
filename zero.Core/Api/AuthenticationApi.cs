@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Database;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Core.Identity;
 
 namespace zero.Core.Api
@@ -16,11 +19,14 @@ namespace zero.Core.Api
 
     protected SignInManager<BackofficeUser> SignInManager { get; private set; }
 
+    protected IZeroStore Store { get; set; }
 
-    public AuthenticationApi(IZeroContext context, SignInManager<BackofficeUser> signInManager)
+
+    public AuthenticationApi(IZeroContext context, SignInManager<BackofficeUser> signInManager, IZeroStore store)
     {
       Context = context;
       SignInManager = signInManager;
+      Store = store;
     }
 
 
@@ -130,6 +136,40 @@ namespace zero.Core.Api
     {
       return SignInManager.UserManager.GetUserId(Context.BackofficeUser);
     }
+
+
+    /// <inheritdoc />
+    public async Task<bool> TrySwitchApp(string appId)
+    {
+      IBackofficeUser user = await GetUser();
+
+      if (user == null || appId.IsNullOrEmpty())
+      {
+        return false;
+      }
+
+      string[] allowedAppIds = user.GetAllowedAppIds();
+
+      bool isMainId = appId.Equals(user.AppId, StringComparison.InvariantCultureIgnoreCase);
+      bool isAllowedId = allowedAppIds.Contains(appId, StringComparer.InvariantCultureIgnoreCase);
+
+      if (user.IsSuper || isMainId || isAllowedId)
+      {
+        user.CurrentAppId = appId;
+
+        //byte[] bytes = new byte[20];
+        //RandomNumberGenerator.Fill(bytes);
+        //user.SecurityStamp = Base32.ToBase32(bytes); // TODO update security stamp but Base32 is .net core internal
+
+        using IAsyncDocumentSession session = Store.OpenCoreSession();
+        await session.StoreAsync(user);
+        await session.SaveChangesAsync();
+
+        return true;
+      }
+
+      return false;
+    }
   }
 
 
@@ -178,6 +218,11 @@ namespace zero.Core.Api
     /// <summary>
     /// Get a single permissions by key
     /// </summary>
-    public Permission GetPermission(string key = null);
+    Permission GetPermission(string key = null);
+
+    /// <summary>
+    /// Tries to switch the currently loaded backoffice application for the current user
+    /// </summary>
+    Task<bool> TrySwitchApp(string appId);
   }
 }

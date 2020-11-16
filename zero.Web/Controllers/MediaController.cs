@@ -85,6 +85,11 @@ namespace zero.Web.Controllers
     {
       string path = await Api.GetSourceById(id, thumb, enforceAppId);
 
+      if (path == null)
+      {
+        return NotFound();
+      }
+
       var provider = new FileExtensionContentTypeProvider();
       string contentType;
       if (path == null || !provider.TryGetContentType(Path.GetFileName(path), out contentType))

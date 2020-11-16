@@ -89,7 +89,7 @@ namespace zero.Core
       }
 
       string appId;
-      string[] allowedAppIds = GetAllowedAppIdsForUser(user);
+      string[] allowedAppIds = user.GetAllowedAppIds();
 
       if (!user.CurrentAppId.IsNullOrEmpty())
       {
@@ -191,51 +191,6 @@ namespace zero.Core
       using IAsyncDocumentSession session = Store.OpenCoreSession();
       return await session.LoadAsync<IBackofficeUser>(userId);
     }
-
-
-    /// <summary>
-    /// Get applications the user has access to
-    /// </summary>
-    string[] GetAllowedAppIdsForUser(IBackofficeUser user)
-    {
-      IEnumerable<Permission> permissions = user.Claims
-        .Where(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(Permissions.Applications))
-        .Select(x => Permission.FromClaim(x.ToClaim(), Permissions.Applications));
-
-      return permissions.Where(x => x.IsTrue).Select(x => x.NormalizedKey).ToArray();
-    }
-
-
-    /// <inheritdoc />
-    //public async Task<bool> TrySwitchForUser(IBackofficeUser user, string appId)
-    //{
-    //  if (user == null || appId.IsNullOrEmpty())
-    //  {
-    //    return false;
-    //  }
-
-    //  string[] allowedAppIds = GetAllowedAppIdsForUser(user);
-
-    //  bool isMainId = appId.Equals(user.AppId, StringComparison.InvariantCultureIgnoreCase);
-    //  bool isAllowedId = allowedAppIds.Contains(appId, StringComparer.InvariantCultureIgnoreCase);
-
-    //  if (user.IsSuper || isMainId || isAllowedId)
-    //  {
-    //    user.CurrentAppId = appId;
-
-    //    //byte[] bytes = new byte[20];
-    //    //RandomNumberGenerator.Fill(bytes);
-    //    //user.SecurityStamp = Base32.ToBase32(bytes); // TODO update security stamp but Base32 is .net core internal
-
-    //    using IAsyncDocumentSession session = Store.OpenCoreSession();
-    //    await session.StoreAsync(user);
-    //    await session.SaveChangesAsync();
-
-    //    return true;
-    //  }
-
-    //  return false;
-    //}
   }
 
 

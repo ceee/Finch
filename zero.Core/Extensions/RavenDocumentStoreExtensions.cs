@@ -1,9 +1,6 @@
-﻿using Raven.Client;
-using Raven.Client.Documents;
+﻿using Raven.Client.Documents;
 using Raven.Client.Documents.Conventions;
-using Raven.Client.Documents.Operations;
 using Raven.Client.Documents.Operations.CompareExchange;
-using Raven.Client.Documents.Queries;
 using Raven.Client.Json.Serialization.NewtonsoftJson;
 using System;
 using System.Linq;
@@ -29,7 +26,7 @@ namespace zero.Core.Extensions
 
       store.Conventions.IdentityPartsSeparator = '.';
 
-      store.Conventions.RegisterAsyncIdConvention<ZeroEntity>((database, entity) =>
+      store.Conventions.RegisterAsyncIdConvention<IZeroEntity>((database, entity) =>
       {
         var typeTagName = store.Conventions.GetCollectionName(entity);
         var tag = store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix(typeTagName);
