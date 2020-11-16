@@ -18,6 +18,17 @@ export default section ? [
     }
   },
   {
+    name: section.alias + '-shared',
+    path: section.url + '/shared/:id?',
+    component: MediaOverview,
+    props: true,
+    meta: {
+      name: section.name,
+      alias: section.alias,
+      section: section
+    }
+  },
+  {
     name: section.alias + '-edit',
     path: section.url + '/edit/:id',
     component: Media,

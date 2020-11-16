@@ -56,8 +56,8 @@
   import Overlay from 'zero/services/overlay.js';
   import FolderOverlay from './overlays/folder.vue';
   import MoveOverlay from './overlays/move.vue';
-  import MediaItemOverlay from './media-overlay-item.vue';
-  import MediaItem from './media-item.vue';
+  import CreateItemOverlay from './overlays/create.vue';
+  import MediaItem from './item.vue';
   import UploadStatusOverlay from './overlays/upload-status.vue';
   import EventHub from 'zero/services/eventhub.js';
   import Notification from 'zero/services/notification.js';
@@ -182,7 +182,7 @@
         let options = {
           title: '@iconpicker.title',
           closeLabel: '@ui.close',
-          component: MediaItemOverlay,
+          component: CreateItemOverlay,
           isCreate: true,
           model: {
             folderId: folderId
