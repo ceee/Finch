@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Database;
@@ -55,7 +57,7 @@ namespace zero.Core
 
 
     /// <inheritdoc />
-    public async virtual Task Resolve(HttpContext context)
+    public async virtual Task Resolve(HttpContext context, IEnumerable<IApplication> applications)
     {
       if (_resolved)
       {
@@ -82,7 +84,7 @@ namespace zero.Core
       }
 
       // resolve current application
-      Application = await AppResolver.Resolve(context, BackofficeUser);
+      Application = await AppResolver.Resolve(applications, context, BackofficeUser);
       AppId = Application.Id;
 
       // set default database for document store
@@ -138,6 +140,6 @@ namespace zero.Core
     /// Resolves the current application (for backoffice + frontend requests) and
     /// the currently active backoffice user, as users are not signed in with the default scheme and do therefore not populate HttpContext.User
     /// </summary>
-    Task Resolve(HttpContext context);
+    Task Resolve(HttpContext context, IEnumerable<IApplication> applications);
   }
 }

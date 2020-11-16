@@ -42,8 +42,10 @@ namespace zero.Core
 
 
     /// <inheritdoc />
-    public async Task<IApplication> Resolve(HttpContext context, ClaimsPrincipal user)
+    public async Task<IApplication> Resolve(IEnumerable<IApplication> apps, HttpContext context, ClaimsPrincipal user)
     {
+      Apps = apps.ToList();
+
       if (context?.Request == null)
       {
         Logger.LogWarning("Could not resolve application as HTTP request is null");
@@ -64,7 +66,6 @@ namespace zero.Core
       if (app == null)
       {
         //Logger.LogWarning("Could not resolve application for host {host}", context.Request.Host);
-        IList<IApplication> apps = await GetApplications();
         app = apps.FirstOrDefault();
       }
 
@@ -138,6 +139,20 @@ namespace zero.Core
     }
 
 
+    /// <inheritdoc />
+    public async Task<IList<IApplication>> GetApplications()
+    {
+      if (Apps != null)
+      {
+        return Apps;
+      }
+
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      Apps = await session.Query<IApplication>().ToListAsync();
+      return Apps;
+    }
+
+
     /// <summary>
     /// Get matching application from an URI
     /// </summary>
@@ -166,22 +181,6 @@ namespace zero.Core
 
 
     /// <summary>
-    /// Get all applications to choose from
-    /// </summary>
-    async Task<IList<IApplication>> GetApplications()
-    {
-      if (Apps != null)
-      {
-        return Apps;
-      }
-
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
-      Apps = await session.Query<IApplication>().ToListAsync();
-      return Apps;
-    }
-
-
-    /// <summary>
     /// Get backoffice user from claims principal
     /// </summary>
     async Task<IBackofficeUser> GetBackofficeUser(ClaimsPrincipal user)
@@ -200,7 +199,7 @@ namespace zero.Core
     /// Resolves the current application from either the backoffice user (in case it is backoffice request)
     /// or the domain (in case it is frontend request).
     /// </summary>
-    Task<IApplication> Resolve(HttpContext context, ClaimsPrincipal user);
+    Task<IApplication> Resolve(IEnumerable<IApplication> apps, HttpContext context, ClaimsPrincipal user);
 
     /// <summary>
     /// Resolves the current application from the request path
@@ -228,5 +227,10 @@ namespace zero.Core
     /// This method won't return apps the user has no access to.
     /// </summary>
     Task<IApplication> ResolveFromUser(IBackofficeUser user);
+
+    /// <summary>
+    /// Get all registered applications
+    /// </summary>
+    Task<IList<IApplication>> GetApplications();
   }
 }

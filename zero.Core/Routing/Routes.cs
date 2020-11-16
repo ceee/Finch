@@ -109,7 +109,6 @@ namespace zero.Core.Routing
       }
 
       IList<IRoute> routes = await session.Query<IRoute>()
-        // TODO appx fix
         .Where(x => (!x.AllowSuffix && x.Url == path) || (x.AllowSuffix && x.Url.In(parts)))
         .Include("References[].Id")
         .Include("Dependencies")
@@ -157,38 +156,40 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<IList<IRoute>> RebuildAllRoutes()
+    public async Task<int> RebuildAllRoutes()
     {
+      IList<IApplication> apps = await AppResolver.GetApplications();
       int count = 0;
-      List<IRoute> all = new List<IRoute>();
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-      session.Advanced.MaxNumberOfRequestsPerSession = 1000;
 
-      foreach (IRouteProvider provider in Providers)
+      foreach (IApplication app in apps)
       {
-        // get all routes for this provider
-        IList<IRoute> routes = await provider.GetAllRoutes(session);
+        using IAsyncDocumentSession session = Store.OpenAsyncSession(app.Database);
+        session.Advanced.MaxNumberOfRequestsPerSession = 1000;
 
-        // delete all registered routes in the database for this provider
-        await Store.PurgeAsync<IRoute>(null, $"where {nameof(IRoute.ProviderAlias)} = $alias", new Raven.Client.Parameters()
+        foreach (IRouteProvider provider in Providers)
         {
-          { "alias", provider.Alias }
-        });
+          // get all routes for this provider
+          IList<IRoute> routes = await provider.GetAllRoutes(session);
 
-        // store new routes
-        using (BulkInsertOperation bulkInsert = Store.BulkInsert())
-        {
-          foreach (IRoute route in routes)
+          // delete all registered routes in the database for this provider
+          await Store.PurgeAsync<IRoute>(app.Database, $"where {nameof(IRoute.ProviderAlias)} = $alias", new Raven.Client.Parameters()
           {
-            await bulkInsert.StoreAsync(route, route.Id);
-            count += 1;
+            { "alias", provider.Alias }
+          });
+
+          // store new routes
+          using (BulkInsertOperation bulkInsert = Store.BulkInsert(app.Database))
+          {
+            foreach (IRoute route in routes)
+            {
+              await bulkInsert.StoreAsync(route, route.Id);
+              count += 1;
+            }
           }
         }
-
-        all.AddRange(routes);
       }
 
-      return all;
+      return count;
     }
 
 
@@ -267,7 +268,7 @@ namespace zero.Core.Routing
     /// <summary>
     /// Purges all routes and rebuilds them by iterating over all registered providers
     /// </summary>
-    Task<IList<IRoute>> RebuildAllRoutes();
+    Task<int> RebuildAllRoutes();
 
     /// <summary>
     /// Get endpoint the route maps to
