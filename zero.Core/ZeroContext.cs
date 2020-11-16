@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using zero.Core.Api;
+using zero.Core.Database;
 using zero.Core.Entities;
-using zero.Core.Identity;
+using zero.Core.Extensions;
 using zero.Core.Options;
 using zero.Core.Routing;
 
@@ -14,16 +14,13 @@ namespace zero.Core
   public class ZeroContext : IZeroContext
   {
     /// <inheritdoc />
-    public IApplication App { get; protected set; }
+    public IApplication Application { get; protected set; }
 
     /// <inheritdoc />
     public string AppId { get; protected set; }
 
     /// <inheritdoc />
     public ClaimsPrincipal BackofficeUser { get; protected set; }
-
-    /// <inheritdoc />
-    public ClaimsIdentity BackofficeIdentity { get; protected set; }
 
     /// <inheritdoc />
     public bool IsBackofficeRequest { get; protected set; }
@@ -38,50 +35,58 @@ namespace zero.Core
     public IResolvedRoute ResolvedRoute { get; private set; }
 
 
-    protected IApplicationContext AppContext { get; private set; }
+    protected IApplicationResolver AppResolver { get; private set; }
 
     protected ILogger<ZeroContext> Logger { get; private set; }
+
+    protected IZeroStore Store { get; private set; }
 
 
     private bool _resolved = false;
 
 
-    public ZeroContext(IZeroOptions options, IApplicationContext appContext, ILogger<ZeroContext> logger)
+    public ZeroContext(IZeroOptions options, IApplicationResolver appResolver, ILogger<ZeroContext> logger, IZeroStore store)
     {
       Options = options;
-      AppContext = appContext;
+      AppResolver = appResolver;
       Logger = logger;
+      Store = store;
     }
 
 
     /// <inheritdoc />
     public async virtual Task Resolve(HttpContext context)
     {
-      if (_resolved || context?.Request is null)
+      if (_resolved)
       {
+        return;
+      }
+
+      if (context?.Request is null)
+      {
+        Store.ResolvedDatabase = null;
         return;
       }
 
       _resolved = true;
 
+      // check if the current request is a backoffice request
+      IsBackofficeRequest = context.IsBackofficeRequest(Options.BackofficePath);
+
+      // get the currently logged-in backoffice user
+      BackofficeUser = new ClaimsPrincipal();
       AuthenticateResult authResult = await context.AuthenticateAsync(Constants.Auth.BackofficeScheme);
       if (authResult?.Principal is not null)
       {
         BackofficeUser = authResult.Principal;
-        if (BackofficeUserIdentity.TryGet(authResult.Principal, out BackofficeUserIdentity identity))
-        {
-          BackofficeIdentity = identity;
-        }
-      }
-      else
-      {
-        BackofficeUser = new ClaimsPrincipal();
       }
 
-      App = await AppContext.Resolve(context, BackofficeUser);
-      AppId = App.Id;
+      // resolve current application
+      Application = await AppResolver.Resolve(context, BackofficeUser);
+      AppId = Application.Id;
 
-      IsBackofficeRequest = AppContext.IsBackofficeRequest(context);
+      // set default database for document store
+      Store.ResolvedDatabase = Application.Database;
 
       if (IsBackofficeRequest is false && context.Request.RouteValues.TryGetValue("zero.route", out object route))
       {
@@ -97,7 +102,7 @@ namespace zero.Core
     /// <summary>
     /// Currently loaded application
     /// </summary>
-    IApplication App { get; }
+    IApplication Application { get; }
 
     /// <summary>
     /// Current loaded application Id
@@ -108,11 +113,6 @@ namespace zero.Core
     /// Resolved backoffice user principal
     /// </summary>
     ClaimsPrincipal BackofficeUser { get; }
-
-    /// <summary>
-    /// Resolved backoffice user identity
-    /// </summary>
-    ClaimsIdentity BackofficeIdentity { get; }
 
     /// <summary>
     /// Whether the current request is a backoffice request or not

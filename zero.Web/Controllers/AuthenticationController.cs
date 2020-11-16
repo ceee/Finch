@@ -11,13 +11,11 @@ namespace zero.Web.Controllers
   public class AuthenticationController : BackofficeController
   {
     IAuthenticationApi Api;
-    IApplicationContext AppContext;
 
 
-    public AuthenticationController(IAuthenticationApi api, IApplicationContext appContext)
+    public AuthenticationController(IAuthenticationApi api)
     {
       Api = api;
-      AppContext = appContext;
     }
 
 
@@ -43,7 +41,8 @@ namespace zero.Web.Controllers
     public async Task<EntityResult> SwitchApp(string appId)
     {
       BackofficeUser user = await Api.GetUser();
-      return EntityResult.Maybe(await AppContext.TrySwitchForUser(user, appId));
+      return EntityResult.Fail();
+      //return EntityResult.Maybe(await AppContext.TrySwitchForUser(user, appId)); // TODO appx
     }
   }
 }

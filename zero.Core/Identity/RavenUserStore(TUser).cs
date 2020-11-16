@@ -66,7 +66,7 @@ namespace zero.Core.Identity
         });
       }
 
-      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
 
       // try to reserve the key for the new user
       if (!await Store.Raven.ReserveAsync(GetReservationKey(user), user.Id))
@@ -116,7 +116,7 @@ namespace zero.Core.Identity
 
       // Delete the user and save it. We must save it because deleting is a cluster-wide operation.
       // Only if the deletion succeeds will we remove the cluster-wide compare/exchange key.
-      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
 
       TUser source = await session.LoadAsync<TUser>(user.Id, cancellationToken);
 
@@ -139,7 +139,7 @@ namespace zero.Core.Identity
         });
       }
 
-      using (IAsyncDocumentSession session = Store.OpenCoreSession(Options))
+      using (IAsyncDocumentSession session = Store.OpenCoreSession())
       {
         TUser source = await session.LoadAsync<TUser>(user.Id, cancellationToken);
 
@@ -169,7 +169,7 @@ namespace zero.Core.Identity
         }
       }
 
-      using (IAsyncDocumentSession session = Store.OpenCoreSession(Options))
+      using (IAsyncDocumentSession session = Store.OpenCoreSession())
       {
         await session.StoreAsync(user, cancellationToken);
         await session.SaveChangesAsync(cancellationToken);
@@ -182,7 +182,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
       return await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
     }
 
@@ -190,7 +190,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
       return await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Username == normalizedUserName, cancellationToken);
     }
 
@@ -258,7 +258,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
       return await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
     }
 
@@ -389,7 +389,7 @@ namespace zero.Core.Identity
         return;
       }
 
-      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
 
       user.Claims.AddRange(claims.Select(claim => new UserClaim(claim)));
       await session.StoreAsync(user, cancellationToken);
@@ -407,7 +407,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IList<TUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
       UserClaim userClaim = new UserClaim(claim);
       return await ScopeQuery(session.Query<TUser>()).Where(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value)).ToListAsync();
     }
@@ -422,7 +422,7 @@ namespace zero.Core.Identity
         return;
       }
 
-      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
 
       IEnumerable<UserClaim> userClaims = claims.Select(c => new UserClaim(c)).ToList();
 
@@ -443,7 +443,7 @@ namespace zero.Core.Identity
         return;
       }
 
-      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
 
       UserClaim userClaim = new UserClaim(claim);
       UserClaim newUserClaim = new UserClaim(newClaim);

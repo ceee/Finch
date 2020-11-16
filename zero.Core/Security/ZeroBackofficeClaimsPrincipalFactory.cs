@@ -55,16 +55,16 @@ namespace zero.Core.Security
         .Select(x => x.NormalizedKey)
         .ToArray();
 
-      string currentAppId = user.CurrentAppId; // ?? user.AppId; // TODO appx fix
+      string currentAppId = user.CurrentAppId ?? user.AppId;
 
-      //if (!user.IsSuper && !appIds.Contains(currentAppId))
-      //{
-      //  currentAppId = user.AppId;
-      //}
+      if (!user.IsSuper && !appIds.Contains(currentAppId))
+      {
+        currentAppId = user.AppId;
+      }
 
       claims.RemoveAll(x => x.Type == Constants.Auth.Claims.AppId);
       claims.Add(new Claim(Constants.Auth.Claims.AppId, currentAppId));
-      //claims.Add(new Claim(Constants.Auth.Claims.DefaultAppId, user.AppId));
+      claims.Add(new Claim(Constants.Auth.Claims.DefaultAppId, user.AppId));
 
       return claims;
     }

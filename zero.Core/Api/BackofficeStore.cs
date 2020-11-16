@@ -1,5 +1,4 @@
-﻿using Raven.Client.Documents;
-using zero.Core.Database;
+﻿using zero.Core.Database;
 using zero.Core.Messages;
 using zero.Core.Options;
 
@@ -9,7 +8,7 @@ namespace zero.Core.Api
   {
     public IZeroStore Store { get; private set; }
 
-    public IApplicationContext AppContext { get; private set; }
+    public IZeroContext Context { get; private set; }
 
     public IZeroOptions Options { get; private set; }
 
@@ -18,10 +17,10 @@ namespace zero.Core.Api
     public IMessageAggregator Messages { get; private set; }
 
 
-    public BackofficeStore(IZeroStore store, IApplicationContext appContext, IZeroOptions options, IAuthenticationApi authenticationApi, IMessageAggregator messages)
+    public BackofficeStore(IZeroStore store, IZeroContext context, IZeroOptions options, IAuthenticationApi authenticationApi, IMessageAggregator messages)
     {
       Store = store;
-      AppContext = appContext;
+      Context = context;
       Options = options;
       Auth = authenticationApi;
       Messages = messages;
@@ -33,7 +32,7 @@ namespace zero.Core.Api
   {
     IZeroStore Store { get; }
 
-    IApplicationContext AppContext { get; }
+    IZeroContext Context { get; }
 
     IZeroOptions Options { get; }
 

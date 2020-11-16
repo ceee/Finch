@@ -2,30 +2,22 @@
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using System.Threading.Tasks;
-using zero.Core.Api;
 using zero.Core.Routing;
 
 namespace zero.Web.Routing
 {
   public class ZeroRoutesTransformer : DynamicRouteValueTransformer
 	{
-    Core.Routing.IRoutes Routes;
-		IApplicationContext Context;
+    IRoutes Routes;
 
-		public ZeroRoutesTransformer(Core.Routing.IRoutes routes, IApplicationContext context)
+		public ZeroRoutesTransformer(IRoutes routes)
     {
 			Routes = routes;
-			Context = context;
     }
 
 
 		public override async ValueTask<RouteValueDictionary> TransformAsync(HttpContext httpContext, RouteValueDictionary values)
 		{
-			if (Context.IsBackofficeRequest(httpContext))
-      {
-				return null;
-      }
-
 			IResolvedRoute route = await Routes.ResolveUrl(httpContext);
 
 			if (route == null)

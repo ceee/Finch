@@ -81,14 +81,14 @@ namespace zero.Core.Entities
   public interface IBackofficeUser : IZeroEntity, IZeroDbConventions, IIdentityUserWithRoles
   {
     /// <summary>
-    /// Application ID the user was created in
+    /// Application the user registered in
     /// </summary>
-    public string AppId { get; set; }
+    string AppId { get; set; }
 
     /// <summary>
     /// Currently selected app id for the backoffice
     /// </summary>
-    public string CurrentAppId { get; set; }
+    string CurrentAppId { get; set; }
 
     /// <summary>
     /// sudo.

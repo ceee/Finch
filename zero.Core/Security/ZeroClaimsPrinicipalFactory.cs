@@ -137,8 +137,6 @@ namespace zero.Core.Security
         claims.Add(new Claim(Constants.Auth.Claims.Email, await UserManager.GetEmailAsync(user)));
       }
 
-      //claims.Add(new Claim(Constants.Auth.Claims.AppId, user.AppId));  // TODO appx fix
-
       return claims;
     }
   }

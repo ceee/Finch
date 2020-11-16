@@ -1,29 +1,28 @@
-﻿using Raven.Client.Documents;
+﻿using Raven.Client;
+using Raven.Client.Documents;
 using Raven.Client.Documents.BulkInsert;
 using Raven.Client.Documents.Operations;
+using Raven.Client.Documents.Queries;
 using Raven.Client.Documents.Session;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using zero.Core.Extensions;
 using zero.Core.Options;
 
 namespace zero.Core.Database
 {
   public class ZeroStore : DocumentStore, IZeroStore
   {
-    protected IZeroOptions Options { get; set; }
-
     public ZeroStore(IZeroOptions options) : base()
     {
       Options = options;
       Database = null;
     }
 
+    protected IZeroOptions Options { get; set; }
 
-    internal async Task SetContext()
-    {
-
-    }
+    /// <inheritdoc />
+    public string ResolvedDatabase { get; set; }
 
 
     /// <inheritdoc />
@@ -33,20 +32,83 @@ namespace zero.Core.Database
     /// <inheritdoc />
     public OperationExecutor GetOperationExecutor(string database = null)
     {
-      if (database.IsNullOrEmpty())
+      return Operations.ForDatabase(database ?? ResolvedDatabase);
+    }
+
+    /// <inheritdoc />
+    public IAsyncDocumentSession OpenCoreSession()
+    {
+      return OpenAsyncSession(Options.Raven.Database);
+    }
+
+    /// <inheritdoc />
+    public override IAsyncDocumentSession OpenAsyncSession(string database)
+    {
+      return base.OpenAsyncSession(database);
+    }
+
+    /// <inheritdoc />
+    public override IAsyncDocumentSession OpenAsyncSession(SessionOptions options)
+    {
+      options.Database = options.Database ?? ResolvedDatabase;
+      return base.OpenAsyncSession(options);
+    }
+
+    /// <inheritdoc />
+    public override IAsyncDocumentSession OpenAsyncSession()
+    {
+      return base.OpenAsyncSession(ResolvedDatabase);
+    }
+
+    /// <inheritdoc />
+    public override IDocumentSession OpenSession(SessionOptions options)
+    {
+      options.Database = options.Database ?? ResolvedDatabase;
+      return base.OpenSession(options);
+    }
+
+    /// <inheritdoc />
+    public override IDocumentSession OpenSession(string database)
+    {
+      return base.OpenSession(database);
+    }
+
+    /// <inheritdoc />
+    public override IDocumentSession OpenSession()
+    {
+      return base.OpenSession(ResolvedDatabase);
+    }
+
+    /// <inheritdoc />
+    public override BulkInsertOperation BulkInsert(string database = null, CancellationToken token = default)
+    {
+      return base.BulkInsert(database ?? ResolvedDatabase, token);
+    }
+
+    /// <inheritdoc />
+    public async Task PurgeAsync<T>(string database = null, string querySuffix = null, Parameters parameters = null)
+    {
+      var collectionName = Conventions.FindCollectionName(typeof(T));
+      var operationQuery = new DeleteByQueryOperation(new IndexQuery()
       {
-        return Operations;
-      }
-      else
-      {
-        return Operations.ForDatabase(database);
-      }
+        Query = $"from {collectionName} c {querySuffix ?? String.Empty}",
+        QueryParameters = parameters
+      }, new QueryOperationOptions { AllowStale = true });
+
+      Operation operation = await GetOperationExecutor(database).SendAsync(operationQuery);
+
+      await operation.WaitForCompletionAsync();
     }
   }
 
 
   public interface IZeroStore : IDocumentStore
   {
+    /// <summary>
+    /// The database which has been resolved from the current application
+    /// </summary>
+    string ResolvedDatabase { get; set; }
+
     /// <summary>
     /// Get underlying raven document store
     /// </summary>
@@ -55,6 +117,16 @@ namespace zero.Core.Database
     /// <summary>
     /// Get operation executor
     /// </summary>
-    public OperationExecutor GetOperationExecutor(string database = null);
+    OperationExecutor GetOperationExecutor(string database = null);
+
+    /// <summary>
+    /// Purges a collection
+    /// </summary>
+    Task PurgeAsync<T>(string database = null, string querySuffix = null, Parameters parameters = null);
+
+    /// <summary>
+    /// Opens a session for the core database
+    /// </summary>
+    IAsyncDocumentSession OpenCoreSession();
   }
 }

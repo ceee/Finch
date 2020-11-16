@@ -113,7 +113,7 @@ namespace zero.Core.Api
           await session.StoreAsync(app);
 
           // set app-id for user and store it
-          //user.AppId = session.Advanced.GetDocumentId(app); // TODO appx fix
+          user.AppId = session.Advanced.GetDocumentId(app);
           await session.StoreAsync(user);
 
           // save default user roles

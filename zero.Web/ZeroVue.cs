@@ -29,17 +29,17 @@ namespace zero.Web
 
     protected IEnumerable<IZeroPlugin> Plugins { get; private set; }
 
-    protected IApplicationContext AppContext { get; private set; }
+    protected IZeroContext Context { get; private set; }
 
 
-    public ZeroVue(IZeroOptions options, IWebHostEnvironment env, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IEnumerable<IZeroPlugin> plugins, IApplicationContext appContext)
+    public ZeroVue(IZeroOptions options, IWebHostEnvironment env, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IEnumerable<IZeroPlugin> plugins, IZeroContext context)
     {
       Environment = env;
       Options = options;
       ApplicationsApi = applicationsApi;
       AuthenticationApi = authenticationApi;
       Plugins = plugins;
-      AppContext = appContext;
+      Context = context;
       //zero.path = "@Model.BackofficePath.EnsureEndsWith('/')";
       //zero.translations = @Html.Raw(text);
     }
@@ -61,7 +61,7 @@ namespace zero.Web
       config.Applications = await CreateApplications();
       config.Alias = CreateAliases();
       config.SettingsAreas = CreateSettingsAreas();
-      config.AppId = AppContext.AppId;
+      config.AppId = Context.AppId;
       //config.SharedAppId = Constants.Database.SharedAppId; // TODO appx
 
       BackofficeUser user = await AuthenticationApi.GetUser();

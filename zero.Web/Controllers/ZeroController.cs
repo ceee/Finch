@@ -5,6 +5,7 @@ using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using zero.Core;
 
 namespace zero.Web.Controllers
 {
@@ -23,7 +24,7 @@ namespace zero.Web.Controllers
 
     public override void OnActionExecuting(ActionExecutingContext filterContext)
     {
-      Application = filterContext.HttpContext.RequestServices.GetService<IApplicationContext>()?.App;
+      Application = filterContext.HttpContext.RequestServices.GetService<IZeroContext>()?.Application;
 
       if (filterContext.RouteData.Values.TryGetValue("zero.route", out object route))
       {

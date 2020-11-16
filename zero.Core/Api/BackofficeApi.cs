@@ -25,7 +25,14 @@ namespace zero.Core.Api
     protected bool IsCoreDatabase { get; private set; }
 
 
-    public BackofficeApi(IBackofficeStore store, bool isCoreDatabase = false)
+    public BackofficeApi(IBackofficeStore store)
+    {
+      Store = store.Store;
+      Backoffice = store;
+      IsCoreDatabase = false;
+    }
+
+    internal BackofficeApi(IBackofficeStore store, bool isCoreDatabase)
     {
       Store = store.Store;
       Backoffice = store;

@@ -28,7 +28,7 @@
         public const string Email = "zero.claim.email";
         public const string Permission = "zero.claim.permission";
         public const string DefaultAppId = "zero.claim.defaultAppId";
-        public const string AppId = "zero.claim.appId"; // TODO appx fix
+        public const string AppId = "zero.claim.appId";
         public const string TicketExpires = "zero.claim.ticketExpires";
       }
     }

@@ -42,7 +42,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
       return await ScopeQuery(session.Query<TUser>()).Where(x => roleName.In(x.RoleIds)).ToListAsync(); // TODO scope     
     }
 

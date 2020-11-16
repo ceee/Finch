@@ -104,7 +104,7 @@ namespace zero.Web
 
       // add default services
       Services.AddHttpContextAccessor();
-      Services.AddScoped<IApplicationContext, ApplicationContext>();
+      Services.AddScoped<IApplicationResolver, ApplicationResolver>();
       Services.AddScoped<IZeroContext, ZeroContext>();
 
       Services.AddScoped<IBackofficeStore, BackofficeStore>();

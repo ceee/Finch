@@ -12,6 +12,7 @@ using zero.Core.Api;
 using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Options;
 
 namespace zero.Core.Routing
 {
@@ -20,15 +21,17 @@ namespace zero.Core.Routing
     protected IZeroStore Store { get; set; }
     protected ILogger<Routes> Logger { get; set; }
     protected IEnumerable<IRouteProvider> Providers { get; set; }
-    protected IApplicationContext Context { get; set; }
+    protected IApplicationResolver AppResolver { get; set; }
+    protected IZeroOptions Options { get; set; }
 
 
-    public Routes(IZeroStore store, ILogger<Routes> logger, IEnumerable<IRouteProvider> providers, IApplicationContext context)
+    public Routes(IZeroStore store, ILogger<Routes> logger, IEnumerable<IRouteProvider> providers, IApplicationResolver appResolver, IZeroOptions options)
     {
       Store = store;
       Logger = logger;
       Providers = providers;
-      Context = context;
+      AppResolver = appResolver;
+      Options = options;
     }
 
 
@@ -128,7 +131,12 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public async Task<IResolvedRoute> ResolveUrl(HttpContext context)
     {
-      IApplication app = await Context.ResolveFromRequest(context);
+      if (context.IsBackofficeRequest(Options.BackofficePath))
+      {
+        return null;
+      }
+
+      IApplication app = await AppResolver.ResolveFromRequest(context);
       string path = context.Request.Path;
 
       if (app == null)

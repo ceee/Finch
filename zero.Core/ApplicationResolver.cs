@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
@@ -15,29 +16,23 @@ using zero.Core.Handlers;
 using zero.Core.Identity;
 using zero.Core.Options;
 
-namespace zero.Core.Api
+namespace zero.Core
 {
-  public class ApplicationContext : IApplicationContext
+  public class ApplicationResolver : IApplicationResolver
   {
-    /// <inheritdoc />
-    public IApplication App { get; protected set; }
-
-    /// <inheritdoc />
-    public string AppId { get; protected set; }
-
     protected IZeroStore Store { get; private set; }
 
     protected IZeroOptions Options { get; private set; }
 
-    protected ILogger<ApplicationContext> Logger { get; private set; }
+    protected ILogger<ApplicationResolver> Logger { get; private set; }
 
     protected IHandlerHolder Handler { get; private set; }
 
-    static IList<IApplication> Apps { get; set; }
+    private IList<IApplication> Apps { get; set; }
 
 
 
-    public ApplicationContext(IZeroStore store, IZeroOptions options, ILogger<ApplicationContext> logger, IHandlerHolder handler = null)
+    public ApplicationResolver(IZeroStore store, IZeroOptions options, ILogger<ApplicationResolver> logger, IHandlerHolder handler = null)
     {
       Store = store;
       Options = options;
@@ -51,12 +46,13 @@ namespace zero.Core.Api
     {
       if (context?.Request == null)
       {
+        Logger.LogWarning("Could not resolve application as HTTP request is null");
         return null;
       }
 
       IApplication app;
 
-      if (IsBackofficeRequest(context))
+      if (context.IsBackofficeRequest(Options.BackofficePath))
       {
         app = await ResolveFromUser(user);
       }
@@ -72,44 +68,9 @@ namespace zero.Core.Api
         app = apps.FirstOrDefault();
       }
 
-      App = app;
-      AppId = app?.Id;
-
       return app;
     }
 
-
-    /// <inheritdoc />
-    public async Task<bool> TrySwitchForUser(IBackofficeUser user, string appId)
-    {
-      if (user == null || appId.IsNullOrEmpty())
-      {
-        return false;
-      }
-
-      string[] allowedAppIds = GetAllowedAppIdsForUser(user);
-
-      bool isMainId = appId.Equals(user.AppId, StringComparison.InvariantCultureIgnoreCase);
-      bool isAllowedId = allowedAppIds.Contains(appId, StringComparer.InvariantCultureIgnoreCase);
-
-      if (user.IsSuper || isMainId || isAllowedId)
-      {
-        user.CurrentAppId = appId;
-
-        //byte[] bytes = new byte[20];
-        //RandomNumberGenerator.Fill(bytes);
-        //user.SecurityStamp = Base32.ToBase32(bytes); // TODO update security stamp but Base32 is .net core internal
-
-        using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
-        await session.StoreAsync(user);
-        await session.SaveChangesAsync();
-
-        return true;
-      }
-
-      return false;
-    }
-       
 
     /// <inheritdoc />
     public async Task<IApplication> ResolveFromUser(ClaimsPrincipal user)
@@ -151,7 +112,7 @@ namespace zero.Core.Api
         throw new Exception($"User entity ${user.Id} needs a valid AppId");
       }
 
-      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
       return await session.LoadAsync<IApplication>(appId);
     }
 
@@ -177,71 +138,30 @@ namespace zero.Core.Api
     }
 
 
-    /// <inheritdoc />
-    public async Task<IApplicationContext> ForId(string appId)
-    {
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-      IApplication app = await session.LoadAsync<Application>(appId);
-
-      return new ApplicationContext(Store, Options, Logger, Handler)
-      {
-        App = app,
-        AppId = appId
-      };
-    }
-
-
-    /// <inheritdoc />
-    public bool IsBackofficeRequest(HttpContext context)
-    {
-      string path = Options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
-      return context.Request.Path.ToString().StartsWith(path);
-    }
-
-
     /// <summary>
     /// Get matching application from an URI
     /// </summary>
     IApplication ResolveFromUriInternal(Uri uri, IList<IApplication> apps)
     {
-      string[] protocols = new string[3] { "https://", "http://", "//" };
-
-      IApplication currentApp = null;
-
       foreach (IApplication app in apps)
       {
         if (app.Domains?.Length < 1)
         {
+          Logger.LogWarning("No domains specified for app {app}", app.Id);
           continue;
         }
 
         foreach (Uri domain in app.Domains)
         {
-          //string normalizedDomain = domain;
-
-          //if (!protocols.Any(protocol => domain.StartsWith(protocol, StringComparison.OrdinalIgnoreCase)))
-          //{
-          //  normalizedDomain = "http://" + domain;
-          //}
-
-          //UriBuilder uriBuilder = new UriBuilder(normalizedDomain);
-
-          //if (!uriBuilder.Uri.IsAbsoluteUri)
-          //{
-          //  continue;
-          //}
-
           int compareResult = Uri.Compare(uri, domain, UriComponents.HostAndPort, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase);
-
           if (compareResult == 0)
           {
-            currentApp = app;
-            break;
+            return app;
           }
         }
       }
 
-      return currentApp;
+      return null;
     }
 
 
@@ -255,7 +175,7 @@ namespace zero.Core.Api
         return Apps;
       }
 
-      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
       Apps = await session.Query<IApplication>().ToListAsync();
       return Apps;
     }
@@ -268,7 +188,7 @@ namespace zero.Core.Api
     {
       string userId = user.FindFirstValue(Constants.Auth.Claims.UserId);
 
-      using IAsyncDocumentSession session = Store.OpenCoreSession(Options);
+      using IAsyncDocumentSession session = Store.OpenCoreSession();
       return await session.LoadAsync<IBackofficeUser>(userId);
     }
 
@@ -284,33 +204,48 @@ namespace zero.Core.Api
 
       return permissions.Where(x => x.IsTrue).Select(x => x.NormalizedKey).ToArray();
     }
+
+
+    /// <inheritdoc />
+    //public async Task<bool> TrySwitchForUser(IBackofficeUser user, string appId)
+    //{
+    //  if (user == null || appId.IsNullOrEmpty())
+    //  {
+    //    return false;
+    //  }
+
+    //  string[] allowedAppIds = GetAllowedAppIdsForUser(user);
+
+    //  bool isMainId = appId.Equals(user.AppId, StringComparison.InvariantCultureIgnoreCase);
+    //  bool isAllowedId = allowedAppIds.Contains(appId, StringComparer.InvariantCultureIgnoreCase);
+
+    //  if (user.IsSuper || isMainId || isAllowedId)
+    //  {
+    //    user.CurrentAppId = appId;
+
+    //    //byte[] bytes = new byte[20];
+    //    //RandomNumberGenerator.Fill(bytes);
+    //    //user.SecurityStamp = Base32.ToBase32(bytes); // TODO update security stamp but Base32 is .net core internal
+
+    //    using IAsyncDocumentSession session = Store.OpenCoreSession();
+    //    await session.StoreAsync(user);
+    //    await session.SaveChangesAsync();
+
+    //    return true;
+    //  }
+
+    //  return false;
+    //}
   }
 
 
-
-  public interface IApplicationContext
+  public interface IApplicationResolver
   {
-    /// <summary>
-    /// Currently loaded application
-    /// </summary>
-    IApplication App { get; }
-
-    /// <summary>
-    /// Current loaded application Id
-    /// </summary>
-    string AppId { get; }
-
     /// <summary>
     /// Resolves the current application from either the backoffice user (in case it is backoffice request)
     /// or the domain (in case it is frontend request).
-    /// The resolved data is stored in the App + AppId properties.
     /// </summary>
     Task<IApplication> Resolve(HttpContext context, ClaimsPrincipal user);
-
-    /// <summary>
-    /// Try to switch the current application for a user
-    /// </summary>
-    Task<bool> TrySwitchForUser(IBackofficeUser user, string appId);
 
     /// <summary>
     /// Resolves the current application from the request path
@@ -338,15 +273,5 @@ namespace zero.Core.Api
     /// This method won't return apps the user has no access to.
     /// </summary>
     Task<IApplication> ResolveFromUser(IBackofficeUser user);
-
-    /// <summary>
-    /// Creates a new application context for the specified application.
-    /// </summary>
-    Task<IApplicationContext> ForId(string appId);
-
-    /// <summary>
-    /// Whether the current request is a backoffice request
-    /// </summary>
-    bool IsBackofficeRequest(HttpContext context);
   }
 }
