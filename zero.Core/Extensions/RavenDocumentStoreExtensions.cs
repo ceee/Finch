@@ -30,9 +30,14 @@ namespace zero.Core.Extensions
       store.Conventions.RegisterAsyncIdConvention<IZeroEntity>((_, entity) =>
       {
         string collection = store.Conventions.GetCollectionName(entity);
-        CollectionAttribute collectionAttribute = entity.GetType().GetCustomAttribute<CollectionAttribute>(true);
+        //CollectionAttribute collectionAttribute = entity.GetType().GetCustomAttribute<CollectionAttribute>(true);
         string tag = store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix(collection);
-        return Task.FromResult(tag + store.Conventions.IdentityPartsSeparator + IdGenerator.Create((collectionAttribute?.LongId ?? false) ? -1 : 8));
+        return Task.FromResult(tag + store.Conventions.IdentityPartsSeparator + IdGenerator.Create());
+      });
+
+      store.Conventions.RegisterAsyncIdConvention<IPage>((_, entity) =>
+      {
+        return store.Conventions.AsyncDocumentIdGenerator(_, entity);
       });
 
       (store.Conventions.Serialization as NewtonsoftJsonSerializationConventions).CustomizeJsonDeserializer = x =>

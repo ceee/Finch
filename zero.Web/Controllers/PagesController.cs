@@ -69,7 +69,7 @@ namespace zero.Web.Controllers
         PageType pageType = pageTypes.FirstOrDefault(x => x.Alias == item.PageTypeAlias);
         IRoute route = null;
 
-        if (!routes.TryGetValue("routes." + item.Hash, out route))
+        if (!routes.TryGetValue("routes." + item.Hash, out route) || route == null)
         {
           route = new Route()
           {
