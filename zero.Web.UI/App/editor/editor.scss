@@ -119,59 +119,6 @@
   }
 }*/
 
-
-.editor-global-flag
-{
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  grid-gap: 16px;
-  padding-bottom: 10px;
-  align-items: center;
-  font-size: var(--font-size);
-  line-height: 1.5;
-  position: relative;
-
-  p
-  {
-    margin: 0;
-    color: var(--color-text);
-  }
-
-  i
-  {
-    font-size: 24px;
-    color: var(--color-primary);
-    margin-top: -2px;
-  }
-
-  & + .ui-button
-  {
-    margin-top: 1.2rem;
-  }
-
-  & + .ui-property
-  {
-    margin-top: 32px;
-    padding-top: 32px;
-    border-top: 1px solid var(--color-line);
-  }
-
-  &.is-block
-  {
-    padding: 20px;
-    padding-right: 70px;
-    border-radius: var(--radius);
-    background: var(--color-box-nested);
-    margin-bottom: var(--padding);
-
-    i
-    {
-      margin-top: -22px;
-      right: 20px;
-    }
-  }
-}
-
 .editor-error
 {
   background: transparent;
