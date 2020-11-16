@@ -2,7 +2,7 @@
   <div v-if="!loading" class="space-list">
     <ui-header-bar :title="space.name" :count="count" title-empty="List">
       <ui-table-filter :attach="$refs.table" />
-      <ui-add-button :route="createRoute" :decision="canCreateShared" />
+      <ui-add-button :route="createRoute" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table ref="table" :config="listRenderer" @count="count = $event" />
@@ -25,8 +25,7 @@
       createRoute: {
         name: 'space-create',
         params: { alias: null }
-      },
-      canCreateShared: false
+      }
     }),
 
     watch: {
@@ -48,7 +47,6 @@
         const alias = 'spaces.' + this.space.alias;
         const listRenderer = this.zero.getList(alias) || SpacesDefaultList;
 
-        this.canCreateShared = this.space.allowShared;
         this.createRoute.params.alias = this.space.alias;
 
         listRenderer.link = item =>

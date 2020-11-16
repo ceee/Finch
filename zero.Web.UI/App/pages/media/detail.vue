@@ -43,7 +43,7 @@
     data: () => ({
       meta: {},
       model: { },
-      route: 'mediaitem',
+      route: 'media-edit',
       disabled: false
     }),
 

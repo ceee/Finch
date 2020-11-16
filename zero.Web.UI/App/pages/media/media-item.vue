@@ -34,7 +34,7 @@
       link()
       {
         return {
-          name: this.value.isFolder ? 'mediafolder' : 'mediaitem',
+          name: this.value.isFolder ? 'media' : 'media-edit',
           params: { id: this.value.id }
         };
       }

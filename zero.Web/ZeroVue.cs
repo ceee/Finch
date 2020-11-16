@@ -337,6 +337,8 @@ namespace zero.Web
     public Dictionary<string, Dictionary<string, string>> Alias { get; set; } = new Dictionary<string, Dictionary<string, string>>();
 
     public Dictionary<string, string> Translations { get; set; } = new Dictionary<string, string>();
+
+    public Dictionary<string, object> Overrides { get; set; } = new Dictionary<string, object>();
   }
 
 

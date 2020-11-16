@@ -1,6 +1,51 @@
 ﻿<template>
-  <div class="media">
-    <router-view v-if="!isOverview"></router-view>
+  <div class="media-content">
+    <ui-header-bar :back-button="!!id" :count="count">
+      <template v-slot:title>
+        <h2 class="ui-header-bar-title">
+          <router-link :to="{ name: 'media' }" class="media-items-hierarchy-item" v-if="!!id"><i class="fth-home"></i></router-link>
+          <router-link :to="{ name: 'media', params: { id: item.id } }" v-for="(item, index) in hierarchy" :key="item.id" class="media-items-hierarchy-item" v-localize="item.name"></router-link>
+        </h2>
+      </template>
+      <template>
+        <ui-search v-if="!selecting" v-model="gridConfig.search" class="onbg" />
+        <ui-dropdown v-if="!!id && !selecting" align="right" :disabled="!!gridConfig.search">
+          <template v-slot:button>
+            <ui-button type="light onbg" label="Folder" caret="down" :disabled="!!gridConfig.search" />
+          </template>
+          <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(current, true)" />
+          <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(current, true)" />
+          <ui-dropdown-separator />
+          <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove(current, true)" />
+        </ui-dropdown>
+        <ui-dropdown v-if="selecting" align="right">
+          <template v-slot:button>
+            <ui-button type="light onbg" :label="selectedText" caret="down" />
+          </template>
+          <!--<slot name="actions"></slot>-->
+        </ui-dropdown>
+        <ui-button v-if="!selecting" type="primary" label="Add folder" @click="addFolder(id)" />
+        <div v-if="!!id && !selecting" type="button" class="ui-button has-state type-primary state-default has-icon">
+          <span class="ui-button-text" v-localize="'Add file'"></span>
+          <input class="media-item-upload" type="file" multiple @change="onUpload" />
+        </div>
+      </template>
+    </ui-header-bar>
+
+    <div class="ui-view-box">
+      <div class="media-items">
+        <ui-datagrid ref="grid" v-model="gridConfig" @select="onSelected" @count="count = $event">
+          <template v-slot:actions="props">
+            <ui-dropdown-button v-if="props.item && props.item.isFolder" label="@ui.open.title" icon="fth-arrow-right" @click="goToFolder(props.item.id)" />
+            <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(props.item, props.item.isFolder)" />
+            <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(props.item, props.item.isFolder)" />
+            <ui-dropdown-button label="Select" icon="fth-check-circle" @click="$refs.grid.select(props.item)" />
+            <ui-dropdown-separator />
+            <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove(props.item, props.item.isFolder)" />
+          </template>
+        </ui-datagrid>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -41,10 +86,6 @@
     },
 
     computed: {
-      isOverview()
-      {
-        return this.$route.name === 'media';
-      },
       selectedText()
       {
         return this.selectedCount + ' selected';
@@ -188,7 +229,7 @@
         if (!isFolder)
         {
           return this.$router.push({
-            name: 'mediaitem',
+            name: 'media-edit',
             params: { id: item.id }
           });
         }
@@ -306,24 +347,24 @@
     font-size: var(--font-size-l);
     font-weight: 400;
     color: var(--color-text-dim);
-
     &:last-child
-    {
-      font-weight: 700;
-      color: var(--color-text);
-    }
 
-    & + .media-items-hierarchy-item:before
-    {
-      content: '/';
-      margin: 0 0.5em;
-      color: var(--color-text-dim);
-      font-weight: 400;
-    }
+  {
+    font-weight: 700;
+    color: var(--color-text);
+  }
 
-    &:hover
-    {
-      color: var(--color-text);
-    }
+  & + .media-items-hierarchy-item:before
+  {
+    content: '/';
+    margin: 0 0.5em;
+    color: var(--color-text-dim);
+    font-weight: 400;
+  }
+
+  &:hover
+  {
+    color: var(--color-text);
+  }
   }
 </style>

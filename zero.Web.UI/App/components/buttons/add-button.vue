@@ -1,23 +1,7 @@
 ﻿<template>
   <div class="ui-add-button">
-    <ui-button v-if="!hasDropdown" :type="type" :label="label" @click="onClick(shared)" :disabled="disabled" /> <!-- :attach="true"-->
-    <!--<ui-button v-if="!hasDropdown" :type="type" icon="fth-chevron-down" />-->
-    <ui-dropdown v-else ref="dropdown" align="right">
-      <template v-slot:button>
-        <ui-button :label="label" :type="type" :disabled="disabled" />
-      </template>
-      <div class="ui-add-button-items">
-        <button type="button" class="ui-add-button-item" @click="onClick(true)" :disabled="disabled">
-          <i class="fth-radio is-primary"></i>
-          <span class="-text">For all apps</span>
-        </button>
-        <span class="ui-add-button-items-line"></span>
-        <button type="button" class="ui-add-button-item" @click="onClick(false)" :disabled="disabled">
-          <i class="fth-layers"></i>
-          <span class="-text">For {{application.name}}</span>
-        </button>
-      </div>
-    </ui-dropdown>
+    <ui-button v-if="!component" :type="type" :label="label" @click="onClick()" :disabled="disabled" /> <!-- :attach="true"-->
+    <component v-else :is="component" :type="type" :label="label" :disabled="disabled" :route="route" />
   </div>
 </template>
 
@@ -27,14 +11,6 @@
 
   export default {
     props: {
-      decision: {
-        type: Boolean,
-        default: true
-      },
-      shared: {
-        type: Boolean,
-        default: false
-      },
       label: {
         type: String,
         default: '@ui.add'
@@ -53,20 +29,18 @@
       }
     },
 
-    computed: {
-      application()
-      {
-        return _find(zero.applications, x => x.id === zero.appId);
-      },
-      hasDropdown()
-      {
-        return this.decision && true; // TODO zero.apps.shared; moved to zero instance afaik
-      }
+    data: () => ({
+      component: null
+    }),
+
+    created()
+    {
+      this.component = zero.overrides['add-button'] || null;
     },
 
     methods: {
 
-      onClick(isShared)
+      onClick()
       {
         if (this.$refs.dropdown)
         {
@@ -76,9 +50,6 @@
         if (!!this.route)
         {
           let routeObj = typeof this.route === 'object' ? this.route : { name: this.route };
-          routeObj.params = routeObj.params || {};
-          routeObj.params.scope = isShared ? zero.sharedAppId : null;
-
           this.$router.push(routeObj);
         }
 

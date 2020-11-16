@@ -1,6 +1,6 @@
 ﻿
 import Media from './detail.vue';
-import Medias from './media.vue';
+import MediaOverview from './overview.vue';
 
 const alias = __zero.alias.sections.media;
 const section = __zero.sections.find(x => x.alias === alias);
@@ -8,29 +8,24 @@ const section = __zero.sections.find(x => x.alias === alias);
 export default section ? [
   {
     name: section.alias,
-    path: section.url,
-    component: Medias,
+    path: section.url + '/:id?',
+    component: MediaOverview,
+    props: true,
     meta: {
       name: section.name,
       alias: section.alias,
       section: section
-    },
-    children: [
-      {
-        name: 'mediaitem',
-        path: 'edit/:id',
-        props: true,
-        component: Media
-      }
-    ]
+    }
   },
   {
-    name: 'mediafolder',
-    path: section.url + '/folder/:id',
+    name: section.alias + '-edit',
+    path: section.url + '/edit/:id',
+    component: Media,
     props: true,
-    component: Medias,
     meta: {
-      name: section.name
+      name: section.name,
+      alias: section.alias,
+      section: section
     }
   }
 ] : [];
