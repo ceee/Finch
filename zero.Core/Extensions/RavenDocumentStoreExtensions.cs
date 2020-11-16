@@ -29,6 +29,13 @@ namespace zero.Core.Extensions
 
       store.Conventions.IdentityPartsSeparator = '.';
 
+      store.Conventions.RegisterAsyncIdConvention<ZeroEntity>((database, entity) =>
+      {
+        var typeTagName = store.Conventions.GetCollectionName(entity);
+        var tag = store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix(typeTagName);
+        return Task.FromResult(tag + store.Conventions.IdentityPartsSeparator + IdGenerator.Create());
+      });
+
       (store.Conventions.Serialization as NewtonsoftJsonSerializationConventions).CustomizeJsonDeserializer = x =>
       {
         x.Converters.Add(new RefJsonConverter());
