@@ -93,18 +93,21 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<ListResult<MediaListItem>> GetListByQuery(MediaListItemQuery query)
     {
+      bool hasSearch = !query.Search.IsNullOrWhiteSpace();
+      bool isRoot = !query.IsShared && query.FolderId.IsNullOrWhiteSpace();
+
       query.SearchFor(entity => entity.Name);
 
       query.OrderQuery = q => q
         .OrderByDescending(x => x.IsFolder)
         .ThenBy(query.OrderBy, query.OrderIsDescending, query.OrderType == ListQueryOrderType.String ? OrderingType.String : OrderingType.Double);
 
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession(query.IsShared ? Backoffice.Options.Raven.Database : null);
       session.Advanced.MaxNumberOfRequestsPerSession = query.PageSize + 1;
 
       IRavenQueryable<MediaListItem> dbQuery = session.Query<MediaListItem, Media_ByParent>().ProjectInto<MediaListItem>();
 
-      if (query.Search.IsNullOrWhiteSpace() || !query.SearchIsGlobal)
+      if (!hasSearch || !query.SearchIsGlobal)
       {
         dbQuery = dbQuery.WhereIf(x => x.ParentId == query.FolderId, !query.FolderId.IsNullOrEmpty(), x => x.ParentId == null);
       }
@@ -117,6 +120,16 @@ namespace zero.Core.Api
         {
           item.Children = await session.Query<MediaListItem, Media_ByParent>().CountAsync(x => x.ParentId == item.Id);
         }
+      }
+
+      // TODO this is only inserted when we have a core/shared database and a multi-tenancy setup
+      if (isRoot)
+      {
+        result.Items.Insert(0, new MediaListItem()
+        {
+          Id = "shared",
+          IsFolder = true
+        });
       }
 
       return result;

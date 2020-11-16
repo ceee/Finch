@@ -3,12 +3,16 @@
     <div class="media-item-preview" :class="{'media-bg-pattern': value.image }">
       <span class="media-item-check"><i class="fth-check"></i></span>
       <img class="media-item-image" v-if="value.image" :src="value.image" />
-      <span class="media-item-icon" v-if="!value.image"><i :class="value.isFolder ? 'fth-folder' : 'fth-file'"></i></span>
+      <span class="media-item-icon" v-if="!value.image"><i :class="shared ? 'fth-globe' : (value.isFolder ? 'fth-folder' : 'fth-file')"></i></span>
     </div>
-    <p class="media-item-text">
+    <p class="media-item-text" v-if="!shared">
       <span :title="value.name">{{value.name}}</span>
       <span class="-minor" v-if="!value.isFolder"><br><span v-filesize="value.size"></span></span>
       <span class="-minor" v-if="value.isFolder"><br><span v-localize="{ key: value.children === 1 ? '@media.child_count_1' : '@media.child_count_x', tokens: { count: value.children }}"></span></span>
+    </p>
+    <p class="media-item-text" v-if="shared">
+      <span :title="value.name">Shared</span>
+      <span class="-minor"><br>Media for all apps</span>
     </p>
   </router-link>
 </template>
@@ -26,17 +30,28 @@
       }
     },
 
-    data: () => ({
-      
-    }),
-
     computed: {
       link()
       {
+        if (this.shared)
+        {
+          return {
+            name: 'media',
+            params: { scope: 'shared' }
+          };
+        }
+
         return {
           name: this.value.isFolder ? 'media' : 'media-edit',
-          params: { id: this.value.id }
+          params: {
+            id: this.value.id,
+            scope: this.$route.params.scope
+          }
         };
+      },
+      shared()
+      {
+        return this.value.id === 'shared';
       }
     }
   };

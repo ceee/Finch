@@ -11,5 +11,7 @@
     public string FolderId { get; set; }
 
     public bool SearchIsGlobal { get; set; }
+
+    public bool IsShared { get; set; }
   }
 }

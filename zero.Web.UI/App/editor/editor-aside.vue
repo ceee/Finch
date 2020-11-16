@@ -22,9 +22,6 @@
     </div>
     <div class="ui-box is-light" v-if="value.id">
       <slot name="infos">
-        <ui-property v-if="value.id" label="@ui.id" :is-text="true">
-          {{value.id}}
-        </ui-property>
         <ui-property v-if="value.id && value.lastModifiedDate" label="@ui.modifiedDate" :is-text="true">
           <ui-date v-model="value.lastModifiedDate" />
         </ui-property>

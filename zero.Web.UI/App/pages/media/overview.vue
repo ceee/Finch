@@ -32,7 +32,7 @@
       </template>
     </ui-header-bar>
 
-    <div class="ui-view-box">
+    <div class="ui-view-box" v-if="scope">
       <div class="media-items">
         <ui-datagrid ref="grid" v-model="gridConfig" @select="onSelected" @count="count = $event">
           <template v-slot:actions="props">
@@ -65,7 +65,7 @@
 
   export default {
 
-    props: ['id'],
+    props: ['id', 'scope'],
 
     data: () => ({
       count: 0,
@@ -80,11 +80,6 @@
       selectedCount: 0
     }),
 
-    created()
-    {
-      this.gridConfig.items = this.getItems;
-    },
-
     computed: {
       selectedText()
       {
@@ -93,6 +88,10 @@
       selecting()
       {
         return this.selectedCount > 0;
+      },
+      shared()
+      {
+        return this.scope === 'shared'
       }
     },
 
@@ -100,10 +99,29 @@
       search(value)
       {
         this.$refs.grid.debouncedUpdate();
+      },
+      '$route': function (val)
+      {
+        this.initialize();
       }
     },
 
+    created()
+    {
+      this.gridConfig.items = this.getItems;
+      this.initialize();
+    },
+
     methods: {
+
+      initialize()
+      {
+        if (!this.scope)
+        {
+          this.$route.params.scope = 'local';
+          this.$router.replace(this.$route);
+        }
+      },
 
       // get items (media + subfolders) in the current folder
       getItems(query)
@@ -116,10 +134,11 @@
         query.search = this.gridConfig.search;
         query.folderId = this.$route.params.id;
         query.searchIsGlobal = true;
+        query.isShared = this.shared;
 
         this.getFolderHierarchy(query.folderId, !!query.search);
 
-        return MediaApi.getListByQuery(query).then(response =>
+        return MediaApi.scope(this.shared).getListByQuery(query).then(response =>
         {
           return Promise.resolve(response);
         });
@@ -147,7 +166,7 @@
           return;
         }
 
-        MediaFolderApi.getHierarchy(id).then(res =>
+        MediaFolderApi.getHierarchy(id, this.shared).then(res =>
         {
           this.hierarchy = res;
           this.current = res[res.length - 1];
