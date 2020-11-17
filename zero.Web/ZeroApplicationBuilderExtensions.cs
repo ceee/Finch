@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using System;
-using zero.Core;
 using zero.Core.Extensions;
 using zero.Core.Options;
 using zero.Web.Middlewares;
@@ -20,8 +15,9 @@ namespace zero.Web
 
       string path = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
 
-      app.UseMiddleware<PoweredByZeroMiddleware>();
-      app.UseMiddleware<ZeroMiddleware>();
+      app.UseMiddleware<ZeroContextMiddleware>();
+
+      app.UseStaticFiles();
 
       // map backoffice
       app.UseWhen(ctx => ctx.Request.Path.ToString().StartsWith(path), builder =>
@@ -31,8 +27,21 @@ namespace zero.Web
         builder.UseAuthentication();
         builder.UseAuthorization();
 
+        //builder.UseMiddleware<ZeroMiddleware>(options);
+
         builder.UseEndpoints(endpoints =>
         {
+          // setup route
+          //endpoints.MapControllerRoute(
+          //  name: "setup",
+          //  pattern: path + "/setup",
+          //  defaults: new
+          //  {
+          //    controller = "ZeroSetup",
+          //    action = "Index"
+          //  }
+          //);
+
           //// routes for API
           //endpoints.MapControllerRoute(
           //  name: "api",
@@ -48,51 +57,12 @@ namespace zero.Web
     }
 
 
-    public static IEndpointConventionBuilder MapZero(this IEndpointRouteBuilder endpoints)
+    public static IApplicationBuilder UseZeroRoutes(this IApplicationBuilder app)
     {
-      return MapZeroCore(endpoints, "/zero/{**path}", new ZeroEndpointOptions());
-    }
-
-
-    public static IEndpointConventionBuilder MapZero(this IEndpointRouteBuilder endpoints, string pattern)
-    {
-      return MapZeroCore(endpoints, pattern, new ZeroEndpointOptions());
-    }
-
-
-    public static IEndpointConventionBuilder MapZero(this IEndpointRouteBuilder endpoints, string pattern, ZeroEndpointOptions options)
-    {
-      return MapZeroCore(endpoints, pattern, options);
-    }
-
-
-    //public static IEndpointRouteBuilder MapZeroRoutes(this IEndpointRouteBuilder endpoints)
-    //{
-    //  endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}");
-    //  return endpoints;
-    //}
-
-
-    static IEndpointConventionBuilder MapZeroCore(IEndpointRouteBuilder endpoints, string pattern, ZeroEndpointOptions options)
-    {
-      if (endpoints.ServiceProvider.GetService<IZeroContext>() == null)
+      return app.UseEndpoints(endpoints =>
       {
-        throw new InvalidOperationException();
-      }
-
-      object[] args = options != null ? new[] { Options.Create(options) } : Array.Empty<object>();
-
-      RequestDelegate backofficePipeline = endpoints.CreateApplicationBuilder()
-         .UseMiddleware<ZeroMiddleware>(args)
-         .Build();
-
-      RequestDelegate frontendPipeline = endpoints.CreateApplicationBuilder()
-         .UseMiddleware<ZeroMiddleware>(args)
-         .Build();
-
-      endpoints.map(frontendPipeline);
-
-      return endpoints.Map(pattern, backofficePipeline).WithDisplayName("Zero");
+        endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}");
+      });
     }
   }
 }

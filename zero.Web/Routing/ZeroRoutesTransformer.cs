@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
-using System;
 using System.Threading.Tasks;
 using zero.Core.Routing;
 
@@ -19,10 +18,8 @@ namespace zero.Web.Routing
 
 		public override async ValueTask<RouteValueDictionary> TransformAsync(HttpContext httpContext, RouteValueDictionary values)
 		{
-			Console.WriteLine("resolve route");
 			IResolvedRoute route = await Routes.ResolveUrl(httpContext);
 
-			Console.WriteLine("route: " + route?.Route.Url);
 			if (route == null)
       {
 				return null;
