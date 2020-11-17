@@ -8,6 +8,7 @@ using zero.Core;
 using zero.Core.Extensions;
 using zero.Core.Options;
 using zero.Web.Middlewares;
+using zero.Web.Routing;
 
 namespace zero.Web
 {
@@ -19,33 +20,29 @@ namespace zero.Web
 
       string path = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
 
-      app.UseStatusCodePages();
-      app.UseRouting();
-      app.UseRequestLocalization();
-
       app.UseMiddleware<PoweredByZeroMiddleware>();
       app.UseMiddleware<ZeroMiddleware>();
 
       // map backoffice
-      //app.UseWhen(ctx => ctx.Request.Path.ToString().StartsWith(path), builder =>
-      //{
-      //  builder.UseRouting();
+      app.UseWhen(ctx => ctx.Request.Path.ToString().StartsWith(path), builder =>
+      {
+        builder.UseRouting();
 
-      //  builder.UseAuthentication();
-      //  builder.UseAuthorization();
+        builder.UseAuthentication();
+        builder.UseAuthorization();
 
-      //  builder.UseEndpoints(endpoints =>
-      //  {
-      //    //// routes for API
-      //    //endpoints.MapControllerRoute(
-      //    //  name: "api",
-      //    //  pattern: path + "/api/{controller}/{action}/{id?}"
-      //    //);
+        builder.UseEndpoints(endpoints =>
+        {
+          //// routes for API
+          //endpoints.MapControllerRoute(
+          //  name: "api",
+          //  pattern: path + "/api/{controller}/{action}/{id?}"
+          //);
 
-      //    // fallbacks for SPA
-      //    endpoints.MapFallbackToController(path + "/{**path}", "Index", "ZeroBackoffice");
-      //  });
-      //});
+          // fallbacks for SPA
+          endpoints.MapFallbackToController(path + "/{**path}", "Index", "ZeroBackoffice");
+        });
+      });
 
       return app;
     }
@@ -87,17 +84,13 @@ namespace zero.Web
 
       RequestDelegate backofficePipeline = endpoints.CreateApplicationBuilder()
          .UseMiddleware<ZeroMiddleware>(args)
-         .UseStaticFiles()
-         .UseRouting()
-         .UseAuthentication()
-         .UseAuthorization()
          .Build();
 
-      //RequestDelegate frontendPipeline = endpoints.CreateApplicationBuilder()
-      //   .UseMiddleware<ZeroMiddleware>(args)
-      //   .Build();
+      RequestDelegate frontendPipeline = endpoints.CreateApplicationBuilder()
+         .UseMiddleware<ZeroMiddleware>(args)
+         .Build();
 
-      //endpoints.map(frontendPipeline);
+      endpoints.map(frontendPipeline);
 
       return endpoints.Map(pattern, backofficePipeline).WithDisplayName("Zero");
     }

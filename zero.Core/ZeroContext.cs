@@ -89,14 +89,12 @@ namespace zero.Core
 
       // set default database for document store
       Store.ResolvedDatabase = Application.Database;
-    }
 
-
-    /// <inheritdoc />
-    public virtual void SetRoute(IResolvedRoute route)
-    {
-      ResolvedRoute = route;
-      Route = ResolvedRoute.Route;
+      if (IsBackofficeRequest is false && context.Request.RouteValues.TryGetValue("zero.route", out object route))
+      {
+        ResolvedRoute = (IResolvedRoute)route;
+        Route = ResolvedRoute.Route;
+      }
     }
   }
 
@@ -143,10 +141,5 @@ namespace zero.Core
     /// the currently active backoffice user, as users are not signed in with the default scheme and do therefore not populate HttpContext.User
     /// </summary>
     Task Resolve(HttpContext context, IEnumerable<IApplication> applications);
-
-    /// <summary>
-    /// Set resolved route for frontend requests
-    /// </summary>
-    void SetRoute(IResolvedRoute route);
   }
 }
