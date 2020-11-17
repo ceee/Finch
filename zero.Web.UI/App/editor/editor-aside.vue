@@ -30,7 +30,7 @@
   export default {
     name: 'uiEditorAside',
 
-    inject: [ 'meta', 'disabled' ],
+    inject: [ 'meta' ],
 
     props: {
       editor: {
@@ -57,6 +57,10 @@
         type: Boolean,
         default: false
       },
+      disabled: {
+        type: [Boolean, Function],
+        default: false
+      }
     },
 
     data: () => ({

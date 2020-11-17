@@ -123,10 +123,10 @@ class Zero
     }
 
     // append editors
-    plugin.editors.forEach(x => this.#editors.push(x));
+    plugin.editors.forEach(x => this.addOrReplace(this.#editors, x, 'alias'));
 
     // append lists
-    plugin.lists.forEach(x => this.#lists.push(x));
+    plugin.lists.forEach(x => this.addOrReplace(this.#lists, x, 'alias'));
 
     console.log(`[zero] Installed %c${plugin.name}%cplugin`, 'font-style:italic;');
   }
@@ -161,6 +161,25 @@ class Zero
     }
 
     return renderer;
+  }
+
+
+  /*
+  * Adds or replaces an item in an array by key
+  */
+  private addOrReplace(array, item, byKey)
+  {
+    const existingRenderer = array.find(x => x[byKey] === item[byKey]);
+
+    if (existingRenderer)
+    {
+      const index = array.indexOf(existingRenderer);
+      array.splice(index, 1, item);
+    }
+    else
+    {
+      array.push(item);
+    }
   }
 };
 

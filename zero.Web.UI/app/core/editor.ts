@@ -19,6 +19,7 @@ class Editor
   fields = [];
 
   options = {
+    disabled: false,
     boxes: false
   };
 
@@ -46,7 +47,7 @@ class Editor
    */
 
   /**
-   * Add a new tab to the editor
+   * Add a new tab to the editor or returns the tab in case it was already added
    * @param {string} alias - Alias for the tab
    * @param {string} name - Name of the tab (can be a translation)
    * @param {number|function} [count] - Output a count indicator
@@ -67,21 +68,20 @@ class Editor
       return;
     }
 
-    if (this.tabs.find(x => x.alias === alias))
-    {
-      console.warn(`[zero] the editor ${this.#alias} does already have a tab with the alias ${alias}`);
-      return;
-    }
+    let tab = this.tabs.find(x => x.alias === alias);
 
-    const tab = this._createTab(alias, name, disabled, count);
-    this.tabs.push(tab);
+    if (!tab)
+    {
+      tab = this._createTab(alias, name, disabled, count);
+      this.tabs.push(tab);
+    }
 
     return tab;
   }
 
 
   /**
-   * Add a new tab to the editor
+   * Add a new field to the editor or returns the field in case it was already added
    * @param {string} path - Model path
    * @param {object} [options] - Custom options
    * @param {string} [options.label] - A custom label for this field (otherwise it's generated via `onLabelCreate`)
@@ -96,9 +96,30 @@ class Editor
    */
   field(path, options)
   {
-    const field = new EditorField(path, options);
-    this.fields.push(field);
+    let field = this.fields.find(x => x.path === path);
+
+    if (!field)
+    {
+      field = new EditorField(path, options);
+      this.fields.push(field);
+    }
+    else
+    {
+      field.options = { ...field.options, ...(options || {}) };
+    }
+
     return field;
+  }
+
+
+  /**
+   * Conditionally disable this editor
+   * @param {function|boolean} [condition] - Optionally only disable this editor when a condition is fulfilled or reset the required state with true/false
+   */
+  disabled(condition)
+  {
+    this.options.disabled = condition;
+    return this;
   }
 
 

@@ -7,7 +7,7 @@ export default {
     return Axios.get('countries/getById', { params: { id } }).then(res => Promise.resolve(res.data));
   },
 
-  getEmpty(id)
+  getEmpty()
   {
     return Axios.get('countries/getEmpty').then(res => Promise.resolve(res.data));
   },

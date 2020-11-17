@@ -11,6 +11,8 @@
   import UiEditor from 'zero/editor/editor.vue';
 
   export default {
+    props: ['id'],
+
     components: { UiEditor },
 
     data: () => ({
@@ -24,7 +26,7 @@
 
       onLoad(form)
       {
-        form.load(!this.$route.params.id ? CountriesApi.getEmpty() : CountriesApi.getById(this.$route.params.id)).then(response =>
+        form.load(!this.$route.params.id ? CountriesApi.getEmpty() : CountriesApi.getById(this.id)).then(response =>
         {
           this.disabled = !response.meta.canEdit;
           this.meta = response.meta;
@@ -42,7 +44,7 @@
       onDelete(item, opts)
       {
         opts.hide();
-        this.$refs.form.onDelete(CountriesApi.delete.bind(this, this.$route.params.id));
+        this.$refs.form.onDelete(CountriesApi.delete.bind(this, this.id));
       }     
     }
   }

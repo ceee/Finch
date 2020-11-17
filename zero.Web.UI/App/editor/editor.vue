@@ -25,8 +25,7 @@
     provide: function ()
     {
       return {
-        meta: this.meta,
-        disabled: false
+        meta: this.meta
       };
     },
 

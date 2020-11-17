@@ -37,14 +37,6 @@ textarea, .ui-native-select
     box-shadow: var(--color-input-focus-shadow);
     outline: none;
   }
-
-  &[disabled], &[readonly]
-  {
-    background-color: transparent;
-    border-color: transparent !important;
-    padding: 0;
-    height: auto;
-  }
 }
 
 select:focus

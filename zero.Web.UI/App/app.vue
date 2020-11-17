@@ -21,8 +21,6 @@
   import AppNotifications from 'zero/components/notifications/notification-holder.vue'
   import EventHub from './services/eventhub.js';
   import AuthApi from 'zero/services/auth.js'
-  import 'zero/config/vue.config.js'
-  import 'zero/config/axios.config.js'
 
   export default {
     name: 'app',

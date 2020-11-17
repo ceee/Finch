@@ -1,5 +1,5 @@
 ﻿<template>
-  <input :value="value" @input="$emit('input', $event.target.value)" type="text" class="ui-input" v-localize:placeholder="placeholder" :maxlength="maxLength" />
+  <input :value="value" @input="$emit('input', $event.target.value)" type="text" class="ui-input" v-localize:placeholder="placeholder" :maxlength="maxLength" :disabled="disabled" />
 </template>
 
 
@@ -13,6 +13,10 @@
       maxLength: {
         type: Number,
         default: null
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       },
       placeholder: {
         type: String,
