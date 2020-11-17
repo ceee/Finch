@@ -89,11 +89,11 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<IResolvedRoute> ResolveUrl(string appId, string path)
+    public async Task<IResolvedRoute> ResolveUrl(IApplication application, string path)
     {
       path = path.Length > 1 ? path.TrimEnd('/') : path;
 
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = Store.OpenAsyncSession(application.Database);
 
       string[] pathParts = path.Trim('/').Split('/');
       string[] parts = new string[pathParts.Length];
@@ -144,7 +144,7 @@ namespace zero.Core.Routing
         return null;
       }
 
-      return await ResolveUrl(app.Id, path);
+      return await ResolveUrl(app, path);
     }
 
 
@@ -250,9 +250,9 @@ namespace zero.Core.Routing
     Task<Dictionary<T, IRoute>> GetRoutes<T>(params T[] models);
 
     /// <summary>
-    /// Resolve an URL from the specified app-id and the path
+    /// Resolve an URL from the specified app and the path
     /// </summary>
-    Task<IResolvedRoute> ResolveUrl(string appId, string path);
+    Task<IResolvedRoute> ResolveUrl(IApplication application, string path);
 
     /// <summary>
     /// Resolve an URL from an http context

@@ -89,25 +89,7 @@ namespace zero.Core.Security
       ClaimsIdentity identity = new ClaimsIdentity(claims, AuthOptions.Scheme, Constants.Auth.Claims.UserName, Constants.Auth.Claims.Role); // "Identity.Application"
 
       bool isUserIdentity = UserIdentity.TryCreate(identity, AuthOptions.Scheme, out UserIdentity userIdentity);
-      
-      if (isUserIdentity)
-      {
-        Claim isZeroClaim = userIdentity.FindFirst(Constants.Auth.Claims.IsZero);
-        Claim appIdClaim = userIdentity.FindFirst(Constants.Auth.Claims.AppId);
-        string appId = appIdClaim?.Value;
-
-        if (appIdClaim is null || isZeroClaim is null or not { Value: PermissionsValue.False })
-        {
-          return null;
-        }
-
-        if (appId is not null || Zero.AppId.Equals(appId, StringComparison.InvariantCultureIgnoreCase))
-        {
-          return userIdentity;
-        }
-      }
-
-      return null;
+      return userIdentity;
     }
 
 

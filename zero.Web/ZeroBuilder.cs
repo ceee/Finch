@@ -174,8 +174,8 @@ namespace zero.Web
 
       Services.AddZeroIdentity<BackofficeUser, BackofficeUserRole>();
       Services.Replace<IUserClaimsPrincipalFactory<BackofficeUser>, ZeroBackofficeClaimsPrincipalFactory<BackofficeUser, BackofficeUserRole>>();
-      Services.Replace<IUserStore<BackofficeUser>, RavenUserStore<BackofficeUser, BackofficeUserRole>>(ServiceLifetime.Scoped);
-      Services.Replace<IRoleStore<BackofficeUserRole>, RavenRoleStore<BackofficeUserRole>>(ServiceLifetime.Scoped);
+      Services.Replace<IUserStore<BackofficeUser>, RavenCoreUserStore<BackofficeUser, BackofficeUserRole>>(ServiceLifetime.Scoped);
+      Services.Replace<IRoleStore<BackofficeUserRole>, RavenCoreRoleStore<BackofficeUserRole>>(ServiceLifetime.Scoped);
 
       Services.AddAuthentication(Constants.Auth.BackofficeScheme)
         .AddZeroBackofficeCookie<BackofficeUser, BackofficeUserRole>();

@@ -47,26 +47,21 @@ namespace zero.Core.Identity
     /// </summary>
     protected virtual IRavenQueryable<TUser> ScopeQuery(IRavenQueryable<TUser> query) => query;
 
+    // <summary>
+    /// Get the database to operate on for this store
+    /// </summary>
+    protected virtual string GetDatabase() => Store.ResolvedDatabase;
 
     // <summary>
-    /// Determines whether a passed user is part of this store and should be processed
+    /// Get a new document store session
     /// </summary>
-    protected virtual bool IsUserPartOfStore(TUser role) => true;
+    protected virtual IAsyncDocumentSession GetSession() => Store.OpenAsyncSession(GetDatabase());
 
 
     /// <inheritdoc />
     public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
     {
-      if (!IsUserPartOfStore(user))
-      {
-        return IdentityResult.Failed(new IdentityError()
-        {
-          Code = "NotPartOfStore",
-          Description = $"The affected user is is not part of this user store and can't be created."
-        });
-      }
-
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      using IAsyncDocumentSession session = GetSession();
 
       // try to reserve the key for the new user
       if (!await Store.Raven.ReserveAsync(GetReservationKey(user), user.Id))
@@ -102,21 +97,12 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
     {
-      if (!IsUserPartOfStore(user))
-      {
-        return IdentityResult.Failed(new IdentityError()
-        {
-          Code = "NotPartOfStore",
-          Description = $"The affected user is is not part of this user store and can't be deleted."
-        });
-      }
-
       // Remove the cluster-wide compare/exchange key.
       await Store.Raven.RemoveReservationAsync(GetReservationKey(user));
 
       // Delete the user and save it. We must save it because deleting is a cluster-wide operation.
       // Only if the deletion succeeds will we remove the cluster-wide compare/exchange key.
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      using IAsyncDocumentSession session = GetSession();
 
       TUser source = await session.LoadAsync<TUser>(user.Id, cancellationToken);
 
@@ -130,16 +116,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IdentityResult> UpdateAsync(TUser user, CancellationToken cancellationToken)
     {
-      if (!IsUserPartOfStore(user))
-      {
-        return IdentityResult.Failed(new IdentityError()
-        {
-          Code = "NotPartOfStore",
-          Description = $"The affected user is is not part of this user store and can't be updated."
-        });
-      }
-
-      using (IAsyncDocumentSession session = Store.OpenCoreSession())
+      using (IAsyncDocumentSession session = GetSession())
       {
         TUser source = await session.LoadAsync<TUser>(user.Id, cancellationToken);
 
@@ -169,7 +146,7 @@ namespace zero.Core.Identity
         }
       }
 
-      using (IAsyncDocumentSession session = Store.OpenCoreSession())
+      using (IAsyncDocumentSession session = GetSession())
       {
         await session.StoreAsync(user, cancellationToken);
         await session.SaveChangesAsync(cancellationToken);
@@ -182,7 +159,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      using IAsyncDocumentSession session = GetSession();
       return await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
     }
 
@@ -190,7 +167,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      using IAsyncDocumentSession session = GetSession();
       return await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Username == normalizedUserName, cancellationToken);
     }
 
@@ -258,7 +235,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      using IAsyncDocumentSession session = GetSession();
       return await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
     }
 
@@ -383,13 +360,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task AddClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
     {
-      if (!IsUserPartOfStore(user))
-      {
-        // TODO we should log this as we can't return an IdentityResult
-        return;
-      }
-
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      using IAsyncDocumentSession session = GetSession();
 
       user.Claims.AddRange(claims.Select(claim => new UserClaim(claim)));
       await session.StoreAsync(user, cancellationToken);
@@ -407,7 +378,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IList<TUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      using IAsyncDocumentSession session = GetSession();
       UserClaim userClaim = new UserClaim(claim);
       return await ScopeQuery(session.Query<TUser>()).Where(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value)).ToListAsync();
     }
@@ -416,13 +387,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task RemoveClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
     {
-      if (!IsUserPartOfStore(user))
-      {
-        // TODO we should log this as we can't return an IdentityResult
-        return;
-      }
-
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      using IAsyncDocumentSession session = GetSession();
 
       IEnumerable<UserClaim> userClaims = claims.Select(c => new UserClaim(c)).ToList();
 
@@ -437,13 +402,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task ReplaceClaimAsync(TUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
     {
-      if (!IsUserPartOfStore(user))
-      {
-        // TODO we should log this as we can't return an IdentityResult
-        return;
-      }
-
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      using IAsyncDocumentSession session = GetSession();
 
       UserClaim userClaim = new UserClaim(claim);
       UserClaim newUserClaim = new UserClaim(newClaim);

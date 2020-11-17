@@ -10,7 +10,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using zero.Core.Database;
 using zero.Core.Entities;
-using zero.Core.Extensions;
 using zero.Core.Options;
 
 namespace zero.Core.Identity
@@ -38,25 +37,21 @@ namespace zero.Core.Identity
     /// </summary>
     protected virtual IRavenQueryable<TRole> ScopeQuery(IRavenQueryable<TRole> query) => query;
 
+    // <summary>
+    /// Get the database to operate on for this store
+    /// </summary>
+    protected virtual string GetDatabase() => Store.ResolvedDatabase;
 
     // <summary>
-    /// Determines whether a passed user role is part of this store and should be processed
+    /// Get a new document store session
     /// </summary>
-    protected virtual bool IsRolePartOfStore(TRole role) => true;
+    protected virtual IAsyncDocumentSession GetSession() => Store.OpenAsyncSession(GetDatabase());
 
 
     /// <inheritdoc/>
     public async Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
     {
-      if (!IsRolePartOfStore(role))
-      {
-        return IdentityResult.Failed(new IdentityError()
-        {
-          Code = "NotPartOfStore",
-          Description = $"The affected role is is not part of this role store and can't be created."
-        });
-      }
-      using (IAsyncDocumentSession session = Store.OpenCoreSession())
+      using (IAsyncDocumentSession session = GetSession())
       {
         await session.StoreAsync(role);
         await session.SaveChangesAsync(cancellationToken);
@@ -68,17 +63,9 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public async Task<IdentityResult> UpdateAsync(TRole role, CancellationToken cancellationToken)
     {
-      if (!IsRolePartOfStore(role))
-      {
-        return IdentityResult.Failed(new IdentityError()
-        {
-          Code = "NotPartOfStore",
-          Description = $"The affected role is is not part of this role store and can't be updatd."
-        });
-      }
       try
       {
-        using IAsyncDocumentSession session = Store.OpenCoreSession();
+        using IAsyncDocumentSession session = GetSession();
         await session.StoreAsync(role, cancellationToken);
         await session.SaveChangesAsync(cancellationToken);
       }
@@ -93,17 +80,9 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public async Task<IdentityResult> DeleteAsync(TRole role, CancellationToken cancellationToken)
     {
-      if (!IsRolePartOfStore(role))
-      {
-        return IdentityResult.Failed(new IdentityError()
-        {
-          Code = "NotPartOfStore",
-          Description = $"The affected role is is not part of this role store and can't be deleted."
-        });
-      }
       try
       {
-        using IAsyncDocumentSession session = Store.OpenCoreSession();
+        using IAsyncDocumentSession session = GetSession();
         session.Delete(role);
         await session.SaveChangesAsync(cancellationToken);
       }
@@ -145,7 +124,7 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      using IAsyncDocumentSession session = GetSession();
       return await ScopeQuery(session.Query<TRole>()).FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken);
     }
 
@@ -153,7 +132,7 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      using IAsyncDocumentSession session = GetSession();
       return await ScopeQuery(session.Query<TRole>()).FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
     }
 

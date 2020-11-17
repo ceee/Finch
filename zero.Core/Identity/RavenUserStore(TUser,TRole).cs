@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using zero.Core.Database;
-using zero.Core.Extensions;
 using zero.Core.Options;
 
 namespace zero.Core.Identity
@@ -42,8 +41,8 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
-      return await ScopeQuery(session.Query<TUser>()).Where(x => roleName.In(x.RoleIds)).ToListAsync(); // TODO scope     
+      using IAsyncDocumentSession session = GetSession();
+      return await ScopeQuery(session.Query<TUser>()).Where(x => roleName.In(x.RoleIds)).ToListAsync();
     }
 
 

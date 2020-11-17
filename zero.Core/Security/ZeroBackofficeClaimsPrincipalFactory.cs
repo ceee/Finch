@@ -28,6 +28,14 @@ namespace zero.Core.Security
 
       if (BackofficeUserIdentity.TryCreate(identity, out BackofficeUserIdentity userIdentity))
       {
+        Claim isZeroClaim = userIdentity.FindFirst(Constants.Auth.Claims.IsZero);
+        Claim appIdClaim = userIdentity.FindFirst(Constants.Auth.Claims.AppId);
+
+        if (appIdClaim is null || isZeroClaim is null or not { Value: PermissionsValue.True })
+        {
+          return null;
+        }
+
         return userIdentity;
       }
 
