@@ -108,7 +108,7 @@ namespace zero.Web
       Services.AddScoped<IZeroContext, ZeroContext>();
 
       Services.AddScoped<IBackofficeStore, BackofficeStore>();
-
+      Services.AddScoped<BackofficeFilterAttribute>();
       Services.AddScoped<ModelStateValidationFilterAttribute>();
 
       Services.AddHttpContextAccessor();

@@ -12,9 +12,14 @@ export default {
     return Axios.get('countries/getEmpty').then(res => Promise.resolve(res.data));
   },
 
+  getByQuery(query)
+  {
+    return Axios.get('countries/getByQuery', { params: query }).then(res => Promise.resolve(res.data));
+  },
+
   getAll(query)
   {
-    return Axios.get('countries/getAll', { params: query }).then(res => Promise.resolve(res.data));
+    return Axios.get('countries/getByQuery', { params: query }).then(res => Promise.resolve(res.data));
   },
 
   getPreviews(ids)

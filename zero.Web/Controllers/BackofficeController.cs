@@ -18,6 +18,7 @@ namespace zero.Web.Controllers
   [ServiceFilter(typeof(ModelStateValidationFilterAttribute))]
   [ApiController]
   [Route("getsreplaced/[controller]/[action]")]
+  [ServiceFilter(typeof(BackofficeFilterAttribute))]
   public abstract class BackofficeController : ControllerBase
   {
     IZeroOptions _options;
@@ -25,6 +26,13 @@ namespace zero.Web.Controllers
 
     protected IZeroOptions Options => _options ?? (_options = HttpContext?.RequestServices?.GetService<IZeroOptions>());
     protected IToken Token => _token ?? (_token = HttpContext?.RequestServices?.GetService<IToken>());
+
+
+    /// <summary>
+    /// Is execuated when the scope changes.
+    /// The scope is evaluated by the BackofficeFilterAttribute.
+    /// </summary>
+    public virtual void OnScopeChanged(string scope) { }
 
 
     /// <summary>
@@ -104,6 +112,41 @@ namespace zero.Web.Controllers
         else
         {
           previews.Add(transform(item.Value));
+        }
+      }
+
+      return previews;
+    }
+
+
+    public IList<PreviewModel> Previews<T>(Dictionary<string, T> items, Action<T, PreviewModel> transform = null) where T : IZeroEntity
+    {
+      IList<PreviewModel> previews = new List<PreviewModel>();
+
+      foreach (var item in items)
+      {
+        if (item.Value == null)
+        {
+          previews.Add(new PreviewModel()
+          {
+            HasError = true,
+            Icon = "fth-alert-circle color-red",
+            Id = item.Key,
+            Name = "@errors.preview.notfound",
+            Text = "@errors.preview.notfound_text"
+          });
+        }
+        else
+        {
+          PreviewModel model = new PreviewModel()
+          {
+            Id = item.Value.Id,
+            Name = item.Value.Name
+          };
+
+          transform?.Invoke(item.Value, model);
+
+          previews.Add(model);
         }
       }
 

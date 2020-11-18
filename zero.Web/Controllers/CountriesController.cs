@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Raven.Client.Documents.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Backoffice;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Core.Identity;
 using zero.Web.Models;
 
@@ -18,23 +20,31 @@ namespace zero.Web.Controllers
       Service = service;
     }
 
+    public override void OnScopeChanged(string scope)
+    {
+      Service.ApplyScope(scope);
+    }
 
-    public async Task<EditModel<ICountry>> GetById([FromQuery] string id) => Edit(await Service.GetById(id));
+
+    public async Task<EditModel<ICountry>> GetById([FromQuery] string id) => Edit(await Service.GetById(id)); 
+
 
     public EditModel<ICountry> GetEmpty([FromServices] ICountry blueprint) => Edit(blueprint);
 
-    public async Task<ListResult<ICountry>> GetAll([FromQuery] ListQuery<ICountry> query) => await Service.GetByQuery(query);
+
+    public async Task<ListResult<ICountry>> GetByQuery([FromQuery] ListQuery<ICountry> query)
+    {
+      query.SearchSelector = country => country.Name;
+      return await Service.Query.OrderByDescending(x => x.IsPreferred).ThenBy(x => x.Name).ToQueriedListAsync(query);
+    }
+
 
     public async Task<IEnumerable<SelectModel>> GetForPicker() => await SelectList(Service.Stream());
 
+
     public async Task<IList<PreviewModel>> GetPreviews([FromQuery] List<string> ids)
     {
-      return Previews(await Service.GetByIds(ids.ToArray()), item => new PreviewModel()
-      {
-        Id = item.Id,
-        Icon = "flag flag-" + item.Code.ToLowerInvariant(),
-        Name = item.Name
-      });
+      return Previews(await Service.GetByIds(ids.ToArray()), (item, model) => model.Icon = "flag flag-" + item.Code.ToLowerInvariant());
     }
 
 

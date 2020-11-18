@@ -17,19 +17,6 @@ namespace zero.Core.Backoffice
     {
       return base.Stream(q => q.OrderByDescending(x => x.IsPreferred).ThenBy(x => x.Name));
     }
-
-
-    /// <inheritdoc />
-    //public async Task<ListResult<ICountry>> GetByQuery(string languageId, ListQuery<ICountry> query)
-    //{
-    //  query.SearchSelector = country => country.Name;
-
-    //  using IAsyncDocumentSession session = Store.OpenAsyncSession();
-    //  return await session.Query<ICountry>()
-    //    .OrderByDescending(x => x.IsPreferred)
-    //    .ThenBy(x => x.Name)
-    //    .ToQueriedListAsync(query);
-    //}
   }
 
 

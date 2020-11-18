@@ -17,10 +17,20 @@ using zero.Core.Utils;
 
 namespace zero.Core.Backoffice
 {
-  public abstract class BackofficeService<T> : IBackofficeService<T> where T : IZeroEntity
+  public abstract class BackofficeService<T> : IBackofficeService<T>, IDisposable where T : IZeroEntity
   {
-    /// <inheritdoc />
-    public string Database { get; set; }
+    private IAsyncDocumentSession _session;
+    private string _database;
+
+
+    public BackofficeService(IZeroContext context, IValidator<T> validator = null)
+    {
+      Context = context;
+      Store = context.Store;
+      Validator = validator;
+      Database = Store.ResolvedDatabase;
+    }
+
 
     /// <summary>
     /// Zero context
@@ -37,21 +47,49 @@ namespace zero.Core.Backoffice
     /// </summary>
     protected readonly IValidator<T> Validator;
 
-
-    public BackofficeService(IZeroContext context, IValidator<T> validator = null)
-    {
-      Context = context;
-      Store = context.Store;
-      Validator = validator;
-    }
-
-
     /// <summary>
     /// Create an an async document session
     /// </summary>
-    protected virtual IAsyncDocumentSession Session()
+    protected IAsyncDocumentSession Session
     {
-      return Database.IsNullOrWhiteSpace() ? Store.OpenAsyncSession() : Store.OpenAsyncSession(Database);
+      get
+      {
+        if (_session != null)
+        {
+          return _session;
+        }
+        _session = Store.OpenAsyncSession(Database ?? Store.ResolvedDatabase);
+        _session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
+        return _session;
+      }
+    }
+
+    /// <inheritdoc />
+    public string Database
+    {
+      get => _database;
+      set
+      {
+        if (value != _database)
+        {
+          _session?.Dispose();
+          _session = null;
+          _database = value;
+        }
+      }
+    }
+
+    /// <inheritdoc />
+    public Guid Guid { get; private set; } = Guid.NewGuid();
+
+    /// <inheritdoc />
+    public IRavenQueryable<T> Query => Session.Query<T>();
+
+
+    /// <inheritdoc />
+    public virtual void ApplyScope(string scope)
+    {
+      Database = scope is "shared" or "core" ? Context.Options.Raven.Database : Store.ResolvedDatabase;
     }
 
 
@@ -63,16 +101,14 @@ namespace zero.Core.Backoffice
         return default;
       }
 
-      using IAsyncDocumentSession session = Session();
-      return await session.LoadAsync<T>(id);
+      return await Session.LoadAsync<T>(id);
     }
 
 
     /// <inheritdoc />
     public virtual async Task<Dictionary<string, T>> GetByIds(params string[] ids)
     {
-      using IAsyncDocumentSession session = Session();
-      Dictionary<string, T> models = await session.LoadAsync<T>(ids);
+      Dictionary<string, T> models = await Session.LoadAsync<T>(ids);
       Dictionary<string, T> result = new Dictionary<string, T>();
 
       foreach (string id in ids)
@@ -88,8 +124,7 @@ namespace zero.Core.Backoffice
     /// <inheritdoc />
     public virtual async Task<ListResult<T>> GetByQuery(ListQuery<T> query)
     {
-      using IAsyncDocumentSession session = Session();
-      return await session.Query<T>().ToQueriedListAsync(query);
+      return await Session.Query<T>().ToQueriedListAsync(query);
     }
 
 
@@ -100,15 +135,14 @@ namespace zero.Core.Backoffice
     /// <inheritdoc />
     public virtual async IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IRavenQueryable<T>> expression)
     {
-      using IAsyncDocumentSession session = Session();
-      IRavenQueryable<T> query = session.Query<T>();
+      IRavenQueryable<T> query = Session.Query<T>();
 
       if (expression != null)
       {
         query = expression(query);
       }
 
-      var stream = await session.Advanced.StreamAsync(query);
+      var stream = await Session.Advanced.StreamAsync(query);
 
       while (await stream.MoveNextAsync())
       {
@@ -120,7 +154,7 @@ namespace zero.Core.Backoffice
     /// <inheritdoc />
     public async Task<EntityResult<T>> Save(T model)
     {
-      bool isCreate = false;
+      //bool isCreate = false;
 
       // run validator
       if (Validator != null)
@@ -152,7 +186,7 @@ namespace zero.Core.Backoffice
       // set default properties
       if (model.Id.IsNullOrEmpty())
       {
-        isCreate = true;
+        //isCreate = true;
 
         model.CreatedDate = DateTimeOffset.Now;
         model.CreatedById = userId;
@@ -170,10 +204,7 @@ namespace zero.Core.Backoffice
       model.CreatedById ??= userId;
       model.Hash ??= IdGenerator.Create();
 
-      using IAsyncDocumentSession session = Session();
-      session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
-
-      await session.StoreAsync(model);
+      await Session.StoreAsync(model);
 
       //await Backoffice.Messages.Publish(new EntitySavedMessage<T>()
       //{
@@ -184,7 +215,7 @@ namespace zero.Core.Backoffice
       //  Session = session
       //});
 
-      await session.SaveChangesAsync();
+      await Session.SaveChangesAsync();
 
       return EntityResult<T>.Success(model);
     }
@@ -197,19 +228,16 @@ namespace zero.Core.Backoffice
     /// <inheritdoc />
     public virtual async Task<EntityResult<T>> DeleteById(string id)
     {
-      using IAsyncDocumentSession session = Session();
-      session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
-
-      T entity = await session.LoadAsync<T>(id);
+      T entity = await Session.LoadAsync<T>(id);
 
       if (entity == null)
       {
         return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
       }
 
-      session.Delete(entity);
+      Session.Delete(entity);
 
-      await session.SaveChangesAsync();
+      await Session.SaveChangesAsync();
 
       return EntityResult<T>.Success();
     }
@@ -240,16 +268,38 @@ namespace zero.Core.Backoffice
       await Store.PurgeAsync<T>(Database, querySuffix, parameters);
       return EntityResult<T>.Success();
     }
+
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+      Session?.Dispose();
+    }
   }
 
 
-  public interface IBackofficeService<T> where T : IZeroEntity
+  public interface IBackofficeService<T> : IDisposable where T : IZeroEntity
   {
+    /// <summary>
+    /// Guid for this instance
+    /// </summary>
+    Guid Guid { get; }
+
     /// <summary>
     /// The database to operate on.
     /// Is null by default, which uses the database from the resolved application.
     /// </summary>
     string Database { get; set; }
+
+    /// <summary>
+    /// Returns a new document queryable
+    /// </summary>
+    IRavenQueryable<T> Query { get; }
+
+    /// <summary>
+    /// Applies the scope to the service instance
+    /// </summary>
+    void ApplyScope(string scope);
 
     /// <summary>
     /// Get an entity by Id
