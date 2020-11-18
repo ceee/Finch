@@ -2,7 +2,7 @@
 :root
 {
   // accent colors
-  $color-primary: #2c3036; //#1db1b6;
+  $color-primary: #2c3036;
   $color-primary-fg: #fff;
   $color-primary-low: #{rgba(#2c3036, 0.2)};
   $color-secondary: #f9e0c4;
@@ -32,6 +32,7 @@
 
   // accent colors
   --color-primary: #{$color-primary};
+  --color-primary-low: #{$color-primary-low};
   --color-primary-text: #{$color-primary-fg};
 
   // generic shades 

@@ -22,11 +22,14 @@ namespace zero.Core.Backoffice
     private IAsyncDocumentSession _session;
     private string _database;
 
+    protected IBackofficeServiceInterceptorHandler InterceptorHandler { get; private set; }
 
-    public BackofficeService(IZeroContext context, IValidator<T> validator = null)
+
+    public BackofficeService(IZeroContext context, IBackofficeServiceInterceptorHandler interceptorHandler, IValidator<T> validator = null)
     {
       Context = context;
       Store = context.Store;
+      InterceptorHandler = interceptorHandler;
       Validator = validator;
       Database = Store.ResolvedDatabase;
     }
@@ -152,20 +155,9 @@ namespace zero.Core.Backoffice
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Save(T model)
+    public virtual async Task<EntityResult<T>> Save(T model)
     {
-      //bool isCreate = false;
-
-      // run validator
-      if (Validator != null)
-      {
-        ValidationResult validation = await Validator.ValidateAsync(model);
-
-        if (!validation.IsValid)
-        {
-          return EntityResult<T>.Fail(validation);
-        }
-      }
+      bool isCreate = false;
 
       // find all Raven Ids
       List<ObjectTraverser.Result<GenerateIdAttribute>> ravenIds = ObjectTraverser.FindAttribute<GenerateIdAttribute>(model);
@@ -186,7 +178,7 @@ namespace zero.Core.Backoffice
       // set default properties
       if (model.Id.IsNullOrEmpty())
       {
-        //isCreate = true;
+        isCreate = true;
 
         model.CreatedDate = DateTimeOffset.Now;
         model.CreatedById = userId;
@@ -204,16 +196,96 @@ namespace zero.Core.Backoffice
       model.CreatedById ??= userId;
       model.Hash ??= IdGenerator.Create();
 
+      // create interceptor parameters
+      BackofficeServiceInterceptor.Parameters<T> parameters = default;
+      if (isCreate)
+      {
+        parameters = Parameters<BackofficeServiceInterceptor.CreateParameters<T>>(args => args.Model = model);
+      }
+      else
+      {
+        parameters = Parameters<BackofficeServiceInterceptor.UpdateParameters<T>>(args =>
+        {
+          args.Id = model.Id;
+          args.Model = model;
+        });
+      }
+
+      // run interceptors
+      if (isCreate)
+      {
+        return await Create(model);
+      }
+
+      return await Update(model);
+    }
+
+
+    /// <inheritdoc />
+    async Task<EntityResult<T>> Create(T model)
+    {
+      // run interceptors
+      var parameters = Parameters<BackofficeServiceInterceptor.CreateParameters<T>>(args => args.Model = model);
+      EntityResult<T> preResult = await InterceptorHandler.Handle(x => x.Creating(parameters));
+
+      if (preResult != null)
+      {
+        return preResult;
+      }
+
+      // run validator
+      if (Validator != null)
+      {
+        ValidationResult validation = await Validator.ValidateAsync(model);
+
+        if (!validation.IsValid)
+        {
+          return EntityResult<T>.Fail(validation);
+        }
+      }
+
       await Session.StoreAsync(model);
 
-      //await Backoffice.Messages.Publish(new EntitySavedMessage<T>()
-      //{
-      //  Id = model.Id,
-      //  IsCreate = isCreate,
-      //  IsDelete = false,
-      //  Model = model,
-      //  Session = session
-      //});
+      // run interceptors
+      await InterceptorHandler.Handle<T>(x => x.Created(parameters));
+
+      await Session.SaveChangesAsync();
+
+      return EntityResult<T>.Success(model);
+    }
+
+
+    /// <inheritdoc />
+    async Task<EntityResult<T>> Update(T model)
+    {
+      // run interceptors
+      var parameters = Parameters<BackofficeServiceInterceptor.UpdateParameters<T>>(args =>
+      {
+        args.Model = model;
+        args.Id = model.Id;
+      });
+      EntityResult<T> preResult = await InterceptorHandler.Handle(x => x.Updating(parameters));
+
+      if (preResult != null)
+      {
+        return preResult;
+      }
+
+      // run validator
+      if (Validator != null)
+      {
+        ValidationResult validation = await Validator.ValidateAsync(model);
+
+        if (!validation.IsValid)
+        {
+          return EntityResult<T>.Fail(validation);
+        }
+      }
+
+      await Session.StoreAsync(model);
+
+      // run interceptors
+      await InterceptorHandler.Handle<T>(x => x.Updated(parameters));
 
       await Session.SaveChangesAsync();
 
@@ -235,7 +307,21 @@ namespace zero.Core.Backoffice
         return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
       }
 
+      var parameters = Parameters<BackofficeServiceInterceptor.DeleteParameters<T>>(args =>
+      {
+        args.Model = entity;
+        args.Id = entity.Id;
+      });
+      EntityResult<T> preResult = await InterceptorHandler.Handle(x => x.Deleting(parameters));
+
+      if (preResult != null)
+      {
+        return preResult;
+      }
+
       Session.Delete(entity);
+
+      await InterceptorHandler.Handle<T>(x => x.Deleted(parameters));
 
       await Session.SaveChangesAsync();
 
@@ -265,7 +351,18 @@ namespace zero.Core.Backoffice
     /// <inheritdoc />
     public virtual async Task<EntityResult<T>> Purge(string querySuffix = null, Parameters parameters = null)
     {
+      var interceptorParameters = Parameters<BackofficeServiceInterceptor.PurgeParameters<T>>();
+      EntityResult<T> preResult = await InterceptorHandler.Handle(x => x.Purging(interceptorParameters));
+
+      if (preResult != null)
+      {
+        return preResult;
+      }
+
       await Store.PurgeAsync<T>(Database, querySuffix, parameters);
+
+      await InterceptorHandler.Handle<T>(x => x.Purged(interceptorParameters));
+
       return EntityResult<T>.Success();
     }
 
@@ -274,6 +371,23 @@ namespace zero.Core.Backoffice
     public void Dispose()
     {
       Session?.Dispose();
+    }
+
+
+    /// <summary>
+    /// Get interceptor parameters
+    /// </summary>
+    public TParams Parameters<TParams>(Action<TParams> configure = null) where TParams : BackofficeServiceInterceptor.Parameters<T>, new()
+    {
+      TParams parameters = new TParams()
+      {
+        Context = Context,
+        Store = Store,
+        Validator = Validator,
+        Session = Session
+      };
+      configure?.Invoke(parameters);
+      return parameters;
     }
   }
 

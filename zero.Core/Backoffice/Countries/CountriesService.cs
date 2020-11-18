@@ -9,7 +9,7 @@ namespace zero.Core.Backoffice
 {
   public class CountriesBackofficeService : BackofficeService<ICountry>, ICountriesBackofficeService
   {
-    public CountriesBackofficeService(IZeroContext context, IValidator<ICountry> validator) : base(context, validator) { }
+    public CountriesBackofficeService(IZeroContext context, IBackofficeServiceInterceptorHandler interceptor, IValidator<ICountry> validator) : base(context, interceptor, validator) { }
 
 
     /// <inheritdoc />

@@ -1,5 +1,6 @@
 ﻿<template>
   <aside v-if="!nested && infos && infos != 'none'" class="editor-infos">
+    <component v-if="component" :is="component" :editor="editor" v-model="value" :meta="meta" :disabled="disabled" />
     <slot name="info-boxes"></slot>
     <div class="ui-box editor-active-toggle" v-if="activeToggle" :class="{'is-active': value.isActive }">
       <slot name="settings">
@@ -9,7 +10,6 @@
       </slot>
       <slot name="settings-properties"></slot>
     </div>
-    <component v-if="component" :is="component" :editor="editor" v-model="value" :meta="meta" :disabled="disabled" />
     <div class="ui-box is-light" v-if="value.id">
       <slot name="infos">
         <ui-property v-if="value.id && value.lastModifiedDate" label="@ui.modifiedDate" :is-text="true">
