@@ -112,6 +112,25 @@ namespace zero.Web.Controllers
 
 
 
+    public async Task<IList<SelectModel>> SelectList<T>(IAsyncEnumerable<T> enumerable) where T : IZeroEntity
+    {
+      List<SelectModel> items = new List<SelectModel>();
+
+      await foreach (T item in enumerable)
+      {
+        items.Add(new SelectModel()
+        {
+          Id = item.Id,
+          Name = item.Name,
+          IsActive = item.IsActive
+        });
+      }
+
+      return items;
+    }
+
+
+
     public async Task<IList<PreviewModel>> Previews<T>(Dictionary<string, T> items, Func<T, Task<PreviewModel>> transform)
     {
       IList<PreviewModel> previews = new List<PreviewModel>();

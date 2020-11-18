@@ -34,12 +34,13 @@ namespace zero.Core
     /// <inheritdoc />
     public IResolvedRoute ResolvedRoute { get; private set; }
 
+    /// <inheritdoc />
+    public IZeroStore Store { get; private set; }
+
 
     protected IApplicationResolver AppResolver { get; private set; }
 
     protected ILogger<ZeroContext> Logger { get; private set; }
-
-    protected IZeroStore Store { get; private set; }
 
 
     private bool _resolved = false;
@@ -123,6 +124,11 @@ namespace zero.Core
     /// Global zero options
     /// </summary>
     IZeroOptions Options { get; }
+
+    /// <summary>
+    /// Document store
+    /// </summary>
+    IZeroStore Store { get; }
 
     /// <summary>
     /// Matching (frontend) path route
