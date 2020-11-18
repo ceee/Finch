@@ -15,17 +15,17 @@ using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Utils;
 
-namespace zero.Core.Backoffice
+namespace zero.Core.Collections
 {
-  public abstract class BackofficeService<T> : IBackofficeService<T>, IDisposable where T : IZeroEntity
+  public abstract class CollectionBase<T> : ICollectionBase<T>, IDisposable where T : IZeroEntity
   {
     private IAsyncDocumentSession _session;
     private string _database;
 
-    protected IBackofficeServiceInterceptorHandler InterceptorHandler { get; private set; }
+    protected ICollectionInterceptorHandler InterceptorHandler { get; private set; }
 
 
-    public BackofficeService(IZeroContext context, IBackofficeServiceInterceptorHandler interceptorHandler, IValidator<T> validator = null)
+    public CollectionBase(IZeroContext context, ICollectionInterceptorHandler interceptorHandler, IValidator<T> validator = null)
     {
       Context = context;
       Store = context.Store;
@@ -132,6 +132,20 @@ namespace zero.Core.Backoffice
 
 
     /// <inheritdoc />
+    public virtual async Task<List<T>> GetAll()
+    {
+      List<T> items = new();
+
+      await foreach (T item in Stream())
+      {
+        items.Add(item);
+      }
+
+      return items;
+    }
+
+
+    /// <inheritdoc />
     public virtual IAsyncEnumerable<T> Stream() => Stream(null);
 
 
@@ -197,14 +211,14 @@ namespace zero.Core.Backoffice
       model.Hash ??= IdGenerator.Create();
 
       // create interceptor parameters
-      BackofficeServiceInterceptor.Parameters<T> parameters = default;
+      CollectionInterceptor.Parameters<T> parameters = default;
       if (isCreate)
       {
-        parameters = Parameters<BackofficeServiceInterceptor.CreateParameters<T>>(args => args.Model = model);
+        parameters = Parameters<CollectionInterceptor.CreateParameters<T>>(args => args.Model = model);
       }
       else
       {
-        parameters = Parameters<BackofficeServiceInterceptor.UpdateParameters<T>>(args =>
+        parameters = Parameters<CollectionInterceptor.UpdateParameters<T>>(args =>
         {
           args.Id = model.Id;
           args.Model = model;
@@ -225,7 +239,7 @@ namespace zero.Core.Backoffice
     async Task<EntityResult<T>> Create(T model)
     {
       // run interceptors
-      var parameters = Parameters<BackofficeServiceInterceptor.CreateParameters<T>>(args => args.Model = model);
+      var parameters = Parameters<CollectionInterceptor.CreateParameters<T>>(args => args.Model = model);
       EntityResult<T> preResult = await InterceptorHandler.Handle(x => x.Creating(parameters));
 
       if (preResult != null)
@@ -259,7 +273,7 @@ namespace zero.Core.Backoffice
     async Task<EntityResult<T>> Update(T model)
     {
       // run interceptors
-      var parameters = Parameters<BackofficeServiceInterceptor.UpdateParameters<T>>(args =>
+      var parameters = Parameters<CollectionInterceptor.UpdateParameters<T>>(args =>
       {
         args.Model = model;
         args.Id = model.Id;
@@ -307,7 +321,7 @@ namespace zero.Core.Backoffice
         return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
       }
 
-      var parameters = Parameters<BackofficeServiceInterceptor.DeleteParameters<T>>(args =>
+      var parameters = Parameters<CollectionInterceptor.DeleteParameters<T>>(args =>
       {
         args.Model = entity;
         args.Id = entity.Id;
@@ -351,7 +365,7 @@ namespace zero.Core.Backoffice
     /// <inheritdoc />
     public virtual async Task<EntityResult<T>> Purge(string querySuffix = null, Parameters parameters = null)
     {
-      var interceptorParameters = Parameters<BackofficeServiceInterceptor.PurgeParameters<T>>();
+      var interceptorParameters = Parameters<CollectionInterceptor.PurgeParameters<T>>();
       EntityResult<T> preResult = await InterceptorHandler.Handle(x => x.Purging(interceptorParameters));
 
       if (preResult != null)
@@ -377,7 +391,7 @@ namespace zero.Core.Backoffice
     /// <summary>
     /// Get interceptor parameters
     /// </summary>
-    public TParams Parameters<TParams>(Action<TParams> configure = null) where TParams : BackofficeServiceInterceptor.Parameters<T>, new()
+    public TParams Parameters<TParams>(Action<TParams> configure = null) where TParams : CollectionInterceptor.Parameters<T>, new()
     {
       TParams parameters = new TParams()
       {
@@ -392,7 +406,7 @@ namespace zero.Core.Backoffice
   }
 
 
-  public interface IBackofficeService<T> : IDisposable where T : IZeroEntity
+  public interface ICollectionBase<T> : IDisposable where T : IZeroEntity
   {
     /// <summary>
     /// Guid for this instance
@@ -429,6 +443,12 @@ namespace zero.Core.Backoffice
     /// Get entities by query
     /// </summary>
     Task<ListResult<T>> GetByQuery(ListQuery<T> query);
+
+    /// <summary>
+    /// Get all entities from this collection. 
+    /// Warning: Don't use this method for large collections. Stream the results instead.
+    /// </summary>
+    Task<List<T>> GetAll();
 
     /// <summary>
     /// Stream the collection

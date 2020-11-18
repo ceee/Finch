@@ -2,8 +2,9 @@
 using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Validation;
 
-namespace zero.Core.Validation
+namespace zero.Core.Collections
 {
   public class CountryValidator : ZeroValidator<ICountry>
   {

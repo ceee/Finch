@@ -13,11 +13,10 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
 using zero.Core.Assemblies;
-using zero.Core.Backoffice;
+using zero.Core.Collections;
 using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -112,7 +111,7 @@ namespace zero.Web
       Services.AddScoped<BackofficeFilterAttribute>();
       Services.AddScoped<ModelStateValidationFilterAttribute>();
 
-      Services.AddSingleton<IBackofficeServiceInterceptorHandler, BackofficeServiceInterceptorHandler>();
+      Services.AddSingleton<ICollectionInterceptorHandler, CollectionInterceptorHandler>();
 
       Services.AddHttpContextAccessor();
 

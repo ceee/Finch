@@ -2,7 +2,7 @@
 using Raven.Client.Documents.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using zero.Core.Backoffice;
+using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Identity;
@@ -13,9 +13,9 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Read)]
   public class CountriesController : BackofficeController
   {
-    ICountriesBackofficeService Service;
+    ICountriesCollection Service;
 
-    public CountriesController(ICountriesBackofficeService service)
+    public CountriesController(ICountriesCollection service)
     {
       Service = service;
     }

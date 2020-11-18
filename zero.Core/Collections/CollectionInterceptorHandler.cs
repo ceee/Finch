@@ -6,26 +6,26 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using zero.Core.Entities;
 
-namespace zero.Core.Backoffice
+namespace zero.Core.Collections
 {
-  public class BackofficeServiceInterceptorHandler : IBackofficeServiceInterceptorHandler
+  public class CollectionInterceptorHandler : ICollectionInterceptorHandler
   {
     /// <inheritdoc />
-    public IEnumerable<IBackofficeServiceInterceptor> Interceptors { get; private set; }
+    public IEnumerable<ICollectionInterceptor> Interceptors { get; private set; }
 
 
-    public BackofficeServiceInterceptorHandler(IEnumerable<IBackofficeServiceInterceptor> items)
+    public CollectionInterceptorHandler(IEnumerable<ICollectionInterceptor> items)
     {
       Interceptors = items;
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> Handle<T>(Expression<Func<IBackofficeServiceInterceptor, Task<EntityResult<T>>>> intercept)
+    public async Task<EntityResult<T>> Handle<T>(Expression<Func<ICollectionInterceptor, Task<EntityResult<T>>>> intercept)
     {
-      Func<IBackofficeServiceInterceptor, Task<EntityResult<T>>> func = default;
+      Func<ICollectionInterceptor, Task<EntityResult<T>>> func = default;
 
-      foreach (IBackofficeServiceInterceptor interceptor in ForType(typeof(T)))
+      foreach (ICollectionInterceptor interceptor in ForType(typeof(T)))
       {
         if (func == default)
         {
@@ -45,11 +45,11 @@ namespace zero.Core.Backoffice
 
 
     /// <inheritdoc />
-    public async Task Handle<T>(Expression<Func<IBackofficeServiceInterceptor, Task>> intercept)
+    public async Task Handle<T>(Expression<Func<ICollectionInterceptor, Task>> intercept)
     {
-      Func<IBackofficeServiceInterceptor, Task> func = default;
+      Func<ICollectionInterceptor, Task> func = default;
 
-      foreach (IBackofficeServiceInterceptor interceptor in ForType(typeof(T)))
+      foreach (ICollectionInterceptor interceptor in ForType(typeof(T)))
       {
         if (func == default)
         {
@@ -64,28 +64,28 @@ namespace zero.Core.Backoffice
     /// <summary>
     /// Get all interceptors for a certain type
     /// </summary>
-    IEnumerable<IBackofficeServiceInterceptor> ForType(Type targetType)
+    IEnumerable<ICollectionInterceptor> ForType(Type targetType)
     {
       return Interceptors.Where(item => item.Types.Count == 0 || item.Types.Any(type => targetType.IsAssignableFrom(type)));
     }
   }
 
 
-  public interface IBackofficeServiceInterceptorHandler
+  public interface ICollectionInterceptorHandler
   {
     /// <summary>
     /// All registered interceptors
     /// </summary>
-    IEnumerable<IBackofficeServiceInterceptor> Interceptors { get; }
+    IEnumerable<ICollectionInterceptor> Interceptors { get; }
 
     /// <summary>
     /// Calls all matching interceptors with the specified expression
     /// </summary>
-    Task<EntityResult<T>> Handle<T>(Expression<Func<IBackofficeServiceInterceptor, Task<EntityResult<T>>>> intercept);
+    Task<EntityResult<T>> Handle<T>(Expression<Func<ICollectionInterceptor, Task<EntityResult<T>>>> intercept);
 
     /// <summary>
     /// Calls all matching interceptors with the specified expression
     /// </summary>
-    Task Handle<T>(Expression<Func<IBackofficeServiceInterceptor, Task>> intercept);
+    Task Handle<T>(Expression<Func<ICollectionInterceptor, Task>> intercept);
   }
 }

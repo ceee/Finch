@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using zero.Core.Api;
-using zero.Core.Backoffice;
+using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Messages;
 using zero.Core.Options;
@@ -71,8 +71,7 @@ namespace zero.Web.Defaults
       services.AddTransient<IValidator<IBackofficeUser>, BackofficeUserValidator>();
 
       services.AddTransient<IApplicationsApi, ApplicationsApi>();
-      services.AddTransient<ICountriesApi, CountriesApi>();
-      services.AddTransient<ICountriesBackofficeService, CountriesBackofficeService>();
+      services.AddTransient<ICountriesCollection, CountriesCollection>();
       services.AddTransient<ILanguagesApi, LanguagesApi>();
       services.AddTransient<ITranslationsApi, TranslationsApi>();
       services.AddTransient<IUserApi, UserApi>();

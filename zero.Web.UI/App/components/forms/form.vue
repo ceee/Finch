@@ -34,7 +34,7 @@
 
     data: () => ({
       dirty: false,
-      loadingState: 'loading',
+      loadingState: 'default',
       loadingError: null,
       state: 'default',
       errors: [],
