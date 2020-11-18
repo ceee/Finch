@@ -34,7 +34,7 @@
 
     data: () => ({
       dirty: false,
-      loadingState: 'default',
+      loadingState: 'loading',
       loadingError: null,
       state: 'default',
       errors: [],
@@ -106,8 +106,6 @@
             .then(
               response =>
               {
-                this.loadingState = 'default';
-
                 if (response.meta && typeof response.meta.canEdit === 'boolean')
                 {
                   this.canEdit = response.meta.canEdit;
@@ -124,6 +122,12 @@
                 }
 
                 resolve(response);
+
+                this.loadingState = 'default';
+                this.$nextTick(() =>
+                {
+                  this.$emit('loaded', this);
+                });
               },
               (error) =>
               {

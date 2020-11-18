@@ -4,7 +4,7 @@
     <slot name="info-boxes"></slot>
     <div class="ui-box editor-active-toggle" v-if="activeToggle" :class="{'is-active': value.isActive }">
       <slot name="settings">
-        <ui-property v-if="activeToggle" label="@ui.active" :is-text="true" class="is-toggle">
+        <ui-property v-if="activeToggle" field="isActive" label="@ui.active" :is-text="true" class="is-toggle">
           <ui-toggle v-model="value.isActive" class="is-primary" :disabled="disabled" />
         </ui-property>
       </slot>
@@ -12,10 +12,10 @@
     </div>
     <div class="ui-box is-light" v-if="value.id">
       <slot name="infos">
-        <ui-property v-if="value.id && value.lastModifiedDate" label="@ui.modifiedDate" :is-text="true">
+        <ui-property v-if="value.id && value.lastModifiedDate"  field="lastModifiedDate" label="@ui.modifiedDate" :is-text="true">
           <ui-date v-model="value.lastModifiedDate" />
         </ui-property>
-        <ui-property v-if="value.id" label="@ui.createdDate" :is-text="true">
+        <ui-property v-if="value.id" label="@ui.createdDate" field="createdDate" :is-text="true">
           <ui-date v-model="value.createdDate" />
         </ui-property>
         <slot name="infos-more"></slot>

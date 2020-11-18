@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText, 'hide-label': hideLabel }">
+  <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText, 'hide-label': hideLabel, 'is-locked': locked }">
     <label v-if="label && !hideLabel" class="ui-property-label" :for="field">
       <span v-localize="label"></span>
       <strong class="ui-property-required" v-if="required">*</strong>
@@ -7,11 +7,12 @@
       <small v-if="description" v-localize="description"></small>
     </label>
 
-    <div class="ui-property-content">    
+    <div class="ui-property-content">
       <slot></slot>
       <ui-error v-if="field" :field="field" />
     </div>
 
+    <button type="button" class="ui-property-lock" v-if="locked"></button>
   </div>
 </template>
 
@@ -28,6 +29,17 @@
       required: Boolean,
       vertical: Boolean,
       isText: Boolean
+    },
+
+    data: () => ({
+      locked: false
+    }),
+
+    methods: {
+      setLocked(isLocked)
+      {
+        this.locked = isLocked;
+      }
     }
   }
 </script>
@@ -184,4 +196,28 @@
       margin-left: 50px;
     }
   }
+
+  /*.ui-property.is-locked
+  {
+
+  }*/
+
+  /*.ui-property-lock
+  {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 3;
+    background: transparent;
+    width: 100%;
+    cursor: default;
+    border-right: 3px solid var(--color-primary);
+
+    &:after
+    {
+      content: ''
+    }
+  }*/
 </style>
