@@ -3,7 +3,7 @@
     <div class="ui-table" :class="{'is-inline': inline }">
       <header class="ui-table-row ui-table-head">      
         <div v-for="column in columns" :key="column.path" class="ui-table-cell" :table-field="column.path" :style="column.flex" :class="column.options.class">
-          {{ column.label | localize }}
+          <span v-localize:html="column.label"></span>
           <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="query.orderBy == column.path ? 'sort-' + (query.orderIsDescending ? 'desc' : 'asc') : null">
             <i class="arrow arrow-down"></i>
           </button>

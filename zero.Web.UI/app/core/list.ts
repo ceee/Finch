@@ -73,8 +73,18 @@ class List
    */
   column(path, options)
   {
-    const column = new ListColumn(path, options);
-    this.columns.push(column);
+    let column = this.columns.find(x => x.path === path);
+
+    if (!column)
+    {
+      column = new ListColumn(path, options);
+      this.columns.push(column);
+    }
+    else
+    {
+      column.options = { ...column.options, ...(options || {}) };
+    }
+
     return column;
   }
 

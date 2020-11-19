@@ -14,6 +14,11 @@ export default {
     return Axios.get(base + 'getEmpty').then(res => Promise.resolve(res.data));
   },
 
+  getByQuery(query)
+  {
+    return Axios.get(base + 'getByQuery', { params: query }).then(res => Promise.resolve(res.data));
+  },
+
   getAll(query)
   {
     return Axios.get(base + 'getAll', query ? { params: { query } } : undefined).then(res => Promise.resolve(res.data));

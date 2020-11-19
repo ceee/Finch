@@ -156,7 +156,7 @@ class ListColumn
     this.#type = 'boolean';
     this.#asHtml = true;
     this.#funcOptions = { colored: false, ...options };
-    this.#func = (value, opts) => '<span class="ui-table-field-bool' + (value === true ? ' is-checked' : '') + (opts.colored ? ' is-colored' : '') + '"></span>';
+    this.#func = (value, opts) => '<span class="ui-table-field-bool' + (!!value ? ' is-checked' : '') + (opts.colored ? ' is-colored' : '') + '"></span>';
     return this;
   }
 

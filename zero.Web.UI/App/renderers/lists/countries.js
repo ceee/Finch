@@ -8,7 +8,7 @@ const prefix = '@country.fields.';
 list.templateLabel = x => prefix + x;
 list.link = zero.alias.settings.countries + '-edit';
 
-list.onFetch(filter => CountriesApi.getAll(filter));
+list.onFetch(filter => CountriesApi.getByQuery(filter));
 
 list.column('flag', { width: 62, canSort: false, hideLabel: true }).custom((value, model) => `<i class="flag flag-${model.code.toLowerCase()}"></i>`, true, 'flag');
 list.column('name').name();

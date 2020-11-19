@@ -20,6 +20,12 @@ export default {
     return Axios.get('languages/getAll').then(res => Promise.resolve(res.data));
   },
 
+  // get all languages
+  getByQuery(query)
+  {
+    return Axios.get('languages/getByQuery', { params: query }).then(res => Promise.resolve(res.data));
+  },
+
   // get all available cultures
   getAllCultures()
   {

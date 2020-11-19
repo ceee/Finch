@@ -7,7 +7,7 @@ const list = new List('mailTemplates');
 list.templateLabel = x => '@mailTemplate.fields.' + x;
 list.link = zero.alias.settings.mails + '-edit';
 
-list.onFetch(filter => MailTemplatesApi.getAll(filter));
+list.onFetch(filter => MailTemplatesApi.getByQuery(filter));
 
 list.column('name').name();
 list.column('subject').text();

@@ -15,6 +15,12 @@ export default {
   },
 
   // get all translations
+  getByQuery(query)
+  {
+    return Axios.get('translations/getByQuery', { params: query }).then(res => Promise.resolve(res.data));
+  },
+
+  // get all translations
   getAll(query)
   {
     return Axios.get('translations/getAll', { params: query }).then(res => Promise.resolve(res.data));

@@ -127,7 +127,7 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public virtual async Task<ListResult<T>> GetByQuery(ListQuery<T> query)
     {
-      return await Session.Query<T>().ToQueriedListAsync(query);
+      return await Session.Query<T>().OrderByDescending(x => x.CreatedDate).ToQueriedListAsync(query);
     }
 
 

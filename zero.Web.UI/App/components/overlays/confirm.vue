@@ -51,12 +51,14 @@
 
             if (!errors)
             {
-              instance.$refs.error.clear();
+              instance.$refs.error.clearErrors();
             }
             else
             {
-              instance.$refs.error.set(errors);
+              instance.$refs.error.setErrors(errors);
             }
+
+            setTimeout(() => instance.state = 'default', 1500);
           },
           success: true
         });

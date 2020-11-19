@@ -1,37 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Raven.Client.Documents.Linq;
+using System.Linq;
 using System.Threading.Tasks;
-using zero.Core.Api;
+using zero.Core.Collections;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Core.Identity;
-using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Translations, PermissionsValue.Read)]
-  public class TranslationsController : BackofficeController
+  public class TranslationsController : BackofficeCollectionController<ITranslation, ITranslationsCollection>
   {
-    ITranslationsApi Api;
-
-    public TranslationsController(ITranslationsApi api)
+    public TranslationsController(ITranslationsCollection collection) : base(collection)
     {
-      Api = api;
     }
 
-
-    public EditModel<ITranslation> GetEmpty([FromServices] ITranslation blueprint) => Edit(blueprint);
-
-
-    public async Task<EditModel<ITranslation>> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
-
-
-    public async Task<ListResult<ITranslation>> GetAll([FromQuery] ListQuery<ITranslation> query) => await Api.GetByQuery(query);
-
-
-    [ZeroAuthorize(Permissions.Settings.Translations, PermissionsValue.Update)]
-    public async Task<EntityResult<ITranslation>> Save([FromBody] ITranslation model) => await Api.Save(model);
-
-
-    [ZeroAuthorize(Permissions.Settings.Translations, PermissionsValue.Update)]
-    public async Task<EntityResult<ITranslation>> Delete([FromQuery] string id) => await Api.Delete(id);
+    public override async Task<ListResult<ITranslation>> GetByQuery([FromQuery] ListQuery<ITranslation> query)
+    {
+      query.SearchFor(entity => entity.Key, entity => entity.Value);
+      return await Collection.Query.OrderByDescending(x => x.CreatedDate).ToQueriedListAsync(query);
+    }
   }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using zero.Core.Api;
+using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 
@@ -12,7 +13,7 @@ namespace zero.Core.Mails
 {
   public class MailSender : IMailSender
   {
-    protected IMailTemplatesApi TemplatesApi { get; set; }
+    protected IMailTemplatesCollection Collection { get; set; }
 
     protected SmtpClient Client { get; set; }
 
@@ -23,10 +24,10 @@ namespace zero.Core.Mails
     private Encoding encoding = Encoding.UTF8;
 
 
-    public MailSender(IZeroContext zero, IMailTemplatesApi templatesApi, ILogger<IMailSender> logger)
+    public MailSender(IZeroContext zero, IMailTemplatesCollection collection, ILogger<IMailSender> logger)
     {
       Zero = zero;
-      TemplatesApi = templatesApi;
+      Collection = collection;
       Logger = logger;
       Client = new SmtpClient();
     }
@@ -114,7 +115,7 @@ namespace zero.Core.Mails
     /// <inheritdoc />
     protected virtual async Task<IMailTemplate> GetMailTemplate(string key)
     {
-      return await TemplatesApi.GetByKey(key);
+      return await Collection.GetByKey(key);
     }
   }
 }

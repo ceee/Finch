@@ -72,13 +72,13 @@ namespace zero.Web.Defaults
 
       services.AddTransient<IApplicationsApi, ApplicationsApi>();
       services.AddTransient<ICountriesCollection, CountriesCollection>();
-      services.AddTransient<ILanguagesApi, LanguagesApi>();
-      services.AddTransient<ITranslationsApi, TranslationsApi>();
+      services.AddTransient<ILanguagesCollection, LanguagesCollection>();
+      services.AddTransient<ITranslationsCollection, TranslationsCollection>();
       services.AddTransient<IUserApi, UserApi>();
       services.AddTransient<IPagesApi, PagesApi>();
       services.AddTransient<IPageTreeApi, PageTreeApi>();
       services.AddTransient<IPreviewApi, PreviewApi>();
-      services.AddTransient<IMailTemplatesApi, MailTemplatesApi>();
+      services.AddTransient<IMailTemplatesCollection, MailTemplatesCollection>();
 
       services.AddTransient<ISetupApi, SetupApi>();
       services.AddTransient<ISectionsApi, SectionsApi>();
