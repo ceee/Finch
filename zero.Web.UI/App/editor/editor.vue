@@ -70,6 +70,7 @@
       loaded: false,
       hasTabs: false,
       asBoxes: false,
+      coreDatabase: false,
       tabs: []
     }),
 
@@ -101,6 +102,7 @@
       }
 
       this.asBoxes = this.editorConfig.options.boxes;
+      this.coreDatabase = this.editorConfig.options.coreDatabase;
       this.onConfigure(this);
 
       this.loaded = true;

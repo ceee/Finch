@@ -35,7 +35,7 @@ var api = base =>
     },
 
     // get path to thumbnail source
-    getImageSource(id, thumb, enforceAppId)
+    getImageSource(id, thumb, core)
     {
       if (!id || id.indexOf('http') === 0)
       {
@@ -45,7 +45,7 @@ var api = base =>
       {
         return id.substring(6) + "?preset=productListing";
       }
-      return zero.apiPath + base + 'streamThumbnail/?id=' + id + (typeof thumb === 'boolean' ? '&thumb=' + (thumb ? 'true' : 'false') : '') + (enforceAppId === false ? '&enforceAppId=false' : '');
+      return zero.apiPath + base + 'streamThumbnail/?id=' + id + (typeof thumb === 'boolean' ? '&thumb=' + (thumb ? 'true' : 'false') : '') + (core === true ? '&core=true' : '');
     },
 
     // save a media

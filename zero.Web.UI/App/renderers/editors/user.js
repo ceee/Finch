@@ -3,6 +3,7 @@ import Editor from 'zero/core/editor.ts';
 import Permissions from 'zero/components/permissions.vue';
 
 const editor = new Editor('user', '@user.fields.');
+editor.options.coreDatabase = true;
 
 const permissionsCount = x => (x.claims || []).filter(claim =>
 {

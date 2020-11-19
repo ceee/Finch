@@ -4,7 +4,7 @@
       <header class="ui-table-row ui-table-head">      
         <div v-for="column in columns" :key="column.path" class="ui-table-cell" :table-field="column.path" :style="column.flex" :class="column.options.class">
           <span v-localize:html="column.label"></span>
-          <button :disabled="!column.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="query.orderBy == column.path ? 'sort-' + (query.orderIsDescending ? 'desc' : 'asc') : null">
+          <button :disabled="!column.options.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="query.orderBy == column.path ? 'sort-' + (query.orderIsDescending ? 'desc' : 'asc') : null">
             <i class="arrow arrow-down"></i>
           </button>
         </div>
@@ -42,7 +42,8 @@
   import './table.scss'
   import UiPagination from 'zero/components/pagination.vue';
   import TableValue from './table-value.js';
-  import { debounce as _debounce } from 'underscore';
+  import { debounce as _debounce, isEqual as _isEqual } from 'underscore';
+  import Qs from 'qs';
 
   export default {
     name: 'uiTable',
@@ -88,12 +89,9 @@
     },
 
     watch: {
-      query: {
-        deep: true,
-        handler: function (val)
-        {
-          if (this.loaded) this.debouncedUpdate();
-        }
+      'query.search': function (val)
+      {
+        if (this.loaded) this.onChange();
       },
       $route(to, from)
       {
@@ -116,7 +114,7 @@
             flex: column.options.width ? { 'flex': '0 1 ' + column.options.width + 'px' } : {}
           };
         });
-        this.query = { ...this.listConfig.query };
+        this.query = { ...this.listConfig.query, ...this.listConfig.queryToParams(this.$route.query) };
         this.component = typeof !!this.listConfig.link ? 'router-link' : 'div';
         this.filter = { ...this.listConfig.filterOptions };
         this.$nextTick(() =>
@@ -167,6 +165,17 @@
       },
 
 
+      // a property has changed and therefore we update the URL and table content
+      onChange()
+      {
+        const query = Qs.stringify(this.listConfig.paramsToQuery(this.query));
+        const path = this.$route.path + (query ? '?' + query : '');
+
+        history.replaceState(null, null, path);
+        this.debouncedUpdate();
+      },
+
+
       getLink(item)
       {
         if (!this.listConfig.link)
@@ -190,14 +199,14 @@
       setPage(index)
       {
         this.query.page = index;
-        this.debouncedUpdate();
+        this.onChange();
       },
 
       // set a new filter
       setFilter(filter)
       {
         this.query.filter = filter;
-        this.debouncedUpdate();
+        this.onChange();
       },
 
       // sort by a column
@@ -217,7 +226,10 @@
           this.query.orderIsDescending = true;
         }
 
-        this.debouncedUpdate();
+        // reset the page on sorting change
+        this.query.page = 1;
+
+        this.onChange();
       },
 
       // toggle selection of an item

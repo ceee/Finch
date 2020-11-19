@@ -46,13 +46,13 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<string> GetSourceById(string id, bool thumb = false, bool enforceAppId = true)
+    public async Task<string> GetSourceById(string id, bool thumb = false, bool isCoreDatabase = false)
     {
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      using IAsyncDocumentSession session = isCoreDatabase ? Store.OpenCoreSession() : Store.OpenAsyncSession();
 
       IMedia media = await session.LoadAsync<IMedia>(id);
 
-      if (media == null) //|| (enforceAppId && media.AppId != Constants.Database.SharedAppId && media.AppId != Scope.AppId)) // TODO appx fix
+      if (media == null)
       {
         return null;
       }
@@ -280,7 +280,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get media source by Id
     /// </summary>
-    Task<string> GetSourceById(string id, bool thumb = false, bool enforceAppId = true);
+    Task<string> GetSourceById(string id, bool thumb = false, bool isCoreDatabase = false);
 
     /// <summary>
     /// Get media by ids

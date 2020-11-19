@@ -3,6 +3,7 @@ import Editor from 'zero/core/editor.ts';
 import ApplicationFeatures from 'zero/pages/settings/application-features.vue';
 
 const editor = new Editor('application', '@application.fields.');
+editor.options.coreDatabase = true;
 
 const general = editor.tab('general', '@ui.tab_general');
 const domains = editor.tab('domains', '@application.tab_domains', x => x.domains.length);

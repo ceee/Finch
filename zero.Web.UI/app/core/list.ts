@@ -42,6 +42,67 @@ class List
 
   actions = [];
 
+  /**
+   * Converts the list parameters (like page, search, filter, ...) to a vue router query
+   */
+  paramsToQuery = params =>
+  {
+    let values: any = {};
+
+    if (params.page !== this.query.page)
+    {
+      values.page = params.page;
+    }
+    if (params.isDescending !== this.query.isDescending || params.orderBy !== this.query.orderBy)
+    {
+      values.by = params.orderBy || this.query.orderBy;
+      values.desc = params.isDescending || this.query.isDescending;
+    }
+    if (!!params.search)
+    {
+      values.search = params.search;
+    }
+    if (params.filter && params.filter.id)
+    {
+      values.filter = params.filter.id;
+    }
+    return values;
+  };
+
+  /**
+   * Converts an URL query string to list parameters
+   */
+  queryToParams = query =>
+  {
+    if (!query)
+    {
+      return {};
+    }
+    let values = JSON.parse(JSON.stringify(this.query));
+    if (query.page)
+    {
+      values.page = +query.page || this.query.page;
+    }
+    if (query.by)
+    {
+      values.orderBy = query.by;
+    }
+    if (query.desc)
+    {
+      values.isDescending = query.desc === "true" || query.desc === true;
+    }
+    if (query.search)
+    {
+      values.search = query.search;
+    }
+    if (query.filter)
+    {
+      values.filter = values.filter || {};
+      values.filter.id = query.filter;
+    }
+    return values;
+  };
+
 
   constructor(alias)
   {

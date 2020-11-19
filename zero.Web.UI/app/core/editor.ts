@@ -20,7 +20,8 @@ class Editor
 
   options = {
     disabled: false,
-    boxes: false
+    boxes: false,
+    coreDatabase: true
   };
 
 
@@ -90,22 +91,29 @@ class Editor
    * @param {string} [options.helpText] - Display a help text below the field
    * @param {boolean|function} [options.condition] - Conditionally hide the field
    * @param {boolean|function} [options.disabled=false] - Conditionally disable the field
+   * @param {boolean} [options.coreDatabase] - Operate on the core database for this field (default is set by Editor.options.coreDatabase)
    * @param {string|object} [options.tab] - Add this field to a tab (by passing the alias or the tab instance)
    * @param {string} [options.class] - Append HTML class to the generated property
    * @returns {EditorField}
    */
   field(path, options)
   {
+    options = options || {};
+
     let field = this.fields.find(x => x.path === path);
 
     if (!field)
     {
+      if (typeof options.coreDatabase === 'undefined')
+      {
+        options.coreDatabase = this.options.coreDatabase;
+      }
       field = new EditorField(path, options);
       this.fields.push(field);
     }
     else
     {
-      field.options = { ...field.options, ...(options || {}) };
+      field.options = { ...field.options, ...options };
     }
 
     return field;

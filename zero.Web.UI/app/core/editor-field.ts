@@ -38,6 +38,7 @@ class EditorField
     condition: null,
     disabled: false,
     tab: null,
+    coreDatabase: false,
     class: ''
   };
 

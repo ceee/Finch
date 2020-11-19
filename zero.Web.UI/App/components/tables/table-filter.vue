@@ -134,6 +134,7 @@
         else
         {
           this.currentFilter = JSON.parse(JSON.stringify(value));
+          this.currentFilter.filter.id = this.currentFilter.id;
           this.$emit('filter', this.currentFilter.filter);
           this.attach.setFilter(this.currentFilter.filter);
         }
@@ -157,7 +158,7 @@
       // persist a filter in local storage
       saveFilter(name, filter, id)
       {
-        id = id || Strings.guid();
+        id = id || Strings.guid(4);
 
         let savedFilter = this.storedFilters.find(x => x.id === id);
         let index = this.storedFilters.indexOf(savedFilter);
