@@ -1,52 +1,11 @@
-import Axios from 'axios';
-
-const base = 'mediaFolder/';
+import { collection, get, post } from '../helpers/request.ts';
 
 export default {
+  ...collection('mediaFolder/'),
 
-  // get media folder by id
-  getById(id)
-  {
-    return Axios.get(base + 'getById', { params: { id } }).then(res => Promise.resolve(res.data));
-  },
+  getHierarchy: async id => await get('mediaFolder/getHierarchy', { params: { id } }),
 
-  // get new media folder model
-  getEmpty()
-  {
-    return Axios.get(base + 'getEmpty').then(res => Promise.resolve(res.data));
-  },
+  getAllAsTree: async (parent, active) => await get('mediaFolder/getAllAsTree', { params: { parent, active } }),
 
-  // get media folder hierarchy by id
-  getHierarchy(id)
-  {
-    return Axios.get(base + 'getHierarchy', { params: { id } }).then(res => Promise.resolve(res.data));
-  },
-
-  // get all folder with a certain parent (can be empty) as tree
-  getAllAsTree(parent, active)
-  {
-    return Axios.get(base + 'getAllAsTree', {
-      params: {
-        parent: parent,
-        active: active
-      }
-    }).then(res => Promise.resolve(res.data));
-  },
-
-  // save a media folder
-  save(model)
-  {
-    return Axios.post(base + 'save', model).then(res => Promise.resolve(res.data));
-  },
-
-  move(id, destinationId)
-  {
-    return Axios.post(base + 'move', { id, destinationId }).then(res => Promise.resolve(res.data));
-  },
-
-  // deletes a media folder
-  delete(id)
-  {
-    return Axios.delete(base + 'delete', { params: { id } }).then(res => Promise.resolve(res.data));
-  }
+  move: async (id, destinationId) => await post('mediaFolder/move', { id, destinationId })
 };

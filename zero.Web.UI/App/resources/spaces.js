@@ -1,42 +1,21 @@
-import Axios from 'axios';
+import { get, post, del } from '../helpers/request.ts';
+
+const base = 'spaces/';
 
 export default {
+  getByAlias: async alias => await get(base + 'getByAlias', { params: { alias } }),
 
-  // get space by alias
-  getByAlias(alias)
-  {
-    return Axios.get('spaces/getByAlias', { params: { alias }}).then(res => Promise.resolve(res.data));
-  },
+  getAll: async () => await get(base + 'getAll'),
 
-  // get all spaces
-  getAll()
-  {
-    return Axios.get('spaces/getAll').then(res => Promise.resolve(res.data));
-  },
-
-  // get all list items in a space
-  getList(alias, query)
+  getList: async (alias, query) =>
   {
     query.alias = alias;
-
-    return Axios.get('spaces/getList', { params: query }).then(res => Promise.resolve(res.data));
+    return await get(base + 'getList', { params: query })
   },
 
-  // get space item
-  getContent(alias, contentId)
-  {
-    return Axios.get('spaces/getContent', { params: { alias, contentId } }).then(res => Promise.resolve(res.data));
-  },
+  getContent: async (alias, contentId) => await get(base + 'getContent', { params: { alias, contentId } }),
 
-  // save a space item
-  save(model)
-  {
-    return Axios.post('spaces/save', model).then(res => Promise.resolve(res.data));
-  },
+  save: async model => await post(base + 'save', model),
 
-  // deletes an item
-  delete(alias, id)
-  {
-    return Axios.delete('spaces/delete', { params: { alias, id } }).then(res => Promise.resolve(res.data));
-  }
+  delete: async(alias, id) => await del(base + 'delete', { params: { alias, id } })
 };

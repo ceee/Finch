@@ -59,7 +59,7 @@
 
 <script>
   import { map as _map, find as _find } from 'underscore';
-  import AuthApi from 'zero/services/auth.js'
+  import AuthApi from 'zero/helpers/auth.js'
   import MediaApi from 'zero/resources/media.js'
   import IconPicker from 'zero/components/pickers/iconPicker/iconpicker.vue';
 

@@ -20,10 +20,10 @@
 
 
 <script>
-  import Strings from 'zero/services/strings.js';
+  import Strings from 'zero/helpers/strings.js';
   import { extend as _extend } from 'underscore';
   import DaterangepickerOverlay from './overlay.vue';
-  import Overlay from 'zero/services/overlay.js';
+  import Overlay from 'zero/helpers/overlay.js';
   import dayjs from 'dayjs';
 
   const DATETIME_FORMAT = 'DD.MM.YY HH:mm';

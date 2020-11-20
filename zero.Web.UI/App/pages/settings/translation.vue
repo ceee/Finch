@@ -27,7 +27,7 @@
 
 <script>
   import TranslationsApi from 'zero/resources/translations.js';
-  import Overlay from 'zero/services/overlay.js';
+  import Overlay from 'zero/helpers/overlay.js';
   import Editor from 'zero/editor/editor.vue';
 
   export default {

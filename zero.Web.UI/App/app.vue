@@ -19,8 +19,8 @@
   import AppLogin from 'zero/pages/login/login.vue'
   import AppOverlays from 'zero/components/overlays/overlay-holder.vue'
   import AppNotifications from 'zero/components/notifications/notification-holder.vue'
-  import EventHub from './services/eventhub.js';
-  import AuthApi from 'zero/services/auth.js'
+  import EventHub from 'zero/helpers/eventhub.js';
+  import AuthApi from 'zero/helpers/auth.js'
 
   export default {
     name: 'app',

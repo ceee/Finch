@@ -1,5 +1,5 @@
 ﻿import Axios from 'axios';
-import Auth from 'zero/services/auth.js';
+import Auth from 'zero/helpers/auth.js';
 import Qs from 'qs';
 
 if (!__zero || !__zero.apiPath)

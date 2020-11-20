@@ -1,10 +1,5 @@
-import Axios from 'axios';
+import { get } from '../helpers/request.ts';
 
 export default {
-
-  // get all settings areas
-  getAreas()
-  {
-    return Axios.get('settings/getAreas').then(res => Promise.resolve(res.data));
-  }
+  getAreas: async () => await get('settings/getAreas')
 };

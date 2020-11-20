@@ -13,7 +13,7 @@
 
 
 <script>
-  import Overlay from 'zero/services/overlay.js'
+  import Overlay from 'zero/helpers/overlay.js'
   import { filter as _filter } from 'underscore';
 
   export default {

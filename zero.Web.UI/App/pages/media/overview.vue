@@ -53,14 +53,14 @@
 <script>
   import MediaApi from 'zero/resources/media.js';
   import MediaFolderApi from 'zero/resources/media-folder.js';
-  import Overlay from 'zero/services/overlay.js';
+  import Overlay from 'zero/helpers/overlay.js';
   import FolderOverlay from './overlays/folder.vue';
   import MoveOverlay from './overlays/move.vue';
   import CreateItemOverlay from './overlays/create.vue';
   import MediaItem from './item.vue';
   import UploadStatusOverlay from './overlays/upload-status.vue';
-  import EventHub from 'zero/services/eventhub.js';
-  import Notification from 'zero/services/notification.js';
+  import EventHub from 'zero/helpers/eventhub.js';
+  import Notification from 'zero/helpers/notification.js';
   import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
 
   export default {
@@ -138,7 +138,7 @@
 
         this.getFolderHierarchy(query.folderId, !!query.search);
 
-        return MediaApi.scope(this.shared).getListByQuery(query).then(response =>
+        return MediaApi.getListByQuery(query).then(response => // .scope(this.shared)
         {
           return Promise.resolve(response);
         });

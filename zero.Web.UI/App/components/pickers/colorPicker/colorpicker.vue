@@ -10,7 +10,7 @@
 
 
 <script>
-  import Strings from 'zero/services/strings.js';
+  import Strings from 'zero/helpers/strings.js';
   import { extend as _extend } from 'underscore';
 
   export default {

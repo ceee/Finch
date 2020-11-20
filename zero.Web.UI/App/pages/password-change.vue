@@ -24,7 +24,7 @@
 
 
 <script>
-  import AuthApi from 'zero/services/auth.js'
+  import AuthApi from 'zero/helpers/auth.js'
   import UsersApi from 'zero/resources/users.js'
 
   export default {

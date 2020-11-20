@@ -13,7 +13,7 @@
 <script>
   import UiEditor from 'zero/editor/editor.vue';
   import UiEditorOverlay from 'zero/editor/editor-overlay.vue';
-  import Overlay from 'zero/services/overlay.js';
+  import Overlay from 'zero/helpers/overlay.js';
   import Editor from 'zero/core/editor.ts';
 
   export default {

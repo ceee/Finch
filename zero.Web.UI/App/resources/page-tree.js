@@ -1,15 +1,5 @@
-import Axios from 'axios';
+import { get } from '../helpers/request.ts';
 
 export default {
-
-  // get all pages with a certain parent (can be empty)
-  getChildren(parent, active)
-  {
-    return Axios.get('pageTree/getChildren', {
-      params: {
-        parent: parent,
-        active: active
-      }
-    }).then(res => Promise.resolve(res.data));
-  }
+  getChildren: async (parent, active) => await get('pageTree/getChildren', { params: { parent, active } })
 };

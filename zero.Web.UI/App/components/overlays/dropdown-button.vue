@@ -18,7 +18,7 @@
 
 
 <script>
-  import { warn } from 'zero/services/debug.js';
+  import { warn } from 'zero/helpers/debug.js';
 
   export default {
     name: 'uiDropdownButton',

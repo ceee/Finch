@@ -19,7 +19,7 @@
 <script>
   import MediaFolderApi from 'zero/resources/media-folder.js';
   import MediaApi from 'zero/resources/media.js';
-  import Notification from 'zero/services/notification.js'
+  import Notification from 'zero/helpers/notification.js'
 
   export default {
 

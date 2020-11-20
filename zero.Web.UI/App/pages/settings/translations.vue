@@ -12,7 +12,7 @@
 
 
 <script>
-  import Overlay from 'zero/services/overlay.js';
+  import Overlay from 'zero/helpers/overlay.js';
   import AddOverlay from './translation.vue';
 
   export default {

@@ -23,7 +23,7 @@
 
 <script>
   import PagesApi from 'zero/resources/pages.js';
-  import Overlay from 'zero/services/overlay.js';
+  import Overlay from 'zero/helpers/overlay.js';
 
   export default {
 

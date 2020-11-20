@@ -7,11 +7,11 @@
 
 
 <script>
-  import Strings from 'zero/services/strings.js';
-  import Objects from 'zero/services/objects.js';
+  import Strings from 'zero/helpers/strings.js';
+  import Objects from 'zero/helpers/objects.js';
   import Editor from 'zero/core/editor.ts';
   import EditorField from 'zero/core/editor-field.ts';
-  import Localization from 'zero/services/localization.js';
+  import Localization from 'zero/helpers/localization.js';
 
   export default {
     name: 'uiEditorComponent',

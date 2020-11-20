@@ -32,8 +32,8 @@
 
 
 <script>
-  import Overlay from 'zero/services/overlay.js';
-  import Strings from 'zero/services/strings.js';
+  import Overlay from 'zero/helpers/overlay.js';
+  import Strings from 'zero/helpers/strings.js';
   import FilterOverlay from './table-filter-overlay.vue';
   import { isArray as _isArray } from 'underscore';
 

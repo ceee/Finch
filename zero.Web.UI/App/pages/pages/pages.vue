@@ -35,14 +35,14 @@
 <script>
   import PageTreeApi from 'zero/resources/page-tree.js'
   import PagesApi from 'zero/resources/pages.js'
-  import Overlay from 'zero/services/overlay.js'
+  import Overlay from 'zero/helpers/overlay.js'
   import CreateOverlay from './overlays/create.vue'
   import SortOverlay from './overlays/sort.vue'
   import MoveOverlay from './overlays/move.vue'
   import CopyOverlay from './overlays/copy.vue'
-  import EventHub from 'zero/services/eventhub.js'
-  import Notification from 'zero/services/notification.js'
-  import Strings from 'zero/services/strings.js';
+  import EventHub from 'zero/helpers/eventhub.js'
+  import Notification from 'zero/helpers/notification.js'
+  import Strings from 'zero/helpers/strings.js';
 
   export default {
 

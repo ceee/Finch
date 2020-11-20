@@ -1,26 +1,13 @@
-import Axios from 'axios';
+import { get, post, del } from '../helpers/request.ts';
 
 const base = 'recycleBin/';
 
 export default {
+  getByQuery: async query => await get(base + 'getByQuery', { params: query }),
 
-  getByQuery(query)
-  {
-    return Axios.get(base + 'getByQuery', { params: query }).then(res => Promise.resolve(res.data));
-  },
+  getCountByOperation: async operationId => await get(base + 'getCountByOperation', { params: { operationId } }),
 
-  getCountByOperation(operationId)
-  {
-    return Axios.get(base + 'getCountByOperation', { params: { operationId } }).then(res => Promise.resolve(res.data));
-  },
+  delete: async id => await del(base + 'delete', { params: { id } }),
 
-  delete(id)
-  {
-    return Axios.delete(base + 'delete', { params: { id } }).then(res => Promise.resolve(res.data));
-  },
-
-  deleteByGroup(group)
-  {
-    return Axios.delete(base + 'deleteByGroup', { params: { group } }).then(res => Promise.resolve(res.data));
-  }
+  deleteByGroup: async group => await del(base + 'deleteByGroup', { params: { group } })
 };

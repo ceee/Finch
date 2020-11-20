@@ -6,7 +6,7 @@
 
 
 <script>
-  import Strings from 'zero/services/strings.js';
+  import Strings from 'zero/helpers/strings.js';
 
   export default {
     name: 'uiTab',

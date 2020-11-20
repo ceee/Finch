@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Strings from 'zero/services/strings.js';
+import Strings from 'zero/helpers/strings.js';
 import { find as _find, extend as _extend } from 'underscore';
 
 export default new Vue({

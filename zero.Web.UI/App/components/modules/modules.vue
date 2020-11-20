@@ -3,7 +3,7 @@
     <div v-if="items.length" class="ui-modules-inner-sortable" v-sortable="{ onUpdate: onSortingUpdated }">
       <module-preview v-for="item in items" :key="item.id" :types="moduleTypes" :value="item" @edit="edit" @remove="remove" :disabled="disabled" />
     </div>
-    <modules-select ref="moduleSelect" :types="moduleTypes" :value="value" v-if="canAdd" @selected="onAdd" />
+    <module-select ref="moduleSelect" :types="moduleTypes" :value="value" v-if="canAdd" @selected="onAdd" />
   </div>
 </template>
 
@@ -12,9 +12,9 @@
   import ModulesApi from 'zero/resources/modules.js';
   import EditModuleOverlay from './edit-module.vue';
   import ModulePreview from './module-preview.vue';
-  import ModuleSelect from './modules-select.vue';
-  import Overlay from 'zero/services/overlay.js';
-  import Arrays from 'zero/services/arrays.js';
+  import ModuleSelect from './module-select.vue';
+  import Overlay from 'zero/helpers/overlay.js';
+  import Arrays from 'zero/helpers/arrays.js';
 
   export default {
     name: 'uiModules',

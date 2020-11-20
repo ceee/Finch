@@ -19,7 +19,7 @@
 <script>
   import PageTreeApi from 'zero/resources/page-tree.js'
   import PagesApi from 'zero/resources/pages.js';
-  import Notification from 'zero/services/notification.js'
+  import Notification from 'zero/helpers/notification.js'
 
   export default {
 

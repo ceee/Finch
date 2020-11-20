@@ -16,7 +16,7 @@
   import PageTreeApi from 'zero/resources/page-tree.js'
   import PagesApi from 'zero/resources/pages.js'
   import PageOverlay from './overlay.vue';
-  import Overlay from 'zero/services/overlay.js';
+  import Overlay from 'zero/helpers/overlay.js';
   import { extend as _extend, isArray as _isArray, isEmpty as _isEmpty, clone as _clone } from 'underscore';
 
   export default {

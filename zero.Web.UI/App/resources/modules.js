@@ -1,21 +1,11 @@
-import Axios from 'axios';
+import { get } from '../helpers/request.ts';
 
 const base = 'modules/';
 
 export default {
+  getModuleTypes: async tags => await get(base + 'getModuleTypes', { params: { tags } }),
 
-  getModuleTypes(tags)
-  {
-    return Axios.get(base + 'getModuleTypes', { params: { tags } }).then(res => Promise.resolve(res.data));
-  },
+  getModuleType: async alias => await get(base + 'getModuleType', { params: { alias } }),
 
-  getModuleType(alias)
-  {
-    return Axios.get(base + 'getModuleType', { params: { alias } }).then(res => Promise.resolve(res.data));
-  },
-
-  getEmpty(alias)
-  {
-    return Axios.get(base + 'getEmpty', { params: { alias } }).then(res => Promise.resolve(res.data));
-  },
+  getEmpty: async alias => await get(base + 'getEmpty', { params: { alias } })
 };

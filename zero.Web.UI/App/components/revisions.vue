@@ -17,7 +17,7 @@
 
 <script>
   import dayjs from 'dayjs';
-  import Strings from 'zero/services/strings.js';
+  import Strings from 'zero/helpers/strings.js';
   import MediaApi from 'zero/resources/media.js';
 
   export default {

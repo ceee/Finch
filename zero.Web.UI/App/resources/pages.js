@@ -1,71 +1,25 @@
-import Axios from 'axios';
+import { collection, get, post, del } from '../helpers/request.ts';
 
 const base = 'pages/';
 
 export default {
+  ...collection(base),
 
-  getAllowedPageTypes(parent)
-  {
-    return Axios.get(base + 'getAllowedPageTypes', { params: { parent } }).then(res => Promise.resolve(res.data));
-  },
+  getAllowedPageTypes: async parent => await get(base + 'getAllowedPageTypes', { params: { parent } }),
 
-  getPageType(alias)
-  {
-    return Axios.get(base + 'getPageType', { params: { alias } }).then(res => Promise.resolve(res.data));
-  },
+  getPageType: async alias => await get(base + 'getPageType', { params: { alias } }),
 
-  getById(id)
-  {
-    return Axios.get(base + 'getById', { params: { id } }).then(res => Promise.resolve(res.data));
-  },
+  getEmpty: async (type, parent) => await get(base + 'getEmpty', { params: { type, parent } }),
 
-  getEmpty(type, parent)
-  {
-    return Axios.get(base + 'getEmpty', { params: { type, parent } }).then(res => Promise.resolve(res.data));
-  },
+  getRevisions: async (id, page) => await get(base + 'getRevisions', { params: { id, page } }),
 
-  getPreviews(ids)
-  {
-    return Axios.get(base + 'getPreviews', { params: { ids } }).then(res => Promise.resolve(res.data));
-  },
+  saveSorting: async ids => await post(base + 'saveSorting', ids),
 
-  getRevisions(id, page)
-  {
-    return Axios.get(base + 'getRevisions', { params: { id, page } }).then(res => Promise.resolve(res.data));
-  },
+  move: async (id, destinationId) => await post(base + 'move', { id, destinationId }),
 
-  getAll(query)
-  {
-    return Axios.get(base + 'getAll', { params: query }).then(res => Promise.resolve(res.data));
-  },
+  copy: async (id, destinationId, includeDescendants) => await post(base + 'copy', { id, destinationId, includeDescendants }),
 
-  save(model)
-  {
-    return Axios.post(base + 'save', model).then(res => Promise.resolve(res.data));
-  },
+  restore: async (id, includeDescendants) => await post(base + 'restore', { id, includeDescendants }),
 
-  saveSorting(ids)
-  {
-    return Axios.post(base + 'saveSorting', ids).then(res => Promise.resolve(res.data));
-  },
-
-  move(id, destinationId)
-  {
-    return Axios.post(base + 'move', { id, destinationId }).then(res => Promise.resolve(res.data));
-  },
-
-  copy(id, destinationId, includeDescendants)
-  {
-    return Axios.post(base + 'copy', { id, destinationId, includeDescendants }).then(res => Promise.resolve(res.data));
-  },
-
-  restore(id, includeDescendants)
-  {
-    return Axios.post(base + 'restore', { id, includeDescendants }).then(res => Promise.resolve(res.data));
-  },
-
-  delete(id, moveToRecycleBin)
-  {
-    return Axios.delete(base + 'delete', { params: { id, moveToRecycleBin } }).then(res => Promise.resolve(res.data));
-  }
+  delete: async (id, moveToRecycleBin) => await del(base + 'delete', { id, moveToRecycleBin }),
 };

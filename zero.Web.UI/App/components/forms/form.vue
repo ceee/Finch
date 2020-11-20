@@ -10,8 +10,8 @@
 
 
 <script>
-  import Overlay from 'zero/services/overlay.js'
-  import Notification from 'zero/services/notification.js'
+  import Overlay from 'zero/helpers/overlay.js'
+  import Notification from 'zero/helpers/notification.js'
   import { isArray as _isArray, filter as _filter, groupBy as _groupBy, each as _each, difference as _difference } from 'underscore'
 
   export default {

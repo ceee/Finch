@@ -18,7 +18,7 @@
 
 <script>
   import MediaFolderApi from 'zero/resources/media-folder.js';
-  import Overlay from 'zero/services/overlay.js';
+  import Overlay from 'zero/helpers/overlay.js';
 
   export default {
 

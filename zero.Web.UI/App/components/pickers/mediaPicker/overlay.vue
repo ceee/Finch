@@ -40,7 +40,7 @@
 <script>
   import MediaApi from 'zero/resources/media.js'
   import MediaFolderApi from 'zero/resources/media-folder.js';
-  import Overlay from 'zero/services/overlay.js'
+  import Overlay from 'zero/helpers/overlay.js'
   import AddFolderOverlay from 'zero/pages/media/overlays/folder.vue'
   import UploadStatusOverlay from 'zero/pages/media/overlays/upload-status.vue'
   import { debounce as _debounce, filter as _filter } from 'underscore'

@@ -1,4 +1,4 @@
-﻿import Localization from 'zero/services/localization.js';
+﻿import Localization from 'zero/helpers/localization.js';
 import { isArray as _isArray } from 'underscore';
 
 
