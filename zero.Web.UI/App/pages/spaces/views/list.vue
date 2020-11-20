@@ -12,7 +12,7 @@
 
 
 <script>
-  import SpacesApi from 'zero/resources/spaces.js';
+  import SpacesApi from 'zero/api/spaces.js';
   import SpacesDefaultList from 'zero/renderers/lists/spaces.default.js';
 
   export default {

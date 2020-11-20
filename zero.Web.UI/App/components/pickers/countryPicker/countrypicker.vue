@@ -6,7 +6,7 @@
 
 
 <script>
-  import CountriesApi from 'zero/resources/countries.js'
+  import CountriesApi from 'zero/api/countries.js'
   import { extend as _extend } from 'underscore'
 
   export default {

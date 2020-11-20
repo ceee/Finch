@@ -18,7 +18,7 @@
 
 
 <script>
-  import UserRolesApi from 'zero/resources/userRoles.js';
+  import UserRolesApi from 'zero/api/userRoles.js';
   import { filter as _filter } from 'underscore';
 
   export default {

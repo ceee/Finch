@@ -23,7 +23,7 @@
 
 
 <script>
-  import ModulesApi from 'zero/resources/modules.js';
+  import ModulesApi from 'zero/api/modules.js';
   import UiEditor from 'zero/editor/editor.vue';
 
   export default {

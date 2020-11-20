@@ -38,8 +38,8 @@
 
 
 <script>
-  import MediaApi from 'zero/resources/media.js'
-  import MediaFolderApi from 'zero/resources/media-folder.js';
+  import MediaApi from 'zero/api/media.js'
+  import MediaFolderApi from 'zero/api/media-folder.js';
   import Overlay from 'zero/helpers/overlay.js'
   import AddFolderOverlay from 'zero/pages/media/overlays/folder.vue'
   import UploadStatusOverlay from 'zero/pages/media/overlays/upload-status.vue'

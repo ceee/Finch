@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText, 'hide-label': hideLabel, 'is-locked': locked }">
+  <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText, 'hide-label': hideLabel, 'is-disabled': disabled }">
     <label v-if="label && !hideLabel" class="ui-property-label" :for="field">
       <span v-localize="label"></span>
       <strong class="ui-property-required" v-if="required">*</strong>
@@ -11,8 +11,6 @@
       <slot></slot>
       <ui-error v-if="field" :field="field" />
     </div>
-
-    <button type="button" class="ui-property-lock" v-if="locked"></button>
   </div>
 </template>
 
@@ -28,17 +26,10 @@
       description: String,
       required: Boolean,
       vertical: Boolean,
-      isText: Boolean
-    },
-
-    data: () => ({
-      locked: false
-    }),
-
-    methods: {
-      setLocked(isLocked)
-      {
-        this.locked = isLocked;
+      isText: Boolean,
+      disabled: {
+        type: Boolean,
+        default: false
       }
     }
   }
@@ -54,7 +45,7 @@
     margin: 0 -32px 0;
     padding: 0 32px 0;
 
-    &.is-disabled
+    &.is-disabled .ui-property-content
     {
       pointer-events: none;
     }
@@ -196,28 +187,4 @@
       margin-left: 50px;
     }
   }
-
-  /*.ui-property.is-locked
-  {
-
-  }*/
-
-  /*.ui-property-lock
-  {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 3;
-    background: transparent;
-    width: 100%;
-    cursor: default;
-    border-right: 3px solid var(--color-primary);
-
-    &:after
-    {
-      content: ''
-    }
-  }*/
 </style>

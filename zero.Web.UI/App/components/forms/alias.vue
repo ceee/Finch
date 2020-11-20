@@ -10,7 +10,7 @@
 
 <script>
   import { map as _map } from 'underscore';
-  import UtilsApi from 'zero/resources/utils.js';
+  import UtilsApi from 'zero/api/utils.js';
 
   export default {
     name: 'uiAlias',

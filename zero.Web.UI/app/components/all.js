@@ -57,6 +57,7 @@ import uiLoading from './loading.vue';
 import uiPagination from './pagination.vue';
 import uiPermissions from './permissions.vue';
 import uiRevisions from './revisions.vue';
+import uiIcon from './icon.vue';
 
 export default {
   uiAddButton,
@@ -117,5 +118,6 @@ export default {
   uiLoading,
   uiPagination,
   uiPermissions,
-  uiRevisions
+  uiRevisions,
+  uiIcon
 };

@@ -9,7 +9,7 @@
 
 
 <script>
-  import LanguagesApi from 'zero/resources/languages.js';
+  import LanguagesApi from 'zero/api/languages.js';
 
   export default {
     props: {

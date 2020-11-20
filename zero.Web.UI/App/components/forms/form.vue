@@ -86,7 +86,11 @@
             closeLabel: '@unsavedchanges.close'
           }).then(
             () => next(false),
-            () => next()
+            () =>
+            {
+              this.dirty = false;
+              next();
+            }
           );
         }
         else

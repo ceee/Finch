@@ -7,7 +7,7 @@
 
 
 <script>
-  import MailTemplatesApi from 'zero/resources/mailTemplates.js';
+  import MailTemplatesApi from 'zero/api/mailTemplates.js';
   import UiEditor from 'zero/editor/editor.vue';
 
   export default {

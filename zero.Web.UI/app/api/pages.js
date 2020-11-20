@@ -21,5 +21,5 @@ export default {
 
   restore: async (id, includeDescendants) => await post(base + 'restore', { id, includeDescendants }),
 
-  delete: async (id, moveToRecycleBin) => await del(base + 'delete', { id, moveToRecycleBin }),
+  delete: async (id, moveToRecycleBin) => await del(base + 'delete', { params: { id, moveToRecycleBin } }),
 };

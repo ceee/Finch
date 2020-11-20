@@ -1,6 +1,6 @@
 ﻿
 import List from 'zero/core/list.ts';
-import MailTemplatesApi from 'zero/resources/mailTemplates.js';
+import MailTemplatesApi from 'zero/api/mailTemplates.js';
 
 const list = new List('mailTemplates');
 

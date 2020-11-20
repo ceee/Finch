@@ -23,7 +23,7 @@
   import SpaceEditor from 'zero/pages/spaces/views/editor.vue';
   import SpaceList from 'zero/pages/spaces/views/list.vue';
   import SpaceCustom from 'zero/pages/spaces/views/custom.vue';
-  import SpacesApi from 'zero/resources/spaces.js';
+  import SpacesApi from 'zero/api/spaces.js';
 
   export default {
     data: () => ({

@@ -11,7 +11,7 @@
 
 
 <script>
-  import SpacesApi from 'zero/resources/spaces.js';
+  import SpacesApi from 'zero/api/spaces.js';
 
   export default {
     props: [ 'alias' ],

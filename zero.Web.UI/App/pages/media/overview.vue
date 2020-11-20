@@ -51,8 +51,8 @@
 
 
 <script>
-  import MediaApi from 'zero/resources/media.js';
-  import MediaFolderApi from 'zero/resources/media-folder.js';
+  import MediaApi from 'zero/api/media.js';
+  import MediaFolderApi from 'zero/api/media-folder.js';
   import Overlay from 'zero/helpers/overlay.js';
   import FolderOverlay from './overlays/folder.vue';
   import MoveOverlay from './overlays/move.vue';

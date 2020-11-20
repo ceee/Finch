@@ -33,7 +33,7 @@
 
 
 <script>
-  import MediaApi from 'zero/resources/media.js';
+  import MediaApi from 'zero/api/media.js';
 
   export default {
 

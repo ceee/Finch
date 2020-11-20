@@ -6,7 +6,7 @@
 
 
 <script>
-  import UsersApi from 'zero/resources/users.js'
+  import UsersApi from 'zero/api/users.js'
   import { extend as _extend } from 'underscore'
 
   export default {

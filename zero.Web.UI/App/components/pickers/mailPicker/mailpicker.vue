@@ -6,7 +6,7 @@
 
 
 <script>
-  import MailTemplatesApi from 'zero/resources/mailTemplates.js'
+  import MailTemplatesApi from 'zero/api/mailTemplates.js'
   import { extend as _extend } from 'underscore'
 
   export default {

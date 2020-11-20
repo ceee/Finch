@@ -1,5 +1,5 @@
 ﻿
-import MediaApi from 'zero/resources/media.js';
+import MediaApi from 'zero/api/media.js';
 import Strings from 'zero/helpers/strings.js';
 import Localization from 'zero/helpers/localization.js';
 

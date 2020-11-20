@@ -1,5 +1,5 @@
 import { warn } from 'zero/helpers/debug.js';
-import MediaApi from 'zero/resources/media.js';
+import MediaApi from 'zero/api/media.js';
 
 export default function (el, binding)
 {

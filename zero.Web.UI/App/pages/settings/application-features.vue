@@ -8,7 +8,7 @@
 
 
 <script>
-  import ApplicationsApi from 'zero/resources/applications.js';
+  import ApplicationsApi from 'zero/api/applications.js';
 
   export default {
     props: {

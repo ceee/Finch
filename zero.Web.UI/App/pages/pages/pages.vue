@@ -33,8 +33,8 @@
 
 
 <script>
-  import PageTreeApi from 'zero/resources/page-tree.js'
-  import PagesApi from 'zero/resources/pages.js'
+  import PageTreeApi from 'zero/api/page-tree.js'
+  import PagesApi from 'zero/api/pages.js'
   import Overlay from 'zero/helpers/overlay.js'
   import CreateOverlay from './overlays/create.vue'
   import SortOverlay from './overlays/sort.vue'

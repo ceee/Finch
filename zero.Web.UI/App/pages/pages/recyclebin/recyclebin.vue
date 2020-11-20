@@ -14,7 +14,7 @@
 <script>
   const GROUP = "pages";
 
-  import RecycleBinApi from 'zero/resources/recycle-bin.js'
+  import RecycleBinApi from 'zero/api/recycle-bin.js'
   import Overlay from 'zero/helpers/overlay.js'
   import RecycleBinActionsOverlay from './recyclebin-actions.vue'
   import EventHub from 'zero/helpers/eventhub.js'

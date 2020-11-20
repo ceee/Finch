@@ -18,7 +18,7 @@
 <script>
   import dayjs from 'dayjs';
   import Strings from 'zero/helpers/strings.js';
-  import MediaApi from 'zero/resources/media.js';
+  import MediaApi from 'zero/api/media.js';
 
   export default {
     name: 'uiRevisions',

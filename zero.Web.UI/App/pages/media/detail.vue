@@ -32,7 +32,7 @@
 
 
 <script>
-  import MediaApi from 'zero/resources/media.js';
+  import MediaApi from 'zero/api/media.js';
   import UiEditor from 'zero/editor/editor.vue';
 
   export default {

@@ -1,6 +1,6 @@
 ﻿
 import List from 'zero/core/list.ts';
-import TranslationsApi from 'zero/resources/translations.js';
+import TranslationsApi from 'zero/api/translations.js';
 
 const list = new List('translations');
 const prefix = '@translation.fields.';

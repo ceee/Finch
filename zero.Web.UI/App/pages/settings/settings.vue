@@ -26,7 +26,7 @@
 
 <script>
   import ApplicationsItems from 'zero/pages/settings/applications-items.vue'
-  import SettingsApi from 'zero/resources/settings.js';
+  import SettingsApi from 'zero/api/settings.js';
 
   export default {
     name: 'app-settings',
@@ -60,13 +60,12 @@
   {
     min-height: 100%;
     position: relative;
-    padding: 45px var(--padding);
+    padding: 40px var(--padding);
     width: 100%;
     max-width: 2000px;
     display: grid;
     gap: 80px 40px;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    padding-left: 80px;
   }
 
   .settings-group-items

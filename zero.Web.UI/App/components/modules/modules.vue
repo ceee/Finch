@@ -9,7 +9,7 @@
 
 
 <script>
-  import ModulesApi from 'zero/resources/modules.js';
+  import ModulesApi from 'zero/api/modules.js';
   import EditModuleOverlay from './edit-module.vue';
   import ModulePreview from './module-preview.vue';
   import ModuleSelect from './module-select.vue';

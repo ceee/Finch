@@ -18,9 +18,9 @@
     <nav class="app-nav-inner">
       <template v-for="section in sections">
         <router-link :to="section.url" class="app-nav-item" :alias="section.alias" :class="{ 'has-children': hasChildren(section) }">
-          <i class="app-nav-item-icon" :class="section.icon"></i>
+          <ui-icon :icon="section.icon" class="app-nav-item-icon" />
           {{section.name | localize}}
-          <i v-if="hasChildren(section)" class="app-nav-item-arrow fth-chevron-down"></i>
+          <ui-icon v-if="hasChildren(section)" icon="chevron-down" class="app-nav-item-arrow" />
         </router-link>
         <transition name="app-nav-children">
           <div class="app-nav-children" v-if="hasChildren(section) && $route.path.indexOf('/' + section.alias) === 0">
@@ -44,12 +44,12 @@
             <img class="-image" v-if="userAvatar" :src="userAvatar" :alt="user.name" />
             <span class="-image" v-if="!userAvatar"><i class="fth-user"></i></span>
             <p class="-text"><strong>{{user.name}}</strong></p>
-            <i class="-arrow fth-chevron-down"></i>
+            <ui-icon icon="chevron-down" class="-arrow" />
           </button>
         </template>
-        <ui-dropdown-button label="Edit" icon="fth-edit-2" @click="editUser" />
-        <ui-dropdown-button label="Change password" icon="fth-lock" @click="changePassword" />
-        <ui-dropdown-button label="Logout" icon="fth-log-out" @click="logout" />
+        <ui-dropdown-button label="Edit" icon="edit-2" @click="editUser" />
+        <ui-dropdown-button label="Change password" icon="lock" @click="changePassword" />
+        <ui-dropdown-button label="Logout" icon="log-out" @click="logout" />
       </ui-dropdown>
     </footer>
 
@@ -60,7 +60,7 @@
 <script>
   import { map as _map, find as _find } from 'underscore';
   import AuthApi from 'zero/helpers/auth.js'
-  import MediaApi from 'zero/resources/media.js'
+  import MediaApi from 'zero/api/media.js'
   import IconPicker from 'zero/components/pickers/iconPicker/iconpicker.vue';
 
   export default {

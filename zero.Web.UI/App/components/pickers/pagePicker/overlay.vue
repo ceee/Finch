@@ -15,7 +15,7 @@
 
 
 <script>
-  import PageTreeApi from 'zero/resources/page-tree.js'
+  import PageTreeApi from 'zero/api/page-tree.js'
 
   export default {
 

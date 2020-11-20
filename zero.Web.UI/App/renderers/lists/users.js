@@ -1,6 +1,6 @@
 ﻿
 import List from 'zero/core/list.ts';
-import UsersApi from 'zero/resources/users.js';
+import UsersApi from 'zero/api/users.js';
 
 const list = new List('users');
 const prefix = '@user.fields.';

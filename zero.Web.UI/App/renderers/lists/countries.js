@@ -1,6 +1,6 @@
 ﻿
 import List from 'zero/core/list.ts';
-import CountriesApi from 'zero/resources/countries.js';
+import CountriesApi from 'zero/api/countries.js';
 
 const list = new List('countries');
 const prefix = '@country.fields.';

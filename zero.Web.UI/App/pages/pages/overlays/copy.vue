@@ -22,8 +22,8 @@
 
 
 <script>
-  import PageTreeApi from 'zero/resources/page-tree.js'
-  import PagesApi from 'zero/resources/pages.js';
+  import PageTreeApi from 'zero/api/page-tree.js'
+  import PagesApi from 'zero/api/pages.js';
   import Notification from 'zero/helpers/notification.js'
 
   export default {
