@@ -24,6 +24,8 @@ namespace zero.Core.Collections
 
     protected ICollectionInterceptorHandler InterceptorHandler { get; private set; }
 
+    protected virtual Action<T> PreSave { get; set; }
+
 
     public CollectionBase(IZeroContext context, ICollectionInterceptorHandler interceptorHandler, IValidator<T> validator = null)
     {
@@ -171,6 +173,13 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public virtual async Task<EntityResult<T>> Save(T model)
     {
+      if (model == null)
+      {
+        return EntityResult<T>.Fail("@errors.onsave.empty");
+      }
+
+      PreSave?.Invoke(model);
+
       bool isCreate = false;
 
       // find all Raven Ids

@@ -74,6 +74,7 @@ namespace zero.Web.Defaults
       services.AddTransient<ICountriesCollection, CountriesCollection>();
       services.AddTransient<ILanguagesCollection, LanguagesCollection>();
       services.AddTransient<ITranslationsCollection, TranslationsCollection>();
+      services.AddTransient<IMediaCollection, MediaCollection>();
       services.AddTransient<IUserApi, UserApi>();
       services.AddTransient<IPagesApi, PagesApi>();
       services.AddTransient<IPageTreeApi, PageTreeApi>();

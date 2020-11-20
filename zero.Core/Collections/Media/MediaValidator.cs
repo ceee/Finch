@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
-using zero.Core.Api;
 using zero.Core.Entities;
+using zero.Core.Validation;
 
-namespace zero.Core.Validation
+namespace zero.Core.Collections
 {
   public class MediaValidator : ZeroValidator<IMedia>
   {
-    public MediaValidator(IBackofficeStore store)
+    public MediaValidator()
     {
       RuleFor(x => x.Name).Length(2, 80);
       RuleFor(x => x.IsActive).Equal(true);

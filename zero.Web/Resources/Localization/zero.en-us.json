@@ -132,7 +132,8 @@
   "errors": {
     "idnotfound": "Could not find an entity for the given ID",
     "onsave": {
-      "notallowed": "You are not allowed to edit this resource"
+      "notallowed": "You are not allowed to edit this resource",
+      "empty": "You need to pass a model"
     },
     "ondelete": {
       "idnotfound": "Could not find an entity for the given ID"

@@ -36,6 +36,9 @@ namespace zero.Web.Controllers
     public virtual async Task<EditModel<TEntity>> GetById([FromQuery] string id) => Edit(await Collection.GetById(id));
 
 
+    public virtual async Task<Dictionary<string, TEntity>> GetByIds([FromQuery] string[] ids) => await Collection.GetByIds(ids);
+
+
     public virtual EditModel<TEntity> GetEmpty([FromServices] TEntity blueprint) => Edit(blueprint);
 
 
@@ -58,9 +61,11 @@ namespace zero.Web.Controllers
     public virtual async Task<IList<PreviewModel>> GetPreviews([FromQuery] List<string> ids) => Previews(await Collection.GetByIds(ids.ToArray()), PreviewTransform);
 
 
+    [HttpPost]
     public virtual async Task<EntityResult<TEntity>> Save([FromBody] TEntity model) => await Collection.Save(model);
 
 
+    [HttpDelete]
     public virtual async Task<EntityResult<TEntity>> Delete([FromQuery] string id) => await Collection.DeleteById(id);
   }
 }

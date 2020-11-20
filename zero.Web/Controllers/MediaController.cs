@@ -9,6 +9,7 @@ using System.Net;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
+using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Identity;
 using zero.Web.Models;
@@ -16,48 +17,35 @@ using zero.Web.Models;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Sections.Media, PermissionsValue.True)]
-  public class MediaController : BackofficeController
+  public class MediaController : BackofficeCollectionController<IMedia, IMediaCollection>
   {
-    IMediaApi Api;
     IMediaFolderApi MediaFolderApi;
     IPaths Paths;
 
-
-    public MediaController(IMediaApi api, IMediaFolderApi mediaFolderApi, IPaths paths)
+    public MediaController(IMediaCollection collection, IMediaFolderApi mediaFolderApi, IPaths paths) : base(collection)
     {
-      Api = api;
       MediaFolderApi = mediaFolderApi;
       Paths = paths;
+      PreviewTransform = (item, model) => model.Icon = "fth-globe";
     }
 
-  
-    public async Task<EditModel<IMedia>> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
+    public async Task<ListResult<MediaListItem>> GetListByQuery([FromQuery] MediaListItemQuery query) => await Collection.GetListByQuery(query);
 
-    public async Task<Dictionary<string, IMedia>> GetByIds([FromQuery] string[] ids) => await Api.GetById(ids);
-
-
-    public async Task<ListResult<MediaListItem>> GetListByQuery([FromQuery] MediaListItemQuery query) => await Api.GetListByQuery(query);
-
-
-    public async Task<EntityResult<IMedia>> Save([FromBody] IMedia model) => await Api.Save(model);
 
     [HttpPost]
-    public async Task<EntityResult<IMedia>> Upload(IFormFile file, string folderId) => await Api.Save(await Api.Upload(file, folderId));
+    public async Task<EntityResult<IMedia>> Upload(IFormFile file, string folderId) => await Collection.Save(await Collection.Upload(file, folderId));
 
     [HttpPost]
-    public async Task<Media> UploadTemporary(IFormFile file, string folderId) => await Api.Upload(file, folderId);
-
-    [HttpDelete]
-    public async Task<EntityResult<IMedia>> Delete([FromQuery] string id) => await Api.Delete(id);
+    public async Task<Media> UploadTemporary(IFormFile file, string folderId) => await Collection.Upload(file, folderId);
 
     [HttpPost]
-    public async Task<EntityResult<IMedia>> Move([FromBody] ActionCopyModel model) => await Api.Move(model.Id, model.DestinationId);
+    public async Task<EntityResult<IMedia>> Move([FromBody] ActionCopyModel model) => await Collection.Move(model.Id, model.DestinationId);
 
 
     public async Task<MediaListResultModel> GetAll([FromQuery] MediaListQuery query)
     {
-      ListResult<MediaListModel> items = (await Api.GetByQuery(query)).MapTo(x => new MediaListModel()
+      ListResult<MediaListModel> items = (await Collection.GetByQuery(query)).MapTo(x => new MediaListModel()
       {
         Id = x.Id,
         IsFolder = false,
@@ -81,9 +69,9 @@ namespace zero.Web.Controllers
 
 
     [HttpGet]
-    public async Task<IActionResult> StreamThumbnail([FromQuery] string id, [FromQuery] bool thumb = true, [FromQuery] bool core = false)
+    public async Task<IActionResult> StreamThumbnail([FromQuery] string id, [FromQuery] bool thumb = true)
     {
-      string path = await Api.GetSourceById(id, thumb, core);
+      string path = await Collection.GetSourceById(id, thumb);
 
       if (path == null)
       {
