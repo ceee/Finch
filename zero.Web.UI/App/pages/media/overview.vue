@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="media-content">
-    <ui-header-bar :back-button="!!id" :count="count">
+    <ui-header-bar :back-button="!!id || shared" :count="count">
       <template v-slot:title>
         <h2 class="ui-header-bar-title">
           <router-link :to="{ name: 'media' }" class="media-items-hierarchy-item" v-if="!!id"><i class="fth-home"></i></router-link>

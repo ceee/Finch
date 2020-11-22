@@ -21,7 +21,7 @@ const upload = async (file, folderId, onProgress, isTemporary) =>
 };
 
 
-const getImageSource = (id, thumb) =>
+const getImageSource = (id, thumb, shared) =>
 {
   if (!id || id.indexOf('http') === 0)
   {
@@ -31,7 +31,7 @@ const getImageSource = (id, thumb) =>
   {
     return id.substring(6) + "?preset=productListing";
   }
-  return zero.apiPath + base + 'streamThumbnail/?id=' + id + (typeof thumb === 'boolean' ? '&thumb=' + (thumb ? 'true' : 'false') : '');
+  return zero.apiPath + base + 'streamThumbnail/?id=' + id + (typeof thumb === 'boolean' ? '&thumb=' + (thumb ? 'true' : 'false') : '') + (shared === true ? '&scope=shared' : '');
 };
 
 
