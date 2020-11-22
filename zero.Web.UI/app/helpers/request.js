@@ -49,6 +49,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.collection = exports.send = exports.patch = exports.put = exports.del = exports.post = exports.get = void 0;
 var axios_1 = require("axios");
+var getConfig = function (config) {
+    config = config || {};
+    if (config.scope) {
+        config.params = config.params || {};
+        config.params.scope = config.scope;
+    }
+    return config;
+};
 function get(url, config) {
     if (config === void 0) { config = null; }
     return __awaiter(this, void 0, void 0, function () {
@@ -118,15 +126,18 @@ function send(config) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, axios_1.default(config)];
+                    config = getConfig(config);
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, axios_1.default(config)];
+                case 2:
                     result = _a.sent();
                     return [2 /*return*/, result.data];
-                case 2:
+                case 3:
                     err_1 = _a.sent();
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     });
@@ -135,57 +146,57 @@ exports.send = send;
 function collection(base) {
     var _this = this;
     return {
-        getById: function (id) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        getById: function (id, config) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, get(base + 'getById', { params: { id: id } })];
+                case 0: return [4 /*yield*/, get(base + 'getById', __assign(__assign({}, config), { params: { id: id } }))];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         }); }); },
-        getByIds: function (ids) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        getByIds: function (ids, config) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, get(base + 'getByIds', { params: { ids: ids } })];
+                case 0: return [4 /*yield*/, get(base + 'getByIds', __assign(__assign({}, config), { params: { ids: ids } }))];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         }); }); },
-        getEmpty: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        getEmpty: function (config) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, get(base + 'getEmpty')];
+                case 0: return [4 /*yield*/, get(base + 'getEmpty', __assign({}, config))];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         }); }); },
-        getByQuery: function (query) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        getByQuery: function (query, config) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, get(base + 'getByQuery', { params: { query: query } })];
+                case 0: return [4 /*yield*/, get(base + 'getByQuery', __assign(__assign({}, config), { params: { query: query } }))];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         }); }); },
-        getAll: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        getAll: function (config) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, get(base + 'getAll')];
+                case 0: return [4 /*yield*/, get(base + 'getAll', __assign({}, config))];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         }); }); },
-        getPreviews: function (ids) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        getPreviews: function (ids, config) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, get(base + 'getPreviews', { params: { ids: ids } })];
+                case 0: return [4 /*yield*/, get(base + 'getPreviews', __assign(__assign({}, config), { params: { ids: ids } }))];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         }); }); },
-        getForPicker: function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        getForPicker: function (config) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, get(base + 'getForPicker')];
+                case 0: return [4 /*yield*/, get(base + 'getForPicker', __assign({}, config))];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         }); }); },
-        save: function (model) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        save: function (model, config) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, post(base + 'save', model)];
+                case 0: return [4 /*yield*/, post(base + 'save', model, __assign({}, config))];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         }); }); },
-        delete: function (id) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        delete: function (id, config) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, del(base + 'delete', { params: { id: id } })];
+                case 0: return [4 /*yield*/, del(base + 'delete', __assign(__assign({}, config), { params: { id: id } }))];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         }); }); }

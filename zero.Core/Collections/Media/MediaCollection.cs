@@ -178,7 +178,7 @@ namespace zero.Core.Collections
       }
 
       // TODO this is only inserted when we have a core/shared database and a multi-tenancy setup
-      if (isRoot)
+      if (isRoot && Database != Context.Options.Raven.Database)
       {
         result.Items.Insert(0, new MediaListItem()
         {

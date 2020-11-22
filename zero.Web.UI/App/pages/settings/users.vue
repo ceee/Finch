@@ -59,7 +59,8 @@
       {
         return {
           name: 'roles-edit',
-          params: { id: item.id }
+          params: { id: item.id },
+          query: { scope: 'shared '}
         };
       }
     }

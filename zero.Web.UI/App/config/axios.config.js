@@ -29,4 +29,21 @@ Axios.interceptors.response.use(response => response, error =>
   return Promise.reject(error);
 });
 
+Axios.interceptors.request.use(config =>
+{
+  if (location.search)
+  {
+    var query = Qs.parse(location.search.substring(1));
+    if (query.scope)
+    {
+      if (!config.params)
+      {
+        config.params = {};
+      }
+      config.params['scope'] = query.scope;
+    }
+  }
+  return config;
+}, error => Promise.reject(error));
+
 export default Axios;

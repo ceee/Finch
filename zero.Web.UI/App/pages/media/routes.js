@@ -8,7 +8,7 @@ const section = __zero.sections.find(x => x.alias === alias);
 export default section ? [
   {
     name: section.alias,
-    path: section.url + '/:scope?/:id?',
+    path: section.url + '/:id?',
     component: MediaOverview,
     props: true,
     meta: {
@@ -19,7 +19,7 @@ export default section ? [
   },
   {
     name: section.alias + '-edit',
-    path: section.url + '/:scope/edit/:id',
+    path: section.url + '/edit/:id',
     component: Media,
     props: true,
     meta: {

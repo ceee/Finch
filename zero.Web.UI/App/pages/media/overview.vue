@@ -32,7 +32,7 @@
       </template>
     </ui-header-bar>
 
-    <div class="ui-view-box" v-if="scope">
+    <div class="ui-view-box">
       <div class="media-items">
         <ui-datagrid ref="grid" v-model="gridConfig" @select="onSelected" @count="count = $event">
           <template v-slot:actions="props">
@@ -91,7 +91,7 @@
       },
       shared()
       {
-        return this.scope === 'shared'
+        return this.$route.query.scope === 'shared';
       }
     },
 
@@ -116,11 +116,11 @@
 
       initialize()
       {
-        if (!this.scope)
-        {
-          this.$route.params.scope = 'local';
-          this.$router.replace(this.$route);
-        }
+        //if (!this.scope)
+        //{
+        //  this.$route.params.scope = 'local';
+        //  this.$router.replace(this.$route);
+        //}
       },
 
       // get items (media + subfolders) in the current folder

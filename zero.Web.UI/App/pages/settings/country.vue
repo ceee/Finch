@@ -26,7 +26,7 @@
 
       onLoad(form)
       {
-        form.load(!this.$route.params.id ? CountriesApi.getEmpty() : CountriesApi.getById(this.id)).then(response =>
+        form.load(!this.$route.params.id ? CountriesApi.getEmpty() : CountriesApi.getById(this.id, { scope: 'hallo' })).then(response =>
         {
           this.disabled = !response.meta.canEdit;
           this.meta = response.meta;

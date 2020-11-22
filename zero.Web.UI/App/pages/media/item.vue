@@ -37,16 +37,16 @@
         {
           return {
             name: 'media',
-            params: { scope: 'shared' }
+            query: { scope: 'shared' }
           };
         }
 
         return {
           name: this.value.isFolder ? 'media' : 'media-edit',
           params: {
-            id: this.value.id,
-            scope: this.$route.params.scope
-          }
+            id: this.value.id
+          },
+          query: this.$route.query
         };
       },
       shared()

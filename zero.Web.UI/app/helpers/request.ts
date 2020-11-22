@@ -1,5 +1,16 @@
 ﻿import axios from 'axios';
 
+const getConfig = config =>
+{
+  config = config || {};
+  if (config.scope)
+  {
+    config.params = config.params || {};
+    config.params.scope = config.scope;
+  }
+  return config;
+};
+
 export async function get(url, config: any = null)
 {
   return await send({ method: 'get', url, ...config });
@@ -28,6 +39,8 @@ export async function patch(url, data: any = null, config: any = null)
 
 export async function send(config)
 {
+  config = getConfig(config);
+
   try
   {
     const result = await axios(config);
@@ -43,14 +56,14 @@ export async function send(config)
 export function collection(base)
 {
   return {
-    getById: async id => await get(base + 'getById', { params: { id } }),
-    getByIds: async ids => await get(base + 'getByIds', { params: { ids } }),
-    getEmpty: async () => await get(base + 'getEmpty'),
-    getByQuery: async query => await get(base + 'getByQuery', { params: { query } }),
-    getAll: async () => await get(base + 'getAll'),
-    getPreviews: async ids => await get(base + 'getPreviews', { params: { ids } }),
-    getForPicker: async () => await get(base + 'getForPicker'),
-    save: async model => await post(base + 'save', model),
-    delete: async id => await del(base + 'delete', { params: { id } })
+    getById: async (id, config) => await get(base + 'getById', { ...config, params: { id } }),
+    getByIds: async (ids, config) => await get(base + 'getByIds', { ...config, params: { ids } }),
+    getEmpty: async config => await get(base + 'getEmpty', { ...config }),
+    getByQuery: async (query, config) => await get(base + 'getByQuery', { ...config, params: { query } }),
+    getAll: async (config) => await get(base + 'getAll', { ...config }),
+    getPreviews: async (ids, config) => await get(base + 'getPreviews', { ...config, params: { ids } }),
+    getForPicker: async (config) => await get(base + 'getForPicker', { ...config }),
+    save: async (model, config) => await post(base + 'save', model, { ...config }),
+    delete: async (id, config) => await del(base + 'delete', { ...config, params: { id } })
   };
 }

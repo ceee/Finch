@@ -1,5 +1,6 @@
 import { collection, get, post } from '../helpers/request.ts';
 
+const base = 'media/';
 
 const upload = async (file, folderId, onProgress, isTemporary) =>
 {
@@ -7,7 +8,7 @@ const upload = async (file, folderId, onProgress, isTemporary) =>
   data.append('file', file);
   data.append('folderId', folderId);
 
-  return await post('media/' + (isTemporary ? 'uploadTemporary' : 'upload'), data, {
+  return await post(base + (isTemporary ? 'uploadTemporary' : 'upload'), data, {
     onUploadProgress: (progressEvent) =>
     {
       if (typeof onProgress === 'function')
@@ -20,7 +21,7 @@ const upload = async (file, folderId, onProgress, isTemporary) =>
 };
 
 
-const getImageSource = (id, thumb, core) =>
+const getImageSource = (id, thumb) =>
 {
   if (!id || id.indexOf('http') === 0)
   {
@@ -30,16 +31,16 @@ const getImageSource = (id, thumb, core) =>
   {
     return id.substring(6) + "?preset=productListing";
   }
-  return zero.apiPath + 'media/streamThumbnail/?id=' + id + (typeof thumb === 'boolean' ? '&thumb=' + (thumb ? 'true' : 'false') : '') + (core === true ? '&core=true' : '');
+  return zero.apiPath + base + 'streamThumbnail/?id=' + id + (typeof thumb === 'boolean' ? '&thumb=' + (thumb ? 'true' : 'false') : '');
 };
 
 
 export default {
-  ...collection('media/'),
+  ...collection(base),
 
-  getListByQuery: async query => await get('media/getListByQuery', { params: query }),
+  getListByQuery: async query => await get(base + 'getListByQuery', { params: query }),
 
-  move: async (id, destinationId) => await post('media/move', { id, destinationId }),
+  move: async (id, destinationId) => await post(base + 'move', { id, destinationId }),
 
   upload,
 

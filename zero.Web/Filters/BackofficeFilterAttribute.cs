@@ -7,7 +7,7 @@ namespace zero.Web.Filters
 {
   public class BackofficeFilterAttribute : IActionFilter
   {
-    const string SCOPE_KEY = "__scope";
+    const string SCOPE_KEY = "scope";
 
 
     public void OnActionExecuting(ActionExecutingContext context)

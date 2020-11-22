@@ -29,7 +29,8 @@
       {
         return {
           name: baseRoute + '-edit',
-          params: { id: item.id }
+          params: { id: item.id },
+          query: { scope: 'shared' }
         };
       },
 
@@ -40,7 +41,10 @@
 
       getAddLink()
       {
-        return { name: baseRoute + '-create' };
+        return {
+          name: baseRoute + '-create',
+          query: { scope: 'shared' }
+        };
       }
 
     }
