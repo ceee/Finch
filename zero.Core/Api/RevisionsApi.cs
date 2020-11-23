@@ -81,7 +81,7 @@ namespace zero.Core.Api
         {
           revision.User = new RevisionUser()
           {
-            AvatarId = user.AvatarId,
+            AvatarId = user.AvatarId?.Id,
             Id = user.Id,
             Name = user.Name
           };

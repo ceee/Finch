@@ -1,36 +1,36 @@
-﻿namespace zero.Core.Entities
+﻿using Newtonsoft.Json;
+using zero.Core.Extensions;
+
+namespace zero.Core.Entities
 {
-  public class Ref<T> : Ref where T : IZeroIdEntity
-  {
-    public Ref() : base() { }
-    public Ref(string id) : base(id) { }
-
-    public static implicit operator Ref<T>(string id) => new Ref<T>(id);
-
-    public static implicit operator string(Ref<T> reference) => reference.Id;
-  }
-
-
   public class Ref
   {
+    public string Id { get; set; }
+
+    [JsonProperty("Core")]
+    public bool IsCore { get; set; }
+
     public Ref() { }
 
-    public Ref(string id)
+    public Ref(string id) : this()
     {
       Id = id;
     }
 
-    public string Id { get; set; }
+    public Ref(string id, bool isCore) : this(id)
+    {
+      IsCore = isCore;
+    }
 
 
     public override string ToString()
     {
-      return Id;
+      return (IsCore ? "core:" : string.Empty) + Id;
     }
 
-
-    public static implicit operator Ref(string id) => new Ref(id);
-
-    public static implicit operator string(Ref reference) => reference.Id;
+    public static Ref Create(string id, bool isCore = false)
+    {
+      return id.IsNullOrWhiteSpace() ? null : new Ref(id, isCore);
+    }
   }
 }

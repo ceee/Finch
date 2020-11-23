@@ -32,7 +32,7 @@ namespace zero.Core.Entities
     public string SecurityStamp { get; set; }
 
     /// <inheritdoc/>
-    public MediaRef AvatarId { get; set; }
+    public Ref AvatarId { get; set; }
 
     /// <inheritdoc/>
     public string LanguageId { get; set; }
@@ -99,7 +99,7 @@ namespace zero.Core.Entities
     /// <summary>
     /// Avatar image
     /// </summary>
-    MediaRef AvatarId { get; set; }
+    Ref AvatarId { get; set; }
 
     /// <summary>
     /// Backoffice display language

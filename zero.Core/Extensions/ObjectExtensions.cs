@@ -21,12 +21,12 @@ namespace zero.Core.Extensions
     public static T Clone<T>(this T obj)
     {
       Type type = obj.GetType();
-      return (T)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(obj, new RefJsonConverter()), type, new RefJsonConverter());
+      return (T)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(obj), type);
     }
 
     public static T CloneLax<T>(this object obj)
     {
-      return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj, new RefJsonConverter()), new RefJsonConverter());
+      return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj));
     }
   }
 }

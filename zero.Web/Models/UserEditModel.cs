@@ -14,7 +14,7 @@ namespace zero.Web.Models
 
     public bool IsEmailConfirmed { get; set; }
 
-    public string AvatarId { get; set; }
+    public Ref AvatarId { get; set; }
 
     public string LanguageId { get; set; }
 
