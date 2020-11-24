@@ -17,7 +17,7 @@ namespace zero.Core.Entities
   }
 
 
-  [Collection("BackofficeUserRoles")]
+  [Collection("Roles")]
   public interface IBackofficeUserRole : IZeroEntity, IZeroDbConventions, IIdentityUserRole
   {
     /// <summary>

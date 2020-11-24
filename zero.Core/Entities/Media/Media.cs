@@ -38,6 +38,9 @@ namespace zero.Core.Entities
 
     /// <inheritdoc />
     public MediaType Type { get; set; }
+
+    /// <inheritdoc />
+    public bool IsCore { get; set; }
   }
 
 
@@ -101,5 +104,10 @@ namespace zero.Core.Entities
     /// Type of the media
     /// </summary>
     MediaType Type { get; set; }
+
+    /// <summary>
+    /// Whether this media item is part of the core database (for multi-tenant setup)
+    /// </summary>
+    bool IsCore { get; set; }
   }
 }

@@ -43,6 +43,10 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public async Task<string> GetSourceById(string id, bool thumb = false)
     {
+      if (id.StartsWith(Constants.Database.CoreIdPrefix))
+      {
+        ApplyScope("shared");
+      }
       IMedia media = await Session.LoadAsync<IMedia>(id);
 
       if (media == null)

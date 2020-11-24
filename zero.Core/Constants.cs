@@ -36,6 +36,7 @@
     public static class Database
     {
       public const string ReservationPrefix = "zero.";
+      public const string CoreIdPrefix = "core.";
       public const string Expires = Raven.Client.Constants.Documents.Metadata.Expires;
     }
 

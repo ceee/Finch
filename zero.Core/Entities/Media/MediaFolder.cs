@@ -7,6 +7,9 @@ namespace zero.Core.Entities
   {
     /// <inheritdoc />
     public string ParentId { get; set; }
+
+    /// <inheritdoc />
+    public bool IsCore { get; set; }
   }
 
 
@@ -20,5 +23,10 @@ namespace zero.Core.Entities
     /// Parent folder id
     /// </summary>
     string ParentId { get; set; }
+
+    /// <summary>
+    /// Whether this media folder is part of the core database (for multi-tenant setup)
+    /// </summary>
+    bool IsCore { get; set; }
   }
 }

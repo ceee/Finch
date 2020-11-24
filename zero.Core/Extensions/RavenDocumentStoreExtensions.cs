@@ -16,6 +16,7 @@ namespace zero.Core.Extensions
   public static class RavenDocumentStoreExtensions
   {
     const char DOT = '.';
+
     /// <summary>
     /// Setup conventions for the document store
     /// </summary>
@@ -29,10 +30,22 @@ namespace zero.Core.Extensions
 
       store.Conventions.RegisterAsyncIdConvention<IZeroEntity>((_, entity) =>
       {
+        string prefix = String.Empty;
+        string guid = IdGenerator.Create();
         string collection = store.Conventions.GetCollectionName(entity);
         //CollectionAttribute collectionAttribute = entity.GetType().GetCustomAttribute<CollectionAttribute>(true);
+
+        if ((entity is IMedia && ((IMedia)entity).IsCore) || (entity is IMediaFolder && ((IMediaFolder)entity).IsCore))
+        {
+          prefix = Constants.Database.CoreIdPrefix;
+        }
+        if (entity is IBackofficeUser or IBackofficeUserRole)
+        {
+          guid = IdGenerator.Create(8);
+        }
+
         string tag = store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix(collection);
-        return Task.FromResult(tag + store.Conventions.IdentityPartsSeparator + IdGenerator.Create());
+        return Task.FromResult(prefix + tag + store.Conventions.IdentityPartsSeparator + guid);
       });
 
       store.Conventions.RegisterAsyncIdConvention<IPage>((_, entity) =>
