@@ -69,7 +69,7 @@
 
     props: {
       value: {
-        type: [Array, Object, String],
+        type: [Array, String],
         default: null
       },
       disabled: {

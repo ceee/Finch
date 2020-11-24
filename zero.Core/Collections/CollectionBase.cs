@@ -99,28 +99,6 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public void ResetScope()
-    {
-      Database = Store.ResolvedDatabase;
-    }
-
-
-    /// <inheritdoc />
-    public async Task Scoped(string scope, Func<Task> action)
-    {
-      if (scope.IsNullOrEmpty())
-      {
-        await action();
-        return;
-      }
-
-      ApplyScope(scope);
-      await action();
-      ResetScope();
-    }
-
-
-    /// <inheritdoc />
     public virtual async Task<T> GetById(string id)
     {
       if (id.IsNullOrWhiteSpace())
@@ -459,16 +437,6 @@ namespace zero.Core.Collections
     /// Applies the scope to the service instance
     /// </summary>
     void ApplyScope(string scope);
-
-    /// <summary>
-    /// Resets the scope to the initial value
-    /// </summary>
-    void ResetScope();
-
-    /// <summary>
-    /// Execute scoped actions
-    /// </summary>
-    Task Scoped(string scope, Func<Task> action);
 
     /// <summary>
     /// Get an entity by Id

@@ -7,7 +7,7 @@
   export default {
     props: {
       value: {
-        type: [String, Object, Array],
+        type: [String, Array],
         default: null
       },
       disabled: {

@@ -23,11 +23,6 @@ const upload = async (file, folderId, onProgress, isTemporary) =>
 
 const getImageSource = (id, thumb, shared) =>
 {
-  if (typeof id === 'object')
-  {
-    shared = id.isCore;
-    id = id.id;
-  }
   if (!id || id.indexOf('http') === 0)
   {
     return id;

@@ -47,7 +47,7 @@ namespace zero.Web.Controllers
       return Previews(await Api.GetByIds(ids.ToArray()), item => new PreviewModel()
       {
         Id = item.Id,
-        Image = item.AvatarId,
+        Icon = item.AvatarId,
         Name = item.Name
       });
     }

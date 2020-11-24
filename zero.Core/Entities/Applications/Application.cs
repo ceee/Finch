@@ -19,10 +19,10 @@ namespace zero.Core.Entities
     public string Email { get; set; }
 
     /// <inheritdoc />
-    public Ref ImageId { get; set; }
+    public MediaRef ImageId { get; set; }
 
     /// <inheritdoc />
-    public Ref IconId { get; set; }
+    public MediaRef IconId { get; set; }
 
     /// <inheritdoc />
     public Uri[] Domains { get; set; } = new Uri[] { };
@@ -53,12 +53,12 @@ namespace zero.Core.Entities
     /// <summary>
     /// Image of the application
     /// </summary>
-    Ref ImageId { get; set; }
+    MediaRef ImageId { get; set; }
 
     /// <summary>
     /// Simple image of the application (can be used as favicon)
     /// </summary>
-    Ref IconId { get; set; }
+    MediaRef IconId { get; set; }
 
     /// <summary>
     /// All assigned domains for this application
