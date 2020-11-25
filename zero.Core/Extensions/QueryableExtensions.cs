@@ -48,6 +48,9 @@ namespace zero.Core.Extensions
 
     public static IQueryable<T> Paging<T>(this IQueryable<T> source, int pageNumber, int pageSize)
     {
+      pageNumber = pageNumber.Limit(1, 10_000_000);
+      pageSize = pageSize.Limit(1, 1_000);
+
       if (pageNumber <= 0 || pageSize <= 0)
       {
         throw new NotSupportedException("Both pageNumber and pageSize must be greater than zero");

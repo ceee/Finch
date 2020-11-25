@@ -83,7 +83,7 @@ namespace zero.Web.ViewHelpers
     public async Task<string> GetUrl(string id, bool isAbsolute = false)
     {
       IMedia media = await GetById(id);
-      return media?.Source;
+      return media?.Source.TrimStart("url://");
     }
 
 
@@ -91,7 +91,7 @@ namespace zero.Web.ViewHelpers
     public async Task<Dictionary<string, string>> GetUrls(string[] ids, bool isAbsolute = false)
     {
       Dictionary<string, IMedia> medias = await GetByIds(ids);
-      return medias.ToDictionary(x => x.Key, x => x.Value?.Source);
+      return medias.ToDictionary(x => x.Key, x => x.Value?.Source.TrimStart("url://"));
     }
   }
 
