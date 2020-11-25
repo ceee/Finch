@@ -93,17 +93,8 @@ namespace zero.Core.Routing
         return routes;
       }
 
-      List<IRoute> allRoutes = new List<IRoute>();
       IList<IPage> pages = await session.Query<IPage>().ToListAsync();
-      //IEnumerable<IGrouping<string, IPage>> groupedPages = pages. pages.GroupBy(x => x.AppId);
-
-      //foreach (var group in groupedPages)
-      //{
-        IList<IRoute> routes = TraversePageChildren(null, new List<IPage>() { }, pages);
-        allRoutes.AddRange(routes);
-      //}
-
-      return allRoutes;
+      return TraversePageChildren(null, new List<IPage>() { }, pages);
     }
 
 

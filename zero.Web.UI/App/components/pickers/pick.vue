@@ -714,7 +714,8 @@
   }
 
   .ui-pick-preview + .ui-pick-preview,
-  .ui-pick-previews + .ui-select-button
+  .ui-pick-previews + .ui-select-button,
+  .ui-pick-previews + .ui-pick-add
   {
     margin-top: 10px;
   }

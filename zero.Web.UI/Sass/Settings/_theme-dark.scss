@@ -2,11 +2,13 @@
 .theme-dark
 {
   // accent colors
-  $color-primary: #1db1b6;
+  $color-primary: #3c9a92; //#18a471
   $color-primary-fg: #fff;
   $color-primary-low: #{rgba(#2c3036, 0.2)};
-  $color-secondary: #f9e0c4;
-  $color-secondary-fg: #20242a;
+  $color-secondary: #24b4a6;
+  $color-secondary-fg: #fff;
+  $color-tertiary: #c4e4de;
+  $color-tertiary-fg: #2c3036;
 
   // foreground colors
   $color-fg: #fff;
@@ -32,6 +34,10 @@
   --color-primary: #{$color-primary};
   --color-primary-low: #{$color-primary-low};
   --color-primary-text: #{$color-primary-fg};
+  --color-secondary: #{$color-secondary};
+  --color-secondary-text: #{$color-secondary-fg};
+  --color-tertiary: #{$color-tertiary};
+  --color-tertiary-text: #{$color-tertiary-fg};
 
   // generic shades 
   // (try to avoid them)

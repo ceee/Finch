@@ -155,7 +155,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    max-width: 300px;
+    max-width: 100%;
 
     &.has-icon
     {

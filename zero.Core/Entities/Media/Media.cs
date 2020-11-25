@@ -7,6 +7,9 @@ namespace zero.Core.Entities
   public class Media : ZeroEntity, IMedia
   {
     /// <inheritdoc />
+    public string AppId { get; set; }
+
+    /// <inheritdoc />
     public string FileId { get; set; }
 
     /// <inheritdoc />
@@ -38,9 +41,6 @@ namespace zero.Core.Entities
 
     /// <inheritdoc />
     public MediaType Type { get; set; }
-
-    /// <inheritdoc />
-    public bool IsCore { get; set; }
   }
 
 
@@ -48,7 +48,7 @@ namespace zero.Core.Entities
   /// A media file (can contain an image or other media like videos and documents)
   /// </summary>
   [Collection("Media", LongId = true)]
-  public interface IMedia : IZeroEntity, IZeroDbConventions
+  public interface IMedia : IZeroEntity, IZeroDbConventions, IAppAwareEntity
   {
     /// <summary>
     /// Id/name of the phyiscal folder which is stored on disk/cloud
@@ -104,10 +104,5 @@ namespace zero.Core.Entities
     /// Type of the media
     /// </summary>
     MediaType Type { get; set; }
-
-    /// <summary>
-    /// Whether this media item is part of the core database (for multi-tenant setup)
-    /// </summary>
-    bool IsCore { get; set; }
   }
 }

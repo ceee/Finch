@@ -5,8 +5,10 @@
   $color-primary: #2c3036; //#18a471
   $color-primary-fg: #fff;
   $color-primary-low: #{rgba(#2c3036, 0.2)};
-  $color-secondary: #f9e0c4;
-  $color-secondary-fg: #20242a;
+  $color-secondary: #24b4a6;
+  $color-secondary-fg: #fff;
+  $color-tertiary: #c4e4de;
+  $color-tertiary-fg: #2c3036;
 
   // foreground colors
   $color-fg: #2c3036;
@@ -15,9 +17,9 @@
   $color-fg-shade-3: #c8cbcf;
   
   // background colors  
-  $color-bg: #f4f4f7;
+  $color-bg: #f4f4f6;
   $color-bg-shade-1: #fff; // bright
-  $color-bg-shade-2: #f8f8fa; // dim
+  $color-bg-shade-2: #f8f8f9; // dim
   $color-bg-shade-3: #f5f5f6; // bright-two
   $color-bg-shade-4: #efeff1; // bright-three
   $color-bg-shade-5: #eaecef;
@@ -34,6 +36,10 @@
   --color-primary: #{$color-primary};
   --color-primary-low: #{$color-primary-low};
   --color-primary-text: #{$color-primary-fg};
+  --color-secondary: #{$color-secondary};
+  --color-secondary-text: #{$color-secondary-fg};
+  --color-tertiary: #{$color-tertiary};
+  --color-tertiary-text: #{$color-tertiary-fg};
 
   // generic shades 
   // (try to avoid them)

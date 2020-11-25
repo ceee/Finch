@@ -7,6 +7,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -20,10 +21,31 @@ namespace zero.Core.Collections
 {
   public class MediaCollection : CollectionBase<IMedia>, IMediaCollection
   {
+    private IAsyncDocumentSession _coreSession;
+
+
     public MediaCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<IMedia> validator, IPaths paths) : base(context, interceptor, validator)
     {
       PreSave = model => model.IsActive = true;
       Paths = paths;
+    }
+
+
+    /// <summary>
+    /// Create an an async document session
+    /// </summary>
+    protected IAsyncDocumentSession CoreSession
+    {
+      get
+      {
+        if (_coreSession != null)
+        {
+          return _coreSession;
+        }
+        _coreSession = Store.OpenCoreSession();
+        _coreSession.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
+        return _coreSession;
+      }
     }
 
 
@@ -40,13 +62,49 @@ namespace zero.Core.Collections
     protected IPaths Paths { get; set; }
 
 
+    public override Task<IMedia> GetById(string id)
+    {
+      ApplyScopeBasedOnId(id);
+      return base.GetById(id);
+    }
+
+
+    public override async Task<Dictionary<string, IMedia>> GetByIds(params string[] ids)
+    {
+      string[] localIds = ids.Where(x => !x.StartsWith(Constants.Database.CoreIdPrefix)).ToArray();
+      string[] coreIds = ids.Except(localIds).ToArray();
+
+      Dictionary<string, IMedia> result = new Dictionary<string, IMedia>();
+      Dictionary<string, IMedia> models = null;
+
+      if (localIds.Length > 0)
+      {
+        models = await Session.LoadAsync<IMedia>(localIds);
+        foreach (string id in localIds)
+        {
+          models.TryGetValue(id, out IMedia model);
+          result.Add(id, model);
+        }
+      }
+      if (coreIds.Length > 0)
+      {
+        models = await CoreSession.LoadAsync<IMedia>(coreIds);
+        foreach (string id in coreIds)
+        {
+          models.TryGetValue(id, out IMedia model);
+          result.Add(id, model);
+        }
+      }
+
+      return result;
+    }
+
+
     /// <inheritdoc />
     public async Task<string> GetSourceById(string id, bool thumb = false)
     {
-      if (id.StartsWith(Constants.Database.CoreIdPrefix))
-      {
-        ApplyScope("shared");
-      }
+      ApplyScopeBasedOnId(id);
+
       IMedia media = await Session.LoadAsync<IMedia>(id);
 
       if (media == null)
@@ -66,6 +124,8 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public async Task<ListResult<IMedia>> GetByQuery(MediaListQuery query)
     {
+      ApplyScopeBasedOnId(query.FolderId);
+
       query.SearchFor(entity => entity.Name);
 
       return await Query
@@ -192,6 +252,18 @@ namespace zero.Core.Collections
       }
 
       return result;
+    }
+
+
+    /// <summary>
+    /// Applies the shared scope when an ID is prefixed with core.
+    /// </summary>
+    void ApplyScopeBasedOnId(string id)
+    {
+      if (!id.IsNullOrWhiteSpace() && id.StartsWith(Constants.Database.CoreIdPrefix, StringComparison.InvariantCultureIgnoreCase))
+      {
+        ApplyScope("shared");
+      }
     }
 
 

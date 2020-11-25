@@ -161,31 +161,38 @@ namespace zero.Core.Routing
     {
       int count = 0;
       List<IRoute> all = new List<IRoute>();
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-      session.Advanced.MaxNumberOfRequestsPerSession = 1000;
 
-      foreach (IRouteProvider provider in Providers)
+      using IAsyncDocumentSession coreSession = Store.OpenCoreSession();
+      List<IApplication> apps = await coreSession.Query<IApplication>().ToListAsync();
+
+      foreach (IApplication app in apps)
       {
-        // get all routes for this provider
-        IList<IRoute> routes = await provider.GetAllRoutes(session);
+        using IAsyncDocumentSession session = Store.OpenAsyncSession(app.Database);
+        session.Advanced.MaxNumberOfRequestsPerSession = 1000;
 
-        // delete all registered routes in the database for this provider
-        await Store.PurgeAsync<IRoute>(null, $"where {nameof(IRoute.ProviderAlias)} = $alias", new Raven.Client.Parameters()
+        foreach (IRouteProvider provider in Providers)
         {
-          { "alias", provider.Alias }
-        });
+          // get all routes for this provider
+          IList<IRoute> routes = await provider.GetAllRoutes(session);
 
-        // store new routes
-        using (BulkInsertOperation bulkInsert = Store.BulkInsert())
-        {
-          foreach (IRoute route in routes)
+          // delete all registered routes in the database for this provider
+          await Store.PurgeAsync<IRoute>(app.Database, $"where {nameof(IRoute.ProviderAlias)} = $alias", new Raven.Client.Parameters()
           {
-            await bulkInsert.StoreAsync(route, route.Id);
-            count += 1;
-          }
-        }
+            { "alias", provider.Alias }
+          });
 
-        all.AddRange(routes);
+          // store new routes
+          using (BulkInsertOperation bulkInsert = Store.BulkInsert(app.Database))
+          {
+            foreach (IRoute route in routes)
+            {
+              await bulkInsert.StoreAsync(route, route.Id);
+              count += 1;
+            }
+          }
+
+          all.AddRange(routes);
+        }
       }
 
       return all;
