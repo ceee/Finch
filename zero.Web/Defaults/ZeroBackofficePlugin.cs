@@ -8,6 +8,7 @@ using zero.Core.Mails;
 using zero.Core.Messages;
 using zero.Core.Options;
 using zero.Core.Plugins;
+using zero.Core.Renderer;
 using zero.Core.Routing;
 using zero.Core.Validation;
 using zero.Web.Routing;
@@ -48,6 +49,8 @@ namespace zero.Web.Defaults
       //services.AddAll(typeof(IValidator<>), ServiceLifetime.Scoped);
       //services.AddAll(typeof(IValidator), ServiceLifetime.Scoped);
       services.AddSingleton<IMessageAggregator, MessageAggregator>();
+
+      services.AddScoped<IRazorRenderer, RazorRenderer>();
 
       services.AddTransient<IApplication, Application>();
       services.AddTransient<ICountry, Country>();
@@ -106,7 +109,7 @@ namespace zero.Web.Defaults
       services.AddScoped<ZeroRoutesTransformer>();
 
       services.AddScoped<IMailProvider, MailProvider>();
-      services.AddScoped<IMailSender, LoggerMailSender>();
+      services.AddScoped<IMailDispatcher, FileMailDispatcher>();
 
       services.AddScoped<IZeroMediaHelper, ZeroMediaHelper>();
     }

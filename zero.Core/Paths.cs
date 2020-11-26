@@ -45,6 +45,14 @@ namespace zero.Core
       return Path.Combine(Root, path);
     }
 
+    /// <summary>
+    /// Map a path
+    /// </summary>
+    public string Map(params string[] paths)
+    {
+      return Path.Combine(Root, Path.Combine(paths));
+    }
+
 
     /// <summary>
     /// Create a directory if it does not exist yet
@@ -116,6 +124,11 @@ namespace zero.Core
     /// Map a path
     /// </summary>
     string Map(string path);
+
+    /// <summary>
+    /// Map a path
+    /// </summary>
+    string Map(params string[] paths);
 
     /// <summary>
     /// Create a directory if it does not exist yet

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Renderer;
 
 namespace zero.Core.Mails
 {
@@ -18,20 +19,40 @@ namespace zero.Core.Mails
 
     protected IZeroContext Zero { get; set; }
 
-    protected IMailSender MailSender { get; set; }
+    protected IMailDispatcher MailSender { get; set; }
+
+    protected IRazorRenderer Renderer { get; set; }
 
     protected Regex PlaceholderRegex { get; set; }
 
     private Encoding encoding = Encoding.UTF8;
 
 
-    public MailProvider(IZeroContext zero, IMailTemplatesCollection collection, ILogger<IMailProvider> logger, IMailSender mailSender)
+    public MailProvider(IZeroContext zero, IMailTemplatesCollection collection, ILogger<IMailProvider> logger, IMailDispatcher mailSender, IRazorRenderer renderer)
     {
       Zero = zero;
       Collection = collection;
       Logger = logger;
       MailSender = mailSender;
+      Renderer = renderer;
       PlaceholderRegex = new Regex("{([\\w-_.]+)}", RegexOptions.IgnoreCase);
+    }
+
+
+    /// <inheritdoc />
+    public virtual async Task<Mail<T>> Create<T>(string mailTemplateKey, T model, CancellationToken token = default) where T : class
+    {
+      IMailTemplate template = await GetMailTemplate(mailTemplateKey);
+
+      if (template == null)
+      {
+        Logger.LogError("Could not find a mail template with the key {key}", mailTemplateKey);
+        return null;
+      }
+
+      Mail<T> mail = Merge(new Mail<T>(), template);
+      mail.Model = model;
+      return mail;
     }
 
 
@@ -46,8 +67,60 @@ namespace zero.Core.Mails
         return null;
       }
 
-      Mail mail = new Mail();
+      return Merge(new Mail(), template);
+    }
 
+
+    /// <inheritdoc />
+    public virtual async Task Send(Mail message, CancellationToken token = default)
+    {
+      await Send(message, MailSender, token);
+    }
+
+
+    /// <inheritdoc />
+    public virtual async Task Send(Mail message, IMailDispatcher dispatcher, CancellationToken token = default)
+    {
+      await Render(message);
+      dispatcher.Enqueue(message);
+      await dispatcher.Send(token);
+    }
+
+
+    
+    protected virtual async Task<IMailTemplate> GetMailTemplate(string key)
+    {
+      return await Collection.GetByKey(key);
+    }
+
+
+
+    protected virtual async Task Render(Mail message)
+    {
+      message.Subject = TokenReplacement.Apply(message.Subject, message.Placeholders);
+      message.Body = TokenReplacement.Apply(message.Body, message.Placeholders);
+
+      if (!message.HasView)
+      {
+        message.IsRendered = true;
+        return;
+      }
+
+      string viewPath = message.ViewPath;
+
+      if (viewPath.IsNullOrEmpty())
+      {
+        viewPath = $"~/Views/Mails/{message.Template.Key.Replace('.', '/')}.cshtml";
+      }
+
+      message.Body = await Renderer.ViewAsync(viewPath, message);
+      message.IsBodyHtml = true;
+      message.IsRendered = true;
+    }
+
+
+    protected virtual T Merge<T>(T mail, IMailTemplate template) where T : Mail
+    {
       mail.Template = template;
 
       // get sender from template or fall back to application
@@ -82,49 +155,6 @@ namespace zero.Core.Mails
 
       return mail;
     }
-
-
-    /// <inheritdoc />
-    public virtual async Task Send(Mail message, CancellationToken token = default)
-    {
-      await Send(message, MailSender, token);
-    }
-
-
-    /// <inheritdoc />
-    public virtual async Task Send(Mail message, IMailSender sender, CancellationToken token = default)
-    {
-      await sender.Send(message, token);
-    }
-
-
-    /// <inheritdoc />
-    protected virtual async Task<IMailTemplate> GetMailTemplate(string key)
-    {
-      return await Collection.GetByKey(key);
-    }
-
-
-    //protected Mail ReplacePlaceholders(Mail message)
-    //{
-      
-
-    //  foreach ((string key, string value) in message.Placeholders)
-    //  {
-        
-    //  }
-    //}
-
-
-    //protected string ReplacePlaceholders(string text)
-    //{
-    //  MatchCollection matches = PlaceholderRegex.Matches(text);
-
-    //  foreach (Match match in matches)
-    //  {
-    //    text.
-    //  }
-    //}
   }
 
 
@@ -134,9 +164,16 @@ namespace zero.Core.Mails
     Task<Mail> Create(string mailTemplateKey, CancellationToken token = default);
 
     /// <inheritdoc />
+    Task<Mail<T>> Create<T>(string mailTemplateKey, T model, CancellationToken token = default) where T : class;
+
+    /// <summary>
+    /// Sends a message with the default dispatcher
+    /// </summary>
     Task Send(Mail message, CancellationToken token = default);
 
-    /// <inheritdoc />
-    Task Send(Mail message, IMailSender sender, CancellationToken token = default);
+    /// <summary>
+    /// Sends a message with the specified dispatcher
+    /// </summary>
+    Task Send(Mail message, IMailDispatcher dispatcher, CancellationToken token = default);
   }
 }
