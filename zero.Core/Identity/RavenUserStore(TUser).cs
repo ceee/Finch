@@ -47,15 +47,24 @@ namespace zero.Core.Identity
     /// </summary>
     protected virtual IRavenQueryable<TUser> ScopeQuery(IRavenQueryable<TUser> query) => query;
 
-    // <summary>
+    /// <summary>
     /// Get the database to operate on for this store
     /// </summary>
     protected virtual string GetDatabase() => Store.ResolvedDatabase;
 
-    // <summary>
+    /// <summary>
     /// Get a new document store session
     /// </summary>
     protected virtual IAsyncDocumentSession GetSession() => Store.OpenAsyncSession(GetDatabase());
+
+    /// <summary>
+    /// Whether an email is already reserved
+    /// </summary>
+    protected virtual async Task<bool> IsEmailReserved(IAsyncDocumentSession session, TUser user, CancellationToken cancellationToken = default)
+    {
+      TUser existingUser = await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Email == user.Email, cancellationToken);
+      return existingUser != null && existingUser.Id != user.Id;
+    }
 
 
     /// <inheritdoc />
@@ -63,8 +72,7 @@ namespace zero.Core.Identity
     {
       using IAsyncDocumentSession session = GetSession();
 
-      // try to reserve the key for the new user
-      if (!await Store.Raven.ReserveAsync(GetReservationKey(user), user.Id))
+      if (await IsEmailReserved(session, user))
       {
         return IdentityResult.Failed(new IdentityError
         {
@@ -74,21 +82,7 @@ namespace zero.Core.Identity
       }
 
       await session.StoreAsync(user, cancellationToken);
-
-      // Because this a a cluster-wide operation due to compare/exchange tokens,
-      // we need to save changes here; if we can't store the user, 
-      // we need to roll back the email reservation.
-      try
-      {
-        await session.SaveChangesAsync(cancellationToken);
-      }
-      catch (Exception)
-      {
-        // The compare/exchange email reservation is cluster-wide, outside of the session scope. 
-        // We need to manually roll it back.
-        await Store.Raven.RemoveReservationAsync(GetReservationKey(user));
-        throw;
-      }
+      await session.SaveChangesAsync(cancellationToken);
 
       return IdentityResult.Success;
     }
@@ -97,11 +91,6 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
     {
-      // Remove the cluster-wide compare/exchange key.
-      await Store.Raven.RemoveReservationAsync(GetReservationKey(user));
-
-      // Delete the user and save it. We must save it because deleting is a cluster-wide operation.
-      // Only if the deletion succeeds will we remove the cluster-wide compare/exchange key.
       using IAsyncDocumentSession session = GetSession();
 
       TUser source = await session.LoadAsync<TUser>(user.Id, cancellationToken);
@@ -129,20 +118,13 @@ namespace zero.Core.Identity
           });
         }
 
-        if (source.Email != user.Email)
+        if (source.Email != user.Email && await IsEmailReserved(session, user))
         {
-          // try to reserve the key for the new user
-          if (!await Store.Raven.ReserveAsync(GetReservationKey(user), user.Id))
+          return IdentityResult.Failed(new IdentityError
           {
-            return IdentityResult.Failed(new IdentityError
-            {
-              Code = "DuplicateEmail",
-              Description = $"The email address {user.Email} is already taken."
-            });
-          }
-
-          // Remove the cluster-wide compare/exchange key.
-          await Store.Raven.RemoveReservationAsync(GetReservationKey(source));
+            Code = "DuplicateEmail",
+            Description = $"The email address {user.Email} is already taken."
+          });
         }
       }
 

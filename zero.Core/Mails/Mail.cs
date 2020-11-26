@@ -11,6 +11,8 @@ namespace zero.Core.Mails
   {
     public IMailTemplate Template { get; set; }
 
-    public Dictionary<string, string> Placeholders { get; private set; } = new Dictionary<string, string>();
+    public Dictionary<string, string> Placeholders { get; set; } = new Dictionary<string, string>();
+
+    public Dictionary<string, string> Metadata { get; set; } = new Dictionary<string, string>();
   }
 }

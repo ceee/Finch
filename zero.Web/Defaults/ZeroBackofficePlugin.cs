@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using zero.Core.Api;
 using zero.Core.Collections;
 using zero.Core.Entities;
+using zero.Core.Mails;
 using zero.Core.Messages;
 using zero.Core.Options;
 using zero.Core.Plugins;
@@ -103,6 +104,9 @@ namespace zero.Web.Defaults
       services.AddScoped<PageRouteProvider>();
 
       services.AddScoped<ZeroRoutesTransformer>();
+
+      services.AddScoped<IMailProvider, MailProvider>();
+      services.AddScoped<IMailSender, LoggerMailSender>();
 
       services.AddScoped<IZeroMediaHelper, ZeroMediaHelper>();
     }

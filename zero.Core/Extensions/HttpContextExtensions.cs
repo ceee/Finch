@@ -2,7 +2,7 @@
 
 namespace zero.Core.Extensions
 {
-  internal static class HttpContextExtensions
+  public static class HttpContextExtensions
   {
     /// <summary>
     /// Whether the current request is a backoffice request
@@ -11,6 +11,34 @@ namespace zero.Core.Extensions
     {
       string path = backofficePath.EnsureStartsWith('/').TrimEnd('/');
       return context.Request.Path.ToString().StartsWith(path);
+    }
+
+
+    /// <summary>
+    /// Whether the current request is an AJAX request
+    /// </summary>
+    public static bool IsAjaxRequest(this HttpContext context)
+    {
+      if (context?.Request?.Headers == null)
+      {
+        return false;
+      }
+
+      return context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+    }
+
+
+    /// <summary>
+    /// Whether the current request only accepts application/json
+    /// </summary>
+    public static bool IsJsonRequest(this HttpContext context)
+    {
+      if (context?.Request?.Headers == null)
+      {
+        return false;
+      }
+
+      return context.Request.Headers["Accept"] == "application/json";
     }
   }
 }

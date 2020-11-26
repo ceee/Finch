@@ -1,11 +1,28 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace zero.Core.Extensions
 {
   public static class StringExtensions
   {
+    const string SPACE = " ";
+
+    static Regex replaceMultipleSpacesRegex { get; } = new Regex("[ ]{2,}", RegexOptions.None);
+
+
+    public static string FullTrim(this string value)
+    {
+      if (String.IsNullOrEmpty(value))
+      {
+        return value;
+      }
+
+      return replaceMultipleSpacesRegex.Replace(value, SPACE).Trim();
+    }
+
+
     public static string EnsureStartsWith(this string input, string toStartWith)
     {
       if (input.StartsWith(toStartWith)) return input;
