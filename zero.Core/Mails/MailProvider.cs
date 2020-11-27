@@ -94,8 +94,8 @@ namespace zero.Core.Mails
     }
 
 
-
-    protected virtual async Task Render(Mail message)
+    /// <inheritdoc />
+    public virtual async Task<string> Render(Mail message)
     {
       message.Subject = TokenReplacement.Apply(message.Subject, message.Placeholders);
       message.Body = TokenReplacement.Apply(message.Body, message.Placeholders);
@@ -103,7 +103,7 @@ namespace zero.Core.Mails
       if (!message.HasView)
       {
         message.IsRendered = true;
-        return;
+        return message.Body;
       }
 
       string viewPath = message.ViewPath;
@@ -116,6 +116,7 @@ namespace zero.Core.Mails
       message.Body = await Renderer.ViewAsync(viewPath, message);
       message.IsBodyHtml = true;
       message.IsRendered = true;
+      return message.Body;
     }
 
 
@@ -165,6 +166,12 @@ namespace zero.Core.Mails
 
     /// <inheritdoc />
     Task<Mail<T>> Create<T>(string mailTemplateKey, T model, CancellationToken token = default) where T : class;
+
+    /// <summary>
+    /// Renders the message body.
+    /// This is automatically called when sending messages.
+    /// </summary>
+    Task<string> Render(Mail message);
 
     /// <summary>
     /// Sends a message with the default dispatcher
