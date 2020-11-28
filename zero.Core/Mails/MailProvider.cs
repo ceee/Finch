@@ -40,7 +40,7 @@ namespace zero.Core.Mails
 
 
     /// <inheritdoc />
-    public virtual async Task<Mail<T>> Create<T>(string mailTemplateKey, T model, CancellationToken token = default) where T : class
+    public virtual async Task<T> Create<T>(string mailTemplateKey, CancellationToken token = default) where T : Mail, new()
     {
       IMailTemplate template = await GetMailTemplate(mailTemplateKey);
 
@@ -50,9 +50,7 @@ namespace zero.Core.Mails
         return null;
       }
 
-      Mail<T> mail = Merge(new Mail<T>(), template);
-      mail.Model = model;
-      return mail;
+      return Merge(new T(), template);
     }
 
 
@@ -165,7 +163,7 @@ namespace zero.Core.Mails
     Task<Mail> Create(string mailTemplateKey, CancellationToken token = default);
 
     /// <inheritdoc />
-    Task<Mail<T>> Create<T>(string mailTemplateKey, T model, CancellationToken token = default) where T : class;
+    Task<T> Create<T>(string mailTemplateKey, CancellationToken token = default) where T : Mail, new();
 
     /// <summary>
     /// Renders the message body.
