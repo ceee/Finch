@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -79,9 +80,16 @@ namespace zero.Core.Mails
     /// <inheritdoc />
     public virtual async Task Send(Mail message, IMailDispatcher dispatcher, CancellationToken token = default)
     {
-      await Render(message);
-      dispatcher.Enqueue(message);
-      await dispatcher.Send(token);
+      try
+      {
+        await Render(message);
+        dispatcher.Enqueue(message);
+        await dispatcher.Send(token);
+      }
+      catch (Exception ex)
+      {
+        Logger.LogError(ex, "Failed to send mail message with template @{template}", message.Template.Key);
+      }
     }
 
 
