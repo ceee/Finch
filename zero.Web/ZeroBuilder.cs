@@ -157,9 +157,12 @@ namespace zero.Web
         var assemblies = AssemblyDiscovery.Current.GetAssemblies().ToList();
 
         // TODO maybe we shouldn't use all auto-registered assemblies but specify them directly via options?
-        foreach (Assembly assembly in assemblies)
+        if (options.SetupCompleted)
         {
-          IndexCreation.CreateIndexes(assembly, store, database: options.Raven.Database);
+          foreach (Assembly assembly in assemblies)
+          {
+            IndexCreation.CreateIndexes(assembly, store, database: options.Raven.Database);
+          }
         }
 
         return (ZeroStore)raven;

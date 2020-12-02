@@ -11,6 +11,7 @@
 
     public static class Auth
     {
+      public const string SystemUser = "system";
       public const string DefaultScheme = "zeroScheme";
       public const string BackofficeDisplayName = "Zero Bacckoffice";
       public const string BackofficeScheme = "zeroBackoffice";

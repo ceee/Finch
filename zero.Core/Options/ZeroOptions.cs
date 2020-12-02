@@ -26,6 +26,9 @@ namespace zero.Core.Options
     }
 
     /// <inheritdoc />
+    public bool SetupCompleted => !String.IsNullOrEmpty(Raven?.Database);
+
+    /// <inheritdoc />
     public string ZeroVersion { get; set; }
 
     /// <inheritdoc />
@@ -86,6 +89,11 @@ namespace zero.Core.Options
 
   public interface IZeroOptions
   {
+    /// <summary>
+    /// Whether the zero setup has already been completed and the instance is ready for use
+    /// </summary>
+    bool SetupCompleted { get; }
+
     /// <summary>
     /// The currently active version
     /// This should not be set manually, as it is used for setup and migrations and incremented automatically

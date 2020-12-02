@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Raven.Client.ServerWide;
+using Raven.Client.ServerWide.Operations;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Database;
@@ -66,6 +68,11 @@ namespace zero.Core
       if (context?.Request is null)
       {
         Store.ResolvedDatabase = null;
+        return;
+      }
+
+      if (!Options.SetupCompleted)
+      {
         return;
       }
 

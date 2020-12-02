@@ -131,7 +131,7 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public async Task<IResolvedRoute> ResolveUrl(HttpContext context)
     {
-      if (context.IsBackofficeRequest(Options.BackofficePath))
+      if (!Options.SetupCompleted || context.IsBackofficeRequest(Options.BackofficePath))
       {
         return null;
       }

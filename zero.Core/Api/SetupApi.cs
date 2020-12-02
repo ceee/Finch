@@ -8,12 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Entities.Setup;
 using zero.Core.Extensions;
 using zero.Core.Identity;
 using zero.Core.Options;
+using zero.Core.Utils;
 using zero.Core.Validation;
 
 
@@ -23,13 +26,13 @@ namespace zero.Core.Api
   {
     protected IZeroOptions Options { get; private set; }
 
-    protected UserManager<BackofficeUser> UserManager { get; private set; }
+    protected IPasswordHasher<BackofficeUser> PasswordHasher { get; private set; }
 
 
-    public SetupApi(IZeroOptions options, UserManager<BackofficeUser> userManager)
+    public SetupApi(IZeroOptions options, IPasswordHasher<BackofficeUser> passwordHasher)
     {
       Options = options;
-      UserManager = userManager;
+      PasswordHasher = passwordHasher;
     }
 
 
@@ -59,29 +62,35 @@ namespace zero.Core.Api
         raven.Setup(Options).Initialize();
 
         // create application
-        Application app = new Application()
+        Application app = Prepare(new Application()
         {
+          Id = "app." + Safenames.Alias(model.AppName),
           CreatedDate = DateTimeOffset.Now,
           IsActive = true,
           Name = model.AppName,
-          Alias = Safenames.Alias(model.AppName)
-        };
+          Alias = Safenames.Alias(model.AppName),
+          Database = model.Database.Name
+        });
 
         // create user
-        BackofficeUser user = new BackofficeUser()
+        BackofficeUser user = Prepare(new BackofficeUser()
         {
           IsSuper = true,
           CreatedDate = DateTimeOffset.Now,
           Email = model.User.Email,
+          Username = model.User.Email,
           Name = model.User.Name,
           IsActive = true,
           LanguageId = Options.DefaultLanguage,
           Alias = Safenames.Alias(model.User.Name),
-          IsEmailConfirmed = true
-        };
+          IsEmailConfirmed = true,
+          SecurityStamp = NewSecurityStamp()
+        });
+
+        user.PasswordHash = PasswordHasher.HashPassword(user, model.User.Password);
 
         // create default language
-        Language language = new Language() // TODO get default language selection from setup UI
+        Language language = Prepare(new Language() // TODO get default language selection from setup UI
         {
           Name = "English",
           Alias = Safenames.Alias("English"),
@@ -89,62 +98,60 @@ namespace zero.Core.Api
           Code = "en-US",
           IsActive = true,
           IsDefault = true
-        };
+        });
 
-        // TODO UserManager uses the DI resolved IDocumentStore instance which should not be available at this point??
-        IdentityResult result = await UserManager.CreateAsync(user, model.User.Password);
+        using IAsyncDocumentSession session = raven.OpenAsyncSession();
+
+        await session.StoreAsync(user);
 
         // user creation failed
-        if (!result.Succeeded)
+        //if (!result.Succeeded)
+        //{
+        //  EntityResult<SetupModel> entityResult = EntityResult<SetupModel>.Fail();
+
+        //  foreach (IdentityError error in result.Errors)
+        //  {
+        //    entityResult.AddError(error.Code, error.Description);
+        //  }
+
+        //  return entityResult;
+        //}
+
+
+        await session.StoreAsync(app);
+
+        // save default user roles
+        IList<BackofficeUserRole> roles = GetRoles(model);
+
+        foreach (BackofficeUserRole role in roles)
         {
-          EntityResult<SetupModel> entityResult = EntityResult<SetupModel>.Fail();
-
-          foreach (IdentityError error in result.Errors)
-          {
-            entityResult.AddError(error.Code, error.Description);
-          }
-
-          return entityResult;
+          await session.StoreAsync(role);
         }
 
-        // save entities
-        using (IAsyncDocumentSession session = raven.OpenAsyncSession())
+        // add admin role to super user
+        // set app-id for user and store it
+        user.AppId = session.Advanced.GetDocumentId(app);
+        user.CurrentAppId = user.AppId;
+        user.RoleIds.Add(roles.First(role => role.Name == "Standard").Id);
+        user.RoleIds.Add(roles.First(role => role.Name == "Administrator").Id);
+        await session.StoreAsync(user);
+
+        // create language
+        await session.StoreAsync(language);
+
+        // set countries
+        using (Raven.Client.Documents.BulkInsert.BulkInsertOperation bulkInsert = raven.BulkInsert())
         {
-          await session.StoreAsync(app);
-
-          // set app-id for user and store it
-          user.AppId = session.Advanced.GetDocumentId(app);
-          await session.StoreAsync(user);
-
-          // save default user roles
-          IList<BackofficeUserRole> roles = GetRoles(model);
-
-          foreach (BackofficeUserRole role in roles)
+          foreach (Country country in GetCountries(model, language))
           {
-            await session.StoreAsync(role);
+            await bulkInsert.StoreAsync(country);
           }
-
-          // add admin role to super user
-          user.RoleIds.Add(roles.First(role => role.Name == "Standard").Alias);
-          user.RoleIds.Add(roles.First(role => role.Name == "Administrator").Alias);
-
-          // create language
-          await session.StoreAsync(language);
-
-          // set countries
-          using (Raven.Client.Documents.BulkInsert.BulkInsertOperation bulkInsert = raven.BulkInsert())
-          {
-            foreach (Country country in GetCountries(model, language))
-            {
-              await bulkInsert.StoreAsync(country);
-            }
-          }
-
-          // update settings file. if this fails the changes won't be stored
-          UpdateSettingsFile(model);
-
-          await session.SaveChangesAsync();
         }
+
+        // update settings file. if this fails the changes won't be stored
+        UpdateSettingsFile(model);
+
+        await session.SaveChangesAsync();
       }
       catch (Exception)
       {
@@ -204,7 +211,7 @@ namespace zero.Core.Api
         string json = File.ReadAllText(filePath);
 
 
-        countries.AddRange(JsonConvert.DeserializeObject<Dictionary<string, string>>(json).Select(country => new Country()
+        countries.AddRange(JsonConvert.DeserializeObject<Dictionary<string, string>>(json).Select(country => Prepare(new Country()
         {
           CreatedDate = DateTimeOffset.Now,
           IsActive = true,
@@ -213,7 +220,7 @@ namespace zero.Core.Api
           //LanguageId = defaultLanguage.Id,
           Code = country.Key.ToLowerInvariant(),
           Name = country.Value
-        }).ToList());
+        })).ToList());
       }
 
       return countries;
@@ -227,12 +234,11 @@ namespace zero.Core.Api
     {
       string type = Constants.Auth.Claims.Permission;
 
-      BackofficeUserRole adminRole = new BackofficeUserRole()
+      BackofficeUserRole adminRole = Prepare(new BackofficeUserRole()
       {
         Name = "Administrator",
         Alias = Safenames.Alias("Administrator"),
         Sort = 0,
-        //AppId = Constants.Database.SharedAppId, // TODO appx fix
         Icon = "fth-award",
         CreatedDate = DateTimeOffset.Now,
         IsActive = true,
@@ -251,9 +257,9 @@ namespace zero.Core.Api
           new UserClaim(type, Permissions.Settings.Updates, PermissionsValue.Update),
           new UserClaim(type, Permissions.Settings.Users, PermissionsValue.Update),
         },
-      };
+      });
 
-      BackofficeUserRole editorRole = new BackofficeUserRole()
+      BackofficeUserRole editorRole = Prepare(new BackofficeUserRole()
       {
         Name = "Editor",
         Alias = Safenames.Alias("Editor"),
@@ -270,9 +276,9 @@ namespace zero.Core.Api
           new UserClaim(type, Permissions.Sections.Settings, PermissionsValue.True),
           new UserClaim(type, Permissions.Settings.Translations, PermissionsValue.True)
         }
-      };
+      });
 
-      BackofficeUserRole defaultRole = new BackofficeUserRole()
+      BackofficeUserRole defaultRole = Prepare(new BackofficeUserRole()
       {
         Name = "Standard",
         Alias = Safenames.Alias("Standard"),
@@ -284,9 +290,53 @@ namespace zero.Core.Api
         {
           new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.True)
         }
-      };
+      });
 
       return new List<BackofficeUserRole>() { adminRole, editorRole, defaultRole };
+    }
+
+
+    T Prepare<T>(T model, string languageId = null) where T : IZeroIdEntity
+    {
+      IZeroEntity zeroEntity = model as IZeroEntity;
+
+      // set default properties
+      if (zeroEntity != null && zeroEntity.CreatedDate == default)
+      {
+        zeroEntity.CreatedDate = DateTimeOffset.Now;
+      }
+      if (zeroEntity != null && zeroEntity.CreatedById == default)
+      {
+        zeroEntity.CreatedById = Constants.Auth.SystemUser;
+      }
+
+      if (model is ILanguageAwareEntity && (model as ILanguageAwareEntity).LanguageId == null)
+      {
+        (model as ILanguageAwareEntity).LanguageId = languageId;
+      }
+
+      // update name alias and last modified
+      if (zeroEntity != null)
+      {
+        zeroEntity.Alias = Safenames.Alias(zeroEntity.Name);
+        zeroEntity.LastModifiedById = Constants.Auth.SystemUser;
+        zeroEntity.LastModifiedDate = DateTimeOffset.Now;
+        zeroEntity.Hash ??= IdGenerator.Create();
+        zeroEntity.IsActive = true;
+      }
+
+      return model;
+    }
+
+
+    /// <summary>
+    /// Creates a new security stamp
+    /// </summary>
+    string NewSecurityStamp()
+    {
+      byte[] bytes = new byte[20];
+      RandomNumberGenerator.Fill(bytes);
+      return Base32.ToBase32(bytes);
     }
   }
 

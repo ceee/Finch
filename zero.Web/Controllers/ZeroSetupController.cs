@@ -30,10 +30,10 @@ namespace zero.Web.Setup
 
     public IActionResult Index()
     {
-      if (!Options.ZeroVersion.IsNullOrEmpty())
-      {
-        return Redirect(Options.BackofficePath);
-      }
+      //if (!Options.ZeroVersion.IsNullOrEmpty())
+      //{
+      //  return Redirect(Options.BackofficePath);
+      //}
 
       return View("/Views/Zero/Setup.cshtml");
     }
