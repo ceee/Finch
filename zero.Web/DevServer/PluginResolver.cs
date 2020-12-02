@@ -5,7 +5,7 @@ namespace Zero.Web.DevServer
 {
   public class PluginResolver
   {
-    protected IEnumerable<IZeroPlugin> Plugins { get; set; }
+    public IEnumerable<IZeroPlugin> Plugins { get; set; }
 
 
     public PluginResolver(IEnumerable<IZeroPlugin> plugins)

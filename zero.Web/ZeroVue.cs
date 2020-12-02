@@ -256,16 +256,21 @@ namespace zero.Web
     Dictionary<string, string> CreateTranslations()
     {
       var zeroTranslations = CreateTranslationsForFile("O:/zero/zero.Web/Resources/Localization/zero.en-us.json"); // TODO
-      var commerceTranslations = CreateTranslationsForFile("O:/zero/zero.Commerce/Resources/Localization/zero.commerce.en-us.json");
-      var debugTranslations = CreateTranslationsForFile("O:/Laola/Laola.Backoffice/Resources/laola.en-us.json"); // TODO move into project
 
-      foreach (var translation in commerceTranslations)
+      foreach (IZeroPlugin plugin in Plugins)
       {
-        zeroTranslations.Add(translation.Key, translation.Value);
-      }
-      foreach (var translation in debugTranslations)
-      {
-        zeroTranslations.Add(translation.Key, translation.Value);
+        if (plugin.Options.LocalizationPaths.Count > 0)
+        {
+          foreach (string path in plugin.Options.LocalizationPaths)
+          {
+            Dictionary<string, string> translations = CreateTranslationsForFile(path);
+
+            foreach (var translation in translations)
+            {
+              zeroTranslations.Add(translation.Key, translation.Value);
+            }
+          }
+        }
       }
 
       return zeroTranslations;

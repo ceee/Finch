@@ -97,13 +97,15 @@ namespace Zero.Web.DevServer
       PidUtils.KillPort((ushort)port, true);
 
       // get all plugins which need to be passed to vite
-      var plugins = new List<dynamic>()
+      List<string> plugins = new();
+
+      foreach (var plugin in pluginResolver.Plugins)
       {
-        new
+        if (!String.IsNullOrEmpty(plugin.Options.PluginPath))
         {
-          path = Path.Combine(env.ContentRootPath, "../", "ViteZero.Plugin", "vite.plugin.js")
+          plugins.Add(plugin.Options.PluginPath);
         }
-      };
+      }
 
       // create and run the vite script
       ProcessProxy process = new ProcessProxy(workingDirectory, "npm", options.Value.ForwardLog)

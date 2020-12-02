@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-mediapicker :config="config" :value="value" @input="$emit('input', $event)" :disabled="disabled" />
+  <ui-mediapicker :config="{ limit }" :value="value" @input="$emit('input', $event)" :disabled="disabled" />
 </template>
 
 
@@ -14,7 +14,15 @@
         type: Boolean,
         default: false
       },
-      config: Object
+      limit: {
+        type: Number,
+        default: 1
+      }
     },
+
+    created()
+    {
+      console.info(this);
+    }
   }
 </script>
