@@ -1,9 +1,9 @@
 ﻿<template>
   <ui-form ref="form" class="page page-editor" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model="model" title="@page.name" :disabled="disabled" :is-create="!id" :state="form.state" :active-toggle="true" :can-delete="meta.canDelete" @delete="onDelete">
+    <ui-form-header v-model="model" title="@page.name" :disabled="disabled" :is-create="!id" :state="form.state" :active-toggle="!isFolder" :can-delete="meta.canDelete" @delete="onDelete">
       <template v-slot:actions>
-        <ui-dropdown-button label="@page.preview.title" icon="fth-eye" :disabled="disabled" @click="openPreview" />
-        <ui-dropdown-separator />
+        <ui-dropdown-button v-if="!isFolder" label="@page.preview.title" icon="fth-eye" :disabled="disabled" @click="openPreview" />
+        <ui-dropdown-separator v-if="!isFolder" />
         <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(model)" />
         <ui-dropdown-button label="@ui.copy.title" icon="fth-copy" @click="copy(model)" />
         <ui-dropdown-separator />
@@ -22,6 +22,10 @@
     </div>
 
     <ui-editor v-if="!loading && editor" :config="editor" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" :disabled="disabled" />
+
+    <div v-if="isFolder">
+      <!-- // TODO list children -->
+    </div>
   </ui-form>
 </template>
 
@@ -64,6 +68,7 @@
         open: false,
         window: null
       },
+      isFolder: false,
       debouncedUpdatePreview: null
     }),
 
@@ -126,6 +131,7 @@
 
         form.load(!this.id ? PagesApi.getEmpty(this.type, this.parent) : PagesApi.getById(this.id)).then(response =>
         {
+          this.isFolder = response.entity.pageTypeAlias === __zero.alias.pages.folder;
           this.disabled = !response.meta.canEdit;
           this.editor = response.entity ? this.zero.getEditor('pages.' + response.entity.pageTypeAlias)  : null;
           this.model = response.entity;
@@ -160,6 +166,11 @@
 
       onEditorConfigure(editor)
       {
+        if (this.isFolder)
+        {
+          return;
+        }
+
         editor.tabs.push({
           alias: 'zero.info',
           name: '@page.info_tab',

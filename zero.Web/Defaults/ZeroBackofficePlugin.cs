@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using zero.Core;
 using zero.Core.Api;
 using zero.Core.Collections;
 using zero.Core.Entities;
@@ -41,6 +42,8 @@ namespace zero.Web.Defaults
       zero.Permissions.AddCollection<ModulePermissions>();
       zero.Permissions.AddCollection<SettingsPermissions>();
       zero.Permissions.AddCollection<SpacePermissions>();
+
+      zero.Pages.Add<PageFolder>(Constants.Pages.FolderAlias, "@page.folder.name", "@page.folder.description", "fth-folder", true, true);
     }
 
 

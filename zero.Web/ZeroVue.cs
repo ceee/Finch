@@ -180,6 +180,10 @@ namespace zero.Web
 
       aliases.Add("sections", sections);
       aliases.Add("settings", settings);
+      aliases.Add("pages", new Dictionary<string, string>()
+      {
+        { "folder", Constants.Pages.FolderAlias }
+      });
 
       return aliases;
     }

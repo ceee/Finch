@@ -381,6 +381,17 @@
     "root": "Root",
     "info_tab": "Info",
 
+    "folder": {
+      "name": "Folder",
+      "description": "Group pages together",
+      "fields": {
+        "isPartOfRoute": "Is part of Url",
+        "isPartOfRoute_text": "Whether to render the page name as part of the Url",
+        "urlAlias": "Url alias",
+        "urlAlias_text": "Use this field instead of the page name for Url generation"
+      }
+    },
+
     "overview": {
       "actions": {
         "continue": "Continue",

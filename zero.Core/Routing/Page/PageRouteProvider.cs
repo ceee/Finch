@@ -86,7 +86,12 @@ namespace zero.Core.Routing
         foreach (IPage page in currentPages)
         {
           IRoute route = BuildRoute(page, parents, allPages);
-          routes.Add(route);
+
+          if (route != null)
+          {
+            routes.Add(route);
+          }
+
           routes.AddRange(TraversePageChildren(page, parents.Union(new List<IPage>() { page }), allPages));
         }
 
@@ -103,6 +108,11 @@ namespace zero.Core.Routing
     /// </summary>
     protected virtual IRoute BuildRoute(IPage page, IEnumerable<IPage> parents, IEnumerable<IPage> allPages)
     {
+      if (page is PageFolder)
+      {
+        return null;
+      }
+
       IRoute route = new Route()
       {
         Id = GetRouteId(page),

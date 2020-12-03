@@ -67,12 +67,14 @@
     public static class PermissionCollections
     {
       public const string Sections = "permissionCollectionSections";
-
       public const string Spaces = "permissionCollectionSpaces";
-
       public const string Settings = "permisssionCollectionSettings";
-
       public const string Modules = "permissionCollectionModules";
+    }
+
+    public static class Pages
+    {
+      public const string FolderAlias = "zero.folder";
     }
   }
 }

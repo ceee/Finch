@@ -106,6 +106,11 @@ namespace zero.Core.Routing
     {
       string alias;
 
+      if (page is PageFolder && !((PageFolder)page).IsPartOfRoute)
+      {
+        return null;
+      }
+
       if (!page.UrlAlias.IsNullOrWhiteSpace())
       {
         alias = page.UrlAlias;

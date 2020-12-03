@@ -7,6 +7,7 @@ import media from './media.js';
 import user from './user.js';
 import userRole from './userRole.js';
 import mailTemplate from './mailTemplate.js';
+import pageFolder from './page-folder.js';
 
 export default {
   application,
@@ -16,5 +17,6 @@ export default {
   //translation,
   user,
   userRole,
-  mailTemplate
+  mailTemplate,
+  pageFolder
 };
