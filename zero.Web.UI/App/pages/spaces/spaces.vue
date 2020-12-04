@@ -95,9 +95,21 @@
         {
           if (this.isOverview)
           {
-            this.space = null;
-            this.component = null;
-            this.loaded = true;
+            const space = this.spaces[0];
+
+            if (space)
+            {
+              this.$router.replace({
+                name: 'space',
+                params: { alias: space.alias }
+              });
+            }
+            else
+            {
+              this.space = null;
+              this.component = null;
+              this.loaded = true;
+            }
             return;
           }
 

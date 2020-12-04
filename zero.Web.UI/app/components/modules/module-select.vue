@@ -229,7 +229,7 @@
   {
     display: inline-flex;
     justify-content: center;
-    color: var(--color-text-dim);
+    color: var(--color-text);
     font-size: 26px;
   }
 
