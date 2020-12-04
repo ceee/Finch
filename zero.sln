@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{1CE271AD
 		build\build.ps1 = build\build.ps1
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Stories", "zero.Stories\zero.Stories.csproj", "{C23CF90A-DB90-427F-816C-0E2FE20E29D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{C23CF90A-DB90-427F-816C-0E2FE20E29D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C23CF90A-DB90-427F-816C-0E2FE20E29D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C23CF90A-DB90-427F-816C-0E2FE20E29D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C23CF90A-DB90-427F-816C-0E2FE20E29D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
