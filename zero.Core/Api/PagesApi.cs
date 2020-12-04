@@ -54,8 +54,6 @@ namespace zero.Core.Api
         model.PageTypeAlias = type.Alias;
         model.ParentId = parentId; // TODO validate if type is allowed and if parentid is allowed
 
-        Handler.Get<IPageCreationHandler>()?.OnCreate(model);
-
         return Task.FromResult(model);
       }
       catch
@@ -92,26 +90,36 @@ namespace zero.Core.Api
     public async Task<IList<PageType>> GetAllowedPageTypes(string parentId = null)
     {    
       IEnumerable<PageType> types = Options.Pages.GetAllItems();
+      List<IPage> parents = new();
 
-      if (parentId.IsNullOrEmpty())
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+
+      if (!parentId.IsNullOrEmpty())
       {
-        return types.Where(x => x.AllowAsRoot || x.OnlyAtRoot).ToList();
+        Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
+          .ProjectInto<Pages_ByHierarchy.Result>()
+          .Include<Pages_ByHierarchy.Result, IPage>(x => x.Id)
+          .Include<Pages_ByHierarchy.Result, IPage>(x => x.Path.Select(p => p.Id))
+          .FirstOrDefaultAsync(x => x.Id == parentId);
+
+        if (result != null)
+        {
+          List<string> ids = result.Path.Select(x => x.Id).ToList();
+          ids.Add(result.Id);
+          parents = (await session.LoadAsync<IPage>(ids)).Select(x => x.Value).Reverse().ToList();
+        }
       }
 
-      Page page = await GetById<Page>(parentId);
-      PageType pageType = page != null ? types.FirstOrDefault(x => x.Alias == page.PageTypeAlias) : null;
+      IPageTypeHandler handler = Handler.Get<IPageTypeHandler>();
 
-      if (pageType == null)
+      // if there is no registered handler we just allow all page types
+      if (handler == null)
       {
-        return new List<PageType>();
+        return types.ToList();
       }
 
-      if (pageType.AllowAllChildrenTypes)
-      {
-        return types.Where(x => !x.OnlyAtRoot).ToList();
-      }
 
-      return types.Where(x => !x.OnlyAtRoot && pageType.AllowedChildrenTypes.Contains(x.Alias)).ToList();
+      return handler.GetAllowedPageTypes(Backoffice.Context.Application, types, parents)?.ToList() ?? new();
     }
 
 

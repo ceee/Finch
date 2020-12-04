@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace zero.Core.Entities
 {
@@ -42,26 +41,6 @@ namespace zero.Core.Entities
     /// </summary>
     public string Icon { get; set; }
 
-    /// <summary>
-    /// Whether this page type can be used as a website entry point
-    /// </summary>
-    public bool AllowAsRoot { get; set; }
-
-    /// <summary>
-    /// This page type is only allowed at the root level (ignoring other properties)
-    /// </summary>
-    public bool OnlyAtRoot { get; set; }
-
-    /// <summary>
-    /// Whether all page types can be created as children of this type
-    /// </summary>
-    public bool AllowAllChildrenTypes { get; set; }
-
-    /// <summary>
-    /// Page types which are allowed as children
-    /// </summary>
-    public List<string> AllowedChildrenTypes { get; set; } = new List<string>();
-
 
     public PageType(Type type)
     {
@@ -75,11 +54,7 @@ namespace zero.Core.Entities
         Alias = model.Alias,
         Name = model.Name,
         Description = model.Description,
-        Icon = model.Icon,
-        AllowAllChildrenTypes = model.AllowAllChildrenTypes,
-        AllowedChildrenTypes = model.AllowedChildrenTypes,
-        AllowAsRoot = model.AllowAsRoot,
-        OnlyAtRoot = model.OnlyAtRoot
+        Icon = model.Icon
       };
     }
   }

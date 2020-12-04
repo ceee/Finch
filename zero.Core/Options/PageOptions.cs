@@ -18,34 +18,26 @@ namespace zero.Core.Options
     }
 
 
-    public void Add<T>(string alias, string name, string description, string icon, bool allowAsRoot = false, bool allowAllChildrenTypes = false, List<string> allowedChildrenTypes = null, bool onlyAtRoot = false) where T : Page, new()
+    public void Add<T>(string alias, string name, string description, string icon) where T : Page, new()
     {
       Items.Add(new PageType(typeof(T))
       {
         Alias = alias,
         Name = name,
         Description = description,
-        Icon = icon,
-        AllowAsRoot = allowAsRoot,
-        AllowAllChildrenTypes = allowAllChildrenTypes,
-        AllowedChildrenTypes = allowedChildrenTypes ?? new List<string>(),
-        OnlyAtRoot = onlyAtRoot
+        Icon = icon
       });
     }
 
 
-    public void Add(Type type, string alias, string name, string description, string icon, bool allowAsRoot = false, bool allowAllChildrenTypes = false, List<string> allowedChildrenTypes = null, bool onlyAtRoot = false)
+    public void Add(Type type, string alias, string name, string description, string icon)
     {
       Items.Add(new PageType(type)
       {
         Alias = alias,
         Name = name,
         Description = description,
-        Icon = icon,
-        AllowAsRoot = allowAsRoot,
-        AllowAllChildrenTypes = allowAllChildrenTypes,
-        AllowedChildrenTypes = allowedChildrenTypes ?? new List<string>(),
-        OnlyAtRoot = onlyAtRoot
+        Icon = icon
       });
     }
   }

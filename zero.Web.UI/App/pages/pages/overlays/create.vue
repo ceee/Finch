@@ -1,21 +1,23 @@
 ﻿<template>
-  <div v-if="!loading" class="page-create">
+  <div class="page-create">
     <h2 class="ui-headline" v-localize="'@page.create.title'"></h2>
-    <div v-if="pageTypes.length && config.parent" class="page-create-parent">
-      <span v-localize="'@page.create.parent'"></span>: <strong>{{config.parent.name}}</strong>
-    </div>
-    <div class="page-create-items">
-      <button type="button" v-for="item in pageTypes" class="page-create-item" @click="onSelect(item)">
-        <i class="page-create-item-icon" :class="item.icon"></i>
-        <span class="page-create-item-text">
-          {{item.name | localize}}
-          <span v-if="item.description" v-localize="item.description"></span>
-        </span>
-      </button>     
-    </div>
-    <ui-message type="error" v-if="!pageTypes.length" text="@page.create.nonavailable" />
-    <div class="app-confirm-buttons">
-      <ui-button type="light" :label="config.closeLabel" :disabled="loading" @click="config.close"></ui-button>
+    <div v-if="!loading">
+      <div v-if="pageTypes.length && config.parent" class="page-create-parent">
+        <span v-localize="'@page.create.parent'"></span>: <strong>{{config.parent.name}}</strong>
+      </div>
+      <div class="page-create-items">
+        <button type="button" v-for="item in pageTypes" class="page-create-item" @click="onSelect(item)">
+          <i class="page-create-item-icon" :class="item.icon"></i>
+          <span class="page-create-item-text">
+            {{item.name | localize}}
+            <span v-if="item.description" v-localize="item.description"></span>
+          </span>
+        </button>     
+      </div>
+      <ui-message type="error" v-if="!pageTypes.length" text="@page.create.nonavailable" />
+      <div class="app-confirm-buttons">
+        <ui-button type="light" :label="config.closeLabel" @click="config.close"></ui-button>
+      </div>
     </div>
   </div>
 </template>
@@ -52,6 +54,8 @@
 
     mounted()
     {
+      this.loading = true;
+
       PagesApi.getAllowedPageTypes(this.model.parentId).then(response =>
       {
         this.pageTypes = response;

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using zero.Core.Attributes;
 using zero.Core.Database;
 using zero.Core.Entities;
-using zero.Core.Entities.Messages;
 using zero.Core.Extensions;
 using zero.Core.Utils;
 
@@ -174,15 +173,6 @@ namespace zero.Core.Api
       await session.StoreAsync(model);
 
       meta?.Invoke(session.Advanced.GetMetadataFor(model));
-
-      await Backoffice.Messages.Publish(new EntitySavedMessage<T>()
-      {
-        Id = model.Id,
-        IsCreate = isCreate,
-        IsDelete = false,
-        Model = model,
-        Session = session
-      });
 
       await session.SaveChangesAsync();
 
