@@ -8,7 +8,7 @@
             <ui-datepicker v-model="value.from" :time="time" />
           </ui-property>
         </div>
-        <div class="ui-daterangepicker-group">
+        <div class="ui-daterangepicker-group" v-if="rangeEnd">
           <ui-property :label="toLabel" :vertical="true">
             <ui-datepicker v-model="value.to" :time="time" />
           </ui-property>
@@ -78,6 +78,10 @@
         type: Boolean,
         default: false
       },
+      rangeEnd: {
+        type: Boolean,
+        default: true
+      },
       options: {
         type: Object,
         default: () => { }
@@ -127,7 +131,8 @@
             min: this.minDate,
             fromText: this.fromLabel,
             toText: this.toLabel,
-            amPm: this.amPm
+            amPm: this.amPm,
+            rangeEnd: this.rangeEnd
           },
           model: {
             from: this.value.from,

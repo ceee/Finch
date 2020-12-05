@@ -8,7 +8,26 @@
           <component v-if="tab.component" :is="tab.component" v-model="value" />
         </ui-tab>
       </ui-tabs>
-      <editor-aside :editor="editorConfig" :value="value" v-bind="{ infos, activeToggle, nested, isPage }" />
+      <editor-aside :editor="editorConfig" :value="value" v-bind="{ infos, activeToggle, nested, isPage }">
+        <template v-slot:info-boxes>
+          <slot name="info-boxes"></slot>
+        </template>
+        <template v-slot:settings>
+          <slot name="settings"></slot>
+        </template>
+        <template v-slot:settings-properties>
+          <slot name="settings-properties"></slot>
+        </template>
+        <template v-slot:infos>
+          <slot name="infos"></slot>
+        </template>
+        <template v-slot:infos-more>
+          <slot name="infos-more"></slot>
+        </template>
+        <template v-slot:infos-after>
+          <slot name="infos-after"></slot>
+        </template>
+      </editor-aside>
     </div>
   </div>
 </template>

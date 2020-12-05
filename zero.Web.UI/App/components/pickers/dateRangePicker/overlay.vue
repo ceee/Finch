@@ -1,13 +1,13 @@
 ﻿<template>
   <ui-form ref="form" class="ui-daterangepicker" v-slot="form">
     <div class="ui-daterangepicker-items">
-      <div class="ui-split">
+      <div :class="{ 'ui-split': config.options.rangeEnd }">
         <div class="ui-daterangepicker-group">
           <ui-property :label="config.options.fromText" :vertical="true">
             <ui-datepicker v-model="fromDate" :time="true" />
           </ui-property>
         </div>
-        <div class="ui-daterangepicker-group">
+        <div class="ui-daterangepicker-group" v-if="config.options.rangeEnd">
           <ui-property :label="config.options.toText" :vertical="true">
             <ui-datepicker v-model="toDate" :time="true" />
           </ui-property>
