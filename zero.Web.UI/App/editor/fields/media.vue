@@ -18,11 +18,6 @@
         type: Number,
         default: 1
       }
-    },
-
-    created()
-    {
-      console.info(this);
     }
   }
 </script>

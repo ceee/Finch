@@ -5,7 +5,8 @@
         <div class="ui-datagrid-item" v-for="(item, index) in items" :key="index" v-on:contextmenu="onRightClicked(item, $event)">
           <button v-if="configuration.selectable && selected.length > 0" type="button" class="ui-datagrid-cell-select" @click="select(item)"></button>
           <component :is="configuration.component" :value="item" class="ui-datagrid-cell" :class="{ 'is-selected': configuration.selectable && selected.indexOf(item) > -1 }"></component>
-        </div>  
+        </div>
+        <slot name="below"></slot>
       </div>
 
       <div class="ui-datagrid-empty" v-if="!isLoading && items.length < 1">
@@ -133,7 +134,7 @@
       {
         this.debouncedUpdate = _debounce(this.update, 300);
 
-        this.configuration = _extend(defaultConfig, this.value);
+        this.configuration = _extend(JSON.parse(JSON.stringify(defaultConfig)), this.value);
 
         if (this.configuration.order.enabled)
         {

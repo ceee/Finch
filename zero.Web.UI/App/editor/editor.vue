@@ -8,7 +8,7 @@
           <component v-if="tab.component" :is="tab.component" v-model="value" />
         </ui-tab>
       </ui-tabs>
-      <editor-aside :editor="editorConfig" :value="value" v-bind="{ infos, activeToggle, nested, isPage }">
+      <editor-aside :editor="editorConfig" :value="value" v-if="infos != 'none' && !isPage" v-bind="{ infos, activeToggle, nested, isPage }">
         <template v-slot:info-boxes>
           <slot name="info-boxes"></slot>
         </template>
