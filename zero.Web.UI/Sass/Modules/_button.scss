@@ -312,7 +312,7 @@ button::-moz-focus-inner
   align-items: center;
 }
 
-.ui-select-button-icon
+.ui-select-button-icon 
 {
   width: 42px;
   height: 42px;
@@ -325,10 +325,13 @@ button::-moz-focus-inner
   text-align: center;
   font-size: 16px;
   flex-shrink: 0;
+  overflow: hidden;
 
   &.is-image
   {
     padding: 10px;
+    font-size: 0;
+    color: transparent;
     
     img
     {
