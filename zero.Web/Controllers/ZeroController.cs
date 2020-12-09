@@ -21,10 +21,13 @@ namespace zero.Web.Controllers
 
     protected virtual T Route { get; set; }
 
+    IZeroContext _context;
+    protected IZeroContext Context => _context ?? (_context = HttpContext?.RequestServices?.GetService<IZeroContext>());
+
 
     public override void OnActionExecuting(ActionExecutingContext filterContext)
     {
-      Application = filterContext.HttpContext.RequestServices.GetService<IZeroContext>()?.Application;
+      Application = Context?.Application;
 
       if (filterContext.RouteData.Values.TryGetValue("zero.route", out object route))
       {

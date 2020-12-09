@@ -167,6 +167,14 @@ namespace zero.Web
 
         return (ZeroStore)raven;
       });
+
+
+      Services.AddScoped<IZeroDocumentSession>(services =>
+      {
+        var session = services.GetRequiredService<IZeroStore>()!.OpenAsyncSession();
+        session.Advanced.WaitForIndexesAfterSaveChanges();
+        return session as ZeroDocumentSession;
+      });
     }
 
 

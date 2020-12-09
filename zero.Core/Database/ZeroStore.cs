@@ -44,39 +44,69 @@ namespace zero.Core.Database
     /// <inheritdoc />
     public override IAsyncDocumentSession OpenAsyncSession(string database)
     {
-      return base.OpenAsyncSession(database);
+      return OpenAsyncSession(new SessionOptions()
+      {
+        Database = database
+      });
     }
 
     /// <inheritdoc />
     public override IAsyncDocumentSession OpenAsyncSession(SessionOptions options)
     {
       options.Database = options.Database ?? ResolvedDatabase;
-      return base.OpenAsyncSession(options);
+
+      AssertInitialized();
+      EnsureNotClosed();
+
+      var sessionId = Guid.NewGuid();
+      var session = new ZeroDocumentSession(this, sessionId, options);
+      RegisterEvents(session);
+      AfterSessionCreated(session);
+
+      return session;
     }
 
     /// <inheritdoc />
     public override IAsyncDocumentSession OpenAsyncSession()
     {
-      return base.OpenAsyncSession(ResolvedDatabase);
+      return OpenAsyncSession(new SessionOptions()
+      {
+        Database = ResolvedDatabase
+      });
     }
 
     /// <inheritdoc />
     public override IDocumentSession OpenSession(SessionOptions options)
     {
       options.Database = options.Database ?? ResolvedDatabase;
-      return base.OpenSession(options);
+
+      AssertInitialized();
+      EnsureNotClosed();
+
+      var sessionId = Guid.NewGuid();
+      var session = new DocumentSession(this, sessionId, options);
+      RegisterEvents(session);
+      AfterSessionCreated(session);
+
+      return session;
     }
 
     /// <inheritdoc />
     public override IDocumentSession OpenSession(string database)
     {
-      return base.OpenSession(database);
+      return OpenSession(new SessionOptions()
+      {
+        Database = database
+      });
     }
 
     /// <inheritdoc />
     public override IDocumentSession OpenSession()
     {
-      return base.OpenSession(ResolvedDatabase);
+      return OpenSession(new SessionOptions()
+      {
+        Database = ResolvedDatabase
+      });
     }
 
     /// <inheritdoc />
