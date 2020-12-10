@@ -32,6 +32,11 @@ const addArea = (areaAlias, component, detailComponent, hasCreate, postCreate) =
 {
   let area = typeof areaAlias === 'object' ? areaAlias : settings.find(x => x.alias === areaAlias);
 
+  if (!area)
+  {
+    return;
+  }
+
   routes.push({
     name: area.alias,
     path: area.url,

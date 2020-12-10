@@ -7,7 +7,7 @@ namespace zero.Core.Entities
   /// <summary>
   /// Represents a paged result for a model collection
   /// </summary>
-  public class ListResult<T>
+  public class ListResult<T> : ListResult
   {
     public ListResult(long totalItems, long page, long pageSize)
     {
@@ -39,20 +39,7 @@ namespace zero.Core.Entities
         Statistics = Statistics
       };
     }
-
-    public long Page { get; private set; }
-
-    public long PageSize { get; private set; }
-
-    public long TotalPages { get; private set; }
-
-    public long TotalItems { get; private set; }
-
-    public bool HasMore { get; private set; }
-
     public IList<T> Items { get; set; }
-
-    public List<PagedResultStatistic> Statistics { get; set; } = new List<PagedResultStatistic>();
 
 
     /// <summary>
@@ -84,6 +71,22 @@ namespace zero.Core.Entities
       });
       return this;
     }
+  }
+
+
+  public class ListResult
+  {
+    public long Page { get; protected set; }
+
+    public long PageSize { get; protected set; }
+
+    public long TotalPages { get; protected set; }
+
+    public long TotalItems { get; protected set; }
+
+    public bool HasMore { get; protected set; }
+
+    public List<PagedResultStatistic> Statistics { get; set; } = new List<PagedResultStatistic>();
   }
 
 
