@@ -23,6 +23,7 @@ namespace zero.Core.Options
       Permissions = new PermissionOptions();
       Settings = new SettingsOptions();
       Spaces = new SpaceOptions();
+      Integrations = new IntegrationOptions();
     }
 
     /// <inheritdoc />
@@ -74,6 +75,9 @@ namespace zero.Core.Options
 
     /// <inheritdoc />
     public SpaceOptions Spaces { get; private set; }
+
+    /// <inheritdoc />
+    public IntegrationOptions Integrations { get; private set; }
   }
 
 
@@ -164,5 +168,10 @@ namespace zero.Core.Options
     /// 
     /// </summary>
     SpaceOptions Spaces { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    IntegrationOptions Integrations { get; }
   }
 }

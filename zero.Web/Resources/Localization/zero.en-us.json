@@ -222,7 +222,8 @@
   "settings": {
     "groups": {
       "system": "System",
-      "plugins": "Plugins"
+      "plugins": "Plugins",
+      "integrations": "Integrations"
     },
     "system": {
       "updates": {
@@ -257,6 +258,10 @@
       "logs": {
         "name": "Logging",
         "text": "Debug und view logs"
+      },
+      "integrations": {
+        "name": "Integrations",
+        "text": "Configure available integrations"
       }
     },
     "plugins": {
@@ -449,6 +454,14 @@
       "code": "Code",
       "code_text": "Code in ISO 3166-1 format which is used to display the appropriate flag",
       "isPreferred": "Show on top"
+    }
+  },
+
+  "integration": {
+    "list": "Integrations",
+    "name": "Integration",
+    "activeWarning": "This integration is not activated and will therefore not run under any circumstances.",
+    "fields": {
     }
   },
 

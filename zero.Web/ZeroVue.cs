@@ -177,6 +177,7 @@ namespace zero.Web
       settings.Add("mails", Constants.Settings.Mails);
       settings.Add("updates", Constants.Settings.Updates);
       settings.Add("users", Constants.Settings.Users);
+      settings.Add("integrations", Constants.Settings.Integrations);
 
       aliases.Add("sections", sections);
       aliases.Add("settings", settings);
@@ -199,6 +200,8 @@ namespace zero.Web
 
       List<ZeroVueSettingsGroup> groups = new List<ZeroVueSettingsGroup>();
 
+      bool hasIntegrations = Options.Integrations.GetAllItems().Any();
+
       foreach (SettingsGroup group in Options.Settings.GetAllItems())
       {
         List<ZeroVueSettingsArea> areas = new List<ZeroVueSettingsArea>();
@@ -206,6 +209,10 @@ namespace zero.Web
         foreach (SettingsArea area in group.Items)
         {
           if (!isSuperUser && !Permission.CanReadKey(permissions, area.Alias, true))
+          {
+            continue;
+          }
+          if (area.Alias == Constants.Settings.Integrations && !hasIntegrations)
           {
             continue;
           }

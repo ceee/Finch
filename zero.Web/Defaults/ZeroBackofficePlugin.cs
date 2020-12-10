@@ -5,6 +5,7 @@ using zero.Core;
 using zero.Core.Api;
 using zero.Core.Collections;
 using zero.Core.Entities;
+using zero.Core.Integrations;
 using zero.Core.Mails;
 using zero.Core.Messages;
 using zero.Core.Options;
@@ -115,6 +116,8 @@ namespace zero.Web.Defaults
       services.AddScoped<IMailDispatcher, FileMailDispatcher>();
 
       services.AddScoped<IZeroMediaHelper, ZeroMediaHelper>();
+
+      services.AddScoped<IIntegrationService, IntegrationService>();
     }
   }
 }

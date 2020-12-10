@@ -12,6 +12,8 @@ import UserRole from './role.vue';
 import MailTemplates from './mails.vue';
 import MailTemplate from './mail.vue';
 import Translations from './translations.vue';
+import Integrations from './integrations.vue';
+import Integration from './integration.vue';
 
 const alias = __zero.alias.sections.settings;
 const section = __zero.sections.find(x => x.alias === alias);
@@ -99,6 +101,20 @@ if (section)
   addArea(__zero.alias.settings.translations, Translations, Translations, true);
 
   addArea(__zero.alias.settings.mails, MailTemplates, MailTemplate, true);
+
+  addArea(__zero.alias.settings.integrations, Integrations, Integration, false, area =>
+  {
+    routes.push({
+      name: area.alias + '-create',
+      path: area.url + '/create/:alias',
+      props: true,
+      component: Integration,
+      meta: {
+        create: true,
+        name: area.name
+      }
+    });
+  });
 
   addArea(__zero.alias.settings.users, Users, User, true, area =>
   {
