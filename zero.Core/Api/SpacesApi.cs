@@ -88,6 +88,20 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public async Task<ListResult<T>> GetListByQuery<T>(string alias, ListQuery<T> query) where T : ISpaceContent
+    {
+      query.SearchSelector = item => item.Name;
+
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
+      {
+        return await session.Query<T>()
+          .Where(x => x.SpaceAlias == alias)
+          .ToQueriedListAsync(query);
+      }
+    }
+
+
+    /// <inheritdoc />
     public async Task<ListResult<T>> GetListByQuery<T>(ListQuery<T> query) where T : ISpaceContent
     {
       Space space = GetBy<T>();
@@ -148,6 +162,11 @@ namespace zero.Core.Api
     /// Get all list items for a space (with query)
     /// </summary>
     Task<ListResult<ISpaceContent>> GetListByQuery(string alias, ListQuery<ISpaceContent> query);
+
+    /// <summary>
+    /// Get all list items for a space (with query)
+    /// </summary>
+    Task<ListResult<T>> GetListByQuery<T>(string alias, ListQuery<T> query) where T : ISpaceContent;
 
     /// <summary>
     /// Get all list items for a space (with query)

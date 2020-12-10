@@ -11,6 +11,7 @@ import Output from '../editor/fields/output.vue';
 import Checklist from '../editor/fields/checklist.vue';
 import ColorPicker from '../editor/fields/colorpicker.vue';
 import CountryPicker from '../editor/fields/countrypicker.vue';
+import SpacePicker from '../editor/fields/spacepicker.vue';
 import MailTemplatePicker from '../editor/fields/mailtemplatepicker.vue';
 import CulturePicker from '../editor/fields/culturepicker.vue';
 import DatePicker from '../editor/fields/datepicker.vue';
@@ -295,6 +296,17 @@ class EditorField
   countryPicker(limit)
   {
     return this._setComponent(CountryPicker, { limit });
+  }
+
+
+  /**
+   * Renders a space picker
+   * @param {number} [limit=1] - Maximum items to be selected
+   * @returns {EditorField}
+   */
+  spacePicker(limit)
+  {
+    return this._setComponent(SpacePicker, { limit });
   }
 
 

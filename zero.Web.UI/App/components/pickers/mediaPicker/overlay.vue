@@ -107,6 +107,7 @@
         }
 
         query.folderId = this.folderId;
+        query.pageSize = 100;
 
         this.getFolderHierarchy(query.folderId);
 
