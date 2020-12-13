@@ -15,7 +15,7 @@
       <div class="spaces-tree-resizable ui-resizable"></div>
     </div>
 
-    <component v-if="!isOverview && loaded && component" ref="comp" :is="component" :space="space" :config="spaceConfig"></component>
+    <component class="spaces-main" v-if="!isOverview && loaded && component" ref="comp" :is="component" :space="space" :config="spaceConfig"></component>
   </div>
 </template>
 
@@ -144,6 +144,12 @@
     gap: 2px;
     justify-content: stretch;
     height: 100vh;
+  }
+
+  .spaces-main
+  {
+    min-height: 100vh;
+    overflow-y: auto;
   }
 
   .spaces-overview

@@ -14,6 +14,7 @@ import uiForm from './forms/form.vue';
 import uiInputList from './forms/input-list.vue';
 import uiProperty from './forms/property.vue';
 import uiRte from './forms/rte.vue';
+import uiQuill from './forms/quill.vue';
 import uiSearch from './forms/search.vue';
 import uiTags from './forms/tags.vue';
 import uiToggle from './forms/toggle.vue';
@@ -77,6 +78,7 @@ export default {
   uiInputList,
   uiProperty,
   uiRte,
+  uiQuill,
   uiSearch,
   uiTags,
   uiToggle,
