@@ -3,7 +3,6 @@ import Text from '../editor/fields/text.vue';
 import Currency from '../editor/fields/currency.vue';
 import Number from '../editor/fields/number.vue';
 import Rte from '../editor/fields/rte.vue';
-import QuillRte from '../editor/fields/quill.vue';
 import Select from '../editor/fields/select.vue';
 import Textarea from '../editor/fields/textarea.vue';
 import Toggle from '../editor/fields/toggle.vue';
@@ -198,16 +197,6 @@ class EditorField
   rte()
   {
     return this._setComponent(Rte);
-  }
-
-
-  /**
-   * Render a rich-text editor (powered by Quill) field
-   * @returns {EditorField}
-   */
-  quill()
-  {
-    return this._setComponent(QuillRte);
   }
 
 
