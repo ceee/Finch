@@ -11,6 +11,11 @@ namespace zero.Core.Renderer
 
     public static string Apply(string text, Dictionary<string, string> tokens)
     {
+      if (text.IsNullOrWhiteSpace())
+      {
+        return text;
+      }
+
       foreach ((string key, string value) in tokens)
       {
         string tokenKey = key.EnsureStartsWith(BEGIN).EnsureEndsWith(END);

@@ -28,6 +28,9 @@ namespace zero.Core.Entities
 
     /// <inheritdoc />
     public string Body { get; set; }
+
+    /// <inheritdoc />
+    public string Preheader { get; set; }
   }
 
 
@@ -73,5 +76,10 @@ namespace zero.Core.Entities
     /// Email body (can contain placeholders)
     /// </summary>
     string Body { get; set; }
+
+    /// <summary>
+    /// Preheader which is displayed in the preview pane (can contain placeholders)
+    /// </summary>
+    string Preheader { get; set; }
   }
 }

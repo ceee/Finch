@@ -105,6 +105,7 @@ namespace zero.Core.Mails
     {
       message.Subject = TokenReplacement.Apply(message.Subject, message.Placeholders);
       message.Body = TokenReplacement.Apply(message.Body, message.Placeholders);
+      message.Preheader = TokenReplacement.Apply(message.Preheader, message.Placeholders);
 
       if (!message.HasView)
       {
@@ -159,6 +160,7 @@ namespace zero.Core.Mails
       mail.Body = mail.Template.Body;
       mail.IsBodyHtml = true;
       mail.BodyEncoding = encoding;
+      mail.Preheader = mail.Template.Preheader;
 
       return mail;
     }

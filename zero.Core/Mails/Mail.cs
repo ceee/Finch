@@ -17,6 +17,8 @@ namespace zero.Core.Mails
 
     public bool IsRendered { get; set; }
 
+    public string Preheader { get; set; }
+
     public IMailTemplate Template { get; set; }
 
     public Dictionary<string, string> Placeholders { get; set; } = new Dictionary<string, string>();

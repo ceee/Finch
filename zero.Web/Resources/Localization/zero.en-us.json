@@ -586,6 +586,8 @@
       "subject": "Subject",
       "body": "Body",
       "body_text": "Additional body which is rendered into the mail template",
+      "preheader": "Preheader",
+      "preheader_text": "This text is rendered as part of the preview in your mail program",
       "senderEmail": "Sender email",
       "senderEmail_text": "Leave empty to use application email",
       "senderName": "Sender name",
