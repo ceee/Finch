@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="integrations-item" :class="{'is-activated': activated }">
-    <i class="integrations-item-icon" :style="{'background-color': model.color ? model.color : null }" :class="[model.icon || 'fth-box', hasColor ? 'has-color' : '']" />
+    <i class="integrations-item-icon" :style="{'background-color': hasColor ? model.color : null }" :class="[model.icon || 'fth-box', hasColor ? 'has-color' : '']" />
     <p class="integrations-item-text">
       <strong v-localize="model.name"></strong>
       <template v-if="model.description">
@@ -8,17 +8,20 @@
         <span v-localize="model.description"></span>
       </template>
     </p>
-    <router-link v-if="!activated" class="ui-button type-light type-onbg" :to="{ name: 'integrations-create', params: { alias: model.alias } }">
+    <button type="button" v-if="!activated" @click="open" class="ui-button type-light" :class="{ 'type-onbg': !activated }">
       <span class="ui-button-text" v-localize="'Setup'" />
-    </router-link>
-    <router-link v-else class="ui-button type-light type-onbg" :to="{ name: 'integrations-edit', params: { id: model.alias } }">
+    </button>
+    <button type="button" v-else @click="open" class="ui-button type-light" :class="{ 'type-onbg': !activated }">
       <span class="ui-button-text" v-localize="'Edit'" />
-    </router-link>
+    </button>
   </div>
 </template>
 
 
 <script>
+  import IntegrationOverlay from './integration.vue';
+  import Overlay from 'zero/helpers/overlay.js';
+
   export default {
     props: {
       model: {
@@ -34,7 +37,25 @@
     computed: {
       hasColor()
       {
-        return !!this.model.color;
+        return !!this.model.color && this.activated;
+      }
+    },
+
+    methods: {
+      open()
+      {
+        // open editing overlay
+        return Overlay.open({
+          component: IntegrationOverlay,
+          display: 'editor',
+          model: this.model,
+          isCreate: !this.activated,
+          alias: this.model.alias,
+          width: 960
+        }).then(value =>
+        {
+          console.log(value);
+        });
       }
     }
   }
