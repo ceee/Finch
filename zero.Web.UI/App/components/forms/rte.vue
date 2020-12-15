@@ -36,7 +36,7 @@
   import { Plugin, PluginKey } from 'prosemirror-state';
   import
   {
-    HardBreak, Bold, Code, Italic, Link, Strike, Underline, History
+    HardBreak, Bold, Code, Italic, Link, Strike, Underline, History, Placeholder
   }
   from 'tiptap-extensions';
 
@@ -54,6 +54,10 @@
         type: Boolean,
         default: false
       },
+      placeholder: {
+        type: String,
+        default: null
+      }
     },
 
     data: () => ({
@@ -86,27 +90,36 @@
 
     mounted()
     {
-      this.editor = new Editor({
-        editable: !this.disabled,
-        extensions: [
-          new HardBreak(),
-          new Link(),
-          new Bold(),
-          new Code(),
-          new Italic(),
-          new Strike(),
-          new Underline(),
-          new History(),
+      let extensions = [
+        new HardBreak(),
+        new Link(),
+        new Bold(),
+        new Code(),
+        new Italic(),
+        new Strike(),
+        new Underline(),
+        new History(),
           //new Plugin({
           //  name: new PluginKey('break2'),
 
           //})
-        ],
-        onUpdate: ({ getHTML }) =>
-        {
-          var html = getHTML();
-          this.onDebouncedChange(html);
-        },
+      ];
+
+      if (this.placeholder)
+      {
+        extensions.push(new Placeholder({
+          emptyEditorClass: 'is-editor-empty',
+          emptyNodeClass: 'is-empty',
+          emptyNodeText: this.placeholder,
+          showOnlyWhenEditable: true,
+          showOnlyCurrent: true
+        }));
+      }
+
+      this.editor = new Editor({
+        editable: !this.disabled,
+        extensions: extensions,
+        onUpdate: opts => this.onDebouncedChange(opts.getHTML())
       });
 
       this.init();
