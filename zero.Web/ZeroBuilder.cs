@@ -17,6 +17,7 @@ using zero.Core;
 using zero.Core.Api;
 using zero.Core.Assemblies;
 using zero.Core.Collections;
+using zero.Core.Cultures;
 using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -105,6 +106,7 @@ namespace zero.Web
       // add default services
       Services.AddHttpContextAccessor();
       Services.AddScoped<IApplicationResolver, ApplicationResolver>();
+      Services.AddScoped<ICultureResolver, CultureResolver>();
       Services.AddScoped<IZeroContext, ZeroContext>();
 
       Services.AddScoped<IBackofficeStore, BackofficeStore>();
