@@ -57,6 +57,10 @@
       placeholder: {
         type: String,
         default: null
+      },
+      extensions: {
+        type: Array,
+        default: () => []
       }
     },
 
@@ -91,14 +95,15 @@
     mounted()
     {
       let extensions = [
-        new HardBreak(),
+        ...this.extensions,
+        //new HardBreak(),
         new Link(),
         new Bold(),
         new Code(),
         new Italic(),
         new Strike(),
         new Underline(),
-        new History(),
+        new History()
           //new Plugin({
           //  name: new PluginKey('break2'),
 
@@ -162,6 +167,16 @@
     p + p
     {
       margin-top: 1em;
+    }
+
+    p.is-editor-empty:first-child:before
+    {
+      content: attr(data-empty-text);
+      float: left;
+      color: var(--color-input-placeholder);
+      opacity: .7;
+      pointer-events: none;
+      height: 0;
     }
 
     a
