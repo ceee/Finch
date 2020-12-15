@@ -32,10 +32,11 @@
   import Strings from 'zero/helpers/strings.js';
   import { debounce as _debounce } from 'underscore';
   import { Editor, EditorContent, EditorMenuBubble, EditorMenuBar } from 'tiptap';
+  import { baseKeymap } from 'prosemirror-commands';
+  import { Plugin, PluginKey } from 'prosemirror-state';
   import
   {
-    Blockquote, BulletList, CodeBlock, HardBreak, Heading, ListItem, OrderedList, TodoItem, TodoList,
-    Bold, Code, Italic, Link, Strike, Underline, History
+    HardBreak, Bold, Code, Italic, Link, Strike, Underline, History
   }
   from 'tiptap-extensions';
 
@@ -56,7 +57,7 @@
     },
 
     data: () => ({
-      id: 'quill-' + Strings.guid(),
+      id: 'rte-' + Strings.guid(),
       blocked: false,
       onDebouncedChange: null,
       editor: null
@@ -65,8 +66,17 @@
     watch: {
       value()
       {
-        this.init();
-      }
+        if (!this.blocked)
+        {
+          this.init();
+        }
+      },
+      disabled(value)
+      {
+        this.editor.setOptions({
+          editable: !value
+        })
+      },
     },
 
     created()
@@ -77,8 +87,8 @@
     mounted()
     {
       this.editor = new Editor({
+        editable: !this.disabled,
         extensions: [
-          new CodeBlock(),
           new HardBreak(),
           new Link(),
           new Bold(),
@@ -87,10 +97,15 @@
           new Strike(),
           new Underline(),
           new History(),
+          //new Plugin({
+          //  name: new PluginKey('break2'),
+
+          //})
         ],
         onUpdate: ({ getHTML }) =>
         {
-          this.onDebouncedChange(getHTML());
+          var html = getHTML();
+          this.onDebouncedChange(html);
         },
       });
 
@@ -105,8 +120,9 @@
 
       onChange(content)
       {
-        // TODO this will automatically set the cursor to the end, not desired ;-)
-        //this.$emit('input', content);
+        this.blocked = true;
+        this.$emit('input', content);
+        this.$nextTick(() => this.blocked = false);
       }
     },
 
