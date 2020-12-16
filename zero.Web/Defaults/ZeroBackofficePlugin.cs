@@ -117,7 +117,8 @@ namespace zero.Web.Defaults
 
       services.AddScoped<IZeroMediaHelper, ZeroMediaHelper>();
 
-      services.AddScoped<IIntegrationService, IntegrationService>();
+      services.AddScoped<IIntegrationTypeService, IntegrationTypeService>();
+      services.AddScoped<IIntegrationsCollection, IntegrationsCollection>();
     }
   }
 }

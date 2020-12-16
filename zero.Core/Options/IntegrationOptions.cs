@@ -3,9 +3,9 @@ using zero.Core.Integrations;
 
 namespace zero.Core.Options
 {
-  public class IntegrationOptions : ZeroBackofficeCollection<IIntegration>, IZeroCollectionOptions
+  public class IntegrationOptions : ZeroBackofficeCollection<IIntegrationType>, IZeroCollectionOptions
   {
-    public void Add<T>() where T : IIntegration, new()
+    public void Add<T>() where T : IIntegrationType, new()
     {
       Items.Add(new T());
     }

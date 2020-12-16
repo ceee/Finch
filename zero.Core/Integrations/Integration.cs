@@ -1,35 +1,26 @@
-﻿using System;
+﻿using zero.Core.Attributes;
+using zero.Core.Entities;
 
 namespace zero.Core.Integrations
 {
-  /// <summary>
-  /// An integration is an application part which has a public configuration per app.
-  /// It's up to the user to provide functionality.
-  /// </summary>
-  public class Integration : IIntegration
+  public abstract class Integration : ZeroEntity, IIntegration
   {
-    /// <inheritdoc />
-    public string Alias { get; set; }
+    public Integration()
+    {
+      IsActive = true;
+    }
 
     /// <inheritdoc />
-    public string Name { get; set; }
+    public string IntegrationAlias { get; set; }
+  }
 
-    /// <inheritdoc />
-    public string Description { get; set; }
 
-    /// <inheritdoc />
-    public string ImagePath { get; set; }
-
-    /// <inheritdoc />
-    public string Color { get; set; }
-
-    /// <inheritdoc />
-    public Type SettingsType { get; set; }
-
-    /// <inheritdoc />
-    public bool AllowMultiple { get; set; }
-
-    /// <inheritdoc />
-    public bool IsAutoActivated { get; set; }
+  [Collection("Integrations")]
+  public interface IIntegration : IZeroEntity, IZeroDbConventions
+  {
+    /// <summary>
+    /// Preferred countries are displayed on top in lists
+    /// </summary>
+    string IntegrationAlias { get; set; }
   }
 }

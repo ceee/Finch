@@ -8,11 +8,13 @@ namespace zero.Web.Controllers
   //[ZeroAuthorize(Permissions.Sections.Spaces, PermissionsValue.True)]
   public class IntegrationsController : BackofficeController
   {
-    IIntegrationService Integrations;
+    IIntegrationsCollection Integrations;
+    IIntegrationTypeService Types;
 
-    public IntegrationsController(IIntegrationService integrations)
+    public IntegrationsController(IIntegrationsCollection integrations, IIntegrationTypeService types)
     {
       Integrations = integrations;
+      Types = types;
     }
 
 
@@ -20,16 +22,16 @@ namespace zero.Web.Controllers
     {
       return Ok(new
       {
-        available = await Integrations.GetAvailable(),
-        activated = await Integrations.GetActivated()
+        available = await Types.GetAvailable(),
+        activated = await Types.GetActivated()
       });
     }
 
 
     public IActionResult GetEmptySettings([FromQuery] string alias)
     {
-      IIntegration integration = Integrations.GetByAlias(alias);
-      IIntegrationSettings model = integration != null ? Activator.CreateInstance(integration.SettingsType) as IIntegrationSettings : null;
+      IIntegrationType integration = Types.GetByAlias(alias);
+      IIntegration model = integration != null ? Activator.CreateInstance(integration.SettingsType) as IIntegration : null;
 
       if (model != null)
       {
@@ -42,26 +44,26 @@ namespace zero.Web.Controllers
 
     public async Task<IActionResult> GetSettingsByAlias([FromQuery] string alias)
     {
-      IIntegrationSettings content = await Integrations.GetSettingsByAlias(alias);
+      IIntegration content = await Integrations.GetByAlias(alias);
       return Ok(Edit(content));
     }
 
 
     public async Task<IActionResult> GetSettingsById([FromQuery] string id)
     {
-      IIntegrationSettings content = await Integrations.GetSettingsById(id);
+      IIntegration content = await Integrations.GetById(id);
       return Ok(Edit(content));
     }
 
 
-    public async Task<IActionResult> Save([FromBody] IIntegrationSettings model)
+    public async Task<IActionResult> Save([FromBody] IIntegration model)
     {
       return Ok(await Integrations.Save(model));
     }
 
     public async Task<IActionResult> Delete([FromQuery] string id)
     {
-      return Ok(await Integrations.Delete(id));
+      return Ok(await Integrations.DeleteById(id));
     }
   }
 }

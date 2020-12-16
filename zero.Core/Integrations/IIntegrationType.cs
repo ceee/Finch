@@ -7,7 +7,7 @@ namespace zero.Core.Integrations
   /// An integration is an application part which has a public configuration per app.
   /// It's up to the user to provide functionality.
   /// </summary>
-  public interface IIntegration
+  public interface IIntegrationType
   {
     /// <summary>
     /// The alias
