@@ -27,7 +27,7 @@ namespace zero.Core.Collections
     protected virtual Action<T> PreSave { get; set; }
 
 
-    public CollectionBase(IZeroContext context, ICollectionInterceptorHandler interceptorHandler, IValidator<T> validator = null)
+    public CollectionBase(IZeroContext context, ICollectionInterceptorHandler interceptorHandler = null, IValidator<T> validator = null)
     {
       Context = context;
       Store = context.Store;
@@ -249,7 +249,7 @@ namespace zero.Core.Collections
     {
       // run interceptors
       var parameters = Parameters<CollectionInterceptor.CreateParameters<T>>(args => args.Model = model);
-      EntityResult<T> preResult = await InterceptorHandler.Handle(x => x.Creating(parameters));
+      EntityResult<T> preResult = await InterceptorHandler?.Handle(x => x.Creating(parameters));
 
       if (preResult != null)
       {
@@ -270,7 +270,7 @@ namespace zero.Core.Collections
       await Session.StoreAsync(model);
 
       // run interceptors
-      await InterceptorHandler.Handle<T>(x => x.Created(parameters));
+      await InterceptorHandler?.Handle<T>(x => x.Created(parameters));
 
       await Session.SaveChangesAsync();
 
@@ -287,7 +287,7 @@ namespace zero.Core.Collections
         args.Model = model;
         args.Id = model.Id;
       });
-      EntityResult<T> preResult = await InterceptorHandler.Handle(x => x.Updating(parameters));
+      EntityResult<T> preResult = await InterceptorHandler?.Handle(x => x.Updating(parameters));
 
       if (preResult != null)
       {
@@ -308,7 +308,7 @@ namespace zero.Core.Collections
       await Session.StoreAsync(model);
 
       // run interceptors
-      await InterceptorHandler.Handle<T>(x => x.Updated(parameters));
+      await InterceptorHandler?.Handle<T>(x => x.Updated(parameters));
 
       await Session.SaveChangesAsync();
 
@@ -335,7 +335,7 @@ namespace zero.Core.Collections
         args.Model = entity;
         args.Id = entity.Id;
       });
-      EntityResult<T> preResult = await InterceptorHandler.Handle(x => x.Deleting(parameters));
+      EntityResult<T> preResult = await InterceptorHandler?.Handle(x => x.Deleting(parameters));
 
       if (preResult != null)
       {
@@ -344,7 +344,7 @@ namespace zero.Core.Collections
 
       Session.Delete(entity);
 
-      await InterceptorHandler.Handle<T>(x => x.Deleted(parameters));
+      await InterceptorHandler?.Handle<T>(x => x.Deleted(parameters));
 
       await Session.SaveChangesAsync();
 
@@ -375,7 +375,7 @@ namespace zero.Core.Collections
     public virtual async Task<EntityResult<T>> Purge(string querySuffix = null, Parameters parameters = null)
     {
       var interceptorParameters = Parameters<CollectionInterceptor.PurgeParameters<T>>();
-      EntityResult<T> preResult = await InterceptorHandler.Handle(x => x.Purging(interceptorParameters));
+      EntityResult<T> preResult = await InterceptorHandler?.Handle(x => x.Purging(interceptorParameters));
 
       if (preResult != null)
       {
@@ -384,7 +384,7 @@ namespace zero.Core.Collections
 
       await Store.PurgeAsync<T>(Database, querySuffix, parameters);
 
-      await InterceptorHandler.Handle<T>(x => x.Purged(interceptorParameters));
+      await InterceptorHandler?.Handle<T>(x => x.Purged(interceptorParameters));
 
       return EntityResult<T>.Success();
     }

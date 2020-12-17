@@ -18,7 +18,7 @@
 
 //namespace zero.Core.Collections
 //{
-//  public abstract class CollectionPresetBase<T> : ICollectionPresetBase<T>, IDisposable
+//  public abstract class CollectionPresetBase<T> : ICollectionPresetBase<T>, IDisposable where T : class, IPreset, new()
 //  {
 //    private IAsyncDocumentSession _session;
 //    private string _database;
@@ -97,12 +97,18 @@
 
 
 //    /// <inheritdoc />
-//    public virtual async Task<T> Get()
+//    public virtual async Task<T> Get(string key)
 //    {
-//      string alias = "// TODO";
-//      IPresetOverride<T> preset = await Session.Query<IPresetOverride<T>>().FirstOrDefaultAsync(x => x.Alias == alias);
+//      IPresetOverride<T> preset = await Session.Query<IPresetOverride<T>>().FirstOrDefaultAsync(x => x.Key == key);
+//      return preset?.Model ?? new();
+//    }
 
 
+//    /// <inheritdoc />
+//    public virtual async Task<List<T>> GetAll(string key)
+//    {
+//      List<T> presets = await Session.Query<T>().Where(x => x.Key == key).ToListAsync();
+//      //return preset ?? new();
 //    }
 
 
@@ -201,7 +207,7 @@
 
 
 
-//  public interface ICollectionPresetBase<T> : IDisposable
+//  public interface ICollectionPresetBase<T> : IDisposable where T : class, IPreset, new()
 //  {
 //    /// <summary>
 //    /// Guid for this instance
@@ -220,8 +226,13 @@
 //    void ApplyScope(string scope);
 
 //    /// <summary>
-//    /// Get preset by Id
+//    /// Get preset of a certain type
 //    /// </summary>
 //    Task<T> Get();
+
+//    /// <summary>
+//    /// Get all presets of a certain type
+//    /// </summary>
+//    Task<List<T>> GetAll();
 //  }
 //}
