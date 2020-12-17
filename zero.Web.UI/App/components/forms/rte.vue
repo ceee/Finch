@@ -32,13 +32,9 @@
   import Strings from 'zero/helpers/strings.js';
   import { debounce as _debounce } from 'underscore';
   import { Editor, EditorContent, EditorMenuBubble, EditorMenuBar } from 'tiptap';
-  import { baseKeymap } from 'prosemirror-commands';
-  import { Plugin, PluginKey } from 'prosemirror-state';
-  import
-  {
-    HardBreak, Bold, Code, Italic, Link, Strike, Underline, History, Placeholder
-  }
-  from 'tiptap-extensions';
+  import { HardBreak } from './rte.extensions.js';
+  import { Bold, Code, Italic, Link, Strike, Underline, History, Placeholder } from 'tiptap-extensions';
+
 
   export default {
     name: 'uiRte',
@@ -59,6 +55,10 @@
         default: null
       },
       extensions: {
+        type: Array,
+        default: () => []
+      },
+      disabledExtensions: {
         type: Array,
         default: () => []
       }
@@ -96,7 +96,7 @@
     {
       let extensions = [
         ...this.extensions,
-        //new HardBreak(),
+        new HardBreak(),
         new Link(),
         new Bold(),
         new Code(),
@@ -104,10 +104,6 @@
         new Strike(),
         new Underline(),
         new History()
-          //new Plugin({
-          //  name: new PluginKey('break2'),
-
-          //})
       ];
 
       if (this.placeholder)
@@ -119,6 +115,11 @@
           showOnlyWhenEditable: true,
           showOnlyCurrent: true
         }));
+      }
+
+      if (this.disabledExtensions.length)
+      {
+        extensions = extensions.filter(x => this.disabledExtensions.indexOf(x.name) < 0);
       }
 
       this.editor = new Editor({
