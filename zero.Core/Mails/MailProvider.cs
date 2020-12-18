@@ -98,7 +98,7 @@ namespace zero.Core.Mails
     {
       return await Collection.GetByKey(key);
     }
-
+     
 
     /// <inheritdoc />
     public virtual async Task<string> Render(Mail message)

@@ -9,12 +9,12 @@ namespace zero.Core.Entities
 
     /// <inheritdoc />
     public string Key { get; set; }
-
+     
     /// <inheritdoc />
     public string Value { get; set; }
 
     /// <inheritdoc />
-    public TranslationDisplay Display { get; set; }
+    public TranslationDisplay Display { get; set; } 
   }
 
 

@@ -12,6 +12,7 @@ using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Core.Renderer;
 using zero.Core.Routing;
+using zero.Core.Services;
 using zero.Core.Validation;
 using zero.Web.Routing;
 using zero.Web.Sections;
@@ -119,6 +120,8 @@ namespace zero.Web.Defaults
 
       services.AddScoped<IIntegrationTypeService, IntegrationTypeService>();
       services.AddScoped<IIntegrationsCollection, IntegrationsCollection>();
+
+      services.AddScoped<ILocalizer, Localizer>();
     }
   }
 }
