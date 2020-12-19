@@ -1,8 +1,8 @@
 ﻿<template>
-  <div class="app-nav">
+  <div class="app-nav theme-dark" :class="{'is-compact': compact }">
 
     <h1 class="app-nav-headline">
-      <img src="/Assets/zero-2-light.png" v-localize:alt="'@zero.name'" />
+      <img src="/Assets/zero-2.png" v-localize:alt="'@zero.name'" />
     </h1>
 
     <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">
@@ -19,13 +19,13 @@
       <template v-for="section in sections">
         <router-link :to="section.url" class="app-nav-item" :alias="section.alias" :class="{ 'has-children': hasChildren(section) }">
           <ui-icon :icon="section.icon" class="app-nav-item-icon" />
-          {{section.name | localize}}
+          <span class="app-nav-item-text" v-localize="section.name"></span>
           <ui-icon v-if="hasChildren(section)" icon="chevron-down" class="app-nav-item-arrow" />
         </router-link>
         <transition name="app-nav-children">
           <div class="app-nav-children" v-if="hasChildren(section) && $route.path.indexOf('/' + section.alias) === 0">
             <router-link v-for="child in section.children" v-bind:key="child.alias" :to="child.url" class="app-nav-child">
-              {{child.name | localize}}
+              <span class="app-nav-child-text" v-localize="child.name"></span>
             </router-link>
           </div>
         </transition>
@@ -49,6 +49,7 @@
         </template>
         <ui-dropdown-button label="Edit" icon="edit-2" @click="editUser" />
         <ui-dropdown-button label="Change password" icon="lock" @click="changePassword" />
+        <ui-dropdown-button label="Toggle sidebar" icon="fth-minimize-2" @click="compact=!compact" />
         <ui-dropdown-button label="Logout" icon="log-out" @click="logout" />
       </ui-dropdown>
     </footer>
@@ -71,7 +72,8 @@
       applications: zero.applications,
       sections: zero.sections,
       user: null,
-      userAvatar: null
+      userAvatar: null,
+      compact: true
     }),
 
 

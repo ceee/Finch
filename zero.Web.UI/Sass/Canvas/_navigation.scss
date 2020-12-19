@@ -170,7 +170,7 @@ a.app-nav-child
 {
   display: grid;
   width: 100%;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(auto, 1fr) auto;
   gap: 16px;
   color: var(--color-text-dim);
   align-items: center;
@@ -199,6 +199,93 @@ a.app-nav-child
     {
       font-weight: 700;
       color: var(--color-text);
+    }
+  }
+}
+
+
+/* COMPACT MODE */
+
+.app-nav.is-compact
+{
+  width: 82px;
+
+  .app-nav-headline
+  {
+    width: 100%;
+    overflow: hidden;
+    padding-left: 0;
+    padding-right: 0;
+
+    img
+    {
+      margin-left: 29px;
+      clip-path: circle(23.78% at 13px 14px);
+      min-width: 118px;
+    }
+  }
+
+  .app-nav-switch
+  {
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+    width: 100%;
+    overflow: hidden;
+    padding: 16px 0 0;
+  }
+
+  a.app-nav-item, button.app-nav-item
+  {
+    display: flex;
+
+    &:hover + .app-nav-children
+    {
+      display: block;
+    }
+  }
+
+  .app-nav-item-text, .app-nav-item-arrow
+  {
+    display: none;
+  }
+
+  .app-nav-children
+  {
+    display: none;
+    width: 290px;
+    position: absolute;
+    background: var(--color-bg-shade-1);
+    z-index: 3;
+    border-radius: var(--radius);
+    padding: 15px 0 20px;
+
+    &:hover
+    {
+      display: block;
+    }
+  }
+
+  a.app-nav-child
+  {
+    padding: 0 var(--padding);
+  }
+
+  .app-nav-account
+  {
+    padding: 0;
+    margin-bottom: var(--padding);
+    margin-left: 25px;
+  }
+
+  .app-nav-account-button
+  {
+    display: block;
+    width: 32px;
+
+    .-text, .-arrow
+    {
+      display: none;
     }
   }
 }
