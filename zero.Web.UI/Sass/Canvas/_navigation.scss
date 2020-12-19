@@ -238,6 +238,7 @@ a.app-nav-child
   a.app-nav-item, button.app-nav-item
   {
     display: flex;
+    //height: 60px;
 
     &:hover + .app-nav-children
     {
@@ -253,12 +254,20 @@ a.app-nav-child
   .app-nav-children
   {
     display: none;
-    width: 290px;
     position: absolute;
-    background: var(--color-bg-shade-1);
-    z-index: 3;
+    z-index: 8;
+    min-width: 240px;
+    min-height: 20px;
+    background: var(--color-dropdown);
     border-radius: var(--radius);
-    padding: 15px 0 20px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border: 1px solid var(--color-dropdown-border);
+    box-shadow: var(--shadow-dropdown);
+    padding: 5px;
+    color: var(--color-text);
+    margin-left: 82px;
+    margin-top: -50px;
 
     &:hover
     {
@@ -269,6 +278,31 @@ a.app-nav-child
   a.app-nav-child
   {
     padding: 0 var(--padding);
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+    align-items: center;
+    font-size: var(--font-size);
+    padding: 0 16px;
+    height: 42px;
+    color: var(--color-text-dim);
+    border-radius: var(--radius);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+
+    &:not([disabled]):hover, &:focus
+    {
+      background: var(--color-dropdown-selected);
+    }
+
+    &.is-active
+    {
+      color: var(--color-text);
+      font-weight: 700;
+    }
   }
 
   .app-nav-account
