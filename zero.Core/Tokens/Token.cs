@@ -4,12 +4,12 @@ using zero.Core.Entities;
 namespace zero.Core.Tokens
 {
   [Collection("Tokens")]
-  public class SecurityToken : ZeroEntity, IZeroDbConventions
+  public class SecurityToken : IZeroDbConventions
   {
-    public byte[] Key { get; set; }
+    public string Id { get; set; }
+
+    public string Key { get; set; }
 
     public string Token { get; set; }
-
-    public object Value { get; set; }
   }
 }

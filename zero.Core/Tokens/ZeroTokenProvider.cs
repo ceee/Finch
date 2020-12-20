@@ -1,85 +1,239 @@
-﻿using System.Globalization;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Raven.Client.Documents.Session;
+using System;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
+using zero.Core.Database;
+using zero.Core.Extensions;
 
 namespace zero.Core.Tokens
 {
-  public abstract class ZeroTokenProvider<T>
+  public class ZeroTokenProvider : IZeroTokenProvider
   {
-    /// <summary>
-    /// Creates bytes to use as a security token from the models internal data (preferable security stamp).
-    /// </summary>
-    /// <param name="model">The model.</param>
-    /// <returns>The security token bytes.</returns>
-    protected abstract Task<byte[]> GetSecurityToken(T model);
+    readonly char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-".ToCharArray();
 
+    readonly RandomNumberGenerator randonNumberGenerator;
 
-    /// <summary>
-    /// Returns a constant, provider and model unique modifier used for entropy in generated tokens from model information.
-    /// </summary>
-    /// <param name="purpose">The purpose the token will be generated for.</param>
-    /// <param name="model">The model a token should be generated for.</param>
-    /// <returns>
-    /// The <see cref="Task"/> that represents the asynchronous operation, containing a constant modifier for the specified 
-    /// <paramref name="model"/> and <paramref name="purpose"/>.
-    /// </returns>
-    protected abstract Task<string> GetModifier(string purpose, T model);
+    protected IZeroStore Store { get; private set; }
+    
 
-
-    /// <inheritdoc />
-    public virtual async Task<string> Generate(string purpose, T model)
+    public ZeroTokenProvider(IZeroStore store)
     {
-      var securityToken = await GetSecurityToken(model);
-      var modifier = await GetModifier(purpose, model);
-
-      return Rfc6238AuthenticationService.GenerateCode(securityToken, modifier).ToString("D6", CultureInfo.InvariantCulture);
+      Store = store;
+      randonNumberGenerator = RandomNumberGenerator.Create();
     }
 
 
     /// <inheritdoc />
-    public virtual async Task<bool> Validate(string purpose, string token, T model)
+    public virtual async Task<string> Create(string key, TimeSpan expires, int length = 82)
     {
-      int code;
-      if (!int.TryParse(token, out code))
+      if (key.IsNullOrWhiteSpace())
+      {
+        throw new ArgumentException("Key cannot be empty");
+      }
+      if (length < 16)
+      {
+        throw new ArgumentOutOfRangeException("Use at least a length of 16 for the token");
+      }
+
+      string tokenKey = Random(length);
+
+      SecurityToken securityToken = new SecurityToken()
+      {
+        Id = TokenToId(tokenKey),
+        Token = tokenKey,
+        Key = HashKey(key)
+      };
+
+      // saves the token
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      await session.StoreAsync(securityToken);
+
+      // set the expires flag for the token
+      IMetadataDictionary metadata = session.Advanced.GetMetadataFor(securityToken);
+      metadata[Constants.Database.Expires] = DateTime.UtcNow.AddSeconds(expires.TotalSeconds);
+      await session.SaveChangesAsync();
+
+      return tokenKey;
+    }
+
+
+    /// <inheritdoc />
+    public virtual async Task<bool> Verify(string key, string token)
+    {
+      if (token.IsNullOrWhiteSpace() || key.IsNullOrWhiteSpace())
       {
         return false;
       }
-      var securityToken = await GetSecurityToken(model);
-      var modifier = await GetModifier(purpose, model);
 
-      return securityToken != null && Rfc6238AuthenticationService.ValidateCode(securityToken, code, modifier);
+      // try to find a valid token
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      SecurityToken securityToken = await session.LoadAsync<SecurityToken>(TokenToId(token));
+      bool isValid = securityToken != null && VerifyKey(securityToken.Key, key);
+
+      // remove token from DB if it is valid
+      if (isValid)
+      {
+        session.Delete(securityToken);
+        await session.SaveChangesAsync();
+      }
+
+      return isValid;
+    }
+
+
+    /// <inheritdoc />
+    public string Random(int length)
+    {
+      byte[] data = new byte[4 * length];
+      using RNGCryptoServiceProvider crypto = new();
+      crypto.GetBytes(data);
+
+      StringBuilder result = new(length);
+
+      for (int i = 0; i < length; i++)
+      {
+        var rnd = BitConverter.ToUInt32(data, i * 4);
+        var idx = rnd % chars.Length;
+
+        result.Append(chars[idx]);
+      }
+
+      return result.ToString();
+    }
+
+
+    /// <summary>
+    /// Converts the token to a database id
+    /// </summary>
+    string TokenToId(string token)
+    {
+      string collection = Store.Conventions.GetCollectionName(typeof(SecurityToken));
+      string idPrefix = Store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix(collection);
+      return idPrefix + Store.Conventions.IdentityPartsSeparator + token;
+    }
+
+
+    /// <summary>
+    /// Creates a hash for the security token key.
+    /// Borrowed from the .NET Core PasswordHasher 
+    /// (see: https://github.com/dotnet/aspnetcore/blob/release/5.0/src/Identity/Extensions.Core/src/PasswordHasher.cs)
+    /// </summary>
+    string HashKey(string key)
+    {
+      key = key.ToLowerInvariant();
+
+      KeyDerivationPrf prf = KeyDerivationPrf.HMACSHA256;
+      int iterationCount = 100;
+      int saltSize = 128 / 8;
+      int numBytesRequested = 256 / 8;
+
+      byte[] salt = new byte[saltSize];
+      randonNumberGenerator.GetBytes(salt);
+      byte[] subkey = KeyDerivation.Pbkdf2(key, salt, prf, iterationCount, numBytesRequested);
+
+      var outputBytes = new byte[13 + salt.Length + subkey.Length];
+      outputBytes[0] = 0x01;
+      WriteNetworkByteOrder(outputBytes, 1, (uint)prf);
+      WriteNetworkByteOrder(outputBytes, 5, (uint)iterationCount);
+      WriteNetworkByteOrder(outputBytes, 9, (uint)saltSize);
+      Buffer.BlockCopy(salt, 0, outputBytes, 13, salt.Length);
+      Buffer.BlockCopy(subkey, 0, outputBytes, 13 + saltSize, subkey.Length);
+      return Convert.ToBase64String(outputBytes);
+    }
+
+
+    /// <summary>
+    /// Verifies the given key.
+    /// Borrowed from the .NET Core PasswordHasher 
+    /// (see: https://github.com/dotnet/aspnetcore/blob/release/5.0/src/Identity/Extensions.Core/src/PasswordHasher.cs)
+    /// </summary>
+    bool VerifyKey(string storedKey, string key)
+    {
+      byte[] decodedStoredKey = Convert.FromBase64String(storedKey);
+      int embeddedIterCount = default(int);
+
+      try
+      {
+        KeyDerivationPrf prf = (KeyDerivationPrf)ReadNetworkByteOrder(decodedStoredKey, 1);
+        embeddedIterCount = (int)ReadNetworkByteOrder(decodedStoredKey, 5);
+        int saltLength = (int)ReadNetworkByteOrder(decodedStoredKey, 9);
+
+        // Read the salt: must be >= 128 bits
+        if (saltLength < 128 / 8)
+        {
+          return false;
+        }
+
+        byte[] salt = new byte[saltLength];
+        Buffer.BlockCopy(decodedStoredKey, 13, salt, 0, salt.Length);
+
+        // Read the subkey (the rest of the payload): must be >= 128 bits
+        int subkeyLength = decodedStoredKey.Length - 13 - salt.Length;
+        if (subkeyLength < 128 / 8)
+        {
+          return false;
+        }
+        byte[] expectedSubkey = new byte[subkeyLength];
+        Buffer.BlockCopy(decodedStoredKey, 13 + salt.Length, expectedSubkey, 0, expectedSubkey.Length);
+
+        // Hash the incoming password and verify it
+        byte[] actualSubkey = KeyDerivation.Pbkdf2(key, salt, prf, embeddedIterCount, subkeyLength);
+
+        return true;
+      }
+      catch
+      {
+        return false;
+      }
+    }
+
+
+    static void WriteNetworkByteOrder(byte[] buffer, int offset, uint value)
+    {
+      buffer[offset + 0] = (byte)(value >> 24);
+      buffer[offset + 1] = (byte)(value >> 16);
+      buffer[offset + 2] = (byte)(value >> 8);
+      buffer[offset + 3] = (byte)(value >> 0);
+    }
+
+    static uint ReadNetworkByteOrder(byte[] buffer, int offset)
+    {
+      return ((uint)(buffer[offset + 0]) << 24) | ((uint)(buffer[offset + 1]) << 16) | ((uint)(buffer[offset + 2]) << 8) | ((uint)(buffer[offset + 3]));
     }
   }
 
 
-  public interface IZeroTokenProvider<T>
+  public interface IZeroTokenProvider
   {
     /// <summary>
-    /// Generates a token for the specified <paramref name="model"/> and <paramref name="purpose"/>.
+    /// Generates a token for a <paramref name="key"/> with a specified <paramref name="expires"/> lifespan.
     /// </summary>
-    /// <param name="purpose">The purpose the token will be used for.</param>
-    /// <param name="model">The model a token should be generated for.</param>
+    /// <param name="key">The purpose the token will be used for. The key must match when verifying the token and should always be hidden from the user.</param>
+    /// <param name="expires">The token will automatically expire after this timespan.</param>
     /// <returns>
-    /// The <see cref="Task"/> that represents the asynchronous operation, containing the token for the specified 
-    /// <paramref name="model"/> and <paramref name="purpose"/>.
+    /// The generated token with the specified <paramref name="length"/>.
     /// </returns>
-    /// <remarks>
-    /// The <paramref name="purpose"/> parameter allows a token generator to be used for multiple types of token whilst
-    /// insuring a token for one purpose cannot be used for another.
-    /// </remarks>
-    Task<string> Generate(string purpose, T model);
+    Task<string> Create(string key, TimeSpan expires, int length = 82);
 
     /// <summary>
-    /// Returns a flag indicating whether the specified <paramref name="token"/> is valid for the given
-    /// <paramref name="model"/> and <paramref name="purpose"/>.
+    /// Validates the passed <paramref name="token"/> for the specified <paramref name="key"/>.
     /// </summary>
-    /// <param name="purpose">The purpose the token will be used for.</param>
-    /// <param name="token">The token to validate.</param>
-    /// <param name="model">The model a token should be validated for.</param>
+    /// <param name="key">The purpose the token was used for.</param>
+    /// <param name="token">The previously generated token.</param>
     /// <returns>
-    /// The <see cref="Task"/> that represents the asynchronous operation, containing the a flag indicating the result
-    /// of validating the <paramref name="token"> for the specified </paramref><paramref name="model"/> and <paramref name="purpose"/>.
-    /// The task will return true if the token is valid, otherwise false.
+    /// False, if the token could not be found or it has already expired.
     /// </returns>
-    Task<bool> Validate(string purpose, string token, T model);
+    Task<bool> Verify(string key, string token);
+
+    /// <summary>
+    /// Generates a random token with the specified <paramref name="length"/> using the RNGCryptoServiceProvider.
+    /// </summary>
+    /// <remarks>
+    /// This method won't store the token in the database and can't be used for verification. Use <see cref="Create(string, TimeSpan, int)"/> instead.
+    /// </remarks>
+    string Random(int length);
   }
 }

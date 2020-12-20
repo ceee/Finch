@@ -73,7 +73,7 @@
       sections: zero.sections,
       user: null,
       userAvatar: null,
-      compact: true
+      compact: false
     }),
 
 
