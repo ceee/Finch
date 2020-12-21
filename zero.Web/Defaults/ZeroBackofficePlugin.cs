@@ -105,6 +105,7 @@ namespace zero.Web.Defaults
       services.AddTransient<IModulesApi, ModulesApi>();
       services.AddTransient<IRecycleBinApi, RecycleBinApi>();
 
+      services.AddScoped<IRequestUrlResolver, RequestUrlResolver>();
       services.AddScoped<IRoutes, Routes>();
       services.AddScoped<IPageUrlBuilder, PageUrlBuilder>();
       services.AddScoped<IPageEndpointResolver, PageEndpointResolver>();
