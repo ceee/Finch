@@ -48,18 +48,6 @@ namespace zero.Core.Identity
 
 
     /// <summary>
-    /// A hash which is used to validate a password-change request
-    /// </summary>
-    string PasswordResetToken { get; set; }
-
-    /// <summary>
-    /// The date when the current password-reset hash expires
-    /// </summary>
-    DateTimeOffset? PasswordResetTokenExpirationDate { get; set; }
-
-
-
-    /// <summary>
     /// Number of times sign in failed.
     /// </summary>
     int AccessFailedCount { get; set; }

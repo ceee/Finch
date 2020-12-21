@@ -48,14 +48,6 @@ namespace zero.Core.Entities
 
 
     /// <inheritdoc/>
-    public string PasswordResetToken { get; set; }
-
-    /// <inheritdoc/>
-    public DateTimeOffset? PasswordResetTokenExpirationDate { get; set; }
-
-
-
-    /// <inheritdoc/>
     public int AccessFailedCount { get; set; }
 
     /// <inheritdoc/>
