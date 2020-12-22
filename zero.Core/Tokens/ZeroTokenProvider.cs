@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Raven.Client.Documents.Session;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -27,7 +28,7 @@ namespace zero.Core.Tokens
 
 
     /// <inheritdoc />
-    public virtual async Task<string> Create(string key, TimeSpan expires, int length = 82)
+    public virtual async Task<string> Create(string key, TimeSpan expires, int length = 82, Dictionary<string, string> metadata = default)
     {
       if (key.IsNullOrWhiteSpace())
       {
@@ -44,7 +45,8 @@ namespace zero.Core.Tokens
       {
         Id = TokenToId(tokenKey),
         Token = tokenKey,
-        Key = HashKey(key)
+        Key = HashKey(key),
+        Metadata = metadata ?? new()
       };
 
       // saves the token
@@ -52,8 +54,8 @@ namespace zero.Core.Tokens
       await session.StoreAsync(securityToken);
 
       // set the expires flag for the token
-      IMetadataDictionary metadata = session.Advanced.GetMetadataFor(securityToken);
-      metadata[Constants.Database.Expires] = DateTime.UtcNow.AddSeconds(expires.TotalSeconds);
+      IMetadataDictionary tokenMetadata = session.Advanced.GetMetadataFor(securityToken);
+      tokenMetadata[Constants.Database.Expires] = DateTime.UtcNow.AddSeconds(expires.TotalSeconds);
       await session.SaveChangesAsync();
 
       return tokenKey;
@@ -81,6 +83,31 @@ namespace zero.Core.Tokens
       }
 
       return isValid;
+    }
+
+
+    /// <inheritdoc />
+    public virtual async Task<SecurityToken> VerifyAndReturn(string key, string token)
+    {
+      if (token.IsNullOrWhiteSpace() || key.IsNullOrWhiteSpace())
+      {
+        return null;
+      }
+
+      // try to find a valid token
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      SecurityToken securityToken = await session.LoadAsync<SecurityToken>(TokenToId(token));
+      bool isValid = securityToken != null && VerifyKey(securityToken.Key, key);
+
+      // remove token from DB if it is valid
+      if (isValid)
+      {
+        session.Delete(securityToken);
+        await session.SaveChangesAsync();
+        return securityToken;
+      }
+
+      return null;
     }
 
 
@@ -213,10 +240,12 @@ namespace zero.Core.Tokens
     /// </summary>
     /// <param name="key">The purpose the token will be used for. The key must match when verifying the token and should always be hidden from the user.</param>
     /// <param name="expires">The token will automatically expire after this timespan.</param>
+    /// <param name="length">Length of the geneated token.</param> 
+    /// <param name="metadata">Additional metadata to store with the token. This data can be retrieved on verification with <see cref="VerifyAndReturn(string, string)"/></param>
     /// <returns>
     /// The generated token with the specified <paramref name="length"/>.
     /// </returns>
-    Task<string> Create(string key, TimeSpan expires, int length = 82);
+    Task<string> Create(string key, TimeSpan expires, int length = 82, Dictionary<string, string> metadata = default);
 
     /// <summary>
     /// Validates the passed <paramref name="token"/> for the specified <paramref name="key"/>.
@@ -227,6 +256,16 @@ namespace zero.Core.Tokens
     /// False, if the token could not be found or it has already expired.
     /// </returns>
     Task<bool> Verify(string key, string token);
+
+    /// <summary>
+    /// Validates the passed <paramref name="token"/> for the specified <paramref name="key"/>.
+    /// </summary>
+    /// <param name="key">The purpose the token was used for.</param>
+    /// <param name="token">The previously generated token.</param>
+    /// <returns>
+    /// Null, if the token could not be found or it has already expired.
+    /// </returns>
+    Task<SecurityToken> VerifyAndReturn(string key, string token);
 
     /// <summary>
     /// Generates a random token with the specified <paramref name="length"/> using the RNGCryptoServiceProvider.

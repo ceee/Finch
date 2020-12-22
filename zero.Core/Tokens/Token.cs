@@ -1,4 +1,5 @@
-﻿using zero.Core.Attributes;
+﻿using System.Collections.Generic;
+using zero.Core.Attributes;
 using zero.Core.Entities;
 
 namespace zero.Core.Tokens
@@ -11,5 +12,7 @@ namespace zero.Core.Tokens
     public string Key { get; set; }
 
     public string Token { get; set; }
+
+    public Dictionary<string, string> Metadata { get; set; } = new Dictionary<string, string>();
   }
 }
