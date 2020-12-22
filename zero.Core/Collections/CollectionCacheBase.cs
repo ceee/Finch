@@ -86,7 +86,7 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public override async Task<EntityResult<T>> Save(T model)
     {
-      EntityResult<T> result = await Save(model);
+      EntityResult<T> result = await base.Save(model);
       if (result.IsSuccess)
       {
         Items = null;
@@ -98,7 +98,7 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public override async Task<EntityResult<T>> DeleteById(string id)
     {
-      EntityResult<T> result = await DeleteById(id);
+      EntityResult<T> result = await base.DeleteById(id);
       if (result.IsSuccess)
       {
         Items = null;
@@ -109,7 +109,7 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public override async Task<int> DeleteByIds(params string[] ids)
     {
-      int successCount = await DeleteByIds(ids);
+      int successCount = await base.DeleteByIds(ids);
       if (successCount > 0)
       {
         Items = null;
@@ -121,7 +121,7 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public override async Task<EntityResult<T>> Purge(string querySuffix = null, Parameters parameters = null)
     {
-      EntityResult<T> result = await Purge(querySuffix, parameters);
+      EntityResult<T> result = await base.Purge(querySuffix, parameters);
       if (result.IsSuccess)
       {
         Items = null;
