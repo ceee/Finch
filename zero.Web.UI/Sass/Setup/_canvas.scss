@@ -53,7 +53,7 @@ body
 body:before
 {
   content: 'setup';
-  @extend %font-headline;
+  //@extend %font-headline;
   color: rgba(black, 0.05);
   position: fixed;
   left: -10vw;

@@ -1,7 +1,6 @@
 
 $font-icon-name: 'Feather';
 $font-text-name: 'Lato';
-$font-headline-name: 'TwCenMt';
 
 @include font-face($font-icon-name, '/Assets/Fonts/Feather/feather', 400);
 
@@ -13,25 +12,14 @@ $font-headline-name: 'TwCenMt';
 
 @include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Black', 900);
 
-@include font-face($font-headline-name, '/Assets/Fonts/TwCenMt/twcenmt-regular', 400);
-
-@include font-face($font-headline-name, '/Assets/Fonts/TwCenMt/twcenmt-bold', 700);
-
 %font
 {
   font-family: $font-text-name, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-%font-headline
-{
-  font-family: $font-headline-name, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  //font-family: $font-headline-name, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
 :root
 {
   --font: '#{$font-text-name}', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  --font-headline: '#{$font-headline-name}', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   --font-icon: '#{$font-icon-name}';
 }
 

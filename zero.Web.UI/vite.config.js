@@ -2,19 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const { createVuePlugin } = require('vite-plugin-vue2');
 
-
-let loadedPlugins = JSON.parse(process.env.ZERO_PLUGINS || "[]"); 
+let loadedPlugins = JSON.parse(process.env.ZERO_PLUGINS || "[]"); //["../zero.Commerce/Plugin", "../../Laola/Laola.Backoffice/Plugin"];
 let zeroPlugins = [];
-//let _plugins = [
-//  {
-//    path: '../zero.Commerce/Plugin/vite.plugin.js',
-//    root: '../zero.Commerce/Plugin'
-//  },
-//  {
-//    path: '../../Laola/Laola.Backoffice/Plugin/vite.plugin.js',
-//    root: '../../Laola/Laola.Backoffice/Plugin'
-//  }
-//];
 
 let pluginFileContent = '';
 let pluginAliases = {};
@@ -67,7 +56,7 @@ const aliasResolver = {
   //}
 };
 
-export default {
+const config = {
   port: process.env.PORT,
   cors: true,
   emitManifest: true,
@@ -76,5 +65,13 @@ export default {
     '/@zero/': path.resolve(__dirname, 'app/'),
     ...pluginAliases
   },
-  resolvers: [aliasResolver]
-}
+  resolvers: [aliasResolver],
+  rollupOutputOptions: {
+    format: 'cjs',
+    entryFileNames: `[name].js`,
+    chunkFileNames: `[name].js`,
+    assetFileNames: `[name].[ext]`
+  },
+};
+
+export default config;
