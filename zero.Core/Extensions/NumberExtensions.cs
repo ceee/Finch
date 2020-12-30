@@ -35,14 +35,16 @@ namespace zero.Core.Extensions
         throw new NotImplementedException($"The notation {notation} has no implementation for generating human-readable file sizes");
       }
 
+      int power = notation == FileSizeNotation.SI ? 1000 : 1024;
+
       string[] units = FileSizeUnits[notation];
 
       int order = 0;
 
-      while (sizeInBytes >= 1024 && order + 1 < units.Length)
+      while (sizeInBytes >= power && order + 1 < units.Length)
       {
         order++;
-        sizeInBytes = sizeInBytes / 1024;
+        sizeInBytes = sizeInBytes / power;
       }
 
       return String.Format("{0:0.##} {1}", sizeInBytes, units[order]);
