@@ -1,8 +1,8 @@
 ﻿<template>
-  <div class="app-nav theme-dark" :class="{'is-compact': compact }">
+  <div class="app-nav" :class="{'is-compact': compact }">
 
     <h1 class="app-nav-headline">
-      <img src="/Assets/zero-2.png" v-localize:alt="'@zero.name'" />
+      <img src="/Assets/zero-2-light.png" v-localize:alt="'@zero.name'" />
     </h1>
 
     <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">

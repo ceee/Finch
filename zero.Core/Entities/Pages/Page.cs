@@ -27,17 +27,12 @@ namespace zero.Core.Entities
 
 
   [Collection("Pages")]
-  public interface IPage : IZeroEntity, IZeroDbConventions
+  public interface IPage : IZeroEntity, IZeroDbConventions, ITreeEntity
   {
     /// <summary>
     /// Use this field (when filled out) instead of the alias for URL generation
     /// </summary>
     string UrlAlias { get; set; }
-
-    /// <summary>
-    /// Id of the parent page
-    /// </summary>
-    string ParentId { get; set; }
 
     /// <summary>
     /// Alias of the used page type
