@@ -30,7 +30,11 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<ListResult<MediaListItem>> GetListByQuery([FromQuery] MediaListItemQuery query) => await Collection.GetListByQuery(query);
+    public async Task<ListResult<MediaListItem>> GetListByQuery([FromQuery] MediaListItemQuery query)
+    {
+      query.IncludeInactive = true;
+      return await Collection.GetListByQuery(query);
+    }
 
 
     [HttpPost]
@@ -45,6 +49,7 @@ namespace zero.Web.Controllers
 
     public async Task<MediaListResultModel> GetAll([FromQuery] MediaListQuery query)
     {
+      query.IncludeInactive = true;
       ListResult<MediaListModel> items = (await Collection.GetByQuery(query)).MapTo(x => new MediaListModel()
       {
         Id = x.Id,

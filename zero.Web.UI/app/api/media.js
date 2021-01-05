@@ -31,6 +31,10 @@ const getImageSource = (id, thumb, shared) =>
   {
     return id.substring(6) + "?preset=productListing";
   }
+  if (Array.isArray(id))
+  {
+    id = id[0];
+  }
   return zero.apiPath + base + 'streamThumbnail/?id=' + id + (typeof thumb === 'boolean' ? '&thumb=' + (thumb ? 'true' : 'false') : '') + (shared === true ? '&scope=shared' : '');
 };
 

@@ -15,7 +15,11 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<ListResult<IRecycledEntity>> GetByQuery([FromQuery] RecycleBinListQuery query) => await Api.GetByQuery(query);
+    public async Task<ListResult<IRecycledEntity>> GetByQuery([FromQuery] RecycleBinListQuery query)
+    {
+      query.IncludeInactive = true;
+      return await Api.GetByQuery(query);
+    }
 
 
     public async Task<int> GetCountByOperation([FromQuery] string operationId) => await Api.GetCountByOperation(operationId);

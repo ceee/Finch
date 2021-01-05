@@ -42,7 +42,7 @@ namespace zero.Web.Controllers
     public virtual EditModel<TEntity> GetEmpty([FromServices] TEntity blueprint) => Edit(blueprint);
 
 
-    public virtual async Task<ListResult<TEntity>> GetByQuery([FromQuery] ListQuery<TEntity> query)
+    public virtual async Task<ListResult<TEntity>> GetByQuery([FromQuery] ListBackofficeQuery<TEntity> query)
     {
       query.SearchSelector = model => model.Name;
       IRavenQueryable<TEntity> ravenQuery = Collection.Query;

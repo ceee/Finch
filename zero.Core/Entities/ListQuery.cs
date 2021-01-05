@@ -6,6 +6,22 @@ using System.Linq.Expressions;
 
 namespace zero.Core.Entities
 {
+  public class ListBackofficeQuery<T> : ListQuery<T>
+  {
+    public ListBackofficeQuery()
+    {
+      IncludeInactive = true;
+    }
+  }
+
+  public class ListBackofficeQuery<T, TFilter> : ListQuery<T, TFilter> where TFilter : IListSpecificQuery
+  {
+    public ListBackofficeQuery()
+    {
+      IncludeInactive = true;
+    }
+  }
+
   public class ListQuery<T>
   {
     public string Search { get; set; } = null;
@@ -25,6 +41,8 @@ namespace zero.Core.Entities
     public int Page { get; set; } = 1;
 
     public int PageSize { get; set; } = 30;
+
+    public bool IncludeInactive { get; set; } = false;
 
     public void SearchFor(params Expression<Func<T, object>>[] selectors)
     {

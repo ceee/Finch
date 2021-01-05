@@ -112,7 +112,7 @@ namespace zero.Core.Api
         dbQuery = dbQuery.WhereIf(x => x.ParentId == query.FolderId, !query.FolderId.IsNullOrEmpty(), x => x.ParentId == null);
       }
 
-      ListResult<MediaListItem> result = await dbQuery.ToQueriedListAsync(query);
+      ListResult<MediaListItem> result = await dbQuery.ToQueriedListAsyncX(query);
 
       foreach (MediaListItem item in result.Items)
       {
