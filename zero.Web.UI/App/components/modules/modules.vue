@@ -3,7 +3,10 @@
     <div v-if="items.length" class="ui-modules-inner-sortable" v-sortable="{ onUpdate: onSortingUpdated }">
       <module-preview v-for="item in items" :key="item.id" :types="moduleTypes" :value="item" @edit="edit" @remove="remove" :disabled="disabled" />
     </div>
-    <module-select ref="moduleSelect" :types="moduleTypes" :value="value" v-if="canAdd" @selected="onAdd" />
+    <button v-if="canAdd" type="button" class="ui-modules-start-button" @click="selectModule">
+      <i class="ui-modules-start-button-icon fth-plus"></i>
+      <p class="ui-modules-start-button-text"><strong>Add content</strong> <!--<br>Compose the page by adding modules--></p>
+    </button>
   </div>
 </template>
 
@@ -12,14 +15,14 @@
   import ModulesApi from 'zero/api/modules.js';
   import EditModuleOverlay from './edit-module.vue';
   import ModulePreview from './module-preview.vue';
-  import ModuleSelect from './module-select.vue';
+  import ModuleSelectOverlay from './module-select.vue';
   import Overlay from 'zero/helpers/overlay.js';
   import Arrays from 'zero/helpers/arrays.js';
 
   export default {
     name: 'uiModules',
 
-    components: { ModulePreview, ModuleSelect },
+    components: { ModulePreview },
 
     props: {
       value: {
@@ -78,6 +81,16 @@
       },
 
 
+      selectModule()
+      {
+        Overlay.open({
+          component: ModuleSelectOverlay,
+          types: this.moduleTypes,
+          width: 480
+        }).then(module => this.onAdd(module), () => { });
+      },
+
+
       onAdd(module)
       {
         this.edit(module, null, true);
@@ -98,6 +111,8 @@
         const alias = 'modules.' + module.alias;
         const editor = this.zero.getEditor(alias);
 
+        console.info(editor);
+
         if (!editor)
         {
           // TODO throw error
@@ -109,7 +124,6 @@
           return ModulesApi.getEmpty(module.alias).then(res =>
           {
             this.items.push(res.entity);
-            this.$refs.moduleSelect.reset();
             this.onChange();
           });
         }
@@ -127,7 +141,6 @@
           if (isAdd)
           {
             this.items.push(value);
-            this.$refs.moduleSelect.reset();
           }
           else
           {
@@ -158,5 +171,48 @@
   .ui-modules-inner-sortable
   {
     margin-top: -32px;
+  }
+
+  .ui-modules-start-button
+  {
+    color: var(--color-primary);
+    font-size: var(--font-size);
+    display: inline-grid;
+    grid-template-columns: auto 1fr; 
+    gap: 25px;
+    align-items: center;
+  }
+
+  .ui-modules-inner-sortable + .ui-modules-start-button
+  {
+    margin-top: var(--padding);
+  }
+
+  .ui-modules-start-button-icon
+  {
+    width: 52px;
+    height: 52px;
+    line-height: 50px !important;
+    font-size: 20px;
+    text-align: center;
+    background: var(--color-button-light);
+    border-radius: var(--radius);
+  }
+
+  .ui-modules-start-button-text
+  {
+    line-height: 1.3;
+    color: var(--color-text-dim);
+    margin: 0;
+    font-size: var(--font-size-s);
+    strong
+
+  {
+    display: inline-block;
+    margin-bottom: 2px;
+    color: var(--color-text);
+    font-size: var(--font-size);
+  }
+
   }
 </style>

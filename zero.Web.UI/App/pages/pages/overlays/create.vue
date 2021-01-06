@@ -118,7 +118,7 @@
   {
     display: grid;
     width: 100%;
-    grid-template-columns: 48px 1fr auto;
+    grid-template-columns: 40px 1fr auto;
     gap: 12px;
     align-items: center;
     position: relative;
@@ -157,6 +157,6 @@
     position: relative;
     top: -2px;
     left: 4px;
-    color: var(--color-text);
+    color: var(--color-text); 
   }
 </style>

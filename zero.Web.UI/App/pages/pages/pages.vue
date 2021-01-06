@@ -126,7 +126,7 @@
       {
         Overlay.open({
           component: CreateOverlay,
-          width: 520,
+          width: 480,
           parent: parent
         }).then(() =>
         {

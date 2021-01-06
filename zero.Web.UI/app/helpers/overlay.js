@@ -1,5 +1,5 @@
 import Vue from 'vue';
-//import AppConfirm from 'zero/components/overlays/confirm.vue';
+import AppConfirm from 'zero/components/overlays/confirm.vue'; // TODO importing vue files in js/ts files causes a Rollup production build error
 import Strings from 'zero/helpers/strings.js';
 import { find as _find, extend as _extend } from 'underscore';
 
