@@ -137,7 +137,7 @@
     {
       background: var(--color-input);
       max-width: 800px;
-      min-height: 42px;
+      min-height: 48px;
       display: flex;
       width: 100%;
       flex-direction: column;

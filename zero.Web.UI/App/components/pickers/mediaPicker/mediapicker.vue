@@ -334,8 +334,8 @@
 
     &.is-icon
     {
-      width: 42px;
-      height: 42px;
+      width: 48px;
+      height: 48px;
       display: inline-flex;
       justify-content: center;
       align-items: center;

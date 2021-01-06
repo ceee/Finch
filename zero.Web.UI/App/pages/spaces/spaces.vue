@@ -165,7 +165,7 @@
   .spaces-tree-item
   {
     display: grid;
-    grid-template-columns: 30px 1fr auto;
+    grid-template-columns: 32px 1fr auto;
     gap: 6px;
     height: 100%;
     align-items: center;
@@ -197,12 +197,26 @@
       }
     }
 
-    &.is-active, &:hover
+    /*&.is-active:before
     {
-      .spaces-tree-item-icon
-      {
-        color: var(--color-text);
-      }
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      display: inline-block;
+      background: var(--color-tree-selected-line);
+    }*/
+
+    &:hover .spaces-tree-item-icon
+    {
+      color: var(--color-text);
+    }
+
+    &.is-active .spaces-tree-item-icon
+    {
+      color: var(--color-primary);
     }
   }
 

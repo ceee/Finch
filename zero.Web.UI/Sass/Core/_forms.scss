@@ -21,8 +21,8 @@ textarea, .ui-native-select, .ui-rte-input
   border: 1px solid transparent;
   font-size: var(--font-size);
   display: inline-block;
-  height: 42px;
-  padding: 6px 12px;
+  height: 48px;
+  padding: 6px 16px;
   line-height: 1.5;
   color: var(--color-text);
   border-radius: var(--radius);
@@ -100,8 +100,8 @@ textarea
     position: absolute;
     right: 12px;
     top: 0;
-    height: 42px;
-    line-height: 40px;
+    height: 48px;
+    line-height: 46px;
   }
 
   &[disabled], &[readonly]
@@ -178,7 +178,7 @@ textarea
 
   input:focus ~ &
   {
-    background: var(--color-input-focus-bg) !important;
+    background: var(--color-checked) !important;
     border: var(--color-input-focus-border);
     box-shadow: var(--color-input-focus-shadow);
     outline: none;

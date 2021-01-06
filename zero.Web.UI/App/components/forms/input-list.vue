@@ -126,8 +126,8 @@
     .ui-icon-button
     {
       border-radius: 0 var(--radius) var(--radius) 0;
-      height: 42px;
-      width: 42px;
+      height: 48px;
+      width: 48px;
       border-left: none;
       background: transparent !important;
       box-shadow: none;

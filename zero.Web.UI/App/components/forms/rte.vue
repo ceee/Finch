@@ -157,7 +157,7 @@
   .ui-rte-input
   {
     height: auto;
-    min-height: 42px;
+    min-height: 48px;
     padding-top: 9px;
 
     p

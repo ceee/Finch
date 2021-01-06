@@ -118,7 +118,7 @@
   {
     display: grid;
     width: 100%;
-    grid-template-columns: 42px 1fr auto;
+    grid-template-columns: 48px 1fr auto;
     gap: 12px;
     align-items: center;
     position: relative;

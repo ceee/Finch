@@ -110,6 +110,46 @@ namespace zero.Core.Extensions
     /// <summary>
     /// 
     /// </summary>
+    public static async Task<ListResult<T>> ToQueriedListAsyncX<T, TFilter>(this IRavenQueryable<T> queryable, ListQuery<T, TFilter> query) where TFilter : IListSpecificQuery
+    {
+      queryable = queryable.Statistics(out QueryStatistics stats);
+
+      IQueryable<T> rawQuery = queryable;
+
+      if (query != null)
+      {
+        if (!query.Search.IsNullOrEmpty() && query.SearchSelector != null)
+        {
+          rawQuery = rawQuery.SearchIf(query.SearchSelector, query.Search, "*", "*");
+        }
+        if (!query.Search.IsNullOrEmpty() && query.SearchSelectors.Length > 0)
+        {
+          foreach (var selector in query.SearchSelectors)
+          {
+            rawQuery = rawQuery.SearchIf(selector, query.Search, "*", "*", Raven.Client.Documents.Queries.SearchOperator.Or);
+          }
+        }
+
+        if (!query.OrderBy.IsNullOrEmpty())
+        {
+          rawQuery = rawQuery.OrderBy(query.OrderBy, query.OrderIsDescending, query.OrderType == ListQueryOrderType.String ? OrderingType.String : OrderingType.Double);
+        }
+
+        if (query.PageSize > 0)
+        {
+          rawQuery = rawQuery.Paging(query.Page, query.PageSize);
+        }
+      }
+
+      List<T> items = await rawQuery.ToListAsync();
+
+      return new ListResult<T>(items, stats.TotalResults, query.Page, query.PageSize);
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
     public static async Task<ListResult<T>> ToQueriedListAsync<T, TFilter>(this IRavenQueryable<T> queryable, ListQuery<T, TFilter> query) where T : IZeroEntity where TFilter : IListSpecificQuery
     {
       queryable = queryable.Statistics(out QueryStatistics stats);

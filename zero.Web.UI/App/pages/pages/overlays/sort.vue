@@ -139,7 +139,7 @@
 
   button.pages-sort-item-button
   {
-    height: 42px;
+    height: 48px;
     width: 24px;
     display: flex;
     justify-content: center;

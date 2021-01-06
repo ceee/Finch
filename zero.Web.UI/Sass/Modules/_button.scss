@@ -32,8 +32,8 @@ button::-moz-focus-inner
   align-items: center;
   background: var(--color-button);
   color: var(--color-button-text);
-  padding: 0 20px;
-  height: 42px;
+  padding: 0 var(--padding-m);
+  height: 48px;
   border-radius: var(--radius);
   font-size: var(--font-size);
   font-weight: 700;
@@ -314,8 +314,8 @@ button::-moz-focus-inner
 
 .ui-select-button-icon 
 {
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   display: inline-flex;
   justify-content: center;
   align-items: center;

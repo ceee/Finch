@@ -149,7 +149,7 @@
     align-items: center;
     font-size: var(--font-size);
     padding: 0 16px;
-    height: 42px;
+    height: 48px;
     color: var(--color-text);
     border-radius: var(--radius);
     white-space: nowrap;
@@ -159,7 +159,7 @@
 
     &.has-icon
     {
-      grid-template-columns: 30px minmax(0, 1fr) auto;
+      grid-template-columns: 32px minmax(0, 1fr) auto;
 
       &:not([disabled]):hover .ui-dropdown-button-icon
       {
@@ -253,7 +253,7 @@
     align-items: center;
     font-size: var(--font-size);
     padding: 0 6px 0 16px;
-    height: 42px;
+    height: 48px;
     color: var(--color-text);
     border-radius: var(--radius);
     white-space: nowrap;

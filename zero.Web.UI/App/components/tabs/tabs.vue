@@ -116,7 +116,7 @@
   {
     display: inline-flex;
     align-items: center;
-    height: 50px;
+    height: 58px;
     //overflow: hidden;
     padding: 0 var(--padding);
     font-size: var(--font-size);
@@ -149,16 +149,26 @@
       color: var(--color-text);
       background: var(--color-box);
       box-shadow: var(--shadow-short);
+      border-top: 3px solid var(--color-primary);
 
       .ui-tabs-list-item-count
       {
         background: var(--color-box-light);
       }
 
-      &:before
+      /*&:before
       {
-        display: none;
-      }
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 3px;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        background: var(--color-primary);
+        display: inline-block;
+      }*/
     }
 
     &.has-errors

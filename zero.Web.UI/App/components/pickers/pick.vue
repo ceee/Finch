@@ -651,7 +651,7 @@
     display: grid;
     grid-template-columns: auto 1fr;
     padding: 10px 18px;
-    min-height: 42px;
+    min-height: 48px;
     width: 100%;
     border-radius: var(--radius);
     align-items: center;

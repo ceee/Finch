@@ -2,8 +2,8 @@
 .theme-dark
 {
   // accent colors
-  $color-primary: #fff; //#18a471
-  $color-primary-fg: #191e25;
+  $color-primary: #0d83f0;
+  $color-primary-fg: #fff;
   $color-primary-low: #{rgba(#2c3036, 0.2)};
   $color-secondary: #00a7b9;
   $color-secondary-fg: #fff;
@@ -12,11 +12,12 @@
 
   // foreground colors
   $color-fg: #fff;
-  $color-fg-shade-1: #b0b4b8; // dim
+  $color-fg-shade-1: #a8abad; // dim
   $color-fg-shade-2: #8c9094; // dim-two
   
   // background colors  
   $color-bg: #191e25;
+  $color-bg-shade-0: #1f2329;
   $color-bg-shade-1: #22272e; // bright
   $color-bg-shade-2: #1d2229; // dim
   $color-bg-shade-3: #2a2f36; // bright-two
@@ -64,19 +65,19 @@
   // buttons
   --color-button: #{$color-primary};
   --color-button-text: #{$color-primary-fg};
-  --color-button-light: #{$color-bg-shade-4};
+  --color-button-light: #{$color-bg-shade-3};
   --color-button-light-onbg: #{$color-bg-shade-3};
 
   // forms
   --color-input: #{$color-bg-shade-2};
   --color-input-placeholder: #{$color-fg-shade-1};
   --color-check: #{$color-bg-shade-3};
-  --color-checked: #{$color-bg-shade-3};
-  --color-checked-fg: #{$color-fg};
+  --color-checked: #{$color-primary};
+  --color-checked-fg: #{$color-primary-fg};
   --color-toggle: #{$color-bg-shade-3};
   --color-toggle-fg: #{$color-fg};
-  --color-toggled: #{$color-bg-shade-3};
-  --color-toggled-fg: #{$color-fg};
+  --color-toggled: #{$color-primary};
+  --color-toggled-fg: #{$color-primary-fg};
   --color-input-focus-bg: #{$color-bg-shade-1};
   --color-input-focus-border: 1px solid #{$color-bg-shade-5}; 
   --color-input-focus-shadow: 0 0 0 4px #{$color-bg-shade-2};
@@ -88,7 +89,8 @@
 
   // trees
   --color-tree: #{$color-bg-shade-1};
-  --color-tree-selected: #{$color-bg-shade-3};
+  --color-tree-selected: #{$color-bg-shade-0};
+  --color-tree-selected-line: #{$color-primary};
 
   // dropdowns
   --color-dropdown: #{$color-bg-shade-3};
@@ -104,7 +106,7 @@
 
   // tables
   --color-table: #{$color-bg-shade-1};
-  --color-table-line-horizontal: #{$color-bg-shade-3};
+  --color-table-line-horizontal: transparent; //#{$color-bg-shade-3};
   --color-table-line-vertical: transparent;
   --color-table-head: #{$color-bg-shade-2};
   --color-table-hover: #{$color-bg-shade-2};

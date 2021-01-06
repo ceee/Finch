@@ -121,13 +121,12 @@
   .ui-property-label small
   {
     display: block;
-    padding-top: 5px;
+    padding-top: 2px;
     font-size: var(--font-size-xs);
     font-weight: 400;
-    line-height: 1.4;
+    line-height: 1.3;
     text-decoration: none;
     color: var(--color-text-dim);
-    letter-spacing: 0.3px;
 
     &:empty
     {
