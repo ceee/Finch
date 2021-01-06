@@ -118,7 +118,6 @@ namespace zero.Core.Api
         return types.ToList();
       }
 
-
       return handler.GetAllowedPageTypes(Backoffice.Context.Application, types, parents)?.ToList() ?? new();
     }
 

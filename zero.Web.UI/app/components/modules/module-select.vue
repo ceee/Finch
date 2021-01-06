@@ -1,270 +1,148 @@
 ﻿<template>
-    <div class="ui-modules-start">
-
-      <button v-if="!isSelecting" type="button" class="ui-modules-start-button" @click="startSelection">
-        <i class="ui-modules-start-button-icon fth-plus"></i>
-        <p class="ui-modules-start-button-text"><strong>Add content</strong> <!--<br>Compose the page by adding modules--></p>
-      </button>
-
-      <div class="ui-modules-select" v-if="isSelecting">
-        <ui-icon-button class="ui-modules-select-close" @click="isSelecting=false" icon="fth-x" title="@ui.close" />
-        <ui-inline-tabs class="ui-modules-select-groups">
-          <ui-tab v-for="group in moduleTypes" :key="group.key" :label="group.name" :count="group.count">
-            <div class="ui-modules-select-items">
-              <button v-for="item in group.items" :key="item.alias" type="button" class="ui-modules-select-item" :disabled="item.isDisabled" @click="editModule(item, true)">
-                <div class="ui-modules-select-item-icon">
-                  <i :class="item.icon"></i>
-                </div>
-                <div class="ui-modules-select-item-text">
-                  <strong v-localize="item.name"></strong>
-                  <span class="is-minor" v-localize="item.description"></span>
-                </div>
-                <span v-if="item.isDisabled" class="ui-modules-select-item-disabled">Not allowed <i class="fth-slash"></i></span>
-              </button>
-            </div>
-          </ui-tab>
-        </ui-inline-tabs>
+  <div class="ui-modules-select">
+    <h2 class="ui-headline">Add module</h2>
+    <div v-if="!loading">
+      <div class="ui-modules-select-items">
+        <button type="button" v-for="item in types" class="ui-modules-select-item" @click="onSelect(item)">
+          <i class="ui-modules-select-item-icon" :class="item.icon"></i>
+          <span class="ui-modules-select-item-text">
+            {{item.name | localize}}
+            <span v-if="item.description" v-localize="item.description"></span>
+          </span>
+        </button>     
+      </div>
+      <ui-message type="error" v-if="!types.length" text="@page.create.nonavailable" />
+      <div class="app-confirm-buttons">
+        <ui-button type="light" :label="config.closeLabel" @click="config.close"></ui-button>
       </div>
     </div>
+  </div>
 </template>
 
 
 <script>
-  import { groupBy as _groupBy, keys as _keys, each as _each } from 'underscore';
-  import Notification from 'zero/helpers/notification.js';
+  import ModulesApi from 'zero/api/modules.js';
+  import Overlay from 'zero/helpers/overlay.js';
 
   export default {
-    name: 'uiModuleSelect',
 
     props: {
-      value: Array,
-      config: Object,
-      types: {
-        type: Array,
-        default: () => []
-      },
-      disabled: {
-        type: Boolean,
-        default: false
-      }
+      config: Object
     },
-
 
     data: () => ({
-      canAdd: true,
-      isSelecting: false,
-      moduleTypes: [],
-      activeGroup: null
+      model: {
+        name: null,
+        parentId: null,
+        pageTypeAlias: null
+      },
+      loading: false,
+      item: {},
+      disabled: false,
+      types: []
     }),
-
-
-    watch: {
-      types(val)
-      {
-        this.rebuildGroups(val);
-      }
-    },
 
 
     created()
     {
-      this.rebuildGroups(this.types);
+      this.types = this.config.types;
+      this.model.parentId = this.config.parent ? this.config.parent.id : null;
     },
 
 
     methods: {
-
-      rebuildGroups(value)
+      onSelect(item)
       {
-        let groups = _groupBy(value, val => val.group);
-        let index = 0;
-
-        _each(groups, (items, key) =>
-        {
-          this.moduleTypes.push({
-            name: !key || key === 'null' ? '@modules.default_group' : key,
-            index: index++,
-            count: items.length,
-            items: items,
-            isDisabled: false
-          });
-        });
-
-        this.activeGroup = this.moduleTypes[0];
+        //this.config.close();
+        this.config.confirm(item);
+        //this.$router.push({
+        //  name: 'ui-modules-select',
+        //  params: { type: item.alias, parent: this.model.parentId }
+        //});
       },
-
-
-      startSelection()
-      {
-        if (this.types.length > 1)
-        {
-          this.isSelecting = true;
-        }
-        else if (this.types.length === 1)
-        {
-          this.$emit('selected', this.types[0], true);
-        }
-        else
-        {
-          Notification.error('No modules allowed', 'There are no modules configured which are allowed for this data type.', { duration: 5000 });
-        }
-      },
-
-
-      selectGroup(group)
-      {
-        this.activeGroup = group;
-      },
-
-
-      editModule(module, isAdd)
-      {
-        this.$emit('selected', module, isAdd);
-      },
-
-
-      reset()
-      {
-        this.isSelecting = false;
-        this.activeGroup = this.moduleTypes[0];
-      }
     }
   }
 </script>
 
 <style lang="scss">
-  .ui-modules-start
+  .ui-modules-select
   {
-    margin: 0;
-    display: flex;
+    text-align: left;
 
-    .ui-modules-inner-sortable + &
+    .ui-message
     {
-      margin-top: var(--padding);
+      margin: 0;
     }
   }
 
-  .ui-modules-start-button
+  .ui-modules-select-parent
   {
-    color: var(--color-primary);
-    font-size: var(--font-size);
-    display: inline-grid;
-    grid-template-columns: auto 1fr;
-    gap: 25px;
-    align-items: center;
-  }
-
-  .ui-modules-start-button-icon
-  {
-    width: 52px;
-    height: 52px;
-    line-height: 50px !important;
-    font-size: 20px;
-    text-align: center;
-    background: var(--color-button-light);
+    margin: 30px 0 -10px 0; 
     border-radius: var(--radius);
-  }
-
-  .ui-modules-start-button-text
-  {
-    line-height: 1.3;
+    /*border: 1px solid var(--color-line-light);*/
+    background: var(--color-box-nested);
+    line-height: 1.4;
     color: var(--color-text-dim);
-    margin: 0;
-    font-size: var(--font-size-s);
+    padding: 14px 16px;
+    font-size: var(--font-size);
 
     strong
     {
-      display: inline-block;
-      margin-bottom: 2px;
       color: var(--color-text);
-      font-size: var(--font-size);
     }
-  }
-
-  .ui-modules-select
-  {
-    width: 100%;
-    position: relative;
-
-    .ui-inline-tabs-list
-    {
-      padding-right: 50px;
-    }
-  }
-
-  .ui-modules-select-close
-  {
-    position: absolute;
-    right: 0;
-    top: 0;
-    background: none !important;
   }
 
   .ui-modules-select-items
   {
-    display: grid;
-    gap: 10px;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    align-items: stretch;
+    margin: 0 -16px;
+    margin-top: var(--padding);
+    max-height: 600px;
+    overflow-y: auto;
   }
 
   .ui-modules-select-item
   {
     display: grid;
-    grid-template-columns: 76px 1fr;
+    width: 100%;
+    grid-template-columns: 40px 1fr auto;
+    gap: 12px;
     align-items: center;
-    height: 100px;
-    border-radius: var(--radius);
-    background: var(--color-button-light);
-    padding: 10px var(--padding) 10px 0;
     position: relative;
+    color: var(--color-text);
+    padding: 16px;
+    border-radius: var(--radius); 
 
-    &[disabled]
+    &:hover, &:focus
     {
-      opacity: .6;
+      background: var(--color-tree-selected);
+    }
+
+    & + .ui-modules-select-item
+    {
+      margin-top: 5px;
+    }
+  }
+
+  .ui-modules-select-item-text
+  {
+    display: flex;
+    flex-direction: column;
+
+    span
+    {
+      color: var(--color-text-dim);
+      margin-top: 3px;
     }
   }
 
   .ui-modules-select-item-icon
   {
-    display: inline-flex;
-    justify-content: center;
-    color: var(--color-text);
-    font-size: 26px;
-  }
-
-  .ui-modules-select-item-text
-  {
-    strong
-    {
-      display: block;
-      margin-bottom: 3px;
-    }
-
-    .is-minor
-    {
-      color: var(--color-text-dim);
-      font-size: var(--font-size-s);
-    }
-  }
-
-  .ui-modules-select-item-disabled
-  {
-    position: absolute;
-    right: 5px;
-    top: 5px;
-    display: inline-flex;
-    align-items: center;
-    font-size: 8px;
-    text-transform: uppercase;
-    color: var(--color-text-dim-one);
+    font-size: 22px;
     line-height: 1;
-    font-weight: 600;
-
-    i
-    {
-      margin-left: 6px;
-      font-size: 13px;
-    }
+    font-weight: 400;
+    position: relative;
+    top: -2px;
+    left: 4px;
+    color: var(--color-text);
   }
 </style>
