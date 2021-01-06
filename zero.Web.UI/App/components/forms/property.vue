@@ -136,7 +136,7 @@
 
   .ui-property-required
   {
-    color: var(--color-text-dim);
+    color: var(--color-required-marker);
     margin-left: 0.2em;
     font-weight: 400;
   }

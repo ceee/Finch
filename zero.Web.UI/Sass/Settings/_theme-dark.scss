@@ -110,4 +110,7 @@
   --color-table-line-vertical: transparent;
   --color-table-head: #{$color-bg-shade-2};
   --color-table-hover: #{$color-bg-shade-2};
+
+  // misc
+  --color-required-marker: #{$color-primary};
 }
