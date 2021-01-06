@@ -144,13 +144,13 @@
   .ui-property-content
   {
     flex: 1;
-    max-width: 800px;
+    max-width: 932px;
     font-size: var(--font-size);
   }
 
   .ui-property-help
   {
-    max-width: 800px;
+    max-width: 932px;
     font-size: var(--font-size-xs);
     color: var(--color-text-dim);
     margin: 15px 0 0;

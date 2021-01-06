@@ -22,10 +22,14 @@
 
 .editor-outer
 {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+
   &.-infos-aside:not(.is-page)
   {
     display: grid;
-    grid-template-columns: 1fr 340px var(--padding);
+    //grid-template-columns: 1fr 340px var(--padding);
     align-items: flex-start;
   }
 
@@ -45,6 +49,7 @@
 
 .editor-infos
 {
+  display: none;
   margin: 61px 0 0;
   position: sticky;
   top: var(--padding);

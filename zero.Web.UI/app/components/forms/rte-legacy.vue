@@ -136,7 +136,7 @@
     .pell-raw
     {
       background: var(--color-input);
-      max-width: 800px;
+      max-width: 932px;
       min-height: 48px;
       display: flex;
       width: 100%;
