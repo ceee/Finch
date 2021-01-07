@@ -188,4 +188,9 @@
   {
     margin-top: 12px !important;
   }
+
+  .ui-table-filter-overlay .ui-select-button-description
+  {
+    color: var(--color-primary);
+  }
 </style>

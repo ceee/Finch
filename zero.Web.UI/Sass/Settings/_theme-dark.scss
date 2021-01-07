@@ -12,7 +12,7 @@
 
   // foreground colors
   $color-fg: #fff;
-  $color-fg-shade-1: #7b848a; // dim
+  $color-fg-shade-1: #7d858a; // dim
   $color-fg-shade-2: #8c9094; // dim-two
   
   // background colors  
@@ -108,7 +108,7 @@
   --color-table: #{$color-bg-shade-1};
   --color-table-line-horizontal: transparent; //#{$color-bg-shade-3};
   --color-table-line-vertical: transparent;
-  --color-table-head: #{$color-bg-shade-2};
+  --color-table-head: #{$color-bg-shade-3};
   --color-table-hover: #{$color-bg-shade-2};
 
   // misc
