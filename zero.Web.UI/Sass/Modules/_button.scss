@@ -364,4 +364,16 @@ strong.ui-select-button-label
   color: var(--color-text-dim);
   margin-top: 3px;
   font-size: var(--font-size-xs);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  -webkit-line-clamp: 1;
+  max-height: 16px;
+
+  p
+  {
+    margin: 0;
+  }
 }

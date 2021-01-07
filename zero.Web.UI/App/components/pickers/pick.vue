@@ -731,6 +731,7 @@
     {
       height: 24px;
       width: 24px;
+      flex-shrink: 0; 
 
       .ui-button-icon
       {
