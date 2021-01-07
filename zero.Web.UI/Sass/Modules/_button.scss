@@ -32,7 +32,7 @@ button::-moz-focus-inner
   align-items: center;
   background: var(--color-button);
   color: var(--color-button-text);
-  padding: 0 var(--padding-m);
+  padding: 0 21px;
   height: 48px;
   border-radius: var(--radius);
   font-size: var(--font-size-m);
@@ -81,6 +81,12 @@ button::-moz-focus-inner
     background: var(--color-button-light);
     color: var(--color-text);
     border: 1px solid transparent;
+  }
+
+  &.type-primary
+  {
+    min-width: 90px;
+    justify-content: center;
   }
 
 

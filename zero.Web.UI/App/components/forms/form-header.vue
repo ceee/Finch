@@ -12,6 +12,15 @@
       <div v-if="activeToggle" class="ui-form-header-toggle">
         <ui-toggle v-model="value.isActive" class="is-primary" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" :disabled="disabled" />
       </div>
+      <ui-dropdown align="right">
+        <template v-slot:button>
+          <!--<ui-button type="light onbg" icon="fth-info" class="ui-form-header-info-button" />-->
+          <ui-button type="light onbg" label="Infos" />
+        </template>
+        <br />
+        infos
+        <br /><br />
+      </ui-dropdown>
       <ui-dropdown v-if="actionsDefined && !disabled" align="right">
         <template v-slot:button>
           <ui-button type="light onbg" label="@ui.actions" caret="down" />
@@ -19,7 +28,7 @@
         <slot name="actions"></slot>
         <ui-dropdown-button v-if="canDelete" label="@ui.delete" icon="fth-trash" @click="onDelete" :disabled="disabled" />
       </ui-dropdown>
-      <ui-button :submit="true" type="primary" label="@ui.save" :state="state" v-if="!disabled" />
+      <ui-button :submit="true" type="primary" label="@ui.save" :state="state" v-if="!disabled" class="ui-form-header-primary-button" />
     </div>
   </ui-header-bar>
 </template>
@@ -84,6 +93,13 @@
 
 
 <style lang="scss">
+  .ui-form-header
+  {
+/*    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;*/
+  }
+
   .ui-form-header-aside
   {
     display: flex;
@@ -154,5 +170,19 @@
     {
       background: none;
     }
+  }
+
+  .ui-form-header-info-button
+  {
+    padding: 0;
+    justify-content: center;
+    width: 48px;
+    text-align: center;
+  }
+
+  .ui-form-header-info-button .ui-button-icon
+  {
+    margin: 0 !important;
+    font-size: 18px;
   }
 </style>
