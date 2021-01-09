@@ -14,8 +14,8 @@
     "confirm": "Confirm",
     "save": "Save",
     "create": "Create",
-    "createdDate": "Created at",
-    "modifiedDate": "Last modified at",
+    "createdDate": "Created",
+    "modifiedDate": "Last modified",
     "id": "ID",
     "active": "Active",
     "inactive": "Inactive",
@@ -38,6 +38,7 @@
     "icon_select": "Select an icon",
     "tab_general": "General",
     "tab_content": "Content",
+    "tab_infos": "Infos",
     "pick": {
       "title": "Choose one",
       "title_multiple": "Choose",

@@ -1,7 +1,11 @@
 ﻿<template>
   <ui-form ref="form" class="language" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
     <ui-form-header v-model="model" title="@language.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
-    <ui-editor config="language" v-model="model" :meta="meta" :disabled="disabled" />
+    <ui-editor config="language" v-model="model" :meta="meta" :disabled="disabled">
+      <template v-slot:below>
+        <ui-editor-infos v-model="model" :disabled="disabled" />
+      </template>
+    </ui-editor>
   </ui-form>
 </template>
 

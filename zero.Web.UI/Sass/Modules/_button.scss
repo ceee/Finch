@@ -35,7 +35,7 @@ button::-moz-focus-inner
   padding: 0 21px;
   height: 48px;
   border-radius: var(--radius);
-  font-size: var(--font-size-m);
+  font-size: var(--font-size);
   font-weight: 700;
   margin: 0;
   -webkit-backface-visibility: hidden;
@@ -89,6 +89,11 @@ button::-moz-focus-inner
     justify-content: center;
   }
 
+  &.type-primary.type-small
+  {
+    min-width: 0;
+  }
+
 
   &.type-light.type-onbg, &.type-action.type-onbg
   {
@@ -126,7 +131,7 @@ button::-moz-focus-inner
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 
-    & + .ui-button
+    & + .ui-button, & + .ui-dropdown-container .ui-button
     {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;

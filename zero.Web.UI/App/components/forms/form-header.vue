@@ -9,18 +9,9 @@
     </template>
     <div class="ui-form-header-aside">
       <slot></slot>
-      <div v-if="activeToggle" class="ui-form-header-toggle">
+      <div v-if="typeof value.isActive !== 'undefined'" class="ui-form-header-toggle">
         <ui-toggle v-model="value.isActive" class="is-primary" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" :disabled="disabled" />
       </div>
-      <ui-dropdown align="right">
-        <template v-slot:button>
-          <!--<ui-button type="light onbg" icon="fth-info" class="ui-form-header-info-button" />-->
-          <ui-button type="light onbg" label="Infos" />
-        </template>
-        <br />
-        infos
-        <br /><br />
-      </ui-dropdown>
       <ui-dropdown v-if="actionsDefined && !disabled" align="right">
         <template v-slot:button>
           <ui-button type="light onbg" label="@ui.actions" caret="down" />
@@ -62,10 +53,6 @@
         type: String
       },
       isCreate: {
-        type: Boolean,
-        default: false
-      },
-      activeToggle: {
         type: Boolean,
         default: false
       },
@@ -122,20 +109,15 @@
     margin-left: var(--padding-s);
     margin-right: var(--padding-s);
 
-    .ui-toggle-switch, .ui-toggle-switch.is-active
-    {
-      background: var(--color-button-light-onbg);
-      box-shadow: var(--shadow-short);
-
-      i
-      {
-        background: var(--color-text);
-      }
-    }
-
     .ui-toggle-off-warning
     {
+      display: none;
       color: var(--color-accent-red);
+    }
+
+    input:focus + .ui-toggle-switch
+    {
+      border-color: transparent;
     }
   }
 

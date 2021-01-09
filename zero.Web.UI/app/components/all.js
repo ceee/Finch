@@ -60,6 +60,9 @@ import uiPermissions from './permissions.vue';
 import uiRevisions from './revisions.vue';
 import uiIcon from './icon.vue';
 
+import uiEditor from '../editor/editor.vue';
+import uiEditorInfos from '../editor/editor-infos.vue';
+
 export default {
   uiAddButton,
   uiButton,
@@ -121,5 +124,8 @@ export default {
   uiPagination,
   uiPermissions,
   uiRevisions,
-  uiIcon
+  uiIcon,
+
+  uiEditor,
+  uiEditorInfos
 };

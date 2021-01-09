@@ -15,6 +15,6 @@ general.field('email').text(120).required();
 general.field('imageId').image();
 general.field('iconId').image();
 domains.field('domains', { helpText: '@application.fields.domains_help' }).inputList(10, null, '@application.fields.domains_add').required();
-features.field('features').custom(ApplicationFeatures);
+features.field('features', { hideLabel: true }).custom(ApplicationFeatures);
 
 export default editor;

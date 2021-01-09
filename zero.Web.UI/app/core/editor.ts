@@ -1,5 +1,6 @@
 ﻿
 import EditorField from './editor-field.ts';
+import Infos from '../editor/editor-infos.vue';
 
 class Editor
 {
@@ -53,9 +54,11 @@ class Editor
    * @param {string} name - Name of the tab (can be a translation)
    * @param {number|function} [count] - Output a count indicator
    * @param {boolean|function} [disabled] - Conditionally disable the tab and its content
+   * @param {string} [classes] - Append HTML class to the generated tab
+   * @param {object} [component] - Render a custom vue component instead of editor fields
    * @returns {EditorTab}
    */
-  tab(alias, name, count, disabled)
+  tab(alias, name, count, disabled, classes, component)
   {
     if (typeof disabled !== 'undefined' && typeof disabled !== 'boolean' && typeof disabled !== 'function')
     {
@@ -73,7 +76,7 @@ class Editor
 
     if (!tab)
     {
-      tab = this._createTab(alias, name, disabled, count);
+      tab = this._createTab(alias, name, disabled, count, classes, component);
       this.tabs.push(tab);
     }
 
@@ -93,7 +96,7 @@ class Editor
    * @param {boolean|function} [options.disabled=false] - Conditionally disable the field
    * @param {boolean} [options.coreDatabase] - Operate on the core database for this field (default is set by Editor.options.coreDatabase)
    * @param {string|object} [options.tab] - Add this field to a tab (by passing the alias or the tab instance)
-   * @param {string} [options.class] - Append HTML class to the generated property
+   * @param {string} [options.classes] - Append HTML class to the generated property
    * @returns {EditorField}
    */
   field(path, options)
@@ -102,11 +105,20 @@ class Editor
 
     let field = this.fields.find(x => x.path === path);
 
+    if (this.tabs.length < 1)
+    {
+      this.tab('content', '@ui.tab_content', x => 0, x => false, null, null);
+    }
+
     if (!field)
     {
       if (typeof options.coreDatabase === 'undefined')
       {
         options.coreDatabase = this.options.coreDatabase;
+      }
+      if (!options.tab)
+      {
+        options.tab = 'content';
       }
       field = new EditorField(path, options);
       this.fields.push(field);
@@ -117,6 +129,17 @@ class Editor
     }
 
     return field;
+  }
+
+
+  /**
+   * Adds an info tab to the editor which outputs data for IZeroEntity.
+   * This won't work as expected for other entities as they probably do not have required properties defined.
+   * @returns {EditorTab}
+   */
+  infoTab()
+  {
+    return this.tab('infos', '@ui.tab_infos', x => 0, false, 'is-blank', Infos);
   }
 
 
@@ -186,7 +209,7 @@ class Editor
   setBase(editor)
   {
     this.fields = editor.fields.map(x => new EditorField(x.path).setBase(x));
-    this.tabs = editor.tabs.map(x => this._createTab(x.alias, x.name, x.disabled, x.count));
+    this.tabs = editor.tabs.map(x => this._createTab(x.alias, x.name, x.disabled, x.count, x.component));
     return this;
   }
 
@@ -195,13 +218,15 @@ class Editor
    * Create a new tab instance
    * @returns {EditorTab}
    */
-  _createTab(alias, name, disabled, count)
+  _createTab(alias, name, disabled, count, classes, component)
   {
     return {
       alias,
       name,
       disabled,
       count,
+      class: classes,
+      component,
       field: (path, options) =>
       {
         options = options || {};

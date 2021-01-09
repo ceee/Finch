@@ -2,7 +2,7 @@
   <div class="ui-mediapicker">
     <div v-if="previews.length > 0" class="ui-mediapicker-previews">
       <div v-for="item in previews" class="ui-mediapicker-preview">
-        <div v-if="!item.error" class="ui-mediapicker-preview-image">
+        <div v-if="!item.error" class="ui-mediapicker-preview-image" :class="{'media-pattern': item.thumbnailSource }">
           <img v-if="item.thumbnailSource" :src="item.thumbnailSource" :alt="item.name" />
           <button v-if="!disabled" type="button" class="ui-mediapicker-preview-image-delete" @click="remove(item)" v-localize:title="'@ui.remove'"><i class="fth-x"></i></button>
           <button v-if="!disabled" type="button" class="ui-mediapicker-preview-image-edit" @click="edit(item)" v-localize:title="'@ui.edit'"><i class="fth-edit-2"></i></button>
@@ -308,8 +308,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
     /*background: var(--color-bg);*/
     border: 1px solid var(--color-line);
     padding: 3px;

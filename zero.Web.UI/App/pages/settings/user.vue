@@ -21,6 +21,9 @@
         </p>
         <ui-message v-if="!model.isActive" class="user-aside-error" type="error" text="@user.fields.isDisabled_warning" />
       </template>
+      <template v-slot:below>
+        <ui-editor-infos v-model="model" :disabled="disabled" />
+      </template>
     </ui-editor>
   </ui-form>
 </template>

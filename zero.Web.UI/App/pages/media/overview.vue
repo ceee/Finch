@@ -73,7 +73,7 @@
       hierarchy: [],
       gridConfig: {
         search: null,
-        width: 280,
+        width: 180,
         component: MediaItem,
         selectable: true
       },

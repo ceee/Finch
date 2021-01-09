@@ -1,34 +1,18 @@
 ﻿<template>
-  <div>
-    <div class="editor-outer" v-if="loaded" :class="{ 'has-tabs': hasTabs, '-infos-aside': !nested && infos != 'none', 'is-page': isPage, 'as-boxes': asBoxes }">
-      <ui-tabs class="editor">
-        <ui-tab v-if="!tab.disabled(value)" v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :key="index">
-          <h3 v-if="asBoxes" class="ui-headline" v-localize="tab.name"></h3>
-          <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value" />
-          <component v-if="tab.component" :is="tab.component" v-model="value" />
-        </ui-tab>
-      </ui-tabs>
-      <editor-aside :editor="editorConfig" :value="value" v-if="infos != 'none' && !isPage" v-bind="{ infos, activeToggle, nested, isPage }">
-        <template v-slot:info-boxes>
-          <slot name="info-boxes"></slot>
-        </template>
-        <template v-slot:settings>
-          <slot name="settings"></slot>
-        </template>
-        <template v-slot:settings-properties>
-          <slot name="settings-properties"></slot>
-        </template>
-        <template v-slot:infos>
-          <slot name="infos"></slot>
-        </template>
-        <template v-slot:infos-more>
-          <slot name="infos-more"></slot>
-        </template>
-        <template v-slot:infos-after>
-          <slot name="infos-after"></slot>
-        </template>
-      </editor-aside>
-    </div>
+  <div class="editor" v-if="loaded" :class="['display-' + display, { 'has-sidebar': asideDefined, 'hide-tabs': tabs.length < 2 }]">
+    <ui-tabs class="editor-tabs">
+      <ui-tab v-if="!tab.disabled(value)" v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :key="index">
+        <h3 v-if="display == 'boxes'" class="ui-headline" v-localize="tab.name"></h3>
+        <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value" />
+        <component v-if="tab.component" :is="tab.component" v-model="value" />
+      </ui-tab>
+    </ui-tabs>
+    <aside class="editor-aside" v-if="asideDefined">
+      <slot name="aside"></slot>
+    </aside>
+    <aside class="editor-below" v-if="belowDefined">
+      <slot name="below"></slot>
+    </aside>
   </div>
 </template>
 
@@ -60,22 +44,6 @@
       value: {
         type: Object
       },
-      infos: {
-        type: String,
-        default: 'aside'
-      },
-      activeToggle: {
-        type: Boolean,
-        default: true
-      },
-      nested: {
-        type: Boolean,
-        default: false
-      },
-      isPage: {
-        type: Boolean,
-        default: false
-      },
       onConfigure: {
         type: Function,
         default: () => { }
@@ -87,41 +55,35 @@
     data: () => ({
       editorConfig: null,
       loaded: false,
-      hasTabs: false,
-      asBoxes: false,
-      coreDatabase: false,
       tabs: []
     }),
+
+    computed: {
+      asideDefined()
+      {
+        return this.$scopedSlots.hasOwnProperty('aside');
+      },
+      belowDefined()
+      {
+        return this.$scopedSlots.hasOwnProperty('below');
+      }
+    },
 
     created()
     {
       this.editorConfig = typeof this.config === 'string' ? this.zero.getEditor(this.config) : this.config;
 
-      if (this.editorConfig.tabs.length > 0)
+      this.tabs = this.editorConfig.tabs.map(tab =>
       {
-        this.hasTabs = true;
-        this.tabs = this.editorConfig.tabs.map(tab =>
-        {
-          return {
-            ...tab,
-            count: value => typeof tab.count === 'number' ? tab.count : (typeof tab.count === 'function' ? tab.count(value) : 0),
-            disabled: value => typeof tab.disabled === 'boolean' ? tab.disabled : (typeof tab.disabled === 'function' ? tab.disabled(value) : false),
-            fields: this.editorConfig.getFields(tab)
-          };
-        });
-      }
-      else
-      {
-        this.tabs = [{
-          name: '_',
-          count: value => 0,
-          disabled: value => false,
-          fields: this.editorConfig.getFields()
-        }];
-      }
+        return {
+          ...tab,
+          count: value => typeof tab.count === 'number' ? tab.count : (typeof tab.count === 'function' ? tab.count(value) : 0),
+          disabled: value => typeof tab.disabled === 'boolean' ? tab.disabled : (typeof tab.disabled === 'function' ? tab.disabled(value) : false),
+          fields: this.editorConfig.getFields(tab)
+        };
+      });
 
-      this.asBoxes = this.editorConfig.options.boxes;
-      this.coreDatabase = this.editorConfig.options.coreDatabase;
+      this.display = this.editorConfig.options.display || 'tabs';
       this.onConfigure(this);
 
       this.loaded = true;
