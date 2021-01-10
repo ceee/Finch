@@ -30,7 +30,7 @@
     {
       LanguagesApi.getSupportedCultures().then(res =>
       {
-        this.items = res
+        this.items = res;
       });
     }
   }

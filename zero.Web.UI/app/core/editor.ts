@@ -103,15 +103,17 @@ class Editor
   {
     options = options || {};
 
-    let field = this.fields.find(x => x.path === path);
+    //let field = this.fields.find(x => x.path === path); 
+    // TODO we need another method to retrieve existing fields
+    // but we can't do it this way anymore as sometimes a field is defined multiple times with a condition
 
     if (this.tabs.length < 1)
     {
       this.tab('content', '@ui.tab_content', x => 0, x => false, null, null);
     }
 
-    if (!field)
-    {
+    //if (!field)
+    //{
       if (typeof options.coreDatabase === 'undefined')
       {
         options.coreDatabase = this.options.coreDatabase;
@@ -120,13 +122,13 @@ class Editor
       {
         options.tab = 'content';
       }
-      field = new EditorField(path, options);
+      let field = new EditorField(path, options);
       this.fields.push(field);
-    }
-    else
-    {
-      field.options = { ...field.options, ...options };
-    }
+    //}
+    //else
+    //{
+    //  field.options = { ...field.options, ...options };
+    //}
 
     return field;
   }

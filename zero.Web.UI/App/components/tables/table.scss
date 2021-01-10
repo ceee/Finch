@@ -44,11 +44,17 @@
   {
     border-bottom: none;
   }
+
+  .ui-table.is-inline &
+  {
+    border-bottom-color: var(--color-line);
+  }
 }
 
 a.ui-table-row:hover
 {
   box-shadow: var(--shadow-mid);
+  background: var(--color-table-hover); 
   z-index: 2;
 }
 

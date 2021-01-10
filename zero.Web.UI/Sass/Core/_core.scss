@@ -280,3 +280,37 @@ code
     border-radius: var(--radius);
   }
 }
+
+
+.ui-editor-overlay
+{
+  > content
+  {
+    position: relative;
+    padding-top: 0 !important;
+  } 
+
+  .ui-box
+  {
+    margin: 0;
+  }
+
+  .ui-tabs-list, .editor
+  {
+    padding: 0;
+  }
+
+  .ui-property.ui-modules
+  {
+    margin: 0;
+    padding: 0; 
+  }
+
+  .ui-loading
+  {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -14px 0 0 -14px;
+  }
+}

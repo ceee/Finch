@@ -85,8 +85,14 @@
     overflow: visible !important;
     position: relative;
     text-align: center;
-    font-size: 20px;
+    font-size: 28px;
     box-shadow: var(--shadow-short);
+  }
+
+  .media-item.is-selected .media-item-preview
+  { 
+    transform: scale(0.95);
+    border: 3px solid var(--color-primary);
   }
 
   .media-item-image
@@ -104,17 +110,17 @@
     display: none;
     justify-content: center;
     align-items: center;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 20px;
     position: absolute;
     z-index: 2;
-    left: -5px;
-    top: -5px;
+    left: -12px;
+    top: -12px;
     background: var(--color-primary);
     color: var(--color-primary-text);
     box-shadow: 1px 1px 0 1px var(--color-shadow);
-    font-size: 12px;
+    font-size: 11px;
 
     .is-selected &
     {
