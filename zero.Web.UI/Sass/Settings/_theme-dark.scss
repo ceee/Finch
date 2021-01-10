@@ -16,10 +16,10 @@
   $color-fg-shade-2: #8c9094; // dim-two
   
   // background colors  
-  $color-bg: #191e25;
+  $color-bg: #181c22;
   $color-bg-shade-0: #1d2229;
   $color-bg-shade-1: #22272e; // bright
-  $color-bg-shade-2: #1d2229; // dim
+  $color-bg-shade-2: #1c2026; // dim
   $color-bg-shade-3: #282d36; // bright-two
   $color-bg-shade-4: #363c45; // bright-three
   $color-bg-shade-5: #43484f;
@@ -112,5 +112,5 @@
   --color-table-hover: #{$color-bg-shade-2};
 
   // misc
-  --color-required-marker: #{$color-primary};
+  --color-required-marker: #{$color-fg-shade-1};
 }

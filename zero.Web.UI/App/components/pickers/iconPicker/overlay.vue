@@ -151,8 +151,8 @@
 
     &.is-active
     {
-      background: var(--color-box);
-      color: var(--color-text);
+      background: var(--color-primary);
+      color: var(--color-primary-fg);
       box-shadow: var(--shadow-short);
     }
 

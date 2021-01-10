@@ -3,7 +3,7 @@
     <ui-tabs class="editor-tabs">
       <ui-tab v-if="!tab.disabled(value)" v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :key="index">
         <h3 v-if="display == 'boxes'" class="ui-headline" v-localize="tab.name"></h3>
-        <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value" />
+        <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value" :class="field.options.class" />
         <component v-if="tab.component" :is="tab.component" v-model="value" />
       </ui-tab>
     </ui-tabs>
