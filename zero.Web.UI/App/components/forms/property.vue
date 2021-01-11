@@ -49,6 +49,11 @@
     {
       pointer-events: none;
     }
+
+    &.is-disabled
+    {
+      cursor: not-allowed; 
+    }
   }
 
   .ui-property + .ui-split,

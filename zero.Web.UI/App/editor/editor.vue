@@ -28,7 +28,8 @@
     provide: function ()
     {
       return {
-        meta: this.meta
+        meta: this.meta,
+        editor: this.config
       };
     },
 
@@ -53,7 +54,7 @@
     components: { EditorComponent, EditorAside },
 
     data: () => ({
-      editorConfig: null,
+      editorConfig: {},
       loaded: false,
       tabs: []
     }),

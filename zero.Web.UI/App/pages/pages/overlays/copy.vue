@@ -154,7 +154,7 @@
   .pages-copy .ui-box
   {
     margin: 0;    
-    padding: 20px var(--padding) 18px;
+    padding: 20px var(--padding) 18px; 
 
     & + .ui-box
     {

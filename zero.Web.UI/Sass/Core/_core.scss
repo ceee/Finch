@@ -282,7 +282,8 @@ code
 }
 
 
-.ui-editor-overlay
+.ui-editor-overlay,
+.ui-overlay-editor
 {
   > content
   {
@@ -293,6 +294,11 @@ code
   .ui-box
   {
     margin: 0;
+  }
+
+  .ui-box + .ui-box
+  {
+    margin-top: var(--padding-s);
   }
 
   .ui-tabs-list, .editor
