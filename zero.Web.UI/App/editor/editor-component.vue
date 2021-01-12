@@ -44,18 +44,20 @@
     },
 
     data: () => ({
-      model: null
+      model: null,
+      loaded: false
     }),
 
     mounted()
     {
       this.rebuildModel();
+      this.loaded = true;
     },
 
     computed: {
       isHidden()
       {
-        return typeof this.config.options.condition === 'function' && !this.config.options.condition(this.value);
+        return !this.loaded || (typeof this.config.options.condition === 'function' && !this.config.options.condition(this.value));
       },
       isRequired()
       {

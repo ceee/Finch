@@ -10,6 +10,8 @@ namespace zero.Core.Utils
 
     public Func<T, object> FieldSelector { get; set; }
 
+    public Func<T, bool> CanRender { get; set; } = x => true;
+
     public double Width { get; set; }
 
     public TableColumnType ColumnType { get; set; }
@@ -26,9 +28,10 @@ namespace zero.Core.Utils
       return this;
     }
 
-    public TableColumn<T> For(Func<T, object> fieldSelector)
+    public TableColumn<T> For(Func<T, object> fieldSelector, Func<T, bool> canRender = null)
     {
       FieldSelector = fieldSelector;
+      CanRender = canRender ?? CanRender;
       return this;
     }
 

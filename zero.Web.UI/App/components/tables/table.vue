@@ -169,9 +169,8 @@
       onChange()
       {
         const query = Qs.stringify(this.listConfig.paramsToQuery(this.query));
-        const path = this.$route.path + (query ? '?' + query : '');
+        const path = __zero.path + this.$route.path.substring(1) + (query ? '?' + query : '');
 
-        // TODO when the session becomes invalid this path looses its "zero" prefix, this has to be fixed!
         history.replaceState(null, null, path);
         this.debouncedUpdate();
       },

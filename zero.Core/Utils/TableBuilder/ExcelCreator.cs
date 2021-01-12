@@ -154,7 +154,7 @@ namespace zero.Core.Utils
 
       foreach (TableColumn<T> column in columns)
       {
-        object value = isHeader ? column.Name : (column.FieldSelector != null ? column.FieldSelector(item) : String.Empty);
+        object value = isHeader ? column.Name : (column.FieldSelector != null && column.CanRender(item) ? column.FieldSelector(item) : String.Empty);
         object property = MapProperty(value, column, out XLDataType dataType);
 
         IXLCell cell = builder.Cell(lineNumber, index + 1)

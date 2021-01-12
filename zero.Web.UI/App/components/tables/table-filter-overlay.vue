@@ -62,7 +62,7 @@
     },
 
     data: () => ({
-      loading: false,
+      loading: true,
       disabled: false,
       model: {},
       template: null,
@@ -98,8 +98,9 @@
       
       onLoad()
       {
-        this.model = JSON.parse(JSON.stringify(this.config.model.filter || {}));
+        this.loading = true;
         this.template = JSON.parse(JSON.stringify(this.config.template || {}));
+        this.model = JSON.parse(JSON.stringify(this.config.model.filter || this.template));
         this.editor = this.config.editor;
         this.filterName = this.config.model.name;
         this.fields = this.editor.fields.map(x =>

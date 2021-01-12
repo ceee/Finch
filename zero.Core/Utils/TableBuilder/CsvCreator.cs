@@ -46,7 +46,7 @@ namespace zero.Core.Utils
       StringBuilder builder = Create(true);
       foreach (T item in source)
       {
-        List<object> values = Columns.Select(c => c.FieldSelector != null ? c.FieldSelector(item) : String.Empty).ToList();
+        List<object> values = Columns.Select(c => c.FieldSelector != null && c.CanRender(item) ? c.FieldSelector(item) : String.Empty).ToList();
         AppendLine(builder, values);
       }
       Stream = new MemoryStream();
@@ -68,7 +68,7 @@ namespace zero.Core.Utils
       StringBuilder builder = Create(true);
       await foreach (T item in source.WithCancellation(token))
       {
-        List<object> values = Columns.Select(c => c.FieldSelector != null ? c.FieldSelector(item) : String.Empty).ToList();
+        List<object> values = Columns.Select(c => c.FieldSelector != null && c.CanRender(item) ? c.FieldSelector(item) : String.Empty).ToList();
         AppendLine(builder, values);
       }
       Stream = new MemoryStream();

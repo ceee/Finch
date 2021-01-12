@@ -178,7 +178,10 @@
                   {
                     let routeObj = typeof this.route === 'object' ? this.route : { name: this.route };
                     routeObj.params = routeObj.params || {};
+                    routeObj.query = this.$route.query || {};
                     routeObj.params.id = response.model.id;
+
+                    console.info(routeObj);
 
                     this.$router.replace(routeObj);
                   }
