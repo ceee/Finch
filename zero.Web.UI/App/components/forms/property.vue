@@ -10,7 +10,8 @@
     <div class="ui-property-content">
       <slot></slot>
       <ui-error v-if="field" :field="field" />
-    </div>
+    </div> 
+    <slot name="after"></slot>
   </div>
 </template>
 
@@ -53,6 +54,11 @@
     &.is-disabled
     {
       cursor: not-allowed; 
+    }
+
+    &.is-blocked
+    {
+
     }
   }
 
