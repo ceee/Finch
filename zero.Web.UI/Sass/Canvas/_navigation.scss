@@ -257,6 +257,11 @@ a.app-nav-child
     {
       display: block;
     }
+
+    &:before
+    {
+      display: none;
+    }
   }
 
   .app-nav-item-text, .app-nav-item-arrow
@@ -276,11 +281,11 @@ a.app-nav-child
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border: 1px solid var(--color-dropdown-border);
-    box-shadow: var(--shadow-dropdown);
+    box-shadow: 6px 1px 8px rgba(0, 0, 0, 0.02);
     padding: 5px;
     color: var(--color-text);
     margin-left: 82px;
-    margin-top: -50px;
+    margin-top: -55px;
 
     &:hover
     {

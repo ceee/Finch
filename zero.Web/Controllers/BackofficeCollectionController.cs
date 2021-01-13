@@ -21,6 +21,8 @@ namespace zero.Web.Controllers
 
     protected Action<TEntity, PreviewModel> PreviewTransform { get; set; }
 
+    protected Action<TEntity, SelectModel> PickerTransform { get; set; }
+
 
     public BackofficeCollectionController(TCollection collection)
     {
@@ -55,7 +57,7 @@ namespace zero.Web.Controllers
     }
 
 
-    public virtual async Task<IEnumerable<SelectModel>> GetForPicker() => await SelectList(Collection.Stream());
+    public virtual async Task<IEnumerable<SelectModel>> GetForPicker() => await SelectList(Collection.Stream(), PickerTransform);
 
 
     public virtual async Task<IList<PreviewModel>> GetPreviews([FromQuery] List<string> ids) => Previews(await Collection.GetByIds(ids.ToArray()), PreviewTransform);

@@ -138,7 +138,7 @@ namespace zero.Web.Controllers
         }
         else
         {
-          PreviewModel model = new PreviewModel()
+          PreviewModel model = new()
           {
             Id = item.Value.Id,
             Name = item.Value.Name
@@ -155,18 +155,22 @@ namespace zero.Web.Controllers
 
 
 
-    public async Task<IList<SelectModel>> SelectList<T>(IAsyncEnumerable<T> enumerable) where T : IZeroEntity
+    public async Task<IList<SelectModel>> SelectList<T>(IAsyncEnumerable<T> enumerable, Action<T, SelectModel> transform = null) where T : IZeroEntity
     {
       List<SelectModel> items = new List<SelectModel>();
 
       await foreach (T item in enumerable)
       {
-        items.Add(new SelectModel()
+        SelectModel model = new()
         {
           Id = item.Id,
           Name = item.Name,
           IsActive = item.IsActive
-        });
+        };
+
+        transform?.Invoke(item, model);
+
+        items.Add(model);
       }
 
       return items;

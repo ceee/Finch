@@ -1,8 +1,9 @@
 ﻿<template>
-  <div class="app-nav theme-dark" :class="{'is-compact': compact }">
+  <div class="app-nav" :class="{'is-compact': compact }">
 
     <h1 class="app-nav-headline">
-      <img src="/Assets/zero-2.png" v-localize:alt="'@zero.name'" />
+      <img src="/Assets/zero-2-light.png" class="show-light" v-localize:alt="'@zero.name'" />
+      <img src="/Assets/zero-2.png" class="show-dark" v-localize:alt="'@zero.name'" />
     </h1>
 
     <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">
@@ -49,7 +50,7 @@
         </template>
         <ui-dropdown-button label="Edit" icon="edit-2" @click="editUser" />
         <ui-dropdown-button label="Change password" icon="lock" @click="changePassword" />
-        <ui-dropdown-button label="Toggle sidebar" icon="fth-minimize-2" @click="compact=!compact" />
+        <ui-dropdown-button label="Toggle sidebar" icon="fth-minimize-2" @click="toggleSidebar" />
         <ui-dropdown-button label="Logout" icon="log-out" @click="logout" />
       </ui-dropdown>
     </footer>
@@ -63,6 +64,8 @@
   import AuthApi from 'zero/helpers/auth.js'
   import MediaApi from 'zero/api/media.js'
   import IconPicker from 'zero/components/pickers/iconPicker/iconpicker.vue';
+
+  const compactCacheKey = 'zero.navigation.compact';
 
   export default {
     name: 'app-navigation',
@@ -90,6 +93,7 @@
 
     created()
     {
+      this.compact = localStorage.getItem(compactCacheKey) === 'true';
       this.buildUser(AuthApi.user);
 
       AuthApi.$on('user', user =>
@@ -171,6 +175,12 @@
             location.reload();
           }
         });
+      },
+
+      toggleSidebar()
+      {
+        this.compact = !this.compact;
+        localStorage.setItem(compactCacheKey, this.compact.toString());
       }
     }
   }

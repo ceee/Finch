@@ -96,6 +96,7 @@ class Editor
    * @param {boolean|function} [options.disabled=false] - Conditionally disable the field
    * @param {boolean} [options.coreDatabase] - Operate on the core database for this field (default is set by Editor.options.coreDatabase)
    * @param {string|object} [options.tab] - Add this field to a tab (by passing the alias or the tab instance)
+   * @param {boolean} [options.allTabs] - Add this field to all defined tabs (could be an information property for instance)
    * @param {string} [options.classes] - Append HTML class to the generated property
    * @returns {EditorField}
    */
@@ -164,7 +165,7 @@ class Editor
   getFields(tab)
   {
     const alias = typeof tab === 'undefined' ? null : (typeof tab === 'string' ? tab : tab.alias);
-    return this.fields.filter(x => !alias ? true : x.options.tab === alias);
+    return this.fields.filter(x => !alias || x.options.allTabs ? true : x.options.tab === alias);
   }
 
 

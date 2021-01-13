@@ -296,9 +296,9 @@ code
     margin: 0;
   }
 
-  .ui-box + .ui-box
+  .ui-box + .ui-box:not(.ui-tab)
   {
-    margin-top: var(--padding-s);
+    margin-top: var(--padding-s); 
   }
 
   .ui-tabs-list, .editor
@@ -319,4 +319,15 @@ code
     top: 50%;
     margin: -14px 0 0 -14px;
   }
+}
+
+.show-dark, .hide-light,
+.theme-dark .show-light, .theme-dark .hide-dark
+{
+  display: none !important;
+}
+
+.theme-dark .show-dark, .theme-dark .hide-light
+{
+  display: initial !important;
 }
