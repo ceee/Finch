@@ -11,19 +11,19 @@ namespace zero.Core.Options
       DefaultLanguage = SupportedLanguages[0];
       TokenExpiration = 60;
       BackofficePath = "/zero";
-      ExcludedPaths = new List<string>() { };
-      Raven = new RavenOptions()
+      ExcludedPaths = new() { };
+      Raven = new()
       {
         CollectionPrefix = String.Empty
       };
-      Sections = new SectionOptions();
-      Features = new FeatureOptions();
-      Pages = new PageOptions();
-      Modules = new ModuleOptions();
-      Permissions = new PermissionOptions();
-      Settings = new SettingsOptions();
-      Spaces = new SpaceOptions();
-      Integrations = new IntegrationOptions();
+      Sections = new();
+      Features = new();
+      Pages = new();
+      Modules = new();
+      Permissions = new();
+      Settings = new();
+      Spaces = new();
+      Integrations = new();
     }
 
     /// <inheritdoc />

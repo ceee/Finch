@@ -4,7 +4,8 @@
     <span></span>
     <ui-form class="app-auth-inner" v-slot="form" @submit="onSubmit">
       <div>
-        <img class="app-auth-image" src="/Assets/zero-2.png" v-localize:alt="'@zero.name'" />
+        <img src="/Assets/zero-2-light.png" class="app-auth-image show-light" v-localize:alt="'@zero.name'" />
+        <img src="/Assets/zero-2.png" class="app-auth-image show-dark" v-localize:alt="'@zero.name'" />
 
         <ui-error :catch-remaining="true" />
         <ui-message type="info" v-if="rejectReason" :text="rejectReason" />

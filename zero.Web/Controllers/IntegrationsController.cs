@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using zero.Core.Entities;
 using zero.Core.Integrations;
 
 namespace zero.Web.Controllers
@@ -9,9 +10,9 @@ namespace zero.Web.Controllers
   public class IntegrationsController : BackofficeController
   {
     IIntegrationsCollection Integrations;
-    IIntegrationTypeService Types;
+    IIntegrationService Types;
 
-    public IntegrationsController(IIntegrationsCollection integrations, IIntegrationTypeService types)
+    public IntegrationsController(IIntegrationsCollection integrations, IIntegrationService types)
     {
       Integrations = integrations;
       Types = types;
@@ -22,43 +23,44 @@ namespace zero.Web.Controllers
     {
       return Ok(new
       {
-        available = await Types.GetAvailable(),
-        activated = await Types.GetActivated()
+        //available = await Types.GetAvailable(),
+        //activated = await Types.GetActivated()
       });
     }
 
 
     public IActionResult GetEmptySettings([FromQuery] string alias)
     {
-      IIntegrationType integration = Types.GetByAlias(alias);
-      IIntegration model = integration != null ? Activator.CreateInstance(integration.SettingsType) as IIntegration : null;
+      //IIntegration integration = Types.GetByAlias(alias);
+      //IIntegrationModel model = integration != null ? Activator.CreateInstance(integration.ModelType) as IIntegrationModel : null;
 
-      if (model != null)
-      {
-        model.IntegrationAlias = integration.Alias;
-      }
+      //if (model != null)
+      //{
+      //  model.IntegrationAlias = integration.Alias;
+      //}
 
-      return Ok(Edit(model));
+      return Ok(Edit(default(IIntegration)));
     }
 
 
     public async Task<IActionResult> GetSettingsByAlias([FromQuery] string alias)
     {
-      IIntegration content = await Integrations.GetByAlias(alias);
-      return Ok(Edit(content));
+      //IIntegrationModel content = await Integrations.GetByAlias(alias);
+      return Ok(Edit(default(IIntegration)));
     }
 
 
     public async Task<IActionResult> GetSettingsById([FromQuery] string id)
     {
-      IIntegration content = await Integrations.GetById(id);
-      return Ok(Edit(content));
+      //IIntegrationModel content = await Integrations.GetById(id);
+      return Ok(Edit(default(IIntegration)));
     }
 
 
     public async Task<IActionResult> Save([FromBody] IIntegration model)
     {
-      return Ok(await Integrations.Save(model));
+      return Ok();
+      //return Ok(await Integrations.Save(model));
     }
 
     public async Task<IActionResult> Delete([FromQuery] string id)

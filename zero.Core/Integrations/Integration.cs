@@ -1,26 +1,21 @@
-﻿using zero.Core.Attributes;
+﻿using System;
+using zero.Core.Attributes;
 using zero.Core.Entities;
 
 namespace zero.Core.Integrations
 {
-  public abstract class Integration : ZeroEntity, IIntegration
+  /// <inheritdoc />
+  public class Integration : ZeroEntity, IIntegration
   {
-    public Integration()
-    {
-      IsActive = true;
-    }
-
     /// <inheritdoc />
-    public string IntegrationAlias { get; set; }
+    public string TypeAlias { get; set; }
   }
 
 
+  /// <summary>
+  /// An integration is an application part which has a public configuration per app.
+  /// It's up to the user to provide functionality.
+  /// </summary>
   [Collection("Integrations")]
-  public interface IIntegration : IZeroEntity, IZeroDbConventions
-  {
-    /// <summary>
-    /// Preferred countries are displayed on top in lists
-    /// </summary>
-    string IntegrationAlias { get; set; }
-  }
+  public interface IIntegration : IZeroTypedEntity, IZeroDbConventions { }
 }
