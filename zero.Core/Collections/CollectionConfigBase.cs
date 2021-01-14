@@ -11,9 +11,9 @@ using zero.Core.Options;
 
 namespace zero.Core.Collections
 {
-  public abstract class FixedCollectionBase<T> : CollectionBase<T>, IFixedCollectionBase<T>, IDisposable where T : IZeroTypedEntity
+  public abstract class CollectionConfigBase<T> : CollectionBase<T>, IFixedCollectionBase<T>, IDisposable where T : IZeroConfigEntity
   {
-    public FixedCollectionBase(IZeroContext context, ICollectionInterceptorHandler interceptorHandler = null, IValidator<T> validator = null) : base(context, interceptorHandler, validator) { }
+    public CollectionConfigBase(IZeroContext context, ICollectionInterceptorHandler interceptorHandler = null, IValidator<T> validator = null) : base(context, interceptorHandler, validator) { }
 
 
     protected abstract IEnumerable<OptionsType> GetDefinedTypes();
@@ -62,7 +62,7 @@ namespace zero.Core.Collections
 
       TSpecific model = await Session.Query<TSpecific>().FirstOrDefaultAsync(x => x.TypeAlias == type.Alias);
 
-      if (model == null && type.IsAutoActivated)
+      if (model == null) //&& type.IsAutoActivated)
       {
         return new TSpecific();
       }

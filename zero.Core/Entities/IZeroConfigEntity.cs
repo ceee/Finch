@@ -1,6 +1,6 @@
 ﻿namespace zero.Core.Entities
 {
-  public interface IZeroTypedEntity : IZeroEntity
+  public interface IZeroConfigEntity : IZeroEntity
   {
     /// <summary>
     /// Alias of the used type

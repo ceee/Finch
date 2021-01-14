@@ -115,7 +115,7 @@
           };
         });
         this.query = { ...this.listConfig.query, ...this.listConfig.queryToParams(this.$route.query) };
-        this.component = typeof !!this.listConfig.link ? 'router-link' : 'div';
+        this.component = !!this.listConfig.link ? 'router-link' : 'div';
         this.filter = { ...this.listConfig.filterOptions };
         this.$nextTick(() =>
         {

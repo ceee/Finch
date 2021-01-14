@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <Folder Include="Entities\Messages\Applications\" />
+    <Folder Include="Numbers\" />
   </ItemGroup>
 
 </Project>

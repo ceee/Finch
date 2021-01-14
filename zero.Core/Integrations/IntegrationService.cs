@@ -54,10 +54,10 @@ namespace zero.Core.Integrations
         return false;
       }
 
-      if (types.Any(x => x.IsAutoActivated))
-      {
-        return true;
-      }
+      //if (types.Any(x => x.IsAutoActivated))
+      //{
+      //  return true;
+      //}
 
       string[] aliases = types.Select(x => x.Alias).ToArray();
 
@@ -79,7 +79,7 @@ namespace zero.Core.Integrations
       using IAsyncDocumentSession session = Store.OpenAsyncSession();
       T integration = await session.Query<T>().FirstOrDefaultAsync(x => x.TypeAlias == type.Alias && x.IsActive);
 
-      if (integration == null && type.IsAutoActivated)
+      if (integration == null)// && type.IsAutoActivated)
       {
         return new T();
       }

@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="editor-infos">
+  <div v-if="visible" class="editor-infos">
     <div class="ui-box is-light editor-infos-aside">
       <slot name="before"></slot>
       <ui-property v-if="value.id && value.lastModifiedDate" field="lastModifiedDate" label="@ui.modifiedDate">
@@ -23,6 +23,13 @@
       disabled: {
         type: Boolean,
         default: false
+      }
+    },
+
+    computed: {
+      visible()
+      {
+        return (this.value && this.value.id) || this.$scopedSlots.hasOwnProperty('before') || this.$scopedSlots.hasOwnProperty('after');
       }
     }
   }

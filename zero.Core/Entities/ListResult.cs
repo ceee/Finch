@@ -39,7 +39,7 @@ namespace zero.Core.Entities
         Statistics = Statistics
       };
     }
-    public IList<T> Items { get; set; }
+    public IList<T> Items { get; set; } = new List<T>();
 
 
     /// <summary>

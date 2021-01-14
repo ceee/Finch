@@ -189,6 +189,13 @@ a.ui-table-row:hover
   padding: 0 20px;
 }
 
+.ui-table.is-inline .ui-table-empty,
+.ui-table.is-inline .ui-table-loading
+{
+  height: auto;
+  padding: var(--padding) 20px;
+}
+
 .ui-table-empty-icon
 {
   font-size: 34px;

@@ -17,5 +17,5 @@ namespace zero.Core.Integrations
   /// It's up to the user to provide functionality.
   /// </summary>
   [Collection("Integrations")]
-  public interface IIntegration : IZeroTypedEntity, IZeroDbConventions { }
+  public interface IIntegration : IZeroConfigEntity, IZeroDbConventions { }
 }

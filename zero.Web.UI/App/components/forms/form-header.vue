@@ -9,7 +9,7 @@
     </template>
     <div class="ui-form-header-aside">
       <slot></slot>
-      <div v-if="typeof value.isActive !== 'undefined'" class="ui-form-header-toggle">
+      <div v-if="!activeDisabled && typeof value.isActive !== 'undefined'" class="ui-form-header-toggle">
         <ui-toggle v-model="value.isActive" class="is-primary" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" :disabled="disabled" />
       </div>
       <ui-dropdown v-if="actionsDefined && !disabled" align="right">
@@ -46,6 +46,10 @@
         default: false
       },
       titleDisabled: {
+        type: Boolean,
+        default: false
+      },
+      activeDisabled: {
         type: Boolean,
         default: false
       },

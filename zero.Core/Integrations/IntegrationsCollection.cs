@@ -9,7 +9,7 @@ using zero.Core.Options;
 
 namespace zero.Core.Integrations
 {
-  public class IntegrationsCollection : FixedCollectionBase<Integration>, IIntegrationsCollection
+  public class IntegrationsCollection : CollectionConfigBase<Integration>, IIntegrationsCollection
   {
     public IntegrationsCollection(IZeroContext context, ICollectionInterceptorHandler interceptorHandler) : base(context, interceptorHandler) { }
 
@@ -27,10 +27,10 @@ namespace zero.Core.Integrations
         return false;
       }
 
-      if (types.Any(x => x.IsAutoActivated))
-      {
-        return true;
-      }
+      //if (types.Any(x => x.IsAutoActivated))
+      //{
+      //  return true;
+      //}
 
       string[] aliases = types.Select(x => x.Alias).ToArray();
       return await Session.Query<IIntegration>().AnyAsync(x => x.TypeAlias.In(aliases) && x.IsActive);

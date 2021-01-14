@@ -16,12 +16,12 @@ namespace zero.Core.Options
     public string Alias { get; set; }
 
     /// <summary>
-    /// Do never return null when it has not been configured yet but the default instance for a settings object
+    /// The name of the options type
     /// </summary>
-    public bool IsAutoActivated { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
-    /// Set a validator for the integration editor
+    /// Set a validator for the editor
     /// </summary>
     public IValidator Validator { get; set; }
   }

@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using zero.Core.Options;
 
@@ -26,11 +25,6 @@ namespace zero.Core.Integrations
     public List<string> Tags { get; set; } = new();
 
     /// <summary>
-    /// The name of the integration (either a string or a translation key with @ prefix)
-    /// </summary>
-    public string Name { get; set; }
-
-    /// <summary>
     /// Optional description
     /// </summary>
     public string Description { get; set; }
@@ -54,7 +48,6 @@ namespace zero.Core.Integrations
         Name = model.Name,
         Description = model.Description,
         ImagePath = model.ImagePath,
-        IsAutoActivated = model.IsAutoActivated,
         Tags = model.Tags,
         Validator = model.Validator
       };
