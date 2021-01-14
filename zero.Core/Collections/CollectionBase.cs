@@ -219,21 +219,6 @@ namespace zero.Core.Collections
       model.CreatedById ??= userId;
       model.Hash ??= IdGenerator.Create();
 
-      // create interceptor parameters
-      CollectionInterceptor.Parameters<T> parameters = default;
-      if (isCreate)
-      {
-        parameters = Parameters<CollectionInterceptor.CreateParameters<T>>(args => args.Model = model);
-      }
-      else
-      {
-        parameters = Parameters<CollectionInterceptor.UpdateParameters<T>>(args =>
-        {
-          args.Id = model.Id;
-          args.Model = model;
-        });
-      }
-
       // run interceptors
       if (isCreate)
       {

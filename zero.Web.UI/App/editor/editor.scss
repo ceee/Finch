@@ -33,6 +33,21 @@
   }
 }
 
+.editor.display-boxes .ui-tab
+{
+  display: inherit !important;
+}
+
+.editor.display-boxes .ui-tab + .ui-tab
+{
+  margin-top: var(--padding-m);
+}
+
+.editor-tab-headline
+{
+  margin-bottom: var(--padding) !important;
+}
+
 .editor-tabs
 {
   .ui-tabs-list

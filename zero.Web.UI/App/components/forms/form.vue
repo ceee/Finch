@@ -181,8 +181,6 @@
                     routeObj.query = this.$route.query || {};
                     routeObj.params.id = response.model.id;
 
-                    console.info(routeObj);
-
                     this.$router.replace(routeObj);
                   }
                 }

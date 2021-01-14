@@ -13,8 +13,7 @@
 
     props: {
       label: {
-        type: String,
-        required: true
+        type: String
       },
       count: {
         type: Number,
