@@ -133,7 +133,7 @@ namespace zero.Core.Collections
         });
       }
 
-      return result;
+      return result.OrderByDescending(x => x.IsActive).ThenByDescending(x => x.IsConfigured).ThenByDescending(x => x.Type.Name).ToList();
     }
 
 

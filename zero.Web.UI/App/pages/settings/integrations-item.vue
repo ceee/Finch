@@ -18,9 +18,10 @@
           <span v-localize="model.type.description"></span>
         </template>
       </p>
-      <div>
-        <ui-toggle class="integrations-item-toggle" v-if="model.isConfigured" v-model="model.isActive" @input="$emit('onActiveChange', model)" on-content="Active" off-content="Active" />
+      <div class="integrations-item-tags">
+        <span class="ui-tag" v-for="tag in model.type.tags">{{tag}}</span>
       </div>
+      <ui-toggle class="integrations-item-toggle" v-if="model.isConfigured" v-model="model.isActive" @input="$emit('onActiveChange', model)" on-content="Active" off-content="Active" />
     </main>  
   </div>
 </template>
@@ -93,16 +94,21 @@
     padding-top: var(--padding-m);
   }
 
+  .integrations-item-tags
+  {
+    margin-top: var(--padding-s); 
+  }
+
   .integrations-item-icon
   {
     display: inline-block;
     width: 120px;
-    height: 80px;
-    line-height: 79px !important; 
+    height: 90px;
+    line-height: 91px !important;
     font-size: 22px;
     text-align: center;
     background: var(--color-box-nested);
-    border-radius: var(--radius);  
+    border-radius: var(--radius);
   }
 
   .integrations-item-icon.has-color
@@ -136,6 +142,6 @@
 
   .integrations-item-toggle
   {
-    margin-top: var(--padding); 
+    margin-top: var(--padding-m); 
   }
 </style>
