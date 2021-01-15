@@ -11,6 +11,7 @@ namespace zero.Web.Defaults
 
       AddInternal(Constants.Settings.Plugins, "@settings.plugins.installed.name", "@settings.plugins.installed.text", "fth-package");
       AddInternal(Constants.Settings.CreatePlugin, "@settings.plugins.create.name", "@settings.plugins.create.text", "fth-box");
+      AddInternal(Constants.Settings.Integrations, "@settings.plugins.integrations.name", "@settings.plugins.integrations.text", "fth-sliders");
     }
   }
 }

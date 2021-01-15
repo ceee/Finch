@@ -259,10 +259,6 @@
       "logs": {
         "name": "Logging",
         "text": "Debug und view logs"
-      },
-      "integrations": {
-        "name": "Integrations",
-        "text": "Configure available integrations"
       }
     },
     "plugins": {
@@ -274,6 +270,10 @@
       "create": {
         "name": "Create a plugin",
         "text": "Create from existing code"
+      },
+      "integrations": {
+        "name": "Integrations",
+        "text": "Configure available integrations"
       }
     }
   },

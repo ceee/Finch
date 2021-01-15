@@ -39,7 +39,7 @@ namespace zero.Web.Defaults
       zero.Sections.Add<SettingsSection>();
 
       zero.Settings.AddGroup<SystemSettings>();
-      //zero.Settings.AddGroup<PluginSettings>();
+      zero.Settings.AddGroup<PluginSettings>();
 
       zero.Permissions.AddCollection<SectionPermissions>();
       zero.Permissions.AddCollection<ModulePermissions>();
