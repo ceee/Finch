@@ -1,5 +1,6 @@
 ﻿
 import Text from '../editor/fields/text.vue';
+import Password from '../editor/fields/password.vue';
 import Currency from '../editor/fields/currency.vue';
 import Number from '../editor/fields/number.vue';
 import Rte from '../editor/fields/rte.vue';
@@ -165,6 +166,18 @@ class EditorField
   text(maxLength, placeholder)
   {
     return this._setComponent(Text, { maxLength, placeholder });
+  }
+
+
+  /**
+   * Render a password input field
+   * @param {number} [maxLength] - Maximum length of the input
+   * @param {string} [placeholder] - Placeholder text (can be a translation)
+   * @returns {EditorField}
+   */
+  password(maxLength, placeholder)
+  {
+    return this._setComponent(Password, { maxLength, placeholder });
   }
 
 

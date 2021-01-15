@@ -152,7 +152,7 @@
     &.is-active
     {
       background: var(--color-primary);
-      color: var(--color-primary-fg);
+      color: var(--color-primary-text);
       box-shadow: var(--shadow-short);
     }
 

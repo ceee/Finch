@@ -26,6 +26,8 @@ namespace zero.Core.Collections
 
     protected virtual Action<T> PreSave { get; set; }
 
+    protected bool OnlyActive { get; set; } = false; // TODO do we really need this?
+
 
     public CollectionBase(IZeroContext context, ICollectionInterceptorHandler interceptorHandler = null, IValidator<T> validator = null)
     {
@@ -99,6 +101,13 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
+    public virtual void WithInactive(bool includeInactive = true)
+    {
+      OnlyActive = !includeInactive;
+    }
+
+
+    /// <inheritdoc />
     public virtual async Task<T> GetById(string id)
     {
       if (id.IsNullOrWhiteSpace())
@@ -106,7 +115,7 @@ namespace zero.Core.Collections
         return default;
       }
 
-      return await Session.LoadAsync<T>(id);
+      return WhenActive(await Session.LoadAsync<T>(id));
     }
 
 
@@ -119,7 +128,7 @@ namespace zero.Core.Collections
       foreach (string id in ids)
       {
         models.TryGetValue(id, out T model);
-        result.Add(id, model);
+        result.Add(id, WhenActive(model));
       }
 
       return result;
@@ -129,7 +138,7 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public virtual async Task<ListResult<T>> GetByQuery(ListQuery<T> query)
     {
-      return await Session.Query<T>().OrderByDescending(x => x.CreatedDate).ToQueriedListAsync(query);
+      return await Session.Query<T>().WhereIf(x => x.IsActive, OnlyActive).OrderByDescending(x => x.CreatedDate).ToQueriedListAsync(query);
     }
 
 
@@ -154,7 +163,7 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public virtual async IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IRavenQueryable<T>> expression)
     {
-      IRavenQueryable<T> query = Session.Query<T>();
+      IRavenQueryable<T> query = Session.Query<T>().WhereIf(x => x.IsActive, OnlyActive);
 
       if (expression != null)
       {
@@ -308,6 +317,11 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public virtual async Task<EntityResult<T>> DeleteById(string id)
     {
+      if (String.IsNullOrEmpty(id))
+      {
+        return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
+      }
+
       T entity = await Session.LoadAsync<T>(id);
 
       if (entity == null)
@@ -397,6 +411,15 @@ namespace zero.Core.Collections
       configure?.Invoke(parameters);
       return parameters;
     }
+
+
+    /// <summary>
+    /// Do only return the model when it is set to active or inactive entities are included with IncludeInactive()
+    /// </summary>
+    protected T WhenActive(T model)
+    {
+      return model != null && (!OnlyActive || model.IsActive) ? model : default;
+    }
   }
 
 
@@ -422,6 +445,11 @@ namespace zero.Core.Collections
     /// Applies the scope to the service instance
     /// </summary>
     void ApplyScope(string scope);
+
+    /// <summary>
+    /// Include entities with IsActive=false for GET queries
+    /// </summary>
+    void WithInactive(bool include = true);
 
     /// <summary>
     /// Get an entity by Id

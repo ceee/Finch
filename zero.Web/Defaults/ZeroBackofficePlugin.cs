@@ -120,8 +120,8 @@ namespace zero.Web.Defaults
 
       services.AddScoped<IZeroMediaHelper, ZeroMediaHelper>();
 
-      services.AddScoped<IIntegrationService, IntegrationService>();
-      services.AddScoped<IIntegrationsCollection, IntegrationsCollection>();
+      services.AddTransient<IIntegrationService, IntegrationService>();
+      services.AddTransient<IIntegrationsCollection, IntegrationsCollection>();
 
       services.AddScoped<ILocalizer, Localizer>();
       services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();

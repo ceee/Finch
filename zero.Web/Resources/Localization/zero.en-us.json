@@ -462,6 +462,12 @@
     "list": "Integrations",
     "name": "Integration",
     "activeWarning": "This integration is not activated and will therefore not run under any circumstances.",
+    "errors": {
+      "typenotfound": "The integration type does not exist",
+      "multiplenotallowed": "Can not create multiple integrations per type",
+      "notfound": "Could not find a matching integration",
+      "couldnotupdatestate": "Not updated"
+    },
     "fields": {
     }
   },

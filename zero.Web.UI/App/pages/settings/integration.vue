@@ -9,7 +9,9 @@
       <template v-slot:footer>
         <ui-button type="light onbg" label="@ui.close" @click="config.hide"></ui-button>
         <ui-button v-if="!config.isCreate" type="light onbg" label="@ui.remove" @click="onDelete"></ui-button>
-        <ui-button v-if="!disabled" type="primary" :submit="true" label="@ui.save" :state="form.state" :disabled="loading"></ui-button>
+        <ui-button v-if="config.isCreate && !disabled" type="light onbg" :submit="true" label="@ui.save" :state="form.state" :disabled="loading"></ui-button>
+        <ui-button v-if="config.isCreate && !disabled" type="primary" @click="saveAndActivate" label="Save and activate" :state="form.state" :disabled="loading"></ui-button>
+        <ui-button v-if="!config.isCreate && !disabled" type="primary" :submit="true" label="@ui.save" :state="form.state" :disabled="loading"></ui-button>
       </template>
 
       <ui-loading v-if="loading" :is-big="true" />
@@ -56,14 +58,21 @@
 
       onLoad(form)
       {
-        form.load(this.config.isCreate ? IntegrationsApi.getEmptySettings(this.config.alias) : IntegrationsApi.getSettingsByAlias(this.config.alias)).then(response =>
+        form.load(this.config.isCreate ? IntegrationsApi.getEmpty(this.config.alias) : IntegrationsApi.getByAlias(this.config.alias)).then(response =>
         {
           this.disabled = !response.meta.canEdit;
           this.meta = response.meta;
           this.model = response.entity;
-          this.editor = this.model.integrationAlias ? 'integration.' + this.model.integrationAlias : null;
+          this.editor = this.model.typeAlias ? 'integration.' + this.model.typeAlias : null;
           this.loading = false;
         });
+      },
+
+
+      saveAndActivate(e)
+      {
+        this.model.isActive = true;
+        this.onSubmit(this.$refs.form);
       },
 
 
@@ -81,14 +90,14 @@
         Overlay.confirmDelete().then(opts =>
         {
           opts.state('loading');
-          IntegrationsApi.delete(this.model.id).then(response =>
+          IntegrationsApi.delete(this.config.alias).then(response =>
           {
             if (response.success)
             {
               opts.state('success');
               opts.hide();
               Notification.success('@deleteoverlay.success', '@deleteoverlay.success_text');
-              this.config.close();
+              this.config.confirm(response);
             }
             else
             {

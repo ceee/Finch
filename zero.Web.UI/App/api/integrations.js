@@ -1,12 +1,13 @@
-import { get, post, del } from '../helpers/request.ts';
+import { get, post, del } from 'zero/helpers/request.ts';
 
 const base = 'integrations/';
 
 export default {
-  getAll: async () => await get(base + 'getAll'),
-  getEmptySettings: async alias => await get(base + 'getEmptySettings', { params: { alias } }),
-  getSettingsById: async id => await get(base + 'getSettingsById', { params: { id } }),
-  getSettingsByAlias: async alias => await get(base + 'getSettingsByAlias', { params: { alias } }),
-  save: async model => await post(base + 'save', model),
-  delete: async id => await del(base + 'delete', { params: { id } })
+  getEmpty: async alias => await get(base + 'getEmpty', { params: { alias } }),
+  getTypes: async () => await get(base + 'getTypes'),
+  getByAlias: async (alias, config) => await get(base + 'getByAlias', { ...config, params: { alias } }),
+  getByQuery: async (query, config) => await get(base + 'getByQuery', { ...config, params: { query } }),
+  save: async (model, config) => await post(base + 'save', model, { ...config }),
+  saveActiveState: async (model, config) => await post(base + 'saveActiveState', model, { ...config }),
+  delete: async alias => await del(base + 'delete', { params: { alias } })
 };

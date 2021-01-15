@@ -1,71 +1,45 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Integrations;
+using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
-  //[ZeroAuthorize(Permissions.Sections.Spaces, PermissionsValue.True)]
+  //[ZeroAuthorize(Permissions.Sections.PREFIX + "commerce", PermissionsValue.Read)]
   public class IntegrationsController : BackofficeController
   {
-    IIntegrationsCollection Integrations;
-    IIntegrationService Types;
+    IIntegrationsCollection Collection;
 
-    public IntegrationsController(IIntegrationsCollection integrations, IIntegrationService types)
+    public IntegrationsController(IIntegrationsCollection collection)
     {
-      Integrations = integrations;
-      Types = types;
+      Collection = collection;
+      Collection.WithInactive();
     }
 
 
-    public async Task<IActionResult> GetAll()
-    {
-      return Ok(new
-      {
-        //available = await Types.GetAvailable(),
-        //activated = await Types.GetActivated()
-      });
-    }
+    public EditModel<IIntegration> GetEmpty([FromQuery] string alias) => Edit(Collection.GetEmpty(alias));
 
 
-    public IActionResult GetEmptySettings([FromQuery] string alias)
-    {
-      //IIntegration integration = Types.GetByAlias(alias);
-      //IIntegrationModel model = integration != null ? Activator.CreateInstance(integration.ModelType) as IIntegrationModel : null;
-
-      //if (model != null)
-      //{
-      //  model.IntegrationAlias = integration.Alias;
-      //}
-
-      return Ok(Edit(default(IIntegration)));
-    }
+    public async Task<EditModel<IIntegration>> GetByAlias([FromQuery] string alias) => Edit(await Collection.GetByAlias(alias));
 
 
-    public async Task<IActionResult> GetSettingsByAlias([FromQuery] string alias)
-    {
-      //IIntegrationModel content = await Integrations.GetByAlias(alias);
-      return Ok(Edit(default(IIntegration)));
-    }
+    public async Task<ListResult<IIntegration>> GetByQuery([FromQuery] ListQuery<IIntegration> query) => await Collection.GetByQuery(query);
 
 
-    public async Task<IActionResult> GetSettingsById([FromQuery] string id)
-    {
-      //IIntegrationModel content = await Integrations.GetById(id);
-      return Ok(Edit(default(IIntegration)));
-    }
+    public async Task<IList<IntegrationTypeWithStatus>> GetTypes() => await Collection.GetTypesWithStatus();
 
 
-    public async Task<IActionResult> Save([FromBody] IIntegration model)
-    {
-      return Ok();
-      //return Ok(await Integrations.Save(model));
-    }
+    [HttpPost]
+    public async Task<EntityResult<IIntegration>> Save([FromBody] IIntegration model) => await Collection.Save(model);
 
-    public async Task<IActionResult> Delete([FromQuery] string id)
-    {
-      return Ok(await Integrations.DeleteById(id));
-    }
+    [HttpPost]
+    public async Task<EntityResult<IIntegration>> SaveActiveState([FromBody] Integration model) => model.IsActive ? await Collection.Activate(model.Alias) : await Collection.Deactivate(model.Alias);
+
+    [HttpDelete]
+    public async Task<EntityResult<IIntegration>> Delete([FromQuery] string alias) => await Collection.Delete(alias);
   }
 }
