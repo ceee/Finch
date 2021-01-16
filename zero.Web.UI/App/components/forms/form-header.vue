@@ -119,6 +119,18 @@
       color: var(--color-accent-red);
     }
 
+    .ui-toggle-switch
+    {
+      background: var(--color-button-light-onbg);
+      box-shadow: var(--shadow-short) !important;
+    }
+
+    .ui-toggle-switch.is-active
+    {
+      background: var(--color-checked);
+      box-shadow: none !important;
+    }
+
     input:focus + .ui-toggle-switch
     {
       border-color: transparent;

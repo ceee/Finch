@@ -19,9 +19,9 @@
     "vue-router": "^3.4.8"
   },
   "devDependencies": {
-    "sass": "^1.26.5",
-    "vite": "^1.0.0-rc.8",
-    "vite-plugin-vue2": "^0.2.1",
+    "sass": "1.32.4",
+    "vite": "1.0.0-rc.13",
+    "vite-plugin-vue2": "0.2.2",
     "vue-template-compiler": "^2.6.12"
   }
 }

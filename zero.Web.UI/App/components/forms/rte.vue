@@ -10,18 +10,13 @@
           <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.code() }" @click="commands.code"><i class="fth-code"></i></button>
         </div>
       </editor-menu-bubble>
-      <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+      <!--<editor-menu-bar :editor="editor" v-slot="{ commands, isActive }"> // TODO this triggers a recursive loop error when used in multiple properties per editor 
         <div class="ui-rte-controls">
           <span class="ui-rte-controls-label">Editor</span>
           <button type="button" title="Undo" class="ui-rte-control" @click="commands.undo" :disabled="commands.undoDepth() < 1"><i class="fth-chevron-left"></i></button>
           <button type="button" title="Redo" class="ui-rte-control" @click="commands.redo" :disabled="commands.redoDepth() < 1"><i class="fth-chevron-right"></i></button>
-          <!--<button type="button" class="ui-rte-control" :class="{ 'is-active': isActive.bold() }" @click="commands.bold"><i class="fth-bold"></i></button>
-          <button type="button" class="ui-rte-control" :class="{ 'is-active': isActive.italic() }" @click="commands.italic"><i class="fth-italic"></i></button>
-          <button type="button" class="ui-rte-control" :class="{ 'is-active': isActive.underline() }" @click="commands.underline"><i class="fth-underline"></i></button>
-          <button type="button" class="ui-rte-control" :class="{ 'is-active': isActive.link() }" @click="commands.link"><i class="fth-link"></i></button>
-          <button type="button" class="ui-rte-control" :class="{ 'is-active': isActive.code() }" @click="commands.code"><i class="fth-code"></i></button>-->
         </div>
-      </editor-menu-bar>
+      </editor-menu-bar>-->
       <editor-content class="ui-rte-input" :editor="editor" />
     </div>
   </div>

@@ -100,7 +100,7 @@
       scheduleLocalize()
       {
         return {
-          key: !this.value.from && !this.value.to ? '@ui.date.set' :
+          key: !this.value || (!this.value.from && !this.value.to) ? '@ui.date.set' :
             (this.value.from && !this.value.to ? '@ui.date.x' :
               (!this.value.from && this.value.to ? '@ui.date.y' : '@ui.date.xtoy')),
           tokens: {
