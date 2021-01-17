@@ -1,6 +1,9 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model zero.Web.Models.ZeroBackofficeModel
-@{ Layout = null; }
+@{ 
+  Layout = null;
+  string config = await Model.Vue.ConfigAsJson();
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,8 +24,11 @@
 </head>
 <body class="theme-light theme-rounded">
   <div id="app"></div>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    @Html.Raw(Model.Vue.GetIconSvg())
+  </svg>
   <script>
-    window.__zero = @Html.Raw(await Model.Vue.ConfigAsJson());
+    window.__zero = @Html.Raw(config);
     window.zero = window.__zero;
   </script>
   <script type="module" src="http://localhost:@(Model.Port)/vite/client"></script>

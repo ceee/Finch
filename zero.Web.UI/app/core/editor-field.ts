@@ -384,12 +384,12 @@ class EditorField
 
   /**
    * Pick an icon from the specified icon collection
-   * @param {string[]} [icons] - Custom icon set with icon class names
+   * @param {string} [iconSetAlias] - Custom icon set alias (defined in ZeroOptions.Icons)
    * @returns {EditorField}
    */
-  iconPicker(icons)
+  iconPicker(iconSetAlias)
   {
-    return this._setComponent(IconPicker, { icons });
+    return this._setComponent(IconPicker, { set: iconSetAlias });
   }
 
 

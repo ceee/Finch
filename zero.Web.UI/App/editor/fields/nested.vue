@@ -15,6 +15,7 @@
   import UiEditorOverlay from 'zero/editor/editor-overlay.vue';
   import Overlay from 'zero/helpers/overlay.js';
   import Editor from 'zero/core/editor.ts';
+  import Strings from 'zero/helpers/strings.js';
 
   export default {
 
@@ -138,13 +139,13 @@
 
       getName(item)
       {
-        return typeof this.itemLabel === 'function' ? this.itemLabel(item) : 'Item';
+        return Strings.htmlToText(typeof this.itemLabel === 'function' ? this.itemLabel(item) : 'Item');
       },
 
 
       getDescription(item)
       {
-        return typeof this.itemDescription === 'function' ? this.itemDescription(item) : '';
+        return Strings.htmlToText(typeof this.itemDescription === 'function' ? this.itemDescription(item) : '');
       },
 
 

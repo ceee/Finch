@@ -4,6 +4,17 @@
   @extend %font-icon;
 }
 
+.feather 
+{
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
 .fth-alert-octagon:before { content: "\e81b"; }
 
 .fth-alert-circle:before { content: "\e81c"; }
@@ -568,26 +579,4 @@
   border-bottom-color: var(--color-primary);
   position: relative;
   top: -2px;
-}
-
-
-
-.colorized-icons .fth-facebook
-{
-  color: #486eb7 !important;
-}
-
-.colorized-icons .fth-instagram
-{
-  color: #bb4079 !important;
-  background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d) !important;
-  background-clip: text !important;
-  -webkit-background-clip: text !important;
-  text-fill-color: transparent !important;
-  -webkit-text-fill-color: transparent !important;
-}
-
-.colorized-icons .fth-google
-{
-  color: #f04c43 !important;
 }

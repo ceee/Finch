@@ -101,5 +101,13 @@ export default {
     var val = (hasDecimals || fixedDecimals) ? (value / 1).toFixed(decimals) : ~~value;
     return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, noEncode ? " " : "&nbsp;") + (hideSymbol === true ? "" : (noEncode ? " €" : "&nbsp;&euro;"));
     // TODO we have dynamic currencies, not fixed to €
+  },
+
+
+  htmlToText(html)
+  {
+    let tag = document.createElement('div');
+    tag.innerHTML = html;
+    return tag.innerText;
   }
 };

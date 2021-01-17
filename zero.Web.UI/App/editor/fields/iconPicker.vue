@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-iconpicker :value="value" @input="$emit('input', $event)" :disabled="disabled" />
+  <ui-iconpicker :value="value" @input="$emit('input', $event)" :disabled="disabled" :set="set" />
 </template>
 
 
@@ -12,6 +12,10 @@
       disabled: {
         type: Boolean,
         default: false
+      },
+      set: {
+        type: String,
+        default: 'feather'
       },
       config: Object
     }

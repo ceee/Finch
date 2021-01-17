@@ -19,7 +19,7 @@
     <nav class="app-nav-inner">
       <template v-for="section in sections">
         <router-link :to="section.url" class="app-nav-item" :alias="section.alias" :class="{ 'has-children': hasChildren(section) }">
-          <ui-icon :icon="section.icon" class="app-nav-item-icon" />
+          <ui-icon :symbol="section.icon" class="app-nav-item-icon" />
           <span class="app-nav-item-text" v-localize="section.name"></span>
           <ui-icon v-if="hasChildren(section)" icon="chevron-down" class="app-nav-item-arrow" />
         </router-link>
@@ -45,13 +45,13 @@
             <img class="-image" v-if="userAvatar" :src="userAvatar" :alt="user.name" />
             <span class="-image" v-if="!userAvatar"><i class="fth-user"></i></span>
             <p class="-text"><strong>{{user.name}}</strong></p>
-            <ui-icon icon="chevron-down" class="-arrow" />
+            <ui-icon symbol="chevron-down" class="-arrow" />
           </button>
         </template>
-        <ui-dropdown-button label="Edit" icon="edit-2" @click="editUser" />
-        <ui-dropdown-button label="Change password" icon="lock" @click="changePassword" />
+        <ui-dropdown-button label="Edit" icon="fth-edit-2" @click="editUser" />
+        <ui-dropdown-button label="Change password" icon="fth-lock" @click="changePassword" />
         <ui-dropdown-button label="Toggle sidebar" icon="fth-minimize-2" @click="toggleSidebar" />
-        <ui-dropdown-button label="Logout" icon="log-out" @click="logout" />
+        <ui-dropdown-button label="Logout" icon="fth-log-out" @click="logout" />
       </ui-dropdown>
     </footer>
 

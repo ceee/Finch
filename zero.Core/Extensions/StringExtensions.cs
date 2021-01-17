@@ -11,6 +11,8 @@ namespace zero.Core.Extensions
 
     static Regex replaceMultipleSpacesRegex { get; } = new Regex("[ ]{2,}", RegexOptions.None);
 
+    static Regex newLineCharsRegex { get; } = new Regex("\t|\n|\r", RegexOptions.None);
+
 
     public static string FullTrim(this string value)
     {
@@ -154,6 +156,17 @@ namespace zero.Core.Extensions
       string[] parts = input.Split('.');
 
       return String.Join(".", parts.Select(x => x.ToPascalCase()));
+    }
+
+
+    public static string RemoveNewLines(this string input)
+    {
+      if (String.IsNullOrEmpty(input))
+      {
+        return input;
+      }
+
+      return newLineCharsRegex.Replace(input, String.Empty).Trim();
     }
   }
 }

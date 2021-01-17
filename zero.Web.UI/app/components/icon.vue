@@ -1,5 +1,7 @@
 ﻿<template>
-  <i class="ui-icon" :class="iconClass"></i>
+  <svg v-if="symbol" class="ui-icon" :width="size" :height="size" :stroke-width="strokeWidth">
+    <use :xlink:href="'#' + symbol.trim()" />
+  </svg>
 </template>
 
 
@@ -8,18 +10,28 @@
     name: 'uiIcon',
 
     props: {
-      icon: {
+      symbol: {
         type: String,
-        default: null,
-        required: true
-      }
-    },
-
-    computed: {
-      iconClass()
-      {
-        return this.icon.indexOf('fth-') === 0 ? this.icon : ('fth-' + this.icon);
+        default: null
+      },
+      size: {
+        type: Number,
+        default: 17
+      },
+      strokeWidth: {
+        type: Number,
+        default: 2
       }
     }
   }
 </script>
+
+<style lang="scss">
+  .ui-icon
+  {
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+</style>

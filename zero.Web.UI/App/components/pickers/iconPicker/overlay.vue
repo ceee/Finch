@@ -17,7 +17,8 @@
 
     <div class="ui-iconpicker-overlay-items">
       <button v-for="item in items" type="button" class="ui-iconpicker-overlay-item" :class="{ 'is-active': item === icon, [color]: item === icon }" :title="item" @click="select(item)">
-        <i :class="item"></i>
+        <ui-icon :symbol="item" />
+        <!--<i :class="item"></i>-->
       </button>
     </div>
   </ui-overlay-editor>
@@ -35,10 +36,12 @@
     },
 
     data: () => ({
+      file: null,
       colors: [ 'default', 'gray', 'blue-gray', 'blue', 'teal', 'green', 'lime', 'yellow', 'orange', 'red', 'purple', 'brown' ],
       icon: null,
       color: null,
       query: '',
+      set: null,
       items: []
     }),
 
@@ -56,7 +59,8 @@
     created()
     {
       this.debouncedSearch = _debounce(this.search, 100);
-      this.items = this.config.items;
+      this.set = this.config.set;
+      this.items = this.set.icons;
       this.init();
     },
 
@@ -112,11 +116,11 @@
 
         if (!query)
         {
-          this.items = this.config.items;
+          this.items = this.set.icons;
         }
         else
         {
-          this.items = _filter(this.config.items, function (item)
+          this.items = _filter(this.set.icons, function (item)
           {
             return item.toLowerCase().indexOf(query) > -1;
           })

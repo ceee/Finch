@@ -82,7 +82,7 @@
         }
         Overlay.setDropdown(this);
         this.open = true;
-        this.position();
+        //this.position();
         this.$emit('opened');
       },
 
@@ -98,8 +98,6 @@
 
       position()
       {
-        return; 
-
         this.$nextTick(() =>
         {
           // the trigger which is the relative to the overlay

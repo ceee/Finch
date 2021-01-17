@@ -24,6 +24,8 @@ namespace zero.Core.Options
       Settings = new();
       Spaces = new();
       Integrations = new();
+      Icons = new();
+      Icons.AddSet("feather", "Feather", "/assets/icons/feather.svg", "fth");
     }
 
     /// <inheritdoc />
@@ -78,6 +80,9 @@ namespace zero.Core.Options
 
     /// <inheritdoc />
     public IntegrationOptions Integrations { get; private set; }
+
+    /// <inheritdoc />
+    public IconOptions Icons { get; private set; }
   }
 
 
@@ -173,5 +178,10 @@ namespace zero.Core.Options
     /// 
     /// </summary>
     IntegrationOptions Integrations { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    IconOptions Icons { get; }
   }
 }

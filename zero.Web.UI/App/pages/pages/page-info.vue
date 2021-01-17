@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="page-editor-info ui-view-box has-sidebar">
+  <div class="ui-view-box page-editor-info has-sidebar">
     <div>
       <div class="ui-box">
         <h3 class="ui-headline" v-localize="'Links'"></h3>
@@ -12,23 +12,18 @@
         <ui-revisions v-if="!isCreate" :get="getRevisions" />
       </div>
     </div>
-    <div class="ui-view-box-aside editor-infos">
+    <div class="ui-view-box-aside">
       <div class="ui-box editor-active-toggle" :class="{'is-active': value.isActive }">
-        <ui-property label="@ui.active" :is-text="true" class="is-toggle">
-          <ui-toggle v-model="value.isActive" class="is-primary" :disabled="disabled" />
-        </ui-property>
-        <ui-property label="@page.schedule.label" :is-text="true">
+        <ui-property label="@page.schedule.label" :is-text="true" :vertical="true">
           <ui-daterangepicker :value="{ from: value.publishDate, to: value.unpublishDate }" @input="onRangeChange" :class="{ 'is-primary': value.publishDate || value.unpublishDate }" :disabled="disabled" />
         </ui-property>
-      </div>
-      <div class="ui-box is-light">
-        <ui-property v-if="!isCreate" label="@ui.id" :is-text="true">
+        <ui-property v-if="!isCreate" label="@ui.id" :is-text="true" :vertical="true">
           {{value.id}}
         </ui-property>
-        <ui-property v-if="!isCreate" label="@ui.createdDate" :is-text="true">
+        <ui-property v-if="!isCreate" label="@ui.createdDate" :is-text="true" :vertical="true">
           <ui-date v-model="value.createdDate" />
         </ui-property>
-        <ui-property label="@page.type" :is-text="true" v-if="pageType">
+        <ui-property label="@page.type" :is-text="true" v-if="pageType" :vertical="true">
           <i :class="pageType.icon"></i> &nbsp;{{pageType.name}}
         </ui-property>
       </div>
@@ -87,3 +82,15 @@
     }
   }
 </script>
+
+<style lang="scss">
+  .page-editor-info
+  {
+    padding: 0 !important;
+  }
+
+  .page-editor-info .ui-view-box-aside
+  {
+    padding: 0;
+  }
+</style>
