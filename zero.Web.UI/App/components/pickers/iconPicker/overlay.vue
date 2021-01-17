@@ -13,11 +13,15 @@
       <i v-for="col in colors" :class="{ 'is-active': ('color-' + col) === color || (col === 'default' && !color), ['bg-color-' + col]: true }" @click="selectColor(col)" :title="col"></i>
     </div>
 
-    <hr class="ui-iconpicker-overlay-line">
+    <!--<div class="ui-iconpicker-overlay-size">
+      <input type="range" min="14" max="48" step="2" v-model.number="size" />
+    </div>-->
 
-    <div class="ui-iconpicker-overlay-items">
+    <!--<hr class="ui-iconpicker-overlay-line">-->
+
+    <div class="ui-iconpicker-overlay-items" :style="{ 'grid-template-columns': 'repeat(' + columns + ', 1fr)' }">
       <button v-for="item in items" type="button" class="ui-iconpicker-overlay-item" :class="{ 'is-active': item === icon, [color]: item === icon }" :title="item" @click="select(item)">
-        <ui-icon :symbol="item" />
+        <ui-icon :symbol="item" :size="size" />
         <!--<i :class="item"></i>-->
       </button>
     </div>
@@ -42,7 +46,8 @@
       color: null,
       query: '',
       set: null,
-      items: []
+      items: [],
+      size: 17
     }),
 
     watch: {
@@ -53,6 +58,13 @@
       query()
       {
         this.debouncedSearch();
+      }
+    },
+
+    computed: {
+      columns()
+      {
+        return ~~(480 / (this.size + 43));
       }
     },
 
@@ -139,19 +151,24 @@
   .ui-iconpicker-overlay-items
   {
     display: grid;
-    gap: 0;
     grid-template-columns: repeat(auto-fill, 61px);
+    grid-gap: 8px;
     align-items: stretch;
   }
 
   .ui-iconpicker-overlay-item
   {
-    display: block;
-    text-align: center;
-    font-size: 20px;
-    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
     border-radius: var(--radius);
-    /*border: 2px solid transparent;*/
+
+    &:hover
+    {
+      background: var(--color-box);
+      box-shadow: var(--shadow-short);
+    }
 
     &.is-active
     {
