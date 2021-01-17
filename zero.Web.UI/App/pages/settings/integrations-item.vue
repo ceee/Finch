@@ -1,7 +1,9 @@
 ﻿<template>
   <div class="integrations-item" :class="{'is-configured': model.isConfigured }">
     <aside>
-      <i class="integrations-item-icon" :style="{'background-color': hasColor ? model.type.color : null }" :class="[model.type.icon || 'fth-box', hasColor ? 'has-color' : '']"></i>
+      <span class="integrations-item-icon" :style="{'background-color': hasColor ? model.type.color : null }">
+        <ui-icon :symbol="model.type.icon || 'fth-box'" :size="26" />
+      </span>
       <button type="button" v-if="!model.isConfigured" @click="open" class="ui-button type-primary type-block">
         <span class="ui-button-text" v-localize="'Setup'" />
       </button>
@@ -12,7 +14,7 @@
     <main>
       <p class="integrations-item-text">
         <strong v-localize="model.type.name"></strong>
-        <i class="fth-check-circle" v-if="model.isConfigured"></i>
+        <ui-icon symbol="fth-check-circle" v-if="model.isConfigured" :size="13" />
         <template v-if="model.type.description">
           <br>
           <span v-localize="model.type.description"></span>
@@ -101,10 +103,11 @@
 
   .integrations-item-icon
   {
-    display: inline-block;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     width: 120px;
     height: 90px;
-    line-height: 91px !important;
     font-size: 22px;
     text-align: center;
     background: var(--color-box-nested);
@@ -125,7 +128,7 @@
     max-width: 820px;
   } 
 
-  .integrations-item-text i
+  .integrations-item-text .ui-icon
   {
     color: var(--color-primary); 
     margin-left: 0.5em; 

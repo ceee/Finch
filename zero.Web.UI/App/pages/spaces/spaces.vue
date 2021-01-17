@@ -5,7 +5,7 @@
 
       <div class="spaces-tree-items">
         <router-link :to="{ name: 'space', params: { alias: item.alias } }" v-for="item in spaces" :key="item.alias" class="spaces-tree-item" :class="{ 'has-line': item.lineBelow }">
-          <i class="spaces-tree-item-icon" :class="item.icon"></i>
+          <ui-icon class="spaces-tree-item-icon" :symbol="item.icon" />
           <span class="spaces-tree-item-text">
             <span v-localize="item.name"></span>
             <span class="-minor" v-if="item.description" v-localize="item.description"></span>

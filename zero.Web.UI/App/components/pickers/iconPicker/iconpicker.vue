@@ -102,6 +102,7 @@
           set: this.iconSet,
           model: this.value,
           colors: this.colors,
+          width: 660
         }, typeof this.options === 'object' ? this.options : {});
 
         return Overlay.open(options).then(value =>

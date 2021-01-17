@@ -1,11 +1,11 @@
 ﻿<template>
   <div class="ui-tree-item" :class="getClasses(value)" v-on:contextmenu="onRightClicked(value, $event)">
     <button :disabled="value.disabled" v-if="value.hasChildren" @click="toggle(value)" type="button" class="ui-tree-item-toggle">
-      <i class="ui-tree-item-arrow" :class="['fth-chevron-' + (value.isOpen ? 'up' : 'down')]"></i>
+      <ui-icon class="ui-tree-item-arrow" :symbol="'fth-chevron-' + (value.isOpen ? 'up' : 'down')" />
     </button>
     <component :disabled="value.disabled" :is="tag" type="button" :to="value.url" class="ui-tree-item-link" @click="onClick(value, $event)">
-      <i class="ui-tree-item-icon" :class="value.icon"></i>
-      <i v-if="value.modifier" :title="value.modifier.name" class="ui-tree-item-modifier" :class="value.modifier.icon"></i>
+      <ui-icon class="ui-tree-item-icon" :symbol="value.icon" />
+      <ui-icon v-if="value.modifier" :title="value.modifier.name" class="ui-tree-item-modifier" :symbol="value.modifier.icon" />
       <span class="ui-tree-item-text">{{value.name | localize}}</span>
     </component>
     <ui-dot-button :disabled="value.disabled" class="ui-tree-item-actions" v-if="value.hasActions" @click="onActionsClicked(value, $event)" />
@@ -110,28 +110,16 @@
     transition: color 0.2s ease;
     position: relative;
 
-    /*&.is-inactive .ui-tree-item-text,
-    &.is-inactive .ui-tree-item-icon
-    {
-      color: var(--color-text-dim);
-    }*/
-
-    .ui-tree-item-arrow
-    {
-      transition: transform 0.2s ease;
-    }
-
     &:hover > .ui-tree-item-actions
     {
       transition-delay: 0.2s;
       opacity: 1;
-    }
-    
+    }    
 
     &.is-open > .ui-tree-item-toggle .ui-tree-item-arrow
     {
       transform: rotate(180deg);
-    }
+    } 
 
     &.is-disabled
     {

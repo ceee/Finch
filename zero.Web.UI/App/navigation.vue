@@ -21,7 +21,7 @@
         <router-link :to="section.url" class="app-nav-item" :alias="section.alias" :class="{ 'has-children': hasChildren(section) }">
           <ui-icon :symbol="section.icon" class="app-nav-item-icon" />
           <span class="app-nav-item-text" v-localize="section.name"></span>
-          <ui-icon v-if="hasChildren(section)" icon="chevron-down" class="app-nav-item-arrow" />
+          <ui-icon v-if="hasChildren(section)" symbol="fth-chevron-down" class="app-nav-item-arrow" />
         </router-link>
         <transition name="app-nav-children">
           <div class="app-nav-children" v-if="hasChildren(section) && $route.path.indexOf('/' + section.alias) === 0">
@@ -45,7 +45,7 @@
             <img class="-image" v-if="userAvatar" :src="userAvatar" :alt="user.name" />
             <span class="-image" v-if="!userAvatar"><i class="fth-user"></i></span>
             <p class="-text"><strong>{{user.name}}</strong></p>
-            <ui-icon symbol="chevron-down" class="-arrow" />
+            <ui-icon symbol="fth-chevron-down" class="-arrow" />
           </button>
         </template>
         <ui-dropdown-button label="Edit" icon="fth-edit-2" @click="editUser" />

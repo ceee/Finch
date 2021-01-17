@@ -1,9 +1,9 @@
 ﻿<template>
   <router-link :to="link" class="media-item">
     <div class="media-item-preview" :class="{'media-pattern': value.image }">
-      <span class="media-item-check"><i class="fth-check"></i></span>
+      <span class="media-item-check"><ui-icon symbol="fth-check" :size="14" /></span>
       <img class="media-item-image" v-if="value.image" :src="value.image" />
-      <span class="media-item-icon" v-if="!value.image"><i :class="shared ? 'fth-globe' : (value.isFolder ? 'fth-folder' : 'fth-file')"></i></span>
+      <span class="media-item-icon" v-if="!value.image"><ui-icon :symbol="shared ? 'fth-globe' : (value.isFolder ? 'fth-folder' : 'fth-file')" :size="28" /></span>
     </div>
     <p class="media-item-text" v-if="!shared">
       <span :title="value.name">{{value.name}}</span>
@@ -85,7 +85,6 @@
     overflow: visible !important;
     position: relative;
     text-align: center;
-    font-size: 28px;
     box-shadow: var(--shadow-short);
   }
 

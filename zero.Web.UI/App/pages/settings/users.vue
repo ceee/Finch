@@ -10,7 +10,7 @@
       <h2 class="ui-headline users-group-headline" v-localize="'@role.roles'"></h2>
       <div class="users-roles">
         <router-link v-for="role in roles" :key="role.id" :to="getRoleLink(role)" class="users-role">
-          <i class="users-role-icon" :class="role.icon"></i>
+          <ui-icon class="users-role-icon" :symbol="role.icon" :size="24" />
           <strong>{{role.name}}</strong>
           <span class="users-role-minor" v-localize="{ key: role.countClaims !== 1 ? '@user.count_permissions' : '@user.one_permission', tokens: { count: role.claims.length }}"></span>
         </router-link>
@@ -120,7 +120,6 @@
 
   .users-role-icon
   {
-    font-size: 26px;
     text-align: center;
     display: inline-block;
     margin: 0 auto var(--padding-m);

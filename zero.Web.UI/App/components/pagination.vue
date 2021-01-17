@@ -7,7 +7,7 @@
       </select>
       <button type="button" class="ui-button type-blank caret-down">
         <span class="ui-button-text" v-localize="{ key: '@ui.pagination.xofy', tokens: { x: page, y: pages }}"></span>
-        <i class="ui-button-caret fth-chevron-down"></i>
+        <ui-icon class="ui-button-caret" symbol="fth-chevron-down" />
       </button>
     </div>
     <ui-icon-button class="ui-pagination-next ui-pagination-button" :type="buttonType" title="@ui.pagination.next" icon="fth-chevron-right" :disabled="page >= pages" @click="set(page + 1)" />

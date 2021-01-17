@@ -2,7 +2,9 @@
   <div class="ui-searchinput">
     <input ref="input" type="search" :value="value" @input="onChange" @keyup.enter="onSubmit" class="ui-input" v-localize:placeholder="placeholder" />
     <slot name="button" v-bind="{ onSubmit: onSubmit }">
-      <button type="button" class="ui-searchinput-button" v-localize:title="'@ui.search.button'" @click="onSubmit"><i class="fth-search"></i></button>
+      <button type="button" class="ui-searchinput-button" v-localize:title="'@ui.search.button'" @click="onSubmit">
+        <ui-icon symbol="fth-search" />
+      </button>
     </slot>
   </div>
 </template>
@@ -62,10 +64,12 @@
       background: var(--color-input);
     }
 
-    &.onbg .ui-input
+    &.onbg .ui-input:not(:focus)
     {
-      box-shadow: var(--shadow-short);
-      background: var(--color-button-light-onbg);
+      /*box-shadow: var(--shadow-short);
+      background: var(--color-button-light-onbg);*/
+      background: none;
+      border: 1px dashed var(--color-line-dashed);
     }
 
     .ui-searchinput-button
@@ -74,7 +78,7 @@
       right: 0;
       top: 0;
       height: 100%;
-      width: 40px;
+      width: 45px;
       text-align: center;
       font-size: var(--font-size);
       padding-top: 1px;

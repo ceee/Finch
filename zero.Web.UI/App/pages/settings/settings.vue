@@ -8,7 +8,9 @@
       <h2 class="ui-headline settings-group-headline" v-localize="group.name"></h2>
       <div class="settings-group-items">
         <router-link :to="item.url || '/'" v-for="item in group.items" :key="item.name" class="settings-group-item">
-          <i class="settings-group-item-icon" :class="item.icon || 'fth-settings'" />
+          <span class="settings-group-item-icon">
+            <ui-icon :symbol="item.icon || 'fth-settings'" :size="18" />
+          </span>
           <p class="settings-group-item-text">
             <strong v-localize="item.name"></strong>
             <template v-if="item.description">
@@ -89,11 +91,11 @@
 
   .settings-group-item-icon
   {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     width: 60px;
     height: 60px;
-    line-height: 59px !important;
-    font-size: 18px;
-    text-align: center;
     background: var(--color-box);
     border-radius: var(--radius);
     box-shadow: var(--shadow-short);

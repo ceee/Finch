@@ -47,7 +47,7 @@
       query: '',
       set: null,
       items: [],
-      size: 17
+      size: 20
     }),
 
     watch: {
@@ -64,7 +64,7 @@
     computed: {
       columns()
       {
-        return ~~(480 / (this.size + 43));
+        return ~~(580 / (this.size + 45));
       }
     },
 
@@ -161,7 +161,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px 0;
+    padding: 22px 0;
     border-radius: var(--radius);
 
     &:hover

@@ -1,12 +1,12 @@
 ﻿<template>
   <button :type="buttonType" class="ui-button has-state" :class="buttonClass" :disabled="disabled || state == 'loading'" @click="tryClick">
     <span v-if="label" class="ui-button-text" v-localize:html="label"></span>
-    <i v-if="caret" class="ui-button-caret" :class="caretClass"></i>
-    <i v-if="icon" class="ui-button-icon" :class="icon"></i>
+    <ui-icon v-if="caret" :symbol="caretSymbol" class="ui-button-caret" />
+    <ui-icon v-if="icon" :symbol="icon" />
     <span v-if="!isDefaultState" class="ui-button-state">
       <i v-if="stateDisplay == 'loading'" class="ui-button-progress"></i>
-      <i v-if="stateDisplay == 'success'" class="fth-check"></i>
-      <i v-if="stateDisplay == 'error'" class="fth-x"></i>
+      <ui-icon v-if="stateDisplay == 'success'" symbol="fth-check" />
+      <ui-icon v-if="stateDisplay == 'error'" symbol="fth-x" />
     </span>
   </button>
 </template>
@@ -105,7 +105,7 @@
 
         return classes;
       },
-      caretClass()
+      caretSymbol()
       {
         return 'fth-chevron-' + this.caret;
       },
