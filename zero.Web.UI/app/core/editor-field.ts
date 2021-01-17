@@ -222,12 +222,14 @@ class EditorField
 
   /**
    * Render a select dropdown with the specified items
-   * @param {EditorSelectItem[]} items - Set items to pick from
+   * @param {EditorSelectItem[]|function} items - Set items to pick from
+   * @param {object} [options] - Custom options
+   * @param {number} [options.emptyOption=false] - Adds an empty option so the field can be blank
    * @returns {EditorField}
    */
-  select(items)
+  select(items, options)
   {
-    return this._setComponent(Select, { items });
+    return this._setComponent(Select, { items, ...options });
   }
 
 
