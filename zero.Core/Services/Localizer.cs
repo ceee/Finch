@@ -65,14 +65,23 @@ namespace zero.Core.Services
     }
 
 
-    /// <summary>
-    /// Get a text string from a Text attribute on a specific enum value
-    /// </summary>
+    /// <inheritdoc />
     public string Text<T>(T enumValue) where T : Enum
     {
       Type type = enumValue.GetType();
       MemberInfo memInfo = type.GetMember(enumValue.ToString())[0];
       return Text(memInfo.GetCustomAttribute<LocalizeAttribute>()?.Key);
+    }
+
+
+    /// <inheritdoc />
+    public string Maybe(string key) => Maybe(key, null);
+
+
+    /// <inheritdoc />
+    public string Maybe(string key, IDictionary<string, string> tokens)
+    {
+      return key.IsNullOrEmpty() || !key.StartsWith("@") ? key : Text(key.Substring(1), tokens);
     }
 
 
@@ -93,7 +102,7 @@ namespace zero.Core.Services
   }
 
   public interface ILocalizer : IDisposable
-  {
+  {   
     /// <summary>
     /// 
     /// </summary>
@@ -107,6 +116,16 @@ namespace zero.Core.Services
     /// <summary>
     /// Get a text string from a [Localize] attribute
     /// </summary>
-    public string Text<T>(T enumValue) where T : Enum;
+    string Text<T>(T enumValue) where T : Enum;
+
+    /// <summary>
+    /// Only tries to resolve the key when it is prefixed with an @
+    /// </summary>
+    string Maybe(string key);
+
+    /// <summary>
+    /// Only tries to resolve the key when it is prefixed with an @
+    /// </summary>
+    string Maybe(string key, IDictionary<string, string> tokens);
   }
 }
