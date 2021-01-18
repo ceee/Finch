@@ -121,10 +121,10 @@ namespace zero.Core.Routing
       }
       else
       {
-        alias = Safenames.Alias(page.Name);
+        alias = page.Name;
       }
 
-      return alias.Trim().Trim(PATH_SEPARATOR);
+      return Safenames.Alias(alias).Trim().Trim(PATH_SEPARATOR);
     }
   }
 }
