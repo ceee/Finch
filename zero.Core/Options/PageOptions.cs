@@ -11,6 +11,8 @@ namespace zero.Core.Options
       
     }
 
+    public string Root { get; set; } = Constants.Pages.DefaultRootPageTypeAlias;
+
 
     public void Add<T>(PageType<T> pageType) where T : Page, new()
     {

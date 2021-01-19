@@ -76,6 +76,7 @@
     public static class Pages
     {
       public const string FolderAlias = "zero.folder";
+      public const string DefaultRootPageTypeAlias = "root";
     }
   }
 }

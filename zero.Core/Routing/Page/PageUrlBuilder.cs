@@ -10,6 +10,7 @@ using zero.Core.Database;
 using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Options;
 
 namespace zero.Core.Routing
 {
@@ -21,10 +22,13 @@ namespace zero.Core.Routing
 
     protected IZeroStore Store { get; private set; }
 
+    protected IZeroOptions Options { get; private set; }
 
-    public PageUrlBuilder(IZeroStore store)
+
+    public PageUrlBuilder(IZeroStore store, IZeroOptions options)
     {
       Store = store;
+      Options = options;
     }
 
 
@@ -114,6 +118,10 @@ namespace zero.Core.Routing
       if (!page.UrlAlias.IsNullOrWhiteSpace())
       {
         alias = page.UrlAlias;
+      }
+      else if (page.PageTypeAlias == Options.Pages.Root)
+      {
+        return String.Empty;
       }
       else if (!page.Alias.IsNullOrWhiteSpace())
       {
