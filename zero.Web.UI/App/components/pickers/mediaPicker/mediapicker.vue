@@ -4,8 +4,8 @@
       <div v-for="item in previews" class="ui-mediapicker-preview">
         <div v-if="!item.error" class="ui-mediapicker-preview-image" :class="{'media-pattern': item.thumbnailSource }">
           <img v-if="item.thumbnailSource" :src="item.thumbnailSource" :alt="item.name" />
-          <button v-if="!disabled" type="button" class="ui-mediapicker-preview-image-delete" @click="remove(item)" v-localize:title="'@ui.remove'"><i class="fth-x"></i></button>
-          <button v-if="!disabled" type="button" class="ui-mediapicker-preview-image-edit" @click="edit(item)" v-localize:title="'@ui.edit'"><i class="fth-edit-2"></i></button>
+          <button v-if="!disabled" type="button" class="ui-mediapicker-preview-image-delete" @click="remove(item)" v-localize:title="'@ui.remove'"><ui-icon symbol="fth-x" :size="12" /></button>
+          <button v-if="!disabled" type="button" class="ui-mediapicker-preview-image-edit" @click="edit(item)" v-localize:title="'@ui.edit'"><ui-icon symbol="fth-edit-2" :size="12" /></button>
         </div>
         <div v-if="!item.error" class="ui-mediapicker-preview-text">
           <b :title="item.name">{{getFilename(item.name)}}</b>
@@ -312,7 +312,7 @@
     height: 80px;
     /*background: var(--color-bg);*/
     border: 1px solid var(--color-line);
-    padding: 3px;
+    padding: 0;
     border-radius: var(--radius);
     color: var(--color-text);
     position: relative;

@@ -1,6 +1,6 @@
 ﻿<template>
-  <svg v-if="symbol" class="ui-icon" :width="size" :height="size" :stroke-width="strokeWidth">
-    <use :xlink:href="'#' + symbol.trim()" />
+  <svg v-if="symbol" class="ui-icon" :width="size" :height="size" :stroke-width="strokeWidth" :data-symbol="symbol">
+    <use v-if="!isFlag" :xlink:href="'#' + symbol.trim()" />
   </svg>
 </template>
 
@@ -21,6 +21,13 @@
       strokeWidth: {
         type: Number,
         default: 2
+      }
+    },
+
+    computed: {
+      isFlag()
+      {
+        return this.symbol && this.symbol.indexOf('flag') === 0;
       }
     }
   }

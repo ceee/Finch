@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-mediapicker :config="{ limit }" :value="value" @input="$emit('input', $event)" :disabled="disabled" />
+  <ui-mediapicker :config="{ limit, disallowSelect, disallowUpload, fileExtensions, maxFileSize }" :value="value" @input="$emit('input', $event)" :disabled="disabled" />
 </template>
 
 
@@ -17,6 +17,22 @@
       limit: {
         type: Number,
         default: 1
+      },
+      disallowSelect: {
+        type: Boolean,
+        default: false
+      },
+      disallowUpload: {
+        type: Boolean,
+        default: false
+      },
+      fileExtensions: {
+        type: Array,
+        default: null
+      },
+      maxFileSize: {
+        type: Number,
+        default: 10
       }
     }
   }

@@ -1,9 +1,9 @@
 ﻿<template>
   <div class="editor-nested" :depth="depth">
-    <div class="ui-pick-previews" v-if="items.length">
-      <div v-for="(item, index) in items" class="ui-pick-preview">
+    <div class="ui-pick-previews" v-if="items.length" v-sortable="{ onUpdate: onSortingUpdated }">
+      <div v-for="(item, index) in items" :key="item.id" class="ui-pick-preview">
         <ui-select-button :icon="getIcon(item)" :label="getName(item)" :description="getDescription(item)" :disabled="disabled" @click="editItem(item)" />
-        <ui-icon-button v-if="!disabled" icon="fth-x" title="@ui.close" @click="removeItem(index)" :disabled="disabled" />
+        <ui-icon-button v-if="!disabled" icon="fth-x" title="@ui.close" @click="removeItem(index)" :disabled="disabled" :size="14" />
       </div>
     </div>
     <ui-select-button v-if="limit > items.length" icon="fth-plus" :label="addLabel || '@ui.add'" @click="addItem" :disabled="disabled" />
@@ -16,6 +16,7 @@
   import Overlay from 'zero/helpers/overlay.js';
   import Editor from 'zero/core/editor.ts';
   import Strings from 'zero/helpers/strings.js';
+  import Arrays from 'zero/helpers/arrays.js';
 
   export default {
 
@@ -50,7 +51,7 @@
         deep: true,
         handler(val)
         {
-          this.setup();
+          this.setup(val);
         }
       }
     },
@@ -64,15 +65,15 @@
 
     mounted()
     {
-      this.setup();
+      this.setup(this.value);
     },
 
 
     methods: {
 
-      setup()
+      setup(value)
       {
-        this.items = JSON.parse(JSON.stringify(this.value)) || [];
+        this.items = JSON.parse(JSON.stringify(value)) || [];
         this.multiple = this.limit > 1;
         if (!this.multiple)
         {
@@ -152,7 +153,15 @@
       getIcon(item)
       {
         return typeof this.itemIcon === 'function' ? this.itemIcon(item) : this.itemIcon;
-      }
+      },
+
+
+      onSortingUpdated(ev)
+      {
+        this.items = Arrays.move(this.items, ev.oldIndex, ev.newIndex);
+        this.onChange();
+        //this.$emit('input', this.multiple ? result : (result.length > 0 ? result[0] : null));
+      },
     }
   }
 </script>

@@ -12,7 +12,7 @@ namespace zero.Web.Controllers
     public CountriesController(ICountriesCollection collection) : base(collection)
     {
       DefaultQuery = q => q.OrderByDescending(x => x.IsPreferred).ThenBy(x => x.Name);
-      PreviewTransform = (item, model) => model.Icon = "flag flag-" + item.Code.ToLowerInvariant();
+      PreviewTransform = (item, model) => model.Icon = "flag-" + item.Code.ToLowerInvariant();
     }
   }
 }
