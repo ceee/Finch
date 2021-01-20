@@ -84,6 +84,10 @@
       getNewItem()
       {
         return JSON.parse(JSON.stringify(this.template || {}));
+        // TODO we need to set a default ID here so we can sort based on this v-for key.
+        // the problem is we don't know if the object has an ID nor how long it should be. 
+        // It is only generated on the server so we don't have access to it yet.
+        // the v-for key is necessary so the v-sortable works and correctly propagates changes, d'oh.
       },
 
       addItem()
