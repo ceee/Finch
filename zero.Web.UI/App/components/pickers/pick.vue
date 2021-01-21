@@ -3,7 +3,7 @@
     
     <!-- previews -->
     <div class="ui-pick-previews" v-if="configuration.preview.enabled && previews.length > 0 && !configuration.preview.combined" v-sortable="{ onUpdate: onSortingUpdated, enabled: configuration.sortable }">
-      <div v-for="preview in previews" class="ui-pick-preview">
+      <div v-for="preview in previews" :key="preview[configuration.keys.id]" class="ui-pick-preview">
         <ui-select-button :icon="getPreviewIcon(preview)" :icon-as-image="configuration.preview.iconAsImage" :label="preview[configuration.keys.name]" :description="getPreviewDescription(preview)" :disabled="disabled" @click="pick(preview[configuration.keys.id])" :tokens="preview" />
         <ui-icon-button v-if="!disabled && configuration.preview.delete" @click="remove(preview[configuration.keys.id])" icon="fth-x" title="@ui.close" :size="14" />
       </div>
@@ -570,9 +570,8 @@
       onSortingUpdated(ev)
       {
         this.selected = Arrays.move(this.selected, ev.oldIndex, ev.newIndex);
-        //this.previews = Arrays.move(this.previews, ev.oldIndex, ev.newIndex);
-        //this.onChange(this.multiple ? this.selected : this.selected[0]);
-      },
+        this.onChange(this.multiple ? this.selected : this.selected[0]);
+      }
     }
   }
 </script>
