@@ -7,7 +7,7 @@
       </div>
       <div class="page-create-items">
         <button type="button" v-for="item in pageTypes" class="page-create-item" @click="onSelect(item)">
-          <i class="page-create-item-icon" :class="item.icon"></i>
+          <ui-icon class="page-create-item-icon" :symbol="item.icon" :size="22" />
           <span class="page-create-item-text">
             {{item.name | localize}}
             <span v-if="item.description" v-localize="item.description"></span>
@@ -110,7 +110,7 @@
   {
     margin: 0 -16px;
     margin-top: var(--padding);
-    max-height: 600px;
+    max-height: 490px;
     overflow-y: auto;
   }
 
@@ -133,7 +133,7 @@
 
     & + .page-create-item
     {
-      margin-top: 10px;
+      margin-top: 2px;
     }
   }
 
@@ -151,9 +151,6 @@
 
   .page-create-item-icon
   {
-    font-size: 22px;
-    line-height: 1;
-    font-weight: 400;
     position: relative;
     top: -2px;
     left: 4px;

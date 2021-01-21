@@ -4,7 +4,7 @@
     <div v-if="!loading">
       <div class="ui-modules-select-items">
         <button type="button" v-for="item in types" class="ui-modules-select-item" @click="onSelect(item)">
-          <i class="ui-modules-select-item-icon" :class="item.icon"></i>
+          <ui-icon class="ui-modules-select-item-icon" :symbol="item.icon" :size="22" />
           <span class="ui-modules-select-item-text">
             {{item.name | localize}}
             <span v-if="item.description" v-localize="item.description"></span>
@@ -137,9 +137,6 @@
 
   .ui-modules-select-item-icon
   {
-    font-size: 22px;
-    line-height: 1;
-    font-weight: 400;
     position: relative;
     top: -2px;
     left: 4px;

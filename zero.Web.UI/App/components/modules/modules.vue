@@ -4,7 +4,7 @@
       <module-preview v-for="item in items" :key="item.id" :types="moduleTypes" :value="item" @edit="edit" @remove="remove" :disabled="disabled" />
     </div>
     <button v-if="canAdd" type="button" class="ui-modules-start-button" @click="selectModule">
-      <i class="ui-modules-start-button-icon fth-plus"></i>
+      <span class="ui-modules-start-button-icon"><ui-icon symbol="fth-plus" :size="19" /></span>
       <p class="ui-modules-start-button-text"><strong>Add content</strong> <!--<br>Compose the page by adding modules--></p>
     </button>
   </div>
@@ -190,11 +190,11 @@
 
   .ui-modules-start-button-icon
   {
+    display: inline-flex; 
+    justify-content: center;
+    align-items: center;
     width: 52px;
     height: 52px;
-    line-height: 50px !important;
-    font-size: 20px;
-    text-align: center;
     background: var(--color-button-light);
     border-radius: var(--radius);
   }

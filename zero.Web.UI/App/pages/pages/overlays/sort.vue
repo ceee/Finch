@@ -11,9 +11,9 @@
     <p class="pages-sort-text" v-localize="'@ui.sort.text'"></p>
     <div class="pages-sort-items" v-sortable="{ handle: '.is-handle', onUpdate: onSortingUpdated }">
       <div v-for="(item, index) in items" :key="item.id" class="pages-sort-item">
-        <span>{{index + 1}}. &nbsp; <i class="pages-sort-item-icon" :class="item.icon"></i> {{item.name}}</span>
+        <span>{{index + 1}}.  &nbsp; <ui-icon class="pages-sort-item-icon" :symbol="item.icon" :size="15" /> {{item.name}}</span>
         <button type="button" class="pages-sort-item-button is-handle">
-          <i class="-minor fth-more-vertical"></i>
+          <ui-icon class="-minor" symbol="fth-more-vertical" :size="14" />
         </button>
       </div>
     </div>
@@ -162,10 +162,11 @@
     margin: 0 0 20px;
   }
 
-  i.pages-sort-item-icon
+  .pages-sort-item-icon
   {
-    top: 0;
+    position: relative;
+    top: 2px;
     color: var(--color-text);
-    margin-right: 8px;
+    margin: 0 6px;
   }
 </style>

@@ -20,7 +20,9 @@
 
     <div v-if="isOverview" class="page-overview">
       <button type="button" @click="action.action(action)" v-for="action in actions" :key="action.alias" class="page-overview-action">
-        <i class="page-overview-action-icon" :class="action.icon" />
+        <div class="page-overview-action-icon">
+          <ui-icon :symbol="action.icon" :size="24" />
+        </div>
         <p class="page-overview-action-text">
           <strong v-localize="'@page.overview.actions.' + action.alias"></strong>
           <br>
@@ -294,20 +296,20 @@
     grid-template-columns: auto 1fr;
     gap: 35px;
     align-items: center;
+  }
 
-    & + .page-overview-action
-    {
-      margin-top: var(--padding);
-    }
+  .page-overview-action + .page-overview-action
+  {
+    margin-top: var(--padding);
   }
 
   .page-overview-action-icon
   {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     width: 90px;
     height: 90px;
-    line-height: 89px !important;
-    font-size: 22px;
-    text-align: center;
     background: var(--color-box);
     border-radius: var(--radius);
     box-shadow: var(--shadow-short);
@@ -316,14 +318,14 @@
   .page-overview-action-text
   {
     line-height: 1.3;
-    color: var(--color-text-dim);
+    color: var(--color-text-dim); 
+  }
 
-    strong
-    {
-      display: inline-block;
-      margin-bottom: 8px;
-      color: var(--color-text);
-      font-size: var(--font-size-l);
-    }
+  .page-overview-action-text strong
+  {
+    display: inline-block;
+    margin-bottom: 8px;
+    color: var(--color-text);
+    font-size: var(--font-size-l);
   }
 </style>
