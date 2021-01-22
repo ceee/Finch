@@ -3,20 +3,20 @@
     <div ref="editor" :id="id">
       <editor-menu-bubble :editor="editor" :keep-in-bounds="true" v-slot="{ commands, isActive, menu }">
         <div class="ui-rte-overlay-controls theme-dark" :class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`">
-          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.bold() }" @click="commands.bold"><i class="fth-bold"></i></button>
-          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.italic() }" @click="commands.italic"><i class="fth-italic"></i></button>
-          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.underline() }" @click="commands.underline"><i class="fth-underline"></i></button>
-          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.link() }" @click="commands.link"><i class="fth-link"></i></button>
-          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.code() }" @click="commands.code"><i class="fth-code"></i></button>
+          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.bold() }" @click="commands.bold"><ui-icon symbol="fth-bold" /></button>
+          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.italic() }" @click="commands.italic"><ui-icon symbol="fth-italic" /></button>
+          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.underline() }" @click="commands.underline"><ui-icon symbol="fth-underline" /></button>
+          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.link() }" @click="commands.link"><ui-icon symbol="fth-link" /></button>
+          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.code() }" @click="commands.code"><ui-icon symbol="fth-code" /></button>
         </div>
       </editor-menu-bubble>
-      <!--<editor-menu-bar :editor="editor" v-slot="{ commands, isActive }"> // TODO this triggers a recursive loop error when used in multiple properties per editor 
+      <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }"> <!--// TODO this triggers a recursive loop error when used in multiple properties per editor--> 
         <div class="ui-rte-controls">
           <span class="ui-rte-controls-label">Editor</span>
-          <button type="button" title="Undo" class="ui-rte-control" @click="commands.undo" :disabled="commands.undoDepth() < 1"><i class="fth-chevron-left"></i></button>
-          <button type="button" title="Redo" class="ui-rte-control" @click="commands.redo" :disabled="commands.redoDepth() < 1"><i class="fth-chevron-right"></i></button>
+          <button type="button" title="Undo" class="ui-rte-control" @click="commands.undo" :disabled="commands.undoDepth() < 1"><ui-icon symbol="fth-chevron-left" /></button>
+          <button type="button" title="Redo" class="ui-rte-control" @click="commands.redo" :disabled="commands.redoDepth() < 1"><ui-icon symbol="fth-chevron-right" /></button>
         </div>
-      </editor-menu-bar>-->
+      </editor-menu-bar>
       <editor-content class="ui-rte-input" :editor="editor" />
     </div>
   </div>
@@ -28,7 +28,7 @@
   import { debounce as _debounce } from 'underscore';
   import { Editor, EditorContent, EditorMenuBubble, EditorMenuBar } from 'tiptap';
   import { HardBreak } from './rte.extensions.js';
-  import { Bold, Code, Italic, Link, Strike, Underline, History, Placeholder } from 'tiptap-extensions';
+  import { Bold, Code, Italic, Link, Strike, Underline, History, Placeholder, HorizontalRule, ListItem, BulletList, OrderedList, Heading } from 'tiptap-extensions';
 
 
   export default {
@@ -98,7 +98,14 @@
         new Italic(),
         new Strike(),
         new Underline(),
-        new History()
+        new History(),
+        new ListItem(),
+        new BulletList(),
+        new OrderedList(),
+        new HorizontalRule(),
+        new Heading({
+          levels: [2, 3, 4],
+        })
       ];
 
       if (this.placeholder)
@@ -302,5 +309,54 @@
   {
     background: var(--color-box);
     color: var(--color-text);
+  }
+
+  .ui-rte-input .ProseMirror
+  {
+    > *
+    {
+      margin: 1rem 0;
+    }
+
+    > :first-child
+    {
+      margin-top: 0;
+    }
+    > :last-child
+    {
+      margin-bottom: 0;
+    }
+
+    h1,h2,h3,h4,h5,h6
+    {
+      margin-bottom: .5rem;
+      font-weight: bold;
+    }
+
+    h1 
+    {
+      font-size: 1.4em;
+    }
+
+    h2 
+    {
+      font-size: 1.2em;
+    }
+
+    h3
+    {
+      font-size: 1.1em;
+    }
+
+    h4, h5, h6
+    {
+      font-size: 1em;
+    } 
+
+    hr
+    {
+      border-bottom-style: dashed;
+      border-bottom-color: var(--color-line-dashed);
+    }
   }
 </style>
