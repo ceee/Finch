@@ -1,11 +1,13 @@
 ﻿<template>
   <div class="ui-module-preview-text">
-    <article class="-text" v-if="text" v-html="text"></article>
-    <article class="-subline" v-if="subline" v-html="subline"></article>
+    <article class="-text" v-if="text" v-html="textContent"></article>
+    <article class="-subline" v-if="subline" v-html="sublineContent"></article>
   </div>
 </template>
 
 <script>
+  import Strings from 'zero/helpers/strings.js';
+
   export default {
     name: 'uiModulePreviewText',
 
@@ -15,6 +17,21 @@
       },
       subline: {
         type: String
+      },
+      html: {
+        type: Boolean,
+        default: false
+      }
+    },
+
+    computed: {
+      textContent()
+      {
+        return this.html ? this.text : Strings.htmlToText(this.text);
+      },
+      sublineContent()
+      {
+        return this.html ? this.subline : Strings.htmlToText(this.subline);
       }
     }
   }

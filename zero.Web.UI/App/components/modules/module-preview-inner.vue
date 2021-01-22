@@ -9,27 +9,32 @@
       },
       template: {
         type: String,
-        required: true
+        default: null
       }
     },
 
     render: function (h)
     {
+      if (!this.template)
+      {
+        return;
+      }
+
       return h(
-      {
-        template: '<div class="ui-module-preview-inner">' + this.template + '</div>',
-        props: {
-          model: {
-            type: Object,
-            default: () => { }
+        {
+          template: '<div class="ui-module-preview-inner">' + this.template + '</div>',
+          props: {
+            model: {
+              type: Object,
+              default: () => { }
+            }
           }
-        }
-      },
-      {
-        props: {
-          model: this.value
-        }
-      });
+        },
+        {
+          props: {
+            model: this.value
+          }
+        });
     },
   }
 </script>

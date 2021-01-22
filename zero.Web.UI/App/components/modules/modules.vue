@@ -1,7 +1,7 @@
 ﻿<template>
-  <div class="ui-modules-inner">
+  <div v-if="loaded" class="ui-modules-inner">
     <div v-if="items.length" class="ui-modules-inner-sortable" v-sortable="{ onUpdate: onSortingUpdated }">
-      <module-preview v-for="item in items" :key="item.id" :types="moduleTypes" :value="item" @edit="edit" @remove="remove" :disabled="disabled" />
+      <module-preview v-for="item in items" :key="item.id" :types="moduleTypes" :value="item" @edit="edit" @remove="remove" @isActive="onChange" :disabled="disabled" />
     </div>
     <button v-if="canAdd" type="button" class="ui-modules-start-button" @click="selectModule">
       <span class="ui-modules-start-button-icon"><ui-icon symbol="fth-plus" :size="19" /></span>
@@ -42,6 +42,7 @@
 
 
     data: () => ({
+      loaded: false,
       items: [],
       moduleTypes: []
     }),
@@ -69,6 +70,7 @@
       {
         this.moduleTypes = res;
         this.setup(this.value);
+        this.loaded = true;
       });
     },
 
@@ -108,10 +110,8 @@
 
       edit(module, model, isAdd)
       {
-        const alias = 'modules.' + module.alias;
+        const alias = 'module.' + module.alias;
         const editor = this.zero.getEditor(alias);
-
-        console.info(editor);
 
         if (!editor)
         {

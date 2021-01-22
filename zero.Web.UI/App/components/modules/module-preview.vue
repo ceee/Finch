@@ -1,8 +1,11 @@
 ﻿<template>
   <div class="ui-module-item" v-if="!loading" :data-module="alias" :class="{'can-edit': canEdit }">
     <div class="ui-module-item-content" v-if="module" @click="emit('edit')">
-      <span v-if="!hasPreviewSettings || renderer.preview.label !== false" class="ui-module-item-header" v-localize="module.name"></span>
-      <module-preview-inner v-if="tryRender" :template="renderer.preview.template" :value="value" />
+      <span v-if="!preview || !preview.hideLabel" class="ui-module-item-header" v-localize="module.name"></span>
+      <module-preview-inner v-if="tryRender && typeof preview.template === 'string'" :template="preview.template" :value="value" />
+      <div v-if="tryRender && typeof preview.template !== 'string'" class="ui-module-preview-inner">
+        <component :is="preview.template" :model="value" />
+      </div>
     </div>
     <div class="ui-module-item-content" v-else>
       <span class="ui-module-item-header is-error"><i class="fth-alert-circle"></i> {{alias}}</span>
@@ -56,7 +59,8 @@
     data: () => ({
       loading: true,
       module: {},
-      renderer: {}
+      renderer: {},
+      preview: null
     }),
 
 
@@ -73,13 +77,9 @@
       {
         return this.value.moduleTypeAlias;
       },
-      hasPreviewSettings()
-      {
-        return this.module && this.renderer && typeof this.renderer.preview === 'object';
-      },
       tryRender()
       {
-        return this.hasPreviewSettings && this.renderer.preview.template;
+        return this.preview && this.preview.template;
       },
       canEdit()
       {
@@ -100,7 +100,13 @@
       {
         this.loading = true;
         this.module = _find(this.types, x => x.alias == this.alias);
-        this.renderer = null; // TODO zero.renderers['module.' + this.alias];
+        this.renderer = this.zero.getEditor('module.' + this.alias);
+
+        if (this.renderer)
+        {
+          this.preview = this.renderer.previewOptions;
+        }
+
         this.$nextTick(() => this.loading = false);
       },
 

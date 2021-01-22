@@ -7,6 +7,12 @@ class Editor
   #alias;
   #prefix;
 
+  #preview = {
+    icon: null,
+    template: null,
+    hideLabel: false
+  };
+
   /**
    * Overrides the string generation for the label
    */
@@ -36,6 +42,11 @@ class Editor
   get alias()
   {
     return this.#alias;
+  }
+
+  get previewOptions()
+  {
+    return this.#preview;
   }
 
 
@@ -213,6 +224,23 @@ class Editor
   {
     this.fields = editor.fields.map(x => new EditorField(x.path).setBase(x));
     this.tabs = editor.tabs.map(x => this._createTab(x.alias, x.name, x.disabled, x.count, x.component));
+    this.#preview = { ...editor.previewOptions };
+    return this;
+  }
+
+
+  /**
+   * Create a preview for this editor
+   * This is primarly used for <ui-modules /> module previews
+   * @param {string|object} template - A vue template string (`model` is passed as property for the module content) or a custom vue component
+   * @param {object} [options] - Custom options
+   * @param {number} [options.icon] - Custom icon
+   * @param {number} [options.hideLabel=false] - Whether to hide the displayed module-type label in the preview
+   * @returns {Editor}
+   */
+  preview(template, options)
+  {
+    this.#preview = { ...this.#preview, template, ...options };
     return this;
   }
 

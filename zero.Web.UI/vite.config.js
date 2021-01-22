@@ -63,7 +63,8 @@ const config = {
   plugins: [createVuePlugin(), ...zeroPlugins],
   alias: {
     '/@zero/': path.resolve(__dirname, 'app/'),
-    ...pluginAliases
+    ...pluginAliases,
+    'vue': 'vue/dist/vue.esm.js'
   },
   resolvers: [aliasResolver],
   rollupOutputOptions: {
