@@ -2,14 +2,17 @@
   <figure class="ui-module-preview-figure" :class="{'has-image': imageSource != null}">
     <img v-if="imageSource" :src="imageSource" class="-image" />
     <figcaption>
-      <article class="-text" v-if="text" v-html="text"></article>
-      <article class="-subline" v-if="subline">{{subline.replace(/<\/?[^>]+>/ig, " ")}}</article>
+      <p>
+        <span class="-text" v-if="text" v-html="textContent"></span>
+        <span class="-subline" v-if="subline" v-html="sublineContent"></span>
+      </p>
     </figcaption>
   </figure>
 </template>
 
 <script>
-  import MediaApi from 'zero/api/media.js'
+  import MediaApi from 'zero/api/media.js';
+  import Strings from 'zero/helpers/strings.js';
 
 
   export default {
@@ -24,12 +27,27 @@
       },
       image: {
         type: String
+      },
+      html: {
+        type: Boolean,
+        default: false
       }
     },
 
     data: () => ({
       imageSource: null
     }),
+
+    computed: {
+      textContent()
+      {
+        return this.html ? this.text : Strings.htmlToText(this.text);
+      },
+      sublineContent()
+      {
+        return this.html ? this.subline : Strings.htmlToText(this.subline);
+      }
+    },
 
     watch: {
       image(val)

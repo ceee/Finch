@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-module-preview-text">
-    <article class="-text" v-if="text" v-html="textContent"></article>
-    <article class="-subline" v-if="subline" v-html="sublineContent"></article>
+    <p class="-text" v-if="text" v-html="textContent"></p>
+    <p class="-subline" v-if="subline" v-html="sublineContent"></p>
   </div>
 </template>
 
@@ -48,10 +48,11 @@
 
     }
 
-    .-subline
+    p.-subline
     {
       color: var(--color-text-dim);
       font-size: var(--font-size-s);
+      margin-top: 0.2em;
     }
 
     .-text, .-subline
