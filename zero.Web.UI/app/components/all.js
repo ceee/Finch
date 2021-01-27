@@ -17,6 +17,7 @@ import uiRte from './forms/rte.vue';
 import uiSearch from './forms/search.vue';
 import uiTags from './forms/tags.vue';
 import uiToggle from './forms/toggle.vue';
+import uiSelect from './forms/select.vue';
 
 import uiModulePreviewFigure from './modules/predefined/module-preview-figure.vue';
 import uiModulePreviewHeadline from './modules/predefined/module-preview-headline.vue';
@@ -83,6 +84,7 @@ export default {
   uiSearch,
   uiTags,
   uiToggle,
+  uiSelect,
 
   uiModulePreviewFigure,
   uiModulePreviewHeadline,
