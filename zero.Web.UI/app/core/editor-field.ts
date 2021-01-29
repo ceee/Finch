@@ -20,6 +20,7 @@ import DateRangePicker from '../editor/fields/daterangepicker.vue';
 import IconPicker from '../editor/fields/iconPicker.vue';
 import LanguagePicker from '../editor/fields/language.vue';
 import PagePicker from '../editor/fields/pagepicker.vue';
+import LinkPicker from '../editor/fields/linkpicker.vue';
 import InputList from '../editor/fields/inputlist.vue';
 import Media from '../editor/fields/media.vue';
 import Modules from '../editor/fields/modules.vue';
@@ -216,16 +217,6 @@ class EditorField
 
 
   /**
-   * Render a link picker
-   * @returns {EditorField}
-   */
-  linkPicker()
-  {
-    return this._setComponent(Link, {});
-  }
-
-
-  /**
    * @typedef {object} EditorSelectItem
    * @param {object} key - Key/Id of the item
    * @param {string} value - Label/Value of the item (can be a translation)
@@ -413,6 +404,18 @@ class EditorField
   pagePicker(options)
   {
     return this._setComponent(PagePicker, { ...options });
+  }
+
+
+  /**
+   * Render a link picker
+   * @param {object} [options] - Custom options
+   * @param {number} [options.limit=1] - Limit of selection
+   * @returns {EditorField}
+   */
+  linkPicker(options)
+  {
+    return this._setComponent(LinkPicker, { ...options });
   }
 
 

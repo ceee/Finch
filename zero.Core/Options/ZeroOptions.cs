@@ -9,7 +9,7 @@ namespace zero.Core.Options
     {
       SupportedLanguages = new string[2] { "en-US", "de-DE" };
       DefaultLanguage = SupportedLanguages[0];
-      TokenExpiration = 60;
+      TokenExpiration = 60 * 3;
       BackofficePath = "/zero";
       ExcludedPaths = new() { };
       Raven = new()

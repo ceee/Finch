@@ -41,6 +41,7 @@ import uiPagepicker from './pickers/pagePicker/pagepicker.vue';
 import uiUserpicker from './pickers/userPicker/userpicker.vue';
 import uiMailtemplatepicker from './pickers/mailPicker/mailpicker.vue';
 import uiSpacepicker from './pickers/spacePicker/spacepicker.vue';
+import uiLinkpicker from './pickers/linkPicker/linkpicker.vue';
 import uiPick from './pickers/pick.vue';
 
 import uiTable from './tables/table.vue';
@@ -110,6 +111,7 @@ export default {
   uiUserpicker,
   uiMailtemplatepicker,
   uiSpacepicker,
+  uiLinkpicker,
   uiPick,
 
   uiTable,

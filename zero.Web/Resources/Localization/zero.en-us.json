@@ -130,6 +130,13 @@
     "raw": "Edit HTML"
   },
 
+  "links": {
+    "providers": {
+      "page": "Pages",
+      "media": "Media"
+    }
+  },
+
   "errors": {
     "idnotfound": "Could not find an entity for the given ID",
     "onsave": {

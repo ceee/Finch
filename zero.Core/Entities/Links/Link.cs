@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace zero.Core.Entities
 {
-  public class Link
+  public class Link : ILink
   {
     public string ProviderAlias { get; set; }
 
@@ -15,7 +15,7 @@ namespace zero.Core.Entities
 
     public string Title { get; set; }
 
-    public Dictionary<string, string> Values { get; set; } = new Dictionary<string, string>();
+    public Dictionary<string, object> Values { get; set; } = new();
   }
 
   public enum LinkTarget
@@ -23,5 +23,21 @@ namespace zero.Core.Entities
     Default = 0,
     Self = 1,
     Blank = 2
+  }
+
+
+  public interface ILink
+  {
+    string ProviderAlias { get; set; }
+
+    LinkTarget Target { get; set; }
+
+    string UrlSuffix { get; set; }
+
+    string Label { get; set; }
+
+    string Title { get; set; }
+
+    Dictionary<string, object> Values { get; set; }
   }
 }
