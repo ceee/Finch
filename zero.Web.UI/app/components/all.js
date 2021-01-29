@@ -22,6 +22,8 @@ import uiSelect from './forms/select.vue';
 import uiModulePreviewFigure from './modules/predefined/module-preview-figure.vue';
 import uiModulePreviewHeadline from './modules/predefined/module-preview-headline.vue';
 import uiModulePreviewText from './modules/predefined/module-preview-text.vue';
+import uiModulePreviewButton from './modules/predefined/module-preview-button.vue';
+import uiModulePreviewTags from './modules/predefined/module-preview-tags.vue';
 import uiModules from './modules/modules.vue';
 
 import uiDropdownButton from './overlays/dropdown-button.vue';
@@ -89,6 +91,8 @@ export default {
   uiModulePreviewFigure,
   uiModulePreviewHeadline,
   uiModulePreviewText,
+  uiModulePreviewButton,
+  uiModulePreviewTags,
   uiModules,
 
   uiDropdownButton,

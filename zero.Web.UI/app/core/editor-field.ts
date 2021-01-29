@@ -26,6 +26,7 @@ import Modules from '../editor/fields/modules.vue';
 import Nested from '../editor/fields/nested.vue';
 import State from '../editor/fields/state.vue';
 import Tags from '../editor/fields/tags.vue';
+import Link from '../editor/fields/link.vue';
 
 
 class EditorField
@@ -211,6 +212,16 @@ class EditorField
   rte()
   {
     return this._setComponent(Rte);
+  }
+
+
+  /**
+   * Render a link picker
+   * @returns {EditorField}
+   */
+  linkPicker()
+  {
+    return this._setComponent(Link, {});
   }
 
 

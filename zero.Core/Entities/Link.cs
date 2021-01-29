@@ -11,6 +11,8 @@ namespace zero.Core.Entities
 
     public string UrlSuffix { get; set; }
 
+    public string Label { get; set; }
+
     public string Title { get; set; }
 
     public Dictionary<string, string> Values { get; set; } = new Dictionary<string, string>();
