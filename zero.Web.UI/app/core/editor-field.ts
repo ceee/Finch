@@ -411,6 +411,11 @@ class EditorField
    * Render a link picker
    * @param {object} [options] - Custom options
    * @param {number} [options.limit=1] - Limit of selection
+   * @param {boolean} [options.title=true] - Allow input of custom link title
+   * @param {boolean} [options.target=true] - Allow selection of the link target
+   * @param {boolean} [options.label=false] - Allow input of a custom label for button generation
+   * @param {boolean} [options.suffix=false] - Allow input of custom link URL suffix (query or hash)
+   * @param {string[]} [options.areas] - Limit link areas to the specified values (built-in are zero.pages, zero.media and zero.url)
    * @returns {EditorField}
    */
   linkPicker(options)

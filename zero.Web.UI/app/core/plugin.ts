@@ -7,6 +7,7 @@ class Plugin
   routes = [];
   editors = [];
   lists = [];
+  linkAreas = [];
 
 
   constructor(name)
@@ -54,9 +55,9 @@ class Plugin
   /*
    * Add a new vue list renderer to the global configuration 
    */
-  addList(config)
+  addList(list)
   {
-    this.lists.push(config);
+    this.lists.push(list);
   }
 
 
@@ -86,6 +87,15 @@ class Plugin
   addRoutes(routes)
   {
     routes.forEach(route => this.addRoute(route));
+  }
+
+
+  /*
+   * Add a new link area
+   */
+  addLinkArea(area)
+  {
+    this.linkAreas.push(area);
   }
 };
 

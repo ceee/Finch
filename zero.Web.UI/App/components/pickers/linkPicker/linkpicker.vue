@@ -18,7 +18,7 @@
   import { extend as _extend, isArray as _isArray, isEmpty as _isEmpty, clone as _clone } from 'underscore';
 
   export default {
-    name: 'uiPagepicker',
+    name: 'uiLinkpicker',
 
     props: {
       value: {
@@ -28,6 +28,26 @@
       limit: {
         type: Number,
         default: 1
+      },
+      title: {
+        type: Boolean,
+        default: true
+      },
+      label: {
+        type: Boolean,
+        default: false
+      },
+      target: {
+        type: Boolean,
+        default: true
+      },
+      suffix: {
+        type: Boolean,
+        default: false
+      },
+      areas: {
+        type: Array,
+        default: () => []
       },
       disabled: {
         type: Boolean,
@@ -121,7 +141,15 @@
           closeLabel: '@ui.close',
           component: LinkpickerOverlay,
           display: 'editor',
-          model: this.multiple ? id : this.value
+          model: this.multiple ? id : this.value,
+          options: {
+            limit: this.limit,
+            label: this.label,
+            title: this.title,
+            target: this.target,
+            suffix: this.suffix,
+            areas: this.areas
+          }
         }, typeof this.options === 'object' ? this.options : {});
 
         return Overlay.open(options).then(value =>

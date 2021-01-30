@@ -1,6 +1,13 @@
 {
   "zero": {
-    "name": "zero"
+    "name": "zero",
+
+    "config": {
+      "linkareas": {
+        "pages": "Pages",
+        "media": "Media"
+      }
+    }
   },
 
   "ui": {

@@ -149,7 +149,7 @@
       color: var(--color-text);
       background: var(--color-box);
       box-shadow: var(--shadow-short);
-      border-top: 3px solid var(--color-primary);
+      //border-top: 3px solid var(--color-primary);
 
       .ui-tabs-list-item-count
       {

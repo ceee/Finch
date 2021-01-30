@@ -128,6 +128,8 @@ class Zero
     // append lists
     plugin.lists.forEach(x => this.addOrReplace(this.#lists, x, 'alias'));
 
+    // append 
+
     console.log(`[zero] Installed %c${plugin.name}%cplugin`, 'font-style:italic;');
   }
 

@@ -15,10 +15,7 @@
     props: {
       value: [String, Number, Object],
       items: [Array, Function],
-      entity: {
-        type: Object,
-        required: true
-      },
+      entity: Object,
       disabled: Boolean,
       emptyOption: {
         type: Boolean,
@@ -57,21 +54,17 @@
     methods: {
       rebuild()
       {
-        let items = [];
-
-        if (!this.entity || !this.items)
-        {
-          this.options = items;
-          return;
-        }
-
-        if (typeof this.items === 'function')
+        if (this.entity && typeof this.items === 'function')
         {
           this.options = this.items(this.entity);
         }
-        else
+        else if (typeof this.items !== 'function' && this.items)
         {
           this.options = [...this.items];
+        }
+        else
+        {
+          this.options = [];
         }
       },
 

@@ -98,6 +98,7 @@
         })
         .catch(error =>
         {
+          console.error(error);
           this.setStatus('error', this.items, error);
           // TODO handle errors
         });
