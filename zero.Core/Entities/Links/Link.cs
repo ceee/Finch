@@ -5,7 +5,7 @@ namespace zero.Core.Entities
 {
   public class Link : ILink
   {
-    public string ProviderAlias { get; set; }
+    public string Area { get; set; }
 
     public LinkTarget Target { get; set; }
 
@@ -28,7 +28,7 @@ namespace zero.Core.Entities
 
   public interface ILink
   {
-    string ProviderAlias { get; set; }
+    string Area { get; set; }
 
     LinkTarget Target { get; set; }
 

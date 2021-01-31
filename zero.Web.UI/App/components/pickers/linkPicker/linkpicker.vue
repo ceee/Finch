@@ -22,7 +22,7 @@
 
     props: {
       value: {
-        type: [String, Array],
+        type: [Object, Array],
         default: null
       },
       limit: {
@@ -77,6 +77,7 @@
       },
       canAdd()
       {
+        return true; // TODO
         let count = Array.isArray(this.value) ? this.value.length : (!this.value ? 0 : 1);
         return !this.disabled && count < this.limit;
       }
