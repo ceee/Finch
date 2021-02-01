@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-rte" :disabled="disabled">
     <div ref="editor" :id="id">
-      <editor-menu-bubble :editor="editor" :keep-in-bounds="true" v-slot="{ commands, isActive, menu }">
+      <!--<editor-menu-bubble :editor="editor" :keep-in-bounds="true" v-slot="{ commands, isActive, menu }">
         <div class="ui-rte-overlay-controls theme-dark" :class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`">
           <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.bold() }" @click="commands.bold"><ui-icon symbol="fth-bold" /></button>
           <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.italic() }" @click="commands.italic"><ui-icon symbol="fth-italic" /></button>
@@ -9,12 +9,23 @@
           <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.link() }" @click="commands.link"><ui-icon symbol="fth-link" /></button>
           <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.code() }" @click="commands.code"><ui-icon symbol="fth-code" /></button>
         </div>
-      </editor-menu-bubble>
-      <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }"> <!--// TODO this triggers a recursive loop error when used in multiple properties per editor--> 
+      </editor-menu-bubble>-->
+      <editor-menu-bar v-if="cmds.length > 0" :editor="editor" v-slot="{ commands, isActive }"> <!--// TODO this triggers a recursive loop error when used in multiple properties per editor--> 
         <div class="ui-rte-controls">
-          <span class="ui-rte-controls-label">Editor</span>
-          <button type="button" title="Undo" class="ui-rte-control" @click="commands.undo" :disabled="commands.undoDepth() < 1"><ui-icon symbol="fth-chevron-left" /></button>
-          <button type="button" title="Redo" class="ui-rte-control" @click="commands.redo" :disabled="commands.redoDepth() < 1"><ui-icon symbol="fth-chevron-right" /></button>
+          <div class="ui-rte-control-outer" v-for="cmd in cmds">
+            <button v-if="!cmd.isParent" :data-alias="cmd.alias" type="button" v-localize:title="cmd.title" class="ui-rte-control" :class="{ 'is-active': cmd.isActive(isActive) }" @click="cmd.onClick($event, commands)" :disabled="cmd.disabled(commands)">
+              <ui-icon :symbol="cmd.symbol" :size="cmd.symbolSize" />
+            </button>
+            <ui-dropdown v-if="cmd.isParent" align="right">
+              <template v-slot:button>
+                <button :data-alias="cmd.alias" type="button" v-localize:title="cmd.title" class="ui-rte-control" :class="{ 'is-active': cmd.isActive(isActive) }" :disabled="cmd.disabled(commands)">
+                  <ui-icon :symbol="cmd.symbol" :size="cmd.symbolSize" />
+                </button>
+              </template>
+              <slot name="actions"></slot>
+              <ui-dropdown-button v-for="child in cmd.children" :label="child.title" @click="child.onClick($event, commands)" :disabled="child.disabled(commands)" />
+            </ui-dropdown>
+          </div>
         </div>
       </editor-menu-bar>
       <editor-content class="ui-rte-input" :editor="editor" />
@@ -27,14 +38,13 @@
   import Strings from 'zero/helpers/strings.js';
   import { debounce as _debounce } from 'underscore';
   import { Editor, EditorContent, EditorMenuBubble, EditorMenuBar } from 'tiptap';
-  import { HardBreak } from './rte.extensions.js';
-  import { Bold, Code, Italic, Link, Strike, Underline, History, Placeholder, HorizontalRule, ListItem, BulletList, OrderedList, Heading } from 'tiptap-extensions';
-
+  import { Placeholder } from 'tiptap-extensions';
+  import createConfig from 'zero/config/rte.config.js';
 
   export default {
     name: 'uiRte',
 
-    components: { EditorContent, EditorMenuBubble, EditorMenuBar  },
+    components: { EditorContent, EditorMenuBubble, EditorMenuBar },
 
     props: {
       value: {
@@ -49,13 +59,9 @@
         type: String,
         default: null
       },
-      extensions: {
-        type: Array,
-        default: () => []
-      },
-      disabledExtensions: {
-        type: Array,
-        default: () => []
+      setup: {
+        type: Function,
+        default: () => { }
       }
     },
 
@@ -63,7 +69,9 @@
       id: 'rte-' + Strings.guid(),
       blocked: false,
       onDebouncedChange: null,
-      editor: null
+      editor: null,
+      extensions: [],
+      cmds: []
     }),
 
     watch: {
@@ -89,28 +97,30 @@
 
     mounted()
     {
-      let extensions = [
-        ...this.extensions,
-        new HardBreak(),
-        new Link(),
-        new Bold(),
-        new Code(),
-        new Italic(),
-        new Strike(),
-        new Underline(),
-        new History(),
-        new ListItem(),
-        new BulletList(),
-        new OrderedList(),
-        new HorizontalRule(),
-        new Heading({
-          levels: [2, 3, 4],
-        })
-      ];
+      var config = createConfig();
+
+      if (typeof this.setup === 'function')
+      {
+        this.setup(config);
+      }
+
+      this.extensions = config.extensions;
+      this.cmds = config.commands.map(cmd =>
+      {
+        let params = this.mapCommand(cmd);
+
+        if (cmd.children && cmd.children.length)
+        {
+          params.isParent = true;
+          params.children = cmd.children.map(child => this.mapCommand(child));
+        }
+
+        return params;
+      });
 
       if (this.placeholder)
       {
-        extensions.push(new Placeholder({
+        this.extensions.push(new Placeholder({
           emptyEditorClass: 'is-editor-empty',
           emptyNodeClass: 'is-empty',
           emptyNodeText: this.placeholder,
@@ -119,14 +129,9 @@
         }));
       }
 
-      if (this.disabledExtensions.length)
-      {
-        extensions = extensions.filter(x => this.disabledExtensions.indexOf(x.name) < 0);
-      }
-
       this.editor = new Editor({
         editable: !this.disabled,
-        extensions: extensions,
+        extensions: this.extensions,
         onUpdate: opts => this.onDebouncedChange(opts.getHTML())
       });
 
@@ -144,6 +149,19 @@
         this.blocked = true;
         this.$emit('input', content);
         this.$nextTick(() => this.blocked = false);
+      },
+
+      mapCommand(cmd)
+      {
+        return {
+          alias: cmd.alias,
+          title: cmd.title,
+          symbol: cmd.symbol,
+          symbolSize: cmd.symbolSize || 17,
+          isActive: typeof cmd.isActive === 'function' ? cmd.isActive : () => false,
+          disabled: typeof cmd.disabled === 'function' ? cmd.disabled : () => false,
+          onClick: typeof cmd.onClick === 'function' ? cmd.onClick : () => { }
+        };
       }
     },
 
@@ -156,11 +174,33 @@
 
 <style lang="scss">
 
+  .ui-rte
+  {
+    background: var(--color-input);
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+  }
+
+  .ui-rte:focus-within
+  {
+    background-color: var(--color-input-focus-bg);
+    border: var(--color-input-focus-border);
+    box-shadow: var(--color-input-focus-shadow);
+    outline: none;
+  }
+
   .ui-rte-input
   {
     height: auto;
     min-height: 48px;
     padding-top: 9px;
+    max-height: 420px;
+    overflow-y: auto;
+
+    .ProseMirror:focus
+    {
+      outline: none;
+    }
 
     p
     {
@@ -259,18 +299,11 @@
 
   .ui-rte-controls
   {
-    background: var(--color-input);
-    border-radius: var(--radius) var(--radius) 0 0;
+    background: none;
     padding: 5px 5px 0;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-  }
-
-  .ui-rte-controls + .ui-rte-input
-  {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
   }
 
   .ui-rte-controls-label
@@ -300,15 +333,21 @@
     opacity: .5;
   }
 
-  .ui-rte-control + .ui-rte-control
+  .ui-rte-control-outer + .ui-rte-control-outer
   {
-    margin-left: 5px;
+    margin-left: 5px; 
   }
 
   .ui-rte-control:hover, .ui-rte-control.is-active
   {
-    background: var(--color-box);
+    background: var(--color-box-nested);
     color: var(--color-text);
+  }
+
+  .ui-rte-input
+  {
+    background: none !important;
+    border-radius: 0;
   }
 
   .ui-rte-input .ProseMirror
@@ -355,8 +394,15 @@
 
     hr
     {
+      display: block;
       border-bottom-style: dashed;
       border-bottom-color: var(--color-line-dashed);
+    }
+
+    li p 
+    {
+      display: block;
+      line-height: 1.5;
     }
   }
 </style>

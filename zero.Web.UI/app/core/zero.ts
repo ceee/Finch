@@ -10,7 +10,7 @@ import Vue from 'vue';
 import plugins from './plugins.js';
 //import CommercePlugin from '../../../zero.Commerce/Plugins/zero.Commerce/plugin.js'; // TODO dynPath
 //import TestPlugin from '../../../../Laola/Laola.Backoffice/Plugin/plugin.js'; // TODO dynPath
-import options from './options.js';
+import zeroConfig from '../config/zero.config.js';
 import routerConfig from '../config/router.config.js'
 
 class Zero
@@ -18,7 +18,7 @@ class Zero
   static install;
   static instance;
 
-  config = { ...options };
+  config = { ...zeroConfig };
 
   #vue = null;
   #plugins = [];
@@ -31,7 +31,7 @@ class Zero
 
   constructor(vue, opts)
   {
-    this.config = { ...options, ...opts };
+    this.config = { ...zeroConfig, ...opts };
     this.#vue = vue;
 
     this.use(ZeroPlugin);
