@@ -37,20 +37,20 @@ export default function ()
     ],
 
     commands: [
-      {
-        alias: 'undo',
-        title: '@rte.undo',
-        symbol: 'fth-chevron-left',
-        disabled: cmd => cmd.undoDepth() > 1,
-        onClick: (ev, cmd) => cmd.undo(ev),
-      },
-      {
-        alias: 'redo',
-        title: '@rte.redo',
-        symbol: 'fth-chevron-right',
-        disabled: cmd => cmd.redoDepth() > 1,
-        onClick: (ev, cmd) => cmd.redo(ev)
-      },
+      //{
+      //  alias: 'undo',
+      //  title: '@rte.undo',
+      //  symbol: 'fth-chevron-left',
+      //  disabled: cmd => cmd.undoDepth() > 1,
+      //  onClick: (ev, cmd) => cmd.undo(ev),
+      //},
+      //{
+      //  alias: 'redo',
+      //  title: '@rte.redo',
+      //  symbol: 'fth-chevron-right',
+      //  disabled: cmd => cmd.redoDepth() > 1,
+      //  onClick: (ev, cmd) => cmd.redo(ev)
+      //},
       {
         alias: 'bold',
         title: '@rte.bold',
@@ -75,22 +75,14 @@ export default function ()
         isActive: active => active.underline(),
         onClick: (ev, cmd) => cmd.underline(ev)
       },
-      {
-        alias: 'strikethrough',
-        title: '@rte.strike',
-        symbol: 'fth-zap-off',
-        symbolSize: 14,
-        isActive: active => active.strike(),
-        onClick: (ev, cmd) => cmd.strike(ev)
-      },
-      {
-        alias: 'paragraph',
-        title: '@rte.paragraph',
-        symbol: 'fth-bold',
-        symbolSize: 14,
-        isActive: active => active.paragraph(),
-        onClick: (ev, cmd) => cmd.paragraph(ev)
-      },
+      //{
+      //  alias: 'strikethrough',
+      //  title: '@rte.strike',
+      //  symbol: 'fth-zap-off',
+      //  symbolSize: 14,
+      //  isActive: active => active.strike(),
+      //  onClick: (ev, cmd) => cmd.strike(ev)
+      //},
       {
         alias: 'code',
         title: '@rte.code',
