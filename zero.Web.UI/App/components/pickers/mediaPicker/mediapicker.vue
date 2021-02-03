@@ -87,7 +87,7 @@
 
 
     data: () => ({
-      configuration: {},
+      configuration: null,
       previews: []
     }),
 
@@ -102,7 +102,7 @@
 
     created()
     {
-      this.configuration = _extend(defaultConfig, this.config);
+      this.configuration = JSON.parse(JSON.stringify(_extend(defaultConfig, this.config)));
     },
 
 
@@ -144,6 +144,7 @@
 
         if (!ids || ids.length < 1)
         {
+          this.$emit('previews', this.multiple ? [] : null);
           return;
         }
 
@@ -165,6 +166,8 @@
               this.previews.push(value);
             }
           });
+
+          this.$emit('previews', this.multiple ? this.previews : this.previews[0]);
         });
       },
 
