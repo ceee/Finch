@@ -96,6 +96,10 @@
     },
     "export": {
       "action": "Export"
+    },
+    "parsedinput": {
+      "placeholder": "Enter a value",
+      "placeholder_output": "ID"
     }
   },
 
@@ -545,6 +549,14 @@
     "select_description": "Upload or select",
     "upload_text": "Upload",
     "upload_description": "Upload a new file"
+  },
+
+  "videopicker": {
+    "providers": {
+      "html": "Media upload",
+      "youtube": "YouTube",
+      "vimeo": "Vimeo"
+    }
   },
 
   "application": {

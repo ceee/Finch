@@ -94,6 +94,11 @@ namespace zero.Web
         PluginPath = x.Options.PluginPath
       }).ToList();
 
+      config.Services = new()
+      {
+        YouTubeApiKey = Options.Services.YouTubeApiKey
+      };
+
       return config;
     }
 
@@ -428,6 +433,8 @@ namespace zero.Web
     public Dictionary<string, object> Overrides { get; set; } = new Dictionary<string, object>();
 
     public IList<ZeroVueIconSet> Icons { get; set; } = new List<ZeroVueIconSet>();
+
+    public ZeroVueServices Services { get; set; } = new();
   }
 
 
@@ -499,5 +506,10 @@ namespace zero.Web
     public string Prefix { get; set; }
 
     public HashSet<string> Icons { get; set; } = new();
+  }
+
+  public class ZeroVueServices
+  {
+    public string YouTubeApiKey { get; set; }
   }
 }
