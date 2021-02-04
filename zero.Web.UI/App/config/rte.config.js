@@ -21,7 +21,9 @@ export default function ()
     extensions: [
       new History(),
       new HardBreak(),
-      new Link(), // TODO
+      new Link({
+        target: '_blank'
+      }), // TODO
       new Bold(),
       new Code(),
       new Italic(),
