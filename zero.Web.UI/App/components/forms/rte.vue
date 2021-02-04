@@ -1,36 +1,37 @@
 ﻿<template>
-  <div class="ui-rte" :disabled="disabled">
-    <div :id="id">
-      <!--<editor-menu-bubble :editor="editor" :keep-in-bounds="true" v-slot="{ commands, isActive, menu }">
-        <div class="ui-rte-overlay-controls theme-dark" :class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`">
-          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.bold() }" @click="commands.bold"><ui-icon symbol="fth-bold" /></button>
-          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.italic() }" @click="commands.italic"><ui-icon symbol="fth-italic" /></button>
-          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.underline() }" @click="commands.underline"><ui-icon symbol="fth-underline" /></button>
-          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.link() }" @click="commands.link"><ui-icon symbol="fth-link" /></button>
-          <button type="button" class="ui-rte-overlay-control" :class="{ 'is-active': isActive.code() }" @click="commands.code"><ui-icon symbol="fth-code" /></button>
+  <div class="ui-rte" :id="id" :disabled="disabled">
+
+    <editor-menu-bubble v-if="hasBubble" :editor="editor" :keep-in-bounds="true" v-slot="{ commands, isActive, menu }">
+      <div class="ui-rte-overlay-controls theme-dark" :class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`">
+        <div class="ui-rte-overlay-control-outer" v-for="cmd in cmds" v-if="cmd.bubble && !cmd.isParent" :key="cmd.id">
+          <button type="button" :data-alias="cmd.alias" v-localize:title="cmd.title" class="ui-rte-overlay-control" :class="{ 'is-active': cmd.isActive(isActive) }"  @click="cmd.onClick($event, commands)">
+            <ui-icon :symbol="cmd.symbol" :size="cmd.symbolSize" />
+          </button>
         </div>
-      </editor-menu-bubble>-->
-      <editor-menu-bar v-if="cmds.length > 0 && editor" :editor="editor" v-slot="{ commands, isActive }">
-        <div class="ui-rte-controls">
-          <div class="ui-rte-control-outer" v-for="cmd in cmds" :key="cmd.id">
-            <button type="button" v-if="!cmd.isParent" :data-alias="cmd.alias" v-localize:title="cmd.title" class="ui-rte-control" :class="{ 'is-active': cmd.isActive(isActive) }"
-                    @click="cmd.onClick($event, commands)">
-              <!--// TODO :disabled="cmd.disabled(commands)" | this triggers a recursive loop error when used in multiple properties per editor-->
-              <ui-icon :symbol="cmd.symbol" :size="cmd.symbolSize" />
-            </button>
-            <ui-dropdown v-if="cmd.isParent" align="right">
-              <template v-slot:button>
-                <button :data-alias="cmd.alias" type="button" v-localize:title="cmd.title" class="ui-rte-control" :class="{ 'is-active': cmd.isActive(isActive) }">
-                  <ui-icon :symbol="cmd.symbol" :size="cmd.symbolSize" />
-                </button>
-              </template>
-              <ui-dropdown-button v-for="child in cmd.children" :label="child.title" @click="child.onClick($event, commands)" />
-            </ui-dropdown>
-          </div>
+      </div>
+    </editor-menu-bubble>
+
+    <editor-menu-bar v-if="cmds.length > 0 && editor" :editor="editor" v-slot="{ commands, isActive }">
+      <div class="ui-rte-controls">
+        <div class="ui-rte-control-outer" v-for="cmd in cmds" :key="cmd.id">
+          <button type="button" v-if="!cmd.isParent" :data-alias="cmd.alias" v-localize:title="cmd.title" class="ui-rte-control" :class="{ 'is-active': cmd.isActive(isActive) }" @click="cmd.onClick($event, commands)">
+            <!--// TODO :disabled="cmd.disabled(commands)" | this triggers a recursive loop error when used in multiple properties per editor-->
+            <ui-icon :symbol="cmd.symbol" :size="cmd.symbolSize" />
+          </button>
+          <ui-dropdown v-if="cmd.isParent" align="right">
+            <template v-slot:button>
+              <button :data-alias="cmd.alias" type="button" v-localize:title="cmd.title" class="ui-rte-control" :class="{ 'is-active': cmd.isActive(isActive) }">
+                <ui-icon :symbol="cmd.symbol" :size="cmd.symbolSize" />
+              </button>
+            </template>
+            <ui-dropdown-button v-for="child in cmd.children" :label="child.title" @click="child.onClick($event, commands)" />
+          </ui-dropdown>
         </div>
-      </editor-menu-bar>
-      <editor-content class="ui-rte-input" :editor="editor" />
-    </div>
+      </div>
+    </editor-menu-bar>
+
+    <editor-content class="ui-rte-input" :editor="editor" />
+
   </div>
 </template>
 
@@ -90,6 +91,13 @@
           editable: !value
         })
       },
+    },
+
+    computed: {
+      hasBubble()
+      {
+        return this.cmds.find(x => x.bubble) != null;
+      }
     },
 
     created()
@@ -163,7 +171,8 @@
           symbolSize: cmd.symbolSize || 17,
           isActive: typeof cmd.isActive === 'function' ? cmd.isActive : () => false,
           disabled: typeof cmd.disabled === 'function' ? cmd.disabled : () => false,
-          onClick: typeof cmd.onClick === 'function' ? cmd.onClick : () => { }
+          onClick: typeof cmd.onClick === 'function' ? cmd.onClick : () => { },
+          bubble: cmd.bubble || false
         };
       }
     },

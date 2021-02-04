@@ -57,7 +57,8 @@ export default function ()
         symbol: 'fth-bold',
         symbolSize: 14,
         isActive: active => active.bold(),
-        onClick: (ev, cmd) => cmd.bold(ev)
+        onClick: (ev, cmd) => cmd.bold(ev),
+        bubble: true
       },
       {
         alias: 'italic',
@@ -65,7 +66,8 @@ export default function ()
         symbol: 'fth-italic',
         symbolSize: 14,
         isActive: active => active.italic(),
-        onClick: (ev, cmd) => cmd.italic(ev)
+        onClick: (ev, cmd) => cmd.italic(ev),
+        bubble: true
       },
       {
         alias: 'underline',
@@ -73,7 +75,8 @@ export default function ()
         symbol: 'fth-underline',
         symbolSize: 14,
         isActive: active => active.underline(),
-        onClick: (ev, cmd) => cmd.underline(ev)
+        onClick: (ev, cmd) => cmd.underline(ev),
+        bubble: true
       },
       //{
       //  alias: 'strikethrough',
@@ -89,7 +92,8 @@ export default function ()
         symbol: 'fth-code',
         symbolSize: 14,
         isActive: active => active.code(),
-        onClick: (ev, cmd) => cmd.code(ev)
+        onClick: (ev, cmd) => cmd.code(ev),
+        bubble: true
       },
       {
         alias: 'line',
