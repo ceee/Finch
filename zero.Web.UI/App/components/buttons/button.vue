@@ -2,7 +2,7 @@
   <button :type="buttonType" class="ui-button has-state" :class="buttonClass" :disabled="disabled || state == 'loading'" @click="tryClick">
     <span v-if="label" class="ui-button-text" v-localize:html="label"></span>
     <ui-icon v-if="caret" :symbol="caretSymbol" class="ui-button-caret" />
-    <ui-icon v-if="icon" :symbol="icon" />
+    <ui-icon v-if="icon" :symbol="icon" class="ui-button-icon" />
     <span v-if="!isDefaultState" class="ui-button-state">
       <i v-if="stateDisplay == 'loading'" class="ui-button-progress"></i>
       <ui-icon v-if="stateDisplay == 'success'" symbol="fth-check" />

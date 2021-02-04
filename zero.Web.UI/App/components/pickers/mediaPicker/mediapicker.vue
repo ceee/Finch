@@ -260,6 +260,8 @@
           }
 
           this.onChange(newValue);
+
+          return new Promise(resolve => resolve(newValue));
         });
       }
       

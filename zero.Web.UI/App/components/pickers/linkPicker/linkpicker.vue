@@ -155,7 +155,7 @@
 
         return Overlay.open(options).then(value =>
         {
-          console.info('confirmed: ' + value);
+          return new Promise(resolve => resolve(value));
         });
       }    
     }

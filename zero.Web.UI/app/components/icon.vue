@@ -1,5 +1,5 @@
 ﻿<template>
-  <svg v-if="symbol" class="ui-icon" :width="size" :height="size" :stroke-width="strokeWidth" :data-symbol="symbol">
+  <svg class="ui-icon" :width="size" :height="size" :stroke-width="strokeWidth" :data-symbol="symbol">
     <use v-if="!isFlag" :xlink:href="'#' + symbol.trim()" />
   </svg>
 </template>
@@ -12,7 +12,8 @@
     props: {
       symbol: {
         type: String,
-        default: null
+        default: null,
+        required: true
       },
       size: {
         type: Number,
