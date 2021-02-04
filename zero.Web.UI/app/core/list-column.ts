@@ -175,6 +175,31 @@ class ListColumn
 
 
   /**
+   * Outputs an icon
+   * @param {string} [icon] - Fixed icon name
+   * @param {string} [size=17] - Size of the icon
+   * @returns {ListColumn}
+   */
+  icon(icon, size)
+  {
+    size = size || 17;
+    this.#type = 'icon';
+    this.#asHtml = true;
+    this.#func = (value, opts) =>
+    {
+      let ico = (icon || value).trim();
+      let html = `<svg class="ui-icon ui-table-field-image" width="${size}" height="${size}" stroke-width="2" :data-symbol="${ico}">`;
+      if (ico.indexOf('flag') !== 0)
+      {
+        html += `<use xlink:href="#${ico}" />`;
+      }
+      return html + `</svg>`;
+    };    
+    return this;
+  }
+
+
+  /**
    * Shortcut for text() with predefined label and class
    * @returns {ListColumn}
    */
