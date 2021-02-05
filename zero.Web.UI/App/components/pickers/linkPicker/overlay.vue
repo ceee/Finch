@@ -32,6 +32,9 @@
         <ui-property label="Area" :vertical="true">
           <ui-select v-model="current" :items="areaItems"></ui-select>
         </ui-property>
+      </div>
+
+      <div class="ui-box">
         <div class="ui-linkpicker-overlay-items" v-if="area">
           <ui-tree v-if="area.display === 'tree'" ref="tree" v-bind="treeConfig" :get="getTreeItems" @select="treeConfig.onSelect" />
         </div>
@@ -204,7 +207,7 @@
 
   .ui-linkpicker-overlay-items > .ui-tree
   {
-    margin: 24px -32px 0;
+    margin: 0 -32px 0;
   }
 
   .ui-linkpicker-overlay-items .ui-tree-item.is-selected, .ui-linkpicker-overlay-items .ui-tree-item:hover:not(.is-disabled)
