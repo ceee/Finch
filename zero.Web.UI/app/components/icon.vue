@@ -1,5 +1,5 @@
 ﻿<template>
-  <svg class="ui-icon" :width="size" :height="size" :stroke-width="strokeWidth" :data-symbol="symbol">
+  <svg class="ui-icon" :width="size" :height="size" :stroke-width="stroke" :data-symbol="symbol">
     <use v-if="!isFlag" :xlink:href="'#' + symbol.trim()" />
   </svg>
 </template>
@@ -19,7 +19,7 @@
         type: Number,
         default: 17
       },
-      strokeWidth: {
+      stroke: {
         type: Number,
         default: 2
       }
@@ -41,5 +41,11 @@
     stroke-linecap: round;
     stroke-linejoin: round;
     fill: none;
+  }
+
+  .ui-icon[data-symbol="fth-waffle"]
+  {
+    stroke: none;
+    fill: currentColor;
   }
 </style>
