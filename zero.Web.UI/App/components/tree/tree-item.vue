@@ -6,7 +6,8 @@
     <component :disabled="value.disabled" :is="tag" type="button" :to="value.url" class="ui-tree-item-link" @click="onClick(value, $event)">
       <ui-icon class="ui-tree-item-icon" :symbol="value.icon" />
       <ui-icon v-if="value.modifier" :title="value.modifier.name" class="ui-tree-item-modifier" :symbol="value.modifier.icon" />
-      <span class="ui-tree-item-text">{{value.name | localize}}</span>
+      <span class="ui-tree-item-text">{{value.name | localize}}<span class="ui-tree-item-description" v-if="value.description"><br />{{value.description | localize}}</span></span>
+      
     </component>
     <ui-dot-button :disabled="value.disabled" class="ui-tree-item-actions" v-if="value.hasActions" @click="onActionsClicked(value, $event)" />
   </div>
@@ -182,6 +183,12 @@
     text-overflow: ellipsis;
   }
 
+  .ui-tree-item-description
+  {
+    color: var(--color-text-dim);
+    font-size: var(--font-size-xs);
+  }
+
   .ui-tree-item-toggle
   {
     position: absolute;
@@ -193,7 +200,6 @@
     text-align: right;
     padding-right: 5px;
     transition: color 0.2s ease;
-
     &:hover
     {
       color: var(--color-text);

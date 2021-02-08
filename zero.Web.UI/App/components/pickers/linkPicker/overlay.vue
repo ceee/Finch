@@ -69,7 +69,7 @@
       treeConfig: {
         parent: null,
         active: null,
-        onSelect: (ev) => { console.info(ev); }
+        onSelect: (ev) => { console.info(JSON.parse(JSON.stringify(ev))); }
       },
       search: null,
       link: null,

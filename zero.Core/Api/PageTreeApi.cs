@@ -9,12 +9,18 @@ using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Options;
+using zero.Core.Routing;
 
 namespace zero.Core.Api
 {
   public class PageTreeApi : BackofficeApi, IPageTreeApi
   {
-    public PageTreeApi(IBackofficeStore store) : base(store) { }
+    protected IRoutes Routes { get; set; }
+
+    public PageTreeApi(IBackofficeStore store, IRoutes routes) : base(store)
+    {
+      Routes = routes;
+    }
 
 
     /// <inheritdoc />
@@ -37,6 +43,16 @@ namespace zero.Core.Api
           .SearchIf(x => x.Name, search, "*")
           .OrderBy(x => x.Sort)
           .ToListAsync();
+
+        var urls = await Routes.GetUrls(pages.ToArray());
+        
+        foreach (IPage page in pages)
+        {
+          if (urls.TryGetValue(page, out string url))
+          {
+            page.Url = url;
+          }
+        }
       }
       else
       {
@@ -113,7 +129,8 @@ namespace zero.Core.Api
           IsOpen = openIds.Contains(page.Id),
           IsInactive = !page.IsActive,
           HasActions = true,
-          Modifier = GetModifier(page)
+          Modifier = GetModifier(page),
+          Description = isSearch ? page.Url : null
         });
       }
 
