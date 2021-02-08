@@ -168,5 +168,21 @@ namespace zero.Core.Extensions
 
       return newLineCharsRegex.Replace(input, String.Empty).Trim();
     }
+
+
+    public static string Shorten(this string input, int maxLength)
+    {
+      if (maxLength < 4)
+      {
+        throw new ArgumentOutOfRangeException("maxLength", "Has to be at least 4 characters long");
+      }
+
+      if (String.IsNullOrEmpty(input) || input.Length <= maxLength)
+      {
+        return input;
+      }
+
+      return input.Substring(0, maxLength - 3) + "...";
+    }
   }
 }

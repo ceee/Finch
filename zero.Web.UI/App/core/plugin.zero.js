@@ -17,7 +17,7 @@ plugin.addRoutes(routes);
 
 plugin.install = (vue, zero) =>
 {
-  console.info(vue, zero);
+  
 };
 
 export default plugin;

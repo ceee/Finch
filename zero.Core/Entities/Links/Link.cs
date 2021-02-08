@@ -11,8 +11,6 @@ namespace zero.Core.Entities
 
     public string UrlSuffix { get; set; }
 
-    public string Label { get; set; }
-
     public string Title { get; set; }
 
     public Dictionary<string, object> Values { get; set; } = new();
@@ -33,8 +31,6 @@ namespace zero.Core.Entities
     LinkTarget Target { get; set; }
 
     string UrlSuffix { get; set; }
-
-    string Label { get; set; }
 
     string Title { get; set; }
 
