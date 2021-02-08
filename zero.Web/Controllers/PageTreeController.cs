@@ -16,9 +16,9 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<IList<TreeItem>> GetChildren([FromQuery] string parent = null, [FromQuery] string active = null)
+    public async Task<IList<TreeItem>> GetChildren([FromQuery] string parent = null, [FromQuery] string active = null, [FromQuery] string search = null)
     {
-      return await Api.GetChildren(parent, active);
+      return await Api.GetChildren(parent, active, search);
     }
   }
 }

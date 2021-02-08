@@ -46,6 +46,11 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public async Task<IRoute> GetRoute<T>(T model)
     {
+      if (model == null)
+      {
+        return null;
+      }
+
       Type type = model.GetType();
       IRouteProvider routeProvider = Providers.FirstOrDefault(x => x.AffectedTypes.Any(t => t.IsAssignableFrom(type)));
 

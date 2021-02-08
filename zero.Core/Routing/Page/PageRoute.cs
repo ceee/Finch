@@ -3,19 +3,11 @@ using zero.Core.Entities;
 
 namespace zero.Core.Routing
 {
-  public class PageRoute : IResolvedRoute
+  public class PageRoute : BasePageRoute
   {
     public PageRoute() { }
-
-    public PageRoute(IRoute route)
-    {
-      Route = route;
-    }
-
-    public IPage Page { get; set; }
+    public PageRoute(IRoute route) : base(route) { }
 
     public IList<IPage> Parents { get; set; }
-
-    public IRoute Route { get; set; }
   }
 }

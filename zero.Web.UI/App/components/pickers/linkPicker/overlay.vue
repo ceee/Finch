@@ -8,15 +8,12 @@
     </template>
 
     <div v-if="opened">
-      <div class="ui-box ui-linkpicker-overlay-options">
+      <!--<div class="ui-box ui-linkpicker-overlay-options">
         <ui-property label="Open in a new tab">
           <ui-toggle :value="link.target === 'blank'" @input="onTargetChange" />
         </ui-property>
         <template v-if="showOptions">
           <hr />
-          <ui-property label="Label" :vertical="true">
-            <input v-model="link.label" type="text" class="ui-input" maxlength="160" />
-          </ui-property>
           <ui-property label="Title" :vertical="true">
             <input v-model="link.title" type="text" class="ui-input" maxlength="160" />
           </ui-property>
@@ -27,17 +24,22 @@
           <hr />
           <ui-button label="More options" @click="showOptions=true" caret="down" />
         </div>
-      </div>
-      <div class="ui-box">
-        <ui-property label="Area" :vertical="true">
+      </div>-->
+      <div class="ui-linkpicker-overlay-area">
+        <ui-property :vertical="true">
           <ui-select v-model="current" :items="areaItems"></ui-select>
         </ui-property>
       </div>
 
       <div class="ui-box">
-        <div class="ui-linkpicker-overlay-items" v-if="area">
-          <ui-tree v-if="area.display === 'tree'" ref="tree" v-bind="treeConfig" :get="getTreeItems" @select="treeConfig.onSelect" />
-        </div>
+        <ui-property :vertical="true">
+          <ui-search v-model="search" />
+        </ui-property>
+        <ui-property :vertical="true">
+          <div class="ui-linkpicker-overlay-items" v-if="area">
+            <ui-tree v-if="area.display === 'tree'" ref="tree" v-bind="treeConfig" :get="getTreeItems" @select="treeConfig.onSelect" />
+          </div>
+        </ui-property>
       </div>
     </div>
     <!--<div v-if="opened" class="ui-box ui-linkpicker-overlay-items">
@@ -49,6 +51,7 @@
 
 <script>
   import PageTreeApi from 'zero/api/page-tree.js'
+  import { debounce as _debounce } from 'underscore';
 
   export default {
 
@@ -68,12 +71,12 @@
         active: null,
         onSelect: (ev) => { console.info(ev); }
       },
+      search: null,
       link: null,
       template: {
         area: null,
         target: 'default',
         urlSuffix: null,
-        label: null,
         title: null,
         values: {}
       },
@@ -85,12 +88,18 @@
       current()
       {
         this.reloadSelector();
+      },
+      search()
+      {
+        this.debouncedSearch();
       }
     },
 
 
     mounted()
     {
+      this.debouncedSearch = _debounce(() => this.$refs.tree.refresh(), 300);
+
       this.areas = this.zero.config.linkPicker.areas;
       this.areaItems = this.areas.map(x =>
       {
@@ -151,7 +160,7 @@
       // get tree items
       getTreeItems(parent)
       { 
-        return PageTreeApi.getChildren(parent, null).then(res =>
+        return PageTreeApi.getChildren(parent, null, this.search).then(res =>
         {
           res = res.filter(x => x.id !== 'recyclebin');
           
@@ -178,6 +187,34 @@
 </script>
 
 <style lang="scss">
+  .ui-linkpicker-overlay-area
+  {
+    margin-bottom: var(--padding-s);
+  }
+
+  .ui-linkpicker-overlay .ui-property + .ui-property
+  {
+    margin-top: 15px;
+  }
+
+  .ui-linkpicker-overlay-area .ui-native-select
+  {
+    background: var(--color-box);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-short);
+    font-weight: bold;
+  }
+
+  .ui-linkpicker-overlay-area .ui-native-select select
+  {
+    font-weight: bold;
+  }
+
+  .ui-linkpicker-overlay-area .ui-native-select select option
+  {
+    font-weight: normal;
+  }
+
   .ui-linkpicker-overlay content
   {
     padding-top: 0; 
@@ -197,7 +234,7 @@
   .ui-linkpicker-overlay-options .ui-property-content
   {
     display: inline;
-    flex: 0 0 auto;
+    flex: 0 0 auto; 
   }
 
   .ui-linkpicker-overlay-options .ui-property-label

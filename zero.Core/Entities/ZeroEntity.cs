@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Diagnostics;
 
 namespace zero.Core.Entities
@@ -38,6 +39,10 @@ namespace zero.Core.Entities
 
     /// <inheritdoc/>
     public BlueprintConfiguration Blueprint { get; set; }
+
+    /// <inheritdoc/>
+    [JsonIgnore]
+    public string Url { get; set; }
   }
 
 
@@ -94,5 +99,12 @@ namespace zero.Core.Entities
     /// Configuration of the base entity (which this one inherits from)
     /// </summary>
     BlueprintConfiguration Blueprint { get; set; }
+
+    /// <summary>
+    /// [Warning] This field is always empty when bound to the database.
+    /// It is only filled in the app-code for routing.
+    /// </summary>
+    [JsonIgnore]
+    public string Url { get; set; }
   }
 }
