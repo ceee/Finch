@@ -2,14 +2,9 @@
 // ref: 
 // https://github.com/vuejs/vue-router/blob/dev/src/index.js
 
-import Axios from 'axios';
 import ZeroPlugin from './plugin.zero.js';
-import EventHub from '../services/eventhub.js';
 import VueRouter from 'vue-router';
-import Vue from 'vue';
 import plugins from './plugins.js';
-//import CommercePlugin from '../../../zero.Commerce/Plugins/zero.Commerce/plugin.js'; // TODO dynPath
-//import TestPlugin from '../../../../Laola/Laola.Backoffice/Plugin/plugin.js'; // TODO dynPath
 import zeroConfig from '../config/zero.config.js';
 import routerConfig from '../config/router.config.js'
 

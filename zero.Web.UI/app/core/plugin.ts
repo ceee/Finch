@@ -7,7 +7,6 @@ class Plugin
   routes = [];
   editors = [];
   lists = [];
-  linkAreas = [];
 
 
   constructor(name)
@@ -87,15 +86,6 @@ class Plugin
   addRoutes(routes)
   {
     routes.forEach(route => this.addRoute(route));
-  }
-
-
-  /*
-   * Add a new link area
-   */
-  addLinkArea(area)
-  {
-    this.linkAreas.push(area);
   }
 };
 

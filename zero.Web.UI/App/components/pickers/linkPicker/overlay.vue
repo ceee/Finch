@@ -5,6 +5,7 @@
     </template>
     <template v-slot:footer>
       <ui-button type="light onbg" :label="config.closeLabel" :parent="config.rootId" @click="config.hide" />
+      <ui-button type="primary" label="@ui.confirm" @click="onSave" />
     </template>
 
     <div v-if="opened">
@@ -32,31 +33,18 @@
       </div>
 
       <div class="ui-box">
-        <ui-property :vertical="true">
-          <ui-search v-model="search" />
-        </ui-property>
-        <ui-property :vertical="true">
-          <div class="ui-linkpicker-overlay-items" v-if="area">
-            <ui-tree v-if="area.display === 'tree'" ref="tree" v-bind="treeConfig" :get="getTreeItems" @select="treeConfig.onSelect" />
-          </div>
-        </ui-property>
+        <component v-if="area && area.component" :is="area.component" :area="area" :value="link" />
       </div>
     </div>
-    <!--<div v-if="opened" class="ui-box ui-linkpicker-overlay-items">
-      <ui-tree ref="tree" :get="getItems" :parent="config.rootId" @select="onSelect" />
-    </div>-->
   </ui-overlay-editor>
 </template>
 
 
 <script>
-  import PageTreeApi from 'zero/api/page-tree.js'
-  import { debounce as _debounce } from 'underscore';
-
   export default {
 
     props: {
-      model: String,
+      model: Object,
       config: Object
     },
 
@@ -66,12 +54,6 @@
       area: null,
       areas: [],
       areaItems: [],
-      treeConfig: {
-        parent: null,
-        active: null,
-        onSelect: (ev) => { console.info(JSON.parse(JSON.stringify(ev))); }
-      },
-      search: null,
       link: null,
       template: {
         area: null,
@@ -88,18 +70,12 @@
       current()
       {
         this.reloadSelector();
-      },
-      search()
-      {
-        this.debouncedSearch();
       }
     },
 
 
     mounted()
     {
-      this.debouncedSearch = _debounce(() => this.$refs.tree.refresh(), 300);
-
       this.areas = this.zero.config.linkPicker.areas;
       this.areaItems = this.areas.map(x =>
       {
@@ -111,7 +87,7 @@
       this.area = this.areas[0];
       this.current = this.area.alias;
 
-      this.link = JSON.parse(JSON.stringify(this.template));
+      this.link = JSON.parse(JSON.stringify(this.model || this.template));
       this.link.area = this.current;
 
       setTimeout(() => this.opened = true, 300);
@@ -123,60 +99,12 @@
       reloadSelector()
       {
         this.area = this.areas.find(x => x.alias === this.current);
-
-        if (!this.opened)
-        {
-          return;
-        }
-        if (this.area.display === 'tree' && this.$refs.tree)
-        {
-          this.$refs.tree.refresh();
-        }
-        else if (this.area.display === 'list')
-        {
-
-        }
-        else if (this.area.display === 'media')
-        {
-
-        }
-        else
-        {
-          // custom
-        }
       },
 
-      onSelect(item)
+      onSave()
       {
-        this.config.confirm(item);
+        this.config.confirm(this.link);
       },
-
-      // get list items
-      getListItems(search)
-      {
-
-      },
-
-      // get tree items
-      getTreeItems(parent)
-      { 
-        return PageTreeApi.getChildren(parent, null, this.search).then(res =>
-        {
-          res = res.filter(x => x.id !== 'recyclebin');
-          
-          res.forEach(item =>
-          {
-            if (item.id === this.model)
-            {
-              item.isSelected = true;
-            }
-            item.hasActions = false;
-          });
-
-          return res;
-        });
-      },
-
 
       onTargetChange(ev)
       {
@@ -186,7 +114,7 @@
   }
 </script>
 
-<style lang="scss">
+<style>
   .ui-linkpicker-overlay-area
   {
     margin-bottom: var(--padding-s);
@@ -241,30 +169,4 @@
   {
     padding-top: 1px;
   }
-
-  .ui-linkpicker-overlay-items > .ui-tree
-  {
-    margin: 0 -32px 0;
-  }
-
-  .ui-linkpicker-overlay-items .ui-tree-item.is-selected, .ui-linkpicker-overlay-items .ui-tree-item:hover:not(.is-disabled)
-  {
-    background: var(--color-tree-selected);
-  }
-
-  /*.ui-linkpicker-overlay-items .ui-tree-item.is-selected
-  {
-    &:after
-    {
-      font-family: "Feather";
-      content: "\e83e";
-      font-size: 16px;
-      color: var(--color-primary);
-    }
-      
-    .ui-tree-item-text
-    {
-      font-weight: bold;
-    }
-  }*/
 </style>

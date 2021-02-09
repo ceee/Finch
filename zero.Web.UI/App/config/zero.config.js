@@ -15,17 +15,6 @@ export default {
   },
 
   linkPicker: {
-    areas: [
-      {
-        alias: 'zero.pages',
-        name: '@zero.config.linkareas.pages',
-        display: 'tree'
-      },
-      {
-        alias: 'zero.media',
-        name: '@zero.config.linkareas.media',
-        display: 'media'
-      }
-    ]
+    areas: []
   }
 }

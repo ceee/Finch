@@ -7,7 +7,7 @@
         <ui-icon-button v-if="!disabled" @click="remove(preview.id)" icon="fth-x" title="@ui.close" />
       </div>
     </div>-->
-    <ui-select-button v-if="canAdd" icon="fth-plus" :label="limit > 1 ? '@ui.add' : '@ui.select'" @click="pick()" :disabled="disabled" />
+    <ui-select-button v-if="canAdd" icon="fth-plus" :label="limit > 1 ? '@ui.add' : '@ui.select'" @click="onPick()" :disabled="disabled" />
   </div>
 </template>
 
@@ -130,6 +130,23 @@
       },
 
 
+      onPick(id)
+      {
+        this.pick(id).then(res =>
+        {
+          if (this.limit > 1)
+          {
+            this.value.push(res);
+            this.onChange(this.value);
+          }
+          else
+          {
+            this.onChange(res);
+          }
+        });
+      },
+
+
       pick(id)
       {
         if (this.disabled)
@@ -169,7 +186,7 @@
     justify-content: space-between;
     align-items: center;
 
-    .ui-icon-button
+    .ui-icon-button 
     {
       height: 24px;
       width: 24px;
