@@ -1,13 +1,13 @@
 ﻿<template>
   <div class="ui-linkpicker" :class="{'is-disabled': disabled }">
     <input ref="input" type="hidden" :value="value" />
-    <div class="ui-pagepicker-previews" v-if="previews.length > 0">
-      <div v-for="preview in previews" class="ui-pagepicker-preview">
-        <ui-select-button :icon="preview.icon" :label="preview.name" :description="preview.text" :disabled="disabled" @click="onPick(preview.id)" :tokens="{ id: preview.id }" />
+    <div class="ui-linkpicker-previews" v-if="previews.length > 0">
+      <div v-for="preview in previews" class="ui-linkpicker-preview">
+        <ui-select-button :icon="preview.icon" :label="preview.name" :description="preview.text" :disabled="disabled" @click="pick(preview.id)" :tokens="{ id: preview.id }" />
         <ui-icon-button v-if="!disabled" @click="remove(preview.id)" icon="fth-x" title="@ui.close" />
       </div>
     </div>
-    <ui-select-button v-if="canAdd" icon="fth-plus" :label="limit > 1 ? '@ui.add' : '@ui.select'" @click="onPick()" :disabled="disabled" />
+    <ui-select-button v-if="canAdd" icon="fth-plus" :label="limit > 1 ? '@ui.add' : '@ui.select'" @click="pick()" :disabled="disabled" />
   </div>
 </template>
 
@@ -104,6 +104,7 @@
 
         if (!this.value || _isEmpty(this.value))
         {
+          this.$emit('previews', this.multiple ? [] : null);
           this.previews = [];
           return;
         }
@@ -113,6 +114,7 @@
         LinksApi.getPreviews(links).then(res =>
         {
           this.previews = res;
+          this.$emit('previews', this.multiple ? this.previews : this.previews[0]);
         });
       },
 
@@ -129,24 +131,6 @@
         {
           this.onChange(this.multiple ? [] : null);
         }
-      },
-
-
-      onPick(id)
-      {
-        this.pick(id).then(res =>
-        {
-          console.info(JSON.parse(JSON.stringify(res)));
-          if (this.multiple)
-          {
-            this.value.push(res);
-            this.onChange(this.value);
-          }
-          else
-          {
-            this.onChange(res);
-          }
-        });
       },
 
 
@@ -173,9 +157,19 @@
           }
         }, typeof this.options === 'object' ? this.options : {});
 
-        return Overlay.open(options).then(value =>
+        return Overlay.open(options).then(res =>
         {
-          return new Promise(resolve => resolve(value));
+          if (this.multiple)
+          {
+            this.value.push(res);
+            this.onChange(this.value);
+          }
+          else
+          {
+            this.onChange(res);
+          }
+
+          return new Promise(resolve => resolve(res));
         });
       }    
     }
