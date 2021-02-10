@@ -15,7 +15,7 @@
       </ui-property>
     </div>
     <div class="ui-box pages-copy-items">
-      <ui-tree ref="tree" :get="getItems" @select="onSelect" />
+      <ui-tree ref="tree" :get="getItems" @select="onSelect" mode="select" />
     </div>
   </ui-overlay-editor>
 </template>
@@ -39,7 +39,6 @@
 
     data: () => ({
       items: [],
-      selected: [],
       state: 'default',
       cache: {},
       prevItem: null,
@@ -56,18 +55,9 @@
 
     methods: {
 
-      onSelect(item)
+      onSelect(id)
       {
-        item.isSelected = true;
-
-        if (this.prevItem && this.prevItem.id != item.id)
-        {
-          this.prevItem.isSelected = false;
-        }
-
-        this.prevItem = item;
-        this.selected = item;
-        //this.config.confirm(item);
+        this.selected = id;
       },
 
       getItems(parent)
@@ -100,8 +90,6 @@
 
           response.forEach(item =>
           {
-            //item.disabled = true;
-            item.isSelected = false;
             item.disabled = item.id === 'recyclebin' || item.id == this.model.id;
             item.hasActions = false;
           });
@@ -115,7 +103,7 @@
       {
         this.state = 'loading';
 
-        PagesApi.copy(this.model.id, this.selected.id, this.includeDescendants).then(res =>
+        PagesApi.copy(this.model.id, this.selected, this.includeDescendants).then(res =>
         {
           if (res.success)
           {
@@ -154,7 +142,7 @@
   .pages-copy .ui-box
   {
     margin: 0;    
-    padding: 20px var(--padding) 18px; 
+    padding: 20px var(--padding) 18px;
 
     & + .ui-box
     {
@@ -165,27 +153,6 @@
     .ui-tree-item.is-disabled
     {
       opacity: .5;
-    }
-
-    .ui-tree-item.is-selected, .ui-tree-item:hover:not(.is-disabled)
-    {
-      background: var(--color-tree-selected);
-    }
-
-    .ui-tree-item.is-selected
-    {
-      &:after
-      {
-        font-family: "Feather";
-        content: "\e83e";
-        font-size: 16px;
-        color: var(--color-primary);
-      }
-      
-      .ui-tree-item-text
-      {
-        font-weight: bold;
-      }
     }
   }
 

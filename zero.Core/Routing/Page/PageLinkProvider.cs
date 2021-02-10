@@ -1,49 +1,65 @@
 ﻿using Raven.Client.Documents.Session;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using zero.Core.Database;
 using zero.Core.Entities;
+using zero.Core.Extensions;
+using zero.Core.Options;
 
 namespace zero.Core.Routing
 {
   public class PageLinkProvider : ILinkProvider
   {
-    /// <inheritdoc />
-    public string Name { get; } = "@links.providers.page";
-
-    /// <inheritdoc />
-    public string Alias { get; } = "zero.pages";
-
-    protected IZeroStore Store { get; set; }
-
     protected IRoutes Routes { get; set; }
+    protected IZeroOptions Options { get; set; }
 
-
-    public PageLinkProvider(IZeroStore store, IRoutes routes)
+    public PageLinkProvider(IRoutes routes, IZeroOptions options)
     {
-      Store = store;
       Routes = routes;
+      Options = options;
     }
 
 
     /// <inheritdoc />
-    public async Task<string> ResolveLink(ILink link)
+    public bool CanProcess(ILink link) => link.Area == "zero.pages";
+
+
+    /// <inheritdoc />
+    public async Task<string> Resolve(ILink link)
     {
-      if (!link.Values.TryGetValue("pageId", out object pageIdObj))
+      return await Routes.GetUrl<IPage>(link.Values.GetValueOrDefault<string>("id"));
+    }
+
+
+    /// <inheritdoc />
+    public async Task<PreviewModel> Preview(IAsyncDocumentSession session, ILink link)
+    {
+      string id = link.Values.GetValueOrDefault<string>("id");
+
+      if (id.IsNullOrEmpty())
       {
         return null;
       }
 
-      string pageId = pageIdObj.ToString();
+      IPage page = await session.LoadAsync<IPage>(id);
 
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-      IPage page = await session.LoadAsync<IPage>(pageId);
-      IRoute route = await Routes.GetRoute(page);
+      if (page == null)
+      {
+        return null;
+      }
 
-      return route.Url;
+      PageType pageType = Options.Pages.GetAllItems().FirstOrDefault(x => x.Alias == page.PageTypeAlias);
+
+      string url = await Routes.GetUrl<IPage>(page);
+
+      return new()
+      {
+        Id = page.Id,
+        Icon = pageType?.Icon ?? "fth-folder",
+        Name = page.Name,
+        Text = url
+      };
     }
   }
 }

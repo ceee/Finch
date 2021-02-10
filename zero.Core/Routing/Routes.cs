@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using zero.Core.Api;
 using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -40,7 +39,39 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
+    public async Task<string> GetUrl<T>(string id) where T : IZeroIdEntity => (await GetRoute(id))?.Url;
+
+
+    /// <inheritdoc />
     public async Task<Dictionary<T, string>> GetUrls<T>(params T[] models) => (await GetRoutes(models)).ToDictionary(x => x.Key, x => x.Value?.Url);
+
+
+    /// <inheritdoc />
+    public async Task<IRoute> GetRoute<T>(string id) where T : IZeroIdEntity
+    {
+      if (id.IsNullOrEmpty())
+      {
+        return null;
+      }
+
+      Type type = typeof(T);
+      IRouteProvider routeProvider = Providers.FirstOrDefault(x => x.AffectedTypes.Any(t => t.IsAssignableFrom(type)));
+
+      if (routeProvider == null)
+      {
+        return null;
+      }
+
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
+      T model = await session.LoadAsync<T>(id);
+
+      if (model == null)
+      {
+        return null;
+      }
+
+      return await routeProvider.GetRoute(session, model);
+    }
 
 
     /// <inheritdoc />
@@ -246,10 +277,20 @@ namespace zero.Core.Routing
     /// </summary>
     Task<string> GetUrl<T>(T model);
 
+    /// <summary>
+    /// Get the URL for an entity
+    /// </summary>
+    Task<string> GetUrl<T>(string id) where T : IZeroIdEntity;
+
     /// <summary> 
     /// Get the route object for an entity
     /// </summary>
     Task<IRoute> GetRoute<T>(T model);
+
+    /// <summary> 
+    /// Get the route object for an entity
+    /// </summary>
+    Task<IRoute> GetRoute<T>(string id) where T : IZeroIdEntity;
 
     /// <summary>
     /// Get URLs for multiple entities

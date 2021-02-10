@@ -33,7 +33,7 @@
       </div>
 
       <div class="ui-box">
-        <component v-if="area && area.component" :is="area.component" :area="area" :value="link" />
+        <component v-if="area && area.component" :is="area.component" :area="area" v-model="link" />
       </div>
     </div>
   </ui-overlay-editor>
@@ -89,6 +89,8 @@
 
       this.link = JSON.parse(JSON.stringify(this.model || this.template));
       this.link.area = this.current;
+
+      console.info(JSON.parse(JSON.stringify(this.link)));
 
       setTimeout(() => this.opened = true, 300);
     },

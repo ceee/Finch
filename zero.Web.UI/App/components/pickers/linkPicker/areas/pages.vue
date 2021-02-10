@@ -4,7 +4,7 @@
       <ui-search v-model="search" />
     </ui-property>
     <ui-property :vertical="true">
-      <ui-tree ref="tree" v-bind="treeConfig" :get="getTreeItems" @select="onSelect" class="ui-linkpicker-area-pages-tree" />
+      <ui-tree ref="tree" v-bind="treeConfig" :get="getTreeItems" @select="onSelect" :selection="selection" class="ui-linkpicker-area-pages-tree" />
     </ui-property>
   </div>
 </template>
@@ -29,9 +29,11 @@
     },
 
     data: () => ({
+      selection: [],
       treeConfig: {
         parent: null,
-        active: null
+        active: null,
+        mode: 'select'
       },
       search: null,
       debouncedSearch: null
@@ -41,22 +43,40 @@
       search()
       {
         this.debouncedSearch();
+      },
+      value()
+      {
+        this.selection = [this.value.values.id];
       }
     },
 
     mounted()
     {
       this.debouncedSearch = _debounce(() => this.$refs.tree.refresh(), 300);
+      this.selection = this.value.values.id ? [this.value.values.id] : [];
     },
 
     methods: {
 
-      onSelect(item)
+      isValid()
       {
-        this.value.values = {
-          id: item.id
-        };
+        return this.selection.length > 0;
+      },
+
+      onSelect(id)
+      {
+        if (id)
+        {
+          this.selection = [id];
+          this.value.values = { id };
+        }
+        else
+        {
+          this.selection = [];
+          this.value.values = { id: null };
+        }
         this.$emit('change', this.value);
+        this.$emit('input', this.value);
       },
 
       getTreeItems(parent)
@@ -67,10 +87,6 @@
 
           res.forEach(item =>
           {
-            //if (item.id === this.model)
-            //{
-            //  item.isSelected = true;
-            //}
             item.hasActions = false;
           });
 
@@ -91,5 +107,34 @@
   .ui-linkpicker-area-pages-tree .ui-tree-item:hover:not(.is-disabled)
   {
     background: var(--color-tree-selected);
+  }
+
+  .ui-linkpicker-area-pages-tree
+  {
+    .ui-tree-item.is-disabled
+    {
+      opacity: .5;
+    }
+
+    .ui-tree-item.is-selected, .ui-tree-item:hover:not(.is-disabled)
+    {
+      background: var(--color-tree-selected);
+    }
+
+    .ui-tree-item.is-selected
+    {
+      &:after
+      {
+        font-family: "Feather";
+        content: "\e83e";
+        font-size: 16px;
+        color: var(--color-primary);
+      }
+      
+      .ui-tree-item-text
+      {
+        font-weight: bold;
+      }
+    }
   }
 </style>

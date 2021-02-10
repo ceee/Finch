@@ -28,6 +28,10 @@
       activeId: {
         type: String,
         default: null
+      },
+      selected: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -62,7 +66,7 @@
           'has-children': item.hasChildren,
           'is-inactive': item.isInactive,
           'is-open': item.isOpen,
-          'is-selected': item.isSelected,
+          'is-selected': this.selected || item.isSelected,
           'is-disabled': item.disabled,
           'is-active': this.isLink && ((!!item.id && item.id === this.activeId) || item.id == this.$route.params.id || (item.url && !item.url.params && item.url.name === this.$route.name))
         };
@@ -128,7 +132,7 @@
       opacity: .5;
     }
 
-    &.is-active:before
+    &.is-active:before, &.is-selected:before
     {
       content: ' ';
       position: absolute;
@@ -139,17 +143,19 @@
       background: var(--color-tree-selected);
     }
 
-    /*&.is-active:after
+    &.is-selected:after
     {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      display: inline-block;
-      background: var(--color-tree-selected-line);
-    }*/
+      font-family: "Feather";
+      content: "\e83e";
+      font-size: 16px;
+      color: var(--color-primary); 
+      z-index: 2;
+    }
+
+    &.is-selected .ui-tree-item-text
+    {
+      font-weight: bold;
+    }
   }
 
   .ui-tree-item-link

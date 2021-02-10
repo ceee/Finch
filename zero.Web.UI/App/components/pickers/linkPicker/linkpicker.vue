@@ -1,12 +1,12 @@
 ﻿<template>
   <div class="ui-linkpicker" :class="{'is-disabled': disabled }">
     <input ref="input" type="hidden" :value="value" />
-    <!--<div class="ui-pagepicker-previews" v-if="previews.length > 0">
+    <div class="ui-pagepicker-previews" v-if="previews.length > 0">
       <div v-for="preview in previews" class="ui-pagepicker-preview">
-        <ui-select-button :icon="preview.icon" :label="preview.name" :description="preview.text" :disabled="disabled" @click="pick(preview.id)" :tokens="{ id: preview.id }" />
+        <ui-select-button :icon="preview.icon" :label="preview.name" :description="preview.text" :disabled="disabled" @click="onPick(preview.id)" :tokens="{ id: preview.id }" />
         <ui-icon-button v-if="!disabled" @click="remove(preview.id)" icon="fth-x" title="@ui.close" />
       </div>
-    </div>-->
+    </div>
     <ui-select-button v-if="canAdd" icon="fth-plus" :label="limit > 1 ? '@ui.add' : '@ui.select'" @click="onPick()" :disabled="disabled" />
   </div>
 </template>
@@ -14,6 +14,7 @@
 
 <script>
   import LinkpickerOverlay from './overlay.vue';
+  import LinksApi from 'zero/api/links.js';
   import Overlay from 'zero/helpers/overlay.js';
   import { extend as _extend, isArray as _isArray, isEmpty as _isEmpty, clone as _clone } from 'underscore';
 
@@ -77,7 +78,6 @@
       },
       canAdd()
       {
-        return true; // TODO
         let count = Array.isArray(this.value) ? this.value.length : (!this.value ? 0 : 1);
         return !this.disabled && count < this.limit;
       }
@@ -101,17 +101,19 @@
       updatePreviews()
       {
         this.previews = [];
-        //if (!this.value || _isEmpty(this.value))
-        //{
-        //  this.previews = [];
-        //  return;
-        //}
 
-        //let ids = _isArray(this.value) ? this.value : [this.value];
-        //PagesApi.getPreviews(ids).then(res =>
-        //{
-        //  this.previews = res;
-        //});
+        if (!this.value || _isEmpty(this.value))
+        {
+          this.previews = [];
+          return;
+        }
+
+        let links = Array.isArray(this.value) ? this.value : [this.value];
+
+        LinksApi.getPreviews(links).then(res =>
+        {
+          this.previews = res;
+        });
       },
 
 
@@ -125,7 +127,7 @@
         }
         else
         {
-          this.onChange(this.limit > 1 ? [] : null);
+          this.onChange(this.multiple ? [] : null);
         }
       },
 
@@ -134,7 +136,8 @@
       {
         this.pick(id).then(res =>
         {
-          if (this.limit > 1)
+          console.info(JSON.parse(JSON.stringify(res)));
+          if (this.multiple)
           {
             this.value.push(res);
             this.onChange(this.value);

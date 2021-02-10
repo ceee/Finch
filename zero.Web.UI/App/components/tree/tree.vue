@@ -6,8 +6,8 @@
     <slot></slot>
     <span v-if="status === 'loading'" class="ui-tree-item-loading"><i></i></span>
     <template v-for="item in items">
-      <ui-tree-item :value="item" @rightclick="onRightClicked" @click="onSelect(item, $event)" @actions="onActionsClicked" @open="toggle" :active-id="active" />
-      <ui-tree v-if="item.hasChildren && item.isOpen && status != 'loading'" :get="get" :parent="item.id" :depth="depth + 1" :active="active" @select="onSelect">
+      <ui-tree-item :value="item" @rightclick="onRightClicked" @click="onSelect(item, $event)" @actions="onActionsClicked" @open="toggle" :active-id="active" :selected="selection.indexOf(item.id) > -1" />
+      <ui-tree v-if="item.hasChildren && item.isOpen && status != 'loading'" v-bind="{ get, parent: item.id, depth: depth + 1, active, onSelect, mode, selection, selectionLimit }">
         <template v-slot:actions="props">
           <slot name="actions" v-bind="props"></slot>
         </template>
@@ -51,6 +51,18 @@
       hasActions: {
         type: Function,
         default: null
+      },
+      mode: {
+        type: String,
+        default: 'link'
+      },
+      selection: {
+        type: Array,
+        default: () => []
+      },
+      selectionLimit: {
+        type: Number,
+        default: 1
       }
     },
 
@@ -123,7 +135,29 @@
       // selected an item
       onSelect(item, ev)
       {
-        this.$emit('select', item, ev);
+        if (this.mode === 'select')
+        {
+          let index = this.selection.indexOf(item.id);
+          if (index > -1)
+          {
+            this.selection.splice(index, 1);
+          }
+          else if (this.selectionLimit === 1)
+          {
+            this.selection.splice(0, this.selection.length);
+            this.selection.push(item.id);
+          }
+          else if (this.selection.length < this.selectionLimit)
+          {
+            this.selection.push(item.id);
+          }
+
+          this.$emit('select', this.selectionLimit > 1 ? this.selection : (this.selection.length > 0 ? this.selection[0] : null), ev);
+        }
+        else
+        {
+          this.$emit('select', item, ev);
+        }
       },
 
 
@@ -197,6 +231,7 @@
   .ui-tree
   {
     position: relative;
+    overflow-x: hidden;
   }
 
   .ui-tree-header + .ui-tree-item

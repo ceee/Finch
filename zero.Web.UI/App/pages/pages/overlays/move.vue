@@ -10,7 +10,7 @@
 
     <p class="pages-move-text" v-localize:html="{ key: '@ui.move.text', tokens: { name: model.name } }"></p>
     <div class="ui-box pages-move-items">
-      <ui-tree ref="tree" :get="getItems" @select="onSelect" />
+      <ui-tree ref="tree" :get="getItems" mode="select" @select="onSelect" />
     </div>
   </ui-overlay-editor>
 </template>
@@ -50,18 +50,9 @@
 
     methods: {
 
-      onSelect(item)
+      onSelect(id)
       {
-        item.isSelected = true;
-
-        if (this.prevItem && this.prevItem.id != item.id)
-        {
-          this.prevItem.isSelected = false;
-        }
-
-        this.prevItem = item;
-        this.selected = item;
-        //this.config.confirm(item);
+        this.selected = id;
       },
 
       getItems(parent)
@@ -94,13 +85,6 @@
 
           response.forEach(item =>
           {
-            //item.disabled = true;
-            item.isSelected = this.model.parentId == item.id;
-
-            if (item.isSelected)
-            {
-              this.prevItem = item;
-            }
             item.disabled = item.id === 'recyclebin' || item.id == this.model.id;
             item.hasActions = false;
           });
@@ -112,7 +96,7 @@
 
       onSave()
       {
-        if (this.model.parentId == this.selected.id)
+        if (this.model.parentId == this.selected)
         {
           this.config.close();
           return;
@@ -120,7 +104,7 @@
 
         this.state = 'loading';
 
-        PagesApi.move(this.model.id, this.selected.id).then(res =>
+        PagesApi.move(this.model.id, this.selected).then(res =>
         {
           if (res.success)
           {
@@ -147,27 +131,6 @@
     .ui-tree-item.is-disabled
     {
       opacity: .5;
-    }
-
-    .ui-tree-item.is-selected, .ui-tree-item:hover:not(.is-disabled)
-    {
-      background: var(--color-tree-selected);
-    }
-
-    .ui-tree-item.is-selected
-    {
-      &:after
-      {
-        font-family: "Feather";
-        content: "\e83e";
-        font-size: 16px;
-        color: var(--color-primary);
-      }
-      
-      .ui-tree-item-text
-      {
-        font-weight: bold;
-      }
     }
   }
 
