@@ -39,7 +39,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<string> GetUrl<T>(string id) where T : IZeroIdEntity => (await GetRoute(id))?.Url;
+    public async Task<string> GetUrl<T>(string id) where T : IZeroIdEntity => (await GetRoute<T>(id))?.Url;
 
 
     /// <inheritdoc />
