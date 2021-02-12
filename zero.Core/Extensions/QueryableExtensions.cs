@@ -77,25 +77,25 @@ namespace zero.Core.Extensions
 
     public static IQueryable<T> SearchIf<T>(this IQueryable<T> source, Expression<Func<T, object>> fieldSelector, string searchTerms, string suffix = null, string prefix = null, SearchOperator @operator = SearchOperator.Or)
     {
-      string search;
-
       if (String.IsNullOrWhiteSpace(searchTerms))
       {
         return source;
       }
 
-      search = searchTerms;
-
-      if (suffix != null)
+      string[] searchParts = searchTerms.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Select(x =>
       {
-        search += suffix;
-      }
-      if (prefix != null)
-      {
-        search = prefix + search;
-      }
+        if (suffix != null)
+        {
+          x += suffix;
+        }
+        if (prefix != null)
+        {
+          x = prefix + x;
+        }
+        return x;
+      }).ToArray();
 
-      return source.Search(fieldSelector, search.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries), @operator: @operator);
+      return source.Search(fieldSelector, searchParts, @operator: @operator);
     }
   }
 }

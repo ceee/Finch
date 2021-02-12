@@ -53,7 +53,7 @@
       },
       source()
       {
-        return this.iconAsImage ? MediaApi.getImageSource(this.icon) : null;
+        return this.iconAsImage ? (this.icon.indexOf('/') === 0 ? this.icon : MediaApi.getImageSource(this.icon)) : null;
       }
     },
 

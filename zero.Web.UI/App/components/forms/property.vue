@@ -83,9 +83,9 @@
       padding-right: 0;
     }
 
-    .ui-property-content
+    .ui-property-label + .ui-property-content
     {
-      margin-top: 5px;
+      margin-top: 5px; 
     }
   }
 
