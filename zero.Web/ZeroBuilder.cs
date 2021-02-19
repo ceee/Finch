@@ -153,6 +153,8 @@ namespace zero.Web
           Urls = new string[1] { options.Raven.Url }
         };
 
+        store.Conventions.MaxNumberOfRequestsPerSession = 100;
+
         IDocumentStore raven = store.Setup(options).Initialize();
 
         // create all indexes
