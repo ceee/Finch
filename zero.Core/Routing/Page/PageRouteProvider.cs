@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using zero.Core.Entities;
+using zero.Core.Options;
 
 namespace zero.Core.Routing
 {
@@ -19,25 +20,11 @@ namespace zero.Core.Routing
 
     protected IPageUrlBuilder UrlBuilder { get; set; }
 
-    protected IPageEndpointResolver EndpointResolver { get; set; }
 
-
-    public PageRouteProvider(ILogger<PageRouteProvider> logger, IPageUrlBuilder urlBuilder, IPageEndpointResolver endpointResolver) : base("zero.pages")
+    public PageRouteProvider(IZeroOptions options, ILogger<PageRouteProvider> logger, IPageUrlBuilder urlBuilder) : base("zero.pages", options)
     {
       Logger = logger;
       UrlBuilder = urlBuilder;
-      EndpointResolver = endpointResolver;
-    }
-
-
-    /// <inheritdoc />
-    public override RouteProviderEndpoint MapEndpoint(IResolvedRoute route)
-    {
-      if (!(route is PageRoute))
-      {
-        return base.MapEndpoint(route);
-      }
-      return EndpointResolver.GetEndpoint(route as PageRoute);
     }
 
 

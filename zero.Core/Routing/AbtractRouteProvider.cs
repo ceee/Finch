@@ -1,7 +1,12 @@
-﻿using Raven.Client.Documents.Session;
+﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using zero.Core.Entities;
+using zero.Core.Options;
 
 namespace zero.Core.Routing
 {
@@ -15,19 +20,15 @@ namespace zero.Core.Routing
 
     public const char SLASH = '/';
 
-    protected RouteProviderEndpoint DefaultEndpoint { get; set; }
+    protected IZeroOptions Options { get; set; }
 
 
 
-    public AbtractRouteProvider(string alias)
+    public AbtractRouteProvider(string alias, IZeroOptions options)
     {
       Alias = alias;
+      Options = options;
       AffectedTypes = new Type[1] { typeof(T) };
-      DefaultEndpoint = new RouteProviderEndpoint()
-      {
-        Controller = "ZeroFrontend",
-        Action = "Index"
-      };
     }
 
 
@@ -36,7 +37,19 @@ namespace zero.Core.Routing
     /// </summary>
     public virtual RouteProviderEndpoint MapEndpoint(IResolvedRoute route)
     {
-      return DefaultEndpoint;
+      IEnumerable<Func<IResolvedRoute, RouteProviderEndpoint>> resolvers = Options.Routing.EndpointResolvers.GetAll(route.GetType());
+
+      foreach (Func<IResolvedRoute, RouteProviderEndpoint> resolver in resolvers.Reverse())
+      {
+        RouteProviderEndpoint endpoint = resolver(route);
+
+        if (endpoint != null)
+        {
+          return endpoint;
+        }
+      }
+
+      return Options.Routing.DefaultEndpoint;
     }
 
 
@@ -83,6 +96,59 @@ namespace zero.Core.Routing
       }
 
       return GetRouteId((T)model);
+    }
+
+
+    protected async Task<IPage> ResolvePage(IAsyncDocumentSession session)
+    {
+      IEnumerable<Expression<Func<IPage, bool>>> resolvers = Options.Routing.PageResolvers.GetAll(typeof(T));
+
+      foreach (Expression<Func<IPage, bool>> resolver in resolvers.Reverse())
+      {
+        IPage page = await session.Query<IPage>().FirstOrDefaultAsync(resolver);
+
+        if (page != null)
+        {
+          return page;
+        }
+      }
+
+      return null;
+    }
+
+
+    protected async Task<IEnumerable<IPage>> ResolvePages(IAsyncDocumentSession session)
+    {
+      List<IPage> pages = new();
+      IEnumerable<Expression<Func<IPage, bool>>> resolvers = Options.Routing.PageResolvers.GetAll(typeof(T));
+
+      foreach (Expression<Func<IPage, bool>> resolver in resolvers.Reverse())
+      {
+        pages.AddRange(await session.Query<IPage>().Where(resolver).ToListAsync());
+      }
+
+      return pages;
+    }
+
+
+    protected async Task<IRoute> ResolvePageRoute(IAsyncDocumentSession session)
+    {
+      IPage page = await ResolvePage(session);
+
+      // WARNING: we are assuming that the route id is built from the page hash but this could be altered with PageRouteProvier.GetRouteId.
+      // we cannot use a dependency on this provider here as we are working from the abstract route provider which is the base of the PageRouteProvider itself,
+      // and therefore a circular dependency.
+      return page == null ? null : await session.LoadAsync<IRoute>(ID_PREFIX + page.Hash);
+    }
+
+
+    protected async Task<IEnumerable<IRoute>> ResolvePageRoutes(IAsyncDocumentSession session)
+    {
+      List<IRoute> routes = new();
+      IEnumerable<IPage> pages = await ResolvePages(session);
+
+      string[] ids = pages.Select(x => ID_PREFIX + x.Hash).ToArray();
+      return ids.Length < 1 ? routes : (await session.LoadAsync<IRoute>(ids)).Select(x => x.Value);
     }
   }
 }

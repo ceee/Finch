@@ -17,6 +17,8 @@ namespace zero.Core.Routing
 {
   public class Routes : IRoutes
   {
+    public const char PATH_SEPERATOR = '/';
+
     protected IZeroStore Store { get; set; }
     protected ILogger<Routes> Logger { get; set; }
     protected IEnumerable<IRouteProvider> Providers { get; set; }

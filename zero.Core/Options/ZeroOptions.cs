@@ -27,6 +27,7 @@ namespace zero.Core.Options
       Icons = new();
       Icons.AddSet("feather", "Feather", "/assets/icons/feather.svg", "fth");
       Services = new();
+      Routing = new();
     }
 
     /// <inheritdoc />
@@ -87,6 +88,9 @@ namespace zero.Core.Options
 
     /// <inheritdoc />
     public ServiceOptions Services { get; private set; }
+
+    /// <inheritdoc />
+    public RoutingOptions Routing { get; private set; }
   }
 
 
@@ -192,5 +196,10 @@ namespace zero.Core.Options
     /// 
     /// </summary>
     ServiceOptions Services { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RoutingOptions Routing { get; }
   }
 }

@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using System.Threading.Tasks;
-using zero.Core.Routing;
 
-namespace zero.Web.Routing
+namespace zero.Core.Routing
 {
   public class ZeroRoutesTransformer : DynamicRouteValueTransformer
 	{

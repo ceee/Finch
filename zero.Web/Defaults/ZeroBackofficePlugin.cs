@@ -15,7 +15,6 @@ using zero.Core.Routing;
 using zero.Core.Services;
 using zero.Core.Tokens;
 using zero.Core.Validation;
-using zero.Web.Routing;
 using zero.Web.Sections;
 using zero.Web.ViewHelpers;
 
@@ -108,8 +107,6 @@ namespace zero.Web.Defaults
       services.AddScoped<IRequestUrlResolver, RequestUrlResolver>();
       services.AddScoped<IRoutes, Routes>();
       services.AddScoped<IPageUrlBuilder, PageUrlBuilder>();
-      services.AddScoped<IPageEndpointResolver, PageEndpointResolver>();
-      //services.AddTransient<IUrlProvider, PageUrlProvider>();
       services.AddScoped<IRouteProvider, PageRouteProvider>();
       services.AddScoped<PageRouteProvider>();
       services.AddScoped<ILinks, Links>();
