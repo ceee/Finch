@@ -57,7 +57,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Create an an async document session
     /// </summary>
-    protected IAsyncDocumentSession Session
+    public IAsyncDocumentSession Session
     {
       get
       {
@@ -440,6 +440,11 @@ namespace zero.Core.Collections
     /// Returns a new document queryable
     /// </summary>
     IRavenQueryable<T> Query { get; }
+
+    /// <summary>
+    /// Create an async document session
+    /// </summary>
+    IAsyncDocumentSession Session { get; }
 
     /// <summary>
     /// Applies the scope to the service instance
