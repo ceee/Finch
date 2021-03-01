@@ -144,7 +144,7 @@
     color: var(--color-text);
     margin: 0;
     font-size: var(--font-size-l);
-    font-weight: 700;
+    font-weight: 900;
     //display: flex;
     //align-items: center;
 

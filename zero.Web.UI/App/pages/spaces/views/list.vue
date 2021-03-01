@@ -1,5 +1,5 @@
 ﻿<template>
-  <div v-if="!loading" class="space-list">
+  <div v-if="!loading" class="space-list" :data-space="space.alias">
     <ui-header-bar :title="space.name" :count="count" title-empty="List">
       <ui-table-filter :attach="$refs.table" />
       <ui-add-button :route="createRoute" />

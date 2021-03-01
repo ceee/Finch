@@ -4,8 +4,8 @@
       <ui-icon class="ui-tree-item-arrow" :symbol="'fth-chevron-' + (value.isOpen ? 'up' : 'down')" />
     </button>
     <component :disabled="value.disabled" :is="tag" type="button" :to="value.url" class="ui-tree-item-link" @click="onClick(value, $event)">
-      <ui-icon class="ui-tree-item-icon" :symbol="value.icon" />
-      <ui-icon v-if="value.modifier" :title="value.modifier.name" class="ui-tree-item-modifier" :symbol="value.modifier.icon" />
+      <ui-icon class="ui-tree-item-icon" :symbol="value.icon" :size="18" />
+      <ui-icon v-if="value.modifier" :title="value.modifier.name" class="ui-tree-item-modifier" :symbol="modifier" :class="modifierClass" :size="14" />
       <span class="ui-tree-item-text">{{value.name | localize}}<span class="ui-tree-item-description" v-if="value.description"><br />{{value.description | localize}}</span></span>
       
     </component>
@@ -43,6 +43,14 @@
       tag()
       {
         return this.isLink ? 'router-link' : 'button';
+      },
+      modifier()
+      {
+        return this.value && this.value.modifier ? this.value.modifier.icon.split(' ')[0] : null;
+      },
+      modifierClass()
+      {
+        return this.value && this.value.modifier ? this.value.modifier.icon.split(' ')[1] : null;
       }
     },
 
@@ -214,9 +222,6 @@
 
   .ui-tree-item-icon
   {
-    font-size: 18px;
-    line-height: 1;
-    font-weight: 400;
     position: relative;
     top: -2px;
     color: var(--color-text-dim);
@@ -268,13 +273,6 @@
     bottom: 12px;
     background: var(--color-tree);
     border-radius: 50%;
-    width: 14px;
-    height: 14px;
-    /*color: var(--color-text-dim);*/
-    font-size: 11px;
-    font-style: normal;
-    text-align: center;
-    line-height: 14px;
 
     .ui-tree-item.is-active &
     {
