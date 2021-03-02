@@ -8,9 +8,6 @@ namespace zero.Core.Entities
     public string LanguageId { get; set; }
 
     /// <inheritdoc />
-    public string Key { get; set; }
-     
-    /// <inheritdoc />
     public string Value { get; set; }
 
     /// <inheritdoc />
@@ -28,11 +25,6 @@ namespace zero.Core.Entities
   [Collection("Translations", LongId = true)]
   public interface ITranslation : IZeroEntity, ILanguageAwareEntity, IZeroDbConventions
   {
-    /// <summary>
-    /// Key which can be used to query translations
-    /// </summary>
-    string Key { get; set; }
-
     /// <summary>
     /// Value of the translation
     /// </summary>

@@ -17,6 +17,9 @@ namespace zero.Core.Entities
     public string Alias { get; set; }
 
     /// <inheritdoc/>
+    public string Key { get; set; }
+
+    /// <inheritdoc/>
     public uint Sort { get; set; }
 
     /// <inheritdoc/>
@@ -55,9 +58,13 @@ namespace zero.Core.Entities
 
     /// <summary>
     /// Unique alias which can be used in the frontend and URLs
-    /// As generating aliases from the name would not be unique we append an incremental number if the desired alias is not available anymore
     /// </summary>
     string Alias { get; set; }
+
+    /// <summary>
+    /// A key which can be used to query this entity in code
+    /// </summary>
+    string Key { get; set; }
 
     /// <summary>
     /// Sort order

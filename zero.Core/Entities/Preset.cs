@@ -29,9 +29,6 @@ namespace zero.Core.Entities
   public class PresetOverride<T> : ZeroEntity, IPresetOverride<T> where T : IPreset
   {
     /// <inheritdoc />
-    public string Key { get; set; }
-
-    /// <inheritdoc />
     public Type TargetType { get; set; }
 
     /// <inheritdoc />
@@ -42,11 +39,6 @@ namespace zero.Core.Entities
   [Collection("Presets")]
   public interface IPresetOverride<T> : IZeroEntity, IZeroDbConventions where T : IPreset
   {
-    /// <summary>
-    /// Key is used to query a preset
-    /// </summary>
-    string Key { get; set; }
-
     /// <summary>
     /// Type of the target model (used to query)
     /// </summary>

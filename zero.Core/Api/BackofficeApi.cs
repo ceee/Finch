@@ -86,7 +86,6 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> SaveModel<T>(T model, IValidator<T> validator = null, Action<IMetadataDictionary> meta = null) where T : IZeroEntity
     {
-      bool isCreate = false;
       // check for alias
       //if (model is IUrlAliasEntity)
       //{
@@ -149,8 +148,6 @@ namespace zero.Core.Api
       // set default properties
       if (model.Id.IsNullOrEmpty())
       {
-        isCreate = true;
-
         model.CreatedDate = DateTimeOffset.Now;
         model.CreatedById = userId;
 

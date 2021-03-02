@@ -19,7 +19,7 @@ namespace zero.Core.Extensions
 
     public static T GetValueOrDefault<T>(this Dictionary<string, object> model, string key)
     {
-      object? value = model.GetValueOrDefault(key);
+      object value = model.GetValueOrDefault(key);
       return value == default || !(value is T) ? default : (T)value; 
     }
   }

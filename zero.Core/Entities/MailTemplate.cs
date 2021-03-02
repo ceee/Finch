@@ -6,9 +6,6 @@ namespace zero.Core.Entities
   public class MailTemplate : ZeroEntity, IMailTemplate
   {
     /// <inheritdoc />
-    public string Key { get; set; }
-
-    /// <inheritdoc />
     public string SenderEmail { get; set; }
 
     /// <inheritdoc />
@@ -37,11 +34,6 @@ namespace zero.Core.Entities
   [Collection("MailTemplates")]
   public interface IMailTemplate : IZeroEntity, IZeroDbConventions
   {
-    /// <summary>
-    /// Alias which is used to get the template in code
-    /// </summary>
-    string Key { get; set; }
-
     /// <summary>
     /// Email address of the sender (overrides email from application)
     /// </summary>
