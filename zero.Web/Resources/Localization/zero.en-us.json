@@ -27,6 +27,7 @@
     "active": "Active",
     "inactive": "Inactive",
     "delete": "Delete",
+    "deleteQ": "Delete?",
     "default": "Default",
     "remove": "Remove",
     "alias": "Alias",

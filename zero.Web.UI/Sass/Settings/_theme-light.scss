@@ -2,10 +2,10 @@
 :root, .theme-light
 {
   // accent colors
-  $color-primary: #0d83f0; //#0d83f0; #22272e
-  $color-primary-fg: #fff;
+  $color-primary: #22272e; //#0d83f0; #22272e
+  $color-primary-fg: #fff; 
   $color-primary-low: #{rgba(#2c3036, 0.2)};
-  $color-secondary: #00a7b9;
+  $color-secondary: #a7cec7;
   $color-secondary-fg: #fff;
   $color-tertiary: #c4e4de;
   $color-tertiary-fg: #2c3036;
@@ -67,7 +67,7 @@
   // buttons
   --color-button: #{$color-primary};
   --color-button-text: #{$color-primary-fg};
-  --color-button-light: #{$color-bg-shade-2};
+  --color-button-light: #{$color-bg-shade-3};
   --color-button-light-onbg: #{$color-bg-shade-1};
   --color-button-focus-outline: 1px dotted #{$color-bg-shade-7};
 

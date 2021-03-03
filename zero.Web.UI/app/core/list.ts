@@ -38,6 +38,11 @@ class List
    */
   link = null;
 
+  /**
+   * Convert a row into a button where the callback is this function
+   */
+  onClick = null;
+
   columns = [];
 
   actions = [];

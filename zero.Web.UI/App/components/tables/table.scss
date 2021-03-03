@@ -51,7 +51,7 @@
   }
 }
 
-a.ui-table-row:hover
+a.ui-table-row:hover, button.ui-table-row:hover
 {
   //box-shadow: var(--shadow-mid);
   background: var(--color-table-hover); 

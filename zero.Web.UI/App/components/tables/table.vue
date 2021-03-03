@@ -1,6 +1,8 @@
 ﻿<template>
   <div class="ui-table-outer">
     <div class="ui-table" :class="{'is-inline': inline }">
+      <slot name="top"></slot>
+
       <header class="ui-table-row ui-table-head">      
         <div v-for="column in columns" :key="column.path" class="ui-table-cell" :table-field="column.path" :style="column.flex" :class="column.options.class">
           <span v-localize:html="column.label"></span>
@@ -13,7 +15,9 @@
         </button>-->
       </header>
 
-      <component :is="component" v-for="(item, index) in items" :key="index" :to="getLink(item)" class="ui-table-row" :class="{ 'is-selected': selected.indexOf(item) > -1 }">
+      <slot name="topRow"></slot>
+
+      <component :is="component" v-for="(item, index) in items" :key="index" :to="getLink(item)" type="button" class="ui-table-row" :class="{ 'is-selected': selected.indexOf(item) > -1 }" @click="onRowClick(item)">
         <div v-for="column in columns" :key="column.path" class="ui-table-cell" :class="column.options.class" :style="column.flex" :table-field="column.path" :field-type="column.type" v-table-value="{ column, item }"></div>
         <!--<button type="button" v-if="configuration.selectable" table-field="table_selectable" class="ui-table-cell is-selectable" @click="select(item)">
           <i class="fth-check-square"></i>
@@ -115,7 +119,7 @@
           };
         });
         this.query = { ...this.listConfig.query, ...this.listConfig.queryToParams(this.$route.query) };
-        this.component = !!this.listConfig.link ? 'router-link' : 'div';
+        this.component = !!this.listConfig.link ? 'router-link' : (!!this.listConfig.onClick ? 'button' : 'div');
         this.filter = { ...this.listConfig.filterOptions };
         this.$nextTick(() =>
         {
@@ -192,6 +196,15 @@
             id: item.id
           }
         };
+      },
+
+
+      onRowClick(item)
+      {
+        if (typeof this.listConfig.onClick === 'function')
+        {
+          this.listConfig.onClick(item);
+        }
       },
 
 
