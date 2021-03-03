@@ -22,7 +22,7 @@ namespace zero.Core.Entities
   }
 
 
-  [Collection("Translations", LongId = true)]
+  [Collection("Translations")]
   public interface ITranslation : IZeroEntity, ILanguageAwareEntity, IZeroDbConventions
   {
     /// <summary>

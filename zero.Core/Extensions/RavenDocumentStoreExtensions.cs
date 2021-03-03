@@ -30,13 +30,8 @@ namespace zero.Core.Extensions
 
       store.Conventions.RegisterAsyncIdConvention<IZeroEntity>((_, entity) =>
       {
-        string guid = IdGenerator.Create();
+        string guid = IdGenerator.Create((entity is IBackofficeUser or IBackofficeUserRole) ? 8 : -1);
         string collection = store.Conventions.GetCollectionName(entity);
-
-        if (entity is IBackofficeUser or IBackofficeUserRole)
-        {
-          guid = IdGenerator.Create(8);
-        }
 
         string tag = store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix(collection);
         return Task.FromResult(tag + store.Conventions.IdentityPartsSeparator + guid);

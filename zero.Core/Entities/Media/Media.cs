@@ -47,7 +47,7 @@ namespace zero.Core.Entities
   /// <summary>
   /// A media file (can contain an image or other media like videos and documents)
   /// </summary>
-  [Collection("Media", LongId = true)]
+  [Collection("Media")]
   public interface IMedia : IZeroEntity, IZeroDbConventions, IAppAwareEntity
   {
     /// <summary>
