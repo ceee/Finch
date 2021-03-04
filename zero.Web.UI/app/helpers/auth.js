@@ -94,7 +94,12 @@ export default new Vue({
     // try to switch selected application for user
     switchApp(appId)
     {
-      return Axios.post('authentication/switchApp', null, { params: { appId } }).then(res => Promise.resolve(res.data.success));
+      return Axios.post('authentication/switchApp', null, { params: { appId } }).then(res =>
+      {
+        zero.appId = appId;
+        this.$emit('appswitch', res.data);
+        return Promise.resolve(res.data.success);
+      });
     },
 
     // open overlay to update password

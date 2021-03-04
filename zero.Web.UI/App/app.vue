@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="app" :class="getClassList()">
+  <div class="app" :class="getClassList()" :key="appKey">
     <template v-if="isAuthenticated">
       <app-navigation />
       <div class="app-main">
@@ -28,8 +28,16 @@
     components: { AppNavigation, AppOverlays, AppLogin, AppNotifications },
 
     data: () => ({
-      isAuthenticated: false
+      isAuthenticated: false,
+      keyIndex: 0
     }),
+
+    computed: {
+      appKey()
+      {
+        return 'appkey-' + this.keyIndex;
+      }
+    },
 
     created()
     {
@@ -38,6 +46,12 @@
       AuthApi.$on('authenticated', isAuthenticated =>
       {
         this.isAuthenticated = isAuthenticated;
+      });
+
+      AuthApi.$on('appswitch', data =>
+      {
+        this.rerender();
+        //this.isAuthenticated = isAuthenticated;
       });
     },
 
@@ -49,6 +63,11 @@
         return {
           'is-preview': false //this.$route.name === 'preview'
         };
+      },
+
+      rerender()
+      {
+        this.keyIndex += 1;
       }
     }
   }

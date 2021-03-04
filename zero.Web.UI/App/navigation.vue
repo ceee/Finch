@@ -76,23 +76,18 @@
       sections: zero.sections,
       user: null,
       userAvatar: null,
-      compact: false
+      compact: false,
+      currentApplication: null
     }),
 
 
     components: { IconPicker },
 
 
-    computed: {
-      currentApplication()
-      {
-        return _find(this.applications, x => x.id === zero.appId);
-      }
-    },
-
-
     created()
     {
+      console.info('created');
+      this.currentApplication = _find(this.applications, x => x.id === zero.appId);
       this.compact = localStorage.getItem(compactCacheKey) === 'true';
       this.buildUser(AuthApi.user);
 
@@ -163,17 +158,14 @@
 
       applicationChanged(item, opts)
       {
+
         opts.loading(true);
 
         AuthApi.switchApp(item.id).then(success =>
         {
           opts.loading(false);
           opts.hide();
-
-          if (success)
-          {
-            location.reload();
-          }
+          console.info('in', item);
         });
       },
 
