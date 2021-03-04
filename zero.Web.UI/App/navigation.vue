@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="app-nav" :class="{'is-compact': compact }">
+  <div class="app-nav theme-dark" :class="{'is-compact': compact }">
 
     <h1 class="app-nav-headline">
       <img src="/Assets/zero-2-light.png" class="show-light" v-localize:alt="'@zero.name'" />
@@ -10,7 +10,7 @@
       <template v-slot:button>
         <ui-button type="light block" :label="currentApplication.name" caret="down" />
       </template>
-      <ui-dropdown-button v-for="app in applications" :value="app" :key="app.id" :label="app.name" :selected="app.id === appId" @click="applicationChanged" />
+      <ui-dropdown-button v-for="app in applications" :value="app" :key="app.id" :label="app.name" :selected="app.id === appId" @click="applicationChanged" :prevent="true" />
       <ui-dropdown-separator />
       <ui-dropdown-button label="Add new application" icon="fth-plus" @click="addApplication" />
       <ui-dropdown-button label="Manage apps" icon="fth-edit-2" @click="manageApplications" />
@@ -86,7 +86,6 @@
 
     created()
     {
-      console.info('created');
       this.currentApplication = _find(this.applications, x => x.id === zero.appId);
       this.compact = localStorage.getItem(compactCacheKey) === 'true';
       this.buildUser(AuthApi.user);
@@ -158,14 +157,12 @@
 
       applicationChanged(item, opts)
       {
-
         opts.loading(true);
 
         AuthApi.switchApp(item.id).then(success =>
         {
           opts.loading(false);
-          opts.hide();
-          console.info('in', item);
+          //opts.hide();
         });
       },
 

@@ -42,10 +42,6 @@
         type: Boolean,
         default: false
       },
-      action: {
-        type: Function,
-        default: () => { }
-      },
       confirm: {
         type: Boolean,
         default: false

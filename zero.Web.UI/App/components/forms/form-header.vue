@@ -128,7 +128,7 @@
 
     .ui-toggle-switch.is-active
     {
-      background: var(--color-checked);
+      background: var(--color-toggled);
       box-shadow: none !important;
     }
 

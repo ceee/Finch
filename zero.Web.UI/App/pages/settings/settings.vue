@@ -99,6 +99,13 @@
     background: var(--color-box);
     border-radius: var(--radius);
     box-shadow: var(--shadow-short);
+    color: var(--color-text-dim);
+    transition: color 0.2s ease;
+  }
+
+  a.settings-group-item:hover .settings-group-item-icon
+  {
+    color: var(--color-text);
   }
 
   .settings-group-item-text

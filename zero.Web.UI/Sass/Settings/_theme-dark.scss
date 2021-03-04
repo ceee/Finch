@@ -2,8 +2,8 @@
 .theme-dark
 {
   // accent colors
-  $color-primary: #0d83f0; //#0d83f0; #22272e
-  $color-primary-fg: #fff;
+  $color-primary: #fff; //#f9c202; //#0d83f0; #22272e
+  $color-primary-fg: #181c22;
   $color-primary-low: #{rgba(#2c3036, 0.2)};
   $color-secondary: #94c4bb;
   $color-secondary-fg: #fff;
@@ -11,8 +11,8 @@
   $color-tertiary-fg: #2c3036;
 
   // foreground colors
-  $color-fg: #fff;
-  $color-fg-shade-1: #7d858a; // dim
+  $color-fg: #fafafa;
+  $color-fg-shade-1: #81878a; // dim
   $color-fg-shade-2: #8c9094; // dim-two
   
   // background colors  
@@ -20,10 +20,33 @@
   $color-bg-shade-0: #1d2229;
   $color-bg-shade-1: #22272e; // bright
   $color-bg-shade-2: #1c2026; // dim
-  $color-bg-shade-3: #282d36; // bright-two
+  $color-bg-shade-3: #2d323b; // bright-two
   $color-bg-shade-4: #363c45; // bright-three
   $color-bg-shade-5: #43484f;
   $color-bg-shade-6: #43484f;
+
+  /*$color-primary: #eee; //#0d83f0; #22272e
+  $color-primary-fg: #222;
+  $color-primary-low: #{rgba(#2c3036, 0.2)};
+  $color-secondary: #94c4bb;
+  $color-secondary-fg: #fff;
+  $color-tertiary: #c4e4de;
+  $color-tertiary-fg: #2c3036;
+
+  // foreground colors
+  $color-fg: #eee;
+  $color-fg-shade-1: #838383; // dim
+  $color-fg-shade-2: #8c9094; // dim-two
+  
+  // background colors  
+  $color-bg: #1d1d1d;
+  $color-bg-shade-0: #232323;
+  $color-bg-shade-1: #282828; // bright
+  $color-bg-shade-2: #333333; // dim
+  $color-bg-shade-3: #3b3b3b; // bright-two
+  $color-bg-shade-4: #4a4a4a; // bright-three
+  $color-bg-shade-5: #43484f;
+  $color-bg-shade-6: #43484f;*/
 
   // misc colors
   $color-overlay-shade: rgba(0, 0, 0, 0.3);
@@ -76,8 +99,8 @@
   --color-checked-fg: #{$color-primary-fg};
   --color-toggle: #{$color-bg-shade-3};
   --color-toggle-fg: #{$color-fg};
-  --color-toggled: #{$color-primary};
-  --color-toggled-fg: #{$color-primary-fg};
+  --color-toggled: #{$color-fg};
+  --color-toggled-fg: #{$color-bg-shade-3};
   --color-input-focus-bg: #{$color-bg-shade-1};
   --color-input-focus-border: 1px solid #{$color-bg-shade-5}; 
   --color-input-focus-shadow: 0 0 0 4px #{$color-bg-shade-2};
@@ -108,7 +131,7 @@
   --color-table: #{$color-bg-shade-1};
   --color-table-line-horizontal: #{$color-bg}; //#{$color-bg-shade-3};
   --color-table-line-vertical: transparent;
-  --color-table-head: #{$color-bg-shade-3};
+  --color-table-head: #{$color-bg-shade-1};
   --color-table-hover: #{$color-bg-shade-2};
 
   // misc

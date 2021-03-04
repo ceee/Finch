@@ -73,6 +73,11 @@
   border-top: 1px solid var(--color-line-onbg);
 }
 
+.theme-dark .editor-infos
+{
+  border-top: none;
+}
+
 .editor-infos .ui-box
 {
   margin: 0;
