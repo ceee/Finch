@@ -105,14 +105,16 @@
     width: auto;
     position: absolute;
     left: auto;
-    right: 0;
+    right: 0; 
     top: 0;
     bottom: 0;
-    border-radius: 0;
+    border-radius: var(--radius);
     box-shadow: var(--shadow-overlay);
     background: var(--color-overlay-editor);
     text-align: left;
     padding: 0;
+    margin: 10px;
+    height: calc(100vh - 20px);
     max-width: 100%;
   }
 

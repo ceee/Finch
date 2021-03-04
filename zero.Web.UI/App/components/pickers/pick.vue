@@ -91,6 +91,8 @@
     title: null,
     // automatically open picker
     autoOpen: false,
+    // picker has pagination
+    paging: false,
 
     keys: {
       // id key
@@ -347,6 +349,11 @@
 
         let onLoaded = (items) =>
         {
+          if (this.configuration.paging && typeof items === 'object' && !Array.isArray(items))
+          {
+            // TODO we need to store metadata to allow pagination
+            items = items.items;
+          }
           this.allItems = items;
           this.loadSuggestions();
           this.loaded = true;
@@ -371,11 +378,17 @@
 
         let handleResult = (res) =>
         {
+          if (this.configuration.paging && typeof res === 'object' && !Array.isArray(res))
+          {
+            // TODO we need to store metadata to allow pagination
+            res = res.items;
+          }
+
           if (this.configuration.excludedIds && this.configuration.excludedIds.length)
           {
             res = _filter(res, (item) => this.configuration.excludedIds.indexOf(item[this.configuration.keys.id]) < 0);
           }
-
+         
           this.items = res;
         };
 

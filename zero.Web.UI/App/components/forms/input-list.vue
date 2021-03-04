@@ -104,18 +104,14 @@
   .ui-input-list-item
   {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
     background: var(--color-input);
     border-radius: var(--radius);
-
-    & + .ui-input-list-item, & + .ui-button, & + .ui-select-button
-    {
-      margin-top: 6px;
-    }
+    margin-bottom: 6px;
 
     .ui-input-list.is-disabled &
     {
-      background: transparent;
+      background: transparent; 
     }
 
     .ui-input
@@ -131,6 +127,11 @@
       border-left: none;
       background: transparent !important;
       box-shadow: none;
+    }
+
+    .ui-icon-button + .ui-icon-button
+    {
+      margin-left: 0;
     }
   }
 </style>
