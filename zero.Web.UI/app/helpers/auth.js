@@ -96,9 +96,11 @@ export default new Vue({
     {
       return Axios.post('authentication/switchApp', null, { params: { appId } }).then(res =>
       {
-        zero.appId = appId;
-        this.$emit('appswitch', res.data);
-        return Promise.resolve(res.data.success);
+        //return this.zero.reloadConfig().then(() =>
+        //{
+          this.$emit('appswitch', res.data);
+          return Promise.resolve(res.data.success);
+        //});
       });
     },
 

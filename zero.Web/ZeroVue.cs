@@ -47,8 +47,6 @@ namespace zero.Web
       Plugins = plugins;
       Context = context;
       Logger = logger;
-      //zero.path = "@Model.BackofficePath.EnsureEndsWith('/')";
-      //zero.translations = @Html.Raw(text);
     }
 
 
@@ -62,12 +60,8 @@ namespace zero.Web
       config.PluginPath = "@/Plugins";
       config.Version = Options.ZeroVersion;
       config.PluginCount = Plugins.Count();
-      config.ErrorFieldNone = Constants.ErrorFieldNone;
-      config.Sections = CreateSections();
-      config.Translations = CreateTranslations();
-      config.Applications = await CreateApplications();
+      config.ErrorFieldNone = Constants.ErrorFieldNone;     
       config.Alias = CreateAliases();
-      config.SettingsAreas = CreateSettingsAreas();
       config.AppId = Context.AppId;
       //config.SharedAppId = Constants.Database.SharedAppId; // TODO appx
       config.Icons = CreateIconSets();
@@ -85,19 +79,24 @@ namespace zero.Web
           Name = user.Name,
           Roles = user.RoleIds
         };
+
+        config.Sections = CreateSections();
+        config.Translations = CreateTranslations();
+        config.Applications = await CreateApplications();
+        config.SettingsAreas = CreateSettingsAreas();
+
+        config.Plugins = Plugins.Select(x => new ZeroVuePlugin()
+        {
+          Name = x.Options.Name,
+          Description = x.Options.Description,
+          PluginPath = x.Options.PluginPath
+        }).ToList();
+
+        config.Services = new()
+        {
+          YouTubeApiKey = Options.Services.YouTubeApiKey
+        };
       }
-
-      config.Plugins = Plugins.Select(x => new ZeroVuePlugin()
-      {
-        Name = x.Options.Name,
-        Description = x.Options.Description,
-        PluginPath = x.Options.PluginPath
-      }).ToList();
-
-      config.Services = new()
-      {
-        YouTubeApiKey = Options.Services.YouTubeApiKey
-      };
 
       return config;
     }
@@ -386,6 +385,16 @@ namespace zero.Web
     /// </summary>
     Task<ZeroVueConfig> Config();
 
+    ///// <summary>
+    ///// Creates the zero configuration for vue
+    ///// </summary>
+    //Task<Dictionary<string, string>> Translations();
+
+    ///// <summary>
+    ///// Creates the zero configuration for vue
+    ///// </summary>
+    //Task<ZeroVueConfig> IconSets();
+
     /// <summary>
     /// Creates the zero configuration for vue
     /// </summary>
@@ -415,8 +424,6 @@ namespace zero.Web
     public string ErrorFieldNone { get; set; }
 
     public string AppId { get; set; }
-
-    public string SharedAppId { get; set; }
 
     public UserEditModel User { get; set; }
 

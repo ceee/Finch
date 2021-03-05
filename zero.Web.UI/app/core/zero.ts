@@ -5,15 +5,17 @@
 import ZeroPlugin from './plugin.zero.js';
 import VueRouter from 'vue-router';
 import plugins from './plugins.js';
-import zeroConfig from '../config/zero.config.js';
+import mediaConfig from '../config/media.config.js';
+import linksConfig from '../config/links.config.js';
 import routerConfig from '../config/router.config.js'
+import Axios from 'axios';
 
 class Zero
 {
   static install;
   static instance;
 
-  config = { ...zeroConfig };
+  config = { };
 
   #vue = null;
   #plugins = [];
@@ -26,7 +28,16 @@ class Zero
 
   constructor(vue, opts)
   {
-    this.config = { ...zeroConfig, ...opts };
+    let initialConfig = JSON.parse(document.getElementById('zeroconfig').innerHTML);
+    this.config = {
+      ...initialConfig,
+      media: mediaConfig,
+      linkPicker: linksConfig,
+      ...(opts || {})
+    };
+
+    console.info(this.config);
+
     this.#vue = vue;
 
     this.use(ZeroPlugin);
@@ -58,6 +69,23 @@ class Zero
   get router()
   {
     return this.#router;
+  }
+
+
+  /*
+   * Reload config
+   */
+  reloadConfig(config)
+  {
+    return Axios.get('zerovue/config').then(res =>
+    {
+      this.config = {
+        ...res.data,
+        media: mediaConfig,
+        linkPicker: linksConfig,
+        ...(config || {})
+      };
+    });
   }
 
 

@@ -89,6 +89,7 @@
       },
       'filter.search': function (val)
       {
+        this.filter.page = 1;
         this.debouncedUpdate();
       }
     },

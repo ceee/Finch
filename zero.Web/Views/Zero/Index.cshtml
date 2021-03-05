@@ -27,6 +27,9 @@
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     @Html.Raw(Model.Vue.GetIconSvg())
   </svg>
+  <script id="zeroconfig" type="application/json">
+    @Html.Raw(config)
+  </script>
   <script>
     window.__zero = @Html.Raw(config);
     window.zero = window.__zero;

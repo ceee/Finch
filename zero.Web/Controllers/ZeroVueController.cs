@@ -19,12 +19,15 @@ namespace zero.Web.Controllers
 
 
     [HttpGet]
-    public async Task<ZeroVueConfig> Config()
+    public async Task<IActionResult> Config()
     {
-      var settings = new JsonSerializerSettings();
+      JsonSerializerSettings settings = new();
       settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+      settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+      settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+      settings.TypeNameHandling = TypeNameHandling.None;
 
-      return await ZeroVue.Config(); //, settings);
+      return new JsonResult(await ZeroVue.Config(), settings);
     }
   }
 }
