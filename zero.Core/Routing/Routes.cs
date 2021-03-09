@@ -113,13 +113,27 @@ namespace zero.Core.Routing
         return null;
       }
 
-      Dictionary<T, IRoute> result = new Dictionary<T, IRoute>();
+      Dictionary<T, IRoute> result = new();
+      Dictionary<string, T> routeMap = new();
+      HashSet<string> routeIds = new();
 
       using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
       foreach (T model in models)
       {
-        result.TryAdd(model, await routeProvider.GetRoute(session, model));
+        string routeId = routeProvider.GetRouteId(model);
+        routeIds.Add(routeId);
+        routeMap.Add(routeId, model);
+      }
+
+      Dictionary<string, IRoute> routes = await session.LoadAsync<IRoute>(routeIds);
+
+      foreach ((string key, IRoute route) in routes)
+      {
+        if (routeMap.TryGetValue(key, out T model))
+        {
+          result.TryAdd(model, route);
+        }
       }
 
       return result;
@@ -129,11 +143,11 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public async Task<IResolvedRoute> ResolveUrl(IApplication application, string path)
     {
-      path = path.Length > 1 ? path.TrimEnd('/') : path;
+      path = path.Length > 1 ? path.TrimEnd(PATH_SEPERATOR) : path;
 
       using IAsyncDocumentSession session = Store.OpenAsyncSession(application.Database);
 
-      string[] pathParts = path.Trim('/').Split('/');
+      string[] pathParts = path.Trim(PATH_SEPERATOR).Split(PATH_SEPERATOR);
       string[] parts = new string[pathParts.Length];
 
       int min = parts.Length;
@@ -141,28 +155,41 @@ namespace zero.Core.Routing
       {
         for (int i = 0; i < min; i++)
         {
-          parts[i] += '/' + pathPart;
+          parts[i] += PATH_SEPERATOR + pathPart;
         }
         min -= 1;
       }
 
       IList<IRoute> routes = await session.Query<IRoute>()
-        // TODO appx fix
         .Where(x => (!x.AllowSuffix && x.Url == path) || (x.AllowSuffix && x.Url.In(parts)))
         .Include("References[].Id")
         .Include("Dependencies")
         .ToListAsync();
 
+      IRoute route = routes.FirstOrDefault();
+
+      // try to get the best matching path when multiple routes are found
+      // our assumption is that the best path is those with the longest path parts separated by a slash
+      // if we still get multiple routes with equal part counts then we prefer those which do not allow a suffix
       if (routes.Count > 1)
       {
-        Logger.LogWarning("Multiple routes {routes} were found for {path}", routes.Select(x => x.Id), path);
+        int maxPathParts = routes.Max(x => x.Url.Count(u => u == PATH_SEPERATOR));
+        IEnumerable<IRoute> longestRoutes = routes.Where(x => maxPathParts == x.Url.Count(u => u == PATH_SEPERATOR)).OrderBy(x => x.AllowSuffix);
+
+        if (longestRoutes.Count() > 1) 
+        {
+          Logger.LogWarning("Multiple routes {routes} were found for {path}", longestRoutes.Select(x => x.Id), path);
+        }
+
+        route = longestRoutes.FirstOrDefault();
       }
-      else if (routes.Count < 1)
+
+      if (route == null)
       {
         return null;
       }
 
-      return await ResolveRouteInternal(session, routes.First());
+      return await ResolveRouteInternal(session, route);
     }
 
 
