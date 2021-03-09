@@ -34,11 +34,9 @@ namespace zero.Core.Entities
 
     public ListResult<TTarget> MapTo<TTarget>(Func<T, TTarget> convertItem)
     {
-      return new ListResult<TTarget>(Items.Select(x => convertItem(x)).Where(x => x != null).ToList(), TotalItems, Page, PageSize)
-      {
-        Statistics = Statistics
-      };
+      return new ListResult<TTarget>(Items.Select(x => convertItem(x)).Where(x => x != null).ToList(), TotalItems, Page, PageSize);
     }
+
     public IList<T> Items { get; set; } = new List<T>();
 
 
@@ -56,21 +54,6 @@ namespace zero.Core.Entities
       }
       return 0;
     }
-
-
-    /// <summary>
-    /// Adds a statistic value
-    /// </summary>
-    public ListResult<T> AddStatistic(string key, object value, StatisticDisplay display = StatisticDisplay.Default)
-    {
-      Statistics.Add(new PagedResultStatistic()
-      {
-        Key = key,
-        Value = value,
-        Display = display
-      });
-      return this;
-    }
   }
 
 
@@ -85,31 +68,5 @@ namespace zero.Core.Entities
     public long TotalItems { get; protected set; }
 
     public bool HasMore { get; protected set; }
-
-    public List<PagedResultStatistic> Statistics { get; set; } = new List<PagedResultStatistic>();
-  }
-
-
-  public class PagedResultStatistic
-  {
-    public string Key { get; set; }
-
-    public object Value { get; set; }
-
-    public StatisticDisplay Display { get; set; }
-  }
-
-
-  public enum StatisticDisplay
-  {
-    Default,
-    Currency
-  }
-
-
-  public enum Direction
-  {
-    Ascending = 0,
-    Descending = 1
   }
 }

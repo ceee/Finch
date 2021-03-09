@@ -14,7 +14,6 @@ namespace zero.Web.Models
     public MediaListResultModel(ListResult<MediaListModel> items, IEnumerable<MediaListModel> folders) : base(items.Items, items.TotalItems, items.Page, items.PageSize)
     {
       Folders = folders;
-      Statistics = items.Statistics;
     }
 
     public MediaListResultModel(ListResult<MediaListModel> items, IEnumerable<MediaListModel> folders, IMediaFolder currentFolder, IEnumerable<IMediaFolder> hierarchy) : this(items, folders)
