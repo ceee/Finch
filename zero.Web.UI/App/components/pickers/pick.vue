@@ -417,6 +417,12 @@
       {
         let onLoaded = (items, needsFilter) =>
         {
+          if (this.configuration.paging && typeof items === 'object' && !Array.isArray(items))
+          {
+            // TODO we need to store metadata to allow pagination
+            items = items.items;
+          }
+
           if (needsFilter)
           {
             this.previews = [];
