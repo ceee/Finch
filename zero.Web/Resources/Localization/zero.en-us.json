@@ -13,6 +13,7 @@
   "ui": {
     "yes": "Yes",
     "no": "No",
+    "required": "Required",
     "more": "More",
     "add": "Add",
     "actions": "Actions",
