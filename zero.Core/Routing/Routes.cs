@@ -222,10 +222,9 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<IList<IRoute>> RebuildAllRoutes()
+    public async Task RebuildAllRoutes()
     {
       int count = 0;
-      List<IRoute> all = new List<IRoute>();
 
       using IAsyncDocumentSession coreSession = Store.OpenCoreSession();
       List<IApplication> apps = await coreSession.Query<IApplication>().ToListAsync();
@@ -255,12 +254,8 @@ namespace zero.Core.Routing
               count += 1;
             }
           }
-
-          all.AddRange(routes);
         }
       }
-
-      return all;
     }
 
 
@@ -349,7 +344,7 @@ namespace zero.Core.Routing
     /// <summary>
     /// Purges all routes and rebuilds them by iterating over all registered providers
     /// </summary>
-    Task<IList<IRoute>> RebuildAllRoutes();
+    Task RebuildAllRoutes();
 
     /// <summary>
     /// Get endpoint the route maps to
