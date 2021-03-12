@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-box">
-    <ui-daterangepicker :value="value" @input="$emit('input', $event.target.value)" :disabled="disabled"
+    <ui-daterangepicker :value="value" @input="$emit('input', $event)" :disabled="disabled"
       v-bind="{ format, time, maxDate, minDate, fromLabel, toLabel, amPm, inline }" />
   </div>
 </template>
