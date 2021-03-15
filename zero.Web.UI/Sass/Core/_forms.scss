@@ -157,16 +157,16 @@ textarea
 .ui-native-check-toggle
 {
   display: inline-block;
-  width: 22px;
-  height: 22px;
-  line-height: 21px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
   text-align: center;
-  border-radius: var(--radius);
+  border-radius: 3px;
   border: 1px solid transparent;
   background: var(--color-check);
   margin-right: 10px;
   position: relative;
-  top: 0;
+  top: -1px;
 
   &:before
   {

@@ -123,7 +123,7 @@ namespace zero.Core.Routing
       {
         string routeId = routeProvider.GetRouteId(model);
         routeIds.Add(routeId);
-        routeMap.Add(routeId, model);
+        routeMap.TryAdd(routeId, model);
       }
 
       Dictionary<string, IRoute> routes = await session.LoadAsync<IRoute>(routeIds);
