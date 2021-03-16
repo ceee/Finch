@@ -3,14 +3,15 @@ export default {
 
   setValue(model, props, value)
   {
-    const prop = props.shift();
+    const clonedProps = [...props];
+    const prop = clonedProps.shift();
 
     if (!model[prop])
     {
       model[prop] = {};
       //Vue.set(model, prop, {});
     }
-    if (!props.length)
+    if (!clonedProps.length)
     {
       if (value && typeof value === 'object' && !Array.isArray(value))
       {
@@ -22,6 +23,6 @@ export default {
       return;
     }
 
-    this.setValue(model[prop], props, value);
+    this.setValue(model[prop], clonedProps, value);
   }
 };

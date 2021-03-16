@@ -50,7 +50,8 @@
       model: null,
       loaded: false,
       blockComponent: null,
-      manualDisabled: false
+      manualDisabled: false,
+      selector: null
     }),
 
     mounted()
@@ -62,7 +63,7 @@
     computed: {
       isHidden()
       {
-        return !this.loaded || (typeof this.config.options.condition === 'function' && !this.config.options.condition(this.value));
+        return this.loaded && typeof this.config.options.condition === 'function' && !this.config.options.condition(this.value);
       },
       isRequired()
       {
