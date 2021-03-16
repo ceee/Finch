@@ -1,6 +1,6 @@
 ﻿<template>
   <svg class="ui-icon" :width="size" :height="size" :stroke-width="stroke" :data-symbol="symbol">
-    <use v-if="!isFlag" :xlink:href="'#' + symbol.trim()" />
+    <use v-show="!isFlag" v-bind="{ 'xlink:href': href }" />
   </svg>
 </template>
 
@@ -15,6 +15,10 @@
         default: null,
         required: true
       },
+      file: {
+        type: String,
+        default: null
+      },
       size: {
         type: Number,
         default: 17
@@ -25,10 +29,15 @@
       }
     },
 
+
     computed: {
       isFlag()
       {
         return this.symbol && this.symbol.indexOf('flag') === 0;
+      },
+      href()
+      {
+        return (this.file || '') + '#' + this.symbol;
       }
     }
   }

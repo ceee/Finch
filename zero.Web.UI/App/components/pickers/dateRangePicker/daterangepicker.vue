@@ -104,8 +104,8 @@
             (this.value.from && !this.value.to ? '@ui.date.x' :
               (!this.value.from && this.value.to ? '@ui.date.y' : '@ui.date.xtoy')),
           tokens: {
-            x: Strings.date(this.value.from, this.format || (this.time ? DATETIME_FORMAT : DATE_FORMAT)),
-            y: Strings.date(this.value.to, this.format || (this.time ? DATETIME_FORMAT : DATE_FORMAT))
+            x: this.value ? Strings.date(this.value.from, this.format || (this.time ? DATETIME_FORMAT : DATE_FORMAT)) : null,
+            y: this.value ? Strings.date(this.value.to, this.format || (this.time ? DATETIME_FORMAT : DATE_FORMAT)) : null
           }
         };
       }

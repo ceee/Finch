@@ -30,7 +30,7 @@ $accent-colors: (
   "lime": "#a0db61",
   "yellow": "#fdd330",
   "orange": "#ff662b",
-  "red": "#d82853"
+  "red": "rgb(216, 40, 83)"
 );
 
 :root
@@ -47,7 +47,7 @@ $accent-colors: (
 
   .color-#{$name}
   {
-    color: var(#{$var});
+    color: var(#{$var}) !important; 
   }
 
   .bg-color-#{$name}

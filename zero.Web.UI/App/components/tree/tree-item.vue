@@ -5,7 +5,7 @@
     </button>
     <component :disabled="value.disabled" :is="tag" type="button" :to="value.url" class="ui-tree-item-link" @click="onClick(value, $event)">
       <ui-icon class="ui-tree-item-icon" :symbol="value.icon" :size="18" />
-      <ui-icon v-if="value.modifier" :title="value.modifier.name" class="ui-tree-item-modifier" :symbol="modifier" :class="modifierClass" :size="14" />
+      <ui-icon v-if="value.modifier" :title="value.modifier.name" class="ui-tree-item-modifier" :symbol="modifier" :class="modifierClass" :size="12" />
       <span class="ui-tree-item-text">{{value.name | localize}}<span class="ui-tree-item-description" v-if="value.description"><br />{{value.description | localize}}</span></span>
       
     </component>
@@ -271,12 +271,21 @@
     position: absolute;
     left: 10px;
     bottom: 12px;
+    color: var(--color-text-dim);
     background: var(--color-tree);
     border-radius: 50%;
+    padding: 3px; 
+    width: 18px;
+    height: 18px; 
+
+    .ui-tree-item.is-active &, .ui-tree-item:hover &
+    {
+      color: var(--color-text);
+    }
 
     .ui-tree-item.is-active &
     {
-      background: var(--color-tree-selected);
+      background: var(--color-tree-selected); 
     }
   }
 

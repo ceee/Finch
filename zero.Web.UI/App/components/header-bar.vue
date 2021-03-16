@@ -144,7 +144,7 @@
     color: var(--color-text);
     margin: 0;
     font-size: var(--font-size-l);
-    font-weight: 900;
+    font-weight: 700;
     //display: flex;
     //align-items: center;
 
@@ -160,7 +160,7 @@
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      background: var(--color-bg-shade-3);
+      background: var(--color-bg-shade-5); 
       //box-shadow: var(--shadow-short);
       color: var(--color-text);
       height: 22px;
