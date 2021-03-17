@@ -9,17 +9,21 @@ namespace zero.Core.Utils
     /// </summary>
     public static string Create(int length = -1)
     {
-      if (length > 0)
+      if (length < 1)
       {
+        length = 12;
+      }
+      //if (length > 0)
+      //{
         return Convert.ToBase64String(Guid.NewGuid().ToByteArray())
           .Replace("/", String.Empty)
           .Replace("+", String.Empty)
           .Replace("-", String.Empty)
           .ToLowerInvariant()
           .Substring(0, length);
-      }
+      //}
 
-      return Guid.NewGuid().ToString();
+      //return Guid.NewGuid().ToString();
     }
   }
 }
