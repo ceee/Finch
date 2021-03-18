@@ -3,7 +3,7 @@
     <div class="media-item-preview" :class="{'media-pattern': value.image }">
       <span class="media-item-check"><ui-icon symbol="fth-check" :size="14" /></span>
       <img class="media-item-image" v-if="value.image" :src="value.image" />
-      <span class="media-item-icon" v-if="!value.image"><ui-icon :symbol="shared ? 'fth-globe' : (value.isFolder ? 'fth-folder' : 'fth-file')" :size="28" /></span>
+      <span class="media-item-icon" v-if="!value.image"><ui-icon :symbol="shared ? 'fth-globe' : (value.isFolder ? 'fth-folder' : 'fth-file')" :size="36" :stroke-width="1.5" /></span>
     </div>
     <p class="media-item-text" v-if="!shared">
       <span :title="value.name">{{value.name}}</span>

@@ -143,19 +143,21 @@ namespace zero.Web
     /// </summary>
     void ConfigureDatabase()
     {
-      // add raven
+      Services.AddSingleton<IZeroDocumentConventionsBuilder, ZeroDocumentConventionsBuilder>();
+
       Services.AddSingleton<IZeroStore, ZeroStore>(context =>
       {
         IZeroOptions options = context.GetService<IZeroOptions>();
+        IZeroDocumentConventionsBuilder conventionsBuilder = context.GetService<IZeroDocumentConventionsBuilder>();
 
         IDocumentStore store = new ZeroStore(options)
         {
           Urls = new string[1] { options.Raven.Url }
         };
 
-        store.Conventions.MaxNumberOfRequestsPerSession = 100;
+        conventionsBuilder.Run(store.Conventions);
 
-        IDocumentStore raven = store.Setup(options).Initialize();
+        IDocumentStore raven = store.Initialize();
 
         // create all indexes
         var assemblies = AssemblyDiscovery.Current.GetAssemblies().ToList();

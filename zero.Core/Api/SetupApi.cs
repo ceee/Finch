@@ -28,11 +28,14 @@ namespace zero.Core.Api
 
     protected IPasswordHasher<BackofficeUser> PasswordHasher { get; private set; }
 
+    protected IZeroDocumentConventionsBuilder ConventionsBuilder { get; private set; }
 
-    public SetupApi(IZeroOptions options, IPasswordHasher<BackofficeUser> passwordHasher)
+
+    public SetupApi(IZeroOptions options, IPasswordHasher<BackofficeUser> passwordHasher, IZeroDocumentConventionsBuilder conventionsBuilder)
     {
       Options = options;
       PasswordHasher = passwordHasher;
+      ConventionsBuilder = conventionsBuilder;
     }
 
 
@@ -59,7 +62,8 @@ namespace zero.Core.Api
           Database = model.Database.Name
         };
 
-        raven.Setup(Options).Initialize();
+        ConventionsBuilder.Run(raven.Conventions);
+        raven.Initialize();
 
         // create application
         Application app = Prepare(new Application()
