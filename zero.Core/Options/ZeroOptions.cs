@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using zero.Core.Entities;
 
 namespace zero.Core.Options
 {
@@ -25,7 +26,6 @@ namespace zero.Core.Options
       Spaces = new();
       Integrations = new();
       Icons = new();
-      Icons.AddSet("feather", "Feather", "/assets/icons/feather.svg", "fth");
       Services = new();
       Routing = new();
     }

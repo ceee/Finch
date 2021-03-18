@@ -45,6 +45,7 @@ namespace zero.Web.Defaults
       zero.Permissions.AddCollection<SettingsPermissions>();
       zero.Permissions.AddCollection<SpacePermissions>();
 
+      zero.Icons.AddSet("feather", "Feather", "/assets/icons/feather.svg", "fth");
       zero.Pages.Add<PageFolder>(Constants.Pages.FolderAlias, "@page.folder.name", "@page.folder.description", "fth-folder");
     }
 

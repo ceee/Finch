@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-add-button">
-    <ui-button v-if="!component" :type="type" :label="label" @click="onClick()" :disabled="disabled" /> <!-- :attach="true"-->
-    <component v-else :is="component" :type="type" :label="label" :disabled="disabled" :route="route" />
+    <ui-button v-if="!component" :type="type" :label="label" @click="onClick" :disabled="disabled" /> <!-- :attach="true"-->
+    <component v-else :is="component" :type="type" :label="label" :disabled="disabled" :route="route" @click="onClick" />
   </div>
 </template>
 
