@@ -162,7 +162,7 @@ namespace zero.Core.Api
       model.LastModifiedById = userId;
       model.LastModifiedDate = DateTimeOffset.Now;
       model.CreatedById ??= userId;
-      model.Hash ??= IdGenerator.Create();
+      model.Hash ??= IdGenerator.Classic();
 
       using IAsyncDocumentSession session = Session();
       session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);

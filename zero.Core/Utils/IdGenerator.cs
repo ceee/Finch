@@ -4,6 +4,11 @@ namespace zero.Core.Utils
 {
   public class IdGenerator
   {
+    public static string Classic()
+    {
+      return Guid.NewGuid().ToString();
+    }
+
     /// <summary>
     /// Create a new unique Id
     /// </summary>

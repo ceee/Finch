@@ -226,7 +226,7 @@ namespace zero.Core.Collections
       model.LastModifiedById = userId;
       model.LastModifiedDate = DateTimeOffset.Now;
       model.CreatedById ??= userId;
-      model.Hash ??= IdGenerator.Create();
+      model.Hash ??= IdGenerator.Classic();
 
       // run interceptors
       if (isCreate)
