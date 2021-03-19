@@ -206,8 +206,21 @@ class ListColumn
   name()
   {
     this.options.label = '@ui.name';
-    this.options.class = 'is-bold';
-    return this.text();
+    this.options.class = 'is-name';
+    this.#type = 'text';
+    this.#asHtml = true;
+    this.#func = (value, opts, model) =>
+    {
+      let html = '<b>' + value + '</b>';
+
+      if (model.blueprint && model.blueprint.id)
+      {
+        html += ` <svg class="ui-icon" width="15" height="15" stroke-width="2" :data-symbol="fth-cloud" title="Synchronized"><use xlink:href="#fth-cloud" /></svg>`;
+      }
+
+      return html;
+    };
+    return this;
   }
 
 

@@ -41,7 +41,7 @@ namespace zero.Core.Api
         pages = await session
           .Query<IPage>()
           .SearchIf(x => x.Name, search, "*")
-          .OrderBy(x => x.Sort)
+          .OrderBy(x => x.Sort, OrderingType.Long)
           .ToListAsync();
 
         var urls = await Routes.GetUrls(pages.ToArray());
@@ -60,7 +60,7 @@ namespace zero.Core.Api
         pages = await session
           .Query<IPage>()
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
-          .OrderBy(x => x.Sort)
+          .OrderBy(x => x.Sort, OrderingType.Long)
           .ToListAsync();
 
 

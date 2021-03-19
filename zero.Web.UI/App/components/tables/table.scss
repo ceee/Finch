@@ -127,6 +127,12 @@ a.ui-table-row:hover, button.ui-table-row:hover
   }
 }
 
+.ui-table-row:not(.ui-table-head) .ui-table-cell.is-name .ui-icon
+{
+  margin-left: .6em;
+  color: var(--color-synchronized);
+}
+
 .ui-table-row:not(.is-selected) .ui-table-cell:not(.is-head).is-selectable i
 {
   color: var(--color-text);
