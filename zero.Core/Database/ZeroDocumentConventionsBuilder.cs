@@ -1,4 +1,5 @@
 ﻿using Raven.Client.Documents.Conventions;
+using Raven.Client.Documents.Subscriptions;
 using Raven.Client.Json.Serialization;
 using Raven.Client.Json.Serialization.NewtonsoftJson;
 using System;
@@ -66,9 +67,11 @@ namespace zero.Core.Database
     /// <summary>
     /// Finds the collection name for a certain type based on internal rules
     /// </summary>
-    protected virtual string FindCollectionName(Type type)
+    protected virtual string FindCollectionName(Type originalType)
     {
       string collection = null;
+
+      Type type = originalType;
 
       Func<string, string> cache = name =>
       {
@@ -76,6 +79,13 @@ namespace zero.Core.Database
         return name;
       };
 
+      // get inner type for revisions
+      if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Revision<>))
+      {
+        type = type.GetGenericArguments().FirstOrDefault();
+      }
+
+      // try to resolve from cache
       if (CachedTypeCollectionNameMap.TryGetValue(type, out collection))
       {
         return collection;
