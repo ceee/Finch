@@ -235,7 +235,7 @@
 
   .ui-tree-item.is-active .ui-tree-item-icon
   {
-    color: var(--color-primary);
+    color: var(--color-text);
   }
 
   .ui-tree-item-loading

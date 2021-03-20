@@ -2,7 +2,7 @@
   <div class="ui-header-bar">
     <div class="ui-header-bar-inner">
       <div class="ui-header-bar-main">
-        <ui-icon-button v-if="backButton" type="light onbg" @click="onBack" />
+        <ui-icon-button v-if="backButton" type="light onbg" @click="onBack" :size="15" />
         <div class="ui-header-bar-main-title">
           <slot name="title">
             <h2 class="ui-header-bar-title" :class="{'is-empty': !title && titleEmpty}">

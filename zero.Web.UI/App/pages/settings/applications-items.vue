@@ -6,7 +6,7 @@
       <span class="apps-item-status" :class="{ 'is-active': app.isActive }" v-localize="getStatus(app)"></span>
     </router-link>
     <router-link :to="getAddLink()" class="apps-items-add">
-      <i class="fth-plus"></i>
+      <ui-icon symbol="fth-plus" :size="24" />
     </router-link>
   </div>
 </template>
