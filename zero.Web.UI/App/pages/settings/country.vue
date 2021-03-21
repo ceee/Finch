@@ -5,6 +5,9 @@
       <template v-slot:below>
         <ui-editor-infos v-model="model" :disabled="disabled" />
       </template>
+      <!--<template v-slot:aside>
+        <ui-editor-aside v-model="model" :disabled="disabled" />
+      </template>-->
     </ui-editor>
   </ui-form>
 </template>
@@ -12,6 +15,7 @@
 
 <script>
   import CountriesApi from 'zero/api/countries.js';
+  import UiEditorAside from 'zero/editor/editor-aside.vue';
 
   export default {
     props: ['id'],
@@ -22,6 +26,8 @@
       route: zero.alias.settings.countries + '-edit',
       disabled: false
     }),
+
+    components: { UiEditorAside },
 
     methods: {
 

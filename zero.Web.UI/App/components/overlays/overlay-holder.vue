@@ -108,13 +108,11 @@
     right: 0; 
     top: 0;
     bottom: 0;
-    border-radius: var(--radius);
     box-shadow: var(--shadow-overlay);
     background: var(--color-overlay-editor);
     text-align: left;
     padding: 0;
-    margin: 10px;
-    height: calc(100vh - 20px);
+    height: 100vh;
     max-width: 100%;
   }
 

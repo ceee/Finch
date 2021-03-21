@@ -26,10 +26,10 @@
 
   &.has-sidebar
   {
-    max-width: 1460px;
+    max-width: 1580px;
     display: grid;
-    grid-template-columns: minmax(auto, 1fr) 200px;
-    grid-gap: var(--padding);
+    grid-template-columns: minmax(auto, 1fr) 260px;
+    grid-gap: 0 var(--padding);
   }
 }
 

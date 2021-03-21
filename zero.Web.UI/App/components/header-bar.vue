@@ -6,9 +6,9 @@
         <div class="ui-header-bar-main-title">
           <slot name="title">
             <h2 class="ui-header-bar-title" :class="{'is-empty': !title && titleEmpty}">
-              <span v-if="prefix" class="-minor" v-localize:html="prefix"></span>
+              <span v-if="prefix" class="-minor -prefix"><span v-localize:html="prefix"></span> <ui-icon symbol="fth-chevron-right" /></span>
               <span v-localize="title || titleEmpty"></span>
-              <span v-if="suffix" class="-minor" v-localize:html="suffix"></span>
+              <span v-if="suffix" class="-minor -suffix" v-localize:html="suffix"></span>
               <span v-if="count > 0" class="-minor -count">{{count}}</span>
             </h2>
           </slot>
@@ -116,6 +116,7 @@
     .ui-icon-button
     {
       margin-right: var(--padding-s);
+      margin-top: -2px;
     }
   }
 
@@ -147,6 +148,9 @@
     font-weight: 700;
     //display: flex;
     //align-items: center;
+    font-size: var(--font-size-xl);
+    font-weight: 900;
+    //text-transform: uppercase;
 
     &.is-empty, .-minor
     {
@@ -160,7 +164,7 @@
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      background: var(--color-bg-shade-5); 
+      background: var(--color-box); 
       //box-shadow: var(--shadow-short);
       color: var(--color-text);
       height: 22px;
@@ -173,6 +177,13 @@
       margin-top: 2px;
       position: relative;
       top: -1px;
+    }
+
+    .ui-icon
+    {
+      position: relative;
+      top: 2px;
+      margin: 0 5px;
     }
   }
 
