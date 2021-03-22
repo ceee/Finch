@@ -1,103 +1,45 @@
-import Vue from 'vue';
 
+export var isServer = vNode =>
+{
+  return typeof vNode.componentInstance !== 'undefined' && vNode.componentInstance.$isServer;
+};
 
-/// calls the passed function when a click happens outside the target element
-Vue.directive('click-outside', {
-  bind(el, binding, vNode)
+export var isPopup = (popupItem, elements) =>
+{
+  if (!popupItem || !elements)
   {
-    if (!Helpers.validate(binding)) return;
-
-    // Define Handler and cache it on the element
-    function handler(e)
-    {
-      if (!vNode.context) return;
-
-      // some components may have related popup item, on which we shall prevent the click outside event handler.
-      var elements = e.path || (e.composedPath && e.composedPath());
-      elements && elements.length > 0 && elements.unshift(e.target);
-
-      if (el.contains(e.target) || Helpers.isPopup(vNode.context.popupItem, elements) || !el.__vueClickOutside__)
-      {
-        return;
-      }
-
-      el.__vueClickOutside__.callback(e);
-    }
-
-    // add Event Listeners
-    el.__vueClickOutside__ = {
-      handler: handler,
-      callback: binding.value
-    };
-
-    setTimeout(() =>
-    {
-      !Helpers.isServer(vNode) && document.addEventListener('click', handler);
-    }, 200);
-  },
-
-  update(el, binding)
-  {
-    if (Helpers.validate(binding))
-    {
-      el.__vueClickOutside__.callback = binding.value;
-    }
-  },
-
-  unbind(el, binding, vNode)
-  {
-    !Helpers.isServer(vNode) && document.removeEventListener('click', el.__vueClickOutside__.handler);
-    delete el.__vueClickOutside__;
+    return false;
   }
-});
 
-
-
-var Helpers = {
-
-  isServer(vNode)
+  for (var i = 0, len = elements.length; i < len; i++)
   {
-    return typeof vNode.componentInstance !== 'undefined' && vNode.componentInstance.$isServer;
-  },
-
-  isPopup(popupItem, elements)
-  {
-    if (!popupItem || !elements)
+    try
     {
-      return false;
-    }
-
-    for (var i = 0, len = elements.length; i < len; i++)
-    {
-      try
+      if (popupItem.contains(elements[i]))
       {
-        if (popupItem.contains(elements[i]))
-        {
-          return true;
-        }
-        if (elements[i].contains(popupItem))
-        {
-          return false;
-        }
+        return true;
       }
-      catch (e)
+      if (elements[i].contains(popupItem))
       {
         return false;
       }
     }
-
-    return false;
-  },
-
-  validate(binding)
-  {
-    if (typeof binding.value !== 'function')
+    catch (e)
     {
-      console.warn('v-click-outside: provided expression ' + binding.expression + ' is not a function.');
       return false;
     }
-
-    return true;
   }
 
+  return false;
+};
+
+export var validate = (binding) =>
+{
+  if (typeof binding.value !== 'function')
+  {
+    console.warn('v-click-outside: provided expression ' + binding.expression + ' is not a function.');
+    return false;
+  }
+
+  return true;
 };

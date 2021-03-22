@@ -1,30 +1,6 @@
-import Vue from 'vue';
-
-
-
-/// resize an element
-Vue.directive('resizable', {
-  bind(el, binding)
-  {
-    let resizable = new Resizable(el, binding.value);
-    resizable.listen();
-  },
-
-  update(el, binding)
-  {
-    
-  },
-
-  unbind(el, binding)
-  {
-
-  }
-});
-
-
 
 // object (new) that handles resizing of an element
-var Resizable = function (element, params)
+export var Resizable = function (element, params)
 {
   const prefix = 'zero.ui-resizable.';
   const cacheKey = prefix + (params.save || 'none');
