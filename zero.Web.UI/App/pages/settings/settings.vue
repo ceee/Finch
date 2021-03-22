@@ -29,6 +29,9 @@
 <script>
   import ApplicationsItems from 'zero/pages/settings/applications-items.vue'
   import SettingsApi from 'zero/api/settings.js';
+  import { ArrayHelper } from 'zero/zerox';
+
+  console.info(ArrayHelper);
 
   export default {
     name: 'app-settings',

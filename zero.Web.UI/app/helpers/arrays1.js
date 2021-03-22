@@ -9,7 +9,7 @@ const arrayMoveMutate = (array, from, to) =>
 /**
  * Move an item in an array
  */
-function move(array, from, to)
+export function move(array, from, to)
 {
   array = array.slice();
   arrayMoveMutate(array, from, to);
@@ -19,7 +19,7 @@ function move(array, from, to)
 /**
  * Replaces an item in an array
  */
-function replace(array, origin, target)
+export function replace(array, origin, target)
 {
   const index = array.indexOf(origin);
 
@@ -37,7 +37,7 @@ function replace(array, origin, target)
 /**
  * Removes an item from an array
  */
-function remove(array, value)
+export function remove(array, value)
 {
   const index = array.indexOf(value);
 
@@ -49,9 +49,3 @@ function remove(array, value)
   array.splice(index, 1);
   return index;
 }
-
-export default {
-  move,
-  replace,
-  remove
-};
