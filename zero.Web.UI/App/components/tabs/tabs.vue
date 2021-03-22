@@ -4,7 +4,7 @@
       <button type="button" v-for="(tab, index) in tabs" class="ui-tabs-list-item" :key="index" :class="{ 'is-active': tab.active, 'has-errors': tab.hasErrors }" :disabled="tab.disabled" 
               :aria-selected="tab.active" role="tab" @click="select(index)">
         <i v-if="tab.hasErrors" class="ui-tabs-list-item-error fth-alert-circle"></i>
-        {{ tab.label | localize }}
+        <ui-localize :value="tab.label" />
         <i v-if="tab.countOutput > 0" class="ui-tabs-list-item-count">{{tab.countOutput}}</i>
       </button>
     </div>

@@ -6,7 +6,13 @@
     <component :disabled="value.disabled" :is="tag" type="button" :to="value.url" class="ui-tree-item-link" @click="onClick(value, $event)">
       <ui-icon class="ui-tree-item-icon" :symbol="value.icon" :size="18" />
       <ui-icon v-if="value.modifier" :title="value.modifier.name" class="ui-tree-item-modifier" :symbol="modifier" :class="modifierClass" :size="12" />
-      <span class="ui-tree-item-text">{{value.name | localize}}<span class="ui-tree-item-description" v-if="value.description"><br />{{value.description | localize}}</span></span>
+      <span class="ui-tree-item-text">
+        <ui-localize :value="value.name" />
+        <span class="ui-tree-item-description" v-if="value.description">
+        <br />
+        <ui-localize :value="value.description" />
+        </span>
+      </span>
       
     </component>
     <ui-dot-button :disabled="value.disabled" class="ui-tree-item-actions" v-if="value.hasActions" @click="onActionsClicked(value, $event)" />

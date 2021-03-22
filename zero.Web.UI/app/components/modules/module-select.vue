@@ -6,7 +6,7 @@
         <button type="button" v-for="item in types" class="ui-modules-select-item" @click="onSelect(item)">
           <ui-icon class="ui-modules-select-item-icon" :symbol="item.icon" :size="22" />
           <span class="ui-modules-select-item-text">
-            {{item.name | localize}}
+            <ui-localize :value="item.name" />
             <span v-if="item.description" v-localize="item.description"></span>
           </span>
         </button>     

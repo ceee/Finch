@@ -10,7 +10,7 @@
         <button type="button" v-for="item in list" class="ui-select-overlay-item" @click="onSelect(item)">
           <ui-icon class="ui-select-overlay-item-icon" :symbol="item[configuration.iconKey]" :size="22" />
           <span class="ui-select-overlay-item-text">
-            {{item[configuration.labelKey] | localize}}
+            <ui-localize :value="item[configuration.labelKey]" />
             <span v-if="item[configuration.descriptionKey]" v-localize="item[configuration.descriptionKey]"></span>
           </span>
         </button>

@@ -63,6 +63,7 @@ import uiPagination from './pagination.vue';
 import uiPermissions from './permissions.vue';
 import uiRevisions from './revisions.vue';
 import uiIcon from './icon.vue';
+import uiLocalize from './localize.vue';
 
 import uiEditor from '../editor/editor.vue';
 import uiEditorInfos from '../editor/editor-infos.vue';
@@ -133,6 +134,7 @@ export default {
   uiPermissions,
   uiRevisions,
   uiIcon,
+  uiLocalize,
 
   uiEditor,
   uiEditorInfos

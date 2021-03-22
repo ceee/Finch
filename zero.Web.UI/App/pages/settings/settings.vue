@@ -15,7 +15,7 @@
             <strong v-localize="item.name"></strong>
             <template v-if="item.description">
               <br>
-              {{item.description | localize({ tokens: tokens })}}
+              <ui-localize :value="item.description" :tokens="tokens" />
             </template>
           </p>
         </router-link>

@@ -1,5 +1,5 @@
 ﻿<template>
-  <button type="button" class="ui-icon-button" :disabled="disabled" :class="'type-' + type.split(' ').join(' type-')" @click="tryClick" :title="title | localize">
+  <button type="button" class="ui-icon-button" :disabled="disabled" :class="'type-' + type.split(' ').join(' type-')" @click="tryClick" v-localize:title="title">
     <span class="sr-only" v-localize="title"></span>
     <ui-icon class="ui-button-icon" :symbol="icon" :size="size" :stroke="stroke" />
   </button>

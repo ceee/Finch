@@ -3,13 +3,13 @@
   <div @click="onClickShim">
     <button v-if="!confirming" :disabled="disabled" type="button" @click="onClick" class="ui-dropdown-button" :class="{ 'has-icon': icon, 'is-active': selected, 'is-multiline': multiline }">
       <ui-icon v-if="icon" :symbol="icon" class="ui-dropdown-button-icon" />
-      {{label | localize}}
+      <ui-localize :value="label" />
       <ui-icon v-if="selected" symbol="check" class="ui-dropdown-button-selected" />
       <i v-if="loading" class="ui-dropdown-button-progress"></i>
     </button>
     <div v-if="confirming" class="ui-dropdown-button-confirmation">
       <ui-icon v-if="icon" :symbol="icon" class="ui-dropdown-button-icon" />
-      {{label | localize}}
+      <ui-localize :value="label" />
       <ui-button type="small primary" label="OK" @click="onClick($event, true)" />
       <ui-button type="small light" label="Cancel" @click="confirming=false" />
     </div>

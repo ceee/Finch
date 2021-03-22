@@ -5,7 +5,6 @@ import App from 'zero/app.vue';
 import components from 'zero/components/all.js';
 import * as directives from 'zero/directives/all.js';
 //import 'zero/directives/globals.js';
-import 'zero/filters/globals.js';
 import 'zero/config/vue.config.js';
 import 'zero/config/axios.config.js';
 
