@@ -94,7 +94,7 @@ namespace zero.Core.Api
     public async Task<ListResult<MediaListItem>> GetListByQuery(MediaListItemQuery query)
     {
       bool hasSearch = !query.Search.IsNullOrWhiteSpace();
-      bool isRoot = !query.IsShared && query.FolderId.IsNullOrWhiteSpace();
+      bool isRoot = query.FolderId.IsNullOrWhiteSpace();
 
       query.SearchFor(entity => entity.Name);
 
@@ -102,7 +102,7 @@ namespace zero.Core.Api
         .OrderByDescending(x => x.IsFolder)
         .ThenBy(query.OrderBy, query.OrderIsDescending, query.OrderType == ListQueryOrderType.String ? OrderingType.String : OrderingType.Double);
 
-      using IAsyncDocumentSession session = Store.OpenAsyncSession(query.IsShared ? Backoffice.Options.Raven.Database : null);
+      using IAsyncDocumentSession session = Store.OpenAsyncSession();
       session.Advanced.MaxNumberOfRequestsPerSession = query.PageSize + 1;
 
       IRavenQueryable<MediaListItem> dbQuery = session.Query<MediaListItem, Media_ByParent>().ProjectInto<MediaListItem>();

@@ -1,39 +1,47 @@
 ﻿<template>
   <div class="media-content">
-    <ui-header-bar :back-button="!!id || shared" :count="count">
+    <ui-header-bar :back-button="!!id" :count="count">
       <template v-slot:title>
         <h2 class="ui-header-bar-title">
-          <router-link :to="{ name: 'media' }" class="media-items-hierarchy-item" v-if="!!id"><i class="fth-home"></i></router-link>
-          <router-link :to="{ name: 'media', params: { id: item.id } }" v-for="(item, index) in hierarchy" :key="item.id" class="media-items-hierarchy-item" v-localize="item.name"></router-link>
+          <span v-for="(item, index) in hierarchy" :key="item.id" class="media-items-hierarchy-item">
+            <router-link :to="{ name: 'media', params: { id: item.id } }" v-localize="item.name"></router-link>
+            <ui-icon v-if="index < hierarchy.length - 1" symbol="fth-chevron-right" />
+          </span>
         </h2>
       </template>
       <template>
-        <ui-search v-if="!selecting" v-model="gridConfig.search" class="onbg" />
-        <ui-dropdown v-if="!!id && !selecting" align="right" :disabled="!!gridConfig.search">
-          <template v-slot:button>
-            <ui-button type="light onbg" label="Folder" caret="down" :disabled="!!gridConfig.search" />
-          </template>
-          <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(current, true)" />
-          <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(current, true)" />
-          <ui-dropdown-separator />
-          <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove(current, true)" />
-        </ui-dropdown>
-        <ui-dropdown v-if="selecting" align="right">
-          <template v-slot:button>
-            <ui-button type="light onbg" :label="selectedText" caret="down" />
-          </template>
-          <!--<slot name="actions"></slot>-->
-        </ui-dropdown>
-        <ui-button v-if="!selecting" type="primary" label="Add folder" @click="addFolder(id)" />
-        <div v-if="!!id && !selecting" type="button" class="ui-button has-state type-primary state-default has-icon">
-          <span class="ui-button-text" v-localize="'Add file'"></span>
-          <input class="media-item-upload" type="file" multiple @change="onUpload" />
-        </div>
+        <template v-if="!selecting">
+          <ui-search v-model="gridConfig.search" class="onbg" />
+          <ui-dropdown v-if="!!id" align="right" :disabled="!!gridConfig.search">
+            <template v-slot:button>
+              <ui-button type="light onbg" label="@media.actions.folderdropdown" caret="down" :disabled="!!gridConfig.search" />
+            </template>
+            <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(current, true)" />
+            <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(current, true)" />
+            <ui-dropdown-separator />
+            <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove(current, true)" />
+          </ui-dropdown>
+          <ui-button type="primary" label="@ui.add" @click="add" />
+          <!--<div v-if="!!id" type="button" class="ui-button has-state type-primary state-default has-icon">
+            <span class="ui-button-text" v-localize="'@media.actions.addfile'"></span>
+            <input class="media-item-upload" type="file" multiple @change="onUpload" />
+          </div>-->
+        </template>
+        <template v-if="selecting">
+          <ui-button type="blank" label="@media.selection.clear" @click="clearSelection" />
+          <ui-dropdown align="right">
+            <template v-slot:button>
+              <ui-button type="primary" :label="selectedText" caret="down" />
+            </template>
+            <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(current, true)" />
+            <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove(current, true)" />
+          </ui-dropdown>
+        </template>
       </template>
     </ui-header-bar>
 
     <div class="ui-view-box">
-      <div class="media-items">
+      <div class="media-items" :class="{ 'is-selecting': selecting }">
         <ui-datagrid ref="grid" v-model="gridConfig" @select="onSelected" @count="count = $event">
           <template v-slot:actions="props">
             <ui-dropdown-button v-if="props.item && props.item.isFolder" label="@ui.open.title" icon="fth-arrow-right" @click="goToFolder(props.item.id)" />
@@ -61,6 +69,7 @@
   import UploadStatusOverlay from './overlays/upload-status.vue';
   import EventHub from 'zero/helpers/eventhub.js';
   import Notification from 'zero/helpers/notification.js';
+  import SelectOverlay from 'zero/components/overlays/select-overlay.vue';
   import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
 
   export default {
@@ -88,10 +97,6 @@
       selecting()
       {
         return this.selectedCount > 0;
-      },
-      shared()
-      {
-        return this.$route.query.scope === 'shared';
       }
     },
 
@@ -106,6 +111,12 @@
       }
     },
 
+    //beforeRouteUpdate(to, from, next)
+    //{
+    //  this.clearSelection();
+    //  next();
+    //},
+
     created()
     {
       this.gridConfig.items = this.getItems;
@@ -116,6 +127,7 @@
 
       initialize()
       {
+        //this.clearSelection();
         //if (!this.scope)
         //{
         //  this.$route.params.scope = 'local';
@@ -134,11 +146,10 @@
         query.search = this.gridConfig.search;
         query.folderId = this.$route.params.id;
         query.searchIsGlobal = true;
-        query.isShared = this.shared;
 
         this.getFolderHierarchy(query.folderId, !!query.search);
 
-        return MediaApi.getListByQuery(query).then(response => // .scope(this.shared)
+        return MediaApi.getListByQuery(query).then(response =>
         {
           return Promise.resolve(response);
         });
@@ -166,8 +177,12 @@
           return;
         }
 
-        MediaFolderApi.getHierarchy(id, this.shared).then(res =>
+        MediaFolderApi.getHierarchy(id).then(res =>
         {
+          res.splice(0, 0, {
+            id: null,
+            name: '@media.list'
+          });
           this.hierarchy = res;
           this.current = res[res.length - 1];
         });
@@ -181,6 +196,36 @@
           name: 'media',
           params: !id ? {} : { id: id }
         });
+      },
+
+
+      // shows add overlay
+      add()
+      {
+        //< !--< div v -if= "!!id" type = "button" class="ui-button has-state type-primary state-default has-icon" >
+        //    <span class="ui-button-text" v-localize="'@media.actions.addfile'"></span>
+        //    <input class="media-item-upload" type="file" multiple @change="onUpload" />
+        //  </div > -->
+        Overlay.open({
+          component: SelectOverlay,
+          width: 480,
+          theme: 'dark',
+          items: [ 
+            {
+              name: '@media.actions.addfile',
+              description: '@media.actions.addfile_text',
+              icon: 'fth-upload-cloud'
+            },
+            {
+              name: '@media.actions.addfolder',
+              description: '@media.actions.addfolder_text',
+              icon: 'fth-folder-plus'
+            }
+          ]
+        }).then(item =>
+        {
+          
+        }, () => { });
       },
 
 
@@ -322,6 +367,15 @@
             }
           });
         });
+      },
+
+
+      clearSelection()
+      {
+        if (this.$refs.grid)
+        {
+          this.$refs.grid.clearSelection();
+        }
       }
     }
   }
@@ -365,25 +419,22 @@
     margin: 0;
     font-size: var(--font-size-l);
     font-weight: 400;
-    color: var(--color-text-dim);
-    &:last-child
+    color: var(--color-text-dim); 
 
-  {
-    font-weight: 700;
-    color: var(--color-text);
-  }
+    a
+    {
+      color: var(--color-text-dim); 
+    }
 
-  & + .media-items-hierarchy-item:before
-  {
-    content: '/';
-    margin: 0 0.5em;
-    color: var(--color-text-dim);
-    font-weight: 400;
-  }
+    &:last-child a
+    {
+      font-weight: 700;
+      color: var(--color-text);
+    }
 
-  &:hover
-  {
-    color: var(--color-text);
-  }
+    a:hover
+    {
+      color: var(--color-text);
+    }
   }
 </style>

@@ -304,6 +304,12 @@
         }
 
         this.$emit('select', this.selected, this);
+      },
+
+      clearSelection()
+      {
+        this.selected = [];
+        this.$emit('select', this.selected, this);
       }
     }
   }

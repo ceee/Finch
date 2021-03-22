@@ -18,7 +18,9 @@ namespace zero.Core.Database.Indexes
         Name = item.Name,
         Image = null,
         Children = 0,
-        Size = 0
+        Size = 0,
+        IsShared = item.Blueprint != null,
+        AspectRatio = 0
       }));
 
       AddMap<IMedia>(items => items.Select(item => new MediaListItem
@@ -30,7 +32,9 @@ namespace zero.Core.Database.Indexes
         Name = item.Name,
         Image = item.PreviewSource,
         Children = 0,
-        Size = item.Size
+        Size = item.Size,
+        IsShared = item.Blueprint != null,
+        AspectRatio = item.ImageMeta != null ? (float)item.ImageMeta.Width / item.ImageMeta.Height : 0
       }));
 
       StoreAllFields(FieldStorage.Yes);

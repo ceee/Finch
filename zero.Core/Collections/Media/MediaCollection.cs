@@ -222,8 +222,6 @@ namespace zero.Core.Collections
         .OrderByDescending(x => x.IsFolder)
         .ThenBy(query.OrderBy, query.OrderIsDescending, query.OrderType == ListQueryOrderType.String ? OrderingType.String : OrderingType.Double);
 
-      Session.Advanced.MaxNumberOfRequestsPerSession = query.PageSize + 1;
-
       IRavenQueryable<MediaListItem> dbQuery = Session.Query<MediaListItem, Media_ByParent>().ProjectInto<MediaListItem>();
 
       if (!hasSearch || !query.SearchIsGlobal)
@@ -233,22 +231,15 @@ namespace zero.Core.Collections
 
       ListResult<MediaListItem> result = await dbQuery.ToQueriedListAsyncX(query);
 
+      string[] ids = result.Items.Where(x => x.IsFolder).Select(x => x.Id).ToArray();
+
+      List<Media_ByChildren.Result> children = await Session.Query<Media_ByChildren.Result, Media_ByChildren>()
+        .Where(x => x.ParentId.In(ids))
+        .ToListAsync();
+
       foreach (MediaListItem item in result.Items)
       {
-        if (item.IsFolder)
-        {
-          item.Children = await Session.Query<MediaListItem, Media_ByParent>().CountAsync(x => x.ParentId == item.Id);
-        }
-      }
-
-      // TODO this is only inserted when we have a core/shared database and a multi-tenancy setup
-      if (isRoot && Database != Context.Options.Raven.Database)
-      {
-        result.Items.Insert(0, new MediaListItem()
-        {
-          Id = "shared",
-          IsFolder = true
-        });
+        item.Children = children.FirstOrDefault(x => x.ParentId == item.Id)?.ChildrenCount ?? 0;
       }
 
       return result;

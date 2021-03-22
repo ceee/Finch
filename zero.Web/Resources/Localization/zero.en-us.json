@@ -591,6 +591,16 @@
     "name": "Media",
     "addfolder": "Add a new folder",
     "editfolder": "Edit folder",
+    "actions": {
+      "folderdropdown": "Folder",
+      "addfolder": "Create folder",
+      "addfolder_text": "Adds a new folder in the current parent folder",
+      "addfile": "Upload files",
+      "addfile_text": "Add one or more files to the current filter"
+    },
+    "selection": {
+      "clear": "Clear selection"
+    },
     "fields": {
       "foldername_placeholder": "Enter a name ...",
       "caption": "Caption",

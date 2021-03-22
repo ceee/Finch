@@ -87,12 +87,11 @@
 
     & + .ui-view-box
     {
-      padding-top: 0;
+      padding-top: 0; 
     }
 
     .app-tree &
     {
-      height: 90px;
       margin-bottom: 8px;
     }
   }
@@ -146,11 +145,6 @@
     margin: 0;
     font-size: var(--font-size-l);
     font-weight: 700;
-    //display: flex;
-    //align-items: center;
-    font-size: var(--font-size-xl);
-    font-weight: 900;
-    //text-transform: uppercase;
 
     &.is-empty, .-minor
     {

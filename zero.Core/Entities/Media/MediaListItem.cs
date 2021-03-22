@@ -21,5 +21,9 @@ namespace zero.Core.Entities
     public int Children { get; set; }
 
     public bool HasTransparency { get; set; }
+
+    public float AspectRatio { get; set; }
+
+    public bool IsShared { get; set; }
   }
 }

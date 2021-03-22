@@ -2,7 +2,7 @@
   <div class="media-upload">
 
     <div v-if="entity.source" class="media-upload-preview" :data-type="entity.type">
-      <span ref="image" v-if="entity.type === 'image'" class="media-upload-preview-image media-bg-pattern" @click="setFocalPoint" @dblclick="entity.focalPoint = null">
+      <span ref="image" v-if="entity.type === 'image'" class="media-upload-preview-image media-pattern" @click="setFocalPoint" @dblclick="entity.focalPoint = null">
         <span class="media-upload-preview-focal-point" :style="getFocalPointStyle(entity.focalPoint)"></span>
         <img :src="entity.previewSource" :alt="entity.name" />
       </span>
@@ -125,7 +125,6 @@
   {
     padding: 0;
     border-radius: var(--radius);
-    background: var(--color-bg-dim);
     display: inline-block;
     position: relative;
     cursor: pointer;

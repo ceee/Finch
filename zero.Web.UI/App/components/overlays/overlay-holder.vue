@@ -4,7 +4,7 @@
       <div class="app-overlay-outer" :display="instance.display" v-for="(instance, index) in instances" :key="instance.id" :style="{ transform: instance.display !== 'editor' ? null : 'translateX(' + (editorLength - index - 1) * -60 + 'px)' }">
         <div class="app-overlay-bg" @click="close(instance)"></div>
         <dialog open class="app-overlay" :style="{ width: instance.width + 'px' }" :class="'theme-' + instance.theme" :display="instance.display">
-          <component :is="instance.component" :model.sync="instance.model" :config="instance"></component>
+          <component :is="instance.component" :model.sync="instance.model" :config="instance" v-bind="instance"></component>
         </dialog>
       </div>
     </transition-group>
@@ -93,6 +93,15 @@
     z-index: 3;
     color: var(--color-text);
     font-size: var(--font-size);
+  }
+
+  .app-overlay .ui-loading
+  {
+    position: relative;
+    left: 50%;
+    margin-left: -16px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   .app-overlay[display="dialog"] .ui-form-loading
