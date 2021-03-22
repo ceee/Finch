@@ -1,7 +1,6 @@
 ﻿
 import Page from './page.vue';
 import Pages from './pages.vue';
-import RecycleBin from './recyclebin/recyclebin.vue';
 
 const alias = __zero.alias.sections.pages;
 const section = __zero.sections.find(x => x.alias === alias);
@@ -35,7 +34,7 @@ export default section ? [
         name: 'recyclebin',
         path: 'recyclebin',
         section: alias,
-        component: RecycleBin,
+        component: () => import('./recyclebin/recyclebin.vue'),
         meta: {
           name: '@recyclebin.name'
         }

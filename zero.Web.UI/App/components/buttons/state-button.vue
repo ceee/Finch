@@ -41,7 +41,7 @@
   }
 </script>
 
-<style lang="scss">
+<style>
   .ui-state-button
   {
     display: inline-flex;
@@ -57,30 +57,28 @@
     background: var(--color-input);
     padding: 10px 16px;
     color: var(--color-text-dim);
+  }
 
-    & + .ui-state-button-item
-    {
-      border-left: none;
-    }
+  button.ui-state-button-item + .ui-state-button-item
+  {
+    border-left: none;
+  }
 
-    &:first-of-type
-    {
-      border-top-left-radius: var(--radius);
-      border-bottom-left-radius: var(--radius);
-    }
+  button.ui-state-button-item:first-of-type
+  {
+    border-top-left-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
+  }
 
-    &:last-child
-    {
-      border-top-right-radius: var(--radius);
-      border-bottom-right-radius: var(--radius);
-    }
+  button.ui-state-button-item:last-child
+  {
+    border-top-right-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+  }
 
-    &.is-active
-    {
-      //background: var(--color-bg-bright-three);
-      color: var(--color-text);
-      font-weight: bold;
-    }
-   
+  button.ui-state-button-item.is-active
+  {
+    color: var(--color-text);
+    font-weight: bold;
   }
 </style>

@@ -315,18 +315,18 @@
   }
 </script>
 
-<style lang="scss">
+<style>
   .ui-datagrid-items
   {
     display: grid;
     gap: var(--padding-s);
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     align-items: stretch;
+  }
 
-    &.is-block
-    {
-      display: block;
-    }
+  .ui-datagrid-items.is-block
+  {
+    display: block;
   }
 
   .ui-datagrid-item

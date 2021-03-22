@@ -114,26 +114,22 @@
   .ui-check-list-item
   {
     display: block;
-
-    & + .ui-check-list-item
-    {
-      margin-top: 14px;
-    }
   }
-
+  .ui-alias + .ui-check-list-item
+  {
+    margin-top: 14px;
+  }
   .ui-check-list.is-inline .ui-check-list-item
   {
     display: inline-block;
-    
-    & + .ui-check-list-item
-    {
-      margin-top: 0;
-      margin-left: 30px;
-    }
-
-    .ui-native-check-toggle
-    {
-      margin-right: 6px;
-    }
+  }
+  .ui-check-list.is-inline .ui-check-list-item + .ui-check-list-item
+  {
+    margin-top: 0;
+    margin-left: 30px;
+  }
+  .ui-check-list.is-inline .ui-check-list-item .ui-native-check-toggle
+  {
+    margin-right: 6px;
   }
 </style>

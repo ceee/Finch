@@ -13,6 +13,8 @@ Object.entries(components).forEach(cmp =>
   Vue.component(cmp[0], cmp[1].default || cmp[1]);
 });
 
+Vue.component('MyAddButton', () => import('zero/components/buttons/add-button-2.vue'));
+
 Vue.use(VueRouter);
 Vue.use(Zero);
 

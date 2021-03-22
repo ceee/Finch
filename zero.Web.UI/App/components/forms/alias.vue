@@ -96,40 +96,40 @@
   }
 </script>
 
-<style lang="scss">
+<style>
   .ui-alias
   {
     display: flex;
     align-items: center;
+  }
 
-    button
-    {
-      width: 24px;
-      height: 24px;
-      border-radius: var(--radius);
-      background: var(--color-box-nested);
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 13px;
-      margin-right: 10px;
-    }
+  .ui-alias button
+  {
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius);
+    background: var(--color-box-nested);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    margin-right: 10px;
+  }
 
-    input
-    {
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      height: 24px !important;
-      padding: 0 !important;
-      outline: none !important;
-      min-width: 10px !important;
-      width: auto !important;
-    }
+  .ui-alias input
+  {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    height: 24px !important;
+    padding: 0 !important;
+    outline: none !important;
+    min-width: 10px !important;
+    width: auto !important;
+  }
 
-    &:not(.is-locked) input
-    {
-      font-weight: bold;
-    }
+  .ui-alias:not(.is-locked) input
+  {
+    font-weight: bold;
   }
 </style>

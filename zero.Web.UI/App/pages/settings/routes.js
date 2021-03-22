@@ -1,19 +1,4 @@
 ﻿
-import Settings from './settings.vue';
-import Applications from './applications.vue';
-import Application from './application.vue';
-import Countries from './countries.vue';
-import Country from './country.vue';
-import Languages from './languages.vue';
-import Language from './language.vue';
-import Users from './users.vue';
-import User from './user.vue';
-import UserRole from './role.vue';
-import MailTemplates from './mails.vue';
-import MailTemplate from './mail.vue';
-import Translations from './translations.vue';
-import Integrations from './integrations.vue';
-
 const alias = __zero.alias.sections.settings;
 const section = __zero.sections.find(x => x.alias === alias);
 let settings = [];
@@ -85,7 +70,7 @@ if (section)
   routes.push({
     name: section.alias,
     path: section.url,
-    component: Settings,
+    component: () => import('./settings.vue'),
     meta: {
       name: section.name,
       alias: section.alias,
@@ -96,25 +81,25 @@ if (section)
 
   // add details
 
-  addArea(__zero.alias.settings.applications, Applications, Application, true);
+  addArea(__zero.alias.settings.applications, () => import('./applications.vue'), () => import('./application.vue'), true);
 
-  addArea(__zero.alias.settings.countries, Countries, Country, true);
+  addArea(__zero.alias.settings.countries, () => import('./countries.vue'), () => import('./country.vue'), true);
 
-  addArea(__zero.alias.settings.languages, Languages, Language, true);
+  addArea(__zero.alias.settings.languages, () => import('./languages.vue'), () => import('./language.vue'), true);
 
-  addArea(__zero.alias.settings.translations, Translations, Translations, true);
+  addArea(__zero.alias.settings.translations, () => import('./translations.vue'), () => import('./translations.vue'), true);
 
-  addArea(__zero.alias.settings.mails, MailTemplates, MailTemplate, true);
+  addArea(__zero.alias.settings.mails, () => import('./mails.vue'), () => import('./mail.vue'), true);
 
-  addArea(__zero.alias.settings.integrations, Integrations);
+  addArea(__zero.alias.settings.integrations, () => import('./integrations.vue'));
 
-  addArea(__zero.alias.settings.users, Users, User, true, area =>
+  addArea(__zero.alias.settings.users, () => import('./users.vue'), () => import('./user.vue'), true, area =>
   {
     routes.push({
       name: 'roles-create',
       path: '/' + section.alias + '/roles/create/:scope?',
       props: true,
-      component: UserRole,
+      component: () => import('./role.vue'),
       meta: {
         create: true,
         name: area.name
@@ -125,7 +110,7 @@ if (section)
       name: 'roles-edit',
       path: '/' + section.alias + '/roles/edit/:id',
       props: true,
-      component: UserRole,
+      component: () => import('./role.vue'),
       meta: {
         name: area.name
       }
