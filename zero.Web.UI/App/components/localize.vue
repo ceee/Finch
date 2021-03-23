@@ -1,5 +1,4 @@
 ﻿<template>
-  <!-- // TODO can we replace this in Vue 3 with just {{output}}? <span> will destroy layout -->
   <span>{{output}}</span>
 </template>
 
@@ -21,10 +20,7 @@
       },
       tokens: {
         type: Object,
-        default: () =>
-        {
-          return {}
-        }
+        default: null
       },
       hideEmpty: {
         type: Boolean,
@@ -32,27 +28,10 @@
       }
     },
 
-    data: () => ({
-      output: null
-    }),
-
-    watch: {
-      value: function (value)
+    computed: {
+      output()
       {
-        this.rebuild();
-      }
-    },
-
-    mounted()
-    {
-      this.rebuild();
-    },
-
-    methods: {
-
-      rebuild()
-      {
-        this.output = Localization.localize(this.value, { tokens: this.tokens, force: this.force, hideEmpty: this.hideEmpty });
+        return Localization.localize(this.value, { tokens: this.tokens, force: this.force, hideEmpty: this.hideEmpty });
       }
     }
   }
