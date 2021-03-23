@@ -4,7 +4,7 @@
       <ui-icon class="ui-tree-item-arrow" :symbol="'fth-chevron-' + (value.isOpen ? 'up' : 'down')" />
     </button>
     <component :disabled="value.disabled" :is="tag" type="button" :to="value.url" class="ui-tree-item-link" @click="onClick(value, $event)">
-      <ui-icon class="ui-tree-item-icon" :symbol="value.icon" :size="18" />
+      <ui-icon class="ui-tree-item-icon" :class="{'is-dashed': value.isDashed }" :symbol="value.icon" :size="18" />
       <ui-icon v-if="value.modifier" :title="value.modifier.name" class="ui-tree-item-modifier" :symbol="modifier" :class="modifierClass" :size="12" />
       <span class="ui-tree-item-text">
         <ui-localize :value="value.name" />
@@ -232,6 +232,11 @@
     top: -2px;
     color: var(--color-text-dim);
     transition: color 0.2s ease;
+  }
+
+  .ui-tree-item-icon.is-dashed
+  {
+    stroke-dasharray: 3.5px; 
   }
 
   .ui-tree-item:hover .ui-tree-item-icon

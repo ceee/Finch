@@ -61,6 +61,11 @@
     public bool IsInactive { get; set; }
 
     /// <summary>
+    /// Whether to display the item icon with a dashed line
+    /// </summary>
+    public bool IsDashed { get; set; }
+
+    /// <summary>
     /// Whether to show actions menu. This will only work when the onActionsRequested cb is implemented in the component
     /// </summary>
     public bool HasActions { get; set; }
