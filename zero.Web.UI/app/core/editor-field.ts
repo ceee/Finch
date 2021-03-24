@@ -1,35 +1,4 @@
 ﻿
-import Text from '../editor/fields/text.vue';
-import Password from '../editor/fields/password.vue';
-import Currency from '../editor/fields/currency.vue';
-import Number from '../editor/fields/number.vue';
-import Rte from '../editor/fields/rte.vue';
-import Select from '../editor/fields/select.vue';
-import Textarea from '../editor/fields/textarea.vue';
-import Toggle from '../editor/fields/toggle.vue';
-import Alias from '../editor/fields/alias.vue';
-import Output from '../editor/fields/output.vue';
-import Checklist from '../editor/fields/checklist.vue';
-import ColorPicker from '../editor/fields/colorpicker.vue';
-import CountryPicker from '../editor/fields/countrypicker.vue';
-import SpacePicker from '../editor/fields/spacepicker.vue';
-import MailTemplatePicker from '../editor/fields/mailtemplatepicker.vue';
-import CulturePicker from '../editor/fields/culturepicker.vue';
-import DatePicker from '../editor/fields/datepicker.vue';
-import DateRangePicker from '../editor/fields/daterangepicker.vue';
-import IconPicker from '../editor/fields/iconPicker.vue';
-import LanguagePicker from '../editor/fields/language.vue';
-import PagePicker from '../editor/fields/pagepicker.vue';
-import LinkPicker from '../editor/fields/linkpicker.vue';
-import InputList from '../editor/fields/inputlist.vue';
-import Media from '../editor/fields/media.vue';
-import Modules from '../editor/fields/modules.vue';
-import Nested from '../editor/fields/nested.vue';
-import State from '../editor/fields/state.vue';
-import Tags from '../editor/fields/tags.vue';
-import Link from '../editor/fields/link.vue';
-
-
 class EditorField
 {
   path = null;
@@ -167,7 +136,7 @@ class EditorField
    */
   text(maxLength, placeholder)
   {
-    return this._setComponent(Text, { maxLength, placeholder });
+    return this._setComponent(() => import('../editor/fields/text.vue'), { maxLength, placeholder });
   }
 
 
@@ -179,7 +148,7 @@ class EditorField
    */
   password(maxLength, placeholder)
   {
-    return this._setComponent(Password, { maxLength, placeholder });
+    return this._setComponent(() => import('../editor/fields/password.vue'), { maxLength, placeholder });
   }
 
 
@@ -190,7 +159,7 @@ class EditorField
    */
   currency(placeholder)
   {
-    return this._setComponent(Currency, { placeholder });
+    return this._setComponent(() => import('../editor/fields/currency.vue'), { placeholder });
   }
 
 
@@ -202,7 +171,7 @@ class EditorField
    */
   number(maxLength, placeholder)
   {
-    return this._setComponent(Number, { maxLength, placeholder });
+    return this._setComponent(() => import('../editor/fields/number.vue'), { maxLength, placeholder });
   }
 
 
@@ -212,7 +181,7 @@ class EditorField
    */
   rte()
   {
-    return this._setComponent(Rte);
+    return this._setComponent(() => import('../editor/fields/rte.vue'));
   }
 
 
@@ -231,7 +200,7 @@ class EditorField
    */
   select(items, options)
   {
-    return this._setComponent(Select, { items, ...options });
+    return this._setComponent(() => import('../editor/fields/select.vue'), { items, ...options });
   }
 
 
@@ -242,7 +211,7 @@ class EditorField
    */
   textarea(maxLength)
   {
-    return this._setComponent(Textarea, { maxLength });
+    return this._setComponent(() => import('../editor/fields/textarea.vue'), { maxLength });
   }
 
 
@@ -253,7 +222,7 @@ class EditorField
    */
   toggle(negative)
   {
-    return this._setComponent(Toggle, { negative });
+    return this._setComponent(() => import('../editor/fields/toggle.vue'), { negative });
   }
 
 
@@ -265,7 +234,7 @@ class EditorField
   output(render)
   {
     this.#isReadOnly = true;
-    return this._setComponent(Output, { render });
+    return this._setComponent(() => import('../editor/fields/text.vue'), { render });
   }
 
 
@@ -276,7 +245,7 @@ class EditorField
    */
   alias(namePath)
   {
-    return this._setComponent(Alias, { namePath });
+    return this._setComponent(() => import('../editor/fields/alias.vue'), { namePath });
   }
 
 
@@ -292,7 +261,7 @@ class EditorField
    */
   checkList(items, options)
   {
-    return this._setComponent(Checklist, { items, ...options });
+    return this._setComponent(() => import('../editor/fields/checklist.vue'), { items, ...options });
   }
 
 
@@ -302,7 +271,7 @@ class EditorField
    */
   colorPicker()
   {
-    return this._setComponent(ColorPicker);
+    return this._setComponent(() => import('../editor/fields/colorpicker.vue'));
   }
 
 
@@ -313,7 +282,7 @@ class EditorField
    */
   countryPicker(limit)
   {
-    return this._setComponent(CountryPicker, { limit });
+    return this._setComponent(() => import('../editor/fields/colorpicker.vue'), { limit });
   }
 
 
@@ -324,7 +293,7 @@ class EditorField
    */
   spacePicker(limit)
   {
-    return this._setComponent(SpacePicker, { limit });
+    return this._setComponent(() => import('../editor/fields/spacepicker.vue'), { limit });
   }
 
 
@@ -334,7 +303,7 @@ class EditorField
    */
   culturePicker()
   {
-    return this._setComponent(CulturePicker);
+    return this._setComponent(() => import('../editor/fields/culturepicker.vue'));
   }
 
 
@@ -345,7 +314,7 @@ class EditorField
    */
   mailTemplatePicker(limit)
   {
-    return this._setComponent(MailTemplatePicker, { limit });
+    return this._setComponent(() => import('../editor/fields/mailtemplatepicker.vue'), { limit });
   }
 
 
@@ -361,7 +330,7 @@ class EditorField
    */
   datePicker(options)
   {
-    return this._setComponent(DatePicker, { ...options });
+    return this._setComponent(() => import('../editor/fields/datepicker.vue'), { ...options });
   }
 
 
@@ -380,7 +349,7 @@ class EditorField
    */
   dateRangePicker(options)
   {
-    return this._setComponent(DateRangePicker, { ...options });
+    return this._setComponent(() => import('../editor/fields/daterangepicker.vue'), { ...options });
   }
 
 
@@ -391,7 +360,7 @@ class EditorField
    */
   iconPicker(iconSetAlias)
   {
-    return this._setComponent(IconPicker, { set: iconSetAlias });
+    return this._setComponent(() => import('../editor/fields/iconPicker.vue'), { set: iconSetAlias });
   }
 
 
@@ -403,7 +372,7 @@ class EditorField
    */
   pagePicker(options)
   {
-    return this._setComponent(PagePicker, { ...options });
+    return this._setComponent(() => import('../editor/fields/pagepicker.vue'), { ...options });
   }
 
 
@@ -420,7 +389,7 @@ class EditorField
    */
   linkPicker(options)
   {
-    return this._setComponent(LinkPicker, { ...options });
+    return this._setComponent(() => import('../editor/fields/linkpicker.vue'), { ...options });
   }
 
 
@@ -433,7 +402,7 @@ class EditorField
    */
   inputList(limit, maxItemLength, addLabel)
   {
-    return this._setComponent(InputList, { limit, maxItemLength, addLabel });
+    return this._setComponent(() => import('../editor/fields/inputlist.vue'), { limit, maxItemLength, addLabel });
   }
 
 
@@ -445,7 +414,7 @@ class EditorField
    */
   tags(limit, maxItemLength)
   {
-    return this._setComponent(Tags, { limit, maxItemLength });
+    return this._setComponent(() => import('../editor/fields/tags.vue'), { limit, maxItemLength });
   }
 
 
@@ -455,7 +424,7 @@ class EditorField
    */
   languagePicker()
   {
-    return this._setComponent(LanguagePicker);
+    return this._setComponent(() => import('../editor/fields/language.vue'));
   }
 
 
@@ -466,7 +435,7 @@ class EditorField
    */
   modules(tags)
   {
-    return this._setComponent(Modules, { tags });
+    return this._setComponent(() => import('../editor/fields/modules.vue'), { tags });
   }
 
 
@@ -485,7 +454,7 @@ class EditorField
    */
   nested(editor, options)
   {
-    return this._setComponent(Nested, { editor, ...options });
+    return this._setComponent(() => import('../editor/fields/nested.vue'), { editor, ...options });
   }
 
 
@@ -496,7 +465,7 @@ class EditorField
    */
   state(items)
   {
-    return this._setComponent(State, { items });
+    return this._setComponent(() => import('../editor/fields/state.vue'), { items });
   }
 
 
@@ -512,7 +481,7 @@ class EditorField
    */
   media(options)
   {
-    return this._setComponent(Media, { ...options });
+    return this._setComponent(() => import('../editor/fields/media.vue'), { ...options });
   }
 
 
@@ -528,7 +497,7 @@ class EditorField
    */
   image(options)
   {
-    return this._setComponent(Media, { ...options, fileExtensions: ['.jpg', '.jpeg', '.png', '.webp', '.svg'] });
+    return this._setComponent(() => import('../editor/fields/media.vue'), { ...options, fileExtensions: ['.jpg', '.jpeg', '.png', '.webp', '.svg'] });
   }
 
 

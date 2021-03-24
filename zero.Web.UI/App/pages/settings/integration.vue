@@ -26,7 +26,6 @@
 
 
 <script>
-  import UiEditor from 'zero/editor/editor.vue';
   import Overlay from 'zero/helpers/overlay.js';
   import Notification from 'zero/helpers/notification.js';
   import IntegrationsApi from 'zero/api/integrations.js';
@@ -36,8 +35,6 @@
     props: {
       config: Object
     },
-
-    components: { UiEditor },
 
     data: () => ({
       disabled: false,

@@ -30,7 +30,6 @@
 
 
 <script>
-  import IntegrationOverlay from './integration.vue';
   import Overlay from 'zero/helpers/overlay.js';
 
   export default {
@@ -57,7 +56,7 @@
       {
         // open editing overlay
         return Overlay.open({
-          component: IntegrationOverlay,
+          component: () => import('./integration.vue'),
           display: 'editor',
           model: this.model.type,
           isCreate: !this.model.isConfigured,

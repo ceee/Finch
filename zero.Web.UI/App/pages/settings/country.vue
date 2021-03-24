@@ -15,7 +15,6 @@
 
 <script>
   import CountriesApi from 'zero/api/countries.js';
-  import UiEditorAside from 'zero/editor/editor-aside.vue';
 
   export default {
     props: ['id'],
@@ -26,8 +25,6 @@
       route: zero.alias.settings.countries + '-edit',
       disabled: false
     }),
-
-    components: { UiEditorAside },
 
     methods: {
 

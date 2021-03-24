@@ -11,13 +11,9 @@
 
 
 <script>
-  import { filter as _filter } from 'underscore';
   import UserRolesApi from 'zero/api/userRoles.js';
-  import UiEditor from 'zero/editor/editor.vue';
 
   export default {
-    components: { UiEditor },
-
     data: () => ({
       meta: {},
       model: { name: null, features: [], domains: [], claims: [] },

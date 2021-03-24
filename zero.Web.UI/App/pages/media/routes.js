@@ -1,7 +1,4 @@
 ﻿
-import Media from './detail.vue';
-import MediaOverview from './overview.vue';
-
 const alias = __zero.alias.sections.media;
 const section = __zero.sections.find(x => x.alias === alias);
 
@@ -9,7 +6,7 @@ export default section ? [
   {
     name: section.alias,
     path: section.url + '/:id?',
-    component: MediaOverview,
+    component: () => import('./overview.vue'),
     props: true,
     meta: {
       name: section.name,
@@ -20,7 +17,7 @@ export default section ? [
   {
     name: section.alias + '-edit',
     path: section.url + '/edit/:id',
-    component: Media,
+    component: () => import('./detail.vue'),
     props: true,
     meta: {
       name: section.name,

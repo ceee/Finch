@@ -1,6 +1,5 @@
 ﻿
 import EditorField from './editor-field.ts';
-import Infos from '../editor/editor-infos.vue';
 
 class Editor
 {
@@ -153,7 +152,7 @@ class Editor
    */
   infoTab()
   {
-    return this.tab('infos', '@ui.tab_infos', x => 0, false, 'is-blank', Infos);
+    return this.tab('infos', '@ui.tab_infos', x => 0, false, 'is-blank', () => import('../editor/editor-infos.vue'));
   }
 
 

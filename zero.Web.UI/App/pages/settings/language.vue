@@ -12,12 +12,9 @@
 
 <script>
   import LanguagesApi from 'zero/api/languages.js';
-  import UiEditor from 'zero/editor/editor.vue';
 
   export default {
     props: ['id'],
-
-    components: { UiEditor },
 
     data: () => ({
       meta: {},

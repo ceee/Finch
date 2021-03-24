@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="page page-error">
-    <i class="page-error-icon fth-cloud-snow"></i>
+    <ui-icon class="page-error-icon" symbol="fth-cloud-snow" :size="82" />
     <p class="page-error-text">
       <strong class="page-error-headline">Not found</strong><br>
       The requested resource could not be found
@@ -102,7 +102,6 @@
 
   .page-error-icon
   {
-    font-size: 82px;
     color: var(--color-text);
     margin-bottom: 20px;
   }

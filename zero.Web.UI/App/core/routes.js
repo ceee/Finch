@@ -1,6 +1,4 @@
 ﻿
-import Preview from '../pages/preview.vue';
-import NotFound from '../pages/notfound.vue';
 import dashboardRoutes from '../pages/dashboard/routes.js';
 import pageRoutes from '../pages/pages/routes.js';
 import mediaRoutes from '../pages/media/routes.js';
@@ -11,7 +9,7 @@ export default [
   {
     name: 'preview',
     path: '/preview',
-    component: Preview,
+    component: () => import('../pages/preview.vue'),
     meta: {
       name: '@preview.name'
     }
@@ -24,6 +22,6 @@ export default [
   {
     name: '404',
     path: '*',
-    component: NotFound
+    component: () => import('../pages/notfound.vue')
   }
 ];

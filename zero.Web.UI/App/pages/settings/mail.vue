@@ -12,12 +12,9 @@
 
 <script>
   import MailTemplatesApi from 'zero/api/mailTemplates.js';
-  import UiEditor from 'zero/editor/editor.vue';
 
   export default {
     props: ['id'],
-
-    components: { UiEditor },
 
     data: () => ({
       meta: {},

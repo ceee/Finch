@@ -1,8 +1,4 @@
 ﻿
-import MediaApi from 'zero/api/media.js';
-import Strings from 'zero/helpers/strings.js';
-import Localization from 'zero/helpers/localization.js';
-
 class ListAction
 {
   key;
@@ -28,7 +24,6 @@ class ListAction
    */
   call(options)
   {
-    console.info(options);
     this.action(options);
   }
 }

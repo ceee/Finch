@@ -1,5 +1,4 @@
 ﻿
-import Editor from './editor.ts';
 import ListColumn from './list-column.ts';
 import ListAction from './list-action.ts';
 
