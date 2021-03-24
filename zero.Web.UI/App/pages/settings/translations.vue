@@ -13,7 +13,6 @@
 
 <script>
   import Overlay from 'zero/helpers/overlay.js';
-  import AddOverlay from './translation.vue';
 
   export default {
     data: () => ({
@@ -58,7 +57,7 @@
       edit(id)
       {
         Overlay.open({
-          component: AddOverlay,
+          component: () => import('./translation.vue'),
           width: 700,
           model: { id }
         }).then(res =>

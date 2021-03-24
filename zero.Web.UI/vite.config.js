@@ -42,6 +42,10 @@ const aliasResolver = {
     {
       return '/@' + id;
     }
+    if (id.indexOf('zerolib') === 0)
+    {
+      return '/@zero/zerox.js';
+    }
   }
   //requestToFile(publicPath, root)
   //{
