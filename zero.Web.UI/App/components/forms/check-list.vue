@@ -115,6 +115,10 @@
   {
     display: block;
   }
+  .ui-check-list .ui-check-list-item + .ui-check-list-item
+  {
+    margin-top: 8px;
+  }
   .ui-alias + .ui-check-list-item
   {
     margin-top: 14px;
