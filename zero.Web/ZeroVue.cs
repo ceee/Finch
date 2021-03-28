@@ -65,6 +65,7 @@ namespace zero.Web
       config.AppId = Context.AppId;
       //config.SharedAppId = Constants.Database.SharedAppId; // TODO appx
       config.Icons = CreateIconSets();
+      config.Translations = CreateTranslations();
 
       BackofficeUser user = await AuthenticationApi.GetUser();
 
@@ -81,7 +82,6 @@ namespace zero.Web
         };
 
         config.Sections = CreateSections();
-        config.Translations = CreateTranslations();
         config.Applications = await CreateApplications();
         config.SettingsAreas = CreateSettingsAreas();
 
