@@ -25,6 +25,8 @@
     "createdDate": "Created",
     "modifiedDate": "Last modified",
     "id": "ID",
+    "disabled": "Disabled",
+    "enabled": "Enabled",
     "active": "Active",
     "inactive": "Inactive",
     "delete": "Delete",

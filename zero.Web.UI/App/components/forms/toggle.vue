@@ -152,6 +152,11 @@
     }
   }
 
+  .ui-toggle.onbg .ui-toggle-switch:not(.is-active)
+  {
+    background: var(--color-bg);
+  }
+
   .ui-toggle.is-negative .ui-toggle-switch.is-active
   {
     background: var(--color-negative);
