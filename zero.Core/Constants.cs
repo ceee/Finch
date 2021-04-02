@@ -78,5 +78,12 @@
       public const string FolderAlias = "zero.folder";
       public const string DefaultRootPageTypeAlias = "root";
     }
+
+    public static class Routing
+    {
+      public const string InternalRoutePrefix = "/__zero/";
+
+      public const string ErrorRoute = InternalRoutePrefix + "error";
+    }
   }
 }

@@ -12,6 +12,7 @@ namespace zero.Core.Options
       DefaultEndpoint = new("ZeroFrontend", "Index");
       EndpointResolvers = new();
       PageResolvers = new();
+      ErrorReexecutionPath = "/error";
     }
 
 
@@ -26,5 +27,10 @@ namespace zero.Core.Options
     /// 
     /// </summary>
     public RoutingPageResolverOptions PageResolvers { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string ErrorReexecutionPath { get; set; }
   }
 }
