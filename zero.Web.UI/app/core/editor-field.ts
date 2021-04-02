@@ -292,7 +292,7 @@ class EditorField
    */
   countryPicker(limit)
   {
-    return this._setComponent(() => import('../editor/fields/colorpicker.vue'), { limit });
+    return this._setComponent(() => import('../editor/fields/countrypicker.vue'), { limit });
   }
 
 
