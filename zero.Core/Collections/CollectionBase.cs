@@ -122,6 +122,8 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public virtual async Task<Dictionary<string, T>> GetByIds(params string[] ids)
     {
+      ids = ids.Distinct().ToArray();
+
       Dictionary<string, T> models = await Session.LoadAsync<T>(ids);
       Dictionary<string, T> result = new Dictionary<string, T>();
 

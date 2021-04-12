@@ -73,12 +73,12 @@ a.ui-table-row:hover, button.ui-table-row:hover
 
   .ui-table-cell
   {
-    justify-content: space-between;
+    justify-content: space-between; 
   }
 
   .ui-table.is-inline &
-  {
-    background: none;
+  { 
+    background: var(--color-box);
   }
 }
 
