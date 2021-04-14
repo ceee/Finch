@@ -24,6 +24,14 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
+    public T GetProvider<T>() where T : class, ILinkProvider
+    {
+      Type type = typeof(T);
+      return Providers.FirstOrDefault(x => x.GetType().IsAssignableFrom(type)) as T;
+    }
+
+
+    /// <inheritdoc />
     public async Task<string> GetUrl(ILink link)
     {
       ILinkProvider provider = Providers.LastOrDefault(x => x.CanProcess(link));
@@ -75,5 +83,10 @@ namespace zero.Core.Routing
     /// Get the provider for a specific link
     /// </summary>
     ILinkProvider GetProvider(ILink link);
+
+    /// <summary>
+    /// Find a provider by a specific type
+    /// </summary>
+    T GetProvider<T>() where T : class, ILinkProvider;
   }
 }

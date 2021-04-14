@@ -11,6 +11,8 @@ namespace zero.Core.Routing
 {
   public class PageLinkProvider : ILinkProvider
   {
+    public const string AREA = "zero.pages";
+
     protected IRoutes Routes { get; set; }
     protected IZeroOptions Options { get; set; }
 
@@ -21,14 +23,33 @@ namespace zero.Core.Routing
     }
 
 
+    /// <summary>
+    /// Creates a new link object from a page
+    /// </summary>
+    public ILink Create(IPage page, LinkTarget target = LinkTarget.Default, string title = null)
+    {
+      return new Link()
+      {
+        Area = AREA,
+        Target = target,
+        Title = title,
+        Values = new()
+        {
+          { "id", page.Id }
+        }
+      };
+    }
+
+
     /// <inheritdoc />
-    public bool CanProcess(ILink link) => link.Area == "zero.pages";
+    public bool CanProcess(ILink link) => link.Area == AREA;
 
 
     /// <inheritdoc />
     public async Task<string> Resolve(ILink link)
     {
-      return await Routes.GetUrl<IPage>(link.Values.GetValueOrDefault<string>("id"));
+      link.Url = await Routes.GetUrl<IPage>(link.Values.GetValueOrDefault<string>("id")) + (link.UrlSuffix ?? string.Empty);
+      return link.Url;
     }
 
 

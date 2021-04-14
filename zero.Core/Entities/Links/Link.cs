@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace zero.Core.Entities
@@ -14,6 +15,10 @@ namespace zero.Core.Entities
     public string Title { get; set; }
 
     public Dictionary<string, object> Values { get; set; } = new();
+
+    /// <inheritdoc />
+    [JsonIgnore]
+    public string Url { get; set; }
   }
 
   public enum LinkTarget
@@ -35,5 +40,12 @@ namespace zero.Core.Entities
     string Title { get; set; }
 
     Dictionary<string, object> Values { get; set; }
+
+    /// <summary>
+    /// [Warning] This field is always empty when bound to the database.
+    /// It is only filled in the app-code for routing.
+    /// </summary>
+    [JsonIgnore]
+    public string Url { get; set; }
   }
 }
