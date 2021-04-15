@@ -7,7 +7,7 @@
     <span v-if="status === 'loading'" class="ui-tree-item-loading"><i></i></span>
     <template v-for="item in items">
       <ui-tree-item :value="item" @rightclick="onRightClicked" @click="onSelect(item, $event)" @actions="onActionsClicked" @open="toggle" :active-id="active" :selected="selection.indexOf(item.id) > -1" />
-      <ui-tree v-if="item.hasChildren && item.isOpen && status != 'loading'" v-bind="{ get, parent: item.id, depth: depth + 1, active, onSelect, mode, selection, selectionLimit }">
+      <ui-tree v-if="item.hasChildren && item.isOpen && status != 'loading'" v-bind="{ get, parent: item.id, depth: depth + 1, active, mode, selection, selectionLimit }" @select="onChildSelect">
         <template v-slot:actions="props">
           <slot name="actions" v-bind="props"></slot>
         </template>
@@ -158,6 +158,12 @@
         {
           this.$emit('select', item, ev);
         }
+      },
+
+
+      onChildSelect(item, ev)
+      {
+        this.$emit('select', item, ev);
       },
 
 
