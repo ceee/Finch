@@ -1,11 +1,12 @@
 ﻿<template>
   <div class="ui-tree-item" :class="getClasses(value)" v-on:contextmenu="onRightClicked(value, $event)">
-    <button :disabled="value.disabled" v-if="value.hasChildren" @click="toggle(value)" type="button" class="ui-tree-item-toggle">
-      <ui-icon class="ui-tree-item-arrow" :symbol="'fth-chevron-' + (value.isOpen ? 'up' : 'down')" />
+    <button :disabled="value.disabled" v-if="value.hasChildren" @click="toggle(value)" type="button" class="ui-tree-item-toggle" :style="{ 'width': ((depth * 15) + 32) + 'px' }">
+      <ui-icon class="ui-tree-item-arrow" :symbol="'fth-chevron-' + (value.isOpen ? 'up' : 'down')" :size="14" />
     </button>
+    <span v-if="!value.hasChildren" class="ui-tree-item-toggle" :style="{ 'width': ((depth * 15) + 32) + 'px' }"></span>
     <component :disabled="value.disabled" :is="tag" type="button" :to="value.url" class="ui-tree-item-link" @click="onClick(value, $event)">
-      <ui-icon class="ui-tree-item-icon" :class="{'is-dashed': value.isDashed }" :symbol="value.icon" :size="18" />
-      <ui-icon v-if="value.modifier" :title="value.modifier.name" class="ui-tree-item-modifier" :symbol="modifier" :class="modifierClass" :size="12" />
+      <ui-icon class="ui-tree-item-icon" v-if="value.icon" :class="{'is-dashed': value.isDashed }" :symbol="value.icon" :size="18" />
+      <ui-icon v-if="value.modifier" :title="value.modifier.name" class="ui-tree-item-modifier" :symbol="modifier" :class="modifierClass" :size="10" :stroke="2.5" />
       <span class="ui-tree-item-text">
         <ui-localize :value="value.name" />
         <span class="ui-tree-item-description" v-if="value.description">
@@ -16,6 +17,7 @@
       
     </component>
     <ui-dot-button :disabled="value.disabled" class="ui-tree-item-actions" v-if="value.hasActions" @click="onActionsClicked(value, $event)" />
+    <span class="ui-tree-item-count" v-if="value.countOutput != null">{{value.countOutput}}</span>
   </div>
 </template>
 
@@ -38,7 +40,11 @@
       selected: {
         type: Boolean,
         default: false
-      }
+      },
+      depth: {
+        type: Number,
+        default: 0
+      },
     },
 
     computed: {
@@ -76,7 +82,8 @@
       // get all classes for a tree item
       getClasses(item)
       {
-        return {
+        return { 
+          'has-icon': !!item.icon,
           'has-children': item.hasChildren,
           'is-inactive': item.isInactive,
           'is-open': item.isOpen,
@@ -119,10 +126,10 @@
   .ui-tree-item
   {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: auto 1fr auto auto; 
     align-items: center;
     font-size: var(--font-size);
-    padding: 0 var(--padding);
+    padding: 0 var(--padding) 0 0;
     height: 54px;
     color: var(--color-text);
     position: relative;
@@ -131,14 +138,8 @@
 
     &:hover > .ui-tree-item-actions
     {
-      transition-delay: 0.2s;
       opacity: 1;
-    }    
-
-    &.is-open > .ui-tree-item-toggle .ui-tree-item-arrow
-    {
-      transform: rotate(180deg);
-    } 
+    }
 
     &.is-disabled
     {
@@ -146,7 +147,7 @@
       opacity: .5;
     }
 
-    &.is-active:before, &.is-selected:before
+    &.is-active:before, &.is-selected:before, &:hover:before
     {
       content: ' ';
       position: absolute;
@@ -211,15 +212,13 @@
 
   .ui-tree-item-toggle
   {
-    position: absolute;
     color: var(--color-text-dim);
     height: 100%;
-    top: 0;
-    left: 0;
-    width: 30px;
     text-align: right;
-    padding-right: 5px;
+    padding-right: 8px;
     transition: color 0.2s ease;
+    z-index: 1;
+
     &:hover
     {
       color: var(--color-text);
@@ -281,13 +280,14 @@
   {
     position: absolute;
     left: 10px;
-    bottom: 12px;
+    bottom: 17px;
     color: var(--color-text-dim);
     background: var(--color-tree);
     border-radius: 50%;
-    padding: 3px; 
-    width: 18px;
-    height: 18px; 
+    padding: 2px; 
+    width: 14px;
+    height: 14px; 
+    transition: color 0.2s ease;
 
     .ui-tree-item.is-active &, .ui-tree-item:hover &
     {
@@ -302,7 +302,6 @@
 
   .ui-tree-item-actions
   {
-    transition: opacity 0.2s ease 0;
     opacity: 0;
     color: var(--color-text-dim);
 
@@ -310,5 +309,23 @@
     {
       opacity: 1;
     }
+  }
+
+  .ui-tree-item-count
+  {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    background: var(--color-box-nested);
+    color: var(--color-text);
+    height: 22px;
+    line-height: 22px;
+    padding: 0 10px;
+    border-radius: 16px;
+    font-style: normal;
+    grid-column: 3;
+    margin-right: -4px;
+    margin-left: 8px;
   }
 </style>

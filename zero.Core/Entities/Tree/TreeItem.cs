@@ -69,6 +69,11 @@
     /// Whether to show actions menu. This will only work when the onActionsRequested cb is implemented in the component
     /// </summary>
     public bool HasActions { get; set; }
+
+    /// <summary>
+    /// Output an additional count value.
+    /// </summary>
+    public int? CountOutput { get; set; }
   }
 
 
