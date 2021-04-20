@@ -343,6 +343,8 @@ button::-moz-focus-inner
     padding: 5px;
     font-size: 0;
     color: transparent;
+    background: var(--color-image-bg);
+    border-radius: var(--radius);
     
     img
     {

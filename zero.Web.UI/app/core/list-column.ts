@@ -213,6 +213,11 @@ class ListColumn
     {
       let html = '<b>' + value + '</b>';
 
+      if (model.isActive === false)
+      {
+        html = value;
+      }
+
       if (model.blueprint && model.blueprint.id)
       {
         html += ` <svg class="ui-icon" width="15" height="15" stroke-width="2" :data-symbol="fth-cloud" title="Synchronized"><use xlink:href="#fth-cloud" /></svg>`;

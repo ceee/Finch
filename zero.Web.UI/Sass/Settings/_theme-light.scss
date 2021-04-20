@@ -2,9 +2,9 @@
 :root, .theme-light
 {
   // accent colors
-  $color-primary: #0d83f0;// #22272e
+  $color-primary: #ff8900;// #22272e
   $color-primary-fg: #fff; 
-  $color-primary-low: #{rgba(#0d83f0, 0.2)};
+  $color-primary-low: #{rgba(#ff8900, 0.2)};
   $color-secondary: #0d83f0;
   $color-secondary-fg: #fff;
   $color-tertiary: #c4e4de;
@@ -113,6 +113,7 @@
   --color-table-line-vertical: transparent; //#{$color-bg-shade-3};
   --color-table-head: #{$color-bg-shade-2};
   --color-table-hover: #{$color-bg-shade-2};
+  --color-table-highlight: #{$color-bg-shade-3};
 
   // misc
   --color-required-marker: #{$color-primary};

@@ -2,9 +2,9 @@
 .theme-dark
 {
   // accent colors
-  $color-primary: #0d83f0; //#f9c202; //#0d83f0; #22272e
+  $color-primary: #16c6a5; //#f9c202; //#0d83f0; #22272e
   $color-primary-fg: #fff;
-  $color-primary-low: #{rgba(#0d83f0, 0.2)};
+  $color-primary-low: #{rgba(#ff8900, 0.2)};
   $color-secondary: #94c4bb;
   $color-secondary-fg: #fff;
   $color-tertiary: #c4e4de;
@@ -12,7 +12,7 @@
 
   // foreground colors
   $color-fg: #fafafa;
-  $color-fg-shade-1: #81878a; // dim
+  $color-fg-shade-1: #aaacaf; // dim
   $color-fg-shade-2: #8c9094; // dim-two
   
   // background colors  
@@ -99,8 +99,8 @@
   --color-checked-fg: #{$color-primary-fg};
   --color-toggle: #{$color-bg-shade-3};
   --color-toggle-fg: #{$color-fg};
-  --color-toggled: #{$color-fg};
-  --color-toggled-fg: #{$color-bg-shade-3};
+  --color-toggled: #{$color-primary};
+  --color-toggled-fg: #{$color-primary-fg};
   --color-input-focus-bg: #{$color-bg-shade-1};
   --color-input-focus-border: 1px solid #{$color-bg-shade-5}; 
   --color-input-focus-shadow: 0 0 0 4px #{$color-bg-shade-2};
@@ -133,6 +133,7 @@
   --color-table-line-vertical: transparent;
   --color-table-head: #{$color-bg-shade-1};
   --color-table-hover: #{$color-bg-shade-2};
+  --color-table-highlight: #{$color-bg-shade-3};
 
   // misc
   --color-required-marker: #{$color-fg-shade-1};

@@ -140,7 +140,7 @@ a.ui-table-row:hover, button.ui-table-row:hover
   &.is-name .ui-icon
   {
     margin-left: .6em;
-    color: var(--color-synchronized);
+    color: var(--color-text-dim); //var(--color-synchronized);
   }
 }
 
