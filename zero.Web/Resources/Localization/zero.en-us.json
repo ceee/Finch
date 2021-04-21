@@ -34,6 +34,7 @@
     "default": "Default",
     "remove": "Remove",
     "alias": "Alias",
+    "link": "Link",
     "pagination": {
       "xofy": "Page {x} of {y}",
       "next": "Next page",

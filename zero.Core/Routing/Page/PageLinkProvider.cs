@@ -14,7 +14,7 @@ namespace zero.Core.Routing
     public const string AREA = "zero.pages";
 
     protected IRoutes Routes { get; set; }
-    protected IZeroOptions Options { get; set; }
+    protected IZeroOptions Options { get; set; } 
 
     public PageLinkProvider(IRoutes routes, IZeroOptions options)
     {

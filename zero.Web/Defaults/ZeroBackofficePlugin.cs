@@ -112,6 +112,7 @@ namespace zero.Web.Defaults
       services.AddScoped<PageRouteProvider>();
       services.AddScoped<ILinks, Links>();
       services.AddScoped<ILinkProvider, PageLinkProvider>();
+      services.AddScoped<ILinkProvider, RawLinkProvider>();
 
       services.AddScoped<ZeroRoutesTransformer>();
 
