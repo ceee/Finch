@@ -18,10 +18,10 @@ textarea, .ui-native-select, .ui-rte-input
 {
   @extend %font;
   background: var(--color-input);
-  border: 1px solid transparent;
+  border: var(--color-input-border);
   font-size: var(--font-size);
   display: inline-block;
-  height: 48px;
+  height: 48px; 
   padding: 6px 16px;
   line-height: 1.5;
   color: var(--color-text);
@@ -30,7 +30,7 @@ textarea, .ui-native-select, .ui-rte-input
   box-sizing: border-box;
   width: 100%;
 
-  &:not(:disabled):not([readonly]):focus
+  &:not(:disabled):not([readonly]):focus 
   {
     background-color: var(--color-input-focus-bg);
     border: var(--color-input-focus-border);

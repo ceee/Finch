@@ -2,11 +2,11 @@
 :root, .theme-light
 {
   // accent colors
-  $color-primary: #ff8900;// #22272e
+  $color-primary: #1aa39b;// #22272e
   $color-primary-fg: #fff; 
-  $color-primary-low: #{rgba(#ff8900, 0.2)};
-  $color-secondary: #0d83f0;
-  $color-secondary-fg: #fff;
+  $color-primary-low: #{rgba(#1aa39b, 0.2)};
+  $color-secondary: #b9e2dc;
+  $color-secondary-fg: #222;
   $color-tertiary: #c4e4de;
   $color-tertiary-fg: #2c3036;
 
@@ -17,7 +17,7 @@
   $color-fg-shade-3: #c8cbcf;
   
   // background colors  
-  $color-bg: #f4f4f6; // rgba(245, 247, 250)
+  $color-bg: #f2f2f4; // rgba(245, 247, 250)
   $color-bg-shade-0: #f8f8fa;
   $color-bg-shade-1: #fff; // bright
   $color-bg-shade-2: #f8f8fa; // dim
@@ -72,7 +72,8 @@
   --color-button-focus-outline: 1px dotted #{$color-bg-shade-7};
 
   // forms
-  --color-input: #{$color-bg-shade-2};
+  --color-input: #{$color-bg-shade-1};
+  --color-input-border: 1px solid #{$color-bg-shade-5};
   --color-input-placeholder: #{$color-fg-shade-1};
   --color-check: #{$color-bg-shade-3};
   --color-checked: #{$color-primary};

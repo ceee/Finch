@@ -26,7 +26,10 @@
       hideLabel: Boolean,
       description: String,
       required: Boolean,
-      vertical: Boolean,
+      vertical: {
+        type: Boolean,
+        default: false
+      },
       isText: Boolean,
       disabled: {
         type: Boolean,
@@ -117,8 +120,8 @@
   {
     display: block;
     color: var(--color-text);
-    width: 260px;
-    padding-right: 60px;
+    width: 220px;
+    padding-right: 40px;
     font-size: var(--font-size);
     line-height: 1.5;
     font-weight: 700;
