@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-datepicker" :class="{'is-disabled': disabled }">
     <input type="text" class="ui-input ui-datepicker-input" v-localize:placeholder="'@ui.date.select'" :value="output" @input="onChange" @focus="onFocus" @blur="onBlur" :disabled="disabled" />
-    <i v-if="!clear || !value" class="fth-calendar ui-datepicker-icon"></i>
+    <ui-icon v-if="!clear || !value" symbol="fth-calendar" class="ui-datepicker-icon" :size="17" />
     <button v-if="clear && value" type="button" class="ui-datepicker-input-button" @click="clearInput"><i class="fth-x"></i></button>
 
     <ui-dropdown ref="overlay" class="ui-datepicker-overlay" @opened="overlayOpened">
@@ -182,7 +182,6 @@
     right: 13px;
     top: 50%;
     margin-top: -8px;
-    font-size: var(--font-size-l);
   }
 
   .ui-datepicker-overlay .ui-dropdown
