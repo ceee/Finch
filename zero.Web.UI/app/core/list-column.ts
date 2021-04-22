@@ -148,15 +148,16 @@ class ListColumn
   /**
    * Output a boolean value by displaying a checkmark
    * @param {object} [options] - Custom options
-   * @param {string} [options.colored] - Green color for check and red color for cross
    * @returns {ListColumn}
    */
   boolean(options)
   {
     this.#type = 'boolean';
     this.#asHtml = true;
-    this.#funcOptions = { colored: false, ...options };
-    this.#func = (value, opts) => '<span class="ui-table-field-bool' + (!!value ? ' is-checked' : '') + (opts.colored ? ' is-colored' : '') + '"></span>';
+    this.#funcOptions = { ...options };
+    this.#func = (value, opts) => `<svg class="ui-icon ui-table-field-bool" width="16" height="16" stroke-width="${!!value ? '2.5' : '2'}" data-symbol="${!!value ? 'fth-check' : 'fth-x'}">
+      <use xlink:href="#${!!value ? 'fth-check' : 'fth-x'}" />
+    </svg>`;
     return this;
   }
 

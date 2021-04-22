@@ -89,6 +89,13 @@ button::-moz-focus-inner
     justify-content: center;
   }
 
+  &.type-secondary
+  {
+    background: var(--color-secondary);
+    color: var(--color-secondary-text);
+    border: 1px solid transparent;
+  }
+
   &.type-primary.type-small
   {
     min-width: 0;

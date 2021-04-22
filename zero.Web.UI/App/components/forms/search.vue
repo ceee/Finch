@@ -58,9 +58,9 @@
     .ui-input
     {
       display: block;
-      min-width: 320px;
+      min-width: 320px; 
       padding-right: 40px;
-      border: none;
+      border: var(--color-input-border);
       background: var(--color-input);
     }
 

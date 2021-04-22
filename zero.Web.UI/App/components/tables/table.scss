@@ -140,7 +140,7 @@ a.ui-table-row:hover, button.ui-table-row:hover
   &.is-name .ui-icon
   {
     margin-left: .6em;
-    color: var(--color-text-dim); //var(--color-synchronized);
+    color: var(--color-synchronized);
   }
 }
 
@@ -230,33 +230,11 @@ a.ui-table-row:hover, button.ui-table-row:hover
 
 .ui-table-field-bool
 {
-  font-family: var(--font-icon);
-  color: var(--color-text-dim);
-
-  &:before
-  {
-    content: "\e8f6";
-  }
-
-  &.is-checked
-  {
-    color: var(--color-text);
-
-    &:before
-    {
-      content: "\e83f";
-    }
-  }
-
-  &.is-colored
-  {
-    color: var(--color-accent-error);
-
-    &.is-checked
-    {
-      color: var(--color-accent-success);
-    }
-  }
+  color: var(--color-text-dim-one);
+}
+.ui-table-field-bool[data-symbol="fth-check"]
+{
+  color: var(--color-primary);
 }
 
 .ui-table-cell[field-type="datetime"]

@@ -116,9 +116,9 @@
   {
     display: inline-flex;
     align-items: center;
-    height: 50px;
+    height: 54px;
     //overflow: hidden;
-    padding: 0 var(--padding-m);
+    padding: 0 var(--padding);
     font-size: var(--font-size);
     color: var(--color-text);
     position: relative;
