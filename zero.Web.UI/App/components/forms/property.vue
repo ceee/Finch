@@ -68,11 +68,11 @@
   .ui-property + .ui-split,
   .ui-split + .ui-property,
   .ui-property + .ui-property
-  {
+  { 
     margin-top: 50px;
-    //padding-top: 30px;
-    //margin-top: 30px;
-    //border-top: 1px solid var(--color-line);
+    /*padding-top: 30px;
+    margin-top: 30px;
+    border-top: 1px dashed var(--color-line-onbg);*/
   }
 
   .ui-property.is-vertical

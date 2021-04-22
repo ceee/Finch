@@ -116,7 +116,7 @@
   {
     display: inline-flex;
     align-items: center;
-    height: 54px;
+    height: 58px;
     //overflow: hidden;
     padding: 0 var(--padding);
     font-size: var(--font-size);
@@ -156,7 +156,7 @@
         background: var(--color-box-light);
       }
 
-      /*&:before
+      &:before
       {
         content: '';
         position: absolute;
@@ -168,7 +168,7 @@
         border-top-right-radius: 3px;
         background: var(--color-primary);
         display: inline-block;
-      }*/
+      }
     }
 
     &.has-errors
