@@ -1,5 +1,5 @@
 ﻿<template>
-  <input :value="value" @input="$emit('input', $event.target.value)" type="password" class="ui-input" v-localize:placeholder="placeholder" :maxlength="maxLength" :disabled="disabled" />
+  <input :value="value" @input="$emit('input', $event.target.value)" type="password" class="ui-input" v-placeholder="{ placeholder, model: entity }" :maxlength="maxLength" :disabled="disabled" />
 </template>
 
 
@@ -21,7 +21,8 @@
       placeholder: {
         type: String,
         default: null
-      }
+      },
+      entity: Object
     }
   }
 </script>

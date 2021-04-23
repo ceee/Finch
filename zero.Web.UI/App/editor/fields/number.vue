@@ -1,5 +1,5 @@
 ﻿<template>
-  <input :value="value" @input="onChange($event.target.value)" type="text" class="ui-input" v-localize:placeholder="placeholder" :maxlength="maxLength" :disabled="disabled" />
+  <input :value="value" @input="onChange($event.target.value)" type="text" class="ui-input" v-placeholder="{ placeholder, model: entity }" :maxlength="maxLength" :disabled="disabled" />
 </template>
 
 
@@ -8,8 +8,9 @@
     props: {
       value: Number,
       maxLength: Number,
-      placeholder: String,
-      disabled: Boolean
+      placeholder: [String, Function],
+      disabled: Boolean,
+      entity: Object
     },
 
     methods: {

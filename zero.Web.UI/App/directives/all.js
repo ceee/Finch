@@ -44,6 +44,39 @@ export var localize = (el, binding) =>
 
 
 /**
+ * Sets the placeholder to the desired string or executes a function which gets the placeholder string
+ */
+export var placeholder = (el, binding) =>
+{
+  if (binding.value !== binding.oldValue || !el.innerText)
+  {
+    const hasValue = !!binding.value;
+    const isObject = typeof binding.value === 'object';
+    let value = hasValue ? (isObject ? binding.value.placeholder : binding.value) : null;
+    let result = null;
+
+    if (isObject && typeof value === 'function')
+    {
+      if (typeof binding.value.model === 'undefined')
+      {
+        // TODO throw warning
+        return;
+      }
+      result = value(binding.value.model);
+    }
+    else
+    {
+      result = value;
+    }
+
+    result = hasValue ? Localization.localize(result) : '';
+    el.setAttribute('placeholder', result);
+  }
+};
+
+
+
+/**
  * Outputs a formatted date
  */
 export var date = (el, binding) =>

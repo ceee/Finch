@@ -141,7 +141,7 @@ class EditorField
   /**
    * Render a text input field
    * @param {number} [maxLength] - Maximum length of the input
-   * @param {string} [placeholder] - Placeholder text (can be a translation)
+   * @param {string|function} [placeholder] - Placeholder text (can be a translation) or function
    * @returns {EditorField}
    */
   text(maxLength, placeholder)
@@ -153,7 +153,7 @@ class EditorField
   /**
    * Render a password input field
    * @param {number} [maxLength] - Maximum length of the input
-   * @param {string} [placeholder] - Placeholder text (can be a translation)
+   * @param {string|function} [placeholder] - Placeholder text (can be a translation) or function
    * @returns {EditorField}
    */
   password(maxLength, placeholder)
@@ -164,7 +164,7 @@ class EditorField
 
   /**
    * Render a currency input field
-   * @param {string} [placeholder] - Placeholder text (can be a translation)
+   * @param {string|function} [placeholder] - Placeholder text (can be a translation) or function
    * @returns {EditorField}
    */
   currency(placeholder)
@@ -176,7 +176,7 @@ class EditorField
   /**
    * Render a number input field
    * @param {number} [maxLength] - Maximum length of the input
-   * @param {string} [placeholder] - Placeholder text (can be a translation)
+   * @param {string|function} [placeholder] - Placeholder text (can be a translation) or function
    * @returns {EditorField}
    */
   number(maxLength, placeholder)

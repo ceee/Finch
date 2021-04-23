@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-box">
-    <input :value="value" @input="$emit('input', +$event.target.value)" type="text" class="ui-input" v-localize:placeholder="placeholder" :disabled="disabled" />
+    <input :value="value" @input="$emit('input', +$event.target.value)" type="text" class="ui-input" v-placeholder="{ placeholder, model: entity }" :disabled="disabled" />
   </div>
 </template>
 
@@ -16,7 +16,8 @@
         type: Boolean,
         default: false
       },
-      placeholder: String
+      placeholder: String,
+      entity: Object
     },
   }
 </script>
