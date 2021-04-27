@@ -275,6 +275,12 @@
 </script>
 
 <style lang="scss">
+  .page-editor
+  {
+    overflow-y: auto;
+    height: 100%;
+  }
+
   .page-editor .ui-tab.is-info
   {
     

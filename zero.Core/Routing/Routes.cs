@@ -113,30 +113,8 @@ namespace zero.Core.Routing
         return null;
       }
 
-      Dictionary<T, IRoute> result = new();
-      Dictionary<string, T> routeMap = new();
-      HashSet<string> routeIds = new();
-
       using IAsyncDocumentSession session = Store.OpenAsyncSession();
-
-      foreach (T model in models)
-      {
-        string routeId = routeProvider.GetRouteId(model);
-        routeIds.Add(routeId);
-        routeMap.TryAdd(routeId, model);
-      }
-
-      Dictionary<string, IRoute> routes = await session.LoadAsync<IRoute>(routeIds);
-
-      foreach ((string key, IRoute route) in routes)
-      {
-        if (routeMap.TryGetValue(key, out T model))
-        {
-          result.TryAdd(model, route);
-        }
-      }
-
-      return result;
+      return (await routeProvider.GetRoutes(session, models.Select(x => (object)x))).ToDictionary(x => (T)x.Key, x => x.Value);
     }
 
 

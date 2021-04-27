@@ -6,12 +6,17 @@ using System.Threading.Tasks;
 
 namespace zero.Core.Routing
 {
-  public interface IRouteProvider<in T> : IRouteProvider
+  public interface IRouteProvider<T> : IRouteProvider
   {
     /// <summary>
     /// Find URL for an entity
     /// </summary>
     Task<IRoute> GetRoute(IAsyncDocumentSession session, T model);
+
+    /// <summary>
+    /// Find URLs for mulitple entities
+    /// </summary>
+    Task<Dictionary<T, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<T> models);
 
     /// <summary>
     /// Generate unique route ID for a model
@@ -41,6 +46,11 @@ namespace zero.Core.Routing
     /// Find URL for an entity
     /// </summary>
     Task<IRoute> GetRoute(IAsyncDocumentSession session, object model);
+
+    /// <summary>
+    /// Find URLs for mulitple entities
+    /// </summary>
+    Task<Dictionary<object, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<object> models);
 
     /// <summary>
     /// Rebuild all routes for this provider so they can be hydrated into the database

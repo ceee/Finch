@@ -54,6 +54,41 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
+    public virtual async Task<Dictionary<T, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<T> models)
+    {
+      Dictionary<T, IRoute> result = new();
+      Dictionary<string, T> routeMap = new();
+      HashSet<string> routeIds = new();
+
+      foreach (T model in models)
+      {
+        string routeId = GetRouteId(model);
+        routeIds.Add(routeId);
+        routeMap.TryAdd(routeId, model);
+      }
+
+      Dictionary<string, IRoute> routes = await session.LoadAsync<IRoute>(routeIds);
+
+      foreach ((string key, IRoute route) in routes)
+      {
+        if (routeMap.TryGetValue(key, out T model))
+        {
+          result.TryAdd(model, route);
+        }
+      }
+
+      return result;
+    }
+
+
+    /// <inheritdoc />
+    public virtual async Task<Dictionary<object, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<object> models)
+    {
+      return (await GetRoutes(session, models.Select(x => (T)x).ToArray())).ToDictionary(x => (object)x.Key, x => x.Value);
+    }
+
+
+    /// <inheritdoc />
     public virtual async Task<IRoute> GetRoute(IAsyncDocumentSession session, T model)
     {
       return await session.LoadAsync<IRoute>(GetRouteId(model));
