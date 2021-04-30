@@ -189,8 +189,8 @@
   .ui-rte
   {
     background: var(--color-input);
-    border-radius: var(--radius);
-    border: 1px solid transparent;
+    border-radius: var(--radius); 
+    border: var(--color-input-border);
   }
 
   .ui-rte:focus-within
@@ -208,6 +208,7 @@
     padding-top: 9px;
     max-height: 420px;
     overflow-y: auto;
+    border: none !important;
 
     .ProseMirror:focus
     {
@@ -316,6 +317,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    border-bottom: var(--color-input-border);
   }
 
   .ui-rte-controls-label

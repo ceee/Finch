@@ -1,4 +1,4 @@
-﻿ <template>
+﻿<template>
   <div class="ui-input-list" :class="{'is-disabled': disabled }">
     <div v-for="item in items" class="ui-input-list-item">
       <input v-model="item.value" type="text" class="ui-input" :maxlength="maxLength" :readonly="disabled" @input="onChange" size="5" />
