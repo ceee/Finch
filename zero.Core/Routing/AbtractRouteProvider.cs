@@ -54,7 +54,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public virtual async Task<Dictionary<T, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<T> models)
+    public virtual async Task<Dictionary<T, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<T> models, object parameters = null)
     {
       Dictionary<T, IRoute> result = new();
       Dictionary<string, T> routeMap = new();
@@ -62,7 +62,7 @@ namespace zero.Core.Routing
 
       foreach (T model in models)
       {
-        string routeId = GetRouteId(model);
+        string routeId = GetRouteId(model, parameters);
         routeIds.Add(routeId);
         routeMap.TryAdd(routeId, model);
       }
@@ -82,27 +82,27 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public virtual async Task<Dictionary<object, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<object> models)
+    public virtual async Task<Dictionary<object, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<object> models, object parameters = null)
     {
-      return (await GetRoutes(session, models.Select(x => (T)x).ToArray())).ToDictionary(x => (object)x.Key, x => x.Value);
+      return (await GetRoutes(session, models.Select(x => (T)x).ToArray(), parameters)).ToDictionary(x => (object)x.Key, x => x.Value);
     }
 
 
     /// <inheritdoc />
-    public virtual async Task<IRoute> GetRoute(IAsyncDocumentSession session, T model)
+    public virtual async Task<IRoute> GetRoute(IAsyncDocumentSession session, T model, object parameters = null)
     {
-      return await session.LoadAsync<IRoute>(GetRouteId(model));
+      return await session.LoadAsync<IRoute>(GetRouteId(model, parameters));
     }
 
 
     /// <inheritdoc />
-    public virtual async Task<IRoute> GetRoute(IAsyncDocumentSession session, object model)
+    public virtual async Task<IRoute> GetRoute(IAsyncDocumentSession session, object model, object parameters = null)
     {
       if (!(model is T))
       {
         return null;
       }
-      return await GetRoute(session, (T)model);
+      return await GetRoute(session, (T)model, parameters);
     }
 
 
@@ -119,18 +119,18 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public abstract string GetRouteId(T model);
+    public abstract string GetRouteId(T model, object parameters = null);
 
 
     /// <inheritdoc />
-    public string GetRouteId(object model)
+    public string GetRouteId(object model, object parameters = null)
     {
       if (!(model is T))
       {
         throw new ArgumentException($"Parameter has to be of type {typeof(T)}", nameof(model));
       }
 
-      return GetRouteId((T)model);
+      return GetRouteId((T)model, parameters);
     }
 
 

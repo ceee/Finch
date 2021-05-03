@@ -11,17 +11,17 @@ namespace zero.Core.Routing
     /// <summary>
     /// Find URL for an entity
     /// </summary>
-    Task<IRoute> GetRoute(IAsyncDocumentSession session, T model);
+    Task<IRoute> GetRoute(IAsyncDocumentSession session, T model, object parameters = null);
 
     /// <summary>
     /// Find URLs for mulitple entities
     /// </summary>
-    Task<Dictionary<T, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<T> models);
+    Task<Dictionary<T, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<T> models, object parameters = null);
 
     /// <summary>
     /// Generate unique route ID for a model
     /// </summary>
-    string GetRouteId(T model);
+    string GetRouteId(T model, object parameters = null);
   }
 
 
@@ -45,12 +45,12 @@ namespace zero.Core.Routing
     /// <summary>
     /// Find URL for an entity
     /// </summary>
-    Task<IRoute> GetRoute(IAsyncDocumentSession session, object model);
+    Task<IRoute> GetRoute(IAsyncDocumentSession session, object model, object parameters = null);
 
     /// <summary>
     /// Find URLs for mulitple entities
     /// </summary>
-    Task<Dictionary<object, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<object> models);
+    Task<Dictionary<object, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<object> models, object parameters = null);
 
     /// <summary>
     /// Rebuild all routes for this provider so they can be hydrated into the database
@@ -60,6 +60,6 @@ namespace zero.Core.Routing
     /// <summary>
     /// Generate unique route ID for a model
     /// </summary>
-    string GetRouteId(object model);
+    string GetRouteId(object model, object parameters = null);
   }
 }

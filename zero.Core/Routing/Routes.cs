@@ -37,19 +37,19 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<string> GetUrl<T>(T model) => (await GetRoute(model))?.Url;
+    public async Task<string> GetUrl<T>(T model, object parameters = null) => (await GetRoute(model, parameters))?.Url;
 
 
     /// <inheritdoc />
-    public async Task<string> GetUrl<T>(string id) where T : IZeroIdEntity => (await GetRoute<T>(id))?.Url;
+    public async Task<string> GetUrl<T>(string id, object parameters = null) where T : IZeroIdEntity => (await GetRoute<T>(id, parameters))?.Url;
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<T, string>> GetUrls<T>(params T[] models) => (await GetRoutes(models)).ToDictionary(x => x.Key, x => x.Value?.Url);
+    public async Task<Dictionary<T, string>> GetUrls<T>(IEnumerable<T> models, object parameters = null) => (await GetRoutes(models, parameters)).ToDictionary(x => x.Key, x => x.Value?.Url);
 
 
     /// <inheritdoc />
-    public async Task<IRoute> GetRoute<T>(string id) where T : IZeroIdEntity
+    public async Task<IRoute> GetRoute<T>(string id, object parameters = null) where T : IZeroIdEntity
     {
       if (id.IsNullOrEmpty())
       {
@@ -72,12 +72,12 @@ namespace zero.Core.Routing
         return null;
       }
 
-      return await routeProvider.GetRoute(session, model);
+      return await routeProvider.GetRoute(session, model, parameters);
     }
 
 
     /// <inheritdoc />
-    public async Task<IRoute> GetRoute<T>(T model)
+    public async Task<IRoute> GetRoute<T>(T model, object parameters = null)
     {
       if (model == null)
       {
@@ -93,19 +93,19 @@ namespace zero.Core.Routing
       }
 
       using IAsyncDocumentSession session = Store.OpenAsyncSession();
-      return await routeProvider.GetRoute(session, model);
+      return await routeProvider.GetRoute(session, model, parameters);
     }
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<T, IRoute>> GetRoutes<T>(params T[] models)
+    public async Task<Dictionary<T, IRoute>> GetRoutes<T>(IEnumerable<T> models, object parameters = null)
     {
-      if (models.Length < 1)
+      if (!models.Any())
       {
         return new();
       }
 
-      Type type = models[0].GetType();
+      Type type = models.First().GetType();
       IRouteProvider routeProvider = Providers.FirstOrDefault(x => x.AffectedTypes.Any(t => t.IsAssignableFrom(type)));
 
       if (routeProvider == null)
@@ -114,7 +114,7 @@ namespace zero.Core.Routing
       }
 
       using IAsyncDocumentSession session = Store.OpenAsyncSession();
-      return (await routeProvider.GetRoutes(session, models.Select(x => (object)x))).ToDictionary(x => (T)x.Key, x => x.Value);
+      return (await routeProvider.GetRoutes(session, models.Select(x => (object)x), parameters)).ToDictionary(x => (T)x.Key, x => x.Value);
     }
 
 
@@ -277,32 +277,32 @@ namespace zero.Core.Routing
     /// <summary>
     /// Get the URL for an entity
     /// </summary>
-    Task<string> GetUrl<T>(T model);
+    Task<string> GetUrl<T>(T model, object parameters = null);
 
     /// <summary>
     /// Get the URL for an entity
     /// </summary>
-    Task<string> GetUrl<T>(string id) where T : IZeroIdEntity;
+    Task<string> GetUrl<T>(string id, object parameters = null) where T : IZeroIdEntity;
 
     /// <summary> 
     /// Get the route object for an entity
     /// </summary>
-    Task<IRoute> GetRoute<T>(T model);
+    Task<IRoute> GetRoute<T>(T model, object parameters = null);
 
     /// <summary> 
     /// Get the route object for an entity
     /// </summary>
-    Task<IRoute> GetRoute<T>(string id) where T : IZeroIdEntity;
+    Task<IRoute> GetRoute<T>(string id, object parameters = null) where T : IZeroIdEntity;
 
     /// <summary>
     /// Get URLs for multiple entities
     /// </summary>
-    Task<Dictionary<T, string>> GetUrls<T>(params T[] models);
+    Task<Dictionary<T, string>> GetUrls<T>(IEnumerable<T> models, object parameters = null);
 
     /// <summary>
     /// Get routes for multiple entities
     /// </summary>
-    Task<Dictionary<T, IRoute>> GetRoutes<T>(params T[] models);
+    Task<Dictionary<T, IRoute>> GetRoutes<T>(IEnumerable<T> models, object parameters = null);
 
     /// <summary>
     /// Resolve an URL from the specified app and the path

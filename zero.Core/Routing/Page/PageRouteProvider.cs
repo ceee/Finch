@@ -29,7 +29,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public override string GetRouteId(IPage model) => ID_PREFIX + model.Hash;
+    public override string GetRouteId(IPage model, object parameters = null) => ID_PREFIX + model.Hash;
 
 
     /// <inheritdoc />
