@@ -4,7 +4,7 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Validation
 {
-  public class ApplicationValidator : ZeroValidator<IApplication>
+  public class ApplicationValidator : ZeroValidator<Application>
   {
     public ApplicationValidator()
     {

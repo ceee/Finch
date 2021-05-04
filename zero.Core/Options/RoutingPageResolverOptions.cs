@@ -13,11 +13,11 @@ namespace zero.Core.Options
     class ResolverMap
     {
       public Type Type { get; set; }
-      public Expression<Func<IPage, bool>> Impl { get; set; }
+      public Expression<Func<Page, bool>> Impl { get; set; }
     }
 
 
-    public void Add<T>(Expression<Func<IPage, bool>> resolver)
+    public void Add<T>(Expression<Func<Page, bool>> resolver)
     {
       Resolvers.Add(new()
       {
@@ -26,7 +26,7 @@ namespace zero.Core.Options
       });
     }
 
-    public void Replace<T>(Expression<Func<IPage, bool>> resolver)
+    public void Replace<T>(Expression<Func<Page, bool>> resolver)
     {
       Remove<T>();
       Add<T>(resolver);
@@ -38,17 +38,17 @@ namespace zero.Core.Options
       Resolvers.RemoveWhere(x => x.Type == type);
     }
 
-    public Expression<Func<IPage, bool>> Get<T>() => Get(typeof(T));
+    public Expression<Func<Page, bool>> Get<T>() => Get(typeof(T));
 
-    public IEnumerable<Expression<Func<IPage, bool>>> GetAll<T>() => GetAll(typeof(T));
+    public IEnumerable<Expression<Func<Page, bool>>> GetAll<T>() => GetAll(typeof(T));
 
-    public Expression<Func<IPage, bool>> Get(Type type)
+    public Expression<Func<Page, bool>> Get(Type type)
     {
       ResolverMap map = Resolvers.LastOrDefault(x => x.Type == type);
       return map?.Impl;
     }
 
-    public IEnumerable<Expression<Func<IPage, bool>>> GetAll(Type type)
+    public IEnumerable<Expression<Func<Page, bool>>> GetAll(Type type)
     {
       IEnumerable<ResolverMap> maps = Resolvers.Where(x => x.Type == type);
       return maps.Select(map => map.Impl).Where(x => x != null);

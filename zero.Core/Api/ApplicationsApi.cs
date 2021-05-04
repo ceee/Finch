@@ -10,54 +10,54 @@ namespace zero.Core.Api
 {
   public class ApplicationsApi : BackofficeApi, IApplicationsApi
   {
-    IValidator<IApplication> Validator;
+    IValidator<Application> Validator;
 
 
-    public ApplicationsApi(IBackofficeStore store, IValidator<IApplication> validator) : base(store, isCoreDatabase: true)
+    public ApplicationsApi(IBackofficeStore store, IValidator<Application> validator) : base(store, isCoreDatabase: true)
     {
       Validator = validator;
     }
 
 
     /// <inheritdoc />
-    public async Task<IApplication> GetById(string id)
+    public async Task<Application> GetById(string id)
     {
-      return await GetById<IApplication>(id);
+      return await GetById<Application>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<IApplication>> GetAll()
+    public async Task<IList<Application>> GetAll()
     {
       using IAsyncDocumentSession session = Session();
       return await session
-        .Query<IApplication>()
+        .Query<Application>()
         .OrderByDescending(x => x.CreatedDate)
         .ToListAsync();
     }
 
 
     /// <inheritdoc />
-    public async Task<ListResult<IApplication>> GetByQuery(ListQuery<IApplication> query)
+    public async Task<ListResult<Application>> GetByQuery(ListQuery<Application> query)
     {
       query.SearchFor(entity => entity.Name);
 
       using IAsyncDocumentSession session = Session();
-      return await session.Query<IApplication>().ToQueriedListAsync(query);
+      return await session.Query<Application>().ToQueriedListAsync(query);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IApplication>> Save(IApplication model)
+    public async Task<EntityResult<Application>> Save(Application model)
     {
       return await SaveModel(model, Validator);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IApplication>> Delete(string id)
+    public async Task<EntityResult<Application>> Delete(string id)
     {
-      return await DeleteById<IApplication>(id);
+      return await DeleteById<Application>(id);
     }
   }
 
@@ -67,26 +67,26 @@ namespace zero.Core.Api
     /// <summary>
     /// Get application by Id
     /// </summary>
-    Task<IApplication> GetById(string id);
+    Task<Application> GetById(string id);
 
     /// <summary>
     /// Get all available zero applications
     /// </summary>
-    Task<IList<IApplication>> GetAll();
+    Task<IList<Application>> GetAll();
 
     /// <summary>
     /// Get all available applications (with query)
     /// </summary>
-    Task<ListResult<IApplication>> GetByQuery(ListQuery<IApplication> query);
+    Task<ListResult<Application>> GetByQuery(ListQuery<Application> query);
 
     /// <summary>
     /// Creates or updates a application
     /// </summary>
-    Task<EntityResult<IApplication>> Save(IApplication model);
+    Task<EntityResult<Application>> Save(Application model);
 
     /// <summary>
     /// Deletes a application by Id
     /// </summary>
-    Task<EntityResult<IApplication>> Delete(string id);
+    Task<EntityResult<Application>> Delete(string id);
   }
 }

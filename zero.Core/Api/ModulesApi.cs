@@ -27,11 +27,11 @@ namespace zero.Core.Api
     {
       IEnumerable<ModuleType> types = Options.Modules.GetAllItems();
       List<ModuleType> modules = types.ToList();
-      IPage page = null;
+      Page page = null;
 
       if (!pageId.IsNullOrEmpty())
       {
-        page = await GetById<IPage>(pageId);
+        page = await GetById<Page>(pageId);
       }
 
       if (tags?.Length > 0)

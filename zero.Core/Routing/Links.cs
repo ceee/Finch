@@ -32,7 +32,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<string> GetUrl(ILink link)
+    public async Task<string> GetUrl(Link link)
     {
       ILinkProvider provider = Providers.LastOrDefault(x => x.CanProcess(link));
 
@@ -47,11 +47,11 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<ILink, string>> GetUrls(params ILink[] links)
+    public async Task<Dictionary<Link, string>> GetUrls(params Link[] links)
     {
-      Dictionary<ILink, string> result = new();
+      Dictionary<Link, string> result = new();
 
-      foreach (ILink link in links)
+      foreach (Link link in links)
       {
         result.Add(link, await GetUrl(link));
       }
@@ -61,7 +61,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public ILinkProvider GetProvider(ILink link)
+    public ILinkProvider GetProvider(Link link)
     {
       return Providers.LastOrDefault(x => x.CanProcess(link));
     }
@@ -72,17 +72,17 @@ namespace zero.Core.Routing
     /// <summary>
     /// Get URL from a link object by finding a provider which can resolve the link
     /// </summary>
-    Task<string> GetUrl(ILink link);
+    Task<string> GetUrl(Link link);
 
     /// <summary>
     /// Get URLs from link objects by finding matching providers
     /// </summary>
-    Task<Dictionary<ILink, string>> GetUrls(params ILink[] links);
+    Task<Dictionary<Link, string>> GetUrls(params Link[] links);
 
     /// <summary>
     /// Get the provider for a specific link
     /// </summary>
-    ILinkProvider GetProvider(ILink link);
+    ILinkProvider GetProvider(Link link);
 
     /// <summary>
     /// Find a provider by a specific type

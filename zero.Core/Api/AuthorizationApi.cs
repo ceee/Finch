@@ -76,7 +76,7 @@ namespace zero.Core.Api
     }
 
 
-    public EntityPermission GetPermissionForEntity<T>(T model, string permissionKey) where T : IZeroEntity
+    public EntityPermission GetPermissionForEntity<T>(T model, string permissionKey) where T : ZeroEntity
     {
       EntityPermission result = new EntityPermission();
 

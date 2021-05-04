@@ -1,8 +1,8 @@
-﻿using zero.Core.Identity;
+﻿using zero.Core.Entities;
 
 namespace zero.Core.Security
 {
-  public class ZeroAuthOptions<TUser> where TUser : IIdentityUser
+  public class ZeroAuthOptions<TUser> where TUser : ZeroIdentityUser
   {
     public string Scheme { get; set; }
 

@@ -23,7 +23,7 @@ namespace zero.Core.Identity
     IUserClaimStore<TUser>,
     IUserSecurityStampStore<TUser>,
     IProtectedUserStore<TUser>
-    where TUser : class, IIdentityUser
+    where TUser : ZeroIdentityUser
   {
     protected IZeroStore Store { get; private set; }
 

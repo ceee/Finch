@@ -58,27 +58,27 @@ namespace zero.Web.Defaults
 
       services.AddScoped<IRazorRenderer, RazorRenderer>();
 
-      services.AddTransient<IApplication, Application>();
-      services.AddTransient<ICountry, Country>();
-      services.AddTransient<ILanguage, Language>();
-      services.AddTransient<ITranslation, Translation>();
-      services.AddTransient<IPage, Page>();
-      services.AddTransient<IRecycledEntity, RecycledEntity>();
-      services.AddTransient<IMedia, Media>();
-      services.AddTransient<IMediaFolder, MediaFolder>();
-      services.AddTransient<IPreview, Preview>();
-      services.AddTransient<IRoute, Route>();
+      services.AddTransient<Application, Application>();
+      services.AddTransient<Country, Country>();
+      services.AddTransient<Language, Language>();
+      services.AddTransient<Translation, Translation>();
+      services.AddTransient<Page, Page>();
+      services.AddTransient<RecycledEntity, RecycledEntity>();
+      services.AddTransient<Media, Media>();
+      services.AddTransient<MediaFolder, MediaFolder>();
+      services.AddTransient<Preview, Preview>();
+      services.AddTransient<Route, Route>();
 
-      services.AddTransient<IValidator<IApplication>, ApplicationValidator>();
-      services.AddTransient<IValidator<ICountry>, CountryValidator>();
-      services.AddTransient<IValidator<IMailTemplate>, MailTemplateValidator>();
-      services.AddTransient<IValidator<ILanguage>, LanguageValidator>();
-      services.AddTransient<IValidator<ITranslation>, TranslationValidator>();
-      services.AddTransient<IValidator<IPage>, PageValidator>();
-      services.AddTransient<IValidator<IMedia>, MediaValidator>();
-      services.AddTransient<IValidator<IMediaFolder>, MediaFolderValidator>();
-      services.AddTransient<IValidator<IBackofficeUserRole>, UserRoleValidator>();
-      services.AddTransient<IValidator<IBackofficeUser>, BackofficeUserValidator>();
+      services.AddTransient<IValidator<Application>, ApplicationValidator>();
+      services.AddTransient<IValidator<Country>, CountryValidator>();
+      services.AddTransient<IValidator<MailTemplate>, MailTemplateValidator>();
+      services.AddTransient<IValidator<Language>, LanguageValidator>();
+      services.AddTransient<IValidator<Translation>, TranslationValidator>();
+      services.AddTransient<IValidator<Page>, PageValidator>();
+      services.AddTransient<IValidator<Media>, MediaValidator>();
+      services.AddTransient<IValidator<MediaFolder>, MediaFolderValidator>();
+      services.AddTransient<IValidator<BackofficeUserRole>, UserRoleValidator>();
+      services.AddTransient<IValidator<BackofficeUser>, BackofficeUserValidator>();
 
       services.AddTransient<IApplicationsApi, ApplicationsApi>();
       services.AddTransient<ICountriesCollection, CountriesCollection>();

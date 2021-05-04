@@ -4,7 +4,7 @@ using zero.Core.Validation;
 
 namespace zero.Core.Collections
 {
-  public class MediaValidator : ZeroValidator<IMedia>
+  public class MediaValidator : ZeroValidator<Media>
   {
     public MediaValidator()
     {

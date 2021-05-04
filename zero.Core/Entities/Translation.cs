@@ -1,17 +1,16 @@
-﻿using zero.Core.Attributes;
-
-namespace zero.Core.Entities
+﻿namespace zero.Core.Entities
 {
-  public class Translation : ZeroEntity, ITranslation
+  public class Translation : ZeroEntity
   {
-    /// <inheritdoc />
-    public string LanguageId { get; set; }
-
-    /// <inheritdoc />
+    /// <summary>
+    /// Value of the translation
+    /// </summary>
     public string Value { get; set; }
 
-    /// <inheritdoc />
-    public TranslationDisplay Display { get; set; } 
+    /// <summary>
+    /// Display + input type
+    /// </summary>
+    public TranslationDisplay Display { get; set; }
   }
 
 
@@ -19,20 +18,5 @@ namespace zero.Core.Entities
   {
     Text = 0,
     HTML = 1
-  }
-
-
-  [Collection("Translations")]
-  public interface ITranslation : IZeroEntity, ILanguageAwareEntity, IZeroDbConventions
-  {
-    /// <summary>
-    /// Value of the translation
-    /// </summary>
-    string Value { get; set; }
-
-    /// <summary>
-    /// Display + input type
-    /// </summary>
-    TranslationDisplay Display { get; set; }
   }
 }

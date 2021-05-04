@@ -27,7 +27,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public bool Verify(IZeroIdEntity entity, string token)
+    public bool Verify(ZeroIdEntity entity, string token)
     {
       return Verify(entity?.Id, token);
     }
@@ -54,7 +54,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public string Get(IZeroIdEntity entity)
+    public string Get(ZeroIdEntity entity)
     {
       return Get(entity?.Id);
     }
@@ -91,7 +91,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Verifies if the change token is valid for the entity
     /// </summary>
-    bool Verify(IZeroIdEntity entity, string token);
+    bool Verify(ZeroIdEntity entity, string token);
 
     /// <summary>
     /// Verifies if the change token is valid for the entity
@@ -101,7 +101,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get a new change token for the entity
     /// </summary>
-    string Get(IZeroIdEntity entity);
+    string Get(ZeroIdEntity entity);
 
     /// <summary>
     /// Get a new change token for the entity

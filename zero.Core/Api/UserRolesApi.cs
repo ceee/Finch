@@ -35,28 +35,28 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IList<IBackofficeUserRole>> GetAll()
+    public async Task<IList<BackofficeUserRole>> GetAll()
     {
       using IAsyncDocumentSession session = Session();
-      return await session.Query<IBackofficeUserRole>().OrderBy(x => x.Sort).ThenBy(x => x.Name).ToListAsync();
+      return await session.Query<BackofficeUserRole>().OrderBy(x => x.Sort).ThenBy(x => x.Name).ToListAsync();
     }
 
 
     /// <inheritdoc />
-    public async Task<IBackofficeUserRole> GetById(string id)
+    public async Task<BackofficeUserRole> GetById(string id)
     {
       return await RoleManager.FindByIdAsync(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IBackofficeUserRole>> Save(IBackofficeUserRole model)
+    public async Task<EntityResult<BackofficeUserRole>> Save(BackofficeUserRole model)
     {
       ValidationResult validation = await new UserRoleValidator().ValidateAsync(model);
 
       if (!validation.IsValid)
       {
-        return EntityResult<IBackofficeUserRole>.Fail(validation);
+        return EntityResult<BackofficeUserRole>.Fail(validation);
       }
 
       if (model.Id.IsNullOrEmpty())
@@ -80,12 +80,12 @@ namespace zero.Core.Api
         }
       }
 
-      return EntityResult<IBackofficeUserRole>.Success(model);
+      return EntityResult<BackofficeUserRole>.Success(model);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IBackofficeUserRole>> Delete(string id)
+    public async Task<EntityResult<BackofficeUserRole>> Delete(string id)
     {
       using (IAsyncDocumentSession session = Session())
       {
@@ -93,7 +93,7 @@ namespace zero.Core.Api
 
         if (country == null)
         {
-          return EntityResult<IBackofficeUserRole>.Fail("@errors.ondelete.idnotfound");
+          return EntityResult<BackofficeUserRole>.Fail("@errors.ondelete.idnotfound");
         }
 
         session.Delete(country);
@@ -101,7 +101,7 @@ namespace zero.Core.Api
         await session.SaveChangesAsync();
       }
 
-      return EntityResult<IBackofficeUserRole>.Success();
+      return EntityResult<BackofficeUserRole>.Success();
     }
   }
 
@@ -111,21 +111,21 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all user roles
     /// </summary>
-    Task<IList<IBackofficeUserRole>> GetAll();
+    Task<IList<BackofficeUserRole>> GetAll();
 
     /// <summary>
     /// Get role by id
     /// </summary>
-    Task<IBackofficeUserRole> GetById(string id);
+    Task<BackofficeUserRole> GetById(string id);
 
     /// <summary>
     /// Create or update a role
     /// </summary>
-    Task<EntityResult<IBackofficeUserRole>> Save(IBackofficeUserRole model);
+    Task<EntityResult<BackofficeUserRole>> Save(BackofficeUserRole model);
 
     /// <summary>
     /// Deletes a role
     /// </summary>
-    Task<EntityResult<IBackofficeUserRole>> Delete(string id);
+    Task<EntityResult<BackofficeUserRole>> Delete(string id);
   }
 }

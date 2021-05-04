@@ -54,9 +54,9 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public virtual async Task<Dictionary<T, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<T> models, object parameters = null)
+    public virtual async Task<Dictionary<T, Route>> GetRoutes(IAsyncDocumentSession session, IEnumerable<T> models, object parameters = null)
     {
-      Dictionary<T, IRoute> result = new();
+      Dictionary<T, Route> result = new();
       Dictionary<string, T> routeMap = new();
       HashSet<string> routeIds = new();
 
@@ -67,9 +67,9 @@ namespace zero.Core.Routing
         routeMap.TryAdd(routeId, model);
       }
 
-      Dictionary<string, IRoute> routes = await session.LoadAsync<IRoute>(routeIds);
+      Dictionary<string, Route> routes = await session.LoadAsync<Route>(routeIds);
 
-      foreach ((string key, IRoute route) in routes)
+      foreach ((string key, Route route) in routes)
       {
         if (routeMap.TryGetValue(key, out T model))
         {
@@ -82,21 +82,21 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public virtual async Task<Dictionary<object, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<object> models, object parameters = null)
+    public virtual async Task<Dictionary<object, Route>> GetRoutes(IAsyncDocumentSession session, IEnumerable<object> models, object parameters = null)
     {
       return (await GetRoutes(session, models.Select(x => (T)x).ToArray(), parameters)).ToDictionary(x => (object)x.Key, x => x.Value);
     }
 
 
     /// <inheritdoc />
-    public virtual async Task<IRoute> GetRoute(IAsyncDocumentSession session, T model, object parameters = null)
+    public virtual async Task<Route> GetRoute(IAsyncDocumentSession session, T model, object parameters = null)
     {
-      return await session.LoadAsync<IRoute>(GetRouteId(model, parameters));
+      return await session.LoadAsync<Route>(GetRouteId(model, parameters));
     }
 
 
     /// <inheritdoc />
-    public virtual async Task<IRoute> GetRoute(IAsyncDocumentSession session, object model, object parameters = null)
+    public virtual async Task<Route> GetRoute(IAsyncDocumentSession session, object model, object parameters = null)
     {
       if (!(model is T))
       {
@@ -107,7 +107,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public virtual Task<IResolvedRoute> ResolveRoute(IAsyncDocumentSession session, IRoute route)
+    public virtual Task<IResolvedRoute> ResolveRoute(IAsyncDocumentSession session, Route route)
     {
       DefaultResolvedRoute resolved = new DefaultResolvedRoute() { Route = route };
       return Task.FromResult((IResolvedRoute)resolved);
@@ -115,7 +115,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public abstract Task<IList<IRoute>> GetAllRoutes(IAsyncDocumentSession session);
+    public abstract Task<IList<Route>> GetAllRoutes(IAsyncDocumentSession session);
 
 
     /// <inheritdoc />
@@ -134,13 +134,13 @@ namespace zero.Core.Routing
     }
 
 
-    protected async Task<IPage> ResolvePage(IAsyncDocumentSession session)
+    protected async Task<Page> ResolvePage(IAsyncDocumentSession session)
     {
-      IEnumerable<Expression<Func<IPage, bool>>> resolvers = Options.Routing.PageResolvers.GetAll(typeof(T));
+      IEnumerable<Expression<Func<Page, bool>>> resolvers = Options.Routing.PageResolvers.GetAll(typeof(T));
 
-      foreach (Expression<Func<IPage, bool>> resolver in resolvers.Reverse())
+      foreach (Expression<Func<Page, bool>> resolver in resolvers.Reverse())
       {
-        IPage page = await session.Query<IPage>().FirstOrDefaultAsync(resolver);
+        Page page = await session.Query<Page>().FirstOrDefaultAsync(resolver);
 
         if (page != null)
         {
@@ -152,38 +152,38 @@ namespace zero.Core.Routing
     }
 
 
-    protected async Task<IEnumerable<IPage>> ResolvePages(IAsyncDocumentSession session)
+    protected async Task<IEnumerable<Page>> ResolvePages(IAsyncDocumentSession session)
     {
-      List<IPage> pages = new();
-      IEnumerable<Expression<Func<IPage, bool>>> resolvers = Options.Routing.PageResolvers.GetAll(typeof(T));
+      List<Page> pages = new();
+      IEnumerable<Expression<Func<Page, bool>>> resolvers = Options.Routing.PageResolvers.GetAll(typeof(T));
 
-      foreach (Expression<Func<IPage, bool>> resolver in resolvers.Reverse())
+      foreach (Expression<Func<Page, bool>> resolver in resolvers.Reverse())
       {
-        pages.AddRange(await session.Query<IPage>().Where(resolver).ToListAsync());
+        pages.AddRange(await session.Query<Page>().Where(resolver).ToListAsync());
       }
 
       return pages;
     }
 
 
-    protected async Task<IRoute> ResolvePageRoute(IAsyncDocumentSession session)
+    protected async Task<Route> ResolvePageRoute(IAsyncDocumentSession session)
     {
-      IPage page = await ResolvePage(session);
+      Page page = await ResolvePage(session);
 
       // WARNING: we are assuming that the route id is built from the page hash but this could be altered with PageRouteProvier.GetRouteId.
       // we cannot use a dependency on this provider here as we are working from the abstract route provider which is the base of the PageRouteProvider itself,
       // and therefore a circular dependency.
-      return page == null ? null : await session.LoadAsync<IRoute>(ID_PREFIX + page.Hash);
+      return page == null ? null : await session.LoadAsync<Route>(ID_PREFIX + page.Hash);
     }
 
 
-    protected async Task<IEnumerable<IRoute>> ResolvePageRoutes(IAsyncDocumentSession session)
+    protected async Task<IEnumerable<Route>> ResolvePageRoutes(IAsyncDocumentSession session)
     {
-      List<IRoute> routes = new();
-      IEnumerable<IPage> pages = await ResolvePages(session);
+      List<Route> routes = new();
+      IEnumerable<Page> pages = await ResolvePages(session);
 
       string[] ids = pages.Select(x => ID_PREFIX + x.Hash).ToArray();
-      return ids.Length < 1 ? routes : (await session.LoadAsync<IRoute>(ids)).Select(x => x.Value);
+      return ids.Length < 1 ? routes : (await session.LoadAsync<Route>(ids)).Select(x => x.Value);
     }
   }
 }

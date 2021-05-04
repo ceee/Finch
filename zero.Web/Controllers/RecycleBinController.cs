@@ -15,7 +15,7 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<ListResult<IRecycledEntity>> GetByQuery([FromQuery] RecycleBinListQuery query)
+    public async Task<ListResult<RecycledEntity>> GetByQuery([FromQuery] RecycleBinListQuery query)
     {
       query.IncludeInactive = true;
       return await Api.GetByQuery(query);
@@ -26,11 +26,11 @@ namespace zero.Web.Controllers
 
 
     [HttpDelete]
-    public async Task<EntityResult<IRecycledEntity>> Delete([FromQuery] string id) => await Api.Delete(id);
+    public async Task<EntityResult<RecycledEntity>> Delete([FromQuery] string id) => await Api.Delete(id);
 
 
     [HttpDelete]
-    public async Task<EntityResult<IRecycledEntity>> DeleteByGroup([FromQuery] string group) => await Api.DeleteByGroup(group);
+    public async Task<EntityResult<RecycledEntity>> DeleteByGroup([FromQuery] string group) => await Api.DeleteByGroup(group);
 
   }
 }

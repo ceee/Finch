@@ -35,7 +35,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get revision list for an entity
     /// </summary>
-    public async Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10, bool includeContent = false) where T : IZeroEntity
+    public async Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10, bool includeContent = false) where T : ZeroEntity
     {
       using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
@@ -65,7 +65,7 @@ namespace zero.Core.Api
 
       // load affected users as the revisions could have been edited by other users too
       string[] userIds = items.Select(x => x.LastModifiedById).Distinct().ToArray();
-      Dictionary<string, IBackofficeUser> users = await UserApi.GetByIds(userIds);
+      Dictionary<string, BackofficeUser> users = await UserApi.GetByIds(userIds);
 
       // create revision objects
       foreach (T item in items)
@@ -77,7 +77,7 @@ namespace zero.Core.Api
           Json = includeContent ? JsonConvert.SerializeObject(item) : null
         };
 
-        if (!item.LastModifiedById.IsNullOrEmpty() && users.TryGetValue(item.LastModifiedById, out IBackofficeUser user) && user != null)
+        if (!item.LastModifiedById.IsNullOrEmpty() && users.TryGetValue(item.LastModifiedById, out BackofficeUser user) && user != null)
         {
           revision.User = new RevisionUser()
           {
@@ -100,6 +100,6 @@ namespace zero.Core.Api
     /// <summary>
     /// Get revision list (without content JSON) for an entity
     /// </summary>
-    Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10, bool includeContent = false) where T : IZeroEntity;
+    Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10, bool includeContent = false) where T : ZeroEntity;
   }
 }

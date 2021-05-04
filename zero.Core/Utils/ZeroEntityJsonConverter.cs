@@ -14,7 +14,7 @@
 //    public ZeroEntityJsonConverter()
 //    {
 //      type = typeof(Ref<>);
-//      idProperty = nameof(Ref<IZeroIdEntity>.Id);
+//      idProperty = nameof(Ref<ZeroIdEntity>.Id);
 //    }
 
 

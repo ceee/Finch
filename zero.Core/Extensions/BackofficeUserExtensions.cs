@@ -7,7 +7,7 @@ namespace zero.Core.Extensions
 {
   public static class BackofficeUserExtensions
   {
-    public static string[] GetAllowedAppIds(this IBackofficeUser user)
+    public static string[] GetAllowedAppIds(this BackofficeUser user)
     {
       if (user == null)
       {

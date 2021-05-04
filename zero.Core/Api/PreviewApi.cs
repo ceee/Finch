@@ -8,25 +8,25 @@ namespace zero.Core.Api
 {
   public class PreviewApi : BackofficeApi, IPreviewApi
   {
-    IPreview Blueprint;
+    Preview Blueprint;
 
-    public PreviewApi(IBackofficeStore store, IPreview blueprint) : base(store)
+    public PreviewApi(IBackofficeStore store, Preview blueprint) : base(store)
     {
       Blueprint = blueprint;
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IPreview>> Add<TEntity>(TEntity model) where TEntity : IZeroEntity
+    public async Task<EntityResult<Preview>> Add<TEntity>(TEntity model) where TEntity : ZeroEntity
     {
       return await Update(null, model);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IPreview>> Update<TEntity>(string id, TEntity model) where TEntity : IZeroEntity
+    public async Task<EntityResult<Preview>> Update<TEntity>(string id, TEntity model) where TEntity : ZeroEntity
     {
-      IPreview entity = id == null ? await GetById<IPreview>(id) : Blueprint.Clone();
+      Preview entity = id == null ? await GetById<Preview>(id) : Blueprint.Clone();
       entity.Content = model;
       entity.OriginalId = model.Id;
       entity.Name = model.Name;
@@ -39,16 +39,16 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IPreview> GetById(string id)
+    public async Task<Preview> GetById(string id)
     {
-      return await GetById<IPreview>(id);
+      return await GetById<Preview>(id);
     }
 
 
     /// <summary>
     /// Get preview expiration for a document
     /// </summary>
-    DateTime GetExpiry(IZeroEntity model)
+    DateTime GetExpiry(ZeroEntity model)
     {
       return DateTime.Now.AddHours(1);
     }
@@ -59,16 +59,16 @@ namespace zero.Core.Api
     /// <summary>
     /// Adds an entity to the preview collection. This will generate a preview with an id which can be used for the preview view.
     /// </summary>
-    Task<EntityResult<IPreview>> Add<TEntity>(TEntity model) where TEntity : IZeroEntity;
+    Task<EntityResult<Preview>> Add<TEntity>(TEntity model) where TEntity : ZeroEntity;
 
     /// <summary>
     /// Updates an entity in the preview collection. This will generate a preview with an id which can be used for the preview view.
     /// </summary>
-    Task<EntityResult<IPreview>> Update<TEntity>(string id, TEntity model) where TEntity : IZeroEntity;
+    Task<EntityResult<Preview>> Update<TEntity>(string id, TEntity model) where TEntity : ZeroEntity;
 
     /// <summary>
     /// Get preview entity by Id
     /// </summary>
-    Task<IPreview> GetById(string id);
+    Task<Preview> GetById(string id);
   }
 }

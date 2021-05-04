@@ -7,9 +7,9 @@ using zero.Core.Entities;
 
 namespace zero.Core.Collections
 {
-  public class TranslationsCollection : CollectionBase<ITranslation>, ITranslationsCollection
+  public class TranslationsCollection : CollectionBase<Translation>, ITranslationsCollection
   {
-    public TranslationsCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<ITranslation> validator) : base(context, interceptor, validator) { }
+    public TranslationsCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<Translation> validator) : base(context, interceptor, validator) { }
 
 
     /// <inheritdoc />
@@ -19,14 +19,14 @@ namespace zero.Core.Collections
     }
 
     /// <inheritdoc />
-    public override IAsyncEnumerable<ITranslation> Stream()
+    public override IAsyncEnumerable<Translation> Stream()
     {
       return base.Stream(q => q.OrderByDescending(x => x.Name));
     }
   }
 
 
-  public interface ITranslationsCollection : ICollectionBase<ITranslation>
+  public interface ITranslationsCollection : ICollectionBase<Translation>
   {
     /// <summary>
     /// Get a translated string by id

@@ -5,7 +5,7 @@ using zero.Core.Identity;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Mails, PermissionsValue.Read)]
-  public class MailTemplatesController : BackofficeCollectionController<IMailTemplate, IMailTemplatesCollection>
+  public class MailTemplatesController : BackofficeCollectionController<MailTemplate, IMailTemplatesCollection>
   {
     public MailTemplatesController(IMailTemplatesCollection collection) : base(collection)
     {

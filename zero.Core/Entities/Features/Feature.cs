@@ -1,15 +1,23 @@
 ﻿namespace zero.Core.Entities
 {
-  /// <inheritdoc />
-  public class Feature : IFeature
+  /// <summary>
+  /// A feature can affect both the backoffice and the frontend
+  /// </summary>
+  public class Feature
   {
-    /// <inheritdoc />
+    /// <summary>
+    /// The alias
+    /// </summary>
     public string Alias { get; set; }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// The name of the feature
+    /// </summary>
     public string Name { get; set; }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Additional description
+    /// </summary>
     public string Description { get; set; }
   }
 }

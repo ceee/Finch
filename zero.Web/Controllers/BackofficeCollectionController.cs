@@ -12,7 +12,7 @@ using zero.Web.Models;
 namespace zero.Web.Controllers
 {
   public abstract class BackofficeCollectionController<TEntity, TCollection> : BackofficeController 
-    where TEntity : IZeroEntity 
+    where TEntity : ZeroEntity 
     where TCollection : ICollectionBase<TEntity>
   {
     protected TCollection Collection { get; private set; }

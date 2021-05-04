@@ -11,8 +11,8 @@ using zero.Core.Identity;
 namespace zero.Core.Security
 {
   public class ZeroBackofficeClaimsPrincipalFactory<TUser, TRole> : ZeroClaimsPrinicipalFactory<TUser, TRole>
-    where TUser : class, IBackofficeUser
-    where TRole : class, IBackofficeUserRole
+    where TUser : BackofficeUser
+    where TRole : BackofficeUserRole
   {
     public ZeroBackofficeClaimsPrincipalFactory(UserManager<TUser> userManager, RoleManager<TRole> roleManager, IOptions<IdentityOptions> optionsAccessor, IOptions<ZeroAuthOptions<TUser>> authOptions, IZeroContext zero) 
       : base(userManager, roleManager, optionsAccessor, authOptions, zero)

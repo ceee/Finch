@@ -14,28 +14,28 @@ namespace zero.Core.Api
 {
   public class MediaFolderApi : BackofficeApi, IMediaFolderApi
   {
-    IValidator<IMediaFolder> Validator;
+    IValidator<MediaFolder> Validator;
 
 
-    public MediaFolderApi(IBackofficeStore store, IValidator<IMediaFolder> validator) : base(store)
+    public MediaFolderApi(IBackofficeStore store, IValidator<MediaFolder> validator) : base(store)
     {
       Validator = validator;
     }
 
 
     /// <inheritdoc />
-    public async Task<IMediaFolder> GetById(string id)
+    public async Task<MediaFolder> GetById(string id)
     {
-      return await GetById<IMediaFolder>(id);
+      return await GetById<MediaFolder>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<IMediaFolder>> GetAll(string parentId = null)
+    public async Task<IList<MediaFolder>> GetAll(string parentId = null)
     {
       using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
-        return await session.Query<IMediaFolder>()
+        return await session.Query<MediaFolder>()
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .OrderByDescending(x => x.Name)
           .ToListAsync();
@@ -51,7 +51,7 @@ namespace zero.Core.Api
 
       using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
-        IList<IMediaFolder> folders = await session.Query<IMediaFolder>()
+        IList<MediaFolder> folders = await session.Query<MediaFolder>()
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .OrderByDescending(x => x.CreatedDate).ThenBy(x => x.Name)
           .ToListAsync();
@@ -62,7 +62,7 @@ namespace zero.Core.Api
         {
           MediaFolder_ByHierarchy.Result result = await session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
             .ProjectInto<MediaFolder_ByHierarchy.Result>()
-            .Include<MediaFolder_ByHierarchy.Result, IMediaFolder>(x => x.Path.Select(p => p.Id))
+            .Include<MediaFolder_ByHierarchy.Result, MediaFolder>(x => x.Path.Select(p => p.Id))
             .FirstOrDefaultAsync(x => x.Id == activeId);
 
           if (result != null)
@@ -81,7 +81,7 @@ namespace zero.Core.Api
           .ToListAsync();
 
 
-        foreach (IMediaFolder folder in folders)
+        foreach (MediaFolder folder in folders)
         {
           int childCount = children.Count(x => x.Id == folder.Id);
 
@@ -124,30 +124,30 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IList<IMediaFolder>> GetHierarchy(string id)
+    public async Task<IList<MediaFolder>> GetHierarchy(string id)
     {
       using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
         MediaFolder_ByHierarchy.Result result = await session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
           .ProjectInto<MediaFolder_ByHierarchy.Result>()
-          .Include<MediaFolder_ByHierarchy.Result, IMediaFolder>(x => x.Path.Select(p => p.Id))
+          .Include<MediaFolder_ByHierarchy.Result, MediaFolder>(x => x.Path.Select(p => p.Id))
           .FirstOrDefaultAsync(x => x.Id == id);
 
         if (result == null)
         {
-          return new List<IMediaFolder>();
+          return new List<MediaFolder>();
         }
 
         List<string> ids = result.Path.Select(x => x.Id).ToList();
         ids.Add(id);
 
-        return (await session.LoadAsync<IMediaFolder>(ids)).Select(x => x.Value).ToList();
+        return (await session.LoadAsync<MediaFolder>(ids)).Select(x => x.Value).ToList();
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IMediaFolder>> Save(IMediaFolder model)
+    public async Task<EntityResult<MediaFolder>> Save(MediaFolder model)
     {
       model.IsActive = true;
       return await SaveModel(model, Validator);
@@ -155,14 +155,14 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IMediaFolder>> Move(string id, string parentId)
+    public async Task<EntityResult<MediaFolder>> Move(string id, string parentId)
     {
-      IMediaFolder model = await GetById<IMediaFolder>(id);
-      IMediaFolder parent = await GetById<IMediaFolder>(parentId);
+      MediaFolder model = await GetById<MediaFolder>(id);
+      MediaFolder parent = await GetById<MediaFolder>(parentId);
 
       if (model == null || (!parentId.IsNullOrEmpty() && parent == null))
       {
-        return EntityResult<IMediaFolder>.Fail("@errors.idnotfound");
+        return EntityResult<MediaFolder>.Fail("@errors.idnotfound");
       }
 
       model.ParentId = parent?.Id;
@@ -172,9 +172,9 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IMediaFolder>> Delete(string id)
+    public async Task<EntityResult<MediaFolder>> Delete(string id)
     {
-      return await DeleteById<IMediaFolder>(id);
+      return await DeleteById<MediaFolder>(id);
     }
   }
 
@@ -184,17 +184,17 @@ namespace zero.Core.Api
     /// <summary>
     /// Get application by Id
     /// </summary>
-    Task<IMediaFolder> GetById(string id);
+    Task<MediaFolder> GetById(string id);
 
     /// <summary>
     /// Get hierarchy for a folder
     /// </summary>
-    Task<IList<IMediaFolder>> GetHierarchy(string id);
+    Task<IList<MediaFolder>> GetHierarchy(string id);
 
     /// <summary>
     /// Get all folders with the specified parent or on root
     /// </summary>
-    Task<IList<IMediaFolder>> GetAll(string parentId = null);
+    Task<IList<MediaFolder>> GetAll(string parentId = null);
 
     /// <summary>
     /// Get all folders with the specified parent or on root for tree output
@@ -204,16 +204,16 @@ namespace zero.Core.Api
     /// <summary>
     /// Creates or updates a folder
     /// </summary>
-    Task<EntityResult<IMediaFolder>> Save(IMediaFolder model);
+    Task<EntityResult<MediaFolder>> Save(MediaFolder model);
 
     /// <summary>
     /// Move a folder to a new parent
     /// </summary>
-    Task<EntityResult<IMediaFolder>> Move(string id, string parentId);
+    Task<EntityResult<MediaFolder>> Move(string id, string parentId);
 
     /// <summary>
     /// Deletes a folder
     /// </summary>
-    Task<EntityResult<IMediaFolder>> Delete(string id);
+    Task<EntityResult<MediaFolder>> Delete(string id);
   }
 }

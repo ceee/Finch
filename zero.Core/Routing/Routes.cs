@@ -41,7 +41,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<string> GetUrl<T>(string id, object parameters = null) where T : IZeroIdEntity => (await GetRoute<T>(id, parameters))?.Url;
+    public async Task<string> GetUrl<T>(string id, object parameters = null) where T : ZeroIdEntity => (await GetRoute<T>(id, parameters))?.Url;
 
 
     /// <inheritdoc />
@@ -49,7 +49,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<IRoute> GetRoute<T>(string id, object parameters = null) where T : IZeroIdEntity
+    public async Task<Route> GetRoute<T>(string id, object parameters = null) where T : ZeroIdEntity
     {
       if (id.IsNullOrEmpty())
       {
@@ -77,7 +77,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<IRoute> GetRoute<T>(T model, object parameters = null)
+    public async Task<Route> GetRoute<T>(T model, object parameters = null)
     {
       if (model == null)
       {
@@ -98,7 +98,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<T, IRoute>> GetRoutes<T>(IEnumerable<T> models, object parameters = null)
+    public async Task<Dictionary<T, Route>> GetRoutes<T>(IEnumerable<T> models, object parameters = null)
     {
       if (!models.Any())
       {
@@ -119,7 +119,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<IResolvedRoute> ResolveUrl(IApplication application, string path)
+    public async Task<IResolvedRoute> ResolveUrl(Application application, string path)
     {
       path = path.Length > 1 ? path.TrimEnd(PATH_SEPERATOR) : path;
 
@@ -138,13 +138,13 @@ namespace zero.Core.Routing
         min -= 1;
       }
 
-      IList<IRoute> routes = await session.Query<IRoute>()
+      IList<Route> routes = await session.Query<Route>()
         .Where(x => (!x.AllowSuffix && x.Url == path) || (x.AllowSuffix && x.Url.In(parts)))
         .Include("References[].Id")
         .Include("Dependencies")
         .ToListAsync();
 
-      IRoute route = routes.FirstOrDefault();
+      Route route = routes.FirstOrDefault();
 
       // try to get the best matching path when multiple routes are found
       // our assumption is that the best path is those with the longest path parts separated by a slash
@@ -152,7 +152,7 @@ namespace zero.Core.Routing
       if (routes.Count > 1)
       {
         int maxPathParts = routes.Max(x => x.Url.Count(u => u == PATH_SEPERATOR));
-        IEnumerable<IRoute> longestRoutes = routes.Where(x => maxPathParts == x.Url.Count(u => u == PATH_SEPERATOR)).OrderBy(x => x.AllowSuffix);
+        IEnumerable<Route> longestRoutes = routes.Where(x => maxPathParts == x.Url.Count(u => u == PATH_SEPERATOR)).OrderBy(x => x.AllowSuffix);
 
         if (longestRoutes.Count() > 1) 
         {
@@ -179,7 +179,7 @@ namespace zero.Core.Routing
         return null;
       }
 
-      IApplication app = await AppResolver.ResolveFromRequest(context);
+      Application app = await AppResolver.ResolveFromRequest(context);
       string path = context.Request.Path;
 
       if (app == null)
@@ -192,7 +192,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<IResolvedRoute> ResolveRoute(IRoute route)
+    public async Task<IResolvedRoute> ResolveRoute(Route route)
     {
       using IAsyncDocumentSession session = Store.OpenAsyncSession();
       return await ResolveRouteInternal(session, route);
@@ -205,9 +205,9 @@ namespace zero.Core.Routing
       int count = 0;
 
       using IAsyncDocumentSession coreSession = Store.OpenCoreSession();
-      List<IApplication> apps = await coreSession.Query<IApplication>().ToListAsync();
+      List<Application> apps = await coreSession.Query<Application>().ToListAsync();
 
-      foreach (IApplication app in apps)
+      foreach (Application app in apps)
       {
         using IAsyncDocumentSession session = Store.OpenAsyncSession(app.Database);
         session.Advanced.MaxNumberOfRequestsPerSession = 1000;
@@ -215,10 +215,10 @@ namespace zero.Core.Routing
         foreach (IRouteProvider provider in Providers)
         {
           // get all routes for this provider
-          IList<IRoute> routes = await provider.GetAllRoutes(session);
+          IList<Route> routes = await provider.GetAllRoutes(session);
 
           // delete all registered routes in the database for this provider
-          await Store.PurgeAsync<IRoute>(app.Database, $"where {nameof(IRoute.ProviderAlias)} = $alias", new Raven.Client.Parameters()
+          await Store.PurgeAsync<Route>(app.Database, $"where {nameof(Route.ProviderAlias)} = $alias", new Raven.Client.Parameters()
           {
             { "alias", provider.Alias }
           });
@@ -226,7 +226,7 @@ namespace zero.Core.Routing
           // store new routes
           using (BulkInsertOperation bulkInsert = Store.BulkInsert(app.Database))
           {
-            foreach (IRoute route in routes)
+            foreach (Route route in routes)
             {
               await bulkInsert.StoreAsync(route, route.Id);
               count += 1;
@@ -248,7 +248,7 @@ namespace zero.Core.Routing
     /// <summary>
     /// Call the provider which can resolve the route
     /// </summary>
-    async Task<IResolvedRoute> ResolveRouteInternal(IAsyncDocumentSession session, IRoute route)
+    async Task<IResolvedRoute> ResolveRouteInternal(IAsyncDocumentSession session, Route route)
     {
       IRouteProvider routeProvider = FindProvider(route.ProviderAlias);
       return await routeProvider?.ResolveRoute(session, route);
@@ -282,17 +282,17 @@ namespace zero.Core.Routing
     /// <summary>
     /// Get the URL for an entity
     /// </summary>
-    Task<string> GetUrl<T>(string id, object parameters = null) where T : IZeroIdEntity;
+    Task<string> GetUrl<T>(string id, object parameters = null) where T : ZeroIdEntity;
 
     /// <summary> 
     /// Get the route object for an entity
     /// </summary>
-    Task<IRoute> GetRoute<T>(T model, object parameters = null);
+    Task<Route> GetRoute<T>(T model, object parameters = null);
 
     /// <summary> 
     /// Get the route object for an entity
     /// </summary>
-    Task<IRoute> GetRoute<T>(string id, object parameters = null) where T : IZeroIdEntity;
+    Task<Route> GetRoute<T>(string id, object parameters = null) where T : ZeroIdEntity;
 
     /// <summary>
     /// Get URLs for multiple entities
@@ -302,12 +302,12 @@ namespace zero.Core.Routing
     /// <summary>
     /// Get routes for multiple entities
     /// </summary>
-    Task<Dictionary<T, IRoute>> GetRoutes<T>(IEnumerable<T> models, object parameters = null);
+    Task<Dictionary<T, Route>> GetRoutes<T>(IEnumerable<T> models, object parameters = null);
 
     /// <summary>
     /// Resolve an URL from the specified app and the path
     /// </summary>
-    Task<IResolvedRoute> ResolveUrl(IApplication application, string path);
+    Task<IResolvedRoute> ResolveUrl(Application application, string path);
 
     /// <summary>
     /// Resolve an URL from an http context
@@ -317,7 +317,7 @@ namespace zero.Core.Routing
     /// <summary>
     /// Resolve a route object by passing it to the specified provider
     /// </summary>
-    Task<IResolvedRoute> ResolveRoute(IRoute route);
+    Task<IResolvedRoute> ResolveRoute(Route route);
 
     /// <summary>
     /// Purges all routes and rebuilds them by iterating over all registered providers

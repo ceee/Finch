@@ -141,7 +141,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<bool> TrySwitchApp(string appId)
     {
-      IBackofficeUser user = await GetUser();
+      BackofficeUser user = await GetUser();
 
       if (user == null || appId.IsNullOrEmpty())
       {

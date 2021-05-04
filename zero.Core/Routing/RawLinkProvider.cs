@@ -14,7 +14,7 @@ namespace zero.Core.Routing
     /// <summary>
     /// Creates a new link object from an url
     /// </summary>
-    public ILink Create(string url, LinkTarget target = LinkTarget.Default, string title = null)
+    public Link Create(string url, LinkTarget target = LinkTarget.Default, string title = null)
     {
       return new Link()
       {
@@ -30,11 +30,11 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public bool CanProcess(ILink link) => link.Area == AREA;
+    public bool CanProcess(Link link) => link.Area == AREA;
 
 
     /// <inheritdoc />
-    public Task<string> Resolve(ILink link)
+    public Task<string> Resolve(Link link)
     {
       link.Url = link.Values.GetValueOrDefault<string>("url");
       return Task.FromResult(link.Url);
@@ -42,7 +42,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public Task<PreviewModel> Preview(IAsyncDocumentSession session, ILink link)
+    public Task<PreviewModel> Preview(IAsyncDocumentSession session, Link link)
     {
       string url = link.Values.GetValueOrDefault<string>("url");
 

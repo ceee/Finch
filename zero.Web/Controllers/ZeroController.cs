@@ -17,7 +17,7 @@ namespace zero.Web.Controllers
 
   public abstract class ZeroController<T> : Controller where T : IResolvedRoute
   {
-    protected IApplication Application { get; set; }
+    protected Application Application { get; set; }
 
     protected virtual T Route { get; set; }
 

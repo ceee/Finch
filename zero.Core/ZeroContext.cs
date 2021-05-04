@@ -16,7 +16,7 @@ namespace zero.Core
   public class ZeroContext : IZeroContext
   {
     /// <inheritdoc />
-    public IApplication Application { get; protected set; }
+    public Application Application { get; protected set; }
 
     /// <inheritdoc />
     public string AppId { get; protected set; }
@@ -31,7 +31,7 @@ namespace zero.Core
     public IZeroOptions Options { get; protected set; }
 
     /// <inheritdoc />
-    public IRoute Route { get; private set; }
+    public Route Route { get; private set; }
 
     /// <inheritdoc />
     public IResolvedRoute ResolvedRoute { get; private set; }
@@ -117,7 +117,7 @@ namespace zero.Core
     /// <summary>
     /// Currently loaded application
     /// </summary>
-    IApplication Application { get; }
+    Application Application { get; }
 
     /// <summary>
     /// Current loaded application Id
@@ -147,7 +147,7 @@ namespace zero.Core
     /// <summary>
     /// Matching (frontend) path route
     /// </summary>
-    IRoute Route { get; }
+    Route Route { get; }
 
     /// <summary>
     /// Matching (frontend) resolved route

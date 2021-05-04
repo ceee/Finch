@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 
 namespace zero.Core.Entities
 {
-  public class Link : ILink
+  public class Link
   {
     public string Area { get; set; }
 
@@ -16,7 +15,10 @@ namespace zero.Core.Entities
 
     public Dictionary<string, object> Values { get; set; } = new();
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [Warning] This field is always empty when bound to the database.
+    /// It is only filled in the app-code for routing.
+    /// </summary>
     [JsonIgnore]
     public string Url { get; set; }
   }
@@ -26,26 +28,5 @@ namespace zero.Core.Entities
     Default = 0,
     Self = 1,
     Blank = 2
-  }
-
-
-  public interface ILink
-  {
-    string Area { get; set; }
-
-    LinkTarget Target { get; set; }
-
-    string UrlSuffix { get; set; }
-
-    string Title { get; set; }
-
-    Dictionary<string, object> Values { get; set; }
-
-    /// <summary>
-    /// [Warning] This field is always empty when bound to the database.
-    /// It is only filled in the app-code for routing.
-    /// </summary>
-    [JsonIgnore]
-    public string Url { get; set; }
   }
 }

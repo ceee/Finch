@@ -17,7 +17,7 @@ using zero.Core.Utils;
 
 namespace zero.Core.Collections
 {
-  public abstract class CollectionBase<T> : ICollectionBase<T>, IDisposable where T : IZeroEntity
+  public abstract class CollectionBase<T> : ICollectionBase<T>, IDisposable where T : ZeroEntity
   {
     private IAsyncDocumentSession _session;
     private string _database;
@@ -216,11 +216,7 @@ namespace zero.Core.Collections
 
         model.CreatedDate = DateTimeOffset.Now;
         model.CreatedById = userId;
-
-        if (model is ILanguageAwareEntity)
-        {
-          (model as ILanguageAwareEntity).LanguageId = "languages.1-A"; // TODO correct language id
-        }
+        model.LanguageId = "languages.1-A"; // TODO correct language id
       }
 
       // update name alias and last modified
@@ -425,7 +421,7 @@ namespace zero.Core.Collections
   }
 
 
-  public interface ICollectionBase<T> : IDisposable where T : IZeroEntity
+  public interface ICollectionBase<T> : IDisposable where T : ZeroEntity
   {
     /// <summary>
     /// Guid for this instance

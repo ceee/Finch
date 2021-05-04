@@ -2,6 +2,6 @@
 {
   public class DefaultResolvedRoute : IResolvedRoute
   {
-    public IRoute Route { get; set; }
+    public Route Route { get; set; }
   }
 }

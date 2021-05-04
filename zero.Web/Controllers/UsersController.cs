@@ -25,10 +25,10 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<EditModel<IBackofficeUser>> GetById([FromQuery] string id) => Edit(await Api.GetUserById(id));
+    public async Task<EditModel<BackofficeUser>> GetById([FromQuery] string id) => Edit(await Api.GetUserById(id));
 
 
-    public async Task<ListResult<IBackofficeUser>> GetAll([FromQuery] ListBackofficeQuery<IBackofficeUser> query) => await Api.GetByQuery(query);
+    public async Task<ListResult<BackofficeUser>> GetAll([FromQuery] ListBackofficeQuery<BackofficeUser> query) => await Api.GetByQuery(query);
 
 
     public IList<PermissionCollection> GetAllPermissions() => PermissionsApi.GetAll();
@@ -54,18 +54,18 @@ namespace zero.Web.Controllers
 
 
     [ZeroAuthorize]
-    public async Task<EntityResult<IBackofficeUser>> UpdatePassword([FromBody] UserPasswordEditModel model)
+    public async Task<EntityResult<BackofficeUser>> UpdatePassword([FromBody] UserPasswordEditModel model)
     {
-      EntityResult<IBackofficeUser> result;
+      EntityResult<BackofficeUser> result;
 
       if (model.NewPassword != model.ConfirmNewPassword)
       {
-        result = EntityResult<IBackofficeUser>.Fail(nameof(model.NewPassword), "@errors.changepassword.newpasswordsnotmatching");
+        result = EntityResult<BackofficeUser>.Fail(nameof(model.NewPassword), "@errors.changepassword.newpasswordsnotmatching");
       }
       else
       {
         BackofficeUser user = await AuthenticationApi.GetUser();
-        result = await Api.UpdatePassword(user as IBackofficeUser, model.CurrentPassword, model.NewPassword);
+        result = await Api.UpdatePassword(user as BackofficeUser, model.CurrentPassword, model.NewPassword);
 
         if (result.IsSuccess)
         {
@@ -78,31 +78,31 @@ namespace zero.Web.Controllers
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<IBackofficeUser>> Disable([FromBody] IBackofficeUser model)
+    public async Task<EntityResult<BackofficeUser>> Disable([FromBody] BackofficeUser model)
     {
-      IBackofficeUser entity = await Api.GetUserById(model.Id);
+      BackofficeUser entity = await Api.GetUserById(model.Id);
       return await Api.Disable(entity);
     }
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<IBackofficeUser>> Enable([FromBody] IBackofficeUser model)
+    public async Task<EntityResult<BackofficeUser>> Enable([FromBody] BackofficeUser model)
     {
-      IBackofficeUser entity = await Api.GetUserById(model.Id);
+      BackofficeUser entity = await Api.GetUserById(model.Id);
       return await Api.Enable(entity);
     }
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<IBackofficeUser>> Save([FromBody] IBackofficeUser model) => await Api.Save(model);
+    public async Task<EntityResult<BackofficeUser>> Save([FromBody] BackofficeUser model) => await Api.Save(model);
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
     // TODO do not need settings.users authorization for editing current user profiles
-    public async Task<EntityResult<IBackofficeUser>> SaveCurrent([FromBody] IBackofficeUser model) => await Api.Save(model);
+    public async Task<EntityResult<BackofficeUser>> SaveCurrent([FromBody] BackofficeUser model) => await Api.Save(model);
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<IBackofficeUser>> Delete([FromQuery] string id) => await Api.Delete(id);
+    public async Task<EntityResult<BackofficeUser>> Delete([FromQuery] string id) => await Api.Delete(id);
   }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace zero.Core.Entities
+﻿namespace zero.Core.Entities
 {
   public enum SpaceView
   {

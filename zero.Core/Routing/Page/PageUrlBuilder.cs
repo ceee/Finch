@@ -33,22 +33,22 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<string> GetUrl(IPage page)
+    public async Task<string> GetUrl(Page page)
     {
       using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
       Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
           .ProjectInto<Pages_ByHierarchy.Result>()
-          .Include<Pages_ByHierarchy.Result, IPage>(x => x.Path.Select(p => p.Id))
+          .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
           .FirstOrDefaultAsync(x => x.Id == page.Id);
 
-      IList<IPage> parents = (await session.LoadAsync<IPage>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
+      IList<Page> parents = (await session.LoadAsync<Page>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
 
       StringBuilder stringBuilder = new StringBuilder();
 
       if (parents != null)
       {
-        foreach (IPage parent in parents)
+        foreach (Page parent in parents)
         {
           stringBuilder.Append(GetUrlPart(parent));
           stringBuilder.Append(PATH_SEPARATOR);
@@ -68,12 +68,12 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public string GetUrl(IPage page, IEnumerable<IPage> parents)
+    public string GetUrl(Page page, IEnumerable<Page> parents)
     {
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.Append(PATH_SEPARATOR);
 
-      void AddPart(IPage page)
+      void AddPart(Page page)
       {
         string part = GetUrlPart(page);
 
@@ -86,7 +86,7 @@ namespace zero.Core.Routing
 
       if (parents != null)
       {
-        foreach (IPage parent in parents)
+        foreach (Page parent in parents)
         {
           AddPart(parent);
         }
@@ -106,7 +106,7 @@ namespace zero.Core.Routing
     /// <summary>
     /// Get the part of the URL (by querying UrlAlias and Alias) for this page
     /// </summary>
-    protected virtual string GetUrlPart(IPage page)
+    protected virtual string GetUrlPart(Page page)
     {
       string alias;
 

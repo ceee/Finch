@@ -7,13 +7,13 @@ namespace zero.Core.Routing
   {
     public BasePageRoute() { }
 
-    public BasePageRoute(IRoute route)
+    public BasePageRoute(Route route)
     {
       Route = route;
     }
 
-    public IPage Page { get; set; }
+    public Page Page { get; set; }
 
-    public IRoute Route { get; set; }
+    public Route Route { get; set; }
   }
 }

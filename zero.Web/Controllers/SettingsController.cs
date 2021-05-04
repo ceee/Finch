@@ -67,7 +67,7 @@ namespace zero.Web.Controllers
         }
       }
 
-      IList<IApplication> applications = new List<IApplication>();
+      IList<Application> applications = new List<Application>();
 
       if (Permission.CanReadKey(permissions, Permissions.Settings.Applications, false))
       {

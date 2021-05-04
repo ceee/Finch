@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Entities\Messages\**" />
+    <EmbeddedResource Remove="Entities\Messages\**" />
+    <None Remove="Entities\Messages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
@@ -27,7 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Messages\Applications\" />
     <Folder Include="Numbers\" />
   </ItemGroup>
 

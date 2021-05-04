@@ -36,7 +36,7 @@
 
 //        if (result != null)
 //        {
-//          IZeroEntity model = result.Value as IZeroEntity;
+//          ZeroEntity model = result.Value as ZeroEntity;
 
 //          if (model != null)
 //          {

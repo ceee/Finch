@@ -10,6 +10,6 @@ namespace zero.Core.Handlers
 {
   public interface IApplicationResolverHandler : IHandler
   {
-    IApplication Resolve(HttpRequest request, IList<IApplication> applications);
+    Application Resolve(HttpRequest request, IList<Application> applications);
   }
 }

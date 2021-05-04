@@ -39,7 +39,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IMedia> GetById(string id)
+    public async Task<Media> GetById(string id)
     {
       return await GetById<Media>(id);
     }
@@ -50,7 +50,7 @@ namespace zero.Core.Api
     {
       using IAsyncDocumentSession session = isCoreDatabase ? Store.OpenCoreSession() : Store.OpenAsyncSession();
 
-      IMedia media = await session.LoadAsync<IMedia>(id);
+      Media media = await session.LoadAsync<Media>(id);
 
       if (media == null)
       {
@@ -67,23 +67,23 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<string, IMedia>> GetById(IEnumerable<string> ids)
+    public async Task<Dictionary<string, Media>> GetById(IEnumerable<string> ids)
     {
       using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
-        return await session.LoadAsync<IMedia>(ids);
+        return await session.LoadAsync<Media>(ids);
       }
     }
 
 
     /// <inheritdoc />
-    public async Task<ListResult<IMedia>> GetByQuery(MediaListQuery query)
+    public async Task<ListResult<Media>> GetByQuery(MediaListQuery query)
     {
       query.SearchFor(entity => entity.Name);
 
       using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
-        return await session.Query<IMedia>()
+        return await session.Query<Media>()
           .WhereIf(x => x.FolderId == query.FolderId, !query.FolderId.IsNullOrEmpty(), x => x.FolderId == null)
           .ToQueriedListAsync(query);
       }
@@ -137,7 +137,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IMedia>> Save(IMedia model)
+    public async Task<EntityResult<Media>> Save(Media model)
     {
       model.IsActive = true;
       return await SaveModel(model);
@@ -145,14 +145,14 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IMedia>> Move(string id, string parentId)
+    public async Task<EntityResult<Media>> Move(string id, string parentId)
     {
-      IMedia model = await GetById<IMedia>(id);
-      IMediaFolder parent = await GetById<IMediaFolder>(parentId);
+      Media model = await GetById<Media>(id);
+      MediaFolder parent = await GetById<MediaFolder>(parentId);
 
       if (model == null || (!parentId.IsNullOrEmpty() && parent == null))
       {
-        return EntityResult<IMedia>.Fail("@errors.idnotfound");
+        return EntityResult<Media>.Fail("@errors.idnotfound");
       }
 
       model.FolderId = parent?.Id;
@@ -162,9 +162,9 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IMedia>> Delete(string id)
+    public async Task<EntityResult<Media>> Delete(string id)
     {
-      return await DeleteById<IMedia>(id);
+      return await DeleteById<Media>(id);
     }
 
 
@@ -237,7 +237,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Saves a thumbnail of an image
     /// </summary>
-    string SaveThumbnail(IMedia media, Image<Rgba32> image, string extensionPrefix, ResizeOptions resizeOptions)
+    string SaveThumbnail(Media media, Image<Rgba32> image, string extensionPrefix, ResizeOptions resizeOptions)
     {
       string extension = Path.GetExtension(media.Source);
 
@@ -275,7 +275,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get media by Id
     /// </summary>
-    Task<IMedia> GetById(string id);
+    Task<Media> GetById(string id);
 
     /// <summary>
     /// Get media source by Id
@@ -285,12 +285,12 @@ namespace zero.Core.Api
     /// <summary>
     /// Get media by ids
     /// </summary>
-    Task<Dictionary<string, IMedia>> GetById(IEnumerable<string> ids);
+    Task<Dictionary<string, Media>> GetById(IEnumerable<string> ids);
 
     /// <summary>
     /// Get all available media items with query
     /// </summary>
-    Task<ListResult<IMedia>> GetByQuery(MediaListQuery query);
+    Task<ListResult<Media>> GetByQuery(MediaListQuery query);
 
     /// <summary>
     /// Get all available media items (including folders) with query
@@ -300,17 +300,17 @@ namespace zero.Core.Api
     /// <summary>
     /// Creates or updates a media item
     /// </summary>
-    Task<EntityResult<IMedia>> Save(IMedia model);
+    Task<EntityResult<Media>> Save(Media model);
 
     /// <summary>
     /// Move a file to a new parent
     /// </summary>
-    Task<EntityResult<IMedia>> Move(string id, string parentId);
+    Task<EntityResult<Media>> Move(string id, string parentId);
 
     /// <summary>
     /// Deletes a media item by Id
     /// </summary>
-    Task<EntityResult<IMedia>> Delete(string id);
+    Task<EntityResult<Media>> Delete(string id);
 
     /// <summary>
     /// Clean-up all media based on stored database information

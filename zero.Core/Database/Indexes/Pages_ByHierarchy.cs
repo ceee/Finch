@@ -8,10 +8,8 @@ namespace zero.Core.Database.Indexes
 {
   public class Pages_ByHierarchy : AbstractIndexCreationTask<Page, Pages_ByHierarchy.Result>
   {
-    public class Result : IZeroIdEntity, IZeroDbConventions
+    public class Result : ZeroIdEntity, IZeroDbConventions
     {
-      public string Id { get; set; }
-
       public string Name { get; set; }
 
       public List<PathResult> Path { get; set; } = new List<PathResult>();

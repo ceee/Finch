@@ -10,8 +10,8 @@ using zero.Core.Identity;
 namespace zero.Core.Security
 {
   public class ZeroClaimsPrinicipalFactory<TUser, TRole> : ZeroClaimsPrinicipalFactory<TUser>
-    where TUser : class, IIdentityUserWithRoles
-    where TRole : class, IIdentityUserRole
+    where TUser : ZeroIdentityUser
+    where TRole : ZeroIdentityRole
   {
     public RoleManager<TRole> RoleManager { get; private set; }
     
@@ -49,7 +49,7 @@ namespace zero.Core.Security
 
 
   public class ZeroClaimsPrinicipalFactory<TUser> : UserClaimsPrincipalFactory<TUser>, IUserClaimsPrincipalFactory<TUser>
-    where TUser : class, IIdentityUser
+    where TUser : ZeroIdentityUser
   {
     protected ZeroAuthOptions<TUser> AuthOptions { get; private set; }
 

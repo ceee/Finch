@@ -16,19 +16,19 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<EditModel<IPreview>> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
+    public async Task<EditModel<Preview>> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
 
-    public async Task<EntityResult<string>> Add([FromBody] IZeroEntity model)
+    public async Task<EntityResult<string>> Add([FromBody] ZeroEntity model)
     {
-      EntityResult<IPreview> preview = await Api.Add(model);
+      EntityResult<Preview> preview = await Api.Add(model);
       return EntityResult<string>.From(preview, preview.Model?.Id);
     }
 
 
-    public async Task<EntityResult<string>> Update([FromQuery] string id, [FromBody] IZeroEntity model)
+    public async Task<EntityResult<string>> Update([FromQuery] string id, [FromBody] ZeroEntity model)
     {
-      EntityResult<IPreview> preview = await Api.Update(id, model);
+      EntityResult<Preview> preview = await Api.Update(id, model);
       return EntityResult<string>.From(preview, id);
     }
   }

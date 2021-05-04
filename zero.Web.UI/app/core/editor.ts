@@ -146,7 +146,7 @@ class Editor
 
 
   /**
-   * Adds an info tab to the editor which outputs data for IZeroEntity.
+   * Adds an info tab to the editor which outputs data for ZeroEntity.
    * This won't work as expected for other entities as they probably do not have required properties defined.
    * @returns {EditorTab}
    */

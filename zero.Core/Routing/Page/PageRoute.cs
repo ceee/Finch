@@ -6,8 +6,8 @@ namespace zero.Core.Routing
   public class PageRoute : BasePageRoute
   {
     public PageRoute() { }
-    public PageRoute(IRoute route) : base(route) { }
+    public PageRoute(Route route) : base(route) { }
 
-    public IList<IPage> Parents { get; set; }
+    public IList<Page> Parents { get; set; }
   }
 }

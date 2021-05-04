@@ -3,6 +3,11 @@
 namespace zero.Core.Entities
 {
   /// <summary>
+  /// Internal section
+  /// </summary>
+  public interface IInternalSection : ISection { }
+
+  /// <summary>
   /// A section is a main part of the backoffice application
   /// </summary>
   public interface ISection

@@ -2,6 +2,6 @@
 {
   public interface IResolvedRoute
   {
-    IRoute Route { get; set; }
+    Route Route { get; set; }
   }
 }

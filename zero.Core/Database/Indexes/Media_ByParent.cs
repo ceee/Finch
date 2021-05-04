@@ -9,7 +9,7 @@ namespace zero.Core.Database.Indexes
   {
     public Media_ByParent()
     {
-      AddMap<IMediaFolder>(items => items.Select(item => new MediaListItem
+      AddMap<MediaFolder>(items => items.Select(item => new MediaListItem
       {
         Id = item.Id,
         ParentId = item.ParentId,
@@ -23,7 +23,7 @@ namespace zero.Core.Database.Indexes
         AspectRatio = 0
       }));
 
-      AddMap<IMedia>(items => items.Select(item => new MediaListItem
+      AddMap<Media>(items => items.Select(item => new MediaListItem
       {
         Id = item.Id,
         ParentId = item.FolderId,

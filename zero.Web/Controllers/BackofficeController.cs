@@ -38,7 +38,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Creates an edit model with appropriate options and permissions
     /// </summary>
-    public EditModel<T> Edit<T>(T data, bool typed = true, Action<EditModel<T>> transform = null) where T : IZeroIdEntity
+    public EditModel<T> Edit<T>(T data, bool typed = true, Action<EditModel<T>> transform = null) where T : ZeroIdEntity
     {
       Type type = typeof(T);
 
@@ -69,7 +69,7 @@ namespace zero.Web.Controllers
     /// Creates an edit model with appropriate options and permissions
     /// </summary>
     public TWrapper Edit<T, TWrapper>(TWrapper data, bool typed = true, Action<EditModel<T>> transform = null) 
-      where T : IZeroIdEntity
+      where T : ZeroIdEntity
       where TWrapper : EditModel<T>, new() 
     {
       Type type = typeof(T);
@@ -119,7 +119,7 @@ namespace zero.Web.Controllers
     }
 
 
-    public IList<PreviewModel> Previews<T>(Dictionary<string, T> items, Action<T, PreviewModel> transform = null) where T : IZeroEntity
+    public IList<PreviewModel> Previews<T>(Dictionary<string, T> items, Action<T, PreviewModel> transform = null) where T : ZeroEntity
     {
       IList<PreviewModel> previews = new List<PreviewModel>();
 
@@ -155,7 +155,7 @@ namespace zero.Web.Controllers
 
 
 
-    public async Task<IList<SelectModel>> SelectList<T>(IAsyncEnumerable<T> enumerable, Action<T, SelectModel> transform = null) where T : IZeroEntity
+    public async Task<IList<SelectModel>> SelectList<T>(IAsyncEnumerable<T> enumerable, Action<T, SelectModel> transform = null) where T : ZeroEntity
     {
       List<SelectModel> items = new List<SelectModel>();
 

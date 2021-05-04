@@ -1,6 +1,6 @@
 ﻿namespace zero.Core.Entities
 {
-  public class Ref<T> : Ref where T : IZeroIdEntity
+  public class Ref<T> : Ref where T : ZeroIdEntity
   {
     public Ref() : base() { }
     public Ref(string id) : base(id) { }

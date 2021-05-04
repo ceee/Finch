@@ -25,10 +25,10 @@ namespace zero.Web.Controllers
     public ModuleType GetModuleType([FromQuery] string alias) => Api.GetModuleType(alias);
 
 
-    public EditModel<IModule> GetEmpty(string alias)
+    public EditModel<Module> GetEmpty(string alias)
     {
       ModuleType moduleType = Api.GetModuleType(alias);
-      IModule module = Activator.CreateInstance(moduleType.ContentType) as IModule;
+      Module module = Activator.CreateInstance(moduleType.ContentType) as Module;
 
       module.ModuleTypeAlias = moduleType.Alias;
       module.Id = IdGenerator.Create(8);

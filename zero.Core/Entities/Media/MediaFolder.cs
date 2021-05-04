@@ -2,26 +2,15 @@
 
 namespace zero.Core.Entities
 {
-  /// <inheritdoc />
-  public class MediaFolder : ZeroEntity, IMediaFolder
-  {
-    /// <inheritdoc />
-    public string AppId { get; set; }
-
-    /// <inheritdoc />
-    public string ParentId { get; set; }
-  }
-
-
   /// <summary>
   /// A media folder contains media and other folders
   /// </summary>
   [Collection("MediaFolders")]
-  public interface IMediaFolder : IZeroEntity, IZeroDbConventions, IAppAwareEntity
+  public class MediaFolder : ZeroEntity
   {
     /// <summary>
     /// Parent folder id
     /// </summary>
-    string ParentId { get; set; }
+    public string ParentId { get; set; }
   }
 }

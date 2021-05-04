@@ -6,12 +6,10 @@ using zero.Core.Entities;
 
 namespace zero.Core.Database.Indexes
 {
-  public class MediaFolder_ByHierarchy : AbstractIndexCreationTask<IMediaFolder, MediaFolder_ByHierarchy.Result>
+  public class MediaFolder_ByHierarchy : AbstractIndexCreationTask<MediaFolder, MediaFolder_ByHierarchy.Result>
   {
-    public class Result : IZeroIdEntity, IZeroDbConventions
+    public class Result : ZeroIdEntity, IZeroDbConventions
     {
-      public string Id { get; set; }
-
       public string Name { get; set; }
 
       public List<PathResult> Path { get; set; } = new List<PathResult>();
@@ -32,7 +30,7 @@ namespace zero.Core.Database.Indexes
       {
         Id = item.Id,
         Name = item.Name,
-        Path = Recurse(item, x => LoadDocument<IMediaFolder>(x.ParentId))
+        Path = Recurse(item, x => LoadDocument<MediaFolder>(x.ParentId))
                 .Where(x => x != null && x.Id != null && x.Id != item.Id)
                 .Reverse()
                 .Select(current => new PathResult()

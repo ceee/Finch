@@ -19,12 +19,12 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Collections
 {
-  public class MediaCollection : CollectionBase<IMedia>, IMediaCollection
+  public class MediaCollection : CollectionBase<Media>, IMediaCollection
   {
     private IAsyncDocumentSession _coreSession;
 
 
-    public MediaCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<IMedia> validator, IPaths paths) : base(context, interceptor, validator)
+    public MediaCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<Media> validator, IPaths paths) : base(context, interceptor, validator)
     {
       PreSave = model => model.IsActive = true;
       Paths = paths;
@@ -62,36 +62,36 @@ namespace zero.Core.Collections
     protected IPaths Paths { get; set; }
 
 
-    public override Task<IMedia> GetById(string id)
+    public override Task<Media> GetById(string id)
     {
       ApplyScopeBasedOnId(id);
       return base.GetById(id);
     }
 
 
-    public override async Task<Dictionary<string, IMedia>> GetByIds(params string[] ids)
+    public override async Task<Dictionary<string, Media>> GetByIds(params string[] ids)
     {
       string[] localIds = ids.Where(x => !x.StartsWith(Constants.Database.CoreIdPrefix)).ToArray();
       string[] coreIds = ids.Except(localIds).ToArray();
 
-      Dictionary<string, IMedia> result = new Dictionary<string, IMedia>();
-      Dictionary<string, IMedia> models = null;
+      Dictionary<string, Media> result = new Dictionary<string, Media>();
+      Dictionary<string, Media> models = null;
 
       if (localIds.Length > 0)
       {
-        models = await Session.LoadAsync<IMedia>(localIds);
+        models = await Session.LoadAsync<Media>(localIds);
         foreach (string id in localIds)
         {
-          models.TryGetValue(id, out IMedia model);
+          models.TryGetValue(id, out Media model);
           result.Add(id, model);
         }
       }
       if (coreIds.Length > 0)
       {
-        models = await CoreSession.LoadAsync<IMedia>(coreIds);
+        models = await CoreSession.LoadAsync<Media>(coreIds);
         foreach (string id in coreIds)
         {
-          models.TryGetValue(id, out IMedia model);
+          models.TryGetValue(id, out Media model);
           result.Add(id, model);
         }
       }
@@ -105,7 +105,7 @@ namespace zero.Core.Collections
     {
       ApplyScopeBasedOnId(id);
 
-      IMedia media = await Session.LoadAsync<IMedia>(id);
+      Media media = await Session.LoadAsync<Media>(id);
 
       if (media == null)
       {
@@ -122,7 +122,7 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public async Task<ListResult<IMedia>> GetByQuery(MediaListQuery query)
+    public async Task<ListResult<Media>> GetByQuery(MediaListQuery query)
     {
       ApplyScopeBasedOnId(query.FolderId);
 
@@ -135,14 +135,14 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IMedia>> Move(string id, string parentId)
+    public async Task<EntityResult<Media>> Move(string id, string parentId)
     {
-      IMedia model = await GetById(id);
-      IMediaFolder parent = await Session.LoadAsync<IMediaFolder>(parentId);
+      Media model = await GetById(id);
+      MediaFolder parent = await Session.LoadAsync<MediaFolder>(parentId);
 
       if (model == null || (!parentId.IsNullOrEmpty() && parent == null))
       {
-        return EntityResult<IMedia>.Fail("@errors.idnotfound");
+        return EntityResult<Media>.Fail("@errors.idnotfound");
       }
 
       model.FolderId = parent?.Id;
@@ -261,7 +261,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Saves a thumbnail of an image
     /// </summary>
-    string SaveThumbnail(IMedia media, Image<Rgba32> image, string extensionPrefix, ResizeOptions resizeOptions)
+    string SaveThumbnail(Media media, Image<Rgba32> image, string extensionPrefix, ResizeOptions resizeOptions)
     {
       string extension = Path.GetExtension(media.Source);
 
@@ -294,7 +294,7 @@ namespace zero.Core.Collections
   }
 
 
-  public interface IMediaCollection : ICollectionBase<IMedia>
+  public interface IMediaCollection : ICollectionBase<Media>
   {
     /// <summary>
     /// Get media source by Id
@@ -304,7 +304,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Get all available media items with query
     /// </summary>
-    Task<ListResult<IMedia>> GetByQuery(MediaListQuery query);
+    Task<ListResult<Media>> GetByQuery(MediaListQuery query);
 
     /// <summary>
     /// Get all available media items (including folders) with query
@@ -314,7 +314,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Move a file to a new parent
     /// </summary>
-    Task<EntityResult<IMedia>> Move(string id, string parentId);
+    Task<EntityResult<Media>> Move(string id, string parentId);
 
     /// <summary>
     /// Uploads a file to the media folder

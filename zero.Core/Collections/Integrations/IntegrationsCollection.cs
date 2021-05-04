@@ -12,7 +12,7 @@ using zero.Core.Options;
 
 namespace zero.Core.Collections
 {
-  public class IntegrationsCollection : CollectionBase<IIntegration>, IIntegrationsCollection
+  public class IntegrationsCollection : CollectionBase<Integration>, IIntegrationsCollection
   {
     /// <inheritdoc />
     public IReadOnlyCollection<IntegrationType> RegisteredTypes { get; private set; }
@@ -31,7 +31,7 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public IIntegration GetEmpty(string alias)
+    public Integration GetEmpty(string alias)
     {
       IntegrationType type = RegisteredTypes.FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
 
@@ -42,7 +42,7 @@ namespace zero.Core.Collections
 
       try
       {
-        IIntegration model = Activator.CreateInstance(type.ContentType) as IIntegration;
+        Integration model = Activator.CreateInstance(type.ContentType) as Integration;
         model.TypeAlias = type.Alias;
         return model;
       }
@@ -56,7 +56,7 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public async Task<IIntegration> GetByAlias(string alias)
+    public async Task<Integration> GetByAlias(string alias)
     {
       IntegrationType type = RegisteredTypes.FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
       return await Load<Integration>(type);
@@ -64,7 +64,7 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public async Task<T> Get<T>(string alias = null) where T : IIntegration, new()
+    public async Task<T> Get<T>(string alias = null) where T : Integration, new()
     {
       IntegrationType type = RegisteredTypes.FirstOrDefault(x => x.ContentType == typeof(T) && (alias.IsNullOrEmpty() || x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase)));
       return await Load<T>(type);
@@ -72,17 +72,17 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public async Task<IList<IIntegration>> GetByTag(string tag)
+    public async Task<IList<Integration>> GetByTag(string tag)
     {
       IEnumerable<IntegrationType> types = RegisteredTypes.Where(x => x.Tags.Contains(tag, StringComparer.InvariantCultureIgnoreCase));
 
       if (!types.Any())
       {
-        return new List<IIntegration>();
+        return new List<Integration>();
       }
 
       string[] aliases = types.Select(x => x.Alias).ToArray();
-      return await Session.Query<IIntegration>().Where(x => x.TypeAlias.In(aliases)).ToListAsync();
+      return await Session.Query<Integration>().Where(x => x.TypeAlias.In(aliases)).ToListAsync();
     }
 
 
@@ -94,14 +94,14 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public override async Task<ListResult<IIntegration>> GetByQuery(ListQuery<IIntegration> query)
+    public override async Task<ListResult<Integration>> GetByQuery(ListQuery<Integration> query)
     {
-      List<IIntegration> result = new();
-      List<IIntegration> models = await Session.Query<IIntegration>().ToListAsync();
+      List<Integration> result = new();
+      List<Integration> models = await Session.Query<Integration>().ToListAsync();
 
       foreach (IntegrationType type in RegisteredTypes)
       {
-        IIntegration model = models.FirstOrDefault(x => x.TypeAlias == type.Alias);
+        Integration model = models.FirstOrDefault(x => x.TypeAlias == type.Alias);
 
         if (model != null)
         {
@@ -118,11 +118,11 @@ namespace zero.Core.Collections
     public async Task<IList<IntegrationTypeWithStatus>> GetTypesWithStatus()
     {
       List<IntegrationTypeWithStatus> result = new();
-      List<IIntegration> models = await Session.Query<IIntegration>().ToListAsync();
+      List<Integration> models = await Session.Query<Integration>().ToListAsync();
 
       foreach (IntegrationType type in RegisteredTypes)
       {
-        IIntegration model = models.FirstOrDefault(x => x.TypeAlias == type.Alias);
+        Integration model = models.FirstOrDefault(x => x.TypeAlias == type.Alias);
 
         result.Add(new()
         {
@@ -138,31 +138,31 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public override async Task<EntityResult<IIntegration>> Save(IIntegration model)
+    public override async Task<EntityResult<Integration>> Save(Integration model)
     {
       if (model == null)
       {
-        return EntityResult<IIntegration>.Fail("@integration.errors.notfound");
+        return EntityResult<Integration>.Fail("@integration.errors.notfound");
       }
 
       IntegrationType type = RegisteredTypes.FirstOrDefault(x => x.Alias.Equals(model.TypeAlias, StringComparison.InvariantCultureIgnoreCase));
 
       if (type == null)
       {
-        return EntityResult<IIntegration>.Fail("@integration.errors.typenotfound");
+        return EntityResult<Integration>.Fail("@integration.errors.typenotfound");
       }
 
-      string existingId = await Session.Query<IIntegration>().Where(x => x.TypeAlias == type.Alias).Select(x => x.Id).FirstOrDefaultAsync();
+      string existingId = await Session.Query<Integration>().Where(x => x.TypeAlias == type.Alias).Select(x => x.Id).FirstOrDefaultAsync();
 
       if (!existingId.IsNullOrEmpty() && existingId != model.Id)
       {
-        return EntityResult<IIntegration>.Fail("@integration.errors.multiplenotallowed");
+        return EntityResult<Integration>.Fail("@integration.errors.multiplenotallowed");
       }
 
       model.Alias = type.Alias;
       model.Name = null;
 
-      EntityResult<IIntegration> result = await base.Save(model);
+      EntityResult<Integration> result = await base.Save(model);
 
       if (result.IsSuccess)
       {
@@ -174,9 +174,9 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IIntegration>> Activate(string alias)
+    public async Task<EntityResult<Integration>> Activate(string alias)
     {
-      IIntegration model = await GetByAlias(alias);
+      Integration model = await GetByAlias(alias);
       if (model != null)
       { 
         model.IsActive = true;
@@ -186,9 +186,9 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IIntegration>> Deactivate(string alias)
+    public async Task<EntityResult<Integration>> Deactivate(string alias)
     {
-      IIntegration model = await GetByAlias(alias);
+      Integration model = await GetByAlias(alias);
       if (model != null)
       {
         model.IsActive = false;
@@ -198,7 +198,7 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IIntegration>> Delete(string alias)
+    public async Task<EntityResult<Integration>> Delete(string alias)
     {
       return await base.Delete(await GetByAlias(alias));
     }
@@ -207,7 +207,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Get integration data from database
     /// </summary>
-    protected async Task<T> Load<T>(IntegrationType type) where T : IIntegration, new()
+    protected async Task<T> Load<T>(IntegrationType type) where T : Integration, new()
     {
       if (type == null)
       {
@@ -242,22 +242,22 @@ namespace zero.Core.Collections
     /// <summary>
     /// Get new integration model for the specified integration type alias
     /// </summary>
-    IIntegration GetEmpty(string alias);
+    Integration GetEmpty(string alias);
 
     /// <summary>
     /// Get integration by an alias
     /// </summary>
-    Task<IIntegration> GetByAlias(string alias);
+    Task<Integration> GetByAlias(string alias);
 
     /// <summary>
     /// Get an integration by type and optional alias
     /// </summary>
-    Task<T> Get<T>(string alias = null) where T : IIntegration, new();
+    Task<T> Get<T>(string alias = null) where T : Integration, new();
 
     /// <summary>
     /// Get all integrations by a certain tag
     /// </summary>
-    Task<IList<IIntegration>> GetByTag(string tag);
+    Task<IList<Integration>> GetByTag(string tag);
 
     /// <summary>
     /// Check if any integrations of certain tag are activated
@@ -267,7 +267,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Get all integrations with the specified query
     /// </summary>
-    Task<ListResult<IIntegration>> GetByQuery(ListQuery<IIntegration> query);
+    Task<ListResult<Integration>> GetByQuery(ListQuery<Integration> query);
 
     /// <summary>
     /// Get all integration types with their configuration status
@@ -277,21 +277,21 @@ namespace zero.Core.Collections
     /// <summary>
     /// Saves an integration
     /// </summary>
-    Task<EntityResult<IIntegration>> Save(IIntegration model);
+    Task<EntityResult<Integration>> Save(Integration model);
 
     /// <summary>
     /// Activates a configured integration
     /// </summary>
-    Task<EntityResult<IIntegration>> Activate(string alias);
+    Task<EntityResult<Integration>> Activate(string alias);
 
     /// <summary>
     /// Disables a configured integration
     /// </summary>
-    Task<EntityResult<IIntegration>> Deactivate(string alias);
+    Task<EntityResult<Integration>> Deactivate(string alias);
 
     /// <summary>
     /// Deletes configuration of an integration and disables it
     /// </summary>
-    Task<EntityResult<IIntegration>> Delete(string alias);
+    Task<EntityResult<Integration>> Delete(string alias);
   }
 }

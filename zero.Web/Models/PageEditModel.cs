@@ -7,7 +7,7 @@ using zero.Core.Entities;
 
 namespace zero.Web.Models
 {
-  public class PageEditModel<T> : EditModel<T> where T : IPage
+  public class PageEditModel<T> : EditModel<T> where T : Page
   {
     public PageType PageType { get; set; }
 

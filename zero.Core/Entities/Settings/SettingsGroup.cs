@@ -2,6 +2,8 @@
 
 namespace zero.Core.Entities
 {
+  public class InternalSettingsGroup : SettingsGroup { }
+
   public class SettingsGroup
   {
     public string Name { get; set; }

@@ -6,7 +6,7 @@ using zero.Core.Validation;
 
 namespace zero.Core.Collections
 {
-  public class CountryValidator : ZeroValidator<ICountry>
+  public class CountryValidator : ZeroValidator<Country>
   {
     public CountryValidator(IBackofficeStore store)
     {

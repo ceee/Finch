@@ -1,6 +1,6 @@
 ﻿namespace zero.Core.Entities
 {
-  public class ValueRef<T> : ValueRef<T, string> where T : IZeroIdEntity
+  public class ValueRef<T> : ValueRef<T, string> where T : ZeroIdEntity
   {
     public ValueRef() : base() { }
     public ValueRef(string id, string value) : base(id, value) { }
@@ -9,7 +9,7 @@
   }
 
 
-  public class ValueRef<TEntity, TValue> : Ref where TEntity : IZeroIdEntity
+  public class ValueRef<TEntity, TValue> : Ref where TEntity : ZeroIdEntity
   {
     public ValueRef() : base() { }
     public ValueRef(string id, TValue value) : base(id)

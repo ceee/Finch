@@ -6,7 +6,7 @@ using System;
 
 namespace zero.Core.Validation
 {
-  public class UserRoleValidator : ZeroValidator<IBackofficeUserRole>
+  public class UserRoleValidator : ZeroValidator<BackofficeUserRole>
   {
     const string SECTION_CLAIM = "section.";
 
@@ -20,7 +20,7 @@ namespace zero.Core.Validation
 
       RuleFor(x => x.Claims).NotEmpty().Must((role, claims, context) =>
       {
-        foreach (IUserClaim claim in claims)
+        foreach (UserClaim claim in claims)
         {
           if (claim.Value.StartsWith(SECTION_CLAIM, StringComparison.InvariantCultureIgnoreCase) && claim.Value.EndsWith(TRUE_CLAIM_VALUE, StringComparison.InvariantCultureIgnoreCase))
           {

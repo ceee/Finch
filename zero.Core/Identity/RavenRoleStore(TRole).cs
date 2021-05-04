@@ -15,7 +15,7 @@ using zero.Core.Options;
 namespace zero.Core.Identity
 {
   public class RavenRoleStore<TRole> : IRoleStore<TRole>, IRoleClaimStore<TRole> 
-    where TRole : class, IIdentityUserRole
+    where TRole : ZeroIdentityRole
   {
     protected IZeroStore Store { get; private set; }
 

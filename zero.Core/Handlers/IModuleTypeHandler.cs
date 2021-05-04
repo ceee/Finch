@@ -5,6 +5,6 @@ namespace zero.Core.Handlers
 {
   public interface IModuleTypeHandler : IHandler
   {
-    IEnumerable<ModuleType> GetAllowedModuleTypes(IApplication application, IEnumerable<ModuleType> registeredTypes, IPage page = default, string[] tags = default);
+    IEnumerable<ModuleType> GetAllowedModuleTypes(Application application, IEnumerable<ModuleType> registeredTypes, Page page = default, string[] tags = default);
   }
 }

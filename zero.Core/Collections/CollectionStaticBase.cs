@@ -120,7 +120,7 @@
 //  }
 
 
-//  public interface IICollectionPredefinedBase<T> : IDisposable where T : IZeroEntity
+//  public interface IICollectionPredefinedBase<T> : IDisposable where T : ZeroEntity
 //  {
 //    /// <summary>
 //    /// Guid for this instance

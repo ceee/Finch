@@ -246,7 +246,7 @@ namespace zero.Core.Api
         Icon = "fth-award",
         CreatedDate = DateTimeOffset.Now,
         IsActive = true,
-        Claims = new List<IUserClaim>()
+        Claims = new List<UserClaim>()
         {
           //new UserClaim(type, Permissions.Applications, PermissionsValue.Write),
           new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.True),
@@ -271,7 +271,7 @@ namespace zero.Core.Api
         Icon = "fth-feather",
         CreatedDate = DateTimeOffset.Now,
         IsActive = true,
-        Claims = new List<IUserClaim>()
+        Claims = new List<UserClaim>()
         {
           new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.True),
           new UserClaim(type, Permissions.Sections.Spaces, PermissionsValue.True),
@@ -290,7 +290,7 @@ namespace zero.Core.Api
         Icon = "fth-users",
         CreatedDate = DateTimeOffset.Now,
         IsActive = true,
-        Claims = new List<IUserClaim>()
+        Claims = new List<UserClaim>()
         {
           new UserClaim(type, Permissions.Sections.Dashboard, PermissionsValue.True)
         }
@@ -300,9 +300,9 @@ namespace zero.Core.Api
     }
 
 
-    T Prepare<T>(T model, string languageId = null) where T : IZeroIdEntity
+    T Prepare<T>(T model, string languageId = null) where T : ZeroIdEntity
     {
-      IZeroEntity zeroEntity = model as IZeroEntity;
+      ZeroEntity zeroEntity = model as ZeroEntity;
 
       // set default properties
       if (zeroEntity != null && zeroEntity.CreatedDate == default)
@@ -313,10 +313,9 @@ namespace zero.Core.Api
       {
         zeroEntity.CreatedById = Constants.Auth.SystemUser;
       }
-
-      if (model is ILanguageAwareEntity && (model as ILanguageAwareEntity).LanguageId == null)
+      if (zeroEntity != null && zeroEntity.LanguageId == default)
       {
-        (model as ILanguageAwareEntity).LanguageId = languageId;
+        zeroEntity.LanguageId = languageId;
       }
 
       // update name alias and last modified

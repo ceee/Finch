@@ -8,7 +8,7 @@
 //{
 //  public class TreeEntity_ByPath : AbstractIndexCreationTask<ITreeEntity, TreeEntity_ByPath.Result>
 //  {
-//    public class Result : IZeroIdEntity, IZeroDbConventions
+//    public class Result : ZeroIdEntity, IZeroDbConventions
 //    {
 //      public string Id { get; set; }
 

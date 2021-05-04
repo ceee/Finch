@@ -4,15 +4,21 @@ using System.Security.Claims;
 
 namespace zero.Core.Entities
 {
-  public class UserClaim : IUserClaim
+  public class UserClaim
   {
-    /// <inheritdoc/>
+    /// <summary>
+    /// Gets or sets the claim type for this claim
+    /// </summary>
     public string Type { get; set; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Gets or sets the claim value for this claim
+    /// </summary>
     public string Value { get; set; }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Convert to a claim
+    /// </summary>
     public Claim ToClaim() => new Claim(Type, Value);
 
     public UserClaim() { }
@@ -38,34 +44,14 @@ namespace zero.Core.Entities
 
 
 
-  public interface IUserClaim
+  public class UserClaimComparer : IEqualityComparer<UserClaim>
   {
-    /// <summary>
-    /// Gets or sets the claim type for this claim
-    /// </summary>
-    string Type { get; set; }
-
-    /// <summary>
-    /// Gets or sets the claim value for this claim
-    /// </summary>
-    string Value { get; set; }
-
-    /// <summary>
-    /// Convert to a claim
-    /// </summary>
-    /// <returns></returns>
-    Claim ToClaim();
-  }
-
-
-  public class UserClaimComparer : IEqualityComparer<IUserClaim>
-  {
-    public bool Equals(IUserClaim x, IUserClaim y)
+    public bool Equals(UserClaim x, UserClaim y)
     {
       return (x == null && y == null) || (x.Type.Equals(y.Type, StringComparison.InvariantCultureIgnoreCase) && x.Value.Equals(y.Value, StringComparison.InvariantCultureIgnoreCase));
     }
 
-    public int GetHashCode(IUserClaim obj)
+    public int GetHashCode(UserClaim obj)
     {
       return (obj.Type + obj.Value).GetHashCode();
     }

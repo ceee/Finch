@@ -33,11 +33,11 @@ namespace zero.Core.Cultures
       }
       else
       {
-        ILanguage language = await session.Query<ILanguage>().FirstOrDefaultAsync();
+        Language language = await session.Query<Language>().FirstOrDefaultAsync();
 
         if (language == null)
         {
-          Logger.LogWarning("Could not set request culture as there is no available ILanguage stored");
+          Logger.LogWarning("Could not set request culture as there is no available Language stored");
           return CultureInfo.CurrentCulture;
         }
 
@@ -50,7 +50,7 @@ namespace zero.Core.Cultures
         }
         catch (Exception ex)
         {
-          Logger.LogError(ex, "Could not create culture from ILanguage code {code}", language.Code);
+          Logger.LogError(ex, "Could not create culture from Language code {code}", language.Code);
           return CultureInfo.CurrentCulture;
         }
       }

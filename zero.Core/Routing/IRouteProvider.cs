@@ -11,12 +11,12 @@ namespace zero.Core.Routing
     /// <summary>
     /// Find URL for an entity
     /// </summary>
-    Task<IRoute> GetRoute(IAsyncDocumentSession session, T model, object parameters = null);
+    Task<Route> GetRoute(IAsyncDocumentSession session, T model, object parameters = null);
 
     /// <summary>
     /// Find URLs for mulitple entities
     /// </summary>
-    Task<Dictionary<T, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<T> models, object parameters = null);
+    Task<Dictionary<T, Route>> GetRoutes(IAsyncDocumentSession session, IEnumerable<T> models, object parameters = null);
 
     /// <summary>
     /// Generate unique route ID for a model
@@ -40,22 +40,22 @@ namespace zero.Core.Routing
     /// Resolve a route and load optional dependencies into it.
     /// This is the data which is passed to the specified controller action.
     /// </summary>
-    Task<IResolvedRoute> ResolveRoute(IAsyncDocumentSession session, IRoute route);
+    Task<IResolvedRoute> ResolveRoute(IAsyncDocumentSession session, Route route);
 
     /// <summary>
     /// Find URL for an entity
     /// </summary>
-    Task<IRoute> GetRoute(IAsyncDocumentSession session, object model, object parameters = null);
+    Task<Route> GetRoute(IAsyncDocumentSession session, object model, object parameters = null);
 
     /// <summary>
     /// Find URLs for mulitple entities
     /// </summary>
-    Task<Dictionary<object, IRoute>> GetRoutes(IAsyncDocumentSession session, IEnumerable<object> models, object parameters = null);
+    Task<Dictionary<object, Route>> GetRoutes(IAsyncDocumentSession session, IEnumerable<object> models, object parameters = null);
 
     /// <summary>
     /// Rebuild all routes for this provider so they can be hydrated into the database
     /// </summary>
-    Task<IList<IRoute>> GetAllRoutes(IAsyncDocumentSession session);
+    Task<IList<Route>> GetAllRoutes(IAsyncDocumentSession session);
 
     /// <summary>
     /// Generate unique route ID for a model

@@ -7,10 +7,8 @@ namespace zero.Core.Database.Indexes
 {
   public class MediaFolders_WithChildren : AbstractIndexCreationTask<MediaFolder, MediaFolders_WithChildren.Result>
   {
-    public class Result : IZeroIdEntity, IZeroDbConventions
+    public class Result : ZeroIdEntity
     {
-      public string Id { get; set; }
-
       public string ParentId { get; set; }
 
       public string Name { get; set; }

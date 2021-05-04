@@ -5,81 +5,37 @@ using System.Diagnostics;
 namespace zero.Core.Entities
 {
   [DebuggerDisplay("Id = {Id,nq}, Name = {Name}, Alias = {Alias}")]
-  public abstract class ZeroEntity : IZeroEntity
-  {
-    /// <inheritdoc/>
-    public string Id { get; set; }
-
-    /// <inheritdoc/>
-    public string Name { get; set; }
-
-    /// <inheritdoc/>
-    public string Alias { get; set; }
-
-    /// <inheritdoc/>
-    public string Key { get; set; }
-
-    /// <inheritdoc/>
-    public uint Sort { get; set; }
-
-    /// <inheritdoc/>
-    public bool IsActive { get; set; }
-
-    /// <inheritdoc/>
-    public string Hash { get; set; }
-
-    /// <inheritdoc/>
-    public string LastModifiedById { get; set; }
-
-    /// <inheritdoc/>
-    public DateTimeOffset LastModifiedDate { get; set; }
-
-    /// <inheritdoc/>
-    public string CreatedById { get; set; }
-
-    /// <inheritdoc/>
-    public DateTimeOffset CreatedDate { get; set; }
-
-    /// <inheritdoc/>
-    public BlueprintConfiguration Blueprint { get; set; }
-
-    /// <inheritdoc/>
-    [JsonIgnore]
-    public string Url { get; set; }
-  }
-
-
-  public interface IZeroEntity : IZeroIdEntity
+  public abstract class ZeroEntity : ZeroIdEntity, IZeroDbConventions
   {
     /// <summary>
     /// Full name of the entity
     /// </summary>
-    string Name { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// Unique alias which can be used in the frontend and URLs
     /// </summary>
-    string Alias { get; set; }
+    public string Alias { get; set; }
 
     /// <summary>
     /// A key which can be used to query this entity in code
     /// </summary>
-    string Key { get; set; }
+    public string Key { get; set; }
 
     /// <summary>
     /// Sort order
     /// </summary>
-    uint Sort { get; set; }
+    public uint Sort { get; set; }
 
     /// <summary>
     /// Whether the entity is visible in the frontend
     /// </summary>
-    bool IsActive { get; set; }
+    public bool IsActive { get; set; }
 
     /// <summary>
     /// Unique hash for this entity (primarily used for routing)
     /// </summary>
-    string Hash { get; set; }
+    public string Hash { get; set; }
 
     /// <summary>
     /// Backoffice user who last modified this content
@@ -89,23 +45,27 @@ namespace zero.Core.Entities
     /// <summary>
     /// Date of last modification
     /// </summary>
-    DateTimeOffset LastModifiedDate { get; set; }
+    public DateTimeOffset LastModifiedDate { get; set; }
 
     /// <summary>
     /// Backoffice user who created this content
     /// </summary>
-    [Overwrite]
     public string CreatedById { get; set; }
 
     /// <summary>
     /// Date of creation
     /// </summary>
-    DateTimeOffset CreatedDate { get; set; }
+    public DateTimeOffset CreatedDate { get; set; }
 
     /// <summary>
     /// Configuration of the base entity (which this one inherits from)
     /// </summary>
-    BlueprintConfiguration Blueprint { get; set; }
+    public BlueprintConfiguration Blueprint { get; set; }
+
+    /// <summary>
+    /// Language of the entity
+    /// </summary>
+    public string LanguageId { get; set; }
 
     /// <summary>
     /// [Warning] This field is always empty when bound to the database.
@@ -113,5 +73,14 @@ namespace zero.Core.Entities
     /// </summary>
     [JsonIgnore]
     public string Url { get; set; }
+  }
+
+
+  public abstract class ZeroIdEntity
+  {
+    /// <summary>
+    /// Id of the entity
+    /// </summary>
+    public string Id { get; set; }
   }
 }

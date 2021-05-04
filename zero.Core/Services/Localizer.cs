@@ -41,7 +41,7 @@ namespace zero.Core.Services
 
       if (!Cache.TryGetValue(key, out string value))
       {
-        ITranslation translation = LoadTranslation(key);
+        Translation translation = LoadTranslation(key);
 
         if (translation == null)
         {
@@ -95,9 +95,9 @@ namespace zero.Core.Services
     /// <summary>
     /// Get translation from database or any other source
     /// </summary>
-    protected virtual ITranslation LoadTranslation(string key)
+    protected virtual Translation LoadTranslation(string key)
     {
-      return Session.Query<ITranslation>().FirstOrDefault(x => x.Key == key);
+      return Session.Query<Translation>().FirstOrDefault(x => x.Key == key);
     }
   }
 

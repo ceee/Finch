@@ -38,18 +38,18 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public Task<IPage> GetEmpty(string pageType, string parentId = null)
+    public Task<Page> GetEmpty(string pageType, string parentId = null)
     {
       PageType type = GetPageType(pageType);
 
       if (type == null)
       {
-        return Task.FromResult<IPage>(null);
+        return Task.FromResult<Page>(null);
       }
 
       try
       {
-        IPage model = Activator.CreateInstance(type.ContentType) as IPage;
+        Page model = Activator.CreateInstance(type.ContentType) as Page;
 
         model.PageTypeAlias = type.Alias;
         model.ParentId = parentId; // TODO validate if type is allowed and if parentid is allowed
@@ -61,21 +61,21 @@ namespace zero.Core.Api
         Logger.LogWarning("Could not create page with type {type}", type);
       }
 
-      return Task.FromResult<IPage>(null);
+      return Task.FromResult<Page>(null);
     }
 
 
     /// <inheritdoc />
-    public async Task<IPage> GetById(string id)
+    public async Task<Page> GetById(string id)
     {
-      return await GetById<IPage>(id);
+      return await GetById<Page>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<string, IPage>> GetByIds(params string[] ids)
+    public async Task<Dictionary<string, Page>> GetByIds(params string[] ids)
     {
-      return await GetByIds<IPage>(ids);
+      return await GetByIds<Page>(ids);
     }
 
 
@@ -90,7 +90,7 @@ namespace zero.Core.Api
     public async Task<IList<PageType>> GetAllowedPageTypes(string parentId = null)
     {    
       IEnumerable<PageType> types = Options.Pages.GetAllItems();
-      List<IPage> parents = new();
+      List<Page> parents = new();
 
       using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
@@ -98,15 +98,15 @@ namespace zero.Core.Api
       {
         Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
           .ProjectInto<Pages_ByHierarchy.Result>()
-          .Include<Pages_ByHierarchy.Result, IPage>(x => x.Id)
-          .Include<Pages_ByHierarchy.Result, IPage>(x => x.Path.Select(p => p.Id))
+          .Include<Pages_ByHierarchy.Result, Page>(x => x.Id)
+          .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
           .FirstOrDefaultAsync(x => x.Id == parentId);
 
         if (result != null)
         {
           List<string> ids = result.Path.Select(x => x.Id).ToList();
           ids.Add(result.Id);
-          parents = (await session.LoadAsync<IPage>(ids)).Select(x => x.Value).Reverse().ToList();
+          parents = (await session.LoadAsync<Page>(ids)).Select(x => x.Value).Reverse().ToList();
         }
       }
 
@@ -130,22 +130,22 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IPage>> Save(IPage model)
+    public async Task<EntityResult<Page>> Save(Page model)
     {
       return await SaveModel(model, null);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IList<IPage>>> SaveSorting(string[] sortedIds)
+    public async Task<EntityResult<IList<Page>>> SaveSorting(string[] sortedIds)
     {
-      Dictionary<string, IPage> items = await GetByIds<IPage>(sortedIds);
+      Dictionary<string, Page> items = await GetByIds<Page>(sortedIds);
       uint index = 0;
 
       // contains multiple parents, therefore fail
       if (items.Select(x => x.Value?.ParentId).Distinct().Count() > 1)
       {
-        return EntityResult<IList<IPage>>.Fail("@errors.page.sortingmultipleparents");
+        return EntityResult<IList<Page>>.Fail("@errors.page.sortingmultipleparents");
       }
 
       using (IAsyncDocumentSession session = Store.OpenAsyncSession())
@@ -163,26 +163,26 @@ namespace zero.Core.Api
         await session.SaveChangesAsync();
       }
 
-      return EntityResult<IList<IPage>>.Success(items.Select(x => x.Value).ToList());
+      return EntityResult<IList<Page>>.Success(items.Select(x => x.Value).ToList());
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IPage>> Move(string id, string parentId)
+    public async Task<EntityResult<Page>> Move(string id, string parentId)
     {
-      IPage model = await GetById<IPage>(id);
-      IPage parent = await GetById<IPage>(parentId);
+      Page model = await GetById<Page>(id);
+      Page parent = await GetById<Page>(parentId);
 
       if (model == null || (!parentId.IsNullOrEmpty() && parent == null))
       {
-        return EntityResult<IPage>.Fail("@errors.idnotfound");
+        return EntityResult<Page>.Fail("@errors.idnotfound");
       }
 
       IList<PageType> pageTypes = await GetAllowedPageTypes(parentId);
 
       if (!pageTypes.Any(x => x.Alias == model.PageTypeAlias))
       {
-        return EntityResult<IPage>.Fail("@errors.page.parentnotallowed");
+        return EntityResult<Page>.Fail("@errors.page.parentnotallowed");
       }
 
       model.ParentId = parent?.Id;
@@ -192,14 +192,14 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IPage>> Copy(string id, string destinationId, bool includeDescendants = false)
+    public async Task<EntityResult<Page>> Copy(string id, string destinationId, bool includeDescendants = false)
     {
-      IPage model = await GetById<IPage>(id);
-      IPage parent = await GetById<IPage>(destinationId);
+      Page model = await GetById<Page>(id);
+      Page parent = await GetById<Page>(destinationId);
 
       if (model == null || (!destinationId.IsNullOrEmpty() && parent == null))
       {
-        return EntityResult<IPage>.Fail("@errors.idnotfound");
+        return EntityResult<Page>.Fail("@errors.idnotfound");
       }
 
       string baseId = model.Id;
@@ -215,7 +215,7 @@ namespace zero.Core.Api
 
       if (!pageTypes.Any(x => x.Alias == model.PageTypeAlias))
       {
-        return EntityResult<IPage>.Fail("@errors.page.parentnotallowed");
+        return EntityResult<Page>.Fail("@errors.page.parentnotallowed");
       }
 
       using (IAsyncDocumentSession session = Store.OpenAsyncSession())
@@ -227,7 +227,7 @@ namespace zero.Core.Api
         {
           Pages_WithChildren.Result childrenResult = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
             .ProjectInto<Pages_WithChildren.Result>()
-            .Include<Pages_WithChildren.Result, IPage>(x => x.Id)
+            .Include<Pages_WithChildren.Result, Page>(x => x.Id)
             .Where(x => x.Id == oldParentId)
             .FirstOrDefaultAsync();
 
@@ -236,11 +236,11 @@ namespace zero.Core.Api
             return;
           }
 
-          Dictionary<string, IPage> childrenPages = await session.LoadAsync<IPage>(childrenResult.ChildrenIds);
+          Dictionary<string, Page> childrenPages = await session.LoadAsync<Page>(childrenResult.ChildrenIds);
 
           foreach (var child in childrenPages)
           {
-            IPage childPage = child.Value.Clone();
+            Page childPage = child.Value.Clone();
             childPage.Id = null;
             childPage.IsActive = false;
             childPage.ParentId = newParentId;
@@ -261,14 +261,14 @@ namespace zero.Core.Api
         await session.SaveChangesAsync();
       }
 
-      return EntityResult<IPage>.Success(model);
+      return EntityResult<Page>.Success(model);
     }
 
 
     /// <inheritdoc />
     public async Task<EntityResult<string[]>> Delete(string id, bool moveToRecycleBin = true)
     {
-      IList<IPage> pages = await GetByIdWithDescendants(id);
+      IList<Page> pages = await GetByIdWithDescendants(id);
       string[] ids = pages.Select(x => x.Id).ToArray();
 
       if (pages.Count < 1)
@@ -281,7 +281,7 @@ namespace zero.Core.Api
         await RecycleBinApi.Add(pages, RECYCLE_BIN_GROUP);
       }
 
-      await DeleteByIds<IPage>(ids);
+      await DeleteByIds<Page>(ids);
 
       return EntityResult<string[]>.Success(ids);
     }
@@ -291,8 +291,8 @@ namespace zero.Core.Api
     public async Task<EntityResult<string[]>> Restore(string id, bool includeDescendants = false)
     {
       EntityResult<string[]> result = new EntityResult<string[]>();
-      IRecycledEntity recycledEntity = await RecycleBinApi.GetById(id);
-      List<IRecycledEntity> entities = new List<IRecycledEntity>() { recycledEntity };
+      RecycledEntity recycledEntity = await RecycleBinApi.GetById(id);
+      List<RecycledEntity> entities = new List<RecycledEntity>() { recycledEntity };
 
       if (recycledEntity == null)
       {
@@ -309,21 +309,21 @@ namespace zero.Core.Api
       string[] ids = entities.Select(x => x.OriginalId).ToArray();
 
       // check if parents are available
-      string[] parentIds = entities.Select(x => x.Content as IPage).Where(x => x != null).Select(x => x.ParentId).ToArray();
-      parentIds = (await GetByIds<IPage>(parentIds)).Where(x => x.Value != null).Select(x => x.Value.Id).ToArray();
+      string[] parentIds = entities.Select(x => x.Content as Page).Where(x => x != null).Select(x => x.ParentId).ToArray();
+      parentIds = (await GetByIds<Page>(parentIds)).Where(x => x.Value != null).Select(x => x.Value.Id).ToArray();
 
       // validate and restore all items
-      foreach (IRecycledEntity entity in entities)
+      foreach (RecycledEntity entity in entities)
       {
         // check if it contains page data
-        if (entity.Group != RECYCLE_BIN_GROUP || !(entity.Content is IPage))
+        if (entity.Group != RECYCLE_BIN_GROUP || !(entity.Content is Page))
         {
-          //result.AddError("Cannot parse recycled entity as an IPage in group \"" + RECYCLE_BIN_GROUP + "\""); // TODO correct error message
+          //result.AddError("Cannot parse recycled entity as an Page in group \"" + RECYCLE_BIN_GROUP + "\""); // TODO correct error message
           continue;
         }
 
         // get page
-        IPage page = entity.Content as IPage;
+        Page page = entity.Content as Page;
         page.IsActive = false;
 
         // validate app and parent
@@ -334,7 +334,7 @@ namespace zero.Core.Api
         }
 
         // restore to pages
-        EntityResult<IPage> saveResult = await SaveModel(page);
+        EntityResult<Page> saveResult = await SaveModel(page);
       }
 
       // delete affected entities from recycle bin
@@ -354,11 +354,11 @@ namespace zero.Core.Api
     /// <summary>
     /// Get a page with all its descendants
     /// </summary>
-    async Task<List<IPage>> GetByIdWithDescendants(string id)
+    async Task<List<Page>> GetByIdWithDescendants(string id)
     {
-      List<IPage> items = new List<IPage>();
+      List<Page> items = new List<Page>();
 
-      IPage model = await GetById<IPage>(id);
+      Page model = await GetById<Page>(id);
 
       if (model == null)
       {
@@ -374,7 +374,7 @@ namespace zero.Core.Api
         {
           Pages_WithChildren.Result childrenResult = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
             .ProjectInto<Pages_WithChildren.Result>()
-            .Include<Pages_WithChildren.Result, IPage>(x => x.Id)
+            .Include<Pages_WithChildren.Result, Page>(x => x.Id)
             .Where(x => x.Id == parentId)
             .FirstOrDefaultAsync();
 
@@ -383,7 +383,7 @@ namespace zero.Core.Api
             return;
           }
 
-          Dictionary<string, IPage> childrenPages = await session.LoadAsync<IPage>(childrenResult.ChildrenIds);
+          Dictionary<string, Page> childrenPages = await session.LoadAsync<Page>(childrenResult.ChildrenIds);
 
           foreach (var child in childrenPages)
           {
@@ -405,17 +405,17 @@ namespace zero.Core.Api
     /// <summary>
     /// Get a new empty page with the specified type
     /// </summary>
-    public Task<IPage> GetEmpty(string pageType, string parentId = null);
+    public Task<Page> GetEmpty(string pageType, string parentId = null);
 
     /// <summary>
     /// Get page by Id
     /// </summary>
-    Task<IPage> GetById(string id);
+    Task<Page> GetById(string id);
 
     /// <summary>
     /// Get pages by ids
     /// </summary>
-    Task<Dictionary<string, IPage>> GetByIds(params string[] ids);
+    Task<Dictionary<string, Page>> GetByIds(params string[] ids);
 
     /// <summary>
     /// Get all available page types
@@ -435,22 +435,22 @@ namespace zero.Core.Api
     /// <summary>
     /// Creates or updates a page
     /// </summary>
-    Task<EntityResult<IPage>> Save(IPage model);
+    Task<EntityResult<Page>> Save(Page model);
 
     /// <summary>
     /// Update sorting of pages on a specific level
     /// </summary>
-    Task<EntityResult<IList<IPage>>> SaveSorting(string[] sortedIds);
+    Task<EntityResult<IList<Page>>> SaveSorting(string[] sortedIds);
 
     /// <summary>
     /// Move a page to a new parent
     /// </summary>
-    Task<EntityResult<IPage>> Move(string id, string parentId);
+    Task<EntityResult<Page>> Move(string id, string parentId);
 
     /// <summary>
     /// Copies a page (with optional descendants) to a new location
     /// </summary>
-    Task<EntityResult<IPage>> Copy(string id, string destinationId, bool includeDescendants = false);
+    Task<EntityResult<Page>> Copy(string id, string destinationId, bool includeDescendants = false);
 
     /// <summary>
     /// Deletes a page by Id (with all it's descendants)

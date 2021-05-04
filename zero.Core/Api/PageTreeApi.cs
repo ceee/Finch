@@ -29,7 +29,7 @@ namespace zero.Core.Api
       IList<TreeItem> items = new List<TreeItem>();
       IReadOnlyCollection<PageType> pageTypes = Backoffice.Options.Pages.GetAllItems();
       string[] openIds = new string[0] { };
-      IList<IPage> pages = null;
+      IList<Page> pages = null;
       IList<Pages_WithChildren.Result> children = null;
       bool isSearch = !search.IsNullOrWhiteSpace();
 
@@ -39,14 +39,14 @@ namespace zero.Core.Api
       if (isSearch)
       {
         pages = await session
-          .Query<IPage>()
+          .Query<Page>()
           .SearchIf(x => x.Name, search, "*")
           .OrderBy(x => x.Sort, OrderingType.Long)
           .ToListAsync();
 
         var urls = await Routes.GetUrls(pages.ToArray());
         
-        foreach (IPage page in pages)
+        foreach (Page page in pages)
         {
           if (urls.TryGetValue(page, out string url))
           {
@@ -58,7 +58,7 @@ namespace zero.Core.Api
       {
 
         pages = await session
-          .Query<IPage>()
+          .Query<Page>()
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .OrderBy(x => x.Sort, OrderingType.Long)
           .ToListAsync();
@@ -90,7 +90,7 @@ namespace zero.Core.Api
 
 
       // function to get modifier icon
-      TreeItemModifier GetModifier(IPage page)
+      TreeItemModifier GetModifier(Page page)
       {
         if (page.PublishDate > DateTimeOffset.Now || page.UnpublishDate > DateTimeOffset.Now)
         {
@@ -105,7 +105,7 @@ namespace zero.Core.Api
 
 
       // build tree
-      foreach (IPage page in pages)
+      foreach (Page page in pages)
       {
         PageType pageType = pageTypes.FirstOrDefault(x => x.Alias == page.PageTypeAlias);
 

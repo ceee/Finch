@@ -5,7 +5,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Utils
 {
-  public abstract class TableExport<TEntity> : ITableExport<TEntity> where TEntity : IZeroEntity
+  public abstract class TableExport<TEntity> : ITableExport<TEntity> where TEntity : ZeroEntity
   {
     public virtual async Task<Stream> Export(TableFormat format = TableFormat.Excel)
     {
@@ -36,7 +36,7 @@ namespace zero.Core.Utils
   }
 
 
-  public interface ITableExport<TEntity> where TEntity : IZeroEntity
+  public interface ITableExport<TEntity> where TEntity : ZeroEntity
   {
     Task<Stream> Export(TableFormat format = TableFormat.Excel);
   }

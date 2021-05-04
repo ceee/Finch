@@ -17,7 +17,7 @@ using zero.Web.Models;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Sections.Media, PermissionsValue.True)]
-  public class MediaController : BackofficeCollectionController<IMedia, IMediaCollection>
+  public class MediaController : BackofficeCollectionController<Media, IMediaCollection>
   {
     IMediaFolderApi MediaFolderApi;
     IPaths Paths;
@@ -38,13 +38,13 @@ namespace zero.Web.Controllers
 
 
     [HttpPost]
-    public async Task<EntityResult<IMedia>> Upload(IFormFile file, [FromForm] string folderId) => await Collection.Save(await Collection.Upload(file, folderId));
+    public async Task<EntityResult<Media>> Upload(IFormFile file, [FromForm] string folderId) => await Collection.Save(await Collection.Upload(file, folderId));
 
     [HttpPost]
     public async Task<Media> UploadTemporary(IFormFile file, [FromForm] string folderId) => await Collection.Upload(file, folderId);
 
     [HttpPost]
-    public async Task<EntityResult<IMedia>> Move([FromBody] ActionCopyModel model) => await Collection.Move(model.Id, model.DestinationId);
+    public async Task<EntityResult<Media>> Move([FromBody] ActionCopyModel model) => await Collection.Move(model.Id, model.DestinationId);
 
 
     public async Task<MediaListResultModel> GetAll([FromQuery] MediaListQuery query)
@@ -60,8 +60,8 @@ namespace zero.Web.Controllers
         Type = x.Type
       });
 
-      IList<IMediaFolder> hierarchy = null;
-      IMediaFolder folder = null;
+      IList<MediaFolder> hierarchy = null;
+      MediaFolder folder = null;
 
       if (!String.IsNullOrEmpty(query.FolderId))
       {

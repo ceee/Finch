@@ -11,7 +11,7 @@ using zero.Core.Options;
 
 namespace zero.Core.Routing
 {
-  public class PageRouteProvider : AbtractRouteProvider<IPage>
+  public class PageRouteProvider : AbtractRouteProvider<Page>
   {
     protected const string REF_KEY = "page";
     protected const string PAGE_TYPE_KEY = "pageType";
@@ -29,11 +29,11 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public override string GetRouteId(IPage model, object parameters = null) => ID_PREFIX + model.Hash;
+    public override string GetRouteId(Page model, object parameters = null) => ID_PREFIX + model.Hash;
 
 
     /// <inheritdoc />
-    public override async Task<IResolvedRoute> ResolveRoute(IAsyncDocumentSession session, IRoute route)
+    public override async Task<IResolvedRoute> ResolveRoute(IAsyncDocumentSession session, Route route)
     {
       PageRoute resolved = new PageRoute(route);
 
@@ -48,9 +48,9 @@ namespace zero.Core.Routing
       ids.Add(reference.Id);
       ids.AddRange(route.Dependencies);
 
-      Dictionary<string, IPage> pages = await session.LoadAsync<IPage>(ids);
+      Dictionary<string, Page> pages = await session.LoadAsync<Page>(ids);
 
-      if (!pages.TryGetValue(reference.Id, out IPage page))
+      if (!pages.TryGetValue(reference.Id, out Page page))
       {
         return null;
       }
@@ -63,44 +63,44 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public override async Task<IList<IRoute>> GetAllRoutes(IAsyncDocumentSession session)
+    public override async Task<IList<Route>> GetAllRoutes(IAsyncDocumentSession session)
     {
-      IList<IRoute> TraversePageChildren(IPage parent, IEnumerable<IPage> parents, IEnumerable<IPage> allPages)
+      IList<Route> TraversePageChildren(Page parent, IEnumerable<Page> parents, IEnumerable<Page> allPages)
       {
-        List<IRoute> routes = new List<IRoute>();
-        IEnumerable<IPage> currentPages = allPages.Where(x => x.ParentId == parent?.Id);
+        List<Route> routes = new List<Route>();
+        IEnumerable<Page> currentPages = allPages.Where(x => x.ParentId == parent?.Id);
 
-        foreach (IPage page in currentPages)
+        foreach (Page page in currentPages)
         {
-          IRoute route = BuildRoute(page, parents, allPages);
+          Route route = BuildRoute(page, parents, allPages);
 
           if (route != null)
           {
             routes.Add(route);
           }
 
-          routes.AddRange(TraversePageChildren(page, parents.Union(new List<IPage>() { page }), allPages));
+          routes.AddRange(TraversePageChildren(page, parents.Union(new List<Page>() { page }), allPages));
         }
 
         return routes;
       }
 
-      IList<IPage> pages = await session.Query<IPage>().ToListAsync();
-      return TraversePageChildren(null, new List<IPage>() { }, pages);
+      IList<Page> pages = await session.Query<Page>().ToListAsync();
+      return TraversePageChildren(null, new List<Page>() { }, pages);
     }
 
 
     /// <summary>
     /// Build route entity from page
     /// </summary>
-    protected virtual IRoute BuildRoute(IPage page, IEnumerable<IPage> parents, IEnumerable<IPage> allPages)
+    protected virtual Route BuildRoute(Page page, IEnumerable<Page> parents, IEnumerable<Page> allPages)
     {
       if (page is PageFolder)
       {
         return null;
       }
 
-      IRoute route = new Route()
+      Route route = new Route()
       {
         Id = GetRouteId(page),
         Url = UrlBuilder.GetUrl(page, parents),
@@ -112,7 +112,7 @@ namespace zero.Core.Routing
 
       if (parents != null)
       {
-        foreach (IPage parent in parents)
+        foreach (Page parent in parents)
         {
           route.Dependencies.Add(parent.Id);
         }

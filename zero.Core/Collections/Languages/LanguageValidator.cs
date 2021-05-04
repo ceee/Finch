@@ -7,7 +7,7 @@ using zero.Core.Validation;
 
 namespace zero.Core.Collections
 {
-  public class LanguageValidator : ZeroValidator<ILanguage>
+  public class LanguageValidator : ZeroValidator<Language>
   {
     public LanguageValidator(IBackofficeStore store)
     {

@@ -1,11 +1,9 @@
 ﻿using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using zero.Core.Api;
 using zero.Core.Entities;
 
 namespace zero.Core.Extensions
@@ -13,7 +11,7 @@ namespace zero.Core.Extensions
   public static class RavenQueryableExtensions
   {
     // TODO we need to simplify these extensions methods.
-    // ToQueriedListAsyncX is used in MediaCollection for the Media_ByParent index, which produces MediaListItem (which is no IZeroEntity)
+    // ToQueriedListAsyncX is used in MediaCollection for the Media_ByParent index, which produces MediaListItem (which is no ZeroEntity)
     /// <summary>
     /// 
     /// </summary>
@@ -61,7 +59,7 @@ namespace zero.Core.Extensions
     /// <summary>
     /// 
     /// </summary>
-    public static async Task<ListResult<T>> ToQueriedListAsync<T>(this IRavenQueryable<T> queryable, ListQuery<T> query) where T : IZeroEntity
+    public static async Task<ListResult<T>> ToQueriedListAsync<T>(this IRavenQueryable<T> queryable, ListQuery<T> query) where T : ZeroEntity
     {
       queryable = queryable.Statistics(out QueryStatistics stats);
 
@@ -150,7 +148,7 @@ namespace zero.Core.Extensions
     /// <summary>
     /// 
     /// </summary>
-    public static async Task<ListResult<T>> ToQueriedListAsync<T, TFilter>(this IRavenQueryable<T> queryable, ListQuery<T, TFilter> query) where T : IZeroEntity where TFilter : IListSpecificQuery
+    public static async Task<ListResult<T>> ToQueriedListAsync<T, TFilter>(this IRavenQueryable<T> queryable, ListQuery<T, TFilter> query) where T : ZeroEntity where TFilter : IListSpecificQuery
     {
       queryable = queryable.Statistics(out QueryStatistics stats);
 

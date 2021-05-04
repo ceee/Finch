@@ -9,16 +9,16 @@ namespace zero.Core.Routing
     /// <summary>
     /// 
     /// </summary>
-    bool CanProcess(ILink link);
+    bool CanProcess(Link link);
 
     /// <summary>
     /// 
     /// </summary>
-    Task<string> Resolve(ILink link);
+    Task<string> Resolve(Link link);
 
     /// <summary>
     /// 
     /// </summary>
-    Task<PreviewModel> Preview(IAsyncDocumentSession session, ILink link);
+    Task<PreviewModel> Preview(IAsyncDocumentSession session, Link link);
   }
 }

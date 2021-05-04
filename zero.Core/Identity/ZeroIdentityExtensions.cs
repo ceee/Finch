@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
+using zero.Core.Entities;
 using zero.Core.Security;
 
 namespace zero.Core.Identity
@@ -9,8 +10,8 @@ namespace zero.Core.Identity
   public static class ZeroIdentityExtensions
   {
     public static IdentityBuilder AddZeroIdentity<TUser, TRole>(this IServiceCollection services) 
-      where TUser : class, IIdentityUserWithRoles, IIdentityUser
-      where TRole : class, IIdentityUserRole
+      where TUser : ZeroIdentityUser
+      where TRole : ZeroIdentityRole
     {
       services.AddZeroIdentityCore<TUser>();
 
@@ -31,7 +32,7 @@ namespace zero.Core.Identity
 
 
     public static IdentityBuilder AddZeroIdentity<TUser>(this IServiceCollection services)
-      where TUser : class, IIdentityUser
+      where TUser : ZeroIdentityUser
     {
       services.AddZeroIdentityCore<TUser>();
 
@@ -47,7 +48,7 @@ namespace zero.Core.Identity
 
 
     static IServiceCollection AddZeroIdentityCore<TUser>(this IServiceCollection services)
-      where TUser : class, IIdentityUser
+      where TUser : ZeroIdentityUser
     {
       services.AddHttpContextAccessor();
       services.AddOptions();
@@ -85,7 +86,7 @@ namespace zero.Core.Identity
 
       services.Configure<SecurityStampValidatorOptions>(opts =>
       {
-        opts.ValidationInterval = TimeSpan.FromMinutes(30);
+        opts.ValidationInterval = TimeSpan.FromMinutes(90);
       });
 
       return services;

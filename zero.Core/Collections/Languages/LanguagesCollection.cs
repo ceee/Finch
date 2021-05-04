@@ -10,13 +10,13 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Collections
 {
-  public class LanguagesCollection : CollectionBase<ILanguage>, ILanguagesCollection
+  public class LanguagesCollection : CollectionBase<Language>, ILanguagesCollection
   {
-    public LanguagesCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<ILanguage> validator) : base(context, interceptor, validator) { }
+    public LanguagesCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<Language> validator) : base(context, interceptor, validator) { }
 
 
     /// <inheritdoc />
-    public override IAsyncEnumerable<ILanguage> Stream()
+    public override IAsyncEnumerable<Language> Stream()
     {
       return base.Stream(q => q.OrderByDescending(x => x.CreatedDate));
     }
@@ -40,7 +40,7 @@ namespace zero.Core.Collections
   }
 
 
-  public interface ILanguagesCollection : ICollectionBase<ILanguage>
+  public interface ILanguagesCollection : ICollectionBase<Language>
   {
     /// <summary>
     /// Get all available cultures

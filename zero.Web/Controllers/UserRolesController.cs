@@ -22,20 +22,20 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<EditModel<IBackofficeUserRole>> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
+    public async Task<EditModel<BackofficeUserRole>> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
 
-    public async Task<IList<IBackofficeUserRole>> GetAll() => await Api.GetAll();
+    public async Task<IList<BackofficeUserRole>> GetAll() => await Api.GetAll();
    
 
     public IList<PermissionCollection> GetAllPermissions() => PermissionsApi.GetAll();
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<IBackofficeUserRole>> Save([FromBody] IBackofficeUserRole model) => await Api.Save(model);
+    public async Task<EntityResult<BackofficeUserRole>> Save([FromBody] BackofficeUserRole model) => await Api.Save(model);
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<IBackofficeUserRole>> Delete([FromQuery] string id) => await Api.Delete(id);
+    public async Task<EntityResult<BackofficeUserRole>> Delete([FromQuery] string id) => await Api.Delete(id);
   }
 }

@@ -4,7 +4,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Validation
 {
-  public class PageValidator : ZeroValidator<IPage>
+  public class PageValidator : ZeroValidator<Page>
   {
     public PageValidator()
     {

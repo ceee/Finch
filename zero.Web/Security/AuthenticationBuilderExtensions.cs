@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Entities;
 using zero.Core.Extensions;
-using zero.Core.Identity;
 using zero.Core.Options;
 using zero.Core.Security;
 
@@ -17,14 +16,14 @@ namespace zero.Web.Security
   public static class AuthenticationBuilderExtensions
   {
     public static AuthenticationBuilder AddZeroBackofficeCookie<TUser, TRole>(this AuthenticationBuilder builder, Action<OptionsBuilder<CookieAuthenticationOptions>> setupAction = null)
-      where TUser : class, IBackofficeUser
-      where TRole : class, IBackofficeUserRole
+      where TUser : BackofficeUser
+      where TRole : BackofficeUserRole
     {
       return builder.AddCookie<TUser>(Constants.Auth.BackofficeScheme, Constants.Auth.BackofficeDisplayName, true, b =>
       {
         b.Configure<IZeroOptions>((options, zero) =>
         {
-          options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+          options.ExpireTimeSpan = TimeSpan.FromMinutes(90);
           options.Cookie.Name = Constants.Auth.BackofficeCookieName;
 
           options.CookieManager = new ContextualCookieManager((ctx, key) =>
@@ -49,8 +48,8 @@ namespace zero.Web.Security
 
 
     public static AuthenticationBuilder AddZeroCookie<TUser, TRole>(this AuthenticationBuilder builder, string scheme, string cookieDisplayName = null, Action<OptionsBuilder<CookieAuthenticationOptions>> setupAction = null)
-      where TUser : class, IIdentityUserWithRoles
-      where TRole : class, IIdentityUserRole
+      where TUser : ZeroIdentityUser
+      where TRole : ZeroIdentityRole
     {
       return builder.AddCookie<TUser>(scheme, cookieDisplayName, false, setupAction);
     }
@@ -58,7 +57,7 @@ namespace zero.Web.Security
 
 
     public static AuthenticationBuilder AddZeroCookie<TUser>(this AuthenticationBuilder builder, string scheme, string cookieDisplayName = null, Action<OptionsBuilder<CookieAuthenticationOptions>> setupAction = null)
-      where TUser : class, IIdentityUser
+      where TUser : ZeroIdentityUser
     {
       return builder.AddCookie<TUser>(scheme, cookieDisplayName, false, setupAction);
     }
@@ -66,7 +65,7 @@ namespace zero.Web.Security
 
 
     static AuthenticationBuilder AddCookie<TUser>(this AuthenticationBuilder builder, string scheme, string displayName, bool isBackoffice, Action<OptionsBuilder<CookieAuthenticationOptions>> setupAction = null)
-      where TUser : class, IIdentityUser
+      where TUser : ZeroIdentityUser
     {
       IServiceCollection services = builder.Services;
 

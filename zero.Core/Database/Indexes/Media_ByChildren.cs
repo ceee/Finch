@@ -6,10 +6,8 @@ namespace zero.Core.Database.Indexes
 {
   public class Media_ByChildren : AbstractMultiMapIndexCreationTask<Media_ByChildren.Result>
   {
-    public class Result : IZeroIdEntity, IZeroDbConventions
+    public class Result : ZeroIdEntity, IZeroDbConventions
     {
-      public string Id { get; set; }
-
       public string ParentId { get; set; }
 
       public int ChildrenCount { get; set; }
@@ -20,7 +18,7 @@ namespace zero.Core.Database.Indexes
 
     public Media_ByChildren()
     {
-      AddMap<IMedia>(items => items.Select(item => new Result()
+      AddMap<Media>(items => items.Select(item => new Result()
       {
         Id = item.Id,
         ParentId = item.FolderId,
@@ -28,7 +26,7 @@ namespace zero.Core.Database.Indexes
         ChildrenIds = new string[] { }
       }));
 
-      AddMap<IMediaFolder>(items => items.Select(item => new Result()
+      AddMap<MediaFolder>(items => items.Select(item => new Result()
       {
         Id = item.Id,
         ParentId = item.ParentId,

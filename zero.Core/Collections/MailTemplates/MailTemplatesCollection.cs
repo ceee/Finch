@@ -5,24 +5,24 @@ using zero.Core.Entities;
 
 namespace zero.Core.Collections
 {
-  public class MailTemplatesCollection : CollectionBase<IMailTemplate>, IMailTemplatesCollection
+  public class MailTemplatesCollection : CollectionBase<MailTemplate>, IMailTemplatesCollection
   {
-    public MailTemplatesCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<IMailTemplate> validator) : base(context, interceptor, validator) { }
+    public MailTemplatesCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<MailTemplate> validator) : base(context, interceptor, validator) { }
 
 
     /// <inheritdoc />
-    public async Task<IMailTemplate> GetByKey(string key)
+    public async Task<MailTemplate> GetByKey(string key)
     {
       return await Query.FirstOrDefaultAsync(x => x.Key == key);
     }
   }
 
 
-  public interface IMailTemplatesCollection : ICollectionBase<IMailTemplate>
+  public interface IMailTemplatesCollection : ICollectionBase<MailTemplate>
   {
     /// <summary>
     /// Get mail template by associated key
     /// </summary>
-    Task<IMailTemplate> GetByKey(string key);
+    Task<MailTemplate> GetByKey(string key);
   }
 }

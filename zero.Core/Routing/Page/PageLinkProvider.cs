@@ -26,7 +26,7 @@ namespace zero.Core.Routing
     /// <summary>
     /// Creates a new link object from a page
     /// </summary>
-    public ILink Create(IPage page, LinkTarget target = LinkTarget.Default, string title = null)
+    public Link Create(Page page, LinkTarget target = LinkTarget.Default, string title = null)
     {
       return new Link()
       {
@@ -42,19 +42,19 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public bool CanProcess(ILink link) => link.Area == AREA;
+    public bool CanProcess(Link link) => link.Area == AREA;
 
 
     /// <inheritdoc />
-    public async Task<string> Resolve(ILink link)
+    public async Task<string> Resolve(Link link)
     {
-      link.Url = await Routes.GetUrl<IPage>(link.Values.GetValueOrDefault<string>("id")) + (link.UrlSuffix ?? string.Empty);
+      link.Url = await Routes.GetUrl<Page>(link.Values.GetValueOrDefault<string>("id")) + (link.UrlSuffix ?? string.Empty);
       return link.Url;
     }
 
 
     /// <inheritdoc />
-    public async Task<PreviewModel> Preview(IAsyncDocumentSession session, ILink link)
+    public async Task<PreviewModel> Preview(IAsyncDocumentSession session, Link link)
     {
       string id = link.Values.GetValueOrDefault<string>("id");
 
@@ -63,7 +63,7 @@ namespace zero.Core.Routing
         return null;
       }
 
-      IPage page = await session.LoadAsync<IPage>(id);
+      Page page = await session.LoadAsync<Page>(id);
 
       if (page == null)
       {
@@ -72,7 +72,7 @@ namespace zero.Core.Routing
 
       PageType pageType = Options.Pages.GetAllItems().FirstOrDefault(x => x.Alias == page.PageTypeAlias);
 
-      string url = await Routes.GetUrl<IPage>(page);
+      string url = await Routes.GetUrl<Page>(page);
 
       return new()
       {

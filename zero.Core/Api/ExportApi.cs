@@ -31,6 +31,6 @@
 //    /// <summary>
 //    /// Returns a space by a defined generic
 //    /// </summary>
-//    Space GetBy<T>() where T : ISpaceContent;
+//    Space GetBy<T>() where T : SpaceContent;
 //  }
 //}

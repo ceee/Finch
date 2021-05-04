@@ -6,7 +6,7 @@ using zero.Core.Validation;
 
 namespace zero.Core.Collections
 {
-  public class MediaFolderValidator : ZeroValidator<IMediaFolder>
+  public class MediaFolderValidator : ZeroValidator<MediaFolder>
   {
     public MediaFolderValidator(IBackofficeStore store)
     {

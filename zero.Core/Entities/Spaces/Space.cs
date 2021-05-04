@@ -2,7 +2,7 @@
 
 namespace zero.Core.Entities
 {
-  public class Space : ISpace
+  public class Space
   {
     public string Alias { get; set; }
 
@@ -21,27 +21,5 @@ namespace zero.Core.Entities
     public string Icon { get; set; }
 
     public bool LineBelow { get; set; }
-  }
-
-  public interface ISpace
-  {
-    string Alias { get; set; }
-
-    string EditorAlias { get; set; }
-
-    string ComponentPath { get; set; }
-
-    string Description { get; set; }
-
-    string Icon { get; set; }
-
-    bool LineBelow { get; set; }
-
-    string Name { get; set; }
-
-    Type Type { get; set; }
-
-    SpaceView View { get; set; }
-
   }
 }

@@ -28,7 +28,7 @@ namespace zero.Core
 
     protected IHandlerHolder Handler { get; private set; }
 
-    private IList<IApplication> Apps { get; set; }
+    private IList<Application> Apps { get; set; }
 
 
 
@@ -42,7 +42,7 @@ namespace zero.Core
 
 
     /// <inheritdoc />
-    public async Task<IApplication> Resolve(HttpContext context, ClaimsPrincipal user)
+    public async Task<Application> Resolve(HttpContext context, ClaimsPrincipal user)
     {
       if (context?.Request == null)
       {
@@ -50,7 +50,7 @@ namespace zero.Core
         return null;
       }
 
-      IApplication app;
+      Application app;
 
       if (context.IsBackofficeRequest(Options.BackofficePath))
       {
@@ -64,7 +64,7 @@ namespace zero.Core
       if (app == null)
       {
         //Logger.LogWarning("Could not resolve application for host {host}", context.Request.Host);
-        IList<IApplication> apps = await GetApplications();
+        IList<Application> apps = await GetApplications();
         app = apps.FirstOrDefault();
       }
 
@@ -73,15 +73,15 @@ namespace zero.Core
 
 
     /// <inheritdoc />
-    public async Task<IApplication> ResolveFromUser(ClaimsPrincipal user)
+    public async Task<Application> ResolveFromUser(ClaimsPrincipal user)
     {
-      IBackofficeUser userEntity = await GetBackofficeUser(user);
+      BackofficeUser userEntity = await GetBackofficeUser(user);
       return await ResolveFromUser(userEntity);
     }
 
 
     /// <inheritdoc />
-    public async Task<IApplication> ResolveFromUser(IBackofficeUser user)
+    public async Task<Application> ResolveFromUser(BackofficeUser user)
     {
       if (user == null)
       {
@@ -113,26 +113,26 @@ namespace zero.Core
       }
 
       using IAsyncDocumentSession session = Store.OpenCoreSession();
-      return await session.LoadAsync<IApplication>(appId);
+      return await session.LoadAsync<Application>(appId);
     }
 
 
     /// <inheritdoc />
-    public async Task<IApplication> ResolveFromRequest(HttpContext context)
+    public async Task<Application> ResolveFromRequest(HttpContext context)
     {
       return Handler.Get<IApplicationResolverHandler>()?.Resolve(context.Request, await GetApplications()) ?? await ResolveFromUri(context.Request.GetEncodedUrl());
     }
 
 
     /// <inheritdoc />
-    public async Task<IApplication> ResolveFromUri(string uriString)
+    public async Task<Application> ResolveFromUri(string uriString)
     {
       return ResolveFromUriInternal(new Uri(uriString, UriKind.Absolute), await GetApplications());
     }
 
 
     /// <inheritdoc />
-    public async Task<IApplication> ResolveFromUri(Uri uri)
+    public async Task<Application> ResolveFromUri(Uri uri)
     {
       return ResolveFromUriInternal(uri, await GetApplications());
     }
@@ -141,9 +141,9 @@ namespace zero.Core
     /// <summary>
     /// Get matching application from an URI
     /// </summary>
-    IApplication ResolveFromUriInternal(Uri uri, IList<IApplication> apps)
+    Application ResolveFromUriInternal(Uri uri, IList<Application> apps)
     {
-      foreach (IApplication app in apps)
+      foreach (Application app in apps)
       {
         if (app.Domains?.Length < 1)
         {
@@ -168,7 +168,7 @@ namespace zero.Core
     /// <summary>
     /// Get all applications to choose from
     /// </summary>
-    async Task<IList<IApplication>> GetApplications()
+    async Task<IList<Application>> GetApplications()
     {
       if (Apps != null)
       {
@@ -176,7 +176,7 @@ namespace zero.Core
       }
 
       using IAsyncDocumentSession session = Store.OpenCoreSession();
-      Apps = await session.Query<IApplication>().ToListAsync();
+      Apps = await session.Query<Application>().ToListAsync();
       return Apps;
     }
 
@@ -184,12 +184,12 @@ namespace zero.Core
     /// <summary>
     /// Get backoffice user from claims principal
     /// </summary>
-    async Task<IBackofficeUser> GetBackofficeUser(ClaimsPrincipal user)
+    async Task<BackofficeUser> GetBackofficeUser(ClaimsPrincipal user)
     {
       string userId = user.FindFirstValue(Constants.Auth.Claims.UserId);
 
       using IAsyncDocumentSession session = Store.OpenCoreSession();
-      return await session.LoadAsync<IBackofficeUser>(userId);
+      return await session.LoadAsync<BackofficeUser>(userId);
     }
   }
 
@@ -200,33 +200,33 @@ namespace zero.Core
     /// Resolves the current application from either the backoffice user (in case it is backoffice request)
     /// or the domain (in case it is frontend request).
     /// </summary>
-    Task<IApplication> Resolve(HttpContext context, ClaimsPrincipal user);
+    Task<Application> Resolve(HttpContext context, ClaimsPrincipal user);
 
     /// <summary>
     /// Resolves the current application from the request path
     /// </summary>
-    Task<IApplication> ResolveFromRequest(HttpContext context);
+    Task<Application> ResolveFromRequest(HttpContext context);
 
     /// <summary>
     /// Get matching application from an URI string
     /// </summary>
-    Task<IApplication> ResolveFromUri(string uriString);
+    Task<Application> ResolveFromUri(string uriString);
 
     /// <summary>
     /// Get matching application from an URI
     /// </summary>
-    Task<IApplication> ResolveFromUri(Uri uri);
+    Task<Application> ResolveFromUri(Uri uri);
 
     /// <summary>
     /// Resolves the current application from the logged-in backoffice user.
     /// This method won't return apps the user has no access to.
     /// </summary>
-    Task<IApplication> ResolveFromUser(ClaimsPrincipal user);
+    Task<Application> ResolveFromUser(ClaimsPrincipal user);
 
     /// <summary>
     /// Resolves the current application from a user.
     /// This method won't return apps the user has no access to.
     /// </summary>
-    Task<IApplication> ResolveFromUser(IBackofficeUser user);
+    Task<Application> ResolveFromUser(BackofficeUser user);
   }
 }

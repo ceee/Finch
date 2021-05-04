@@ -5,28 +5,37 @@ using zero.Core.Entities;
 namespace zero.Core.Routing
 {
   [Collection("Routes")]
-  public class Route : IRoute
+  public class Route : ZeroIdEntity
   {
-    /// <inheritdoc />
-    public string Id { get; set; }
-
-    /// <inheritdoc />
+    /// <summary>
+    /// Generated URL based on the URL provider
+    /// </summary>
     public string Url { get; set; }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Alias of the URL provider which generated this route
+    /// </summary>
     public string ProviderAlias { get; set; }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Enable this property so all routes are catched which start with this Url
+    /// </summary>
     public bool AllowSuffix { get; set; }
 
-    /// <inheritdoc />
-    public Dictionary<string, object> Params { get; set; } = new Dictionary<string, object>();
+    /// <summary>
+    /// Additional parameters
+    /// </summary>
+    public Dictionary<string, object> Params { get; set; } = new();
 
-    /// <inheritdoc />
-    public IList<RouteReference> References { get; set; } = new List<RouteReference>();
+    /// <summary>
+    /// Contains references to the resolved collection entities
+    /// </summary>
+    public List<RouteReference> References { get; set; } = new();
 
-    /// <inheritdoc />
-    public IList<string> Dependencies { get; set; } = new List<string>();
+    /// <summary>
+    /// Route dependencies can be used for cache busting
+    /// </summary>
+    public List<string> Dependencies { get; set; } = new();
   }
 
 
@@ -43,40 +52,5 @@ namespace zero.Core.Routing
       Id = id;
       Collection = collection;
     }
-  }
-
-
-  [Collection("Routes")]
-  public interface IRoute : IZeroIdEntity, IZeroDbConventions
-  {
-    /// <summary>
-    /// Generated URL based on the URL provider
-    /// </summary>
-    string Url { get; set; }
-
-    /// <summary>
-    /// Alias of the URL provider which generated this route
-    /// </summary>
-    string ProviderAlias { get; set; }
-
-    /// <summary>
-    /// Enable this property so all routes are catched which start with this Url
-    /// </summary>
-    public bool AllowSuffix { get; set; }
-
-    /// <summary>
-    /// Additional parameters
-    /// </summary>
-    Dictionary<string, object> Params { get; set; }
-
-    /// <summary>
-    /// Contains references to the resolved collection entities
-    /// </summary>
-    IList<RouteReference> References { get; set; }
-
-    /// <summary>
-    /// Route dependencies can be used for cache busting
-    /// </summary>
-    IList<string> Dependencies { get; set; }
   }
 }

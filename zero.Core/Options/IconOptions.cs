@@ -2,7 +2,7 @@
 
 namespace zero.Core.Options
 {
-  public class IconOptions : ZeroBackofficeCollection<IIconSet>, IZeroCollectionOptions
+  public class IconOptions : ZeroBackofficeCollection<IconSet>, IZeroCollectionOptions
   {
     /// <summary>
     /// Add a new backoffice icon set

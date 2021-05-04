@@ -7,7 +7,7 @@ namespace zero.Web.Sections
   /// <summary>
   /// Global list entities
   /// </summary>
-  public class SpacesSection : ISection, IZeroInternal
+  public class SpacesSection : IInternalSection
   {
     /// <inheritdoc />
     public string Alias => Constants.Sections.Spaces;

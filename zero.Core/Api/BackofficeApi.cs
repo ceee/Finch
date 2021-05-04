@@ -53,7 +53,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<T> GetById<T>(string id) where T : IZeroIdEntity
+    public async Task<T> GetById<T>(string id) where T : ZeroIdEntity
     {
       if (id.IsNullOrWhiteSpace())
       {
@@ -66,7 +66,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<string, T>> GetByIds<T>(params string[] ids) where T : IZeroIdEntity
+    public async Task<Dictionary<string, T>> GetByIds<T>(params string[] ids) where T : ZeroIdEntity
     {
       using IAsyncDocumentSession session = Session();
       Dictionary<string, T> models = await session.LoadAsync<T>(ids);
@@ -84,7 +84,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> SaveModel<T>(T model, IValidator<T> validator = null, Action<IMetadataDictionary> meta = null) where T : IZeroEntity
+    public async Task<EntityResult<T>> SaveModel<T>(T model, IValidator<T> validator = null, Action<IMetadataDictionary> meta = null) where T : ZeroEntity
     {
       // check for alias
       //if (model is IUrlAliasEntity)
@@ -150,11 +150,7 @@ namespace zero.Core.Api
       {
         model.CreatedDate = DateTimeOffset.Now;
         model.CreatedById = userId;
-
-        if (model is ILanguageAwareEntity)
-        {
-          (model as ILanguageAwareEntity).LanguageId = "languages.1-A"; // TODO correct language id
-        }
+        model.LanguageId = "languages.1-A"; // TODO correct language id
       }
 
       // update name alias and last modified
@@ -179,7 +175,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<T>> DeleteById<T>(string id) where T : IZeroIdEntity
+    public async Task<EntityResult<T>> DeleteById<T>(string id) where T : ZeroIdEntity
     {
       using IAsyncDocumentSession session = Session();
       session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
@@ -200,7 +196,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<int> DeleteByIds<T>(params string[] ids) where T : IZeroIdEntity
+    public async Task<int> DeleteByIds<T>(params string[] ids) where T : ZeroIdEntity
     {
       int successCount = 0;
 
@@ -230,28 +226,28 @@ namespace zero.Core.Api
     /// Get an entity by Id.
     /// If the requested entity is an IAppAwareEntity it will only return entities for the currently selected app + shared app
     /// </summary>
-    Task<T> GetById<T>(string id) where T : IZeroIdEntity;
+    Task<T> GetById<T>(string id) where T : ZeroIdEntity;
 
     /// <summary>
     /// Get entities by ids.
     /// If the requested entity is an IAppAwareEntity it will only return entities for the currently selected app + shared app
     /// </summary>
-    Task<Dictionary<string, T>> GetByIds<T>(params string[] ids) where T : IZeroIdEntity;
+    Task<Dictionary<string, T>> GetByIds<T>(params string[] ids) where T : ZeroIdEntity;
 
     /// <summary>
     /// Updates or creates an entity with an optional validator
     /// </summary>
-    Task<EntityResult<T>> SaveModel<T>(T model, IValidator<T> validator = null, Action<IMetadataDictionary> meta = null) where T : IZeroEntity;
+    Task<EntityResult<T>> SaveModel<T>(T model, IValidator<T> validator = null, Action<IMetadataDictionary> meta = null) where T : ZeroEntity;
 
     /// <summary>
     /// Deletes an entity by Id
     /// </summary>
-    Task<EntityResult<T>> DeleteById<T>(string id) where T : IZeroIdEntity;
+    Task<EntityResult<T>> DeleteById<T>(string id) where T : ZeroIdEntity;
 
     /// <summary>
     /// Deletes entities by Id
     /// </summary>
-    Task<int> DeleteByIds<T>(params string[] ids) where T : IZeroIdEntity;
+    Task<int> DeleteByIds<T>(params string[] ids) where T : ZeroIdEntity;
 
     /// <summary>
     /// Delete a whole collection (with an optional query suffix, i.e. a where statement)

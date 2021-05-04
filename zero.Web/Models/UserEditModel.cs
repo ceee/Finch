@@ -20,7 +20,7 @@ namespace zero.Web.Models
 
     public List<string> Roles { get; set; } = new List<string>();
 
-    public List<IUserClaim> Claims { get; set; } = new List<IUserClaim>();
+    public List<UserClaim> Claims { get; set; } = new List<UserClaim>();
 
     public DateTimeOffset? LockoutEnd { get; set; }
 

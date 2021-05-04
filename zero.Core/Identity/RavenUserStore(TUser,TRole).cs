@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using zero.Core.Database;
+using zero.Core.Entities;
 using zero.Core.Options;
 
 namespace zero.Core.Identity
@@ -17,8 +18,8 @@ namespace zero.Core.Identity
 
   public partial class RavenUserStore<TUser, TRole> : RavenUserStore<TUser>,
     IUserRoleStore<TUser>
-    where TUser : class, IIdentityUserWithRoles
-    where TRole : class, IIdentityUserRole
+    where TUser : ZeroIdentityUser
+    where TRole : ZeroIdentityRole
   {
     public RavenUserStore(IZeroStore store, IZeroOptions options) : base(store, options) { }
 

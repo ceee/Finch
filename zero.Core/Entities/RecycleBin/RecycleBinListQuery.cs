@@ -1,6 +1,6 @@
 ﻿namespace zero.Core.Entities
 {
-  public class RecycleBinListQuery : ListQuery<IRecycledEntity>
+  public class RecycleBinListQuery : ListQuery<RecycledEntity>
   {
     public string Group { get; set; }
 

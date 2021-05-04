@@ -31,25 +31,25 @@ namespace zero.Web.Controllers
  
     public PageType GetPageType([FromQuery] string alias) => Api.GetPageType(alias);
 
-    public async Task<PageEditModel<IPage>> GetById([FromQuery] string id)
+    public async Task<PageEditModel<Page>> GetById([FromQuery] string id)
     {
-      IPage entity = await Api.GetById(id);
+      Page entity = await Api.GetById(id);
 
       if (entity == null)
       {
         return null;
       }
 
-      return Edit<IPage, PageEditModel<IPage>>(new PageEditModel<IPage>()
+      return Edit<Page, PageEditModel<Page>>(new PageEditModel<Page>()
       {
         Entity = entity,
-        //Revisions = await RevisionsApi.GetPaged<IPage>(id),
+        //Revisions = await RevisionsApi.GetPaged<Page>(id),
         PageType = Api.GetPageType(entity.PageTypeAlias)
       });
     }
 
 
-    public async Task<EditModel<IPage>> GetEmpty([FromQuery] string type, [FromQuery] string parent = null)
+    public async Task<EditModel<Page>> GetEmpty([FromQuery] string type, [FromQuery] string parent = null)
     {
       return Edit(await Api.GetEmpty(type, parent));
     }
@@ -61,13 +61,13 @@ namespace zero.Web.Controllers
 
       using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
-      Dictionary<string, IPage> pages = await session.LoadAsync<IPage>(ids);
-      Dictionary<string, IRoute> routes = await session.LoadAsync<IRoute>(pages.Where(x => x.Value != null).Select(x => "routes." + x.Value.Hash));
+      Dictionary<string, Page> pages = await session.LoadAsync<Page>(ids);
+      Dictionary<string, Route> routes = await session.LoadAsync<Route>(pages.Where(x => x.Value != null).Select(x => "routes." + x.Value.Hash));
 
       return Previews(pages, item =>
       {
         PageType pageType = pageTypes.FirstOrDefault(x => x.Alias == item.PageTypeAlias);
-        IRoute route = null;
+        Route route = null;
 
         if (!routes.TryGetValue("routes." + item.Hash, out route) || route == null)
         {
@@ -88,22 +88,22 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<ListResult<Revision>> GetRevisions([FromQuery] string id, [FromQuery] int page = 1) => await RevisionsApi.GetPaged<IPage>(id, page);
+    public async Task<ListResult<Revision>> GetRevisions([FromQuery] string id, [FromQuery] int page = 1) => await RevisionsApi.GetPaged<Page>(id, page);
 
 
-    public async Task<EntityResult<IPage>> Save([FromBody] IPage model) => await Api.Save(model);
-
-
-    [HttpPost]
-    public async Task<EntityResult<IList<IPage>>> SaveSorting([FromBody] string[] ids) => await Api.SaveSorting(ids);
+    public async Task<EntityResult<Page>> Save([FromBody] Page model) => await Api.Save(model);
 
 
     [HttpPost]
-    public async Task<EntityResult<IPage>> Move([FromBody] ActionCopyModel model) => await Api.Move(model.Id, model.DestinationId);
+    public async Task<EntityResult<IList<Page>>> SaveSorting([FromBody] string[] ids) => await Api.SaveSorting(ids);
 
 
     [HttpPost]
-    public async Task<EntityResult<IPage>> Copy([FromBody] ActionCopyModel model) => await Api.Copy(model.Id, model.DestinationId, model.IncludeDescendants);
+    public async Task<EntityResult<Page>> Move([FromBody] ActionCopyModel model) => await Api.Move(model.Id, model.DestinationId);
+
+
+    [HttpPost]
+    public async Task<EntityResult<Page>> Copy([FromBody] ActionCopyModel model) => await Api.Copy(model.Id, model.DestinationId, model.IncludeDescendants);
 
 
     [HttpPost]

@@ -6,7 +6,7 @@ using zero.Core.Validation;
 
 namespace zero.Core.Collections
 {
-  public class TranslationValidator : ZeroValidator<ITranslation>
+  public class TranslationValidator : ZeroValidator<Translation>
   {
     public TranslationValidator(IBackofficeStore store)
     {

@@ -7,7 +7,7 @@ namespace zero.Web.Sections
   /// <summary>
   /// Media items (images, videos, documents) grouped in folders
   /// </summary>
-  public class MediaSection : ISection, IZeroInternal
+  public class MediaSection : IInternalSection
   {
     /// <inheritdoc />
     public string Alias => Constants.Sections.Media;

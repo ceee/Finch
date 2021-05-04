@@ -11,18 +11,18 @@ namespace zero.Core.Api
 {
   public class RecycleBinApi : BackofficeApi, IRecycleBinApi
   {
-    IRecycledEntity Blueprint;
+    RecycledEntity Blueprint;
 
-    public RecycleBinApi(IBackofficeStore store, IRecycledEntity blueprint) : base(store)
+    public RecycleBinApi(IBackofficeStore store, RecycledEntity blueprint) : base(store)
     {
       Blueprint = blueprint;
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IRecycledEntity>> Add<TEntity>(TEntity model, string group = null, string operationId = null) where TEntity : IZeroEntity
+    public async Task<EntityResult<RecycledEntity>> Add<TEntity>(TEntity model, string group = null, string operationId = null) where TEntity : ZeroEntity
     {
-      IRecycledEntity entity = Blueprint.Clone();
+      RecycledEntity entity = Blueprint.Clone();
       entity.Group = group;
       entity.Content = model;
       entity.OriginalId = model.Id;
@@ -34,42 +34,42 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IEnumerable<IRecycledEntity>>> Add<TEntity>(IEnumerable<TEntity> models, string group = null) where TEntity : IZeroEntity
+    public async Task<EntityResult<IEnumerable<RecycledEntity>>> Add<TEntity>(IEnumerable<TEntity> models, string group = null) where TEntity : ZeroEntity
     {
-      IList<IRecycledEntity> results = new List<IRecycledEntity>();
+      IList<RecycledEntity> results = new List<RecycledEntity>();
       string operationId = IdGenerator.Create();
 
       foreach (TEntity model in models)
       {
-        EntityResult<IRecycledEntity> result = await Add(model, group, operationId);
+        EntityResult<RecycledEntity> result = await Add(model, group, operationId);
 
         if (!result.IsSuccess)
         {
-          return EntityResult<IEnumerable<IRecycledEntity>>.Fail(result.Errors);
+          return EntityResult<IEnumerable<RecycledEntity>>.Fail(result.Errors);
         }
 
         results.Add(result.Model);
       }
 
-      return EntityResult<IEnumerable<IRecycledEntity>>.Success(results);
+      return EntityResult<IEnumerable<RecycledEntity>>.Success(results);
     }
 
 
     /// <inheritdoc />
-    public async Task<IRecycledEntity> GetById(string id)
+    public async Task<RecycledEntity> GetById(string id)
     {
-      return await GetById<IRecycledEntity>(id);
+      return await GetById<RecycledEntity>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<ListResult<IRecycledEntity>> GetByQuery(RecycleBinListQuery query)
+    public async Task<ListResult<RecycledEntity>> GetByQuery(RecycleBinListQuery query)
     {
       query.SearchSelector = x => x.Name;
 
       using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
-        return await session.Query<IRecycledEntity>()
+        return await session.Query<RecycledEntity>()
           .WhereIf(x => x.Group == query.Group, !query.Group.IsNullOrWhiteSpace())
           .WhereIf(x => x.OperationId == query.OperationId, !query.OperationId.IsNullOrWhiteSpace())
           .ToQueriedListAsync(query);
@@ -78,11 +78,11 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IList<IRecycledEntity>> GetByOperation(string operationId)
+    public async Task<IList<RecycledEntity>> GetByOperation(string operationId)
     {
       using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
-        return await session.Query<IRecycledEntity>()
+        return await session.Query<RecycledEntity>()
           .Where(x => x.OperationId == operationId)
           .ToListAsync();
       }
@@ -96,7 +96,7 @@ namespace zero.Core.Api
     {
       using (IAsyncDocumentSession session = Store.OpenAsyncSession())
       {
-        return await session.Query<IRecycledEntity>()
+        return await session.Query<RecycledEntity>()
           .Where(x => x.OperationId == operationId)
           .CountAsync();
       }
@@ -104,31 +104,31 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IRecycledEntity>> Delete(string id)
+    public async Task<EntityResult<RecycledEntity>> Delete(string id)
     {
-      return await DeleteById<IRecycledEntity>(id);
+      return await DeleteById<RecycledEntity>(id);
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IRecycledEntity>> DeleteAll()
+    public async Task<EntityResult<RecycledEntity>> DeleteAll()
     {
       // TODO make Purge operations app-aware
-      return await Purge<IRecycledEntity>();
+      return await Purge<RecycledEntity>();
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IRecycledEntity>> DeleteByOperation(string operationId)
+    public async Task<EntityResult<RecycledEntity>> DeleteByOperation(string operationId)
     {
-      return await Purge<IRecycledEntity>("where c.OperationId = $id", new Raven.Client.Parameters() { { "id", operationId } });
+      return await Purge<RecycledEntity>("where c.OperationId = $id", new Raven.Client.Parameters() { { "id", operationId } });
     }
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<IRecycledEntity>> DeleteByGroup(string group)
+    public async Task<EntityResult<RecycledEntity>> DeleteByGroup(string group)
     {
-      return await Purge<IRecycledEntity>("where c.Group = $group", new Raven.Client.Parameters() { { "group", group } });
+      return await Purge<RecycledEntity>("where c.Group = $group", new Raven.Client.Parameters() { { "group", group } });
     }
   }
 
@@ -137,27 +137,27 @@ namespace zero.Core.Api
     /// <summary>
     /// Adds an entity to the recycle bin. This operation will not remove this entity from it's own collection!
     /// </summary>
-    Task<EntityResult<IRecycledEntity>> Add<TEntity>(TEntity model, string group = null, string operationId = null) where TEntity : IZeroEntity;
+    Task<EntityResult<RecycledEntity>> Add<TEntity>(TEntity model, string group = null, string operationId = null) where TEntity : ZeroEntity;
 
     /// <summary>
     /// Adds the specified entities to the recycle bin. This operation will not remove entities from their own collection!
     /// </summary>
-    Task<EntityResult<IEnumerable<IRecycledEntity>>> Add<TEntity>(IEnumerable<TEntity> models, string group = null) where TEntity : IZeroEntity;
+    Task<EntityResult<IEnumerable<RecycledEntity>>> Add<TEntity>(IEnumerable<TEntity> models, string group = null) where TEntity : ZeroEntity;
 
     /// <summary>
     /// Get recycled entity by Id
     /// </summary>
-    Task<IRecycledEntity> GetById(string id);
+    Task<RecycledEntity> GetById(string id);
 
     /// <summary>
     /// Get all recycled items
     /// </summary>
-    Task<ListResult<IRecycledEntity>> GetByQuery(RecycleBinListQuery query);
+    Task<ListResult<RecycledEntity>> GetByQuery(RecycleBinListQuery query);
 
     /// <summary>
     /// Get affected entities from a specific operation
     /// </summary>
-    Task<IList<IRecycledEntity>> GetByOperation(string operationId);
+    Task<IList<RecycledEntity>> GetByOperation(string operationId);
 
     /// <summary>
     /// Get affected entity count from a specific operation
@@ -167,21 +167,21 @@ namespace zero.Core.Api
     // <summary>
     /// Deletes a recycled entity by Id
     /// </summary>
-    Task<EntityResult<IRecycledEntity>> Delete(string id);
+    Task<EntityResult<RecycledEntity>> Delete(string id);
 
     /// <summary>
     /// Purges the recycle bin
     /// </summary>
-    Task<EntityResult<IRecycledEntity>> DeleteAll();
+    Task<EntityResult<RecycledEntity>> DeleteAll();
 
     /// <summary>
     /// Deletes all recycled items from a specific operation
     /// </summary>
-    Task<EntityResult<IRecycledEntity>> DeleteByOperation(string operationId);
+    Task<EntityResult<RecycledEntity>> DeleteByOperation(string operationId);
 
     /// <summary>
     /// Deletes all recycled items from a specific group
     /// </summary>
-    Task<EntityResult<IRecycledEntity>> DeleteByGroup(string group);
+    Task<EntityResult<RecycledEntity>> DeleteByGroup(string group);
   }
 }

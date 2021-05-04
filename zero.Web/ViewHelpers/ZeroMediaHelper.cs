@@ -18,7 +18,7 @@ namespace zero.Web.ViewHelpers
     /// <summary>
     /// Media cache for repetitive queries within an HTTP request
     /// </summary>
-    Dictionary<string, IMedia> Cache { get; set; } = new Dictionary<string, IMedia>();
+    Dictionary<string, Media> Cache { get; set; } = new Dictionary<string, Media>();
 
 
     public ZeroMediaHelper(IHttpContextAccessor httpContextAccessor, IMediaApi mediaApi)
@@ -29,14 +29,14 @@ namespace zero.Web.ViewHelpers
 
 
     /// <inheritdoc />
-    public async Task<IMedia> GetById(string id)
+    public async Task<Media> GetById(string id)
     {
       if (id.IsNullOrEmpty())
       {
         return null;
       }
 
-      if (!Cache.TryGetValue(id, out IMedia media))
+      if (!Cache.TryGetValue(id, out Media media))
       {
         media = await MediaApi.GetById(id);
         Cache.Add(id, media);
@@ -47,14 +47,14 @@ namespace zero.Web.ViewHelpers
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<string, IMedia>> GetByIds(string[] ids)
+    public async Task<Dictionary<string, Media>> GetByIds(string[] ids)
     {
       HashSet<string> remoteIds = new HashSet<string>();
-      Dictionary<string, IMedia> items = new Dictionary<string, IMedia>();
+      Dictionary<string, Media> items = new Dictionary<string, Media>();
 
       foreach (string id in ids)
       {
-        if (Cache.TryGetValue(id, out IMedia media))
+        if (Cache.TryGetValue(id, out Media media))
         {
           items.Add(id, media);
         }
@@ -66,7 +66,7 @@ namespace zero.Web.ViewHelpers
 
       if (remoteIds.Count > 0)
       {
-        Dictionary<string, IMedia> remoteItems = await MediaApi.GetById(remoteIds);
+        Dictionary<string, Media> remoteItems = await MediaApi.GetById(remoteIds);
 
         foreach (var item in remoteItems)
         {
@@ -82,7 +82,7 @@ namespace zero.Web.ViewHelpers
     /// <inheritdoc />
     public async Task<string> GetUrl(string id, bool isAbsolute = false)
     {
-      IMedia media = await GetById(id);
+      Media media = await GetById(id);
       return media?.Source.TrimStart("url://");
     }
 
@@ -90,7 +90,7 @@ namespace zero.Web.ViewHelpers
     /// <inheritdoc />
     public async Task<Dictionary<string, string>> GetUrls(string[] ids, bool isAbsolute = false)
     {
-      Dictionary<string, IMedia> medias = await GetByIds(ids);
+      Dictionary<string, Media> medias = await GetByIds(ids);
       return medias.ToDictionary(x => x.Key, x => x.Value?.Source.TrimStart("url://"));
     }
   }
@@ -101,12 +101,12 @@ namespace zero.Web.ViewHelpers
     /// <summary>
     /// Get media by Id
     /// </summary>
-    Task<IMedia> GetById(string id);
+    Task<Media> GetById(string id);
 
     /// <summary>
     /// Get media items by Ids
     /// </summary>
-    Task<Dictionary<string, IMedia>> GetByIds(string[] ids);
+    Task<Dictionary<string, Media>> GetByIds(string[] ids);
 
     /// <summary>
     /// Get source for a media item

@@ -2,27 +2,17 @@
 
 namespace zero.Core.Entities
 {
-  public class Preview : ZeroEntity, IPreview
-  {
-    /// <inheritdoc />
-    public string OriginalId { get; set; }
-
-    /// <inheritdoc />
-    public IZeroEntity Content { get; set; }
-  }
-
-
   [Collection("Previews")]
-  public interface IPreview : IZeroEntity, IZeroDbConventions
+  public class Preview : ZeroEntity
   {
     /// <summary>
     /// Id of the original entity
     /// </summary>
-    string OriginalId { get; set; }
+    public string OriginalId { get; set; }
 
     /// <summary>
     /// Contains the entity content
     /// </summary>
-    IZeroEntity Content { get; set; }
+    public ZeroEntity Content { get; set; }
   }
 }

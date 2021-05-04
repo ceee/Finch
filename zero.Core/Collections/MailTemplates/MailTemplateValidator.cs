@@ -3,7 +3,7 @@ using zero.Core.Validation;
 
 namespace zero.Core.Collections
 {
-  public class MailTemplateValidator : ZeroValidator<IMailTemplate>
+  public class MailTemplateValidator : ZeroValidator<MailTemplate>
   {
     public MailTemplateValidator()
     {

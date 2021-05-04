@@ -10,7 +10,7 @@ namespace zero.Core.Extensions
     /// <summary>
     /// 
     /// </summary>
-    public static ListResult<T> ToQueriedList<T>(this IEnumerable<T> items, ListQuery<T> query) where T : IZeroEntity
+    public static ListResult<T> ToQueriedList<T>(this IEnumerable<T> items, ListQuery<T> query) where T : ZeroEntity
     {
       //queryable = queryable.Statistics(out QueryStatistics stats);
 

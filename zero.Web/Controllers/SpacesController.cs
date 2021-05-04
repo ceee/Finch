@@ -35,7 +35,7 @@ namespace zero.Web.Controllers
     public List<Space> GetAll() => Api.GetAll().Where(space => CanReadSpace(space.Alias)).ToList();
 
 
-    public async Task<IActionResult> GetList([FromQuery] string alias, [FromQuery] ListBackofficeQuery<ISpaceContent> query = null)
+    public async Task<IActionResult> GetList([FromQuery] string alias, [FromQuery] ListBackofficeQuery<SpaceContent> query = null)
     {
       if (!CanReadSpace(alias))
       {
@@ -54,7 +54,7 @@ namespace zero.Web.Controllers
       }
 
       Space space = Api.GetByAlias(alias);
-      ISpaceContent model = null;
+      SpaceContent model = null;
 
       if (space == null)
       {
@@ -79,7 +79,7 @@ namespace zero.Web.Controllers
     /// <summary>
     /// Save content item
     /// </summary>
-    public async Task<IActionResult> Save([FromBody] ISpaceContent model)
+    public async Task<IActionResult> Save([FromBody] SpaceContent model)
     {
       if (!CanWriteSpace(model.SpaceAlias))
       {

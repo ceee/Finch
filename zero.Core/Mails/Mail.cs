@@ -19,7 +19,7 @@ namespace zero.Core.Mails
 
     public string Preheader { get; set; }
 
-    public IMailTemplate Template { get; set; }
+    public MailTemplate Template { get; set; }
 
     public MailPlaceholders Placeholders { get; set; } = new();
 

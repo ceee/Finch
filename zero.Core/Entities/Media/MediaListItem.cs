@@ -2,10 +2,8 @@
 
 namespace zero.Core.Entities
 {
-  public class MediaListItem : IZeroIdEntity, IZeroDbConventions
+  public class MediaListItem : ZeroIdEntity
   {
-    public string Id { get; set; }
-
     public string ParentId { get; set; }
 
     public string Name { get; set; }

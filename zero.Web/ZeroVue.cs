@@ -136,7 +136,7 @@ namespace zero.Web
           continue;
         }
 
-        bool isExternal = !(section is IZeroInternal);
+        bool isExternal = !(section is IInternalSection);
         string url = Safenames.Alias(section.Alias).EnsureStartsWith('/');
 
         if (section.Alias == Constants.Sections.Dashboard)
@@ -236,7 +236,7 @@ namespace zero.Web
             continue;
           }
 
-          bool isPlugin = !(area is IZeroInternal);
+          bool isPlugin = !(area is InternalSettingsArea);
 
           ZeroVueSettingsArea vueArea = new ZeroVueSettingsArea()
           {
@@ -270,7 +270,7 @@ namespace zero.Web
     /// </summary>
     async Task<List<ZeroVueApplication>> CreateApplications()
     {
-      IList<IApplication> applications = await ApplicationsApi.GetAll();
+      IList<Application> applications = await ApplicationsApi.GetAll();
 
       return applications.OrderBy(app => app.Sort).Select(app => new ZeroVueApplication()
       {
@@ -329,11 +329,11 @@ namespace zero.Web
     IList<ZeroVueIconSet> CreateIconSets()
     {
       List<ZeroVueIconSet> result = new();
-      IReadOnlyCollection<IIconSet> sets = Options.Icons.GetAllItems();
+      IReadOnlyCollection<IconSet> sets = Options.Icons.GetAllItems();
 
       StringBuilder svg = new();
 
-      foreach (IIconSet set in sets)
+      foreach (IconSet set in sets)
       {
         string path = Paths.Map(set.SpritePath.TrimStart('/'));
 

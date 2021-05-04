@@ -7,20 +7,20 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Collections
 {
-  public class CountriesCollection : CollectionBase<ICountry>, ICountriesCollection
+  public class CountriesCollection : CollectionBase<Country>, ICountriesCollection
   {
-    public CountriesCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<ICountry> validator) : base(context, interceptor, validator) { }
+    public CountriesCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<Country> validator) : base(context, interceptor, validator) { }
 
 
     /// <inheritdoc />
-    public override IAsyncEnumerable<ICountry> Stream()
+    public override IAsyncEnumerable<Country> Stream()
     {
       return base.Stream(q => q.OrderByDescending(x => x.IsPreferred).ThenBy(x => x.Name));
     }
   }
 
 
-  public interface ICountriesCollection : ICollectionBase<ICountry>
+  public interface ICountriesCollection : ICollectionBase<Country>
   {
 
   }

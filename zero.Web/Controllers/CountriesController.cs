@@ -7,7 +7,7 @@ using zero.Core.Identity;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Countries, PermissionsValue.Read)]
-  public class CountriesController : BackofficeCollectionController<ICountry, ICountriesCollection>
+  public class CountriesController : BackofficeCollectionController<Country, ICountriesCollection>
   {
     public CountriesController(ICountriesCollection collection) : base(collection)
     {

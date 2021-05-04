@@ -6,18 +6,18 @@ namespace zero.Core.Entities
   {
     public ZeroReference() { }
 
-    public ZeroReference(IZeroEntity entity)
+    public ZeroReference(ZeroEntity entity)
     {
       Id = entity.Id;
       Name = entity.Name;
     }
 
-    public static ZeroReference From(IZeroEntity entity)
+    public static ZeroReference From(ZeroEntity entity)
     {
       return entity == null ? null : new ZeroReference(entity);
     }
 
-    public static ZeroReference From<T>(T entity, Func<T, string> transform) where T : IZeroEntity
+    public static ZeroReference From<T>(T entity, Func<T, string> transform) where T : ZeroEntity
     {
       return entity == null ? null : new ZeroReference()
       {

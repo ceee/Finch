@@ -43,7 +43,7 @@ namespace zero.Core.Mails
     /// <inheritdoc />
     public virtual async Task<T> Create<T>(string mailTemplateKey, CancellationToken token = default) where T : Mail, new()
     {
-      IMailTemplate template = await GetMailTemplate(mailTemplateKey);
+      MailTemplate template = await GetMailTemplate(mailTemplateKey);
 
       if (template == null)
       {
@@ -58,7 +58,7 @@ namespace zero.Core.Mails
     /// <inheritdoc />
     public virtual async Task<Mail> Create(string mailTemplateKey, CancellationToken token = default)
     {
-      IMailTemplate template = await GetMailTemplate(mailTemplateKey);
+      MailTemplate template = await GetMailTemplate(mailTemplateKey);
 
       if (template == null)
       {
@@ -95,7 +95,7 @@ namespace zero.Core.Mails
 
 
     
-    protected virtual async Task<IMailTemplate> GetMailTemplate(string key)
+    protected virtual async Task<MailTemplate> GetMailTemplate(string key)
     {
       return await Collection.GetByKey(key);
     }
@@ -128,7 +128,7 @@ namespace zero.Core.Mails
     }
 
 
-    protected virtual T Merge<T>(T mail, IMailTemplate template) where T : Mail
+    protected virtual T Merge<T>(T mail, MailTemplate template) where T : Mail
     {
       mail.Template = template;
 

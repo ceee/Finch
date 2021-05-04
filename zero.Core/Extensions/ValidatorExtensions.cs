@@ -101,14 +101,14 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this value is unique within a collection
     /// </summary>
-    public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IBackofficeStore store) where T : IZeroEntity
+    public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IBackofficeStore store) where T : ZeroEntity
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
         using IAsyncDocumentSession session = store.Store.OpenAsyncSession();
 
         bool any = await session.Advanced.AsyncDocumentQuery<T>()
-          .WhereNotEquals(nameof(IZeroIdEntity.Id), entity.Id)
+          .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
           .WhereEquals(context.Rule.PropertyName.ToPascalCaseId(), value)
           .AnyAsync(cancellation);
 
@@ -120,14 +120,14 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this value is at least set once to the expected value within a collection
     /// </summary>
-    public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IBackofficeStore store, TProperty expectedValue) where T : IZeroEntity
+    public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IBackofficeStore store, TProperty expectedValue) where T : ZeroEntity
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
         using IAsyncDocumentSession session = store.Store.OpenAsyncSession();
 
         return await session.Advanced.AsyncDocumentQuery<T>()
-          .WhereNotEquals(nameof(IZeroIdEntity.Id), entity.Id)
+          .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
           .WhereEquals(context.Rule.PropertyName.ToPascalCaseId(), expectedValue)
           .AnyAsync(cancellation);
       }).WithMessage("@errors.forms.not_unique_alone");
@@ -137,7 +137,7 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
     /// </summary>
-    public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IBackofficeStore store) where T : IZeroEntity
+    public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IBackofficeStore store) where T : ZeroEntity
     {
       return ruleBuilder.Exists<T, T>(store);
     }
@@ -146,7 +146,7 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
     /// </summary>
-    public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IBackofficeStore store) where T : IZeroEntity where TReference : IZeroEntity
+    public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IBackofficeStore store) where T : ZeroEntity where TReference : ZeroEntity
     {
       return ruleBuilder.MustAsync(async (entity, id, context, cancellation) =>
       {

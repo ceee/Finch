@@ -21,25 +21,25 @@ namespace zero.Web.Controllers
     }
 
 
-    public EditModel<IIntegration> GetEmpty([FromQuery] string alias) => Edit(Collection.GetEmpty(alias));
+    public EditModel<Integration> GetEmpty([FromQuery] string alias) => Edit(Collection.GetEmpty(alias));
 
 
-    public async Task<EditModel<IIntegration>> GetByAlias([FromQuery] string alias) => Edit(await Collection.GetByAlias(alias));
+    public async Task<EditModel<Integration>> GetByAlias([FromQuery] string alias) => Edit(await Collection.GetByAlias(alias));
 
 
-    public async Task<ListResult<IIntegration>> GetByQuery([FromQuery] ListQuery<IIntegration> query) => await Collection.GetByQuery(query);
+    public async Task<ListResult<Integration>> GetByQuery([FromQuery] ListQuery<Integration> query) => await Collection.GetByQuery(query);
 
 
     public async Task<IList<IntegrationTypeWithStatus>> GetTypes() => await Collection.GetTypesWithStatus();
 
 
     [HttpPost]
-    public async Task<EntityResult<IIntegration>> Save([FromBody] IIntegration model) => await Collection.Save(model);
+    public async Task<EntityResult<Integration>> Save([FromBody] Integration model) => await Collection.Save(model);
 
     [HttpPost]
-    public async Task<EntityResult<IIntegration>> SaveActiveState([FromBody] Integration model) => model.IsActive ? await Collection.Activate(model.Alias) : await Collection.Deactivate(model.Alias);
+    public async Task<EntityResult<Integration>> SaveActiveState([FromBody] Integration model) => model.IsActive ? await Collection.Activate(model.Alias) : await Collection.Deactivate(model.Alias);
 
     [HttpDelete]
-    public async Task<EntityResult<IIntegration>> Delete([FromQuery] string alias) => await Collection.Delete(alias);
+    public async Task<EntityResult<Integration>> Delete([FromQuery] string alias) => await Collection.Delete(alias);
   }
 }

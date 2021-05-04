@@ -17,7 +17,7 @@ namespace zero.Core.Security
   // the authentication breaks when another application signs in a user
   // they share one cookie on both sites/applications, maybe this is an issue
 
-  public class SchemedSignInManager<TUser> : SignInManager<TUser> where TUser : class, IIdentityUser
+  public class SchemedSignInManager<TUser> : SignInManager<TUser> where TUser : ZeroIdentityUser
   {
     protected ZeroAuthOptions<TUser> AuthOptions { get; private set; }
 
