@@ -16,16 +16,16 @@ class EditorField
     class: ''
   };
 
-  #preview = {
+  _preview = {
     icon: 'fth-filter',
     preview: x => x,
     hasValue: x => !!x
   };
 
-  #component = null;
-  #componentOptions = {};
-  #required = false;
-  #isReadOnly = false;
+  _component = null;
+  _componentOptions = {};
+  _required = false;
+  _isReadOnly = false;
 
   constructor(path, options)
   {
@@ -36,22 +36,22 @@ class EditorField
 
   get component()
   {
-    return this.#component;
+    return this._component;
   }
 
   get componentOptions()
   {
-    return this.#componentOptions;
+    return this._componentOptions;
   }
 
   get isRequired()
   {
-    return this.#required;
+    return this._required;
   }
 
   get previewOptions()
   {
-    return this.#preview;
+    return this._preview;
   }
 
 
@@ -64,10 +64,10 @@ class EditorField
   {
     this.path = field.path;
     this.options = { ...field.options };
-    this.#preview = { ...field.previewOptions };
-    this.#component = field.component;
-    this.#componentOptions = field.componentOptions;
-    this.#required = field.isRequired;
+    this._preview = { ...field.previewOptions };
+    this._component = field.component;
+    this._componentOptions = field.componentOptions;
+    this._required = field.isRequired;
     return this;
   }
 
@@ -77,8 +77,8 @@ class EditorField
    */
   _setComponent(component, options?)
   {
-    this.#component = component;
-    this.#componentOptions = options || {};
+    this._component = component;
+    this._componentOptions = options || {};
     return this;
   }
 
@@ -101,15 +101,15 @@ class EditorField
   {
     if (typeof condition === 'function')
     {
-      this.#required = condition;
+      this._required = condition;
     }
     else if (typeof condition === 'boolean')
     {
-      this.#required = condition;
+      this._required = condition;
     }
     else
     {
-      this.#required = true;
+      this._required = true;
     }
     return this;
   }
@@ -243,7 +243,7 @@ class EditorField
    */
   output(render)
   {
-    this.#isReadOnly = true;
+    this._isReadOnly = true;
     return this._setComponent(() => import('../editor/fields/text.vue'), { render });
   }
 
@@ -522,7 +522,7 @@ class EditorField
    */
   preview(options)
   {
-    this.#preview = { ...this.preview, ...options };
+    this._preview = { ...this.preview, ...options };
     return this;
   }
 }

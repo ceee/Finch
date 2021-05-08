@@ -3,10 +3,10 @@ import EditorField from './editor-field.ts';
 
 class Editor
 {
-  #alias;
-  #prefix;
+  _alias;
+  _prefix;
 
-  #preview = {
+  _preview = {
     icon: null,
     template: null,
     hideLabel: false
@@ -15,11 +15,11 @@ class Editor
   /**
    * Overrides the string generation for the label
    */
-  templateLabel = field => this.#prefix + field;
+  templateLabel = field => this._prefix + field;
   /**
    * Overrides the string generation for the description
    */
-  templateDescription = field => this.#prefix + field + '_text';
+  templateDescription = field => this._prefix + field + '_text';
 
   tabs = [];
   fields = [];
@@ -33,19 +33,19 @@ class Editor
 
   constructor(alias, prefix)
   {
-    this.#alias = alias;
-    this.#prefix = prefix || '';
+    this._alias = alias;
+    this._prefix = prefix || '';
   }
 
 
   get alias()
   {
-    return this.#alias;
+    return this._alias;
   }
 
   get previewOptions()
   {
-    return this.#preview;
+    return this._preview;
   }
 
 
@@ -223,7 +223,7 @@ class Editor
   {
     this.fields = editor.fields.map(x => new EditorField(x.path).setBase(x));
     this.tabs = editor.tabs.map(x => this._createTab(x.alias, x.name, x.disabled, x.count, x.component));
-    this.#preview = { ...editor.previewOptions };
+    this._preview = { ...editor.previewOptions };
     return this;
   }
 
@@ -239,7 +239,7 @@ class Editor
    */
   preview(template, options)
   {
-    this.#preview = { ...this.#preview, template, ...options };
+    this._preview = { ...this._preview, template, ...options };
     return this;
   }
 

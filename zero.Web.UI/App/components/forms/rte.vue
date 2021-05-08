@@ -24,7 +24,7 @@
                 <ui-icon :symbol="cmd.symbol" :size="cmd.symbolSize" />
               </button>
             </template>
-            <ui-dropdown-button v-for="child in cmd.children" :label="child.title" @click="child.onClick($event, commands)" />
+            <ui-dropdown-button v-for="child in cmd.children" :key="child.id" :label="child.title" @click="child.onClick($event, commands)" />
           </ui-dropdown>
         </div>
       </div>

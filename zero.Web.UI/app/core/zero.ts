@@ -17,13 +17,13 @@ class Zero
 
   config = { };
 
-  #vue = null;
-  #plugins = [];
-  #editors = [];
-  #lists = [];
-  #routes = [];
-  #router = null;
-  #setupDone = false;
+  _vue = null;
+  _plugins = [];
+  _editors = [];
+  _lists = [];
+  _routes = [];
+  _router = null;
+  _setupDone = false;
 
 
   constructor(vue, opts)
@@ -38,7 +38,7 @@ class Zero
 
     console.info(this.config);
 
-    this.#vue = vue;
+    this._vue = vue;
 
     this.use(ZeroPlugin);
     //this.use(CommercePlugin);
@@ -59,7 +59,7 @@ class Zero
    */
   get plugins()
   {
-    return this.#plugins;
+    return this._plugins;
   }
 
 
@@ -68,7 +68,7 @@ class Zero
    */
   get router()
   {
-    return this.#router;
+    return this._router;
   }
 
 
@@ -94,17 +94,17 @@ class Zero
    */
   setup()
   {
-    this.#router = new VueRouter({
+    this._router = new VueRouter({
       ...routerConfig,
-      routes: this.#routes
+      routes: this._routes
     });
 
-    this.#router.beforeEach(routerConfig.beforeEach);
+    this._router.beforeEach(routerConfig.beforeEach);
 
     //const result = await Axios.get('zerovue/config');
     //this.config = { ...this.config, ...result.data };
 
-    this.#setupDone = true;
+    this._setupDone = true;
     //EventHub.$emit('zero.setup');
   }
 
@@ -130,26 +130,26 @@ class Zero
   {
     if (typeof plugin.install === 'function')
     {
-      plugin.install(this.#vue, this);
+      plugin.install(this._vue, this);
     }
 
-    this.#plugins.push(plugin);
+    this._plugins.push(plugin);
 
     // append routes
-    if (this.#setupDone)
+    if (this._setupDone)
     {
-      this.#router.addRoutes(plugin.routes);
+      this._router.addRoutes(plugin.routes);
     }
     else
     {
-      plugin.routes.forEach(x => this.#routes.push(x));
+      plugin.routes.forEach(x => this._routes.push(x));
     }
 
     // append editors
-    plugin.editors.forEach(x => this.addOrReplace(this.#editors, x, 'alias'));
+    plugin.editors.forEach(x => this.addOrReplace(this._editors, x, 'alias'));
 
     // append lists
-    plugin.lists.forEach(x => this.addOrReplace(this.#lists, x, 'alias'));
+    plugin.lists.forEach(x => this.addOrReplace(this._lists, x, 'alias'));
 
     // append 
 
@@ -162,7 +162,7 @@ class Zero
    */
   getEditor(alias)
   {
-    const renderer = this.#editors.find(x => x.alias === alias);
+    const renderer = this._editors.find(x => x.alias === alias);
 
     if (!renderer)
     {
@@ -178,7 +178,7 @@ class Zero
   */
   getList(alias)
   {
-    const renderer = this.#lists.find(x => x.alias === alias);
+    const renderer = this._lists.find(x => x.alias === alias);
 
     if (!renderer)
     {

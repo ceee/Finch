@@ -14,10 +14,10 @@ class ListColumn
     class: ''
   };
 
-  #type = null;
-  #func = () => { };
-  #funcOptions = {};
-  #asHtml = false;
+  _type = null;
+  _func = () => { };
+  _funcOptions = {};
+  _asHtml = false;
 
   constructor(path, options)
   {
@@ -28,12 +28,12 @@ class ListColumn
 
   get isHtml()
   {
-    return this.#asHtml;
+    return this._asHtml;
   }
 
   get type()
   {
-    return this.#type;
+    return this._type;
   }
 
 
@@ -45,7 +45,7 @@ class ListColumn
    */
   render(value, model)
   {
-    return this.#func(value, this.#funcOptions, model);
+    return this._func(value, this._funcOptions, model);
   }
 
 
@@ -58,9 +58,9 @@ class ListColumn
    */
   custom(renderFunc, asHtml, type)
   {
-    this.#type = type || 'custom';
-    this.#asHtml = asHtml || false;
-    this.#func = (value, opts, model) =>
+    this._type = type || 'custom';
+    this._asHtml = asHtml || false;
+    this._func = (value, opts, model) =>
     {
       return renderFunc(value, model, opts);
     };
@@ -78,9 +78,9 @@ class ListColumn
    */
   text(options)
   {
-    this.#type = 'text';
-    this.#funcOptions = { localize: false, tokens: {}, wrap: false, ...options };
-    this.#func = (value, opts) =>
+    this._type = 'text';
+    this._funcOptions = { localize: false, tokens: {}, wrap: false, ...options };
+    this._func = (value, opts) =>
     {
       let result = value;
       if (opts.localize)
@@ -103,8 +103,8 @@ class ListColumn
    */
   html(options)
   {
-    this.#type = 'html';
-    this.#asHtml = true;
+    this._type = 'html';
+    this._asHtml = true;
     return this.text(options);
   }
 
@@ -117,9 +117,9 @@ class ListColumn
    */
   date(options)
   {
-    this.#type = 'date';
-    this.#funcOptions = { format: 'short', ...options };
-    this.#func = (value, opts) => Strings.date(value, opts.format);
+    this._type = 'date';
+    this._funcOptions = { format: 'short', ...options };
+    this._func = (value, opts) => Strings.date(value, opts.format);
     return this;
   }
 
@@ -130,9 +130,9 @@ class ListColumn
    */
   currency()
   {
-    this.#type = 'currency';
-    this.#asHtml = true;
-    this.#func = (value, opts) =>
+    this._type = 'currency';
+    this._asHtml = true;
+    this._func = (value, opts) =>
     {
       let price = isNaN(value) ? 0 : value;
       let hasDecimals = ~~price !== price;
@@ -152,10 +152,10 @@ class ListColumn
    */
   boolean(options)
   {
-    this.#type = 'boolean';
-    this.#asHtml = true;
-    this.#funcOptions = { ...options };
-    this.#func = (value, opts) => `<svg class="ui-icon ui-table-field-bool" width="16" height="16" stroke-width="${!!value ? '2.5' : '2'}" data-symbol="${!!value ? 'fth-check' : 'fth-x'}">
+    this._type = 'boolean';
+    this._asHtml = true;
+    this._funcOptions = { ...options };
+    this._func = (value, opts) => `<svg class="ui-icon ui-table-field-bool" width="16" height="16" stroke-width="${!!value ? '2.5' : '2'}" data-symbol="${!!value ? 'fth-check' : 'fth-x'}">
       <use xlink:href="#${!!value ? 'fth-check' : 'fth-x'}" />
     </svg>`;
     return this;
@@ -168,9 +168,9 @@ class ListColumn
    */
   image()
   {
-    this.#type = 'image';
-    this.#asHtml = true;
-    this.#func = (value, opts) => value ? `<img src="${MediaApi.getImageSource(value)}" class="ui-table-field-image">` : '';
+    this._type = 'image';
+    this._asHtml = true;
+    this._func = (value, opts) => value ? `<img src="${MediaApi.getImageSource(value)}" class="ui-table-field-image">` : '';
     return this;
   }
 
@@ -184,9 +184,9 @@ class ListColumn
   icon(icon, size)
   {
     size = size || 17;
-    this.#type = 'icon';
-    this.#asHtml = true;
-    this.#func = (value, opts) =>
+    this._type = 'icon';
+    this._asHtml = true;
+    this._func = (value, opts) =>
     {
       let ico = (icon || value).trim();
       let html = `<svg class="ui-icon ui-table-field-image" width="${size}" height="${size}" stroke-width="2" :data-symbol="${ico}">`;
@@ -208,9 +208,9 @@ class ListColumn
   {
     this.options.label = '@ui.name';
     this.options.class = 'is-name';
-    this.#type = 'text';
-    this.#asHtml = true;
-    this.#func = (value, opts, model) =>
+    this._type = 'text';
+    this._asHtml = true;
+    this._func = (value, opts, model) =>
     {
       let html = '<b>' + value + '</b>';
 

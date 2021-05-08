@@ -14,13 +14,23 @@ loadedPlugins.forEach(pluginPath =>
 {
   const viteConfigPath = pluginPath + "/vite.plugin.js"; 
   const pluginConfig = require(viteConfigPath);
-  zeroPlugins.push(pluginConfig());
+  const resolvedPluginConfig = pluginConfig();
+  zeroPlugins.push(resolvedPluginConfig);
 
   const name = 'zeroPlugin' + idx;
-  const alias = '/@zeroplugin' + (idx++) + '/';
+  const alias = '@zeroplugin' + (idx++);
   pluginAliases[alias] = path.resolve(__dirname, pluginPath);
+
+  if (typeof resolvedPluginConfig.alias === 'object')
+  {
+    for (const key in resolvedPluginConfig.alias)
+    {
+      pluginAliases[key] = resolvedPluginConfig.alias[key];
+    }
+  }
+
   pluginNames.push(name);
-  pluginFileContent += "import " + name + " from '" + alias + "plugin.js';\n";
+  pluginFileContent += "import " + name + " from '" + alias + "/plugin.js';\n";
 });
 
 pluginFileContent += "export default [ " + pluginNames.join(', ') + " ];";
@@ -35,48 +45,29 @@ fs.writeFile(path.resolve(__dirname, 'app/core/plugins.js'), pluginFileContent, 
   //file written successfully
 })
 
-const aliasResolver = {
-  alias(id)
-  {
-    if (id.indexOf('zero/') === 0)
-    {
-      return '/@' + id;
-    }
-    if (id.indexOf('zerolib') === 0)
-    {
-      return '/@zero/zerox.js';
-    }
-  }
-  //requestToFile(publicPath, root)
-  //{
-  //  if (publicPath.indexOf('/@zero/') === 0)
-  //  {
-  //    return path.join(root, publicPath.replace('/@zero/', ''));
-  //  }
-  //  if (publicPath.indexOf('/@shop/') === 0)
-  //  {
-  //    return path.join(root, publicPath.replace('/@shop/', '../zero.Commerce/Plugins/zero.Commerce/'));
-  //  }
-  //}
-};
-
 const config = {
-  port: process.env.PORT,
-  cors: true,
-  emitManifest: true,
+  server: {
+    port: process.env.PORT,
+    cors: true
+  },
   plugins: [createVuePlugin(), ...zeroPlugins],
   alias: {
-    '/@zero/': path.resolve(__dirname, 'app/'),
+    '@zero': path.resolve(__dirname, 'app/'),
+    'zero': path.resolve(__dirname, 'app/'),
     ...pluginAliases,
-    'vue': 'vue/dist/vue.esm.js'
+    'vue': 'vue/dist/vue.esm.js',
+    'tiptap': 'tiptap/dist/tiptap.esm.js'
   },
-  resolvers: [aliasResolver],
-  rollupOutputOptions: {
-    format: 'cjs',
-    entryFileNames: `[name].js`,
-    chunkFileNames: `[name].js`,
-    assetFileNames: `[name].[ext]`
-  },
+  build: {
+    manifest: false,
+    rollupOptions: {
+      format: 'cjs',
+      entryFileNames: `[name].js`,
+      chunkFileNames: `[name].js`,
+      assetFileNames: `[name].[ext]`
+    },
+
+  }
 };
 
 export default config;

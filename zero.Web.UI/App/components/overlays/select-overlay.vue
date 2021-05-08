@@ -25,7 +25,6 @@
 
 
 <script>
-  import ChannelsApi from 'shop/api/channels.js';
   import Overlay from 'zero/helpers/overlay.js';
 
   const defaultConfig = {

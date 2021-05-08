@@ -4,9 +4,9 @@ import ListAction from './list-action.ts';
 
 class List
 {
-  #alias;
-  #fetch;
-  #filterOptions;
+  _alias;
+  _fetch;
+  _filterOptions;
 
   /**
    * Set the default query options which are passed to the fetch function.
@@ -110,18 +110,18 @@ class List
 
   constructor(alias)
   {
-    this.#alias = alias;
+    this._alias = alias;
   }
 
 
   get alias()
   {
-    return this.#alias;
+    return this._alias;
   }
 
   get filterOptions()
   {
-    return this.#filterOptions;
+    return this._filterOptions;
   }
 
 
@@ -193,7 +193,7 @@ class List
    */
   onFetch(callback)
   {
-    this.#fetch = callback;
+    this._fetch = callback;
   }
 
 
@@ -202,7 +202,7 @@ class List
    */
   fetch(filter)
   {
-    return this.#fetch(filter);
+    return this._fetch(filter);
   }
 
 
@@ -214,7 +214,7 @@ class List
    */
   useFilter(editor, template)
   {
-    this.#filterOptions = { editor, template };
+    this._filterOptions = { editor, template };
   }
 };
 

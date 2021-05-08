@@ -1,8 +1,8 @@
 ﻿
 class Plugin
 {
-  #name;
-  #onInstall;
+  _name;
+  _onInstall;
 
   routes = [];
   editors = [];
@@ -11,23 +11,23 @@ class Plugin
 
   constructor(name)
   {
-    this.#name = name;
+    this._name = name;
   }
 
 
   get name()
   {
-    return this.#name;
+    return this._name;
   }
 
   get install()
   {
-    return this.#onInstall;
+    return this._onInstall;
   }
 
   set install(callback)
   {
-    this.#onInstall = callback;
+    this._onInstall = callback;
   }
 
 
