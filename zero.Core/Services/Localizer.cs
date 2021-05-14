@@ -32,7 +32,7 @@ namespace zero.Core.Services
 
 
     /// <inheritdoc />
-    public string Text(string key, IDictionary<string, string> tokens)
+    public string Text(string key, Dictionary<string, string> tokens)
     {
       if (key.IsNullOrEmpty())
       {
@@ -79,7 +79,7 @@ namespace zero.Core.Services
 
 
     /// <inheritdoc />
-    public string Maybe(string key, IDictionary<string, string> tokens)
+    public string Maybe(string key, Dictionary<string, string> tokens)
     {
       return key.IsNullOrEmpty() || !key.StartsWith("@") ? key : Text(key.Substring(1), tokens);
     }
@@ -111,7 +111,7 @@ namespace zero.Core.Services
     /// <summary>
     /// 
     /// </summary>
-    string Text(string key, IDictionary<string, string> tokens);
+    string Text(string key, Dictionary<string, string> tokens);
 
     /// <summary>
     /// Get a text string from a [Localize] attribute
@@ -126,6 +126,6 @@ namespace zero.Core.Services
     /// <summary>
     /// Only tries to resolve the key when it is prefixed with an @
     /// </summary>
-    string Maybe(string key, IDictionary<string, string> tokens);
+    string Maybe(string key, Dictionary<string, string> tokens);
   }
 }

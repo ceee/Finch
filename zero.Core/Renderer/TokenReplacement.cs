@@ -15,7 +15,7 @@ namespace zero.Core.Renderer
     }
 
 
-    public static string Apply(string text, IDictionary<string, string> tokens)
+    public static string Apply(string text, Dictionary<string, string> tokens)
     {
       if (text.IsNullOrWhiteSpace())
       {

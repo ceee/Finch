@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="app-nav theme-light" :class="{'is-compact': compact }">
+  <div class="app-nav" :class="{'is-compact': compact }">
 
     <h1 class="app-nav-headline">
       <img src="/Assets/zero-2-light.png" class="show-light" v-localize:alt="'@zero.name'" />

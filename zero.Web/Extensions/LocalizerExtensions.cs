@@ -16,7 +16,7 @@ namespace zero.Web.Extensions
     }
 
 
-    public static IHtmlContent Html(this ILocalizer localizer, string key, IDictionary<string, string> tokens)
+    public static IHtmlContent Html(this ILocalizer localizer, string key, Dictionary<string, string> tokens)
     {
       string value = localizer.Text(key, tokens);
 
