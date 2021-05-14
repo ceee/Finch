@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace zero.Core.Entities
 {
   [DebuggerDisplay("Id = {Id,nq}, Name = {Name}, Alias = {Alias}")]
-  public abstract class ZeroEntity : ZeroIdEntity, IZeroDbConventions
+  public class ZeroEntity : ZeroIdEntity, IZeroDbConventions
   {
     /// <summary>
     /// Full name of the entity
@@ -76,7 +76,7 @@ namespace zero.Core.Entities
   }
 
 
-  public abstract class ZeroIdEntity
+  public class ZeroIdEntity
   {
     /// <summary>
     /// Id of the entity
