@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Web", "zero.Web\zero.W
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "zero.Web.UI", "zero.Web.UI\", "{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_56763"
 		Debug.AspNetCompiler.PhysicalPath = "zero.Web.UI\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_56763\"
