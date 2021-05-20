@@ -4,7 +4,7 @@ using System;
 
 namespace zero.Core.Database
 {
-  public class ZeroDocumentSession : AsyncDocumentSession, IZeroDocumentSession, IZeroCoreDocumentSession
+  public class ZeroDocumentSession : AsyncDocumentSession, IZeroDocumentSession
   {
     public ZeroDocumentSession(DocumentStore documentStore, Guid id, SessionOptions options) : base(documentStore, id, options)
     {
@@ -12,13 +12,8 @@ namespace zero.Core.Database
     }
   }
 
+
   public interface IZeroDocumentSession : IAsyncDocumentSession
-  {
-
-  }
-
-
-  public interface IZeroCoreDocumentSession : IAsyncDocumentSession
   {
 
   }

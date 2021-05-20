@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Raven.Client.Documents.Session;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Cultures;
@@ -41,16 +42,19 @@ namespace zero.Core
 
     protected IApplicationResolver AppResolver { get; private set; }
 
+    protected ICultureResolver CultureResolver { get; private set; }
+
     protected ILogger<ZeroContext> Logger { get; private set; }
 
 
     private bool _resolved = false;
 
 
-    public ZeroContext(IZeroOptions options, IApplicationResolver appResolver, ILogger<ZeroContext> logger, IZeroStore store)
+    public ZeroContext(IZeroOptions options, IApplicationResolver appResolver, ICultureResolver cultureResolver, ILogger<ZeroContext> logger, IZeroStore store)
     {
       Options = options;
       AppResolver = appResolver;
+      CultureResolver = cultureResolver;
       Logger = logger;
       Store = store;
     }
@@ -96,7 +100,7 @@ namespace zero.Core
       Store.ResolvedDatabase = Application.Database;
 
       // set current culture
-      //await CultureResolver.Resolve(this);      
+      await CultureResolver.Resolve(this);      
 
       // resolve request route
       if (IsBackofficeRequest is false && context.Request.RouteValues.TryGetValue("zero.route", out object route))

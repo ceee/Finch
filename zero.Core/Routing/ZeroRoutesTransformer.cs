@@ -9,19 +9,15 @@ namespace zero.Core.Routing
   public class ZeroRoutesTransformer : DynamicRouteValueTransformer
 	{
     IRoutes Routes;
-		IZeroContext Context;
 
-		public ZeroRoutesTransformer(IRoutes routes, IZeroContext context)
+		public ZeroRoutesTransformer(IRoutes routes)
     {
 			Routes = routes;
-			Context = context;
     }
 
 
 		public override async ValueTask<RouteValueDictionary> TransformAsync(HttpContext httpContext, RouteValueDictionary values)
 		{
-			Console.WriteLine("ZeroRoutesTransformer");
-			await Context.Resolve(httpContext);
 			IResolvedRoute route = await Routes.ResolveUrl(httpContext);
 
 			if (route == null)

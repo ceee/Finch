@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
 using System.Threading.Tasks;
 using zero.Core;
 
@@ -16,7 +15,6 @@ namespace zero.Web.Middlewares
 
     public async Task Invoke(HttpContext httpContext, IZeroContext zeroContext)
     {
-      Console.WriteLine("ZeroContextMiddleware");
       await zeroContext.Resolve(httpContext);
       await Next(httpContext);
     }
