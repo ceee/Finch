@@ -24,6 +24,9 @@ namespace zero.Core.Database
     /// <inheritdoc />
     public string ResolvedDatabase { get; set; }
 
+    /// <inheritdoc />
+    public string CoreDatabase => Options.Raven.Database;
+
 
     /// <inheritdoc />
     public IDocumentStore Raven => this;
@@ -138,6 +141,11 @@ namespace zero.Core.Database
     /// The database which has been resolved from the current application
     /// </summary>
     string ResolvedDatabase { get; set; }
+
+    /// <summary>
+    /// The core database which hosts applications, users and shared resources
+    /// </summary>
+    string CoreDatabase { get; }
 
     /// <summary>
     /// Get underlying raven document store

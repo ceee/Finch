@@ -175,9 +175,16 @@ namespace zero.Web
       });
 
 
-      Services.AddScoped<IZeroDocumentSession>(services =>
+      Services.AddScoped<IZeroDocumentSession, ZeroDocumentSession>(services =>
       {
         var session = services.GetRequiredService<IZeroStore>()!.OpenAsyncSession();
+        session.Advanced.WaitForIndexesAfterSaveChanges();
+        return session as ZeroDocumentSession;
+      });
+
+      Services.AddScoped<IZeroCoreDocumentSession, ZeroDocumentSession>(services =>
+      {
+        var session = services.GetRequiredService<IZeroStore>()!.OpenCoreSession();
         session.Advanced.WaitForIndexesAfterSaveChanges();
         return session as ZeroDocumentSession;
       });

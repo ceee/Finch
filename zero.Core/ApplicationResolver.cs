@@ -1,26 +1,25 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using zero.Core.Caches.Internal;
 using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Handlers;
-using zero.Core.Identity;
 using zero.Core.Options;
 
 namespace zero.Core
 {
   public class ApplicationResolver : IApplicationResolver
   {
-    protected IZeroStore Store { get; private set; }
+    ApplicationCache _applicationCache;
+    BackofficeUserCache _backofficeUserCache;
 
     protected IZeroOptions Options { get; private set; }
 
@@ -28,13 +27,12 @@ namespace zero.Core
 
     protected IHandlerHolder Handler { get; private set; }
 
-    private IList<Application> Apps { get; set; }
-
 
 
     public ApplicationResolver(IZeroStore store, IZeroOptions options, ILogger<ApplicationResolver> logger, IHandlerHolder handler = null)
     {
-      Store = store;
+      _applicationCache = new ApplicationCache(store);
+      _backofficeUserCache = new BackofficeUserCache(store);
       Options = options;
       Logger = logger;
       Handler = handler;
@@ -64,8 +62,7 @@ namespace zero.Core
       if (app == null)
       {
         //Logger.LogWarning("Could not resolve application for host {host}", context.Request.Host);
-        IList<Application> apps = await GetApplications();
-        app = apps.FirstOrDefault();
+        app = _applicationCache.All.FirstOrDefault();
       }
 
       return app;
@@ -75,13 +72,20 @@ namespace zero.Core
     /// <inheritdoc />
     public async Task<Application> ResolveFromUser(ClaimsPrincipal user)
     {
-      BackofficeUser userEntity = await GetBackofficeUser(user);
-      return await ResolveFromUser(userEntity);
+      BackofficeUserCache.Result userEntity = GetBackofficeUser(user);
+      return userEntity != null ? await ResolveFromUser(new BackofficeUser()
+      {
+        Id = userEntity.Id,
+        AppId = userEntity.AppId,
+        CurrentAppId = userEntity.CurrentAppId,
+        Claims = userEntity.Claims,
+        IsSuper = userEntity.IsSuper
+      }) : null;
     }
 
 
     /// <inheritdoc />
-    public async Task<Application> ResolveFromUser(BackofficeUser user)
+    public Task<Application> ResolveFromUser(BackofficeUser user)
     {
       if (user == null)
       {
@@ -112,36 +116,35 @@ namespace zero.Core
         throw new Exception($"User entity ${user.Id} needs a valid AppId");
       }
 
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
-      return await session.LoadAsync<Application>(appId);
+      return Task.FromResult(_applicationCache.ById(appId));
     }
 
 
     /// <inheritdoc />
     public async Task<Application> ResolveFromRequest(HttpContext context)
     {
-      return Handler.Get<IApplicationResolverHandler>()?.Resolve(context.Request, await GetApplications()) ?? await ResolveFromUri(context.Request.GetEncodedUrl());
+      return Handler.Get<IApplicationResolverHandler>()?.Resolve(context.Request, _applicationCache.All) ?? await ResolveFromUri(context.Request.GetEncodedUrl());
     }
 
 
     /// <inheritdoc />
-    public async Task<Application> ResolveFromUri(string uriString)
+    public Task<Application> ResolveFromUri(string uriString)
     {
-      return ResolveFromUriInternal(new Uri(uriString, UriKind.Absolute), await GetApplications());
+      return Task.FromResult(ResolveFromUriInternal(new Uri(uriString, UriKind.Absolute), _applicationCache.All));
     }
 
 
     /// <inheritdoc />
-    public async Task<Application> ResolveFromUri(Uri uri)
+    public Task<Application> ResolveFromUri(Uri uri)
     {
-      return ResolveFromUriInternal(uri, await GetApplications());
+      return Task.FromResult(ResolveFromUriInternal(uri, _applicationCache.All));
     }
 
 
     /// <summary>
     /// Get matching application from an URI
     /// </summary>
-    Application ResolveFromUriInternal(Uri uri, IList<Application> apps)
+    Application ResolveFromUriInternal(Uri uri, IEnumerable<Application> apps)
     {
       foreach (Application app in apps)
       {
@@ -166,30 +169,12 @@ namespace zero.Core
 
 
     /// <summary>
-    /// Get all applications to choose from
-    /// </summary>
-    async Task<IList<Application>> GetApplications()
-    {
-      if (Apps != null)
-      {
-        return Apps;
-      }
-
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
-      Apps = await session.Query<Application>().ToListAsync();
-      return Apps;
-    }
-
-
-    /// <summary>
     /// Get backoffice user from claims principal
     /// </summary>
-    async Task<BackofficeUser> GetBackofficeUser(ClaimsPrincipal user)
+    BackofficeUserCache.Result GetBackofficeUser(ClaimsPrincipal user)
     {
       string userId = user.FindFirstValue(Constants.Auth.Claims.UserId);
-
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
-      return await session.LoadAsync<BackofficeUser>(userId);
+      return _backofficeUserCache.ById(userId);
     }
   }
 
