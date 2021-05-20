@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Database;
+using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Options;
@@ -138,7 +139,7 @@ namespace zero.Core.Routing
         min -= 1;
       }
 
-      IList<Route> routes = await session.Query<Route>()
+      IList<Route> routes = await session.Query<Route, Routes_ForResolver>()
         .Where(x => (!x.AllowSuffix && x.Url == path) || (x.AllowSuffix && x.Url.In(parts)))
         .Include("References[].Id")
         .Include("Dependencies")
