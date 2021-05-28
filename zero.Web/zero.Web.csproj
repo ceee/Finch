@@ -22,12 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Resources/**/*" />
-    <None Include="Resources/**/*">
-      <Pack>true</Pack>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-      <PackagePath>content\zero\Resources\</PackagePath>
-    </None>
 
     <!--<BackofficeUI Include="..\zero.Web.UI\**\*" Exclude="..\zero.Web.UI\node_modules\**\*;..\zero.Web.UI\Assets\*.js;..\zero.Web.UI\Output\*.js;..\zero.Web.UI\package-lock.json" />
     <None Include="@(BackofficeUI)" Link="Zero\%(RecursiveDir)%(Filename)%(Extension)">
