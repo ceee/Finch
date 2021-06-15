@@ -216,7 +216,7 @@ namespace zero.Core.Collections
 
         model.CreatedDate = DateTimeOffset.Now;
         model.CreatedById = userId;
-        model.LanguageId = "languages.1-A"; // TODO correct language id
+        model.LanguageId ??= "languages.1-A"; // TODO correct language id
       }
 
       // update name alias and last modified
