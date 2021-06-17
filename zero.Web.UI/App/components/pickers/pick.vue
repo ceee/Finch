@@ -38,14 +38,14 @@
       <!-- search -->
       <ui-search v-if="configuration.search.enabled" ref="search" class="ui-pick-overlay-search" :value="searchValue" @input="onSearch" @submit="onSearchSubmit">
         <template v-slot:button="search" v-if="configuration.autocomplete">
-          <button type="button" class="ui-searchinput-button" v-localize:title="'@ui.search.button'" @click="search.onSubmit"><i class="fth-check"></i></button>
+          <button type="button" class="ui-searchinput-button" v-localize:title="'@ui.search.button'" @click="search.onSubmit"><ui-icon symbol="fth-check"></ui-icon></button>
         </template>
       </ui-search>
 
       <!-- items -->
       <div class="ui-pick-overlay-items">
         <button v-for="item in items" :key="item[configuration.keys.id]" type="button" class="ui-pick-overlay-item" @click="select(item)" :class="{'is-selected': isSelected(item) }">
-          <i v-if="item[configuration.keys.icon]" class="-icon" :class="item[configuration.keys.icon]" />
+          <ui-icon v-if="item[configuration.keys.icon]" class="-icon" :symbol="item[configuration.keys.icon]" />
           <div class="ui-pick-overlay-item-title">
             <span class="-name" v-localize="item[configuration.keys.name]"></span>
             <span v-if="item[configuration.keys.description] && configuration.list.description" class="-text" v-localize="item[configuration.keys.description]"></span>
@@ -56,7 +56,7 @@
       <!-- loading + empty states -->
       <div class="ui-pick-overlay-center" v-if="isLoading || (!configuration.autocomplete && !items.length)">
         <div v-if="!isLoading && !configuration.autocomplete && !items.length" class="ui-pick-overlay-message">
-          <i class="ui-pick-overlay-message-icon fth-list"></i>
+          <ui-icon class="ui-pick-overlay-message-icon" symbol="fth-list" :size="18" />
           No items found
         </div>
         <ui-loading v-if="isLoading" />
