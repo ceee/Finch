@@ -41,6 +41,7 @@
   import { debounce as _debounce } from 'underscore';
   import { Editor, EditorContent, EditorMenuBubble } from 'tiptap';
   import EditorMenuBar from './rte.menubar.js';
+  import { MaxSize } from 'zero/config/rte.extensions.js';
   import { Placeholder } from 'tiptap-extensions';
   import createConfig from 'zero/config/rte.config.js';
 
@@ -57,6 +58,10 @@
       disabled: {
         type: Boolean,
         default: false
+      },
+      maxLength: {
+        type: Number,
+        default: null
       },
       placeholder: {
         type: String,
@@ -137,6 +142,11 @@
           showOnlyWhenEditable: true,
           showOnlyCurrent: true
         }));
+      }
+
+      if (this.maxLength > 0)
+      {
+        this.extensions.push(new MaxSize({ maxSize: this.maxLength }));
       }
 
       this.editor = new Editor({

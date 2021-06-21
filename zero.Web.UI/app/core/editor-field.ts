@@ -187,11 +187,15 @@ class EditorField
 
   /**
    * Render a rich-text editor field
+   * @param {object} [options] - Custom options
+   * @param {number} [options.maxLength=null] - Maximum characters
+   * @param {string} [options.placeholder=null] - Placeholder text (can be a translation) or function
+   * @param {function} [options.setup=value] - Called on RTE setup
    * @returns {EditorField}
    */
-  rte()
+  rte(options)
   {
-    return this._setComponent(() => import('../editor/fields/rte.vue'));
+    return this._setComponent(() => import('../editor/fields/rte.vue'), { ...options });
   }
 
 
