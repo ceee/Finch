@@ -3,6 +3,7 @@ using Raven.Client.Documents.Subscriptions;
 using Raven.Client.Json.Serialization;
 using Raven.Client.Json.Serialization.NewtonsoftJson;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -26,7 +27,7 @@ namespace zero.Core.Database
 
     protected IZeroOptions Options { get; private set; }
 
-    protected static Dictionary<Type, string> CachedTypeCollectionNameMap = new();
+    protected static ConcurrentDictionary<Type, string> CachedTypeCollectionNameMap = new();
 
 
     public ZeroDocumentConventionsBuilder(IZeroOptions options)
@@ -75,7 +76,7 @@ namespace zero.Core.Database
 
       Func<string, string> cache = name =>
       {
-        CachedTypeCollectionNameMap.Add(type, name);
+        CachedTypeCollectionNameMap.TryAdd(type, name);
         return name;
       };
 
