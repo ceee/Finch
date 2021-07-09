@@ -37,7 +37,7 @@
       },
       href()
       {
-        return (this.file || '') + '#' + this.symbol;
+        return (this.file || '') + '#' + this.symbol.trim();
       }
     }
   }
