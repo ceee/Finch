@@ -106,7 +106,14 @@ namespace zero.Core.Routing
         return new();
       }
 
-      Type type = models.First().GetType();
+      T firstExistingModel = models.FirstOrDefault(x => x != null);
+
+      if (firstExistingModel == null)
+      {
+        return new();
+      }
+
+      Type type = firstExistingModel.GetType();
       IRouteProvider routeProvider = Providers.FirstOrDefault(x => x.AffectedTypes.Any(t => t.IsAssignableFrom(type)));
 
       if (routeProvider == null)

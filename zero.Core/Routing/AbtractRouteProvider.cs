@@ -62,6 +62,10 @@ namespace zero.Core.Routing
 
       foreach (T model in models)
       {
+        if (model == null)
+        {
+          continue;
+        }
         string routeId = GetRouteId(model, parameters);
         routeIds.Add(routeId);
         routeMap.TryAdd(routeId, model);

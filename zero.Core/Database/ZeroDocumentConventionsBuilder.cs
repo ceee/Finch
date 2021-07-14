@@ -39,7 +39,7 @@ namespace zero.Core.Database
     /// <inheritdoc />
     public void Run(DocumentConventions conventions)
     {
-      conventions.MaxNumberOfRequestsPerSession = 100;
+      conventions.MaxNumberOfRequestsPerSession = 1000;
       conventions.IdentityPartsSeparator = IdentityPartsSeparator;
       conventions.TransformTypeCollectionNameToDocumentIdPrefix = TransformTypeCollectionNameToDocumentIdPrefix;
       conventions.FindCollectionName = FindCollectionName;
