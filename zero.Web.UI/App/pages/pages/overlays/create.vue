@@ -10,7 +10,7 @@
           <ui-icon class="page-create-item-icon" :symbol="item.icon" :size="22" />
           <span class="page-create-item-text">
             <ui-localize :value="item.name" />
-            <span v-if="item.description" v-localize="item.description"></span>
+            <span class="page-create-item-description" v-if="item.description" v-localize="item.description"></span>
           </span>
         </button>     
       </div>
@@ -141,12 +141,12 @@
   {
     display: flex;
     flex-direction: column;
+  }
 
-    span
-    {
-      color: var(--color-text-dim);
-      margin-top: 3px;
-    }
+  .page-create-item-description
+  {
+    color: var(--color-text-dim);
+    margin-top: 3px;
   }
 
   .page-create-item-icon
