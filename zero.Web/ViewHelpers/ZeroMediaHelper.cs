@@ -6,6 +6,7 @@ using zero.Core.Api;
 using zero.Core.Entities;
 using zero.Core.Routing;
 using zero.Core.Extensions;
+using System.Collections.Concurrent;
 
 namespace zero.Web.ViewHelpers
 {
@@ -18,7 +19,7 @@ namespace zero.Web.ViewHelpers
     /// <summary>
     /// Media cache for repetitive queries within an HTTP request
     /// </summary>
-    Dictionary<string, Media> Cache { get; set; } = new Dictionary<string, Media>();
+    ConcurrentDictionary<string, Media> Cache { get; set; } = new();
 
 
     public ZeroMediaHelper(IHttpContextAccessor httpContextAccessor, IMediaApi mediaApi)
@@ -39,7 +40,7 @@ namespace zero.Web.ViewHelpers
       if (!Cache.TryGetValue(id, out Media media))
       {
         media = await MediaApi.GetById(id);
-        Cache.Add(id, media);
+        Cache.TryAdd(id, media);
       }
 
       return media;
@@ -56,7 +57,7 @@ namespace zero.Web.ViewHelpers
       {
         if (Cache.TryGetValue(id, out Media media))
         {
-          items.Add(id, media);
+          items.TryAdd(id, media);
         }
         else
         {
@@ -70,8 +71,8 @@ namespace zero.Web.ViewHelpers
 
         foreach (var item in remoteItems)
         {
-          items.Add(item.Key, item.Value);
-          Cache.Add(item.Key, item.Value);
+          items.TryAdd(item.Key, item.Value);
+          Cache.TryAdd(item.Key, item.Value);
         }
       }
 
