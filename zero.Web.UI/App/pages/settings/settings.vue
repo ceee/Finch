@@ -65,9 +65,9 @@
     padding: 40px 80px;
     width: 100%;
     max-width: 2000px;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 80px 40px;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   }
 
   .settings-group-items
