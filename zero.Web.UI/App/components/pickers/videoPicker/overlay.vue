@@ -1,7 +1,7 @@
 ﻿<template>
   <ui-overlay-editor class="ui-videpicker-overlay">
     <template v-slot:header>
-      <ui-header-bar :title="config.title" :back-button="false" :close-button="true" />
+      <ui-header-bar title="@videopicker.headline" :back-button="false" :close-button="true" />
     </template>
     <template v-slot:footer>
       <ui-button type="light onbg" :label="config.closeLabel" :parent="config.rootId" @click="config.hide" />

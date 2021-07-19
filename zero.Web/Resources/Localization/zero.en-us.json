@@ -557,6 +557,7 @@
   },
 
   "videopicker": {
+    "headline": "Pick a video",
     "providers": {
       "html": "Media upload",
       "youtube": "YouTube",

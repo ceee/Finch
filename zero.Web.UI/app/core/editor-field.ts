@@ -516,6 +516,17 @@ class EditorField
 
 
   /**
+   * Render a video (YouTube/vimeo) picker
+   * @param {number} [limit=1] - Limit the videos
+   * @returns {EditorField}
+   */
+  video(limit)
+  {
+    return this._setComponent(() => import('../editor/fields/video.vue'), { limit });
+  }
+
+
+  /**
    * Create a preview for this field
    * This is only used in list filters, ...
    * @param {object} options - Custom options

@@ -29,26 +29,6 @@
         type: Number,
         default: 1
       },
-      title: {
-        type: Boolean,
-        default: true
-      },
-      label: {
-        type: Boolean,
-        default: false
-      },
-      target: {
-        type: Boolean,
-        default: true
-      },
-      suffix: {
-        type: Boolean,
-        default: false
-      },
-      areas: {
-        type: Array,
-        default: () => []
-      },
       disabled: {
         type: Boolean,
         default: false
@@ -144,12 +124,7 @@
           display: 'editor',
           model: this.multiple ? id : this.value,
           options: {
-            limit: this.limit,
-            label: this.label,
-            title: this.title,
-            target: this.target,
-            suffix: this.suffix,
-            areas: this.areas
+            limit: this.limit
           }
         }, typeof this.options === 'object' ? this.options : {});
 
