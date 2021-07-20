@@ -12,8 +12,12 @@ namespace zero.Core.Options
       DefaultEndpoint = new("ZeroFrontend", "Index");
       EndpointResolvers = new();
       PageResolvers = new();
-      ErrorReexecutionPath = "/error";
+      //ErrorReexecutionPath = "/error";
+      NotFoundEndpoint = null;
     }
+
+
+    public RouteProviderEndpoint NotFoundEndpoint { get; set; }
 
 
     public RouteProviderEndpoint DefaultEndpoint { get; set; }

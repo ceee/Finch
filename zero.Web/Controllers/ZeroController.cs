@@ -17,12 +17,12 @@ namespace zero.Web.Controllers
 
   public abstract class ZeroController<T> : Controller where T : IResolvedRoute
   {
-    protected Application Application { get; set; }
+    public Application Application { get; set; }
 
-    protected virtual T Route { get; set; }
+    public virtual T Route { get; set; }
 
     IZeroContext _context;
-    protected IZeroContext Context => _context ?? (_context = HttpContext?.RequestServices?.GetService<IZeroContext>());
+    public IZeroContext Context => _context ?? (_context = HttpContext?.RequestServices?.GetService<IZeroContext>());
 
 
     public override void OnActionExecuting(ActionExecutingContext filterContext)

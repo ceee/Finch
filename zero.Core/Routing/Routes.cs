@@ -208,6 +208,22 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
+    public NotFoundRoute NotFound(HttpContext context)
+    {
+      if (!Options.SetupCompleted || context.IsBackofficeRequest(Options.BackofficePath) || Options.Routing.NotFoundEndpoint == null)
+      {
+        return null;
+      }
+
+      return new NotFoundRoute(context)
+      {
+        Controller = Options.Routing.NotFoundEndpoint.Controller,
+        Action = Options.Routing.NotFoundEndpoint.Action
+      };
+    }
+
+
+    /// <inheritdoc />
     public async Task RebuildAllRoutes()
     {
       int count = 0;
@@ -326,6 +342,11 @@ namespace zero.Core.Routing
     /// Resolve a route object by passing it to the specified provider
     /// </summary>
     Task<IResolvedRoute> ResolveRoute(Route route);
+
+    /// <summary>
+    /// Returns the endpoint which maps 404 requests
+    /// </summary>
+    NotFoundRoute NotFound(HttpContext context);
 
     /// <summary>
     /// Purges all routes and rebuilds them by iterating over all registered providers
