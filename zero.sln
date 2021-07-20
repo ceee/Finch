@@ -41,6 +41,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Stories", "zero.Storie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Forms", "zero.Forms\zero.Forms.csproj", "{A8E5F34F-5400-4F92-96C6-7F91645BC220}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{6FAA92A8-CA1A-48EA-9857-C9092971B4D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{63A8AD15-15F0-4555-BD62-C38B4465FFC1} = {6FAA92A8-CA1A-48EA-9857-C9092971B4D1}
+		{C23CF90A-DB90-427F-816C-0E2FE20E29D0} = {6FAA92A8-CA1A-48EA-9857-C9092971B4D1}
+		{A8E5F34F-5400-4F92-96C6-7F91645BC220} = {6FAA92A8-CA1A-48EA-9857-C9092971B4D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD3F31B9-8BBB-4334-9571-F556B9E632C9}
