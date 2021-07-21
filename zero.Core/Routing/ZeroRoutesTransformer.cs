@@ -21,14 +21,14 @@ namespace zero.Core.Routing
 
 			if (route == null)
       {
-				return HandleFail(httpContext, values);
+				return null;
       }
 
 			RouteProviderEndpoint endpoint = Routes.MapEndpoint(route);
 
 			if (endpoint == null)
       {
-				return HandleFail(httpContext, values);
+				return null;
       }
 
 			values["zero.route"] = route;

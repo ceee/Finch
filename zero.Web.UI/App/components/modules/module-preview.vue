@@ -242,10 +242,17 @@
     grid-column: 2;
     align-self: center;
     margin: -10px 0;
+    opacity: 0;
+    transition: opacity .2s ease;
 
     > * + *
     {
       margin-left: 10px;
+    }
+
+    .ui-module-item:hover &
+    {
+      opacity: 1;
     }
   }
 
