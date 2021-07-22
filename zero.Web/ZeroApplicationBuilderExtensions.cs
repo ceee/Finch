@@ -68,16 +68,24 @@ namespace zero.Web
     public static IApplicationBuilder UseZeroRoutes(this IApplicationBuilder app)
     {
       IZeroOptions options = app.ApplicationServices.GetService<IZeroOptions>();
+      string path = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
 
-      return app.UseEndpoints(endpoints =>
+      // map backoffice
+      app.UseWhen(ctx => !ctx.Request.Path.ToString().StartsWith(path), builder =>
       {
-        endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}", state: null, order: 10);
-
-        if (options.Routing.NotFoundEndpoint != null)
+        builder.UseRouting();
+        builder.UseEndpoints(endpoints =>
         {
-          endpoints.MapFallbackToController(options.Routing.NotFoundEndpoint.Action, options.Routing.NotFoundEndpoint.Controller);
-        }
+          endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}", state: null, order: 10);
+
+          if (options.Routing.NotFoundEndpoint != null)
+          {
+            endpoints.MapFallbackToController(options.Routing.NotFoundEndpoint.Action, options.Routing.NotFoundEndpoint.Controller);
+          }
+        });
       });
+
+      return app;
 
       //return app.Use(async (ctx, next) =>
       //{
