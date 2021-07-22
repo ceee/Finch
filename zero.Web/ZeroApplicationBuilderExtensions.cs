@@ -74,6 +74,8 @@ namespace zero.Web
       app.UseWhen(ctx => !ctx.Request.Path.ToString().StartsWith(path), builder =>
       {
         builder.UseRouting();
+        builder.UseAuthentication();
+        builder.UseAuthorization();
         builder.UseEndpoints(endpoints =>
         {
           endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}", state: null, order: 10);

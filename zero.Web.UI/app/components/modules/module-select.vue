@@ -4,10 +4,12 @@
     <div v-if="!loading">
       <div class="ui-modules-select-items">
         <button type="button" v-for="item in types" class="ui-modules-select-item" @click="onSelect(item)">
-          <ui-icon class="ui-modules-select-item-icon" :symbol="item.icon" :size="22" />
+          <div class="ui-modules-select-item-top">
+            <ui-icon class="ui-modules-select-item-icon" :symbol="item.icon" :size="22" />
+          </div>
           <span class="ui-modules-select-item-text">
-            <ui-localize :value="item.name" />
-            <span v-if="item.description" v-localize="item.description"></span>
+            <ui-localize :value="item.name" class="-headline" />
+            <span v-if="item.description" class="-desc" v-localize="item.description"></span>
           </span>
         </button>     
       </div>
@@ -65,6 +67,14 @@
 </script>
 
 <style lang="scss">
+  .app-overlay[data-alias="modules-select"]
+  {
+    width: calc(100vw - 40px);
+    max-width: 1080px;
+    height: calc(100vh - 40px);
+    max-height: 750px;
+  }
+
   .ui-modules-select
   {
     text-align: left;
@@ -94,33 +104,49 @@
 
   .ui-modules-select-items
   {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-gap: var(--padding-m);
     margin: 0 -16px;
+    padding: 0 16px;
     margin-top: var(--padding);
-    max-height: 600px;
+    max-height: 550px;
     overflow-y: auto;
   }
 
   .ui-modules-select-item
   {
-    display: grid;
+    display: inline-flex;
+    flex-direction: column;
     width: 100%;
     grid-template-columns: 40px 1fr auto;
     gap: 12px;
-    align-items: center;
+    align-items: stretch;
     position: relative;
     color: var(--color-text);
-    padding: 16px;
-    border-radius: var(--radius); 
 
-    &:hover, &:focus
+    /*&:hover, &:focus
     {
       background: var(--color-tree-selected);
-    }
+    }*/
 
-    & + .ui-modules-select-item
+    &:hover .ui-modules-select-item-top
     {
-      margin-top: 5px;
+      border: 1px solid var(--color-bg-shade-5);
+      background: var(--color-bg-shade-1);
+      outline: none;
     }
+  }
+
+  .ui-modules-select-item-top
+  {
+    background: var(--color-bg-shade-2);
+    height: 100px;
+    border-radius: var(--radius);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--color-line);
   }
 
   .ui-modules-select-item-text
@@ -128,18 +154,25 @@
     display: flex;
     flex-direction: column;
 
-    span
+    .-desc
     {
       color: var(--color-text-dim);
       margin-top: 3px;
+      font-size: var(--font-size-s);
+      line-height: 1.4;
+    }
+
+    .-headline
+    {
+      color: var(--color-text);
+      font-weight: 700;
     }
   }
 
   .ui-modules-select-item-icon
   {
     position: relative;
-    top: -2px;
-    left: 4px;
+    font-size: var(--size-xl);
     color: var(--color-text);
   }
 </style>

@@ -86,9 +86,10 @@
       selectModule()
       {
         Overlay.open({
+          alias: 'modules-select',
           component: ModuleSelectOverlay,
           types: this.moduleTypes,
-          width: 480
+          width: null
         }).then(module => this.onAdd(module), () => { });
       },
 

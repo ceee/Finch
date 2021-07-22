@@ -69,7 +69,8 @@ export default new Vue({
         softdismiss: options.display !== 'editor',
         closeLabel: '@ui.close',
         confirmLabel: '@ui.confirm',
-        confirmType: 'default'
+        confirmType: 'default',
+        alias: options.alias
       }, options);
 
       if (typeof options.theme === 'undefined')
