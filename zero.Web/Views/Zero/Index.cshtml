@@ -18,7 +18,9 @@
   <link rel="shortcut icon" type="image/png" href="/assets/zero-icon.png" sizes="196x196">
   <base href="~/">
   <environment exclude="Development">
-    <link href="~/zero/Assets/app.css" rel="stylesheet" asp-append-version="true" />
+    <script type="module" crossorigin src="~/zero/index.js"></script>
+    <link rel="modulepreload" href="~/zero/vendor.js" />
+    <link rel="stylesheet" href="~/zero/index.css" />
   </environment>
   <title>zero</title>
 </head>
@@ -34,7 +36,9 @@
     window.__zero = @Html.Raw(config);
     window.zero = window.__zero;
   </script>
-  <script type="module" src="http://localhost:@(Model.Port)/vite/client"></script>
-  <script type="module" src="http://localhost:@(Model.Port)/app/app.js"></script>
+  <environment include="Development">
+    <script type="module" src="http://localhost:@(Model.Port)/vite/client"></script>
+    <script type="module" src="http://localhost:@(Model.Port)/app/app.js"></script>
+  </environment>
 </body>
 </html>

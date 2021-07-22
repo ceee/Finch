@@ -2,7 +2,14 @@ const path = require('path');
 const fs = require('fs');
 const { createVuePlugin } = require('vite-plugin-vue2');
 
-let loadedPlugins = JSON.parse(process.env.ZERO_PLUGINS || "[]"); //["../zero.Commerce/Plugin", "../../Laola/Laola.Backoffice/Plugin"];
+let loadedPlugins = JSON.parse(process.env.ZERO_PLUGINS || "[]");
+
+
+if (!process.env.ZERO_PLUGINS)
+{
+  loadedPlugins = ["../zero.Commerce/Plugin", "../zero.Stories/Plugin", "../zero.Forms/Plugin", "../../Laola/Laola.Backoffice/Plugin"];
+}
+
 let zeroPlugins = [];
 
 let pluginFileContent = '';
@@ -45,7 +52,10 @@ fs.writeFile(path.resolve(__dirname, 'app/core/plugins.js'), pluginFileContent, 
   //file written successfully
 })
 
-const config = {
+/**
+ * @type {import('vite').UserConfig}
+ */
+let config = {
   server: {
     port: process.env.PORT,
     cors: true
@@ -59,15 +69,30 @@ const config = {
     'tiptap': 'tiptap/dist/tiptap.esm.js'
   },
   build: {
-    manifest: false,
-    rollupOptions: {
-      format: 'cjs',
-      entryFileNames: `[name].js`,
-      chunkFileNames: `[name].js`,
-      assetFileNames: `[name].[ext]`
+    manifest: true,
+    outDir: 'dist/zero',
+    minify: false,
+    terserOptions: {
+      compress: false
     },
-
+    rollupOptions: {
+      output: {
+        format: 'es',
+        entryFileNames: `[name].js`,
+        chunkFileNames: `[name].js`,
+        assetFileNames: `[name].[ext]`
+      }
+    }
   }
 };
+
+if (process.env.NODE_ENV === 'production')
+{
+  config.base = '/zero/';
+  config.alias.tiptap = 'node_modules/tiptap/dist/tiptap.esm.js';
+  config.alias.underscore = 'node_modules/underscore/underscore-esm.js';
+  config.alias.axios = 'node_modules/axios/dist/axios.js';
+  config.alias.dayjs = 'node_modules/dayjs/esm/index.js';
+}
 
 export default config;
