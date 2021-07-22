@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Threading.Tasks;
-using zero.Core;
 using zero.Core.Extensions;
 using zero.Core.Options;
 using zero.Core.Routing;
@@ -67,39 +64,10 @@ namespace zero.Web
 
     public static IApplicationBuilder UseZeroRoutes(this IApplicationBuilder app)
     {
-      IZeroOptions options = app.ApplicationServices.GetService<IZeroOptions>();
-      string path = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
-
-      // map backoffice
-      app.UseWhen(ctx => !ctx.Request.Path.ToString().StartsWith(path), builder =>
+      return app.UseEndpoints(endpoints =>
       {
-        builder.UseRouting();
-        builder.UseAuthentication();
-        builder.UseAuthorization();
-        builder.UseEndpoints(endpoints =>
-        {
-          endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}", state: null, order: 10);
-
-          if (options.Routing.NotFoundEndpoint != null)
-          {
-            endpoints.MapFallbackToController(options.Routing.NotFoundEndpoint.Action, options.Routing.NotFoundEndpoint.Controller);
-          }
-        });
+        endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}", state: null, order: 10);
       });
-
-      return app;
-
-      //return app.Use(async (ctx, next) =>
-      //{
-      //  await next();
-      //  if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
-      //  {
-      //    Console.WriteLine("NotFound0: " + ctx.Request.Path);
-      //    //Re-execute the request so the user gets the error page
-      //    //ctx.Request.Path = "/Pages404";
-      //    await next();
-      //  }
-      //});
     }
   }
 }
