@@ -64,9 +64,16 @@ namespace zero.Web
 
     public static IApplicationBuilder UseZeroRoutes(this IApplicationBuilder app)
     {
+      IZeroOptions options = app.ApplicationServices.GetService<IZeroOptions>();
+
       return app.UseEndpoints(endpoints =>
       {
         endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}", state: null, order: 10);
+
+        //if (options.Routing.NotFoundEndpoint != null)
+        //{
+        //  endpoints.MapFallbackToController(options.Routing.NotFoundEndpoint.Action, options.Routing.NotFoundEndpoint.Controller);
+        //}
       });
     }
   }
