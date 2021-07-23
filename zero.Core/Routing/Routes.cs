@@ -4,6 +4,7 @@ using Raven.Client.Documents;
 using Raven.Client.Documents.BulkInsert;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
+using Raven.Client.Exceptions.Documents.Indexes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -146,11 +147,21 @@ namespace zero.Core.Routing
         min -= 1;
       }
 
-      IList<Route> routes = await session.Query<Route, Routes_ForResolver>()
-        .Where(x => (!x.AllowSuffix && x.Url == path) || (x.AllowSuffix && x.Url.In(parts)))
-        .Include("References[].Id")
-        .Include("Dependencies")
-        .ToListAsync();
+      IList<Route> routes = null;
+
+      try
+      {
+        routes = await session.Query<Route, Routes_ForResolver>()
+          .Where(x => (!x.AllowSuffix && x.Url == path) || (x.AllowSuffix && x.Url.In(parts)))
+          .Include("References[].Id")
+          .Include("Dependencies")
+          .ToListAsync();
+      }
+      catch (IndexDoesNotExistException ex)
+      {
+        Logger.LogError(ex, "Indexes have not been created yet");
+        return null;
+      }
 
       Route route = routes.FirstOrDefault();
 
