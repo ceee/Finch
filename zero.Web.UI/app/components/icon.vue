@@ -1,5 +1,5 @@
 ﻿<template>
-  <svg class="ui-icon" :width="size" :height="size" :stroke-width="stroke" :data-symbol="symbol">
+  <svg class="ui-icon" :width="size" :height="size" :stroke-width="stroke" :data-symbol="symbolName" :class="classes">
     <use v-show="!isFlag" v-bind="{ 'xlink:href': href }" />
   </svg>
 </template>
@@ -31,13 +31,22 @@
 
 
     computed: {
+
+      symbolName()
+      {
+        return this.symbol && this.symbol.split(' ')[0];
+      },
+      classes()
+      {
+        return this.symbol ? this.symbol.split(' ').slice(1) : [];
+      },
       isFlag()
       {
         return this.symbol && this.symbol.indexOf('flag') === 0;
       },
       href()
       {
-        return (this.file || '') + '#' + this.symbol.trim();
+        return (this.file || '') + '#' + this.symbolName.trim();
       }
     }
   }
