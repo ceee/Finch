@@ -13,12 +13,12 @@ namespace zero.Web.Controllers
 {
   public class LinksController : BackofficeController
   {
-    IZeroStore Store;
+    IZeroDocumentSession Session;
     ILinks Links;
 
-    public LinksController(IZeroStore store, ILinks links)
+    public LinksController(IZeroDocumentSession session, ILinks links)
     {
-      Store = store;
+      Session = session;
       Links = links;
     }
 
@@ -26,7 +26,6 @@ namespace zero.Web.Controllers
     public async Task<IList<PreviewModel>> GetPreviews([FromBody] List<Link> links)
     {
       IList<PreviewModel> previews = new List<PreviewModel>();
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
       foreach (Link link in links)
       {
@@ -35,7 +34,7 @@ namespace zero.Web.Controllers
 
         if (provider != null)
         {
-          model = await provider.Preview(session, link);
+          model = await provider.Preview(Session, link);
         }
 
         previews.Add(model ?? new PreviewModel()

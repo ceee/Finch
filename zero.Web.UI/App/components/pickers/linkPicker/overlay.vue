@@ -84,13 +84,20 @@
           value: x.name
         };
       });
-      this.area = this.areas[0];
-      this.current = this.area.alias;
 
       this.link = JSON.parse(JSON.stringify(this.model || this.template));
-      this.link.area = this.current;
 
-      console.info(JSON.parse(JSON.stringify(this.link)));
+      if (this.model && this.model.area && this.areas.find(x => x.alias === this.model.area))
+      {
+        this.area = this.areas.find(x => x.alias === this.model.area);
+      }
+      else
+      {
+        this.area = this.areas[0];
+      }
+
+      this.current = this.area.alias;
+      this.link.area = this.current;
 
       setTimeout(() => this.opened = true, 300);
     },
@@ -105,6 +112,7 @@
 
       onSave()
       {
+        this.link.area = this.current;
         this.config.confirm(this.link);
       },
 
@@ -133,6 +141,7 @@
     border-radius: var(--radius);
     box-shadow: var(--shadow-short);
     font-weight: bold;
+    border-color: transparent;
   }
 
   .ui-linkpicker-overlay-area .ui-native-select select
