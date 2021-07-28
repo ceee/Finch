@@ -2,13 +2,12 @@
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
-using zero.Core.Options;
 
 namespace zero.Core.Routing
 {
   public class RawLinkProvider : ILinkProvider
   {
-    public const string AREA = "zero.raw";
+    public const string AREA = "zero.url";
 
 
     /// <summary>
