@@ -168,6 +168,12 @@ textarea
   position: relative;
   top: -1px;
 
+  .onbg :not(input:checked) ~ &
+  {
+    background: var(--color-bg-shade-1);
+    box-shadow: var(--shadow-short);
+  }
+
   &:before
   {
     content: "\e83f";
