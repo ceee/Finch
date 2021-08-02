@@ -36,6 +36,33 @@ class ListColumn
     return this._type;
   }
 
+  get func()
+  {
+    return this._func;
+  }
+
+  get funcOptions()
+  {
+    return this._funcOptions;
+  }
+
+
+  /**
+   * Set another list column as the base for this column (copies properties)
+   * @param {ListColumn} column - Base list column
+   * @returns {ListColumn}
+   */
+  setBase(column)
+  {
+    this.path = column.path;
+    this.options = { ...column.options };
+    this._asHtml = column.isHtml;
+    this._type = column.type;
+    this._func = column.func;
+    this._funcOptions = column.funcOptions;
+    return this;
+  }
+
 
   /**
    * Render the output by passing the value and the whole entity

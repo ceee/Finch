@@ -46,6 +46,25 @@ class List
 
   actions = [];
 
+
+  /**
+   * Set another list as the base for this list (copies all fields)
+   * @param {List} list - Base list
+   * @returns {List}
+   */
+  setBase(list)
+  {
+    this.columns = list.columns.map(x => new ListColumn(x.path).setBase(x));
+    this.actions = list.actions.map(x => new ListAction(x.key, x.label, x.icon, x.action, x.autoclose));
+    this.query = { ...list.query };
+    this.templateLabel = list.templateLabel;
+    this.link = list.link;
+    this.onClick = list.onClick;
+    this.actions = [...list.actions];
+    return this;
+  }
+
+
   /**
    * Converts the list parameters (like page, search, filter, ...) to a vue router query
    */
