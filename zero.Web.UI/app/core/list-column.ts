@@ -174,17 +174,21 @@ class ListColumn
 
   /**
    * Output a boolean value by displaying a checkmark
-   * @param {object} [options] - Custom options
+   * @param {function} [isTrueFunc] - Decide if this boolean is true based on a function with the value as a parameter
    * @returns {ListColumn}
    */
-  boolean(options)
+  boolean(isTrueFunc)
   {
     this._type = 'boolean';
     this._asHtml = true;
-    this._funcOptions = { ...options };
-    this._func = (value, opts) => `<svg class="ui-icon ui-table-field-bool" width="16" height="16" stroke-width="${!!value ? '2.5' : '2'}" data-symbol="${!!value ? 'fth-check' : 'fth-x'}">
-      <use xlink:href="#${!!value ? 'fth-check' : 'fth-x'}" />
-    </svg>`;
+    this._funcOptions = { isTrueFunc };
+    this._func = (value, opts) =>
+    {
+      let isTrue = typeof opts.isTrueFunc === 'function' ? !!opts.isTrueFunc(value) : !!value;
+      return `<svg class="ui-icon ui-table-field-bool" width="16" height="16" stroke-width="${isTrue ? '2.5' : '2'}" data-symbol="${isTrue ? 'fth-check' : 'fth-x'}">
+        <use xlink:href="#${isTrue ? 'fth-check' : 'fth-x'}" />
+      </svg>`;
+    }
     return this;
   }
 
