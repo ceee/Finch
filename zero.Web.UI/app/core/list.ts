@@ -201,7 +201,11 @@ class List
     return this.action('export', '@ui.export.action', 'fth-share', opts =>
     {
       opts.loading(true);
-      callback().then(_ => opts.hide());
+      callback().then(_ =>
+      {
+        opts.loading(false);
+        opts.hide();
+      });
     }, false);
   }
 
