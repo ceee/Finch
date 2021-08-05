@@ -109,7 +109,7 @@ namespace zero.Core.Extensions
 
         bool any = await session.Advanced.AsyncDocumentQuery<T>()
           .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
-          .WhereEquals(context.Rule.PropertyName.ToPascalCaseId(), value)
+          .WhereEquals(context.PropertyName.ToPascalCaseId(), value)
           .AnyAsync(cancellation);
 
         return !any;
@@ -128,7 +128,7 @@ namespace zero.Core.Extensions
 
         return await session.Advanced.AsyncDocumentQuery<T>()
           .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
-          .WhereEquals(context.Rule.PropertyName.ToPascalCaseId(), expectedValue)
+          .WhereEquals(context.PropertyName.ToPascalCaseId(), expectedValue)
           .AnyAsync(cancellation);
       }).WithMessage("@errors.forms.not_unique_alone");
     }
