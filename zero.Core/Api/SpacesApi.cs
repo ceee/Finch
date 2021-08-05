@@ -74,6 +74,29 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
+    public async Task<Dictionary<string, T>> GetItems<T>(params string[] ids) where T : SpaceContent
+    {
+      Space space = GetBy<T>();
+
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
+      {
+        ids = ids.Distinct().ToArray();
+
+        Dictionary<string, T> models = await session.LoadAsync<T>(ids);
+        Dictionary<string, T> result = new Dictionary<string, T>();
+
+        foreach (string id in ids)
+        {
+          models.TryGetValue(id, out T model);
+          result.Add(id, model);
+        }
+
+        return result;
+      }
+    }
+
+
+    /// <inheritdoc />
     public async Task<ListResult<SpaceContent>> GetListByQuery(string alias, ListQuery<SpaceContent> query)
     {
       query.SearchSelector = item => item.Name;
@@ -157,6 +180,11 @@ namespace zero.Core.Api
     /// Get editor item for a space
     /// </summary>
     Task<T> GetItem<T>(string id = null) where T : SpaceContent;
+
+    /// <summary>
+    /// Get editor items for a space
+    /// </summary>
+    Task<Dictionary<string, T>> GetItems<T>(params string[] ids) where T : SpaceContent;
 
     /// <summary>
     /// Get all list items for a space (with query)
