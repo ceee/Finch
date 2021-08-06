@@ -33,14 +33,16 @@ namespace zero.Core.Utils
         length = 12;
       }
 
+      return CreateRandom(length);
+
       //if (length > 0)
       //{
-        return Convert.ToBase64String(Guid.NewGuid().ToByteArray())
-          .Replace("/", String.Empty)
-          .Replace("+", String.Empty)
-          .Replace("-", String.Empty)
-          .ToLowerInvariant()
-          .Substring(0, length);
+        //return Convert.ToBase64String(Guid.NewGuid().ToByteArray())
+        //  .Replace("/", String.Empty)
+        //  .Replace("+", String.Empty)
+        //  .Replace("-", String.Empty)
+        //  .ToLowerInvariant()
+        //  .Substring(0, length);
       //}
 
       //return Guid.NewGuid().ToString();

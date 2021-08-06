@@ -150,6 +150,7 @@ class List
    * @param {object} [options] - Custom options
    * @param {string} [options.label] - A custom label for this column (otherwise it's generated via `templateLabel`)
    * @param {boolean} [options.hideLabel=false] - Hide the column label
+   * @param {number} [options.index] - Custom position for this column
    * @param {number} [options.width] - Custom width of the column in px
    * @param {boolean} [options.canSort=true] - Disable/enable sorting within this column
    * @param {string} [options.class] - Append HTML class to the generated cells
@@ -162,7 +163,14 @@ class List
     if (!column)
     {
       column = new ListColumn(path, options);
-      this.columns.push(column);
+      if (options && options.index > -1)
+      {
+        this.columns.splice(options.index, 0, column);
+      }
+      else
+      {
+        this.columns.push(column);
+      }
     }
     else
     {
@@ -170,6 +178,20 @@ class List
     }
 
     return column;
+  }
+
+
+  /**
+   * Removes a list column
+   * @param {string} path - Model path
+   */
+  removeColumn(path)
+  {
+    let column = this.columns.find(x => x.path === path);
+    if (column != null)
+    {
+      this.columns.splice(this.columns.indexOf(column), 1);
+    }
   }
 
 
