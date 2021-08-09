@@ -64,6 +64,7 @@ import uiPermissions from './permissions.vue';
 import uiRevisions from './revisions.vue';
 import uiIcon from './icon.vue';
 import uiLocalize from './localize.vue';
+import uiText from './text.vue';
 
 import uiEditor from '../editor/editor.vue';
 import uiEditorInfos from '../editor/editor-infos.vue';
@@ -135,6 +136,7 @@ export default {
   uiRevisions,
   uiIcon,
   uiLocalize,
+  uiText,
 
   uiEditor,
   uiEditorInfos

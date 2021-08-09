@@ -125,7 +125,7 @@ namespace zero.Core.Database
         QueryParameters = parameters
       }, new QueryOperationOptions { AllowStale = true });
 
-      Operation operation = await GetOperationExecutor(database).SendAsync(operationQuery);
+      Operation operation = await GetOperationExecutor(database ?? ResolvedDatabase).SendAsync(operationQuery);
 
       await operation.WaitForCompletionAsync();
     }
