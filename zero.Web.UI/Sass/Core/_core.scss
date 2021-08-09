@@ -343,3 +343,20 @@ code
   stroke-linejoin: round;
   fill: none;
 }
+
+
+// maxlines attribute from directive
+.ui-maxlines
+{
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+.ui-maxlines.is-expanded
+{
+  -webkit-line-clamp: inherit !important;
+}
