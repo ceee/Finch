@@ -17,9 +17,9 @@ namespace zero.Core.Entities
       Name = name;
     }
 
-    public void Add(string alias, string name, string description = null, string icon = null)
+    public void Add(string alias, string name, string description = null, string icon = null, string customUrl = null)
     {
-      Items.Add(new SettingsArea(alias, name, description, icon));
+      Items.Add(new SettingsArea(alias, name, description, icon, customUrl));
     }
 
     public void AddInternal(string alias, string name, string description = null, string icon = null)

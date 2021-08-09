@@ -25,15 +25,21 @@
     /// </summary>
     public string Description { get; }
 
+    /// <summary>
+    /// Set a custom URL for this settings area link
+    /// </summary>
+    public string CustomUrl { get; set; }
+
 
     public SettingsArea() { }
 
-    public SettingsArea(string alias, string name, string description = null, string icon = null)
+    public SettingsArea(string alias, string name, string description = null, string icon = null, string customUrl = null)
     {
       Alias = alias;
       Name = name;
       Icon = icon;
       Description = description;
+      CustomUrl = customUrl;
     }
   }
 

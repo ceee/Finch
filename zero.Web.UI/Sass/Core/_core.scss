@@ -8,6 +8,16 @@
 	-webkit-tap-highlight-color: transparent;
 }
 
+p
+{
+  margin: 0;
+}
+
+p + p
+{
+  margin-top: 0.5em;
+}
+
 
 // media
 

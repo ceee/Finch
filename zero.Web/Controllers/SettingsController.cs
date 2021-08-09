@@ -51,7 +51,7 @@ namespace zero.Web.Controllers
             Name = area.Name,
             Description = area.Description,
             Icon = area.Icon,
-            Url = Constants.Sections.Settings.EnsureStartsWith('/') + Safenames.Alias(area.Alias).EnsureStartsWith('/')
+            Url = area.CustomUrl.Or(Constants.Sections.Settings.EnsureStartsWith('/') + Safenames.Alias(area.Alias).EnsureStartsWith('/'))
           };
 
           areas.Add(vueArea);
