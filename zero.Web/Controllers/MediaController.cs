@@ -97,7 +97,7 @@ namespace zero.Web.Controllers
         return File(content, contentType, DateTimeOffset.Now, EntityTagHeaderValue.Any);
       }
 
-      string fullPath = Path.Combine(Paths.Root, path?.Trim('/') ?? String.Empty);
+      string fullPath = Path.Combine(Paths.WebRoot, path?.Trim('/') ?? String.Empty);
 
       if (path == null || !System.IO.File.Exists(fullPath))
       {

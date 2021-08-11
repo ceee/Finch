@@ -118,11 +118,7 @@ namespace zero.Web
       Services.AddHttpContextAccessor();
 
       Services.AddTransient<IZeroVue, ZeroVue>();
-      Services.AddTransient<IPaths>(factory =>
-      {
-        IWebHostEnvironment env = factory.GetService<IWebHostEnvironment>();
-        return new Paths(env.WebRootPath, true);
-      });
+      Services.AddScoped<IPaths>(factory => new Paths(factory.GetService<IWebHostEnvironment>(), true));
 
       Services.AddTransient<IHandlerHolder, HandlerHolder>();
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Hosting;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,9 +9,13 @@ namespace zero.Core
 {
   public class Paths : IPaths
   {
-    public string Root { get; set; }
+    public string WebRoot { get; set; }
+
+    public string ContentRoot { get; set; }
 
     public string Media { get; set; }
+
+    protected IWebHostEnvironment Env { get; set; }
 
     private bool IsDebug { get; set; }
 
@@ -29,11 +34,13 @@ namespace zero.Core
     };
 
 
-    public Paths(string root, bool isDebug)
+    public Paths(IWebHostEnvironment env, bool isDebug)
     {
+      Env = env;
       IsDebug = isDebug;
-      Root = root;
-      Media = Path.Combine(root, MEDIA_FOLDER);
+      WebRoot = env.WebRootPath;
+      ContentRoot = env.ContentRootPath;
+      Media = Path.Combine(WebRoot, MEDIA_FOLDER);
     }
 
 
@@ -42,7 +49,7 @@ namespace zero.Core
     /// </summary>
     public string Map(string path)
     {
-      return Path.Combine(Root, path);
+      return Path.Combine(WebRoot, path);
     }
 
     /// <summary>
@@ -50,7 +57,7 @@ namespace zero.Core
     /// </summary>
     public string Map(params string[] paths)
     {
-      return Path.Combine(Root, Path.Combine(paths));
+      return Path.Combine(WebRoot, Path.Combine(paths));
     }
 
 
@@ -116,7 +123,9 @@ namespace zero.Core
 
   public interface IPaths
   {
-    string Root { get; set; }
+    string ContentRoot { get; set; }
+
+    string WebRoot { get; set; }
 
     string Media { get; set; }
 
