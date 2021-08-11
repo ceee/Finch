@@ -69,16 +69,22 @@
   .ui-split + .ui-property,
   .ui-property + .ui-property
   { 
-    margin-top: 50px;
-    /*padding-top: 30px;
+    padding-top: 30px;
     margin-top: 30px;
-    border-top: 1px dashed var(--color-line-onbg);*/
+    border-top: 1px dashed var(--color-line-dashed);
+
+    .is-narrow &
+    {
+      margin-top: 30px;
+      padding-top: 0;
+      border-top: none;
+    }
   }
 
   .ui-property.is-vertical
   {
     flex-direction: column;
-    border-top: none;
+    //border-top: none;
 
     .ui-property-label
     {
