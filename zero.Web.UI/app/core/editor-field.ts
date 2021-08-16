@@ -248,7 +248,7 @@ class EditorField
   output(render)
   {
     this._isReadOnly = true;
-    return this._setComponent(() => import('../editor/fields/text.vue'), { render });
+    return this._setComponent(() => import('../editor/fields/output.vue'), { render });
   }
 
 
