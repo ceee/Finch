@@ -40,7 +40,7 @@ namespace zero.Core.Routing
     /// Resolve a route and load optional dependencies into it.
     /// This is the data which is passed to the specified controller action.
     /// </summary>
-    Task<IResolvedRoute> ResolveRoute(IAsyncDocumentSession session, Route route);
+    Task<IResolvedRoute> ResolveRoute(IAsyncDocumentSession session, RouteResponse response);
 
     /// <summary>
     /// Find URL for an entity

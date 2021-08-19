@@ -33,12 +33,12 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public override async Task<IResolvedRoute> ResolveRoute(IAsyncDocumentSession session, Route route)
+    public override async Task<IResolvedRoute> ResolveRoute(IAsyncDocumentSession session, RouteResponse response)
     {
-      PageRoute resolved = new PageRoute(route);
+      PageRoute resolved = new PageRoute(response.Route);
 
       List<string> ids = new List<string>();
-      RouteReference reference = route.References.SingleOrDefault(x => x.Collection == REF_KEY);
+      RouteReference reference = response.Route.References.SingleOrDefault(x => x.Collection == REF_KEY);
 
       if (reference == null)
       {
@@ -46,7 +46,7 @@ namespace zero.Core.Routing
       }
 
       ids.Add(reference.Id);
-      ids.AddRange(route.Dependencies);
+      ids.AddRange(response.Route.Dependencies);
 
       Dictionary<string, Page> pages = await session.LoadAsync<Page>(ids);
 

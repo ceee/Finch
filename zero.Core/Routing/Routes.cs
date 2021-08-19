@@ -128,7 +128,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<IResolvedRoute> ResolveUrl(Application application, string path)
+    public async Task<IResolvedRoute> ResolveUrl(HttpContext context, Application application, string path)
     {
       path = path.Length > 1 ? path.TrimEnd(PATH_SEPERATOR) : path;
 
@@ -186,7 +186,13 @@ namespace zero.Core.Routing
         return null;
       }
 
-      return await ResolveRouteInternal(session, route);
+      return await ResolveRouteInternal(session, new RouteResponse()
+      {
+        Route = route,
+        App = application,
+        HttpContext = context,
+        Path = path
+      });
     }
 
 
@@ -206,16 +212,16 @@ namespace zero.Core.Routing
         return null;
       }
 
-      return await ResolveUrl(app, path);
+      return await ResolveUrl(context, app, path);
     }
 
 
-    /// <inheritdoc />
-    public async Task<IResolvedRoute> ResolveRoute(Route route)
-    {
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-      return await ResolveRouteInternal(session, route);
-    }
+    ///// <inheritdoc />
+    //public async Task<IResolvedRoute> ResolveRoute(Route route)
+    //{
+    //  using IAsyncDocumentSession session = Store.OpenAsyncSession();
+    //  return await ResolveRouteInternal(session, null); // TODO
+    //}
 
 
     /// <inheritdoc />
@@ -283,10 +289,10 @@ namespace zero.Core.Routing
     /// <summary>
     /// Call the provider which can resolve the route
     /// </summary>
-    async Task<IResolvedRoute> ResolveRouteInternal(IAsyncDocumentSession session, Route route)
+    async Task<IResolvedRoute> ResolveRouteInternal(IAsyncDocumentSession session, RouteResponse response)
     {
-      IRouteProvider routeProvider = FindProvider(route.ProviderAlias);
-      return await routeProvider?.ResolveRoute(session, route);
+      IRouteProvider routeProvider = FindProvider(response.Route.ProviderAlias);
+      return await routeProvider?.ResolveRoute(session, response);
     }
 
 
@@ -342,7 +348,7 @@ namespace zero.Core.Routing
     /// <summary>
     /// Resolve an URL from the specified app and the path
     /// </summary>
-    Task<IResolvedRoute> ResolveUrl(Application application, string path);
+    Task<IResolvedRoute> ResolveUrl(HttpContext context, Application application, string path);
 
     /// <summary>
     /// Resolve an URL from an http context
@@ -352,7 +358,7 @@ namespace zero.Core.Routing
     /// <summary>
     /// Resolve a route object by passing it to the specified provider
     /// </summary>
-    Task<IResolvedRoute> ResolveRoute(Route route);
+    //Task<IResolvedRoute> ResolveRoute(Route route);
 
     /// <summary>
     /// Returns the endpoint which maps 404 requests

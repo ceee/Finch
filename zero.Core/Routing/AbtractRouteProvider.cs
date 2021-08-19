@@ -111,9 +111,9 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public virtual Task<IResolvedRoute> ResolveRoute(IAsyncDocumentSession session, Route route)
+    public virtual Task<IResolvedRoute> ResolveRoute(IAsyncDocumentSession session, RouteResponse response)
     {
-      DefaultResolvedRoute resolved = new DefaultResolvedRoute() { Route = route };
+      DefaultResolvedRoute resolved = new DefaultResolvedRoute() { Route = response.Route };
       return Task.FromResult((IResolvedRoute)resolved);
     }
 
