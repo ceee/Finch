@@ -72,8 +72,8 @@
   --color-button-focus-outline: 1px dotted #{$color-bg-shade-7};
 
   // forms
-  --color-input: #{$color-bg-shade-1};
-  --color-input-border: 1px solid #{$color-bg-shade-5};
+  --color-input: #{$color-bg-shade-0};
+  --color-input-border: 1px solid transparent;
   --color-input-placeholder: #{$color-fg-shade-1};
   --color-check: #{$color-bg-shade-3};
   --color-checked: #{$color-primary};
