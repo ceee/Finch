@@ -28,7 +28,7 @@
       required: Boolean,
       vertical: {
         type: Boolean,
-        default: false
+        default: true
       },
       isText: Boolean,
       disabled: {

@@ -58,7 +58,7 @@
 
 .app-nav-switch
 {
-  padding: 16px var(--padding) 0;
+  padding: 16px var(--padding-m) 0;
   margin-bottom: 30px;
 
   .ui-button
@@ -70,19 +70,26 @@
 a.app-nav-item, button.app-nav-item
 {
   display: grid;
-  grid-template-columns: 32px 1fr auto;
+  grid-template-columns: 28px 1fr auto;
   gap: 6px;
   align-items: center;
   font-size: var(--font-size);
-  padding: 0 var(--padding);
+  padding: 0 var(--padding-xs);
   height: 50px;
   color: var(--color-text);
   position: relative;
+  border-radius: var(--radius);
+  margin: 0 var(--padding-xs);
+
+  & + .app-nav-item
+  {
+    margin-top: 2px;
+  }
 
   &:hover
   {
     color: var(--color-text);
-    //background: var(--color-tree-selected);
+    background: var(--color-tree-selected);
 
     .app-nav-item-icon
     {
@@ -137,8 +144,8 @@ a.app-nav-item, button.app-nav-item
   line-height: 1;
   font-weight: 400;
   position: relative;
-  top: -2px;
-  color: var(--color-text-dim);
+  top: -1px;
+  color: var(--color-text);
   transition: color 0.2s ease;
 }
 
@@ -157,8 +164,8 @@ a.app-nav-child
   display: flex;
   align-items: center;
   font-size: var(--font-size);
-  padding: 0 var(--padding) 0 calc(var(--padding) + 36px);
-  height: 30px;
+  padding: 0 var(--padding) 0 calc(var(--padding) + 27px);
+  height: 36px;
   color: var(--color-text-dim);
 
   &:hover, &.is-active

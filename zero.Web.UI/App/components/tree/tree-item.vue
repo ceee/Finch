@@ -135,6 +135,7 @@
     position: relative;
     transition: color 0.2s ease;
     position: relative;
+    margin-bottom: 2px;
 
     &:hover > .ui-tree-item-actions
     {
@@ -153,9 +154,10 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      left: -100px;
-      right: 0;
+      left: var(--padding-xs);
+      right: var(--padding-xs);
       background: var(--color-tree-selected);
+      border-radius: var(--radius);
     }
 
     &.is-selected:after
@@ -176,7 +178,7 @@
   .ui-tree-item-link
   {
     display: grid;
-    grid-template-columns: 32px 1fr auto;
+    grid-template-columns: 28px 1fr auto;
     gap: 6px;
     height: 100%;
     align-items: center;
@@ -215,7 +217,7 @@
     color: var(--color-text-dim);
     height: 100%;
     text-align: right;
-    padding-right: 8px;
+    padding-right: 4px;
     transition: color 0.2s ease;
     z-index: 1;
 

@@ -12,7 +12,7 @@ $font-text-name: 'Lato';
 
 @include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Black', 900);
 
-/*@font-face {
+@font-face {
   font-family: 'Inter';
   font-weight: 100 900;
   font-display: swap;
@@ -27,7 +27,7 @@ $font-text-name: 'Lato';
   font-style: italic;
   font-named-instance: 'Italic';
   src: url("/Assets/Fonts/Inter/Inter-italic.var.woff2?v=3.17") format("woff2");
-}*/
+}
 
 
 %font
