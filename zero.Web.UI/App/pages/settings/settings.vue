@@ -99,7 +99,7 @@
     background: var(--color-box);
     border-radius: var(--radius);
     box-shadow: var(--shadow-short);
-    color: var(--color-text-dim);
+    color: var(--color-text);
     transition: color 0.2s ease;
   }
 
