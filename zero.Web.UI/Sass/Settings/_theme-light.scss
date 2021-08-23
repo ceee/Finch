@@ -5,7 +5,7 @@
   $color-primary: #22272e;// #22272e
   $color-primary-fg: #fff; 
   $color-primary-low: #{rgba(#22272e, 0.2)};
-  $color-secondary: #b9e2dc;
+  $color-secondary: #aaa;
   $color-secondary-fg: #222;
   $color-tertiary: #c4e4de;
   $color-tertiary-fg: #2c3036;
@@ -24,7 +24,7 @@
   $color-bg-shade-3: #f5f5f5; // bright-two
   $color-bg-shade-4: #efefef; // bright-three
   $color-bg-shade-5: #eaeaea;
-  $color-bg-shade-6: #d2d2d2;
+  $color-bg-shade-6: #c2c2c2;
   $color-bg-shade-7: #878787;
 
   // misc colors
@@ -90,6 +90,7 @@
   --color-line: #{$color-bg-shade-3};
   --color-line-onbg: #{$color-bg-shade-4};
   --color-line-dashed: #{$color-bg-shade-5};
+  --color-line-dashed-onbg: #{$color-bg-shade-6};
 
   // trees
   --color-tree: #{$color-bg-shade-1};

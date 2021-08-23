@@ -68,8 +68,8 @@
     {
       /*box-shadow: var(--shadow-short);
       background: var(--color-button-light-onbg);*/
-      background: var(--color-bg-shade-5);
-      //border: 1px dashed var(--color-line-dashed);
+      background: transparent;
+      border: 1px dashed var(--color-line-dashed-onbg);
     }
 
     .ui-searchinput-button

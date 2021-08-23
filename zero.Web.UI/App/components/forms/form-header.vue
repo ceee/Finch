@@ -150,7 +150,7 @@
     font-size: var(--font-size-l);
     font-weight: 700;
     background: none;
-    border: 1px dashed var(--color-line-dashed);
+    border: 1px dashed var(--color-line-dashed-onbg);
 
     /*&:hover, &:focus, .ui-header-bar-title.is-empty &
     {

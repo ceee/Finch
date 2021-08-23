@@ -24,6 +24,7 @@
   $color-bg-shade-4: #363c45; // bright-three
   $color-bg-shade-5: #43484f;
   $color-bg-shade-6: #43484f;
+  $color-bg-shade-7: #43484f;
 
   /*$color-primary: #eee; //#0d83f0; #22272e
   $color-primary-fg: #222;
@@ -110,6 +111,7 @@
   --color-line: #{$color-bg-shade-3};
   --color-line-onbg: #{$color-bg-shade-3};
   --color-line-dashed: #{$color-bg-shade-6};
+  --color-line-dashed-onbg: #{$color-bg-shade-7};
 
   // trees
   --color-tree: #{$color-bg-shade-1};
