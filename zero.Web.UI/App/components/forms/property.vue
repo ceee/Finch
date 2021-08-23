@@ -45,7 +45,7 @@
   .ui-property
   {
     position: relative;
-    display: flex;  
+    display: flex;
     margin: 0 -32px 0;
     padding: 0 32px 0;
 
@@ -126,7 +126,7 @@
   {
     display: block;
     color: var(--color-text);
-    width: 220px;
+    flex-basis: 30%;
     padding-right: 40px;
     font-size: var(--font-size);
     line-height: 1.5;

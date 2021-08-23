@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="application-features">
-    <ui-property v-for="feature in features" :key="feature.alias" :label="feature.name" :description="feature.description">
+    <ui-property v-for="feature in features" :key="feature.alias" :label="feature.name" :description="feature.description" :vertical="false"> 
       <ui-toggle :value="value.indexOf(feature.alias) > -1" @input="onFeatureToggle($event, feature)" :disabled="disabled" />
     </ui-property>
   </div>
