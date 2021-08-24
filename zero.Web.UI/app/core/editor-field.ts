@@ -12,6 +12,7 @@ class EditorField
     disabled: false,
     tab: null,
     allTabs: false,
+    vertical: true,
     coreDatabase: false,
     class: ''
   };
@@ -236,6 +237,7 @@ class EditorField
    */
   toggle(negative)
   {
+    this.options.vertical = false;
     return this._setComponent(() => import('../editor/fields/toggle.vue'), { negative });
   }
 

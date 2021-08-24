@@ -3,12 +3,12 @@
     <ui-inline-tabs v-if="permissions.length" class="ui-permissions" :force-count="true">
       <ui-tab v-for="(permissionCollection, index) in permissions" :key="index" :label="permissionCollection.label" :title="permissionCollection.description" :count="getCount(permissionCollection)">
         <ui-error field="Claims" />
-        <ui-property v-for="(permission, index) in permissionCollection.items" :key="index" class="role-permission-toggle" :label="permission.label" :description="permission.description">
-          <ui-toggle v-if="permission.valueType === 'boolean'" :disabled="disabled" v-model="permission.value" @input="onChange" />
+        <ui-property v-for="(permission, index) in permissionCollection.items" :key="index" class="role-permission-toggle" :label="permission.label" :description="permission.description" :vertical="false">
           <div class="ui-permissions-crud" v-if="permission.valueType === 'crud'">
             <ui-toggle :value="permission.value != 'none'" :disabled="disabled" @input="onPermissionToggle($event, permission)" />
             <ui-check-list :value="permission.value.split(',')" :items="stateItems" v-if="permission.value != 'none'" :inline="true" @input="onPermissionCRUDChecked($event, permission)" :disabled="disabled" />
           </div>
+          <ui-toggle v-if="permission.valueType === 'boolean'" :disabled="disabled" v-model="permission.value" @input="onChange" />
           <!--<input v-if="permission.valueType === 'string'" :disabled="disabled" v-model="permission.value" type="text" class="ui-input" @input="onChange" />-->
         </ui-property>
       </ui-tab>

@@ -45,7 +45,9 @@
   .ui-property
   {
     position: relative;
-    display: flex;
+    display: grid;
+    grid-gap: 40px;
+    grid-template-columns: minmax(auto, 1fr) auto;
     margin: 0 -32px 0;
     padding: 0 32px 0;
 
@@ -83,22 +85,29 @@
 
   .ui-property.is-vertical
   {
+    grid-template-columns: minmax(auto, 1fr);
+    grid-gap: 12px;
     flex-direction: column;
     //border-top: none;
 
-    .ui-property-label
+    > .ui-property-label
     {
       width: 100%;
       padding-right: 0;
     }
 
-    .ui-property-label + .ui-property-content
+    > .ui-property-label + .ui-property-content
     {
-      margin-top: 12px; 
+      margin-top: 0; 
+    }
+
+    > .ui-property-content
+    {
+      display: block;
     }
   }
 
-  .ui-property.is-text .ui-property-content
+  .ui-property.is-text > .ui-property-content
   {
     margin-top: 2px;
   }
@@ -126,11 +135,11 @@
   {
     display: block;
     color: var(--color-text);
-    flex-basis: 30%;
-    padding-right: 40px;
+    //flex-basis: 30%;
     font-size: var(--font-size);
     line-height: 1.5;
     font-weight: 700;
+    flex-basis: 100%;
 
     /*.ui-property:focus-within &
     {
@@ -166,6 +175,8 @@
     flex: 1;
     max-width: 932px;
     font-size: var(--font-size);
+    display: flex;
+    align-items: center;
   }
 
   .ui-property-help

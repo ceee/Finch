@@ -1,5 +1,8 @@
 ﻿<template>
-  <ui-property v-if="!isHidden" :field="config.path" :label="label" :hide-label="config.options.hideLabel" :description="description" :required="isRequired" :disabled="isDisabled" :class="{'is-disabled': isDisabled, 'has-block': !!blockComponent }">
+  <ui-property v-if="!isHidden" :field="config.path" :label="label" :hide-label="config.options.hideLabel" 
+               :description="description" :required="isRequired" :disabled="isDisabled" 
+               :vertical="config.options.vertical"
+               :class="{'is-disabled': isDisabled, 'has-block': !!blockComponent }">
     <component :is="config.component" v-bind="config.componentOptions" :value="model" :entity="value" @input="onChange" :disabled="isDisabled" />
     <p v-if="config.options.helpText" class="ui-property-help" v-localize="config.options.helpText"></p>
     <template v-if="blockComponent && loaded" v-slot:after>
