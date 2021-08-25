@@ -15,7 +15,12 @@
       <template v-slot:button>
         <ui-button type="light block" :label="currentApplication.name" caret="down" />
       </template>
-      <ui-dropdown-button v-for="app in applications" :value="app" :key="app.id" :label="app.name" :selected="app.id === appId" @click="applicationChanged" :prevent="true" />
+      <button v-for="app in applications" :key="app.id" type="button" @click="applicationChanged(app)" class="ui-dropdown-button has-icon" :class="{ 'is-active': app.id == appId }">
+        <img :src="app.image" class="ui-dropdown-button-icon" :alt="app.name" />
+        <ui-localize :value="app.name" />
+        <ui-icon v-if="app.id == appId" symbol="check" class="ui-dropdown-button-selected" />
+      </button>
+      <!--<ui-dropdown-button v-for="app in applications" :value="app" :key="app.id" :label="app.name" :selected="app.id === appId" @click="applicationChanged" :prevent="true" />-->
       <ui-dropdown-separator />
       <ui-dropdown-button label="Add new application" icon="fth-plus" @click="addApplication" />
       <ui-dropdown-button label="Manage apps" icon="fth-edit-2" @click="manageApplications" />
@@ -162,11 +167,11 @@
 
       applicationChanged(item, opts)
       {
-        opts.loading(true);
+        //opts.loading(true);
 
         AuthApi.switchApp(item.id).then(success =>
         {
-          opts.loading(false);
+          //opts.loading(false);
           //opts.hide();
         });
       },

@@ -156,7 +156,7 @@
         background: var(--color-box-light);
       }
 
-      &:before
+      /*&:before
       {
         content: '';
         position: absolute;
@@ -168,7 +168,7 @@
         border-top-right-radius: 3px;
         background: var(--color-primary);
         display: inline-block;
-      }
+      }*/
     }
 
     &.has-errors

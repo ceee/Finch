@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using zero.Core;
 using zero.Core.Api;
+using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Identity;
@@ -35,10 +36,12 @@ namespace zero.Web
 
     protected ILogger<IZeroVue> Logger { get; private set; }
 
+    protected IZeroDocumentSession Session { get; private set; }
+
     string IconSymbolsSvg { get; set; }
 
 
-    public ZeroVue(IZeroOptions options, IPaths paths, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IEnumerable<IZeroPlugin> plugins, IZeroContext context, ILogger<IZeroVue> logger)
+    public ZeroVue(IZeroOptions options, IPaths paths, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IEnumerable<IZeroPlugin> plugins, IZeroContext context, ILogger<IZeroVue> logger, IZeroDocumentSession session)
     {
       Paths = paths;
       Options = options;
@@ -47,6 +50,7 @@ namespace zero.Web
       Plugins = plugins;
       Context = context;
       Logger = logger;
+      Session = session;
     }
 
 
@@ -272,10 +276,14 @@ namespace zero.Web
     {
       IList<Application> applications = await ApplicationsApi.GetAll();
 
+      string[] mediaIds = applications.Select(x => x.IconId).Where(x => x != null).ToArray();
+      Dictionary<string, Media> media = await Session.LoadAsync<Media>(mediaIds);
+
       return applications.OrderBy(app => app.Sort).Select(app => new ZeroVueApplication()
       {
         Id = app.Id,
-        Name = app.Name
+        Name = app.Name,
+        Image = app.IconId.IsNullOrEmpty() ? null : media.GetValueOrDefault(app.IconId)?.ThumbnailSource
       }).ToList();
     }
 
@@ -502,6 +510,8 @@ namespace zero.Web
     public string Id { get; set; }
 
     public string Name { get; set; }
+
+    public string Image { get; set; }
   }
 
   public class ZeroVueIconSet

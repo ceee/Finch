@@ -135,7 +135,6 @@
     position: relative;
     transition: color 0.2s ease;
     position: relative;
-    margin-bottom: 2px;
 
     &:hover > .ui-tree-item-actions
     {
@@ -154,8 +153,8 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      left: var(--padding-xs);
-      right: var(--padding-xs);
+      left: 0;
+      right: 0;
       background: var(--color-tree-selected);
       border-radius: var(--radius);
     }

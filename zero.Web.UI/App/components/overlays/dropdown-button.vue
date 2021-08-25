@@ -144,6 +144,7 @@
     gap: 6px;
     align-items: center;
     font-size: var(--font-size);
+    font-weight: 500;
     padding: 0 16px;
     height: 48px;
     color: var(--color-text);
@@ -155,7 +156,7 @@
 
     &.has-icon
     {
-      grid-template-columns: 32px minmax(0, 1fr) auto;
+      grid-template-columns: 30px minmax(0, 1fr) auto;
 
       &:not([disabled]):hover .ui-dropdown-button-icon
       {
@@ -222,7 +223,7 @@
     font-weight: 400;
     position: relative;
     top: -1px;
-    color: var(--color-text-dim);
+    color: var(--color-text);
   }
 
   .ui-dropdown-button-progress
