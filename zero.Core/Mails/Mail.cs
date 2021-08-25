@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Mail;
+﻿using System.Net.Mail;
 using zero.Core.Entities;
 
 namespace zero.Core.Mails
@@ -11,6 +10,8 @@ namespace zero.Core.Mails
 
   public class Mail : MailMessage
   {
+    public bool IsDeactivated { get; set; }
+
     public string ViewPath { get; set; }
 
     public bool HasView { get; set; } = true;

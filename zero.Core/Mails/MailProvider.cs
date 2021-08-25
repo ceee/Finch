@@ -41,7 +41,7 @@ namespace zero.Core.Mails
 
 
     /// <inheritdoc />
-    public virtual async Task<T> Create<T>(string mailTemplateKey, CancellationToken token = default) where T : Mail, new()
+    public virtual async Task<T> Create<T>(string mailTemplateKey, Action<MailTemplate> onCreate = null) where T : Mail, new()
     {
       MailTemplate template = await GetMailTemplate(mailTemplateKey);
 
@@ -50,13 +50,15 @@ namespace zero.Core.Mails
         Logger.LogError("Could not find a mail template with the key {key}", mailTemplateKey);
         return null;
       }
+
+      onCreate?.Invoke(template);
 
       return Merge(new T(), template);
     }
 
 
     /// <inheritdoc />
-    public virtual async Task<Mail> Create(string mailTemplateKey, CancellationToken token = default)
+    public virtual async Task<Mail> Create(string mailTemplateKey, Action<MailTemplate> onCreate = null)
     {
       MailTemplate template = await GetMailTemplate(mailTemplateKey);
 
@@ -65,6 +67,8 @@ namespace zero.Core.Mails
         Logger.LogError("Could not find a mail template with the key {key}", mailTemplateKey);
         return null;
       }
+
+      onCreate?.Invoke(template);
 
       return Merge(new Mail(), template);
     }
@@ -80,6 +84,11 @@ namespace zero.Core.Mails
     /// <inheritdoc />
     public virtual async Task Send(Mail message, IMailDispatcher dispatcher, CancellationToken token = default)
     {
+      if (message.IsDeactivated)
+      {
+        return;
+      }
+
       try
       {
         await Render(message);
@@ -131,6 +140,7 @@ namespace zero.Core.Mails
     protected virtual T Merge<T>(T mail, MailTemplate template) where T : Mail
     {
       mail.Template = template;
+      mail.IsDeactivated = !mail.Template.IsActive;
 
       // get sender from template or fall back to application
       mail.From = new MailAddress(template.SenderEmail.Or(Zero.Application.Email), template.SenderName.Or(Zero.Application.FullName), encoding);
@@ -171,10 +181,10 @@ namespace zero.Core.Mails
   public interface IMailProvider
   {
     /// <inheritdoc />
-    Task<Mail> Create(string mailTemplateKey, CancellationToken token = default);
+    Task<Mail> Create(string mailTemplateKey, Action<MailTemplate> onCreate = null);
 
     /// <inheritdoc />
-    Task<T> Create<T>(string mailTemplateKey, CancellationToken token = default) where T : Mail, new();
+    Task<T> Create<T>(string mailTemplateKey, Action<MailTemplate> onCreate = null) where T : Mail, new();
 
     /// <summary>
     /// Renders the message body.
