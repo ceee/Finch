@@ -1,7 +1,7 @@
 ﻿
 [class^="fth-"], [class*=" fth-"]
 {
-  @extend %font-icon;
+  font-family: var(--font-icon);
 }
 
 .feather 

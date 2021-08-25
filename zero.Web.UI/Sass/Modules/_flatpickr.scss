@@ -39,7 +39,6 @@
 
 .flatpickr-current-month
 {
-  @extend .ui-native-select;
   border: none;
   background: var(--color-button-light);
 
@@ -181,7 +180,7 @@
 
     &:before
     {
-      @extend %font-icon;
+      font-family: var(--font-icon);
       content: "\e845";
     }
   }

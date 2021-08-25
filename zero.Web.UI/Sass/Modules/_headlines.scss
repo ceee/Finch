@@ -2,7 +2,7 @@
 
 h2.ui-headline
 {
-  @extend %font;
+  font-family: var(--font);
   margin: 0;
   font-size: var(--font-size-l);
   font-weight: 700;
@@ -23,7 +23,7 @@ h2.ui-headline
 
 h3.ui-headline
 {
-  @extend %font;
+  font-family: var(--font);
   margin: 0;
   font-size: var(--font-size-m);
   font-weight: 700;

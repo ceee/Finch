@@ -2,7 +2,7 @@
 
 button
 {
-  @extend %font;
+  font-family: var(--font);
   color: var(--color-text);
   display: inline-block;
   font-size: var(--font-size);
@@ -24,7 +24,9 @@ button::-moz-focus-inner
   border: 0;
 }
 
-.ui-button
+.ui-button,
+.ui-dot-button,
+.ui-icon-button
 {
   position: relative;
   display: inline-flex;
@@ -44,7 +46,7 @@ button::-moz-focus-inner
   user-select: none;
   border: none;
   overflow: hidden;
-  @extend %font;
+  font-family: var(--font);
 
   &:hover
   {
@@ -263,7 +265,6 @@ button::-moz-focus-inner
 
 .ui-dot-button
 {
-  @extend .ui-button;
   background: transparent;
   padding: 0;
   height: 28px;
@@ -287,7 +288,6 @@ button::-moz-focus-inner
 
 .ui-icon-button
 {
-  @extend .ui-button;
   background: var(--color-button-light);
   padding: 0 !important;
   height: 32px;

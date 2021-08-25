@@ -14,13 +14,15 @@
 
 
 <script>
-  import '../sass/app.scss'
+  import '../sass/sass.js'
   import AppNavigation from 'zero/navigation.vue'
   import AppLogin from 'zero/pages/login/login.vue'
   import AppOverlays from 'zero/components/overlays/overlay-holder.vue'
   import AppNotifications from 'zero/components/notifications/notification-holder.vue'
   import EventHub from 'zero/helpers/eventhub.js';
   import AuthApi from 'zero/helpers/auth.js'
+  import ConfigApi from 'zero/api/config.js';
+
 
   export default {
     name: 'app',
@@ -53,6 +55,11 @@
         this.rerender();
         //this.isAuthenticated = isAuthenticated;
       });
+
+      AuthApi.$on('apprebuild', data =>
+      {
+        this.rerender();
+      });
     },
 
 
@@ -67,7 +74,12 @@
 
       rerender()
       {
-        this.keyIndex += 1;
+        ConfigApi.getConfig().then(res => {
+          window.__zero = res;
+          window.zero = res;
+          AuthApi.setUser(res.user);
+          this.keyIndex += 1;
+        });
       }
     }
   }

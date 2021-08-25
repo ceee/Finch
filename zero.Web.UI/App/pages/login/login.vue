@@ -30,7 +30,7 @@
 
 
 <script>
-  import AuthApi from 'zero/helpers/auth.js'
+  import AuthApi from 'zero/helpers/auth.js';
 
   export default {
     name: 'app-login',
@@ -57,6 +57,7 @@
         form.handle(AuthApi.login(this.model)).then(res =>
         {
           window.location.reload();
+          AuthApi.$emit('apprebuild');
         }, errors =>
         {
           console.info('login: error', errors);

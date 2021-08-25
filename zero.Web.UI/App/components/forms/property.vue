@@ -40,8 +40,6 @@
 </script>
 
 <style lang="scss">
-  @import 'Sass/Core/all';
-
   .ui-property
   {
     position: relative;
@@ -190,7 +188,7 @@
     &:before
     {
       content: "\e87f";
-      @extend %font-icon;
+      font-family: var(--font-icon);
       color: var(--color-primary);
       font-size: var(--font-size-l);
       float: left;

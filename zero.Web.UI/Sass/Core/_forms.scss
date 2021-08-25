@@ -14,9 +14,9 @@
 
 input[type="text"], input[type="color"], input[type="date"], input[type="datetime"], input[type="email"], input[type="file"], input[type="month"], input[type="number"],
 input[type="password"], input[type="range"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], input[type="week"],
-textarea, .ui-native-select, .ui-rte-input
+textarea, .ui-native-select, .ui-rte-input, .flatpickr-current-month
 {
-  @extend %font;
+  font-family: var(--font);
   background: var(--color-input);
   border: var(--color-input-border);
   font-size: var(--font-size);
@@ -61,14 +61,14 @@ textarea
 // select
 // --------------------------------
 
-.ui-native-select
+.ui-native-select, .flatpickr-current-month
 {
   position: relative;
   font-size: var(--font-size);
 
   select
   {
-    @extend %font;
+    font-family: var(--font);
     position: absolute;
     left: 0;
     right: 0;
@@ -95,7 +95,7 @@ textarea
 
   &:after
   {
-    @extend %font-icon;
+    font-family: var(--font-icon);
     content: "\e842";
     position: absolute;
     right: 12px;
@@ -177,7 +177,7 @@ textarea
   &:before
   {
     content: "\e83f";
-    @extend %font-icon;
+    font-family: var(--font-icon);
     color: transparent;
     font-size: var(--font-size-s);
   }

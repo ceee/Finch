@@ -23,7 +23,7 @@ body
   background: var(--color-page);
   color: var(--color-text);
   font-size: 16px;
-  @extend %font;
+  font-family: var(--font);
 }
 
 .clear
@@ -63,7 +63,7 @@ body
 }
 
 
-.ui-split
+.ui-split, .ui-split-three, .ui-split-four
 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -86,12 +86,10 @@ body
 
 .ui-split-three
 {
-  @extend .ui-split;
   grid-template-columns: 1fr 1fr 1fr;
 }
 
 .ui-split-four
 {
-  @extend .ui-split;
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
