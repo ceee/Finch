@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="app" :class="getClassList()" :key="appKey">
     <template v-if="isAuthenticated">
-      <app-bar />
+      <!--<app-bar />-->
       <app-navigation />
       <div class="app-main">
         <router-view></router-view>
