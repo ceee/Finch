@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using zero.Core.Attributes;
 using zero.Core.Utils;
 
 namespace zero.Core.Extensions
@@ -27,6 +29,24 @@ namespace zero.Core.Extensions
     public static T CloneLax<T>(this object obj)
     {
       return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj, new RefJsonConverter()), new RefJsonConverter());
+    }
+
+    public static T AutoSetIds<T>(this T obj)
+    {
+      // find all Raven Ids
+      List<ObjectTraverser.Result<GenerateIdAttribute>> ravenIds = ObjectTraverser.FindAttribute<GenerateIdAttribute>(obj);
+
+      // set unset Raven Ids
+      foreach (ObjectTraverser.Result<GenerateIdAttribute> item in ravenIds)
+      {
+        string id = item.Property.GetValue(item.Parent, null) as string;
+        if (String.IsNullOrWhiteSpace(id))
+        {
+          item.Property.SetValue(item.Parent, item.Item.Length.HasValue ? IdGenerator.Create(item.Item.Length.Value) : IdGenerator.Create());
+        }
+      }
+
+      return obj;
     }
   }
 }

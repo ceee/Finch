@@ -180,10 +180,14 @@ namespace zero.Core.Mails
 
   public interface IMailProvider
   {
-    /// <inheritdoc />
+    /// <summary>
+    /// Creates a maling from a template
+    /// </summary>
     Task<Mail> Create(string mailTemplateKey, Action<MailTemplate> onCreate = null);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Creates a maling from a template
+    /// </summary>
     Task<T> Create<T>(string mailTemplateKey, Action<MailTemplate> onCreate = null) where T : Mail, new();
 
     /// <summary>

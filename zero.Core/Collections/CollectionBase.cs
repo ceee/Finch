@@ -193,18 +193,8 @@ namespace zero.Core.Collections
 
       bool isCreate = false;
 
-      // find all Raven Ids
-      List<ObjectTraverser.Result<GenerateIdAttribute>> ravenIds = ObjectTraverser.FindAttribute<GenerateIdAttribute>(model);
-
-      // set unset Raven Ids
-      foreach (ObjectTraverser.Result<GenerateIdAttribute> item in ravenIds)
-      {
-        string id = item.Property.GetValue(item.Parent, null) as string;
-        if (String.IsNullOrWhiteSpace(id))
-        {
-          item.Property.SetValue(item.Parent, item.Item.Length.HasValue ? IdGenerator.Create(item.Item.Length.Value) : IdGenerator.Create());
-        }
-      }
+      // set IDs
+      model.AutoSetIds();
 
       // get current user
       string userId = Context.BackofficeUser.FindFirstValue(Constants.Auth.Claims.UserId);
