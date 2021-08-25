@@ -276,7 +276,7 @@
     grid-template-columns: auto 1fr;
     gap: 2px;
     justify-content: stretch;
-    height: 100vh;
+    height: calc(100vh - 70px);
   }
 
 

@@ -1,6 +1,7 @@
 ﻿<template>
   <div class="app" :class="getClassList()" :key="appKey">
     <template v-if="isAuthenticated">
+      <app-bar />
       <app-navigation />
       <div class="app-main">
         <router-view></router-view>
@@ -16,6 +17,7 @@
 <script>
   import '../sass/sass.js'
   import AppNavigation from 'zero/navigation.vue'
+  import AppBar from 'zero/bar.vue'
   import AppLogin from 'zero/pages/login/login.vue'
   import AppOverlays from 'zero/components/overlays/overlay-holder.vue'
   import AppNotifications from 'zero/components/notifications/notification-holder.vue'
@@ -27,7 +29,7 @@
   export default {
     name: 'app',
 
-    components: { AppNavigation, AppOverlays, AppLogin, AppNotifications },
+    components: { AppNavigation, AppBar, AppOverlays, AppLogin, AppNotifications },
 
     data: () => ({
       isAuthenticated: false,

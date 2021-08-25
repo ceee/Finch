@@ -58,6 +58,7 @@
     stroke: currentColor;
     stroke-linecap: round;
     stroke-linejoin: round;
+    //fill: var(--color-bg-shade-3);
     fill: none;
   }
 

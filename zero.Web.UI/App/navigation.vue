@@ -1,21 +1,6 @@
 ﻿<template>
   <div class="app-nav theme-light" :class="{'is-compact': compact }">
 
-    <h1 class="app-nav-headline">
-      <img src="/Assets/zero-2-light.png" class="show-light" v-localize:alt="'@zero.name'" />
-      <img src="/Assets/zero-2.png" class="show-dark" v-localize:alt="'@zero.name'" />
-    </h1>
-
-    <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">
-      <template v-slot:button>
-        <ui-button type="light block" :label="currentApplication.name" caret="down" />
-      </template>
-      <ui-dropdown-button v-for="app in applications" :value="app" :key="app.id" :label="app.name" :selected="app.id === appId" @click="applicationChanged" :prevent="true" />
-      <ui-dropdown-separator />
-      <ui-dropdown-button label="Add new application" icon="fth-plus" @click="addApplication" />
-      <ui-dropdown-button label="Manage apps" icon="fth-edit-2" @click="manageApplications" />
-    </ui-dropdown>
-
     <nav class="app-nav-inner">
       <template v-for="section in sections">
         <router-link :to="section.url" class="app-nav-item" :alias="section.alias" :class="{ 'has-children': hasChildren(section) }">
@@ -31,29 +16,7 @@
           </div>
         </transition>
       </template>
-      <!-- // TODO this is only for development -->
-      <!--<button type="button" class="app-nav-item" @click="$refs.iconpicker.pick()">
-        <i class="app-nav-item-icon fth-droplet"></i> Icons
-      </button>
-      <icon-picker ref="iconpicker" :output="false" />-->
     </nav>
-
-    <footer class="app-nav-account" v-if="user">     
-      <ui-dropdown align="left bottom">
-        <template v-slot:button>
-          <button type="button" class="app-nav-account-button">
-            <img class="-image" v-if="userAvatar" :src="userAvatar" :alt="user.name" />
-            <span class="-image" v-if="!userAvatar"><i class="fth-user"></i></span>
-            <p class="-text"><strong>{{user.name}}</strong></p>
-            <ui-icon symbol="fth-chevron-down" class="-arrow" />
-          </button>
-        </template>
-        <ui-dropdown-button label="Edit" icon="fth-edit-2" @click="editUser" />
-        <ui-dropdown-button label="Change password" icon="fth-lock" @click="changePassword" />
-        <ui-dropdown-button label="Toggle sidebar" icon="fth-minimize-2" @click="toggleSidebar" />
-        <ui-dropdown-button label="Logout" icon="fth-log-out" @click="logout" />
-      </ui-dropdown>
-    </footer>
 
   </div>
 </template>
@@ -88,82 +51,14 @@
     {
       this.currentApplication = _find(this.applications, x => x.id === zero.appId);
       this.compact = localStorage.getItem(compactCacheKey) === 'true';
-      this.buildUser(AuthApi.user);
-
-      AuthApi.$on('user', user =>
-      {
-        this.buildUser(user);
-      });
     },
 
 
     methods: {
 
-      buildUser(user)
-      {
-        this.user = user;
-
-        if (user && user.avatarId)
-        {
-          this.userAvatar = MediaApi.getImageSource(user.avatarId, false, true);
-        }
-        else
-        {
-          this.userAvatar = null;
-        }
-      },
-
       hasChildren(section)
       {
         return section.children && section.children.length > 0;
-      },
-
-      editUser(item, opts)
-      {
-        opts.hide();
-        this.$router.push({
-          name: zero.alias.settings.users + '-edit',
-          params: { id: this.user.id }
-        });
-      },
-
-      changePassword(item, opts)
-      {
-        AuthApi.openPasswordOverlay();
-        opts.hide();
-      },
-
-      logout(item, opts)
-      {
-        AuthApi.logout();
-        opts.hide();
-      },
-
-      addApplication(item, opts)
-      {
-        opts.hide();
-        this.$router.push({
-          name: zero.alias.settings.applications + '-create'
-        });
-      },
-
-      manageApplications(item, opts)
-      {
-        opts.hide();
-        this.$router.push({
-          name: zero.alias.settings.applications
-        });
-      },
-
-      applicationChanged(item, opts)
-      {
-        opts.loading(true);
-
-        AuthApi.switchApp(item.id).then(success =>
-        {
-          opts.loading(false);
-          //opts.hide();
-        });
       },
 
       toggleSidebar()
