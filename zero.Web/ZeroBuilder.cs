@@ -113,7 +113,7 @@ namespace zero.Web
       Services.AddScoped<BackofficeFilterAttribute>();
       Services.AddScoped<ModelStateValidationFilterAttribute>();
 
-      Services.AddSingleton<ICollectionInterceptorHandler, CollectionInterceptorHandler>();
+      Services.AddScoped<ICollectionInterceptorHandler, CollectionInterceptorHandler>();
 
       Services.AddHttpContextAccessor();
 

@@ -7,12 +7,6 @@ namespace zero.Core.Collections
   public abstract partial class CollectionInterceptor : ICollectionInterceptor
   {
     /// <inheritdoc />
-    public int Gravity { get; set; } = 0;
-
-    /// <inheritdoc />
-    public virtual bool CanHandle(Type type) => false;
-
-    /// <inheritdoc />
     public virtual Task<InterceptorResult<T>> Creating<T>(CreateParameters<T> args) where T : ZeroEntity => Task.FromResult<InterceptorResult<T>>(default);
 
     /// <inheritdoc />
@@ -40,16 +34,6 @@ namespace zero.Core.Collections
 
   public interface ICollectionInterceptor
   {
-    /// <summary>
-    /// Interceptors with higher gravity run before other interceptors (which can handle a given type)
-    /// </summary>
-    public int Gravity { get; set; }
-
-    /// <summary>
-    /// Whether this interceptor can handle a certain type
-    /// </summary>
-    bool CanHandle(Type type);
-
     /// <summary>
     /// Called after an entity has been stored but before the session has saved its changes
     /// </summary>

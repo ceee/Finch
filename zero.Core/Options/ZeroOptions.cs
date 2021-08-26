@@ -28,6 +28,7 @@ namespace zero.Core.Options
       Icons = new();
       Services = new();
       Routing = new();
+      Interceptors = new();
     }
 
     /// <inheritdoc />
@@ -91,6 +92,9 @@ namespace zero.Core.Options
 
     /// <inheritdoc />
     public RoutingOptions Routing { get; private set; }
+
+    /// <inheritdoc />
+    public InterceptorOptions Interceptors { get; private set; }
   }
 
 
@@ -201,5 +205,10 @@ namespace zero.Core.Options
     /// 
     /// </summary>
     RoutingOptions Routing { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    InterceptorOptions Interceptors { get; }
   }
 }

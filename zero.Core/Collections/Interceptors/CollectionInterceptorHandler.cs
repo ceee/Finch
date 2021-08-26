@@ -2,37 +2,30 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using zero.Core.Entities;
-using zero.Core.Utils;
+using zero.Core.Options;
 
 namespace zero.Core.Collections
 {
   public class CollectionInterceptorHandler : ICollectionInterceptorHandler
   {
-    protected ConcurrentBag<InterceptorRef> Interceptors { get; private set; } = new();
+    protected ConcurrentDictionary<Type, ICollectionInterceptor> Interceptors { get; private set; } = new();
+
+    protected IZeroOptions Options { get; set; }
+
+    protected IServiceProvider Services { get; set; }
 
     protected ILogger<ICollectionInterceptorHandler> Logger { get; set; }
 
 
-    public CollectionInterceptorHandler(IEnumerable<ICollectionInterceptor> items, ILogger<ICollectionInterceptorHandler> logger)
+    public CollectionInterceptorHandler(IZeroOptions options, IServiceProvider serviceProvider, ILogger<ICollectionInterceptorHandler> logger)
     {
       Logger = logger;
-      Interceptors = new();
-
-      foreach (ICollectionInterceptor item in items)
-      {
-        Interceptors.Add(new()
-        {
-          Interceptor = item,
-          Hash = IdGenerator.Create(),
-          Name = item.GetType().Name,
-          Gravity = item.Gravity
-        });
-      }
+      Options = options;
+      Services = serviceProvider;
     }
 
 
@@ -60,23 +53,28 @@ namespace zero.Core.Collections
     {
       Func<ICollectionInterceptor, Task<InterceptorResult<T>>> func = default;
 
-      foreach (InterceptorRef interceptorRef in ForType(typeof(T)))
+      foreach (InterceptorRegistration registration in ForType(typeof(T)))
       {
+        if (!TryResolve(registration, out ICollectionInterceptor interceptor))
+        {
+          continue;
+        }
+
         if (func == default)
         {
           func = expression.Compile();
         }
 
-        Logger.LogDebug("Run interceptor {interceptor} before operation {operation}", interceptorRef.Name, instruction.Operation);
+        Logger.LogDebug("Run interceptor {interceptor} before operation {operation}", registration.Name, instruction.Operation);
 
-        InterceptorResult<T> result = await func(interceptorRef.Interceptor);
+        InterceptorResult<T> result = await func(interceptor);
 
         if (result == default)
         {
           result = new();
         }
 
-        result.InterceptorHash = interceptorRef.Hash;
+        result.InterceptorHash = registration.Hash;
         instruction.Results.Add(result);
 
         if (result.Result != null)
@@ -103,18 +101,23 @@ namespace zero.Core.Collections
       Func<ICollectionInterceptor, Task> func = default;
       instruction ??= new();
 
-      foreach (InterceptorRef interceptorRef in ForType(typeof(T)))
+      foreach (InterceptorRegistration registration in ForType(typeof(T)))
       {
-        InterceptorResult<T> beforeResult = instruction?.Results.FirstOrDefault(res => res.InterceptorHash == interceptorRef.Hash);
+        if (!TryResolve(registration, out ICollectionInterceptor interceptor))
+        {
+          continue;
+        }
+
+        InterceptorResult<T> beforeResult = instruction?.Results.FirstOrDefault(res => res.InterceptorHash == registration.Hash);
 
         if (func == default)
         {
           func = expression.Compile();
         }
 
-        Logger.LogDebug("Run interceptor {interceptor} after operation {operation}", interceptorRef.Name, instruction.Operation);
+        Logger.LogDebug("Run interceptor {interceptor} after operation {operation}", registration.Name, instruction.Operation);
 
-        await func(interceptorRef.Interceptor);
+        await func(interceptor);
       }
     }
 
@@ -122,22 +125,35 @@ namespace zero.Core.Collections
     /// <summary>
     /// Get all interceptors for a certain type
     /// </summary>
-    IEnumerable<InterceptorRef> ForType(Type targetType)
+    IOrderedEnumerable<InterceptorRegistration> ForType(Type targetType)
     {
-      return Interceptors.Where(map => map.Interceptor.CanHandle(targetType)).OrderByDescending(x => x.Gravity);
+      return Options.Interceptors.GetAllItems().Where(x => x.CanHandle(targetType)).OrderByDescending(x => x.Gravity);
      // return Interceptors.Where(item => item.Types.Count == 0 || item.Types.Any(type => targetType.IsAssignableFrom(type)));
     }
 
 
-    protected class InterceptorRef
+    /// <summary>
+    /// Resolves an interceptor from the service provider
+    /// </summary>
+    bool TryResolve(InterceptorRegistration registration, out ICollectionInterceptor interceptor)
     {
-      public string Hash { get; set; }
+      Type type = registration.InterceptorType;
 
-      public ICollectionInterceptor Interceptor { get; set; }
+      if (Interceptors.TryGetValue(type, out interceptor))
+      {
+        return true;
+      }
 
-      public string Name { get; set; }
+      interceptor = Services.GetService(type) as ICollectionInterceptor;
 
-      public int Gravity { get; set; }
+      if (interceptor == null)
+      {
+        Logger.LogWarning("Could not resolve interceptor {interceptor}", registration.Name);
+      }
+
+      Interceptors.TryAdd(type, interceptor);
+
+      return interceptor != null;
     }
   }
 
