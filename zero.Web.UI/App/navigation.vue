@@ -1,6 +1,15 @@
 ﻿<template>
   <div class="app-nav theme-light" :class="{'is-compact': compact }">
 
+    <div class="app-nav-apps theme-dark">
+      <ui-header-bar class="ui-tree-header" title="Applications" :back-button="false" />
+      <button v-for="app in applications" :key="app.id" type="button" @click="applicationChanged(app)" class="app-nav-app" :class="{ 'is-active': app.id == appId }">
+        <img :src="app.image" class="app-nav-app-icon" :alt="app.name" />
+        <ui-localize :value="app.name" />
+        <ui-icon v-if="app.id == appId" symbol="fth-check" class="app-nav-app-selected" />
+      </button>
+    </div>
+
     <div class="app-nav-boxed">
 
       <h1 class="app-nav-headline">
@@ -13,7 +22,7 @@
 
     <ui-dropdown v-if="applications.length > 0" theme="dark" class="app-nav-switch theme-dark">
       <template v-slot:button>
-        <ui-button type="light block" :label="currentApplication.name" caret="down" />
+        <ui-button type="light block" :label="currentApplication.name" caret="right" />
       </template>
       <button v-for="app in applications" :key="app.id" type="button" @click="applicationChanged(app)" class="ui-dropdown-button has-icon" :class="{ 'is-active': app.id == appId }">
         <img :src="app.image" class="ui-dropdown-button-icon" :alt="app.name" />
