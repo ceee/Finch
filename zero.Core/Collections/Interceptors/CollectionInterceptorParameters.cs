@@ -7,9 +7,9 @@ using zero.Core.Extensions;
 
 namespace zero.Core.Collections
 {
-  public abstract partial class CollectionInterceptor : ICollectionInterceptor
+  public abstract partial class CollectionInterceptor<T> : ICollectionInterceptor<T> where T : ZeroEntity
   {
-    public class Parameters<T> where T : ZeroEntity
+    public class Parameters
     {
       /// <summary>
       /// The current zero context
@@ -48,7 +48,7 @@ namespace zero.Core.Collections
     }
 
 
-    public class ParametersWithModel<T> : Parameters<T> where T : ZeroEntity
+    public class ParametersWithModel : Parameters
     {
       /// <summary>
       /// The model which is affected
@@ -57,12 +57,12 @@ namespace zero.Core.Collections
     }
 
 
-    public class CreateParameters<T> : ParametersWithModel<T> where T : ZeroEntity
+    public class CreateParameters : ParametersWithModel
     {
     }
 
 
-    public class UpdateParameters<T> : ParametersWithModel<T> where T : ZeroEntity
+    public class UpdateParameters : ParametersWithModel
     {
       /// <summary>
       /// The Id of the model which is updated
@@ -71,7 +71,7 @@ namespace zero.Core.Collections
     }
 
 
-    public class DeleteParameters<T> : ParametersWithModel<T> where T : ZeroEntity
+    public class DeleteParameters : ParametersWithModel
     {
       /// <summary>
       /// The id of the model which is deleted
@@ -80,6 +80,9 @@ namespace zero.Core.Collections
     }
 
 
-    public class PurgeParameters<T> : Parameters<T> where T : ZeroEntity { }
+    public class PurgeParameters : Parameters
+    {
+
+    }
   }
 }

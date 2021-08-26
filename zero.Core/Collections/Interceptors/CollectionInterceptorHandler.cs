@@ -12,7 +12,7 @@ namespace zero.Core.Collections
 {
   public class CollectionInterceptorHandler : ICollectionInterceptorHandler
   {
-    protected ConcurrentDictionary<Type, ICollectionInterceptor> Interceptors { get; private set; } = new();
+    protected ConcurrentDictionary<Type, object> Interceptors { get; private set; } = new();
 
     protected IZeroOptions Options { get; set; }
 
@@ -32,7 +32,7 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public InterceptorInstruction<T, TParameters> Create<T, TParameters>(string operationName, TParameters parameters)
       where T : ZeroEntity
-      where TParameters : CollectionInterceptor.Parameters<T>
+      where TParameters : CollectionInterceptor<T>.Parameters
     {
       InterceptorInstruction<T, TParameters> instruction = new(parameters);
       instruction.Operation = operationName;
@@ -47,16 +47,16 @@ namespace zero.Core.Collections
     /// <summary>
     /// Calls all matching interceptors with the specified expression
     /// </summary>
-    internal async Task HandleBefore<T, TParameters>(Expression<Func<ICollectionInterceptor, Task<InterceptorResult<T>>>> expression, InterceptorInstruction<T, TParameters> instruction)
+    internal async Task HandleBefore<T, TParameters>(Expression<Func<ICollectionInterceptor<T>, Task<InterceptorResult<T>>>> expression, InterceptorInstruction<T, TParameters> instruction)
       where T : ZeroEntity
-      where TParameters : CollectionInterceptor.Parameters<T>
+      where TParameters : CollectionInterceptor<T>.Parameters
     {
       string typeName = (typeof(T)).Name;
-      Func<ICollectionInterceptor, Task<InterceptorResult<T>>> func = default;
+      Func<ICollectionInterceptor<T>, Task<InterceptorResult<T>>> func = default;
 
       foreach (InterceptorRegistration registration in ForType(typeof(T)))
       {
-        if (!TryResolve(registration, out ICollectionInterceptor interceptor))
+        if (!TryResolve(registration, out ICollectionInterceptor<T> interceptor))
         {
           continue;
         }
@@ -95,16 +95,16 @@ namespace zero.Core.Collections
     /// <summary>
     /// Calls all matching interceptors with the specified expression
     /// </summary>
-    internal async Task HandleAfter<T, TParameters>(Expression<Func<ICollectionInterceptor, Task>> expression, InterceptorInstruction<T, TParameters> instruction)
+    internal async Task HandleAfter<T, TParameters>(Expression<Func<ICollectionInterceptor<T>, Task>> expression, InterceptorInstruction<T, TParameters> instruction)
       where T : ZeroEntity
-      where TParameters : CollectionInterceptor.Parameters<T>
+      where TParameters : CollectionInterceptor<T>.Parameters
     {
-      Func<ICollectionInterceptor, Task> func = default;
+      Func<ICollectionInterceptor<T>, Task> func = default;
       instruction ??= new();
 
       foreach (InterceptorRegistration registration in ForType(typeof(T)))
       {
-        if (!TryResolve(registration, out ICollectionInterceptor interceptor))
+        if (!TryResolve(registration, out ICollectionInterceptor<T> interceptor))
         {
           continue;
         }
@@ -134,16 +134,17 @@ namespace zero.Core.Collections
     /// <summary>
     /// Resolves an interceptor from the service provider
     /// </summary>
-    bool TryResolve(InterceptorRegistration registration, out ICollectionInterceptor interceptor)
+    bool TryResolve<T>(InterceptorRegistration registration, out ICollectionInterceptor<T> interceptor) where T : ZeroEntity
     {
       Type type = registration.InterceptorType;
 
-      if (Interceptors.TryGetValue(type, out interceptor))
+      if (Interceptors.TryGetValue(type, out object interceptorObj))
       {
+        interceptor = interceptorObj as ICollectionInterceptor<T>;
         return true;
       }
 
-      interceptor = Services.GetService(type) as ICollectionInterceptor;
+      interceptor = Services.GetService(type) as ICollectionInterceptor<T>;
 
       if (interceptor == null)
       {
@@ -164,6 +165,6 @@ namespace zero.Core.Collections
     /// </summary>
     InterceptorInstruction<T, TParameters> Create<T, TParameters>(string operationName, TParameters parameters)
       where T : ZeroEntity
-      where TParameters : CollectionInterceptor.Parameters<T>;
+      where TParameters : CollectionInterceptor<T>.Parameters;
   }
 }

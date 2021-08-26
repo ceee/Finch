@@ -8,7 +8,7 @@ namespace zero.Core.Collections
 {
   public class InterceptorInstruction<T, TParameters>
     where T : ZeroEntity
-    where TParameters : CollectionInterceptor.Parameters<T>
+    where TParameters : CollectionInterceptor<T>.Parameters
   {
     public string Operation { get; set; }
 
@@ -20,9 +20,9 @@ namespace zero.Core.Collections
 
     public bool Return => EntityResult != null;
 
-    internal Func<Expression<Func<ICollectionInterceptor, Task<InterceptorResult<T>>>>, Task> BeforeOperationHandler = _ => Task.CompletedTask;
+    internal Func<Expression<Func<ICollectionInterceptor<T>, Task<InterceptorResult<T>>>>, Task> BeforeOperationHandler = _ => Task.CompletedTask;
 
-    internal Func<Expression<Func<ICollectionInterceptor, Task>>, Task> AfterOperationHandler = _ => Task.CompletedTask;
+    internal Func<Expression<Func<ICollectionInterceptor<T>, Task>>, Task> AfterOperationHandler = _ => Task.CompletedTask;
 
 
     internal InterceptorInstruction() { }
@@ -33,12 +33,12 @@ namespace zero.Core.Collections
     }
 
 
-    public async Task HandleBefore(Expression<Func<ICollectionInterceptor, Task<InterceptorResult<T>>>> expression)
+    public async Task HandleBefore(Expression<Func<ICollectionInterceptor<T>, Task<InterceptorResult<T>>>> expression)
     {
       await BeforeOperationHandler(expression);
     }
 
-    public async Task HandleAfter(Expression<Func<ICollectionInterceptor, Task>> expression)
+    public async Task HandleAfter(Expression<Func<ICollectionInterceptor<T>, Task>> expression)
     {
       await AfterOperationHandler(expression);
     }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using zero.Core.Collections;
+using zero.Core.Entities;
 using zero.Core.Utils;
 
 namespace zero.Core.Options
@@ -8,13 +10,39 @@ namespace zero.Core.Options
   {
     public void Add<T>(int gravity = 0, Func<Type, bool> canHandle = null) where T : ICollectionInterceptor
     {
+      Type type = typeof(T);
+
+      if (canHandle == null)
+      {
+        canHandle = _ => true;
+      }
+
       Items.Add(new InterceptorRegistration()
       {
         Hash = IdGenerator.Create(),
-        Name = typeof(T).Name,
+        Name = type.Name,
         Gravity = gravity,
-        CanHandle = canHandle ?? (_ => true),
-        InterceptorType = typeof(T)
+        CanHandle = canHandle,
+        InterceptorType = type
+      });
+    }
+
+    public void Add<T, TBoxed>(int gravity = 0, Func<Type, bool> canHandle = null) 
+      where T : ICollectionInterceptor<TBoxed>
+      where TBoxed : ZeroEntity
+    {
+      Type type = typeof(T);
+      Type boxedType = typeof(TBoxed);
+      Func<Type, bool> finalCanHandle = requestedType => boxedType.IsAssignableFrom(requestedType) && (canHandle == null || canHandle.Invoke(requestedType));
+
+      Items.Add(new InterceptorRegistration()
+      {
+        Hash = IdGenerator.Create(),
+        Name = type.Name,
+        Gravity = gravity,
+        CanHandle = finalCanHandle,
+        InterceptorType = type,
+        IsInterceptorBoxed = true
       });
     }
   }
@@ -31,5 +59,7 @@ namespace zero.Core.Options
     public string Name { get; set; }
 
     public Func<Type, bool> CanHandle { get; set; }
+
+    public bool IsInterceptorBoxed { get; set; }
   }
 }

@@ -240,7 +240,7 @@ namespace zero.Core.Collections
         }
       }
 
-      var instruction = CreateInstruction<CollectionInterceptor.CreateParameters<T>>("create", args => args.Model = model);
+      var instruction = CreateInstruction<CollectionInterceptor<T>.CreateParameters>("create", args => args.Model = model);
       await instruction.HandleBefore(x => x.Creating(instruction.Parameters));
 
       if (instruction.Return)
@@ -273,7 +273,7 @@ namespace zero.Core.Collections
       }
 
       // run interceptor
-      var instruction = CreateInstruction<CollectionInterceptor.UpdateParameters<T>>("update", args =>
+      var instruction = CreateInstruction<CollectionInterceptor<T>.UpdateParameters>("update", args =>
       {
         args.Model = model;
         args.Id = model.Id;
@@ -314,7 +314,7 @@ namespace zero.Core.Collections
         return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
       }
 
-      var instruction = CreateInstruction<CollectionInterceptor.DeleteParameters<T>>("delete", args =>
+      var instruction = CreateInstruction<CollectionInterceptor<T>.DeleteParameters>("delete", args =>
       {
         args.Model = entity;
         args.Id = entity.Id;
@@ -358,7 +358,7 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public virtual async Task<EntityResult<T>> Purge(string querySuffix = null, Parameters parameters = null)
     {
-      var instruction = CreateInstruction<CollectionInterceptor.PurgeParameters<T>>("purge");
+      var instruction = CreateInstruction<CollectionInterceptor<T>.PurgeParameters>("purge");
       await instruction.HandleBefore(x => x.Purging(instruction.Parameters));
 
       if (instruction.Return)
@@ -384,7 +384,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Get interceptor parameters
     /// </summary>
-    protected InterceptorInstruction<T, TParams> CreateInstruction<TParams>(string operationName, Action<TParams> configure = null) where TParams : CollectionInterceptor.Parameters<T>, new()
+    protected InterceptorInstruction<T, TParams> CreateInstruction<TParams>(string operationName, Action<TParams> configure = null) where TParams : CollectionInterceptor<T>.Parameters, new()
     {
       TParams parameters = new TParams()
       {
