@@ -57,22 +57,20 @@
       <icon-picker ref="iconpicker" :output="false" />-->
     </nav>
 
-    <footer class="app-nav-account" v-if="user">     
-      <ui-dropdown align="left bottom">
-        <template v-slot:button>
-          <button type="button" class="app-nav-account-button">
-            <img class="-image" v-if="userAvatar" :src="userAvatar" :alt="user.name" />
-            <span class="-image" v-if="!userAvatar"><i class="fth-user"></i></span>
-            <p class="-text"><strong>{{user.name}}</strong></p>
-            <ui-icon symbol="fth-more-horizontal" class="-arrow" /> 
-          </button>
-        </template>
-        <ui-dropdown-button label="Edit" icon="fth-edit-2" @click="editUser" />
-        <ui-dropdown-button label="Change password" icon="fth-lock" @click="changePassword" />
-        <ui-dropdown-button label="Toggle sidebar" icon="fth-minimize-2" @click="toggleSidebar" />
-        <ui-dropdown-button label="Logout" icon="fth-log-out" @click="logout" />
-      </ui-dropdown>
-    </footer>
+    <ui-dropdown class="app-nav-account" v-if="user" align="left bottom">
+      <template v-slot:button>
+        <button type="button" class="app-nav-account-button">
+          <img class="-image" v-if="userAvatar" :src="userAvatar" :alt="user.name" />
+          <span class="-image" v-if="!userAvatar"><i class="fth-user"></i></span>
+          <p class="-text"><strong>{{user.name}}</strong></p>
+          <ui-icon symbol="fth-more-horizontal" class="-arrow" /> 
+        </button>
+      </template>
+      <ui-dropdown-button label="Edit" icon="fth-edit-2" @click="editUser" />
+      <ui-dropdown-button label="Change password" icon="fth-lock" @click="changePassword" />
+      <ui-dropdown-button label="Toggle sidebar" icon="fth-minimize-2" @click="toggleSidebar" />
+      <ui-dropdown-button label="Logout" icon="fth-log-out" @click="logout" />
+    </ui-dropdown>
 
   </div>
 </template>

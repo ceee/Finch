@@ -225,7 +225,7 @@ a.app-nav-child
   display: flex;
   align-items: center;
   font-size: var(--font-size);
-  padding: 0 var(--padding) 0 calc(var(--padding) + 38px);
+  padding: 0 var(--padding) 0 calc(var(--padding) + 26px);
   height: 36px;
   color: var(--color-text-dim);
 
@@ -262,9 +262,7 @@ a.app-nav-child
 
 .app-nav-account
 {
-  padding: var(--padding-m);
   border-top: 1px solid var(--color-line-onbg);
-  //padding-top: var(--padding-xs);
 }
 
 .app-nav-account-button
@@ -275,6 +273,12 @@ a.app-nav-child
   gap: 16px;
   color: var(--color-text-dim);
   align-items: center;
+  padding: var(--padding-m);
+
+  &:hover
+  {
+    background: var(--color-bg-shade-2);
+  }
 
   .-image
   {
