@@ -64,7 +64,7 @@
             <img class="-image" v-if="userAvatar" :src="userAvatar" :alt="user.name" />
             <span class="-image" v-if="!userAvatar"><i class="fth-user"></i></span>
             <p class="-text"><strong>{{user.name}}</strong></p>
-            <ui-icon symbol="fth-chevron-down" class="-arrow" />
+            <ui-icon symbol="fth-more-horizontal" class="-arrow" /> 
           </button>
         </template>
         <ui-dropdown-button label="Edit" icon="fth-edit-2" @click="editUser" />

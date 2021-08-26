@@ -3,9 +3,9 @@
     <transition-group name="overlay" :duration="600">
       <div class="app-overlay-outer" :display="instance.display" v-for="(instance, index) in instances" :key="instance.id" :style="{ transform: instance.display !== 'editor' ? null : 'translateX(' + (editorLength - index - 1) * -60 + 'px)' }">
         <div class="app-overlay-bg" @click="close(instance)"></div>
-        <dialog open class="app-overlay" :data-alias="instance.alias" :style="{ width: instance.width ? (instance.width + 'px') : null }" :class="'theme-' + instance.theme" :display="instance.display">
+        <div open class="app-overlay" :data-alias="instance.alias" :style="{ width: instance.width ? (instance.width + 'px') : null }" :class="'theme-' + instance.theme" :display="instance.display">
           <component :is="instance.component" :model.sync="instance.model" :config="instance" v-bind="instance"></component>
-        </dialog>
+        </div>
       </div>
     </transition-group>
   </div>
@@ -57,7 +57,7 @@
     bottom: 0;
     z-index: 5;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     transition: transform 0.4s ease-out;
 
     & + .app-overlay-outer .app-overlay
@@ -83,11 +83,13 @@
     width: auto;
     height: auto;
     background: var(--color-overlay);
-    border-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
     border: none !important;
     box-shadow: var(--shadow-overlay-dialog);
     padding: var(--padding);
-    text-align: center;
+    padding-top: 40px;
+    text-align: left;
     position: relative;
     -webkit-backface-visibility: hidden;
     z-index: 3;
@@ -102,6 +104,11 @@
     margin-left: -16px;
     margin-top: 20px;
     margin-bottom: 20px;
+  }
+
+  .app-overlay .ui-headline
+  {
+    margin-bottom: 0.4em;
   }
 
   .app-overlay[display="dialog"] .ui-form-loading
@@ -153,7 +160,7 @@
     .app-overlay
     {
       opacity: 0;
-      transform: scale(0.95);
+      transform: translateY(-20px);
     }
 
     .app-overlay[display="editor"]

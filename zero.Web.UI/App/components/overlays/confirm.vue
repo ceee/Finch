@@ -4,8 +4,8 @@
     <p v-localize:html="config.text"></p>
     <ui-error ref="error" style="margin-top: 25px;" />
     <div class="app-confirm-buttons">
-      <ui-button type="light" :label="config.closeLabel" :disabled="state == 'loading'" @click="config.close"></ui-button>
       <ui-button :type="config.confirmType" :state="state" :label="config.confirmLabel" @click="confirm"></ui-button>
+      <ui-button type="light" :label="config.closeLabel" :disabled="state == 'loading'" @click="config.close"></ui-button>
     </div>
   </div>
 </template>
@@ -70,7 +70,7 @@
 <style lang="scss">
   .app-confirm-buttons
   {
-    margin-top: 30px;
+    margin-top: 40px;
   }
 
   .app-confirm p

@@ -16,7 +16,7 @@
 
 <script>
   import '../sass/sass.js'
-  import AppNavigation from 'zero/navigation.vue'
+  import AppNavigation from './navigation.vue'
   import AppBar from 'zero/bar.vue'
   import AppLogin from 'zero/pages/login/login.vue'
   import AppOverlays from 'zero/components/overlays/overlay-holder.vue'

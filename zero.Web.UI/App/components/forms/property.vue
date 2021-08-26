@@ -105,9 +105,9 @@
     }
   }
 
-  .ui-property.is-text > .ui-property-content
+  .ui-property.is-text
   {
-    margin-top: 2px;
+    grid-gap: 2px;
   }
 
   .ui-property.full-width > .ui-property-content,
