@@ -229,15 +229,6 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     async Task<EntityResult<T>> Create(T model)
     {
-      // run interceptors
-      var parameters = Parameters<CollectionInterceptor.CreateParameters<T>>(args => args.Model = model);
-      EntityResult<T> preResult = await InterceptorHandler?.Handle(x => x.Creating(parameters));
-
-      if (preResult != null)
-      {
-        return preResult;
-      }
-
       // run validator
       if (Validator != null)
       {
@@ -249,10 +240,17 @@ namespace zero.Core.Collections
         }
       }
 
+      var instruction = CreateInstruction<CollectionInterceptor.CreateParameters<T>>("create", args => args.Model = model);
+      await instruction.HandleBefore(x => x.Creating(instruction.Parameters));
+
+      if (instruction.Return)
+      {
+        return instruction.EntityResult;
+      }
+
       await Session.StoreAsync(model);
 
-      // run interceptors
-      await InterceptorHandler?.Handle<T>(x => x.Created(parameters));
+      await instruction.HandleAfter(x => x.Created(instruction.Parameters));
 
       await Session.SaveChangesAsync();
 
@@ -263,19 +261,6 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     async Task<EntityResult<T>> Update(T model)
     {
-      // run interceptors
-      var parameters = Parameters<CollectionInterceptor.UpdateParameters<T>>(args =>
-      {
-        args.Model = model;
-        args.Id = model.Id;
-      });
-      EntityResult<T> preResult = await InterceptorHandler?.Handle(x => x.Updating(parameters));
-
-      if (preResult != null)
-      {
-        return preResult;
-      }
-
       // run validator
       if (Validator != null)
       {
@@ -287,10 +272,22 @@ namespace zero.Core.Collections
         }
       }
 
+      // run interceptor
+      var instruction = CreateInstruction<CollectionInterceptor.UpdateParameters<T>>("update", args =>
+      {
+        args.Model = model;
+        args.Id = model.Id;
+      });
+      await instruction.HandleBefore(x => x.Updating(instruction.Parameters));
+
+      if (instruction.Return)
+      {
+        return instruction.EntityResult;
+      }
+
       await Session.StoreAsync(model);
 
-      // run interceptors
-      await InterceptorHandler?.Handle<T>(x => x.Updated(parameters));
+      await instruction.HandleAfter(x => x.Updated(instruction.Parameters));
 
       await Session.SaveChangesAsync();
 
@@ -317,21 +314,21 @@ namespace zero.Core.Collections
         return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
       }
 
-      var parameters = Parameters<CollectionInterceptor.DeleteParameters<T>>(args =>
+      var instruction = CreateInstruction<CollectionInterceptor.DeleteParameters<T>>("delete", args =>
       {
         args.Model = entity;
         args.Id = entity.Id;
       });
-      EntityResult<T> preResult = await InterceptorHandler?.Handle(x => x.Deleting(parameters));
+      await instruction.HandleBefore(x => x.Deleting(instruction.Parameters));
 
-      if (preResult != null)
+      if (instruction.Return)
       {
-        return preResult;
+        return instruction.EntityResult;
       }
 
       Session.Delete(entity);
 
-      await InterceptorHandler?.Handle<T>(x => x.Deleted(parameters));
+      await instruction.HandleAfter(x => x.Deleted(instruction.Parameters));
 
       await Session.SaveChangesAsync();
 
@@ -361,17 +358,17 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public virtual async Task<EntityResult<T>> Purge(string querySuffix = null, Parameters parameters = null)
     {
-      var interceptorParameters = Parameters<CollectionInterceptor.PurgeParameters<T>>();
-      EntityResult<T> preResult = await InterceptorHandler?.Handle(x => x.Purging(interceptorParameters));
+      var instruction = CreateInstruction<CollectionInterceptor.PurgeParameters<T>>("purge");
+      await instruction.HandleBefore(x => x.Purging(instruction.Parameters));
 
-      if (preResult != null)
+      if (instruction.Return)
       {
-        return preResult;
+        return instruction.EntityResult;
       }
 
       await Store.PurgeAsync<T>(Database, querySuffix, parameters);
 
-      await InterceptorHandler?.Handle<T>(x => x.Purged(interceptorParameters));
+      await instruction.HandleAfter(x => x.Purged(instruction.Parameters));
 
       return EntityResult<T>.Success();
     }
@@ -387,7 +384,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Get interceptor parameters
     /// </summary>
-    public TParams Parameters<TParams>(Action<TParams> configure = null) where TParams : CollectionInterceptor.Parameters<T>, new()
+    protected InterceptorInstruction<T, TParams> CreateInstruction<TParams>(string operationName, Action<TParams> configure = null) where TParams : CollectionInterceptor.Parameters<T>, new()
     {
       TParams parameters = new TParams()
       {
@@ -397,7 +394,8 @@ namespace zero.Core.Collections
         Session = Session
       };
       configure?.Invoke(parameters);
-      return parameters;
+
+      return InterceptorHandler?.Create<T, TParams>(operationName, parameters) ?? new();
     }
 
 

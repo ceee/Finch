@@ -5,6 +5,8 @@ namespace zero.Core.Utils
 {
   public class IdGenerator
   {
+    const string CHARS = "abcdefghijklmnopqrstuvwxyz0123456789";
+
     private static Random random = new();
 
 
@@ -19,8 +21,7 @@ namespace zero.Core.Utils
     /// </summary>
     public static string CreateRandom(int length)
     {
-      const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-      return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+      return new string(Enumerable.Repeat(CHARS, length).Select(s => s[random.Next(s.Length)]).ToArray());
     }
 
     /// <summary>

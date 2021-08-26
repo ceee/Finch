@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="app-nav theme-light" :class="{'is-compact': compact }">
 
-    <div class="app-nav-boxed theme-dark">
+    <div class="app-nav-boxed">
 
       <h1 class="app-nav-headline">
         <img src="/Assets/zero-2-light.png" class="show-light" v-localize:alt="'@zero.name'" />
@@ -11,7 +11,7 @@
     </div>
 
 
-    <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">
+    <ui-dropdown v-if="applications.length > 0" theme="dark" class="app-nav-switch theme-dark">
       <template v-slot:button>
         <ui-button type="light block" :label="currentApplication.name" caret="down" />
       </template>

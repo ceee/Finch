@@ -67,5 +67,12 @@ namespace zero.Core.Extensions
 
       return source.Skip((pageNumber - 1) * pageSize).Take(pageSize);
     }
+
+
+    public static bool TryGet<T>(this IEnumerable<T> source, Func<T, bool> predicate, out T model)
+    {
+      model = source.FirstOrDefault(predicate);
+      return model != null;
+    }
   }
 }

@@ -21,6 +21,8 @@ namespace zero.Core
 
     public const string MEDIA_FOLDER = "Uploads";
 
+    public const char PATH_SEPARATOR = '/';
+
     private static char[] InvalidFilenameChars = null;
 
     private const char REPLACEMENT_CHAR = '-';
@@ -41,6 +43,15 @@ namespace zero.Core
       WebRoot = env.WebRootPath;
       ContentRoot = env.ContentRootPath;
       Media = Path.Combine(WebRoot, MEDIA_FOLDER);
+    }
+
+
+    /// <summary>
+    /// Combine a path
+    /// </summary>
+    public string Combine(params string[] paths)
+    {
+      return Path.Combine(paths);
     }
 
 
@@ -128,6 +139,11 @@ namespace zero.Core
     string WebRoot { get; set; }
 
     string Media { get; set; }
+
+    /// <summary>
+    /// Combine a path
+    /// </summary>
+    string Combine(params string[] paths);
 
     /// <summary>
     /// Map a path
