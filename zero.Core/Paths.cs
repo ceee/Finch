@@ -13,6 +13,8 @@ namespace zero.Core
 
     public string ContentRoot { get; set; }
 
+    public string SecureRoot { get; set; }
+
     public string Media { get; set; }
 
     protected IWebHostEnvironment Env { get; set; }
@@ -42,6 +44,7 @@ namespace zero.Core
       IsDebug = isDebug;
       WebRoot = env.WebRootPath;
       ContentRoot = env.ContentRootPath;
+      SecureRoot = Path.Combine(ContentRoot, "wwwroot.secure");
       Media = Path.Combine(WebRoot, MEDIA_FOLDER);
     }
 
@@ -63,12 +66,31 @@ namespace zero.Core
       return Path.Combine(WebRoot, path);
     }
 
+
+    /// <summary>
+    /// Map a secure path
+    /// </summary>
+    public string MapSecure(string path)
+    {
+      return Path.Combine(SecureRoot, path);
+    }
+
+
     /// <summary>
     /// Map a path
     /// </summary>
     public string Map(params string[] paths)
     {
       return Path.Combine(WebRoot, Path.Combine(paths));
+    }
+
+
+    /// <summary>
+    /// Map a secure path
+    /// </summary>
+    public string MapSecure(params string[] paths)
+    {
+      return Path.Combine(SecureRoot, Path.Combine(paths));
     }
 
 
@@ -138,6 +160,8 @@ namespace zero.Core
 
     string WebRoot { get; set; }
 
+    string SecureRoot { get; set; }
+
     string Media { get; set; }
 
     /// <summary>
@@ -151,9 +175,19 @@ namespace zero.Core
     string Map(string path);
 
     /// <summary>
+    /// Map a secure path
+    /// </summary>
+    string MapSecure(string path);
+
+    /// <summary>
     /// Map a path
     /// </summary>
     string Map(params string[] paths);
+
+    /// <summary>
+    /// Map a secure path
+    /// </summary>
+    string MapSecure(params string[] paths);
 
     /// <summary>
     /// Create a directory if it does not exist yet

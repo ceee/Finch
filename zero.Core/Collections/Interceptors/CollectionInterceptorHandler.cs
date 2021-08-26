@@ -51,6 +51,7 @@ namespace zero.Core.Collections
       where T : ZeroEntity
       where TParameters : CollectionInterceptor.Parameters<T>
     {
+      string typeName = (typeof(T)).Name;
       Func<ICollectionInterceptor, Task<InterceptorResult<T>>> func = default;
 
       foreach (InterceptorRegistration registration in ForType(typeof(T)))
@@ -65,7 +66,7 @@ namespace zero.Core.Collections
           func = expression.Compile();
         }
 
-        Logger.LogDebug("Run interceptor {interceptor} before operation {operation}", registration.Name, instruction.Operation);
+        Logger.LogDebug("Run interceptor {interceptor} for {type}:{operation}", registration.Name, typeName, instruction.Operation);
 
         InterceptorResult<T> result = await func(interceptor);
 
@@ -114,8 +115,6 @@ namespace zero.Core.Collections
         {
           func = expression.Compile();
         }
-
-        Logger.LogDebug("Run interceptor {interceptor} after operation {operation}", registration.Name, instruction.Operation);
 
         await func(interceptor);
       }
