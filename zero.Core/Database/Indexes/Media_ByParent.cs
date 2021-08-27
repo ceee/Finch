@@ -5,9 +5,9 @@ using zero.Core.Entities;
 
 namespace zero.Core.Database.Indexes
 {
-  public class Media_ByParent : AbstractMultiMapIndexCreationTask<MediaListItem>
+  public class Media_ByParent : ZeroMultiMapIndex<MediaListItem>
   {
-    public Media_ByParent()
+    protected override void Create()
     {
       AddMap<MediaFolder>(items => items.Select(item => new MediaListItem
       {

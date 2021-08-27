@@ -6,7 +6,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Database.Indexes
 {
-  public class MediaFolder_ByHierarchy : AbstractIndexCreationTask<MediaFolder, MediaFolder_ByHierarchy.Result>
+  public class MediaFolder_ByHierarchy : ZeroIndex<MediaFolder, MediaFolder_ByHierarchy.Result>
   {
     public class Result : ZeroIdEntity, IZeroDbConventions
     {
@@ -24,7 +24,7 @@ namespace zero.Core.Database.Indexes
     }
 
 
-    public MediaFolder_ByHierarchy()
+    protected override void Create()
     {
       Map = items => items.Select(item => new Result
       {

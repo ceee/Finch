@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -156,15 +157,10 @@ namespace zero.Web
         IDocumentStore raven = store.Initialize();
 
         // create all indexes
-        var assemblies = AssemblyDiscovery.Current.GetAssemblies().ToList();
-
-        // TODO maybe we shouldn't use all auto-registered assemblies but specify them directly via options?
         if (options.SetupCompleted)
         {
-          foreach (Assembly assembly in assemblies)
-          {
-            IndexCreation.CreateIndexes(assembly, store, database: options.Raven.Database);
-          }
+          var indexes = options.Raven.Indexes.GetAllForRegistration();
+          IndexCreation.CreateIndexes(indexes, store, database: options.Raven.Database);
         }
 
         return (ZeroStore)raven;

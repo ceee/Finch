@@ -6,7 +6,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Database.Indexes
 {
-  public class Pages_WithChildren : AbstractIndexCreationTask<Page, Pages_WithChildren.Result>
+  public class Pages_WithChildren : ZeroIndex<Page, Pages_WithChildren.Result>
   {
     public class Result : ZeroIdEntity, IZeroDbConventions
     {
@@ -18,7 +18,7 @@ namespace zero.Core.Database.Indexes
     }
 
 
-    public Pages_WithChildren()
+    protected override void Create()
     {
       Map = items => items.Where(x => x.ParentId != null).Select(item => new Result
       {

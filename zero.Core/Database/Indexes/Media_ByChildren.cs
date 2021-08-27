@@ -4,7 +4,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Database.Indexes
 {
-  public class Media_ByChildren : AbstractMultiMapIndexCreationTask<Media_ByChildren.Result>
+  public class Media_ByChildren : ZeroMultiMapIndex<Media_ByChildren.Result>
   {
     public class Result : ZeroIdEntity, IZeroDbConventions
     {
@@ -16,7 +16,7 @@ namespace zero.Core.Database.Indexes
     }
 
 
-    public Media_ByChildren()
+    protected override void Create()
     {
       AddMap<Media>(items => items.Select(item => new Result()
       {

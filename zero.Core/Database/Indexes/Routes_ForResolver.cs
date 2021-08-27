@@ -4,9 +4,9 @@ using zero.Core.Routing;
 
 namespace zero.Core.Database.Indexes
 {
-  public class Routes_ForResolver : AbstractIndexCreationTask<Route>
+  public class Routes_ForResolver : ZeroIndex<Route>
   {
-    public Routes_ForResolver()
+    protected override void Create()
     {
       Map = items => items
         .Select(x => new

@@ -5,7 +5,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Database.Indexes
 {
-  public class MediaFolders_WithChildren : AbstractIndexCreationTask<MediaFolder, MediaFolders_WithChildren.Result>
+  public class MediaFolders_WithChildren : ZeroIndex<MediaFolder, MediaFolders_WithChildren.Result>
   {
     public class Result : ZeroIdEntity
     {
@@ -17,7 +17,7 @@ namespace zero.Core.Database.Indexes
     }
 
 
-    public MediaFolders_WithChildren()
+    protected override void Create()
     {
       Map = items => items.Where(x => x.ParentId != null).Select(item => new Result
       {

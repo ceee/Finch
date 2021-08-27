@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 
 namespace zero.Core.Options
@@ -29,6 +30,16 @@ namespace zero.Core.Options
       Services = new();
       Routing = new();
       Interceptors = new();
+
+      Raven.Indexes.Add<Backoffice_Search>();
+      Raven.Indexes.Add<Media_ByChildren>();
+      Raven.Indexes.Add<Media_ByParent>();
+      Raven.Indexes.Add<MediaFolder_ByHierarchy>();
+      Raven.Indexes.Add<MediaFolders_WithChildren>();
+      Raven.Indexes.Add<Pages_AsHistory>();
+      Raven.Indexes.Add<Pages_ByHierarchy>();
+      Raven.Indexes.Add<Pages_WithChildren>();
+      Raven.Indexes.Add<Routes_ForResolver>();
     }
 
     /// <inheritdoc />
@@ -95,16 +106,6 @@ namespace zero.Core.Options
 
     /// <inheritdoc />
     public InterceptorOptions Interceptors { get; private set; }
-  }
-
-
-  public class RavenOptions
-  {
-    public string Url { get; set; }
-
-    public string Database { get; set; }
-
-    public string CollectionPrefix { get; set; }
   }
 
 
