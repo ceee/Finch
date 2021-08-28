@@ -66,7 +66,8 @@ let config = {
     'zero': path.resolve(__dirname, 'app/'),
     ...pluginAliases,
     'vue': 'vue/dist/vue.esm.js',
-    'tiptap': 'tiptap/dist/tiptap.esm.js'
+    'tiptap': 'tiptap/dist/tiptap.esm.js',
+    'zerox': path.resolve(__dirname, 'app/zerox.js')
   },
   build: {
     manifest: true,

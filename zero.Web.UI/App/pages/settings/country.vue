@@ -14,7 +14,10 @@
 
 
 <script>
-  import CountriesApi from 'zero/api/countries.js';
+  import * as zero from 'zerox';
+  import { countriesApi } from 'zerox';
+
+  console.info(zero);
 
   export default {
     props: ['id'],
@@ -30,7 +33,7 @@
 
       onLoad(form)
       {
-        form.load(!this.$route.params.id ? CountriesApi.getEmpty() : CountriesApi.getById(this.id, { scope: 'hallo' })).then(response =>
+        form.load(!this.$route.params.id ? countriesApi.getEmpty() : countriesApi.getById(this.id, { scope: 'hallo' })).then(response =>
         {
           this.disabled = !response.meta.canEdit;
           this.meta = response.meta;
@@ -41,14 +44,14 @@
 
       onSubmit(form)
       {
-        form.handle(CountriesApi.save(this.model));
+        form.handle(countriesApi.save(this.model));
       },
 
 
       onDelete(item, opts)
       {
         opts.hide();
-        this.$refs.form.onDelete(CountriesApi.delete.bind(this, this.id));
+        this.$refs.form.onDelete(countriesApi.delete.bind(this, this.id));
       }     
     }
   }

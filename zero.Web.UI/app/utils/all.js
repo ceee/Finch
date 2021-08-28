@@ -1,3 +1,3 @@
 ﻿
 export * as request from './request.ts';
-export * as ArrayHelper from './arrays.js';
+export * as arrayHelpers from './arrays.js';
