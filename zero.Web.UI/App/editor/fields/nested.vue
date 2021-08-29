@@ -35,6 +35,10 @@
         type: Number,
         default: 100
       },
+      width: {
+        type: Number,
+        default: 820
+      },
       title: String,
       addLabel: String,
       itemLabel: Function,
@@ -110,7 +114,7 @@
           editor: this.editor,
           title: this.title || '@ui.edit.title',
           model: item,
-          width: 1100,
+          width: this.width,
           create: isAdd
         }).then(value =>
         {

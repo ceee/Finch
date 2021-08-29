@@ -466,6 +466,7 @@ class EditorField
    * @param {function} [options.itemDescription] - Function which generates the description for the current item
    * @param {string|function} [options.itemIcon] - Static icon or function which generates the icon for the current item
    * @param {object} [options.template] - Template which is used when adding an item
+   * @param {object} [options.width=820] - Width of the overlay panel
    * @returns {EditorField}
    */
   nested(editor, options)

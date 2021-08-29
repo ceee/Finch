@@ -145,6 +145,32 @@ class Editor
   }
 
 
+
+  /**
+   * Add a new fieldset to the editor or returns the tab in case it was already added
+   * A fieldset combines properties in a row (side-by-side)
+   * @param {string} alias - Alias for the tab
+   * @param {string} name - Name of the tab (can be a translation)
+   * @param {number|function} [count] - Output a count indicator
+   * @param {boolean|function} [disabled] - Conditionally disable the tab and its content
+   * @param {string} [classes] - Append HTML class to the generated tab
+   * @param {object} [component] - Render a custom vue component instead of editor fields
+   * @returns {EditorTab}
+   */
+  //fieldset(alias, name) // TODO not implemented yet
+  //{
+  //  let tab = this.tabs.find(x => x.alias === alias);
+
+  //  if (!tab)
+  //  {
+  //    tab = this._createTab(alias, name, disabled, count, classes, component);
+  //    this.tabs.push(tab);
+  //  }
+
+  //  return tab;
+  //}
+
+
   /**
    * Adds an info tab to the editor which outputs data for ZeroEntity.
    * This won't work as expected for other entities as they probably do not have required properties defined.
