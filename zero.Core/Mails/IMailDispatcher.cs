@@ -16,5 +16,10 @@ namespace zero.Core.Mails
     /// Sends all mails which have been added to the queue previously
     /// </summary>
     Task Send(CancellationToken token = default);
+
+    /// <summary>
+    /// Whether a certain sender signature is supported by this dispatcher
+    /// </summary>
+    Task<bool> IsSenderSupported(string email) => Task.FromResult(true);
   }
 }

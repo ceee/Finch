@@ -1,6 +1,6 @@
 ﻿<template>
   <p class="ui-message" :class="messageClasses">
-    <i v-if="iconClass" class="ui-message-icon" :class="iconClass"></i>
+    <ui-icon v-if="iconClass" class="ui-message-icon" :symbol="iconClass" />
     <span class="ui-message-text" v-localize:html="text"></span>
   </p>
 </template>

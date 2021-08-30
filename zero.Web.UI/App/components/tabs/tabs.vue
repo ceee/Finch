@@ -3,7 +3,7 @@
     <div role="tablist" class="ui-tabs-list">
       <button type="button" v-for="(tab, index) in tabs" class="ui-tabs-list-item" :key="index" :class="{ 'is-active': tab.active, 'has-errors': tab.hasErrors }" :disabled="tab.disabled" 
               :aria-selected="tab.active" role="tab" @click="select(index)">
-        <i v-if="tab.hasErrors" class="ui-tabs-list-item-error fth-alert-circle"></i>
+        <ui-icon v-if="tab.hasErrors" class="ui-tabs-list-item-error" :size="16" symbol="fth-alert-circle"></ui-icon>
         <span v-localize="tab.label"></span>
         <i v-if="tab.countOutput > 0" class="ui-tabs-list-item-count">{{tab.countOutput}}</i>
       </button>
@@ -101,10 +101,10 @@
 
   .ui-tabs-list
   {
-    /*border-bottom: 1px solid var(--color-line);*/
     padding: var(--padding) var(--padding) 0;
     margin-bottom: calc(var(--padding) * -1);
-    //margin-left: -1px;
+    height: 58px;
+    display: flex;
   }
 
   /*.ui-tabs-items > .ui-tab:first-child.ui-box:not(.is-blank)
@@ -117,7 +117,6 @@
     display: inline-flex;
     align-items: center;
     height: 58px;
-    //overflow: hidden;
     padding: 0 var(--padding);
     font-size: var(--font-size);
     color: var(--color-text);
@@ -125,8 +124,7 @@
     transition: color 0.2s ease;
     border-radius: var(--radius) var(--radius) 0 0;
     background: var(--color-box-light);
-    //border: 1px solid transparent;
-    //border-bottom: none;
+
     & + .ui-tabs-list-item
     {
       margin-left: 4px;
@@ -219,7 +217,6 @@
   {
     display: inline-block;
     float: left;
-    font-size: 16px;
     margin-right: 6px;
     margin-left: -4px;
     position: relative;

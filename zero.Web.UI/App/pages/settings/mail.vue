@@ -19,7 +19,7 @@
     data: () => ({
       meta: {},
       model: { name: null },
-      route: 'settings-mails-edit',
+      route: zero.alias.settings.mails + '-edit',
       disabled: false
     }),
 

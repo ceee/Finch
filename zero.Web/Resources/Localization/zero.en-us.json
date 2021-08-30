@@ -656,6 +656,9 @@
       "cc_text": "Comma-separated list of e-mails",
       "bcc": "Send invisible copy to (BCC)",
       "bcc_text": "Comma-separated list of e-mails"
+    },
+    "errors": {
+      "senderNotAllowed": "The sender email is currently not supported for this registered mail dispatcher. Please contact the administrator for help."
     }
   },
 
