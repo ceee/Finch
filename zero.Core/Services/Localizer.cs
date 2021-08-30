@@ -50,7 +50,7 @@ namespace zero.Core.Services
 
         value = translation.Value;
 
-        lock (Cache)
+        lock (Cache) // TOOD use concurrent dictionary
         {
           Cache[key] = value;
         }
