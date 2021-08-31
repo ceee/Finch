@@ -11,7 +11,7 @@ import 'zero/config/axios.config.js';
 Object.entries(components).forEach(cmp =>
 {
   Vue.component(cmp[0], cmp[1].default || cmp[1]);
-});
+}); 
 
 Object.entries(directives).forEach(cmp =>
 {

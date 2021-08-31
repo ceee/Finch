@@ -52,6 +52,28 @@ fs.writeFile(path.resolve(__dirname, 'app/core/plugins.js'), pluginFileContent, 
   //file written successfully
 })
 
+const myPlugin = () => ({
+  name: 'configure-server',
+  configureServer(server)
+  {
+    var watcher = server.watcher;
+    watcher
+      .on('add', path => console.log(`watch: ${path}`));
+    var files = watcher.getWatched();
+    console.log('watcher:');
+    console.log(files);
+
+    // https://github.com/paulmillr/chokidar#api
+
+    //server.middlewares.use((req, res, next) =>
+    //{
+    //  console.log(req.url);
+    //  next();
+    //  // custom handle request...
+    //})
+  }
+})
+
 /**
  * @type {import('vite').UserConfig}
  */
@@ -60,7 +82,7 @@ let config = {
     port: process.env.PORT,
     cors: true
   },
-  plugins: [createVuePlugin(), ...zeroPlugins],
+  plugins: [createVuePlugin(), ...zeroPlugins, myPlugin()],
   alias: {
     '@zero': path.resolve(__dirname, 'app/'),
     'zero': path.resolve(__dirname, 'app/'),
@@ -86,6 +108,8 @@ let config = {
     }
   }
 };
+
+console.log('root: ' + config.root);
 
 if (process.env.NODE_ENV === 'production')
 {

@@ -16,6 +16,8 @@
         <img src="/Assets/zero-2-light.png" class="show-light" v-localize:alt="'@zero.name'" />
         <img src="/Assets/zero-2.png" class="show-dark" v-localize:alt="'@zero.name'" />
       </h1>
+      
+      <ui-button icon="fth-search" type="blank" class="app-nav-search" /> 
 
     </div>
 

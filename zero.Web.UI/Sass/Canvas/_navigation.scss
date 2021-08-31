@@ -82,6 +82,8 @@
   height: 90px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--padding-xs) 0 0;
 }
 
 .app-nav-inner
@@ -106,6 +108,11 @@
   {
     height: 24px;
   }
+}
+
+.app-nav-search
+{
+
 }
 
 .app-nav-switch
