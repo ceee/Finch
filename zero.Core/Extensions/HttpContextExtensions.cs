@@ -40,5 +40,16 @@ namespace zero.Core.Extensions
 
       return context.Request.Headers["Accept"] == "application/json";
     }
+
+
+    /// <summary>
+    /// Get IP Address of the client
+    /// </summary>
+    public static string GetClientIpAddress(this HttpContext context)
+    {
+      return context.Connection.RemoteIpAddress?.ToString();
+      //string ipAddress = context.GetServerVariable("HTTP_X_FORWARDED_FOR");
+      //return !ipAddress.IsNullOrEmpty() ? ipAddress.Split(',')[0] : context.GetServerVariable("REMOTE_ADDR");
+    }
   }
 }
