@@ -159,7 +159,7 @@ namespace zero.Web
         // create all indexes
         if (options.SetupCompleted)
         {
-          var indexes = options.Raven.Indexes.GetAllForRegistration();
+          var indexes = options.Raven.Indexes.GetAllForRegistration(options);
           IndexCreation.CreateIndexes(indexes, store, database: options.Raven.Database);
         }
 

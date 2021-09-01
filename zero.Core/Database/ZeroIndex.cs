@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using zero.Core.Options;
 
 namespace zero.Core.Database
 {
@@ -273,8 +274,17 @@ namespace zero.Core.Database
   }
 
 
-  public interface IZeroIndexDefinition
+  public interface IZeroIndexDefinition : IAbstractIndexCreationTask
   {
+    void Setup(IZeroOptions options)
+    {
+      IEnumerable<RavenIndexModifiersOptions.Modifier> modifiers = options.Raven.Indexes.Modifiers.GetAllForType(this.GetType());
 
+      foreach (RavenIndexModifiersOptions.Modifier modifier in modifiers)
+      {
+        Action<IZeroIndexDefinition> action = modifier.Modify.Compile();
+        action.Invoke(this);
+      }
+    }
   }
 }

@@ -6,6 +6,7 @@
       <div class="app-main">
         <router-view></router-view>
       </div>
+      <app-search />
       <app-overlays />
       <app-notifications />
     </template>
@@ -18,6 +19,7 @@
   import '../sass/sass.js'
   import AppNavigation from './navigation.vue'
   import AppBar from 'zero/bar.vue'
+  import AppSearch from 'zero/search.vue'
   import AppLogin from 'zero/pages/login/login.vue'
   import AppOverlays from 'zero/components/overlays/overlay-holder.vue'
   import AppNotifications from 'zero/components/notifications/notification-holder.vue'
@@ -29,7 +31,7 @@
   export default {
     name: 'app',
 
-    components: { AppNavigation, AppBar, AppOverlays, AppLogin, AppNotifications },
+    components: { AppNavigation, AppBar, AppSearch, AppOverlays, AppLogin, AppNotifications },
 
     data: () => ({
       isAuthenticated: false,

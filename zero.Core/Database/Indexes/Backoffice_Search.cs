@@ -17,7 +17,7 @@ namespace zero.Core.Database.Indexes
 
       public bool IsActive { get; set; }
 
-      public Dictionary<string, string> Fields { get; set; } = new();
+      public List<string> Fields { get; set; } = new();
     }
 
 

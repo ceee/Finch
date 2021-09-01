@@ -16,6 +16,7 @@ using zero.Core.Services;
 using zero.Core.Tokens;
 using zero.Core.Validation;
 using zero.Web.Sections;
+using zero.Web.Services;
 using zero.Web.ViewHelpers;
 
 namespace zero.Web.Defaults
@@ -126,6 +127,8 @@ namespace zero.Web.Defaults
 
       services.AddScoped<ILocalizer, Localizer>();
       services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();
+
+      services.AddScoped<IBackofficeSearchService, BackofficeSearchService>();
     }
   }
 }
