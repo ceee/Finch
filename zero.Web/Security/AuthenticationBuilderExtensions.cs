@@ -24,6 +24,7 @@ namespace zero.Web.Security
         b.Configure<IZeroOptions>((options, zero) =>
         {
           options.ExpireTimeSpan = TimeSpan.FromMinutes(90);
+          options.Cookie.SameSite = SameSiteMode.Lax;
           options.Cookie.Name = Constants.Auth.BackofficeCookieName;
 
           options.CookieManager = new ContextualCookieManager((ctx, key) =>
@@ -87,7 +88,7 @@ namespace zero.Web.Security
           options.ExpireTimeSpan = TimeSpan.FromDays(90);
           options.Cookie.HttpOnly = true;
           options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-          options.Cookie.SameSite = SameSiteMode.Strict;
+          options.Cookie.SameSite = SameSiteMode.Lax;
           options.Cookie.Path = "/";
 
           options.LoginPath = opts.Path;
