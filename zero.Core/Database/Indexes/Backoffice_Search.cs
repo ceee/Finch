@@ -1,78 +1,22 @@
-﻿using Raven.Client.Documents.Indexes;
-using System.Collections.Generic;
-using System.Linq;
-using zero.Core.Entities;
+﻿using Raven.Client.Documents;
+using zero.Core.Options;
 
 namespace zero.Core.Database.Indexes
 {
-  public class Backoffice_Search : ZeroMultiMapIndex
+  public class Backoffice_Search : ZeroJavascriptIndex
   {
-    public class Result
+    public override void Setup(IZeroOptions options, IDocumentStore store)
     {
-      public string Id { get; set; }
+      // TODO index.Conventions is null, but needed for collection name retrieval
 
-      public string Group { get; set; }
-
-      public string Name { get; set; }
-
-      public bool IsActive { get; set; }
-
-      public List<string> Fields { get; set; } = new();
-    }
-
-
-    protected override void Create()
-    {
-      AddEntities();
-      Index(nameof(Result.Name), FieldIndexing.Search);
-      Index(nameof(Result.Fields), FieldIndexing.Search);
-    }
-
-
-    protected virtual void AddEntities()
-    {
-      AddPages();
-      AddMediaFolders();
-      //AddMedia();
-    }
-
-
-    protected virtual void AddPages()
-    {
-      AddMap<Page>(map => map.Select(page => new Result()
+      foreach (var map in options.Search.GetAllItems())
       {
-        Id = page.Id,
-        Group = "zero.page",
-        Name = page.Name,
-        IsActive = page.IsActive,
-        Fields = new()
-      }));
-    }
+        Maps.Add(map.BuildInstruction(this, store));
+      }
 
 
-    protected virtual void AddMediaFolders()
-    {
-      AddMap<MediaFolder>(map => map.Select(page => new Result()
-      {
-        Id = page.Id,
-        Group = "zero.mediafolder",
-        Name = page.Name,
-        IsActive = page.IsActive,
-        Fields = new()
-      }));
-    }
-
-
-    protected virtual void AddMedia()
-    {
-      AddMap<Media>(map => map.Select(page => new Result()
-      {
-        Id = page.Id,
-        Group = "zero.media",
-        Name = page.Name,
-        IsActive = page.IsActive,
-        Fields = new()
-      }));
+      //Index(nameof(SearchIndexResult.Name), FieldIndexing.Search);
+      //Index(nameof(SearchIndexResult.Fields), FieldIndexing.Search);
     }
   }
 }

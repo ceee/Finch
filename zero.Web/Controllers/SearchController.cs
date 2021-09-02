@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Identity;
+using zero.Core.Models;
 using zero.Web.Services;
 
 namespace zero.Web.Controllers
@@ -16,6 +17,6 @@ namespace zero.Web.Controllers
       SearchService = searchService;
     }
 
-    public async Task<ListResult<ZeroEntity>> Query([FromQuery] string query) => await SearchService.Query(query);
+    public async Task<ListResult<SearchResult>> Query([FromQuery] string query) => await SearchService.Query(query);
   }
 }

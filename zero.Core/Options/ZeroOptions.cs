@@ -40,6 +40,8 @@ namespace zero.Core.Options
       Raven.Indexes.Add<Pages_ByHierarchy>();
       Raven.Indexes.Add<Pages_WithChildren>();
       Raven.Indexes.Add<Routes_ForResolver>();
+
+      Search = new();
     }
 
     /// <inheritdoc />
@@ -106,6 +108,9 @@ namespace zero.Core.Options
 
     /// <inheritdoc />
     public InterceptorOptions Interceptors { get; private set; }
+
+    /// <inheritdoc />
+    public SearchOptions Search { get; private set; }
   }
 
 
@@ -211,5 +216,10 @@ namespace zero.Core.Options
     /// 
     /// </summary>
     InterceptorOptions Interceptors { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    SearchOptions Search { get; }
   }
 }

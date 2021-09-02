@@ -28,7 +28,7 @@
     name: 'app-search',
 
     data: () => ({
-      open: false,
+      open: true,
       query: null,
       model: {
         page: 1,

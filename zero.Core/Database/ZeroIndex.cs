@@ -1,4 +1,5 @@
-﻿using Raven.Client.Documents.Indexes;
+﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Indexes.Spatial;
 using Raven.Client.Documents.Operations.Attachments;
 using System;
@@ -12,7 +13,9 @@ namespace zero.Core.Database
   public abstract class ZeroJavascriptIndex : AbstractJavaScriptIndexCreationTask, IZeroIndexDefinition
   {
     public ZeroJavascriptIndex() { Create(); }
-    protected abstract void Create();
+    protected virtual void Create() { }
+
+    public virtual void Setup(IZeroOptions options, IDocumentStore store) { }
 
     public new string Reduce { get => base.Reduce; set => base.Reduce = value; }
     public new string OutputReduceToCollection { get => base.OutputReduceToCollection; set => base.OutputReduceToCollection = value; }
@@ -47,7 +50,9 @@ namespace zero.Core.Database
   public abstract class ZeroMultiMapIndex : AbstractMultiMapIndexCreationTask<object>, IZeroIndexDefinition
   {
     public ZeroMultiMapIndex() { Create(); }
-    protected abstract void Create();
+    protected virtual void Create() { }
+
+    public virtual void Setup(IZeroOptions options, IDocumentStore store) { }
 
     // AbstractMultiMapIndexCreationTask<TReduceResult>
     public new void AddMap<TSource>(Expression<Func<IEnumerable<TSource>, IEnumerable>> map) => base.AddMap(map);
@@ -112,7 +117,9 @@ namespace zero.Core.Database
   public abstract class ZeroMultiMapIndex<TReduceResult> : AbstractMultiMapIndexCreationTask<TReduceResult>, IZeroIndexDefinition
   {
     public ZeroMultiMapIndex() { Create(); }
-    protected abstract void Create();
+    protected virtual void Create() { }
+
+    public virtual void Setup(IZeroOptions options, IDocumentStore store) { }
 
     // AbstractMultiMapIndexCreationTask<TReduceResult>
     public new void AddMap<TSource>(Expression<Func<IEnumerable<TSource>, IEnumerable>> map) => base.AddMap(map);
@@ -177,7 +184,9 @@ namespace zero.Core.Database
   public abstract class ZeroIndex<TDocument, TReduceResult> : AbstractIndexCreationTask<TDocument, TReduceResult>, IZeroIndexDefinition
   {
     public ZeroIndex() { Create(); }
-    protected abstract void Create();
+    protected virtual void Create() { }
+
+    public virtual void Setup(IZeroOptions options, IDocumentStore store) { }
 
     // AbstractIndexCreationTask<TDocument, TReduceResult>
     public new Expression<Func<IEnumerable<TDocument>, IEnumerable>> Map { get => base.Map; set => base.Map = value; }
@@ -246,7 +255,9 @@ namespace zero.Core.Database
   public abstract class ZeroIndex : AbstractIndexCreationTask, IZeroIndexDefinition
   {
     public ZeroIndex() { Create(); }
-    protected abstract void Create();
+    protected virtual void Create() { }
+
+    public virtual void Setup(IZeroOptions options, IDocumentStore store) { }
 
     // AbstractIndexCreationTask
     public new IJsonObject AsJson(object doc) => base.AsJson(doc);
@@ -276,15 +287,6 @@ namespace zero.Core.Database
 
   public interface IZeroIndexDefinition : IAbstractIndexCreationTask
   {
-    void Setup(IZeroOptions options)
-    {
-      IEnumerable<RavenIndexModifiersOptions.Modifier> modifiers = options.Raven.Indexes.Modifiers.GetAllForType(this.GetType());
-
-      foreach (RavenIndexModifiersOptions.Modifier modifier in modifiers)
-      {
-        Action<IZeroIndexDefinition> action = modifier.Modify.Compile();
-        action.Invoke(this);
-      }
-    }
+    void Setup(IZeroOptions options, IDocumentStore store);
   }
 }

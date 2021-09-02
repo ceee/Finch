@@ -1,11 +1,15 @@
 ﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Queries;
 using Raven.Client.Documents.Session;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Database;
 using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Models;
 
 namespace zero.Web.Services
 {
@@ -19,22 +23,40 @@ namespace zero.Web.Services
     }
 
 
-    public async Task<ListResult<ZeroEntity>> Query(string searchTerm)
+    public async Task<ListResult<SearchResult>> Query(string searchTerm)
     {
-      List<ZeroEntity> results = await Session.Query<Backoffice_Search.Result, Backoffice_Search>()
+      string[] searchParts = searchTerm.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Select(x =>
+      {
+        return "*" + x + "*";
+      }).ToArray();
+
+      List<ZeroEntity> results = await Session.Query<SearchIndexResult, Backoffice_Search>()
         .Statistics(out QueryStatistics stats)
-        .Search(x => x.Name, searchTerm, 2)
-        .Search(x => x.Fields, searchTerm, 1, SearchOptions.Or)
+        .Search(x => x.Name, searchParts, 2, @operator: SearchOperator.And)
+        .Search(x => x.Fields, searchParts, 1, SearchOptions.Or, @operator: SearchOperator.And)
         .Paging(1, 20)
         .ProjectInto<ZeroEntity>()
         .ToListAsync();
 
-      return new ListResult<ZeroEntity>(results, stats.TotalResults, 1, 20);
+      List<SearchResult> items = new();
+
+      foreach (ZeroEntity result in results)
+      {
+        items.Add(new()
+        {
+          Id = result.Id,
+          Name = result.Name,
+          IsActive = result.IsActive,
+          Url = "/" 
+        });
+      }
+
+      return new ListResult<SearchResult>(items, stats.TotalResults, 1, 20);
     }
   }
 
   public interface IBackofficeSearchService
   {
-    Task<ListResult<ZeroEntity>> Query(string searchTerm);
+    Task<ListResult<SearchResult>> Query(string searchTerm);
   }
 }

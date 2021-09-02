@@ -1,9 +1,11 @@
-﻿using Raven.Client.Documents.Indexes;
+﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Indexes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using zero.Core.Database;
+using zero.Core.Extensions;
 
 namespace zero.Core.Options
 {
@@ -19,45 +21,71 @@ namespace zero.Core.Options
   }
 
 
-  public class RavenIndexesOptions : ZeroBackofficeCollection<Type>, IZeroCollectionOptions
+  public class RavenIndexesOptions : ZeroBackofficeCollection<RavenIndexesOptions.Map>, IZeroCollectionOptions
   {
+    public class Map
+    {
+      internal Type Type { get; set; }
+
+      internal Expression<Func<IZeroIndexDefinition>> CreateIndex { get; set; }
+
+      internal Map(Type type, Expression<Func<IZeroIndexDefinition>> create)
+      {
+        Type = type;
+        CreateIndex = create;
+      }
+    }
+
+
     public RavenIndexModifiersOptions Modifiers { get; private set; } = new();
 
     public void Add<T>() where T : IZeroIndexDefinition, new()
     {
-      Items.Add(typeof(T));
+      Items.Add(new(typeof(T), () => new T()));
     }
 
     public void Add(Type indexType)
     {
-      Items.Add(indexType);
+      Items.Add(new(indexType, () => (IZeroIndexDefinition)Activator.CreateInstance(indexType)));
+    }
+
+    public void Add<T>(T index) where T : IZeroIndexDefinition
+    {
+      Items.Add(new(typeof(T), () => index));
     }
 
     public void AddRange(params Type[] indexes)
     {
-      Items.AddRange(indexes);
+      foreach (Type type in indexes)
+      {
+        Add(type);
+      }
     }
 
     public void Replace<T, TReplaceWith>()
        where T : IZeroIndexDefinition, new()
        where TReplaceWith : IZeroIndexDefinition, new()
     {
-      Items.Remove(typeof(T));
-      Items.Add(typeof(TReplaceWith));
+      Replace(typeof(T), typeof(TReplaceWith));
     }
 
     public void Replace(Type origin, Type replaceWith)
     {
-      Items.Remove(origin);
-      Items.Add(replaceWith);
+      var item = Items.FirstOrDefault(x => x.Type == origin);
+      if (item != null)
+      {
+        Items.Remove(item);
+      }
+      Add(replaceWith);
     }
 
-    public IEnumerable<IZeroIndexDefinition> GetAllForRegistration(IZeroOptions options)
+    public IEnumerable<IZeroIndexDefinition> BuildAll(IZeroOptions options, IDocumentStore store)
     {
-      foreach (Type type in Items)
+      foreach (Map map in Items)
       {
-        IZeroIndexDefinition index = (IZeroIndexDefinition)Activator.CreateInstance(type);
-        index.Setup(options);
+        IZeroIndexDefinition index = map.CreateIndex.Compile().Invoke();
+        index.Setup(options, store);
+        index.RunModifiers(options);
         yield return index;
       }
     }
