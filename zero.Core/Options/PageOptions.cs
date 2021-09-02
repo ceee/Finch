@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using zero.Core.Entities;
 
 namespace zero.Core.Options
@@ -41,6 +42,11 @@ namespace zero.Core.Options
         Description = description,
         Icon = icon
       });
+    }
+
+    public PageType GetByAlias(string alias)
+    {
+      return Items.FirstOrDefault(x => x.Alias == alias);
     }
   }
 }

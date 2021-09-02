@@ -671,6 +671,13 @@
     "name": "Preview"
   },
 
+  "search": {
+    "collection": {
+      "page": "Page",
+      "mediaFolder": "Media folder"
+    }
+  },
+
   "_test": {
     "fields": {
       "name": "Name",

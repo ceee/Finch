@@ -11,7 +11,7 @@ namespace zero.Core.Database.Indexes
 
       foreach (var map in options.Search.GetAllItems())
       {
-        Maps.Add(map.BuildInstruction(this, store));
+        Maps.Add(map.BuildInstruction(store));
       }
 
 

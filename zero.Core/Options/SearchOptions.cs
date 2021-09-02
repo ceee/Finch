@@ -18,14 +18,21 @@ namespace zero.Core.Options
     public SearchOptions()
     {
       IsEnabled = true;
-      Map<Page>();
-      Map<MediaFolder>();
+      Map<Page>().Display((x, res, opts) =>
+      {
+        PageType pageType = opts.Pages.GetByAlias(x.PageTypeAlias);
+        if (pageType != null)
+        {
+          res.Icon = pageType.Icon;
+        }
+      });
+      Map<MediaFolder>("fth-image");
     }
 
 
-    public SearchIndexMap<T> Map<T>(string group = null) where T : ZeroEntity, new()
+    public SearchIndexMap<T> Map<T>(string icon = null) where T : ZeroEntity, new()
     {
-      SearchIndexMap<T> map = new(group);
+      SearchIndexMap<T> map = new(icon);
       Items.Add(map);
       return map;
     }
@@ -34,10 +41,11 @@ namespace zero.Core.Options
 
   public class SearchIndexMap
   {
-    protected Type _type;
+    internal Type Type;
+    internal string _Icon;
     protected string _group;
     protected string[] _fields;
-    protected Func<ZeroEntity, SearchResult, Task> _modify;
+    protected Func<ZeroEntity, SearchResult, IZeroOptions, Task> _modify;
 
     const string mapTemplate = @"map('{collection}', function (x) { 
                                   return { 
@@ -49,17 +57,18 @@ namespace zero.Core.Options
                                   };
                                 });";
 
-    internal SearchIndexMap(Type type, string group)
+    internal SearchIndexMap(Type type, string icon = null)
     {
-      _type = type;
-      _group = group;
+      Type = type;
+      _group = "__TODO";
+      _Icon = icon;
     }
 
-    internal string BuildInstruction(IZeroIndexDefinition index, IDocumentStore store)
+    internal string BuildInstruction(IDocumentStore store)
     {
       return TokenReplacement.Apply(mapTemplate, new()
       {
-        { "collection", store.Conventions.GetCollectionName(_type) },
+        { "collection", store.Conventions.GetCollectionName(Type) },
         { "group", _group },
         { "fields", BuildFieldArray(_fields) }
       });
@@ -74,16 +83,35 @@ namespace zero.Core.Options
 
       return "x." + String.Join(", x.", fields);
     }
+
+    internal bool CanModify(Type type)
+    {
+      return Type.IsAssignableFrom(type);
+    }
+
+    internal async Task Modify(ZeroEntity entity, SearchResult result, IZeroOptions options)
+    {
+      if (_modify != null)
+      {
+        await _modify(entity, result, options);
+      }
+    }
   }
 
 
   public class SearchIndexMap<T> : SearchIndexMap where T : ZeroEntity
   {
-    internal SearchIndexMap(string group) : base(typeof(T), group) {}
+    internal SearchIndexMap(string icon = null) : base(typeof(T), icon) {}
+
+    public SearchIndexMap<T> Icon(string icon)
+    {
+      _Icon = icon;
+      return this;
+    }
 
     public SearchIndexMap<T> Display(Action<T, SearchResult> modify = null)
     {
-      _modify = (x, res) =>
+      _modify = (x, res, opts) =>
       {
         modify?.Invoke(x as T, res);
         return Task.CompletedTask;
@@ -93,7 +121,23 @@ namespace zero.Core.Options
 
     public SearchIndexMap<T> Display(Func<T, SearchResult, Task> modify = null)
     {
-      _modify = (x, res) => modify?.Invoke(x as T, res);
+      _modify = (x, res, opts) => modify?.Invoke(x as T, res);
+      return this;
+    }
+
+    public SearchIndexMap<T> Display(Action<T, SearchResult, IZeroOptions> modify = null)
+    {
+      _modify = (x, res, opts) =>
+      {
+        modify?.Invoke(x as T, res, opts);
+        return Task.CompletedTask;
+      };
+      return this;
+    }
+
+    public SearchIndexMap<T> Display(Func<T, SearchResult, IZeroOptions, Task> modify = null)
+    {
+      _modify = (x, res, opts) => modify?.Invoke(x as T, res, opts);
       return this;
     }
 
