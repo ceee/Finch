@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="app-nav theme-light" :class="{'is-compact': compact }">
+  <div class="app-nav" :class="{'is-compact': compact }">
 
     <div class="app-nav-apps theme-dark">
       <ui-header-bar class="ui-tree-header" title="Applications" :back-button="false" />
