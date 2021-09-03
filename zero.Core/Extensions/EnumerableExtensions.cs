@@ -74,5 +74,17 @@ namespace zero.Core.Extensions
       model = source.FirstOrDefault(predicate);
       return model != null;
     }
+
+
+    public static bool TryAdd<T>(this IList<T> source, T model) where T : class
+    {
+      if (model == default)
+      {
+        return false;
+      }
+
+      source.Add(model);
+      return true;
+    }
   }
 }
