@@ -1,11 +1,13 @@
 ﻿<template>
-  <div class="app-search">
-    <form class="app-search-form" @submit.prevent="onSubmit">
-        <input ref="input" class="app-search-form-input" type="search" v-model="query" placeholder="Search..." />
+  <div class="app-search" v-if="open">
+    <div class="app-search-bg" @click="open=false"></div>
+    <div class="app-search-dialog">
+      <form class="app-search-form" @submit.prevent="onSubmit">
+        <input class="app-search-form-input" type="search" v-model="query" placeholder="Search..." />
         <ui-button class="app-search-submit" :submit="true" type="blank" icon="fth-search" />
       </form>
-      <div v-if="list.items.length" class="app-search-items">
-        <router-link :to="item.url" v-for="item in list.items" :key="item.id" class="app-search-item" @click.native="config.close">
+      <div class="app-search-items">
+        <router-link :to="item.url" v-for="item in model.items" :key="item.id" class="app-search-item">
           <ui-icon :symbol="item.icon" :size="18" class="app-search-item-icon" />
           <span class="app-search-item-text">
             <span class="app-search-item-name">{{item.name}} <span class="app-search-item-group" v-localize="item.group"></span></span>
@@ -13,6 +15,7 @@
           </span>
         </router-link>
       </div>
+    </div>
   </div>
 </template>
 
@@ -20,54 +23,80 @@
 <script>
   import { map as _map, find as _find } from 'underscore';
   import SearchApi from 'zero/api/search.js';
+  import EventHub from 'zero/helpers/eventhub.js';
+
 
   export default {
-
-    props: {
-      model: Object,
-      config: Object
-    },
-
     name: 'app-search',
 
     data: () => ({
       open: false,
       query: null,
-      list: {
+      model: {
         page: 1,
         totalPages: 1,
         items: []
       }
     }),
 
+
     mounted()
     {
-      this.$nextTick(() =>
+      EventHub.$off('app.search.open');
+      EventHub.$on('app.search.open', () =>
       {
-        this.$refs.input.focus();
-        //this.$refs.input.select();
+        this.open = true;
       });
     },
 
+
     methods: {
+
       async onSubmit()
       {
-        this.list = await SearchApi.query(this.query);
-        console.info(this.list);
+        this.model = await SearchApi.query(this.query);
+        console.info(this.model);
       }
     }
   }
+
 </script>
 
 <style lang="scss">
-  .app-search-overlay .app-overlay
+  .app-search
   {
-    padding: var(--padding);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .app-search-bg
+  {
+    background: var(--color-overlay-shade);
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
   }
 
   .app-search-dialog
   {
-    
+    background: var(--color-box);
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+    box-shadow: var(--shadow-overlay);
+    width: min(100vw, 780px);
+    padding: var(--padding);
+    position: relative;
+    z-index: 2;
   }
 
   .app-search-form
@@ -146,9 +175,10 @@
   .app-search-item-group
   {
     display: block;
-    font-size: var(--font-size-xs);
-    color: var(--color-text-dim);
-    margin-top: 3px;
+    font-size: 9px;
+    text-transform: uppercase;
+    color: var(--color-text-dim-one);
+    margin-top: 2px;
     //margin-left: 8px;
   }
 

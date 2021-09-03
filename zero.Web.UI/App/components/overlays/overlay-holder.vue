@@ -1,7 +1,9 @@
 ﻿<template>
   <div class="app-overlays" :class="{ 'has-multiple': instances.length > 1 }">
     <transition-group name="overlay" :duration="600">
-      <div class="app-overlay-outer" :display="instance.display" v-for="(instance, index) in instances" :key="instance.id" :style="{ transform: instance.display !== 'editor' ? null : 'translateX(' + (editorLength - index - 1) * -60 + 'px)' }">
+      <div class="app-overlay-outer" :display="instance.display" v-for="(instance, index) in instances" :key="instance.id" 
+           :style="{ transform: instance.display !== 'editor' ? null : 'translateX(' + (editorLength - index - 1) * -60 + 'px)' }"
+           :class="instance.class || ''">
         <div class="app-overlay-bg" @click="close(instance)"></div>
         <div open class="app-overlay" :data-alias="instance.alias" :style="{ width: instance.width ? (instance.width + 'px') : null }" :class="'theme-' + instance.theme" :display="instance.display">
           <component :is="instance.component" :model.sync="instance.model" :config="instance" v-bind="instance"></component>
@@ -26,6 +28,23 @@
       {
         return this.instances.filter(x => x.display === 'editor').length;
       }
+    },
+
+    mounted()
+    {
+      this.$el.addEventListener('keyup', e =>
+      {
+        if (e.key === "Escape" && this.instances.length) 
+        {
+          let instance = this.instances[this.instances.length - 1];
+          instance.close();
+        }
+      });
+    },
+
+    beforeDestroy()
+    {
+      this.$el.removeEventListener('keyup');
     },
 
     methods: {

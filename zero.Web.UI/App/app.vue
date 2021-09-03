@@ -6,7 +6,7 @@
       <div class="app-main">
         <router-view></router-view>
       </div>
-      <app-search />
+      <!--<app-search />-->
       <app-overlays />
       <app-notifications />
     </template>
@@ -26,6 +26,7 @@
   import EventHub from 'zero/helpers/eventhub.js';
   import AuthApi from 'zero/helpers/auth.js'
   import ConfigApi from 'zero/api/config.js';
+  import Overlay from 'zero/helpers/overlay.js'
 
 
   export default {
@@ -64,6 +65,11 @@
       {
         this.rerender();
       });
+
+      EventHub.$on('app.search.open', () =>
+      {
+        this.search();
+      });
     },
 
 
@@ -83,6 +89,17 @@
           window.zero = res;
           AuthApi.setUser(res.user);
           this.keyIndex += 1;
+        });
+      },
+
+      search()
+      {
+        Overlay.open({
+          component: AppSearch,
+          autoclose: false,
+          softdismiss: true,
+          width: 780,
+          class: 'app-search-overlay'
         });
       }
     }

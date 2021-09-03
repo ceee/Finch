@@ -25,6 +25,7 @@ namespace zero.Core.Options
         {
           res.Icon = pageType.Icon;
         }
+        res.Url = "/pages/edit/" + x.Id;
       });
       Map<MediaFolder>("fth-image");
     }

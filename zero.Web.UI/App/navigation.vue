@@ -17,7 +17,7 @@
         <img src="/Assets/zero-2.png" class="show-dark" v-localize:alt="'@zero.name'" />
       </h1>
       
-      <ui-button icon="fth-search" type="blank" class="app-nav-search" /> 
+      <ui-button icon="fth-search" type="blank" class="app-nav-search" @click="openSearch" /> 
 
     </div>
 
@@ -83,6 +83,7 @@
   import AuthApi from 'zero/helpers/auth.js'
   import MediaApi from 'zero/api/media.js'
   import IconPicker from 'zero/components/pickers/iconPicker/iconpicker.vue';
+  import EventHub from 'zero/helpers/eventhub.js'
 
   const compactCacheKey = 'zero.navigation.compact';
 
@@ -189,6 +190,11 @@
       {
         this.compact = !this.compact;
         localStorage.setItem(compactCacheKey, this.compact.toString());
+      },
+
+      openSearch()
+      {
+        EventHub.$emit('app.search.open');
       }
     }
   }
