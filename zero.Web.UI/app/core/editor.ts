@@ -70,13 +70,13 @@ class Editor
    */
   tab(alias, name, count, disabled, classes, component)
   {
-    if (typeof disabled !== 'undefined' && typeof disabled !== 'boolean' && typeof disabled !== 'function')
+    if (typeof disabled !== 'undefined' && disabled != null && typeof disabled !== 'boolean' && typeof disabled !== 'function')
     {
       console.warn(`[zero] editor.tab: the disabled property has to be of type [boolean, function, undefined]`);
       return;
     }
 
-    if (typeof count !== 'undefined' && typeof count !== 'number' && typeof count !== 'function')
+    if (typeof count !== 'undefined' && count != null && typeof count !== 'number' && typeof count !== 'function')
     {
       console.warn(`[zero] editor.tab: the count property has to be of type [number, function, undefined]`);
       return;

@@ -70,6 +70,12 @@
       {
         this.search();
       });
+
+      if (localStorage.getItem('zero.theme') === 'dark')
+      {
+        document.body.classList.remove('theme-light');
+        document.body.classList.add('theme-dark');
+      }
     },
 
 

@@ -70,7 +70,9 @@
       </template>
       <ui-dropdown-button label="Edit" icon="fth-edit-2" @click="editUser" />
       <ui-dropdown-button label="Change password" icon="fth-lock" @click="changePassword" />
-      <ui-dropdown-button label="Toggle sidebar" icon="fth-minimize-2" @click="toggleSidebar" />
+      <!--<ui-dropdown-button label="Toggle sidebar" icon="fth-minimize-2" @click="toggleSidebar" />-->
+      <ui-dropdown-button label="Dark theme" v-if="!darkTheme" icon="fth-moon" @click="toggleDarkTheme" />
+      <ui-dropdown-button label="Light theme" v-if="darkTheme" icon="fth-sun" @click="toggleDarkTheme" />
       <ui-dropdown-button label="Logout" icon="fth-log-out" @click="logout" />
     </ui-dropdown>
 
@@ -86,6 +88,7 @@
   import EventHub from 'zero/helpers/eventhub.js'
 
   const compactCacheKey = 'zero.navigation.compact';
+  const themeCacheKey = 'zero.theme';
 
   export default {
     name: 'app-navigation',
@@ -97,6 +100,7 @@
       user: null,
       userAvatar: null,
       compact: false,
+      darkTheme: false,
       currentApplication: null
     }),
 
@@ -108,6 +112,7 @@
     {
       this.currentApplication = _find(this.applications, x => x.id === zero.appId);
       this.compact = localStorage.getItem(compactCacheKey) === 'true';
+      this.darkTheme = localStorage.getItem(themeCacheKey) === 'dark';
       this.buildUser(AuthApi.user);
 
       AuthApi.$on('user', user =>
@@ -190,6 +195,15 @@
       {
         this.compact = !this.compact;
         localStorage.setItem(compactCacheKey, this.compact.toString());
+      },
+
+      toggleDarkTheme()
+      {
+        this.darkTheme = !this.darkTheme;
+        EventHub.$emit('app.theme', this.darkTheme ? 'dark' : 'light');
+        localStorage.setItem(themeCacheKey, this.darkTheme ? 'dark' : 'light');
+        document.body.classList.toggle('theme-light', !this.darkTheme);
+        document.body.classList.toggle('theme-dark', this.darkTheme);
       },
 
       openSearch()
