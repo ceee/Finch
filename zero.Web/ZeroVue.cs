@@ -69,9 +69,10 @@ namespace zero.Web
       config.AppId = Context.AppId;
       //config.SharedAppId = Constants.Database.SharedAppId; // TODO appx
       config.Icons = CreateIconSets();
-      config.Translations = CreateTranslations();
 
       BackofficeUser user = await AuthenticationApi.GetUser();
+
+      config.Translations = CreateTranslations(user?.LanguageId);
 
       if (user != null)
       {
@@ -291,9 +292,9 @@ namespace zero.Web
     /// <summary>
     /// Creates all translations for the project
     /// </summary>
-    Dictionary<string, string> CreateTranslations()
+    Dictionary<string, string> CreateTranslations(string culture)
     {
-      var zeroTranslations = CreateTranslationsForFile("O:/zero/zero.Web/Resources/Localization/zero.en-us.json"); // TODO
+      var zeroTranslations = CreateTranslationsForFile("O:/zero/zero.Web/Resources/Localization/zero.en-us.json", culture); // TODO
 
       foreach (IZeroPlugin plugin in Plugins)
       {
@@ -301,7 +302,7 @@ namespace zero.Web
         {
           foreach (string path in plugin.Options.LocalizationPaths)
           {
-            Dictionary<string, string> translations = CreateTranslationsForFile(path);
+            Dictionary<string, string> translations = CreateTranslationsForFile(path, culture);
 
             foreach (var translation in translations)
             {
@@ -315,22 +316,39 @@ namespace zero.Web
     }
 
 
-    Dictionary<string, string> CreateTranslationsForFile(string path)
+    Dictionary<string, string> CreateTranslationsForFile(string path, string culture)
     {
+      Dictionary<string, string> items = new();
+      culture = culture?.ToLower();
+
+      if (!culture.IsNullOrEmpty() && culture != "en-us")
+      {
+        items = CreateTranslationsForFile(path, "en-us");
+        path = path.Replace("en-us", culture);
+      }
+
       if (!File.Exists(path))
       {
-        return new Dictionary<string, string>();
+        return items;
       }
+
       string text = File.ReadAllText(path, Encoding.UTF8);
 
       JObject json = JObject.Parse(text);
       IEnumerable<JToken> tokens = json.Descendants().Where(p => p.Count() == 0);
 
-      return tokens.Aggregate(new Dictionary<string, string>(), (properties, token) =>
+      Dictionary<string, string> translationItems = tokens.Aggregate(new Dictionary<string, string>(), (properties, token) =>
       {
         properties.Add(token.Path.ToLowerInvariant(), token.ToString());
         return properties;
       });
+
+      foreach (var translation in translationItems)
+      {
+        items[translation.Key] = translation.Value;
+      }
+
+      return items;
     }
 
 

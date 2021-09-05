@@ -57,6 +57,7 @@
 
       AuthApi.$on('appswitch', data =>
       {
+        location.reload();
         this.rerender();
         //this.isAuthenticated = isAuthenticated;
       });

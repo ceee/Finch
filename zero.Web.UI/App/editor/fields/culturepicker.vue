@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-native-select" :disabled="disabled">
+  <div v-if="!loading" class="ui-native-select" :disabled="disabled">
     <select :value="value" @input="$emit('input', $event.target.value)" :disabled="disabled">
       <option v-for="item in items" :value="item.code">{{item.name}}</option>
     </select>
@@ -23,6 +23,7 @@
     },
 
     data: () => ({
+      loading: true,
       items: []
     }),
 
@@ -31,6 +32,7 @@
       LanguagesApi.getSupportedCultures().then(res =>
       {
         this.items = res;
+        this.loading = false;
       });
     }
   }

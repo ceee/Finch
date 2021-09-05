@@ -1,0 +1,671 @@
+{
+  "zero": {
+    "name": "zero",
+
+    "config": {
+      "linkareas": {
+        "pages": "Seiten",
+        "media": "Medien"
+      }
+    }
+  },
+
+  "ui": {
+    "yes": "Ja",
+    "no": "Nein",
+    "required": "Erforderlich",
+    "more": "Mehr",
+    "add": "Hinzufügen",
+    "actions": "Aktionen",
+    "back": "Zurück",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "save": "Speichern",
+    "create": "Erstellen",
+    "createdDate": "Erstellt am",
+    "modifiedDate": "Zuletzt geändert",
+    "id": "ID",
+    "disabled": "Deaktiviert",
+    "enabled": "Aktiv",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "delete": "Löschen",
+    "deleteQ": "Löschen?",
+    "default": "Standard",
+    "remove": "Entfernen",
+    "alias": "Alias",
+    "link": "Link",
+    "pagination": {
+      "xofy": "Seite {x} von {y}",
+      "next": "Nächste Seite",
+      "previous": "Vorherige Seite"
+    },
+    "search": {
+      "placeholder": "Suchen ...",
+      "button": "Suchen"
+    },
+    "name": "Name",
+    "select": "Select",
+    "icon": "Icon",
+    "icon_select": "Icon auswählen",
+    "tab_general": "Standard",
+    "tab_content": "Inhalte",
+    "tab_options": "Optionen",
+    "tab_infos": "Infos",
+    "pick": {
+      "title": "Auswählen",
+      "title_multiple": "Auswählen",
+      "title_autocomplete": "Wert eingeben",
+      "max": "max. {count}"
+    },
+    "date": {
+      "set": "Datum setzen",
+      "select": "Datum auswählen...",
+      "xtoy": "{x} bis {y}",
+      "x": "ab {x}",
+      "y": "bis {y}",
+      "range_header": "Zeitspanne auswählen",
+      "range_from": "Datum von",
+      "range_to": "Datum bis"
+    },
+    "price": {
+      "free": "Gratis",
+      "xtoy": "von {x} bis {y}",
+      "x": "ab {x}",
+      "y": "bis {y}",
+      "range_from": "Preis ab",
+      "range_to": "Preis bis"
+    },
+    "sort": {
+      "title": "Sortieren",
+      "text": "Ziehe die verschiedenen Elemente wie gewünscht nach oben oder unten."
+    },
+    "move": {
+      "title": "Verschieben",
+      "action": "Verschieben",
+      "text": "Wähle ein neues Überelement für <b>{name}</b> in der Baumstruktur unterhalb."
+    },
+    "copy": {
+      "title": "Kopieren",
+      "action": "Kopieren",
+      "text": "Kopiere <b>{name}</b> an einen neuen Ort in der Baumstruktur unterhalb",
+      "includeDescendants": "Unterelemente inkludieren"
+    },
+    "open": {
+      "title": "Öffnen"
+    },
+    "rename": {
+      "title": "Umbenennen"
+    },
+    "edit": {
+      "title": "Bearbeiten"
+    },
+    "export": {
+      "action": "Exportieren"
+    },
+    "parsedinput": {
+      "placeholder": "Wert eingeben",
+      "placeholder_output": "ID"
+    }
+  },
+
+  "gender": {
+    "undisclosed": "Ungenannt",
+    "male": "Männlich",
+    "female": "Weiblich",
+    "nonbinary": "Nicht-binär"
+  },
+
+  "revisions": {
+    "label": "Revisionen",
+    "actions": {
+      "updated": "Aktualisiert",
+      "created": "Erstellt",
+      "deleted": "Gelöscht"
+    },
+    "view": "Ansehen"
+  },
+
+  "rte": {
+    "undo": "Rückgängig",
+    "redo": "Wiederholen",
+    "bold": "Fett",
+    "italic": "Kursiv",
+    "underline": "Unterstrichen",
+    "strikethrough": "Durchgestrichen",
+    "heading": "Überschrift",
+    "heading1": "Überschrift 1",
+    "heading2": "Überschrift 2",
+    "heading3": "Überschrift 3",
+    "heading4": "Überschrift 4",
+    "heading5": "Überschrift 5",
+    "heading6": "Überschrift 6",
+    "paragraph": "Absatz",
+    "quote": "Zitat",
+    "list": "Liste",
+    "olist": "Nummerierte Liste",
+    "ulist": "Ungeordnete Liste",
+    "code": "Code",
+    "line": "Linie",
+    "link": "Link",
+    "image": "Bild",
+    "video": "Video",
+    "accept": "OK",
+    "cancel": "Abbrechen",
+    "raw": "HTML bearbeiten"
+  },
+
+  "links": {
+    "providers": {
+      "page": "Seiten",
+      "media": "Medien"
+    }
+  },
+
+  "errors": {
+    "idnotfound": "Could not find an entity for the given ID",
+    "onsave": {
+      "notallowed": "You are not allowed to edit this resource",
+      "empty": "You need to pass a model"
+    },
+    "ondelete": {
+      "idnotfound": "Could not find an entity for the given ID"
+    },
+    "http": {
+      "403": "Unauthorized",
+      "403_text": "You are not allowed to view this resource",
+      "404": "Not found",
+      "404_text": "The requested resource could not be found<br>({path})",
+      "409": "Conflict",
+      "409_text": "The operation could not be completed as it is not valid anymore. Please reload the page",
+      "4xx": "Client error",
+      "4xx_text": "There was an internal client error (code: {code})",
+      "504": "Timed out",
+      "504_text": "The backoffice did not receive a timely response from the server",
+      "5xx": "Server error",
+      "5xx_text": "There was an internal server error (code: {code})"
+    },
+    "role": {
+      "emptyclaim": "A permission needs both a key and a value",
+      "nosection": "You have to select at least one section to give users access to"
+    },
+    "changepassword": {
+      "emptyfields": "Please fill out all fields",
+      "nouser": "User is invalid",
+      "newpasswordsnotmatching": "The new password does not match the confirmation"
+    },
+    "preview": {
+      "notfound": "Not found",
+      "notfound_text": "Could not find entity with ID \"{id}\""
+    },
+    "page": {
+      "parentnotallowed": "The page is not allowed as a children of the selected parent",
+      "sortingmultipleparents": "Sorting pages is only allowed for a specific parent page"
+    },
+    "forms": {
+      "email_invalid": "The email address is not valid",
+      "emails_invalid": "The email address(es) is/are not valid",
+      "hex_format": "The input is not in a valid HEX #aabbcc format",
+      "url_format": "The input is no well-formed URL",
+      "not_unique": "The property must be unique in this collection",
+      "not_unique_alone": "There must be at least one entity in this collection which fulfills this condition",
+      "culture": "Could not find a culture for the given ISO code",
+      "reference_notfound": "The reference could not be found"
+    }
+  },
+
+  "unsavedchanges": {
+    "title": "Du hast ungespeicherte Änderungen",
+    "text": "Bist du sicher, dass du deine Änderungen verwerfen möchtest?",
+    "close": "Änderungen verwerfen",
+    "confirm": "Auf Seite bleiben"
+  },
+
+  "deleteoverlay": {
+    "close": "Abbrechen",
+    "confirm": "Löschen",
+    "title": "Entität löschen",
+    "text": "Bist du sicher, dass du diese Entität löschen möchtest?",
+    "success": "Gelöscht",
+    "success_text": "Du hast diese Entität erfolgreich gelöscht",
+    "page_text": "Du bist im Begriff diese Seite inklusive aller Unterseiten zu löschen. Bist du sicher?",
+    "page_success_text": "Du hast diese Seite erfolgreich gelöscht"
+  },
+
+  "changepasswordoverlay": {
+    "title": "Passwort ändern",
+    "confirm": "Passwort ändern",
+    "fields": {
+      "currentPassword": "Aktuelles Passwort",
+      "newPassword": "Neues Passwort",
+      "confirmNewPassword": "Neues Passwort bestätigen"
+    }
+  },
+
+  "sections": {
+    "item": {
+      "dashboard": "Dashboard",
+      "spaces": "Räume",
+      "media": "Medien",
+      "pages": "Seiten",
+      "settings": "Einstellungen"
+    }
+  },
+
+  "settings": {
+    "groups": {
+      "system": "System",
+      "plugins": "Plugins",
+      "integrations": "Integrationen"
+    },
+    "system": {
+      "updates": {
+        "name": "Updates",
+        "text": "Version {zero_version}",
+        "text_default": "Aktuelle zero Version aktualisieren"
+      },
+      "applications": {
+        "name": "Applikationen",
+        "text": "Website Applikationen verwalten"
+      },
+      "users": {
+        "name": "User & Berechtigungen",
+        "text": "Administration der Backend Benutzer"
+      },
+      "languages": {
+        "name": "Sprachen",
+        "text": "Frontend Sprachen"
+      },
+      "translations": {
+        "name": "Übersetzungen",
+        "text": "Frontend Texte und Übersetzungen"
+      },
+      "countries": {
+        "name": "Länder",
+        "text": "Liste an Ländern verwalten"
+      },
+      "mails": {
+        "name": "Mails",
+        "text": "Mailvorlagen bearbeiten"
+      },
+      "logs": {
+        "name": "Logs",
+        "text": "Fehler diagnostizieren"
+      }
+    },
+    "plugins": {
+      "installed": {
+        "name": "Installierte Plugins",
+        "text": "{plugin_count} installierte(s) Plugin(s)",
+        "text_default": "Verwalte und installiere Plugins"
+      },
+      "create": {
+        "name": "Plugin erstellen",
+        "text": "Plugin anhand vorhandenem Code erstellen"
+      },
+      "integrations": {
+        "name": "Integrationen",
+        "text": "Konfigurieren von vorhandenen Integrationen"
+      }
+    }
+  },
+
+  "user": {
+    "name": "Benutzer",
+    "users": "Benutzer",
+    "count_permissions": "{count} Berechtigungen",
+    "one_permission": "1 Berechtigung",
+    "tab_permissions": "Berechtigungen",
+    "fields": {
+      "name_placeholder": "Gib deinen echten Namen oder Benutzernamen ein",
+      "email": "Email",
+      "email_text": "Wird auch als Username für den Login verwendet",
+      "email_placeholder": "Gib deine Email-Adresse ein",
+      "avatarId": "Bild",
+      "avatarId_text": "Lade ein Benutzerbild hoch",
+      "languageId": "Sprache",
+      "languageId_text": "Lege die Backend Sprache für diesen Benutzer fest",
+      "roles": "Benutzerrollen",
+      "roles_text": "Füge Berechtigungen anhand der Rollenzuweisung hinzu",
+      "sections": "Bereiche",
+      "sections_text": "Zugangsberechtigungen für Backend-Bereiche",
+      "isActive": "Kann sich anmelden",
+      "isDisabled": "Deaktivieren",
+      "isLockedOut": "Ist gesperrt",
+      "isLockedOut_warning": "Der Benutzer ist gesperrt bis",
+      "isDisabled_warning": "Dieser Benutzer ist deaktiviert und kann sich nicht mehr in zero einloggen. Der Status kann im <b>Aktionen</b> Menü geändert werden"
+    }
+  },
+
+  "role": {
+    "name": "Benutzerrollen",
+    "roles": "Benutzerrolle",
+    "tab_permissions": "Berechtigungen",
+    "fields": {
+      "description": "Beschreibung",
+      "icon": "Symbol"
+    }
+  },
+
+  "permission": {
+    "states": {
+      "create": "Create",
+      "read": "View",
+      "update": "Update",
+      "delete": "Delete",
+      "write": "Edit",
+      "createdelete": "Create/delete",
+      "none": "None"
+    },
+    "collections": {
+      "sections": "Sections",
+      "sections_description": "Allow access to the following sections",
+      "settings": "Settings",
+      "settings_description": "Define read and write access for settings areas",
+      "spaces": "Spaces",
+      "spaces_description": "Granular control of spaces",
+      "modules": "Modules",
+      "modules_description": "Availability of composing block modules"
+    }
+  },
+
+  "login": {
+    "headline": "hello and welcome",
+    "button": "Login",
+    "button_forgot": "Forgot password?",
+    "fields": {
+      "email": "Email",
+      "email_placeholder": "Enter your email or username",
+      "password": "Password",
+      "password_placeholder": "Enter your password"
+    },
+    "errors": {
+      "wrongcredentials": "Email or password is wrong",
+      "lockedout": "The user has been locked out due to many failed password attempts",
+      "disabled": "The user has been deactivated",
+      "notallowed": "The user is not allowed to sign in",
+      "requirestwofactor": "Two-factor authentication is required to login"
+    },
+    "rejectReasons": {
+      "logout": "You have successfully logged out",
+      "inactive": "You have been inactive for too long. Please login again.",
+      "terminated": "Your session has been terminated. Please login again.",
+      "userchanged": "Your user data has changed. Please login again.",
+      "passwordchanged": "Your password was successfully changed. Please login again."
+    }
+  },
+
+  "modules": {
+    "add": {
+      "title": "Modul hinzufügen",
+      "text": "Stelle die Seite zusammen, in dem du Module hinzufügst"
+    },
+    "default_group": "Standard",
+    "notfound": "Ein module mit dem Alias <code>[{alias}]</code> konnte nicht gefunden werden."
+  },
+
+  "page": {
+    "name": "Seite",
+    "type": "Typ",
+    "root": "Oberste Ebene",
+    "info_tab": "Info",
+
+    "folder": {
+      "name": "Ordner",
+      "description": "Seiten gruppieren",
+      "fields": {
+        "isPartOfRoute": "Als Teil der URL darstellen",
+        "isPartOfRoute_text": "Dieser Ordner wird als Teil der URL dargestellt",
+        "urlAlias": "URL Alias",
+        "urlAlias_text": "Dieses Feld wird für die Generierung der URL anstatt das Namens verwendet"
+      }
+    },
+
+    "overview": {
+      "actions": {
+        "continue": "Continue",
+        "continue_text": "You have last edited \"{page}\"",
+        "new": "New page",
+        "new_text": "Create a new page on root",
+        "history": "History",
+        "history_text": "View page editing history"
+      }
+    },
+    "schedule": {
+      "label": "Schedule",
+      "header": "Schedule publishing",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "scheduled": "Scheduled"
+    },
+
+    "actions": {
+      "emptyrecyclebin": "Empty recycle bin"
+    },
+
+    "create": {
+      "title": "Create page",
+      "parent": "Parent",
+      "nonavailable": "There are no page types allowed here"
+    },
+
+    "preview": {
+      "title": "Preview"
+    },
+
+    "picker": {
+      "headline": "Select a page"
+    }
+  },
+
+  "recyclebin": {
+    "name": "Recycle bin",
+    "description": "View recently deleted entities",
+    "purge": "Purge",
+    "fields": {
+      "originalId": "Page Id",
+      "createdDate": "Deleted"
+    },
+    "overlay": {
+      "title": "Actions"
+    }
+  },
+
+  "country": {
+    "list": "Countries",
+    "name": "Country",
+    "fields": {
+      "code": "Code",
+      "code_text": "Code in ISO 3166-1 format which is used to display the appropriate flag",
+      "isPreferred": "Show on top"
+    }
+  },
+
+  "integration": {
+    "list": "Integrations",
+    "name": "Integration",
+    "activeWarning": "This integration is not activated and will therefore not run under any circumstances.",
+    "errors": {
+      "typenotfound": "The integration type does not exist",
+      "multiplenotallowed": "Can not create multiple integrations per type",
+      "notfound": "Could not find a matching integration",
+      "couldnotupdatestate": "Not updated"
+    },
+    "fields": {
+    }
+  },
+
+  "language": {
+    "list": "Languages",
+    "name": "Language",
+    "fields": {
+      "name": "Name",
+      "locale": "Locale",
+      "code": "ISO Code",
+      "code_text": "Code in ISO 3166-1 format",
+      "isDefault": "Default",
+      "isDefault_text": "Use as default language",
+      "isOptional": "Optional",
+      "isOptional_text": "Values for an optional language must not be entered, even if the field is required",
+      "inheritedLanguageId": "Fallback",
+      "inheritedLanguageId_text": "To allow multi-lingual content to fall back to another language if not present in the requested language, select it here"
+    },
+    "errors": {
+      "fallback_invalid": "Select a different language as a fallback",
+      "default_unique": "There is already another language which is set as the default",
+      "default_not_optional": "The default language can't be set as optional",
+      "default_no_fallback": "The default language can't have a fallback",
+      "needs_default": "At least one language has to be set as the default"
+    }
+  },
+
+  "translation": {
+    "list": "Translations",
+    "name": "Translation",
+    "display": {
+      "text": "Text",
+      "html": "HTML"
+    },
+    "fields": {
+      "key": "Key",
+      "value": "Value",
+      "display": "Display type"
+    }
+  },
+
+  "iconpicker": {
+    "title": "Pick an icon"
+  },
+
+  "colorpicker": {
+    "placeholder": "Select or enter a color (#aabbcc)"
+  },
+
+  "mediapicker": {
+    "select_text": "Add media",
+    "select_description": "Upload or select",
+    "upload_text": "Upload",
+    "upload_description": "Upload a new file"
+  },
+
+  "videopicker": {
+    "headline": "Pick a video",
+    "providers": {
+      "html": "Media upload",
+      "youtube": "YouTube",
+      "vimeo": "Vimeo"
+    }
+  },
+
+  "application": {
+    "list": "Applications",
+    "name": "Application",
+    "tab_features": "Features",
+    "tab_domains": "Domains",
+    "fields": {
+      "name": "Name",
+      "name_text": "Short human-readable name",
+      "fullName": "Full name",
+      "fullName_text": "Full company or product name",
+      "imageid": "Image",
+      "imageid_text": "Image of the app (with transparent background), used for all mails, PDFs, ...",
+      "iconid": "Icon",
+      "iconid_text": "Simplified image for minor application parts",
+      "email": "Email",
+      "email_text": "Generic contact email",
+      "domains": "Domains",
+      "domains_text": "Select domains for this application",
+      "domains_help": "Valid domain names are: \"example.com\", \"www.example.com\", \"example.com:8080\", or \"https://www.example.com\".",
+      "domains_add": "Add domain",
+      "features": "Features",
+      "features_text": "Enable additional features for this application"
+    }
+  },
+
+  "media": {
+    "list": "Media",
+    "name": "Media",
+    "addfolder": "Add a new folder",
+    "editfolder": "Edit folder",
+    "actions": {
+      "folderdropdown": "Folder",
+      "addfolder": "Create folder",
+      "addfolder_text": "Adds a new folder in the current parent folder",
+      "addfile": "Upload files",
+      "addfile_text": "Add one or more files to the current filter"
+    },
+    "selection": {
+      "clear": "Clear selection"
+    },
+    "fields": {
+      "foldername_placeholder": "Enter a name ...",
+      "caption": "Caption",
+      "caption_text": "Additional caption text",
+      "dimension": "Dimension",
+      "size": "Size",
+      "date": "Last modified at",
+      "filename": "Filename",
+      "source": "File",
+      "alternativeText": "Alternative text",
+      "alternativeText_text": "Text which is used when the image can't be loaded",
+      "dpi": "DPI",
+      "colorSpace": "Color space",
+      "hasTransparency": "Has transparency",
+      "frames": "Frames"
+    },
+    "deleteoverlay": {
+      "folder_text": "This will delete the folder and all its descendants including subfolders and files. Are you sure?",
+      "folder_success_text": "You have successfully deleted this folder"
+    },
+    "child_count_1": "{count} item",
+    "child_count_x": "{count} items"
+  },
+
+  "mailTemplate": {
+    "name": "Mail template",
+    "list": "Mail templates",
+    "emailBox": "Email settings",
+    "tabs": {
+      "sender": "Sender",
+      "recipient": "Recipient"
+    },
+    "fields": {
+      "key": "Key",
+      "key_text": "Used to query for the template in code",
+      "subject": "Subject",
+      "body": "Body",
+      "body_text": "Additional body which is rendered into the mail template",
+      "preheader": "Preheader",
+      "preheader_text": "This text is rendered as part of the preview in your mail program",
+      "senderEmail": "Sender email",
+      "senderEmail_text": "Leave empty to use application email",
+      "senderName": "Sender name",
+      "senderName_text": "Leave empty to use application name",
+      "recipientEmail": "Recipient email",
+      "recipientEmail_text": "Only used for mails which do not have a dynamic recipient (e.g. reports)",
+      "cc": "Send copy to (CC)",
+      "cc_text": "Comma-separated list of e-mails",
+      "bcc": "Send invisible copy to (BCC)",
+      "bcc_text": "Comma-separated list of e-mails"
+    },
+    "errors": {
+      "senderNotAllowed": "The sender email is currently not supported for this registered mail dispatcher. Please contact the administrator for help."
+    }
+  },
+
+  "space": {
+    "list": "Räume",
+    "name": "Raum"
+  },
+
+  "preview": {
+    "name": "Vorschau"
+  },
+
+  "search": {
+    "collection": {
+      "page": "Seite",
+      "mediaFolder": "Medienordner"
+    }
+  }
+}
