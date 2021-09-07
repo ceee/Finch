@@ -27,6 +27,8 @@
     "id": "ID",
     "disabled": "Deaktiviert",
     "enabled": "Aktiv",
+    "disable": "Deaktivieren",
+    "enable": "Aktivieren",
     "active": "Aktiv",
     "inactive": "Inaktiv",
     "delete": "Löschen",
@@ -313,9 +315,13 @@
   "user": {
     "name": "Benutzer",
     "users": "Benutzer",
+    "add_user": "Neuer Benutzer",
+    "add_role": "Neue Rolle",
+    "title": "User & Berechtigungen",
     "count_permissions": "{count} Berechtigungen",
     "one_permission": "1 Berechtigung",
     "tab_permissions": "Berechtigungen",
+    "changePassword": "Passwort ändern",
     "fields": {
       "name_placeholder": "Gib deinen echten Namen oder Benutzernamen ein",
       "email": "Email",
@@ -339,7 +345,7 @@
 
   "role": {
     "name": "Benutzerrollen",
-    "roles": "Benutzerrolle",
+    "roles": "Benutzerrollen",
     "tab_permissions": "Berechtigungen",
     "fields": {
       "description": "Beschreibung",
@@ -349,23 +355,19 @@
 
   "permission": {
     "states": {
-      "create": "Create",
-      "read": "View",
-      "update": "Update",
-      "delete": "Delete",
-      "write": "Edit",
-      "createdelete": "Create/delete",
-      "none": "None"
+      "create": "Erstellen",
+      "read": "Ansehen",
+      "update": "Bearbeiten",
+      "delete": "Löschen",
+      "write": "Bearbeiten",
+      "createdelete": "Erstellen/Löschen",
+      "none": "Keine"
     },
     "collections": {
-      "sections": "Sections",
-      "sections_description": "Allow access to the following sections",
-      "settings": "Settings",
-      "settings_description": "Define read and write access for settings areas",
-      "spaces": "Spaces",
-      "spaces_description": "Granular control of spaces",
-      "modules": "Modules",
-      "modules_description": "Availability of composing block modules"
+      "sections": "Bereiche",
+      "settings": "Einstellungen",
+      "spaces": "Räume",
+      "modules": "Module"
     }
   },
 
@@ -423,233 +425,233 @@
 
     "overview": {
       "actions": {
-        "continue": "Continue",
-        "continue_text": "You have last edited \"{page}\"",
-        "new": "New page",
-        "new_text": "Create a new page on root",
-        "history": "History",
-        "history_text": "View page editing history"
+        "continue": "Fortsetzen",
+        "continue_text": "Zuletzt wurde \"{page}\" bearbeitet",
+        "new": "Neue Seite",
+        "new_text": "Eine neue Seite in der obersten Ebene erstellen",
+        "history": "Verlauf",
+        "history_text": "Bearbeitungsverlauf von Seiten anzeigen"
       }
     },
     "schedule": {
-      "label": "Schedule",
-      "header": "Schedule publishing",
-      "publish": "Publish",
-      "unpublish": "Unpublish",
-      "scheduled": "Scheduled"
+      "label": "Planen",
+      "header": "Veröffentlichung planen",
+      "publish": "Veröffentlichen",
+      "unpublish": "Veröffentlichung aufheben",
+      "scheduled": "Geplant"
     },
 
     "actions": {
-      "emptyrecyclebin": "Empty recycle bin"
+      "emptyrecyclebin": "Papierkorb leeren"
     },
 
     "create": {
-      "title": "Create page",
-      "parent": "Parent",
-      "nonavailable": "There are no page types allowed here"
+      "title": "Seite erstellen",
+      "parent": "Ebene oberhalb",
+      "nonavailable": "Hier sind keine Seiten als Unterseiten erlaubt"
     },
 
     "preview": {
-      "title": "Preview"
+      "title": "Vorschau"
     },
 
     "picker": {
-      "headline": "Select a page"
+      "headline": "Seite auswählen"
     }
   },
 
   "recyclebin": {
-    "name": "Recycle bin",
-    "description": "View recently deleted entities",
-    "purge": "Purge",
+    "name": "Papierkorb",
+    "description": "Zuletzt gelöscht Elemente anzeigen",
+    "purge": "Alles löschen",
     "fields": {
-      "originalId": "Page Id",
-      "createdDate": "Deleted"
+      "originalId": "Seiten-ID",
+      "createdDate": "Gelöscht"
     },
     "overlay": {
-      "title": "Actions"
+      "title": "Aktionen"
     }
   },
 
   "country": {
-    "list": "Countries",
-    "name": "Country",
+    "list": "Länder",
+    "name": "Land",
     "fields": {
       "code": "Code",
-      "code_text": "Code in ISO 3166-1 format which is used to display the appropriate flag",
-      "isPreferred": "Show on top"
+      "code_text": "Code im ISO 3166-1 Format, welcher zum Anzeigen von Flaggen benötigt wird",
+      "isPreferred": "Oben anzeigen"
     }
   },
 
   "integration": {
-    "list": "Integrations",
+    "list": "Integrationen",
     "name": "Integration",
-    "activeWarning": "This integration is not activated and will therefore not run under any circumstances.",
+    "activeWarning": "Diese Integration ist deaktiviert und wird daher unter keinen Umständen laufen.",
     "errors": {
-      "typenotfound": "The integration type does not exist",
-      "multiplenotallowed": "Can not create multiple integrations per type",
-      "notfound": "Could not find a matching integration",
-      "couldnotupdatestate": "Not updated"
+      "typenotfound": "Dieser Integrationstyp existiert leider nicht",
+      "multiplenotallowed": "Je Integrationstyp kann nur eine Integration angelegt werden",
+      "notfound": "Eine passende Integration konnte nicht gefunden werden",
+      "couldnotupdatestate": "Nicht aktualisiert"
     },
     "fields": {
     }
   },
 
   "language": {
-    "list": "Languages",
-    "name": "Language",
+    "list": "Sprachen",
+    "name": "Sprache",
     "fields": {
       "name": "Name",
       "locale": "Locale",
       "code": "ISO Code",
-      "code_text": "Code in ISO 3166-1 format",
-      "isDefault": "Default",
-      "isDefault_text": "Use as default language",
+      "code_text": "Code im ISO 3166-1 Format",
+      "isDefault": "Primär",
+      "isDefault_text": "Diese Sprache als Standardsprache verwenden",
       "isOptional": "Optional",
-      "isOptional_text": "Values for an optional language must not be entered, even if the field is required",
-      "inheritedLanguageId": "Fallback",
-      "inheritedLanguageId_text": "To allow multi-lingual content to fall back to another language if not present in the requested language, select it here"
+      "isOptional_text": "Werte müssen bei optionalen Sprachen nicht eingegeben werden, selbst wenn das Feld erforderlich ist",
+      "inheritedLanguageId": "Ersatzsprache",
+      "inheritedLanguageId_text": "Bei fehlendem Inhalt kann Content aus einer Ersatzsprache verwendet werden"
     },
     "errors": {
-      "fallback_invalid": "Select a different language as a fallback",
-      "default_unique": "There is already another language which is set as the default",
-      "default_not_optional": "The default language can't be set as optional",
-      "default_no_fallback": "The default language can't have a fallback",
-      "needs_default": "At least one language has to be set as the default"
+      "fallback_invalid": "Verwende eine andere Sprache als Ersatzsprache",
+      "default_unique": "Es gibt bereits eine Sprache die als Primärsprache verwendet wird",
+      "default_not_optional": "Die Primärsprache kann nicht optional sein",
+      "default_no_fallback": "Die Primärsprache kann keine Ersatzsprache haben",
+      "needs_default": "Zumindest eine Sprache muss als Primärsprache festgelegt werden"
     }
   },
 
   "translation": {
-    "list": "Translations",
-    "name": "Translation",
+    "list": "Übersetzungen",
+    "name": "Übersetzung",
     "display": {
       "text": "Text",
       "html": "HTML"
     },
     "fields": {
-      "key": "Key",
-      "value": "Value",
-      "display": "Display type"
+      "key": "Schlüssel",
+      "value": "Wert",
+      "display": "Anzeigetyp"
     }
   },
 
   "iconpicker": {
-    "title": "Pick an icon"
+    "title": "Symbol auswählen"
   },
 
   "colorpicker": {
-    "placeholder": "Select or enter a color (#aabbcc)"
+    "placeholder": "Wähle eine Farbe aus (#aabbcc)"
   },
 
   "mediapicker": {
-    "select_text": "Add media",
-    "select_description": "Upload or select",
-    "upload_text": "Upload",
-    "upload_description": "Upload a new file"
+    "select_text": "Medien hinzufügen",
+    "select_description": "Hochladen oder auswählen",
+    "upload_text": "Hochladen",
+    "upload_description": "Ein neue Datei hochladen"
   },
 
   "videopicker": {
-    "headline": "Pick a video",
+    "headline": "Video auswählen",
     "providers": {
-      "html": "Media upload",
+      "html": "Datei hochladen",
       "youtube": "YouTube",
       "vimeo": "Vimeo"
     }
   },
 
   "application": {
-    "list": "Applications",
-    "name": "Application",
+    "list": "Applikationen",
+    "name": "Applikation",
     "tab_features": "Features",
     "tab_domains": "Domains",
     "fields": {
       "name": "Name",
-      "name_text": "Short human-readable name",
-      "fullName": "Full name",
-      "fullName_text": "Full company or product name",
-      "imageid": "Image",
-      "imageid_text": "Image of the app (with transparent background), used for all mails, PDFs, ...",
-      "iconid": "Icon",
-      "iconid_text": "Simplified image for minor application parts",
+      "name_text": "Kurzer leserlicher Name",
+      "fullName": "Vollständiger Name",
+      "fullName_text": "Vollständiger Firmen- oder Produktname",
+      "imageid": "Bild",
+      "imageid_text": "Bild der Applikation (mit transparentem Hintegrund), wird für alle Mails, PDFs, ... benützt",
+      "iconid": "Symbol",
+      "iconid_text": "Vereinfachtes Bild als Symbol für kleinere Anwendungen (z.B. Favicon)",
       "email": "Email",
-      "email_text": "Generic contact email",
+      "email_text": "Kontakt-Email-Adresse",
       "domains": "Domains",
-      "domains_text": "Select domains for this application",
-      "domains_help": "Valid domain names are: \"example.com\", \"www.example.com\", \"example.com:8080\", or \"https://www.example.com\".",
-      "domains_add": "Add domain",
+      "domains_text": "Wähle Domains für diese Applikation aus",
+      "domains_help": "Gültige Domainnamen sind: \"example.com\", \"www.example.com\", \"example.com:8080\", or \"https://www.example.com\".",
+      "domains_add": "Domain hinzufügen",
       "features": "Features",
-      "features_text": "Enable additional features for this application"
+      "features_text": "Hier kannst du zusätzliche Features für deine Applikation freischalten"
     }
   },
 
   "media": {
-    "list": "Media",
-    "name": "Media",
-    "addfolder": "Add a new folder",
-    "editfolder": "Edit folder",
+    "list": "Medien",
+    "name": "Medien",
+    "addfolder": "Ordner erstellen",
+    "editfolder": "Ordner bearbeiten",
     "actions": {
-      "folderdropdown": "Folder",
-      "addfolder": "Create folder",
-      "addfolder_text": "Adds a new folder in the current parent folder",
-      "addfile": "Upload files",
-      "addfile_text": "Add one or more files to the current filter"
+      "folderdropdown": "Ordner",
+      "addfolder": "Ordner erstellen",
+      "addfolder_text": "Fügt dem aktuellen Ordner einen neuen Unterordner hinzu",
+      "addfile": "Dateien hochladen",
+      "addfile_text": "Eine oder mehrere Dateien dem aktuellen Ordner hinzufügen"
     },
     "selection": {
-      "clear": "Clear selection"
+      "clear": "Auswahl aufheben"
     },
     "fields": {
-      "foldername_placeholder": "Enter a name ...",
-      "caption": "Caption",
-      "caption_text": "Additional caption text",
-      "dimension": "Dimension",
-      "size": "Size",
-      "date": "Last modified at",
-      "filename": "Filename",
-      "source": "File",
-      "alternativeText": "Alternative text",
-      "alternativeText_text": "Text which is used when the image can't be loaded",
+      "foldername_placeholder": "Name eingeben ...",
+      "caption": "Unterschrift",
+      "caption_text": "Zusätzlicher Beschreibungstext",
+      "dimension": "Dimensionen",
+      "size": "Dateigröße",
+      "date": "Zuletzt geändert",
+      "filename": "Dateiname",
+      "source": "Datei",
+      "alternativeText": "Alternativtext",
+      "alternativeText_text": "Dieser Text wird dargestellt, wenn das Bild nicht geladen werden kann",
       "dpi": "DPI",
-      "colorSpace": "Color space",
-      "hasTransparency": "Has transparency",
-      "frames": "Frames"
+      "colorSpace": "Farbraum",
+      "hasTransparency": "Beinhaltet Transparenz",
+      "frames": "Bilder"
     },
     "deleteoverlay": {
-      "folder_text": "This will delete the folder and all its descendants including subfolders and files. Are you sure?",
-      "folder_success_text": "You have successfully deleted this folder"
+      "folder_text": "Diese Aktion löscht den Ordner sowie alle Unterordner und Dateien. Bist du dir sicher?",
+      "folder_success_text": "Du hast den Ordner erfolgreich gelöscht"
     },
-    "child_count_1": "{count} item",
-    "child_count_x": "{count} items"
+    "child_count_1": "{count} Element",
+    "child_count_x": "{count} Elemente"
   },
 
   "mailTemplate": {
-    "name": "Mail template",
-    "list": "Mail templates",
-    "emailBox": "Email settings",
+    "name": "Mailvorlagen",
+    "list": "Mailvorlage",
+    "emailBox": "Email Einstellungen",
     "tabs": {
-      "sender": "Sender",
-      "recipient": "Recipient"
+      "sender": "Absender",
+      "recipient": "Empfänger"
     },
     "fields": {
-      "key": "Key",
-      "key_text": "Used to query for the template in code",
-      "subject": "Subject",
-      "body": "Body",
-      "body_text": "Additional body which is rendered into the mail template",
+      "key": "Schlüssel",
+      "key_text": "Wird benötigt, um die Vorlage im Code abrufen zu können",
+      "subject": "Betreff",
+      "body": "Inhalt",
+      "body_text": "Zusätzlicher Inhaltstext, welcher in der Mail dargestellt wird",
       "preheader": "Preheader",
-      "preheader_text": "This text is rendered as part of the preview in your mail program",
-      "senderEmail": "Sender email",
-      "senderEmail_text": "Leave empty to use application email",
-      "senderName": "Sender name",
-      "senderName_text": "Leave empty to use application name",
-      "recipientEmail": "Recipient email",
-      "recipientEmail_text": "Only used for mails which do not have a dynamic recipient (e.g. reports)",
-      "cc": "Send copy to (CC)",
-      "cc_text": "Comma-separated list of e-mails",
-      "bcc": "Send invisible copy to (BCC)",
-      "bcc_text": "Comma-separated list of e-mails"
+      "preheader_text": "Dieser Text wird in der Vorschau eines Mailprogramms dargestellt",
+      "senderEmail": "Absender-Email",
+      "senderEmail_text": "Leer lassen, um Applikations-Email zu verwenden",
+      "senderName": "Absendername",
+      "senderName_text": "Leer lassen, um Applikationsname zu verwenden",
+      "recipientEmail": "Empfänger-Email",
+      "recipientEmail_text": "Wird nur für Mails benützt, die keinen dynamischen Empfänger haben (z.B. Reporte)",
+      "cc": "Kopie senden an (CC)",
+      "cc_text": "Mehrere Emails mit Komma trennen",
+      "bcc": "Unsichtbare Kopie senden an (BCC)",
+      "bcc_text": "Mehrere Emails mit Komma trennen"
     },
     "errors": {
-      "senderNotAllowed": "The sender email is currently not supported for this registered mail dispatcher. Please contact the administrator for help."
+      "senderNotAllowed": "Die Absender-Email ist für den aktuellen Mail-Service nicht freigeschalten. Bitte kontaktiere den Administrator für Hilfe."
     }
   },
 

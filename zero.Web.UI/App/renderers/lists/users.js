@@ -10,7 +10,7 @@ list.link = zero.alias.settings.users + '-edit';
 
 list.onFetch(filter => UsersApi.getAll(filter));
 
-list.column('avatarId', { width: 70, canSort: false }).image();
+list.column('avatarId', { width: 70, canSort: false, hideLabel: true }).image();
 list.column('name').name();
 list.column('email').text();
 list.column('isActive').active();

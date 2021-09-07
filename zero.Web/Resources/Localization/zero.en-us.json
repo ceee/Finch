@@ -27,6 +27,8 @@
     "id": "ID",
     "disabled": "Disabled",
     "enabled": "Enabled",
+    "disable": "Disable",
+    "enable": "Enable",
     "active": "Active",
     "inactive": "Inactive",
     "delete": "Delete",
@@ -313,9 +315,13 @@
   "user": {
     "name": "User",
     "users": "Users",
+    "add_user": "Add user",
+    "add_role": "Add role",
+    "title": "Users & Permissions",
     "count_permissions": "{count} permissions",
     "one_permission": "1 permission",
     "tab_permissions": "Permissions",
+    "changePassword": "Change password",
     "fields": {
       "name_placeholder": "Enter your real name or a username",
       "email": "Email",

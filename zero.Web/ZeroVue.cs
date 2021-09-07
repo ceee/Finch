@@ -332,7 +332,7 @@ namespace zero.Web
         return items;
       }
 
-      string text = File.ReadAllText(path, Encoding.UTF8);
+      string text = File.ReadAllText(path, Encoding.GetEncoding("ISO-8859-1"));
 
       JObject json = JObject.Parse(text);
       IEnumerable<JToken> tokens = json.Descendants().Where(p => p.Count() == 0);
