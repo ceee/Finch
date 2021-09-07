@@ -14,10 +14,7 @@
 
 
 <script>
-  import * as zero from 'zerox';
   import { countriesApi } from 'zerox';
-
-  console.info(zero);
 
   export default {
     props: ['id'],
@@ -25,7 +22,7 @@
     data: () => ({
       meta: {},
       model: { name: null, features: [], domains: [] },
-      route: zero.alias.settings.countries + '-edit',
+      route: __zero.alias.settings.countries + '-edit',
       disabled: false
     }),
 

@@ -47,6 +47,10 @@
       },
     },
 
+    data: () => ({
+      _isActive: false
+    }),
+
     computed: {
       isLink()
       {
@@ -63,6 +67,34 @@
       modifierClass()
       {
         return this.value && this.value.modifier ? this.value.modifier.icon.split(' ')[1] : null;
+      },
+      isActive()
+      {
+        return this.value && this.isLink && ((!!this.value.id && this.value.id === this.activeId) || this.value.id == this.$route.params.id || (this.value.url && !this.value.url.params && this.value.url.name === this.$route.name));
+      }
+    },
+
+    watch: {
+      isActive(val)
+      {
+        if (val)
+        {
+          this.$emit('setactive', {
+            $el: this.$el,
+            model: this.value
+          });
+        }
+      }
+    },
+
+    mounted()
+    {
+      if (this.isActive)
+      {
+        this.$emit('setactive', {
+          $el: this.$el,
+          model: this.value
+        });
       }
     },
 
@@ -89,7 +121,7 @@
           'is-open': item.isOpen,
           'is-selected': this.selected || item.isSelected,
           'is-disabled': item.disabled,
-          'is-active': this.isLink && ((!!item.id && item.id === this.activeId) || item.id == this.$route.params.id || (item.url && !item.url.params && item.url.name === this.$route.name))
+          'is-active': this.isActive
         };
       },
 

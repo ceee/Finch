@@ -6,8 +6,10 @@
     <slot></slot>
     <span v-if="status === 'loading'" class="ui-tree-item-loading"><i></i></span>
     <template v-for="item in items">
-      <ui-tree-item :value="item" @rightclick="onRightClicked" @click="onSelect(item, $event)" @actions="onActionsClicked" @open="toggle" :active-id="active" :depth="depth" :selected="selection.indexOf(item.id) > -1" />
-      <ui-tree v-if="item.hasChildren && item.isOpen && status != 'loading'" v-bind="{ get, parent: item.id, depth: depth + 1, active, mode, selection, selectionLimit }" @select="onChildSelect">
+      <ui-tree-item :value="item" :active-id="active" :depth="depth" :selected="selection.indexOf(item.id) > -1"
+                    @rightclick="onRightClicked" @click="onSelect(item, $event)" @actions="onActionsClicked" @open="toggle" @setactive="onActiveSet"
+                    />
+      <ui-tree v-if="item.hasChildren && item.isOpen && status != 'loading'" v-bind="{ get, parent: item.id, depth: depth + 1, active, mode, selection, selectionLimit }" @select="onChildSelect" @setactive="onActiveSet">
         <template v-slot:actions="props">
           <slot name="actions" v-bind="props"></slot>
         </template>
@@ -88,6 +90,10 @@
 
     methods: {
 
+      onActiveSet(val)
+      {
+        this.$emit('setactive', val);
+      },
 
       // refreshes the whole tree
       refresh()

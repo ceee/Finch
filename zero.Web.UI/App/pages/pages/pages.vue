@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="page-container">
-    <div class="app-tree" v-resizable="resizable">
-      <ui-tree ref="tree" :get="getItems" :config="treeConfig" :active="id" header="Pages">
+    <div ref="scrollable" class="app-tree" v-resizable="resizable">
+      <ui-tree ref="tree" :get="getItems" :config="treeConfig" :active="id" header="Pages" @setactive="onActiveSet">
         <template v-slot:actions="props">
           <template v-if="!props.item || props.id !== 'recyclebin'">
             <ui-dropdown-button label="@ui.create" icon="fth-plus" @click="create(props.item)" />
@@ -65,6 +65,28 @@
     }),
 
 
+    //watch: {
+    //  '$route'()
+    //  {
+    //    var $ela = document.querySelector('.app-tree .ui-tree-item.is-active');
+    //    var centerOffset = this.$el.offsetHeight * 0.5 - $ela.offsetHeight * 0.5;
+
+    //    this.$nextTick(() =>
+    //    {
+    //      this.$el.scrollTo({ top: $ela.offsetTop, behavior: 'smooth' });
+    //    });
+
+    //    console.info({
+    //      elOffsetHeight: this.$el.offsetHeight,
+    //      aOffsetHeight: $ela.offsetHeight,
+    //      aOffsetTop: $ela.offsetTop, 
+    //      centerOffset,
+    //      scrollTop: $ela.offsetTop - centerOffset
+    //    });
+    //  }
+    //},
+
+
     computed: {
       id()
       {
@@ -90,6 +112,38 @@
 
 
     methods: {
+
+      onActiveSet(val)
+      {
+        this.$nextTick(() =>
+        {
+          let container = this.$refs.scrollable;
+          let child = val.$el;
+          let centerOffset = container.offsetHeight * 0.5 - child.offsetHeight * 0.5;
+          let threshold = container.offsetHeight * 0.1;
+
+          let activeRange = {
+            from: container.scrollTop + threshold,
+            to: container.scrollTop + container.offsetHeight - threshold
+          };
+
+          let rect = child.getBoundingClientRect();
+          let scrollTop = rect.top + container.offsetTop;
+          let scrollTo = child.offsetTop;
+
+          //console.info(child.offsetTop + ' [ ' + activeRange.from + ' - ' + activeRange.to + ' ]', rect);
+
+          //if (activeRange.from <= scrollTo && activeRange.to >= scrollTo)
+          //{
+          //  console.info('in range');
+          //  return;
+          //}
+
+          //console.info('scroll to: ' + scrollTo);
+          container.scrollTo({ top: scrollTo, behavior: 'smooth' });
+        });
+
+      },
 
       getItems(parent)
       {
