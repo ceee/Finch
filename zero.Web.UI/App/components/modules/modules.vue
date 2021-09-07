@@ -136,7 +136,7 @@
           module: module,
           editor: editor,
           model: model,
-          width: 1100
+          width: 820
         }).then(value =>
         {
           if (isAdd)
