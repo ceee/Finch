@@ -93,6 +93,9 @@
 {
   flex-direction: column;
   border-top: none;
+  margin: 0;
+  padding: 0;
+  grid-gap: 6px !important;
 }
 
 .editor-infos .ui-property-label
@@ -109,10 +112,11 @@
   font-size: var(--font-size-s);
   font-weight: 400;
   color: var(--color-text-dim);
-  margin-top: 2px;
 }
 
 .editor-infos-aside .ui-property + .ui-property
 {
   margin-top: 0;
+  padding-top: 0; 
+  border-top: none;
 }

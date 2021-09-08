@@ -33,7 +33,10 @@ namespace zero.Core.Options
     {
       Type type = typeof(T);
       Type boxedType = typeof(TBoxed);
-      Func<Type, bool> finalCanHandle = requestedType => boxedType.IsAssignableFrom(requestedType) && (canHandle == null || canHandle.Invoke(requestedType));
+      Func<Type, bool> finalCanHandle = requestedType =>
+      {
+        return boxedType.IsAssignableFrom(requestedType) && (canHandle == null || canHandle.Invoke(requestedType));
+      };
 
       Items.Add(new InterceptorRegistration()
       {
