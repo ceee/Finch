@@ -402,7 +402,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Do only return the model when it is set to active or inactive entities are included with IncludeInactive()
     /// </summary>
-    protected T WhenActive(T model)
+    protected TRes WhenActive<TRes>(TRes model) where TRes : T
     {
       return model != null && (!OnlyActive || model.IsActive) ? model : default;
     }

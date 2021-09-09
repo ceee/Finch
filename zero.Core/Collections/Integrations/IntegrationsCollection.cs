@@ -222,7 +222,7 @@ namespace zero.Core.Collections
         entity.TypeAlias = type.Alias;
       }
 
-      return entity;
+      return WhenActive(entity);
     }
   }
 
