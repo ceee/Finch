@@ -85,7 +85,7 @@ export default new Vue({
         options.close = () =>
         {
           this.close(options);
-          reject(options);
+          //reject(options);
           // TODO should we move to resolve here, so we don't trigger errors in case the implementation does not catch them?
           // this will at least need some tests if the .then callback does not catch null values
         };

@@ -6,7 +6,7 @@
            :class="instance.class || ''">
         <div class="app-overlay-bg" @click="close(instance)"></div>
         <div open class="app-overlay" :data-alias="instance.alias" :style="{ width: instance.width ? (instance.width + 'px') : null }" :class="'theme-' + instance.theme" :display="instance.display">
-          <component :is="instance.component" :model.sync="instance.model" :config="instance" v-bind="instance"></component>
+          <component :is="instance.component" :model.sync="instance.model" :config="instance" v-bind="instance" title=""></component>
         </div>
       </div>
     </transition-group>
