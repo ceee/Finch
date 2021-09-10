@@ -239,4 +239,9 @@
       padding-top: 0;
     }
   }
+
+  .ui-property.ui-property-parent:empty
+  {
+    display: none;
+  }
 </style>

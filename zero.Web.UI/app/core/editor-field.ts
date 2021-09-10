@@ -99,6 +99,18 @@ class EditorField
 
 
   /**
+   * Whether the input is below the headline or next to it
+   * @param {boolean} isVertical
+   * @returns {EditorField}
+   */
+  vertical(isVertical)
+  {
+    this.options.vertical = isVertical;
+    return this;
+  }
+
+
+  /**
    * Set this field to disabled
    */
   disabled()
