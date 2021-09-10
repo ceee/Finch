@@ -14,6 +14,8 @@ class EditorField
     allTabs: false,
     vertical: true,
     coreDatabase: false,
+    fieldset: null,
+    fieldsetColumns: null,
     class: ''
   };
 
@@ -80,6 +82,18 @@ class EditorField
   {
     this._component = component;
     this._componentOptions = options || {};
+    return this;
+  }
+
+
+  /**
+   * Sets the column count for this field, only available within a an editor fieldset
+   * @param {number} columnCount - Column count between 1 and 12
+   * @returns {EditorField}
+   */
+  cols(columnCount)
+  {
+    this.options.fieldsetColumns = columnCount < 1 ? 1 : (columnCount > 12 ? 12 : columnCount);
     return this;
   }
 

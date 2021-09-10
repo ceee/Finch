@@ -3,7 +3,10 @@
     <ui-tabs class="editor-tabs">
       <ui-tab v-if="!tab.disabled(value)" v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :key="index">
         <h3 v-if="display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
-        <editor-component v-for="(field, fieldIndex) in tab.fields" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value" :class="field.options.class" />
+        <div class="ui-property ui-property-parent" v-for="fieldset in tab.fieldsets">
+          <editor-component v-for="(field, fieldIndex) in fieldset.fields" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value" 
+                            :class="field.options.class" :data-cols="!!field.options.fieldset" :style="{ 'grid-column': field.options.fieldset ? 'span ' + field.options.fieldsetColumns : null }" />
+        </div>
         <component v-if="tab.component" :is="tab.component" v-model="value" />
       </ui-tab>
     </ui-tabs>
@@ -56,7 +59,8 @@
     data: () => ({
       editorConfig: {},
       loaded: false,
-      tabs: []
+      tabs: [],
+      currentFieldset: null
     }),
 
     computed: {
@@ -76,11 +80,13 @@
 
       this.tabs = this.editorConfig.tabs.map(tab =>
       {
+        let fieldsets = this.editorConfig.getFieldsets(tab);
+
         return {
           ...tab,
           count: value => typeof tab.count === 'number' ? tab.count : (typeof tab.count === 'function' ? tab.count(value) : 0),
           disabled: value => typeof tab.disabled === 'boolean' ? tab.disabled : (typeof tab.disabled === 'function' ? tab.disabled(value) : false),
-          fields: this.editorConfig.getFields(tab)
+          fieldsets
         };
       });
 

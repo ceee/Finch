@@ -215,4 +215,28 @@
       margin-left: 50px;
     }
   }
+
+  .ui-property.ui-property-parent
+  {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-gap: var(--padding) var(--padding-s);
+
+    > .ui-property
+    {
+      grid-column-start: 1;
+      grid-column-end: 13;
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    > .ui-property[data-cols] + .ui-property[data-cols]
+    {
+      margin-top: 0;
+      border-top: none;
+      padding-top: 0;
+    }
+  }
 </style>

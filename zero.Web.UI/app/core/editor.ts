@@ -1,4 +1,5 @@
 ﻿
+import Strings from 'zero/helpers/strings.js';
 import EditorField from './editor-field.ts';
 
 class Editor
@@ -145,30 +146,16 @@ class Editor
   }
 
 
-
   /**
    * Add a new fieldset to the editor or returns the tab in case it was already added
    * A fieldset combines properties in a row (side-by-side)
-   * @param {string} alias - Alias for the tab
-   * @param {string} name - Name of the tab (can be a translation)
-   * @param {number|function} [count] - Output a count indicator
-   * @param {boolean|function} [disabled] - Conditionally disable the tab and its content
-   * @param {string} [classes] - Append HTML class to the generated tab
-   * @param {object} [component] - Render a custom vue component instead of editor fields
-   * @returns {EditorTab}
+   * @param {function} [configure] - Configures the fieldset
    */
-  //fieldset(alias, name) // TODO not implemented yet
-  //{
-  //  let tab = this.tabs.find(x => x.alias === alias);
-
-  //  if (!tab)
-  //  {
-  //    tab = this._createTab(alias, name, disabled, count, classes, component);
-  //    this.tabs.push(tab);
-  //  }
-
-  //  return tab;
-  //}
+  fieldset(configure)
+  {
+    let set = this._createFieldset();
+    configure(set);
+  }
 
 
   /**
@@ -201,7 +188,54 @@ class Editor
   getFields(tab)
   {
     const alias = typeof tab === 'undefined' ? null : (typeof tab === 'string' ? tab : tab.alias);
-    return this.fields.filter(x => !alias || x.options.allTabs ? true : x.options.tab === alias);
+    return this.fields.filter(x => !alias || x.options.allTabs ? true : x.options.tab === alias);;
+  }
+
+
+  /**
+   * Get fields grouped in fieldsets for the specified tab
+   * @param {string|EditorTab} [tab] - Pass the tab or its alias
+   * @returns {EditorField[]}
+   */
+  getFieldsets(tab)
+  {
+    let fields = this.getFields(tab);
+    let currentFieldset = "__undefined";
+    let fieldsets = [];
+
+    fields.forEach(field =>
+    {
+      if (field.options.fieldset != currentFieldset || !field.options.fieldset)
+      {
+        currentFieldset = field.options.fieldset;
+        fieldsets.push({
+          fields: [],
+          cols: []
+        });
+      }
+
+      fieldsets[fieldsets.length - 1].fields.push(field);
+      fieldsets[fieldsets.length - 1].cols.push(field.options.fieldsetColumns);
+    });
+
+    fieldsets.forEach(fieldset =>
+    {
+      fieldset.count = fieldset.fields.length;
+      let reserved = fieldset.cols.reduce((acc, x) => acc + (x || 0), 0);
+      let rest = reserved < 1 ? 12 : (12 - reserved) % 12;
+      let columnsToFill = fieldset.cols.filter(x => !x).length;
+      let perColumn = Math.floor(rest / columnsToFill);
+
+      fieldset.fields.forEach(field =>
+      {
+        if (!field.options.fieldsetColumns)
+        {
+          field.options.fieldsetColumns = perColumn;
+        }
+      });
+    });
+
+    return fieldsets;
   }
 
 
@@ -287,6 +321,32 @@ class Editor
       {
         options = options || {};
         options.tab = alias;
+        return this.field(path, options);
+      },
+      fieldset: configure =>
+      {
+        let set = this._createFieldset(alias);
+        configure(set);
+      },
+      removeField: path => this.removeField(path)
+    };
+  } 
+
+
+  /**
+   * Create a new fieldset
+   */
+  _createFieldset(tab)
+  {
+    let id = Strings.guid();
+
+    return {
+      id,
+      field: (path, options) =>
+      {
+        options = options || {};
+        options.fieldset = id;
+        options.tab = tab;
         return this.field(path, options);
       },
       removeField: path => this.removeField(path)
