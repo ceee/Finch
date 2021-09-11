@@ -13,11 +13,11 @@
     <div class="app-nav-boxed">
 
       <h1 class="app-nav-headline">
-        <img src="/Assets/zero-2-light.png" class="show-light" v-localize:alt="'@zero.name'" />
-        <img src="/Assets/zero-2.png" class="show-dark" v-localize:alt="'@zero.name'" />
+        <img src="/Assets/zero.svg" class="show-light" v-localize:alt="'@zero.name'" />
+        <img src="/Assets/zero-dark.svg" class="show-dark" v-localize:alt="'@zero.name'" /> 
       </h1>
       
-      <ui-button icon="fth-search" type="blank" class="app-nav-search" @click="openSearch" /> 
+      <ui-button icon="fth-search" :stroke="2.5" type="blank" class="app-nav-search" @click="openSearch" /> 
 
     </div>
 

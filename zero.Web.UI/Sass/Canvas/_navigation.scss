@@ -106,7 +106,9 @@
 
   img
   {
-    height: 24px;
+    //height: 24px;
+    height: 26px;
+    //margin-top: 9px;
   }
 }
 
@@ -118,8 +120,9 @@
 .app-nav-switch
 {
   margin-bottom: var(--padding-s);
-  border-bottom: 1px solid var(--color-line-onbg);
+  //border-bottom: 1px solid var(--color-line-onbg);
   background: var(--color-bg-shade-3);
+  //background: var(--color-accent);
 
   .ui-button.type-light
   {
@@ -127,6 +130,7 @@
     height: 70px;
     background: transparent;
     border-radius: 0;
+    font-size: var(--font-size-m);
   }
 
   .ui-dropdown-button-icon

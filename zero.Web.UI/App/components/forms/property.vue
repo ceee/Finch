@@ -232,6 +232,7 @@
       padding-right: 0;
     }
 
+    &:empty:first-child + .ui-property, 
     > .ui-property[data-cols] + .ui-property[data-cols]
     {
       margin-top: 0;
