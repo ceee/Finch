@@ -4,8 +4,8 @@
     <span></span>
     <ui-form class="app-auth-inner" v-slot="form" @submit="onSubmit">
       <div>
-        <img src="/Assets/zero-2-light.png" class="app-auth-image show-light" v-localize:alt="'@zero.name'" />
-        <img src="/Assets/zero-2.png" class="app-auth-image show-dark" v-localize:alt="'@zero.name'" />
+        <img src="/Assets/zero.svg" class="app-auth-image show-light" v-localize:alt="'@zero.name'" />
+        <img src="/Assets/zero-dark.svg" class="app-auth-image show-dark" v-localize:alt="'@zero.name'" />
 
         <ui-error :catch-remaining="true" />
         <ui-message type="info" v-if="rejectReason" :text="rejectReason" />
@@ -21,7 +21,7 @@
       </div>
 
       <div class="app-auth-bottom">
-        <ui-button type="primary" :submit="true" label="@login.button" :state="form.state" />
+        <ui-button class="app-auth-confirm" type="accent" :submit="true" label="@login.button" :state="form.state" />
         <ui-button type="blank" label="@login.button_forgot" />
       </div>
     </ui-form>
@@ -126,7 +126,7 @@
     height: 32px;
     display: block;
     position: relative;
-    margin: 0 auto 3rem;
+    margin: 0 0 3rem 0;
   }
 
   .app-auth .ui-property + .ui-property

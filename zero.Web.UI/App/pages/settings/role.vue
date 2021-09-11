@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-form ref="form" class="role" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model="model" title="@role.name" :disabled="disabled" :is-create="!$route.params.id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
+    <ui-form-header v-model="model" prefix="@role.roles" title="@role.name" :disabled="disabled" :is-create="!$route.params.id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
     <ui-editor config="userRole" v-model="model" :meta="meta" :disabled="disabled">
       <template v-slot:below>
         <ui-editor-infos v-model="model" :disabled="disabled" />

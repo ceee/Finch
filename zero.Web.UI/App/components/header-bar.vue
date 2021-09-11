@@ -115,7 +115,7 @@
     .ui-icon-button
     {
       margin-right: var(--padding-s);
-      margin-top: -2px;
+      //margin-top: -2px;
     }
   }
 
@@ -145,11 +145,18 @@
     margin: 0;
     font-size: var(--font-size-l);
     font-weight: 700;
+    display: flex;
+    align-items: center;
 
     &.is-empty, .-minor
     {
       color: var(--color-text-dim);
       font-weight: 400;
+    }
+
+    .-prefix
+    {
+      flex-shrink: 0;
     }
 
     .-count

@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-form ref="form" class="user" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model="model" title="@user.name" :disabled="disabled" :is-create="!$route.params.id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete">
+    <ui-form-header v-model="model" prefix="@user.users" title="@user.name" :disabled="disabled" :is-create="!$route.params.id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete">
       <template v-slot:actions>
         <ui-dropdown-button v-if="model.isActive" label="@ui.disable" icon="fth-minus-circle" @click="onActiveChange" :disabled="disabled" />
         <ui-dropdown-button v-if="!model.isActive" label="@ui.enable" icon="fth-plus-circle" @click="onActiveChange" :disabled="disabled" />

@@ -3,7 +3,7 @@
     <ui-overlay-editor class="ui-editor-overlay integration">
 
       <template v-slot:header>
-        <ui-header-bar :title="config.model.name" :back-button="false" :close-button="true" />
+        <ui-header-bar :title="config.model.name" prefix="@integration.list" :back-button="false" :close-button="true" />
       </template>
 
       <template v-slot:footer>

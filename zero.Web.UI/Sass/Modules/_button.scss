@@ -91,6 +91,15 @@ button::-moz-focus-inner
     justify-content: center;
   }
 
+  &.type-accent
+  {
+    min-width: 90px;
+    justify-content: center;
+    background: var(--color-accent);
+    color: var(--color-accent-fg);
+    border: 1px solid transparent;
+  }
+
   &.type-secondary
   {
     background: var(--color-secondary);
