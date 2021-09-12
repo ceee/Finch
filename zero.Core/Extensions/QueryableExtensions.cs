@@ -82,6 +82,8 @@ namespace zero.Core.Extensions
         return source;
       }
 
+      searchTerms = searchTerms.Trim();
+
       string[] searchParts = searchTerms.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Select(x =>
       {
         if (suffix != null)
@@ -94,6 +96,11 @@ namespace zero.Core.Extensions
         }
         return x;
       }).ToArray();
+
+      if (searchTerms.StartsWith('"') && searchTerms.EndsWith('"'))
+      {
+        searchParts = new[] { searchTerms };
+      }
 
       return source.Search(fieldSelector, searchParts, @operator: @operator);
     }

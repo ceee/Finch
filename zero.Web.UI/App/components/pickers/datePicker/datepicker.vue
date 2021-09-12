@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-datepicker" :class="{'is-disabled': disabled }">
-    <input type="text" class="ui-input ui-datepicker-input" v-localize:placeholder="'@ui.date.select'" :value="output" @input="onChange" @focus="onFocus" @blur="onBlur" :disabled="disabled" />
+    <input type="text" class="ui-input ui-datepicker-input" v-localize:placeholder="placeholder" :value="output" @input="onChange" @focus="onFocus" @blur="onBlur" :disabled="disabled" />
     <ui-icon v-if="!clear || !value" symbol="fth-calendar" class="ui-datepicker-icon" :size="17" />
     <button v-if="clear && value" type="button" class="ui-datepicker-input-button" @click="clearInput"><i class="fth-x"></i></button>
 
@@ -29,6 +29,10 @@
       value: {
         type: String,
         default: null
+      },
+      placeholder: {
+        type: String,
+        default: '@ui.date.select'
       },
       clear: {
         type: Boolean,

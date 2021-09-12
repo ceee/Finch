@@ -2,7 +2,8 @@
   <ui-header-bar class="ui-form-header" :back-button="true">
     <template v-slot:title>
       <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name && !titleDisabled}">
-        <span v-if="prefix" class="-minor -prefix"><span v-localize:html="prefix"></span> <ui-icon symbol="fth-chevron-right" /></span>
+        <span v-if="prefix" class="-minor -prefix" v-localize:html="prefix"></span>
+        <ui-icon v-if="prefix" class="-chevron" symbol="fth-chevron-right" />
         <input v-if="!titleDisabled" class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" :readonly="titleDisabled || disabled" />
         <!--<ui-alias class="ui-form-header-title-alias" v-if="hasAlias" v-model="value.alias" :name="value.name" :disabled="disabled" />-->
         <span v-if="titleDisabled" v-localize="forceTitle ? title : (value.name || title)"></span>

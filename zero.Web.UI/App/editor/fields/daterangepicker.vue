@@ -34,11 +34,11 @@
       },
       fromLabel: {
         type: String,
-        default: null
+        default: '@ui.date.range_from'
       },
       toLabel: {
         type: String,
-        default: null
+        default: '@ui.date.range_to' 
       },
       amPm: {
         type: Boolean,

@@ -2,17 +2,15 @@
   <div class="ui-daterangepicker" :class="{'is-disabled': disabled }">
     <button v-if="!inline" type="button" class="ui-link" @click="schedule" v-localize="scheduleLocalize" :disabled="disabled"></button>
     <div v-if="inline" class="ui-daterangepicker-inline">
-      <div class="ui-split">
-        <div class="ui-daterangepicker-group">
-          <ui-property :label="fromLabel" :vertical="true">
-            <ui-datepicker v-model="value.from" :time="time" />
-          </ui-property>
-        </div>
-        <div class="ui-daterangepicker-group" v-if="rangeEnd">
-          <ui-property :label="toLabel" :vertical="true">
-            <ui-datepicker v-model="value.to" :time="time" />
-          </ui-property>
-        </div>
+      <div class="ui-daterangepicker-group">
+        <ui-property :vertical="true">
+          <ui-datepicker v-model="value.from" :time="time" />
+        </ui-property>
+      </div>
+      <div class="ui-daterangepicker-group" v-if="rangeEnd">
+        <ui-property :vertical="true">
+          <ui-datepicker v-model="value.to" :time="time" />
+        </ui-property>
       </div>
     </div>
   </div>
@@ -64,11 +62,11 @@
       },
       fromLabel: {
         type: String,
-        default: '@page.schedule.publish'
+        default: '@ui.date.range_from'
       },
       toLabel: {
         type: String,
-        default: '@page.schedule.unpublish'
+        default: '@ui.date.range_to' 
       },
       amPm: {
         type: Boolean,
@@ -154,5 +152,11 @@
     color: var(--color-primary);
     font-weight: 700;
     text-decoration-color: var(--color-primary) !important;
+  }
+
+  .ui-daterangepicker-inline
+  {
+    display: flex;
+    gap: var(--padding-s);
   }
 </style>

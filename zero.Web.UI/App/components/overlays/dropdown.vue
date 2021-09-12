@@ -23,7 +23,7 @@
       },
       theme: {
         type: String,
-        default: 'light'
+        default: 'dark'
       },
       locked: {
         type: Boolean,

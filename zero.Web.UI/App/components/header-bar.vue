@@ -6,7 +6,8 @@
         <div class="ui-header-bar-main-title">
           <slot name="title">
             <h2 class="ui-header-bar-title" :class="{'is-empty': !title && titleEmpty}">
-              <span v-if="prefix" class="-minor -prefix"><span v-localize:html="prefix"></span> <ui-icon symbol="fth-chevron-right" /></span>
+              <span v-if="prefix" class="-minor -prefix" v-localize:html="prefix"></span>
+              <ui-icon v-if="prefix" class="-chevron" symbol="fth-chevron-right" />
               <span v-localize="title || titleEmpty"></span>
               <span v-if="suffix" class="-minor -suffix" v-localize:html="suffix"></span>
               <span v-if="count > 0" class="-minor -count">{{count}}</span>
@@ -77,7 +78,7 @@
   .ui-header-bar
   {
     width: 100%;
-    height: 100px;
+    height: 90px;
     padding: 0 var(--padding) 0; //10px;
 
     & + .ui-blank-box, & + .ui-box, & + .ui-view-box
@@ -159,6 +160,14 @@
       flex-shrink: 0;
     }
 
+    .-chevron
+    {
+      color: var(--color-text-dim);
+      position: relative;
+      top: -1px;
+      margin: 0 var(--padding-xxs);
+    }
+
     .-count
     {
       display: inline-block;
@@ -178,13 +187,6 @@
       margin-top: 2px;
       position: relative;
       top: -1px;
-    }
-
-    .ui-icon
-    {
-      position: relative;
-      top: 2px;
-      margin: 0 5px;
     }
   }
 

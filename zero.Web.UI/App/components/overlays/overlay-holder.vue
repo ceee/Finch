@@ -2,7 +2,7 @@
   <div class="app-overlays" :class="{ 'has-multiple': instances.length > 1 }">
     <transition-group name="overlay" :duration="600">
       <div class="app-overlay-outer" :display="instance.display" v-for="(instance, index) in instances" :key="instance.id" 
-           :style="{ transform: instance.display !== 'editor' ? null : 'translateX(' + (editorLength - index - 1) * -60 + 'px)' }"
+           :style="{ transform: instance.display !== 'editor' ? null : 'translateX(' + (editorLength - index - 1) * -120 + 'px)' }"
            :class="instance.class || ''">
         <div class="app-overlay-bg" @click="close(instance)"></div>
         <div open class="app-overlay" :data-alias="instance.alias" :style="{ width: instance.width ? (instance.width + 'px') : null }" :class="'theme-' + instance.theme" :display="instance.display">
@@ -77,7 +77,7 @@
     z-index: 5;
     justify-content: center;
     align-items: flex-start;
-    transition: transform 0.4s ease-out;
+    transition: transform 0.55s ease-out;
 
     & + .app-overlay-outer .app-overlay
     {

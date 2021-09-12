@@ -25,7 +25,7 @@
       </component>
 
       <div class="ui-table-empty" v-if="!isLoading && items.length < 1">
-        <i class="ui-table-empty-icon fth-list"></i>
+        <ui-icon class="ui-table-empty-icon" symbol="fth-list" size="32" />
         There are no items to show in this list
       </div>
 

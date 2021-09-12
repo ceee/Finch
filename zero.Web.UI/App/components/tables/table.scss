@@ -74,6 +74,7 @@ a.ui-table-row:hover, button.ui-table-row:hover
   .ui-table-cell
   {
     justify-content: space-between; 
+    font-size: var(--font-size-s);
   }
 
   .ui-table.is-inline &
@@ -221,7 +222,6 @@ a.ui-table-row:hover, button.ui-table-row:hover
 
 .ui-table-empty-icon
 {
-  font-size: 34px;
   margin-bottom: 20px;
 }
 

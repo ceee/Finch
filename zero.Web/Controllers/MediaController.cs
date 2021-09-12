@@ -92,9 +92,16 @@ namespace zero.Web.Controllers
 
       if (path.StartsWith("http"))
       {
-        using var client = new WebClient();
-        var content = client.DownloadData(path);
-        return File(content, contentType, DateTimeOffset.Now, EntityTagHeaderValue.Any);
+        try
+        {
+          using var client = new WebClient();
+          var content = client.DownloadData(path);
+          return File(content, contentType, DateTimeOffset.Now, EntityTagHeaderValue.Any);
+        }
+        catch
+        {
+          return NotFound();
+        }
       }
 
       string fullPath = Path.Combine(Paths.WebRoot, path?.Trim('/') ?? String.Empty);

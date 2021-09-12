@@ -75,7 +75,7 @@ export default new Vue({
 
       if (typeof options.theme === 'undefined')
       {
-        options.theme = 'default';
+        options.theme = 'default'; 
       }
 
       this.instances.push(options);
