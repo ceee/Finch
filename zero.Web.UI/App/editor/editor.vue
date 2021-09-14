@@ -4,7 +4,7 @@
       <ui-tab v-if="!tab.disabled(value)" v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :key="index">
         <h3 v-if="display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
         <div class="ui-property ui-property-parent" v-for="fieldset in tab.fieldsets">
-          <editor-component v-for="(field, fieldIndex) in fieldset.fields" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value" 
+          <editor-component v-for="(field, fieldIndex) in fieldset.fields" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value"
                             :class="field.options.class" :data-cols="!!field.options.fieldset" :style="{ 'grid-column': field.options.fieldset ? 'span ' + field.options.fieldsetColumns : null }" />
         </div>
         <component v-if="tab.component" :is="tab.component" v-model="value" />

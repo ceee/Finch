@@ -3,7 +3,7 @@
                :description="description" :required="isRequired" :disabled="isDisabled" 
                :vertical="config.options.vertical"
                :class="{'is-disabled': isDisabled, 'has-block': !!blockComponent }">
-    <component :is="config.component" v-bind="config.componentOptions" :value="model" :entity="value" @input="onChange" :disabled="isDisabled" />
+    <component :is="config.component" v-bind="config.componentOptions" :value="model" :entity="value" :meta="meta" @input="onChange" :disabled="isDisabled" />
     <p v-if="config.options.helpText" class="ui-property-help" v-localize="config.options.helpText"></p>
     <template v-if="blockComponent && loaded" v-slot:after>
       <component :is="blockComponent" v-bind="{ config, editor, value, model }" />
