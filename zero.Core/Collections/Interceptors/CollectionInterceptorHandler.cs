@@ -141,7 +141,7 @@ namespace zero.Core.Collections
       if (Interceptors.TryGetValue(type, out object interceptorObj))
       {
         interceptor = interceptorObj as ICollectionInterceptor<T>;
-        return true;
+        return interceptor != null;
       }
 
       interceptor = Services.GetService(type) as ICollectionInterceptor<T>;
