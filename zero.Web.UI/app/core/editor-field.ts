@@ -16,7 +16,8 @@ class EditorField
     coreDatabase: false,
     fieldset: null,
     fieldsetColumns: null,
-    class: ''
+    class: '',
+    onChange: null
   };
 
   _preview = {
@@ -149,6 +150,17 @@ class EditorField
   when(condition)
   {
     this.options.condition = condition;
+    return this;
+  }
+
+
+  /**
+   * The expression argument is called when the value of the field changes
+   * @param {function} expression - function which is called
+   */
+  onChange(expression)
+  {
+    this.options.onChange = expression;
     return this;
   }
 

@@ -121,6 +121,8 @@
 
       onChange(value)
       {
+        let oldValue = JSON.parse(JSON.stringify(this.model));
+
         if (typeof value === 'function')
         {
           value(this.value);
@@ -130,6 +132,15 @@
           Objects.setValue(this.value, this.selector, value);
         }
         this.$emit('input', this.value);
+
+        if (typeof this.config.options.onChange === 'function')
+        {
+          this.config.options.onChange(value, {
+            oldValue,
+            model: this.value,
+            component: this
+          });
+        }
       },
 
 
