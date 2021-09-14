@@ -20,6 +20,7 @@ namespace zero.Core.Collections
   public abstract class CollectionBase<T> : ICollectionBase<T>, IDisposable where T : ZeroEntity
   {
     private IAsyncDocumentSession _session;
+    private IRevisionsApi _revisions;
     private string _database;
 
     protected ICollectionInterceptorHandler InterceptorHandler { get; private set; }
@@ -53,6 +54,23 @@ namespace zero.Core.Collections
     /// The validator
     /// </summary>
     protected readonly IValidator<T> Validator;
+
+    /// <summary>
+    /// Manage revisions
+    /// </summary>
+    protected IRevisionsApi Revisions
+    {
+      get
+      {
+        if (_revisions != null)
+        {
+          return _revisions;
+        }
+
+        _revisions = new RevisionsApi(Session);
+        return _revisions;
+      }
+    }
 
     /// <summary>
     /// Create an an async document session
@@ -108,11 +126,15 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public virtual async Task<T> GetById(string id)
+    public virtual async Task<T> GetById(string id, string changeVector = null)
     {
       if (id.IsNullOrWhiteSpace())
       {
         return default;
+      }
+      if (!changeVector.IsNullOrEmpty())
+      {
+        return WhenActive(await GetRevision(changeVector));
       }
 
       return WhenActive(await Session.LoadAsync<T>(id));
@@ -155,6 +177,25 @@ namespace zero.Core.Collections
       }
 
       return items;
+    }
+
+
+    /// <inheritdoc />
+    public virtual async Task<ListResult<Revision>> GetRevisions(string id, int page = 1, int pageSize = 10)
+    {
+      if (id.IsNullOrWhiteSpace())
+      {
+        return default;
+      }
+
+      return await Revisions.GetPaged<T>(id, page, pageSize);
+    }
+
+
+    /// <inheritdoc />
+    public virtual async Task<T> GetRevision(string changeVector)
+    {
+      return await Session.Advanced.Revisions.GetAsync<T>(changeVector);
     }
 
 
@@ -445,7 +486,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Get an entity by Id
     /// </summary>
-    Task<T> GetById(string id);
+    Task<T> GetById(string id, string changeVector = null);
 
     /// <summary>
     /// Get entities by ids
@@ -462,6 +503,16 @@ namespace zero.Core.Collections
     /// Warning: Don't use this method for large collections. Stream the results instead.
     /// </summary>
     Task<List<T>> GetAll();
+
+    /// <summary>
+    /// Get page revisions for the specified entity
+    /// </summary>
+    Task<ListResult<Revision>> GetRevisions(string id, int page = 1, int pageSize = 10);
+
+    /// <summary>
+    /// Get a revision by change vector
+    /// </summary>
+    Task<T> GetRevision(string changeVector);
 
     /// <summary>
     /// Stream the collection

@@ -81,7 +81,7 @@ namespace zero.Core.Database
       };
 
       // get inner type for revisions
-      if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Revision<>))
+      if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Raven.Client.Documents.Subscriptions.Revision<>))
       {
         type = type.GetGenericArguments().FirstOrDefault();
       }

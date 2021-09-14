@@ -120,3 +120,31 @@
   padding-top: 0; 
   border-top: none;
 }
+
+.editor-aside-links
+{
+  display: flex;
+  width: 100%;
+  margin-bottom: -5px;
+}
+
+.editor-aside-links .ui-link
+{
+  color: var(--color-text-dim);
+  font-size: var(--font-size-s); 
+  text-decoration: none !important;
+  position: relative;
+}
+
+.editor-aside-links .ui-link + .ui-link
+{
+  margin-left: 20px;
+}
+
+.editor-aside-links .ui-link + .ui-link:before
+{
+  content: '·';
+  position: absolute;
+  left: -12px;
+  top: -1px;
+}

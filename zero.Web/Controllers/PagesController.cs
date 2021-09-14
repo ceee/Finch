@@ -16,12 +16,10 @@ namespace zero.Web.Controllers
   {
     IPagesApi Api;
     IZeroStore Store;
-    IRevisionsApi RevisionsApi;
 
-    public PagesController(IPagesApi api, IRevisionsApi revisionsApi, IZeroStore store)
+    public PagesController(IPagesApi api, IZeroStore store)
     {
       Api = api;
-      RevisionsApi = revisionsApi;
       Store = store;
     }
 
@@ -88,7 +86,8 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<ListResult<Revision>> GetRevisions([FromQuery] string id, [FromQuery] int page = 1) => await RevisionsApi.GetPaged<Page>(id, page);
+    //public async Task<ListResult<Revision>> GetRevisions([FromQuery] string id, [FromQuery] int page = 1) => await RevisionsApi.GetPaged<Page>(id, page); 
+    // TODO this endpoint is available when pages controller moved to BackofficeCollectionController
 
 
     public async Task<EntityResult<Page>> Save([FromBody] Page model) => await Api.Save(model);

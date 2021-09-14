@@ -1,80 +1,56 @@
-﻿using Newtonsoft.Json;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Commands;
-using Raven.Client.Documents.Operations;
-using Raven.Client.Documents.Session;
-using Sparrow.Json;
-using System;
+﻿using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
-using zero.Core.Options;
 
 namespace zero.Core.Api
 {
   public class RevisionsApi : IRevisionsApi
   {
-    protected IZeroOptions Options { get; set; }
+    protected IAsyncDocumentSession Session { get; set; }
 
-    protected IZeroStore Store { get; set; }
-
-    protected IUserApi UserApi { get; set; }
-
-
-    public RevisionsApi(IZeroOptions options, IZeroStore store, IUserApi userApi)
+    public RevisionsApi(IAsyncDocumentSession session)
     {
-      Options = options;
-      Store = store;
-      UserApi = userApi;
+      Session = session;
     }
 
 
     /// <summary>
     /// Get revision list for an entity
     /// </summary>
-    public async Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10, bool includeContent = false) where T : ZeroEntity
+    public async Task<ListResult<Revision<T>>> GetPagedWithModel<T>(string id, int pageNumber = 1, int pageSize = 10) where T : ZeroEntity
     {
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-
       // get paged revisions
-      List<T> items = await session.Advanced.Revisions.GetForAsync<T>(id, (pageNumber - 1) * pageSize, pageSize);
-      double totalResults = items.Count;
-
-      // get total results in case items count equals page size
-      if (pageSize <= items.Count || pageNumber > 1)
-      {
-        GetRevisionsCommand command = new GetRevisionsCommand(id, 0, 1, true);
-        session.Advanced.RequestExecutor.Execute(command, session.Advanced.Context);
-        command.Result.Results.Parent.TryGet("TotalResults", out totalResults);
-      }
+      List<T> items = await Session.Advanced.Revisions.GetForAsync<T>(id, (pageNumber - 1) * pageSize, pageSize);
+      long totalResults = await Session.Advanced.Revisions.GetCountForAsync(id);
 
       // add creation for last page
-      if (!items.Any() && pageNumber >= (int)Math.Ceiling((decimal)totalResults / pageSize))
-      {
-        T currentRevision = await session.LoadAsync<T>(id);
-        if (currentRevision != null)
-        {
-          items.Add(currentRevision);
-        }
-      }
+      //if (!items.Any() && pageNumber >= (int)Math.Ceiling((decimal)totalResults / pageSize))
+      //{
+      //  T currentRevision = await Session.LoadAsync<T>(id);
+      //  if (currentRevision != null)
+      //  {
+      //    items.Add(currentRevision);
+      //  }
+      //}
 
-      List<Revision> revisions = new List<Revision>();
+      List<Revision<T>> revisions = new();
 
       // load affected users as the revisions could have been edited by other users too
       string[] userIds = items.Select(x => x.LastModifiedById).Distinct().ToArray();
-      Dictionary<string, BackofficeUser> users = await UserApi.GetByIds(userIds);
+      Dictionary<string, BackofficeUser> users = await Session.LoadAsync<BackofficeUser>(userIds);
 
       // create revision objects
       foreach (T item in items)
       {
-        Revision revision = new Revision()
+        Revision<T> revision = new()
         {
-          ChangeVector = session.Advanced.GetChangeVectorFor(item),
-          Date = item.LastModifiedDate,
-          Json = includeContent ? JsonConvert.SerializeObject(item) : null
+          Model = item,
+          ModelId = item.Id,
+          ChangeVector = Session.Advanced.GetChangeVectorFor(item),
+          Date = item.LastModifiedDate
         };
 
         if (!item.LastModifiedById.IsNullOrEmpty() && users.TryGetValue(item.LastModifiedById, out BackofficeUser user) && user != null)
@@ -90,7 +66,23 @@ namespace zero.Core.Api
         revisions.Add(revision);
       }
 
-      return new ListResult<Revision>(revisions, Convert.ToInt64(totalResults), pageNumber, pageSize);
+      return new ListResult<Revision<T>>(revisions, totalResults, pageNumber, pageSize);
+    }
+
+
+    /// <summary>
+    /// Get revision list for an entity
+    /// </summary>
+    public async Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10) where T : ZeroEntity
+    {
+      ListResult<Revision<T>> items = await GetPagedWithModel<T>(id, pageNumber, pageSize);
+      return items.MapTo(model => new Revision()
+      {
+        ChangeVector = model.ChangeVector,
+        Date = model.Date,
+        ModelId = model.ModelId,
+        User = model.User
+      });
     }
   }
 
@@ -98,8 +90,13 @@ namespace zero.Core.Api
   public interface IRevisionsApi
   {
     /// <summary>
-    /// Get revision list (without content JSON) for an entity
+    /// Get revision list including models for an entity
     /// </summary>
-    Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10, bool includeContent = false) where T : ZeroEntity;
+    Task<ListResult<Revision<T>>> GetPagedWithModel<T>(string id, int pageNumber = 1, int pageSize = 10) where T : ZeroEntity;
+
+    /// <summary>
+    /// Get revision list for an entity
+    /// </summary>
+    Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10) where T : ZeroEntity;
   }
 }

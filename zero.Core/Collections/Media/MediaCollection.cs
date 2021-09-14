@@ -62,7 +62,7 @@ namespace zero.Core.Collections
     protected IPaths Paths { get; set; }
 
 
-    public override Task<Media> GetById(string id)
+    public override Task<Media> GetById(string id, string changeVector = null)
     {
       ApplyScopeBasedOnId(id);
       return base.GetById(id);

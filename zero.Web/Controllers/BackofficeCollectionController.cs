@@ -35,7 +35,7 @@ namespace zero.Web.Controllers
     }
 
 
-    public virtual async Task<EditModel<TEntity>> GetById([FromQuery] string id) => Edit(await Collection.GetById(id));
+    public virtual async Task<EditModel<TEntity>> GetById([FromQuery] string id, [FromQuery] string changeVector = null) => Edit(changeVector.IsNullOrEmpty() ? await Collection.GetById(id) : await Collection.GetRevision(changeVector));
 
 
     public virtual async Task<Dictionary<string, TEntity>> GetByIds([FromQuery] string[] ids) => await Collection.GetByIds(ids);
@@ -54,6 +54,12 @@ namespace zero.Web.Controllers
       }
 
       return await ravenQuery.ToQueriedListAsync(query);
+    }
+
+
+    public virtual async Task<ListResult<Revision>> GetRevisions([FromQuery] string id, [FromQuery] ListBackofficeQuery<TEntity> query)
+    {
+      return await Collection.GetRevisions(id, query.Page, query.PageSize);
     }
 
 

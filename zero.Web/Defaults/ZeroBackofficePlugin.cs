@@ -99,7 +99,6 @@ namespace zero.Web.Defaults
       services.AddTransient<IToken, Token>();
       services.AddTransient<ISpacesApi, SpacesApi>();
       services.AddTransient<IPermissionsApi, PermissionsApi>();
-      services.AddTransient<IRevisionsApi, RevisionsApi>();
       services.AddTransient<IMediaApi, MediaApi>();
       services.AddTransient<IMediaFolderApi, MediaFolderApi>();
       services.AddTransient<IModulesApi, ModulesApi>();
