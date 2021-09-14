@@ -229,5 +229,17 @@ namespace zero.Web.Controllers
 
       return base.File(stream, contentType, filename, true);
     }
+
+
+    protected IActionResult File(Core.Entities.FileResult file)
+    {
+      if (file == null)
+      {
+        return NotFound();
+      }
+
+      FileStream stream = System.IO.File.OpenRead(file.Path);
+      return File(stream, file.ContentType, file.Filename);
+    }
   }
 }

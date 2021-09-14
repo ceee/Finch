@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.StaticFiles;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,6 +30,8 @@ namespace zero.Core
 
     private const char REPLACEMENT_CHAR = '-';
 
+    private FileExtensionContentTypeProvider FileExtensionContentTypeProvider { get; set; }
+
     private static Dictionary<char, string> Replacements = new Dictionary<char, string>()
     {
       { 'ä', "ae" },
@@ -46,6 +49,7 @@ namespace zero.Core
       ContentRoot = env.ContentRootPath;
       SecureRoot = Path.Combine(ContentRoot, "wwwroot.secure");
       Media = Path.Combine(WebRoot, MEDIA_FOLDER);
+      FileExtensionContentTypeProvider = new();
     }
 
 
@@ -103,6 +107,19 @@ namespace zero.Core
       {
         Directory.CreateDirectory(directory);
       }
+    }
+
+
+    /// <summary>
+    /// Get content type for a filename
+    /// </summary>
+    public string GetContentType(string filename, string fallback = "application/octet-stream")
+    {
+      if (filename == null || !FileExtensionContentTypeProvider.TryGetContentType(Path.GetFileName(filename), out string contentType))
+      {
+        contentType = fallback;
+      }
+      return contentType;
     }
 
 
@@ -193,6 +210,11 @@ namespace zero.Core
     /// Create a directory if it does not exist yet
     /// </summary>
     void Create(string directory);
+
+    /// <summary>
+    /// Get content type for a filename
+    /// </summary>
+    string GetContentType(string filename, string fallback = "application/octet-stream");
 
     /// <summary>
     /// Normalizes a filename and removes invalid chars

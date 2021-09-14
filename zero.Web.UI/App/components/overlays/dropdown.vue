@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-dropdown-container">
-    <div v-if="hasButton" ref="trigger" class="ui-dropdown-toggle" @click.stop="toggle">
+    <div v-if="hasButton" ref="trigger" class="ui-dropdown-toggle" @click.prevent.stop="toggle">
       <slot name="button"></slot>
     </div>
     <div class="ui-dropdown" ref="overlay" role="dialog" v-if="open" v-click-outside="hide" :class="dropdownClasses">
