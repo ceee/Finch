@@ -2,8 +2,10 @@
   <ui-header-bar class="ui-form-header" :back-button="true">
     <template v-slot:title>
       <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name && !titleDisabled}">
-        <span v-if="prefix" class="-minor -prefix" v-localize:html="prefix"></span>
-        <ui-icon v-if="prefix" class="-chevron" symbol="fth-chevron-right" />
+        <template v-for="prefix in prefixes">
+          <span class="-minor -prefix" v-localize:html="prefix"></span>
+          <ui-icon class="-chevron" symbol="fth-chevron-right" :size="14" />
+        </template>
         <input v-if="!titleDisabled" class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" :readonly="titleDisabled || disabled" />
         <!--<ui-alias class="ui-form-header-title-alias" v-if="hasAlias" v-model="value.alias" :name="value.name" :disabled="disabled" />-->
         <span v-if="titleDisabled" v-localize="forceTitle ? title : (value.name || title)"></span>
@@ -42,7 +44,7 @@
         default: false
       },
       prefix: {
-        type: String
+        type: [String, Array]
       },
       value: {
         type: Object
@@ -80,6 +82,11 @@
       actionsDefined()
       {
         return !this.isCreate && (this.canDelete || this.$scopedSlots.hasOwnProperty('actions'));
+      },
+      prefixes()
+      {
+        let items = Array.isArray(this.prefix) ? this.prefix : [this.prefix];
+        return items.filter(x => !!x);
       }
     },
 

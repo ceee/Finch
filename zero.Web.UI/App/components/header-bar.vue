@@ -6,8 +6,10 @@
         <div class="ui-header-bar-main-title">
           <slot name="title">
             <h2 class="ui-header-bar-title" :class="{'is-empty': !title && titleEmpty}">
-              <span v-if="prefix" class="-minor -prefix" v-localize:html="prefix"></span>
-              <ui-icon v-if="prefix" class="-chevron" symbol="fth-chevron-right" />
+              <template v-for="prefix in prefixes">
+                <span class="-minor -prefix" v-localize:html="prefix"></span>
+                <ui-icon class="-chevron" symbol="fth-chevron-right" :size="14" />
+              </template>
               <span v-localize="title || titleEmpty"></span>
               <span v-if="suffix" class="-minor -suffix" v-localize:html="suffix"></span>
               <span v-if="count > 0" class="-minor -count">{{count}}</span>
@@ -39,7 +41,7 @@
         type: String
       },
       prefix: {
-        type: String
+        type: [String, Array]
       },
       suffix: {
         type: String
@@ -58,6 +60,14 @@
       closeButton: {
         type: Boolean,
         default: false
+      }
+    },
+
+    computed: {
+      prefixes()
+      {
+        let items = Array.isArray(this.prefix) ? this.prefix : [this.prefix];
+        return items.filter(x => !!x);
       }
     },
 
