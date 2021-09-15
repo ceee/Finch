@@ -99,6 +99,12 @@ export default {
     decimals = !fixedDecimals ? 2 : decimals;
     var hasDecimals = ~~value !== value;
     var val = (hasDecimals || fixedDecimals) ? (value / 1).toFixed(decimals) : ~~value;
+
+    if (val === "-0." + "0".repeat(decimals))
+    {
+      val = "0." + "0".repeat(decimals);
+    }
+
     return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, noEncode ? " " : "&nbsp;") + (hideSymbol === true ? "" : (noEncode ? " €" : "&nbsp;&euro;"));
     // TODO we have dynamic currencies, not fixed to €
   },
