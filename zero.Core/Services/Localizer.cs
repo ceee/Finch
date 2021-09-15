@@ -66,11 +66,15 @@ namespace zero.Core.Services
 
 
     /// <inheritdoc />
-    public string Text<T>(T enumValue) where T : Enum
+    public string Text<T>(T enumValue) where T : Enum => Text(enumValue, null);
+
+
+    /// <inheritdoc />
+    public string Text<T>(T enumValue, Dictionary<string, string> tokens) where T : Enum
     {
       Type type = enumValue.GetType();
       MemberInfo memInfo = type.GetMember(enumValue.ToString())[0];
-      return Text(memInfo.GetCustomAttribute<LocalizeAttribute>()?.Key);
+      return Text(memInfo.GetCustomAttribute<LocalizeAttribute>()?.Key, tokens);
     }
 
 
@@ -117,6 +121,11 @@ namespace zero.Core.Services
     /// Get a text string from a [Localize] attribute
     /// </summary>
     string Text<T>(T enumValue) where T : Enum;
+
+    /// <summary>
+    /// Get a text string from a [Localize] attribute
+    /// </summary>
+    string Text<T>(T enumValue, Dictionary<string, string> tokens) where T : Enum;
 
     /// <summary>
     /// Only tries to resolve the key when it is prefixed with an @
