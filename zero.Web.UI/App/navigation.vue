@@ -13,6 +13,7 @@
     <div class="app-nav-boxed">
 
       <h1 class="app-nav-headline">
+        <span class="app-nav-logo-circle"></span>
         <img src="/Assets/zero.svg" class="show-light" v-localize:alt="'@zero.name'" />
         <img src="/Assets/zero-dark.svg" class="show-dark" v-localize:alt="'@zero.name'" /> 
       </h1>
