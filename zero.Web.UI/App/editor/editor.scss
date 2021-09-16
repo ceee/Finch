@@ -33,6 +33,12 @@
   }
 }
 
+.editor.has-below .ui-tab.ui-box
+{
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .editor.display-boxes .ui-tab
 {
   display: inherit !important;

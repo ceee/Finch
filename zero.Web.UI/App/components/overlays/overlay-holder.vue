@@ -149,6 +149,8 @@
     padding: 0;
     height: 100vh;
     max-width: 100%;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: var(--radius);
   }
 
   .overlay-enter-active, .overlay-leave-active
