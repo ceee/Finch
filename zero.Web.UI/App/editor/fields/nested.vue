@@ -20,6 +20,8 @@
 
   export default {
 
+    name: 'UiEditorFieldNested',
+
     components: { UiEditor },
 
     props: {
@@ -31,6 +33,7 @@
         type: Object,
         required: true
       },
+      entity: Object,
       limit: {
         type: Number,
         default: 100
@@ -107,6 +110,13 @@
 
       editItem(item, isAdd)
       {
+        let parentModel = JSON.parse(JSON.stringify(this.entity));
+
+        if (this.meta && this.meta.parentModel)
+        {
+          parentModel.parentModel = this.meta.parentModel;
+        }
+
         // open editing overlay
         return Overlay.open({
           component: UiEditorOverlay,
@@ -115,6 +125,7 @@
           title: this.title || '@ui.edit.title',
           model: item,
           width: this.width,
+          parentModel,
           create: isAdd
         }).then(value =>
         {
@@ -148,7 +159,8 @@
 
       getName(item)
       {
-        return Strings.htmlToText(typeof this.itemLabel === 'function' ? this.itemLabel(item) : 'Item');
+        let name = typeof this.itemLabel === 'function' ? this.itemLabel(item) : null;
+        return Strings.htmlToText(name ?? '@ui.item');
       },
 
 

@@ -39,6 +39,7 @@
       id: null,
       loading: true,
       state: 'default',
+      parent: null,
       editor: null,
       meta: {},
       model: {}
@@ -50,6 +51,9 @@
       onLoad(form)
       {
         this.isAdd = this.config.create === true;
+        this.meta = {
+          parentModel: this.config.parentModel
+        };
         this.model = JSON.parse(JSON.stringify(this.config.model));
         this.editor = this.config.editor;
         this.loading = false;
