@@ -92,6 +92,10 @@ namespace zero.Core.Extensions
         {
           rawQuery = rawQuery.OrderBy(query.OrderBy, query.OrderIsDescending, query.OrderType == ListQueryOrderType.String ? OrderingType.String : OrderingType.Double);
         }
+        else
+        {
+          rawQuery = rawQuery.OrderByDescending(x => x.CreatedDate);
+        }
 
         if (query.PageSize > 0)
         {
