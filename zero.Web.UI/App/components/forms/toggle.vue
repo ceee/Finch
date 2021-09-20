@@ -168,6 +168,17 @@
     }
   }
 
+  .ui-toggle.is-accent .ui-toggle-switch.is-active
+  {
+    background: var(--color-accent);
+    border-color: transparent !important;
+
+    i
+    {
+      background: var(--color-accent-fg);
+    }
+  }
+
   .ui-toggle-off-warning
   {
     margin: 0 10px 0 -5px;

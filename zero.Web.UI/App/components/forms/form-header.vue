@@ -14,7 +14,7 @@
     <div class="ui-form-header-aside">
       <slot></slot>
       <div v-if="!activeDisabled && typeof value.isActive !== 'undefined'" class="ui-form-header-toggle">
-        <ui-toggle v-model="value.isActive" class="is-primary" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" :disabled="disabled" />
+        <ui-toggle v-model="value.isActive" class="is-accent" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" :disabled="disabled" />
       </div>
       <slot name="buttons"></slot>
       <ui-dropdown v-if="actionsDefined && !disabled" align="right">
