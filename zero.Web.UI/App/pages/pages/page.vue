@@ -21,7 +21,11 @@
       </div>
     </div>
 
-    <ui-editor v-if="!loading && editor" :config="editor" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" :disabled="disabled" />
+    <ui-editor v-if="!loading && editor" :config="editor" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" :disabled="disabled">
+      <template v-slot:below>
+        <ui-editor-infos v-model="model" :disabled="disabled" />
+      </template>
+    </ui-editor>
 
     <div v-if="isFolder">
       <!-- // TODO list children -->
@@ -171,15 +175,15 @@
           return;
         }
 
-        editor.tabs.push({
-          alias: 'zero.info',
-          name: '@page.info_tab',
-          class: 'is-info is-blank',
-          count: value => null,
-          disabled: value => false,
-          component: InfoTab,
-          fields: []
-        });
+        //editor.tabs.push({
+        //  alias: 'zero.info',
+        //  name: '@page.info_tab',
+        //  class: 'is-info is-blank',
+        //  count: value => null,
+        //  disabled: value => false,
+        //  component: InfoTab,
+        //  fields: []
+        //});
       },
 
 

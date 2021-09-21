@@ -4,8 +4,11 @@
     <span></span>
     <ui-form class="app-auth-inner" v-slot="form" @submit="onSubmit">
       <div>
-        <img src="/Assets/zero.svg" class="app-auth-image show-light" v-localize:alt="'@zero.name'" />
-        <img src="/Assets/zero-dark.svg" class="app-auth-image show-dark" v-localize:alt="'@zero.name'" />
+        <div class="app-auth-logo">
+          <span class="app-nav-logo-circle"></span>
+          <img src="/Assets/zero.svg" class="app-auth-image show-light" v-localize:alt="'@zero.name'" />
+          <img src="/Assets/zero-dark.svg" class="app-auth-image show-dark" v-localize:alt="'@zero.name'" />
+        </div>
 
         <ui-error :catch-remaining="true" />
         <ui-message type="info" v-if="rejectReason" :text="rejectReason" />
@@ -121,12 +124,16 @@
     /*box-shadow: 0 0 60px var(--color-shadow);*/
   }
 
+  .app-auth-logo
+  {
+    display: flex;
+    align-items: center;
+    margin: 0 0 3rem 0;
+  }
+
   .app-auth-image
   {
-    height: 32px;
-    display: block;
-    position: relative;
-    margin: 0 0 3rem 0;
+    height: 15px;
   }
 
   .app-auth .ui-property + .ui-property

@@ -162,6 +162,10 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public virtual async Task<ListResult<T>> GetByQuery(ListQuery<T> query)
     {
+      if (query.SearchSelector == null && !query.SearchSelectors.Any())
+      {
+        query.SearchSelector = x => x.Name;
+      }
       return await Session.Query<T>().WhereIf(x => x.IsActive, OnlyActive).ToQueriedListAsync(query);
     }
 

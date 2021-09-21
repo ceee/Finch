@@ -10,22 +10,28 @@
             <i class="arrow arrow-down"></i>
           </button>
         </div>
-        <!--<button type="button" v-if="configuration.selectable" table-field="table_selectable" class="ui-table-cell is-head is-selectable" @click="select()">
-          <i class="fth-check-square"></i>
-        </button>-->
+        <button type="button" v-if="listConfig.selectable" table-field="table_selectable" class="ui-table-cell is-head is-selectable" @click="select()">
+          <span class="ui-native-check">
+            <input type="checkbox" :checked="selected.length === items.length && selected.length > 0" />
+            <span class="ui-native-check-toggle"></span>
+          </span>
+        </button>
       </header>
 
       <slot name="topRow"></slot>
 
       <component :is="component" v-for="(item, index) in items" :key="index" :to="getLink(item)" type="button" class="ui-table-row" :class="{ 'is-selected': selected.indexOf(item) > -1 }" @click="onRowClick(item)">
         <div v-for="column in columns" :key="column.path" class="ui-table-cell" :class="column.options.class" :style="column.flex" :table-field="column.path" :field-type="column.type" v-table-value="{ column, item }"></div>
-        <!--<button type="button" v-if="configuration.selectable" table-field="table_selectable" class="ui-table-cell is-selectable" @click="select(item)">
-          <i class="fth-check-square"></i>
-        </button>-->
+        <button type="button" v-if="listConfig.selectable" table-field="table_selectable" class="ui-table-cell is-selectable" @click.prevent.stop="select(item)">
+          <span class="ui-native-check">
+            <input type="checkbox" :checked="selected.indexOf(item) > -1" />
+            <span class="ui-native-check-toggle"></span>
+          </span>
+        </button>
       </component>
 
       <div class="ui-table-empty" v-if="!isLoading && items.length < 1">
-        <ui-icon class="ui-table-empty-icon" symbol="fth-list" size="32" />
+        <ui-icon class="ui-table-empty-icon" symbol="fth-list" :size="38" />
         There are no items to show in this list
       </div>
 
@@ -109,6 +115,7 @@
       {
         this.debouncedUpdate = _debounce(this.update, 300);
         this.listConfig = typeof this.config === 'string' ? this.zero.getList(this.config) : this.config;
+        //this.listConfig.selectable = true;
         this.columns = this.listConfig.columns.map(column =>
         {
           return {

@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="app-nav" :class="{'is-compact': compact }">
 
-    <div class="app-nav-apps theme-dark">
+    <div class="app-nav-apps theme-light">
       <ui-header-bar class="ui-tree-header" title="Applications" :back-button="false" />
       <button v-for="app in applications" :key="app.id" type="button" @click="applicationChanged(app)" class="app-nav-app" :class="{ 'is-active': app.id == appId }">
         <img :src="app.image" class="app-nav-app-icon" :alt="app.name" />
@@ -23,7 +23,7 @@
     </div>
 
 
-    <ui-dropdown v-if="applications.length > 0" theme="dark" class="app-nav-switch theme-dark">
+    <ui-dropdown v-if="applications.length > 0" theme="light" class="app-nav-switch theme-light">
       <template v-slot:button>
         <ui-button type="light block" :label="currentApplication.name" caret="right" />
       </template>
