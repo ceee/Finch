@@ -25,7 +25,7 @@ textarea, .ui-native-select, .ui-rte-input, .flatpickr-current-month
   padding: 6px 16px;
   line-height: 1.5;
   color: var(--color-text);
-  border-radius: var(--radius);
+  border-radius: var(--radius-inner);
   vertical-align: middle;
   box-sizing: border-box;
   width: 100%;
@@ -82,7 +82,7 @@ textarea
     background: none;
     border: 1px solid transparent;
     color: var(--color-text);
-    border-radius: var(--radius);
+    border-radius: var(--radius-inner);
   }
 
   select:focus

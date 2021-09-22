@@ -188,7 +188,6 @@
       left: 0;
       right: 0;
       background: var(--color-tree-selected);
-      border-radius: var(--radius);
     }
 
     &.is-selected:after

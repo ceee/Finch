@@ -36,7 +36,7 @@ button::-moz-focus-inner
   color: var(--color-button-text);
   padding: 0 21px;
   height: 48px;
-  border-radius: var(--radius-button);
+  border-radius: var(--radius-inner);
   font-size: var(--font-size);
   font-weight: 700;
   margin: 0;
@@ -348,7 +348,7 @@ button::-moz-focus-inner
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  border-radius: var(--radius);
+  border-radius: var(--radius-inner);
   background: var(--color-button-light);
   border: 1px solid transparent;
   color: var(--color-text);
@@ -363,7 +363,7 @@ button::-moz-focus-inner
     font-size: 0;
     color: transparent;
     background: var(--color-image-bg);
-    border-radius: var(--radius);
+    border-radius: var(--radius-inner);
     border: 1px solid var(--color-line-onbg);
     
     img
@@ -371,7 +371,7 @@ button::-moz-focus-inner
       object-fit: contain;
       width: 100%;
       height: 100%;
-      border-radius: var(--radius);
+      border-radius: var(--radius-inner);
     }
   }
 }
