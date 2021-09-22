@@ -23,7 +23,7 @@
     </div>
 
 
-    <ui-dropdown v-if="applications.length > 0" theme="light" class="app-nav-switch theme-light">
+    <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">
       <template v-slot:button>
         <ui-button type="light block" :label="currentApplication.name" caret="right" />
       </template>
