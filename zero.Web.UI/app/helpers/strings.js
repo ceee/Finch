@@ -110,10 +110,20 @@ export default {
   },
 
 
-  htmlToText(html)
+  htmlToText(html, preserveNewLines)
   {
+    if (preserveNewLines)
+    {
+      html = html
+        .replaceAll('<br>', '___nl___')
+        .replaceAll('<br >', '___nl___')
+        .replaceAll('<br/>', '___nl___')
+        .replaceAll('<br />', '___nl___')
+        .replaceAll('<li>', '___nl___')
+        .replaceAll('<p>', '___nl___');
+    }
     let tag = document.createElement('div');
     tag.innerHTML = html;
-    return tag.innerText;
+    return tag.innerText.replaceAll('___nl___', '<br>');
   }
 };

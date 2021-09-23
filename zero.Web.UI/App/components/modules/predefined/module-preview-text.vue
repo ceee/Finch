@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-module-preview-text">
-    <p class="-text" v-if="text" v-html="textContent"></p>
+    <p class="-text" v-if="text" v-html="textContent" :style="{ '-webkit-line-clamp': maxLines }"></p>
     <p class="-subline" v-if="subline" v-html="sublineContent"></p>
   </div>
 </template>
@@ -18,6 +18,10 @@
       subline: {
         type: String
       },
+      maxLines: {
+        type: Number,
+        default: 6
+      },
       html: {
         type: Boolean,
         default: false
@@ -27,7 +31,7 @@
     computed: {
       textContent()
       {
-        return this.html ? this.text : Strings.htmlToText(this.text);
+        return this.html ? this.text : Strings.htmlToText(this.text, true);
       },
       sublineContent()
       {
@@ -43,9 +47,12 @@
     font-size: var(--font-size);
     line-height: 1.5;
 
-    .-text
+    .-text, .-subline
     {
-
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      display: -webkit-box;
     }
 
     p.-subline
@@ -53,14 +60,6 @@
       color: var(--color-text-dim);
       font-size: var(--font-size-s);
       margin-top: 0.2em;
-    }
-
-    .-text, .-subline
-    {
-      overflow: hidden;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-      display: -webkit-box;
     }
   }
 </style>

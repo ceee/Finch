@@ -139,7 +139,7 @@
     padding: 0; //var(--padding);
     /*margin-top: var(--padding);
     padding-top: var(--padding);*/
-    border-bottom: 1px solid var(--color-line);
+    border-bottom: 1px dashed var(--color-line-dashed);
 
     &.can-edit .ui-module-item-content
     {
@@ -165,10 +165,12 @@
 
   .ui-module-item-header
   {
-    display: flex;
+    display: none; // TODO flex;
     align-items: center;
-    color: var(--color-text-dim);
-    font-size: var(--font-size-s);
+    color: var(--color-text);
+    font-size: var(--font-size);
+    line-height: 1.5;
+    font-weight: 700;
     width: 100%;
 
     i
@@ -215,7 +217,7 @@
 
     .ui-module-item-header + &
     {
-      padding-top: 6px;
+      padding-top: 4px;
     }
 
     p
