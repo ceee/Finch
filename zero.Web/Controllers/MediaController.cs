@@ -74,9 +74,9 @@ namespace zero.Web.Controllers
 
 
     [HttpGet]
-    public async Task<IActionResult> StreamThumbnail([FromQuery] string id, [FromQuery] bool thumb = true)
+    public async Task<IActionResult> GetSource([FromQuery] string id, [FromQuery] MediaSourceSize size = MediaSourceSize.Original)
     {
-      string path = await Collection.GetSourceById(id, thumb);
+      string path = await Collection.GetSourceById(id, size);
 
       if (path == null)
       {

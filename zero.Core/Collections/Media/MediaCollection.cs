@@ -101,7 +101,7 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public async Task<string> GetSourceById(string id, bool thumb = false)
+    public async Task<string> GetSourceById(string id, MediaSourceSize size = MediaSourceSize.Original)
     {
       ApplyScopeBasedOnId(id);
 
@@ -112,12 +112,16 @@ namespace zero.Core.Collections
         return null;
       }
 
-      if (media.Source.StartsWith("url://"))
+      if (size == MediaSourceSize.Thumbnail && media.ThumbnailSource.HasValue())
       {
-        return media.Source.Substring(6) + "?preset=productMini"; // TODO remove this
+        return media.ThumbnailSource;
+      }
+      if (size == MediaSourceSize.Preview && media.PreviewSource.HasValue())
+      {
+        return media.PreviewSource;
       }
 
-      return thumb ? (media.ThumbnailSource ?? media.Source) : media.Source;
+      return media.Source;
     }
 
 
@@ -299,7 +303,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Get media source by Id
     /// </summary>
-    Task<string> GetSourceById(string id, bool thumb = false);
+    Task<string> GetSourceById(string id, MediaSourceSize size = MediaSourceSize.Original);
 
     /// <summary>
     /// Get all available media items with query

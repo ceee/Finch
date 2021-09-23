@@ -169,9 +169,16 @@
 </script>
 
 <style lang="scss">
+
+  .ui-modules-inner
+  {
+    margin: var(--padding-m);
+    margin-top: -16px;
+  }
+
   .ui-modules-inner-sortable
   {
-    margin-top: -32px;
+    padding: var(--padding-s) 0;
   }
 
   .ui-modules-start-button
@@ -182,11 +189,16 @@
     grid-template-columns: auto 1fr; 
     gap: 25px;
     align-items: center;
+    margin-top: var(--padding);
+    margin-bottom: -10px;
   }
 
   .ui-modules-inner-sortable + .ui-modules-start-button
   {
-    margin-top: var(--padding);
+    width: 100%;
+    padding-top: var(--padding);
+    margin-top: var(--padding-xs);
+    border-top: 1px dashed var(--color-line-dashed-onbg);
   }
 
   .ui-modules-start-button-icon

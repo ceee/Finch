@@ -21,7 +21,7 @@ const upload = async (file, folderId, onProgress, isTemporary) =>
 };
 
 
-const getImageSource = (id, thumb, shared) =>
+const getImageSource = (id, size, shared) =>
 {
   if (!id || id.indexOf('http') === 0)
   {
@@ -35,7 +35,21 @@ const getImageSource = (id, thumb, shared) =>
   {
     id = id[0];
   }
-  return zero.apiPath + base + 'streamThumbnail/?id=' + id + (typeof thumb === 'boolean' ? '&thumb=' + (thumb ? 'true' : 'false') : '') + (shared === true ? '&scope=shared' : '');
+
+  if (size === true)
+  {
+    size = 'thumbnail';
+  }
+  else if (size === false)
+  {
+    size = 'original';
+  }
+  else if (!size)
+  {
+    size = 'preview';
+  }
+
+  return zero.apiPath + base + 'getSource/?id=' + id + '&size=' + size + (shared === true ? '&scope=shared' : '');
 };
 
 

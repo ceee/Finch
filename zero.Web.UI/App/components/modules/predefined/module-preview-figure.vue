@@ -28,6 +28,10 @@
       image: {
         type: String
       },
+      imageSize: {
+        type: String,
+        default: 'thumbnail'
+      },
       html: {
         type: Boolean,
         default: false
@@ -71,7 +75,7 @@
           return;
         }
 
-        this.imageSource = MediaApi.getImageSource(this.image);
+        this.imageSource = MediaApi.getImageSource(this.image, this.imageSize);
       }
     }
   }
@@ -114,9 +118,9 @@
 
     .-image
     {
-      border-radius: var(--radius);
-      max-width: 128px;
-      max-height: 64px;
+      border-radius: var(--radius-inner);
+      max-width: 218px;
+      max-height: 124px;
     }
   }
 </style>

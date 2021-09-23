@@ -17,8 +17,8 @@
     <div class="ui-module-item-actions" v-if="!disabled">
       <ui-dropdown align="right">
         <template v-slot:button>
-          <ui-icon-button v-if="!value.isActive" class="ui-module-item-disabled-icon" icon="fth-lock" title="Disabled" />
-          <ui-icon-button v-else icon="fth-more-horizontal" title="Actions" />
+          <ui-icon-button v-if="!value.isActive" class="ui-module-item-disabled-icon ui-module-item-action" icon="fth-lock" title="Disabled" />
+          <ui-icon-button v-else icon="fth-more-vertical" class="ui-module-item-action" title="Actions" />
         </template>
         <ui-dropdown-button v-if="canEdit" label="Edit" icon="fth-edit-2" @click="emit('edit')" />
         <ui-dropdown-button v-if="value.isActive" label="Disable" icon="fth-lock" @click="toggleStatus(false)" />
@@ -65,9 +65,18 @@
 
 
     watch: {
-      value(val)
-      {
-        this.render(val);
+      value: {
+        deep: true,
+        handler(val, oldVal)
+        {
+          // TODO this sucks
+          // but we do always get changes for ALL modules when anything changes
+          // this triggers reload of all modules which can be super expensive
+          if (JSON.stringify(val) !== JSON.stringify(oldVal))
+          {
+            this.render(val);
+          }
+        }
       }
     },
 
@@ -136,10 +145,12 @@
     grid-column-gap: var(--padding);
     position: relative;
     margin: 0 -32px;
+    margin-right: -96px;
+    border-right: 3px solid transparent;
     padding: 0; //var(--padding);
     /*margin-top: var(--padding);
     padding-top: var(--padding);*/
-    border-bottom: 1px dashed var(--color-line-dashed);
+    //border-bottom: 1px dashed var(--color-line-dashed);
 
     &.can-edit .ui-module-item-content
     {
@@ -151,6 +162,11 @@
       cursor: default;
     }
 
+    /*&:hover
+    {
+      border-right: 3px solid var(--color-line-onbg);
+    }*/
+
     /*&:first-child
     {
       border-top: none;
@@ -159,18 +175,18 @@
 
   .ui-module-item-content
   {
-    padding: var(--padding);
+    padding: var(--padding-m) var(--padding);
+    //padding-left: calc(var(--padding) * 3);
     padding-right: 0;
   }
 
   .ui-module-item-header
   {
-    display: none; // TODO flex;
+    display: none; //TODO flex;
     align-items: center;
-    color: var(--color-text);
-    font-size: var(--font-size);
+    color: var(--color-text-dim-one);
+    font-size: var(--font-size-xs);
     line-height: 1.5;
-    font-weight: 700;
     width: 100%;
 
     i
@@ -194,7 +210,7 @@
     opacity: .5;
     position: absolute;
     left: 0;
-    right: 0;
+    right: 65px;
     top: 0;
     bottom: 0;
     z-index: 1;
@@ -244,7 +260,9 @@
     grid-column: 2;
     align-self: center;
     margin: -10px 0;
-    opacity: 0;
+    position: relative;
+    right: 0;
+    //opacity: 0;
     transition: opacity .2s ease;
 
     > * + *
@@ -255,6 +273,19 @@
     .ui-module-item:hover &
     {
       opacity: 1;
+    }
+  }
+
+  .ui-icon-button.ui-module-item-action
+  {
+    background: var(--color-box);
+    height: 50px;
+    width: 24px;
+    border-radius: var(--radius-inner);
+
+    &.ui-module-item-disabled-icon .ui-icon
+    {
+      margin-left: -6px;
     }
   }
 

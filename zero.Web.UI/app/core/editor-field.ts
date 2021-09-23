@@ -582,9 +582,9 @@ class EditorField
    * Create a preview for this field
    * This is only used in list filters, ...
    * @param {object} options - Custom options
-   * @param {number} options.icon - Custom icon
-   * @param {number} options.preview - Render the preview when this filter has been filled out
-   * @param {number} options.hasValue - Determine if the filter has a value or not
+   * @param {string} options.icon - Custom icon
+   * @param {string|function} options.preview - Render the preview when this filter has been filled out
+   * @param {boolean} options.hasValue - Determine if the filter has a value or not
    * @returns {EditorField}
    */
   preview(options)

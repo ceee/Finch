@@ -63,4 +63,12 @@ namespace zero.Core.Entities
     /// </summary>
     public MediaType Type { get; set; }
   }
+
+
+  public enum MediaSourceSize
+  {
+    Original = 0,
+    Preview = 1,
+    Thumbnail = 2
+  }
 }
