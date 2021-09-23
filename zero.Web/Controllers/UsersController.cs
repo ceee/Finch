@@ -77,6 +77,14 @@ namespace zero.Web.Controllers
     }
 
 
+    [ZeroAuthorize]
+    public async Task<EntityResult<string>> HashPassword([FromBody] UserPasswordEditModel model)
+    {
+      BackofficeUser user = await Api.GetUserById(model.UserId);
+      return await Api.HashPassword(user, model.CurrentPassword, model.NewPassword, model.ConfirmNewPassword);
+    }
+
+
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
     public async Task<EntityResult<BackofficeUser>> Disable([FromBody] BackofficeUser model)
     {

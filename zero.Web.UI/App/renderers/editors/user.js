@@ -15,7 +15,11 @@ const general = editor.tab('general', '@ui.tab_general');
 const permissions = editor.tab('permissions', '@user.tab_permissions', permissionsCount);
 
 general.field('name', { label: '@ui.name' }).text(80).required();
-general.field('email').text(120).required();
+general.fieldset(set =>
+{
+  set.field('email').text(120).required();
+  set.field('passwordHash').passwordHash().required();
+});
 general.field('languageId').culturePicker().required();
 general.field('avatarId').image();
 permissions.field('claims', { hideLabel: true }).custom(Permissions);

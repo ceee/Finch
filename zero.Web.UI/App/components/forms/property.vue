@@ -63,6 +63,11 @@
     {
 
     }
+
+    .ui-error
+    {
+      margin-top: 5px;
+    }
   }
 
   .ui-property + .ui-split,
@@ -220,7 +225,7 @@
   {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-gap: var(--padding) var(--padding-s);
+    grid-gap: var(--padding) var(--padding-m);
 
     > .ui-property
     {

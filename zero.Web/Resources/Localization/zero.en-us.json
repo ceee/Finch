@@ -195,7 +195,8 @@
     "changepassword": {
       "emptyfields": "Please fill out all fields",
       "nouser": "User is invalid",
-      "newpasswordsnotmatching": "The new password does not match the confirmation"
+      "newpasswordsnotmatching": "The new password does not match the confirmation",
+      "passwordincorrect": "The current password for this user is wrong"
     },
     "preview": {
       "notfound": "Not found",
@@ -328,6 +329,8 @@
       "email": "Email",
       "email_text": "Also used as login username",
       "email_placeholder": "Enter your email address",
+      "passwordHash": "Password",
+      "passwordHash_text": "Password used for login",
       "avatarId": "Avatar",
       "avatarId_text": "Upload a user image",
       "languageId": "Language",

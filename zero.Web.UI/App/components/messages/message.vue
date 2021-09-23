@@ -73,7 +73,7 @@
     padding: 8px 12px 7px 12px;
     grid-template-columns: auto 1fr;
     gap: 12px;
-    border-radius: var(--radius);
+    border-radius: var(--radius-inner);
     position: relative;
     line-height: 20px;
     text-align: left;

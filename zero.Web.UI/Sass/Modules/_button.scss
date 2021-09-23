@@ -87,8 +87,8 @@ button::-moz-focus-inner
 
   &.type-primary
   {
-    background: var(--color-accent);
-    color: var(--color-accent-fg);
+    background: var(--color-primary);
+    color: var(--color-primary-text);
     min-width: 90px;
     justify-content: center;
   }

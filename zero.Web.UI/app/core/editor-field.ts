@@ -202,6 +202,17 @@ class EditorField
 
 
   /**
+   * Render a password hash field
+   * @param {number} [maxLength] - Maximum length of the password
+   * @returns {EditorField}
+   */
+  passwordHash(maxLength)
+  {
+    return this._setComponent(() => import('../editor/fields/password-hash.vue'), { maxLength });
+  }
+
+
+  /**
    * Render a currency input field
    * @param {string|function} [placeholder] - Placeholder text (can be a translation) or function
    * @returns {EditorField}

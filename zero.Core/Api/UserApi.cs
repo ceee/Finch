@@ -72,7 +72,22 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<BackofficeUser>> Save(BackofficeUser model)
     {
-      return await SaveModel(model); //, new UserValidator<User>());
+      bool updateSecurityStamp = false;
+
+      if (!model.Id.IsNullOrEmpty())
+      {
+        BackofficeUser origin = await GetUserById(model.Id);
+        updateSecurityStamp = origin != null && model.PasswordHash != origin.PasswordHash;
+      }
+
+      EntityResult<BackofficeUser> result = await SaveModel(model); //, new UserValidator<User>());
+
+      if (updateSecurityStamp)
+      {
+        await UserManager.UpdateSecurityStampAsync(model);
+      }
+
+      return result;
     }
 
 
@@ -80,6 +95,60 @@ namespace zero.Core.Api
     public async Task<EntityResult<BackofficeUser>> Delete(string id)
     {
       return await DeleteById<BackofficeUser>(id);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<EntityResult<string>> HashPassword(BackofficeUser user, string currentPassword, string newPassword, string confirmNewPassword)
+    {
+      if (newPassword != confirmNewPassword)
+      {
+        return EntityResult<string>.Fail(nameof(newPassword), "@errors.changepassword.newpasswordsnotmatching");
+      }
+
+      if (currentPassword.IsNullOrWhiteSpace() || newPassword.IsNullOrWhiteSpace())
+      {
+        return EntityResult<string>.Fail(nameof(currentPassword), "@errors.changepassword.emptyfields");
+      }
+
+      if (user == null)
+      {
+        return EntityResult<string>.Fail("@errors.changepassword.nouser");
+      }
+
+      if (UserManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash, currentPassword) != PasswordVerificationResult.Success)
+      {
+        return EntityResult<string>.Fail("@errors.changepassword.passwordincorrect");
+      }
+
+      // validate new password
+      List<IdentityError> errors = new();
+      bool isValid = true;
+      foreach (var v in UserManager.PasswordValidators)
+      {
+        var result = await v.ValidateAsync(UserManager, user, newPassword);
+        if (!result.Succeeded)
+        {
+          if (result.Errors.Any())
+          {
+            errors.AddRange(result.Errors);
+          }
+
+          isValid = false;
+        }
+      }
+
+      if (!isValid)
+      {
+        EntityResult<string> result = EntityResult<string>.Fail();
+        foreach (IdentityError error in errors)
+        {
+          result.AddError(error.Description);
+        }
+        return result;
+      }
+
+      return EntityResult<string>.Success(UserManager.PasswordHasher.HashPassword(user, newPassword));
     }
 
 
@@ -199,6 +268,11 @@ namespace zero.Core.Api
     /// User is logged out if this operation succeeds.
     /// </summary>
     Task<EntityResult<BackofficeUser>> UpdatePassword(BackofficeUser user, string currentPassword, string newPassword);
+
+    /// <summary>
+    /// Tries to hash a new password
+    /// </summary>
+    Task<EntityResult<string>> HashPassword(BackofficeUser user, string currentPassword, string newPassword, string confirmNewPassword);
 
     /// <summary>
     /// Enables a user

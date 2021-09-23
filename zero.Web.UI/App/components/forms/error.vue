@@ -85,3 +85,10 @@
     }
   }
 </script>
+
+<style lang="scss">
+  .ui-error + .editor
+  {
+    margin-top: var(--padding-m);
+  }
+</style>

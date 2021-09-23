@@ -4,7 +4,6 @@
       <template v-slot:actions>
         <ui-dropdown-button v-if="model.isActive" label="@ui.disable" icon="fth-minus-circle" @click="onActiveChange" :disabled="disabled" />
         <ui-dropdown-button v-if="!model.isActive" label="@ui.enable" icon="fth-plus-circle" @click="onActiveChange" :disabled="disabled" />
-        <ui-dropdown-button label="@user.changePassword" icon="fth-lock" :disabled="disabled" />
       </template>
     </ui-form-header>
     <ui-editor config="user" v-model="model" :meta="meta" :disabled="disabled">
@@ -29,6 +28,7 @@
 </template>
 
 <script>
+  import AuthApi from 'zero/helpers/auth.js';
   import UsersApi from 'zero/api/users.js';
 
   export default {
@@ -70,9 +70,9 @@
       {
         form.handle(UsersApi.save(this.model)).then(res =>
         {
-          if (res.entity.id === AuthApi.user.id)
+          if (res.model.id === AuthApi.user.id)
           { 
-            AuthApi.setUser(res.entity);
+            AuthApi.setUser(res.model);
           }
         });
       },
