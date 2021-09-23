@@ -50,6 +50,8 @@ namespace zero.Web.Models
     /// </summary>
     public bool CanBeShared { get; set; }
 
+    public bool IsShared { get; set; }
+
     /// <summary>
     /// The change token maps to a database entity which holds ID and collection of the model to edit
     /// If these values do not match the entity on save it is rejected

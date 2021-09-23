@@ -61,7 +61,9 @@
     // allowed file extensions
     fileExtensions: [],
     // maximum file size in MiB
-    maxFileSize: 10
+    maxFileSize: 10,
+    // whether to operate on the core database
+    shared: false
   };
 
   export default {

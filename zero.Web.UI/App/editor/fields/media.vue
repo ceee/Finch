@@ -1,10 +1,12 @@
 ﻿<template>
-  <ui-mediapicker :config="{ limit, disallowSelect, disallowUpload, fileExtensions, maxFileSize }" :value="value" @input="$emit('input', $event)" :disabled="disabled" />
+  <ui-mediapicker :config="{ limit, disallowSelect, disallowUpload, fileExtensions, maxFileSize, shared: meta.isShared }" :value="value" @input="$emit('input', $event)" :disabled="disabled" />
 </template>
 
 
 <script>
   export default {
+    name: 'uiMediaField',
+
     props: {
       value: {
         type: [String, Array],
@@ -33,7 +35,9 @@
       maxFileSize: {
         type: Number,
         default: 10
-      }
+      },
+      config: Object,
+      meta: Object
     }
   }
 </script>

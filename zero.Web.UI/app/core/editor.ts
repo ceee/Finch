@@ -28,7 +28,7 @@ class Editor
   options = {
     disabled: false,
     display: 'tabs',
-    coreDatabase: true
+    coreDatabase: false
   };
 
 

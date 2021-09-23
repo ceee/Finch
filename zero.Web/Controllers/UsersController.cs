@@ -22,6 +22,7 @@ namespace zero.Web.Controllers
       Api = api;
       AuthenticationApi = authenticationApi;
       PermissionsApi = permissionsApi;
+      IsCoreDatabase = true;
     }
 
 

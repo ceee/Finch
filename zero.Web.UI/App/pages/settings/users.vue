@@ -3,7 +3,7 @@
     <ui-header-bar title="@user.title" :back-button="true">
       <ui-table-filter :attach="$refs.usersTable" />
       <ui-add-button type="light onbg" :route="createRoleRoute" label="@user.add_role" />
-      <ui-button type="primary" label="@user.add_user" />
+      <ui-add-button type="accent" route="users-create" label="@user.add_user" />
     </ui-header-bar>
 
     <div class="ui-blank-box">
@@ -49,7 +49,7 @@
         return {
           name: 'roles-edit',
           params: { id: item.id },
-          query: { scope: 'shared '}
+          query: { scope: 'shared' }
         };
       }
     }

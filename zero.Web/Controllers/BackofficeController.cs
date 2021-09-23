@@ -24,6 +24,8 @@ namespace zero.Web.Controllers
     IZeroOptions _options;
     IToken _token;
 
+    public bool IsCoreDatabase { get; protected set; }
+
     protected IZeroOptions Options => _options ?? (_options = HttpContext?.RequestServices?.GetService<IZeroOptions>());
     protected IToken Token => _token ?? (_token = HttpContext?.RequestServices?.GetService<IToken>());
 
@@ -58,6 +60,7 @@ namespace zero.Web.Controllers
       //model.Meta.CanCreateShared = canBeShared;
       model.Meta.CanEdit = true;
       model.Meta.CanDelete = true;
+      model.Meta.IsShared = IsCoreDatabase;
 
       transform?.Invoke(model);
 
@@ -83,6 +86,7 @@ namespace zero.Web.Controllers
       //data.Meta.CanCreateShared = canBeShared;
       data.Meta.CanEdit = true;
       data.Meta.CanDelete = true;
+      data.Meta.IsShared = IsCoreDatabase;
 
       transform?.Invoke(data);
 

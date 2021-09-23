@@ -16,6 +16,7 @@ namespace zero.Web.Controllers
     public ApplicationsController(IApplicationsApi api)
     {
       Api = api;
+      IsCoreDatabase = true;
     }
 
 

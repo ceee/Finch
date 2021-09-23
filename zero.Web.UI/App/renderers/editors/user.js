@@ -12,13 +12,13 @@ const permissionsCount = x => (x.claims || []).filter(claim =>
 }).length;
 
 const general = editor.tab('general', '@ui.tab_general');
-const permissions = editor.tab('permissions', '@user.tab_permissions', permissionsCount);
+const permissions = editor.tab('permissions', '@user.tab_permissions', permissionsCount, x => !x.id);
 
 general.field('name', { label: '@ui.name' }).text(80).required();
 general.fieldset(set =>
 {
   set.field('email').text(120).required();
-  set.field('passwordHash').passwordHash().required();
+  set.field('passwordHash').when(x => x.id).passwordHash().required();
 });
 general.field('languageId').culturePicker().required();
 general.field('avatarId').image();

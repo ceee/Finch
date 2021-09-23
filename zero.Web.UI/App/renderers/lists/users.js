@@ -6,7 +6,14 @@ const list = new List('users');
 const prefix = '@user.fields.';
 
 list.templateLabel = x => prefix + x;
-list.link = zero.alias.settings.users + '-edit';
+list.link = x =>
+{
+  return {
+    name: zero.alias.settings.users + '-edit',
+    params: { id: x.id },
+    query: { scope: 'shared' }
+  };
+};
 
 list.onFetch(filter => UsersApi.getAll(filter));
 
