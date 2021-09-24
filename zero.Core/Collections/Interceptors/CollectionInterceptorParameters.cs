@@ -71,6 +71,15 @@ namespace zero.Core.Collections
     }
 
 
+    public class SaveParameters : ParametersWithModel
+    {
+      /// <summary>
+      /// The Id of the model which is saving (empty when creating)
+      /// </summary>
+      public string Id { get; set; }
+    }
+
+
     public class DeleteParameters : ParametersWithModel
     {
       /// <summary>

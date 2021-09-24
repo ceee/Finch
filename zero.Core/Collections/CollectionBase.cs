@@ -285,6 +285,7 @@ namespace zero.Core.Collections
         }
       }
 
+      // run interceptor
       var instruction = CreateInstruction<CollectionInterceptor<T>.CreateParameters>("create", args => args.Model = model);
       await instruction.HandleBefore(x => x.Creating(instruction.Parameters));
 
@@ -293,9 +294,23 @@ namespace zero.Core.Collections
         return instruction.EntityResult;
       }
 
+      // run generic interceptor
+      var instruction2 = CreateInstruction<CollectionInterceptor<T>.SaveParameters>("save", args =>
+      {
+        args.Model = model;
+        args.Id = model.Id;
+      });
+      await instruction2.HandleBefore(x => x.Saving(instruction2.Parameters));
+
+      if (instruction2.Return)
+      {
+        return instruction2.EntityResult;
+      }
+
       await Session.StoreAsync(model);
 
       await instruction.HandleAfter(x => x.Created(instruction.Parameters));
+      await instruction2.HandleAfter(x => x.Saved(instruction2.Parameters));
 
       await Session.SaveChangesAsync();
 
@@ -330,9 +345,23 @@ namespace zero.Core.Collections
         return instruction.EntityResult;
       }
 
+      // run generic interceptor
+      var instruction2 = CreateInstruction<CollectionInterceptor<T>.SaveParameters>("save", args =>
+      {
+        args.Model = model;
+        args.Id = model.Id;
+      });
+      await instruction2.HandleBefore(x => x.Saving(instruction2.Parameters));
+
+      if (instruction2.Return)
+      {
+        return instruction2.EntityResult;
+      }
+
       await Session.StoreAsync(model);
 
       await instruction.HandleAfter(x => x.Updated(instruction.Parameters));
+      await instruction2.HandleAfter(x => x.Saved(instruction2.Parameters));
 
       await Session.SaveChangesAsync();
 

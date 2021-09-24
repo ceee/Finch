@@ -13,6 +13,9 @@ namespace zero.Core.Collections
     public virtual Task<InterceptorResult<T>> Updating(UpdateParameters args) => Task.FromResult<InterceptorResult<T>>(default);
 
     /// <inheritdoc />
+    public virtual Task<InterceptorResult<T>> Saving(SaveParameters args) => Task.FromResult<InterceptorResult<T>>(default);
+
+    /// <inheritdoc />
     public virtual Task<InterceptorResult<T>> Deleting(DeleteParameters args) => Task.FromResult<InterceptorResult<T>>(default);
 
     /// <inheritdoc />
@@ -23,6 +26,9 @@ namespace zero.Core.Collections
 
     /// <inheritdoc />
     public virtual Task Updated(UpdateParameters args) => Task.CompletedTask;
+
+    /// <inheritdoc />
+    public virtual Task Saved(SaveParameters args) => Task.CompletedTask;
 
     /// <inheritdoc />
     public virtual Task Deleted(DeleteParameters args) => Task.CompletedTask;
@@ -77,5 +83,15 @@ namespace zero.Core.Collections
     /// Called before an entity is stored and validated
     /// </summary>
     Task<InterceptorResult<T>> Updating(CollectionInterceptor<T>.UpdateParameters args);
+
+    /// <summary>
+    /// Called after an entity has been saved (created or updated) but before the session has saved its changes
+    /// </summary>
+    Task Saved(CollectionInterceptor<T>.SaveParameters args);
+
+    /// <summary>
+    /// Called before an entity is stored and validated
+    /// </summary>
+    Task<InterceptorResult<T>> Saving(CollectionInterceptor<T>.SaveParameters args);
   }
 }
