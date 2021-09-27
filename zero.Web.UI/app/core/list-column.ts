@@ -2,6 +2,7 @@
 import MediaApi from 'zero/api/media.js';
 import Strings from 'zero/helpers/strings.js';
 import Localization from 'zero/helpers/localization.js';
+import EmptyImg from '../../assets/empty.png';
 
 class ListColumn
 {
@@ -201,7 +202,7 @@ class ListColumn
   {
     this._type = 'image';
     this._asHtml = true;
-    this._func = (value, opts) => value ? `<img src="${MediaApi.getImageSource(value)}" class="ui-table-field-image">` : '';
+    this._func = (value, opts) => value ? `<img src="${MediaApi.getImageSource(value)}" @error="$event.target.src=${EmptyImg}" class="ui-table-field-image">` : '';
     return this;
   }
 

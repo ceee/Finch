@@ -80,7 +80,12 @@ namespace zero.Web.Controllers
 
       if (path == null)
       {
-        return NotFound();
+        return EmptyImage();
+      }
+
+      if (path.StartsWith("url://"))
+      {
+        path = path.Substring(6);
       }
 
       var provider = new FileExtensionContentTypeProvider();
@@ -100,7 +105,7 @@ namespace zero.Web.Controllers
         }
         catch
         {
-          return NotFound();
+          return EmptyImage();
         }
       }
 
@@ -108,10 +113,23 @@ namespace zero.Web.Controllers
 
       if (path == null || !System.IO.File.Exists(fullPath))
       {
-        return NotFound();
+        return EmptyImage();
       }
 
       return File(path, contentType, DateTimeOffset.Now, EntityTagHeaderValue.Any);
+    }
+
+
+    IActionResult EmptyImage()
+    {
+      string path = Paths.Map("assets", "empty.png");
+
+      if (!System.IO.File.Exists(path))
+      {
+        return NotFound();
+      }
+
+      return File("assets/empty.png", "image/png", DateTimeOffset.Now, EntityTagHeaderValue.Any);
     }
   }
 }
