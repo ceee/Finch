@@ -70,24 +70,7 @@ namespace zero.Web
       return app.UseEndpoints(endpoints =>
       {
         endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}", state: null, order: 10);
-
-        //if (options.Routing.NotFoundEndpoint != null)
-        //{
-        //  endpoints.MapFallbackToController(options.Routing.NotFoundEndpoint.Action, options.Routing.NotFoundEndpoint.Controller);
-        //}
       });
-
-      //return app.Use(async (ctx, next) =>
-      //{
-      //  await next();
-      //  if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
-      //  {
-      //    Console.WriteLine("NotFound0: " + ctx.Request.Path);
-      //    //Re-execute the request so the user gets the error page
-      //    //ctx.Request.Path = "/Pages404";
-      //    await next();
-      //  }
-      //});
     }
   }
 }
