@@ -151,14 +151,14 @@ namespace zero.Web
         IDocumentStore store = new ZeroStore(options)
         {
           Urls = new string[1] { options.Raven.Url },
-          //Conventions = // TODO activate and test this
-          //{            
-          //  AggressiveCache =
-          //  {
-          //    Duration = TimeSpan.FromDays(1),
-          //    Mode = AggressiveCacheMode.TrackChanges
-          //  }
-          //}
+          Conventions = // TODO activate and test this
+          {
+            AggressiveCache =
+            {
+              Duration = TimeSpan.FromHours(1),
+              Mode = AggressiveCacheMode.TrackChanges
+            }
+          }
         };
 
         conventionsBuilder.Run(store.Conventions);

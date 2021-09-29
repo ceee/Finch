@@ -63,6 +63,8 @@ namespace zero.Core.Database
       RegisterEvents(session);
       AfterSessionCreated(session);
 
+      session.Advanced.DocumentStore.AggressivelyCacheFor(TimeSpan.FromHours(1), options.Database);
+
       return session;
     }
 
@@ -87,6 +89,8 @@ namespace zero.Core.Database
       var session = new DocumentSession(this, sessionId, options);
       RegisterEvents(session);
       AfterSessionCreated(session);
+
+      session.Advanced.DocumentStore.AggressivelyCacheFor(TimeSpan.FromHours(1), options.Database);
 
       return session;
     }
