@@ -109,6 +109,12 @@
     "parsedinput": {
       "placeholder": "Enter a value",
       "placeholder_output": "ID"
+    },
+    "entityfields": {
+      "key": "Key",
+      "alias": "Alias",
+      "sort": "Sort",
+      "hash": "Hash"
     }
   },
 

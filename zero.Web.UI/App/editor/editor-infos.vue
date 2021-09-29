@@ -2,12 +2,23 @@
   <div v-if="visible" class="editor-infos">
     <div class="ui-box is-light editor-infos-aside">
       <slot name="before"></slot>
-      <ui-property v-if="value.id && value.lastModifiedDate" field="lastModifiedDate" label="@ui.modifiedDate">
-        <ui-date v-model="value.lastModifiedDate" />
-      </ui-property>
-      <ui-property v-if="value.id" label="@ui.createdDate" field="createdDate">
-        <ui-date v-model="value.createdDate" />
-      </ui-property>
+      <template v-if="value && value.id">
+        <ui-property v-if="value.lastModifiedDate" field="lastModifiedDate" label="@ui.modifiedDate">
+          <ui-date v-model="value.lastModifiedDate" />
+        </ui-property>
+        <ui-property label="@ui.createdDate" field="createdDate">
+          <ui-date v-model="value.createdDate" />
+        </ui-property>
+         <ui-property label="@ui.entityfields.alias" field="alias">
+          {{value.alias}}
+        </ui-property>
+        <ui-property label="@ui.entityfields.sort" field="sort">
+          {{value.sort}}
+        </ui-property>
+        <ui-property v-if="value.key" label="@ui.entityfields.key" field="key">
+          {{value.key}}
+        </ui-property>
+      </template>
       <slot name="after"></slot>
     </div>
   </div>

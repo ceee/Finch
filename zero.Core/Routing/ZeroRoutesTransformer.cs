@@ -21,14 +21,14 @@ namespace zero.Core.Routing
 
 			if (route == null)
       {
-				return HandleFail(httpContext, values);
+				return null;
       }
 
 			RouteProviderEndpoint endpoint = Routes.MapEndpoint(route);
 
 			if (endpoint == null)
       {
-				return HandleFail(httpContext, values);
+				return null;
       }
 
 			values["zero.route"] = route;
@@ -36,21 +36,5 @@ namespace zero.Core.Routing
 			values["action"] = endpoint.Action;
 			return values;
 		}
-
-
-		RouteValueDictionary HandleFail(HttpContext httpContext, RouteValueDictionary values)
-    {
-			NotFoundRoute notFound = Routes.NotFound(httpContext);
-
-			if (notFound != null)
-      {
-				httpContext.Response.StatusCode = 404;
-				values["zero.route"] = notFound;
-				values["controller"] = notFound.Controller;
-				values["action"] = notFound.Action;
-				return values;
-      }
-			return null;
-    }
 	}
 }
