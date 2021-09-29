@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
-using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +20,7 @@ namespace zero.Core.Identity
     where TUser : ZeroIdentityUser
     where TRole : ZeroIdentityRole
   {
-    public RavenUserStore(IZeroStore store, IZeroOptions options) : base(store, options) { }
+    public RavenUserStore(IZeroStore store, IZeroOptions options, IZeroDocumentSession session) : base(store, options, session) { }
 
 
     /// <inheritdoc />
@@ -42,8 +41,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = GetSession();
-      return await ScopeQuery(session.Query<TUser>()).Where(x => roleName.In(x.RoleIds)).ToListAsync();
+      return await ScopeQuery(Session.Query<TUser>()).Where(x => roleName.In(x.RoleIds)).ToListAsync();
     }
 
 

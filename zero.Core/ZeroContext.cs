@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents.Session;
+using System.Collections.Concurrent;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Cultures;
@@ -109,6 +110,16 @@ namespace zero.Core
         Route = ResolvedRoute.Route;
       }
     }
+
+
+    protected ConcurrentDictionary<string, IAsyncDocumentSession> Sessions { get; set; } = new();
+
+    /// <inheritdoc />
+    public IAsyncDocumentSession GetCurrentScopeAsyncSession(string database = null)
+    {
+      database ??= Store.ResolvedDatabase;
+      return Sessions.GetOrAdd(database, _ => Store.OpenAsyncSession(database));
+    }
   }
 
 
@@ -159,5 +170,10 @@ namespace zero.Core
     /// the currently active backoffice user, as users are not signed in with the default scheme and do therefore not populate HttpContext.User
     /// </summary>
     Task Resolve(HttpContext context);
+
+    /// <summary>
+    /// When using one session per request, we can retrieve the current session for this request
+    /// </summary>
+    IAsyncDocumentSession GetCurrentScopeAsyncSession(string database = null);
   }
 }

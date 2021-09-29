@@ -8,10 +8,7 @@ namespace zero.Core.Identity
   public class RavenCoreRoleStore<TRole> : RavenRoleStore<TRole> 
     where TRole : ZeroIdentityRole
   {
-    public RavenCoreRoleStore(IZeroStore store, IZeroOptions options, IdentityErrorDescriber describer = null) : base(store, options, describer) { }
-
-    /// <inheritdoc/>
-    protected override string GetDatabase() => Options.Raven.Database;
+    public RavenCoreRoleStore(IZeroStore store, IZeroOptions options, IZeroCoreDocumentSession coreSession, IdentityErrorDescriber describer = null) : base(store, options, coreSession, describer) { }
   }
 
 
@@ -19,10 +16,7 @@ namespace zero.Core.Identity
   public class RavenCoreUserStore<TUser> : RavenUserStore<TUser>
     where TUser : ZeroIdentityUser
   {
-    public RavenCoreUserStore(IZeroStore store, IZeroOptions options) : base(store, options) { }
-
-    /// <inheritdoc/>
-    protected override string GetDatabase() => Options.Raven.Database;
+    public RavenCoreUserStore(IZeroStore store, IZeroOptions options, IZeroCoreDocumentSession coreSession) : base(store, options, coreSession) { }
   }
 
 
@@ -31,9 +25,7 @@ namespace zero.Core.Identity
     where TUser : ZeroIdentityUser
     where TRole : ZeroIdentityRole
   {
-    public RavenCoreUserStore(IZeroStore store, IZeroOptions options) : base(store, options) { }
+    public RavenCoreUserStore(IZeroStore store, IZeroOptions options, IZeroCoreDocumentSession coreSession) : base(store, options, coreSession) { }
 
-    /// <inheritdoc/>
-    protected override string GetDatabase() => Options.Raven.Database;
   }
 }

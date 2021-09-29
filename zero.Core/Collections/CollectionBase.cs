@@ -83,7 +83,7 @@ namespace zero.Core.Collections
         {
           return _session;
         }
-        _session = Store.OpenAsyncSession(Database ?? Store.ResolvedDatabase);
+        _session = Context.GetCurrentScopeAsyncSession(Database ?? Store.ResolvedDatabase);
         _session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
         return _session;
       }
@@ -97,7 +97,6 @@ namespace zero.Core.Collections
       {
         if (value != _database)
         {
-          _session?.Dispose();
           _session = null;
           _database = value;
         }

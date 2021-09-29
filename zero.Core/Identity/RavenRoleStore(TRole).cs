@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
-using Raven.Client.Documents.Session;
 using Raven.Client.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +20,16 @@ namespace zero.Core.Identity
 
     protected IZeroOptions Options { get; private set; }
 
+    protected IZeroDocumentSession Session { get; private set; }
+
     protected IdentityErrorDescriber ErrorDescriber { get; private set; }
 
 
-    public RavenRoleStore(IZeroStore store, IZeroOptions options, IdentityErrorDescriber describer = null)
+    public RavenRoleStore(IZeroStore store, IZeroOptions options, IZeroDocumentSession session, IdentityErrorDescriber describer = null)
     {
       Store = store;
       Options = options;
+      Session = session;
       ErrorDescriber = describer ?? new IdentityErrorDescriber();
     }
 
@@ -37,25 +39,12 @@ namespace zero.Core.Identity
     /// </summary>
     protected virtual IRavenQueryable<TRole> ScopeQuery(IRavenQueryable<TRole> query) => query;
 
-    // <summary>
-    /// Get the database to operate on for this store
-    /// </summary>
-    protected virtual string GetDatabase() => Store.ResolvedDatabase;
-
-    // <summary>
-    /// Get a new document store session
-    /// </summary>
-    protected virtual IAsyncDocumentSession GetSession() => Store.OpenAsyncSession(GetDatabase());
-
 
     /// <inheritdoc/>
     public async Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = GetSession())
-      {
-        await session.StoreAsync(role);
-        await session.SaveChangesAsync(cancellationToken);
-      }
+      await Session.StoreAsync(role);
+      await Session.SaveChangesAsync(cancellationToken);
       return IdentityResult.Success;
     }
 
@@ -65,9 +54,8 @@ namespace zero.Core.Identity
     {
       try
       {
-        using IAsyncDocumentSession session = GetSession();
-        await session.StoreAsync(role, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
+        await Session.StoreAsync(role, cancellationToken);
+        await Session.SaveChangesAsync(cancellationToken);
       }
       catch (ConcurrencyException)
       {
@@ -82,9 +70,8 @@ namespace zero.Core.Identity
     {
       try
       {
-        using IAsyncDocumentSession session = GetSession();
-        session.Delete(role);
-        await session.SaveChangesAsync(cancellationToken);
+        Session.Delete(role);
+        await Session.SaveChangesAsync(cancellationToken);
       }
       catch (ConcurrencyException)
       {
@@ -124,16 +111,14 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = GetSession();
-      return await ScopeQuery(session.Query<TRole>()).FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken);
+      return await ScopeQuery(Session.Query<TRole>()).FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken);
     }
 
 
     /// <inheritdoc/>
     public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = GetSession();
-      return await ScopeQuery(session.Query<TRole>()).FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
+      return await ScopeQuery(Session.Query<TRole>()).FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
     }
 
 

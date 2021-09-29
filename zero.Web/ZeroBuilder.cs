@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
+using Raven.Client.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -149,7 +150,15 @@ namespace zero.Web
 
         IDocumentStore store = new ZeroStore(options)
         {
-          Urls = new string[1] { options.Raven.Url }
+          Urls = new string[1] { options.Raven.Url },
+          //Conventions = // TODO activate and test this
+          //{            
+          //  AggressiveCache =
+          //  {
+          //    Duration = TimeSpan.FromDays(1),
+          //    Mode = AggressiveCacheMode.TrackChanges
+          //  }
+          //}
         };
 
         conventionsBuilder.Run(store.Conventions);
@@ -169,7 +178,15 @@ namespace zero.Web
 
       Services.AddScoped<IZeroDocumentSession>(services =>
       {
-        var session = services.GetRequiredService<IZeroStore>()!.OpenAsyncSession();
+        var session = services.GetRequiredService<IZeroContext>()!.GetCurrentScopeAsyncSession();
+        session.Advanced.WaitForIndexesAfterSaveChanges();
+        return session as ZeroDocumentSession;
+      });
+
+      Services.AddScoped<IZeroCoreDocumentSession>(services =>
+      {
+        IZeroOptions options = services.GetService<IZeroOptions>();
+        var session = services.GetRequiredService<IZeroContext>()!.GetCurrentScopeAsyncSession(options.Raven.Database);
         session.Advanced.WaitForIndexesAfterSaveChanges();
         return session as ZeroDocumentSession;
       });

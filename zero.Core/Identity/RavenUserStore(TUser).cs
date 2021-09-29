@@ -29,10 +29,14 @@ namespace zero.Core.Identity
 
     protected IZeroOptions Options { get; private set; }
 
-    public RavenUserStore(IZeroStore store, IZeroOptions options)
+    protected IZeroDocumentSession Session { get; private set; }
+
+
+    public RavenUserStore(IZeroStore store, IZeroOptions options, IZeroDocumentSession session)
     {
       Store = store;
       Options = options;
+      Session = session;
     }
 
 
@@ -48,16 +52,6 @@ namespace zero.Core.Identity
     protected virtual IRavenQueryable<TUser> ScopeQuery(IRavenQueryable<TUser> query) => query;
 
     /// <summary>
-    /// Get the database to operate on for this store
-    /// </summary>
-    protected virtual string GetDatabase() => Store.ResolvedDatabase;
-
-    /// <summary>
-    /// Get a new document store session
-    /// </summary>
-    protected virtual IAsyncDocumentSession GetSession() => Store.OpenAsyncSession(GetDatabase());
-
-    /// <summary>
     /// Whether an email is already reserved
     /// </summary>
     protected virtual async Task<bool> IsEmailReserved(IAsyncDocumentSession session, TUser user, CancellationToken cancellationToken = default)
@@ -70,9 +64,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = GetSession();
-
-      if (await IsEmailReserved(session, user))
+      if (await IsEmailReserved(Session, user))
       {
         return IdentityResult.Failed(new IdentityError
         {
@@ -81,8 +73,8 @@ namespace zero.Core.Identity
         });
       }
 
-      await session.StoreAsync(user, cancellationToken);
-      await session.SaveChangesAsync(cancellationToken);
+      await Session.StoreAsync(user, cancellationToken);
+      await Session.SaveChangesAsync(cancellationToken);
 
       return IdentityResult.Success;
     }
@@ -91,12 +83,10 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = GetSession();
+      TUser source = await Session.LoadAsync<TUser>(user.Id, cancellationToken);
 
-      TUser source = await session.LoadAsync<TUser>(user.Id, cancellationToken);
-
-      session.Delete(source);
-      await session.SaveChangesAsync(cancellationToken);
+      Session.Delete(source);
+      await Session.SaveChangesAsync(cancellationToken);
 
       return IdentityResult.Success;
     }
@@ -105,7 +95,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IdentityResult> UpdateAsync(TUser user, CancellationToken cancellationToken)
     {
-      using (IAsyncDocumentSession session = GetSession())
+      using (IAsyncDocumentSession session = Store.OpenAsyncSession(new SessionOptions() { NoCaching = true }))
       {
         TUser source = await session.LoadAsync<TUser>(user.Id, cancellationToken);
 
@@ -118,7 +108,7 @@ namespace zero.Core.Identity
           });
         }
 
-        if (source.Email != user.Email && await IsEmailReserved(session, user))
+        if (source.Email != user.Email && await IsEmailReserved(Session, user))
         {
           return IdentityResult.Failed(new IdentityError
           {
@@ -128,11 +118,8 @@ namespace zero.Core.Identity
         }
       }
 
-      using (IAsyncDocumentSession session = GetSession())
-      {
-        await session.StoreAsync(user, cancellationToken);
-        await session.SaveChangesAsync(cancellationToken);
-      }
+      await Session.StoreAsync(user, cancellationToken);
+      await Session.SaveChangesAsync(cancellationToken);
 
       return IdentityResult.Success;
     }
@@ -141,16 +128,14 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = GetSession();
-      return await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+      return await ScopeQuery(Session.Query<TUser>()).FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
     }
 
 
     /// <inheritdoc />
     public async Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = GetSession();
-      return await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Username == normalizedUserName, cancellationToken);
+      return await ScopeQuery(Session.Query<TUser>()).FirstOrDefaultAsync(x => x.Username == normalizedUserName, cancellationToken);
     }
 
 
@@ -217,8 +202,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = GetSession();
-      return await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
+      return await ScopeQuery(Session.Query<TUser>()).FirstOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
     }
 
 
@@ -342,11 +326,9 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task AddClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = GetSession();
-
       user.Claims.AddRange(claims.Select(claim => new UserClaim(claim)));
-      await session.StoreAsync(user, cancellationToken);
-      await session.SaveChangesAsync(cancellationToken);
+      await Session.StoreAsync(user, cancellationToken);
+      await Session.SaveChangesAsync(cancellationToken);
     }
 
 
@@ -360,23 +342,20 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IList<TUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = GetSession();
       UserClaim userClaim = new UserClaim(claim);
-      return await ScopeQuery(session.Query<TUser>()).Where(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value)).ToListAsync();
+      return await ScopeQuery(Session.Query<TUser>()).Where(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value)).ToListAsync();
     }
 
 
     /// <inheritdoc />
     public async Task RemoveClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = GetSession();
-
       IEnumerable<UserClaim> userClaims = claims.Select(c => new UserClaim(c)).ToList();
 
       user.Claims = user.Claims.Except(userClaims, new UserClaimComparer()).ToList();
 
-      await session.StoreAsync(user, cancellationToken);
-      await session.SaveChangesAsync(cancellationToken);
+      await Session.StoreAsync(user, cancellationToken);
+      await Session.SaveChangesAsync(cancellationToken);
 
     }
 
@@ -384,16 +363,14 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task ReplaceClaimAsync(TUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
     {
-      using IAsyncDocumentSession session = GetSession();
-
       UserClaim userClaim = new UserClaim(claim);
       UserClaim newUserClaim = new UserClaim(newClaim);
 
       user.Claims.Remove(userClaim);
       user.Claims.Add(newUserClaim);
 
-      await session.StoreAsync(user, cancellationToken);
-      await session.SaveChangesAsync(cancellationToken);
+      await Session.StoreAsync(user, cancellationToken);
+      await Session.SaveChangesAsync(cancellationToken);
     }
   }
 }
