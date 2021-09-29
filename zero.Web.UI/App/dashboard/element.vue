@@ -59,7 +59,7 @@
     display: grid;
     grid-template-rows: auto 1fr;
     position: relative;
-    background: var(--color-bg-bright);
+    background: var(--color-box);
     border-radius: var(--radius);
     box-shadow: var(--shadow-short);
     color: var(--color-text);

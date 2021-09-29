@@ -31,7 +31,7 @@ namespace zero.Web.Defaults
 
     public override void Configure(IZeroOptions zero)
     {
-      zero.Sections.Add<DashboardSection>();
+      //zero.Sections.Add<DashboardSection>();
       zero.Sections.Add<PagesSection>();
       zero.Sections.Add<SpacesSection>();
       zero.Sections.Add<MediaSection>();

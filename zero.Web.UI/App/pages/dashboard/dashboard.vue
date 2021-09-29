@@ -12,8 +12,10 @@
 
 <script>
 
+  import DashboardElement from '../../dashboard/element.vue';
+
   export default {
-    
+    components: { DashboardElement }
   }
 </script>
 
@@ -27,8 +29,7 @@
   .dashboard-elements
   {
     display: grid;
-    padding: 20px;
-    padding-left: 0;
+    padding: var(--padding);
     gap: 16px;
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     grid-auto-rows: minmax(240px, auto);
