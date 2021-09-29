@@ -6,7 +6,7 @@ namespace zero.Web
 {
   public static class ZeroEndpointRouteBuilderExtensions
   {
-    public static IEndpointRouteBuilder MapZeroBackoffice(this IEndpointRouteBuilder endpoints, string path = "/zero")
+    public static IZeroEndpointRouteBuilder MapZeroBackoffice(this IZeroEndpointRouteBuilder endpoints, string path = "/zero")
     {
       //IZeroOptions options = app.ApplicationServices.GetService<IZeroOptions>(); // TODO oO
       // see https://our.umbraco.com/documentation/reference/routing/custom-routes#where-to-put-your-routing-logic
@@ -17,7 +17,7 @@ namespace zero.Web
     }
 
 
-    public static IEndpointRouteBuilder MapZeroRoutes(this IEndpointRouteBuilder endpoints)
+    public static IZeroEndpointRouteBuilder MapZeroRoutes(this IZeroEndpointRouteBuilder endpoints)
     {
       endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}", state: null, order: 10);
       return endpoints;

@@ -120,7 +120,15 @@ namespace zero.Core
     /// <inheritdoc />
     public async Task<Application> ResolveFromRequest(HttpContext context)
     {
-      return Handler.Get<IApplicationResolverHandler>()?.Resolve(context.Request, await GetApplications()) ?? await ResolveFromUri(context.Request.GetEncodedUrl());
+      IApplicationResolverHandler handler = Handler.Get<IApplicationResolverHandler>();
+      Application app = handler?.Resolve(context.Request, await GetApplications());
+
+      if (app == null)
+      {
+        app = await ResolveFromUri(context.Request.GetEncodedUrl());
+      }
+
+      return app;
     }
 
 

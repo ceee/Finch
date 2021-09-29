@@ -9,6 +9,7 @@ using zero.Core.Cultures;
 using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Handlers;
 using zero.Core.Options;
 using zero.Core.Routing;
 
@@ -47,17 +48,24 @@ namespace zero.Core
 
     protected ILogger<ZeroContext> Logger { get; private set; }
 
+    protected IHandlerHolder Handler { get; private set; }
 
-    private bool _resolved = false;
+
+    bool _resolved = false;
+
+    ConcurrentDictionary<string, object> _properties = new();
+
+    ConcurrentDictionary<string, IAsyncDocumentSession> _sessions = new();
 
 
-    public ZeroContext(IZeroOptions options, IApplicationResolver appResolver, ICultureResolver cultureResolver, ILogger<ZeroContext> logger, IZeroStore store)
+    public ZeroContext(IZeroOptions options, IApplicationResolver appResolver, ICultureResolver cultureResolver, ILogger<ZeroContext> logger, IZeroStore store, IHandlerHolder handler)
     {
       Options = options;
       AppResolver = appResolver;
       CultureResolver = cultureResolver;
       Logger = logger;
       Store = store;
+      Handler = handler;
     }
 
 
@@ -109,16 +117,52 @@ namespace zero.Core
         ResolvedRoute = (IResolvedRoute)route;
         Route = ResolvedRoute.Route;
       }
+
+      IContextResolverHandler handler = Handler.Get<IContextResolverHandler>();
+      if (handler != null)
+      {
+        await handler.AfterResolve(this);
+      }
     }
 
 
-    protected ConcurrentDictionary<string, IAsyncDocumentSession> Sessions { get; set; } = new();
+    internal void SetRoute(IResolvedRoute route)
+    {
+      ResolvedRoute = route;
+      Route = ResolvedRoute.Route;
+    }
+
+
+    /// <inheritdoc />
+    public T GetProperty<T>(string key)
+    {
+      if (_properties.TryGetValue(key, out object value) && value is T)
+      {
+        return (T)value;
+      }
+      return default;
+    }
+
+
+    /// <inheritdoc />
+    public void SetProperty(string key, object value)
+    {
+      _properties[key] = value;
+    }
+
+
+    /// <inheritdoc />
+    public void RemoveProperty(string key)
+    {
+      _properties.TryRemove(key, out _);
+    }
+
 
     /// <inheritdoc />
     public IAsyncDocumentSession GetCurrentScopeAsyncSession(string database = null)
     {
       database ??= Store.ResolvedDatabase;
-      return Sessions.GetOrAdd(database, _ => Store.OpenAsyncSession(database));
+      return _sessions.GetOrAdd(database, _ => Store.OpenAsyncSession(database));
     }
   }
 
@@ -175,5 +219,20 @@ namespace zero.Core
     /// When using one session per request, we can retrieve the current session for this request
     /// </summary>
     IAsyncDocumentSession GetCurrentScopeAsyncSession(string database = null);
+
+    /// <summary>
+    /// Get a custom property from this scoped context
+    /// </summary>
+    T GetProperty<T>(string key);
+
+    /// <summary>
+    /// Add a custom property to this scoped context
+    /// </summary>
+    void SetProperty(string key, object value);
+
+    /// <summary>
+    /// Remove a custom property from this scoped context
+    /// </summary>
+    void RemoveProperty(string key);
   }
 }
