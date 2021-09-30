@@ -1,20 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using zero.Core.Api;
+using zero.Core.Collections;
+using zero.Core.Database;
 using zero.Core.Entities;
-using zero.Core.Routing;
 using zero.Core.Extensions;
-using System.Collections.Concurrent;
 
 namespace zero.Web.ViewHelpers
 {
   public class ZeroMediaHelper : IZeroMediaHelper
   {
-    HttpContext HttpContext;
+    IZeroDocumentSession Session;
 
-    IMediaApi MediaApi;
+    public IZeroMediaHelper Core { get; private set; }
 
     /// <summary>
     /// Media cache for repetitive queries within an HTTP request
@@ -22,10 +21,14 @@ namespace zero.Web.ViewHelpers
     ConcurrentDictionary<string, Media> Cache { get; set; } = new();
 
 
-    public ZeroMediaHelper(IHttpContextAccessor httpContextAccessor, IMediaApi mediaApi)
+    public ZeroMediaHelper(IZeroDocumentSession session, IZeroCoreDocumentSession coreSession, bool isCore = false)
     {
-      HttpContext = httpContextAccessor.HttpContext;
-      MediaApi = mediaApi;
+      Session = session;
+
+      if (!isCore)
+      {
+        Core = new ZeroMediaHelper(coreSession, coreSession, true);
+      }
     }
 
 
@@ -39,7 +42,7 @@ namespace zero.Web.ViewHelpers
 
       if (!Cache.TryGetValue(id, out Media media))
       {
-        media = await MediaApi.GetById(id);
+        media = await Session.LoadAsync<Media>(id);
         Cache.TryAdd(id, media);
       }
 
@@ -67,7 +70,7 @@ namespace zero.Web.ViewHelpers
 
       if (remoteIds.Count > 0)
       {
-        Dictionary<string, Media> remoteItems = await MediaApi.GetById(remoteIds);
+        Dictionary<string, Media> remoteItems = await Session.LoadAsync<Media>(remoteIds);
 
         foreach (var item in remoteItems)
         {
@@ -99,6 +102,8 @@ namespace zero.Web.ViewHelpers
 
   public interface IZeroMediaHelper
   {
+    IZeroMediaHelper Core { get; }
+
     /// <summary>
     /// Get media by Id
     /// </summary>

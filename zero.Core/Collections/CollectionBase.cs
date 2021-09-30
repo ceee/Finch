@@ -17,7 +17,7 @@ using zero.Core.Utils;
 
 namespace zero.Core.Collections
 {
-  public abstract class CollectionBase<T> : ICollectionBase<T>, IDisposable where T : ZeroEntity
+  public abstract class CollectionBase<T> : ICollectionBase<T>, ICollectionBase, IDisposable where T : ZeroEntity
   {
     private IAsyncDocumentSession _session;
     private IRevisionsApi _revisions;
@@ -482,7 +482,7 @@ namespace zero.Core.Collections
   }
 
 
-  public interface ICollectionBase<T> : IDisposable where T : ZeroEntity
+  public interface ICollectionBase : IDisposable
   {
     /// <summary>
     /// Guid for this instance
@@ -494,11 +494,6 @@ namespace zero.Core.Collections
     /// Is null by default, which uses the database from the resolved application.
     /// </summary>
     string Database { get; set; }
-
-    /// <summary>
-    /// Returns a new document queryable
-    /// </summary>
-    IRavenQueryable<T> Query { get; }
 
     /// <summary>
     /// Create an async document session
@@ -514,6 +509,15 @@ namespace zero.Core.Collections
     /// Include entities with IsActive=false for GET queries
     /// </summary>
     void WithInactive(bool include = true);
+  }
+
+
+  public interface ICollectionBase<T> : ICollectionBase where T : ZeroEntity
+  {
+    /// <summary>
+    /// Returns a new document queryable
+    /// </summary>
+    IRavenQueryable<T> Query { get; }
 
     /// <summary>
     /// Get an entity by Id
