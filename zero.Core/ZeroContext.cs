@@ -31,6 +31,9 @@ namespace zero.Core
     public bool IsBackofficeRequest { get; protected set; }
 
     /// <inheritdoc />
+    public bool IsLoggedIntoBackoffice { get; protected set; }
+
+    /// <inheritdoc />
     public IZeroOptions Options { get; protected set; }
 
     /// <inheritdoc />
@@ -100,10 +103,12 @@ namespace zero.Core
 
       // get the currently logged-in backoffice user
       BackofficeUser = new ClaimsPrincipal();
+      IsLoggedIntoBackoffice = false;
       AuthenticateResult authResult = await context.AuthenticateAsync(Constants.Auth.BackofficeScheme);
       if (authResult?.Principal is not null)
       {
         BackofficeUser = authResult.Principal;
+        IsLoggedIntoBackoffice = true;
       }
 
       // resolve current application
@@ -160,6 +165,11 @@ namespace zero.Core
     /// Whether the current request is a backoffice request or not
     /// </summary>
     bool IsBackofficeRequest { get; }
+
+    /// <summary>
+    /// Whether the user is logged into the backoffice
+    /// </summary>
+    bool IsLoggedIntoBackoffice { get; }
 
     /// <summary>
     /// Global zero options
