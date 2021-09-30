@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using zero.Core;
 using zero.Core.Api;
 using zero.Core.Collections;
@@ -67,7 +69,7 @@ namespace zero.Web.Defaults
       services.AddTransient<Media, Media>();
       services.AddTransient<MediaFolder, MediaFolder>();
       services.AddTransient<Preview, Preview>();
-      services.AddTransient<Route, Route>();
+      services.AddTransient<Core.Routing.Route, Core.Routing.Route>();
 
       services.AddTransient<IValidator<Application>, ApplicationValidator>();
       services.AddTransient<IValidator<Country>, CountryValidator>();
@@ -114,6 +116,7 @@ namespace zero.Web.Defaults
       services.AddScoped<ILinkProvider, RawLinkProvider>();
 
       services.AddScoped<ZeroRoutesTransformer>();
+      services.TryAddEnumerable(ServiceDescriptor.Singleton<MatcherPolicy, NotFoundSelectorPolicy>());
 
       services.AddScoped<IMailProvider, MailProvider>();
       services.AddScoped<IMailDispatcher, FileMailDispatcher>();

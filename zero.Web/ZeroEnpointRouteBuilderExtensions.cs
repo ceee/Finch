@@ -19,7 +19,7 @@ namespace zero.Web
 
     public static IZeroEndpointRouteBuilder MapZeroRoutes(this IZeroEndpointRouteBuilder endpoints)
     {
-      endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("{**url}", state: null, order: 10);
+      endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("/{**url}", state: null, order: 10);
       return endpoints;
     }
   }

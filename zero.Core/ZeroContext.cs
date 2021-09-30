@@ -12,6 +12,7 @@ using zero.Core.Extensions;
 using zero.Core.Handlers;
 using zero.Core.Options;
 using zero.Core.Routing;
+using zero.Core.Utils;
 
 namespace zero.Core
 {
@@ -33,10 +34,10 @@ namespace zero.Core
     public IZeroOptions Options { get; protected set; }
 
     /// <inheritdoc />
-    public Route Route { get; private set; }
+    public Route Route => ResolvedRoute?.Route;
 
     /// <inheritdoc />
-    public IResolvedRoute ResolvedRoute { get; private set; }
+    public IResolvedRoute ResolvedRoute => HttpContextAccessor?.HttpContext?.Features.Get<IResolvedRoute>();
 
     /// <inheritdoc />
     public IZeroStore Store { get; private set; }
@@ -50,15 +51,17 @@ namespace zero.Core
 
     protected IHandlerHolder Handler { get; private set; }
 
+    protected IHttpContextAccessor HttpContextAccessor { get; private set; }
+
+    protected IPrimitiveTypeCollection ValueCollection { get; private set; }
+
 
     bool _resolved = false;
-
-    ConcurrentDictionary<string, object> _properties = new();
 
     ConcurrentDictionary<string, IAsyncDocumentSession> _sessions = new();
 
 
-    public ZeroContext(IZeroOptions options, IApplicationResolver appResolver, ICultureResolver cultureResolver, ILogger<ZeroContext> logger, IZeroStore store, IHandlerHolder handler)
+    public ZeroContext(IZeroOptions options, IHttpContextAccessor httpContextAccessor, IApplicationResolver appResolver, ICultureResolver cultureResolver, ILogger<ZeroContext> logger, IZeroStore store, IHandlerHolder handler)
     {
       Options = options;
       AppResolver = appResolver;
@@ -66,6 +69,8 @@ namespace zero.Core
       Logger = logger;
       Store = store;
       Handler = handler;
+      ValueCollection = new PrimitiveTypeCollection();
+      HttpContextAccessor = httpContextAccessor;
     }
 
 
@@ -109,53 +114,20 @@ namespace zero.Core
       Store.ResolvedDatabase = Application.Database;
 
       // set current culture
-      await CultureResolver.Resolve(this);      
-
-      // resolve request route
-      if (IsBackofficeRequest is false && context.Request.RouteValues.TryGetValue("zero.route", out object route))
-      {
-        ResolvedRoute = (IResolvedRoute)route;
-        Route = ResolvedRoute.Route;
-      }
-
-      IContextResolverHandler handler = Handler.Get<IContextResolverHandler>();
-      if (handler != null)
-      {
-        await handler.AfterResolve(this);
-      }
-    }
-
-
-    internal void SetRoute(IResolvedRoute route)
-    {
-      ResolvedRoute = route;
-      Route = ResolvedRoute.Route;
+      await CultureResolver.Resolve(this);
     }
 
 
     /// <inheritdoc />
-    public T GetProperty<T>(string key)
-    {
-      if (_properties.TryGetValue(key, out object value) && value is T)
-      {
-        return (T)value;
-      }
-      return default;
-    }
+    public T Get<T>() => ValueCollection.Get<T>();
 
 
     /// <inheritdoc />
-    public void SetProperty(string key, object value)
-    {
-      _properties[key] = value;
-    }
+    public void Set<T>(T value) => ValueCollection.Set(value);
 
 
     /// <inheritdoc />
-    public void RemoveProperty(string key)
-    {
-      _properties.TryRemove(key, out _);
-    }
+    public void Remove<T>() => ValueCollection.Remove<T>();
 
 
     /// <inheritdoc />
@@ -223,16 +195,16 @@ namespace zero.Core
     /// <summary>
     /// Get a custom property from this scoped context
     /// </summary>
-    T GetProperty<T>(string key);
+    T Get<T>();
 
     /// <summary>
     /// Add a custom property to this scoped context
     /// </summary>
-    void SetProperty(string key, object value);
+    void Set<T>(T value);
 
     /// <summary>
     /// Remove a custom property from this scoped context
     /// </summary>
-    void RemoveProperty(string key);
+    void Remove<T>();
   }
 }
