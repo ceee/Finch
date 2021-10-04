@@ -235,7 +235,7 @@ namespace zero.Core.Collections
 
       PreSave?.Invoke(model);
 
-      bool isCreate = false;
+      bool isUpdate = model.Id.IsNullOrEmpty() ? false : await Session.Advanced.ExistsAsync(model.Id);
 
       // set IDs
       model.AutoSetIds();
@@ -244,10 +244,8 @@ namespace zero.Core.Collections
       string userId = Context.BackofficeUser.FindFirstValue(Constants.Auth.Claims.UserId);
 
       // set default properties
-      if (model.Id.IsNullOrEmpty())
+      if (!isUpdate)
       {
-        isCreate = true;
-
         model.CreatedDate = DateTimeOffset.Now;
         model.CreatedById = userId;
         model.LanguageId ??= "languages.1-A"; // TODO correct language id
@@ -260,19 +258,6 @@ namespace zero.Core.Collections
       model.CreatedById ??= userId;
       model.Hash ??= IdGenerator.Classic();
 
-      // run interceptors
-      if (isCreate)
-      {
-        return await Create(model);
-      }
-
-      return await Update(model);
-    }
-
-
-    /// <inheritdoc />
-    async Task<EntityResult<T>> Create(T model)
-    {
       // run validator
       if (Validator != null)
       {
@@ -284,6 +269,18 @@ namespace zero.Core.Collections
         }
       }
 
+      if (!isUpdate)
+      {
+        return await Create(model);
+      }
+
+      return await Update(model);
+    }
+
+
+    /// <inheritdoc />
+    async Task<EntityResult<T>> Create(T model)
+    {
       // run interceptor
       var instruction = CreateInstruction<CollectionInterceptor<T>.CreateParameters>("create", args => args.Model = model);
       await instruction.HandleBefore(x => x.Creating(instruction.Parameters));
@@ -298,6 +295,7 @@ namespace zero.Core.Collections
       {
         args.Model = model;
         args.Id = model.Id;
+        args.IsUpdate = false;
       });
       await instruction2.HandleBefore(x => x.Saving(instruction2.Parameters));
 
@@ -320,17 +318,6 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     async Task<EntityResult<T>> Update(T model)
     {
-      // run validator
-      if (Validator != null)
-      {
-        ValidationResult validation = await Validator.ValidateAsync(model);
-
-        if (!validation.IsValid)
-        {
-          return EntityResult<T>.Fail(validation);
-        }
-      }
-
       // run interceptor
       var instruction = CreateInstruction<CollectionInterceptor<T>.UpdateParameters>("update", args =>
       {
@@ -349,6 +336,7 @@ namespace zero.Core.Collections
       {
         args.Model = model;
         args.Id = model.Id;
+        args.IsUpdate = true;
       });
       await instruction2.HandleBefore(x => x.Saving(instruction2.Parameters));
 

@@ -77,6 +77,16 @@ namespace zero.Core.Collections
       /// The Id of the model which is saving (empty when creating)
       /// </summary>
       public string Id { get; set; }
+
+      /// <summary>
+      /// Whether this instruction is an update
+      /// </summary>
+      public bool IsUpdate { get; set; }
+
+      /// <summary>
+      /// Whether this instruction is create
+      /// </summary>
+      public bool IsCreate => !IsUpdate;
     }
 
 
