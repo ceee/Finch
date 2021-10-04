@@ -8,7 +8,9 @@
     </template>
 
     <button class="pages-recyclebin-action" @click="restore(false)">
-      <i class="pages-recyclebin-action-icon fth-rotate-ccw"></i>
+      <span class="pages-recyclebin-action-icon">
+        <ui-icon symbol="fth-rotate-ccw"></ui-icon>
+      </span>
       <p class="pages-recyclebin-action-text">
         <strong>Restore page</strong>
         <span>Moves this page back into the page tree.</span>
@@ -16,7 +18,9 @@
     </button>
 
     <button class="pages-recyclebin-action" v-if="model.operationId" @click="restore(true)">
-      <i class="pages-recyclebin-action-icon fth-zap"></i>
+      <span class="pages-recyclebin-action-icon">
+        <ui-icon symbol="fth-zap"></ui-icon>
+      </span>
       <p class="pages-recyclebin-action-text">
         <strong>Undo operation</strong>
         <span>Restores all {{operationCount}} pages from the affected operation.</span>
@@ -24,7 +28,9 @@
     </button>
 
     <button class="pages-recyclebin-action">
-      <i class="pages-recyclebin-action-icon fth-trash is-negative"></i>
+      <span class="pages-recyclebin-action-icon is-negative">
+        <ui-icon symbol="fth-trash"></ui-icon>
+      </span>
       <p class="pages-recyclebin-action-text">
         <strong>Delete page...</strong>
         <span>Remove this recycled page forever.</span>
@@ -144,7 +150,6 @@
 
   .pages-recyclebin-action-icon
   {
-    font-size: 18px;
     margin-right: -6px;
     align-self: stretch;
     background: var(--color-box-nested);
