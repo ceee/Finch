@@ -281,6 +281,9 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     async Task<EntityResult<T>> Create(T model)
     {
+      // create ID before-hand so interceptors can use it
+      model.Id = await Session.Advanced.DocumentStore.Conventions.GenerateDocumentIdAsync(Session.Advanced.DocumentStore.Database, model);
+
       // run interceptor
       var instruction = CreateInstruction<CollectionInterceptor<T>.CreateParameters>("create", args => args.Model = model);
       await instruction.HandleBefore(x => x.Creating(instruction.Parameters));
