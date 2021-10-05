@@ -1,114 +1,89 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using zero.Core.Api;
-using zero.Core.Database;
+using zero.Core.Collections;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 using zero.Core.Routing;
 using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
-  public class PagesController : BackofficeController
+  public class PagesController : BackofficeCollectionController<Page, IPagesCollection>
   {
-    IPagesApi Api;
-    IZeroStore Store;
+    IRoutes Routes;
 
-    public PagesController(IPagesApi api, IZeroStore store)
+    public PagesController(IPagesCollection collection, IRoutes routes) : base(collection)
     {
-      Api = api;
-      Store = store;
+      Routes = routes;
     }
 
 
-    public async Task<IList<PageType>> GetAllowedPageTypes([FromQuery] string parent = null) => await Api.GetAllowedPageTypes(parent);
-
- 
-    public PageType GetPageType([FromQuery] string alias) => Api.GetPageType(alias);
-
-    public async Task<PageEditModel<Page>> GetById([FromQuery] string id)
+    public override async Task<EditModel<Page>> GetById([FromQuery] string id, [FromQuery] string changeVector = null)
     {
-      Page entity = await Api.GetById(id);
+      Page entity = changeVector.IsNullOrEmpty() ? await Collection.GetById(id) : await Collection.GetRevision(changeVector);
 
-      if (entity == null)
-      {
-        return null;
-      }
-
-      return Edit<Page, PageEditModel<Page>>(new PageEditModel<Page>()
+      return entity == null ? null : Edit<Page, PageEditModel<Page>>(new PageEditModel<Page>()
       {
         Entity = entity,
-        //Revisions = await RevisionsApi.GetPaged<Page>(id),
-        PageType = Api.GetPageType(entity.PageTypeAlias)
+        PageType = Collection.GetPageType(entity.PageTypeAlias)
       });
     }
 
 
-    public async Task<EditModel<Page>> GetEmpty([FromQuery] string type, [FromQuery] string parent = null)
-    {
-      return Edit(await Api.GetEmpty(type, parent));
-    }
-
-
-    public async Task<IList<PreviewModel>> GetPreviews([FromQuery] List<string> ids)
+    public override async Task<IList<PreviewModel>> GetPreviews([FromQuery] List<string> ids)
     {
       IReadOnlyCollection<PageType> pageTypes = Options.Pages.GetAllItems();
-
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-
-      Dictionary<string, Page> pages = await session.LoadAsync<Page>(ids);
-      Dictionary<string, Route> routes = await session.LoadAsync<Route>(pages.Where(x => x.Value != null).Select(x => "routes." + x.Value.Hash));
+      Dictionary<string, Page> pages = await Collection.GetByIds(ids.ToArray());
+      Dictionary<Page, Route> routes = await Routes.GetRoutes(pages.Where(x => x.Value != null).Select(x => x.Value));
 
       return Previews(pages, item =>
       {
-        PageType pageType = pageTypes.FirstOrDefault(x => x.Alias == item.PageTypeAlias);
-        Route route = null;
+        routes.TryGetValue(item, out Route route);
 
-        if (!routes.TryGetValue("routes." + item.Hash, out route) || route == null)
-        {
-          route = new Route()
-          {
-            Url = "No URL found" // TODO translate
-          };
-        }
-
-        return new PreviewModel()
+        PreviewModel model = new()
         {
           Id = item.Id,
-          Icon = pageType?.Icon ?? "fth-folder",
+          Icon = pageTypes.FirstOrDefault(x => x.Alias == item.PageTypeAlias)?.Icon ?? "fth-folder",
           Name = item.Name,
-          Text = route.Url
+          Text = route?.Url.Or("No URL found")
         };
+
+        PreviewTransform?.Invoke(item, model);
+        return model;
       });
+
     }
 
 
-    //public async Task<ListResult<Revision>> GetRevisions([FromQuery] string id, [FromQuery] int page = 1) => await RevisionsApi.GetPaged<Page>(id, page); 
-    // TODO this endpoint is available when pages controller moved to BackofficeCollectionController
+    public PageType GetPageType([FromQuery] string alias) => Collection.GetPageType(alias);
 
 
-    public async Task<EntityResult<Page>> Save([FromBody] Page model) => await Api.Save(model);
+    public async Task<IList<PageType>> GetAllowedPageTypes([FromQuery] string parent = null) => await Collection.GetAllowedPageTypes(parent);
 
 
-    [HttpPost]
-    public async Task<EntityResult<IList<Page>>> SaveSorting([FromBody] string[] ids) => await Api.SaveSorting(ids);
-
-
-    [HttpPost]
-    public async Task<EntityResult<Page>> Move([FromBody] ActionCopyModel model) => await Api.Move(model.Id, model.DestinationId);
+    public async Task<EditModel<Page>> GetEmpty([FromQuery] string type, [FromQuery] string parent = null) => Edit(await Collection.GetEmpty(type, parent));
 
 
     [HttpPost]
-    public async Task<EntityResult<Page>> Copy([FromBody] ActionCopyModel model) => await Api.Copy(model.Id, model.DestinationId, model.IncludeDescendants);
+    public async Task<EntityResult<IList<Page>>> SaveSorting([FromBody] string[] ids) => await Collection.SaveSorting(ids);
 
 
     [HttpPost]
-    public async Task<EntityResult<string[]>> Restore([FromBody] ActionCopyModel model) => await Api.Restore(model.Id, model.IncludeDescendants);
+    public async Task<EntityResult<Page>> Move([FromBody] ActionCopyModel model) => await Collection.Move(model.Id, model.DestinationId);
 
 
-    public async Task<EntityResult<string[]>> Delete([FromQuery] string id) => await Api.Delete(id, true);
+    [HttpPost]
+    public async Task<EntityResult<Page>> Copy([FromBody] ActionCopyModel model) => await Collection.Copy(model.Id, model.DestinationId, model.IncludeDescendants);
+
+
+    [HttpPost]
+    public async Task<EntityResult<string[]>> Restore([FromBody] ActionCopyModel model) => await Collection.Restore(model.Id, model.IncludeDescendants);
+
+
+    [HttpDelete]
+    public async Task<EntityResult<string[]>> DeleteRecursive([FromQuery] string id) => await Collection.Delete(id, recursive: true, moveToRecycleBin: true);
   }
 }

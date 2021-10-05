@@ -87,8 +87,8 @@ namespace zero.Web.Defaults
       services.AddTransient<ILanguagesCollection, LanguagesCollection>();
       services.AddTransient<ITranslationsCollection, TranslationsCollection>();
       services.AddTransient<IMediaCollection, MediaCollection>();
+      services.AddTransient<IPagesCollection, PagesCollection>();
       services.AddTransient<IUserApi, UserApi>();
-      services.AddTransient<IPagesApi, PagesApi>();
       services.AddTransient<IPageTreeApi, PageTreeApi>();
       services.AddTransient<IPreviewApi, PreviewApi>();
       services.AddTransient<IMailTemplatesCollection, MailTemplatesCollection>();

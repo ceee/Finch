@@ -2,38 +2,35 @@
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
-using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using zero.Core.Api;
 using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Handlers;
-using zero.Core.Options;
 
-namespace zero.Core.Api
+namespace zero.Core.Collections
 {
-  public class PagesApi : BackofficeApi, IPagesApi
+  public class PagesCollection : CollectionBase<Page>, IPagesCollection
   {
     const string RECYCLE_BIN_GROUP = "pages";
 
-    protected IZeroOptions Options { get; private set; }
-
     protected IRecycleBinApi RecycleBinApi { get; private set; }
 
-    protected ILogger<PagesApi> Logger { get; private set; }
+    protected ILogger<IPagesCollection> Logger { get; private set; }
 
     protected IHandlerHolder Handler { get; private set; }
 
 
-    public PagesApi(IZeroOptions options, IBackofficeStore store, IRecycleBinApi recycleBinApi, ILogger<PagesApi> logger, IHandlerHolder handler) : base(store)
+    public PagesCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IRecycleBinApi recycleBinApi, IHandlerHolder handler,
+      ILogger<IPagesCollection> logger, IValidator<Page> validator = null) : base(context, interceptor, validator)
     {
-      Options = options;
       RecycleBinApi = recycleBinApi;
-      Logger = logger;
       Handler = handler;
+      Logger = logger;
     }
 
 
@@ -66,37 +63,22 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<Page> GetById(string id)
-    {
-      return await GetById<Page>(id);
-    }
+    public IList<PageType> GetPageTypes() => Context.Options.Pages.GetAllItems().ToList();
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<string, Page>> GetByIds(params string[] ids)
-    {
-      return await GetByIds<Page>(ids);
-    }
-
-
-    /// <inheritdoc />
-    public IList<PageType> GetPageTypes()
-    {
-      return Options.Pages.GetAllItems().ToList();
-    }
+    public PageType GetPageType(string alias) => Context.Options.Pages.GetAllItems().FirstOrDefault(x => x.Alias == alias);
 
 
     /// <inheritdoc />
     public async Task<IList<PageType>> GetAllowedPageTypes(string parentId = null)
-    {    
-      IEnumerable<PageType> types = Options.Pages.GetAllItems();
+    {
+      IEnumerable<PageType> types = Context.Options.Pages.GetAllItems();
       List<Page> parents = new();
-
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
 
       if (!parentId.IsNullOrEmpty())
       {
-        Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
+        Pages_ByHierarchy.Result result = await Session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
           .ProjectInto<Pages_ByHierarchy.Result>()
           .Include<Pages_ByHierarchy.Result, Page>(x => x.Id)
           .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
@@ -106,7 +88,7 @@ namespace zero.Core.Api
         {
           List<string> ids = result.Path.Select(x => x.Id).ToList();
           ids.Add(result.Id);
-          parents = (await session.LoadAsync<Page>(ids)).Select(x => x.Value).Reverse().ToList();
+          parents = (await Session.LoadAsync<Page>(ids)).Select(x => x.Value).Reverse().ToList();
         }
       }
 
@@ -118,28 +100,14 @@ namespace zero.Core.Api
         return types.ToList();
       }
 
-      return handler.GetAllowedPageTypes(Backoffice.Context.Application, types, parents)?.ToList() ?? new();
-    }
-
-
-    /// <inheritdoc />
-    public PageType GetPageType(string alias) 
-    {
-      return Options.Pages.GetAllItems().FirstOrDefault(x => x.Alias == alias);
-    }
-
-
-    /// <inheritdoc />
-    public async Task<EntityResult<Page>> Save(Page model)
-    {
-      return await SaveModel(model, null);
+      return handler.GetAllowedPageTypes(Context.Application, types, parents)?.ToList() ?? new();
     }
 
 
     /// <inheritdoc />
     public async Task<EntityResult<IList<Page>>> SaveSorting(string[] sortedIds)
     {
-      Dictionary<string, Page> items = await GetByIds<Page>(sortedIds);
+      Dictionary<string, Page> items = await GetByIds(sortedIds);
       uint index = 0;
 
       // contains multiple parents, therefore fail
@@ -148,19 +116,12 @@ namespace zero.Core.Api
         return EntityResult<IList<Page>>.Fail("@errors.page.sortingmultipleparents");
       }
 
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
+      foreach (var item in items)
       {
-        session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
-
-        foreach (var item in items)
-        {
-          item.Value.Sort = index;
-          index += 10;
-          await session.StoreAsync(item.Value);
-          //session.Advanced.Patch<T, uint>(item.Value.Id, x => x.Sort, index++);
-        }
-
-        await session.SaveChangesAsync();
+        item.Value.Sort = index;
+        index += 10;
+        await Save(item.Value);
+        //session.Advanced.Patch<T, uint>(item.Value.Id, x => x.Sort, index++);
       }
 
       return EntityResult<IList<Page>>.Success(items.Select(x => x.Value).ToList());
@@ -170,8 +131,8 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<Page>> Move(string id, string parentId)
     {
-      Page model = await GetById<Page>(id);
-      Page parent = await GetById<Page>(parentId);
+      Page model = await GetById(id);
+      Page parent = await GetById(parentId);
 
       if (model == null || (!parentId.IsNullOrEmpty() && parent == null))
       {
@@ -194,8 +155,8 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<Page>> Copy(string id, string destinationId, bool includeDescendants = false)
     {
-      Page model = await GetById<Page>(id);
-      Page parent = await GetById<Page>(destinationId);
+      Page model = await GetById(id);
+      Page parent = await GetById(destinationId);
 
       if (model == null || (!destinationId.IsNullOrEmpty() && parent == null))
       {
@@ -218,47 +179,38 @@ namespace zero.Core.Api
         return EntityResult<Page>.Fail("@errors.page.parentnotallowed");
       }
 
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
+      // recursive function to store descendants
+      async Task AddChildren(string oldParentId, string newParentId)
       {
-        session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
+        Pages_WithChildren.Result childrenResult = await Session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
+          .ProjectInto<Pages_WithChildren.Result>()
+          .Include<Pages_WithChildren.Result, Page>(x => x.Id)
+          .Where(x => x.Id == oldParentId)
+          .FirstOrDefaultAsync();
 
-        // recursive function to store descendants
-        async Task AddChildren(string oldParentId, string newParentId)
+        if (childrenResult == null || childrenResult.ChildrenIds.Length < 1)
         {
-          Pages_WithChildren.Result childrenResult = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
-            .ProjectInto<Pages_WithChildren.Result>()
-            .Include<Pages_WithChildren.Result, Page>(x => x.Id)
-            .Where(x => x.Id == oldParentId)
-            .FirstOrDefaultAsync();
-
-          if (childrenResult == null || childrenResult.ChildrenIds.Length < 1)
-          {
-            return;
-          }
-
-          Dictionary<string, Page> childrenPages = await session.LoadAsync<Page>(childrenResult.ChildrenIds);
-
-          foreach (var child in childrenPages)
-          {
-            Page childPage = child.Value.Clone();
-            childPage.Id = null;
-            childPage.IsActive = false;
-            childPage.ParentId = newParentId;
-            childPage.CreatedDate = DateTimeOffset.Now;
-
-            await session.StoreAsync(childPage);
-            await AddChildren(child.Key, childPage.Id);
-          }
+          return;
         }
 
-        await session.StoreAsync(model);
+        Dictionary<string, Page> childrenPages = await GetByIds(childrenResult.ChildrenIds);
 
-        if (includeDescendants)
+        foreach (var child in childrenPages)
         {
-          await AddChildren(baseId, model.Id);
-        }
+          Page childPage = child.Value.Clone();
+          childPage.Id = null;
+          childPage.IsActive = false;
+          childPage.ParentId = newParentId;
+          childPage.CreatedDate = DateTimeOffset.Now;
 
-        await session.SaveChangesAsync();
+          await Save(childPage);
+          await AddChildren(child.Key, childPage.Id);
+        }
+      }
+
+      if (includeDescendants)
+      {
+        await AddChildren(baseId, model.Id);
       }
 
       return EntityResult<Page>.Success(model);
@@ -266,10 +218,9 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<string[]>> Delete(string id, bool moveToRecycleBin = true)
+    public async Task<EntityResult<string[]>> Delete(string id, bool recursive = true, bool moveToRecycleBin = true)
     {
-      IList<Page> pages = await GetByIdWithDescendants(id);
-      string[] ids = pages.Select(x => x.Id).ToArray();
+      List<Page> pages = recursive ? await GetByIdWithDescendants(id) : new() { await GetById(id) };
 
       if (pages.Count < 1)
       {
@@ -281,9 +232,9 @@ namespace zero.Core.Api
         await RecycleBinApi.Add(pages, RECYCLE_BIN_GROUP);
       }
 
-      await DeleteByIds<Page>(ids);
+      await Delete(pages.ToArray());
 
-      return EntityResult<string[]>.Success(ids);
+      return EntityResult<string[]>.Success(pages.Select(x => x.Id).ToArray());
     }
 
 
@@ -310,7 +261,7 @@ namespace zero.Core.Api
 
       // check if parents are available
       string[] parentIds = entities.Select(x => x.Content as Page).Where(x => x != null).Select(x => x.ParentId).ToArray();
-      parentIds = (await GetByIds<Page>(parentIds)).Where(x => x.Value != null).Select(x => x.Value.Id).ToArray();
+      parentIds = (await GetByIds(parentIds)).Where(x => x.Value != null).Select(x => x.Value.Id).ToArray();
 
       // validate and restore all items
       foreach (RecycledEntity entity in entities)
@@ -334,7 +285,7 @@ namespace zero.Core.Api
         }
 
         // restore to pages
-        EntityResult<Page> saveResult = await SaveModel(page);
+        EntityResult<Page> saveResult = await Save(page);
       }
 
       // delete affected entities from recycle bin
@@ -358,7 +309,7 @@ namespace zero.Core.Api
     {
       List<Page> items = new List<Page>();
 
-      Page model = await GetById<Page>(id);
+      Page model = await GetById(id);
 
       if (model == null)
       {
@@ -367,55 +318,42 @@ namespace zero.Core.Api
 
       items.Add(model);
 
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
+      // recursive function to store descendants
+      async Task AddChildren(string parentId)
       {
-        // recursive function to store descendants
-        async Task AddChildren(string parentId)
+        Pages_WithChildren.Result childrenResult = await Session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
+          .ProjectInto<Pages_WithChildren.Result>()
+          .Include<Pages_WithChildren.Result, Page>(x => x.Id)
+          .Where(x => x.Id == parentId)
+          .FirstOrDefaultAsync();
+
+        if (childrenResult == null || childrenResult.ChildrenIds.Length < 1)
         {
-          Pages_WithChildren.Result childrenResult = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
-            .ProjectInto<Pages_WithChildren.Result>()
-            .Include<Pages_WithChildren.Result, Page>(x => x.Id)
-            .Where(x => x.Id == parentId)
-            .FirstOrDefaultAsync();
-
-          if (childrenResult == null || childrenResult.ChildrenIds.Length < 1)
-          {
-            return;
-          }
-
-          Dictionary<string, Page> childrenPages = await session.LoadAsync<Page>(childrenResult.ChildrenIds);
-
-          foreach (var child in childrenPages)
-          {
-            items.Add(child.Value);
-            await AddChildren(child.Value.Id);
-          }
+          return;
         }
 
-        await AddChildren(model.Id);
+        Dictionary<string, Page> childrenPages = await GetByIds(childrenResult.ChildrenIds);
+
+        foreach (var child in childrenPages)
+        {
+          items.Add(child.Value);
+          await AddChildren(child.Value.Id);
+        }
       }
+
+      await AddChildren(model.Id);
 
       return items;
     }
   }
 
 
-  public interface IPagesApi
+  public interface IPagesCollection : ICollectionBase<Page>
   {
     /// <summary>
     /// Get a new empty page with the specified type
     /// </summary>
     public Task<Page> GetEmpty(string pageType, string parentId = null);
-
-    /// <summary>
-    /// Get page by Id
-    /// </summary>
-    Task<Page> GetById(string id);
-
-    /// <summary>
-    /// Get pages by ids
-    /// </summary>
-    Task<Dictionary<string, Page>> GetByIds(params string[] ids);
 
     /// <summary>
     /// Get all available page types
@@ -431,11 +369,6 @@ namespace zero.Core.Api
     /// Get a specific page type by alias
     /// </summary>
     PageType GetPageType(string alias);
-
-    /// <summary>
-    /// Creates or updates a page
-    /// </summary>
-    Task<EntityResult<Page>> Save(Page model);
 
     /// <summary>
     /// Update sorting of pages on a specific level
@@ -455,7 +388,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Deletes a page by Id (with all it's descendants)
     /// </summary>
-    Task<EntityResult<string[]>> Delete(string id, bool moveToRecycleBin = true);
+    Task<EntityResult<string[]>> Delete(string id, bool recursive = true, bool moveToRecycleBin = true);
 
     /// <summary>
     /// Restores a page from the recycle bin
