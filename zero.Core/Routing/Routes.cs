@@ -216,30 +216,6 @@ namespace zero.Core.Routing
     }
 
 
-    ///// <inheritdoc />
-    //public async Task<IResolvedRoute> ResolveRoute(Route route)
-    //{
-    //  using IAsyncDocumentSession session = Store.OpenAsyncSession();
-    //  return await ResolveRouteInternal(session, null); // TODO
-    //}
-
-
-    /// <inheritdoc />
-    public NotFoundRoute NotFound(HttpContext context)
-    {
-      if (!Options.SetupCompleted || context.IsBackofficeRequest(Options.BackofficePath) || Options.Routing.NotFoundEndpoint == null)
-      {
-        return null;
-      }
-
-      return new NotFoundRoute(context)
-      {
-        Controller = Options.Routing.NotFoundEndpoint.Controller,
-        Action = Options.Routing.NotFoundEndpoint.Action
-      };
-    }
-
-
     /// <inheritdoc />
     public async Task RebuildAllRoutes()
     {
@@ -253,16 +229,19 @@ namespace zero.Core.Routing
         using IAsyncDocumentSession session = Store.OpenAsyncSession(app.Database);
         session.Advanced.MaxNumberOfRequestsPerSession = 1000;
 
+        // delete all routes
+        await Store.PurgeAsync<Route>(app.Database);
+
         foreach (IRouteProvider provider in Providers)
         {
           // get all routes for this provider
           IList<Route> routes = await provider.GetAllRoutes(session);
 
           // delete all registered routes in the database for this provider
-          await Store.PurgeAsync<Route>(app.Database, $"where {nameof(Route.ProviderAlias)} = $alias", new Raven.Client.Parameters()
-          {
-            { "alias", provider.Alias }
-          });
+          //await Store.PurgeAsync<Route>(app.Database, $"where {nameof(Route.ProviderAlias)} = $alias", new Raven.Client.Parameters()
+          //{
+          //  { "alias", provider.Alias }
+          //});
 
           // store new routes
           using (BulkInsertOperation bulkInsert = Store.BulkInsert(app.Database))
@@ -354,16 +333,6 @@ namespace zero.Core.Routing
     /// Resolve an URL from an http context
     /// </summary>
     Task<IResolvedRoute> ResolveUrl(HttpContext context);
-
-    /// <summary>
-    /// Resolve a route object by passing it to the specified provider
-    /// </summary>
-    //Task<IResolvedRoute> ResolveRoute(Route route);
-
-    /// <summary>
-    /// Returns the endpoint which maps 404 requests
-    /// </summary>
-    NotFoundRoute NotFound(HttpContext context);
 
     /// <summary>
     /// Purges all routes and rebuilds them by iterating over all registered providers

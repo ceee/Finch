@@ -57,6 +57,11 @@ namespace zero.Core.Routing
     /// </summary>
     Task<IList<Route>> GetAllRoutes(IAsyncDocumentSession session);
 
+    ///// <summary>
+    ///// Updates all affected routes on demand after an entity has been changed
+    ///// </summary>
+    //Task<int> UpdateOnDemand(object model, object previous);
+
     /// <summary>
     /// Generate unique route ID for a model
     /// </summary>

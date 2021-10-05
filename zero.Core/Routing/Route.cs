@@ -7,6 +7,13 @@ namespace zero.Core.Routing
   [Collection("Routes")]
   public class Route : ZeroIdEntity
   {
+    public Route() { }
+
+    public Route(string providerAlias)
+    {
+      ProviderAlias = providerAlias;
+    }
+
     /// <summary>
     /// Generated URL based on the URL provider
     /// </summary>

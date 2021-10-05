@@ -106,7 +106,7 @@ namespace zero.Core.Routing
     /// <summary>
     /// Get the part of the URL (by querying UrlAlias and Alias) for this page
     /// </summary>
-    protected virtual string GetUrlPart(Page page)
+    public virtual string GetUrlPart(Page page)
     {
       string alias;
 
