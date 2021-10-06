@@ -7,13 +7,11 @@ namespace zero.Core.Routing
 {
   public class ZeroRoutesTransformer : DynamicRouteValueTransformer
 	{
-    IRoutes Routes;
-		IZeroContext Zero;
+    IRouteResolver RouteResolver;
 
-		public ZeroRoutesTransformer(IRoutes routes, IZeroContext zero)
+		public ZeroRoutesTransformer(IRouteResolver routeResolver)
     {
-			Routes = routes;
-			Zero = zero;
+			RouteResolver = routeResolver;
     }
 
 
@@ -26,7 +24,7 @@ namespace zero.Core.Routing
 				return null;
       }
 
-			route = await Routes.ResolveUrl(httpContext);
+			route = await RouteResolver.ResolveUrl(httpContext);
 
 			if (route == null)
       {
@@ -35,7 +33,7 @@ namespace zero.Core.Routing
 
 			httpContext.Features.Set(route);
 
-			RouteProviderEndpoint endpoint = Routes.MapEndpoint(route);
+			RouteProviderEndpoint endpoint = RouteResolver.MapEndpoint(route);
 
 			if (endpoint == null)
       {
