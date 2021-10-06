@@ -10,8 +10,11 @@
 
   <ItemGroup>
     <Compile Remove="Entities\Messages\**" />
+    <Compile Remove="Numbers\**" />
     <EmbeddedResource Remove="Entities\Messages\**" />
+    <EmbeddedResource Remove="Numbers\**" />
     <None Remove="Entities\Messages\**" />
+    <None Remove="Numbers\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,7 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Numbers\" />
     <Folder Include="Subscriptions\" />
   </ItemGroup>
 
