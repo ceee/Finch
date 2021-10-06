@@ -9,6 +9,11 @@ namespace zero.Core.Routing
     string Alias { get; }
 
     /// <summary>
+    /// Warmup is only called once.
+    /// </summary>
+    Task Warmup();
+
+    /// <summary>
     /// Generate unique route ID for a model
     /// </summary>
     string Id(T model);
@@ -16,12 +21,17 @@ namespace zero.Core.Routing
     /// <summary>
     /// Build URL for a model
     /// </summary>
-    //string Url(T model);
+    string Url(T model);
 
     /// <summary>
     /// Create route entity from a model
     /// </summary>
-    Task<Route> Create(T model);
+    Route Create(T model);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    //bool HasChanged(T newModel, T oldModel);
 
     /// <summary>
     /// Get all models which should be provided and handled by this instance

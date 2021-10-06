@@ -21,14 +21,26 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public override async Task<Route> Create(Country model)
+    public override async Task Warmup()
     {
       PageRoute ??= await ResolvePageRoute();
+    }
 
+
+    /// <inheritdoc />
+    public override string Url(Country model)
+    {
+      return String.Join(SLASH, PageRoute.Url, "story", model.Alias);
+    }
+
+
+    /// <inheritdoc />
+    public override Route Create(Country model)
+    {
       return new Route(Alias)
       {
         Id = Id(model),
-        Url = String.Join(SLASH, PageRoute.Url, "story", model.Alias)
+        Url = Url(model),
       }.DependsOn(model.Id);
     }
 

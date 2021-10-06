@@ -33,10 +33,16 @@ namespace zero.Core.Routing
     }
 
 
+    public virtual Task Warmup() => Task.CompletedTask;
+
+
     public virtual string Id(T model) => ID_PREFIX + model.Hash;
 
 
-    public abstract Task<Route> Create(T model);
+    public abstract string Url(T model);
+
+
+    public abstract Route Create(T model);
 
 
     public abstract Task<IEnumerable<T>> All();

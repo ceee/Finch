@@ -49,6 +49,8 @@ namespace zero.Web.Defaults
 
       zero.Icons.AddSet("feather", "Feather", "/assets/icons/feather.svg", "fth");
       zero.Pages.Add<PageFolder>(Constants.Pages.FolderAlias, "@page.folder.name", "@page.folder.description", "fth-folder");
+
+      zero.Interceptors.Add<ZeroEntityRouteInterceptor>(gravity: 1000);
     }
 
 
@@ -130,6 +132,8 @@ namespace zero.Web.Defaults
       services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();
 
       services.AddScoped<IBackofficeSearchService, BackofficeSearchService>();
+
+      services.AddScoped<ZeroEntityRouteInterceptor>();
     }
   }
 }

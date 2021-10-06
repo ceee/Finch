@@ -144,7 +144,13 @@ namespace zero.Core.Collections
         return interceptor != null;
       }
 
-      interceptor = Services.GetService(type) as ICollectionInterceptor<T>;
+      object service = Services.GetService(type);
+      interceptor = service as ICollectionInterceptor<T>;
+
+      if (interceptor == null && service != null && service is ICollectionInterceptor)
+      {
+        interceptor = new CollectionInterceptorShim<T>(service as ICollectionInterceptor);
+      }
 
       if (interceptor == null)
       {
