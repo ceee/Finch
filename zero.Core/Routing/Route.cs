@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using zero.Core.Attributes;
 using zero.Core.Entities;
 
@@ -11,6 +12,13 @@ namespace zero.Core.Routing
 
     public Route(string providerAlias)
     {
+      ProviderAlias = providerAlias;
+    }
+
+    public Route(string id, string url, string providerAlias)
+    {
+      Id = id;
+      Url = url;
       ProviderAlias = providerAlias;
     }
 
@@ -37,6 +45,7 @@ namespace zero.Core.Routing
     /// <summary>
     /// Contains references to the resolved collection entities
     /// </summary>
+    [Obsolete]
     public List<RouteReference> References { get; set; } = new();
 
     /// <summary>
