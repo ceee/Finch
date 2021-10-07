@@ -5,11 +5,13 @@ using zero.Core.Entities;
 
 namespace zero.Core.Utils
 {
-  public abstract class TableExport<TEntity> : ITableExport<TEntity> where TEntity : ZeroEntity
+  public abstract class TableExport<TEntity> : ITableExport<TEntity> where TEntity : ZeroIdEntity
   {
     public virtual async Task<Stream> Export(TableFormat format = TableFormat.Excel)
     {
       ITableBuilder<TEntity> builder = new TableBuilder<TEntity>(format);
+
+      await Warmup();
 
       Build(builder);
 
@@ -19,6 +21,9 @@ namespace zero.Core.Utils
 
       return stream;
     }
+
+
+    protected virtual Task Warmup() => Task.CompletedTask;
 
 
     protected virtual async IAsyncEnumerable<TEntity> Load()
@@ -31,12 +36,11 @@ namespace zero.Core.Utils
     protected virtual void Build(ITableBuilder<TEntity> builder)
     {
       builder.Column("Id").For(c => c.Id).Size(40);
-      builder.Column("Name").For(c => c.Name).Size(40);
     }
   }
 
 
-  public interface ITableExport<TEntity> where TEntity : ZeroEntity
+  public interface ITableExport<TEntity> where TEntity : ZeroIdEntity
   {
     Task<Stream> Export(TableFormat format = TableFormat.Excel);
   }

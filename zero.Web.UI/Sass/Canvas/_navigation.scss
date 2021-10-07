@@ -249,6 +249,7 @@ a.app-nav-child
   padding: 0 var(--padding) 0 calc(var(--padding) + 26px);
   height: 36px;
   color: var(--color-text-dim);
+  position: relative;
 
   &:hover, &.is-active
   {
@@ -258,6 +259,20 @@ a.app-nav-child
   &.is-active
   {
     font-weight: 700;
+  }
+
+  &.is-active:before
+  {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--color-accent);
+    position: absolute;
+    margin-left: -14px;
+    margin-top: -3px;
+    top: 50%;
   }
 }
 
@@ -274,7 +289,7 @@ a.app-nav-child
 
 .app-nav-children-enter, .app-nav-children-leave-to
 {
-  transform: translateX(10px);
+  transform: translateX(-10px);
   opacity: 0;
 }
 

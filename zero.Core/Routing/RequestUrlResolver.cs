@@ -2,28 +2,46 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using zero.Core.Options;
 
 namespace zero.Core.Routing
 {
   public class RequestUrlResolver : IRequestUrlResolver
   {
+    public IRequestUrlResolver Backoffice { get; private set; }
+
     protected IHttpContextAccessor HttpContextAccessor { get; private set; }
+
+    protected IZeroOptions Options { get; private set; }
 
     protected ILogger<RequestUrlResolver> Logger { get; private set; }
 
-    private static string[] Protocols { get; set; } = new[] { "http://", "https://" };
+    static string[] Protocols = new[] { "http://", "https://", "ftp://", "ftps://", "sftp://", "udp://" };
+
+    bool IsBackoffice = false;
 
 
-    public RequestUrlResolver(IHttpContextAccessor httpContextAccessor, ILogger<RequestUrlResolver> logger)
+    public RequestUrlResolver(IHttpContextAccessor httpContextAccessor, ILogger<RequestUrlResolver> logger, IZeroOptions options, bool isBackoffice = false)
     {
       HttpContextAccessor = httpContextAccessor;
       Logger = logger;
+      Options = options;
+      IsBackoffice = isBackoffice;
+      if (!isBackoffice)
+      {
+        Backoffice = new RequestUrlResolver(httpContextAccessor, logger, options, true);
+      }
     }
 
 
     /// <inheritdoc />
     public string ToAbsolute(string path)
     {
+      if (!CanResolve())
+      {
+        return null;
+      }
+
       if (String.IsNullOrWhiteSpace(path))
       {
         return GetRoot();
@@ -49,10 +67,8 @@ namespace zero.Core.Routing
     }
 
 
-    /// <summary>
-    /// Get protocol + domain and optional port
-    /// </summary>
-    protected string GetRoot(bool includePath = false)
+    /// <inheritdoc />
+    public string GetRoot(bool includePath = false)
     {
       if (!CanResolve())
       {
@@ -62,7 +78,9 @@ namespace zero.Core.Routing
 
       HttpRequest request = HttpContextAccessor.HttpContext.Request;
 
-      return $"{request.Scheme}://{request.Host.Host}{GetPortUrlPart(request)}{(includePath ? request.PathBase.ToUriComponent() : String.Empty)}";
+      string suffix = IsBackoffice ? Options.BackofficePath : String.Empty;
+
+      return $"{request.Scheme}://{request.Host.Host}{GetPortUrlPart(request)}{suffix}{(includePath ? request.PathBase.ToUriComponent() : String.Empty)}";
     }
 
 
@@ -90,8 +108,18 @@ namespace zero.Core.Routing
   public interface IRequestUrlResolver
   {
     /// <summary>
+    /// URL resolver for backoffice links
+    /// </summary>
+    IRequestUrlResolver Backoffice { get; }
+
+    /// <summary>
     /// Converts a relative to an absolute path for the currently used domain
     /// </summary>
     string ToAbsolute(string path);
+
+    /// <summary>
+    /// Get protocol + domain and optional port
+    /// </summary>
+    string GetRoot(bool includePath = false);
   }
 }

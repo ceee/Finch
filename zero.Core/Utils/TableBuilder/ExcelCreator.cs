@@ -21,9 +21,9 @@ namespace zero.Core.Utils
 
     private const string DATETIME_FORMAT = "dd. MM. yyyy, HH:ii";
 
-    private const string BOOL_YES = "Ja"; // TODO translate
+    private const string BOOL_YES = "yes";
 
-    private const string BOOL_NO = "Nein";
+    private const string BOOL_NO = "no";
 
     private const string LINK_NAME = "Link";
 
@@ -86,7 +86,6 @@ namespace zero.Core.Utils
 
 
       // add metadata + defaults
-      workbook.Author = "Laola";
       workbook.RowHeight = 20;
 
       // add header
@@ -124,7 +123,6 @@ namespace zero.Core.Utils
       lineNumber = 1;
 
       // add metadata + defaults
-      workbook.Author = "Laola";
       workbook.RowHeight = 20;
 
       // add header
@@ -174,7 +172,7 @@ namespace zero.Core.Utils
           cell.SetValue(LINK_NAME);
           cell.Hyperlink = new XLHyperlink(value.ToString());
         }
-        if (!isHeader && column.ColumnType == TableColumnType.Currency)
+        if (column.ColumnType == TableColumnType.Currency)
         {
           cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
         }

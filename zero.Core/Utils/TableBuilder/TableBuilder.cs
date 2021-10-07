@@ -69,9 +69,9 @@ namespace zero.Core.Utils
 
 
     /// <inheritdoc />
-    public TableColumn<T> Column(string name, Expression<Func<T, object>> fieldSelector = null, double width = 12, TableColumnType type = TableColumnType.Default)
+    public TableColumn<T> Column(string name, Expression<Func<T, object>> fieldSelector = null, double width = 15, TableColumnType type = TableColumnType.Default)
     {
-      TableColumn<T> column = new TableColumn<T>()
+      TableColumn<T> column = new()
       {
         Name = name,
         FieldSelector = fieldSelector?.Compile(),
@@ -86,9 +86,16 @@ namespace zero.Core.Utils
 
 
     /// <inheritdoc />
+    public void Scope(Action<T> action)
+    {
+      action(default);
+    }
+
+
+    /// <inheritdoc />
     public TableColumn<T> Separator()
     {
-      TableColumn<T> column = new TableColumn<T>()
+      TableColumn<T> column = new()
       {
         IsSeparator = true,
         Width = 4
@@ -120,6 +127,11 @@ namespace zero.Core.Utils
     /// Add a new column to the table
     /// </summary>
     TableColumn<T> Column(string name, Expression<Func<T, object>> fieldSelector = null, double width = 12, TableColumnType type = TableColumnType.Default);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    void Scope(Action<T> action);
 
     /// <summary>
     /// Adds an empty column which acts as a separator

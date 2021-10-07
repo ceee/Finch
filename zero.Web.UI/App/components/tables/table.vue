@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-table-outer">
-    <div class="ui-table" :class="{'is-inline': inline }">
+    <div v-if="!itemComponentConfig.active" class="ui-table" :class="{'is-inline': inline }">
       <slot name="top"></slot>
 
       <header class="ui-table-row ui-table-head">      
@@ -37,6 +37,26 @@
 
       <div class="ui-table-loading" v-if="isLoading">
         <ui-loading />
+      </div>
+    </div>
+    <div v-if="itemComponentConfig.active">
+      <div class="ui-datagrid-outer">
+        <div class="ui-datagrid">
+          <div class="ui-datagrid-items" :style="'grid-template-columns: repeat(auto-fill, minmax(' + itemComponentConfig.width + 'px, 1fr))'"  :class="{'is-block': itemComponentConfig.block }">
+            <component :is="component" class="ui-datagrid-item" v-for="(item, index) in items" :key="index" :to="getLink(item)" type="button" @click="onRowClick(item)">
+              <component :is="itemComponentConfig.component" :value="item" class="ui-datagrid-cell" :class="{ 'is-selected': selected.indexOf(item) > -1 }"></component>
+            </component>
+          </div>
+
+          <div class="ui-datagrid-empty" v-if="!isLoading && items.length < 1">
+            <i class="ui-datagrid-empty-icon fth-list"></i>
+            There are no items to show in this list
+          </div>
+
+          <div class="ui-datagrid-loading" v-if="isLoading">
+            <ui-loading />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -90,7 +110,9 @@
       count: 0,
 
       debouncedUpdate: null,
-      selected: []
+      selected: [],
+
+      itemComponentConfig: { active: false } 
     }),
 
     mounted()
@@ -115,6 +137,7 @@
       {
         this.debouncedUpdate = _debounce(this.update, 300);
         this.listConfig = typeof this.config === 'string' ? this.zero.getList(this.config) : this.config;
+        this.itemComponentConfig = this.listConfig.componentConfig || { active: false };
         //this.listConfig.selectable = true;
         this.columns = this.listConfig.columns.map(column =>
         {

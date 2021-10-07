@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 
 namespace zero.Core.Utils
 {
@@ -28,10 +29,10 @@ namespace zero.Core.Utils
       return this;
     }
 
-    public TableColumn<T> For(Func<T, object> fieldSelector, Func<T, bool> canRender = null)
+    public TableColumn<T> For(Expression<Func<T, object>> fieldSelector, Expression<Func<T, bool>> canRender = null)
     {
-      FieldSelector = fieldSelector;
-      CanRender = canRender ?? CanRender;
+      FieldSelector = fieldSelector.Compile();
+      CanRender = canRender != null ? canRender.Compile() : CanRender;
       return this;
     }
 

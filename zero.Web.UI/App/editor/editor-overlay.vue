@@ -8,7 +8,7 @@
 
       <template v-slot:footer>
         <ui-button type="light onbg" label="@ui.close" @click="config.hide"></ui-button>
-        <ui-button v-if="!disabled" type="primary" :submit="true" label="Confirm" :state="form.state" :disabled="loading"></ui-button>
+        <ui-button v-if="!disabled" type="primary" :submit="true" :label="config.confirmButton || '@ui.confirm'" :state="form.state" :disabled="loading"></ui-button>
       </template>
 
       <ui-loading v-if="loading" :is-big="true" />
@@ -62,7 +62,20 @@
 
       onSubmit(form)
       {
-        this.config.confirm(this.model);
+        if (typeof this.config.confirmGuard === 'function')
+        {
+          form.setState('loading');
+          this.config.confirmGuard(this.model).then(res =>
+          {
+            form.setState('success');
+            form.setDirty(false);
+            this.config.confirm(this.model, res);
+          });
+        }
+        else
+        {
+          this.config.confirm(this.model);
+        }
       }
     }
   }

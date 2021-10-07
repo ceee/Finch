@@ -44,6 +44,13 @@ class List
 
   columns = [];
 
+  componentConfig = {
+    active: false,
+    component: null,
+    width: 320,
+    block: false
+  };
+
   actions = [];
 
 
@@ -192,6 +199,26 @@ class List
     {
       this.columns.splice(this.columns.indexOf(column), 1);
     }
+  }
+
+
+  /**
+   * Use a component instead of columns
+   * @param {object} component - The custom vue component
+   * @param {object} [options] - Custom options
+   * @param {string} [options.width=320] - Desired width of an item (in a grid)
+   * @param {boolean} [options.block=false] - Full width per item, therefore block/list display
+   */
+  component(component, options?)
+  {
+    options = options || {};
+
+    this.componentConfig = {
+      active: component != null,
+      component: component,
+      width: options.width || 320,
+      block: options.block || false
+    };
   }
 
 
