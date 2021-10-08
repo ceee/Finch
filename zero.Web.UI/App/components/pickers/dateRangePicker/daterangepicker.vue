@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-daterangepicker" :class="{'is-disabled': disabled }">
     <button v-if="!inline" type="button" class="ui-link" @click="schedule" v-localize="scheduleLocalize" :disabled="disabled"></button>
-    <div v-if="inline" class="ui-daterangepicker-inline">
+    <div v-if="inline && value" class="ui-daterangepicker-inline">
       <div class="ui-daterangepicker-group">
         <ui-property :vertical="true">
           <ui-datepicker v-model="value.from" :time="time" />
