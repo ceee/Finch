@@ -1,5 +1,4 @@
 ﻿using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +19,14 @@ namespace zero.Core.Routing
 
     const bool TRAILING_SLASH = false;
 
-    protected IZeroStore Store { get; private set; }
+    protected IZeroDocumentSession Session { get; private set; }
 
     protected IZeroOptions Options { get; private set; }
 
 
-    public PageUrlBuilder(IZeroStore store, IZeroOptions options)
+    public PageUrlBuilder(IZeroDocumentSession session, IZeroOptions options)
     {
-      Store = store;
+      Session = session;
       Options = options;
     }
 
@@ -35,14 +34,12 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public async Task<string> GetUrl(Page page)
     {
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-
-      Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
+      Pages_ByHierarchy.Result result = await Session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
           .ProjectInto<Pages_ByHierarchy.Result>()
           .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
           .FirstOrDefaultAsync(x => x.Id == page.Id);
 
-      IList<Page> parents = (await session.LoadAsync<Page>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
+      IList<Page> parents = (await Session.LoadAsync<Page>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
 
       StringBuilder stringBuilder = new StringBuilder();
 

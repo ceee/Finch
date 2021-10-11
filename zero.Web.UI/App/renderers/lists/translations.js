@@ -10,7 +10,7 @@ list.link = zero.alias.settings.translations + '-edit';
 
 list.onFetch(filter => TranslationsApi.getByQuery(filter));
 
-list.column('key').name();
+list.column('key', { width: 420 }).name();
 list.column('value').text();
 
 export default list;

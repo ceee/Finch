@@ -2,7 +2,7 @@
   <div class="countries">
     <ui-header-bar title="@country.list" :count="count" :back-button="true">
       <ui-table-filter :attach="$refs.table" />
-      <my-add-button :route="createRoute" />
+      <ui-add-button :route="createRoute" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table ref="table" config="countries" @count="count = $event" />

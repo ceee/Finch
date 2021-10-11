@@ -581,4 +581,24 @@ namespace zero.Core.Collections
     /// </summary>
     Task<EntityResult<T>> Purge(string querySuffix = null, Parameters parameters = null);
   }
+
+
+  public interface ICollectionSession : IDisposable
+  {
+    /// <summary>
+    /// Guid for this instance
+    /// </summary>
+    Guid Guid { get; }
+
+    /// <summary>
+    /// The database to operate on.
+    /// Is null by default, which uses the database from the resolved application.
+    /// </summary>
+    string Database { get; set; }
+
+    /// <summary>
+    /// Applies the scope to the service instance
+    /// </summary>
+    void ApplyScope(string scope);
+  }
 }

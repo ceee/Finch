@@ -2,6 +2,11 @@
 {
   public class Translation : ZeroEntity
   {
+    public Translation()
+    {
+      IsActive = true;
+    }
+
     /// <summary>
     /// Value of the translation
     /// </summary>

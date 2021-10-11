@@ -19,16 +19,16 @@ namespace zero.Core.Routing
   {
     public const char PATH_SEPERATOR = '/';
 
-    protected IZeroStore Store { get; set; }
+    protected IZeroDocumentSession Session { get; set; }
     protected ILogger<Routes> Logger { get; set; }
     protected IEnumerable<IRouteProvider> Providers { get; set; }
     protected IApplicationResolver AppResolver { get; set; }
     protected IZeroOptions Options { get; set; }
 
 
-    public RouteResolver(IZeroStore store, ILogger<Routes> logger, IEnumerable<IRouteProvider> providers, IApplicationResolver appResolver, IZeroOptions options)
+    public RouteResolver(IZeroDocumentSession session, ILogger<Routes> logger, IEnumerable<IRouteProvider> providers, IApplicationResolver appResolver, IZeroOptions options)
     {
-      Store = store;
+      Session = session;
       Logger = logger;
       Providers = providers;
       AppResolver = appResolver;
@@ -40,8 +40,6 @@ namespace zero.Core.Routing
     public async Task<IResolvedRoute> ResolveUrl(HttpContext context, Application application, string path)
     {
       path = path.Length > 1 ? path.TrimEnd(PATH_SEPERATOR) : path;
-
-      using IAsyncDocumentSession session = Store.OpenAsyncSession(application.Database);
 
       string[] pathParts = path.Trim(PATH_SEPERATOR).Split(PATH_SEPERATOR);
       string[] parts = new string[pathParts.Length];
@@ -60,7 +58,7 @@ namespace zero.Core.Routing
 
       try
       {
-        routes = await session.Query<Route, Routes_ForResolver>()
+        routes = await Session.Query<Route, Routes_ForResolver>()
           .Where(x => (!x.AllowSuffix && x.Url == path) || (x.AllowSuffix && x.Url.In(parts)))
           .Include("References[].Id")
           .Include("Dependencies")
@@ -95,7 +93,7 @@ namespace zero.Core.Routing
         return null;
       }
 
-      return await ResolveRouteInternal(session, new RouteResponse()
+      return await ResolveRouteInternal(Session, new RouteResponse()
       {
         Route = route,
         App = application,

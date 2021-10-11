@@ -101,12 +101,10 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this value is unique within a collection
     /// </summary>
-    public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IBackofficeStore store) where T : ZeroEntity
+    public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IAsyncDocumentSession session) where T : ZeroEntity
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
-        using IAsyncDocumentSession session = store.Store.OpenAsyncSession();
-
         bool any = await session.Advanced.AsyncDocumentQuery<T>()
           .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
           .WhereEquals(context.PropertyName.ToPascalCaseId(), value)
@@ -120,12 +118,10 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this value is at least set once to the expected value within a collection
     /// </summary>
-    public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IBackofficeStore store, TProperty expectedValue) where T : ZeroEntity
+    public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IAsyncDocumentSession session, TProperty expectedValue) where T : ZeroEntity
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
-        using IAsyncDocumentSession session = store.Store.OpenAsyncSession();
-
         return await session.Advanced.AsyncDocumentQuery<T>()
           .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
           .WhereEquals(context.PropertyName.ToPascalCaseId(), expectedValue)
@@ -137,16 +133,16 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
     /// </summary>
-    public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IBackofficeStore store) where T : ZeroEntity
+    public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IAsyncDocumentSession session) where T : ZeroEntity
     {
-      return ruleBuilder.Exists<T, T>(store);
+      return ruleBuilder.Exists<T, T>(session);
     }
 
 
     /// <summary>
     /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
     /// </summary>
-    public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IBackofficeStore store) where T : ZeroEntity where TReference : ZeroEntity
+    public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IAsyncDocumentSession session) where T : ZeroEntity where TReference : ZeroEntity
     {
       return ruleBuilder.MustAsync(async (entity, id, context, cancellation) =>
       {
@@ -155,7 +151,6 @@ namespace zero.Core.Extensions
           return true;
         }
 
-        using IAsyncDocumentSession session = store.Store.OpenAsyncSession();
         TReference model = await session.LoadAsync<TReference>(id);
         return model != null;
       }).WithMessage("@errors.forms.reference_notfound");

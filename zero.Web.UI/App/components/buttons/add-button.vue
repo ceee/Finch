@@ -17,7 +17,7 @@
       },
       type: {
         type: String,
-        default: 'primary'
+        default: 'accent'
       },
       route: {
         type: [String, Object],

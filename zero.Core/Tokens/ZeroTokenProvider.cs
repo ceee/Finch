@@ -2,7 +2,6 @@
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,11 +17,14 @@ namespace zero.Core.Tokens
     readonly RandomNumberGenerator randonNumberGenerator;
 
     protected IZeroStore Store { get; private set; }
+
+    protected IZeroDocumentSession Session { get; private set; }
     
 
-    public ZeroTokenProvider(IZeroStore store)
+    public ZeroTokenProvider(IZeroStore store, IZeroDocumentSession session)
     {
       Store = store;
+      Session = session;
       randonNumberGenerator = RandomNumberGenerator.Create();
     }
 
@@ -50,13 +52,12 @@ namespace zero.Core.Tokens
       };
 
       // saves the token
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-      await session.StoreAsync(securityToken);
+      await Session.StoreAsync(securityToken);
 
       // set the expires flag for the token
-      IMetadataDictionary tokenMetadata = session.Advanced.GetMetadataFor(securityToken);
+      IMetadataDictionary tokenMetadata = Session.Advanced.GetMetadataFor(securityToken);
       tokenMetadata[Constants.Database.Expires] = DateTime.UtcNow.AddSeconds(expires.TotalSeconds);
-      await session.SaveChangesAsync();
+      await Session.SaveChangesAsync();
 
       return tokenKey;
     }
@@ -71,15 +72,14 @@ namespace zero.Core.Tokens
       }
 
       // try to find a valid token
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-      SecurityToken securityToken = await session.LoadAsync<SecurityToken>(TokenToId(token));
+      SecurityToken securityToken = await Session.LoadAsync<SecurityToken>(TokenToId(token));
       bool isValid = securityToken != null && VerifyKey(securityToken.Key, key);
 
       // remove token from DB if it is valid
       if (isValid)
       {
-        session.Delete(securityToken);
-        await session.SaveChangesAsync();
+        Session.Delete(securityToken);
+        await Session.SaveChangesAsync();
       }
 
       return isValid;
@@ -95,15 +95,14 @@ namespace zero.Core.Tokens
       }
 
       // try to find a valid token
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-      SecurityToken securityToken = await session.LoadAsync<SecurityToken>(TokenToId(token));
+      SecurityToken securityToken = await Session.LoadAsync<SecurityToken>(TokenToId(token));
       bool isValid = securityToken != null && VerifyKey(securityToken.Key, key);
 
       // remove token from DB if it is valid
       if (isValid)
       {
-        session.Delete(securityToken);
-        await session.SaveChangesAsync();
+        Session.Delete(securityToken);
+        await Session.SaveChangesAsync();
         return securityToken;
       }
 
