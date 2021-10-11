@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 
 namespace zero.Core.Cultures
 {
@@ -23,8 +23,6 @@ namespace zero.Core.Cultures
     /// <inheritdoc />
     public async Task<CultureInfo> Resolve(IZeroContext context)
     {
-      using IAsyncDocumentSession session = context.Store.OpenAsyncSession();
-
       // TODO this is just fake, we need to correctly resolve culture here
 
       if (context.IsBackofficeRequest)
@@ -33,7 +31,7 @@ namespace zero.Core.Cultures
       }
       else
       {
-        Language language = await session.Query<Language>().FirstOrDefaultAsync();
+        Language language = await context.GetCurrentScopeAsyncSession().Query<Language>().FirstOrDefaultAsync();
 
         if (language == null)
         {
@@ -44,6 +42,12 @@ namespace zero.Core.Cultures
         try
         {
           CultureInfo culture = CultureInfo.CreateSpecificCulture(language.Code);
+
+          if (culture.ThreeLetterISOLanguageName.IsNullOrEmpty())
+          {
+            throw new Exception("ThreeLetterISOLanguageName is empty");
+          }
+
           CultureInfo.CurrentCulture = culture;
           CultureInfo.CurrentUICulture = culture;
           ValidatorOptions.Global.LanguageManager.Culture = culture;
