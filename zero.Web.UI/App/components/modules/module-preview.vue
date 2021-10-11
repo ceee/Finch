@@ -2,9 +2,9 @@
   <div class="ui-module-item" v-if="!loading" :data-module="alias" :class="{'can-edit': canEdit }">
     <div class="ui-module-item-content" v-if="module" @click="emit('edit')">
       <span v-if="!preview || !preview.hideLabel" class="ui-module-item-header" v-localize="module.name"></span>
-      <module-preview-inner v-if="tryRender && typeof preview.template === 'string'" :template="preview.template" :value="value" />
+      <module-preview-inner v-if="tryRender && typeof preview.template === 'string'" :template="preview.template" :value="value" :options="preview" />
       <div v-if="tryRender && typeof preview.template !== 'string'" class="ui-module-preview-inner">
-        <component :is="preview.template" :model="value" />
+        <component :is="preview.template" :model="value" :options="preview" />
       </div>
     </div>
     <div class="ui-module-item-content" v-else>
@@ -182,7 +182,7 @@
 
   .ui-module-item-header
   {
-    display: none; //TODO flex;
+    display: flex; //TODO flex;
     align-items: center;
     color: var(--color-text-dim-one);
     font-size: var(--font-size-xs);

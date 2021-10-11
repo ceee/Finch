@@ -55,6 +55,11 @@
       display: -webkit-box;
     }
 
+    /*.-text > br:first-child
+    {
+      display: none;
+    }*/
+
     p.-subline
     {
       color: var(--color-text-dim);

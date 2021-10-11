@@ -45,7 +45,7 @@
     computed: {
       textContent()
       {
-        return this.html ? this.text : Strings.htmlToText(this.text);
+        return this.html ? this.text : Strings.htmlToText(this.text, true);
       },
       sublineContent()
       {
@@ -112,7 +112,7 @@
     {
       overflow: hidden;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 3;
       display: -webkit-box;
     }
 

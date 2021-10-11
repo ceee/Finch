@@ -28,7 +28,8 @@ namespace zero.Web.Controllers
       return entity == null ? null : Edit<Page, PageEditModel<Page>>(new PageEditModel<Page>()
       {
         Entity = entity,
-        PageType = Collection.GetPageType(entity.PageTypeAlias)
+        PageType = Collection.GetPageType(entity.PageTypeAlias),
+        Urls = new List<string>() { await Routes.GetUrl(entity) }
       });
     }
 
@@ -61,10 +62,17 @@ namespace zero.Web.Controllers
     public PageType GetPageType([FromQuery] string alias) => Collection.GetPageType(alias);
 
 
+    public async Task<List<string>> GetUrls([FromQuery] string pageId)
+    {
+      string url = await Routes.GetUrl<Page>(pageId);
+      return url.HasValue() ? new List<string>() { url } : new List<string>();
+    }
+
+
     public async Task<IList<PageType>> GetAllowedPageTypes([FromQuery] string parent = null) => await Collection.GetAllowedPageTypes(parent);
 
 
-    public async Task<EditModel<Page>> GetEmpty([FromQuery] string type, [FromQuery] string parent = null) => Edit(await Collection.GetEmpty(type, parent));
+    public async Task<EditModel<Page>> GetEmptyByType([FromQuery] string type, [FromQuery] string parent = null) => Edit(await Collection.GetEmpty(type, parent));
 
 
     [HttpPost]

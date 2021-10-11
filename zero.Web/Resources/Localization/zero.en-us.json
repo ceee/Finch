@@ -480,6 +480,11 @@
 
     "picker": {
       "headline": "Select a page"
+    },
+
+    "infotab": {
+      "links": "Link",
+      "revisions": "Revisions"
     }
   },
 

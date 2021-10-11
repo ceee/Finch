@@ -8,7 +8,8 @@ namespace zero.Core.Validation
   {
     public PageValidator()
     {
-      
+      RuleFor(x => x.Name).NotEmpty();
+      RuleFor(x => x.PageTypeAlias).NotEmpty();
     }
   }
 }

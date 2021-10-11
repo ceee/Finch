@@ -128,7 +128,7 @@
     color: var(--color-text);
     position: relative;
     transition: color 0.2s ease;
-    border-radius: var(--radius) var(--radius) 0 0;
+    border-radius: var(--radius-inner) var(--radius-inner) 0 0;
     background: var(--color-box-light);
 
     & + .ui-tabs-list-item

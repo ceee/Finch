@@ -7,6 +7,9 @@
         type: Object,
         default: () => { }
       },
+      options: {
+        type: Object
+      },
       template: {
         type: String,
         default: null
@@ -27,12 +30,16 @@
             model: {
               type: Object,
               default: () => { }
-            }
+            },
+            options: {
+              type: Object
+            },
           }
         },
         {
           props: {
-            model: this.value
+            model: this.value,
+            options: this.options
           }
         });
     },

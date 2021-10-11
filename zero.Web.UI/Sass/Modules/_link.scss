@@ -11,6 +11,19 @@
     color: var(--color-primary);
     text-decoration: underline dotted var(--color-primary) !important;
   }
+
+  .ui-icon
+  {
+    position: relative;
+    top: 3px;
+    margin-right: 6px;
+  }
+
+  &:hover
+  {
+    color: var(--color-accent);
+    text-decoration: underline dotted var(--color-accent) !important;
+  }
 }
 
 .ui-silent-link

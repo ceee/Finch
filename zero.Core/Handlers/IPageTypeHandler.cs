@@ -7,6 +7,6 @@ namespace zero.Core.Handlers
 {
   public interface IPageTypeHandler : IHandler
   {
-    IEnumerable<PageType> GetAllowedPageTypes(Application application, IEnumerable<PageType> registeredTypes, IEnumerable<Page> parents);
+    Task<IEnumerable<PageType>> GetAllowedPageTypes(Application application, IEnumerable<PageType> registeredTypes, IEnumerable<Page> parents);
   }
 }

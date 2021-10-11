@@ -1,32 +1,26 @@
 ﻿<template>
-  <div class="ui-view-box page-editor-info has-sidebar">
-    <div>
-      <div class="ui-box">
-        <h3 class="ui-headline" v-localize="'Links'"></h3>
-        <div>
-        <a v-if="value.route" class="ui-button type-light" :href="value.route.url" target="_blank">
-          <span class="ui-button-text">Open page</span>
-        </a>
-        <br /><br /><br /><br /></div>
-        <h3 class="ui-headline" v-localize="'@revisions.label'"></h3>
-        <ui-revisions v-if="!isCreate" :get="getRevisions" />
-      </div>
+  <div class="page-editor-info"> 
+    <div class="ui-box" v-if="!isCreate">
+      <ui-property label="@page.infotab.links" :is-text="true" :vertical="false">
+        <a v-for="url in urls" class="ui-link" :href="url" target="_blank"><ui-icon symbol="fth-external-link"></ui-icon> {{url}}</a>
+      </ui-property>
+      <!--<ui-property label="@page.infotab.revisions" :is-text="true" :vertical="false">-->
+        <!--<ui-revisions :get="getRevisions" />-->
+      <!--</ui-property>-->
     </div>
-    <div class="ui-view-box-aside">
-      <div class="ui-box editor-active-toggle" :class="{'is-active': value.isActive }">
-        <ui-property label="@page.schedule.label" :is-text="true" :vertical="true">
-          <ui-daterangepicker :value="{ from: value.publishDate, to: value.unpublishDate }" @input="onRangeChange" :class="{ 'is-primary': value.publishDate || value.unpublishDate }" :disabled="disabled" />
-        </ui-property>
-        <ui-property v-if="!isCreate" label="@ui.id" :is-text="true" :vertical="true">
-          {{value.id}}
-        </ui-property>
-        <ui-property v-if="!isCreate" label="@ui.createdDate" :is-text="true" :vertical="true">
-          <ui-date v-model="value.createdDate" />
-        </ui-property>
-        <ui-property label="@page.type" :is-text="true" v-if="pageType" :vertical="true">
-          <i :class="pageType.icon"></i> &nbsp;{{pageType.name}}
-        </ui-property>
-      </div>
+    <div class="ui-box">
+      <ui-property label="@page.schedule.label" :is-text="true" :vertical="false">
+        <ui-daterangepicker :value="{ from: value.publishDate, to: value.unpublishDate }" @input="onRangeChange" :class="{ 'is-primary': value.publishDate || value.unpublishDate }" :disabled="disabled" />
+      </ui-property>
+      <ui-property v-if="!isCreate" label="@ui.id" :is-text="true" :vertical="false">
+        {{value.id}}
+      </ui-property>
+      <ui-property v-if="!isCreate" label="@ui.createdDate" :is-text="true" :vertical="false">
+        <ui-date v-model="value.createdDate" />
+      </ui-property>
+      <ui-property label="@page.type" :is-text="true" v-if="pageType" :vertical="false">
+        <ui-icon :symbol="pageType.icon" style="margin-right:6px;"></ui-icon>{{pageType.name}}
+      </ui-property>
     </div>
   </div>
 </template>
@@ -47,7 +41,8 @@
     },
 
     data: () => ({
-      pageType: null
+      pageType: null,
+      urls: []
     }),
 
     computed: {
@@ -63,6 +58,13 @@
       {
         this.pageType = pageType;
       });
+      if (this.value.id)
+      {
+        PagesApi.getUrls(this.value.id).then(urls =>
+        {
+          this.urls = urls;
+        });
+      }
     },
 
 
@@ -92,5 +94,21 @@
   .page-editor-info .ui-view-box-aside
   {
     padding: 0;
+  }
+
+  .page-editor-info .ui-box
+  {
+    margin: 0;
+  }
+
+  .page-editor-info .ui-box + .ui-box
+  {
+    margin-top: var(--padding-s);
+  }
+  
+  .page-editor-info .ui-box:last-child
+  {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 </style>

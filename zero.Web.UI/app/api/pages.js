@@ -9,7 +9,9 @@ export default {
 
   getPageType: async alias => await get(base + 'getPageType', { params: { alias } }),
 
-  getEmpty: async (type, parent) => await get(base + 'getEmpty', { params: { type, parent } }),
+  getUrls: async id => await get(base + 'getUrls', { params: { pageId: id } }),
+
+  getEmpty: async (type, parent) => await get(base + 'getEmptyByType', { params: { type, parent } }),
 
   getRevisions: async (id, page) => await get(base + 'getRevisions', { params: { id, page } }),
 

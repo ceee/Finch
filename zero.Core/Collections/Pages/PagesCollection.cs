@@ -100,7 +100,7 @@ namespace zero.Core.Collections
         return types.ToList();
       }
 
-      return handler.GetAllowedPageTypes(Context.Application, types, parents)?.ToList() ?? new();
+      return (await handler.GetAllowedPageTypes(Context.Application, types, parents))?.ToList() ?? new();
     }
 
 

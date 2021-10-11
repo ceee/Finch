@@ -6,6 +6,7 @@
           <span class="-minor -prefix" v-localize:html="prefix"></span>
           <ui-icon class="-chevron" symbol="fth-chevron-right" :size="14" />
         </template>
+        <ui-error field="name" />
         <input v-if="!titleDisabled" class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" :readonly="titleDisabled || disabled" />
         <!--<ui-alias class="ui-form-header-title-alias" v-if="hasAlias" v-model="value.alias" :name="value.name" :disabled="disabled" />-->
         <span v-if="titleDisabled" v-localize="forceTitle ? title : (value.name || title)"></span>
@@ -157,6 +158,16 @@
   .ui-header-bar-title
   {
     position: relative;
+
+    .ui-error
+    {
+      display: none;
+    }
+
+    .ui-error + input[type="text"].ui-form-header-title-input:not(:focus)
+    {
+      border-color: var(--color-accent-error);
+    }
   }
 
   input[type="text"].ui-form-header-title-input

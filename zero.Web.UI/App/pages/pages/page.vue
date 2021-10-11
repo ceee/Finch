@@ -2,8 +2,8 @@
   <ui-form ref="form" class="page page-editor" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
     <ui-form-header v-model="model" title="@page.name" :disabled="disabled" :is-create="!id" :state="form.state" :active-toggle="!isFolder" :can-delete="meta.canDelete" @delete="onDelete">
       <template v-slot:actions>
-        <ui-dropdown-button v-if="!isFolder" label="@page.preview.title" icon="fth-eye" :disabled="disabled" @click="openPreview" />
-        <ui-dropdown-separator v-if="!isFolder" />
+        <!--<ui-dropdown-button v-if="!isFolder" label="@page.preview.title" icon="fth-eye" :disabled="disabled" @click="openPreview" />
+        <ui-dropdown-separator v-if="!isFolder" />-->
         <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(model)" />
         <ui-dropdown-button label="@ui.copy.title" icon="fth-copy" @click="copy(model)" />
         <ui-dropdown-separator />
@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <ui-editor v-if="!loading && editor" :config="editor" v-model="model" :meta="meta" :is-page="true" infos="none" :on-configure="onEditorConfigure" :disabled="disabled">
+    <ui-editor v-if="!loading && editor" :config="editor" v-model="model" :meta="meta" :is-page="true" infos="aside" :on-configure="onEditorConfigure" :disabled="disabled">
       <template v-slot:below>
         <ui-editor-infos v-model="model" :disabled="disabled" />
       </template>
@@ -175,15 +175,15 @@
           return;
         }
 
-        //editor.tabs.push({
-        //  alias: 'zero.info',
-        //  name: '@page.info_tab',
-        //  class: 'is-info is-blank',
-        //  count: value => null,
-        //  disabled: value => false,
-        //  component: InfoTab,
-        //  fields: []
-        //});
+        editor.tabs.push({
+          alias: 'zero.info',
+          name: '@page.info_tab',
+          class: 'is-info is-blank',
+          count: value => null,
+          disabled: value => false,
+          component: InfoTab,
+          fields: []
+        });
       },
 
 

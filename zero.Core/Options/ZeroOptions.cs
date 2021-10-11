@@ -39,6 +39,7 @@ namespace zero.Core.Options
       Raven.Indexes.Add<Pages_AsHistory>();
       Raven.Indexes.Add<Pages_ByHierarchy>();
       Raven.Indexes.Add<Pages_WithChildren>();
+      Raven.Indexes.Add<Pages_ByType>();
       Raven.Indexes.Add<Routes_ForResolver>();
 
       Search = new();
