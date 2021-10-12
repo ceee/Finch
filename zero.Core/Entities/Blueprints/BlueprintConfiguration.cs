@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using zero.Core.Attributes;
 
 namespace zero.Core.Entities
 {
@@ -14,9 +13,9 @@ namespace zero.Core.Entities
     public string Id { get; set; }
 
     /// <summary>
-    /// Name of the database
+    /// A shallow copy of a blueprint can not be changed and is always fully synchronised with the parent entity
     /// </summary>
-    public string Database { get; set; }
+    public bool IsShallow { get; set; }
 
     /// <summary>
     /// Properties which are not synced and have their own values
