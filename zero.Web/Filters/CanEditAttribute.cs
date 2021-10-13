@@ -13,12 +13,12 @@ namespace zero.Web.Filters
 
     private class CanEditAttributeImpl : IAsyncResultFilter
     {
-      IToken token;
+      //IToken token;
 
 
-      public CanEditAttributeImpl(IToken token)
+      public CanEditAttributeImpl()//IToken token)
       {
-        this.token = token;
+        //this.token = token;
       }
 
       public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)

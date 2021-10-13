@@ -1,25 +1,38 @@
 ﻿using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System;
+using zero.Core.Extensions;
 
 namespace zero.Core.Database
 {
-  public class ZeroDocumentSession : AsyncDocumentSession, IZeroDocumentSession, IZeroCoreDocumentSession
+  public class ZeroDocumentSession : AsyncDocumentSession, IZeroDocumentSession
   {
-    public ZeroDocumentSession(DocumentStore documentStore, Guid id, SessionOptions options) : base(documentStore, id, options)
-    {
+    public IZeroDocumentSession Core { get; private set; }
 
+    public ZeroDocumentSession(DocumentStore documentStore, Guid id, SessionOptions options, string coreDatabase = null) : base(documentStore, id, options)
+    {
+      if (coreDatabase.HasValue())
+      {
+        Core = new ZeroDocumentSession(documentStore, id, new SessionOptions()
+        {
+          Database = coreDatabase,
+          DisableAtomicDocumentWritesInClusterWideTransaction = options.DisableAtomicDocumentWritesInClusterWideTransaction,
+          NoCaching = options.NoCaching,
+          NoTracking = options.NoTracking,
+          RequestExecutor = options.RequestExecutor,
+          TransactionMode = options.TransactionMode
+        });
+      }
+      else
+      {
+        Core = this;
+      }
     }
   }
 
 
   public interface IZeroDocumentSession : IAsyncDocumentSession
   {
-
-  }
-
-  public interface IZeroCoreDocumentSession : IZeroDocumentSession
-  {
-
+    IZeroDocumentSession Core { get; }
   }
 }

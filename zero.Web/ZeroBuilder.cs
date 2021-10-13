@@ -178,15 +178,7 @@ namespace zero.Web
 
       Services.AddScoped<IZeroDocumentSession>(services =>
       {
-        var session = services.GetRequiredService<IZeroContext>()!.GetCurrentScopeAsyncSession();
-        session.Advanced.WaitForIndexesAfterSaveChanges();
-        return session as ZeroDocumentSession;
-      });
-
-      Services.AddScoped<IZeroCoreDocumentSession>(services =>
-      {
-        IZeroOptions options = services.GetService<IZeroOptions>();
-        var session = services.GetRequiredService<IZeroContext>()!.GetCurrentScopeAsyncSession(options.Raven.Database);
+        var session = services.GetRequiredService<IZeroStore>().OpenAsyncSession();
         session.Advanced.WaitForIndexesAfterSaveChanges();
         return session as ZeroDocumentSession;
       });

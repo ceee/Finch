@@ -19,14 +19,14 @@ namespace zero.Core.Api
 
     protected SignInManager<BackofficeUser> SignInManager { get; private set; }
 
-    protected IZeroStore Store { get; set; }
+    protected IZeroDocumentSession Session { get; set; }
 
 
-    public AuthenticationApi(IZeroContext context, SignInManager<BackofficeUser> signInManager, IZeroStore store)
+    public AuthenticationApi(IZeroContext context, SignInManager<BackofficeUser> signInManager, IZeroDocumentSession session)
     {
       Context = context;
       SignInManager = signInManager;
-      Store = store;
+      Session = session.Core;
     }
 
 
@@ -161,9 +161,8 @@ namespace zero.Core.Api
         //RandomNumberGenerator.Fill(bytes);
         //user.SecurityStamp = Base32.ToBase32(bytes); // TODO update security stamp but Base32 is .net core internal
 
-        using IAsyncDocumentSession session = Store.OpenCoreSession();
-        await session.StoreAsync(user);
-        await session.SaveChangesAsync();
+        await Session.StoreAsync(user);
+        await Session.SaveChangesAsync();
 
         return true;
       }

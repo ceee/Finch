@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
+using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 
@@ -31,7 +33,8 @@ namespace zero.Core.Cultures
       }
       else
       {
-        Language language = await context.GetCurrentScopeAsyncSession().Query<Language>().FirstOrDefaultAsync();
+        using IAsyncDocumentSession session = context.Store.OpenAsyncSession();
+        Language language = await session.Query<Language>().FirstOrDefaultAsync();
 
         if (language == null)
         {

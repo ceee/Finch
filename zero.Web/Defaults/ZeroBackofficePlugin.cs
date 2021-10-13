@@ -100,7 +100,6 @@ namespace zero.Web.Defaults
       services.AddTransient<ISettingsApi, SettingsApi>();
       services.AddTransient<IAuthenticationApi, AuthenticationApi>();
       services.AddTransient<IUserRolesApi, UserRolesApi>();
-      services.AddTransient<IToken, Token>();
       services.AddTransient<ISpacesApi, SpacesApi>();
       services.AddTransient<IPermissionsApi, PermissionsApi>();
       services.AddTransient<IMediaApi, MediaApi>();
@@ -128,6 +127,8 @@ namespace zero.Web.Defaults
 
       services.AddTransient<IIntegrationService, IntegrationService>();
       services.AddTransient<IIntegrationsCollection, IntegrationsCollection>();
+
+      services.AddScoped<ICollectionContext, CollectionContext>();
 
       services.AddScoped<ILocalizer, Localizer>();
       services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();

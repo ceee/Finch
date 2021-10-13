@@ -21,31 +21,10 @@ namespace zero.Core.Collections
 {
   public class MediaCollection : CollectionBase<Media>, IMediaCollection
   {
-    private IAsyncDocumentSession _coreSession;
-
-
-    public MediaCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<Media> validator, IPaths paths) : base(context, interceptor, validator)
+    public MediaCollection(ICollectionContext context, IValidator<Media> validator, IPaths paths) : base(context, validator)
     {
       PreSave = model => model.IsActive = true;
       Paths = paths;
-    }
-
-
-    /// <summary>
-    /// Create an an async document session
-    /// </summary>
-    protected IAsyncDocumentSession CoreSession
-    {
-      get
-      {
-        if (_coreSession != null)
-        {
-          return _coreSession;
-        }
-        _coreSession = Store.OpenCoreSession();
-        _coreSession.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
-        return _coreSession;
-      }
     }
 
 
@@ -88,7 +67,7 @@ namespace zero.Core.Collections
       }
       if (coreIds.Length > 0)
       {
-        models = await CoreSession.LoadAsync<Media>(coreIds);
+        models = await Session.Core.LoadAsync<Media>(coreIds);
         foreach (string id in coreIds)
         {
           models.TryGetValue(id, out Media model);

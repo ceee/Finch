@@ -9,7 +9,7 @@ namespace zero.Core.Collections
 {
   public class CountriesCollection : CollectionBase<Country>, ICountriesCollection
   {
-    public CountriesCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<Country> validator) : base(context, interceptor, validator) { }
+    public CountriesCollection(ICollectionContext context, IValidator<Country> validator) : base(context, validator) { }
 
 
     /// <inheritdoc />

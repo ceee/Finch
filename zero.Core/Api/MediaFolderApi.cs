@@ -5,6 +5,7 @@ using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using zero.Core.Collections;
 using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -17,7 +18,7 @@ namespace zero.Core.Api
     IValidator<MediaFolder> Validator;
 
 
-    public MediaFolderApi(IBackofficeStore store, IValidator<MediaFolder> validator) : base(store)
+    public MediaFolderApi(ICollectionContext store, IValidator<MediaFolder> validator) : base(store)
     {
       Validator = validator;
     }
@@ -33,13 +34,10 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<MediaFolder>> GetAll(string parentId = null)
     {
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
-      {
-        return await session.Query<MediaFolder>()
-          .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
-          .OrderByDescending(x => x.Name)
-          .ToListAsync();
-      }
+      return await Session.Query<MediaFolder>()
+        .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
+        .OrderByDescending(x => x.Name)
+        .ToListAsync();
     }
 
 
@@ -49,62 +47,59 @@ namespace zero.Core.Api
       List<TreeItem> items = new List<TreeItem>();
       string[] openIds = new string[0] { };
 
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
+      IList<MediaFolder> folders = await Session.Query<MediaFolder>()
+        .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
+        .OrderByDescending(x => x.CreatedDate).ThenBy(x => x.Name)
+        .ToListAsync();
+
+
+      // get hierarchy so we know if we should set the folder to open
+      if (!activeId.IsNullOrEmpty())
       {
-        IList<MediaFolder> folders = await session.Query<MediaFolder>()
-          .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
-          .OrderByDescending(x => x.CreatedDate).ThenBy(x => x.Name)
-          .ToListAsync();
+        MediaFolder_ByHierarchy.Result result = await Session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
+          .ProjectInto<MediaFolder_ByHierarchy.Result>()
+          .Include<MediaFolder_ByHierarchy.Result, MediaFolder>(x => x.Path.Select(p => p.Id))
+          .FirstOrDefaultAsync(x => x.Id == activeId);
 
-
-        // get hierarchy so we know if we should set the folder to open
-        if (!activeId.IsNullOrEmpty())
+        if (result != null)
         {
-          MediaFolder_ByHierarchy.Result result = await session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
-            .ProjectInto<MediaFolder_ByHierarchy.Result>()
-            .Include<MediaFolder_ByHierarchy.Result, MediaFolder>(x => x.Path.Select(p => p.Id))
-            .FirstOrDefaultAsync(x => x.Id == activeId);
-
-          if (result != null)
-          {
-            openIds = result.Path.Select(x => x.Id).ToArray();
-          }
+          openIds = result.Path.Select(x => x.Id).ToArray();
         }
-
-
-        // get children for all folders
-        string[] folderIds = folders.Select(x => x.Id).ToArray();
-
-        IList<MediaFolders_WithChildren.Result> children = await session.Query<MediaFolders_WithChildren.Result, MediaFolders_WithChildren>()
-          .ProjectInto<MediaFolders_WithChildren.Result>()
-          .Where(x => x.Id.In(folderIds))
-          .ToListAsync();
-
-
-        foreach (MediaFolder folder in folders)
-        {
-          int childCount = children.Count(x => x.Id == folder.Id);
-
-          items.Add(new TreeItem()
-          {
-            Id = folder.Id,
-            Name = folder.Name,
-            HasChildren = childCount > 0,
-            ChildCount = childCount,
-            ParentId = folder.ParentId,
-            Sort = folder.Sort,
-            Icon = "fth-folder",
-            IsOpen = openIds.Contains(folder.Id),
-            IsInactive = !folder.IsActive,
-            HasActions = true,
-            Modifier = !folder.IsActive ? new TreeItemModifier()
-            {
-              Icon = "fth-minus-circle color-yellow",
-              Name = "Inactive"
-            } : null
-          });
-        } 
       }
+
+
+      // get children for all folders
+      string[] folderIds = folders.Select(x => x.Id).ToArray();
+
+      IList<MediaFolders_WithChildren.Result> children = await Session.Query<MediaFolders_WithChildren.Result, MediaFolders_WithChildren>()
+        .ProjectInto<MediaFolders_WithChildren.Result>()
+        .Where(x => x.Id.In(folderIds))
+        .ToListAsync();
+
+
+      foreach (MediaFolder folder in folders)
+      {
+        int childCount = children.Count(x => x.Id == folder.Id);
+
+        items.Add(new TreeItem()
+        {
+          Id = folder.Id,
+          Name = folder.Name,
+          HasChildren = childCount > 0,
+          ChildCount = childCount,
+          ParentId = folder.ParentId,
+          Sort = folder.Sort,
+          Icon = "fth-folder",
+          IsOpen = openIds.Contains(folder.Id),
+          IsInactive = !folder.IsActive,
+          HasActions = true,
+          Modifier = !folder.IsActive ? new TreeItemModifier()
+          {
+            Icon = "fth-minus-circle color-yellow",
+            Name = "Inactive"
+          } : null
+        });
+      } 
 
       //if (parentId.IsNullOrEmpty())
       //{
@@ -126,23 +121,20 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<MediaFolder>> GetHierarchy(string id)
     {
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
+      MediaFolder_ByHierarchy.Result result = await Session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
+        .ProjectInto<MediaFolder_ByHierarchy.Result>()
+        .Include<MediaFolder_ByHierarchy.Result, MediaFolder>(x => x.Path.Select(p => p.Id))
+        .FirstOrDefaultAsync(x => x.Id == id);
+
+      if (result == null)
       {
-        MediaFolder_ByHierarchy.Result result = await session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
-          .ProjectInto<MediaFolder_ByHierarchy.Result>()
-          .Include<MediaFolder_ByHierarchy.Result, MediaFolder>(x => x.Path.Select(p => p.Id))
-          .FirstOrDefaultAsync(x => x.Id == id);
-
-        if (result == null)
-        {
-          return new List<MediaFolder>();
-        }
-
-        List<string> ids = result.Path.Select(x => x.Id).ToList();
-        ids.Add(id);
-
-        return (await session.LoadAsync<MediaFolder>(ids)).Select(x => x.Value).ToList();
+        return new List<MediaFolder>();
       }
+
+      List<string> ids = result.Path.Select(x => x.Id).ToList();
+      ids.Add(id);
+
+      return (await Session.LoadAsync<MediaFolder>(ids)).Select(x => x.Value).ToList();
     }
 
 

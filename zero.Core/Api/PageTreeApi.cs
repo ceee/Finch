@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using zero.Core.Collections;
 using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -17,7 +18,7 @@ namespace zero.Core.Api
   {
     protected IRoutes Routes { get; set; }
 
-    public PageTreeApi(IBackofficeStore store, IRoutes routes) : base(store)
+    public PageTreeApi(ICollectionContext store, IRoutes routes) : base(store)
     {
       Routes = routes;
     }
@@ -27,18 +28,15 @@ namespace zero.Core.Api
     public async Task<IList<TreeItem>> GetChildren(string parentId = null, string activeId = null, string search = null)
     {
       IList<TreeItem> items = new List<TreeItem>();
-      IReadOnlyCollection<PageType> pageTypes = Backoffice.Options.Pages.GetAllItems();
+      IReadOnlyCollection<PageType> pageTypes = Context.Options.Pages.GetAllItems();
       string[] openIds = new string[0] { };
       IList<Page> pages = null;
       IList<Pages_WithChildren.Result> children = null;
       bool isSearch = !search.IsNullOrWhiteSpace();
 
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-
-
       if (isSearch)
       {
-        pages = await session
+        pages = await Session
           .Query<Page>()
           .SearchIf(x => x.Name, search, "*")
           .OrderBy(x => x.Sort, OrderingType.Long)
@@ -57,7 +55,7 @@ namespace zero.Core.Api
       else
       {
 
-        pages = await session
+        pages = await Session
           .Query<Page>()
           .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
           .OrderBy(x => x.Sort, OrderingType.Long)
@@ -67,7 +65,7 @@ namespace zero.Core.Api
         // get hierarchy so we know if we should set the page to open
         if (!activeId.IsNullOrEmpty())
         {
-          Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
+          Pages_ByHierarchy.Result result = await Session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
             .ProjectInto<Pages_ByHierarchy.Result>()
             .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
             .FirstOrDefaultAsync(x => x.Id == activeId);
@@ -82,7 +80,7 @@ namespace zero.Core.Api
         // get children for all pages
         string[] pageIds = pages.Select(x => x.Id).ToArray();
 
-        children = await session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
+        children = await Session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
           .ProjectInto<Pages_WithChildren.Result>()
           .Where(x => x.Id.In(pageIds))
           .ToListAsync();

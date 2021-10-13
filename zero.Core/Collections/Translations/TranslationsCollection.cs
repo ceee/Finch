@@ -9,7 +9,7 @@ namespace zero.Core.Collections
 {
   public class TranslationsCollection : CollectionBase<Translation>, ITranslationsCollection
   {
-    public TranslationsCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<Translation> validator) : base(context, interceptor, validator) { }
+    public TranslationsCollection(ICollectionContext context, IValidator<Translation> validator) : base(context, validator) { }
 
 
     /// <inheritdoc />

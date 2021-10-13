@@ -14,6 +14,7 @@ using System.Threading;
 using zero.Core.Database.Indexes;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
+using zero.Core.Collections;
 
 namespace zero.Core.Api
 {
@@ -32,7 +33,7 @@ namespace zero.Core.Api
     protected IPaths Paths { get; set; }
 
 
-    public MediaApi(IBackofficeStore store, IPaths paths) : base(store)
+    public MediaApi(ICollectionContext store, IPaths paths) : base(store)
     {
       Paths = paths;
     }
@@ -48,7 +49,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<string> GetSourceById(string id, bool thumb = false, bool isCoreDatabase = false)
     {
-      using IAsyncDocumentSession session = isCoreDatabase ? Store.OpenCoreSession() : Store.OpenAsyncSession();
+      IAsyncDocumentSession session = isCoreDatabase ? Session.Core : Session;
 
       Media media = await session.LoadAsync<Media>(id);
 
@@ -69,10 +70,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<Dictionary<string, Media>> GetById(IEnumerable<string> ids)
     {
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
-      {
-        return await session.LoadAsync<Media>(ids);
-      }
+      return await Session.LoadAsync<Media>(ids);
     }
 
 
@@ -81,12 +79,9 @@ namespace zero.Core.Api
     {
       query.SearchFor(entity => entity.Name);
 
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
-      {
-        return await session.Query<Media>()
-          .WhereIf(x => x.FolderId == query.FolderId, !query.FolderId.IsNullOrEmpty(), x => x.FolderId == null)
-          .ToQueriedListAsync(query);
-      }
+      return await Session.Query<Media>()
+        .WhereIf(x => x.FolderId == query.FolderId, !query.FolderId.IsNullOrEmpty(), x => x.FolderId == null)
+        .ToQueriedListAsync(query);
     }
 
 
@@ -102,10 +97,7 @@ namespace zero.Core.Api
         .OrderByDescending(x => x.IsFolder)
         .ThenBy(query.OrderBy, query.OrderIsDescending, query.OrderType == ListQueryOrderType.String ? OrderingType.String : OrderingType.Double);
 
-      using IAsyncDocumentSession session = Store.OpenAsyncSession();
-      session.Advanced.MaxNumberOfRequestsPerSession = query.PageSize + 1;
-
-      IRavenQueryable<MediaListItem> dbQuery = session.Query<MediaListItem, Media_ByParent>().ProjectInto<MediaListItem>();
+      IRavenQueryable<MediaListItem> dbQuery = Session.Query<MediaListItem, Media_ByParent>().ProjectInto<MediaListItem>();
 
       if (!hasSearch || !query.SearchIsGlobal)
       {
@@ -118,7 +110,7 @@ namespace zero.Core.Api
       {
         if (item.IsFolder)
         {
-          item.Children = await session.Query<MediaListItem, Media_ByParent>().CountAsync(x => x.ParentId == item.Id);
+          item.Children = await Session.Query<MediaListItem, Media_ByParent>().CountAsync(x => x.ParentId == item.Id);
         }
       }
 

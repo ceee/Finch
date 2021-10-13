@@ -5,6 +5,7 @@ using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 
@@ -14,12 +15,9 @@ namespace zero.Core.Api
   {
     protected UserManager<BackofficeUser> UserManager { get; private set; }
 
-    protected IZeroContext Context { get; set; }
-
-    public UserApi(IBackofficeStore store, UserManager<BackofficeUser> userManager, IZeroContext context) : base(store, isCoreDatabase: true)
+    public UserApi(ICollectionContext store, UserManager<BackofficeUser> userManager) : base(store, isCoreDatabase: true)
     {
       UserManager = userManager;
-      Context = context;
     }
 
 
@@ -49,8 +47,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<BackofficeUser>> GetAll()
     {
-      using IAsyncDocumentSession session = Session();
-      return await session.Query<BackofficeUser>()
+      return await Session.Query<BackofficeUser>()
         .OrderByDescending(x => x.CreatedDate)
         .ToListAsync();
     }
@@ -59,12 +56,11 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<ListResult<BackofficeUser>> GetByQuery(ListQuery<BackofficeUser> query)
     {
-      string currentUserId = UserManager.GetUserId(Context.BackofficeUser);
+      string currentUserId = UserManager.GetUserId(Context.Context.BackofficeUser);
 
       query.SearchSelector = user => user.Name;
 
-      using IAsyncDocumentSession session = Session();
-      return await session.Query<BackofficeUser>()
+      return await Session.Query<BackofficeUser>()
         .ToQueriedListAsync(query);
     }
 

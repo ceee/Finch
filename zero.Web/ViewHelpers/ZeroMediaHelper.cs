@@ -21,13 +21,13 @@ namespace zero.Web.ViewHelpers
     ConcurrentDictionary<string, Media> Cache { get; set; } = new();
 
 
-    public ZeroMediaHelper(IZeroDocumentSession session, IZeroCoreDocumentSession coreSession, bool isCore = false)
+    public ZeroMediaHelper(IZeroDocumentSession session, bool isCore = false)
     {
       Session = session;
 
       if (!isCore)
       {
-        Core = new ZeroMediaHelper(coreSession, coreSession, true);
+        Core = new ZeroMediaHelper(session.Core, true);
       }
     }
 

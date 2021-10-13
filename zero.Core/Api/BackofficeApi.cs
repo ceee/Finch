@@ -4,8 +4,10 @@ using Raven.Client;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Attributes;
+using zero.Core.Collections;
 using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -19,35 +21,27 @@ namespace zero.Core.Api
 
     const string NEW_ID = "new:";
 
-    protected IBackofficeStore Backoffice { get; private set; }
+    protected ICollectionContext Context { get; private set; }
+
+    protected IZeroDocumentSession Session { get; private set; }
 
     protected bool IsCoreDatabase { get; private set; }
 
 
-    public BackofficeApi(IBackofficeStore store)
+    public BackofficeApi(ICollectionContext context)
     {
-      Store = store.Store;
-      Backoffice = store;
+      Context = context;
+      Store = context.Store;
+      Session = context.Session;
       IsCoreDatabase = false;
     }
 
-    internal BackofficeApi(IBackofficeStore store, bool isCoreDatabase)
+    internal BackofficeApi(ICollectionContext context, bool isCoreDatabase) : this(context)
     {
-      Store = store.Store;
-      Backoffice = store;
       IsCoreDatabase = isCoreDatabase;
-    }
-
-
-    protected IAsyncDocumentSession Session()
-    {
-      if (!IsCoreDatabase)
+      if (IsCoreDatabase)
       {
-        return Store.OpenAsyncSession();
-      }
-      else
-      {
-        return Store.OpenAsyncSession(Backoffice.Options.Raven.Database);
+        Session = Context.Session.Core;
       }
     }
 
@@ -60,16 +54,14 @@ namespace zero.Core.Api
         return default;
       }
 
-      using IAsyncDocumentSession session = Session();
-      return await session.LoadAsync<T>(id);
+      return await Session.LoadAsync<T>(id);
     }
 
 
     /// <inheritdoc />
     public async Task<Dictionary<string, T>> GetByIds<T>(params string[] ids) where T : ZeroIdEntity
     {
-      using IAsyncDocumentSession session = Session();
-      Dictionary<string, T> models = await session.LoadAsync<T>(ids);
+      Dictionary<string, T> models = await Session.LoadAsync<T>(ids);
       Dictionary<string, T> result = new Dictionary<string, T>();
 
       foreach (string id in ids)
@@ -143,7 +135,7 @@ namespace zero.Core.Api
       }
 
       // get current user
-      string userId = Backoffice.Auth.GetUserId();
+      string userId = Context.Context.BackofficeUser.FindFirstValue(Constants.Auth.Claims.UserId);
 
       // set default properties
       if (model.Id.IsNullOrEmpty())
@@ -160,14 +152,13 @@ namespace zero.Core.Api
       model.CreatedById ??= userId;
       model.Hash ??= IdGenerator.Classic();
 
-      using IAsyncDocumentSession session = Session();
-      session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
+      Session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
 
-      await session.StoreAsync(model);
+      await Session.StoreAsync(model);
 
-      meta?.Invoke(session.Advanced.GetMetadataFor(model));
+      meta?.Invoke(Session.Advanced.GetMetadataFor(model));
 
-      await session.SaveChangesAsync();
+      await Session.SaveChangesAsync();
 
       return EntityResult<T>.Success(model);
     }
@@ -177,19 +168,18 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> DeleteById<T>(string id) where T : ZeroIdEntity
     {
-      using IAsyncDocumentSession session = Session();
-      session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
+      Session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
 
-      T entity = await session.LoadAsync<T>(id);
+      T entity = await Session.LoadAsync<T>(id);
 
       if (entity == null)
       {
         return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
       }
 
-      session.Delete(entity);
+      Session.Delete(entity);
 
-      await session.SaveChangesAsync();
+      await Session.SaveChangesAsync();
 
       return EntityResult<T>.Success();
     }
@@ -213,8 +203,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> Purge<T>(string querySuffix = null, Parameters parameters = null)
     {
-      string database = IsCoreDatabase ? Backoffice.Options.Raven.Database : null;
-      await Store.PurgeAsync<T>(database, querySuffix, parameters);
+      await Store.PurgeAsync<T>(Session.Advanced.DocumentStore.Database, querySuffix, parameters);
       return EntityResult<T>.Success();
     }
   }

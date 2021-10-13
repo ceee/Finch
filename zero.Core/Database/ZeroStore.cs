@@ -59,7 +59,7 @@ namespace zero.Core.Database
       EnsureNotClosed();
 
       var sessionId = Guid.NewGuid();
-      var session = new ZeroDocumentSession(this, sessionId, options);
+      var session = new ZeroDocumentSession(this, sessionId, options, Options.Raven.Database);
       RegisterEvents(session);
       AfterSessionCreated(session);
 

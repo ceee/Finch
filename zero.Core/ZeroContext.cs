@@ -61,8 +61,6 @@ namespace zero.Core
 
     bool _resolved = false;
 
-    ConcurrentDictionary<string, IAsyncDocumentSession> _sessions = new();
-
 
     public ZeroContext(IZeroOptions options, IHttpContextAccessor httpContextAccessor, IApplicationResolver appResolver, ICultureResolver cultureResolver, ILogger<ZeroContext> logger, IZeroStore store, IHandlerHolder handler)
     {
@@ -133,14 +131,6 @@ namespace zero.Core
 
     /// <inheritdoc />
     public void Remove<T>() => ValueCollection.Remove<T>();
-
-
-    /// <inheritdoc />
-    public IAsyncDocumentSession GetCurrentScopeAsyncSession(string database = null)
-    {
-      database ??= Store.ResolvedDatabase;
-      return _sessions.GetOrAdd(database, _ => Store.OpenAsyncSession(database));
-    }
   }
 
 
@@ -196,11 +186,6 @@ namespace zero.Core
     /// the currently active backoffice user, as users are not signed in with the default scheme and do therefore not populate HttpContext.User
     /// </summary>
     Task Resolve(HttpContext context);
-
-    /// <summary>
-    /// When using one session per request, we can retrieve the current session for this request
-    /// </summary>
-    IAsyncDocumentSession GetCurrentScopeAsyncSession(string database = null);
 
     /// <summary>
     /// Get a custom property from this scoped context

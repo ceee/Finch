@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Handlers;
@@ -15,7 +16,7 @@ namespace zero.Core.Api
 
     protected IHandlerHolder Handler { get; private set; }
 
-    public ModulesApi(IZeroOptions options, IBackofficeStore store, IHandlerHolder handler) : base(store)
+    public ModulesApi(IZeroOptions options, ICollectionContext store, IHandlerHolder handler) : base(store)
     {
       Options = options;
       Handler = handler;
@@ -47,7 +48,7 @@ namespace zero.Core.Api
         return modules;
       }
 
-      return handler.GetAllowedModuleTypes(Backoffice.Context.Application, types, page, tags)?.ToList() ?? new();
+      return handler.GetAllowedModuleTypes(Context.Context.Application, types, page, tags)?.ToList() ?? new();
     }
 
 

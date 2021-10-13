@@ -12,7 +12,7 @@ namespace zero.Core.Collections
 {
   public class LanguagesCollection : CollectionBase<Language>, ILanguagesCollection
   {
-    public LanguagesCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<Language> validator) : base(context, interceptor, validator) { }
+    public LanguagesCollection(ICollectionContext context, IValidator<Language> validator) : base(context, validator) { }
 
 
     /// <inheritdoc />

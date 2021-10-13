@@ -1,5 +1,4 @@
-﻿using Raven.Client.Documents.Session;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,19 +10,18 @@ using zero.Core.Renderer;
 
 namespace zero.Core.Services
 {
-  public class Localizer : ILocalizer, IDisposable
+  public class Localizer : ILocalizer
   {
     protected Dictionary<string, string> Cache { get; private set; } = new();
 
     protected IZeroStore Store { get; private set; }
 
-    IDocumentSession _session = null;
-    protected IDocumentSession Session { get { return _session ?? (_session = Store.OpenSession()); } }
+    protected IZeroDocumentSession Session { get; private set; }
 
 
-    public Localizer(IZeroStore store)
+    public Localizer(IZeroDocumentSession session)
     {
-      Store = store;
+      Session = session;
     }
 
 
@@ -89,13 +87,6 @@ namespace zero.Core.Services
     }
 
 
-    /// <inheritdoc />
-    public void Dispose()
-    {
-      Session?.Dispose();
-    }
-
-
     /// <summary>
     /// Get translation from database or any other source
     /// </summary>
@@ -105,7 +96,7 @@ namespace zero.Core.Services
     }
   }
 
-  public interface ILocalizer : IDisposable
+  public interface ILocalizer
   {   
     /// <summary>
     /// 

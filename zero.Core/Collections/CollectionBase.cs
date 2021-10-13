@@ -9,7 +9,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using zero.Core.Api;
-using zero.Core.Attributes;
 using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -19,22 +18,24 @@ namespace zero.Core.Collections
 {
   public abstract class CollectionBase<T> : ICollectionBase<T>, ICollectionBase, IDisposable where T : ZeroEntity
   {
-    private IAsyncDocumentSession _session;
     private IRevisionsApi _revisions;
     private string _database;
 
     protected ICollectionInterceptorHandler InterceptorHandler { get; private set; }
+
+    private IZeroDocumentSession zeroSession;
 
     protected virtual Action<T> PreSave { get; set; }
 
     protected bool OnlyActive { get; set; } = false; // TODO do we really need this?
 
 
-    public CollectionBase(IZeroContext context, ICollectionInterceptorHandler interceptorHandler = null, IValidator<T> validator = null)
+    public CollectionBase(ICollectionContext collectionContext, IValidator<T> validator = null)
     {
-      Context = context;
-      Store = context.Store;
-      InterceptorHandler = interceptorHandler;
+      Context = collectionContext.Context;
+      Store = collectionContext.Store;
+      InterceptorHandler = collectionContext.InterceptorHandler;
+      zeroSession = collectionContext.Session;
       Validator = validator;
       Database = Store.ResolvedDatabase;
     }
@@ -75,19 +76,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Create an an async document session
     /// </summary>
-    public IAsyncDocumentSession Session
-    {
-      get
-      {
-        if (_session != null)
-        {
-          return _session;
-        }
-        _session = Context.GetCurrentScopeAsyncSession(Database ?? Store.ResolvedDatabase);
-        _session.Advanced.WaitForIndexesAfterSaveChanges(throwOnTimeout: false);
-        return _session;
-      }
-    }
+    public IZeroDocumentSession Session => Database == Context.Options.Raven.Database ? zeroSession.Core : zeroSession;
 
     /// <inheritdoc />
     public string Database
@@ -97,7 +86,6 @@ namespace zero.Core.Collections
       {
         if (value != _database)
         {
-          _session = null;
           _database = value;
         }
       }
@@ -489,7 +477,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Create an async document session
     /// </summary>
-    IAsyncDocumentSession Session { get; }
+    IZeroDocumentSession Session { get; }
 
     /// <summary>
     /// Applies the scope to the service instance

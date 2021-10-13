@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using Rc = Raven.Client;
@@ -10,7 +11,7 @@ namespace zero.Core.Api
   {
     Preview Blueprint;
 
-    public PreviewApi(IBackofficeStore store, Preview blueprint) : base(store)
+    public PreviewApi(ICollectionContext store, Preview blueprint) : base(store)
     {
       Blueprint = blueprint;
     }

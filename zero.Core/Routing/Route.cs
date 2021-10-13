@@ -45,7 +45,7 @@ namespace zero.Core.Routing
     /// <summary>
     /// Contains references to the resolved collection entities
     /// </summary>
-    [Obsolete]
+    //[Obsolete]
     public List<RouteReference> References { get; set; } = new();
 
     /// <summary>

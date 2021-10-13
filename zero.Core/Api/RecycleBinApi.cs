@@ -3,6 +3,7 @@ using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Utils;
@@ -13,7 +14,7 @@ namespace zero.Core.Api
   {
     RecycledEntity Blueprint;
 
-    public RecycleBinApi(IBackofficeStore store, RecycledEntity blueprint) : base(store)
+    public RecycleBinApi(ICollectionContext store, RecycledEntity blueprint) : base(store)
     {
       Blueprint = blueprint;
     }
@@ -67,25 +68,19 @@ namespace zero.Core.Api
     {
       query.SearchSelector = x => x.Name;
 
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
-      {
-        return await session.Query<RecycledEntity>()
-          .WhereIf(x => x.Group == query.Group, !query.Group.IsNullOrWhiteSpace())
-          .WhereIf(x => x.OperationId == query.OperationId, !query.OperationId.IsNullOrWhiteSpace())
-          .ToQueriedListAsync(query);
-      }
+      return await Session.Query<RecycledEntity>()
+        .WhereIf(x => x.Group == query.Group, !query.Group.IsNullOrWhiteSpace())
+        .WhereIf(x => x.OperationId == query.OperationId, !query.OperationId.IsNullOrWhiteSpace())
+        .ToQueriedListAsync(query);
     }
 
 
     /// <inheritdoc />
     public async Task<IList<RecycledEntity>> GetByOperation(string operationId)
     {
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
-      {
-        return await session.Query<RecycledEntity>()
-          .Where(x => x.OperationId == operationId)
-          .ToListAsync();
-      }
+      return await Session.Query<RecycledEntity>()
+        .Where(x => x.OperationId == operationId)
+        .ToListAsync();
     }
 
 
@@ -94,12 +89,9 @@ namespace zero.Core.Api
     /// </summary>
     public async Task<int> GetCountByOperation(string operationId)
     {
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
-      {
-        return await session.Query<RecycledEntity>()
-          .Where(x => x.OperationId == operationId)
-          .CountAsync();
-      }
+      return await Session.Query<RecycledEntity>()
+        .Where(x => x.OperationId == operationId)
+        .CountAsync();
     }
 
 

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 
@@ -15,7 +16,7 @@ namespace zero.Core.Api
     protected IPermissionsApi PermissionsApi { get; private set; }
 
 
-    public SpacesApi(IBackofficeStore store, IPermissionsApi permissionsApi) : base(store)
+    public SpacesApi(ICollectionContext store, IPermissionsApi permissionsApi) : base(store)
     {
       PermissionsApi = permissionsApi;
     }
@@ -39,7 +40,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public IReadOnlyCollection<Space> GetAll()
     {
-      return Backoffice.Options.Spaces.GetAllItems();
+      return Context.Options.Spaces.GetAllItems();
     }
 
 
@@ -47,14 +48,10 @@ namespace zero.Core.Api
     public async Task<SpaceContent> GetItem(string alias, string id = null)
     {
       Space space = GetByAlias(alias);
-
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
-      {
-        return await session.Query<SpaceContent>()
-          .Where(x => x.SpaceAlias == space.Alias)
-          .WhereIf(x => x.Id == id, !id.IsNullOrEmpty())
-          .FirstOrDefaultAsync();
-      }
+      return await Session.Query<SpaceContent>()
+        .Where(x => x.SpaceAlias == space.Alias)
+        .WhereIf(x => x.Id == id, !id.IsNullOrEmpty())
+        .FirstOrDefaultAsync();
     }
 
 
@@ -63,13 +60,10 @@ namespace zero.Core.Api
     {
       Space space = GetBy<T>();
 
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
-      {
-        return await session.Query<T>()
-          .Where(x => x.SpaceAlias == space.Alias)
-          .WhereIf(x => x.Id == id, !id.IsNullOrEmpty())
-          .FirstOrDefaultAsync();
-      }
+      return await Session.Query<T>()
+        .Where(x => x.SpaceAlias == space.Alias)
+        .WhereIf(x => x.Id == id, !id.IsNullOrEmpty())
+        .FirstOrDefaultAsync();
     }
 
 
@@ -78,21 +72,18 @@ namespace zero.Core.Api
     {
       Space space = GetBy<T>();
 
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
+      ids = ids.Distinct().ToArray();
+
+      Dictionary<string, T> models = await Session.LoadAsync<T>(ids);
+      Dictionary<string, T> result = new Dictionary<string, T>();
+
+      foreach (string id in ids)
       {
-        ids = ids.Distinct().ToArray();
-
-        Dictionary<string, T> models = await session.LoadAsync<T>(ids);
-        Dictionary<string, T> result = new Dictionary<string, T>();
-
-        foreach (string id in ids)
-        {
-          models.TryGetValue(id, out T model);
-          result.Add(id, model);
-        }
-
-        return result;
+        models.TryGetValue(id, out T model);
+        result.Add(id, model);
       }
+
+      return result;
     }
 
 
@@ -101,12 +92,9 @@ namespace zero.Core.Api
     {
       query.SearchSelector = item => item.Name;
 
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
-      {
-        return await session.Query<SpaceContent>()
-          .Where(x => x.SpaceAlias == alias)
-          .ToQueriedListAsync(query);
-      }
+      return await Session.Query<SpaceContent>()
+        .Where(x => x.SpaceAlias == alias)
+        .ToQueriedListAsync(query);
     }
 
 
@@ -115,12 +103,9 @@ namespace zero.Core.Api
     {
       query.SearchSelector = item => item.Name;
 
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
-      {
-        return await session.Query<T>()
-          .Where(x => x.SpaceAlias == alias)
-          .ToQueriedListAsync(query);
-      }
+      return await Session.Query<T>()
+        .Where(x => x.SpaceAlias == alias)
+        .ToQueriedListAsync(query);
     }
 
 
@@ -130,12 +115,9 @@ namespace zero.Core.Api
       Space space = GetBy<T>();
       query.SearchSelector = item => item.Name;
 
-      using (IAsyncDocumentSession session = Store.OpenAsyncSession())
-      {
-        return await session.Query<T>()
-          .Where(x => x.SpaceAlias == space.Alias)
-          .ToQueriedListAsync(query);
-      }
+      return await Session.Query<T>()
+        .Where(x => x.SpaceAlias == space.Alias)
+        .ToQueriedListAsync(query);
     }
 
 

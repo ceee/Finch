@@ -3,6 +3,7 @@ using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 
@@ -13,7 +14,7 @@ namespace zero.Core.Api
     IValidator<Application> Validator;
 
 
-    public ApplicationsApi(IBackofficeStore store, IValidator<Application> validator) : base(store, isCoreDatabase: true)
+    public ApplicationsApi(ICollectionContext store, IValidator<Application> validator) : base(store, isCoreDatabase: true)
     {
       Validator = validator;
     }
@@ -29,8 +30,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<Application>> GetAll()
     {
-      using IAsyncDocumentSession session = Session();
-      return await session
+      return await Session
         .Query<Application>()
         .OrderByDescending(x => x.CreatedDate)
         .ToListAsync();
@@ -42,8 +42,7 @@ namespace zero.Core.Api
     {
       query.SearchFor(entity => entity.Name);
 
-      using IAsyncDocumentSession session = Session();
-      return await session.Query<Application>().ToQueriedListAsync(query);
+      return await Session.Query<Application>().ToQueriedListAsync(query);
     }
 
 

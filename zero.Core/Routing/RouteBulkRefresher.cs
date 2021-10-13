@@ -10,12 +10,14 @@ namespace zero.Core.Routing
 {
   public class RouteBulkRefresher
   {
+    protected IZeroDocumentSession Session { get; set; }
     protected IZeroStore Store { get; set; }
     protected IEnumerable<IRouteProvider> Providers { get; set; }
 
 
-    public RouteBulkRefresher(IZeroStore store, IEnumerable<IRouteProvider> providers)
+    public RouteBulkRefresher(IZeroDocumentSession session, IZeroStore store, IEnumerable<IRouteProvider> providers)
     {
+      Session = session;
       Store = store;
       Providers = providers;
     }
@@ -26,8 +28,7 @@ namespace zero.Core.Routing
     {
       int count = 0;
 
-      using IAsyncDocumentSession coreSession = Store.OpenCoreSession();
-      List<Application> apps = await coreSession.Query<Application>().ToListAsync();
+      List<Application> apps = await Session.Core.Query<Application>().ToListAsync();
 
       foreach (Application app in apps)
       {

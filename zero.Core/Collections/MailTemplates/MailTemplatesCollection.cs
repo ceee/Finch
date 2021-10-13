@@ -7,7 +7,7 @@ namespace zero.Core.Collections
 {
   public class MailTemplatesCollection : CollectionBase<MailTemplate>, IMailTemplatesCollection
   {
-    public MailTemplatesCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IValidator<MailTemplate> validator) : base(context, interceptor, validator) { }
+    public MailTemplatesCollection(ICollectionContext context, IValidator<MailTemplate> validator) : base(context, validator) { }
 
 
     /// <inheritdoc />

@@ -22,12 +22,10 @@ namespace zero.Web.Controllers
   public abstract class BackofficeController : ControllerBase
   {
     IZeroOptions _options;
-    IToken _token;
 
     public bool IsCoreDatabase { get; protected set; }
 
     protected IZeroOptions Options => _options ?? (_options = HttpContext?.RequestServices?.GetService<IZeroOptions>());
-    protected IToken Token => _token ?? (_token = HttpContext?.RequestServices?.GetService<IToken>());
 
 
     /// <summary>
@@ -53,7 +51,7 @@ namespace zero.Web.Controllers
 
       EditModel<T> model = new EditModel<T>();
       model.Entity = data;
-      model.Meta.Token = Token.Get(data);
+      model.Meta.Token = null; // Token.Get(data);
       //model.Meta.IsAppAware = AppAwareType.IsAssignableFrom(type); // TODO appx
       //model.Meta.CanBeShared = canBeShared;
       model.Meta.CanCreate = true;
@@ -79,7 +77,7 @@ namespace zero.Web.Controllers
 
       //ControllerContext.ActionDescriptor.FilterDescriptors[0].
 
-      data.Meta.Token = Token.Get(data.Entity);
+      data.Meta.Token = null; // Token.Get(data.Entity);
       //data.Meta.IsAppAware = AppAwareType.IsAssignableFrom(type); // TODO appx
       //data.Meta.CanBeShared = canBeShared;
       data.Meta.CanCreate = true;

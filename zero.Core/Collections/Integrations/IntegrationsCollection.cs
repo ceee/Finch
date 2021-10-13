@@ -22,7 +22,7 @@ namespace zero.Core.Collections
     protected ILogger<IntegrationsCollection> Logger { get; private set; }
 
 
-    public IntegrationsCollection(IZeroContext context, IZeroOptions options, ILogger<IntegrationsCollection> logger, ICollectionInterceptorHandler interceptorHandler = null) : base(context, interceptorHandler)
+    public IntegrationsCollection(ICollectionContext context, IZeroOptions options, ILogger<IntegrationsCollection> logger) : base(context)
     {
       Options = options;
       RegisteredTypes = Options.Integrations.GetAllItems();

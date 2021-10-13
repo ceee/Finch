@@ -25,8 +25,8 @@ namespace zero.Core.Collections
     protected IHandlerHolder Handler { get; private set; }
 
 
-    public PagesCollection(IZeroContext context, ICollectionInterceptorHandler interceptor, IRecycleBinApi recycleBinApi, IHandlerHolder handler,
-      ILogger<IPagesCollection> logger, IValidator<Page> validator = null) : base(context, interceptor, validator)
+    public PagesCollection(ICollectionContext context, IRecycleBinApi recycleBinApi, IHandlerHolder handler,
+      ILogger<IPagesCollection> logger, IValidator<Page> validator = null) : base(context, validator)
     {
       RecycleBinApi = recycleBinApi;
       Handler = handler;
