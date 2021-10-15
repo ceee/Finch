@@ -11,7 +11,7 @@ class ListColumn
     label: null,
     hideLabel: false,
     width: null,
-    canSort: true,
+    canSort: false,
     class: ''
   };
 

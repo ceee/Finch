@@ -45,6 +45,8 @@ namespace zero.Web.Controllers
       return Ok(await Api.GetListByQuery(alias, query));
     }
 
+
+
     public async Task<IActionResult> GetContent([FromQuery] string alias, [FromQuery] string contentId = null)
     {
       if (!CanReadSpace(alias))

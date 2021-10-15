@@ -159,7 +159,7 @@ class List
    * @param {boolean} [options.hideLabel=false] - Hide the column label
    * @param {number} [options.index] - Custom position for this column
    * @param {number} [options.width] - Custom width of the column in px
-   * @param {boolean} [options.canSort=true] - Disable/enable sorting within this column
+   * @param {boolean} [options.canSort=false] - Disable/enable sorting within this column
    * @param {string} [options.class] - Append HTML class to the generated cells
    * @returns {ListColumn}
    */

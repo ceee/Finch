@@ -42,6 +42,13 @@ namespace zero.Core.Options
       Raven.Indexes.Add<Pages_ByType>();
       Raven.Indexes.Add<Routes_ForResolver>();
 
+      Raven.Indexes.Add<zero_Countries>();
+      Raven.Indexes.Add<zero_Languages>();
+      Raven.Indexes.Add<zero_Translations>();
+      Raven.Indexes.Add<zero_MailTemplates>();
+      Raven.Indexes.Add<zero_Spaces>();
+      Raven.Indexes.Add<zero_RecycledEntities>();
+
       Search = new();
     }
 

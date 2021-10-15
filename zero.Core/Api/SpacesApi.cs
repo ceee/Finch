@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Collections;
+using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 
@@ -92,7 +93,7 @@ namespace zero.Core.Api
     {
       query.SearchSelector = item => item.Name;
 
-      return await Session.Query<SpaceContent>()
+      return await Session.Query<SpaceContent, zero_Spaces>()
         .Where(x => x.SpaceAlias == alias)
         .ToQueriedListAsync(query);
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace zero.Web.Controllers
   {
     protected TCollection Collection { get; private set; }
 
+    [Obsolete]
     protected Func<IRavenQueryable<TEntity>, IRavenQueryable<TEntity>> DefaultQuery { get; set; }
 
     protected Action<TEntity, PreviewModel> PreviewTransform { get; set; }
@@ -46,14 +48,7 @@ namespace zero.Web.Controllers
 
     public virtual async Task<ListResult<TEntity>> GetByQuery([FromQuery] ListBackofficeQuery<TEntity> query)
     {
-      query.SearchSelector = model => model.Name;
-      IRavenQueryable<TEntity> ravenQuery = Collection.Query;
-      if (DefaultQuery != null)
-      {
-        ravenQuery = DefaultQuery(ravenQuery);
-      }
-
-      return await ravenQuery.ToQueriedListAsync(query);
+      return await Collection.GetByQuery(query);
     }
 
 

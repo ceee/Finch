@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using Raven.Client;
+using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System;
@@ -154,6 +155,17 @@ namespace zero.Core.Collections
         query.SearchSelector = x => x.Name;
       }
       return await Session.Query<T>().WhereIf(x => x.IsActive, OnlyActive).ToQueriedListAsync(query);
+    }
+
+
+    /// <inheritdoc />
+    public virtual async Task<ListResult<T>> GetByQuery<TIndex>(ListQuery<T> query) where TIndex : AbstractCommonApiForIndexes, new()
+    {
+      if (query.SearchSelector == null && !query.SearchSelectors.Any())
+      {
+        query.SearchSelector = x => x.Name;
+      }
+      return await Session.Query<T, TIndex>().WhereIf(x => x.IsActive, OnlyActive).ToQueriedListAsync(query);
     }
 
 
@@ -512,6 +524,11 @@ namespace zero.Core.Collections
     /// Get entities by query
     /// </summary>
     Task<ListResult<T>> GetByQuery(ListQuery<T> query);
+
+    /// <summary>
+    /// Get entities by query (by using the specified index)
+    /// </summary>
+    Task<ListResult<T>> GetByQuery<TIndex>(ListQuery<T> query) where TIndex : AbstractCommonApiForIndexes, new();
 
     /// <summary>
     /// Get all entities from this collection. 

@@ -4,6 +4,7 @@ using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using zero.Core.Collections;
+using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Utils;
@@ -68,7 +69,7 @@ namespace zero.Core.Api
     {
       query.SearchSelector = x => x.Name;
 
-      return await Session.Query<RecycledEntity>()
+      return await Session.Query<RecycledEntity, zero_RecycledEntities>()
         .WhereIf(x => x.Group == query.Group, !query.Group.IsNullOrWhiteSpace())
         .WhereIf(x => x.OperationId == query.OperationId, !query.OperationId.IsNullOrWhiteSpace())
         .ToQueriedListAsync(query);
@@ -78,7 +79,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<IList<RecycledEntity>> GetByOperation(string operationId)
     {
-      return await Session.Query<RecycledEntity>()
+      return await Session.Query<RecycledEntity, zero_RecycledEntities>()
         .Where(x => x.OperationId == operationId)
         .ToListAsync();
     }
@@ -89,7 +90,7 @@ namespace zero.Core.Api
     /// </summary>
     public async Task<int> GetCountByOperation(string operationId)
     {
-      return await Session.Query<RecycledEntity>()
+      return await Session.Query<RecycledEntity, zero_RecycledEntities>()
         .Where(x => x.OperationId == operationId)
         .CountAsync();
     }
