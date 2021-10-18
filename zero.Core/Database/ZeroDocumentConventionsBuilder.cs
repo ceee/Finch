@@ -43,7 +43,7 @@ namespace zero.Core.Database
       conventions.IdentityPartsSeparator = IdentityPartsSeparator;
       conventions.TransformTypeCollectionNameToDocumentIdPrefix = TransformTypeCollectionNameToDocumentIdPrefix;
       conventions.FindCollectionName = FindCollectionName;
-      conventions.RegisterAsyncIdConvention<ZeroEntity>((_, entity) => GetDocumentId(conventions, entity));
+      conventions.RegisterAsyncIdConvention<ZeroIdEntity>((_, entity) => GetDocumentId(conventions, entity));
 
       ConfigureJsonSerializer(conventions.Serialization);
     }
