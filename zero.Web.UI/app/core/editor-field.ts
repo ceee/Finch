@@ -282,12 +282,16 @@ class EditorField
   /**
    * Render a toggle
    * @param {boolean} [negative] - Toggle with a negative color / red background
+   * @param {object} [options] - Custom options
+   * @param {number} [options.negative=false] - Display the toggle in red when set to TRUE
+   * @param {number} [options.onContent=null] - Text next to toggle when it is set to TRUE
+   * @param {number} [options.offContent=null] - Text next to toggle when it is set to FALSE
    * @returns {EditorField}
    */
-  toggle(negative)
+  toggle(options)
   {
     this.options.vertical = false;
-    return this._setComponent(() => import('../editor/fields/toggle.vue'), { negative });
+    return this._setComponent(() => import('../editor/fields/toggle.vue'), { ...options });
   }
 
 

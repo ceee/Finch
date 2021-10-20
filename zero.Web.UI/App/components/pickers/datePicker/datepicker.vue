@@ -2,7 +2,7 @@
   <div class="ui-datepicker" :class="{'is-disabled': disabled }">
     <input type="text" class="ui-input ui-datepicker-input" v-localize:placeholder="placeholder" :value="output" @input="onChange" @focus="onFocus" @blur="onBlur" :disabled="disabled" />
     <ui-icon v-if="!clear || !value" symbol="fth-calendar" class="ui-datepicker-icon" :size="17" />
-    <button v-if="clear && value" type="button" class="ui-datepicker-input-button" @click="clearInput"><i class="fth-x"></i></button>
+    <button v-if="clear && value" type="button" class="ui-datepicker-input-button" @click="clearInput"><ui-icon symbol="fth-x" :size="15" /></button>
 
     <ui-dropdown ref="overlay" class="ui-datepicker-overlay" @opened="overlayOpened">
       <datepicker-overlay :value="value" @change="onSelect" :options="pickerOptions" />
