@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents.Session;
+using System;
 using System.Collections.Concurrent;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -125,8 +126,15 @@ namespace zero.Core
     public void Override(Application app)
     {
       Application = app;
-      AppId = app.Id;
-      Store.ResolvedDatabase = Application.Database;
+      AppId = app?.Id;
+      Store.ResolvedDatabase = app?.Database;
+    }
+
+
+    /// <inheritdoc />
+    public ZeroContextScope CreateScope(Application app)
+    {
+      return new(this, app);
     }
 
 
@@ -141,6 +149,29 @@ namespace zero.Core
     /// <inheritdoc />
     public void Remove<T>() => ValueCollection.Remove<T>();
   }
+
+
+
+  public class ZeroContextScope : IDisposable
+  {
+    public IZeroContext Context { get; }
+
+    Application _originalApp = null;
+
+    public ZeroContextScope(IZeroContext context, Application app)
+    {
+      Context = context;
+      _originalApp = app;
+      Context.Override(app);
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+      Context.Override(_originalApp);
+    }
+  }
+
 
 
   public interface IZeroContext
@@ -200,6 +231,11 @@ namespace zero.Core
     /// Overrides the resolved application for this context instance
     /// </summary>
     void Override(Application app);
+
+    /// <summary>
+    /// SCOPE
+    /// </summary>
+    ZeroContextScope CreateScope(Application app);
 
     /// <summary>
     /// Get a custom property from this scoped context
