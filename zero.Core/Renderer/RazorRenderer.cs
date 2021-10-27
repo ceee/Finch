@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace zero.Core.Renderer
 {
-  public class RazorRenderer : IRazorRenderer
+  public class RazorRenderer : IRazorRenderer, IDisposable
   {
     protected IRazorViewEngine ViewEngine { get; set; }
 
@@ -29,15 +29,19 @@ namespace zero.Core.Renderer
 
     protected IHttpContextAccessor HttpContextAccessor { get; set; }
 
+    protected IServiceScope ServiceScope { get; set; }
+
     protected HtmlHelperOptions HtmlHelperOptions { get; set; }
 
 
-    public RazorRenderer(IRazorViewEngine viewEngine, IHttpContextAccessor httpContextAccessor, ITempDataDictionaryFactory tempDataDictionaryFactory, IModelMetadataProvider modelMetadataProvider, IOptions<MvcViewOptions> mvcHelperOptions)
+    public RazorRenderer(IRazorViewEngine viewEngine, IHttpContextAccessor httpContextAccessor, ITempDataDictionaryFactory tempDataDictionaryFactory, 
+      IModelMetadataProvider modelMetadataProvider, IServiceProvider serviceProvider, IOptions<MvcViewOptions> mvcHelperOptions)
     {
       ViewEngine = viewEngine;
       HttpContextAccessor = httpContextAccessor;
       TempDataDictionaryFactory = tempDataDictionaryFactory;
       ModelMetadataProvider = modelMetadataProvider;
+      ServiceScope = serviceProvider.CreateScope();
       HtmlHelperOptions = mvcHelperOptions.Value.HtmlHelperOptions;
     }
 
@@ -147,10 +151,17 @@ namespace zero.Core.Renderer
     }
 
 
+    /// <inheritdoc />
+    public void Dispose()
+    {
+      ServiceScope?.Dispose();
+    }
+
+
     /// <summary>
     /// Build the view context
     /// </summary>
-    ViewContext BuildViewContext(ActionContext context, StringWriter writer, IView view = null)
+    protected virtual ViewContext BuildViewContext(ActionContext context, StringWriter writer, IView view = null)
     {
       ViewDataDictionary viewData = new(ModelMetadataProvider, context.ModelState); // result.ViewData ?? new ViewData...;
       ITempDataDictionary tempData = TempDataDictionaryFactory.GetTempData(context.HttpContext); //  result.TempData ?? TempData...;
@@ -162,18 +173,33 @@ namespace zero.Core.Renderer
     /// <summary>
     /// Builds a new view context
     /// </summary>
-    ActionContext BuildActionContext()
+    protected virtual ActionContext BuildActionContext()
     {
-      HttpContext context = HttpContextAccessor.HttpContext;
+      HttpContext context = GetHttpContext();
       RouteData routeData = context.GetRouteData();
       return new ActionContext(context, routeData, new ActionDescriptor());
     }
 
 
     /// <summary>
+    /// Get HTTP context or mock one
+    /// </summary>
+    protected virtual HttpContext GetHttpContext()
+    {
+      HttpContext context = HttpContextAccessor.HttpContext;
+      context ??= new DefaultHttpContext() 
+      { 
+        RequestServices = ServiceScope.ServiceProvider 
+      };
+
+      return context;
+    }
+
+
+    /// <summary>
     /// Tries to find a view
     /// </summary>
-    IView FindView(ActionContext actionContext, string viewName)
+    protected virtual IView FindView(ActionContext actionContext, string viewName)
     {
       ViewEngineResult getViewResult = ViewEngine.GetView(executingFilePath: null, viewPath: viewName, isMainPage: false);
       if (getViewResult.Success)

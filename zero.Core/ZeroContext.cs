@@ -122,6 +122,15 @@ namespace zero.Core
 
 
     /// <inheritdoc />
+    public void Override(Application app)
+    {
+      Application = app;
+      AppId = app.Id;
+      Store.ResolvedDatabase = Application.Database;
+    }
+
+
+    /// <inheritdoc />
     public T Get<T>() => ValueCollection.Get<T>();
 
 
@@ -186,6 +195,11 @@ namespace zero.Core
     /// the currently active backoffice user, as users are not signed in with the default scheme and do therefore not populate HttpContext.User
     /// </summary>
     Task Resolve(HttpContext context);
+
+    /// <summary>
+    /// Overrides the resolved application for this context instance
+    /// </summary>
+    void Override(Application app);
 
     /// <summary>
     /// Get a custom property from this scoped context
