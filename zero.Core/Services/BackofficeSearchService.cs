@@ -16,14 +16,14 @@ namespace zero.Core.Services
 {
   public class BackofficeSearchService : IBackofficeSearchService
   {
-    protected IZeroDocumentSession Session { get; private set; }
+    protected IZeroStore Store { get; private set; }
 
     protected IZeroOptions Options { get; private set; }
     
 
-    public BackofficeSearchService(IZeroDocumentSession session, IZeroOptions options)
+    public BackofficeSearchService(IZeroStore store, IZeroOptions options)
     {
-      Session = session;
+      Store = store;
       Options = options;
     }
 
@@ -35,7 +35,7 @@ namespace zero.Core.Services
         return "*" + x + "*";
       }).ToArray();
 
-      List<ZeroEntity> results = await Session.Query<SearchIndexResult, Backoffice_Search>()
+      List<ZeroEntity> results = await Store.Session().Query<SearchIndexResult, Backoffice_Search>()
         .Statistics(out QueryStatistics stats)
         .Search(x => x.Name, searchParts, 2, @operator: SearchOperator.And)
         .Search(x => x.Fields, searchParts, 1, Raven.Client.Documents.SearchOptions.Or, @operator: SearchOperator.And)

@@ -20,17 +20,17 @@ namespace zero.Core.Identity
 
     protected IZeroOptions Options { get; private set; }
 
-    protected IZeroDocumentSession Session { get; private set; }
-
     protected IdentityErrorDescriber ErrorDescriber { get; private set; }
 
+    protected bool Global { get; private set; }
 
-    public RavenRoleStore(IZeroStore store, IZeroOptions options, IZeroDocumentSession session, IdentityErrorDescriber describer = null)
+
+    public RavenRoleStore(IZeroStore store, IZeroOptions options, IdentityErrorDescriber describer = null, bool global = false)
     {
       Store = store;
       Options = options;
-      Session = session;
       ErrorDescriber = describer ?? new IdentityErrorDescriber();
+      Global = global;
     }
 
 
@@ -43,8 +43,9 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public async Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
     {
-      await Session.StoreAsync(role);
-      await Session.SaveChangesAsync(cancellationToken);
+      IZeroDocumentSession session = Store.Session(Global);
+      await session.StoreAsync(role);
+      await session.SaveChangesAsync(cancellationToken);
       return IdentityResult.Success;
     }
 
@@ -54,8 +55,9 @@ namespace zero.Core.Identity
     {
       try
       {
-        await Session.StoreAsync(role, cancellationToken);
-        await Session.SaveChangesAsync(cancellationToken);
+        IZeroDocumentSession session = Store.Session(Global);
+        await session.StoreAsync(role, cancellationToken);
+        await session.SaveChangesAsync(cancellationToken);
       }
       catch (ConcurrencyException)
       {
@@ -70,8 +72,9 @@ namespace zero.Core.Identity
     {
       try
       {
-        Session.Delete(role);
-        await Session.SaveChangesAsync(cancellationToken);
+        IZeroDocumentSession session = Store.Session(Global);
+        session.Delete(role);
+        await session.SaveChangesAsync(cancellationToken);
       }
       catch (ConcurrencyException)
       {
@@ -111,14 +114,14 @@ namespace zero.Core.Identity
     /// <inheritdoc/>
     public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
     {
-      return await ScopeQuery(Session.Query<TRole>()).FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken);
+      return await ScopeQuery(Store.Session(Global).Query<TRole>()).FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken);
     }
 
 
     /// <inheritdoc/>
     public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
     {
-      return await ScopeQuery(Session.Query<TRole>()).FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
+      return await ScopeQuery(Store.Session(Global).Query<TRole>()).FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
     }
 
 

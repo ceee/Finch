@@ -36,12 +36,12 @@ namespace zero.Web
 
     protected ILogger<IZeroVue> Logger { get; private set; }
 
-    protected IZeroDocumentSession Session { get; private set; }
+    protected IZeroStore Store { get; private set; }
 
     string IconSymbolsSvg { get; set; }
 
 
-    public ZeroVue(IZeroOptions options, IPaths paths, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IEnumerable<IZeroPlugin> plugins, IZeroContext context, ILogger<IZeroVue> logger, IZeroDocumentSession session)
+    public ZeroVue(IZeroOptions options, IPaths paths, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IEnumerable<IZeroPlugin> plugins, IZeroContext context, ILogger<IZeroVue> logger, IZeroStore store)
     {
       Paths = paths;
       Options = options;
@@ -50,7 +50,7 @@ namespace zero.Web
       Plugins = plugins;
       Context = context;
       Logger = logger;
-      Session = session;
+      Store = store;
     }
 
 
@@ -278,7 +278,7 @@ namespace zero.Web
       IList<Application> applications = await ApplicationsApi.GetAll();
 
       string[] mediaIds = applications.Select(x => x.IconId).Where(x => x != null).ToArray();
-      Dictionary<string, Media> media = await Session.LoadAsync<Media>(mediaIds);
+      Dictionary<string, Media> media = await Store.Session().LoadAsync<Media>(mediaIds);
 
       return applications.OrderBy(app => app.Sort).Select(app => new ZeroVueApplication()
       {

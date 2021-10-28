@@ -19,14 +19,14 @@ namespace zero.Core.Routing
 
     const bool TRAILING_SLASH = false;
 
-    protected IZeroDocumentSession Session { get; private set; }
+    protected IZeroStore Store { get; private set; }
 
     protected IZeroOptions Options { get; private set; }
 
 
-    public PageUrlBuilder(IZeroDocumentSession session, IZeroOptions options)
+    public PageUrlBuilder(IZeroStore store, IZeroOptions options)
     {
-      Session = session;
+      Store = store;
       Options = options;
     }
 
@@ -34,12 +34,14 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public async Task<string> GetUrl(Page page)
     {
-      Pages_ByHierarchy.Result result = await Session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
+      IZeroDocumentSession session = Store.Session();
+
+      Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
           .ProjectInto<Pages_ByHierarchy.Result>()
           .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
           .FirstOrDefaultAsync(x => x.Id == page.Id);
 
-      IList<Page> parents = (await Session.LoadAsync<Page>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
+      IList<Page> parents = (await session.LoadAsync<Page>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
 
       StringBuilder stringBuilder = new StringBuilder();
 

@@ -12,16 +12,13 @@ namespace zero.Core.Collections
 
     public IZeroOptions Options { get; private set; }
 
-    public IZeroDocumentSession Session { get; private set; }
-
     public ICollectionInterceptorHandler InterceptorHandler { get; private set; }
 
 
-    public CollectionContext(IZeroStore store, IZeroContext context, IZeroDocumentSession session, IZeroOptions options, ICollectionInterceptorHandler interceptorHandler)
+    public CollectionContext(IZeroStore store, IZeroContext context, IZeroOptions options, ICollectionInterceptorHandler interceptorHandler)
     {
       Store = store;
       Context = context;
-      Session = session;
       Options = options;
       InterceptorHandler = interceptorHandler;
     }
@@ -35,8 +32,6 @@ namespace zero.Core.Collections
     IZeroContext Context { get; }
 
     IZeroOptions Options { get; }
-
-    IZeroDocumentSession Session { get; }
 
     ICollectionInterceptorHandler InterceptorHandler { get; }
   }

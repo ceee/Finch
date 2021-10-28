@@ -14,7 +14,7 @@ namespace zero.Core.Routing
     protected Route PageRoute { get; set; }
 
 
-    public NewRouteProvider(IZeroDocumentSession session, IZeroOptions options) : base("new.test", session, options)
+    public NewRouteProvider(IZeroStore store, IZeroOptions options) : base("new.test", store, options)
     {
       Options = options;
     }
@@ -49,7 +49,7 @@ namespace zero.Core.Routing
     public override async Task<IResolvedRoute> Resolve(RouteResponse response)
     {
       PageRoute resolved = new(response.Route);
-      resolved.Page = await Session.LoadAsync<Page>(response.Route.Dependencies[0]);
+      resolved.Page = await Store.Session().LoadAsync<Page>(response.Route.Dependencies[0]);
       return resolved.Page == null ? null : resolved;
     }
 
@@ -57,7 +57,7 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public override async Task<IEnumerable<Country>> All()
     {
-      return await Session.Query<Country>().ToListAsync();
+      return await Store.Session().Query<Country>().ToListAsync();
     }
   }
 }

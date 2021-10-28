@@ -28,11 +28,15 @@ namespace zero.Core.Database
         Core = this;
       }
     }
+
+    public bool IsDisposed { get; set; }
   }
 
 
   public interface IZeroDocumentSession : IAsyncDocumentSession
   {
     IZeroDocumentSession Core { get; }
+
+    bool IsDisposed { get; }
   }
 }

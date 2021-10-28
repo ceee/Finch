@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using zero.Core.Collections;
 using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -11,9 +10,11 @@ namespace zero.Web.ViewHelpers
 {
   public class ZeroMediaHelper : IZeroMediaHelper
   {
-    IZeroDocumentSession Session;
+    IZeroStore Store;
 
     public IZeroMediaHelper Core { get; private set; }
+
+    protected bool Global { get; set; }
 
     /// <summary>
     /// Media cache for repetitive queries within an HTTP request
@@ -21,13 +22,13 @@ namespace zero.Web.ViewHelpers
     ConcurrentDictionary<string, Media> Cache { get; set; } = new();
 
 
-    public ZeroMediaHelper(IZeroDocumentSession session, bool isCore = false)
+    public ZeroMediaHelper(IZeroStore store, bool global = false)
     {
-      Session = session;
+      Store = store;
 
-      if (!isCore)
+      if (!global)
       {
-        Core = new ZeroMediaHelper(session.Core, true);
+        Core = new ZeroMediaHelper(store, true);
       }
     }
 
@@ -42,7 +43,7 @@ namespace zero.Web.ViewHelpers
 
       if (!Cache.TryGetValue(id, out Media media))
       {
-        media = await Session.LoadAsync<Media>(id);
+        media = await Store.Session(Global).LoadAsync<Media>(id);
         Cache.TryAdd(id, media);
       }
 
@@ -70,7 +71,7 @@ namespace zero.Web.ViewHelpers
 
       if (remoteIds.Count > 0)
       {
-        Dictionary<string, Media> remoteItems = await Session.LoadAsync<Media>(remoteIds);
+        Dictionary<string, Media> remoteItems = await Store.Session(Global).LoadAsync<Media>(remoteIds);
 
         foreach (var item in remoteItems)
         {

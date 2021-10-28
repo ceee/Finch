@@ -24,8 +24,6 @@ namespace zero.Core.Collections
 
     protected ICollectionInterceptorHandler InterceptorHandler { get; private set; }
 
-    private IZeroDocumentSession zeroSession;
-
     protected virtual Action<T> PreSave { get; set; }
 
     protected bool OnlyActive { get; set; } = false; // TODO do we really need this?
@@ -36,7 +34,6 @@ namespace zero.Core.Collections
       Context = collectionContext.Context;
       Store = collectionContext.Store;
       InterceptorHandler = collectionContext.InterceptorHandler;
-      zeroSession = collectionContext.Session;
       Validator = validator;
       Database = Store.ResolvedDatabase;
     }
@@ -77,7 +74,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Create an an async document session
     /// </summary>
-    public IZeroDocumentSession Session => Database == Context.Options.Raven.Database ? zeroSession.Core : zeroSession;
+    public IZeroDocumentSession Session => Store.Session(Database == Context.Options.Raven.Database);
 
     /// <inheritdoc />
     public string Database

@@ -14,14 +14,14 @@ namespace zero.Core.Routing
   {
     public const char PATH_SEPERATOR = '/';
 
-    protected IZeroDocumentSession Session { get; set; }
+    protected IZeroStore Store { get; set; }
     protected ILogger<Routes> Logger { get; set; }
     protected IEnumerable<IRouteProvider> Providers { get; set; }
 
 
-    public Routes(IZeroDocumentSession session, ILogger<Routes> logger, IEnumerable<IRouteProvider> providers)
+    public Routes(IZeroStore store, ILogger<Routes> logger, IEnumerable<IRouteProvider> providers)
     {
-      Session = session;
+      Store = store;
       Logger = logger;
       Providers = providers;
     }
@@ -55,14 +55,15 @@ namespace zero.Core.Routing
         return null;
       }
 
-      T model = await Session.LoadAsync<T>(id);
+      IZeroDocumentSession session = Store.Session();
+      T model = await session.LoadAsync<T>(id);
 
       if (model == null)
       {
         return null;
       }
 
-      return await routeProvider.GetRoute(Session, model, parameters);
+      return await routeProvider.GetRoute(session, model, parameters);
     }
 
 
@@ -82,7 +83,7 @@ namespace zero.Core.Routing
         return null;
       }
 
-      return await routeProvider.GetRoute(Session, model, parameters);
+      return await routeProvider.GetRoute(Store.Session(), model, parameters);
     }
 
 
@@ -109,7 +110,7 @@ namespace zero.Core.Routing
         return null;
       }
 
-      return (await routeProvider.GetRoutes(Session, models.Select(x => (object)x), parameters)).ToDictionary(x => (T)x.Key, x => x.Value);
+      return (await routeProvider.GetRoutes(Store.Session(), models.Select(x => (object)x), parameters)).ToDictionary(x => (T)x.Key, x => x.Value);
     }
   }
 

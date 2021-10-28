@@ -23,8 +23,6 @@ namespace zero.Core.Api
 
     protected ICollectionContext Context { get; private set; }
 
-    protected IZeroDocumentSession Session { get; private set; }
-
     protected bool IsCoreDatabase { get; private set; }
 
 
@@ -32,18 +30,16 @@ namespace zero.Core.Api
     {
       Context = context;
       Store = context.Store;
-      Session = context.Session;
       IsCoreDatabase = false;
     }
 
     internal BackofficeApi(ICollectionContext context, bool isCoreDatabase) : this(context)
     {
       IsCoreDatabase = isCoreDatabase;
-      if (IsCoreDatabase)
-      {
-        Session = Context.Session.Core;
-      }
     }
+
+
+    protected IZeroDocumentSession Session => Store.Session(IsCoreDatabase);
 
 
     /// <inheritdoc />

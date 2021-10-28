@@ -5,6 +5,7 @@ using Raven.Client.Documents.Operations;
 using Raven.Client.Documents.Queries;
 using Raven.Client.Documents.Session;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using zero.Core.Options;
@@ -20,6 +21,7 @@ namespace zero.Core.Database
     }
 
     protected IZeroOptions Options { get; set; }
+    protected Dictionary<string, IZeroDocumentSession> ScopedSessions { get; set; } = new();
 
     /// <inheritdoc />
     public string ResolvedDatabase { get; set; }
@@ -27,6 +29,41 @@ namespace zero.Core.Database
 
     /// <inheritdoc />
     public IDocumentStore Raven => this;
+
+
+    /// <inheritdoc />
+    public IZeroDocumentSession Session(string database = null, ZeroSessionResolution resolution = ZeroSessionResolution.Reuse, SessionOptions options = null)
+    {
+      database ??= ResolvedDatabase;
+      options ??= new SessionOptions() { Database = database };
+
+      if (resolution == ZeroSessionResolution.Create)
+      {
+        return OpenAsyncSession(options) as IZeroDocumentSession;
+      }
+
+      if (!ScopedSessions.TryGetValue(database, out IZeroDocumentSession session))
+      {
+        session = OpenAsyncSession(options) as IZeroDocumentSession;
+        ScopedSessions.TryAdd(database, session);
+      }
+      
+      if (session.IsDisposed)
+      {
+        session = OpenAsyncSession(options) as IZeroDocumentSession;
+        ScopedSessions.Remove(database);
+        ScopedSessions.TryAdd(database, session);
+      }
+
+      return session;
+    }
+
+
+    /// <inheritdoc />
+    public IZeroDocumentSession Session(bool global, string database = null, ZeroSessionResolution resolution = ZeroSessionResolution.Reuse, SessionOptions options = null)
+    {
+      return Session(global ? Options.Raven.Database : database, resolution, options);
+    }
 
 
     /// <inheritdoc />
@@ -62,6 +99,10 @@ namespace zero.Core.Database
       var session = new ZeroDocumentSession(this, sessionId, options, Options.Raven.Database);
       RegisterEvents(session);
       AfterSessionCreated(session);
+      session.OnSessionDisposing += (sender, args) =>
+      {
+        session.IsDisposed = true;
+      };
 
       session.Advanced.DocumentStore.AggressivelyCacheFor(TimeSpan.FromHours(1), options.Database);
 
@@ -136,6 +177,13 @@ namespace zero.Core.Database
   }
 
 
+  public enum ZeroSessionResolution
+  {
+    Reuse = 0,
+    Create = 1
+  }
+
+
   public interface IZeroStore : IDocumentStore
   {
     /// <summary>
@@ -147,6 +195,16 @@ namespace zero.Core.Database
     /// Get underlying raven document store
     /// </summary>
     IDocumentStore Raven { get; }
+
+    /// <summary>
+    /// Use a specific session
+    /// </summary>
+    IZeroDocumentSession Session(string database = null, ZeroSessionResolution resolution = ZeroSessionResolution.Reuse, SessionOptions options = null);
+
+    /// <summary>
+    /// Use a session for the core database
+    /// </summary>
+    IZeroDocumentSession Session(bool global, string database = null, ZeroSessionResolution resolution = ZeroSessionResolution.Reuse, SessionOptions options = null);
 
     /// <summary>
     /// Get operation executor

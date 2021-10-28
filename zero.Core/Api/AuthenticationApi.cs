@@ -19,14 +19,14 @@ namespace zero.Core.Api
 
     protected SignInManager<BackofficeUser> SignInManager { get; private set; }
 
-    protected IZeroDocumentSession Session { get; set; }
+    protected IZeroStore Store { get; set; }
 
 
-    public AuthenticationApi(IZeroContext context, SignInManager<BackofficeUser> signInManager, IZeroDocumentSession session)
+    public AuthenticationApi(IZeroContext context, SignInManager<BackofficeUser> signInManager, IZeroStore store)
     {
       Context = context;
       SignInManager = signInManager;
-      Session = session.Core;
+      Store = store;
     }
 
 
@@ -141,6 +141,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<bool> TrySwitchApp(string appId)
     {
+      IZeroDocumentSession session = Store.Session(global: true);
       BackofficeUser user = await GetUser();
 
       if (user == null || appId.IsNullOrEmpty())
@@ -161,8 +162,8 @@ namespace zero.Core.Api
         //RandomNumberGenerator.Fill(bytes);
         //user.SecurityStamp = Base32.ToBase32(bytes); // TODO update security stamp but Base32 is .net core internal
 
-        await Session.StoreAsync(user);
-        await Session.SaveChangesAsync();
+        await session.StoreAsync(user);
+        await session.SaveChangesAsync();
 
         return true;
       }

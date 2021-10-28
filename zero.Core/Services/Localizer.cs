@@ -16,12 +16,10 @@ namespace zero.Core.Services
 
     protected IZeroStore Store { get; private set; }
 
-    protected IZeroDocumentSession Session { get; private set; }
 
-
-    public Localizer(IZeroDocumentSession session)
+    public Localizer(IZeroStore store)
     {
-      Session = session;
+      Store = store;
     }
 
 
@@ -92,7 +90,7 @@ namespace zero.Core.Services
     /// </summary>
     protected virtual Translation LoadTranslation(string key)
     {
-      return Session.Query<Translation>().FirstOrDefault(x => x.Key == key);
+      return Store.Session().Query<Translation>().FirstOrDefault(x => x.Key == key); // TODO I guess this throws ^^
     }
   }
 

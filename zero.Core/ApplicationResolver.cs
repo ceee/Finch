@@ -112,7 +112,7 @@ namespace zero.Core
         throw new Exception($"User entity ${user.Id} needs a valid AppId");
       }
 
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      IAsyncDocumentSession session = Store.Session(global: true);
       return await session.LoadAsync<Application>(appId);
     }
 
@@ -183,7 +183,7 @@ namespace zero.Core
         return Apps;
       }
 
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      IAsyncDocumentSession session = Store.Session(global: true);
       Apps = await session.Query<Application>().ToListAsync();
       return Apps;
     }
@@ -196,7 +196,7 @@ namespace zero.Core
     {
       string userId = user.FindFirstValue(Constants.Auth.Claims.UserId);
 
-      using IAsyncDocumentSession session = Store.OpenCoreSession();
+      IAsyncDocumentSession session = Store.Session(global: true);
       return await session.LoadAsync<BackofficeUser>(userId);
     }
   }

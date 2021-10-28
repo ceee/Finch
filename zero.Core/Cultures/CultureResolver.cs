@@ -33,8 +33,7 @@ namespace zero.Core.Cultures
       }
       else
       {
-        using IAsyncDocumentSession session = context.Store.OpenAsyncSession();
-        Language language = await session.Query<Language>().FirstOrDefaultAsync();
+        Language language = await context.Store.Session().Query<Language>().FirstOrDefaultAsync();
 
         if (language == null)
         {

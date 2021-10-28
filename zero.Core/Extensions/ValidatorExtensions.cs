@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using zero.Core.Api;
+using zero.Core.Database;
 using zero.Core.Entities;
 
 namespace zero.Core.Extensions
@@ -101,11 +102,11 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this value is unique within a collection
     /// </summary>
-    public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IAsyncDocumentSession session) where T : ZeroEntity
+    public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IZeroStore store) where T : ZeroEntity
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
-        bool any = await session.Advanced.AsyncDocumentQuery<T>()
+        bool any = await store.Session().Advanced.AsyncDocumentQuery<T>()
           .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
           .WhereEquals(context.PropertyName.ToPascalCaseId(), value)
           .AnyAsync(cancellation);
@@ -118,11 +119,11 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this value is at least set once to the expected value within a collection
     /// </summary>
-    public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IAsyncDocumentSession session, TProperty expectedValue) where T : ZeroEntity
+    public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IZeroStore store, TProperty expectedValue) where T : ZeroEntity
     {
       return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
       {
-        return await session.Advanced.AsyncDocumentQuery<T>()
+        return await store.Session().Advanced.AsyncDocumentQuery<T>()
           .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
           .WhereEquals(context.PropertyName.ToPascalCaseId(), expectedValue)
           .AnyAsync(cancellation);
@@ -133,16 +134,16 @@ namespace zero.Core.Extensions
     /// <summary>
     /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
     /// </summary>
-    public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IAsyncDocumentSession session) where T : ZeroEntity
+    public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IZeroStore store) where T : ZeroEntity
     {
-      return ruleBuilder.Exists<T, T>(session);
+      return ruleBuilder.Exists<T, T>(store);
     }
 
 
     /// <summary>
     /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
     /// </summary>
-    public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IAsyncDocumentSession session) where T : ZeroEntity where TReference : ZeroEntity
+    public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IZeroStore store) where T : ZeroEntity where TReference : ZeroEntity
     {
       return ruleBuilder.MustAsync(async (entity, id, context, cancellation) =>
       {
@@ -151,7 +152,7 @@ namespace zero.Core.Extensions
           return true;
         }
 
-        TReference model = await session.LoadAsync<TReference>(id);
+        TReference model = await store.Session().LoadAsync<TReference>(id);
         return model != null;
       }).WithMessage("@errors.forms.reference_notfound");
     }

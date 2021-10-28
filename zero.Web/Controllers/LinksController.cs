@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Raven.Client.Documents.Session;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using zero.Core.Api;
 using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Routing;
@@ -13,18 +10,19 @@ namespace zero.Web.Controllers
 {
   public class LinksController : BackofficeController
   {
-    IZeroDocumentSession Session;
+    IZeroStore Store;
     ILinks Links;
 
-    public LinksController(IZeroDocumentSession session, ILinks links)
+    public LinksController(IZeroStore store, ILinks links)
     {
-      Session = session;
+      Store = store;
       Links = links;
     }
 
     [HttpPost]
     public async Task<IList<PreviewModel>> GetPreviews([FromBody] List<Link> links)
     {
+      IZeroDocumentSession session = Store.Session();
       IList<PreviewModel> previews = new List<PreviewModel>();
 
       foreach (Link link in links)
@@ -34,7 +32,7 @@ namespace zero.Web.Controllers
 
         if (provider != null)
         {
-          model = await provider.Preview(Session, link);
+          model = await provider.Preview(session, link);
         }
 
         previews.Add(model ?? new PreviewModel()

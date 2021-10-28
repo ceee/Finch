@@ -20,7 +20,7 @@ namespace zero.Core.Identity
     where TUser : ZeroIdentityUser
     where TRole : ZeroIdentityRole
   {
-    public RavenUserStore(IZeroStore store, IZeroOptions options, IZeroDocumentSession session) : base(store, options, session) { }
+    public RavenUserStore(IZeroStore store, IZeroOptions options, bool global = false) : base(store, options, global) { }
 
 
     /// <inheritdoc />
@@ -41,7 +41,7 @@ namespace zero.Core.Identity
     /// <inheritdoc />
     public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
     {
-      return await ScopeQuery(Session.Query<TUser>()).Where(x => roleName.In(x.RoleIds)).ToListAsync();
+      return await ScopeQuery(Store.Session(Global).Query<TUser>()).Where(x => roleName.In(x.RoleIds)).ToListAsync();
     }
 
 

@@ -156,11 +156,21 @@ namespace zero.Core
   {
     public IZeroContext Context { get; }
 
+    public Application App { get; set; }
+
+    public string Database { get; set; }
+
+    public IZeroStore Store { get; set; }
+
     Application _originalApp = null;
 
-    public ZeroContextScope(IZeroContext context, Application app)
+
+    internal ZeroContextScope(IZeroContext context, Application app)
     {
       Context = context;
+      App = app;
+      Database = app.Database;
+      Store = context.Store;
       _originalApp = app;
       Context.Override(app);
     }

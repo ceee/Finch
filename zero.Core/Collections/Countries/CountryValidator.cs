@@ -8,9 +8,9 @@ namespace zero.Core.Collections
 {
   public class CountryValidator : ZeroValidator<Country>
   {
-    public CountryValidator(IZeroDocumentSession session)
+    public CountryValidator(IZeroStore store)
     {
-      RuleFor(x => x.Code).Length(2).Unique(session);
+      RuleFor(x => x.Code).Length(2).Unique(store);
       RuleFor(x => x.Name).Length(2, 120);
     }
   }
