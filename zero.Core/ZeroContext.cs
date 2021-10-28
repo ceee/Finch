@@ -134,7 +134,7 @@ namespace zero.Core
     /// <inheritdoc />
     public ZeroContextScope CreateScope(Application app)
     {
-      return new(this, app);
+      return new(this, app, Application);
     }
 
 
@@ -165,13 +165,13 @@ namespace zero.Core
     Application _originalApp = null;
 
 
-    internal ZeroContextScope(IZeroContext context, Application app)
+    internal ZeroContextScope(IZeroContext context, Application app, Application originalApp)
     {
       Context = context;
       App = app;
       Database = app.Database;
       Store = context.Store;
-      _originalApp = app;
+      _originalApp = originalApp;
       Context.Override(app);
     }
 
