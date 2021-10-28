@@ -48,7 +48,7 @@ namespace zero.Core.Routing
           //});
 
           // store new routes
-          using (BulkInsertOperation bulkInsert = Store.BulkInsert(app.Database))
+          using (BulkInsertOperation bulkInsert = Store.Raven.BulkInsert(app.Database))
           {
             foreach (Route route in routes)
             {

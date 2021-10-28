@@ -33,7 +33,8 @@ namespace zero.Core.Cultures
       }
       else
       {
-        Language language = await context.Store.Session().Query<Language>().FirstOrDefaultAsync();
+        var session = context.Store.Session();
+        Language language = await session.Query<Language>().FirstOrDefaultAsync();
 
         if (language == null)
         {

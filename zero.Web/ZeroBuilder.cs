@@ -143,12 +143,12 @@ namespace zero.Web
     {
       Services.AddSingleton<IZeroDocumentConventionsBuilder, ZeroDocumentConventionsBuilder>();
 
-      Services.AddSingleton<IZeroStore, ZeroStore>(context =>
+      Services.AddSingleton<IZeroDocumentStore, ZeroDocumentStore>(context =>
       {
         IZeroOptions options = context.GetService<IZeroOptions>();
         IZeroDocumentConventionsBuilder conventionsBuilder = context.GetService<IZeroDocumentConventionsBuilder>();
 
-        IDocumentStore store = new ZeroStore(options)
+        IDocumentStore store = new ZeroDocumentStore(options)
         {
           Urls = new string[1] { options.Raven.Url },
           Conventions = // TODO activate and test this
@@ -172,16 +172,10 @@ namespace zero.Web
           IndexCreation.CreateIndexes(indexes, store, database: options.Raven.Database);
         }
 
-        return (ZeroStore)raven;
+        return (ZeroDocumentStore)raven;
       });
 
-
-      //Services.AddScoped<IZeroDocumentSession>(services =>
-      //{
-      //  var session = services.GetRequiredService<IZeroStore>().OpenAsyncSession();
-      //  session.Advanced.WaitForIndexesAfterSaveChanges();
-      //  return session as ZeroDocumentSession;
-      //});
+      Services.AddScoped<IZeroStore, ZeroStore>();
     }
 
 

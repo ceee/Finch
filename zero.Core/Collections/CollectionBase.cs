@@ -17,7 +17,7 @@ using zero.Core.Utils;
 
 namespace zero.Core.Collections
 {
-  public abstract class CollectionBase<T> : ICollectionBase<T>, ICollectionBase, IDisposable where T : ZeroEntity
+  public abstract class CollectionBase<T> : ICollectionBase<T>, ICollectionBase where T : ZeroEntity
   {
     private IRevisionsApi _revisions;
     private string _database;
@@ -427,18 +427,11 @@ namespace zero.Core.Collections
         return instruction.EntityResult;
       }
 
-      await Store.PurgeAsync<T>(Database, querySuffix, parameters);
+      await Store.Raven.PurgeAsync<T>(Database, querySuffix, parameters);
 
       await instruction.HandleAfter(x => x.Purged(instruction.Parameters));
 
       return EntityResult<T>.Success();
-    }
-
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-      Session?.Dispose();
     }
 
 
@@ -470,7 +463,7 @@ namespace zero.Core.Collections
   }
 
 
-  public interface ICollectionBase : IDisposable
+  public interface ICollectionBase
   {
     /// <summary>
     /// Guid for this instance
@@ -585,7 +578,7 @@ namespace zero.Core.Collections
   }
 
 
-  public interface ICollectionSession : IDisposable
+  public interface ICollectionSession
   {
     /// <summary>
     /// Guid for this instance

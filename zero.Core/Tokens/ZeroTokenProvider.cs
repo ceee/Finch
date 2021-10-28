@@ -139,9 +139,9 @@ namespace zero.Core.Tokens
     /// </summary>
     string TokenToId(string token)
     {
-      string collection = Store.Conventions.GetCollectionName(typeof(SecurityToken));
-      string idPrefix = Store.Conventions.TransformTypeCollectionNameToDocumentIdPrefix(collection);
-      return idPrefix + Store.Conventions.IdentityPartsSeparator + token;
+      string collection = Store.Raven.Conventions.GetCollectionName(typeof(SecurityToken));
+      string idPrefix = Store.Raven.Conventions.TransformTypeCollectionNameToDocumentIdPrefix(collection);
+      return idPrefix + Store.Raven.Conventions.IdentityPartsSeparator + token;
     }
 
 

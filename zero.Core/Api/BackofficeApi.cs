@@ -199,7 +199,7 @@ namespace zero.Core.Api
     /// <inheritdoc />
     public async Task<EntityResult<T>> Purge<T>(string querySuffix = null, Parameters parameters = null)
     {
-      await Store.PurgeAsync<T>(Session.Advanced.DocumentStore.Database, querySuffix, parameters);
+      await Store.Raven.PurgeAsync<T>(Session.Advanced.DocumentStore.Database, querySuffix, parameters);
       return EntityResult<T>.Success();
     }
   }
