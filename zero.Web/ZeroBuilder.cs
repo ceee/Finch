@@ -168,8 +168,8 @@ namespace zero.Web
         // create all indexes
         if (options.SetupCompleted)
         {
-          var indexes = options.Raven.Indexes.BuildAll(options, store);
-          IndexCreation.CreateIndexes(indexes, store, database: options.Raven.Database);
+          //var indexes = options.Raven.Indexes.BuildAll(options, store);
+          //IndexCreation.CreateIndexes(indexes, store, database: options.Raven.Database);
         }
 
         return (ZeroDocumentStore)raven;
