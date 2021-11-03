@@ -118,6 +118,6 @@
   --color-table-highlight: #{$color-bg-shade-3};
 
   // misc
-  --color-required-marker: #{$color-primary};
+  --color-required-marker: var(--color-accent);
   --color-synchronized: #{$color-secondary};
 }

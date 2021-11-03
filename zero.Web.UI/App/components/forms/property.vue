@@ -1,10 +1,10 @@
 ﻿<template>
   <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText, 'hide-label': hideLabel, 'is-disabled': disabled }">
-    <label v-if="label && !hideLabel" class="ui-property-label" :for="field">
+    <label v-if="label && !hideLabel" class="ui-property-label" :for="field" v-localize:title="description" :class="{ 'has-description': !!description }">
       <span v-localize="label"></span>
       <strong class="ui-property-required" v-if="required">*</strong>
       <slot name="label-after"></slot>
-      <small v-if="description" v-localize="description"></small>
+      <small class="ui-property-label-small" v-if="description" :size="14" v-localize:title="description">?</small>
     </label>
 
     <div class="ui-property-content">
@@ -144,25 +144,37 @@
     font-weight: 700;
     flex-basis: 100%;
 
+    &.has-description:hover
+    {
+      cursor: help;
+    }
+
     /*.ui-property:focus-within &
     {
       color: var(--color-accent-info);
     }*/
   }
 
-  .ui-property-label small
+  .ui-property-label-small
   {
-    display: block;
-    padding-top: 2px;
-    font-size: var(--font-size-xs);
-    font-weight: 400;
-    line-height: 1.3;
-    text-decoration: none;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    position: relative;
+    top: -1px;
+    left: 10px;
     color: var(--color-text-dim);
+    cursor: help;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 16px;
+    border-radius: 16px;
+    background: var(--color-bg-shade-4);
 
-    &:empty
-    {
-      display: none;
+    &:hover
+    {      
+      color: var(--color-text);
     }
   }
 
