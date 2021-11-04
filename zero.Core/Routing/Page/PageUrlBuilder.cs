@@ -1,12 +1,8 @@
-﻿using Raven.Client.Documents;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using zero.Core.Api;
 using zero.Core.Database;
-using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Options;
@@ -28,41 +24,6 @@ namespace zero.Core.Routing
     {
       Store = store;
       Options = options;
-    }
-
-
-    /// <inheritdoc />
-    public async Task<string> GetUrl(Page page)
-    {
-      IZeroDocumentSession session = Store.Session();
-
-      Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
-          .ProjectInto<Pages_ByHierarchy.Result>()
-          .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
-          .FirstOrDefaultAsync(x => x.Id == page.Id);
-
-      IList<Page> parents = (await session.LoadAsync<Page>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
-
-      StringBuilder stringBuilder = new StringBuilder();
-
-      if (parents != null)
-      {
-        foreach (Page parent in parents)
-        {
-          stringBuilder.Append(GetUrlPart(parent));
-          stringBuilder.Append(PATH_SEPARATOR);
-        }
-      }
-
-      stringBuilder.Append(GetUrlPart(page));
-      stringBuilder.Append(PATH_SEPARATOR);
-
-      if (!TRAILING_SLASH)
-      {
-        stringBuilder.Remove(stringBuilder.Length - 1, 1);
-      }
-
-      return stringBuilder.ToString();
     }
 
 

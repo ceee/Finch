@@ -3,10 +3,8 @@ using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Queries;
 using Raven.Client.Documents.Session;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using zero.Core.Entities;
 
 namespace zero.Core.Extensions
 {

@@ -13,11 +13,6 @@ namespace zero.Core.Routing
     /// <summary>
     /// Get URL for a page
     /// </summary>
-    Task<string> GetUrl(Page page);
-
-    /// <summary>
-    /// Get URL for a page
-    /// </summary>
     string GetUrl(Page page, IEnumerable<Page> parents);
   }
 }
