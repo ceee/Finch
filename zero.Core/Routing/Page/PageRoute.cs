@@ -9,5 +9,7 @@ namespace zero.Core.Routing
     public PageRoute(Route route) : base(route) { }
 
     public IList<Page> Parents { get; set; }
+
+    public string PageType { get; set; }
   }
 }

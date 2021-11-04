@@ -9,16 +9,13 @@ namespace zero.Core.Routing
 
     public IZeroContext Context { get; private set; }
 
-    public IZeroOptions Options { get; private set; }
-
     public IZeroDocumentSession Session { get; private set; }
 
 
-    public RoutingContext(IZeroStore store, IZeroContext context, IZeroOptions options, IZeroDocumentSession session)
+    public RoutingContext(IZeroStore store, IZeroContext context, IZeroDocumentSession session)
     {
       Store = store;
       Context = context;
-      Options = options;
       Session = session;
     }
   }
@@ -29,8 +26,6 @@ namespace zero.Core.Routing
     IZeroStore Store { get; }
 
     IZeroContext Context { get; }
-
-    IZeroOptions Options { get; }
 
     IZeroDocumentSession Session { get; }
   }

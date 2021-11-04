@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Database.Indexes;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 
 namespace zero.Core.Routing
 {
@@ -33,10 +34,9 @@ namespace zero.Core.Routing
       Route route = new();
 
       route.Url = UrlBuilder.GetUrl(model, parents);
-      route.Dependencies.Add(model.Id);
-      route.Dependencies.AddRange(parents.Select(x => x.Id));
-
-      route.Params.Add(PAGE_TYPE_PARAM, model.PageTypeAlias);
+      route.DependsOn(model.Id);
+      route.DependsOn(parents.Select(x => x.Id).ToArray());
+      route.Param(PAGE_TYPE_PARAM, model.PageTypeAlias);
 
       return route;
     }
@@ -48,6 +48,7 @@ namespace zero.Core.Routing
       PageRoute resolved = new(route);
       resolved.Page = entity;
       resolved.Parents = await GetParents(context, entity);
+      resolved.PageType = route.Param<string>(PAGE_TYPE_PARAM);
 
       return resolved;
     }
