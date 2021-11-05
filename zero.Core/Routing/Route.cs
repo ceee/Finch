@@ -23,6 +23,11 @@ namespace zero.Core.Routing
     }
 
     /// <summary>
+    /// Id of the referenced entity
+    /// </summary>
+    public string ReferenceId { get; set; }
+
+    /// <summary>
     /// Generated URL based on the URL provider
     /// </summary>
     public string Url { get; set; }

@@ -117,6 +117,9 @@ namespace zero.Web.Defaults
       services.AddScoped<ILinkProvider, PageLinkProvider>();
       services.AddScoped<ILinkProvider, RawLinkProvider>();
 
+      services.AddScoped<INewRoutes, NewRoutes>();
+      services.AddScoped<INewRouteProvider, TestPageRouteProvider>();
+
       services.AddScoped<ZeroRoutesTransformer>();
       services.TryAddEnumerable(ServiceDescriptor.Singleton<MatcherPolicy, NotFoundSelectorPolicy>());
 

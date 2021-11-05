@@ -77,6 +77,7 @@
     {
       public const string FolderAlias = "zero.folder";
       public const string DefaultRootPageTypeAlias = "root";
+      public const string PageRouteProviderAlias = "zero.pages";
     }
 
     public static class Routing

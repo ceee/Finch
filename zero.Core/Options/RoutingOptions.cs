@@ -9,12 +9,16 @@ namespace zero.Core.Options
   {
     public RoutingOptions()
     {
+      PageRouteIdBuilder = new PageRouteIdBuilder();
       DefaultEndpoint = new("ZeroFrontend", "Index");
       EndpointResolvers = new();
       PageResolvers = new();
       //ErrorReexecutionPath = "/error";
       NotFoundEndpoint = null;
     }
+
+
+    public IPageRouteIdBuilder PageRouteIdBuilder { get; set; }
 
 
     public RouteProviderEndpoint NotFoundEndpoint { get; set; }

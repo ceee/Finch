@@ -41,6 +41,7 @@ namespace zero.Core.Options
       Raven.Indexes.Add<Pages_WithChildren>();
       Raven.Indexes.Add<Pages_ByType>();
       Raven.Indexes.Add<Routes_ForResolver>();
+      Raven.Indexes.Add<Routes_ByDependencies>();
 
       Raven.Indexes.Add<zero_Countries>();
       Raven.Indexes.Add<zero_Languages>();

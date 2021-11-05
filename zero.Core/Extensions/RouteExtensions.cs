@@ -11,6 +11,18 @@ namespace zero.Core.Extensions
       return route;
     }
 
+    public static Route DependsOn(this Route route, Route anotherRoute)
+    {
+      route.Dependencies.AddRange(anotherRoute.Dependencies);
+      
+      foreach ((string key, object value) in anotherRoute.Params)
+      {
+        route.Params[key] = value;
+      }
+
+      return route;
+    }
+
     public static Route Param(this Route route, string key, object value)
     {
       route.Params[key] = value;

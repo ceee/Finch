@@ -78,10 +78,7 @@ namespace zero.Core.Routing
         return null;
       }
 
-      Type type = model.GetType();
-      INewRouteProvider routeProvider = Providers.FirstOrDefault(x => x.CanHandle(type));
-
-      if (routeProvider == null)
+      if (!TryGetProvider(model, out INewRouteProvider routeProvider))
       {
         return null;
       }
@@ -106,10 +103,7 @@ namespace zero.Core.Routing
         return new();
       }
 
-      Type type = firstExistingModel.GetType();
-      INewRouteProvider routeProvider = Providers.FirstOrDefault(x => x.CanHandle(type));
-
-      if (routeProvider == null)
+      if (!TryGetProvider(firstExistingModel, out INewRouteProvider routeProvider))
       {
         return null;
       }
@@ -125,6 +119,15 @@ namespace zero.Core.Routing
       }
 
       return result;
+    }
+
+
+    /// <inheritdoc />
+    public virtual bool TryGetProvider<T>(T model, out INewRouteProvider provider) where T : IZeroRouteEntity
+    {
+      Type type = model.GetType();
+      provider = Providers.FirstOrDefault(x => x.CanHandle(type));
+      return provider != null;
     }
 
 
@@ -193,5 +196,10 @@ namespace zero.Core.Routing
     /// Get routes for multiple entities
     /// </summary>
     Task<Dictionary<T, Route>> GetRoutes<T>(IEnumerable<T> models, object parameters = null) where T : IZeroRouteEntity;
+
+    /// <summary>
+    /// Find a provider for a certain entity
+    /// </summary>
+    bool TryGetProvider<T>(T model, out INewRouteProvider provider) where T : IZeroRouteEntity;
   }
 }

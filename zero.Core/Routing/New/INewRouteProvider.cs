@@ -26,15 +26,25 @@ namespace zero.Core.Routing
     public sealed override string Key(IZeroRouteEntity model) => Key((T)model);
 
     /// <inheritdoc />
-    public virtual Task<IRouteModel> Model(RoutingContext context, Route route, T entity) => Task.FromResult((IRouteModel)new RouteModel() { Route = route });
+    public virtual Task<bool> IsRouteStale(RoutingContext context, T previous, T current) => Task.FromResult(true);
 
     /// <inheritdoc />
-    public sealed override Task<IRouteModel> Model(RoutingContext context, Route route, IZeroRouteEntity entity) => Model(context, route, (T)entity);
+    public sealed override Task<bool> IsRouteStale(RoutingContext context, IZeroRouteEntity previous, IZeroRouteEntity current) => IsRouteStale(context, (T)previous, (T)current);
+
+    /// <inheritdoc />
+    public virtual string Id(T model) => base.Id(model);
+
+    /// <inheritdoc />
+    public sealed override string Id(IZeroRouteEntity model) => base.Id(model);
   }
 
 
   public abstract class ZeroRouteProvider : INewRouteProvider
   {
+    protected static string ID_PARAM = "id";
+
+    protected PageRouteResolverHelper PageResolver { get; set; } = new();
+
     public ZeroRouteProvider(string alias)
     {
       Alias = alias;
@@ -55,7 +65,13 @@ namespace zero.Core.Routing
     public virtual IAsyncEnumerable<Route> Seed(RoutingContext context) => AsyncEnumerable.Empty<Route>();
 
     /// <inheritdoc />
-    public virtual Task<IRouteModel> Model(RoutingContext context, Route route, IZeroRouteEntity entity) => Task.FromResult((IRouteModel)new RouteModel() { Route = route });
+    public virtual Task<IRouteModel> Model(RoutingContext context, Route route) => Task.FromResult((IRouteModel)new RouteModel() { Route = route });
+
+    /// <inheritdoc />
+    public virtual Task<bool> IsRouteStale(RoutingContext context, IZeroRouteEntity previous, IZeroRouteEntity current) => Task.FromResult(true);
+
+    /// <inheritdoc />
+    public virtual string Id(IZeroRouteEntity model) => "routes." + Alias + "." + Key(model);
   }
 
 
@@ -67,6 +83,11 @@ namespace zero.Core.Routing
     string Key(T model);
 
     /// <summary>
+    /// Generate unique ID for a model
+    /// </summary>
+    string Id(T model);
+
+    /// <summary>
     /// Create route entity from a model
     /// </summary>
     Task<Route> Create(RoutingContext context, T model);
@@ -74,7 +95,13 @@ namespace zero.Core.Routing
     /// <summary>
     /// Converts a route to a model which is passed to the endpoint
     /// </summary>
-    Task<IRouteModel> Model(RoutingContext context, Route route, T entity);
+    Task<IRouteModel> Model(RoutingContext context, Route route);
+
+    /// <summary>
+    /// Determines whether the route for previous is stale and needs to be refreshed 
+    /// based on comparison with the previous version
+    /// </summary>
+    Task<bool> IsRouteStale(RoutingContext context, T previous, T current);
   }
 
 
@@ -96,6 +123,11 @@ namespace zero.Core.Routing
     string Key(IZeroRouteEntity model);
 
     /// <summary>
+    /// Generate unique ID for a model
+    /// </summary>
+    string Id(IZeroRouteEntity model);
+
+    /// <summary>
     /// Create route entity from a model
     /// </summary>
     Task<Route> Create(RoutingContext context, IZeroRouteEntity model);
@@ -108,7 +140,13 @@ namespace zero.Core.Routing
     /// <summary>
     /// Converts a route to a model which is passed to the endpoint
     /// </summary>
-    Task<IRouteModel> Model(RoutingContext context, Route route, IZeroRouteEntity entity);
+    Task<IRouteModel> Model(RoutingContext context, Route route);
+
+    /// <summary>
+    /// Determines whether the route for previous is stale and needs to be refreshed 
+    /// based on comparison with the previous version
+    /// </summary>
+    Task<bool> IsRouteStale(RoutingContext context, IZeroRouteEntity previous, IZeroRouteEntity current);
   }
 
 }

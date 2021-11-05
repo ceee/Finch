@@ -15,9 +15,17 @@ namespace zero.Core.Routing
     protected IPageUrlBuilder UrlBuilder { get; set; }
 
 
-    public TestPageRouteProvider(IPageUrlBuilder urlBuilder) : base("zero.pages")
+    public TestPageRouteProvider(IPageUrlBuilder urlBuilder) : base(Constants.Pages.PageRouteProviderAlias)
     {
       UrlBuilder = urlBuilder;
+    }
+
+
+    /// <inheritdoc />
+    public override Task<bool> IsRouteStale(RoutingContext context, Page previous, Page current)
+    {
+      bool compareUrlPart = !UrlBuilder.GetUrlPart(previous).Equals(UrlBuilder.GetUrlPart(current));
+      return Task.FromResult(compareUrlPart || !previous.ParentId.Equals(current.ParentId));
     }
 
 
@@ -33,6 +41,8 @@ namespace zero.Core.Routing
 
       Route route = new();
 
+      route.Id = Id(model);
+      route.ReferenceId = model.Id;
       route.Url = UrlBuilder.GetUrl(model, parents);
       route.DependsOn(model.Id);
       route.DependsOn(parents.Select(x => x.Id).ToArray());
@@ -43,11 +53,12 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public override async Task<IRouteModel> Model(RoutingContext context, Route route, Page entity)
+    public override async Task<IRouteModel> Model(RoutingContext context, Route route)
     {
+      Page page = await context.Session.LoadAsync<Page>(route.ReferenceId);
       PageRoute resolved = new(route);
-      resolved.Page = entity;
-      resolved.Parents = await GetParents(context, entity);
+      resolved.Page = page;
+      resolved.Parents = await GetParents(context, page);
       resolved.PageType = route.Param<string>(PAGE_TYPE_PARAM);
 
       return resolved;
