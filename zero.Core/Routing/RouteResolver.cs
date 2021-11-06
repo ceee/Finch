@@ -37,7 +37,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<IResolvedRoute> ResolveUrl(HttpContext context, Application application, string path)
+    public async Task<IRouteModel> ResolveUrl(HttpContext context, Application application, string path)
     {
       IZeroDocumentSession session = Store.Session();
 
@@ -106,7 +106,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<IResolvedRoute> ResolveUrl(HttpContext context)
+    public async Task<IRouteModel> ResolveUrl(HttpContext context)
     {
       if (!Options.SetupCompleted || context.IsBackofficeRequest(Options.BackofficePath))
       {
@@ -126,20 +126,22 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public RouteProviderEndpoint MapEndpoint(IResolvedRoute route)
+    public RouteEndpoint MapEndpoint(IRouteModel route)
     {
       IRouteProvider routeProvider = FindProvider(route.Route.ProviderAlias);
-      return routeProvider?.MapEndpoint(route);
+      return null;
+      //return routeProvider?.MapEndpoint(route);
     }
 
 
     /// <summary>
     /// Call the provider which can resolve the route
     /// </summary>
-    async Task<IResolvedRoute> ResolveRouteInternal(IAsyncDocumentSession session, RouteResponse response)
+    Task<IRouteModel> ResolveRouteInternal(IAsyncDocumentSession session, RouteResponse response)
     {
       IRouteProvider routeProvider = FindProvider(response.Route.ProviderAlias);
-      return await routeProvider?.ResolveRoute(session, response);
+      return Task.FromResult(default(IRouteModel));
+      //return await routeProvider?.ResolveRoute(session, response);
     }
 
 
@@ -165,16 +167,16 @@ namespace zero.Core.Routing
     /// <summary>
     /// Resolve an URL from the specified app and the path
     /// </summary>
-    Task<IResolvedRoute> ResolveUrl(HttpContext context, Application application, string path);
+    Task<IRouteModel> ResolveUrl(HttpContext context, Application application, string path);
 
     /// <summary>
     /// Resolve an URL from an http context
     /// </summary>
-    Task<IResolvedRoute> ResolveUrl(HttpContext context);
+    Task<IRouteModel> ResolveUrl(HttpContext context);
 
     /// <summary>
     /// Get endpoint the route maps to
     /// </summary>
-    RouteProviderEndpoint MapEndpoint(IResolvedRoute route);
+    RouteEndpoint MapEndpoint(IRouteModel route);
   }
 }

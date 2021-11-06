@@ -9,9 +9,9 @@ using zero.Core.Entities;
 
 namespace zero.Core.Routing
 {
-  public class RouteRefresher : NewRoutes, IRouteRefresher
+  public class RouteRefresher : Routes, IRouteRefresher
   {
-    public RouteRefresher(IZeroContext context, IZeroStore store, ILogger<Routes> logger, IEnumerable<INewRouteProvider> providers) : base(context, store, logger, providers)
+    public RouteRefresher(IZeroContext context, IZeroStore store, ILogger<Routes> logger, IEnumerable<IRouteProvider> providers) : base(context, store, logger, providers)
     {
 
     }
@@ -20,7 +20,7 @@ namespace zero.Core.Routing
     public async Task<bool> UpdateOnDemand<T>(T model, T previousModel = default) where T : IZeroRouteEntity 
     {
       // find provider for this model
-      if (!TryGetProvider(model, out INewRouteProvider provider))
+      if (!TryGetProvider(model, out IRouteProvider provider))
       {
         return false;
       }

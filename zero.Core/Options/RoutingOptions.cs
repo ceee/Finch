@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using zero.Core.Routing;
+﻿using zero.Core.Routing;
 
 namespace zero.Core.Options
 {
@@ -21,10 +18,10 @@ namespace zero.Core.Options
     public IPageRouteIdBuilder PageRouteIdBuilder { get; set; }
 
 
-    public RouteProviderEndpoint NotFoundEndpoint { get; set; }
+    public RouteEndpoint NotFoundEndpoint { get; set; }
 
 
-    public RouteProviderEndpoint DefaultEndpoint { get; set; }
+    public RouteEndpoint DefaultEndpoint { get; set; }
 
     /// <summary>
     /// 

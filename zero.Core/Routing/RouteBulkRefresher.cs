@@ -11,18 +11,20 @@ namespace zero.Core.Routing
   public class RouteBulkRefresher
   {
     protected IZeroStore Store { get; set; }
+    protected IZeroContext Context { get; set; }
     protected IEnumerable<IRouteProvider> Providers { get; set; }
 
 
-    public RouteBulkRefresher(IZeroStore store, IEnumerable<IRouteProvider> providers)
+    public RouteBulkRefresher(IZeroStore store, IZeroContext context, IEnumerable<IRouteProvider> providers)
     {
       Store = store;
+      Context = context;
       Providers = providers;
     }
 
 
     /// <inheritdoc />
-    public async Task RebuildAllRoutes()
+    public async Task<int> RebuildAllRoutes()
     {
       int count = 0;
 
@@ -30,34 +32,30 @@ namespace zero.Core.Routing
 
       foreach (Application app in apps)
       {
-        IAsyncDocumentSession session = Store.Session(app.Database, ZeroSessionResolution.Create);
-        session.Advanced.MaxNumberOfRequestsPerSession = 1000;
+        IZeroDocumentSession session = Store.Session(app.Database, ZeroSessionResolution.Create);
+        session.Advanced.MaxNumberOfRequestsPerSession = 100_000;
 
-        // delete all routes
-        //await Store.PurgeAsync<Route>(app.Database);
+        await Store.Raven.PurgeAsync<Route>(app.Database);
+
+        RoutingContext context = new(Store, Context, session);
 
         foreach (IRouteProvider provider in Providers)
         {
-          // get all routes for this provider
-          IList<Route> routes = await provider.GetAllRoutes(session);
+          using BulkInsertOperation bulkInsert = Store.Raven.BulkInsert(app.Database);
 
-          // delete all registered routes in the database for this provider
-          //await Store.PurgeAsync<Route>(app.Database, $"where {nameof(Route.ProviderAlias)} = $alias", new Raven.Client.Parameters()
-          //{
-          //  { "alias", provider.Alias }
-          //});
-
-          // store new routes
-          using (BulkInsertOperation bulkInsert = Store.Raven.BulkInsert(app.Database))
+          await foreach (Route route in provider.Seed(context))
           {
-            foreach (Route route in routes)
+            if (route != null)
             {
+              route.ProviderAlias = provider.Alias;
               await bulkInsert.StoreAsync(route, route.Id);
               count += 1;
             }
           }
         }
       }
+
+      return count;
     }
   }
 }

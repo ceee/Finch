@@ -93,4 +93,18 @@ namespace zero.Core.Routing
       return Safenames.Alias(alias).Trim().Trim(PATH_SEPARATOR);
     }
   }
+
+
+  public interface IPageUrlBuilder
+  {
+    /// <summary>
+    /// Get URL for a page
+    /// </summary>
+    string GetUrl(Page page, IEnumerable<Page> parents);
+
+    /// <summary>
+    /// Get the part of the URL (by querying UrlAlias and Alias) for this page
+    /// </summary>
+    string GetUrlPart(Page page);
+  }
 }

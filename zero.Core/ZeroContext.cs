@@ -41,7 +41,7 @@ namespace zero.Core
     public Route Route => ResolvedRoute?.Route;
 
     /// <inheritdoc />
-    public IResolvedRoute ResolvedRoute => HttpContextAccessor?.HttpContext?.Features.Get<IResolvedRoute>();
+    public IRouteModel ResolvedRoute => HttpContextAccessor?.HttpContext?.Features.Get<IRouteModel>();
 
     /// <inheritdoc />
     public IZeroStore Store { get; private set; }
@@ -229,7 +229,7 @@ namespace zero.Core
     /// <summary>
     /// Matching (frontend) resolved route
     /// </summary>
-    IResolvedRoute ResolvedRoute { get; }
+    IRouteModel ResolvedRoute { get; }
 
     /// <summary>
     /// Resolves the current application (for backoffice + frontend requests) and

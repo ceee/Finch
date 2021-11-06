@@ -1,124 +1,92 @@
-﻿using Microsoft.Extensions.Logging;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
-using System;
+﻿using Raven.Client.Documents;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using zero.Core.Database.Indexes;
 using zero.Core.Entities;
-using zero.Core.Options;
+using zero.Core.Extensions;
 
 namespace zero.Core.Routing
 {
-  public class PageRouteProvider : AbtractRouteProvider<Page>
+  public class PageRouteProvider : ZeroRouteProvider<Page>
   {
-    protected const string REF_KEY = "page";
-    protected const string PAGE_TYPE_KEY = "pageType";
-
-    protected ILogger<PageRouteProvider> Logger { get; set; }
+    public static string PAGE_TYPE_PARAM = "pageType";
 
     protected IPageUrlBuilder UrlBuilder { get; set; }
 
 
-    public PageRouteProvider(IZeroOptions options, ILogger<PageRouteProvider> logger, IPageUrlBuilder urlBuilder) : base("zero.pages", options)
+    public PageRouteProvider(IPageUrlBuilder urlBuilder) : base(Constants.Pages.PageRouteProviderAlias)
     {
-      Logger = logger;
       UrlBuilder = urlBuilder;
     }
 
 
     /// <inheritdoc />
-    public override string GetRouteId(Page model, object parameters = null) => ID_PREFIX + model.Hash;
+    public override Task<bool> IsRouteStale(RoutingContext context, Page previous, Page current)
+    {
+      bool compareUrlPart = !UrlBuilder.GetUrlPart(previous).Equals(UrlBuilder.GetUrlPart(current));
+      return Task.FromResult(compareUrlPart || !previous.ParentId.Equals(current.ParentId));
+    }
 
 
     /// <inheritdoc />
-    public override async Task<IResolvedRoute> ResolveRoute(IAsyncDocumentSession session, RouteResponse response)
+    public override async Task<Route> Create(RoutingContext context, Page model)
     {
-      PageRoute resolved = new PageRoute(response.Route);
-
-      List<string> ids = new List<string>();
-      RouteReference reference = response.Route.References.SingleOrDefault(x => x.Collection == REF_KEY);
-
-      if (reference == null)
+      if (model is PageFolder)
       {
         return null;
       }
 
-      ids.Add(reference.Id);
-      ids.AddRange(response.Route.Dependencies);
+      IEnumerable<Page> parents = await GetParents(context, model);
 
-      Dictionary<string, Page> pages = await session.LoadAsync<Page>(ids);
+      Route route = new();
 
-      if (!pages.TryGetValue(reference.Id, out Page page))
-      {
-        return null;
-      }
+      route.Id = Id(model);
+      route.ReferenceId = model.Id;
+      route.Url = UrlBuilder.GetUrl(model, parents);
+      route.DependsOn(model.Id);
+      route.DependsOn(parents.Select(x => x.Id).ToArray());
+      route.Param(PAGE_TYPE_PARAM, model.PageTypeAlias);
 
+      return route;
+    }
+
+
+    /// <inheritdoc />
+    public override async Task<IRouteModel> Model(RoutingContext context, Route route)
+    {
+      Page page = await context.Session.LoadAsync<Page>(route.ReferenceId);
+      PageRoute resolved = new(route);
       resolved.Page = page;
-      resolved.Parents = pages.Where(x => x.Key != reference.Id).Select(x => x.Value).ToList();
+      resolved.Parents = await GetParents(context, page);
+      resolved.PageType = route.Param<string>(PAGE_TYPE_PARAM);
 
       return resolved;
     }
 
 
     /// <inheritdoc />
-    public override async Task<IList<Route>> GetAllRoutes(IAsyncDocumentSession session)
+    public override async IAsyncEnumerable<Route> Seed(RoutingContext context)
     {
-      IList<Route> TraversePageChildren(Page parent, IEnumerable<Page> parents, IEnumerable<Page> allPages)
+      var stream = await context.Session.Advanced.StreamAsync(context.Session.Query<Page>());
+      while (await stream.MoveNextAsync())
       {
-        List<Route> routes = new List<Route>();
-        IEnumerable<Page> currentPages = allPages.Where(x => x.ParentId == parent?.Id);
-
-        foreach (Page page in currentPages)
-        {
-          Route route = BuildRoute(page, parents, allPages);
-
-          if (route != null)
-          {
-            routes.Add(route);
-          }
-
-          routes.AddRange(TraversePageChildren(page, parents.Union(new List<Page>() { page }), allPages));
-        }
-
-        return routes;
+        yield return await Create(context, stream.Current.Document);
       }
-
-      IList<Page> pages = await session.Query<Page>().ToListAsync();
-      return TraversePageChildren(null, new List<Page>() { }, pages);
     }
 
 
     /// <summary>
-    /// Build route entity from page
+    /// Get parents for a page
     /// </summary>
-    protected virtual Route BuildRoute(Page page, IEnumerable<Page> parents, IEnumerable<Page> allPages)
+    protected virtual async Task<IList<Page>> GetParents(RoutingContext context, Page model)
     {
-      if (page is PageFolder)
-      {
-        return null;
-      }
+      Pages_ByHierarchy.Result result = await context.Session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
+        .ProjectInto<Pages_ByHierarchy.Result>()
+        .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
+        .FirstOrDefaultAsync(x => x.Id == model.Id);
 
-      Route route = new Route()
-      {
-        Id = GetRouteId(page),
-        Url = UrlBuilder.GetUrl(page, parents),
-        ProviderAlias = Alias
-      };
-
-      route.Params.Add(PAGE_TYPE_KEY, page.PageTypeAlias);
-      route.References.Add(new RouteReference(page.Id, REF_KEY));
-
-      if (parents != null)
-      {
-        foreach (Page parent in parents)
-        {
-          route.Dependencies.Add(parent.Id);
-        }
-      }
-
-      return route;
+      return (await context.Session.LoadAsync<Page>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
     }
   }
 }

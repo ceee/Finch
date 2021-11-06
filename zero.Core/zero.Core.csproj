@@ -11,10 +11,13 @@
   <ItemGroup>
     <Compile Remove="Entities\Messages\**" />
     <Compile Remove="Numbers\**" />
+    <Compile Remove="Subscriptions\**" />
     <EmbeddedResource Remove="Entities\Messages\**" />
     <EmbeddedResource Remove="Numbers\**" />
+    <EmbeddedResource Remove="Subscriptions\**" />
     <None Remove="Entities\Messages\**" />
     <None Remove="Numbers\**" />
+    <None Remove="Subscriptions\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,10 +37,6 @@
     <PackageReference Include="RavenDB.Client" Version="5.2.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
     <PackageReference Include="System.Linq.Async" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Subscriptions\" />
   </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Routing
 {
-  public abstract class BasePageRoute : IResolvedRoute, IRouteModel
+  public abstract class BasePageRoute : IRouteModel
   {
     public BasePageRoute() { }
 

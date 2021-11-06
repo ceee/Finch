@@ -6,7 +6,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Routing
 {
-  public abstract class ZeroRouteProvider<T> : ZeroRouteProvider, INewRouteProvider<T> where T : IZeroRouteEntity
+  public abstract class ZeroRouteProvider<T> : ZeroRouteProvider, IRouteProvider<T> where T : IZeroRouteEntity
   {
     public ZeroRouteProvider(string alias) : base(alias) { }
 
@@ -36,10 +36,16 @@ namespace zero.Core.Routing
 
     /// <inheritdoc />
     public sealed override string Id(IZeroRouteEntity model) => base.Id(model);
+
+    /// <inheritdoc />
+    public virtual async Task<Route> Find(RoutingContext context, T model) => await context.Session.LoadAsync<Route>(Id(model));
+
+    /// <inheritdoc />
+    public sealed override Task<Route> Find(RoutingContext context, IZeroRouteEntity model) => Find(context, (T)model);
   }
 
 
-  public abstract class ZeroRouteProvider : INewRouteProvider
+  public abstract class ZeroRouteProvider : IRouteProvider
   {
     protected static string ID_PARAM = "id";
 
@@ -72,10 +78,33 @@ namespace zero.Core.Routing
 
     /// <inheritdoc />
     public virtual string Id(IZeroRouteEntity model) => "routes." + Alias + "." + Key(model);
+
+    /// <inheritdoc />
+    public virtual RouteEndpoint Map(RoutingContext context, IRouteModel route)
+    {
+      IEnumerable<Func<IRouteModel, RouteEndpoint>> resolvers = context.Context.Options.Routing.EndpointResolvers.GetAll(route.GetType());
+
+      foreach (Func<IRouteModel, RouteEndpoint> resolver in resolvers.Reverse())
+      {
+        RouteEndpoint endpoint = resolver(route);
+
+        if (endpoint != null)
+        {
+          return endpoint;
+        }
+      }
+
+      return context.Context.Options.Routing.DefaultEndpoint;
+    }
+
+    /// <summary>
+    /// Find a persisted route for an entity
+    /// </summary>
+    public virtual async Task<Route> Find(RoutingContext context, IZeroRouteEntity model) => await context.Session.LoadAsync<Route>(Id(model));
   }
 
 
-  public interface INewRouteProvider<T> : INewRouteProvider where T : IZeroRouteEntity
+  public interface IRouteProvider<T> : IRouteProvider where T : IZeroRouteEntity
   {
     /// <summary>
     /// Generate unique route key for a model
@@ -93,19 +122,19 @@ namespace zero.Core.Routing
     Task<Route> Create(RoutingContext context, T model);
 
     /// <summary>
-    /// Converts a route to a model which is passed to the endpoint
-    /// </summary>
-    Task<IRouteModel> Model(RoutingContext context, Route route);
-
-    /// <summary>
     /// Determines whether the route for previous is stale and needs to be refreshed 
     /// based on comparison with the previous version
     /// </summary>
     Task<bool> IsRouteStale(RoutingContext context, T previous, T current);
+
+    /// <summary>
+    /// Find a persisted route for an entity
+    /// </summary>
+    Task<Route> Find(RoutingContext context, T model);
   }
 
 
-  public interface INewRouteProvider
+  public interface IRouteProvider
   {
     /// <summary>
     /// Alias of this route provider
@@ -147,6 +176,16 @@ namespace zero.Core.Routing
     /// based on comparison with the previous version
     /// </summary>
     Task<bool> IsRouteStale(RoutingContext context, IZeroRouteEntity previous, IZeroRouteEntity current);
+
+    /// <summary>
+    /// Map a route model to an endpoint
+    /// </summary>
+    RouteEndpoint Map(RoutingContext context, IRouteModel route);
+
+    /// <summary>
+    /// Find a persisted route for an entity
+    /// </summary>
+    Task<Route> Find(RoutingContext context, IZeroRouteEntity model);
   }
 
 }
