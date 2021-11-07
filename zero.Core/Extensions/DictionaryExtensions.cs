@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace zero.Core.Extensions
 {
@@ -21,6 +22,19 @@ namespace zero.Core.Extensions
     {
       object value = model.GetValueOrDefault(key);
       return value == default || !(value is T) ? default : (T)value; 
+    }
+
+
+    public static Dictionary<TKey, TElement> ToDistinctDictionary<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
+    {
+      Dictionary<TKey, TElement> result = new();
+
+      foreach (TSource sourceElement in source)
+      {
+        result.TryAdd(keySelector(sourceElement), elementSelector(sourceElement));
+      }
+
+      return result;
     }
   }
 }

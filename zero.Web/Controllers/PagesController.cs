@@ -38,7 +38,7 @@ namespace zero.Web.Controllers
     {
       IReadOnlyCollection<PageType> pageTypes = Options.Pages.GetAllItems();
       Dictionary<string, Page> pages = await Collection.GetByIds(ids.ToArray());
-      Dictionary<Page, Route> routes = await Routes.GetRoutes(pages.Where(x => x.Value != null).Select(x => x.Value));
+      Dictionary<Page, Route> routes = await Routes.GetRoutes(pages.Where(x => x.Value != null).Select(x => x.Value).ToArray());
 
       return Previews(pages, item =>
       {

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Database;
 using zero.Core.Entities;
-using zero.Core.Extensions;
 
 
 namespace zero.Core.Routing
@@ -31,47 +30,27 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<string> GetUrl<T>(T model, object parameters = null) where T : IZeroRouteEntity => (await GetRoute(model, parameters))?.Url;
+    public async Task<string> GetUrl<T>(T model) where T : IZeroRouteEntity => (await GetRoute(model))?.Url;
 
 
     /// <inheritdoc />
-    public async Task<string> GetUrl<T>(string id, object parameters = null) where T : IZeroRouteEntity => (await GetRoute<T>(id, parameters))?.Url;
+    public async Task<string> GetUrl<T>(string id) where T : IZeroRouteEntity => (await GetRoute<T>(id))?.Url;
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<T, string>> GetUrls<T>(IEnumerable<T> models, object parameters = null) where T : IZeroRouteEntity => (await GetRoutes(models, parameters)).ToDictionary(x => x.Key, x => x.Value?.Url);
+    public async Task<Dictionary<T, string>> GetUrls<T>(params T[] models) where T : IZeroRouteEntity => (await GetRoutes(models)).ToDictionary(x => x.Key, x => x.Value?.Url);
 
 
     /// <inheritdoc />
-    public async Task<Route> GetRoute<T>(string id, object parameters = null) where T : IZeroRouteEntity
+    public async Task<Route> GetRoute<T>(string id) where T : IZeroRouteEntity
     {
-      if (id.IsNullOrEmpty())
-      {
-        return null;
-      }
-
-      Type type = typeof(T);
-      IRouteProvider routeProvider = Providers.FirstOrDefault(x => x.CanHandle(type));
-
-      if (routeProvider == null)
-      {
-        return null;
-      }
-
-      RoutingContext context = GetContext();
-      T model = await context.Session.LoadAsync<T>(id);
-
-      if (model == null)
-      {
-        return null;
-      }
-
-      return await FindRoute(routeProvider, context, model);
+      T model = await GetContext().Session.LoadAsync<T>(id);
+      return await GetRoute(model);
     }
 
 
     /// <inheritdoc />
-    public async Task<Route> GetRoute<T>(T model, object parameters = null) where T : IZeroRouteEntity
+    public async Task<Route> GetRoute<T>(T model) where T : IZeroRouteEntity
     {
       if (model == null)
       {
@@ -89,9 +68,9 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public async Task<Dictionary<T, Route>> GetRoutes<T>(IEnumerable<T> models, object parameters = null) where T : IZeroRouteEntity
+    public async Task<Dictionary<T, Route>> GetRoutes<T>(params T[] models) where T : IZeroRouteEntity
     {
-      if (!models.Any())
+      if (models.Length < 1)
       {
         return new();
       }
@@ -109,16 +88,7 @@ namespace zero.Core.Routing
       }
 
       RoutingContext context = GetContext();
-      Dictionary<string, T> idMap = models.ToDictionary(x => GetId(routeProvider, x), x => x);
-      Dictionary<string, Route> routes = await context.Session.LoadAsync<Route>(idMap.Select(x => x.Key));
-      Dictionary<T, Route> result = new();
-
-      foreach ((string id, T model) in idMap)
-      {
-        result.Add(model, routes.GetValueOrDefault(id));
-      }
-
-      return result;
+      return (await routeProvider.Find(context, models.Select(x => (IZeroRouteEntity)x).ToArray())).ToDictionary(x => (T)x.Key, x => x.Value);
     }
 
 
@@ -127,6 +97,14 @@ namespace zero.Core.Routing
     {
       Type type = model.GetType();
       provider = Providers.FirstOrDefault(x => x.CanHandle(type));
+      return provider != null;
+    }
+
+
+    /// <inheritdoc />
+    public virtual bool TryGetProvider(string alias, out IRouteProvider provider)
+    {
+      provider = Providers.FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
       return provider != null;
     }
 
@@ -162,22 +140,6 @@ namespace zero.Core.Routing
 
 
     /// <summary>
-    /// Get ID in collection for an entity 
-    /// </summary>
-    protected virtual string GetId(IRouteProvider provider, IZeroRouteEntity model)
-    {
-      string key = provider.Key(model);
-
-      if (key.IsNullOrEmpty())
-      {
-        return null;
-      }
-
-      return "routes." + provider.Alias + "." + key;
-    }
-
-
-    /// <summary>
     /// Build a new routing context
     /// </summary>
     protected virtual RoutingContext GetContext()
@@ -191,36 +153,41 @@ namespace zero.Core.Routing
     /// <summary>
     /// Get the URL for an entity
     /// </summary>
-    Task<string> GetUrl<T>(T model, object parameters = null) where T : IZeroRouteEntity;
+    Task<string> GetUrl<T>(T model) where T : IZeroRouteEntity;
 
     /// <summary>
     /// Get the URL for an entity
     /// </summary>
-    Task<string> GetUrl<T>(string id, object parameters = null) where T : IZeroRouteEntity;
+    Task<string> GetUrl<T>(string id) where T : IZeroRouteEntity;
 
     /// <summary>
     /// Get URLs for multiple entities
     /// </summary>
-    Task<Dictionary<T, string>> GetUrls<T>(IEnumerable<T> models, object parameters = null) where T : IZeroRouteEntity;
+    Task<Dictionary<T, string>> GetUrls<T>(params T[] models) where T : IZeroRouteEntity;
 
     /// <summary> 
     /// Get the route object for an entity
     /// </summary>
-    Task<Route> GetRoute<T>(T model, object parameters = null) where T : IZeroRouteEntity;
+    Task<Route> GetRoute<T>(T model) where T : IZeroRouteEntity;
 
     /// <summary> 
     /// Get the route object for an entity
     /// </summary>
-    Task<Route> GetRoute<T>(string id, object parameters = null) where T : IZeroRouteEntity;
+    Task<Route> GetRoute<T>(string id) where T : IZeroRouteEntity;
 
     /// <summary>
     /// Get routes for multiple entities
     /// </summary>
-    Task<Dictionary<T, Route>> GetRoutes<T>(IEnumerable<T> models, object parameters = null) where T : IZeroRouteEntity;
+    Task<Dictionary<T, Route>> GetRoutes<T>(params T[] models) where T : IZeroRouteEntity;
 
     /// <summary>
     /// Find a provider for a certain entity
     /// </summary>
     bool TryGetProvider<T>(T model, out IRouteProvider provider) where T : IZeroRouteEntity;
+
+    /// <summary>
+    /// Find a provider by alias
+    /// </summary>
+    bool TryGetProvider(string alias, out IRouteProvider provider);
   }
 }

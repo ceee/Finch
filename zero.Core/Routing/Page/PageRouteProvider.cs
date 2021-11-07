@@ -12,6 +12,8 @@ namespace zero.Core.Routing
   {
     public static string PAGE_TYPE_PARAM = "pageType";
 
+    public static string PAGE_ID_PARAM = "pageId";
+
     protected IPageUrlBuilder UrlBuilder { get; set; }
 
 
@@ -47,6 +49,7 @@ namespace zero.Core.Routing
       route.DependsOn(model.Id);
       route.DependsOn(parents.Select(x => x.Id).ToArray());
       route.Param(PAGE_TYPE_PARAM, model.PageTypeAlias);
+      route.Param(PAGE_ID_PARAM, model.Id);
 
       return route;
     }

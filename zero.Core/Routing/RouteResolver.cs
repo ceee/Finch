@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
-using Raven.Client.Documents.Session;
 using Raven.Client.Exceptions.Documents.Indexes;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,24 +14,16 @@ using zero.Core.Options;
 
 namespace zero.Core.Routing
 {
-  public class RouteResolver : IRouteResolver
+  public class RouteResolver : Routes, IRouteResolver
   {
-    public const char PATH_SEPERATOR = '/';
-
-    protected IZeroStore Store { get; set; }
-    protected ILogger<Routes> Logger { get; set; }
-    protected IEnumerable<IRouteProvider> Providers { get; set; }
     protected IApplicationResolver AppResolver { get; set; }
     protected IZeroOptions Options { get; set; }
 
 
-    public RouteResolver(IZeroStore store, ILogger<Routes> logger, IEnumerable<IRouteProvider> providers, IApplicationResolver appResolver, IZeroOptions options)
+    public RouteResolver(IZeroContext context, IZeroStore store, ILogger<Routes> logger, IEnumerable<IRouteProvider> providers, IApplicationResolver appResolver) : base(context, store, logger, providers)
     {
-      Store = store;
-      Logger = logger;
-      Providers = providers;
       AppResolver = appResolver;
-      Options = options;
+      Options = context.Options;
     }
 
 
@@ -95,7 +86,7 @@ namespace zero.Core.Routing
         return null;
       }
 
-      return await ResolveRouteInternal(session, new RouteResponse()
+      return await ResolveRouteInternal(new RouteResponse()
       {
         Route = route,
         App = application,
@@ -128,36 +119,26 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public RouteEndpoint MapEndpoint(IRouteModel route)
     {
-      IRouteProvider routeProvider = FindProvider(route.Route.ProviderAlias);
+      if (TryGetProvider(route.Route.ProviderAlias, out IRouteProvider provider))
+      {
+        return provider.Map(GetContext(), route);
+      }
+
       return null;
-      //return routeProvider?.MapEndpoint(route);
     }
 
 
     /// <summary>
     /// Call the provider which can resolve the route
     /// </summary>
-    Task<IRouteModel> ResolveRouteInternal(IAsyncDocumentSession session, RouteResponse response)
+    async Task<IRouteModel> ResolveRouteInternal(RouteResponse response)
     {
-      IRouteProvider routeProvider = FindProvider(response.Route.ProviderAlias);
-      return Task.FromResult(default(IRouteModel));
-      //return await routeProvider?.ResolveRoute(session, response);
-    }
-
-
-    /// <summary>
-    /// Find registered route provider for the specified alias
-    /// </summary>
-    IRouteProvider FindProvider(string alias)
-    {
-      IRouteProvider routeProvider = Providers.FirstOrDefault(x => x.Alias == alias);
-
-      if (routeProvider == null)
+      if (TryGetProvider(response.Route.ProviderAlias, out IRouteProvider provider))
       {
-        Logger.LogWarning("Could not locate URL provider {provider}", alias);
+        return await provider.Model(GetContext(), response.Route);
       }
 
-      return routeProvider;
+      return null;
     }
   }
 

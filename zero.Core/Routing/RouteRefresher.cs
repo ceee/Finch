@@ -45,7 +45,7 @@ namespace zero.Core.Routing
 
       // delete previous route if the ID has changed,
       // otherwise it will just be updated
-      if (previousModel != null && !route.Id.Equals(GetId(provider, previousModel)))
+      if (previousModel != null && !route.Id.Equals(provider.Id(previousModel)))
       {
         context.Session.Delete(previousModel);
       }
