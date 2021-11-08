@@ -48,30 +48,31 @@ namespace zero.Core.Routing
     public Dictionary<string, object> Params { get; set; } = new();
 
     /// <summary>
-    /// Contains references to the resolved collection entities
-    /// </summary>
-    //[Obsolete]
-    public List<RouteReference> References { get; set; } = new();
-
-    /// <summary>
     /// Route dependencies can be used for cache busting
     /// </summary>
     public List<string> Dependencies { get; set; } = new();
-  }
 
 
-  public class RouteReference
-  {
-    public string Id { get; set; }
-
-    public string Collection { get; set; }
-
-    public RouteReference() { }
-
-    public RouteReference(string id, string collection)
+    /// <summary>
+    /// Update an existing route with regenerated data
+    /// </summary>
+    public virtual Route Update(Route newRoute)
     {
-      Id = id;
-      Collection = collection;
+      ReferenceId = newRoute.ReferenceId;
+      Url = newRoute.Url;
+      AllowSuffix = newRoute.AllowSuffix;
+      Params = newRoute.Params;
+      Dependencies = newRoute.Dependencies;
+      return this;
+    }
+
+
+    /// <summary>
+    /// Create a new route
+    /// </summary>
+    public static Route Create(string id, string providerAlias)
+    {
+      return new(providerAlias) { Id = id };
     }
   }
 }

@@ -110,16 +110,12 @@ namespace zero.Web.Defaults
       services.AddScoped<IRequestUrlResolver, RequestUrlResolver>();
       services.AddScoped<IRoutes, Routes>();
       services.AddScoped<IRouteResolver, RouteResolver>();
+      services.AddScoped<IRouteRefresher, RouteRefresher>();
       services.AddScoped<IPageUrlBuilder, PageUrlBuilder>();
       services.AddScoped<IRouteProvider, PageRouteProvider>();
-      services.AddScoped<PageRouteProvider>();
       services.AddScoped<ILinks, Links>();
       services.AddScoped<ILinkProvider, PageLinkProvider>();
       services.AddScoped<ILinkProvider, RawLinkProvider>();
-
-      services.AddScoped<IRoutes, Routes>();
-      services.AddScoped<IRouteProvider, PageRouteProvider>();
-
       services.AddScoped<ZeroRoutesTransformer>();
       services.TryAddEnumerable(ServiceDescriptor.Singleton<MatcherPolicy, NotFoundSelectorPolicy>());
 

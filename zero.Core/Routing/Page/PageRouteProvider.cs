@@ -27,7 +27,7 @@ namespace zero.Core.Routing
     public override Task<bool> IsRouteStale(RoutingContext context, Page previous, Page current)
     {
       bool compareUrlPart = !UrlBuilder.GetUrlPart(previous).Equals(UrlBuilder.GetUrlPart(current));
-      return Task.FromResult(compareUrlPart || !previous.ParentId.Equals(current.ParentId));
+      return Task.FromResult(compareUrlPart || previous.ParentId != current.ParentId);
     }
 
 
@@ -41,10 +41,7 @@ namespace zero.Core.Routing
 
       IEnumerable<Page> parents = await GetParents(context, model);
 
-      Route route = new();
-
-      route.Id = Id(model);
-      route.ReferenceId = model.Id;
+      Route route = await base.Create(context, model);
       route.Url = UrlBuilder.GetUrl(model, parents);
       route.DependsOn(model.Id);
       route.DependsOn(parents.Select(x => x.Id).ToArray());

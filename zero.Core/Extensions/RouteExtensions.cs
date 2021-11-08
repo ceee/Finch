@@ -38,12 +38,5 @@ namespace zero.Core.Extensions
     {
       return route.Params.GetValueOrDefault<T>(key);
     }
-
-    [Obsolete]
-    public static Route Reference(this Route route, string id, string collection)
-    {
-      route.References.Add(new(id, collection));
-      return route;
-    }
   }
 }
