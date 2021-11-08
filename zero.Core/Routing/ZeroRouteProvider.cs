@@ -18,12 +18,7 @@ namespace zero.Core.Routing
     public override bool CanHandle(Type type) => typeof(T).IsAssignableFrom(type);
 
     /// <inheritdoc />
-    public virtual Task<Route> Create(RoutingContext context, T model) => Task.FromResult(new Route()
-    {
-      Id = Id(model),
-      ProviderAlias = Alias,
-      ReferenceId = model.Id
-    });
+    public virtual Task<Route> Create(RoutingContext context, T model) => base.Create(context, model);
 
     /// <inheritdoc />
     public sealed override Task<Route> Create(RoutingContext context, IZeroRouteEntity model) => Create(context, (T)model);
@@ -96,7 +91,12 @@ namespace zero.Core.Routing
     public virtual bool CanHandle(Type type) => false;
 
     /// <inheritdoc />
-    public abstract Task<Route> Create(RoutingContext context, IZeroRouteEntity model);
+    public virtual Task<Route> Create(RoutingContext context, IZeroRouteEntity model) => Task.FromResult(new Route()
+    {
+      Id = Id(model),
+      ProviderAlias = Alias,
+      ReferenceId = model.Id
+    });
 
     /// <inheritdoc />
     public virtual string Key(IZeroRouteEntity model) => model.Hash;
