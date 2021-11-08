@@ -56,8 +56,9 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public override async Task<IRouteModel> Model(RoutingContext context, Route route)
+    public override async Task<IRouteModel> Model(RoutingContext context, RouteResponse response)
     {
+      Route route = response.Route;
       Page page = await context.Session.LoadAsync<Page>(route.ReferenceId);
       PageRoute resolved = new(route);
       resolved.Page = page;

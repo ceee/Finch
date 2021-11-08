@@ -135,7 +135,7 @@ namespace zero.Core.Routing
     {
       if (TryGetProvider(response.Route.ProviderAlias, out IRouteProvider provider))
       {
-        return await provider.Model(GetContext(), response.Route);
+        return await provider.Model(GetContext(), response);
       }
 
       return null;

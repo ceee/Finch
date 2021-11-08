@@ -93,7 +93,7 @@ namespace zero.Core.Routing
     public virtual IAsyncEnumerable<Route> Seed(RoutingContext context) => AsyncEnumerable.Empty<Route>();
 
     /// <inheritdoc />
-    public virtual Task<IRouteModel> Model(RoutingContext context, Route route) => Task.FromResult((IRouteModel)new RouteModel() { Route = route });
+    public virtual Task<IRouteModel> Model(RoutingContext context, RouteResponse response) => Task.FromResult((IRouteModel)new RouteModel() { Route = response.Route });
 
     /// <inheritdoc />
     public virtual Task<bool> IsRouteStale(RoutingContext context, IZeroRouteEntity previous, IZeroRouteEntity current) => Task.FromResult(true);
@@ -204,7 +204,7 @@ namespace zero.Core.Routing
     /// <summary>
     /// Converts a route to a model which is passed to the endpoint
     /// </summary>
-    Task<IRouteModel> Model(RoutingContext context, Route route);
+    Task<IRouteModel> Model(RoutingContext context, RouteResponse response);
 
     /// <summary>
     /// Determines whether the route for previous is stale and needs to be refreshed 

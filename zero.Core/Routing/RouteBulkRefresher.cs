@@ -32,16 +32,17 @@ namespace zero.Core.Routing
 
       foreach (Application app in apps)
       {
-        IZeroDocumentSession session = Store.Session(app.Database, ZeroSessionResolution.Create);
+        using ZeroContextScope scope = Context.CreateScope(app);
+        using IZeroDocumentSession session = scope.Store.Session(scope.Database, ZeroSessionResolution.Create);
         session.Advanced.MaxNumberOfRequestsPerSession = 100_000;
 
-        await Store.Raven.PurgeAsync<Route>(app.Database);
+        await scope.Store.Raven.PurgeAsync<Route>(scope.Database);
 
-        RoutingContext context = new(Store, Context, session);
+        RoutingContext context = new(scope.Store, scope.Context, session);
 
         foreach (IRouteProvider provider in Providers)
         {
-          using BulkInsertOperation bulkInsert = Store.Raven.BulkInsert(app.Database);
+          using BulkInsertOperation bulkInsert = scope.Store.Raven.BulkInsert(scope.Database);
 
           await foreach (Route route in provider.Seed(context))
           {
