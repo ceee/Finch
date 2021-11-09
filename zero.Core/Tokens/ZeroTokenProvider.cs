@@ -117,8 +117,7 @@ namespace zero.Core.Tokens
     public string Random(int length)
     {
       byte[] data = new byte[4 * length];
-      using RNGCryptoServiceProvider crypto = new();
-      crypto.GetBytes(data);
+      randonNumberGenerator.GetBytes(data);
 
       StringBuilder result = new(length);
 
@@ -155,7 +154,7 @@ namespace zero.Core.Tokens
       key = key.ToLowerInvariant();
 
       KeyDerivationPrf prf = KeyDerivationPrf.HMACSHA256;
-      int iterationCount = 100;
+      int iterationCount = 10000;
       int saltSize = 128 / 8;
       int numBytesRequested = 256 / 8;
 
@@ -182,12 +181,11 @@ namespace zero.Core.Tokens
     bool VerifyKey(string storedKey, string key)
     {
       byte[] decodedStoredKey = Convert.FromBase64String(storedKey);
-      int embeddedIterCount = default(int);
 
       try
       {
         KeyDerivationPrf prf = (KeyDerivationPrf)ReadNetworkByteOrder(decodedStoredKey, 1);
-        embeddedIterCount = (int)ReadNetworkByteOrder(decodedStoredKey, 5);
+        int embeddedIterCount = (int)ReadNetworkByteOrder(decodedStoredKey, 5);
         int saltLength = (int)ReadNetworkByteOrder(decodedStoredKey, 9);
 
         // Read the salt: must be >= 128 bits
@@ -208,10 +206,10 @@ namespace zero.Core.Tokens
         byte[] expectedSubkey = new byte[subkeyLength];
         Buffer.BlockCopy(decodedStoredKey, 13 + salt.Length, expectedSubkey, 0, expectedSubkey.Length);
 
-        // Hash the incoming password and verify it
+        // Hash the incoming key and verify it
         byte[] actualSubkey = KeyDerivation.Pbkdf2(key, salt, prf, embeddedIterCount, subkeyLength);
 
-        return true;
+        return CryptographicOperations.FixedTimeEquals(actualSubkey, expectedSubkey);
       }
       catch
       {
@@ -230,7 +228,10 @@ namespace zero.Core.Tokens
 
     static uint ReadNetworkByteOrder(byte[] buffer, int offset)
     {
-      return ((uint)(buffer[offset + 0]) << 24) | ((uint)(buffer[offset + 1]) << 16) | ((uint)(buffer[offset + 2]) << 8) | ((uint)(buffer[offset + 3]));
+      return ((uint)(buffer[offset + 0]) << 24)
+        | ((uint)(buffer[offset + 1]) << 16)
+        | ((uint)(buffer[offset + 2]) << 8)
+        | ((uint)(buffer[offset + 3]));
     }
   }
 
