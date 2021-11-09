@@ -2,6 +2,7 @@
 using Raven.Client.Documents.BulkInsert;
 using Raven.Client.Documents.Session;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Database;
 using zero.Core.Entities;
@@ -40,7 +41,7 @@ namespace zero.Core.Routing
 
         RoutingContext context = new(scope.Store, scope.Context, session);
 
-        foreach (IRouteProvider provider in Providers)
+        foreach (IRouteProvider provider in Providers.OrderByDescending(x => x.Priority))
         {
           using BulkInsertOperation bulkInsert = scope.Store.Raven.BulkInsert(scope.Database);
 

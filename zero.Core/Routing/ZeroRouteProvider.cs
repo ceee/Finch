@@ -88,6 +88,9 @@ namespace zero.Core.Routing
     public virtual List<RouteUpdater> Updaters { get; protected set; } = new();
 
     /// <inheritdoc />
+    public uint Priority { get; protected set; } = 0;
+
+    /// <inheritdoc />
     public virtual bool CanHandle(Type type) => false;
 
     /// <inheritdoc />
@@ -192,6 +195,11 @@ namespace zero.Core.Routing
     /// Updaters which handle synchronization of routes for this provider
     /// </summary>
     List<RouteUpdater> Updaters { get; }
+
+    /// <summary>
+    /// Providers with higher priority will run before other providers when seeding
+    /// </summary>
+    uint Priority { get; }
 
     /// <summary>
     /// Whether this provider can handle a certain entity type

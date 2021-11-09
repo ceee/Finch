@@ -11,14 +11,15 @@ namespace zero.Core.Routing
   public class PageRouteProvider : ZeroRouteProvider<Page>
   {
     public static string PAGE_TYPE_PARAM = "pageType";
-
     public static string PAGE_ID_PARAM = "pageId";
+    public static string PAGE_IS_FOLDER = "pageIsFolder";
 
     protected IPageUrlBuilder UrlBuilder { get; set; }
 
 
     public PageRouteProvider(IPageUrlBuilder urlBuilder) : base(Constants.Pages.PageRouteProviderAlias)
     {
+      Priority = 10;
       UrlBuilder = urlBuilder;
     }
 
@@ -34,11 +35,6 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public override async Task<Route> Create(RoutingContext context, Page model)
     {
-      if (model is PageFolder)
-      {
-        return null;
-      }
-
       IEnumerable<Page> parents = await GetParents(context, model);
 
       Route route = await base.Create(context, model);
@@ -47,6 +43,7 @@ namespace zero.Core.Routing
       route.DependsOn(parents.Select(x => x.Id).ToArray());
       route.Param(PAGE_TYPE_PARAM, model.PageTypeAlias);
       route.Param(PAGE_ID_PARAM, model.Id);
+      route.Param(PAGE_IS_FOLDER, model is PageFolder);
 
       return route;
     }
@@ -56,6 +53,12 @@ namespace zero.Core.Routing
     public override async Task<IRouteModel> Model(RoutingContext context, RouteResponse response)
     {
       Route route = response.Route;
+
+      if (route.Param<bool>(PAGE_IS_FOLDER))
+      {
+        return null;
+      }
+
       Page page = await context.Session.LoadAsync<Page>(route.ReferenceId);
       PageRoute resolved = new(route);
       resolved.Page = page;

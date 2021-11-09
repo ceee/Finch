@@ -81,7 +81,7 @@ namespace zero.Core.Routing
         route = longestRoutes.FirstOrDefault();
       }
 
-      if (route == null)
+      if (route == null || route.Param<bool>(PageRouteProvider.PAGE_IS_FOLDER))
       {
         return null;
       }

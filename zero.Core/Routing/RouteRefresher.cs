@@ -19,7 +19,7 @@ namespace zero.Core.Routing
 
     public class Res : RouteUpdaterResult
     {
-      public List<Route> AffectedRoutes { get; set; }
+      public List<Route> AffectedRoutes { get; set; } = new();
     }
 
     public async Task<Res> Test<T>(bool isFake, T model, T previousModel = default) where T : IZeroRouteEntity

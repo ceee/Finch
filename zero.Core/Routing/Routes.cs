@@ -96,7 +96,7 @@ namespace zero.Core.Routing
     public virtual bool TryGetProvider<T>(T model, out IRouteProvider provider) where T : IZeroRouteEntity
     {
       Type type = model.GetType();
-      provider = Providers.FirstOrDefault(x => x.CanHandle(type));
+      provider = Providers.OrderByDescending(x => x.Priority).FirstOrDefault(x => x.CanHandle(type));
       return provider != null;
     }
 
@@ -104,7 +104,7 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public virtual bool TryGetProvider(string alias, out IRouteProvider provider)
     {
-      provider = Providers.FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
+      provider = Providers.OrderByDescending(x => x.Priority).FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
       return provider != null;
     }
 

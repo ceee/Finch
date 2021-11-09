@@ -29,7 +29,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public bool CanProcess(Link link) => link.Area == AREA;
+    public bool CanProcess(Link link) => link.Area is AREA or "zero.raw";
 
 
     /// <inheritdoc />
