@@ -1,10 +1,12 @@
 ﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using zero.Core.Database.Indexes;
 using zero.Core.Entities;
 
 namespace zero.Core.Routing
@@ -140,6 +142,48 @@ namespace zero.Core.Routing
       }
 
       return routes.ToDictionary(x => x.Item1, x => x.Item2);
+    }
+
+
+    public async Task<bool> IsRelevantFor<T>(RoutingContext context, Page page)
+    {
+      HashSet<Page> pages = await ResolveAllPagesFor<T>(context);
+
+      if (pages.Any(x => x.Id == page.Id))
+      {
+        return true;
+      }
+
+      IList<Page> children = await GetChildren(context, pages.Select(x => x.Id));
+      return children.Any(x => x.Id == page.Id);
+    }
+
+
+    /// <summary>
+    /// Get relevant pages for a page
+    /// </summary>
+    public virtual async Task<List<Page>> GetRelevantPagesFor<T>(RoutingContext context, Page page)
+    {
+      HashSet<Page> pages = await ResolveAllPagesFor<T>(context);
+
+      if (pages.Any(x => x.Id == page.Id))
+      {
+        return new();
+      }
+
+      return await GetChildren(context, pages.Select(x => x.Id));
+    }
+
+
+    /// <summary>
+    /// Get parents for a page
+    /// </summary>
+    protected virtual async Task<List<Page>> GetChildren(RoutingContext context, IEnumerable<string> pageIds)
+    {
+      return await context.Session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
+        .Where(x => x.PathIds.In(pageIds))
+        .ProjectInto<Page>()
+        .ToListAsync();
     }
   }
 }

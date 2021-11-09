@@ -22,7 +22,7 @@ namespace zero.Core.Routing
       public List<Route> AffectedRoutes { get; set; } = new();
     }
 
-    public async Task<Res> Test<T>(bool isFake, T model, T previousModel = default) where T : IZeroRouteEntity
+    public async Task<Res> Test<T>(bool isFake, T model, T previousModel = default, bool isDelete = false) where T : IZeroRouteEntity
     {
       // find provider for this model
       if (!TryGetProvider(model, out IRouteProvider provider))
@@ -33,20 +33,10 @@ namespace zero.Core.Routing
       RoutingContext context = GetContext();
 
       // check if route old route is stale
-      if (previousModel != null && !(await provider.IsRouteStale(context, previousModel, model)))
+      if (!isDelete && previousModel != null && !(await provider.IsRouteStale(context, previousModel, model)))
       {
         return new();
       }
-
-      // build new route
-      Route route = await provider.Create(context, model);
-
-      if (route == null)
-      {
-        return new();
-      }
-
-      route.ProviderAlias = provider.Alias;
 
       string id = model.Id;
       List<Route> dependentRoutes = await context.Session.Query<Route, Routes_ByDependencies>().Where(x => x.Dependencies.ContainsAny(new[] { id })).ToListAsync();

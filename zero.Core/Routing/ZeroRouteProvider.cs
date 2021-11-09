@@ -108,6 +108,9 @@ namespace zero.Core.Routing
     public virtual IAsyncEnumerable<Route> Seed(RoutingContext context) => AsyncEnumerable.Empty<Route>();
 
     /// <inheritdoc />
+    public virtual IAsyncEnumerable<Route> SeedOnUpdate<T>(RoutingContext context, T model) where T : IZeroRouteEntity => AsyncEnumerable.Empty<Route>();
+
+    /// <inheritdoc />
     public virtual Task<IRouteModel> Model(RoutingContext context, RouteResponse response) => Task.FromResult((IRouteModel)new RouteModel() { Route = response.Route });
 
     /// <inheritdoc />
@@ -225,6 +228,11 @@ namespace zero.Core.Routing
     /// Get all models which should be provided and handled by this instance
     /// </summary>
     IAsyncEnumerable<Route> Seed(RoutingContext context);
+
+    /// <summary>
+    /// Get all models which should be updated when an entity changes
+    /// </summary>
+    IAsyncEnumerable<Route> SeedOnUpdate<T>(RoutingContext context, T model) where T : IZeroRouteEntity;
 
     /// <summary>
     /// Converts a route to a model which is passed to the endpoint

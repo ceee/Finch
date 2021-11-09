@@ -1,4 +1,5 @@
 ﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,8 +28,9 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public override Task<bool> IsRouteStale(RoutingContext context, Page previous, Page current)
     {
-      bool compareUrlPart = !UrlBuilder.GetUrlPart(previous).Equals(UrlBuilder.GetUrlPart(current));
-      return Task.FromResult(compareUrlPart || previous.ParentId != current.ParentId);
+      bool compareUrl = UrlBuilder.GetUrlPart(previous) == UrlBuilder.GetUrlPart(current);
+      bool compareParent = previous.ParentId == current.ParentId;
+      return Task.FromResult(!compareUrl || !compareParent);
     }
 
 
@@ -76,6 +78,37 @@ namespace zero.Core.Routing
       while (await stream.MoveNextAsync())
       {
         yield return await Create(context, stream.Current.Document);
+      }
+    }
+
+
+    /// <inheritdoc />
+    public override async IAsyncEnumerable<Route> SeedOnUpdate<T>(RoutingContext context, T model)
+    {
+      if (model is Page)
+      {
+        string id = model.Id;
+        IList<Page> children = await context.Session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
+          .Where(x => x.PathIds.In(new[] { id })).ProjectInto<Page>().ToListAsync();
+
+        foreach (Page child in children)
+        {
+          yield return await Create(context, child);
+        }
+      }
+    }
+
+
+    /// <inheritdoc />
+    public async IAsyncEnumerable<Route> SeedOnPageUpdate(RoutingContext context, Page model)
+    {
+      var stream = await context.Session.Advanced.StreamAsync(context.Session.Query<Page>());
+      while (await stream.MoveNextAsync())
+      {
+        if (stream.Current.Document.Id != model.Id)
+        {
+          yield return await Create(context, stream.Current.Document);
+        }
       }
     }
 

@@ -56,6 +56,8 @@ namespace zero.Core.Routing
           .Include("References[].Id")
           .Include("Dependencies")
           .ToListAsync();
+
+        routes = routes.Where(x => !x.Param<bool>(PageRouteProvider.PAGE_IS_FOLDER)).ToList();
       }
       catch (IndexDoesNotExistException ex)
       {
@@ -81,7 +83,7 @@ namespace zero.Core.Routing
         route = longestRoutes.FirstOrDefault();
       }
 
-      if (route == null || route.Param<bool>(PageRouteProvider.PAGE_IS_FOLDER))
+      if (route == null)
       {
         return null;
       }
