@@ -37,36 +37,61 @@ namespace zero.Core.Routing
     /// <inheritdoc />
     public override async Task Saved(SaveParameters args)
     {
-      // find provider for this model
-      if (!Routes.TryGetProvider(args.Model, out IRouteProvider provider))
-      {
-        return;
-      }
+      // DONE [1] assume we have an update for a Product:
+      // this will not trigger a new seeding as the ProductRouteProvider handles <ProductRouteParams> entities, but not products itself
+      // we could overwrite CanHandle() to support <Product> types, but this will lead to errors when other methods are called on this provider
 
-      List<Route> updatedRoutes = new();
+      // DONE [2] some providers have dependencies on entities which are not part of a standalone route provider.
+      // Example: The ProductRouteProvider has a dependency on <Channel>. Channel has no route provider for itself.
+      // Therefore updates to Channels will not trigger seeding.
+      // For deletes it's easy as we can just delete all routes with the dependency by ID (and we won't need a corresponding route provider)
+
+      // DONE [3] we have to find all routes which have become obsolete after update seeding.
+
       RoutingContext context = GetContext();
+      context.Session.Advanced.MaxNumberOfRequestsPerSession = 100_000;
 
-      // return if the route is not stale
-      ZeroEntity previousModel = null;
-      if (previousModel != null && !(await provider.IsRouteStale(context, previousModel, args.Model)))
+      List<Route> obsoleteRoutes = await GetDependencies(context, args.Model);
+      int countObsoleteRoutes = obsoleteRoutes.Count;
+      int countRoutes = 0;
+
+
+      // routine to store a new or updated route
+      async Task StoreRoute(Route route)
       {
-        return;
+        if (route != null)
+        {
+          countRoutes += 1;
+
+          Route obsoleteRoute = obsoleteRoutes.FirstOrDefault(x => x.Id == route.Id);
+
+          if (obsoleteRoute != null)
+          {
+            obsoleteRoutes.Remove(obsoleteRoute);
+          }
+
+          route = obsoleteRoute != null ? obsoleteRoute.Update(route) : route;
+          await context.Session.StoreAsync(route);
+        }
       }
 
-      // build and save new route
-      Route route = await provider.Create(context, args.Model);
-      updatedRoutes.Add(route);
-      await context.Session.StoreAsync(route);
 
-      // delete obsolete routes
-      if (previousModel != null)
+      // find provider for this model
+      if (Routes.TryGetProvider(args.Model, out IRouteProvider provider))
       {
-        await RemoveDependencies(args.Id);
+        // return if the route is not stale
+        ZeroEntity previousModel = null;
+        if (previousModel != null && !(await provider.IsRouteStale(context, previousModel, args.Model)))
+        {
+          return;
+        }
+
+        // build and save new route
+        Route route = await provider.Create(context, args.Model);
+        await StoreRoute(route);
       }
 
-      // find all providers which need to be informed 
-      // that this route has changed
-
+      // find all providers which need to be informed that this route has changed
       // e.g. a Page has changed:
       // 1. Inform PageRouteProvider to update children
       // 2. Inform ProductRouteProvider to update product routes which are part of this page or of a child page
@@ -81,37 +106,50 @@ namespace zero.Core.Routing
       {
         await foreach (Route dependentRoute in dependentProvider.SeedOnUpdate(context, args.Model))
         {
-          updatedRoutes.Add(dependentRoute);
-          await context.Session.StoreAsync(dependentRoute);
+          await StoreRoute(dependentRoute);
         }
       }
 
+      // at first we have gathered all routes which are dependent on the entity (via GetDependencies())
+      // every time we insert a new route in the route table we remove this route from the gathered routes above.
+      // what is left are routes which are obsolete and have not been updated
+      foreach (Route obsoleteRoute in obsoleteRoutes)
+      {
+        context.Session.Delete(obsoleteRoute);
+      }
+
       await context.Session.SaveChangesAsync();
+
+      int countUpdatedRoutes = countObsoleteRoutes - obsoleteRoutes.Count;
+      Logger.LogInformation("Route updates completed (+{added}/~{updated}/-{removed}) for {model} (id: {id})", countRoutes - countUpdatedRoutes, countUpdatedRoutes, obsoleteRoutes.Count, args.Model.Name, args.Model.Id);
     }
 
 
     /// <inheritdoc />
     public override async Task Deleted(DeleteParameters args)
     {
-      await RemoveDependencies(args.Id);
+      RoutingContext context = GetContext();
+
+      string id = args.Model.Id;
+      string[] ids = new[] { id };
+      int count = await context.Session.Query<Route, Routes_ByDependencies>().Where(x => x.Dependencies.ContainsAny(ids)).CountAsync();
+
+      await context.Store.Raven.PurgeAsync<Route>(context.Context.Application.Database, $"where c.Dependencies IN ($id)", new Raven.Client.Parameters()
+      {
+        { "id", id }
+      });
+
+      Logger.LogInformation("Route deletes completed (-{removed}) for {model} (id: {id})", count, args.Model.Name, args.Model.Id);
     }
 
 
     /// <summary>
-    /// Delete all routes which have the affected entity as a dependency
+    /// Get route dependencies for an entity
     /// </summary>
-    protected virtual async Task RemoveDependencies(string id)
+    protected async Task<List<Route>> GetDependencies<T>(RoutingContext context, T model) where T : IZeroRouteEntity
     {
-      await Store.Raven.PurgeAsync<Route>(Context.Application.Database, $"where c.Dependencies IN ($id)", new Raven.Client.Parameters()
-      {
-        { "id", id }
-      });
-    }
-
-
-    protected async Task UpdateDependencies<T>(RoutingContext context, T model) where T : IZeroRouteEntity
-    {
-      List<Route> dependentRoutes = await context.Session.Query<Route, Routes_ByDependencies>().Where(x => model.Id.In(x.Dependencies)).ToListAsync();
+      string[] ids = new[] { model.Id };
+      return await context.Session.Query<Route, Routes_ByDependencies>().Where(x => x.Dependencies.ContainsAny(ids)).ToListAsync();
     }
 
 

@@ -108,6 +108,11 @@ namespace zero.Core.Routing
         .ProjectInto<Pages_ByHierarchy.Result>()
         .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
         .FirstOrDefaultAsync(x => x.Id == model.Id);
+      
+      if (result == null)
+      {
+        return new List<Page>();
+      }
 
       return (await context.Session.LoadAsync<Page>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();
     }
