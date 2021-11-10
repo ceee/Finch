@@ -21,16 +21,19 @@ namespace zero.Core.Routing
 
     protected IRoutes Routes { get; set; }
 
+    protected IRedirectAutomation RedirectAutomation { get; set; }
+
     protected ILogger<ZeroEntityRouteInterceptor> Logger { get; set; }
 
 
-    public ZeroEntityRouteInterceptor(IZeroContext context, IZeroStore store, IRoutes routes, ILogger<ZeroEntityRouteInterceptor> logger, IEnumerable<IRouteProvider> providers)
+    public ZeroEntityRouteInterceptor(IZeroContext context, IZeroStore store, IRoutes routes, ILogger<ZeroEntityRouteInterceptor> logger, IEnumerable<IRouteProvider> providers, IRedirectAutomation redirectAutomation)
     {
       Context = context;
       Store = store;
       Routes = routes;
       Providers = providers;
       Logger = logger;
+      RedirectAutomation = redirectAutomation;
     }
 
 
@@ -51,6 +54,7 @@ namespace zero.Core.Routing
       RoutingContext context = GetContext();
       context.Session.Advanced.MaxNumberOfRequestsPerSession = 100_000;
 
+      Dictionary<string, string> urlUpdates = new();
       List<Route> obsoleteRoutes = await GetDependencies(context, args.Model);
       int countObsoleteRoutes = obsoleteRoutes.Count;
       int countRoutes = 0;
@@ -68,9 +72,10 @@ namespace zero.Core.Routing
           if (obsoleteRoute != null)
           {
             obsoleteRoutes.Remove(obsoleteRoute);
+            urlUpdates.Add(obsoleteRoute.Url, route.Url);
+            route = obsoleteRoute.Update(route);
           }
 
-          route = obsoleteRoute != null ? obsoleteRoute.Update(route) : route;
           await context.Session.StoreAsync(route);
         }
       }
@@ -120,6 +125,15 @@ namespace zero.Core.Routing
 
       await context.Session.SaveChangesAsync();
 
+      // delete associated redirects for obsolete routes
+      await RedirectAutomation.DeleteForRoutes(obsoleteRoutes.ToArray());
+
+      // update associated redirects for routes which have a new URL
+      foreach (var kvp in urlUpdates)
+      {
+        await RedirectAutomation.AddForRoute(kvp.Key, kvp.Value);
+      }
+
       int countUpdatedRoutes = countObsoleteRoutes - obsoleteRoutes.Count;
       Logger.LogInformation("Route updates completed (+{added}/~{updated}/-{removed}) for {model} (id: {id})", countRoutes - countUpdatedRoutes, countUpdatedRoutes, obsoleteRoutes.Count, args.Model.Name, args.Model.Id);
     }
@@ -131,15 +145,17 @@ namespace zero.Core.Routing
       RoutingContext context = GetContext();
 
       string id = args.Model.Id;
-      string[] ids = new[] { id };
-      int count = await context.Session.Query<Route, Routes_ByDependencies>().Where(x => x.Dependencies.ContainsAny(ids)).CountAsync();
+      List<Route> dependencies = await GetDependencies(context, args.Model);
 
       await context.Store.Raven.PurgeAsync<Route>(context.Context.Application.Database, $"where c.Dependencies IN ($id)", new Raven.Client.Parameters()
       {
         { "id", id }
       });
 
-      Logger.LogInformation("Route deletes completed (-{removed}) for {model} (id: {id})", count, args.Model.Name, args.Model.Id);
+      // delete associated redirects for obsolete routes
+      await RedirectAutomation.DeleteForRoutes(dependencies.ToArray());
+
+      Logger.LogInformation("Route deletes completed (-{removed}) for {model} (id: {id})", dependencies.Count, args.Model.Name, args.Model.Id);
     }
 
 

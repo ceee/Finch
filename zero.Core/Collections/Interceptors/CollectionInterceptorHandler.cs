@@ -66,7 +66,11 @@ namespace zero.Core.Collections
           func = expression.Compile();
         }
 
-        Logger.LogDebug("Run interceptor {interceptor} for {type}:{operation}", registration.Name, typeName, instruction.Operation);
+        // we do not log save operations as they are always called for update/create which are already logged beforehand
+        if (instruction.Operation != "save")
+        {
+          Logger.LogDebug("Run interceptor {interceptor} for {type}:{operation}", registration.Name, typeName, instruction.Operation);
+        }
 
         InterceptorResult<T> result = await func(interceptor);
 

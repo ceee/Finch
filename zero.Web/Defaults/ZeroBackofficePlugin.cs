@@ -110,9 +110,10 @@ namespace zero.Web.Defaults
       services.AddScoped<IRequestUrlResolver, RequestUrlResolver>();
       services.AddScoped<IRoutes, Routes>();
       services.AddScoped<IRouteResolver, RouteResolver>();
+      services.AddScoped<IRedirectAutomation, RedirectAutomation>();
+      services.AddScoped<IRouteRedirectCollection, RouteRedirectCollection>();
       services.AddScoped<IPageUrlBuilder, PageUrlBuilder>();
       services.AddScoped<IRouteProvider, PageRouteProvider>();
-      services.AddScoped<IRouteChangeHandler, RouteChangeHandler>();
       services.AddScoped<ILinks, Links>();
       services.AddScoped<ILinkProvider, PageLinkProvider>();
       services.AddScoped<ILinkProvider, RawLinkProvider>();
