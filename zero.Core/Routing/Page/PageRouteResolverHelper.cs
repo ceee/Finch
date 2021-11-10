@@ -154,8 +154,8 @@ namespace zero.Core.Routing
         return true;
       }
 
-      IList<Page> children = await GetChildren(context, pages.Select(x => x.Id));
-      return children.Any(x => x.Id == page.Id);
+      string[] childIds = await GetChildIds(context, page.Id);
+      return pages.Any(x => childIds.Contains(x.Id));
     }
 
 
@@ -165,25 +165,20 @@ namespace zero.Core.Routing
     public virtual async Task<List<Page>> GetRelevantPagesFor<T>(RoutingContext context, Page page)
     {
       HashSet<Page> pages = await ResolveAllPagesFor<T>(context);
-
-      if (pages.Any(x => x.Id == page.Id))
-      {
-        return new();
-      }
-
-      return await GetChildren(context, pages.Select(x => x.Id));
+      string[] childIds = await GetChildIds(context, page.Id);
+      return pages.Where(x => childIds.Contains(x.Id) || x.Id == page.Id).ToList();
     }
 
 
     /// <summary>
     /// Get parents for a page
     /// </summary>
-    protected virtual async Task<List<Page>> GetChildren(RoutingContext context, IEnumerable<string> pageIds)
+    protected virtual async Task<string[]> GetChildIds(RoutingContext context, params string[] pageIds)
     {
       return await context.Session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
         .Where(x => x.PathIds.In(pageIds))
-        .ProjectInto<Page>()
-        .ToListAsync();
+        .Select(x => x.Id)
+        .ToArrayAsync();
     }
   }
 }

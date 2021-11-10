@@ -109,6 +109,12 @@ namespace zero.Core.Routing
     }
 
 
+    protected async Task UpdateDependencies<T>(RoutingContext context, T model) where T : IZeroRouteEntity
+    {
+      List<Route> dependentRoutes = await context.Session.Query<Route, Routes_ByDependencies>().Where(x => model.Id.In(x.Dependencies)).ToListAsync();
+    }
+
+
     /// <summary>
     /// Build a new routing context
     /// </summary>

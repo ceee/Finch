@@ -99,20 +99,6 @@ namespace zero.Core.Routing
     }
 
 
-    /// <inheritdoc />
-    public async IAsyncEnumerable<Route> SeedOnPageUpdate(RoutingContext context, Page model)
-    {
-      var stream = await context.Session.Advanced.StreamAsync(context.Session.Query<Page>());
-      while (await stream.MoveNextAsync())
-      {
-        if (stream.Current.Document.Id != model.Id)
-        {
-          yield return await Create(context, stream.Current.Document);
-        }
-      }
-    }
-
-
     /// <summary>
     /// Get parents for a page
     /// </summary>
