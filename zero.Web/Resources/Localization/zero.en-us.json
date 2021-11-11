@@ -266,7 +266,7 @@
   "settings": {
     "groups": {
       "system": "System",
-      "plugins": "Plugins",
+      "application": "Application",
       "integrations": "Integrations"
     },
     "system": {
@@ -283,6 +283,21 @@
         "name": "Users & Permissions",
         "text": "Administration of backoffice users"
       },
+      "logs": {
+        "name": "Logging",
+        "text": "Debug und view logs"
+      },
+      "plugins": {
+        "name": "Plugins",
+        "text": "{plugin_count} installed plugin(s)",
+        "text_default": "Manage and install plugins"
+      },
+      "create": {
+        "name": "Create a plugin",
+        "text": "Create from existing code"
+      }
+    },
+    "application": {
       "languages": {
         "name": "Languages",
         "text": "Frontend languages"
@@ -298,21 +313,6 @@
       "mails": {
         "name": "Mails",
         "text": "Edit mail templates"
-      },
-      "logs": {
-        "name": "Logging",
-        "text": "Debug und view logs"
-      }
-    },
-    "plugins": {
-      "installed": {
-        "name": "Installed plugins",
-        "text": "{plugin_count} installed plugin(s)",
-        "text_default": "Manage and install plugins"
-      },
-      "create": {
-        "name": "Create a plugin",
-        "text": "Create from existing code"
       },
       "integrations": {
         "name": "Integrations",

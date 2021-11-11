@@ -76,7 +76,7 @@
     gap: 20px;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     align-items: stretch;
-    margin-top: 40px;
+    margin-top: var(--padding-m);
   }
 
   a.settings-group-item
@@ -94,8 +94,8 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 60px;
-    height: 60px;
+    width: 54px;
+    height: 54px;
     background: var(--color-box);
     border-radius: var(--radius);
     box-shadow: var(--shadow-short);

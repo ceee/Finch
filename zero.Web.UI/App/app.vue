@@ -48,6 +48,7 @@
 
     created()
     {
+      console.info('xzero', this.zero);
       AuthApi.setUser(__zero.user);
 
       AuthApi.$on('authenticated', isAuthenticated =>
