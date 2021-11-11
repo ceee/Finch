@@ -51,6 +51,11 @@ namespace zero.Core.Routing
 
       // DONE [3] we have to find all routes which have become obsolete after update seeding.
 
+      // TODO [4] if the entity is part of a route provider it can be checked for stale-ness.
+      // The problem is if we skip this part and only update dependencies.
+      // E.g. ProductRouteProvider has a dependency on <Channel>. As Channel has no route provider it can not be checked for stale-ness.
+      // This has to be done in ProductRouteProvider as only the provider knows which properties of the entity it is using (therefore which properties need to be compared).
+
       RoutingContext context = GetContext();
       context.Session.Advanced.MaxNumberOfRequestsPerSession = 100_000;
 
