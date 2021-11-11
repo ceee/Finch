@@ -3,6 +3,9 @@
     <ui-tabs class="editor-tabs">
       <ui-tab v-if="!tab.disabled(value)" v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :key="index">
         <h3 v-if="display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
+        <slot name="blueprint">
+          <blueprint-property :value="value.blueprint" :entity="value" :meta="meta" />
+        </slot>
         <div class="ui-property ui-property-parent" v-for="fieldset in tab.fieldsets">
           <editor-component v-for="(field, fieldIndex) in fieldset.fields" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value"
                             :class="field.options.class" :data-cols="!!field.options.fieldset" :style="{ 'grid-column': field.options.fieldset ? 'span ' + field.options.fieldsetColumns : null }" />
@@ -24,6 +27,7 @@
   import './editor.scss';
   import EditorComponent from 'zero/editor/editor-component.vue';
   import EditorAside from './editor-aside.vue';
+  import BlueprintProperty from './blueprint/property.vue';
 
   export default {
     name: 'uiEditor',
@@ -54,7 +58,7 @@
       },
     },
 
-    components: { EditorComponent, EditorAside },
+    components: { EditorComponent, EditorAside, BlueprintProperty },
 
     data: () => ({
       editorConfig: {},

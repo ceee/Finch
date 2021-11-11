@@ -25,7 +25,7 @@
         <slot name="actions"></slot>
         <ui-dropdown-button v-if="canDelete" label="@ui.delete" icon="fth-trash" @click="onDelete" :disabled="disabled" />
       </ui-dropdown>
-      <ui-button :submit="true" type="accent" label="@ui.save" :state="state" v-if="!disabled" class="ui-form-header-primary-button" />
+      <ui-button :submit="true" type="accent" :label="isCreate ? '@ui.create' :'@ui.update'" :state="state" v-if="!disabled" class="ui-form-header-primary-button" />
     </div>
   </ui-header-bar>
 </template>

@@ -24,7 +24,7 @@
 
     props: {
       label: {
-        type: String
+        type: [String, Object]
       },
       state: {
         type: String,

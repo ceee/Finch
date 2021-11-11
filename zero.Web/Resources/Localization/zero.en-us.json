@@ -22,6 +22,7 @@
     "confirm": "Confirm",
     "save": "Save",
     "create": "Create",
+    "update": "Update",
     "createdDate": "Created",
     "modifiedDate": "Last modified",
     "id": "ID",
@@ -696,6 +697,18 @@
     "collection": {
       "page": "Page",
       "mediaFolder": "Media folder"
+    }
+  },
+
+  "blueprint": {
+    "hint": {
+      "childText": "<b>This entity is a child of a blueprint</b>. Its properties are automatically updated.",
+      "parentText": "This blueprint will <b>automatically pass changes</b> to its children.",
+      "parentCreateText": "This blueprint will create children in all registered apps and automatically pass changes to them.",
+      "goToBlueprint": "Blueprint",
+      "goToChild": "View child",
+      "settingsButton": "Settings",
+      "xUnlocked": "{count} unlocked"
     }
   },
 
