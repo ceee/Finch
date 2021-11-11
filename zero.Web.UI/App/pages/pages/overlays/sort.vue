@@ -22,7 +22,6 @@
 
 
 <script>
-  import PageTreeApi from 'zero/api/page-tree.js'
   import PagesApi from 'zero/api/pages.js';
   import Arrays from 'zero/helpers/arrays.js'
   import Notification from 'zero/helpers/notification.js'
@@ -51,7 +50,7 @@
 
     mounted()
     {
-      return PageTreeApi.getChildren(this.parentId).then(response =>
+      return PagesApi.getChildren(this.parentId).then(response =>
       {
         this.items = response.filter(x => x.id !== 'recyclebin');
       });

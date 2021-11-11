@@ -11,7 +11,7 @@
 
 
 <script>
-  import PageTreeApi from 'zero/api/page-tree.js';
+  import PagesApi from 'zero/api/pages.js';
   import { debounce as _debounce } from 'underscore';
 
   export default {
@@ -81,7 +81,7 @@
 
       getTreeItems(parent)
       {
-        return PageTreeApi.getChildren(parent, null, this.search).then(res =>
+        return PagesApi.getChildren(parent, null, this.search).then(res =>
         {
           res = res.filter(x => x.id !== 'recyclebin');
 

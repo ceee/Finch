@@ -15,7 +15,7 @@
 
 
 <script>
-  import PageTreeApi from 'zero/api/page-tree.js'
+  import PagesApi from 'zero/api/pages.js'
 
   export default {
 
@@ -52,7 +52,7 @@
       // get tree items
       getItems(parent)
       {
-        return PageTreeApi.getChildren(parent, this.model).then(res =>
+        return PagesApi.getChildren(parent, this.model).then(res =>
         {
           res = res.filter(x => x.id !== 'recyclebin');
           

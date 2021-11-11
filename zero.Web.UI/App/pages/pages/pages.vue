@@ -35,7 +35,6 @@
 
 
 <script>
-  import PageTreeApi from 'zero/api/page-tree.js'
   import PagesApi from 'zero/api/pages.js'
   import Overlay from 'zero/helpers/overlay.js'
   import CreateOverlay from './overlays/create.vue'
@@ -154,7 +153,7 @@
           return Promise.resolve(this.cache[key]);
         }
 
-        return PageTreeApi.getChildren(parent, this.id).then(response =>
+        return PagesApi.getChildren(parent, this.id).then(response =>
         {
           response.forEach(item =>
           {

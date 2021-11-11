@@ -8,7 +8,6 @@ export { default as mailTemplatesApi } from './mailTemplates.js';
 export { default as mediaFolderApi } from './media-folder.js';
 export { default as mediaApi } from './media.js';
 export { default as modulesApi } from './modules.js';
-export { default as pageTreeApi } from './page-tree.js';
 export { default as pagesApi } from './pages.js';
 export { default as recycleBinApi } from './recycle-bin.js';
 export { default as sectionsApi } from './sections.js';

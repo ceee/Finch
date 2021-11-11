@@ -31,6 +31,8 @@ namespace zero.Core.Routing
 
       await Collection.Save(redirect);
 
+      // TODO see https://statamic.com/addons/rias/redirect
+
       // TODO this does not work as expected yet
       //foreach (RouteRedirect oldTargetRedirect in redirects)
       //{
@@ -67,7 +69,7 @@ namespace zero.Core.Routing
       await Collection.Purge($"where c.{nameof(RouteRedirect.IsAutomated)} = $automated and c.{nameof(RouteRedirect.TargetUrl)} IN ($urls)", new Raven.Client.Parameters()
       {
         { "automated", true },
-        { "url", routes.Select(x => x.Url).ToArray() }
+        { "urls", routes.Select(x => x.Url).ToArray() }
       });
     }
   }

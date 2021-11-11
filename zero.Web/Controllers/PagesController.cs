@@ -3,6 +3,7 @@ using Raven.Client.Documents;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using zero.Core.Api;
 using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -56,6 +57,12 @@ namespace zero.Web.Controllers
         return model;
       });
 
+    }
+
+
+    public async Task<IList<TreeItem>> GetChildren([FromQuery] string parent = null, [FromQuery] string active = null, [FromQuery] string search = null)
+    {
+      return await Collection.GetChildren(parent, active, search);
     }
 
 

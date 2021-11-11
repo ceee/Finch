@@ -17,7 +17,6 @@
 
 
 <script>
-  import PageTreeApi from 'zero/api/page-tree.js'
   import PagesApi from 'zero/api/pages.js';
   import Notification from 'zero/helpers/notification.js'
 
@@ -64,7 +63,7 @@
           return Promise.resolve(this.cache[key]);
         }
 
-        return PageTreeApi.getChildren(parent).then(response =>
+        return PagesApi.getChildren(parent).then(response =>
         {
           if (!parent)
           {

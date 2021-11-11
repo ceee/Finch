@@ -13,7 +13,6 @@
 
 
 <script>
-  import PageTreeApi from 'zero/api/page-tree.js'
   import PagesApi from 'zero/api/pages.js'
   import PageOverlay from './overlay.vue';
   import Overlay from 'zero/helpers/overlay.js';

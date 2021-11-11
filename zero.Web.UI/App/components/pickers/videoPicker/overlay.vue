@@ -33,7 +33,6 @@
 
 
 <script>
-  import PageTreeApi from 'zero/api/page-tree.js';
   import { getVideoId, getVimeoMetadata, getYoutubeMetadata } from 'zero/helpers/videoparser.js';
   import { debounce as _debounce } from 'underscore';
 
