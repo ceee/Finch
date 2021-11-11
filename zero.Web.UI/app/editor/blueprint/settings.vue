@@ -11,7 +11,10 @@
     <p class="blueprint-settings-text">By default all properties of your entity are synced with its blueprint.<br />You can disable synchronisation per property so it won't be overridden on changes.</p>
 
     <div class="ui-box">
-      <ui-property v-for="(item, index) in items" :key="index" :label="item.label" :vertical="false" :class="{'not-synced': !item.synced}"> 
+      <ui-property class="blueprint-settings-tableheader" :key="-1" label="Property" :vertical="false">
+        <b>Synchronized</b>
+      </ui-property>
+      <ui-property v-for="(item, index) in items" :key="index" :label="item.label" :description="item.description" :vertical="false" :class="{'not-synced': !item.synced}">
         <ui-toggle :value="item.synced" @input="onChange(item)" />
       </ui-property>
     </div>
@@ -23,6 +26,7 @@
   import PagesApi from 'zero/api/pages.js';
   import Notification from 'zero/helpers/notification.js';
   import Arrays from 'zero/helpers/arrays.js';
+  import Localization from 'zero/helpers/localization.js';
   import BlueprintApi from 'zero/api/blueprint.js';
 
   export default {
@@ -62,6 +66,7 @@
           this.items.push({
             path: field.path,
             label: field.options.label || this.editor.templateLabel(field.path),
+            description: Localization.localize(field.options.description || this.editor.templateDescription(field.path), { hideEmpty: true }),
             synced: this.model.desync.indexOf(field.path) < 0
           });
         }
@@ -178,11 +183,24 @@
     justify-content: space-between;
   }
 
+  .blueprint-settings .blueprint-settings-tableheader
+  {
+    border-bottom: 1px dashed var(--color-line-dashed);
+    padding-bottom: 20px;
+    margin-bottom: 26px;
+
+    b
+    {
+      display: inline-block;
+      margin-top: 3px;
+    }
+  }
+
   .blueprint-settings .ui-property + .ui-property
   {
     margin-top: 20px;
-    border-top: none;
     padding-top: 0;
+    border-top: none;
   }
 
   .blueprint-settings .ui-property-content
@@ -199,6 +217,7 @@
   .blueprint-settings .ui-property.not-synced .ui-property-label
   {
     font-weight: 400;
+    color: var(--color-text-dim);
   }
 
   /*.blueprint-settings .ui-property.not-synced .ui-property-label:before

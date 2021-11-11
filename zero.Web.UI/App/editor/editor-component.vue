@@ -1,13 +1,11 @@
 ﻿<template>
-  <ui-property v-if="!isHidden" :field="config.path" :label="label" :hide-label="config.options.hideLabel" 
-               :description="description" :required="isRequired" :disabled="isDisabled" 
+  <ui-property v-if="!isHidden" :field="config.path" :label="label" :hide-label="config.options.hideLabel"
+               :description="description" :required="isRequired" :disabled="isDisabled"
                :vertical="config.options.vertical"
-               :class="{'is-disabled': isDisabled, 'has-block': !!blockComponent }">
+               :class="{'is-disabled': isDisabled }">
     <component :is="config.component" v-bind="config.componentOptions" :value="model" :entity="value" :meta="meta" @input="onChange" :disabled="isDisabled" />
     <p v-if="config.options.helpText" class="ui-property-help" v-localize="config.options.helpText"></p>
-    <template v-if="blockComponent && loaded" v-slot:after>
-      <component :is="blockComponent" v-bind="{ config, editor, value, model }" />
-    </template>
+    <!--<blueprint-block :config="config" :editor="editor" :value="value" />-->
   </ui-property>
 </template>
 
@@ -18,11 +16,14 @@
   import Editor from 'zero/core/editor.ts';
   import EditorField from 'zero/core/editor-field.ts';
   import Localization from 'zero/helpers/localization.js';
+  import BlueprintBlock from './blueprint/block.vue';
 
   export default {
     name: 'uiEditorComponent',
 
     inject: [ 'meta' ],
+
+    components: { BlueprintBlock },
 
     props: {
       config: {
@@ -52,7 +53,6 @@
     data: () => ({
       model: null,
       loaded: false,
-      blockComponent: null,
       manualDisabled: false,
       selector: null
     }),
@@ -147,12 +147,6 @@
       setDisabled(disabled)
       {
         this.manualDisabled = disabled;
-      },
-
-
-      setBlock(component)
-      {
-        this.blockComponent = component;
       }
     }
   }
