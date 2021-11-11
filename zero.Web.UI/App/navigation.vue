@@ -22,8 +22,7 @@
 
     </div>
 
-
-    <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">
+    <ui-dropdown v-if="applications.length > 0 && zero.config.multiApps" class="app-nav-switch">
       <template v-slot:button>
         <ui-button type="light block" :label="currentApplication.name" caret="right" />
       </template>
@@ -37,6 +36,7 @@
       <ui-dropdown-button label="Add new application" icon="fth-plus" @click="addApplication" />
       <ui-dropdown-button label="Manage apps" icon="fth-edit-2" @click="manageApplications" />
     </ui-dropdown>
+    <div v-else class="app-nav-switch is-fake"></div>
 
     <nav class="app-nav-inner">
       <template v-for="section in sections">

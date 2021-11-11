@@ -30,6 +30,7 @@ namespace zero.Core.Options
       Services = new();
       Routing = new();
       Interceptors = new();
+      Applications = new();
 
       Raven.Indexes.Add<Backoffice_Search>();
       Raven.Indexes.Add<Media_ByChildren>();
@@ -70,6 +71,9 @@ namespace zero.Core.Options
 
     /// <inheritdoc />
     public RavenOptions Raven { get; set; }
+
+    /// <inheritdoc />
+    public ApplicationOptions Applications { get; set; }
 
     /// <inheritdoc />
     public string BackofficePath { get; set; }
@@ -155,6 +159,11 @@ namespace zero.Core.Options
     /// RavenDB configuration data
     /// </summary>
     RavenOptions Raven { get; set; }
+
+    /// <summary>
+    /// Application options
+    /// </summary>
+    ApplicationOptions Applications { get; set; }
 
     /// <summary>
     /// URL path to the backoffice (defaults to /zero)

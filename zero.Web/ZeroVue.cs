@@ -69,6 +69,7 @@ namespace zero.Web
       config.AppId = Context.AppId;
       //config.SharedAppId = Constants.Database.SharedAppId; // TODO appx
       config.Icons = CreateIconSets();
+      config.MultiApps = Options.Applications.EnableMultiple;
 
       BackofficeUser user = await AuthenticationApi.GetUser();
 
@@ -450,6 +451,8 @@ namespace zero.Web
     public string ErrorFieldNone { get; set; }
 
     public string AppId { get; set; }
+
+    public bool MultiApps { get; set; }
 
     public UserEditModel User { get; set; }
 

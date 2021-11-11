@@ -149,6 +149,13 @@
     max-height: 20px;
     max-width: 20px;
   }
+
+  &.is-fake
+  {
+    margin-bottom: 0;
+    height: 0;
+    background: none;
+  }
 }
 
 a.app-nav-item, button.app-nav-item

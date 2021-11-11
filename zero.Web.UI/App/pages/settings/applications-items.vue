@@ -5,7 +5,7 @@
       <span class="apps-item-minor">{{app.domains[0]}}</span>
       <span class="apps-item-status" :class="{ 'is-active': app.isActive }" v-localize="getStatus(app)"></span>
     </router-link>
-    <router-link :to="getAddLink()" class="apps-items-add">
+    <router-link :to="getAddLink()" class="apps-items-add" v-if="zero.config.multiApps">
       <ui-icon symbol="fth-plus" :size="24" />
     </router-link>
   </div>
