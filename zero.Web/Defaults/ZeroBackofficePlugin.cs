@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using zero.Core;
 using zero.Core.Api;
+using zero.Core.Blueprints;
 using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Integrations;
@@ -50,7 +51,8 @@ namespace zero.Web.Defaults
       zero.Icons.AddSet("feather", "Feather", "/assets/icons/feather.svg", "fth");
       zero.Pages.Add<PageFolder>(Constants.Pages.FolderAlias, "@page.folder.name", "@page.folder.description", "fth-folder");
 
-      zero.Interceptors.Add<ZeroEntityRouteInterceptor>(gravity: 1000);
+      zero.Interceptors.Add<ZeroEntityRouteInterceptor>(gravity: 100);
+      zero.Interceptors.Add<BlueprintInterceptor>(gravity: -1);
     }
 
 
@@ -133,6 +135,9 @@ namespace zero.Web.Defaults
       services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();
 
       services.AddScoped<IBackofficeSearchService, BackofficeSearchService>();
+
+      services.AddScoped<IBlueprintService, BlueprintService>();
+      services.AddScoped<BlueprintInterceptor>();
 
       services.AddScoped<ZeroEntityRouteInterceptor>();
     }

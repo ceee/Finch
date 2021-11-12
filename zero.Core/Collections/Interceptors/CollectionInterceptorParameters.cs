@@ -32,6 +32,11 @@ namespace zero.Core.Collections
       public IValidator<T> Validator { get; set; }
 
       /// <summary>
+      /// Access to the collection
+      /// </summary>
+      public ICollectionBase<T> Collection { get; set; }
+
+      /// <summary>
       /// Parameters from the interceptor which ran on before the operation (only available for completed operations)
       /// </summary>
       public Dictionary<string, object> Properties { get; set; } = new();

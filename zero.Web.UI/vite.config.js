@@ -79,7 +79,7 @@ const myPlugin = () => ({
  */
 let config = {
   server: {
-    port: process.env.PORT,
+    port: process.env.PORT || 3399,
     cors: true
   },
   plugins: [createVuePlugin(), ...zeroPlugins, myPlugin()],

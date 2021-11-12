@@ -42,7 +42,7 @@ namespace Zero.Web.DevServer
     {
       // this is a development-time service,
       // therefore no way to enable it in production
-      if (!env.IsDevelopment())
+      if (!env.IsDevelopment() || !options.Value.Enabled)
       {
         return;
       }

@@ -61,6 +61,11 @@ namespace zero.Core.Collections
           continue;
         }
 
+        if (!interceptor.CanRun(instruction.Parameters))
+        {
+          continue;
+        }
+
         if (func == default)
         {
           func = expression.Compile();
@@ -109,6 +114,11 @@ namespace zero.Core.Collections
       foreach (InterceptorRegistration registration in ForType(typeof(T)))
       {
         if (!TryResolve(registration, out ICollectionInterceptor<T> interceptor))
+        {
+          continue;
+        }
+
+        if (!interceptor.CanRun(instruction.Parameters))
         {
           continue;
         }

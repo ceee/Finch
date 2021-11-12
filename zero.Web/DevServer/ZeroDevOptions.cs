@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Zero.Web.DevServer
+﻿namespace Zero.Web.DevServer
 {
   public class ZeroDevOptions
   {
@@ -12,5 +7,7 @@ namespace Zero.Web.DevServer
     public bool ForwardLog { get; set; } = false;
 
     public string WorkingDirectory { get; set; }
+
+    public bool Enabled { get; set; } = true;
   }
 }

@@ -28,6 +28,7 @@ namespace zero.Core.Options
       Integrations = new();
       Icons = new();
       Services = new();
+      Blueprints = new();
       Routing = new();
       Interceptors = new();
       Applications = new();
@@ -115,6 +116,9 @@ namespace zero.Core.Options
 
     /// <inheritdoc />
     public ServiceOptions Services { get; private set; }
+
+    /// <inheritdoc />
+    public BlueprintOptions Blueprints { get; private set; }
 
     /// <inheritdoc />
     public RoutingOptions Routing { get; private set; }
@@ -224,6 +228,11 @@ namespace zero.Core.Options
     /// 
     /// </summary>
     ServiceOptions Services { get; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    BlueprintOptions Blueprints { get; }
 
     /// <summary>
     /// 

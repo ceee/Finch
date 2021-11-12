@@ -20,7 +20,8 @@ namespace zero.Core.Collections
         Context = args.Context,
         Properties = args.Properties,
         Session = args.Session,
-        Store = args.Store
+        Store = args.Store,
+        Collection = null, //args.Collection
         //Validator = args.Validator
       };
 
@@ -44,6 +45,16 @@ namespace zero.Core.Collections
         Prevent = result.Prevent,
         Result = result.Result != null ? EntityResult<T>.From(result.Result, result.Result.Model as T) : null
       };
+    }
+
+    /// <inheritdoc />
+    public override bool CanRun(Parameters args)
+    {
+      if (args is ParametersWithModel)
+      {
+        return _base.CanRun(Args<CollectionInterceptor<ZeroEntity>.ParametersWithModel>(args as ParametersWithModel));
+      }
+      return _base.CanRun(Args<CollectionInterceptor<ZeroEntity>.Parameters>(args));
     }
 
     /// <inheritdoc />

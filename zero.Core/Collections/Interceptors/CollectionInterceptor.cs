@@ -1,11 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using zero.Core.Entities;
 
 namespace zero.Core.Collections
 {
   public abstract partial class CollectionInterceptor<T> : ICollectionInterceptor<T> where T : ZeroEntity
   {
+    /// <inheritdoc />
+    public virtual bool CanRun(Parameters args) => true;
+
     /// <inheritdoc />
     public virtual Task<InterceptorResult<T>> Creating(CreateParameters args) => Task.FromResult<InterceptorResult<T>>(default);
 
@@ -38,12 +40,21 @@ namespace zero.Core.Collections
   }
 
 
-  public abstract partial class CollectionInterceptor : CollectionInterceptor<ZeroEntity>, ICollectionInterceptor { }
+  public abstract partial class CollectionInterceptor : CollectionInterceptor<ZeroEntity>, ICollectionInterceptor
+  {
+    /// <inheritdoc />
+    public override bool CanRun(Parameters args) => base.CanRun(args);
+  }
 
   public interface ICollectionInterceptor : ICollectionInterceptor<ZeroEntity> { }
 
   public interface ICollectionInterceptor<T> where T : ZeroEntity
   {
+    /// <summary>
+    /// Whether any of the interceptor methods is allowed to run based on the parameters
+    /// </summary>
+    bool CanRun(CollectionInterceptor<T>.Parameters args);
+
     /// <summary>
     /// Called after an entity has been stored but before the session has saved its changes
     /// </summary>
