@@ -8,7 +8,7 @@ namespace zero.Core.Options
   {
     public BlueprintOptions()
     {
-      Add<CountryBlueprint>();
+      Add<Application>();
     }
 
 
@@ -24,7 +24,7 @@ namespace zero.Core.Options
     }
 
 
-    public void Add<T>(Action<Blueprint<T>> createExpression) where T : ZeroEntity, new()
+    public void Add<T>(Action<Blueprint<T>> createExpression = null) where T : ZeroEntity, new()
     {
       Items.Add(new DefaultBlueprint<T>(createExpression));
     }

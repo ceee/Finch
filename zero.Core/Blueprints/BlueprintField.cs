@@ -33,7 +33,7 @@ namespace zero.Core.Blueprints
     internal BlueprintField(Expression<Func<T, object>> selector)
     {
       Expression = selector;
-      FieldName = GetPropertyPath(selector, out MemberExpression member);
+      FieldName = selector.GetPropertyPath(out MemberExpression member);
       PropertyInfo = member?.Member as PropertyInfo;
 
       if (PropertyInfo == null)
@@ -64,49 +64,6 @@ namespace zero.Core.Blueprints
     public virtual void OnUpdate(Action<T, T> onUpdate)
     {
       _applyHook = onUpdate;
-    }
-
-
-    static string GetPropertyPath(Expression expr, out MemberExpression member)
-    {
-      StringBuilder path = new();
-      MemberExpression memberExpression = GetMemberExpression(expr);
-      do
-      {
-        member = memberExpression;
-
-        if (path.Length > 0)
-        {
-          path.Insert(0, ".");
-        }
-        path.Insert(0, memberExpression.Member.Name);
-        memberExpression = GetMemberExpression(memberExpression.Expression);
-      }
-      while (memberExpression != null);
-
-      return path.ToString();
-    }
-
-
-    static MemberExpression GetMemberExpression(Expression expression)
-    {
-      if (expression is MemberExpression)
-      {
-        return (MemberExpression)expression;
-      }
-      else if (expression is LambdaExpression)
-      {
-        var lambdaExpression = expression as LambdaExpression;
-        if (lambdaExpression.Body is MemberExpression)
-        {
-          return (MemberExpression)lambdaExpression.Body;
-        }
-        else if (lambdaExpression.Body is UnaryExpression)
-        {
-          return ((MemberExpression)((UnaryExpression)lambdaExpression.Body).Operand);
-        }
-      }
-      return null;
     }
   }
 }

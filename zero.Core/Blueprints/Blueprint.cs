@@ -16,12 +16,12 @@ namespace zero.Core.Blueprints
 
     public Blueprint() : base(typeof(T))
     {
-      Sync(x => x.Name);
-      Sync(x => x.Alias);
-      Sync(x => x.Sort);
-      Sync(x => x.IsActive);
-      Sync(x => x.LanguageId);
-      Sync(x => x.Key);
+      //Sync(x => x.Name);
+      //Sync(x => x.Alias);
+      //Sync(x => x.Sort);
+      //Sync(x => x.IsActive);
+      //Sync(x => x.LanguageId);
+      //Sync(x => x.Key);
     }
 
 
@@ -37,24 +37,24 @@ namespace zero.Core.Blueprints
         return model;
       }
 
-      foreach (BlueprintField<T> field in Fields)
-      {
-        // do not sync disabled fields
-        if (!field.IsSynced && !field.IsLocked)
-        {
-          continue;
-        }
+      //foreach (BlueprintField<T> field in Fields)
+      //{
+      //  // do not sync disabled fields
+      //  if (!field.IsSynced && !field.IsLocked)
+      //  {
+      //    continue;
+      //  }
 
-        // desynced fields are not synced with the blueprint
-        // (but only if they are not locked)
-        if (model.Blueprint.Desync.Contains(field.FieldName, StringComparer) && !field.IsLocked)
-        {
-          continue;
-        }
+      //  // desynced fields are not synced with the blueprint
+      //  // (but only if they are not locked)
+      //  if (model.Blueprint.Desync.Contains(field.FieldName, StringComparer) && !field.IsLocked)
+      //  {
+      //    continue;
+      //  }
 
-        // apply new value to model property
-        field.Apply(blueprint, model);
-      }
+      //  // apply new value to model property
+      //  field.Apply(blueprint, model);
+      //}
 
       ApplyDefaults(blueprint, model);
 
@@ -67,10 +67,16 @@ namespace zero.Core.Blueprints
 
 
     /// <summary>
-    /// Updates meta data for an entity which should always be synchronized
+    /// Update default entity data
     /// </summary>
     protected virtual void ApplyDefaults(T blueprint, T model)
     {
+      //model.Name = blueprint.Name;
+      //model.Alias = blueprint.Alias;
+      //model.IsActive = blueprint.IsActive;
+      model.Key = blueprint.Key;
+      model.Sort = blueprint.Sort;
+      model.LanguageId = blueprint.LanguageId;
       model.Hash = blueprint.Hash;
       model.CreatedById = blueprint.CreatedById;
       model.CreatedDate = blueprint.CreatedDate;
@@ -90,6 +96,12 @@ namespace zero.Core.Blueprints
     }
 
 
+    public void SyncAll()
+    {
+
+    }
+
+
     /// <summary>
     /// Lock a field so it always get synchronized no and cannot be changed
     /// </summary>
@@ -98,6 +110,11 @@ namespace zero.Core.Blueprints
       BlueprintField<T> field = Field(selector);
       field.IsLocked = true;
       return field;
+    }
+
+    public void Unlock(string fieldName)
+    {
+
     }
 
 
@@ -160,9 +177,9 @@ namespace zero.Core.Blueprints
 
   public class DefaultBlueprint<T> : Blueprint<T> where T : ZeroEntity, new()
   {
-    public DefaultBlueprint(Action<Blueprint<T>> expression)
+    public DefaultBlueprint(Action<Blueprint<T>> expression = null) : base()
     {
-      expression(this);
+      expression?.Invoke(this);
     }
   }
 }
