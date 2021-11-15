@@ -115,7 +115,9 @@
       "key": "Key",
       "alias": "Alias",
       "sort": "Sort",
-      "hash": "Hash"
+      "hash": "Hash",
+      "name": "Name",
+      "isActive": "Active"
     }
   },
 

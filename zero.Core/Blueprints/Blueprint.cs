@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using zero.Core.Entities;
+using zero.Core.Extensions;
 
 namespace zero.Core.Blueprints
 {
@@ -11,7 +12,7 @@ namespace zero.Core.Blueprints
   /// </summary>
   public class Blueprint<T> : Blueprint where T : ZeroEntity, new()
   {
-    public List<BlueprintField<T>> Fields { get; private set; } = new();
+    public List<BlueprintField<T>> UnlockedFields { get; private set; } = new();
 
 
     public Blueprint() : base(typeof(T))
@@ -100,63 +101,78 @@ namespace zero.Core.Blueprints
 
 
     /// <summary>
-    /// Synchronize a field
+    /// Lock a field so it always get synchronized no and cannot be changed
     /// </summary>
-    public BlueprintField<T> Sync(Expression<Func<T, object>> selector)
+    public void LockAll()
     {
-      BlueprintField<T> field = Field(selector);
-      field.IsSynced = true;
-      return field;
-    }
-
-
-    public void SyncAll()
-    {
-
+      UnlockedFields = new();
     }
 
 
     /// <summary>
     /// Lock a field so it always get synchronized no and cannot be changed
     /// </summary>
-    public BlueprintField<T> Lock(Expression<Func<T, object>> selector)
+    public void Lock(Expression<Func<T, object>> selector)
     {
-      BlueprintField<T> field = Field(selector);
-      field.IsLocked = true;
-      return field;
-    }
-
-    public void Unlock(params string[] fieldNames)
-    {
-
+      RemoveField(selector);
     }
 
 
-    /// <summary>
-    /// Remove a field from synchronisation
-    /// </summary>
-    public void Remove(Expression<Func<T, object>> selector)
+    public void Unlock(Expression<Func<T, object>> selector)
     {
-      BlueprintField<T> field = new(selector);
-      Fields.RemoveAll(x => x.FieldName.Equals(field.FieldName, StringComparison.InvariantCultureIgnoreCase));
+      AddField(selector);
+    }
+
+
+    public void UnlockDefaults()
+    {
+      AddField(x => x.Name);
+      AddField(x => x.Alias);
+      AddField(x => x.Sort);
+      AddField(x => x.Key);
+      AddField(x => x.IsActive);
+    }
+
+
+    /// <inheritdoc />
+    public override IEnumerable<string> GetUnlockedFieldNames()
+    {
+      foreach (BlueprintField<T> field in UnlockedFields)
+      {
+        yield return field.FieldName.ToCamelCaseId();
+      }
     }
 
 
     /// <summary>
     /// Get existing field or create a new one
     /// </summary>
-    protected BlueprintField<T> Field(Expression<Func<T, object>> selector)
+    protected BlueprintField<T> AddField(Expression<Func<T, object>> selector)
     {
       BlueprintField<T> tempField = new(selector);
-      BlueprintField<T> storedField = Fields.FirstOrDefault(x => x.FieldName.Equals(tempField.FieldName, StringComparison.InvariantCultureIgnoreCase));
+      BlueprintField<T> storedField = UnlockedFields.FirstOrDefault(x => x.FieldName.Equals(tempField.FieldName, StringComparison.InvariantCultureIgnoreCase));
 
       if (storedField != null)
       {
         return storedField;
       }
 
-      Fields.Add(tempField);
+      UnlockedFields.Add(tempField);
       return tempField;
+    }
+
+
+    /// <summary>
+    /// Removes a field
+    /// </summary>
+    protected void RemoveField(Expression<Func<T, object>> selector)
+    {
+      BlueprintField<T> tempField = new(selector);
+
+      if (tempField != null)
+      {
+        UnlockedFields.RemoveAll(x => x.FieldName.Equals(tempField.FieldName, StringComparison.InvariantCultureIgnoreCase));
+      }
     }
   }
 
@@ -171,6 +187,8 @@ namespace zero.Core.Blueprints
     /// </summary>
     public Type ContentType { get; private set; }
 
+    public string Alias { get; private set; }
+
     /// <summary>
     /// String comparer for property name comparison
     /// </summary>
@@ -180,12 +198,18 @@ namespace zero.Core.Blueprints
     public Blueprint(Type type)
     {
       ContentType = type;
+      Alias = type.Name.ToCamelCaseId();
     }
 
     /// <summary>
     /// Merges blueprint data into a model based on the configuration
     /// </summary>
     public abstract ZeroEntity Apply(ZeroEntity blueprint, ZeroEntity model);
+
+    /// <summary>
+    /// Get all fields which have been unlocked
+    /// </summary>
+    public abstract IEnumerable<string> GetUnlockedFieldNames();
   }
 
 

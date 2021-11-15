@@ -15,16 +15,6 @@ namespace zero.Core.Blueprints
 
     public string FieldName { get; private set; }
 
-    /// <summary>
-    /// This field is synced as long as it's not desynced for a certain entity
-    /// </summary>
-    public bool IsSynced { get; set; }
-
-    /// <summary>
-    /// This field is synced and cannot be desynced
-    /// </summary>
-    public bool IsLocked { get; set; }
-
     Action<T, T> _applyHook { get; set; }
 
     Func<T, object> _selectorFunc = null;

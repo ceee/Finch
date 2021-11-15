@@ -2,6 +2,7 @@
 import Editor from 'zero/core/editor.ts';
 
 const editor = new Editor('country', '@country.fields.');
+editor.blueprintAlias = 'country';
 editor.field('name', { label: '@ui.name' }).text(120).required();
 //editor.field('alias', { label: '@ui.alias' }).text().required();
 editor.field('code').text(2).required();

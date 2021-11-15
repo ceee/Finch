@@ -2,7 +2,7 @@
   <div class="translations">
     <ui-header-bar title="@translation.list" :count="count" :back-button="true">
       <ui-table-filter :attach="$refs.table" />
-      <ui-add-button :route="createRoute" />
+      <ui-add-button :route="createRoute" blueprint-alias="translation" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table ref="table" config="translations" @count="count = $event" />

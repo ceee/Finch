@@ -5,6 +5,7 @@
         <div class="blueprint-inner">
           <ui-icon symbol="fth-cloud" :size="22" />
           <p v-localize:html="'@blueprint.hint.childText'"></p>
+          <code style="grid-row:2;grid-column:2;margin-top: -20px;justify-self:flex-start;font-size:11px;">{{fields.filter(x => !x.disabled).map(x => x.path)}}</code>
         </div>
         <aside>
           <ui-button class="blueprint-button-settings" type="blank small" icon="fth-settings" :title="{ key: value.desync.length > 0 ? '@blueprint.hint.xUnlocked' : '@blueprint.hint.settingsButton', tokens: { count: value.desync.length }}" @click="openSettings" />
@@ -30,6 +31,7 @@
   import Overlay from 'zero/helpers/overlay.js';
   import SettingsOverlay from './settings.vue';
   import BlueprintBlockComponent from './block.vue';
+  import Localization from 'zero/helpers/localization.js';
 
   export default {
     props: {
@@ -44,11 +46,19 @@
         type: Object,
         default: () => { }
       },
+      config: {
+        type: Object,
+        default: () => { }
+      },
       disabled: {
         type: Boolean,
         default: false
       }
     },
+
+    data: () => ({
+      fields: []
+    }),
 
     inject: ['editor'],
 
@@ -100,7 +110,7 @@
           component: SettingsOverlay,
           display: 'editor',
           model: this.value,
-          editor
+          fields: this.fields
         }).then(res =>
         {
           this.$emit('input', res.blueprint);
@@ -119,6 +129,7 @@
         {
           this.$nextTick(() =>
           {
+            this.fields = this.getFields();
             this.setupSync(form);
           });
         };
@@ -176,6 +187,7 @@
         return null;
       },
 
+
       // find all form properties
       getProperties(form)
       {
@@ -201,6 +213,58 @@
         traverseChildren(form);
 
         return components;
+      },
+
+
+      getFields()
+      {
+        const editor = typeof this.editor === 'string' ? this.zero.getEditor(this.editor) : this.editor;
+
+        let fields = [];
+        let processed = ['blueprint'];
+        let defaults = ['name', /*'alias',*/ 'isActive', 'sort', /*'key'*/];
+        let fieldMap = {};
+        editor.fields.forEach(field => fieldMap[field.path.toLowerCase()] = field);
+
+        defaults.forEach(alias =>
+        {
+          if (defaults.indexOf(alias) > -1)
+          {
+            processed.push(alias);
+
+            let unlocked = this.config.unlocked.indexOf(alias) > -1;
+
+            fields.push({
+              path: alias,
+              label: Localization.localize("@ui.entityfields." + alias),
+              description: Localization.localize("@ui.entityfields." + alias + "_text", { hideEmpty: true }),
+              synced: !unlocked || this.value.desync.indexOf(alias) < 0,
+              disabled: !unlocked,
+              internal: true
+            });
+          }
+        });
+
+        editor.fields.forEach(field =>
+        {
+          if (processed.indexOf(field.path) < 0)
+          {
+            processed.push(field.path);
+
+            let unlocked = this.config.unlocked.indexOf(field.path) > -1 || this.config.unlocked.find(x => field.path.indexOf(x + '.') === 0);
+
+            fields.push({
+              path: field.path,
+              label: field.options.label || editor.templateLabel(field.path),
+              description: Localization.localize(field.options.description || editor.templateDescription(field.path), { hideEmpty: true }),
+              synced: !unlocked || this.value.desync.indexOf(field.path) < 0,
+              disabled: !unlocked,
+              internal: false
+            });
+          }
+        });
+
+        return fields;
       }
     }
   }

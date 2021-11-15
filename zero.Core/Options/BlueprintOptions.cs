@@ -9,12 +9,6 @@ namespace zero.Core.Options
     public BlueprintOptions()
     {
       Enabled = false;
-      Add<Media>();
-      Add<MediaFolder>();
-      Add<Language>();
-      Add<Country>();
-      Add<Translation>();
-      Add<MailTemplate>();
     }
 
 

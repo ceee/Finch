@@ -25,6 +25,8 @@ class Editor
   tabs = [];
   fields = [];
 
+  blueprintAlias = null;
+
   options = {
     disabled: false,
     display: 'tabs',

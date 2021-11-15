@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using zero.Core;
 using zero.Core.Api;
+using zero.Core.Blueprints;
 using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
@@ -102,6 +104,8 @@ namespace zero.Web
         {
           YouTubeApiKey = Options.Services.YouTubeApiKey
         };
+
+        config.Blueprints = CreateBlueprints();
       }
 
       return config;
@@ -402,6 +406,31 @@ namespace zero.Web
 
       return result;
     }
+
+
+    List<ZeroVueBlueprint> CreateBlueprints()
+    {
+      List<ZeroVueBlueprint> items = new();
+
+      if (!Options.Blueprints.Enabled)
+      {
+        return items;
+      }
+
+      foreach (Blueprint blueprint in Options.Blueprints.GetAllItems())
+      {
+        string[] unlocked = blueprint.GetUnlockedFieldNames().ToArray();
+
+        items.Add(new()
+        {
+          Alias = blueprint.Alias,
+          Enabled = true,
+          Unlocked = unlocked
+        });
+      }
+
+      return items;
+    }
   }
 
 
@@ -471,6 +500,8 @@ namespace zero.Web
     public IList<ZeroVueIconSet> Icons { get; set; } = new List<ZeroVueIconSet>();
 
     public ZeroVueServices Services { get; set; } = new();
+
+    public IList<ZeroVueBlueprint> Blueprints { get; set; } = new List<ZeroVueBlueprint>();
   }
 
 
@@ -549,5 +580,14 @@ namespace zero.Web
   public class ZeroVueServices
   {
     public string YouTubeApiKey { get; set; }
+  }
+
+  public class ZeroVueBlueprint
+  {
+    public string Alias { get; set; }
+
+    public bool Enabled { get; set; }
+
+    public string[] Unlocked { get; set; } = Array.Empty<string>();
   }
 }

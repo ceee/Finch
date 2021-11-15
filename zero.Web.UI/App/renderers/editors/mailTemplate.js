@@ -2,6 +2,7 @@
 import Editor from 'zero/core/editor.ts';
 
 const editor = new Editor('mailTemplate', '@mailTemplate.fields.');
+editor.blueprintAlias = 'mailTemplate';
 
 const general = editor.tab('general', '@ui.tab_general');
 const sender = editor.tab('sender', '@mailTemplate.tabs.sender');

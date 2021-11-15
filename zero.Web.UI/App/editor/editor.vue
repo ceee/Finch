@@ -4,7 +4,7 @@
       <ui-tab v-if="!tab.disabled(value)" v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :key="index">
         <h3 v-if="display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
         <slot name="blueprint">
-          <blueprint-property v-if="value && value.blueprint" :value="value.blueprint" :entity="value" :meta="meta" />
+          <blueprint-property v-if="value && value.blueprint" :value="value.blueprint" :entity="value" :meta="meta" :config="blueprintConfig" />
         </slot>
         <div class="ui-property ui-property-parent" v-for="fieldset in tab.fieldsets">
           <editor-component v-for="(field, fieldIndex) in fieldset.fields" :disabled="disabled" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value"
@@ -67,9 +67,10 @@
 
     data: () => ({
       editorConfig: {},
+      blueprintConfig: null,
       loaded: false,
       tabs: [],
-      currentFieldset: null
+      currentFieldset: null,
     }),
 
     computed: {
@@ -86,6 +87,7 @@
     created()
     {
       this.editorConfig = typeof this.config === 'string' ? this.zero.getEditor(this.config) : this.config;
+      this.blueprintConfig = this.editorConfig.blueprintAlias ? this.zero.config.blueprints.find(x => x.alias == this.editorConfig.blueprintAlias) : null;
 
       this.tabs = this.editorConfig.tabs.map(tab =>
       {

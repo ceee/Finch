@@ -1,7 +1,22 @@
 ﻿<template>
   <div class="ui-add-button">
-    <ui-button v-if="!component" :type="type" :label="label" @click="onClick" :disabled="disabled" /> <!-- :attach="true"-->
-    <component v-else :is="component" :type="type" :label="label" :disabled="disabled" :route="route" @click="onClick" />
+    <ui-button v-if="!blueprintsEnabled" :type="type" :label="label" @click="onClick(false)" :disabled="disabled" /> <!-- :attach="true"-->
+    <ui-dropdown v-else ref="dropdown" align="right">
+      <template v-slot:button>
+        <ui-button :label="label" :type="type" :disabled="disabled" />
+      </template>
+      <div class="ui-add-button-items">
+        <button type="button" class="ui-add-button-item" @click="onClick(true)" :disabled="disabled">
+          <ui-icon symbol="fth-cloud" :size="20" />
+          <span class="-text">Blueprint</span>
+        </button>
+        <span class="ui-add-button-items-line"></span>
+        <button type="button" class="ui-add-button-item" @click="onClick(false)" :disabled="disabled">
+          <ui-icon symbol="fth-arrow-right" :size="20" />
+          <span class="-text">For {{application.name}}</span>
+        </button>
+      </div>
+    </ui-dropdown>
   </div>
 </template>
 
@@ -23,6 +38,10 @@
         type: [String, Object],
         default: null
       },
+      blueprintAlias: {
+        type: String,
+        default: null
+      },
       disabled: {
         type: Boolean,
         default: false
@@ -38,9 +57,21 @@
       this.component = zero.overrides['add-button'] || null;
     },
 
+    computed: {
+      application()
+      {
+        return this.zero.config.applications.find(x => x.id === this.zero.config.appId);
+      },
+      blueprintsEnabled()
+      {
+        let blueprint = this.zero.config.blueprints.find(x => x.alias == this.blueprintAlias);
+        return this.blueprintAlias && blueprint && blueprint.enabled;
+      }
+    },
+
     methods: {
 
-      onClick()
+      onClick(createBlueprint)
       {
         if (this.$refs.dropdown)
         {
@@ -50,6 +81,13 @@
         if (!!this.route)
         {
           let routeObj = typeof this.route === 'object' ? this.route : { name: this.route };
+          routeObj.query = routeObj.query || {};
+
+          if (createBlueprint)
+          {
+            routeObj.query.scope = 'shared';
+          }
+
           this.$router.push(routeObj);
         }
 
@@ -84,10 +122,8 @@
     border-radius: var(--radius);
   }
 
-  .ui-add-button-item i
+  .ui-add-button-item .ui-icon
   {
-    font-size: 20px;
-    line-height: 24px;
     margin-bottom: 12px;
   }
 
@@ -99,7 +135,7 @@
 
   .ui-add-button-item:hover
   {
-    background: var(--color-button-light);
+    background: var(--color-dropdown-selected);
   }
 
   .ui-add-button-items-line

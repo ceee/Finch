@@ -14,8 +14,9 @@
       <ui-property class="blueprint-settings-tableheader" :key="-1" label="Property" :vertical="false">
         <b>Synchronized</b>
       </ui-property>
-      <ui-property v-for="(item, index) in items" :key="index" :label="item.label" :description="item.description" :vertical="false" :class="{'not-synced': !item.synced}">
-        <ui-toggle :value="item.synced" @input="onChange(item)" />
+      <ui-property v-for="(item, index) in items" v-if="!item.disabled" :key="index" :label="item.label" :description="item.description" :vertical="false" :class="{'not-synced': !item.synced}">
+        <ui-toggle v-if="!item.disabled" :value="item.synced" @input="onChange(item)" />
+        <ui-icon class="blueprint-settings-lock" v-else symbol="fth-lock" :size="16" />
       </ui-property>
     </div>
   </ui-overlay-editor>
@@ -37,7 +38,8 @@
         default: false
       },
       model: Object,
-      config: Object
+      config: Object,
+      fields: Array
     },
 
     data: () => ({
@@ -51,26 +53,7 @@
     mounted()
     {
       this.desync = JSON.parse(JSON.stringify(this.model.desync));
-
-      this.editor = this.config.editor;
-
-      let processed = ['blueprint'];
-
-      this.editor.fields.forEach(field =>
-      {
-        if (processed.indexOf(field.path) < 0)
-        {
-          processed.push(field.path);
-          //field.options.disabled = true;
-
-          this.items.push({
-            path: field.path,
-            label: field.options.label || this.editor.templateLabel(field.path),
-            description: Localization.localize(field.options.description || this.editor.templateDescription(field.path), { hideEmpty: true }),
-            synced: this.model.desync.indexOf(field.path) < 0
-          });
-        }
-      });
+      this.items = this.fields;
     },
 
 
@@ -198,7 +181,7 @@
 
   .blueprint-settings .ui-property + .ui-property
   {
-    margin-top: 20px;
+    margin-top: var(--padding-s);
     padding-top: 0;
     border-top: none;
   }
@@ -217,6 +200,11 @@
   .blueprint-settings .ui-property.not-synced .ui-property-label
   {
     font-weight: 400;
+    color: var(--color-text-dim);
+  }
+
+  .blueprint-settings-lock
+  {
     color: var(--color-text-dim);
   }
 

@@ -2,7 +2,7 @@
   <div class="languages">
     <ui-header-bar title="@mailTemplate.list" :count="count" :back-button="true">
       <ui-table-filter :attach="$refs.table" />
-      <ui-add-button :route="createRoute" />
+      <ui-add-button :route="createRoute" blueprint-alias="mailTemplate" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <ui-table ref="table" config="mailTemplates" @count="count = $event" />
