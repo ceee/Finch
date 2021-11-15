@@ -18,7 +18,7 @@
         <ui-toggle v-model="value.isActive" class="is-accent" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" :disabled="disabled" />
       </div>
       <slot name="buttons"></slot>
-      <ui-dropdown v-if="actionsDefined && !disabled" align="right">
+      <ui-dropdown v-if="actionsDefined" align="right">
         <template v-slot:button>
           <ui-button type="light onbg" label="@ui.actions" caret="down" />
         </template>
@@ -129,7 +129,6 @@
     position: relative;
     top: -1px;
     margin-left: var(--padding-s);
-    margin-right: var(--padding-s);
 
     .ui-toggle-off-warning
     {
@@ -152,6 +151,11 @@
     input:focus + .ui-toggle-switch
     {
       border-color: transparent;
+    }
+
+    & + .ui-button
+    {
+      margin-left: var(--padding);
     }
   }
 

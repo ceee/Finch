@@ -71,13 +71,27 @@ namespace zero.Core.Blueprints
     /// </summary>
     protected virtual void ApplyDefaults(T blueprint, T model)
     {
-      //model.Name = blueprint.Name;
-      //model.Alias = blueprint.Alias;
-      //model.IsActive = blueprint.IsActive;
-      model.Key = blueprint.Key;
-      model.Sort = blueprint.Sort;
-      model.LanguageId = blueprint.LanguageId;
+      if (!model.Blueprint.Desync.Contains(nameof(ZeroEntity.Name), StringComparer))
+      {
+        model.Name = blueprint.Name;
+        model.Alias = blueprint.Alias;
+      }
+      if (!model.Blueprint.Desync.Contains(nameof(ZeroEntity.Key), StringComparer))
+      {
+        model.Key = blueprint.Key;
+      }
+      if (!model.Blueprint.Desync.Contains(nameof(ZeroEntity.Sort), StringComparer))
+      {
+        model.Sort = blueprint.Sort;
+      }
+      if (!model.Blueprint.Desync.Contains(nameof(ZeroEntity.IsActive), StringComparer))
+      {
+        model.IsActive = blueprint.IsActive;
+      }
+
+      // these values can't be overridden
       model.Hash = blueprint.Hash;
+      model.LanguageId = blueprint.LanguageId;
       model.CreatedById = blueprint.CreatedById;
       model.CreatedDate = blueprint.CreatedDate;
       model.LastModifiedById = blueprint.LastModifiedById;
@@ -112,7 +126,7 @@ namespace zero.Core.Blueprints
       return field;
     }
 
-    public void Unlock(string fieldName)
+    public void Unlock(params string[] fieldNames)
     {
 
     }

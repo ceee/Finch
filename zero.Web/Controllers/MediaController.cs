@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using zero.Core;
 using zero.Core.Api;
@@ -99,8 +100,8 @@ namespace zero.Web.Controllers
       {
         try
         {
-          using var client = new WebClient();
-          var content = client.DownloadData(path);
+          using HttpClient http = new();
+          var content = await http.GetByteArrayAsync(path);
           return File(content, contentType, DateTimeOffset.Now, EntityTagHeaderValue.Any);
         }
         catch

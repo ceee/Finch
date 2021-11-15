@@ -150,6 +150,12 @@
         background-color: var(--color-toggled);
       }
     }
+
+    .ui-toggle.is-disabled &
+    {
+      opacity: 0.7;
+      pointer-events: none;
+    }
   }
 
   .ui-toggle.onbg .ui-toggle-switch:not(.is-active)

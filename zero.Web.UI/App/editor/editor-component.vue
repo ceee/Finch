@@ -37,7 +37,11 @@
       value: {
         type: Object,
         required: true
-      }
+      },
+      disabled: {
+        type: Boolean,
+        default: false
+      },
     },
 
     watch: {
@@ -74,7 +78,7 @@
       },
       isDisabled()
       {
-        return this.manualDisabled || (typeof this.config.options.disabled === 'boolean' && this.config.options.disabled) || (typeof this.config.options.disabled === 'function' && this.config.options.disabled(this.value, this.model));
+        return this.manualDisabled || this.disabled || (typeof this.config.options.disabled === 'boolean' && this.config.options.disabled) || (typeof this.config.options.disabled === 'function' && this.config.options.disabled(this.value, this.model));
       },
       label()
       {

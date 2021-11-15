@@ -8,8 +8,17 @@ namespace zero.Core.Options
   {
     public BlueprintOptions()
     {
-      Add<Application>();
+      Enabled = false;
+      Add<Media>();
+      Add<MediaFolder>();
+      Add<Language>();
+      Add<Country>();
+      Add<Translation>();
+      Add<MailTemplate>();
     }
+
+
+    public bool Enabled { get; set; }
 
 
     public void Add<T>() where T : Blueprint, new()

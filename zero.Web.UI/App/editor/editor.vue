@@ -7,7 +7,7 @@
           <blueprint-property v-if="value && value.blueprint" :value="value.blueprint" :entity="value" :meta="meta" />
         </slot>
         <div class="ui-property ui-property-parent" v-for="fieldset in tab.fieldsets">
-          <editor-component v-for="(field, fieldIndex) in fieldset.fields" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value"
+          <editor-component v-for="(field, fieldIndex) in fieldset.fields" :disabled="disabled" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value"
                             :class="field.options.class" :data-cols="!!field.options.fieldset" :style="{ 'grid-column': field.options.fieldset ? 'span ' + field.options.fieldsetColumns : null }" />
           
         </div>
@@ -49,6 +49,10 @@
       meta: {
         type: Object,
         default: () => { }
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       },
       value: {
         type: Object
