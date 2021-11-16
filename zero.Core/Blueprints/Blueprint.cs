@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using zero.Core.Entities;
 using zero.Core.Extensions;
+using zero.Core.Utils;
 
 namespace zero.Core.Blueprints
 {
@@ -32,31 +33,14 @@ namespace zero.Core.Blueprints
     public virtual T Apply(T blueprint, T model)
     {
       // reset blueprint options for model in case no blueprint was found
-      if (blueprint == null)
+      if (blueprint == null || model.Blueprint == null)
       {
         model.Blueprint = null;
         return model;
       }
 
-      //foreach (BlueprintField<T> field in Fields)
-      //{
-      //  // do not sync disabled fields
-      //  if (!field.IsSynced && !field.IsLocked)
-      //  {
-      //    continue;
-      //  }
-
-      //  // desynced fields are not synced with the blueprint
-      //  // (but only if they are not locked)
-      //  if (model.Blueprint.Desync.Contains(field.FieldName, StringComparer) && !field.IsLocked)
-      //  {
-      //    continue;
-      //  }
-
-      //  // apply new value to model property
-      //  field.Apply(blueprint, model);
-      //}
-
+      // copy all properties which are synced from the blueprint to the model
+      ObjectTraverser.CopyProperties(blueprint, model, model.Blueprint.Desync);
       ApplyDefaults(blueprint, model);
 
       return model;

@@ -238,6 +238,25 @@ namespace zero.Core.Utils
     }
 
 
+    public static T CopyProperties<T>(T source, T target, params string[] exceptions)
+    {
+      Type sourceType = source.GetType();
+
+      foreach (PropertyInfo sourceProperty in sourceType.GetProperties())
+      {
+        if (!sourceProperty.CanWrite || exceptions.Contains(sourceProperty.Name, StringComparer.InvariantCultureIgnoreCase))
+        {
+          continue;
+        }
+
+        var sourceValue = sourceProperty.GetValue(source, null);
+        sourceProperty.SetValue(target, sourceValue);
+      }
+
+      return target;
+    }
+
+
     private static string CombineKey(string sep, string key1, string key2)
     {
       if (String.IsNullOrEmpty(key1))
