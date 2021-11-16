@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import AppConfirm from 'zero/components/overlays/confirm.vue'; // TODO importing vue files in js/ts files causes a Rollup production build error
+import AppMessage from 'zero/components/overlays/message.vue'; 
 import Strings from 'zero/helpers/strings.js';
 import { find as _find, extend as _extend } from 'underscore';
 
@@ -52,6 +53,19 @@ export default new Vue({
       }, typeof title === 'object' ? title : {});
 
       return this.open(options);
+    },
+
+
+    // open a message dialog with the given options
+    message(title, text)
+    {
+      this.open(_extend({
+        title: title,
+        text: text,
+        component: AppMessage,
+        autoclose: true,
+        softdismiss: true
+      }, typeof title === 'object' ? title : {})).then(() => {}, () => {});
     },
 
 

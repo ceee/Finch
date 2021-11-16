@@ -1,6 +1,7 @@
 ﻿<template>
-  <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText, 'hide-label': hideLabel, 'is-disabled': disabled }">
+  <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText, 'hide-label': hideLabel, 'is-disabled': disabled, 'is-locked': locked }">
     <label v-if="label && !hideLabel" class="ui-property-label" :for="field" v-localize:title="description" :class="{ 'has-description': !!description }">
+      <button type="button" v-if="locked" class="ui-property-label-small is-lock" @click="$emit('unlock')" title="Unlock property..." :disabled="!canUnlock"><ui-icon :size="13" symbol="fth-lock"></ui-icon></button>
       <span v-localize="label"></span>
       <strong class="ui-property-required" v-if="required">*</strong>
       <slot name="label-after"></slot>
@@ -31,6 +32,8 @@
         type: Boolean,
         default: true 
       },
+      locked: Boolean,
+      canUnlock: Boolean,
       isText: Boolean,
       disabled: {
         type: Boolean,
@@ -50,17 +53,18 @@
     margin: 0 -32px 0;
     padding: 0 32px 0;
 
-    &.is-disabled .ui-property-content
+    &.is-disabled .ui-property-content,
+    &.is-locked .ui-property-content
     {
       pointer-events: none;
     }
 
     &.is-disabled
     {
-      cursor: not-allowed; 
+      cursor: not-allowed;
     }
 
-    &.is-blocked
+    &.is-locked
     {
 
     }
@@ -174,8 +178,23 @@
     background: var(--color-bg-shade-4);
 
     &:hover
-    {      
+    {
       color: var(--color-text);
+    }
+
+    &.is-lock
+    {
+      left: 0;
+      margin-right: 6px;
+      background: none;
+      top: 2px;
+      color: var(--color-text);
+      cursor: pointer;
+
+      &[disabled]
+      {
+        cursor: not-allowed;
+      }
     }
   }
 

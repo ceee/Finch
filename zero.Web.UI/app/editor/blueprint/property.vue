@@ -1,25 +1,25 @@
 ﻿<template>
-  <div class="blueprint" :class="{'is-active': entity.isActive, 'is-shared': isBlueprint }">
+  <div class="blueprint" v-if="value && (isParent || isChild)">
     <div class="blueprint-box">
-      <template v-if="hasBlueprint && !isBlueprint">
+      <template v-if="isChild">
         <div class="blueprint-inner">
           <ui-icon symbol="fth-cloud" :size="22" />
           <p v-localize:html="'@blueprint.hint.childText'"></p>
-          <code style="grid-row:2;grid-column:2;margin-top: -20px;justify-self:flex-start;font-size:11px;">{{fields.filter(x => !x.disabled).map(x => x.path)}}</code>
         </div>
         <aside>
-          <ui-button class="blueprint-button-settings" type="blank small" icon="fth-settings" :title="{ key: value.desync.length > 0 ? '@blueprint.hint.xUnlocked' : '@blueprint.hint.settingsButton', tokens: { count: value.desync.length }}" @click="openSettings" />
-          <router-link replace :to="switchLink" class="ui-button type-small" v-localize="'@blueprint.hint.goToBlueprint'"></router-link>
+          <ui-button class="blueprint-button-settings" type="blank small" icon="fth-settings" 
+                     :title="{ key: value.blueprint.desync.length > 0 ? '@blueprint.hint.xUnlocked' : '@blueprint.hint.settingsButton', tokens: { count: value.blueprint.desync.length }}" 
+                     @click="openSettings" />
+          <router-link replace :to="switchLink" class="ui-button type-light type-small" v-localize="'@blueprint.hint.goToBlueprint'"></router-link>
         </aside>
       </template>
-      <template v-if="isBlueprint">
+      <template v-if="isParent">
         <div class="blueprint-inner">
           <ui-icon symbol="fth-cloud" :size="22" />
-          <p v-if="!isNewBlueprint" v-localize:html="'@blueprint.hint.parentText'"></p>
-          <p v-if="isNewBlueprint" v-localize:html="'@blueprint.hint.parentCreateText'"></p>
+          <p v-localize:html="value.id ? '@blueprint.hint.parentText' : '@blueprint.hint.parentCreateText'"></p>
         </div>
-        <aside v-if="!isNewBlueprint">
-          <router-link replace :to="switchLink" class="ui-button type-small" v-localize="'@blueprint.hint.goToChild'"></router-link>
+        <aside v-if="value.id">
+          <router-link replace :to="switchLink" class="ui-button type-light type-small" v-localize="'@blueprint.hint.goToChild'"></router-link>
         </aside>
       </template>
     </div>
@@ -30,17 +30,12 @@
 <script>
   import Overlay from 'zero/helpers/overlay.js';
   import SettingsOverlay from './settings.vue';
-  import BlueprintBlockComponent from './block.vue';
   import Localization from 'zero/helpers/localization.js';
 
   export default {
     props: {
       value: {
         type: Object
-      },
-      entity: {
-        type: Object,
-        required: true
       },
       meta: {
         type: Object,
@@ -56,10 +51,6 @@
       }
     },
 
-    data: () => ({
-      fields: []
-    }),
-
     inject: ['editor'],
 
     watch: {
@@ -70,17 +61,13 @@
     },
 
     computed: {
-      hasBlueprint()
+      isParent()
       {
-        return !!this.value;
+        return this.config.isBlueprintParent(this.$route, this.value);
       },
-      isBlueprint()
+      isChild()
       {
-        return this.entity && this.$route.query.scope === 'shared';
-      },
-      isNewBlueprint()
-      {
-        return this.entity && !this.entity.id && this.$route.query.scope === 'shared';
+        return this.config.isBlueprintChild(this.$route, this.value);
       },
       switchLink()
       {
@@ -89,7 +76,7 @@
           params: this.$route.params,
           query: {
             ...(this.$route.query || {}),
-            scope: this.isBlueprint ? undefined : 'shared'
+            scope: !this.isChild ? undefined : 'shared'
           }
         };
       }
@@ -110,13 +97,14 @@
           component: SettingsOverlay,
           display: 'editor',
           model: this.value,
-          fields: this.fields
+          fields: this.config.fields
         }).then(res =>
         {
+          this.value.blueprint = res.blueprint;
           this.$emit('input', res.blueprint);
           if (typeof res.update === 'function')
           {
-            res.update(this.entity);
+            res.update(this.value);
           }
           //EventHub.$emit('page.update');
         });
@@ -129,7 +117,6 @@
         {
           this.$nextTick(() =>
           {
-            this.fields = this.getFields();
             this.setupSync(form);
           });
         };
@@ -213,58 +200,6 @@
         traverseChildren(form);
 
         return components;
-      },
-
-
-      getFields()
-      {
-        const editor = typeof this.editor === 'string' ? this.zero.getEditor(this.editor) : this.editor;
-
-        let fields = [];
-        let processed = ['blueprint'];
-        let defaults = ['name', /*'alias',*/ 'isActive', 'sort', /*'key'*/];
-        let fieldMap = {};
-        editor.fields.forEach(field => fieldMap[field.path.toLowerCase()] = field);
-
-        defaults.forEach(alias =>
-        {
-          if (defaults.indexOf(alias) > -1)
-          {
-            processed.push(alias);
-
-            let unlocked = this.config.unlocked.indexOf(alias) > -1;
-
-            fields.push({
-              path: alias,
-              label: Localization.localize("@ui.entityfields." + alias),
-              description: Localization.localize("@ui.entityfields." + alias + "_text", { hideEmpty: true }),
-              synced: !unlocked || this.value.desync.indexOf(alias) < 0,
-              disabled: !unlocked,
-              internal: true
-            });
-          }
-        });
-
-        editor.fields.forEach(field =>
-        {
-          if (processed.indexOf(field.path) < 0)
-          {
-            processed.push(field.path);
-
-            let unlocked = this.config.unlocked.indexOf(field.path) > -1 || this.config.unlocked.find(x => field.path.indexOf(x + '.') === 0);
-
-            fields.push({
-              path: field.path,
-              label: field.options.label || editor.templateLabel(field.path),
-              description: Localization.localize(field.options.description || editor.templateDescription(field.path), { hideEmpty: true }),
-              synced: !unlocked || this.value.desync.indexOf(field.path) < 0,
-              disabled: !unlocked,
-              internal: false
-            });
-          }
-        });
-
-        return fields;
       }
     }
   }

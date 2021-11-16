@@ -10,13 +10,12 @@
 
     <p class="blueprint-settings-text">By default all properties of your entity are synced with its blueprint.<br />You can disable synchronisation per property so it won't be overridden on changes.</p>
 
-    <div class="ui-box">
+    <div class="ui-box" v-if="loaded">
       <ui-property class="blueprint-settings-tableheader" :key="-1" label="Property" :vertical="false">
         <b>Synchronized</b>
       </ui-property>
-      <ui-property v-for="(item, index) in items" v-if="!item.disabled" :key="index" :label="item.label" :description="item.description" :vertical="false" :class="{'not-synced': !item.synced}">
-        <ui-toggle v-if="!item.disabled" :value="item.synced" @input="onChange(item)" />
-        <ui-icon class="blueprint-settings-lock" v-else symbol="fth-lock" :size="16" />
+      <ui-property v-for="(field, index) in items" v-if="!field.disabled" :key="index" :label="field.label" :description="field.description" :vertical="false" :class="{'not-synced': !field.synced}">
+        <ui-toggle v-model="field.synced" />
       </ui-property>
     </div>
   </ui-overlay-editor>
@@ -24,8 +23,6 @@
 
 
 <script>
-  import PagesApi from 'zero/api/pages.js';
-  import Notification from 'zero/helpers/notification.js';
   import Arrays from 'zero/helpers/arrays.js';
   import Localization from 'zero/helpers/localization.js';
   import BlueprintApi from 'zero/api/blueprint.js';
@@ -33,73 +30,71 @@
   export default {
 
     props: {
-      isCopy: {
-        type: Boolean,
-        default: false
-      },
       model: Object,
       config: Object,
       fields: Array
     },
 
     data: () => ({
-      desync: [],
-      items: [],
       state: 'default',
-      editor: null
+      loaded: false,
+      editor: null,
+      items: []
     }),
 
 
     mounted()
     {
-      this.desync = JSON.parse(JSON.stringify(this.model.desync));
-      this.items = this.fields;
+      this.fields.forEach(field =>
+      {
+        let item = JSON.parse(JSON.stringify(field));
+        item.synced = field.synced(this.model);
+        this.items.push(item);
+      });
+      this.loaded = true;
     },
 
 
     methods: {
 
-      onChange(item)
-      {
-        item.synced = !item.synced;
-
-        if (item.synced)
-        {
-          Arrays.remove(this.model.desync, item.path);
-        }
-        else
-        {
-          this.model.desync.push(item.path);
-        }
-      },
-
       onSave()
       {
         this.state = 'loading';
 
-        // we need to revert changed values which were switch backed to synchronised state
-        // to do this we load the blueprint entity and its copy properties
+        let desync = JSON.parse(JSON.stringify(this.model.blueprint.desync));
         let resync = [];
 
-        this.desync.forEach(path =>
+        this.items.forEach(field =>
         {
-          if (this.model.desync.indexOf(path) < 0)
+          let desynced = this.model.blueprint.desync.indexOf(field.path) > -1;
+
+          if (field.synced && desynced)
           {
-            resync.push(path);
+            Arrays.remove(desync, field.path);
+            resync.push(field.path);
+          }
+          else if (!field.synced && !desynced)
+          {
+            desync.push(field.path);
           }
         });
 
+        this.model.blueprint.desync = desync;
+
+        // we need to revert changed values which were switch backed to synchronised state
+        // to do this we load the blueprint entity and its copy properties
+
         if (resync.length > 0)
         {
-          BlueprintApi.getById(this.model.id).then(blueprint =>
+          BlueprintApi.getById(this.model.blueprint.id).then(blueprint =>
           {
             this.config.confirm({
-              blueprint: this.model,
+              blueprint: this.model.blueprint,
               update: entity =>
               {
                 resync.forEach(path =>
                 {
-                  entity[path] = blueprint[path];
+                  entity[path] = blueprint[path]; // TODO does not work for nested paths
                 });
               }
             });
@@ -109,7 +104,7 @@
         {
           //this.state = 'success';
           this.config.confirm({
-            blueprint: this.model
+            blueprint: this.model.blueprint
           });
         }
 

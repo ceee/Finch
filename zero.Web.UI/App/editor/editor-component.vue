@@ -1,11 +1,18 @@
 ﻿<template>
-  <ui-property v-if="!isHidden" :field="config.path" :label="label" :hide-label="config.options.hideLabel"
-               :description="description" :required="isRequired" :disabled="isDisabled"
+  <ui-property v-if="!isHidden" 
+               :field="config.path" 
+               :label="label" 
+               :hide-label="config.options.hideLabel"
+               :description="description" 
+               :required="isRequired" 
+               :disabled="isDisabled"
                :vertical="config.options.vertical"
-               :class="{'is-disabled': isDisabled }">
+               :class="{'is-disabled': isDisabled }"
+               :locked="isLocked"
+               :can-unlock="canUnlock || false"
+               @unlock="tryUnlock">
     <component :is="config.component" v-bind="config.componentOptions" :value="model" :entity="value" :meta="meta" @input="onChange" :disabled="isDisabled" />
     <p v-if="config.options.helpText" class="ui-property-help" v-localize="config.options.helpText"></p>
-    <!--<blueprint-block :config="config" :editor="editor" :value="value" />-->
   </ui-property>
 </template>
 
@@ -16,14 +23,12 @@
   import Editor from 'zero/core/editor.ts';
   import EditorField from 'zero/core/editor-field.ts';
   import Localization from 'zero/helpers/localization.js';
-  import BlueprintBlock from './blueprint/block.vue';
+  import Overlay from 'zero/helpers/overlay.js';
 
   export default {
     name: 'uiEditorComponent',
 
     inject: [ 'meta' ],
-
-    components: { BlueprintBlock },
 
     props: {
       config: {
@@ -87,6 +92,14 @@
       description()
       {
         return Localization.localize(this.config.options.description || this.editor.templateDescription(this.config.path), { hideEmpty: true });
+      },
+      isLocked()
+      {
+        return !this.editor.blueprint.unlocked(this.value, this.config);
+      },
+      canUnlock()
+      {
+        return this.isLocked && this.editor.blueprint.canUnlock(this.value, this.config);
       }
     },
 
@@ -151,6 +164,23 @@
       setDisabled(disabled)
       {
         this.manualDisabled = disabled;
+      },
+
+
+      tryUnlock()
+      {
+        Overlay.confirm({
+          title: 'Unlock property',
+          text: 'Unlock this property to override the value passed by the blueprint',
+          confirmLabel: 'Confirm',
+          closeLabel: 'Cancel'
+        }).then(
+          () =>
+          {
+            this.value.blueprint.desync.push(this.config.path);
+          },
+          () => {}
+        );
       }
     }
   }
