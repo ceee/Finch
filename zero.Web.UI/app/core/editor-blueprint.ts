@@ -1,5 +1,7 @@
 ﻿
 import Localization from 'zero/helpers/localization.js';
+import BlueprintApi from 'zero/api/blueprint.js';
+import Arrays from 'zero/helpers/arrays.js';
 
 
 function unlocked(config, model, field)
@@ -39,6 +41,20 @@ function isBlueprintParent(config, route, model)
 }
 
 
+async function lock(config, model, field)
+{
+  Arrays.remove(model.blueprint.desync, field.path);
+  let blueprint = await BlueprintApi.getById(model.blueprint.id);
+  return blueprint[field.path];
+}
+
+
+async function unlock(config, model, field)
+{
+  model.blueprint.desync.push(field.path);
+}
+
+
 /**
  * [TODO] description
  * @typedef {object} EditorBlueprint
@@ -70,10 +86,12 @@ export function createBlueprintConfig(zero, editor, model)
   {
     return {
       alias: blueprintAlias,
-      unlocked: (model, field) => true,
-      canUnlock: (model, field) => false,
-      isBlueprintParent: (route, model) => false,
-      isBlueprintChild: (route, model) => false,
+      unlocked: () => true,
+      canUnlock: () => false,
+      isBlueprintParent: () => false,
+      isBlueprintChild: () => false,
+      lock: () => {},
+      unlock: () => {},
       fields: []
     };
   }
@@ -131,6 +149,8 @@ export function createBlueprintConfig(zero, editor, model)
     alias: blueprintAlias,
     unlocked: (model, field) => unlocked(config, model, field),
     canUnlock: (model, field) => canUnlock(config, model, field),
+    unlock: async (model, field) => await unlock(config, model, field),
+    lock: async (model, field) => await lock(config, model, field),
     isBlueprintParent: (route, model) => isBlueprintParent(config, route, model),
     isBlueprintChild: (route, model) => isBlueprintChild(config, route, model),
     fields: fields

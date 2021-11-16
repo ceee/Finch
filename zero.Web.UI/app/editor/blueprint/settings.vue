@@ -32,7 +32,7 @@
     props: {
       model: Object,
       config: Object,
-      fields: Array
+      blueprintConfig: Object
     },
 
     data: () => ({
@@ -45,7 +45,7 @@
 
     mounted()
     {
-      this.fields.forEach(field =>
+      this.blueprintConfig.fields.forEach(field =>
       {
         let item = JSON.parse(JSON.stringify(field));
         item.synced = field.synced(this.model);

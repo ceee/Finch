@@ -1,5 +1,16 @@
 ﻿<template>
-  <ui-form v-if="!loading" ref="form" class="translation" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
+
+  <ui-form ref="form" v-if="!loading" class="translation" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
+    <h2 class="ui-headline" v-localize="'@translation.name'"></h2>
+    <ui-editor config="translation" v-model="item" :meta="meta" :disabled="disabled" />
+    <div class="app-confirm-buttons">
+      <ui-button type="accent" v-if="!disabled" :submit="true" :state="form.state" :label="!item.id ? '@ui.create' :'@ui.update'"></ui-button>
+      <ui-button type="light" :label="config.closeLabel" :disabled="loading" @click="config.close"></ui-button>
+      <ui-button type="light" v-if="!disabled && model.id" label="@ui.delete" @click="onDelete" style="float:right;"></ui-button>
+    </div>
+  </ui-form>
+
+  <!--<ui-form v-if="!loading" ref="form" class="translation" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
     <h2 class="ui-headline" v-localize="'@translation.name'"></h2>
     <div class="translation-items">
       <div class="ui-split">
@@ -21,7 +32,7 @@
       <ui-button type="light" :label="config.closeLabel" :disabled="loading" @click="config.close"></ui-button>
       <ui-button type="light" v-if="!disabled && model.id" label="@ui.delete" @click="onDelete" style="float:right;"></ui-button>
     </div>
-  </ui-form>
+  </ui-form>-->
 </template>
 
 
@@ -82,6 +93,17 @@
   .translation
   {
     text-align: left;
+
+    .editor, .ui-tab
+    {
+      margin: 0;
+      padding: 0;
+    }
+
+    .editor
+    {
+      padding: var(--padding) 0 var(--padding-s);
+    }
   }
 
   .translation-items

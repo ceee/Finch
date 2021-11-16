@@ -1,7 +1,9 @@
 ﻿<template>
-  <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText, 'hide-label': hideLabel, 'is-disabled': disabled, 'is-locked': locked }">
+  <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText, 'hide-label': hideLabel, 'is-disabled': disabled, 'is-locked': locked, 'can-unlock': canUnlock }">
     <label v-if="label && !hideLabel" class="ui-property-label" :for="field" v-localize:title="description" :class="{ 'has-description': !!description }">
-      <button type="button" v-if="locked" class="ui-property-label-small is-lock" @click="$emit('unlock')" title="Unlock property..." :disabled="!canUnlock"><ui-icon :size="13" symbol="fth-lock"></ui-icon></button>
+      <button type="button" v-if="canUnlock" class="ui-property-label-small is-lock" :class="{'is-unlocked': !locked}" :title="locked ? 'Unlock property...' : 'Lock property'" @click="$emit(locked ? 'unlock' : 'lock')">
+        <ui-icon :size="13" :symbol="locked ? 'fth-lock' : 'fth-unlock'"></ui-icon>
+      </button>
       <span v-localize="label"></span>
       <strong class="ui-property-required" v-if="required">*</strong>
       <slot name="label-after"></slot>
@@ -59,14 +61,9 @@
       pointer-events: none;
     }
 
-    &.is-disabled
+    &.is-disabled, &.is-locked
     {
       cursor: not-allowed;
-    }
-
-    &.is-locked
-    {
-
     }
 
     .ui-error
@@ -188,12 +185,16 @@
       margin-right: 6px;
       background: none;
       top: 2px;
-      color: var(--color-text);
       cursor: pointer;
 
       &[disabled]
       {
         cursor: not-allowed;
+      }
+
+      &.is-unlocked
+      {
+        color: var(--color-text);
       }
     }
   }

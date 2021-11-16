@@ -8,12 +8,12 @@
       <div class="ui-add-button-items">
         <button type="button" class="ui-add-button-item" @click="onClick(true)" :disabled="disabled">
           <ui-icon symbol="fth-cloud" :size="20" />
-          <span class="-text">Blueprint</span>
+          <span class="-text">All apps</span>
         </button>
         <span class="ui-add-button-items-line"></span>
         <button type="button" class="ui-add-button-item" @click="onClick(false)" :disabled="disabled">
           <ui-icon symbol="fth-arrow-right" :size="20" />
-          <span class="-text">For {{application.name}}</span>
+          <span class="-text">{{application.name}}</span>
         </button>
       </div>
     </ui-dropdown>

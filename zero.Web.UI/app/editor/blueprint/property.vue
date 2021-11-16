@@ -97,7 +97,7 @@
           component: SettingsOverlay,
           display: 'editor',
           model: this.value,
-          fields: this.config.fields
+          blueprintConfig: this.config
         }).then(res =>
         {
           this.value.blueprint = res.blueprint;
@@ -280,6 +280,7 @@
     font-size: var(--font-size);
     line-height: 1.4;
     position: relative;
+    padding-right: var(--padding-s);
 
     p
     {

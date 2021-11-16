@@ -10,7 +10,8 @@
                :class="{'is-disabled': isDisabled }"
                :locked="isLocked"
                :can-unlock="canUnlock || false"
-               @unlock="tryUnlock">
+               @unlock="unlock"
+               @lock="lock">
     <component :is="config.component" v-bind="config.componentOptions" :value="model" :entity="value" :meta="meta" @input="onChange" :disabled="isDisabled" />
     <p v-if="config.options.helpText" class="ui-property-help" v-localize="config.options.helpText"></p>
   </ui-property>
@@ -24,6 +25,7 @@
   import EditorField from 'zero/core/editor-field.ts';
   import Localization from 'zero/helpers/localization.js';
   import Overlay from 'zero/helpers/overlay.js';
+  import Arrays from 'zero/helpers/arrays.js';
 
   export default {
     name: 'uiEditorComponent',
@@ -99,7 +101,7 @@
       },
       canUnlock()
       {
-        return this.isLocked && this.editor.blueprint.canUnlock(this.value, this.config);
+        return this.editor.blueprint.canUnlock(this.value, this.config);
       }
     },
 
@@ -167,7 +169,7 @@
       },
 
 
-      tryUnlock()
+      async unlock()
       {
         Overlay.confirm({
           title: 'Unlock property',
@@ -175,12 +177,15 @@
           confirmLabel: 'Confirm',
           closeLabel: 'Cancel'
         }).then(
-          () =>
-          {
-            this.value.blueprint.desync.push(this.config.path);
-          },
+          async () => await this.editor.blueprint.unlock(this.value, this.config),
           () => {}
         );
+      },
+
+      async lock()
+      {
+        let originalValue = await this.editor.blueprint.lock(this.value, this.config);
+        this.onChange(originalValue);
       }
     }
   }

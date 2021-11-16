@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-state-button :items="config.items" :value="value" @input="$emit('input', $event)" :disabled="disabled" />
+  <ui-state-button :items="items" :value="value" @input="$emit('input', $event)" :disabled="disabled" />
 </template>
 
 
@@ -13,11 +13,7 @@
         type: Boolean,
         default: false
       },
-      config: Object
-    },
-
-    data: () => ({
-      items: []
-    })
+      items: [Array, Function]
+    }
   }
 </script>
