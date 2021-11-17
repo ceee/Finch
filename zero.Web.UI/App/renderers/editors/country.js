@@ -1,7 +1,11 @@
 ﻿
 import Editor from 'zero/core/editor.ts';
+import { countriesApi } from 'zerox';
 
 const editor = new Editor('country', '@country.fields.');
+
+editor.collection = countriesApi;
+
 editor.blueprintAlias = 'country';
 editor.field('name', { label: '@ui.name' }).text(120).required();
 //editor.field('alias', { label: '@ui.alias' }).text().required();

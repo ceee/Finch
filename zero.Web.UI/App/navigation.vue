@@ -102,7 +102,8 @@
       userAvatar: null,
       compact: false,
       darkTheme: false,
-      currentApplication: null
+      currentApplication: null,
+      themeSwitchTimeout: null
     }),
 
 
@@ -200,11 +201,16 @@
 
       toggleDarkTheme()
       {
+        //clearTimeout(this.themeSwitchTimeout);
+        //document.body.classList.add('theme-changing');
+
         this.darkTheme = !this.darkTheme;
         EventHub.$emit('app.theme', this.darkTheme ? 'dark' : 'light');
         localStorage.setItem(themeCacheKey, this.darkTheme ? 'dark' : 'light');
         document.body.classList.toggle('theme-light', !this.darkTheme);
         document.body.classList.toggle('theme-dark', this.darkTheme);
+
+        //this.themeSwitchTimeout = setTimeout(() => document.body.classList.remove('theme-changing'), 500);
       },
 
       openSearch()

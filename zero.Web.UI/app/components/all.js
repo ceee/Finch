@@ -67,6 +67,8 @@ import uiLocalize from './localize.vue';
 
 import uiEditor from '../editor/editor.vue';
 import uiEditorInfos from '../editor/editor-infos.vue';
+import uiEditorHeader from '../editor/editor-header.vue';
+import uiEditorForm from '../editor/editor-form.vue';
 
 export default {
   uiAddButton,
@@ -137,5 +139,7 @@ export default {
   uiLocalize,
 
   uiEditor,
-  uiEditorInfos
+  uiEditorInfos,
+  uiEditorHeader,
+  uiEditorForm
 };

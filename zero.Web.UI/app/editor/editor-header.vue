@@ -1,0 +1,222 @@
+﻿<template>
+  <ui-header-bar class="ui-editor-header" :back-button="true">
+    <template v-slot:title>
+      <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name && !titleDisabled}">
+        <template v-for="prefix in prefixes">
+          <span class="-minor -prefix" v-localize:html="prefix"></span>
+          <ui-icon class="-chevron" symbol="fth-chevron-right" :size="14" />
+        </template>
+        <ui-error field="name" />
+        <input v-if="!titleDisabled" class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" :readonly="titleDisabled || disabled" />
+        <!--<ui-alias class="ui-form-header-title-alias" v-if="hasAlias" v-model="value.alias" :name="value.name" :disabled="disabled" />-->
+        <span v-if="titleDisabled" v-localize="forceTitle ? title : (value.name || title)"></span>
+      </h2>
+    </template>
+    <div class="ui-form-header-aside">
+      <slot></slot>
+      <div v-if="!activeDisabled && typeof value.isActive !== 'undefined'" class="ui-form-header-toggle">
+        <ui-toggle v-model="value.isActive" class="is-accent" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" :disabled="disabled" />
+      </div>
+      <slot name="buttons"></slot>
+      <ui-dropdown v-if="actionsDefined" align="right">
+        <template v-slot:button>
+          <ui-button type="light onbg" label="@ui.actions" caret="down" />
+        </template>
+        <slot name="actions"></slot>
+        <ui-dropdown-button v-if="canDelete" label="@ui.delete" icon="fth-trash" @click="onDelete" :disabled="disabled" />
+      </ui-dropdown>
+      <ui-button :submit="true" type="accent" :label="isCreate ? '@ui.create' :'@ui.update'" :state="state" v-if="!disabled" class="ui-form-header-primary-button" />
+    </div>
+  </ui-header-bar>
+</template>
+
+
+<script>
+  export default {
+    name: 'uiEditorHeader',
+
+    props: {
+      title: {
+        type: String,
+        default: null
+      },
+      forceTitle: {
+        type: Boolean,
+        default: false
+      },
+      prefix: {
+        type: [String, Array]
+      },
+      value: {
+        type: Object
+      },
+      canDelete: {
+        type: Boolean,
+        default: true
+      },
+      disabled: {
+        type: Boolean,
+        default: false
+      },
+      titleDisabled: {
+        type: Boolean,
+        default: false
+      },
+      activeDisabled: {
+        type: Boolean,
+        default: false
+      },
+      state: {
+        type: String
+      },
+      isCreate: {
+        type: Boolean,
+        default: false
+      },
+      hasAlias: {
+        type: Boolean,
+        default: true
+      }
+    },
+
+    computed: {
+      actionsDefined()
+      {
+        return !this.isCreate && (this.canDelete || this.$scopedSlots.hasOwnProperty('actions'));
+      },
+      prefixes()
+      {
+        let items = Array.isArray(this.prefix) ? this.prefix : [this.prefix];
+        return items.filter(x => !!x);
+      }
+    },
+
+    methods: {
+      onDelete(item, opts)
+      {
+        this.$emit('delete', item, opts);
+      }
+    }
+  }
+</script>
+
+
+<style lang="scss">
+  .ui-editor-header
+  {
+    /*    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;*/
+  }
+
+  .ui-editor-header-aside
+  {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    > * + *
+    {
+      margin-left: var(--padding-s);
+    }
+  }
+
+  .ui-editor-header-toggle
+  {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: -1px;
+    margin-left: var(--padding-s);
+
+    .ui-toggle-off-warning
+    {
+      display: none;
+      color: var(--color-accent-red);
+    }
+
+    .ui-toggle-switch
+    {
+      background: var(--color-button-light-onbg);
+      box-shadow: var(--shadow-short) !important;
+    }
+
+    .ui-toggle-switch.is-active
+    {
+      background: var(--color-toggled);
+      box-shadow: none !important;
+    }
+
+    input:focus + .ui-toggle-switch
+    {
+      border-color: transparent;
+    }
+
+    & + .ui-button
+    {
+      margin-left: var(--padding);
+    }
+  }
+
+  .ui-header-bar-title
+  {
+    position: relative;
+
+    .ui-error
+    {
+      display: none;
+    }
+
+    .ui-error + input[type="text"].ui-editor-header-title-input:not(:focus)
+    {
+      border-color: var(--color-accent-error);
+    }
+  }
+
+  input[type="text"].ui-editor-header-title-input
+  {
+    font-family: var(--font);
+    color: var(--color-text);
+    font-size: var(--font-size-l);
+    font-weight: 700;
+    background: none;
+    border: 1px dashed var(--color-line-dashed-onbg);
+    /*&:hover, &:focus, .ui-header-bar-title.is-empty &
+    {
+      border: 1px dashed var(--color-text-dim-one);
+    }*/
+
+    .-prefix + &
+    {
+      margin-left: 5px;
+    }
+  }
+
+  .ui-editor-header-title-alias
+  {
+    position: absolute;
+    right: 10px;
+    top: 11px;
+    z-index: 2;
+
+    .ui-alias-lock
+    {
+      background: none;
+    }
+  }
+
+  .ui-editor-header-info-button
+  {
+    padding: 0;
+    justify-content: center;
+    width: 48px;
+    text-align: center;
+  }
+
+  .ui-editor-header-info-button .ui-button-icon
+  {
+    margin: 0 !important;
+    font-size: 18px;
+  }
+</style>

@@ -13,7 +13,7 @@ namespace zero.Core.Entities
     public string Name { get; set; }
 
     /// <summary>
-    /// Unique alias which can be used in the frontend and URLs
+    /// Alias (non-unique) which can be used in the frontend and URLs
     /// </summary>
     public string Alias { get; set; }
 

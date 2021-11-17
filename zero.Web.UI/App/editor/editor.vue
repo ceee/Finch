@@ -1,25 +1,30 @@
 ﻿<template>
-  <div class="editor" v-if="loaded" :class="['display-' + display, { 'has-sidebar': asideDefined, 'hide-tabs': tabs.length < 2, 'has-below': belowDefined }]">
-    <ui-tabs class="editor-tabs">
-      <ui-tab v-if="!tab.disabled(value)" v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :key="index">
-        <h3 v-if="display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
-        <slot name="blueprint">
-          <blueprint-property v-if="value && editorConfig.blueprint" :value="value" :meta="meta" :config="editorConfig.blueprint" />
-        </slot>
-        <div class="ui-property ui-property-parent" v-for="fieldset in tab.fieldsets">
-          <editor-component v-for="(field, fieldIndex) in fieldset.fields" :disabled="disabled" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value"
-                            :class="field.options.class" :data-cols="!!field.options.fieldset" :style="{ 'grid-column': field.options.fieldset ? 'span ' + field.options.fieldsetColumns : null }" />
-          
-        </div>
-        <component v-if="tab.component" :is="tab.component" v-model="value" />
-      </ui-tab>
-    </ui-tabs>
-    <aside class="editor-aside" v-if="asideDefined">
-      <slot name="aside"></slot>
-    </aside>
-    <aside class="editor-below" v-if="belowDefined">
-      <slot name="below"></slot>
-    </aside>
+  <div class="editor-outer" v-if="loaded">
+    <header class="editor-above" v-if="aboveDefined">
+      <slot name="above" v-bind:config="editorConfig"></slot>
+    </header>
+    <div class="editor" :class="['display-' + display, { 'has-sidebar': asideDefined, 'hide-tabs': tabs.length < 2, 'has-below': belowDefined }]">
+      <ui-tabs class="editor-tabs">
+        <ui-tab v-if="!tab.disabled(value)" v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :key="index">
+          <h3 v-if="display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
+          <slot name="blueprint">
+            <blueprint-property v-if="value && editorConfig.blueprint" :value="value" :meta="meta" :config="editorConfig.blueprint" />
+          </slot>
+          <div class="ui-property ui-property-parent" v-for="fieldset in tab.fieldsets">
+            <editor-component v-for="(field, fieldIndex) in fieldset.fields" :disabled="disabled" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value"
+                              :class="field.options.class" :data-cols="!!field.options.fieldset" :style="{ 'grid-column': field.options.fieldset ? 'span ' + field.options.fieldsetColumns : null }" />
+
+          </div>
+          <component v-if="tab.component" :is="tab.component" v-model="value" />
+        </ui-tab>
+      </ui-tabs>
+      <aside class="editor-aside" v-if="asideDefined">
+        <slot name="aside"></slot>
+      </aside>
+      <aside class="editor-below" v-if="belowDefined">
+        <slot name="below"></slot>
+      </aside>
+    </div>
   </div>
 </template>
 
@@ -75,6 +80,10 @@
     }),
 
     computed: {
+      aboveDefined()
+      {
+        return this.$scopedSlots.hasOwnProperty('above');
+      },
       asideDefined()
       {
         return this.$scopedSlots.hasOwnProperty('aside');

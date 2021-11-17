@@ -42,6 +42,11 @@ body
   //grid-gap: 3px;
 }
 
+.theme-switching, .theme-switch *
+{
+  transition: color 0.5s ease, border-color 0.5s ease, background 0.5s ease;
+}
+
 .theme-rounded .app
 {
   grid-gap: 0;

@@ -94,7 +94,7 @@
 
   // forms
   --color-input: #{$color-bg-shade-2};
-  --color-input-border: 1px solid #{$color-bg-shade-5};
+  --color-input-border: 1px solid transparent; //#{$color-bg-shade-5};
   --color-input-placeholder: #{$color-fg-shade-1};
   --color-check: #{$color-bg-shade-3};
   --color-checked: #{$color-primary};
