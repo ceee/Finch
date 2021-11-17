@@ -46,7 +46,6 @@ namespace zero.Core.Utils
 
         if (property.PropertyType.IsValueType || property.PropertyType.IsEnum || property.PropertyType.Equals(STRING_TYPE) || propertyValue == null || propertyValue is IEnumerable)
         {
-          Console.WriteLine("copy: " + propertyNameWithPrefix);
           property.SetValue(target, propertyValue, null);
         }
         else if (property.PropertyType.IsClass)

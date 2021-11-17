@@ -21,7 +21,7 @@ function canUnlock(config, model, field)
 {
   if (!config || !model || !model.blueprint)
   {
-    return true;
+    return false;
   }
 
   return config.unlocked.indexOf(field.path) > -1 
@@ -49,7 +49,7 @@ async function lock(config, model, field)
 }
 
 
-async function unlock(config, model, field)
+function unlock(config, model, field)
 {
   model.blueprint.desync.push(field.path);
 }

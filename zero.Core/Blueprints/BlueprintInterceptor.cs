@@ -3,13 +3,12 @@ using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using zero.Core.Blueprints;
 using zero.Core.Collections;
 using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 
-namespace zero.Core.Routing
+namespace zero.Core.Blueprints
 {
   public class BlueprintInterceptor : CollectionInterceptor
   {

@@ -15,18 +15,14 @@ namespace zero.Core.Blueprints
   {
     public List<BlueprintField<T>> UnlockedFields { get; private set; } = new();
 
-    protected static string[] DefaultFields { get; set; } = new[] { "name", "alias", "key", "sort", "isActive", "hash", "languageId", "createdById", "createdDate", "lastModifiedById", "lastModifiedDate", "blueprint" };
+    /// <summary>
+    /// These fields are not copied by the ObjectCloner 
+    /// as they are either locked or copied manually by ApplyDefaults()
+    /// </summary>
+    protected static string[] DefaultUncopyFields { get; set; } = new[] { "id", "url", "name", "alias", "key", "sort", "isActive", "hash", "languageId", "createdById", "createdDate", "lastModifiedById", "lastModifiedDate", "blueprint" };
 
 
-    public Blueprint() : base(typeof(T))
-    {
-      //Sync(x => x.Name);
-      //Sync(x => x.Alias);
-      //Sync(x => x.Sort);
-      //Sync(x => x.IsActive);
-      //Sync(x => x.LanguageId);
-      //Sync(x => x.Key);
-    }
+    public Blueprint() : base(typeof(T)) { }
 
 
     /// <summary>
@@ -43,7 +39,7 @@ namespace zero.Core.Blueprints
 
       // copy all properties which are synced from the blueprint to the model
       ApplyDefaults(blueprint, model);
-      ObjectCloner.CopyProperties(blueprint, model, DefaultFields.Union(model.Blueprint.Desync).ToArray());
+      ObjectCloner.CopyProperties(blueprint, model, DefaultUncopyFields.Union(model.Blueprint.Desync).ToArray());
 
       return model;
     }

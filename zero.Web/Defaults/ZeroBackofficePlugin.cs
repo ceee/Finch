@@ -53,6 +53,7 @@ namespace zero.Web.Defaults
 
       zero.Interceptors.Add<ZeroEntityRouteInterceptor>(gravity: 100);
       zero.Interceptors.Add<BlueprintInterceptor>(gravity: -1);
+      zero.Interceptors.Add<BlueprintChildInterceptor>(gravity: -1);
     }
 
 
@@ -138,6 +139,7 @@ namespace zero.Web.Defaults
 
       services.AddScoped<IBlueprintService, BlueprintService>();
       services.AddScoped<BlueprintInterceptor>();
+      services.AddScoped<BlueprintChildInterceptor>();
 
       services.AddScoped<ZeroEntityRouteInterceptor>();
     }

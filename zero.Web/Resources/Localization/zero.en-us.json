@@ -711,6 +711,9 @@
       "goToChild": "View child",
       "settingsButton": "Settings",
       "xUnlocked": "{count} unlocked"
+    },
+    "errors": {
+      "cannotDeleteChild": "Entities which are synchronized with a blueprint cannot be deleted"
     }
   },
 
