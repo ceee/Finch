@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -235,36 +236,6 @@ namespace zero.Core.Utils
         object propertyValue = nestedProperty.GetValue(value, null);
         FindAttribute<T>(propertyValue, value, CombineKey(SEPARATOR, key, nestedProperty.Name), nestedProperty, exploredObjects, found);
       }
-    }
-
-
-    public static T CopyProperties<T>(T source, T target, params string[] exceptions)
-    {
-      Type sourceType = source.GetType();
-      Type stringType = typeof(System.String);
-
-      foreach (PropertyInfo sourceProperty in sourceType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
-      {
-        Console.WriteLine("key: " + sourceProperty.Name);
-
-        if (!sourceProperty.CanWrite || exceptions.Contains(sourceProperty.Name, StringComparer.InvariantCultureIgnoreCase))
-        {
-          continue;
-        }
-
-        object sourcePropertyValue = sourceProperty.GetValue(source, null);
-
-        if (sourceProperty.PropertyType.IsValueType || sourceProperty.PropertyType.IsEnum || sourceProperty.PropertyType.Equals(stringType) || sourcePropertyValue == null || sourcePropertyValue is ICollection)
-        {
-          sourceProperty.SetValue(target, sourcePropertyValue, null);
-        }
-        else if (sourceProperty.PropertyType.IsClass)
-        {
-          sourceProperty.SetValue(target, CopyProperties(sourcePropertyValue, sourceProperty.GetValue(target, null)), null);
-        }
-      }
-
-      return target;
     }
 
 

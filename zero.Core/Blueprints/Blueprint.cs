@@ -15,6 +15,8 @@ namespace zero.Core.Blueprints
   {
     public List<BlueprintField<T>> UnlockedFields { get; private set; } = new();
 
+    protected static string[] DefaultFields { get; set; } = new[] { "name", "alias", "key", "sort", "isActive", "hash", "languageId", "createdById", "createdDate", "lastModifiedById", "lastModifiedDate", "blueprint" };
+
 
     public Blueprint() : base(typeof(T))
     {
@@ -40,8 +42,8 @@ namespace zero.Core.Blueprints
       }
 
       // copy all properties which are synced from the blueprint to the model
-      ObjectTraverser.CopyProperties(blueprint, model, model.Blueprint.Desync);
       ApplyDefaults(blueprint, model);
+      ObjectCloner.CopyProperties(blueprint, model, DefaultFields.Union(model.Blueprint.Desync).ToArray());
 
       return model;
     }
