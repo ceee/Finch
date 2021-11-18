@@ -1,20 +1,17 @@
 ﻿<template>
-  <ui-editor-form config="country" class="country" />
-</template>
-
-<!--<template>
   <ui-form ref="form" class="country" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
     <ui-form-header v-model="model" prefix="@country.list" title="@country.name" :disabled="disabled" :is-create="!$route.params.id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
     <ui-editor config="country" v-model="model" :meta="meta" :disabled="disabled">
       <template v-slot:below>
         <ui-editor-infos v-model="model" :disabled="disabled" />
-      </template>-->
-      <!--<template v-slot:aside>
-        <ui-editor-aside v-model="model" :disabled="disabled" />
-      </template>-->
-    <!--</ui-editor>
+      </template>
+    </ui-editor>
   </ui-form>
 </template>
+
+<!--<template>
+  <ui-editor-form config="country" class="country" />
+</template>-->
 
 
 <script>
@@ -64,4 +61,4 @@
   {
     max-width: 80px;
   }
-</style>-->
+</style>

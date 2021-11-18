@@ -38,7 +38,7 @@
   import UiEditor from 'zero/editor/editor.vue';
   import PagesApi from 'zero/api/pages.js';
   import EventHub from 'zero/helpers/eventhub.js';
-  import InfoTab from './page-info.vue';
+  import PageInfoTab from './page-info.vue';
   import Overlay from 'zero/helpers/overlay.js'
   import MoveOverlay from './overlays/move.vue'
   import CopyOverlay from './overlays/copy.vue'
@@ -181,7 +181,7 @@
           class: 'is-info is-blank',
           count: value => null,
           disabled: value => false,
-          component: InfoTab,
+          component: PageInfoTab,
           fields: []
         });
       },
