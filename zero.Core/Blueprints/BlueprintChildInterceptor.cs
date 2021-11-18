@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Raven.Client.Documents.Session;
 using System.Threading.Tasks;
 using zero.Core.Collections;
 using zero.Core.Database;
@@ -27,24 +26,25 @@ namespace zero.Core.Blueprints
     }
 
     /// <inheritdoc />
-    public override bool CanRun(Parameters args)
+    public override bool CanRun(InterceptorParameters args, ZeroIdEntity model)
     {
       // this interceptor does only work for child entities
-      return (args.Session as AsyncDocumentSession)?.DatabaseName != Context.Options.Raven.Database;
+      return false;
+      //return (args.Session as AsyncDocumentSession)?.DatabaseName != Context.Options.Raven.Database;
     }
 
 
     /// <inheritdoc />
-    public override Task<InterceptorResult<ZeroEntity>> Deleting(DeleteParameters args)
+    public override Task<InterceptorResult<ZeroIdEntity>> Deleting(InterceptorParameters args, ZeroIdEntity model)
     {
-      if (args.Model.Blueprint != null)
+      if (model is not ZeroEntity || (model as ZeroEntity).Blueprint != null)
       {
-        InterceptorResult<ZeroEntity> result = new();
-        result.Result = EntityResult<ZeroEntity>.Fail("@blueprint.errors.cannotDeleteChild");
+        InterceptorResult<ZeroIdEntity> result = new();
+        result.Result = EntityResult<ZeroIdEntity>.Fail("@blueprint.errors.cannotDeleteChild");
         return Task.FromResult(result);
       }
 
-      return base.Deleting(args);
+      return base.Deleting(args, model);
     }
   }
 }

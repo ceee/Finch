@@ -32,21 +32,23 @@ namespace zero.Core.Blueprints
     }
 
     /// <inheritdoc />
-    public override bool CanRun(Parameters args)
+    public override bool CanRun(InterceptorParameters args, ZeroIdEntity model)
     {
       // we do only update children if we operate on the shared database
-      return (args.Session as AsyncDocumentSession)?.DatabaseName == Context.Options.Raven.Database;
+      return false;
+      //return (args.Session as AsyncDocumentSession)?.DatabaseName == Context.Options.Raven.Database;
     }
 
 
     /// <inheritdoc />
-    public override async Task Saved(SaveParameters args)
+    public override async Task Saved(InterceptorParameters args, ZeroIdEntity model)
     {
-      if (!BlueprintService.TryGetBlueprint(args.Model, out Blueprint blueprint))
+      if (model is not ZeroEntity || !BlueprintService.TryGetBlueprint(args.Model, out Blueprint blueprint))
       {
         return;
       }
 
+      ZeroEntity entity = model as ZeroEntity;
       int count = 0;
 
       foreach (Application app in await GetApplications())
@@ -58,17 +60,17 @@ namespace zero.Core.Blueprints
 
         if (args.IsUpdate)
         {
-          child = await session.LoadAsync<ZeroEntity>(args.Model.Id);
+          child = await session.LoadAsync<ZeroEntity>(model.Id);
         }
 
         if (child == null)
         {
-          child = args.Model.Clone();
-          child.Blueprint = new() { Id = args.Model.Id };
+          child = entity.Clone();
+          child.Blueprint = new() { Id = model.Id };
         }
         else
         {          
-          blueprint.Apply(args.Model, child);
+          blueprint.Apply(entity, child);
         }
 
         count += 1;
@@ -80,18 +82,19 @@ namespace zero.Core.Blueprints
         await session.SaveChangesAsync();
       }
 
-      Logger.LogDebug("Blueprint: Synced {count} children for {name} ({id})", count, args.Model.Name, args.Id);
+      Logger.LogDebug("Blueprint: Synced {count} children for {name} ({id})", count, entity.Name, model.Id);
     }
 
 
     /// <inheritdoc />
-    public override async Task Deleted(DeleteParameters args)
+    public override async Task Deleted(InterceptorParameters args, ZeroIdEntity model)
     {
-      if (!BlueprintService.TryGetBlueprint(args.Model, out Blueprint blueprint))
+      if (model is not ZeroEntity || !BlueprintService.TryGetBlueprint(model, out Blueprint blueprint))
       {
         return;
       }
 
+      ZeroEntity entity = model as ZeroEntity;
       int count = 0;
 
       foreach (Application app in await GetApplications())
@@ -104,11 +107,11 @@ namespace zero.Core.Blueprints
         // now we have to delete the child
         // but this will not work with the session as we need to run the scoped interceptors,
         // therefore we need access to the collection
-        session.Delete(args.Model.Id);
+        session.Delete(entity.Id);
         await session.SaveChangesAsync();
       }
 
-      Logger.LogDebug("Blueprint: Deleted {count} children for {name} ({id})", count, args.Model.Name, args.Id);
+      Logger.LogDebug("Blueprint: Deleted {count} children for {name} ({id})", count, entity.Name, entity.Id);
     }
 
 

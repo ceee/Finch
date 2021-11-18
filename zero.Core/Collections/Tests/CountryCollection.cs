@@ -1,45 +1,21 @@
-﻿using FluentValidation.Results;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace zero.Core;
+
+using FluentValidation;
 using zero.Core.Entities;
+using zero.Core.Extensions;
+using zero.Core.Validation;
 
-namespace zero.Core.Collections.Tests
+public class CountryCollection : EntityCollection<Country>, ICountryCollection
 {
-  public class CountryCollection : EntityCollection<Country>
+  public CountryCollection() : base() { }
+
+
+  /// <inheritdoc />
+  protected override void ValidationRules(ZeroValidator<Country> validator)
   {
-    /// <inheritdoc />
-    public override async Task<ValidationResult> Validate(ICollectionContext ctx, Country model)
-    {
-      return await new CountryValidator(ctx.Store).ValidateAsync(model);
-    }
+    validator.RuleFor(x => x.Code).Length(2).Unique(Session);
+    validator.RuleFor(x => x.Name).Length(2, 120);
   }
-
-
-  public class CountryDto : ZeroEntity
-  {
-    public bool IsPreferred { get; set; }
-    public string Code { get; set; }
-  }
-
-
-  public class EntityCollection<TEntity, TDto> where TEntity : ZeroEntity where TDto : ZeroEntity
-  {
-    /// <inheritdoc />
-    public virtual Task<ValidationResult> Validate(ICollectionContext ctx, TDto model)
-    {
-      return Task.FromResult(new ValidationResult());
-    }
-
-
-    public virtual Task<EntityResult<TEntity>> Save(ICollectionContext ctx, TDto model)
-    {
-      throw new NotImplementedException();
-    }
-  }
-
-
-  public class EntityCollection<T> : EntityCollection<T, T> where T : ZeroEntity { }
 }
+
+public interface ICountryCollection : IEntityCollection<Country> { }

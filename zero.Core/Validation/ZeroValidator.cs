@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace zero.Core.Validation
 {
-  public abstract class ZeroValidator<TInterface> : ZeroValidator<TInterface, TInterface>
+  public class ZeroValidator<TInterface> : ZeroValidator<TInterface, TInterface>
   {
   }
 

@@ -1,46 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿namespace zero.Core;
+
+using System;
 using System.Threading.Tasks;
+using zero.Core.Collections;
 using zero.Core.Entities;
 
-namespace zero.Core.Collections
+public class InterceptorInstruction<T> where T : ZeroIdEntity
 {
-  public class InterceptorInstruction<T, TParameters>
-    where T : ZeroEntity
-    where TParameters : CollectionInterceptor<T>.Parameters
+  public Guid Guid { get; private set; } = Guid.NewGuid();
+
+  public InterceptorType InterceptorType { get; private set; }
+
+  public T Model { get; private set; }
+
+
+  internal InterceptorInstruction(InterceptorType type, T model)
   {
-    public string Operation { get; set; }
-
-    public TParameters Parameters { get; set; }
-
-    public List<InterceptorResult<T>> Results { get; set; } = new();
-
-    public EntityResult<T> EntityResult { get; set; }
-
-    public bool Return => EntityResult != null;
-
-    internal Func<Expression<Func<ICollectionInterceptor<T>, Task<InterceptorResult<T>>>>, Task> BeforeOperationHandler = _ => Task.CompletedTask;
-
-    internal Func<Expression<Func<ICollectionInterceptor<T>, Task>>, Task> AfterOperationHandler = _ => Task.CompletedTask;
+    InterceptorType = type;
+    Model = model;
+  }
 
 
-    internal InterceptorInstruction() { }
+  public async Task<EntityResult<T>> Run()
+  {
+    //ICollectionInterceptor<T> interceptor = default;
 
-    internal InterceptorInstruction(TParameters parameters)
-    {
-      Parameters = parameters;
-    }
+    //interceptor.Created(new InterceptorParameters()
+    //{
+      
+    //})
+
+    await Task.Delay(0);
+    return new EntityResult<T>();
+  }
 
 
-    public async Task HandleBefore(Expression<Func<ICollectionInterceptor<T>, Task<InterceptorResult<T>>>> expression)
-    {
-      await BeforeOperationHandler(expression);
-    }
-
-    public async Task HandleAfter(Expression<Func<ICollectionInterceptor<T>, Task>> expression)
-    {
-      await AfterOperationHandler(expression);
-    }
+  public async Task Complete()
+  {
+    await Task.Delay(0);
   }
 }

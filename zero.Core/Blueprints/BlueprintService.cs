@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using zero.Core.Entities;
 using zero.Core.Options;
 
 namespace zero.Core.Blueprints
@@ -22,11 +20,11 @@ namespace zero.Core.Blueprints
 
 
     /// <inheritdoc />
-    public bool IsEnabled<T>(T model) where T : ZeroEntity => IsEnabled(model.GetType());
+    public bool IsEnabled<T>(T model) => IsEnabled(model.GetType());
 
 
     /// <inheritdoc />
-    public bool IsEnabled<T>() where T : ZeroEntity => IsEnabled(typeof(T));
+    public bool IsEnabled<T>()=> IsEnabled(typeof(T));
 
 
     /// <inheritdoc />
@@ -34,11 +32,11 @@ namespace zero.Core.Blueprints
 
 
     /// <inheritdoc />
-    public bool TryGetBlueprint<T>(T model, out Blueprint blueprint) where T : ZeroEntity => TryGetBlueprint(model.GetType(), out blueprint);
+    public bool TryGetBlueprint<T>(T model, out Blueprint blueprint) => TryGetBlueprint(model.GetType(), out blueprint);
 
 
     /// <inheritdoc />
-    public bool TryGetBlueprint<T>(out Blueprint blueprint) where T : ZeroEntity => TryGetBlueprint(typeof(T), out blueprint);
+    public bool TryGetBlueprint<T>(out Blueprint blueprint) => TryGetBlueprint(typeof(T), out blueprint);
 
 
     /// <inheritdoc />
@@ -55,18 +53,18 @@ namespace zero.Core.Blueprints
     /// <summary>
     /// Check whether blueprinting functionality is enabled for a certain entity
     /// </summary>
-    bool IsEnabled<T>() where T : ZeroEntity;
+    bool IsEnabled<T>();
 
     /// <summary>
     /// Check whether blueprinting functionality is enabled for a certain entity
     /// </summary>
-    bool IsEnabled<T>(T model) where T : ZeroEntity;
+    bool IsEnabled<T>(T model);
 
     bool IsEnabled(Type type);
 
-    bool TryGetBlueprint<T>(T model, out Blueprint blueprint) where T : ZeroEntity;
+    bool TryGetBlueprint<T>(T model, out Blueprint blueprint);
 
-    bool TryGetBlueprint<T>(out Blueprint blueprint) where T : ZeroEntity;
+    bool TryGetBlueprint<T>(out Blueprint blueprint);
 
     bool TryGetBlueprint(Type type, out Blueprint blueprint);
   }
