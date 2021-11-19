@@ -51,7 +51,7 @@ namespace zero.Web.Defaults
       zero.Icons.AddSet("feather", "Feather", "/assets/icons/feather.svg", "fth");
       zero.Pages.Add<PageFolder>(Constants.Pages.FolderAlias, "@page.folder.name", "@page.folder.description", "fth-folder");
 
-      zero.Interceptors.Add<ZeroEntityRouteInterceptor>(gravity: 100);
+      zero.Interceptors.Add<ZeroEntityRouteInterceptor, ZeroEntity>(gravity: 100);
       zero.Interceptors.Add<BlueprintInterceptor>(gravity: -1);
       zero.Interceptors.Add<BlueprintChildInterceptor>(gravity: -1);
     }

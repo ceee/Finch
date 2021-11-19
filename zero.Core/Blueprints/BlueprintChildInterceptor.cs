@@ -29,8 +29,7 @@ namespace zero.Core.Blueprints
     public override bool CanRun(InterceptorParameters args, ZeroIdEntity model)
     {
       // this interceptor does only work for child entities
-      return false;
-      //return (args.Session as AsyncDocumentSession)?.DatabaseName != Context.Options.Raven.Database;
+      return args.Context.Store.ResolvedDatabase != Context.Options.Raven.Database;
     }
 
 

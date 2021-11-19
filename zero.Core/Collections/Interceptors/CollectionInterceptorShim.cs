@@ -1,10 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using zero.Core.Entities;
 
 namespace zero.Core.Collections
 {
-  public sealed class CollectionInterceptorShim<T> : CollectionInterceptor<T> where T : ZeroEntity
+  public sealed class CollectionInterceptorShim<T> : CollectionInterceptor<T> where T : ZeroIdEntity
   {
     ICollectionInterceptor _base;
 
@@ -13,30 +12,7 @@ namespace zero.Core.Collections
       _base = baseInterceptor;
     }
 
-    TParams Args<TParams>(Parameters args, Action<TParams> modify = null) where TParams : CollectionInterceptor<ZeroEntity>.Parameters, new()
-    {
-      TParams parameters = new TParams()
-      {
-        Context = args.Context,
-        Properties = args.Properties,
-        Session = args.Session,
-        Store = args.Store,
-        Collection = null, //args.Collection
-        //Validator = args.Validator
-      };
-
-      modify?.Invoke(parameters);
-      return parameters;
-    }
-
-    TParams Args<TParams>(ParametersWithModel args, Action<TParams> modify = null) where TParams : CollectionInterceptor<ZeroEntity>.ParametersWithModel, new()
-    {
-      TParams parameters = Args((Parameters)args, modify);
-      parameters.Model = args.Model;
-      return parameters;
-    }
-
-    InterceptorResult<T> Result(InterceptorResult<ZeroEntity> result)
+    InterceptorResult<T> Result(InterceptorResult<ZeroIdEntity> result)
     {
       return result == null ? null : new InterceptorResult<T>()
       {
@@ -48,43 +24,30 @@ namespace zero.Core.Collections
     }
 
     /// <inheritdoc />
-    public override bool CanRun(Parameters args)
-    {
-      if (args is ParametersWithModel)
-      {
-        return _base.CanRun(Args<CollectionInterceptor<ZeroEntity>.ParametersWithModel>(args as ParametersWithModel));
-      }
-      return _base.CanRun(Args<CollectionInterceptor<ZeroEntity>.Parameters>(args));
-    }
+    public override bool CanRun(InterceptorParameters args, T model) => _base.CanRun(args, model);
 
     /// <inheritdoc />
-    public override async Task<InterceptorResult<T>> Creating(CreateParameters args) => Result(await _base.Creating(Args<CollectionInterceptor<ZeroEntity>.CreateParameters>(args)));
+    public override async Task<InterceptorResult<T>> Creating(InterceptorParameters args, T model) => Result(await _base.Creating(args, model));
 
     /// <inheritdoc />
-    public override async Task<InterceptorResult<T>> Updating(UpdateParameters args) => Result(await _base.Updating(Args<CollectionInterceptor<ZeroEntity>.UpdateParameters>(args, x => x.Id = args.Id)));
+    public override async Task<InterceptorResult<T>> Updating(InterceptorParameters args, T model) => Result(await _base.Updating(args, model));
 
     /// <inheritdoc />
-    public override async Task<InterceptorResult<T>> Saving(SaveParameters args) => Result(await _base.Saving(Args<CollectionInterceptor<ZeroEntity>.SaveParameters>(args, x => { x.Id = args.Id; x.IsUpdate = args.IsUpdate; })));
+    public override async Task<InterceptorResult<T>> Saving(InterceptorParameters args, T model) => Result(await _base.Saving(args, model));
 
     /// <inheritdoc />
-    public override async Task<InterceptorResult<T>> Deleting(DeleteParameters args) => Result(await _base.Deleting(Args<CollectionInterceptor<ZeroEntity>.DeleteParameters>(args, x => x.Id = args.Id)));
+    public override async Task<InterceptorResult<T>> Deleting(InterceptorParameters args, T model) => Result(await _base.Deleting(args, model));
 
     /// <inheritdoc />
-    public override async Task<InterceptorResult<T>> Purging(PurgeParameters args) => Result(await _base.Purging(Args<CollectionInterceptor<ZeroEntity>.PurgeParameters>(args)));
+    public override Task Created(InterceptorParameters args, T model) => _base.Created(args, model);
 
     /// <inheritdoc />
-    public override Task Created(CreateParameters args) => _base.Created(Args<CollectionInterceptor<ZeroEntity>.CreateParameters>(args));
+    public override Task Updated(InterceptorParameters args, T model) => _base.Updated(args, model);
 
     /// <inheritdoc />
-    public override Task Updated(UpdateParameters args) => _base.Updated(Args<CollectionInterceptor<ZeroEntity>.UpdateParameters>(args, x => x.Id = args.Id));
+    public override Task Saved(InterceptorParameters args, T model) => _base.Saved(args, model);
 
     /// <inheritdoc />
-    public override Task Saved(SaveParameters args) => _base.Saved(Args<CollectionInterceptor<ZeroEntity>.SaveParameters>(args, x => { x.Id = args.Id; x.IsUpdate = args.IsUpdate; }));
-
-    /// <inheritdoc />
-    public override Task Deleted(DeleteParameters args) => _base.Deleted(Args<CollectionInterceptor<ZeroEntity>.DeleteParameters>(args, x => x.Id = args.Id));
-
-    /// <inheritdoc />
-    public override Task Purged(PurgeParameters args) => _base.Purged(Args<CollectionInterceptor<ZeroEntity>.PurgeParameters>(args));
+    public override Task Deleted(InterceptorParameters args, T model) => _base.Deleted(args, model);
   }
 }

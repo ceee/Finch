@@ -35,15 +35,14 @@ namespace zero.Core.Blueprints
     public override bool CanRun(InterceptorParameters args, ZeroIdEntity model)
     {
       // we do only update children if we operate on the shared database
-      return false;
-      //return (args.Session as AsyncDocumentSession)?.DatabaseName == Context.Options.Raven.Database;
+      return args.Context.Store.ResolvedDatabase == Context.Options.Raven.Database;
     }
 
 
     /// <inheritdoc />
     public override async Task Saved(InterceptorParameters args, ZeroIdEntity model)
     {
-      if (model is not ZeroEntity || !BlueprintService.TryGetBlueprint(args.Model, out Blueprint blueprint))
+      if (model is not ZeroEntity || !BlueprintService.TryGetBlueprint(model, out Blueprint blueprint))
       {
         return;
       }
@@ -56,12 +55,7 @@ namespace zero.Core.Blueprints
         using ZeroContextScope scope = Context.CreateScope(app);
         IZeroDocumentSession session = scope.Store.Session(scope.Database);
 
-        ZeroEntity child = default;
-
-        if (args.IsUpdate)
-        {
-          child = await session.LoadAsync<ZeroEntity>(model.Id);
-        }
+        ZeroEntity child =  await session.LoadAsync<ZeroEntity>(model.Id);
 
         if (child == null)
         {
@@ -78,6 +72,7 @@ namespace zero.Core.Blueprints
         // now we have to store the child
         // but this will not work with the session as we need to run the scoped interceptors,
         // therefore we need access to the collection
+
         await session.StoreAsync(child);
         await session.SaveChangesAsync();
       }

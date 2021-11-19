@@ -46,6 +46,9 @@ namespace zero.Core
     /// <inheritdoc />
     public IZeroStore Store { get; private set; }
 
+    /// <inheritdoc />
+    public IServiceProvider Services { get; private set; }
+
 
     protected IApplicationResolver AppResolver { get; private set; }
 
@@ -63,7 +66,8 @@ namespace zero.Core
     bool _resolved = false;
 
 
-    public ZeroContext(IZeroOptions options, IHttpContextAccessor httpContextAccessor, IApplicationResolver appResolver, ICultureResolver cultureResolver, ILogger<ZeroContext> logger, IZeroStore store, IHandlerHolder handler)
+    public ZeroContext(IZeroOptions options, IHttpContextAccessor httpContextAccessor, IApplicationResolver appResolver, ICultureResolver cultureResolver, 
+      ILogger<ZeroContext> logger, IZeroStore store, IHandlerHolder handler, IServiceProvider services)
     {
       Options = options;
       AppResolver = appResolver;
@@ -73,6 +77,7 @@ namespace zero.Core
       Handler = handler;
       ValueCollection = new PrimitiveTypeCollection();
       HttpContextAccessor = httpContextAccessor;
+      Services = services;
     }
 
 
@@ -220,6 +225,11 @@ namespace zero.Core
     /// Document store
     /// </summary>
     IZeroStore Store { get; }
+
+    /// <summary>
+    /// Service container
+    /// </summary>
+    IServiceProvider Services { get; }
 
     /// <summary>
     /// Matching (frontend) path route

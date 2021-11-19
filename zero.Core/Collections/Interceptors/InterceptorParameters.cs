@@ -2,7 +2,17 @@
 
 using System.Collections.Generic;
 using zero.Core.Database;
+using zero.Core.Entities;
 using zero.Core.Extensions;
+
+
+public class InterceptorParameters<T> : InterceptorParameters where T : ZeroIdEntity
+{
+  /// <summary>
+  /// Access to the collection which has initiated the interceptor instruction
+  /// </summary>
+  public IEntityCollection<T> Collection { get; set; }
+}
 
 public class InterceptorParameters
 {
@@ -15,6 +25,11 @@ public class InterceptorParameters
   /// Raven document store
   /// </summary>
   public IZeroStore Store { get; set; }
+
+  /// <summary>
+  /// TODO
+  /// </summary>
+  public InterceptorRunnerProxy Interceptors { get; set; }
 
   /// <summary>
   /// Parameters from the interceptor which ran on before the operation (only available for completed operations)

@@ -27,6 +27,7 @@ namespace zero.Core.Options
       });
     }
 
+
     public void Add<T, TBoxed>(int gravity = 0, Func<Type, bool> canHandle = null) 
       where T : ICollectionInterceptor<TBoxed>
       where TBoxed : ZeroEntity

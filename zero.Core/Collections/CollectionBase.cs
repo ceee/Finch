@@ -3,7 +3,6 @@ using FluentValidation.Results;
 using Raven.Client;
 using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
-using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,8 +21,6 @@ namespace zero.Core.Collections
     private IRevisionsApi _revisions;
     private string _database;
 
-    protected ICollectionInterceptorHandler InterceptorHandler { get; private set; }
-
     protected virtual Action<T> PreSave { get; set; }
 
     protected bool OnlyActive { get; set; } = false; // TODO do we really need this?
@@ -33,7 +30,6 @@ namespace zero.Core.Collections
     {
       Context = collectionContext.Context;
       Store = collectionContext.Store;
-      InterceptorHandler = collectionContext.InterceptorHandler;
       Validator = validator;
       Database = Store.ResolvedDatabase;
     }
@@ -281,33 +277,7 @@ namespace zero.Core.Collections
       // create ID before-hand so interceptors can use it
       model.Id = await Session.Advanced.DocumentStore.Conventions.GenerateDocumentIdAsync(Session.Advanced.DocumentStore.Database, model);
 
-      // run interceptor
-      var instruction = CreateInstruction<CollectionInterceptor<T>.CreateParameters>("create", args => args.Model = model);
-      await instruction.HandleBefore(x => x.Creating(instruction.Parameters));
-
-      if (instruction.Return)
-      {
-        return instruction.EntityResult;
-      }
-
-      // run generic interceptor
-      var instruction2 = CreateInstruction<CollectionInterceptor<T>.SaveParameters>("save", args =>
-      {
-        args.Model = model;
-        args.Id = model.Id;
-        args.IsUpdate = false;
-      });
-      await instruction2.HandleBefore(x => x.Saving(instruction2.Parameters));
-
-      if (instruction2.Return)
-      {
-        return instruction2.EntityResult;
-      }
-
       await Session.StoreAsync(model);
-
-      await instruction.HandleAfter(x => x.Created(instruction.Parameters));
-      await instruction2.HandleAfter(x => x.Saved(instruction2.Parameters));
 
       await Session.SaveChangesAsync();
 
@@ -318,37 +288,8 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     async Task<EntityResult<T>> Update(T model)
     {
-      // run interceptor
-      var instruction = CreateInstruction<CollectionInterceptor<T>.UpdateParameters>("update", args =>
-      {
-        args.Model = model;
-        args.Id = model.Id;
-      });
-      await instruction.HandleBefore(x => x.Updating(instruction.Parameters));
-
-      if (instruction.Return)
-      {
-        return instruction.EntityResult;
-      }
-
-      // run generic interceptor
-      var instruction2 = CreateInstruction<CollectionInterceptor<T>.SaveParameters>("save", args =>
-      {
-        args.Model = model;
-        args.Id = model.Id;
-        args.IsUpdate = true;
-      });
-      await instruction2.HandleBefore(x => x.Saving(instruction2.Parameters));
-
-      if (instruction2.Return)
-      {
-        return instruction2.EntityResult;
-      }
 
       await Session.StoreAsync(model);
-
-      await instruction.HandleAfter(x => x.Updated(instruction.Parameters));
-      await instruction2.HandleAfter(x => x.Saved(instruction2.Parameters));
 
       await Session.SaveChangesAsync();
 
@@ -375,21 +316,7 @@ namespace zero.Core.Collections
         return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
       }
 
-      var instruction = CreateInstruction<CollectionInterceptor<T>.DeleteParameters>("delete", args =>
-      {
-        args.Model = entity;
-        args.Id = entity.Id;
-      });
-      await instruction.HandleBefore(x => x.Deleting(instruction.Parameters));
-
-      if (instruction.Return)
-      {
-        return instruction.EntityResult;
-      }
-
       Session.Delete(entity);
-
-      await instruction.HandleAfter(x => x.Deleted(instruction.Parameters));
 
       await Session.SaveChangesAsync();
 
@@ -419,37 +346,9 @@ namespace zero.Core.Collections
     /// <inheritdoc />
     public virtual async Task<EntityResult<T>> Purge(string querySuffix = null, Parameters parameters = null)
     {
-      var instruction = CreateInstruction<CollectionInterceptor<T>.PurgeParameters>("purge");
-      await instruction.HandleBefore(x => x.Purging(instruction.Parameters));
-
-      if (instruction.Return)
-      {
-        return instruction.EntityResult;
-      }
-
       await Store.Raven.PurgeAsync<T>(Database, querySuffix, parameters);
 
-      await instruction.HandleAfter(x => x.Purged(instruction.Parameters));
-
       return EntityResult<T>.Success();
-    }
-
-
-    /// <summary>
-    /// Get interceptor parameters
-    /// </summary>
-    protected InterceptorInstruction<T, TParams> CreateInstruction<TParams>(string operationName, Action<TParams> configure = null) where TParams : CollectionInterceptor<T>.Parameters, new()
-    {
-      TParams parameters = new TParams()
-      {
-        Context = Context,
-        Store = Store,
-        Validator = Validator,
-        Session = Session
-      };
-      configure?.Invoke(parameters);
-
-      return InterceptorHandler?.Create<T, TParams>(operationName, parameters) ?? new();
     }
 
 

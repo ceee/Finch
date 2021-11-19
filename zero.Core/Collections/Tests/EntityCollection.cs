@@ -9,6 +9,7 @@ using zero.Core.Database;
 using zero.Core.Entities;
 using zero.Core.Validation;
 
+
 public abstract partial class EntityCollection<T> : IEntityCollection<T> where T : ZeroIdEntity
 {
   /// <inheritdoc />
@@ -43,35 +44,24 @@ public abstract partial class EntityCollection<T> : IEntityCollection<T> where T
 
 
   /// <summary>
+  /// Create rules for validation
+  /// </summary>
+  protected virtual void ValidationRules(ZeroValidator<T> validator) { }
+
+
+  /// <summary>
   /// Do only return the model when it is set to active or inactive entities are included with IncludeInactive()
   /// </summary>
   protected virtual T WhenActive(T model)
   {
     return model != null && (Options.IncludeInactive || (model is ZeroEntity ? (model as ZeroEntity).IsActive : true)) ? model : default;
   }
-
-
-  /// <summary>
-  /// Create rules for validation
-  /// </summary>
-  protected virtual void ValidationRules(ZeroValidator<T> validator) { }
 }
 
 
 
 public interface IEntityCollection<T> where T : ZeroIdEntity
 {
-  /// <summary>
-  /// Guid for this instance
-  /// </summary>
-  Guid Guid { get; }
-
-  /// <summary>
-  /// Get access to the session which is used by this collection.
-  /// The session is context-aware and can change based on the currently applied scope.
-  /// </summary>
-  IZeroDocumentSession Session { get; }
-
   /// <summary>
   /// Get an entity by Id
   /// </summary>
@@ -108,9 +98,33 @@ public interface IEntityCollection<T> where T : ZeroIdEntity
   /// </summary>
   IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IRavenQueryable<T>> expression);
 
-
   /// <summary>
   /// Validates an entity in this collection
   /// </summary>
   Task<ValidationResult> Validate(T model);
+
+  /// <summary>
+  /// Updates or creates an entity with an optional validator
+  /// </summary>
+  Task<EntityResult<T>> Save(T model);
+
+  /// <summary>
+  /// Deletes an entity
+  /// </summary>
+  Task<EntityResult<T>> Delete(T model);
+
+  /// <summary>
+  /// Deletes entities
+  /// </summary>
+  Task<int> Delete(IEnumerable<T> models);
+
+  /// <summary>
+  /// Deletes an entity by Id
+  /// </summary>
+  Task<EntityResult<T>> Delete(string id);
+
+  /// <summary>
+  /// Deletes entities by Id
+  /// </summary>
+  Task<int> Delete(IEnumerable<string> ids);
 }

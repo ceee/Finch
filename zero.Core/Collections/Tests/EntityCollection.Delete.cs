@@ -1,11 +1,7 @@
 ﻿namespace zero.Core;
-
-using Raven.Client;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 
@@ -26,31 +22,16 @@ public abstract partial class EntityCollection<T> : IEntityCollection<T> where T
       return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
     }
 
-    var instruction = Interceptors.CreateInstruction(InterceptorType.Delete, entity);
+    InterceptorInstruction<T> instruction = Interceptors.CreateInstruction(this, InterceptorType.Delete, entity);
 
-    EntityResult<T> result = await instruction.Run();
-
-    if (result != null)
-    {
-      return result;
+    if (!await instruction.Run())
+    { 
+      return instruction.Result;
     }
-
-    //var instruction = CreateInstruction<CollectionInterceptor<T>.DeleteParameters>("delete", args =>
-    //{
-    //  args.Model = entity;
-    //  args.Id = entity.Id;
-    //});
-    //await instruction.HandleBefore(x => x.Deleting(instruction.Parameters));
-
-    //if (instruction.Return)
-    //{
-    //  return instruction.EntityResult;
-    //}
 
     Session.Delete(entity);
 
     await instruction.Complete();
-    //await instruction.HandleAfter(x => x.Deleted(instruction.Parameters));
 
     await Session.SaveChangesAsync();
 

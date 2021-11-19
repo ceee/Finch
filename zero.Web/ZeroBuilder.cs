@@ -115,7 +115,7 @@ namespace zero.Web
       Services.AddScoped<BackofficeFilterAttribute>();
       Services.AddScoped<ModelStateValidationFilterAttribute>();
 
-      Services.AddScoped<ICollectionInterceptorHandler, CollectionInterceptorHandler>();
+      //Services.AddScoped<ICollectionInterceptorHandler, CollectionInterceptorHandler>();
 
       Services.AddHttpContextAccessor();
 

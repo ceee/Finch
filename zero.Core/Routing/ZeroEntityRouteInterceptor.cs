@@ -11,7 +11,7 @@ using zero.Core.Entities;
 
 namespace zero.Core.Routing
 {
-  public class ZeroEntityRouteInterceptor : CollectionInterceptor
+  public class ZeroEntityRouteInterceptor : CollectionInterceptor<ZeroEntity>
   {
     protected IZeroContext Context { get; set; }
 
@@ -38,7 +38,7 @@ namespace zero.Core.Routing
 
 
     /// <inheritdoc />
-    public override async Task Saved(SaveParameters args)
+    public override async Task Saved(InterceptorParameters args, ZeroEntity model)
     {
       // DONE [1] assume we have an update for a Product:
       // this will not trigger a new seeding as the ProductRouteProvider handles <ProductRouteParams> entities, but not products itself
@@ -60,7 +60,7 @@ namespace zero.Core.Routing
       context.Session.Advanced.MaxNumberOfRequestsPerSession = 100_000;
 
       Dictionary<string, string> urlUpdates = new();
-      List<Route> obsoleteRoutes = await GetDependencies(context, args.Model);
+      List<Route> obsoleteRoutes = await GetDependencies(context, model);
       int countObsoleteRoutes = obsoleteRoutes.Count;
       int countRoutes = 0;
 
@@ -87,17 +87,17 @@ namespace zero.Core.Routing
 
 
       // find provider for this model
-      if (Routes.TryGetProvider(args.Model, out IRouteProvider provider))
+      if (Routes.TryGetProvider(model, out IRouteProvider provider))
       {
         // return if the route is not stale
         ZeroEntity previousModel = null;
-        if (previousModel != null && !(await provider.IsRouteStale(context, previousModel, args.Model)))
+        if (previousModel != null && !(await provider.IsRouteStale(context, previousModel, model)))
         {
           return;
         }
 
         // build and save new route
-        Route route = await provider.Create(context, args.Model);
+        Route route = await provider.Create(context, model);
         await StoreRoute(route);
       }
 
@@ -114,7 +114,7 @@ namespace zero.Core.Routing
 
       foreach (IRouteProvider dependentProvider in Providers.OrderByDescending(x => x.Priority))
       {
-        await foreach (Route dependentRoute in dependentProvider.SeedOnUpdate(context, args.Model))
+        await foreach (Route dependentRoute in dependentProvider.SeedOnUpdate(context, model))
         {
           await StoreRoute(dependentRoute);
         }
@@ -140,17 +140,17 @@ namespace zero.Core.Routing
       }
 
       int countUpdatedRoutes = countObsoleteRoutes - obsoleteRoutes.Count;
-      Logger.LogInformation("Route updates completed (+{added}/~{updated}/-{removed}) for {model} (id: {id})", countRoutes - countUpdatedRoutes, countUpdatedRoutes, obsoleteRoutes.Count, args.Model.Name, args.Model.Id);
+      Logger.LogInformation("Route updates completed (+{added}/~{updated}/-{removed}) for {model} (id: {id})", countRoutes - countUpdatedRoutes, countUpdatedRoutes, obsoleteRoutes.Count, model.Name, model.Id);
     }
 
 
     /// <inheritdoc />
-    public override async Task Deleted(DeleteParameters args)
+    public override async Task Deleted(InterceptorParameters args, ZeroEntity model)
     {
       RoutingContext context = GetContext();
 
-      string id = args.Model.Id;
-      List<Route> dependencies = await GetDependencies(context, args.Model);
+      string id = model.Id;
+      List<Route> dependencies = await GetDependencies(context, model);
 
       await context.Store.Raven.PurgeAsync<Route>(context.Context.Application.Database, $"where c.Dependencies IN ($id)", new Raven.Client.Parameters()
       {
@@ -160,7 +160,7 @@ namespace zero.Core.Routing
       // delete associated redirects for obsolete routes
       await RedirectAutomation.DeleteForRoutes(dependencies.ToArray());
 
-      Logger.LogInformation("Route deletes completed (-{removed}) for {model} (id: {id})", dependencies.Count, args.Model.Name, args.Model.Id);
+      Logger.LogInformation("Route deletes completed (-{removed}) for {model} (id: {id})", dependencies.Count, model.Name, model.Id);
     }
 
 
