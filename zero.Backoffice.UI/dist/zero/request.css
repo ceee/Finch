@@ -1,0 +1,59 @@
+.laola-teampicker .ui-select-button-icon.is-image, .laola-teampicker .ui-select-button-icon {
+  padding: 0;
+  border-radius: 50px;
+}
+.laola-teampicker .ui-select-button-icon.is-image img, .laola-teampicker .ui-select-button-icon img {
+  border-radius: 50px;
+}.laola-offer-overlay .-text {
+  line-height: 1.5;
+  font-size: var(--font-size);
+}.laola-offer-overlay .-text {
+  line-height: 1.5;
+  font-size: var(--font-size);
+}.laola-request .shop-order-main .ui-tabs-list {
+  display: block;
+  padding-top: 0;
+  margin-bottom: 0;
+}
+.laola-request .ui-table-head {
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+.laola-request-top-box {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--color-line);
+}
+.laola-request-offer {
+  padding-top: var(--padding);
+  margin-top: var(--padding);
+  border-top: 1px solid var(--color-line);
+}
+.laola-request-offerpreview .ui-property-content {
+  max-width: 100%;
+}
+.laola-request-offerpreview .ui-property-label {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-gap: var(--padding-s);
+  align-items: center;
+}
+.laola-request-offerpreview .ui-property-label .-image {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 48px;
+  background: var(--color-button-light);
+  border: 1px solid transparent;
+  color: var(--color-text);
+  text-align: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.laola-request-offerpreview-message {
+  line-height: 1.4;
+}

@@ -1,9 +1,8 @@
 ﻿using System;
-using zero.Core.Blueprints;
 
 namespace zero;
 
-public class BlueprintOptions : ZeroBackofficeCollection<Blueprint>, IZeroCollectionOptions
+public class BlueprintOptions : OptionsEnumerable<Blueprint>, IOptionsEnumerable
 {
   public BlueprintOptions()
   {

@@ -1,0 +1,10 @@
+.translation {
+  text-align: left;
+}
+.translation-items {
+  margin-top: var(--padding);
+}
+.translation-items .ui-property + .ui-property,
+.translation-items .ui-split + .ui-property {
+  margin-top: 0;
+}

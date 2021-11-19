@@ -1,0 +1,6 @@
+.shop-customers .ui-table-cell[table-field=address] .ui-icon {
+  flex-shrink: 0;
+  margin-right: 10px;
+  position: relative;
+  top: -1px;
+}

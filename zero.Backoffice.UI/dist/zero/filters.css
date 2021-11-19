@@ -1,0 +1,30 @@
+.shop-filter-item {
+  margin: 0;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-gap: 20px;
+  align-items: center;
+  font-size: var(--font-size);
+}
+.shop-filter-item-handle {
+  cursor: grab;
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  margin-top: -1px;
+}
+.shop-filter-item + .shop-filter-item {
+  margin-top: var(--padding-xxs);
+}
+.shop-filter-item-name {
+  margin: 0;
+  color: var(--color-text);
+  padding: 15px 0;
+}
+.shop-filter-item-name span {
+  display: inline-block;
+  font-size: var(--font-size-s);
+  color: var(--color-text-dim);
+  margin-top: 3px;
+}

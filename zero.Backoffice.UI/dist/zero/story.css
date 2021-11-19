@@ -1,0 +1,13 @@
+
+.story .editor
+{
+  max-width: 1060px;
+}
+.story .editor .ui-tab.ui-box:first-child
+{
+  padding: 80px 0;
+}
+.story .ui-tab.ui-box:first-child .editor-tab-headline
+{
+  display: none;
+}

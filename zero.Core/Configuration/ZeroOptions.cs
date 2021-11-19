@@ -27,7 +27,6 @@ public class ZeroOptions : IZeroOptions
     Icons = new();
     Services = new();
     Blueprints = new();
-    Routing = new();
     Interceptors = new();
     Applications = new();
 
@@ -117,9 +116,6 @@ public class ZeroOptions : IZeroOptions
 
   /// <inheritdoc />
   public BlueprintOptions Blueprints { get; private set; }
-
-  /// <inheritdoc />
-  public RoutingOptions Routing { get; private set; }
 
   /// <inheritdoc />
   public InterceptorOptions Interceptors { get; private set; }
@@ -231,11 +227,6 @@ public interface IZeroOptions
   /// 
   /// </summary>
   BlueprintOptions Blueprints { get; }
-
-  /// <summary>
-  /// 
-  /// </summary>
-  RoutingOptions Routing { get; }
 
   /// <summary>
   /// 

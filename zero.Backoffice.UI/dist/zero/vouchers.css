@@ -1,0 +1,4 @@
+.laola-vouchers .shop-orders-col-state2[data-state=expired], .laola-vouchers .shop-orders-col-state2[data-state=disabled], .laola-vouchers .shop-orders-col-state2[data-state=pending] {
+  font-weight: 400;
+  color: var(--color-text-dim);
+}

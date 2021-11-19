@@ -1,0 +1,192 @@
+@charset "UTF-8";
+.pages-move .ui-box {
+  margin: 0;
+  padding: 16px 0;
+}
+.pages-move .ui-box .ui-tree-item.is-disabled {
+  opacity: 0.5;
+}
+.pages-move .ui-box .ui-tree-item.is-selected, .pages-move .ui-box .ui-tree-item:hover:not(.is-disabled) {
+  background: var(--color-tree-selected);
+}
+.pages-move .ui-box .ui-tree-item.is-selected:after {
+  font-family: "Feather";
+  content: "";
+  font-size: 16px;
+  color: var(--color-primary);
+}
+.pages-move .ui-box .ui-tree-item.is-selected .ui-tree-item-text {
+  font-weight: bold;
+}
+.pages-move content {
+  padding-top: 0;
+}
+.pages-move-text {
+  margin: 0 0 20px;
+}.ui-media-overlay {
+  text-align: left;
+}
+.ui-media-overlay-preview {
+  height: 200px;
+  background: var(--color-bg-mid);
+  border-radius: var(--radius) var(--radius) 0 0;
+  margin-top: var(--padding);
+  padding: 10px;
+  overflow: hidden;
+}
+.ui-media-overlay-preview-image {
+  border-radius: 3px;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  display: block;
+  color: transprent;
+  overflow: hidden;
+  font-size: 0;
+  position: relative;
+  z-index: 2;
+}
+.ui-media-overlay-infos {
+  background: var(--color-bg-mid);
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 15px 20px;
+}
+.ui-media-overlay-infos .ui-property-content {
+  color: var(--color-text-dim);
+}
+.ui-media-overlay-fields {
+  margin-top: var(--padding);
+}
+.ui-media-overlay-fields .ui-property + .ui-property, .ui-media-overlay-fields .ui-split + .ui-property {
+  margin-top: 0;
+}
+
+/*.translation-items
+{
+  margin-top: var(--padding);
+
+  .ui-property + .ui-property,
+  .ui-split + .ui-property
+  {
+    margin-top: 0;
+  }
+}*/.media-item {
+  width: 100%;
+  min-height: 200px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 10px;
+  align-items: center;
+  line-height: 1.4;
+  color: var(--color-text);
+  font-size: var(--font-size);
+  border-radius: var(--radius);
+}
+.media-items.is-selecting .media-item {
+  opacity: 0.5;
+}
+.media-items.is-selecting .media-item.is-selected {
+  opacity: 1;
+}
+.media-item-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 200px;
+  width: 100%;
+  background: var(--color-box);
+  border-radius: var(--radius);
+  overflow: visible !important;
+  position: relative;
+  text-align: center;
+  box-shadow: var(--shadow-short);
+}
+.media-item-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: relative;
+  border-radius: var(--radius);
+  z-index: 1;
+}
+.media-item-preview.is-covered .media-item-image {
+  object-fit: cover;
+}
+.media-item-check {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+  border: 5px solid var(--color-bg);
+  position: absolute;
+  z-index: 2;
+  left: -13px;
+  top: -13px;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  box-shadow: 1px 1px 0 1px var(--color-shadow);
+  font-size: 11px;
+}
+.is-selected .media-item-check {
+  display: inline-flex;
+}
+.media-item-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  padding-right: 16px;
+  font-weight: bold;
+}
+.media-item-text .-minor {
+  font-weight: 400;
+  color: var(--color-text-dim);
+}
+.media-item-shared {
+  margin-left: 0.4em;
+  color: var(--color-synchronized);
+  position: relative;
+  top: 2px;
+}.media {
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+}
+.media-content {
+  height: 100vh;
+  overflow-y: auto;
+}
+.media-items .ui-datagrid-items {
+  gap: var(--padding);
+}
+input[type=file].media-item-upload {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  bottom: 0;
+  opacity: 0.001;
+  cursor: pointer;
+}
+.media-items-hierarchy-item {
+  font-family: var(--font);
+  margin: 0;
+  font-size: var(--font-size-l);
+  font-weight: 400;
+  color: var(--color-text-dim);
+}
+.media-items-hierarchy-item a {
+  color: var(--color-text-dim);
+}
+.media-items-hierarchy-item:last-child a {
+  font-weight: 700;
+  color: var(--color-text);
+}
+.media-items-hierarchy-item a:hover {
+  color: var(--color-text);
+}

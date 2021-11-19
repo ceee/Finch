@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <PackageId>zero.Core</PackageId>
@@ -7,18 +7,6 @@
     <TargetFramework>net6.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="old\Entities\Messages\**" />
-    <Compile Remove="Numbers\**" />
-    <Compile Remove="Subscriptions\**" />
-    <EmbeddedResource Remove="old\Entities\Messages\**" />
-    <EmbeddedResource Remove="Numbers\**" />
-    <EmbeddedResource Remove="Subscriptions\**" />
-    <None Remove="old\Entities\Messages\**" />
-    <None Remove="Numbers\**" />
-    <None Remove="Subscriptions\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
