@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using zero.Core.Collections;
 
 namespace zero.Core.Integrations
 {

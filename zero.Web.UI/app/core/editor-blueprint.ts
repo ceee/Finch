@@ -81,8 +81,9 @@ function unlock(config, model, field)
 export function createBlueprintConfig(zero, editor, model)
 {
   let blueprintAlias = editor.blueprintAlias;
+  let config = zero.config.blueprints.find(x => x.alias == blueprintAlias);
 
-  if (!blueprintAlias)
+  if (!blueprintAlias || !config)
   {
     return {
       alias: blueprintAlias,
@@ -96,7 +97,7 @@ export function createBlueprintConfig(zero, editor, model)
     };
   }
 
-  let config = zero.config.blueprints.find(x => x.alias == blueprintAlias);
+  
 
   // check for blueprint availability
   //config.isParent = this.value && this.$route.query.scope === 'shared';

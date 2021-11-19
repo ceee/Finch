@@ -9,13 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Entities\Messages\**" />
+    <Compile Remove="old\Entities\Messages\**" />
     <Compile Remove="Numbers\**" />
     <Compile Remove="Subscriptions\**" />
-    <EmbeddedResource Remove="Entities\Messages\**" />
+    <EmbeddedResource Remove="old\Entities\Messages\**" />
     <EmbeddedResource Remove="Numbers\**" />
     <EmbeddedResource Remove="Subscriptions\**" />
-    <None Remove="Entities\Messages\**" />
+    <None Remove="old\Entities\Messages\**" />
     <None Remove="Numbers\**" />
     <None Remove="Subscriptions\**" />
   </ItemGroup>
