@@ -10,7 +10,7 @@ using zero.Core.Entities;
 using zero.Core.Validation;
 
 
-public abstract partial class EntityCollection<T> : IEntityCollection<T> where T : ZeroIdEntity
+public abstract partial class EntityCollection<T> : IEntityCollection<T> where T : ZeroIdEntity, new()
 {
   /// <inheritdoc />
   public Guid Guid { get; private set; } = Guid.NewGuid();
@@ -23,14 +23,25 @@ public abstract partial class EntityCollection<T> : IEntityCollection<T> where T
 
   protected IZeroContext Context { get; private set; }
 
-  protected EntityCollectionOptions Options { get; private set; }
+  protected EntityCollectionOptions Options { get; set; }
 
-  protected InterceptorRunner<T> Interceptors { get; private set; }
+  protected IInterceptorRunner<T> Interceptors { get; private set; }
 
 
-  public EntityCollection()
+  public EntityCollection(ICollectionContext<T> collectionContext)
   {
+    Context = collectionContext.Context;
+    Interceptors = collectionContext.Interceptors;
     Options = new(true);
+  }
+
+
+  /// <summary>
+  /// Get new instance of an entity
+  /// </summary>
+  public virtual Task<T> Empty()
+  {
+    return Task.FromResult(new T());
   }
 
 
@@ -60,8 +71,13 @@ public abstract partial class EntityCollection<T> : IEntityCollection<T> where T
 
 
 
-public interface IEntityCollection<T> where T : ZeroIdEntity
+public interface IEntityCollection<T> where T : ZeroIdEntity, new()
 {
+  /// <summary>
+  /// Get new instance of an entity
+  /// </summary>
+  Task<T> Empty();
+
   /// <summary>
   /// Get an entity by Id
   /// </summary>
@@ -70,7 +86,7 @@ public interface IEntityCollection<T> where T : ZeroIdEntity
   /// <summary>
   /// Get entities by ids
   /// </summary>
-  Task<Dictionary<string, T>> Load(params string[] ids);
+  Task<Dictionary<string, T>> Load(IEnumerable<string> ids);
 
   /// <summary>
   /// Get entities by query

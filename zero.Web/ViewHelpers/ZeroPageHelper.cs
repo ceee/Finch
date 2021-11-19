@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using zero.Core.Api;
+using zero.Core.Collections;
 using zero.Core.Entities;
-using zero.Core.Routing;
 using zero.Core.Extensions;
 
 namespace zero.Web.ViewHelpers
@@ -13,7 +12,7 @@ namespace zero.Web.ViewHelpers
   {
     HttpContext HttpContext;
 
-    IMediaApi MediaApi;
+    IMediaCollection Media;
 
     /// <summary>
     /// Media cache for repetitive queries within an HTTP request
@@ -21,10 +20,10 @@ namespace zero.Web.ViewHelpers
     Dictionary<string, Media> Cache { get; set; } = new Dictionary<string, Media>();
 
 
-    public ZeroPageHelper(IHttpContextAccessor httpContextAccessor, IMediaApi mediaApi)
+    public ZeroPageHelper(IHttpContextAccessor httpContextAccessor, IMediaCollection media)
     {
       HttpContext = httpContextAccessor.HttpContext;
-      MediaApi = mediaApi;
+      Media = media;
     }
 
 
@@ -38,7 +37,7 @@ namespace zero.Web.ViewHelpers
 
       if (!Cache.TryGetValue(id, out Media media))
       {
-        media = await MediaApi.GetById(id);
+        media = await Media.Load(id);
         Cache.Add(id, media);
       }
 
@@ -66,7 +65,7 @@ namespace zero.Web.ViewHelpers
 
       if (remoteIds.Count > 0)
       {
-        Dictionary<string, Media> remoteItems = await MediaApi.GetById(remoteIds);
+        Dictionary<string, Media> remoteItems = await Media.Load(remoteIds);
 
         foreach (var item in remoteItems)
         {

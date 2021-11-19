@@ -7,7 +7,7 @@ using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Options;
 
-public class InterceptorRunner<T> : IInterceptorRunner<T> where T : ZeroIdEntity
+public class InterceptorRunner<T> : IInterceptorRunner<T> where T : ZeroIdEntity, new()
 {
   protected IZeroContext Context { get; set; }
 
@@ -64,7 +64,7 @@ public class InterceptorRunner<T> : IInterceptorRunner<T> where T : ZeroIdEntity
 }
 
 
-public interface IInterceptorRunner<T> where T : ZeroIdEntity
+public interface IInterceptorRunner<T> where T : ZeroIdEntity, new()
 {
   InterceptorInstruction<T> CreateInstruction(EntityCollection<T> collection, InterceptorType type, T model);
 }

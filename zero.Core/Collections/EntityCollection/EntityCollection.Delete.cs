@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 
-public abstract partial class EntityCollection<T> : IEntityCollection<T> where T : ZeroIdEntity
+public abstract partial class EntityCollection<T>
 {
   /// <inheritdoc />
   public virtual async Task<EntityResult<T>> Delete(string id)

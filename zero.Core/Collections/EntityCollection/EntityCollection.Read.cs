@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using zero.Core.Entities;
 using zero.Core.Extensions;
 
-public abstract partial class EntityCollection<T> : IEntityCollection<T> where T : ZeroIdEntity
+public abstract partial class EntityCollection<T>
 {
   /// <inheritdoc />
   public virtual async Task<T> Load(string id, string changeVector = null)
@@ -27,7 +27,7 @@ public abstract partial class EntityCollection<T> : IEntityCollection<T> where T
 
 
   /// <inheritdoc />
-  public virtual async Task<Dictionary<string, T>> Load(params string[] ids)
+  public virtual async Task<Dictionary<string, T>> Load(IEnumerable<string> ids)
   {
     ids = ids.Distinct().ToArray();
 

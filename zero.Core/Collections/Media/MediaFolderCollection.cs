@@ -1,38 +1,32 @@
 ﻿using FluentValidation;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
-using Raven.Client.Documents.Session;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using zero.Core.Collections;
 using zero.Core.Database.Indexes;
-using zero.Core.Entities;
-using zero.Core.Extensions;
-using zero.Core.Validation;
 
-namespace zero.Core.Api
+namespace zero.Core.Collections
 {
-  public class MediaFolderApi : BackofficeApi, IMediaFolderApi
+  public class MediaFolderCollection : EntityCollection<MediaFolder>, IMediaFolderCollection
   {
-    IValidator<MediaFolder> Validator;
-
-
-    public MediaFolderApi(ICollectionContext store, IValidator<MediaFolder> validator) : base(store)
+    public MediaFolderCollection(ICollectionContext<MediaFolder> context) : base(context)
     {
-      Validator = validator;
+      Options = new(true);
     }
 
 
     /// <inheritdoc />
-    public async Task<MediaFolder> GetById(string id)
+    public override Task<EntityResult<MediaFolder>> Save(MediaFolder model)
     {
-      return await GetById<MediaFolder>(id);
+      model.IsActive = true;
+      return base.Save(model);
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<MediaFolder>> GetAll(string parentId = null)
+    public async Task<List<MediaFolder>> LoadByParent(string parentId = null)
     {
       return await Session.Query<MediaFolder>()
         .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
@@ -42,10 +36,27 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IList<TreeItem>> GetAllAsTree(string parentId = null, string activeId = null)
+    public async Task<EntityResult<MediaFolder>> Move(string id, string parentId)
     {
-      List<TreeItem> items = new List<TreeItem>();
-      string[] openIds = new string[0] { };
+      MediaFolder model = await Load(id);
+      MediaFolder parent = await Load(parentId);
+
+      if (model == null || (!parentId.IsNullOrEmpty() && parent == null))
+      {
+        return EntityResult<MediaFolder>.Fail("@errors.idnotfound");
+      }
+
+      model.ParentId = parent?.Id;
+
+      return await Save(model);
+    }
+
+
+    /// <inheritdoc />
+    public async Task<List<TreeItem>> LoadAsTree(string parentId = null, string activeId = null)
+    {
+      List<TreeItem> items = new();
+      string[] openIds = Array.Empty<string>();
 
       IList<MediaFolder> folders = await Session.Query<MediaFolder>()
         .WhereIf(x => x.ParentId == parentId, !parentId.IsNullOrEmpty(), x => x.ParentId == null)
@@ -99,27 +110,14 @@ namespace zero.Core.Api
             Name = "Inactive"
           } : null
         });
-      } 
-
-      //if (parentId.IsNullOrEmpty())
-      //{
-      //  items.Add(new TreeItem()
-      //  {
-      //    Id = "recyclebin",
-      //    ParentId = null,
-      //    Sort = 99999,
-      //    Name = "@recyclebin.name",
-      //    Icon = "fth-trash",
-      //    HasChildren = false
-      //  });
-      //}
+      }
 
       return items;
     }
 
 
     /// <inheritdoc />
-    public async Task<IList<MediaFolder>> GetHierarchy(string id)
+    public async Task<List<MediaFolder>> GetHierarchy(string id)
     {
       MediaFolder_ByHierarchy.Result result = await Session.Query<MediaFolder_ByHierarchy.Result, MediaFolder_ByHierarchy>()
         .ProjectInto<MediaFolder_ByHierarchy.Result>()
@@ -139,73 +137,35 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<MediaFolder>> Save(MediaFolder model)
+    protected override void ValidationRules(ZeroValidator<MediaFolder> validator)
     {
-      model.IsActive = true;
-      return await SaveModel(model, Validator);
-    }
-
-
-    /// <inheritdoc />
-    public async Task<EntityResult<MediaFolder>> Move(string id, string parentId)
-    {
-      MediaFolder model = await GetById<MediaFolder>(id);
-      MediaFolder parent = await GetById<MediaFolder>(parentId);
-
-      if (model == null || (!parentId.IsNullOrEmpty() && parent == null))
-      {
-        return EntityResult<MediaFolder>.Fail("@errors.idnotfound");
-      }
-
-      model.ParentId = parent?.Id;
-
-      return await Save(model);
-    }
-
-
-    /// <inheritdoc />
-    public async Task<EntityResult<MediaFolder>> Delete(string id)
-    {
-      return await DeleteById<MediaFolder>(id);
+      validator.RuleFor(x => x.Name).Length(2, 80);
+      validator.RuleFor(x => x.IsActive).Equal(true);
+      validator.RuleFor(x => x.ParentId).Exists(Context.Store);
     }
   }
 
 
-  public interface IMediaFolderApi : IBackofficeApi
+  public interface IMediaFolderCollection : IEntityCollection<MediaFolder>
   {
-    /// <summary>
-    /// Get application by Id
-    /// </summary>
-    Task<MediaFolder> GetById(string id);
-
     /// <summary>
     /// Get hierarchy for a folder
     /// </summary>
-    Task<IList<MediaFolder>> GetHierarchy(string id);
+    Task<List<MediaFolder>> GetHierarchy(string id);
 
     /// <summary>
     /// Get all folders with the specified parent or on root
     /// </summary>
-    Task<IList<MediaFolder>> GetAll(string parentId = null);
+    Task<List<MediaFolder>> LoadByParent(string parentId = null);
 
     /// <summary>
     /// Get all folders with the specified parent or on root for tree output
     /// </summary>
-    Task<IList<TreeItem>> GetAllAsTree(string parentId = null, string activeId = null);
-
-    /// <summary>
-    /// Creates or updates a folder
-    /// </summary>
-    Task<EntityResult<MediaFolder>> Save(MediaFolder model);
+    Task<List<TreeItem>> LoadAsTree(string parentId = null, string activeId = null);
 
     /// <summary>
     /// Move a folder to a new parent
     /// </summary>
     Task<EntityResult<MediaFolder>> Move(string id, string parentId);
-
-    /// <summary>
-    /// Deletes a folder
-    /// </summary>
-    Task<EntityResult<MediaFolder>> Delete(string id);
   }
 }

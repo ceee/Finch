@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using zero.Core.Collections;
 using zero.Core.Entities;
 
-public class InterceptorInstruction<T> where T : ZeroIdEntity
+public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
 {
   public Guid Guid { get; private set; } = Guid.NewGuid();
 
@@ -40,7 +40,7 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity
   {
     ICollectionInterceptor<T> interceptor = default;
 
-    await HandleBefore(interceptor);
+    //await HandleBefore(interceptor);
     //await interceptor.Created(Parameters, Model);
     //interceptor.Created(new InterceptorParameters()
     //{
@@ -48,7 +48,7 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity
     //})
 
     await Task.Delay(0);
-    return false;
+    return true;
   }
 
 

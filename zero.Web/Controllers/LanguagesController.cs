@@ -11,7 +11,7 @@ using zero.Core.Identity;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Read)]
-  public class LanguagesController : BackofficeCollectionController<Language, ILanguagesCollection>
+  public class LanguagesController : ZeroBackofficeCollectionController<Language, ILanguagesCollection>
   {
     public LanguagesController(ILanguagesCollection collection) : base(collection)
     {
@@ -19,13 +19,13 @@ namespace zero.Web.Controllers
     }
 
 
-    public IList<Culture> GetAllCultures()
+    public List<Culture> GetAllCultures()
     {
       return Collection.GetAllCultures();
     }
 
 
-    public IList<Culture> GetSupportedCultures()
+    public List<Culture> GetSupportedCultures()
     {
       return Collection.GetAllCultures(Options.SupportedLanguages);
     }
@@ -34,7 +34,7 @@ namespace zero.Web.Controllers
     public override async Task<ListResult<Language>> GetByQuery([FromQuery] ListBackofficeQuery<Language> query)
     {
       query.OrderQuery = q => q.OrderByDescending(x => x.CreatedDate);
-      return await Collection.GetByQuery<zero_Languages>(query);
+      return await Collection.Load<zero_Languages>(query);
     }
   }
 }

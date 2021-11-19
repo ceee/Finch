@@ -1,9 +1,16 @@
-﻿using zero.Core.Collections;
-using zero.Core.Database;
-using zero.Core.Options;
-
-namespace zero.Core.Collections
+﻿namespace zero.Core.Collections
 {
+  public class CollectionContext<T> : CollectionContext, ICollectionContext<T> where T : ZeroIdEntity, new()
+  {
+    public IInterceptorRunner<T> Interceptors { get; private set; }
+
+    public CollectionContext(IZeroContext context, IInterceptorRunner<T> interceptors) : base(context)
+    {
+      Interceptors = interceptors;
+    }
+  }
+
+
   public class CollectionContext : ICollectionContext
   {
     public IZeroStore Store { get; private set; }
@@ -13,12 +20,18 @@ namespace zero.Core.Collections
     public IZeroOptions Options { get; private set; }
 
 
-    public CollectionContext(IZeroStore store, IZeroContext context, IZeroOptions options)
+    public CollectionContext(IZeroContext context)
     {
-      Store = store;
+      Store = context.Store;
+      Options = context.Options;
       Context = context;
-      Options = options;
     }
+  }
+
+
+  public interface ICollectionContext<T> : ICollectionContext where T : ZeroIdEntity, new()
+  {
+    IInterceptorRunner<T> Interceptors { get; }
   }
 
 

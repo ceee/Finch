@@ -6,7 +6,7 @@ using zero.Core.Entities;
 using zero.Core.Extensions;
 
 
-public class InterceptorParameters<T> : InterceptorParameters where T : ZeroIdEntity
+public class InterceptorParameters<T> : InterceptorParameters where T : ZeroIdEntity, new()
 {
   /// <summary>
   /// Access to the collection which has initiated the interceptor instruction

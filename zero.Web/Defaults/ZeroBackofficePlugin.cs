@@ -66,36 +66,29 @@ namespace zero.Web.Defaults
       services.AddScoped<IRazorRenderer, RazorRenderer>();
 
       services.AddTransient<Application, Application>();
-      services.AddTransient<Country, Country>();
-      services.AddTransient<Language, Language>();
       services.AddTransient<Translation, Translation>();
       services.AddTransient<Page, Page>();
       services.AddTransient<RecycledEntity, RecycledEntity>();
-      services.AddTransient<Media, Media>();
-      services.AddTransient<MediaFolder, MediaFolder>();
       services.AddTransient<Preview, Preview>();
       services.AddTransient<Core.Routing.Route, Core.Routing.Route>();
 
       services.AddTransient<IValidator<Application>, ApplicationValidator>();
-      services.AddTransient<IValidator<Country>, CountryValidator>();
-      services.AddTransient<IValidator<MailTemplate>, MailTemplateValidator>();
-      services.AddTransient<IValidator<Language>, LanguageValidator>();
       services.AddTransient<IValidator<Translation>, TranslationValidator>();
       services.AddTransient<IValidator<Page>, PageValidator>();
-      services.AddTransient<IValidator<Media>, MediaValidator>();
-      services.AddTransient<IValidator<MediaFolder>, MediaFolderValidator>();
       services.AddTransient<IValidator<BackofficeUserRole>, UserRoleValidator>();
       services.AddTransient<IValidator<BackofficeUser>, BackofficeUserValidator>();
 
-      services.AddTransient<IApplicationsApi, ApplicationsApi>();
       services.AddTransient<ICountriesCollection, CountriesCollection>();
       services.AddTransient<ILanguagesCollection, LanguagesCollection>();
       services.AddTransient<ITranslationsCollection, TranslationsCollection>();
       services.AddTransient<IMediaCollection, MediaCollection>();
+      services.AddTransient<IMediaFolderCollection, MediaFolderCollection>();
       services.AddTransient<IPagesCollection, PagesCollection>();
+      services.AddTransient<IMailTemplatesCollection, MailTemplatesCollection>();
+
+      services.AddTransient<IApplicationsApi, ApplicationsApi>();
       services.AddTransient<IUserApi, UserApi>();
       services.AddTransient<IPreviewApi, PreviewApi>();
-      services.AddTransient<IMailTemplatesCollection, MailTemplatesCollection>();
 
       services.AddTransient<ISetupApi, SetupApi>();
       services.AddTransient<ISectionsApi, SectionsApi>();
@@ -104,8 +97,6 @@ namespace zero.Web.Defaults
       services.AddTransient<IUserRolesApi, UserRolesApi>();
       services.AddTransient<ISpacesApi, SpacesApi>();
       services.AddTransient<IPermissionsApi, PermissionsApi>();
-      services.AddTransient<IMediaApi, MediaApi>();
-      services.AddTransient<IMediaFolderApi, MediaFolderApi>();
       services.AddTransient<IModulesApi, ModulesApi>();
       services.AddTransient<IRecycleBinApi, RecycleBinApi>();
 
@@ -131,6 +122,8 @@ namespace zero.Web.Defaults
       services.AddTransient<IIntegrationsCollection, IntegrationsCollection>();
 
       services.AddScoped<ICollectionContext, CollectionContext>();
+      services.AddScoped(typeof(ICollectionContext<>), typeof(CollectionContext<>));
+      services.AddScoped(typeof(IInterceptorRunner<>), typeof(InterceptorRunner<>));
 
       services.AddScoped<ILocalizer, Localizer>();
       services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();

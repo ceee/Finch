@@ -10,7 +10,7 @@ using zero.Core.Identity;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Translations, PermissionsValue.Read)]
-  public class TranslationsController : BackofficeCollectionController<Translation, ITranslationsCollection>
+  public class TranslationsController : ZeroBackofficeCollectionController<Translation, ITranslationsCollection>
   {
     public TranslationsController(ITranslationsCollection collection) : base(collection) { }
 
@@ -18,7 +18,7 @@ namespace zero.Web.Controllers
     {
       query.SearchFor(entity => entity.Key, entity => entity.Value);
       query.OrderQuery = q => q.OrderByDescending(x => x.CreatedDate);
-      return await Collection.GetByQuery<zero_Translations>(query);
+      return await Collection.Load<zero_Translations>(query);
     }
   }
 }

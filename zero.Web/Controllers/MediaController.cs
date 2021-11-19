@@ -5,11 +5,9 @@ using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using zero.Core;
-using zero.Core.Api;
 using zero.Core.Collections;
 using zero.Core.Entities;
 using zero.Core.Identity;
@@ -18,14 +16,12 @@ using zero.Web.Models;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Sections.Media, PermissionsValue.True)]
-  public class MediaController : BackofficeCollectionController<Media, IMediaCollection>
+  public class MediaController : ZeroBackofficeCollectionController<Media, IMediaCollection>
   {
-    IMediaFolderApi MediaFolderApi;
     IPaths Paths;
 
-    public MediaController(IMediaCollection collection, IMediaFolderApi mediaFolderApi, IPaths paths) : base(collection)
+    public MediaController(IMediaCollection collection, IPaths paths) : base(collection)
     {
-      MediaFolderApi = mediaFolderApi;
       Paths = paths;
       PreviewTransform = (item, model) => model.Icon = "fth-globe";
     }
@@ -34,7 +30,7 @@ namespace zero.Web.Controllers
     public async Task<ListResult<MediaListItem>> GetListByQuery([FromQuery] MediaListItemQuery query)
     {
       query.IncludeInactive = true;
-      return await Collection.GetListByQuery(query);
+      return await Collection.Load(query);
     }
 
 
@@ -51,7 +47,7 @@ namespace zero.Web.Controllers
     public async Task<MediaListResultModel> GetAll([FromQuery] MediaListQuery query)
     {
       query.IncludeInactive = true;
-      ListResult<MediaListModel> items = (await Collection.GetByQuery(query)).MapTo(x => new MediaListModel()
+      ListResult<MediaListModel> items = (await Collection.Load(query)).MapTo(x => new MediaListModel()
       {
         Id = x.Id,
         IsFolder = false,
@@ -66,8 +62,8 @@ namespace zero.Web.Controllers
 
       if (!String.IsNullOrEmpty(query.FolderId))
       {
-        folder = await MediaFolderApi.GetById(query.FolderId);
-        hierarchy = await MediaFolderApi.GetHierarchy(query.FolderId);
+        folder = await Collection.Folders.Load(query.FolderId);
+        hierarchy = await Collection.Folders.GetHierarchy(query.FolderId);
       }   
 
       return new MediaListResultModel(items, null, folder, hierarchy);
@@ -77,7 +73,7 @@ namespace zero.Web.Controllers
     [HttpGet]
     public async Task<IActionResult> GetSource([FromQuery] string id, [FromQuery] MediaSourceSize size = MediaSourceSize.Original)
     {
-      string path = await Collection.GetSourceById(id, size);
+      string path = await Collection.GetSource(id, size);
 
       if (path == null)
       {

@@ -1,24 +1,45 @@
 ﻿using FluentValidation;
 using Raven.Client.Documents;
 using System.Threading.Tasks;
-using zero.Core.Entities;
+using zero.Core.Mails;
 
 namespace zero.Core.Collections
 {
-  public class MailTemplatesCollection : CollectionBase<MailTemplate>, IMailTemplatesCollection
+  public class MailTemplatesCollection : EntityCollection<MailTemplate>, IMailTemplatesCollection
   {
-    public MailTemplatesCollection(ICollectionContext context, IValidator<MailTemplate> validator) : base(context, validator) { }
+    protected IMailDispatcher Dispatcher { get; set; }
+
+
+    public MailTemplatesCollection(ICollectionContext<MailTemplate> context, IMailDispatcher dispatcher = null) : base(context)
+    {
+      Dispatcher = dispatcher;
+    }
 
 
     /// <inheritdoc />
     public async Task<MailTemplate> GetByKey(string key)
     {
-      return await Query.FirstOrDefaultAsync(x => x.Key == key);
+      return await Session.Query<MailTemplate>().FirstOrDefaultAsync(x => x.Key == key);
+    }
+
+
+    /// <inheritdoc />
+    protected override void ValidationRules(ZeroValidator<MailTemplate> validator)
+    {
+      validator.RuleFor(x => x.SenderEmail).Email();
+
+      if (Dispatcher != null)
+      {
+        validator.RuleFor(x => x.SenderEmail).MustAsync(async (value, ct) =>
+        {
+          return await Dispatcher.IsSenderSupported(value);
+        }).WithMessage("@mailTemplate.errors.senderNotAllowed");
+      }
     }
   }
 
 
-  public interface IMailTemplatesCollection : ICollectionBase<MailTemplate>
+  public interface IMailTemplatesCollection : IEntityCollection<MailTemplate>
   {
     /// <summary>
     /// Get mail template by associated key

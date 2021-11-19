@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Raven.Client.Documents;
 using System.Threading.Tasks;
 using zero.Core.Collections;
 using zero.Core.Database.Indexes;
@@ -9,7 +8,7 @@ using zero.Core.Identity;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Mails, PermissionsValue.Read)]
-  public class MailTemplatesController : BackofficeCollectionController<MailTemplate, IMailTemplatesCollection>
+  public class MailTemplatesController : ZeroBackofficeCollectionController<MailTemplate, IMailTemplatesCollection>
   {
     public MailTemplatesController(IMailTemplatesCollection collection) : base(collection)
     {
@@ -19,7 +18,7 @@ namespace zero.Web.Controllers
     public override async Task<ListResult<MailTemplate>> GetByQuery([FromQuery] ListBackofficeQuery<MailTemplate> query)
     {
       query.SearchFor(entity => entity.Name, entity => entity.Key, entity => entity.Subject);
-      return await Collection.GetByQuery<zero_MailTemplates>(query);
+      return await Collection.Load<zero_MailTemplates>(query);
     }
   }
 }

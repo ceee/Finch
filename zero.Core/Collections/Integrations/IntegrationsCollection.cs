@@ -5,27 +5,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using zero.Core.Entities;
-using zero.Core.Extensions;
 using zero.Core.Integrations;
-using zero.Core.Options;
 
 namespace zero.Core.Collections
 {
-  public class IntegrationsCollection : CollectionBase<Integration>, IIntegrationsCollection
+  public class IntegrationsCollection : EntityCollection<Integration>, IIntegrationsCollection
   {
     /// <inheritdoc />
     public IReadOnlyCollection<IntegrationType> RegisteredTypes { get; private set; }
 
-    protected IZeroOptions Options { get; private set; }
-
     protected ILogger<IntegrationsCollection> Logger { get; private set; }
 
 
-    public IntegrationsCollection(ICollectionContext context, IZeroOptions options, ILogger<IntegrationsCollection> logger) : base(context)
+    public IntegrationsCollection(ICollectionContext<Integration> context, ILogger<IntegrationsCollection> logger) : base(context)
     {
-      Options = options;
-      RegisteredTypes = Options.Integrations.GetAllItems();
+      Options = new(true);
+      RegisteredTypes = Context.Options.Integrations.GetAllItems();
       Logger = logger;
     }
 
@@ -94,7 +89,7 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public override async Task<ListResult<Integration>> GetByQuery(ListQuery<Integration> query)
+    public override async Task<ListResult<Integration>> Load(ListQuery<Integration> query)
     {
       List<Integration> result = new();
       List<Integration> models = await Session.Query<Integration>().ToListAsync();
@@ -198,7 +193,7 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public async Task<EntityResult<Integration>> Delete(string alias)
+    public async Task<EntityResult<Integration>> DeleteByAlias(string alias)
     {
       return await base.Delete(await GetByAlias(alias));
     }
@@ -222,7 +217,7 @@ namespace zero.Core.Collections
         entity.TypeAlias = type.Alias;
       }
 
-      return WhenActive(entity);
+      return WhenActive(entity) as T;
     }
   }
 
@@ -233,11 +228,6 @@ namespace zero.Core.Collections
     /// Get all registered integration types
     /// </summary>
     IReadOnlyCollection<IntegrationType> RegisteredTypes { get; }
-
-    /// <summary>
-    /// Include entities with IsActive=false for GET queries
-    /// </summary>
-    void WithInactive(bool include = true);
 
     /// <summary>
     /// Get new integration model for the specified integration type alias
@@ -267,7 +257,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Get all integrations with the specified query
     /// </summary>
-    Task<ListResult<Integration>> GetByQuery(ListQuery<Integration> query);
+    Task<ListResult<Integration>> Load(ListQuery<Integration> query);
 
     /// <summary>
     /// Get all integration types with their configuration status
@@ -292,6 +282,6 @@ namespace zero.Core.Collections
     /// <summary>
     /// Deletes configuration of an integration and disables it
     /// </summary>
-    Task<EntityResult<Integration>> Delete(string alias);
+    Task<EntityResult<Integration>> DeleteByAlias(string alias);
   }
 }

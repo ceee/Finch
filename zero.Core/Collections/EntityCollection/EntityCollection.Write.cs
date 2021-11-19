@@ -9,7 +9,7 @@ using zero.Core.Entities;
 using zero.Core.Extensions;
 using zero.Core.Utils;
 
-public abstract partial class EntityCollection<T> : IEntityCollection<T> where T : ZeroIdEntity
+public abstract partial class EntityCollection<T>
 {
   /// <inheritdoc />
   public virtual async Task<EntityResult<T>> Save(T model)

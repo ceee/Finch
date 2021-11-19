@@ -1,36 +1,25 @@
-﻿using FluentValidation;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using zero.Core.Entities;
+﻿using System.Threading.Tasks;
 
 namespace zero.Core.Collections
 {
-  public class TranslationsCollection : CollectionBase<Translation>, ITranslationsCollection
+  public class TranslationsCollection : EntityCollection<Translation>, ITranslationsCollection
   {
-    public TranslationsCollection(ICollectionContext context, IValidator<Translation> validator) : base(context, validator) { }
+    public TranslationsCollection(ICollectionContext<Translation> context) : base(context) { }
 
 
     /// <inheritdoc />
-    public async Task<string> GetStringById(string id)
+    public async Task<string> LoadString(string id)
     {
-      return (await GetById(id))?.Value;
-    }
-
-    /// <inheritdoc />
-    public override IAsyncEnumerable<Translation> Stream()
-    {
-      return base.Stream(q => q.OrderByDescending(x => x.Name));
+      return (await Load(id))?.Value;
     }
   }
 
 
-  public interface ITranslationsCollection : ICollectionBase<Translation>
+  public interface ITranslationsCollection : IEntityCollection<Translation>
   {
     /// <summary>
     /// Get a translated string by id
     /// </summary>
-    Task<string> GetStringById(string id);
+    Task<string> LoadString(string id);
   }
 }

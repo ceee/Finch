@@ -1,27 +1,19 @@
 ﻿using FluentValidation;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
-using System.Collections.Generic;
-using zero.Core.Entities;
-using zero.Core.Extensions;
 
 namespace zero.Core.Collections
 {
-  public class CountriesCollection : CollectionBase<Country>, ICountriesCollection
+  public class CountriesCollection : EntityCollection<Country>, ICountriesCollection
   {
-    public CountriesCollection(ICollectionContext context, IValidator<Country> validator) : base(context, validator) { }
-
+    public CountriesCollection(ICollectionContext<Country> context) : base(context) { }
 
     /// <inheritdoc />
-    public override IAsyncEnumerable<Country> Stream()
+    protected override void ValidationRules(ZeroValidator<Country> validator)
     {
-      return base.Stream(q => q.OrderByDescending(x => x.IsPreferred).ThenBy(x => x.Name));
+      validator.RuleFor(x => x.Code).Length(2).Unique(Session);
+      validator.RuleFor(x => x.Name).Length(2, 120);
     }
   }
 
 
-  public interface ICountriesCollection : ICollectionBase<Country>
-  {
-
-  }
+  public interface ICountriesCollection : IEntityCollection<Country> { }
 }

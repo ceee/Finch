@@ -121,7 +121,7 @@ namespace zero.Web.Controllers
     }
 
 
-    public IList<PreviewModel> Previews<T>(Dictionary<string, T> items, Action<T, PreviewModel> transform = null) where T : ZeroEntity
+    public IList<PreviewModel> Previews<T>(Dictionary<string, T> items, Action<T, PreviewModel> transform = null) where T : ZeroIdEntity
     {
       IList<PreviewModel> previews = new List<PreviewModel>();
 
@@ -142,9 +142,13 @@ namespace zero.Web.Controllers
         {
           PreviewModel model = new()
           {
-            Id = item.Value.Id,
-            Name = item.Value.Name
+            Id = item.Value.Id
           };
+
+          if (item.Value is ZeroEntity)
+          {
+            model.Name = (item.Value as ZeroEntity).Name;
+          }
 
           transform?.Invoke(item.Value, model);
 
@@ -157,7 +161,7 @@ namespace zero.Web.Controllers
 
 
 
-    public async Task<IList<SelectModel>> SelectList<T>(IAsyncEnumerable<T> enumerable, Action<T, SelectModel> transform = null) where T : ZeroEntity
+    public async Task<IList<SelectModel>> SelectList<T>(IAsyncEnumerable<T> enumerable, Action<T, SelectModel> transform = null) where T : ZeroIdEntity
     {
       List<SelectModel> items = new List<SelectModel>();
 
@@ -165,10 +169,14 @@ namespace zero.Web.Controllers
       {
         SelectModel model = new()
         {
-          Id = item.Id,
-          Name = item.Name,
-          IsActive = item.IsActive
+          Id = item.Id
         };
+
+        if (item is ZeroEntity)
+        {
+          model.Name = (item as ZeroEntity).Name;
+          model.IsActive = (item as ZeroEntity).IsActive;
+        }
 
         transform?.Invoke(item, model);
 

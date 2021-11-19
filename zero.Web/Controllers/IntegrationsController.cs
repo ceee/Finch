@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using zero.Core.Collections;
 using zero.Core.Entities;
@@ -17,7 +16,6 @@ namespace zero.Web.Controllers
     public IntegrationsController(IIntegrationsCollection collection)
     {
       Collection = collection;
-      Collection.WithInactive();
     }
 
 
@@ -27,7 +25,7 @@ namespace zero.Web.Controllers
     public async Task<EditModel<Integration>> GetByAlias([FromQuery] string alias) => Edit(await Collection.GetByAlias(alias));
 
 
-    public async Task<ListResult<Integration>> GetByQuery([FromQuery] ListQuery<Integration> query) => await Collection.GetByQuery(query);
+    public async Task<ListResult<Integration>> Load([FromQuery] ListQuery<Integration> query) => await Collection.Load(query);
 
 
     public async Task<IList<IntegrationTypeWithStatus>> GetTypes() => await Collection.GetTypesWithStatus();
@@ -40,6 +38,6 @@ namespace zero.Web.Controllers
     public async Task<EntityResult<Integration>> SaveActiveState([FromBody] Integration model) => model.IsActive ? await Collection.Activate(model.Alias) : await Collection.Deactivate(model.Alias);
 
     [HttpDelete]
-    public async Task<EntityResult<Integration>> Delete([FromQuery] string alias) => await Collection.Delete(alias);
+    public async Task<EntityResult<Integration>> Delete([FromQuery] string alias) => await Collection.DeleteByAlias(alias);
   }
 }
