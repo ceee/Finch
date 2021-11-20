@@ -1,4 +1,4 @@
-﻿namespace zero;
+﻿namespace zero.Pages;
 
 /// <summary>
 /// A page folder is used to group pages together but should not contain any content

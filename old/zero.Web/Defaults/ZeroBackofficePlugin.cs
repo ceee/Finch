@@ -1,23 +1,6 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using zero.Core;
-using zero.Core.Api;
-using zero.Core.Blueprints;
-using zero.Core.Collections;
-using zero.Core.Entities;
-using zero.Core.Integrations;
-using zero.Core.Mails;
-using zero.Core.Messages;
-using zero.Core.Options;
-using zero.Core.Plugins;
-using zero.Core.Renderer;
-using zero.Core.Routing;
-using zero.Core.Services;
-using zero.Core.Tokens;
-using zero.Core.Validation;
 using zero.Web.Sections;
 using zero.Web.ViewHelpers;
 
@@ -61,22 +44,6 @@ namespace zero.Web.Defaults
     {
       //services.AddAll(typeof(IValidator<>), ServiceLifetime.Scoped);
       //services.AddAll(typeof(IValidator), ServiceLifetime.Scoped);
-      services.AddSingleton<IMessageAggregator, MessageAggregator>();
-
-      services.AddScoped<IRazorRenderer, RazorRenderer>();
-
-      services.AddTransient<Application, Application>();
-      services.AddTransient<Translation, Translation>();
-      services.AddTransient<Page, Page>();
-      services.AddTransient<RecycledEntity, RecycledEntity>();
-      services.AddTransient<Preview, Preview>();
-      services.AddTransient<Core.Routing.Route, Core.Routing.Route>();
-
-      services.AddTransient<IValidator<Application>, ApplicationValidator>();
-      services.AddTransient<IValidator<Translation>, TranslationValidator>();
-      services.AddTransient<IValidator<Page>, PageValidator>();
-      services.AddTransient<IValidator<BackofficeUserRole>, UserRoleValidator>();
-      services.AddTransient<IValidator<BackofficeUser>, BackofficeUserValidator>();
 
       services.AddTransient<ICountriesCollection, CountriesCollection>();
       services.AddTransient<ILanguagesCollection, LanguagesCollection>();
@@ -98,23 +65,7 @@ namespace zero.Web.Defaults
       services.AddTransient<ISpacesApi, SpacesApi>();
       services.AddTransient<IPermissionsApi, PermissionsApi>();
       services.AddTransient<IModulesApi, ModulesApi>();
-      services.AddTransient<IRecycleBinApi, RecycleBinApi>();
-
-      services.AddScoped<IRequestUrlResolver, RequestUrlResolver>();
-      services.AddScoped<IRoutes, Routes>();
-      services.AddScoped<IRouteResolver, RouteResolver>();
-      services.AddScoped<IRedirectAutomation, RedirectAutomation>();
-      services.AddScoped<IRouteRedirectCollection, RouteRedirectCollection>();
-      services.AddScoped<IPageUrlBuilder, PageUrlBuilder>();
-      services.AddScoped<IRouteProvider, PageRouteProvider>();
-      services.AddScoped<ILinks, Links>();
-      services.AddScoped<ILinkProvider, PageLinkProvider>();
-      services.AddScoped<ILinkProvider, RawLinkProvider>();
-      services.AddScoped<ZeroRoutesTransformer>();
-      services.TryAddEnumerable(ServiceDescriptor.Singleton<MatcherPolicy, NotFoundSelectorPolicy>());
-
-      services.AddScoped<IMailProvider, MailProvider>();
-      services.AddScoped<IMailDispatcher, FileMailDispatcher>();
+      services.AddTransient<IRecycleBinApi, RecycleBinApi>();  
 
       services.AddScoped<IZeroMediaHelper, ZeroMediaHelper>();
 
@@ -125,16 +76,7 @@ namespace zero.Web.Defaults
       services.AddScoped(typeof(ICollectionContext<>), typeof(CollectionContext<>));
       services.AddScoped(typeof(IInterceptorRunner<>), typeof(InterceptorRunner<>));
 
-      services.AddScoped<ILocalizer, Localizer>();
-      services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();
-
       services.AddScoped<IBackofficeSearchService, BackofficeSearchService>();
-
-      services.AddScoped<IBlueprintService, BlueprintService>();
-      services.AddScoped<BlueprintInterceptor>();
-      services.AddScoped<BlueprintChildInterceptor>();
-
-      services.AddScoped<ZeroEntityRouteInterceptor>();
     }
   }
 }

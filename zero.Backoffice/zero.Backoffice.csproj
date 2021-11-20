@@ -9,6 +9,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Countries\countries.de-de.json" />
+    <None Remove="Resources\Countries\countries.en-us.json" />
+    <None Remove="Resources\Localization\zero.en-us.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Countries\countries.de-de.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Resources\Countries\countries.en-us.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Resources\Localization\zero.en-us.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 

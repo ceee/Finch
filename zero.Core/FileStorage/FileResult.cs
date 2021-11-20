@@ -1,4 +1,4 @@
-﻿namespace zero;
+﻿namespace zero.FileStorage;
 
 public class FileResult
 {

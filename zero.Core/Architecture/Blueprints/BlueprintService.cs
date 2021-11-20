@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace zero;
+﻿namespace zero.Architecture;
 
 public class BlueprintService : IBlueprintService
 {

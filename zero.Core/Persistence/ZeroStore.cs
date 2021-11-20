@@ -1,8 +1,6 @@
 ﻿using Raven.Client.Documents.Session;
-using System.Collections.Generic;
-using zero.Core.Options;
 
-namespace zero;
+namespace zero.Persistence;
 
 public class ZeroStore : IZeroStore
 {

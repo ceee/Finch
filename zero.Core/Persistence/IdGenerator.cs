@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace zero;
+﻿namespace zero.Persistence;
 
 public class IdGenerator
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using zero.Core.Collections;
 
-namespace zero;
+namespace zero.Configuration;
 
 public class InterceptorOptions : OptionsEnumerable<InterceptorRegistration>, IOptionsEnumerable
 {

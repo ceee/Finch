@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using zero.Core.Entities;
 
-namespace zero;
+namespace zero.Configuration;
 
 public class ModuleOptions : OptionsEnumerable<ModuleType>, IOptionsEnumerable
 {

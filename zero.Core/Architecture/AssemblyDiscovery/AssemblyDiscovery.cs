@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
-namespace zero;
+namespace zero.Architecture;
 
 public class AssemblyDiscovery : IAssemblyDiscovery
 {

@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System;
 
-namespace zero;
+namespace zero.Identity;
 
 public static class ZeroIdentityExtensions
 {

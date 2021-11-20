@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace zero;
+﻿namespace zero.Configuration;
 
 public abstract class OptionsEnumerable<T>
 {

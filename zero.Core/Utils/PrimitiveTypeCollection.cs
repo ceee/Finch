@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 
-namespace zero;
+namespace zero.Utils;
 
 public class PrimitiveTypeCollection : ConcurrentDictionary<Type, object>, IPrimitiveTypeCollection
 {

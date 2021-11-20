@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace zero;
+﻿namespace zero.Architecture;
 
 /// <summary>
 /// Defines a base entity which is synced and properties which are overridden

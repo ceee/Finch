@@ -4,12 +4,8 @@ using Raven.Client.Documents.BulkInsert;
 using Raven.Client.Documents.Operations;
 using Raven.Client.Documents.Queries;
 using Raven.Client.Documents.Session;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using zero.Core.Options;
 
-namespace zero;
+namespace zero.Persistence;
 
 public class ZeroDocumentStore : DocumentStore, IZeroDocumentStore
 {

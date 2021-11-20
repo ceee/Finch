@@ -3,13 +3,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace zero;
+namespace zero.Identity;
 
 // TODO although the login per application works
 // the authentication breaks when another application signs in a user

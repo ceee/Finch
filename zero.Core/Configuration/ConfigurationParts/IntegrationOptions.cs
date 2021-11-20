@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using zero.Core.Integrations;
 
-namespace zero;
+namespace zero.Configuration;
 
 public class IntegrationOptions : OptionsEnumerable<IntegrationType>, IOptionsEnumerable
 {

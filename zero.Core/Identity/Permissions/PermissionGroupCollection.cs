@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace zero;
+namespace zero.Identity;
 
 public class PermissionGroupCollection : List<PermissionCollection>
 {

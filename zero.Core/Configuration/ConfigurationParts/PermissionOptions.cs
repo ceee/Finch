@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using zero.Core.Identity;
 
-namespace zero;
+namespace zero.Configuration;
 
 public class PermissionOptions : OptionsEnumerable<PermissionCollection>, IOptionsEnumerable
 {

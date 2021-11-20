@@ -1,10 +1,9 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace zero;
+namespace zero.Persistence;
 
 /// <summary>
 /// Replicates the Rfc6238AuthenticationService from ASP.NET Core internals as it isn't part of the public API

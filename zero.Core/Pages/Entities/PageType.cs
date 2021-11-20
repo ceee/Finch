@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace zero;
+﻿namespace zero.Pages;
 
 /// <summary>
 /// A page type holds information about a Page implementation

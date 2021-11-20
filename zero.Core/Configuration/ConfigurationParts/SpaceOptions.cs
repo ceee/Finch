@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using zero.Core.Entities;
 
-namespace zero;
+namespace zero.Configuration;
 
 public class SpaceOptions : OptionsEnumerable<Space>, IOptionsEnumerable
 {

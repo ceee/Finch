@@ -1,8 +1,6 @@
 ﻿using Raven.Client.Documents.Indexes;
-using System;
-using System.Linq;
 
-namespace zero;
+namespace zero.Pages;
 
 public class Pages_AsHistory : ZeroIndex<Page, Pages_AsHistory.Result>
 {

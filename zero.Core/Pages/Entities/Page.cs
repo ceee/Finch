@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace zero;
+﻿namespace zero.Pages;
 
 /// <summary>
 /// A page can consist of unlimited properties and be rendered as you wish

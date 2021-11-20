@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyModel;
 
-namespace zero;
+namespace zero.Architecture;
 
 public interface IAssemblyDiscoveryRule
 {

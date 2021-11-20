@@ -1,7 +1,6 @@
-﻿namespace zero.Core.Options
+﻿namespace zero.Configuration;
+
+public interface IZeroCollectionOptions 
 {
-  public interface IZeroCollectionOptions 
-  {
     
-  }
 }

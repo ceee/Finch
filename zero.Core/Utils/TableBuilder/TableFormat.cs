@@ -1,4 +1,4 @@
-﻿namespace zero;
+﻿namespace zero.Utils;
 
 public enum TableFormat
 {

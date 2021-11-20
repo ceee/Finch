@@ -1,0 +1,19 @@
+﻿namespace zero.Mails;
+
+public interface IMailDispatcher : IDisposable
+{
+  /// <summary>
+  /// Adds a new mail message to the outgoing queue
+  /// </summary>
+  void Enqueue(Mail message);
+
+  /// <summary>
+  /// Sends all mails which have been added to the queue previously
+  /// </summary>
+  Task Send(CancellationToken token = default);
+
+  /// <summary>
+  /// Whether a certain sender signature is supported by this dispatcher
+  /// </summary>
+  Task<bool> IsSenderSupported(string email) => Task.FromResult(true);
+}

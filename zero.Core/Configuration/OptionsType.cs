@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using System;
 
-namespace zero;
+namespace zero.Configuration;
 
 public abstract class OptionsType
 {

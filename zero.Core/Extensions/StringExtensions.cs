@@ -1,9 +1,7 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace zero;
+namespace zero.Extensions;
 
 public static class StringExtensions
 {

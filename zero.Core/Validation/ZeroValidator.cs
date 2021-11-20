@@ -4,7 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace zero;
+namespace zero.Validation;
 
 public class ZeroValidator<TInterface> : ZeroValidator<TInterface, TInterface>
 {

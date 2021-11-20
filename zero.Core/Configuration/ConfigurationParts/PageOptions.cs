@@ -2,7 +2,7 @@
 using System.Linq;
 using zero.Core.Entities;
 
-namespace zero;
+namespace zero.Configuration;
 
 public class PageOptions : OptionsEnumerable<PageType>, IOptionsEnumerable
 {

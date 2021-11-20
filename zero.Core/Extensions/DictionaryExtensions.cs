@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace zero;
+﻿namespace zero.Extensions;
 
 public static class DictionaryExtensions
 {

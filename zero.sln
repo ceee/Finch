@@ -45,11 +45,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{6FAA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Backoffice", "zero.Backoffice\zero.Backoffice.csproj", "{355432DA-01AF-4E1E-B87F-8A8D99E52411}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Routing", "zero.Routing\zero.Routing.csproj", "{C34E958D-24A8-442B-BAC8-096EE37D5ABF}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "old", "old", "{DECD7B35-5ECB-4B4B-BF62-B66F96B156FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Core", "zero.Core\zero.Core.csproj", "{CED2A7FA-8D35-4A2A-AF57-8B95307547CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Core", "zero.Core\zero.Core.csproj", "{CED2A7FA-8D35-4A2A-AF57-8B95307547CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,10 +83,6 @@ Global
 		{355432DA-01AF-4E1E-B87F-8A8D99E52411}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{355432DA-01AF-4E1E-B87F-8A8D99E52411}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{355432DA-01AF-4E1E-B87F-8A8D99E52411}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C34E958D-24A8-442B-BAC8-096EE37D5ABF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C34E958D-24A8-442B-BAC8-096EE37D5ABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C34E958D-24A8-442B-BAC8-096EE37D5ABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C34E958D-24A8-442B-BAC8-096EE37D5ABF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CED2A7FA-8D35-4A2A-AF57-8B95307547CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CED2A7FA-8D35-4A2A-AF57-8B95307547CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CED2A7FA-8D35-4A2A-AF57-8B95307547CB}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace zero;
+namespace zero.Utils;
 
 public interface ITableCreator<T> : IDisposable
 {

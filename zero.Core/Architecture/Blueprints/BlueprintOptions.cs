@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace zero;
+﻿namespace zero.Architecture;
 
 public class BlueprintOptions : OptionsEnumerable<Blueprint>, IOptionsEnumerable
 {

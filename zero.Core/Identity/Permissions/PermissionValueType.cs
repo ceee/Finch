@@ -1,4 +1,4 @@
-﻿namespace zero;
+﻿namespace zero.Identity;
 
 public enum PermissionValueType
 {

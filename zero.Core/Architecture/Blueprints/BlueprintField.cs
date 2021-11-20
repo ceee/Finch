@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace zero;
+namespace zero.Architecture;
 
 public class BlueprintField<T> where T : ZeroEntity
 {

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
-namespace zero;
+namespace zero.Identity;
 
 // This is a re-implementation of ASP.NET Core Base32, as they have marked it as internal
 // by using this we can create user security stamps on the fly and don't need 

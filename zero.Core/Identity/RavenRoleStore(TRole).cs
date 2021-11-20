@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace zero;
+namespace zero.Identity;
 
 public class RavenRoleStore<TRole> : IRoleStore<TRole>, IRoleClaimStore<TRole> 
   where TRole : ZeroIdentityRole

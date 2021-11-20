@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 
-namespace zero;
+namespace zero.Identity;
 
 public class Permission
 {

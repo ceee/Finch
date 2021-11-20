@@ -1,10 +1,7 @@
 ﻿using Raven.Client.Documents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 
-namespace zero;
+namespace zero.Persistence;
 
 public class RavenOptions
 {

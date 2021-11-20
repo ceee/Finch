@@ -1,9 +1,6 @@
 ﻿using Raven.Client.Documents.Indexes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace zero;
+namespace zero.Pages;
 
 public class Pages_ByHierarchy : ZeroIndex<Page, Pages_ByHierarchy.Result>
 {

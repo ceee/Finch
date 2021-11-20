@@ -1,6 +1,6 @@
 ﻿using zero.Core.Entities;
 
-namespace zero;
+namespace zero.Configuration;
 
 public class SectionOptions : OptionsEnumerable<ISection>, IOptionsEnumerable
 {

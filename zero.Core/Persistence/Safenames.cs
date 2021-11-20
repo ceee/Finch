@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 
-namespace zero;
+namespace zero.Persistence;
 
 public class Safenames
 {

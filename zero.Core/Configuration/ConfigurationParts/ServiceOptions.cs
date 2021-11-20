@@ -1,4 +1,4 @@
-﻿namespace zero;
+﻿namespace zero.Configuration;
 
 public class ServiceOptions
 {

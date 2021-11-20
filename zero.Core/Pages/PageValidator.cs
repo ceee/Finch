@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace zero;
+namespace zero.Pages;
 
 public class PageValidator : ZeroValidator<Page>
 {

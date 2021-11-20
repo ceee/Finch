@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using zero.Core.Models;
 using zero.Core.Renderer;
 
-namespace zero;
+namespace zero.Configuration;
 
 public class SearchOptions : OptionsEnumerable<SearchIndexMap>, IOptionsEnumerable
 {

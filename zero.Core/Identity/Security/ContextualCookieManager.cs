@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
-using System;
 
-namespace zero;
+namespace zero.Identity;
 
 public class ContextualCookieManager : ChunkingCookieManager, ICookieManager
 {

@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Raven.Client.Documents.Session;
-using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace zero;
+namespace zero.Persistence;
 
 public class ZeroTokenProvider : IZeroTokenProvider
 {

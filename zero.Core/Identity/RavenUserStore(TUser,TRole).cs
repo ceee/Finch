@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace zero;
+namespace zero.Identity;
 
 // TODO we can't inject IZeroContext here for app-context as the IApplicationContext itself
 // relies on UserManager and therefore this UserStore, i.e. circular dependency

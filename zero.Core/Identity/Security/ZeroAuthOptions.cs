@@ -1,4 +1,4 @@
-﻿namespace zero;
+﻿namespace zero.Identity;
 
 public class ZeroAuthOptions<TUser> where TUser : ZeroIdentityUser
 {

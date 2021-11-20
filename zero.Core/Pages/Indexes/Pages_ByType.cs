@@ -1,7 +1,6 @@
 ﻿using Raven.Client.Documents.Indexes;
-using System.Linq;
 
-namespace zero;
+namespace zero.Pages;
 
 public class Pages_ByType : ZeroIndex<Page>
 {

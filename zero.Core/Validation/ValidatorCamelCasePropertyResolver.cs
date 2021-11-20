@@ -1,9 +1,8 @@
 ﻿using FluentValidation.Internal;
-using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace zero;
+namespace zero.Validation;
 
 public class ValidatorCamelCasePropertyResolver
 {

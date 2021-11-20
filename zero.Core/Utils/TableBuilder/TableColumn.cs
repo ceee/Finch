@@ -1,7 +1,6 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
-namespace zero;
+namespace zero.Utils;
 
 public class TableColumn<T>
 {

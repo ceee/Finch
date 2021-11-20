@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace zero;
+﻿namespace zero.Persistence;
 
 /// <summary>
 /// This attribute will allow the usage of custom collection names for Raven collections

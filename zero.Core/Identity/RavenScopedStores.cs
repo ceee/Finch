@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace zero;
+namespace zero.Identity;
 
 public class RavenCoreRoleStore<TRole> : RavenRoleStore<TRole> 
   where TRole : ZeroIdentityRole

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace zero;
+﻿namespace zero.Persistence;
 
 [RavenCollection("Tokens")]
 public class SecurityToken : IZeroDbConventions

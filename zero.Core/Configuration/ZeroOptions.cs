@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace zero;
+﻿namespace zero.Configuration;
 
 public class ZeroOptions : IZeroOptions
 {

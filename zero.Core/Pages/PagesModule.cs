@@ -1,4 +1,4 @@
-﻿namespace zero;
+﻿namespace zero.Pages;
 
 internal class PagesModule : ZeroModule
 {

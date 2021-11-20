@@ -2,13 +2,9 @@
 using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Indexes.Spatial;
 using Raven.Client.Documents.Operations.Attachments;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using zero.Core.Options;
 
-namespace zero;
+namespace zero.Persistence;
 
 public abstract class ZeroJavascriptIndex : AbstractJavaScriptIndexCreationTask, IZeroIndexDefinition
 {

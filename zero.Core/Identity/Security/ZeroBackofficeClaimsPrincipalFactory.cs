@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace zero;
+namespace zero.Identity;
 
 public class ZeroBackofficeClaimsPrincipalFactory<TUser, TRole> : ZeroClaimsPrinicipalFactory<TUser, TRole>
   where TUser : BackofficeUser
