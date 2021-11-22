@@ -25,3 +25,4 @@ global using zero.Applications;
 global using zero.Backoffice;
 global using zero.Backoffice.Models;
 global using zero.Backoffice.Modules;
+global using zero.Backoffice.Configuration;

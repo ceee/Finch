@@ -1,6 +1,6 @@
-﻿namespace zero.Configuration;
+﻿namespace zero.Backoffice.Configuration;
 
-public class ServiceOptions
+public class ExternalServicesOptions
 {
   /// <summary>
   /// Define a YouTube API Key so the zero videopicker can display previews

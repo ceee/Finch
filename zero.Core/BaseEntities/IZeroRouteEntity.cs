@@ -1,4 +1,4 @@
-﻿namespace zero.Architecture;
+﻿namespace zero;
 
 public interface IZeroRouteEntity
 {

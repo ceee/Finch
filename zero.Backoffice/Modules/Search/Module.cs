@@ -7,7 +7,6 @@ internal class SearchModule : ZeroModule
   /// <inheritdoc />
   public override void Register(IZeroModuleConfiguration config)
   {
-    config.Services.AddOptions<SearchOptions>().Bind(config.Configuration.GetSection(SearchOptions.KEY));
     config.Services.AddScoped<IBackofficeSearchService, BackofficeSearchService>();
   }
 

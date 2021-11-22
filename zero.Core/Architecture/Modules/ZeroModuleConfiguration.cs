@@ -9,7 +9,7 @@ public class ZeroModuleConfiguration : IZeroModuleConfiguration
 
   public IConfiguration Configuration { get; }
 
-  internal ZeroModuleConfiguration(IServiceCollection servicse, IConfiguration configuration)
+  public ZeroModuleConfiguration(IServiceCollection servicse, IConfiguration configuration)
   {
     Services = servicse;
     Configuration = configuration;

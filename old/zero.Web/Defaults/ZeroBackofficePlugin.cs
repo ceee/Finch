@@ -8,13 +8,6 @@ namespace zero.Web.Defaults
 {
   internal class ZeroBackofficePlugin : ZeroPlugin
   {
-    public ZeroBackofficePlugin()
-    {
-      Options.Name = "zero.Defaults";
-      Options.LocalizationPaths.Add("~/Resources/Localization/zero.{lang}.json");
-    }
-
-
     public override void Configure(IZeroOptions zero)
     {
       zero.Sections.Add<DashboardSection>();
@@ -31,12 +24,7 @@ namespace zero.Web.Defaults
       zero.Permissions.AddCollection<SettingsPermissions>();
       zero.Permissions.AddCollection<SpacePermissions>();
 
-      zero.Icons.AddSet("feather", "Feather", "/assets/icons/feather.svg", "fth");
       zero.Pages.Add<PageFolder>(Constants.Pages.FolderAlias, "@page.folder.name", "@page.folder.description", "fth-folder");
-
-      zero.Interceptors.Add<ZeroEntityRouteInterceptor, ZeroEntity>(gravity: 100);
-      zero.Interceptors.Add<BlueprintInterceptor>(gravity: -1);
-      zero.Interceptors.Add<BlueprintChildInterceptor>(gravity: -1);
     }
 
 

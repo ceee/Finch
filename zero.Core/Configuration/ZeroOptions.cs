@@ -67,14 +67,6 @@ public class ZeroOptions : IZeroOptions
   //public ApplicationOptions Applications { get; set; }
 
   ///// <inheritdoc />
-  //public string BackofficePath { get; set; }
-
-  ///// <summary>
-  ///// Paths in the backoffice which are not handled by zero
-  ///// </summary>
-  //public List<string> ExcludedPaths { get; private set; }
-
-  ///// <inheritdoc />
   //public SectionOptions Sections { get; private set; }
 
   ///// <inheritdoc />
@@ -97,12 +89,6 @@ public class ZeroOptions : IZeroOptions
 
   ///// <inheritdoc />
   //public IntegrationOptions Integrations { get; private set; }
-
-  ///// <inheritdoc />
-  //public IconOptions Icons { get; private set; }
-
-  ///// <inheritdoc />
-  //public ServiceOptions Services { get; private set; }
 
   ///// <inheritdoc />
   //public BlueprintOptions Blueprints { get; private set; }
@@ -151,14 +137,4 @@ public interface IZeroOptions
     ///// Application options
     ///// </summary>
     //ApplicationOptions Applications { get; set; }
-
-    ///// <summary>
-    ///// URL path to the backoffice (defaults to /zero)
-    ///// </summary>
-    //string BackofficePath { get; set; }
-
-    ///// <summary>
-    ///// Paths in the backoffice which are not handled by zero
-    ///// </summary>
-    //List<string> ExcludedPaths { get; }
 }

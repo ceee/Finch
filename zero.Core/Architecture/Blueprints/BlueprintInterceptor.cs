@@ -23,6 +23,7 @@ public class BlueprintInterceptor : Interceptor<ZeroEntity>, IBlueprintIntercept
 
   public BlueprintInterceptor(IZeroContext context, IZeroStore store, ILogger<BlueprintInterceptor> logger, IBlueprintService blueprintService, IInterceptors interceptors)
   {
+    Gravity = -1;
     Context = context;
     Store = store;
     Logger = logger;

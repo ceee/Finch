@@ -7,6 +7,7 @@ public class BlueprintChildInterceptor : Interceptor<ZeroEntity>, IBlueprintInte
 
   public BlueprintChildInterceptor(IZeroContext context)
   {
+    Gravity = -1;
     configuredZeroDatabase = context.Options.For<RavenOptions>().Database;
   }
 

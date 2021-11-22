@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics;
 
-namespace zero.Architecture;
+namespace zero;
 
 [DebuggerDisplay("Id = {Id,nq}, Name = {Name}, Alias = {Alias}")]
 public class ZeroEntity : ZeroIdEntity, IZeroDbConventions, IZeroRouteEntity
