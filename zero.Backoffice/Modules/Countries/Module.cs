@@ -1,11 +1,13 @@
-﻿namespace zero.Backoffice.Modules;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace zero.Backoffice.Modules;
 
 internal class CountriesModule : ZeroModule
 {
   /// <inheritdoc />
   public override void Register(IZeroModuleConfiguration config)
   {
-    
+    config.Services.AddScoped<IPermissionProvider, CountryPermissions>();
   }
 
 
