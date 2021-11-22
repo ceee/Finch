@@ -4,7 +4,7 @@ using Raven.Client.Documents.Linq;
 
 namespace zero.Routing;
 
-public class ZeroEntityRouteInterceptor : CollectionInterceptor<ZeroEntity>
+public class ZeroEntityRouteInterceptor : Interceptor<ZeroEntity>
 {
   protected IZeroContext Context { get; set; }
 
@@ -21,6 +21,7 @@ public class ZeroEntityRouteInterceptor : CollectionInterceptor<ZeroEntity>
 
   public ZeroEntityRouteInterceptor(IZeroContext context, IZeroStore store, IRoutes routes, ILogger<ZeroEntityRouteInterceptor> logger, IEnumerable<IRouteProvider> providers, IRedirectAutomation redirectAutomation)
   {
+    Gravity = 100;
     Context = context;
     Store = store;
     Routes = routes;
@@ -31,7 +32,39 @@ public class ZeroEntityRouteInterceptor : CollectionInterceptor<ZeroEntity>
 
 
   /// <inheritdoc />
-  public override async Task Saved(InterceptorParameters args, ZeroEntity model)
+  public override Task Created(InterceptorParameters args, ZeroEntity model) => Saved(args, model, false);
+
+
+  /// <inheritdoc />
+  public override Task Updated(InterceptorParameters args, ZeroEntity model) => Saved(args, model, true);
+
+
+  /// <summary>
+  /// Remove all dependent routes and redirects on route deletion
+  /// </summary>
+  public override async Task Deleted(InterceptorParameters args, ZeroEntity model)
+  {
+    RoutingContext context = GetContext();
+
+    string id = model.Id;
+    List<Route> dependencies = await GetDependencies(context, model);
+
+    await context.Store.Raven.PurgeAsync<Route>(context.Context.Application.Database, $"where c.Dependencies IN ($id)", new Raven.Client.Parameters()
+    {
+      { "id", id }
+    });
+
+    // delete associated redirects for obsolete routes
+    await RedirectAutomation.DeleteForRoutes(dependencies.ToArray());
+
+    Logger.LogInformation("Route deletes completed (-{removed}) for {model} (id: {id})", dependencies.Count, model.Name, model.Id);
+  }
+
+
+  /// <summary>
+  /// Create or update a route when an entity changes and rebuild all dependent routes
+  /// </summary>
+  protected async Task Saved(InterceptorParameters args, ZeroEntity model, bool update = false)
   {
     // DONE [1] assume we have an update for a Product:
     // this will not trigger a new seeding as the ProductRouteProvider handles <ProductRouteParams> entities, but not products itself
@@ -134,26 +167,6 @@ public class ZeroEntityRouteInterceptor : CollectionInterceptor<ZeroEntity>
 
     int countUpdatedRoutes = countObsoleteRoutes - obsoleteRoutes.Count;
     Logger.LogInformation("Route updates completed (+{added}/~{updated}/-{removed}) for {model} (id: {id})", countRoutes - countUpdatedRoutes, countUpdatedRoutes, obsoleteRoutes.Count, model.Name, model.Id);
-  }
-
-
-  /// <inheritdoc />
-  public override async Task Deleted(InterceptorParameters args, ZeroEntity model)
-  {
-    RoutingContext context = GetContext();
-
-    string id = model.Id;
-    List<Route> dependencies = await GetDependencies(context, model);
-
-    await context.Store.Raven.PurgeAsync<Route>(context.Context.Application.Database, $"where c.Dependencies IN ($id)", new Raven.Client.Parameters()
-    {
-      { "id", id }
-    });
-
-    // delete associated redirects for obsolete routes
-    await RedirectAutomation.DeleteForRoutes(dependencies.ToArray());
-
-    Logger.LogInformation("Route deletes completed (-{removed}) for {model} (id: {id})", dependencies.Count, model.Name, model.Id);
   }
 
 

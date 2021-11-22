@@ -1,74 +1,138 @@
-﻿namespace zero.Communication;
+﻿using Microsoft.Extensions.Logging;
+
+namespace zero.Communication;
 
 public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
 {
-  public Guid Guid { get; private set; } = Guid.NewGuid();
+  public Guid Guid { get; private set; }
 
-  public InterceptorType InterceptorType { get; private set; }
+  public InterceptorRunType Runtype { get; private set; }
 
   public T Model { get; private set; }
 
-  public IEntityCollection<T> Collection { get;private set; }
-
-  public InterceptorParameters<T> Parameters { get; private set; }
+  public Type ModelType { get; private set; }
 
   public EntityResult<T> Result { get; private set; }
 
+  protected IZeroContext Context { get; private set; }
 
-  internal InterceptorInstruction(IZeroContext context, IEntityCollection<T> collection, InterceptorType type, T model)
+  protected IEnumerable<IInterceptor> Interceptors { get; private set; }
+
+  protected ILogger<IInterceptor> Logger { get; private set; }
+
+  protected Dictionary<string, InterceptorParameters> CachedParameters { get; private set; } = new();
+
+  protected Func<IInterceptor, bool> InterceptorFilter { get; private set; } = x => true;
+
+
+  internal InterceptorInstruction(IZeroContext context, IEnumerable<IInterceptor> registrations, ILogger<IInterceptor> logger, InterceptorRunType runtype, T model)
   {
-    Collection = collection;
-    InterceptorType = type;
+    Context = context;
+    Guid = Guid.NewGuid();
+    Logger = logger;
+    Runtype = runtype;
     Model = model;
 
-    Parameters = new InterceptorParameters<T>()
-    {
-      Context = context,
-      Store = context.Store,
-      Collection = collection,
-      Properties = new()    
-    };
+    ModelType = model.GetType();
+    Interceptors = registrations.OrderByDescending(x => x.Gravity);
   }
 
 
-  public async Task<bool> Run()
+  /// <summary>
+  /// Custom interceptor filter for this instruction (the CanHandle() method for each interceptor is still activated)
+  /// </summary>
+  public void Filter(Func<IInterceptor, bool> predicate)
   {
-    ICollectionInterceptor<T> interceptor = default;
+    InterceptorFilter = predicate;
+  }
 
-    //await HandleBefore(interceptor);
-    //await interceptor.Created(Parameters, Model);
-    //interceptor.Created(new InterceptorParameters()
-    //{
-      
-    //})
 
-    await Task.Delay(0);
+  /// <summary>
+  /// Run all interceptors (in order) which can handle the given type.
+  /// Depending on the action any of the following methods on the interceptor is called: Creating(), Updating(), Deleting().
+  /// If any of the interceptors returns a result the operation is cancelled and this result is returned.
+  /// </summary>
+  public async Task<bool> Start()
+  {
+    foreach (IInterceptor interceptor in GetInterceptors())
+    {
+      InterceptorParameters parameters = new()
+      {
+        Context = Context,
+        Store = Context.Store,
+        Properties = new()
+      };
+
+      if (!interceptor.CanHandle(parameters, ModelType))
+      {
+        continue;
+      }
+
+      Logger.LogDebug("Run interceptor {interceptor} for {type}:{operation}", interceptor.Name, ModelType, Runtype);
+
+      InterceptorResult<ZeroIdEntity> result = (await HandleBefore(interceptor, parameters)) ?? new();
+      result.InterceptorHash = IdGenerator.Create(32);
+
+      CachedParameters.Add(interceptor.Hash, parameters);
+
+      // we cancel all further interceptors if a result is available and return this instead
+      if (result.Result != null)
+      {
+        Result = EntityResult<T>.From(result.Result, result.Result.Model as T);
+        return false;
+      }
+
+      // the Continue task will cancel all further interceptors
+      if (!result.Continue)
+      {
+        break;
+      }
+    }
+
     return true;
   }
 
 
+  /// <summary>
+  /// Run all interceptors (in order) which can handle the given type.
+  /// Depending on the action any of the following methods on the interceptor is called: Created(), Updated(), Deleted().
+  /// The parameters which are returned from the Start() operation are passed to the methods.
+  /// </summary>
   public async Task Complete()
   {
-    await Task.Delay(0);
+    foreach (IInterceptor interceptor in GetInterceptors())
+    {
+      await HandleAfter(interceptor, CachedParameters.GetValueOrDefault(interceptor.Hash));
+    }
   }
 
 
-  protected Task HandleBefore(ICollectionInterceptor<T> interceptor) => InterceptorType switch
+  protected IEnumerable<IInterceptor> GetInterceptors()
   {
-    InterceptorType.Save => interceptor.Saving(Parameters, Model),
-    InterceptorType.Create => interceptor.Creating(Parameters, Model),
-    InterceptorType.Update => interceptor.Updating(Parameters, Model),
-    InterceptorType.Delete => interceptor.Deleting(Parameters, Model),
+    return Interceptors.Where(InterceptorFilter).OrderByDescending(x => x.Gravity);
+  }
+
+
+  /// <summary>
+  /// Proxy for handling methods on an interceptor
+  /// </summary>
+  protected Task<InterceptorResult<ZeroIdEntity>> HandleBefore(IInterceptor interceptor, InterceptorParameters parameters) => Runtype switch
+  {
+    InterceptorRunType.Create => interceptor.Creating(parameters, Model),
+    InterceptorRunType.Update => interceptor.Updating(parameters, Model),
+    InterceptorRunType.Delete => interceptor.Deleting(parameters, Model),
     _ => throw new NotImplementedException()
   };
 
 
-  protected Task HandleAfter(ICollectionInterceptor<T> interceptor) => InterceptorType switch
+  /// <summary>
+  /// Proxy for handling methods on an interceptor
+  /// </summary>
+  protected Task HandleAfter(IInterceptor interceptor, InterceptorParameters parameters) => Runtype switch
   {
-    InterceptorType.Save => interceptor.Saved(Parameters, Model),
-    InterceptorType.Create => interceptor.Created(Parameters, Model),
-    InterceptorType.Update => interceptor.Updated(Parameters, Model),
-    InterceptorType.Delete => interceptor.Deleted(Parameters, Model),
+    InterceptorRunType.Create => interceptor.Created(parameters, Model),
+    InterceptorRunType.Update => interceptor.Updated(parameters, Model),
+    InterceptorRunType.Delete => interceptor.Deleted(parameters, Model),
     _ => throw new NotImplementedException()
   };
 }

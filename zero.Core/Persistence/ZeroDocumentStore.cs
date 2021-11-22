@@ -11,11 +11,11 @@ public class ZeroDocumentStore : DocumentStore, IZeroDocumentStore
 {
   public ZeroDocumentStore(IZeroOptions options) : base()
   {
-    Options = options;
+    Options = options.For<RavenOptions>();
     Database = null;
   }
 
-  protected IZeroOptions Options { get; set; }
+  protected RavenOptions Options { get; set; }
 
   /// <inheritdoc />
   public string ResolvedDatabase { get; set; }
@@ -45,7 +45,7 @@ public class ZeroDocumentStore : DocumentStore, IZeroDocumentStore
     EnsureNotClosed();
 
     var sessionId = Guid.NewGuid();
-    var session = new ZeroDocumentSession(this, sessionId, options, Options.Raven.Database);
+    var session = new ZeroDocumentSession(this, sessionId, options, Options.Database);
     RegisterEvents(session);
     AfterSessionCreated(session);
     session.OnSessionDisposing += (sender, args) =>

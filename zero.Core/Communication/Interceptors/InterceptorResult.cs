@@ -10,15 +10,10 @@ public class InterceptorResult<T>
   /// <summary>
   /// Prevent further interceptors from running for this operation (only valid for the current interception type, e.g. Update/Created/Purge/...)
   /// </summary>
-  public bool Prevent { get; set; }
+  public bool Continue { get; set; } = true;
 
   /// <summary>
   /// Set a result. This will prevent further execution of the operation and cancels all subsequent interceptors
   /// </summary>
   public EntityResult<T> Result { get; set; }
-
-  /// <summary>
-  /// Additional parameters which can be passed to the interceptor after the operation was completed
-  /// </summary>
-  public Dictionary<string, object> Parameters { get; set; } = new();
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace zero.Backoffice.Modules;
+﻿namespace zero.Backoffice.Modules;
 
 internal class CountriesModule : ZeroModule
 {
@@ -14,6 +12,6 @@ internal class CountriesModule : ZeroModule
   /// <inheritdoc />
   public override void Configure(IZeroOptions options)
   {
-    options.Raven.Indexes.Add<Countries_Listing>();
+    options.For<RavenOptions>().Indexes.Add<zero_Backoffice_Countries_Listing>();
   }
 }

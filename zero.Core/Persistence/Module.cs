@@ -33,7 +33,7 @@ internal class PersistenceModule : ZeroModule
 
     IZeroDocumentStore store = new ZeroDocumentStore(options)
     {
-      Urls = new string[1] { options.Raven.Url },
+      Urls = new string[1] { options.For<RavenOptions>().Url },
       Conventions = // TODO activate and test this
         {
           AggressiveCache =
@@ -49,7 +49,7 @@ internal class PersistenceModule : ZeroModule
     IDocumentStore raven = store.Initialize();
 
     // create all indexes
-    if (options.SetupCompleted)
+    if (options.Initialized)
     {
       //var indexes = options.Raven.Indexes.BuildAll(options, store);
       //IndexCreation.CreateIndexes(indexes, store, database: options.Raven.Database);

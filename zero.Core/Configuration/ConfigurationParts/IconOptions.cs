@@ -1,6 +1,4 @@
-﻿using zero.Core.Entities;
-
-namespace zero.Configuration;
+﻿namespace zero.Configuration;
 
 public class IconOptions : OptionsEnumerable<IconSet>, IOptionsEnumerable
 {

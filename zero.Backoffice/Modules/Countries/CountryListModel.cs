@@ -1,15 +1,12 @@
-﻿using System;
+﻿namespace zero.Backoffice.Modules;
 
-namespace zero.Web.Models
+public class CountryListModel : ListModel
 {
-  public class CountryListModel : ListModel
-  {
-    public string Name { get; set; }
+  public string Name { get; set; }
 
-    public bool IsActive { get; set; }
+  public bool IsActive { get; set; }
 
-    public bool IsPreferred { get; set; }
+  public bool IsPreferred { get; set; }
 
-    public string Code { get; set; }
-  }
+  public string Code { get; set; }
 }

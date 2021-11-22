@@ -1,13 +1,5 @@
 ﻿namespace zero.Communication;
 
-public class InterceptorParameters<T> : InterceptorParameters where T : ZeroIdEntity, new()
-{
-  /// <summary>
-  /// Access to the collection which has initiated the interceptor instruction
-  /// </summary>
-  public IEntityCollection<T> Collection { get; set; }
-}
-
 public class InterceptorParameters
 {
   /// <summary>
@@ -19,11 +11,6 @@ public class InterceptorParameters
   /// Raven document store
   /// </summary>
   public IZeroStore Store { get; set; }
-
-  /// <summary>
-  /// TODO
-  /// </summary>
-  public InterceptorRunnerProxy Interceptors { get; set; }
 
   /// <summary>
   /// Parameters from the interceptor which ran on before the operation (only available for completed operations)

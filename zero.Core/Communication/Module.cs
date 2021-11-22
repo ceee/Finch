@@ -8,5 +8,6 @@ internal class CommunicationModule : ZeroModule
   public override void Register(IZeroModuleConfiguration config)
   {
     config.Services.AddSingleton<IMessageAggregator, MessageAggregator>();
+    config.Services.AddTransient<IHandlerHolder, HandlerHolder>();
   }
 }

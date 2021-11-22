@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Commerce", "plugins\ze
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Web", "old\zero.Web\zero.Web.csproj", "{06156006-7684-41EC-8BD4-3B2A762147CD}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "zero.Web.UI", "zero.Backoffice.UI\", "{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "zero.Backoffice.UI", "zero.Backoffice.UI\", "{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_56763"

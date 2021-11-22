@@ -1,8 +1,6 @@
 ﻿using FluentValidation;
 using Raven.Client.Documents;
-using System;
 using System.Globalization;
-using System.Linq;
 
 namespace zero.Validation;
 

@@ -1,134 +1,134 @@
-﻿//using Microsoft.Extensions.Logging;
-//using Raven.Client.Documents;
-//using Raven.Client.Documents.Session;
-//using System.Collections.Generic;
-//using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 
-//namespace zero.Core.Blueprints
-//{
-//  public class BlueprintInterceptor : CollectionInterceptor
-//  {
-//    protected IZeroContext Context { get; set; }
+namespace zero.Architecture;
 
-//    protected IZeroStore Store { get; set; }
+public class BlueprintInterceptor : Interceptor<ZeroEntity>, IBlueprintInterceptor
+{
+  protected IZeroContext Context { get; set; }
 
-//    protected ILogger<BlueprintInterceptor> Logger { get; set; }
+  protected IZeroStore Store { get; set; }
 
-//    protected IBlueprintService BlueprintService { get; set; }
+  protected ILogger<BlueprintInterceptor> Logger { get; set; }
 
-//    IList<Application> Apps { get; set; }
+  protected IBlueprintService BlueprintService { get; set; }
 
+  protected IInterceptors Interceptors { get; set; }
 
-//    public BlueprintInterceptor(IZeroContext context, IZeroStore store, ILogger<BlueprintInterceptor> logger, IBlueprintService blueprintService)
-//    {
-//      Context = context;
-//      Store = store;
-//      Logger = logger;
-//      BlueprintService = blueprintService;
-//    }
+  IList<Application> apps;
 
-//    /// <inheritdoc />
-//    public override bool CanRun(InterceptorParameters args, ZeroIdEntity model)
-//    {
-//      // we do only update children if we operate on the shared database
-//      return args.Context.Store.ResolvedDatabase == Context.Options.Raven.Database;
-//    }
+  string configuredZeroDatabase;
 
 
-//    /// <inheritdoc />
-//    public override async Task Saved(InterceptorParameters args, ZeroIdEntity model)
-//    {
-//      if (model is not ZeroEntity || !BlueprintService.TryGetBlueprint(model, out Blueprint blueprint))
-//      {
-//        return;
-//      }
+  public BlueprintInterceptor(IZeroContext context, IZeroStore store, ILogger<BlueprintInterceptor> logger, IBlueprintService blueprintService, IInterceptors interceptors)
+  {
+    Context = context;
+    Store = store;
+    Logger = logger;
+    BlueprintService = blueprintService;
+    configuredZeroDatabase = context.Options.For<RavenOptions>().Database;
+    Interceptors = interceptors;
+  }
 
-//      ZeroEntity entity = model as ZeroEntity;
-//      int count = 0;
-
-//      foreach (Application app in await GetApplications())
-//      {
-//        using ZeroContextScope scope = Context.CreateScope(app);
-//        IZeroDocumentSession session = scope.Store.Session(scope.Database);
-
-//        ZeroEntity child =  await session.LoadAsync<ZeroEntity>(model.Id);
-
-//        if (child == null)
-//        {
-//          child = entity.Clone();
-//          child.Blueprint = new() { Id = model.Id };
-//        }
-//        else
-//        {          
-//          blueprint.Apply(entity, child);
-//        }
-
-//        count += 1;
-
-//        // now we have to store the child
-//        // but this will not work with the session as we need to run the scoped interceptors,
-//        // therefore we need access to the collection
-
-//        await session.StoreAsync(child);
-//        await session.SaveChangesAsync();
-//      }
-
-//      Logger.LogDebug("Blueprint: Synced {count} children for {name} ({id})", count, entity.Name, model.Id);
-//    }
+  /// <summary>
+  /// Only run when operations are on the zero database
+  /// </summary>
+  public override bool CanHandle(InterceptorParameters args, Type modelType) => args.Context.Store.ResolvedDatabase == configuredZeroDatabase;
 
 
-//    /// <inheritdoc />
-//    public override async Task Deleted(InterceptorParameters args, ZeroIdEntity model)
-//    {
-//      if (model is not ZeroEntity || !BlueprintService.TryGetBlueprint(model, out Blueprint blueprint))
-//      {
-//        return;
-//      }
-
-//      ZeroEntity entity = model as ZeroEntity;
-//      int count = 0;
-
-//      foreach (Application app in await GetApplications())
-//      {
-//        using ZeroContextScope scope = Context.CreateScope(app);
-//        IZeroDocumentSession session = scope.Store.Session(scope.Database);
-
-//        count += 1;
-
-//        // now we have to delete the child
-//        // but this will not work with the session as we need to run the scoped interceptors,
-//        // therefore we need access to the collection
-//        session.Delete(entity.Id);
-//        await session.SaveChangesAsync();
-//      }
-
-//      Logger.LogDebug("Blueprint: Deleted {count} children for {name} ({id})", count, entity.Name, entity.Id);
-//    }
+  /// <inheritdoc />
+  public override Task Created(InterceptorParameters args, ZeroEntity model) => Saved(args, model, false);
 
 
-//    /// <summary>
-//    /// Get all applications to choose from
-//    /// </summary>
-//    async Task<IList<Application>> GetApplications()
-//    {
-//      if (Apps != null)
-//      {
-//        return Apps;
-//      }
-
-//      IAsyncDocumentSession session = Store.Session(global: true);
-//      Apps = await session.Query<Application>().ToListAsync();
-//      return Apps;
-//    }
+  /// <inheritdoc />
+  public override Task Updated(InterceptorParameters args, ZeroEntity model) => Saved(args, model, true);
 
 
+  /// <inheritdoc />
+  public async Task Saved(InterceptorParameters args, ZeroEntity model, bool update = false)
+  {
+    if (!BlueprintService.TryGetBlueprint(model, out Blueprint blueprint))
+    {
+      return;
+    }
+
+    int count = 0;
+
+    foreach (Application app in await GetApplications())
+    {
+      using ZeroContextScope scope = Context.CreateScope(app);
+      IZeroDocumentSession session = scope.Store.Session(scope.Database);
+
+      ZeroEntity child = await session.LoadAsync<ZeroEntity>(model.Id);
+
+      if (child == null)
+      {
+        child = model.Clone();
+        child.Blueprint = new() { Id = model.Id };
+      }
+      else
+      {
+        blueprint.Apply(model, child);
+      }
+
+      count += 1;
+
+      InterceptorInstruction<ZeroEntity> interceptor = update ? Interceptors.ForUpdate(model) : Interceptors.ForCreate(model);
+      interceptor.Filter(x => x is not IBlueprintInterceptor);
+
+      await interceptor.Start();
+      await session.StoreAsync(child);
+      await interceptor.Complete();
+      await session.SaveChangesAsync();
+    }
+
+    Logger.LogDebug("Blueprint: Synced {count} children for {name} ({id})", count, model.Name, model.Id);
+  }
 
 
-//    /// <inheritdoc />
-//    //public override async Task Saved(SaveParameters args)
-//    //{
+  /// <inheritdoc />
+  public override async Task Deleted(InterceptorParameters args, ZeroEntity model)
+  {
+    if (!BlueprintService.TryGetBlueprint(model, out Blueprint blueprint))
+    {
+      return;
+    }
 
-//    //  //Logger.LogInformation("Route updates completed (+{added}/~{updated}/-{removed}) for {model} (id: {id})", countRoutes - countUpdatedRoutes, countUpdatedRoutes, obsoleteRoutes.Count, args.Model.Name, args.Model.Id);
-//    //}
-//  }
-//}
+    int count = 0;
+
+    foreach (Application app in await GetApplications())
+    {
+      using ZeroContextScope scope = Context.CreateScope(app);
+      IZeroDocumentSession session = scope.Store.Session(scope.Database);
+
+      count += 1;
+
+      InterceptorInstruction<ZeroEntity> interceptor = Interceptors.ForDelete(model);
+      interceptor.Filter(x => x is not IBlueprintInterceptor);
+
+      await interceptor.Start();
+      session.Delete(model.Id);      
+      await interceptor.Complete();
+      await session.SaveChangesAsync();
+    }
+
+    Logger.LogDebug("Blueprint: Deleted {count} children for {name} ({id})", count, model.Name, model.Id);
+  }
+
+
+  /// <summary>
+  /// Get all applications to choose from
+  /// </summary>
+  async Task<IList<Application>> GetApplications()
+  {
+    if (apps != null)
+    {
+      return apps;
+    }
+
+    IAsyncDocumentSession session = Store.Session(global: true);
+    apps = await session.Query<Application>().ToListAsync();
+    return apps;
+  }
+}

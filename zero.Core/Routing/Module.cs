@@ -20,16 +20,18 @@ internal class RoutingModule : ZeroModule
     config.Services.AddScoped<ILinkProvider, RawLinkProvider>();
     config.Services.AddScoped<ZeroRoutesTransformer>();
     config.Services.TryAddEnumerable(ServiceDescriptor.Singleton<MatcherPolicy, NotFoundSelectorPolicy>());
-    config.Services.AddScoped<ZeroEntityRouteInterceptor>();
+    config.Services.AddScoped<IInterceptor, ZeroEntityRouteInterceptor>();
   }
 
 
   /// <inheritdoc />
   public override void Configure(IZeroOptions options)
   {
-    options.Raven.Indexes.Add<RouteRedirects_ByUrl>();
-    options.Raven.Indexes.Add<Routes_ByDependencies>();
-    options.Raven.Indexes.Add<Routes_ForResolver>();
-    options.Interceptors.Add<ZeroEntityRouteInterceptor, ZeroEntity>(gravity: 100);
+    RavenOptions raven = options.For<RavenOptions>();
+    InterceptorOptions interceptors = options.For<InterceptorOptions>();
+
+    raven.Indexes.Add<RouteRedirects_ByUrl>();
+    raven.Indexes.Add<Routes_ByDependencies>();
+    raven.Indexes.Add<Routes_ForResolver>();
   }
 }

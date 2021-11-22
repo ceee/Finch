@@ -1,49 +1,31 @@
-﻿//using Microsoft.Extensions.Logging;
-//using System.Threading.Tasks;
-//using zero.Core.Collections;
-//using zero.Core.Database;
-//using zero.Core.Entities;
+﻿namespace zero.Architecture;
 
-//namespace zero.Core.Blueprints
-//{
-//  public class BlueprintChildInterceptor : CollectionInterceptor
-//  {
-//    protected IZeroContext Context { get; set; }
-
-//    protected IZeroStore Store { get; set; }
-
-//    protected ILogger<BlueprintChildInterceptor> Logger { get; set; }
-
-//    protected IBlueprintService BlueprintService { get; set; }
+public class BlueprintChildInterceptor : Interceptor<ZeroEntity>, IBlueprintInterceptor
+{
+  string configuredZeroDatabase;
 
 
-//    public BlueprintChildInterceptor(IZeroContext context, IZeroStore store, ILogger<BlueprintChildInterceptor> logger, IBlueprintService blueprintService)
-//    {
-//      Context = context;
-//      Store = store;
-//      Logger = logger;
-//      BlueprintService = blueprintService;
-//    }
+  public BlueprintChildInterceptor(IZeroContext context)
+  {
+    configuredZeroDatabase = context.Options.For<RavenOptions>().Database;
+  }
 
-//    /// <inheritdoc />
-//    public override bool CanRun(InterceptorParameters args, ZeroIdEntity model)
-//    {
-//      // this interceptor does only work for child entities
-//      return args.Context.Store.ResolvedDatabase != Context.Options.Raven.Database;
-//    }
+  /// <summary>
+  /// Only run this interceptor when the database is an app database
+  /// </summary>
+  public override bool CanHandle(InterceptorParameters args, Type modelType) => args.Context.Store.ResolvedDatabase != configuredZeroDatabase;
 
 
-//    /// <inheritdoc />
-//    public override Task<InterceptorResult<ZeroIdEntity>> Deleting(InterceptorParameters args, ZeroIdEntity model)
-//    {
-//      if (model is not ZeroEntity || (model as ZeroEntity).Blueprint != null)
-//      {
-//        InterceptorResult<ZeroIdEntity> result = new();
-//        result.Result = EntityResult<ZeroIdEntity>.Fail("@blueprint.errors.cannotDeleteChild");
-//        return Task.FromResult(result);
-//      }
+  /// <inheritdoc />
+  public override Task<InterceptorResult<ZeroEntity>> Deleting(InterceptorParameters args, ZeroEntity model)
+  {
+    if (model.Blueprint == null)
+    {
+      return default;
+    }
 
-//      return base.Deleting(args, model);
-//    }
-//  }
-//}
+    InterceptorResult<ZeroEntity> result = new();
+    result.Result = EntityResult<ZeroEntity>.Fail("@blueprint.errors.cannotDeleteChild");
+    return Task.FromResult(result);
+  }
+}

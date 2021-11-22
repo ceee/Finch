@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace zero.Backoffice;
+﻿namespace zero.Backoffice.Models;
 
 public class EditModel : EditModel<object> { }
 

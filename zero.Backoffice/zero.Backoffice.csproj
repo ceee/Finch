@@ -12,6 +12,8 @@
     <None Remove="Resources\Countries\countries.de-de.json" />
     <None Remove="Resources\Countries\countries.en-us.json" />
     <None Remove="Resources\Localization\zero.en-us.json" />
+    <None Remove="Views\Zero\Index.cshtml" />
+    <None Remove="Views\Zero\Setup.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +29,14 @@
     </Content>
     <Content Include="Resources\Localization\zero.en-us.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\Zero\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\Zero\Setup.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
