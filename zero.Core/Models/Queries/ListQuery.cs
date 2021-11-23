@@ -2,7 +2,7 @@
 using Raven.Client.Documents.Session;
 using System.Linq.Expressions;
 
-namespace zero;
+namespace zero.Models;
 
 public class ListQuery<T>
 {

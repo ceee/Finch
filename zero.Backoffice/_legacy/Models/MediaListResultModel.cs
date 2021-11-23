@@ -3,7 +3,7 @@ using zero.Core.Entities;
 
 namespace zero.Web.Models
 {
-  public class MediaListResultModel : ListResult<MediaListModel>
+  public class MediaListResultModel : Paged<MediaListModel>
   {
     public IEnumerable<MediaListModel> Folders { get; private set; }
 
@@ -11,12 +11,12 @@ namespace zero.Web.Models
 
     public MediaFolder Folder { get; private set; }
 
-    public MediaListResultModel(ListResult<MediaListModel> items, IEnumerable<MediaListModel> folders) : base(items.Items, items.TotalItems, items.Page, items.PageSize)
+    public MediaListResultModel(Paged<MediaListModel> items, IEnumerable<MediaListModel> folders) : base(items.Items, items.TotalItems, items.Page, items.PageSize)
     {
       Folders = folders;
     }
 
-    public MediaListResultModel(ListResult<MediaListModel> items, IEnumerable<MediaListModel> folders, MediaFolder currentFolder, IEnumerable<MediaFolder> hierarchy) : this(items, folders)
+    public MediaListResultModel(Paged<MediaListModel> items, IEnumerable<MediaListModel> folders, MediaFolder currentFolder, IEnumerable<MediaFolder> hierarchy) : this(items, folders)
     {
       Folder = currentFolder;
       FolderHierarchy = hierarchy;

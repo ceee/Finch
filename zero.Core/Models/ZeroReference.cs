@@ -1,4 +1,4 @@
-﻿namespace zero;
+﻿namespace zero.Models;
 
 public class ZeroReference
 {

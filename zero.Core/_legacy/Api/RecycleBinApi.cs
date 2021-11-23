@@ -65,7 +65,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<RecycledEntity>> GetByQuery(RecycleBinListQuery query)
+    public async Task<Paged<RecycledEntity>> GetByQuery(RecycleBinListQuery query)
     {
       query.SearchSelector = x => x.Name;
 
@@ -145,7 +145,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all recycled items
     /// </summary>
-    Task<ListResult<RecycledEntity>> GetByQuery(RecycleBinListQuery query);
+    Task<Paged<RecycledEntity>> GetByQuery(RecycleBinListQuery query);
 
     /// <summary>
     /// Get affected entities from a specific operation

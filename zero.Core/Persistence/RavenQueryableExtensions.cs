@@ -11,7 +11,7 @@ public static class RavenQueryableExtensions
   /// <summary>
   /// 
   /// </summary>
-  public static async Task<ListResult<T>> FilterAsync<T>(this IRavenQueryable<T> source, ListQuery<T> listQuery)
+  public static async Task<Paged<T>> FilterAsync<T>(this IRavenQueryable<T> source, ListQuery<T> listQuery)
   {
     return await source.WithFilter(listQuery).ToListResultAsync(listQuery);
   }
@@ -73,10 +73,10 @@ public static class RavenQueryableExtensions
   /// <summary>
   /// 
   /// </summary>
-  public static async Task<ListResult<T>> ToListResultAsync<T>(this IQueryable<T> source, ListQuery<T> listQuery, CancellationToken token = default)
+  public static async Task<Paged<T>> ToListResultAsync<T>(this IQueryable<T> source, ListQuery<T> listQuery, CancellationToken token = default)
   {
     List<T> results = await source.ToListAsync(token);
-    return new ListResult<T>(results, listQuery.Statistics.TotalResults, listQuery.Page, listQuery.PageSize);
+    return new Paged<T>(results, listQuery.Statistics.TotalResults, listQuery.Page, listQuery.PageSize);
   }
 
 

@@ -15,7 +15,7 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<ListResult<RecycledEntity>> GetByQuery([FromQuery] RecycleBinListQuery query)
+    public async Task<Paged<RecycledEntity>> GetByQuery([FromQuery] RecycleBinListQuery query)
     {
       query.IncludeInactive = true;
       return await Api.GetByQuery(query);

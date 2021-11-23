@@ -5,7 +5,7 @@
 //using zero.Core.Api;
 //using zero.Web.Models;
 
-//namespace zero.Web.Filters
+//namespace zero.Web.Controllers
 //{
 //  public class VerifyTokenAttribute : TypeFilterAttribute
 //  {

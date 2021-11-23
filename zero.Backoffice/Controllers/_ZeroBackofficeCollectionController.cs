@@ -9,7 +9,7 @@ using zero.Core.Entities;
 
 namespace zero.Backoffice;
 
-public abstract class ZeroBackofficeCollectionController<TEntity, TCollection> : ZeroBackofficeController
+public abstract class _ZeroBackofficeCollectionController<TEntity, TCollection> : ZeroBackofficeController
   where TEntity : ZeroIdEntity, new()
   where TCollection : ICollectionOperations<TEntity>
 {
@@ -43,13 +43,13 @@ public abstract class ZeroBackofficeCollectionController<TEntity, TCollection> :
   public virtual async Task<EditModel<TEntity>> GetEmpty() => Edit(await Collection.Empty());
 
 
-  public virtual async Task<ListResult<TEntity>> GetByQuery([FromQuery] ListBackofficeQuery<TEntity> query)
+  public virtual async Task<Paged<TEntity>> GetByQuery([FromQuery] ListBackofficeQuery<TEntity> query)
   {
     return await Collection.Load(query);
   }
 
 
-  public virtual async Task<ListResult<Revision>> GetRevisions([FromQuery] string id, [FromQuery] ListBackofficeQuery<TEntity> query)
+  public virtual async Task<Paged<Revision>> GetRevisions([FromQuery] string id, [FromQuery] ListBackofficeQuery<TEntity> query)
   {
     return null; // TODO
     //return await Collection.GetRevisions(id, query.Page, query.PageSize);

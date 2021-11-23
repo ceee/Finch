@@ -1,4 +1,4 @@
-﻿namespace zero;
+﻿namespace zero.Models;
 
 [RavenCollection("Previews")]
 public class ZeroEntityPreview : ZeroEntity

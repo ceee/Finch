@@ -5,7 +5,7 @@ public static class EnumerableExtensions
   /// <summary>
   /// 
   /// </summary>
-  public static ListResult<T> ToQueriedList<T>(this IEnumerable<T> items, ListQuery<T> query) where T : ZeroEntity
+  public static Paged<T> ToQueriedList<T>(this IEnumerable<T> items, ListQuery<T> query) where T : ZeroEntity
   {
     //queryable = queryable.Statistics(out QueryStatistics stats);
 
@@ -45,7 +45,7 @@ public static class EnumerableExtensions
 
     List<T> result = items.ToList();
 
-    return new ListResult<T>(result, result.Count, query.Page, query.PageSize);
+    return new Paged<T>(result, result.Count, query.Page, query.PageSize);
   }
 
 

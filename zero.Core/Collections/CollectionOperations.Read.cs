@@ -1,5 +1,7 @@
-﻿using Raven.Client.Documents.Indexes;
+﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
+using Raven.Client.Documents.Session;
 
 namespace zero.Collections;
 
@@ -40,18 +42,26 @@ public abstract partial class CollectionOperations
 
 
   /// <inheritdoc />
-  public virtual async Task<ListResult<T>> Load<T>(ListQuery<T> query) where T : ZeroIdEntity, new()
+  public virtual async Task<Paged<T>> Load<T>(int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, new()
   {
-    return await Session.Query<T>().FilterAsync(query);
+    IRavenQueryable<T> queryable = Session.Query<T>().Statistics(out QueryStatistics statistics);
+    querySelector ??= x => x;
+
+    List<T> result = await querySelector(queryable).Paging(pageNumber, pageSize).ToListAsync();
+    return new Paged<T>(result, statistics.TotalResults, pageNumber, pageSize);
   }
 
 
   /// <inheritdoc />
-  public virtual async Task<ListResult<T>> Load<T, TIndex>(ListQuery<T> query) 
+  public virtual async Task<Paged<T>> Load<T, TIndex>(int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) 
     where T : ZeroIdEntity, new() 
     where TIndex : AbstractCommonApiForIndexes, new()
   {
-    return await Session.Query<T, TIndex>().FilterAsync(query);
+    IRavenQueryable<T> queryable = Session.Query<T, TIndex>().Statistics(out QueryStatistics statistics);
+    querySelector ??= x => x;
+
+    List<T> result = await querySelector(queryable).Paging(pageNumber, pageSize).ToListAsync();
+    return new Paged<T>(result, statistics.TotalResults, pageNumber, pageSize);
   }
 
 
@@ -74,16 +84,17 @@ public abstract partial class CollectionOperations
 
 
   /// <inheritdoc />
-  public virtual async IAsyncEnumerable<T> Stream<T>(Func<IRavenQueryable<T>, IRavenQueryable<T>> expression) where T : ZeroIdEntity, new()
+  public virtual async IAsyncEnumerable<T> Stream<T>(Func<IRavenQueryable<T>, IQueryable<T>> expression) where T : ZeroIdEntity, new()
   {
     IRavenQueryable<T> query = Session.Query<T>();
+    IQueryable<T> queryable = query;
 
     if (expression != null)
     {
-      query = expression(query);
+      queryable = expression(query);
     }
 
-    var stream = await Session.Advanced.StreamAsync(query);
+    var stream = await Session.Advanced.StreamAsync(queryable);
 
     while (await stream.MoveNextAsync())
     {

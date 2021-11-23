@@ -43,10 +43,10 @@ public abstract partial class EntityCollection<T> : IEntityCollection<T> where T
   public virtual Task<Dictionary<string, T>> Load(IEnumerable<string> ids) => Operations.Load<T>(ids);
 
   /// <inheritdoc />
-  public virtual Task<ListResult<T>> Load(ListQuery<T> query) => Operations.Load(query);
+  public virtual Task<Paged<T>> Load(int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) => Operations.Load(pageNumber, pageSize, querySelector);
 
   /// <inheritdoc />
-  public virtual Task<ListResult<T>> Load<TIndex>(ListQuery<T> query) where TIndex : AbstractCommonApiForIndexes, new() => Operations.Load<T, TIndex>(query);
+  public virtual Task<Paged<T>> Load<TIndex>(int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where TIndex : AbstractCommonApiForIndexes, new() => Operations.Load<T, TIndex>(pageNumber, pageSize, querySelector);
 
   /// <inheritdoc />
   public virtual Task<List<T>> LoadAll() => Operations.LoadAll<T>();
@@ -55,10 +55,13 @@ public abstract partial class EntityCollection<T> : IEntityCollection<T> where T
   public virtual IAsyncEnumerable<T> Stream() => Operations.Stream<T>();
 
   /// <inheritdoc />
-  public virtual IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IRavenQueryable<T>> expression) => Operations.Stream<T>(expression);
+  public virtual IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IQueryable<T>> expression) => Operations.Stream<T>(expression);
 
   /// <inheritdoc />
-  public virtual Task<EntityResult<T>> Save(T model) => Operations.Save(model, async m => await Validate(m));
+  public virtual Task<EntityResult<T>> Create(T model) => Operations.Create(model, async m => await Validate(m));
+
+  /// <inheritdoc />
+  public virtual Task<EntityResult<T>> Update(T model) => Operations.Update(model, async m => await Validate(m));
 
   /// <inheritdoc />
   public virtual Task<EntityResult<T>> Delete(T model) => Operations.Delete(model);
@@ -115,12 +118,12 @@ public interface IEntityCollection<T> where T : ZeroIdEntity, new()
   /// <summary>
   /// Get entities by query
   /// </summary>
-  Task<ListResult<T>> Load(ListQuery<T> query);
+  Task<Paged<T>> Load(int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default);
 
   /// <summary>
   /// Get entities by query (by using the specified index)
   /// </summary>
-  Task<ListResult<T>> Load<TIndex>(ListQuery<T> query) where TIndex : AbstractCommonApiForIndexes, new();
+  Task<Paged<T>> Load<TIndex>(int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where TIndex : AbstractCommonApiForIndexes, new();
 
   /// <summary>
   /// Get all entities from this collection. 
@@ -136,7 +139,7 @@ public interface IEntityCollection<T> where T : ZeroIdEntity, new()
   /// <summary>
   /// Stream the collection
   /// </summary>
-  IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IRavenQueryable<T>> expression);
+  IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IQueryable<T>> expression);
 
   /// <summary>
   /// Validates an entity in this collection
@@ -144,9 +147,14 @@ public interface IEntityCollection<T> where T : ZeroIdEntity, new()
   Task<ValidationResult> Validate(T model);
 
   /// <summary>
-  /// Updates or creates an entity with an optional validator
+  /// Creates an entity with an optional validator
   /// </summary>
-  Task<EntityResult<T>> Save(T model);
+  Task<EntityResult<T>> Create(T model);
+
+  /// <summary>
+  /// Updates an entity with an optional validator
+  /// </summary>
+  Task<EntityResult<T>> Update(T model);
 
   /// <summary>
   /// Deletes an entity

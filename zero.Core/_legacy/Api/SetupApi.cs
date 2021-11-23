@@ -2,23 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using Raven.Client.Documents;
-using Raven.Client.Documents.Conventions;
 using Raven.Client.Documents.Session;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
-using zero.Core.Database;
-using zero.Core.Entities;
-using zero.Core.Entities.Setup;
-using zero.Core.Extensions;
-using zero.Core.Identity;
-using zero.Core.Options;
-using zero.Core.Utils;
-using zero.Core.Validation;
-
+using zero.Setup;
 
 namespace zero.Core.Api
 {

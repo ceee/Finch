@@ -12,5 +12,5 @@ public class SearchController : BackofficeController
     SearchService = searchService;
   }
 
-  public async Task<ListResult<SearchResult>> Query([FromQuery] string query) => await SearchService.Query(query);
+  public async Task<Paged<SearchResult>> Query([FromQuery] string query) => await SearchService.Query(query);
 }

@@ -75,7 +75,7 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public virtual async Task<ListResult<Media>> Load(MediaListQuery query)
+    public virtual async Task<Paged<Media>> Load(MediaListQuery query)
     {
       query.SearchFor(entity => entity.Name);
 
@@ -162,7 +162,7 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public virtual async Task<ListResult<MediaListItem>> Load(MediaListItemQuery query)
+    public virtual async Task<Paged<MediaListItem>> Load(MediaListItemQuery query)
     {
       bool hasSearch = !query.Search.IsNullOrWhiteSpace();
       bool isRoot = query.FolderId.IsNullOrWhiteSpace();
@@ -180,7 +180,7 @@ namespace zero.Core.Collections
         dbQuery = dbQuery.WhereIf(x => x.ParentId == query.FolderId, !query.FolderId.IsNullOrEmpty(), x => x.ParentId == null);
       }
 
-      ListResult<MediaListItem> result = await dbQuery.ToQueriedListAsyncX(query);
+      Paged<MediaListItem> result = await dbQuery.ToQueriedListAsyncX(query);
 
       string[] ids = result.Items.Where(x => x.IsFolder).Select(x => x.Id).ToArray();
 
@@ -256,12 +256,12 @@ namespace zero.Core.Collections
     /// <summary>
     /// Get all available media items with query
     /// </summary>
-    Task<ListResult<Media>> Load(MediaListQuery query);
+    Task<Paged<Media>> Load(MediaListQuery query);
 
     /// <summary>
     /// Get all available media items (including folders) with query
     /// </summary>
-    Task<ListResult<MediaListItem>> Load(MediaListItemQuery query);
+    Task<Paged<MediaListItem>> Load(MediaListItemQuery query);
 
     /// <summary>
     /// Move a file to a new parent

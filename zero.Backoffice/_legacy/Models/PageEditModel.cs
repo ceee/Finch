@@ -7,7 +7,7 @@ namespace zero.Web.Models
   {
     public PageType PageType { get; set; }
 
-    public ListResult<Revision> Revisions { get; set; }
+    public Paged<Revision> Revisions { get; set; }
 
     public List<string> Urls { get; set; } = new();
   }

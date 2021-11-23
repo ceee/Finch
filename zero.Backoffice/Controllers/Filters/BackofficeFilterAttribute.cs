@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace zero.Backoffice.Filters;
+namespace zero.Backoffice.Controllers;
 
 public class BackofficeFilterAttribute : IActionFilter
 {
@@ -11,11 +11,11 @@ public class BackofficeFilterAttribute : IActionFilter
   {
     Type type = context.Controller.GetType();
 
-    if (typeof(BackofficeController).IsAssignableFrom(type))
+    if (typeof(ZeroBackofficeController).IsAssignableFrom(type))
     {
       if (context.HttpContext.Request.Query.TryGetValue(SCOPE_KEY, out var scope))
       {
-        (context.Controller as BackofficeController).OnScopeChanged(scope.ToString());
+        (context.Controller as ZeroBackofficeController).OnScopeChanged(scope.ToString());
       }
     }
   }

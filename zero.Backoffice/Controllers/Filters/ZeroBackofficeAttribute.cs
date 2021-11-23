@@ -6,7 +6,7 @@
 //using zero.Core.Entities;
 //using zero.Web.Models;
 
-//namespace zero.Web.Filters
+//namespace zero.Web.Controllers
 //{
 //  public class ZeroBackofficeAttribute : TypeFilterAttribute
 //  {

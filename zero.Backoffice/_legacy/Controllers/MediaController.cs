@@ -27,7 +27,7 @@ namespace zero.Web.Controllers
     }
 
 
-    public async Task<ListResult<MediaListItem>> GetListByQuery([FromQuery] MediaListItemQuery query)
+    public async Task<Paged<MediaListItem>> GetListByQuery([FromQuery] MediaListItemQuery query)
     {
       query.IncludeInactive = true;
       return await Collection.Load(query);
@@ -47,7 +47,7 @@ namespace zero.Web.Controllers
     public async Task<MediaListResultModel> GetAll([FromQuery] MediaListQuery query)
     {
       query.IncludeInactive = true;
-      ListResult<MediaListModel> items = (await Collection.Load(query)).MapTo(x => new MediaListModel()
+      Paged<MediaListModel> items = (await Collection.Load(query)).MapTo(x => new MediaListModel()
       {
         Id = x.Id,
         IsFolder = false,

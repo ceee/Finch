@@ -150,12 +150,12 @@ public interface ICollectionOperations
   /// <summary>
   /// Get entities by query
   /// </summary>
-  Task<ListResult<T>> Load<T>(ListQuery<T> query) where T : ZeroIdEntity, new();
+  Task<Paged<T>> Load<T>(int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> expression = default) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Get entities by query (by using the specified index)
   /// </summary>
-  Task<ListResult<T>> Load<T, TIndex>(ListQuery<T> query) where T : ZeroIdEntity, new() where TIndex : AbstractCommonApiForIndexes, new();
+  Task<Paged<T>> Load<T, TIndex>(int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> expression = default) where T : ZeroIdEntity, new() where TIndex : AbstractCommonApiForIndexes, new();
 
   /// <summary>
   /// Get all entities from this collection. 
@@ -171,12 +171,17 @@ public interface ICollectionOperations
   /// <summary>
   /// Stream the collection
   /// </summary>
-  IAsyncEnumerable<T> Stream<T>(Func<IRavenQueryable<T>, IRavenQueryable<T>> expression) where T : ZeroIdEntity, new();
+  IAsyncEnumerable<T> Stream<T>(Func<IRavenQueryable<T>, IQueryable<T>> expression) where T : ZeroIdEntity, new();
 
   /// <summary>
-  /// Updates or creates an entity with an optional validator
+  /// Creates an entity with an optional validator
   /// </summary>
-  Task<EntityResult<T>> Save<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
+  Task<EntityResult<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
+
+  /// <summary>
+  /// Updates an entity with an optional validator
+  /// </summary>
+  Task<EntityResult<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Deletes an entity

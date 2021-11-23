@@ -31,7 +31,7 @@ namespace zero.Web.Controllers
     }
 
 
-    public override async Task<ListResult<Language>> GetByQuery([FromQuery] ListBackofficeQuery<Language> query)
+    public override async Task<Paged<Language>> GetByQuery([FromQuery] ListBackofficeQuery<Language> query)
     {
       query.OrderQuery = q => q.OrderByDescending(x => x.CreatedDate);
       return await Collection.Load<zero_Languages>(query);

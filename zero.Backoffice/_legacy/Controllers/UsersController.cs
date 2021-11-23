@@ -29,7 +29,7 @@ namespace zero.Web.Controllers
     public async Task<EditModel<BackofficeUser>> GetById([FromQuery] string id) => Edit(await Api.GetUserById(id));
 
 
-    public async Task<ListResult<BackofficeUser>> GetAll([FromQuery] ListBackofficeQuery<BackofficeUser> query) => await Api.GetByQuery(query);
+    public async Task<Paged<BackofficeUser>> GetAll([FromQuery] ListBackofficeQuery<BackofficeUser> query) => await Api.GetByQuery(query);
 
 
     public IList<PermissionCollection> GetAllPermissions() => PermissionsApi.GetAll();

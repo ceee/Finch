@@ -18,7 +18,7 @@ public class BackofficeSearchService : IBackofficeSearchService
   }
 
 
-  public async Task<ListResult<SearchResult>> Query(string searchTerm)
+  public async Task<Paged<SearchResult>> Query(string searchTerm)
   {
     string[] searchParts = searchTerm.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Select(x =>
     {
@@ -57,7 +57,7 @@ public class BackofficeSearchService : IBackofficeSearchService
       items.Add(searchResult);
     }
 
-    return new ListResult<SearchResult>(items, stats.TotalResults, 1, 20);
+    return new Paged<SearchResult>(items, stats.TotalResults, 1, 20);
   }
 
 
@@ -69,5 +69,5 @@ public class BackofficeSearchService : IBackofficeSearchService
 
 public interface IBackofficeSearchService
 {
-  Task<ListResult<SearchResult>> Query(string searchTerm);
+  Task<Paged<SearchResult>> Query(string searchTerm);
 }

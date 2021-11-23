@@ -89,7 +89,7 @@ namespace zero.Core.Collections
 
 
     /// <inheritdoc />
-    public override async Task<ListResult<Integration>> Load(ListQuery<Integration> query)
+    public override async Task<Paged<Integration>> Load(ListQuery<Integration> query)
     {
       List<Integration> result = new();
       List<Integration> models = await Session.Query<Integration>().ToListAsync();
@@ -257,7 +257,7 @@ namespace zero.Core.Collections
     /// <summary>
     /// Get all integrations with the specified query
     /// </summary>
-    Task<ListResult<Integration>> Load(ListQuery<Integration> query);
+    Task<Paged<Integration>> Load(ListQuery<Integration> query);
 
     /// <summary>
     /// Get all integration types with their configuration status

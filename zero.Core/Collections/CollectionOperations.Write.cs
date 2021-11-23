@@ -5,7 +5,13 @@ namespace zero.Collections;
 public abstract partial class CollectionOperations
 {
   /// <inheritdoc />
-  public virtual async Task<EntityResult<T>> Save<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new()
+  public virtual Task<EntityResult<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new() => Save(model, validate);
+
+  /// <inheritdoc />
+  public virtual Task<EntityResult<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new() => Save(model, validate);
+
+  /// <inheritdoc />
+  protected virtual async Task<EntityResult<T>> Save<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new()
   {
     if (model == null)
     {

@@ -54,7 +54,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<BackofficeUser>> GetByQuery(ListQuery<BackofficeUser> query)
+    public async Task<Paged<BackofficeUser>> GetByQuery(ListQuery<BackofficeUser> query)
     {
       string currentUserId = UserManager.GetUserId(Context.Context.BackofficeUser);
 
@@ -247,7 +247,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all available users (with query)
     /// </summary>
-    Task<ListResult<BackofficeUser>> GetByQuery(ListQuery<BackofficeUser> query);
+    Task<Paged<BackofficeUser>> GetByQuery(ListQuery<BackofficeUser> query);
 
     /// <summary>
     /// Creates or updates a user

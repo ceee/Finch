@@ -14,6 +14,7 @@ class ZeroBackofficeMvcOptions : IConfigureOptions<MvcOptions>
 
   public void Configure(MvcOptions options)
   {
-    //options.Conventions.Add(new ZeroBackofficeControllerModelConvention(Options.BackofficePath));
+    string backofficePath = Options.For<BackofficeOptions>().Path;
+    options.Conventions.Add(new ZeroBackofficeControllerModelConvention(backofficePath));
   }
 }

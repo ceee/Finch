@@ -20,7 +20,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get revision list for an entity
     /// </summary>
-    public async Task<ListResult<Revision<T>>> GetPagedWithModel<T>(string id, int pageNumber = 1, int pageSize = 10) where T : ZeroEntity
+    public async Task<Paged<Revision<T>>> GetPagedWithModel<T>(string id, int pageNumber = 1, int pageSize = 10) where T : ZeroEntity
     {
       // get paged revisions
       List<T> items = await Session.Advanced.Revisions.GetForAsync<T>(id, (pageNumber - 1) * pageSize, pageSize);
@@ -66,16 +66,16 @@ namespace zero.Core.Api
         revisions.Add(revision);
       }
 
-      return new ListResult<Revision<T>>(revisions, totalResults, pageNumber, pageSize);
+      return new Paged<Revision<T>>(revisions, totalResults, pageNumber, pageSize);
     }
 
 
     /// <summary>
     /// Get revision list for an entity
     /// </summary>
-    public async Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10) where T : ZeroEntity
+    public async Task<Paged<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10) where T : ZeroEntity
     {
-      ListResult<Revision<T>> items = await GetPagedWithModel<T>(id, pageNumber, pageSize);
+      Paged<Revision<T>> items = await GetPagedWithModel<T>(id, pageNumber, pageSize);
       return items.MapTo(model => new Revision()
       {
         ChangeVector = model.ChangeVector,
@@ -92,11 +92,11 @@ namespace zero.Core.Api
     /// <summary>
     /// Get revision list including models for an entity
     /// </summary>
-    Task<ListResult<Revision<T>>> GetPagedWithModel<T>(string id, int pageNumber = 1, int pageSize = 10) where T : ZeroEntity;
+    Task<Paged<Revision<T>>> GetPagedWithModel<T>(string id, int pageNumber = 1, int pageSize = 10) where T : ZeroEntity;
 
     /// <summary>
     /// Get revision list for an entity
     /// </summary>
-    Task<ListResult<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10) where T : ZeroEntity;
+    Task<Paged<Revision>> GetPaged<T>(string id, int pageNumber = 1, int pageSize = 10) where T : ZeroEntity;
   }
 }

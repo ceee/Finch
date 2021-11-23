@@ -15,7 +15,7 @@ namespace zero.Web.Controllers
       PreviewTransform = (item, model) => model.Icon = "fth-mail";
     }
 
-    public override async Task<ListResult<MailTemplate>> GetByQuery([FromQuery] ListBackofficeQuery<MailTemplate> query)
+    public override async Task<Paged<MailTemplate>> GetByQuery([FromQuery] ListBackofficeQuery<MailTemplate> query)
     {
       query.SearchFor(entity => entity.Name, entity => entity.Key, entity => entity.Subject);
       return await Collection.Load<zero_MailTemplates>(query);

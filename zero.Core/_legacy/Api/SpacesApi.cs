@@ -89,7 +89,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<SpaceContent>> GetListByQuery(string alias, ListQuery<SpaceContent> query)
+    public async Task<Paged<SpaceContent>> GetListByQuery(string alias, ListQuery<SpaceContent> query)
     {
       query.SearchSelector = item => item.Name;
 
@@ -100,7 +100,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<T>> GetListByQuery<T>(string alias, ListQuery<T> query) where T : SpaceContent
+    public async Task<Paged<T>> GetListByQuery<T>(string alias, ListQuery<T> query) where T : SpaceContent
     {
       query.SearchSelector = item => item.Name;
 
@@ -111,7 +111,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<T>> GetListByQuery<T>(ListQuery<T> query) where T : SpaceContent
+    public async Task<Paged<T>> GetListByQuery<T>(ListQuery<T> query) where T : SpaceContent
     {
       Space space = GetBy<T>();
       query.SearchSelector = item => item.Name;
@@ -172,17 +172,17 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all list items for a space (with query)
     /// </summary>
-    Task<ListResult<SpaceContent>> GetListByQuery(string alias, ListQuery<SpaceContent> query);
+    Task<Paged<SpaceContent>> GetListByQuery(string alias, ListQuery<SpaceContent> query);
 
     /// <summary>
     /// Get all list items for a space (with query)
     /// </summary>
-    Task<ListResult<T>> GetListByQuery<T>(string alias, ListQuery<T> query) where T : SpaceContent;
+    Task<Paged<T>> GetListByQuery<T>(string alias, ListQuery<T> query) where T : SpaceContent;
 
     /// <summary>
     /// Get all list items for a space (with query)
     /// </summary>
-    Task<ListResult<T>> GetListByQuery<T>(ListQuery<T> query) where T : SpaceContent;
+    Task<Paged<T>> GetListByQuery<T>(ListQuery<T> query) where T : SpaceContent;
 
     /// <summary>
     /// Saves a content item in a space

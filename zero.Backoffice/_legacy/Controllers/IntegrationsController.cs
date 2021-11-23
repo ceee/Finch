@@ -25,7 +25,7 @@ namespace zero.Web.Controllers
     public async Task<EditModel<Integration>> GetByAlias([FromQuery] string alias) => Edit(await Collection.GetByAlias(alias));
 
 
-    public async Task<ListResult<Integration>> Load([FromQuery] ListQuery<Integration> query) => await Collection.Load(query);
+    public async Task<Paged<Integration>> Load([FromQuery] ListQuery<Integration> query) => await Collection.Load(query);
 
 
     public async Task<IList<IntegrationTypeWithStatus>> GetTypes() => await Collection.GetTypesWithStatus();

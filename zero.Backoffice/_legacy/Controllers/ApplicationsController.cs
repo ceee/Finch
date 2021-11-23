@@ -29,7 +29,7 @@ namespace zero.Web.Controllers
     public async Task<IList<Application>> GetAll() => await Api.GetAll();
 
 
-    public async Task<ListResult<Application>> GetByQuery([FromQuery] ListBackofficeQuery<Application> query) => await Api.GetByQuery(query);
+    public async Task<Paged<Application>> GetByQuery([FromQuery] ListBackofficeQuery<Application> query) => await Api.GetByQuery(query);
 
 
     public IReadOnlyCollection<Feature> GetAllFeatures() => Options.Features.GetAllItems();

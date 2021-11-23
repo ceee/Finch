@@ -38,7 +38,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<ListResult<Application>> GetByQuery(ListQuery<Application> query)
+    public async Task<Paged<Application>> GetByQuery(ListQuery<Application> query)
     {
       query.SearchFor(entity => entity.Name);
 
@@ -76,7 +76,7 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all available applications (with query)
     /// </summary>
-    Task<ListResult<Application>> GetByQuery(ListQuery<Application> query);
+    Task<Paged<Application>> GetByQuery(ListQuery<Application> query);
 
     /// <summary>
     /// Creates or updates a application

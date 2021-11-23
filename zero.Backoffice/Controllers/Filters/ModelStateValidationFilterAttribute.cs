@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace zero.Backoffice.Filters;
+namespace zero.Backoffice.Controllers;
 
 public class ModelStateValidationFilterAttribute : IActionFilter
 {

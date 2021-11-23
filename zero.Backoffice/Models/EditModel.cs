@@ -13,10 +13,38 @@ public class EditModel<T>
   /// Meta data
   /// </summary>
   public EditMetaModel Meta { get; set; } = new();
+  
+  /// <summary>
+  /// Permissions for this entity
+  /// </summary>
+  public EditPermissionModel Permissions { get; set; } = new();
 }
 
 
 public class EditMetaModel
+{
+  /// <summary>
+  /// Wehther this entity is application aware
+  /// </summary>
+  public bool IsAppAware { get; set; }
+
+  /// <summary>
+  /// Whether this entity can be shared across applications (only for IsAppAware=true)
+  /// </summary>
+  public bool CanBeShared { get; set; }
+
+  public bool IsShared { get; set; }
+
+  /// <summary>
+  /// The change token maps to a database entity which holds ID and collection of the model to edit
+  /// If these values do not match the entity on save it is rejected
+  /// // TODO expiration expiry  session.Advanced.GetMetadataFor(user)[Raven.Client.Constants.Documents.Metadata.Expires] = DateTime.UtcNow.AddMinutes(60);
+  /// </summary>
+  public string Token { get; set; }
+}
+
+
+public class EditPermissionModel
 {
   /// <summary>
   /// Whether an entity of this type can be created
@@ -37,23 +65,4 @@ public class EditMetaModel
   /// Whether this entity can be deleted
   /// </summary>
   public bool CanDelete { get; set; }
-
-  /// <summary>
-  /// Wehther this entity is application aware
-  /// </summary>
-  public bool IsAppAware { get; set; }
-
-  /// <summary>
-  /// Whether this entity can be shared across applications (only for IsAppAware=true)
-  /// </summary>
-  public bool CanBeShared { get; set; }
-
-  public bool IsShared { get; set; }
-
-  /// <summary>
-  /// The change token maps to a database entity which holds ID and collection of the model to edit
-  /// If these values do not match the entity on save it is rejected
-  /// // TODO expiration expiry  session.Advanced.GetMetadataFor(user)[Raven.Client.Constants.Documents.Metadata.Expires] = DateTime.UtcNow.AddMinutes(60);
-  /// </summary>
-  public string Token { get; set; }
 }
