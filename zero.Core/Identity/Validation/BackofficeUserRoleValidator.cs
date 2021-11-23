@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
-using System;
 
 namespace zero.Identity;
 
-public class BackofficeUserRoleValidator : ZeroValidator<BackofficeUserRole>
+public class BackofficeUserRoleValidator : ZeroValidator<ZeroUserRole>
 {
   const string SECTION_CLAIM = "section.";
 

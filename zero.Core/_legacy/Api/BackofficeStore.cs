@@ -12,12 +12,12 @@ namespace zero.Core.Api
 
     public IZeroOptions Options { get; private set; }
 
-    public IAuthenticationApi Auth { get; private set; }
+    public IAuthenticationService Auth { get; private set; }
 
     public IMessageAggregator Messages { get; private set; }
 
 
-    public BackofficeStore(IZeroStore store, IZeroContext context, IZeroOptions options, IAuthenticationApi authenticationApi, IMessageAggregator messages)
+    public BackofficeStore(IZeroStore store, IZeroContext context, IZeroOptions options, IAuthenticationService authenticationApi, IMessageAggregator messages)
     {
       Store = store;
       Context = context;
@@ -36,7 +36,7 @@ namespace zero.Core.Api
 
     IZeroOptions Options { get; }
 
-    IAuthenticationApi Auth { get; }
+    IAuthenticationService Auth { get; }
 
     IMessageAggregator Messages { get; }
   }

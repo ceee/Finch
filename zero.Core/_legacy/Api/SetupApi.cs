@@ -13,12 +13,12 @@ namespace zero.Core.Api
   {
     protected IZeroOptions Options { get; private set; }
 
-    protected IPasswordHasher<BackofficeUser> PasswordHasher { get; private set; }
+    protected IPasswordHasher<ZeroUser> PasswordHasher { get; private set; }
 
     protected IZeroDocumentConventionsBuilder ConventionsBuilder { get; private set; }
 
 
-    public SetupApi(IZeroOptions options, IPasswordHasher<BackofficeUser> passwordHasher, IZeroDocumentConventionsBuilder conventionsBuilder)
+    public SetupApi(IZeroOptions options, IPasswordHasher<ZeroUser> passwordHasher, IZeroDocumentConventionsBuilder conventionsBuilder)
     {
       Options = options;
       PasswordHasher = passwordHasher;
@@ -64,7 +64,7 @@ namespace zero.Core.Api
         });
 
         // create user
-        BackofficeUser user = Prepare(new BackofficeUser()
+        ZeroUser user = Prepare(new ZeroUser()
         {
           IsSuper = true,
           CreatedDate = DateTimeOffset.Now,
@@ -112,9 +112,9 @@ namespace zero.Core.Api
         await session.StoreAsync(app);
 
         // save default user roles
-        IList<BackofficeUserRole> roles = GetRoles(model);
+        IList<ZeroUserRole> roles = GetRoles(model);
 
-        foreach (BackofficeUserRole role in roles)
+        foreach (ZeroUserRole role in roles)
         {
           await session.StoreAsync(role);
         }
@@ -221,11 +221,11 @@ namespace zero.Core.Api
     /// <summary>
     /// Create default roles
     /// </summary>
-    IList<BackofficeUserRole> GetRoles(SetupModel model)
+    IList<ZeroUserRole> GetRoles(SetupModel model)
     {
       string type = Constants.Auth.Claims.Permission;
 
-      BackofficeUserRole adminRole = Prepare(new BackofficeUserRole()
+      ZeroUserRole adminRole = Prepare(new ZeroUserRole()
       {
         Name = "Administrator",
         Alias = Safenames.Alias("Administrator"),
@@ -250,7 +250,7 @@ namespace zero.Core.Api
         },
       });
 
-      BackofficeUserRole editorRole = Prepare(new BackofficeUserRole()
+      ZeroUserRole editorRole = Prepare(new ZeroUserRole()
       {
         Name = "Editor",
         Alias = Safenames.Alias("Editor"),
@@ -269,7 +269,7 @@ namespace zero.Core.Api
         }
       });
 
-      BackofficeUserRole defaultRole = Prepare(new BackofficeUserRole()
+      ZeroUserRole defaultRole = Prepare(new ZeroUserRole()
       {
         Name = "Standard",
         Alias = Safenames.Alias("Standard"),
@@ -283,7 +283,7 @@ namespace zero.Core.Api
         }
       });
 
-      return new List<BackofficeUserRole>() { adminRole, editorRole, defaultRole };
+      return new List<ZeroUserRole>() { adminRole, editorRole, defaultRole };
     }
 
 

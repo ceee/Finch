@@ -26,4 +26,9 @@ public class BackofficeOptions
   /// Configure search maps
   /// </summary>
   public SearchOptions Search { get; set; } = new();
+
+  /// <summary>
+  /// Options for configuring the vite development server
+  /// </summary>
+  public ZeroDevOptions DevServer { get; set; } = new();
 }

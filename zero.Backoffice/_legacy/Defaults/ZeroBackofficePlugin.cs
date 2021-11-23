@@ -19,16 +19,16 @@ namespace zero.Web.Defaults
       //services.AddAll(typeof(IValidator<>), ServiceLifetime.Scoped);
       //services.AddAll(typeof(IValidator), ServiceLifetime.Scoped);
 
-      services.AddTransient<ICountriesCollection, CountriesCollection>();
-      services.AddTransient<ILanguagesCollection, LanguagesCollection>();
+      services.AddTransient<ICountriesStore, CountriesStore>();
+      services.AddTransient<ILanguagesStore, LanguagesStore>();
       services.AddTransient<ITranslationsCollection, TranslationsCollection>();
       services.AddTransient<IMediaCollection, MediaCollection>();
       services.AddTransient<IMediaFolderCollection, MediaFolderCollection>();
       services.AddTransient<IPagesCollection, PagesCollection>();
-      services.AddTransient<IMailTemplatesCollection, MailTemplatesCollection>();
+      services.AddTransient<IMailTemplatesStore, MailTemplatesStore>();
 
       services.AddTransient<IApplicationsApi, ApplicationsApi>();
-      services.AddTransient<IUserApi, UserApi>();
+      services.AddTransient<IUserService, UserService>();
       services.AddTransient<IPreviewApi, PreviewApi>();
 
       services.AddTransient<ISetupApi, SetupApi>();

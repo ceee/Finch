@@ -14,7 +14,7 @@ namespace zero.Core.Api
     IValidator<Application> Validator;
 
 
-    public ApplicationsApi(ICollectionContext store, IValidator<Application> validator) : base(store, isCoreDatabase: true)
+    public ApplicationsApi(IStoreContext store, IValidator<Application> validator) : base(store, isCoreDatabase: true)
     {
       Validator = validator;
     }

@@ -4,7 +4,7 @@ namespace zero.Configuration;
 
 public class IntegrationService : IntegrationsCollection, IIntegrationService
 {
-  public IntegrationService(ICollectionContext<Integration> context, ILogger<IntegrationsCollection> logger) : base(context, logger)
+  public IntegrationService(IStoreContext<Integration> context, ILogger<IntegrationsCollection> logger) : base(context, logger)
   {
     Options = new(false);
   }

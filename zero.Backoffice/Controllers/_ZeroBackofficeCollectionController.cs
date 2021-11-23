@@ -11,7 +11,7 @@ namespace zero.Backoffice;
 
 public abstract class _ZeroBackofficeCollectionController<TEntity, TCollection> : ZeroBackofficeController
   where TEntity : ZeroIdEntity, new()
-  where TCollection : ICollectionOperations<TEntity>
+  where TCollection : IStoreOperations<TEntity>
 {
   protected TCollection Collection { get; private set; }
 

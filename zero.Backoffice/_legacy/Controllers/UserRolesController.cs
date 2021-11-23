@@ -11,31 +11,31 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Read)]
   public class UserRolesController : BackofficeController
   {
-    IUserRolesApi Api;
-    IPermissionsApi PermissionsApi;
+    IUserRolesService Api;
+    IPermissionsService PermissionsApi;
 
 
-    public UserRolesController(IUserRolesApi api, IPermissionsApi permissionsApi)
+    public UserRolesController(IUserRolesService api, IPermissionsService permissionsApi)
     {
       Api = api;
       PermissionsApi = permissionsApi;
     }
 
 
-    public async Task<EditModel<BackofficeUserRole>> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
+    public async Task<EditModel<ZeroUserRole>> GetById([FromQuery] string id) => Edit(await Api.GetById(id));
 
 
-    public async Task<IList<BackofficeUserRole>> GetAll() => await Api.GetAll();
+    public async Task<IList<ZeroUserRole>> GetAll() => await Api.GetAll();
    
 
     public IList<PermissionCollection> GetAllPermissions() => PermissionsApi.GetAll();
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<BackofficeUserRole>> Save([FromBody] BackofficeUserRole model) => await Api.Save(model);
+    public async Task<EntityResult<ZeroUserRole>> Save([FromBody] ZeroUserRole model) => await Api.Save(model);
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<BackofficeUserRole>> Delete([FromQuery] string id) => await Api.Delete(id);
+    public async Task<EntityResult<ZeroUserRole>> Delete([FromQuery] string id) => await Api.Delete(id);
   }
 }

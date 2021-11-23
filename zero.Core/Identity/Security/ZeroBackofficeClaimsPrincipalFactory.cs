@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace zero.Identity;
 
 public class ZeroBackofficeClaimsPrincipalFactory<TUser, TRole> : ZeroClaimsPrinicipalFactory<TUser, TRole>
-  where TUser : BackofficeUser
-  where TRole : BackofficeUserRole
+  where TUser : ZeroUser
+  where TRole : ZeroUserRole
 {
   public ZeroBackofficeClaimsPrincipalFactory(UserManager<TUser> userManager, RoleManager<TRole> roleManager, IOptions<IdentityOptions> optionsAccessor, IOptions<ZeroAuthOptions<TUser>> authOptions, IZeroContext zero) 
     : base(userManager, roleManager, optionsAccessor, authOptions, zero)

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.IO;
 
 namespace zero;
 
@@ -21,8 +20,6 @@ public class ZeroBuilder
 
   public ZeroBuilder(IServiceCollection services, IConfiguration configuration, Action<IZeroStartupOptions> setupAction)
   {
-    ZeroModuleInitializer.RegisterAll(new ZeroModuleConfiguration(services, configuration));
-
     Services = services;
     Mvc = services.AddMvc();
     Configuration = configuration;
@@ -37,44 +34,34 @@ public class ZeroBuilder
     new AssemblyDiscovery(Mvc).Execute(StartupOptions.AssemblyDiscoveryRules);
 
 
-    // add default plugin
-    AddPlugin<ZeroBackofficePlugin>();
+    services.AddZeroApplications();
+    services.AddZeroBlueprints();
+    services.AddZeroCommunication();
+    services.AddZeroConfiguration(Configuration);
+    services.AddZeroContext();
+    services.AddZeroFileStorage();
+    services.AddZeroIdentity();
+    services.AddZeroLocalization();
+    services.AddZeroMails();
+    services.AddZeroPages();
+    services.AddZeroPersistence();
+    services.AddZeroRendering();
+    services.AddZeroRouting();
+    services.AddZeroStores();
 
+    //Mvc.AddNewtonsoftJson(x =>
+    //{
+    //  // TODO this shall only be configurated for backoffice controllers
+    //  BackofficeJsonSerlializerSettings.Setup(x.SerializerSettings);
+    //});
 
-    Mvc.AddNewtonsoftJson(x =>
-    {
-      // TODO this shall only be configurated for backoffice controllers
-      BackofficeJsonSerlializerSettings.Setup(x.SerializerSettings);
-    });
-
-    if (Environment.GetEnvironmentVariable("DOTNET_WATCH") == "1")
-    {
-      Mvc.AddRazorRuntimeCompilation();
-    } 
+    //if (Environment.GetEnvironmentVariable("DOTNET_WATCH") == "1")
+    //{
+    //  Mvc.AddRazorRuntimeCompilation();
+    //} 
 
     // configure FluentValidation
     ValidatorOptions.Global.PropertyNameResolver = ValidatorCamelCasePropertyResolver.ResolvePropertyName;
-
-
-    // add default services
-    Services.AddScoped<IBackofficeStore, BackofficeStore>();
-    Services.AddScoped<BackofficeFilterAttribute>();
-    Services.AddScoped<ModelStateValidationFilterAttribute>();
-
-    //Services.AddScoped<ICollectionInterceptorHandler, CollectionInterceptorHandler>();
-
-    Services.AddTransient<IZeroVue, ZeroVue>();
-    Services.AddScoped<IPaths>(factory => new Paths(factory.GetService<IWebHostEnvironment>(), true));
-
-    // add dev server
-    Services.AddOptions<ZeroDevOptions>()
-      .Bind(Configuration.GetSection("Zero:DevServer"))
-      .Configure<IWebHostEnvironment>((opts, env) =>
-      {
-        opts.WorkingDirectory = Path.Combine(env.ContentRootPath, "..", "Zero.Web.UI", "App");
-      });
-
-    Services.AddHostedService<ZeroDevService>();
   }
 
 

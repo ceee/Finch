@@ -2,7 +2,7 @@
 
 public static class BackofficeUserExtensions
 {
-  public static string[] GetAllowedAppIds(this BackofficeUser user)
+  public static string[] GetAllowedAppIds(this ZeroUser user)
   {
     if (user == null)
     {

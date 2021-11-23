@@ -11,9 +11,9 @@ using zero.Core.Identity;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Languages, PermissionsValue.Read)]
-  public class LanguagesController : ZeroBackofficeCollectionController<Language, ILanguagesCollection>
+  public class LanguagesController : ZeroBackofficeCollectionController<Language, ILanguagesStore>
   {
-    public LanguagesController(ILanguagesCollection collection) : base(collection)
+    public LanguagesController(ILanguagesStore collection) : base(collection)
     {
       PreviewTransform = (item, model) => model.Icon = "fth-globe";
     }

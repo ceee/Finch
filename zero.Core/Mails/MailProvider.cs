@@ -7,7 +7,7 @@ namespace zero.Mails;
 
 public class MailProvider : IMailProvider
 {
-  protected IMailTemplatesCollection Collection { get; set; }
+  protected IMailTemplatesStore Collection { get; set; }
 
   protected ILogger<IMailProvider> Logger { get; set; }
 
@@ -22,7 +22,7 @@ public class MailProvider : IMailProvider
   private Encoding encoding = Encoding.UTF8;
 
 
-  public MailProvider(IZeroContext zero, IMailTemplatesCollection collection, ILogger<IMailProvider> logger, IMailDispatcher mailSender, IRazorRenderer renderer)
+  public MailProvider(IZeroContext zero, IMailTemplatesStore collection, ILogger<IMailProvider> logger, IMailDispatcher mailSender, IRazorRenderer renderer)
   {
     Zero = zero;
     Collection = collection;

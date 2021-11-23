@@ -29,7 +29,7 @@ namespace zero.Core.Collections
     protected IRoutes Routes { get; set; }
 
 
-    public PagesCollection(ICollectionContext context, IRecycleBinApi recycleBinApi, IHandlerHolder handler,
+    public PagesCollection(IStoreContext context, IRecycleBinApi recycleBinApi, IHandlerHolder handler,
       ILogger<IPagesCollection> logger, IRoutes routes, IValidator<Page> validator = null) : base(context, validator)
     {
       RecycleBinApi = recycleBinApi;

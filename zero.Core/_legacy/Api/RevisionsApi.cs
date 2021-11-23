@@ -40,7 +40,7 @@ namespace zero.Core.Api
 
       // load affected users as the revisions could have been edited by other users too
       string[] userIds = items.Select(x => x.LastModifiedById).Distinct().ToArray();
-      Dictionary<string, BackofficeUser> users = await Session.LoadAsync<BackofficeUser>(userIds);
+      Dictionary<string, ZeroUser> users = await Session.LoadAsync<ZeroUser>(userIds);
 
       // create revision objects
       foreach (T item in items)
@@ -53,7 +53,7 @@ namespace zero.Core.Api
           Date = item.LastModifiedDate
         };
 
-        if (!item.LastModifiedById.IsNullOrEmpty() && users.TryGetValue(item.LastModifiedById, out BackofficeUser user) && user != null)
+        if (!item.LastModifiedById.IsNullOrEmpty() && users.TryGetValue(item.LastModifiedById, out ZeroUser user) && user != null)
         {
           revision.User = new RevisionUser()
           {

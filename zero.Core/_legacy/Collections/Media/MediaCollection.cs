@@ -16,12 +16,12 @@ using zero.Core.Database.Indexes;
 
 namespace zero.Core.Collections
 {
-  public class MediaCollection : EntityCollection<Media>, IMediaCollection
+  public class MediaCollection : EntityStore<Media>, IMediaCollection
   {
     /// <inheritdoc />
     public IMediaFolderCollection Folders { get; protected set; }
 
-    public MediaCollection(ICollectionContext<Media> context, IMediaFolderCollection folders, IPaths paths) : base(context)
+    public MediaCollection(IStoreContext<Media> context, IMediaFolderCollection folders, IPaths paths) : base(context)
     {
       Options = new(true);
       Folders = folders;
@@ -241,7 +241,7 @@ namespace zero.Core.Collections
   }
 
 
-  public interface IMediaCollection : IEntityCollection<Media>
+  public interface IMediaCollection : IEntityStore<Media>
   {
     /// <summary>
     /// Media folder collection

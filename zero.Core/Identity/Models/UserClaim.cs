@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace zero.Identity;
 
@@ -18,7 +17,7 @@ public class UserClaim
   /// <summary>
   /// Convert to a claim
   /// </summary>
-  public Claim ToClaim() => new Claim(Type, Value);
+  public Claim ToClaim() => new(Type, Value);
 
   public UserClaim() { }
 
@@ -38,20 +37,5 @@ public class UserClaim
   {
     Type = claim?.Type;
     Value = claim?.Value;
-  }
-}
-
-
-
-public class UserClaimComparer : IEqualityComparer<UserClaim>
-{
-  public bool Equals(UserClaim x, UserClaim y)
-  {
-    return (x == null && y == null) || (x.Type.Equals(y.Type, StringComparison.InvariantCultureIgnoreCase) && x.Value.Equals(y.Value, StringComparison.InvariantCultureIgnoreCase));
-  }
-
-  public int GetHashCode(UserClaim obj)
-  {
-    return (obj.Type + obj.Value).GetHashCode();
   }
 }

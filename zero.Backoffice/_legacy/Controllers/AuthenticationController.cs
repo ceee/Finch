@@ -10,16 +10,16 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(false)]
   public class AuthenticationController : BackofficeController
   {
-    IAuthenticationApi Api;
+    IAuthenticationService Api;
 
 
-    public AuthenticationController(IAuthenticationApi api)
+    public AuthenticationController(IAuthenticationService api)
     {
       Api = api;
     }
 
 
-    public async Task<EditModel<BackofficeUser>> GetUser() => Edit(await Api.GetUser());
+    public async Task<EditModel<ZeroUser>> GetUser() => Edit(await Api.GetUser());
 
  
     public EntityResult IsLoggedIn() => EntityResult.Maybe(Api.IsLoggedIn());

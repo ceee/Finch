@@ -15,7 +15,7 @@ namespace zero.Core.Api
   {
     RecycledEntity Blueprint;
 
-    public RecycleBinApi(ICollectionContext store, RecycledEntity blueprint) : base(store)
+    public RecycleBinApi(IStoreContext store, RecycledEntity blueprint) : base(store)
     {
       Blueprint = blueprint;
     }

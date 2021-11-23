@@ -9,7 +9,7 @@ using zero.Core.Integrations;
 
 namespace zero.Core.Collections
 {
-  public class IntegrationsCollection : EntityCollection<Integration>, IIntegrationsCollection
+  public class IntegrationsCollection : EntityStore<Integration>, IIntegrationsCollection
   {
     /// <inheritdoc />
     public IReadOnlyCollection<IntegrationType> RegisteredTypes { get; private set; }
@@ -17,7 +17,7 @@ namespace zero.Core.Collections
     protected ILogger<IntegrationsCollection> Logger { get; private set; }
 
 
-    public IntegrationsCollection(ICollectionContext<Integration> context, ILogger<IntegrationsCollection> logger) : base(context)
+    public IntegrationsCollection(IStoreContext<Integration> context, ILogger<IntegrationsCollection> logger) : base(context)
     {
       Options = new(true);
       RegisteredTypes = Context.Options.Integrations.GetAllItems();

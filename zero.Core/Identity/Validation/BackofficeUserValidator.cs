@@ -2,7 +2,7 @@
 
 namespace zero.Identity;
 
-public class BackofficeUserValidator : ZeroValidator<BackofficeUser>
+public class BackofficeUserValidator : ZeroValidator<ZeroUser>
 {
   public BackofficeUserValidator(bool isCreate = false)
   {

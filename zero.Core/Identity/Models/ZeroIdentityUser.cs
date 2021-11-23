@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace zero.Identity;
+﻿namespace zero.Identity;
 
 public abstract class ZeroIdentityUser : ZeroEntity
 {

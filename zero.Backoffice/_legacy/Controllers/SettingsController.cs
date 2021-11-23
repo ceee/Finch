@@ -11,12 +11,12 @@ namespace zero.Web.Controllers
   [ZeroAuthorize(Permissions.Sections.Settings, PermissionsValue.Read)]
   public class SettingsController : BackofficeController
   {
-    IAuthenticationApi AuthApi;
+    IAuthenticationService AuthApi;
 
     IApplicationsApi ApplicationsApi;
 
 
-    public SettingsController(IAuthenticationApi authApi, IApplicationsApi applicationsApi)
+    public SettingsController(IAuthenticationService authApi, IApplicationsApi applicationsApi)
     {
       AuthApi = authApi;
       ApplicationsApi = applicationsApi;

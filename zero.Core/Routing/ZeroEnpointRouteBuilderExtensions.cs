@@ -10,7 +10,7 @@ public static class ZeroEndpointRouteBuilderExtensions
     // see https://our.umbraco.com/documentation/reference/routing/custom-routes#where-to-put-your-routing-logic
     //string path = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
 
-    endpoints.MapFallbackToController(path + "/{**path}", "Index", "ZeroBackoffice");
+    endpoints.MapFallbackToController(path + "/{**path}", "Index", "ZeroIndex");
     return endpoints;
   }
 

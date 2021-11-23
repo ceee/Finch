@@ -8,9 +8,9 @@ using zero.Core.Identity;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Mails, PermissionsValue.Read)]
-  public class MailTemplatesController : ZeroBackofficeCollectionController<MailTemplate, IMailTemplatesCollection>
+  public class MailTemplatesController : ZeroBackofficeCollectionController<MailTemplate, IMailTemplatesStore>
   {
-    public MailTemplatesController(IMailTemplatesCollection collection) : base(collection)
+    public MailTemplatesController(IMailTemplatesStore collection) : base(collection)
     {
       PreviewTransform = (item, model) => model.Icon = "fth-mail";
     }

@@ -16,7 +16,7 @@ namespace zero.Core.Api
 
     protected IHandlerHolder Handler { get; private set; }
 
-    public ModulesApi(IZeroOptions options, ICollectionContext store, IHandlerHolder handler) : base(store)
+    public ModulesApi(IZeroOptions options, IStoreContext store, IHandlerHolder handler) : base(store)
     {
       Options = options;
       Handler = handler;

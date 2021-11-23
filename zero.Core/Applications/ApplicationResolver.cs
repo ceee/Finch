@@ -64,13 +64,13 @@ public class ApplicationResolver : IApplicationResolver
   /// <inheritdoc />
   public async Task<Application> ResolveFromUser(ClaimsPrincipal user)
   {
-    BackofficeUser userEntity = await GetBackofficeUser(user);
+    ZeroUser userEntity = await GetBackofficeUser(user);
     return await ResolveFromUser(userEntity);
   }
 
 
   /// <inheritdoc />
-  public async Task<Application> ResolveFromUser(BackofficeUser user)
+  public async Task<Application> ResolveFromUser(ZeroUser user)
   {
     if (user == null)
     {
@@ -181,12 +181,12 @@ public class ApplicationResolver : IApplicationResolver
   /// <summary>
   /// Get backoffice user from claims principal
   /// </summary>
-  async Task<BackofficeUser> GetBackofficeUser(ClaimsPrincipal user)
+  async Task<ZeroUser> GetBackofficeUser(ClaimsPrincipal user)
   {
     string userId = user.FindFirstValue(Constants.Auth.Claims.UserId);
 
     IAsyncDocumentSession session = Store.Session(global: true);
-    return await session.LoadAsync<BackofficeUser>(userId);
+    return await session.LoadAsync<ZeroUser>(userId);
   }
 }
 
@@ -224,5 +224,5 @@ public interface IApplicationResolver
   /// Resolves the current application from a user.
   /// This method won't return apps the user has no access to.
   /// </summary>
-  Task<Application> ResolveFromUser(BackofficeUser user);
+  Task<Application> ResolveFromUser(ZeroUser user);
 }

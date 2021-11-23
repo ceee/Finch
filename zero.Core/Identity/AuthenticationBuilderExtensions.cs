@@ -9,8 +9,8 @@ namespace zero.Identity;
 public static class AuthenticationBuilderExtensions
 {
   public static AuthenticationBuilder AddZeroBackofficeCookie<TUser, TRole>(this AuthenticationBuilder builder, Action<OptionsBuilder<CookieAuthenticationOptions>> setupAction = null)
-    where TUser : BackofficeUser
-    where TRole : BackofficeUserRole
+    where TUser : ZeroUser
+    where TRole : ZeroUserRole
   {
     return builder.AddCookie<TUser>(Constants.Auth.BackofficeScheme, Constants.Auth.BackofficeDisplayName, true, b =>
     {

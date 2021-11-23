@@ -2,9 +2,9 @@
 
 namespace zero.Core.Collections
 {
-  public class TranslationsCollection : EntityCollection<Translation>, ITranslationsCollection
+  public class TranslationsCollection : EntityStore<Translation>, ITranslationsCollection
   {
-    public TranslationsCollection(ICollectionContext<Translation> context) : base(context) { }
+    public TranslationsCollection(IStoreContext<Translation> context) : base(context) { }
 
 
     /// <inheritdoc />
@@ -15,7 +15,7 @@ namespace zero.Core.Collections
   }
 
 
-  public interface ITranslationsCollection : IEntityCollection<Translation>
+  public interface ITranslationsCollection : IEntityStore<Translation>
   {
     /// <summary>
     /// Get a translated string by id

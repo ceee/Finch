@@ -14,10 +14,10 @@ namespace zero.Core.Api
 {
   public class SpacesApi : BackofficeApi, ISpacesApi
   {
-    protected IPermissionsApi PermissionsApi { get; private set; }
+    protected IPermissionsService PermissionsApi { get; private set; }
 
 
-    public SpacesApi(ICollectionContext store, IPermissionsApi permissionsApi) : base(store)
+    public SpacesApi(IStoreContext store, IPermissionsService permissionsApi) : base(store)
     {
       PermissionsApi = permissionsApi;
     }

@@ -9,9 +9,9 @@ using zero.Core.Database.Indexes;
 
 namespace zero.Core.Collections
 {
-  public class MediaFolderCollection : EntityCollection<MediaFolder>, IMediaFolderCollection
+  public class MediaFolderCollection : EntityStore<MediaFolder>, IMediaFolderCollection
   {
-    public MediaFolderCollection(ICollectionContext<MediaFolder> context) : base(context)
+    public MediaFolderCollection(IStoreContext<MediaFolder> context) : base(context)
     {
       Options = new(true);
     }
@@ -146,7 +146,7 @@ namespace zero.Core.Collections
   }
 
 
-  public interface IMediaFolderCollection : IEntityCollection<MediaFolder>
+  public interface IMediaFolderCollection : IEntityStore<MediaFolder>
   {
     /// <summary>
     /// Get hierarchy for a folder

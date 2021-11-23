@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
-using System.Linq;
 
 namespace zero.Identity;
 

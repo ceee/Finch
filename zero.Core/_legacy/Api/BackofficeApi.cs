@@ -21,19 +21,19 @@ namespace zero.Core.Api
 
     const string NEW_ID = "new:";
 
-    protected ICollectionContext Context { get; private set; }
+    protected IStoreContext Context { get; private set; }
 
     protected bool IsCoreDatabase { get; private set; }
 
 
-    public BackofficeApi(ICollectionContext context)
+    public BackofficeApi(IStoreContext context)
     {
       Context = context;
       Store = context.Store;
       IsCoreDatabase = false;
     }
 
-    internal BackofficeApi(ICollectionContext context, bool isCoreDatabase) : this(context)
+    internal BackofficeApi(IStoreContext context, bool isCoreDatabase) : this(context)
     {
       IsCoreDatabase = isCoreDatabase;
     }

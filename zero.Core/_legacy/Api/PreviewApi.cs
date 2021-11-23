@@ -11,7 +11,7 @@ namespace zero.Core.Api
   {
     Preview Blueprint;
 
-    public PreviewApi(ICollectionContext store, Preview blueprint) : base(store)
+    public PreviewApi(IStoreContext store, Preview blueprint) : base(store)
     {
       Blueprint = blueprint;
     }

@@ -7,7 +7,7 @@ global using System.Threading.Tasks;
 
 global using zero.Applications;
 global using zero.Architecture;
-global using zero.Collections;
+global using zero.Stores;
 global using zero.Configuration;
 global using zero.Context;
 global using zero.Extensions;
@@ -25,3 +25,4 @@ global using zero.Backoffice.Controllers;
 global using zero.Backoffice.Models;
 global using zero.Backoffice.Modules;
 global using zero.Backoffice.UIComposition;
+global using zero.Backoffice.DevServer;

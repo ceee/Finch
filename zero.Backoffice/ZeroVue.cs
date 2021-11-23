@@ -20,7 +20,7 @@ using zero.Core.Options;
 using zero.Core.Plugins;
 using zero.Web.Models;
 
-namespace zero.Web
+namespace zero.Backoffice
 {
   public class ZeroVue : IZeroVue
   {
@@ -30,7 +30,7 @@ namespace zero.Web
 
     protected IApplicationsApi ApplicationsApi { get; private set; }
 
-    protected IAuthenticationApi AuthenticationApi { get; private set; }
+    protected IAuthenticationService AuthenticationApi { get; private set; }
 
     protected IEnumerable<IZeroPlugin> Plugins { get; private set; }
 
@@ -43,7 +43,7 @@ namespace zero.Web
     string IconSymbolsSvg { get; set; }
 
 
-    public ZeroVue(IZeroOptions options, IPaths paths, IApplicationsApi applicationsApi, IAuthenticationApi authenticationApi, IEnumerable<IZeroPlugin> plugins, IZeroContext context, ILogger<IZeroVue> logger, IZeroStore store)
+    public ZeroVue(IZeroOptions options, IPaths paths, IApplicationsApi applicationsApi, IAuthenticationService authenticationApi, IEnumerable<IZeroPlugin> plugins, IZeroContext context, ILogger<IZeroVue> logger, IZeroStore store)
     {
       Paths = paths;
       Options = options;
@@ -73,7 +73,7 @@ namespace zero.Web
       config.Icons = CreateIconSets();
       config.MultiApps = Options.Applications.EnableMultiple;
 
-      BackofficeUser user = await AuthenticationApi.GetUser();
+      ZeroUser user = await AuthenticationApi.GetUser();
 
       config.Translations = CreateTranslations(user?.LanguageId);
 

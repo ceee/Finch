@@ -13,9 +13,9 @@ namespace zero.Backoffice.Modules;
 /// </summary>
 public class CountriesController : ZeroBackofficeApiController
 {
-  protected ICountriesCollection Collection { get; set; }
+  protected ICountriesStore Collection { get; set; }
 
-  public CountriesController(ICountriesCollection collection)
+  public CountriesController(ICountriesStore collection)
   {
     Collection = collection;
   }
