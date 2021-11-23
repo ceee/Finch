@@ -1,4 +1,4 @@
-﻿namespace zero.Backoffice.Sections;
+﻿namespace zero.Backoffice.UIComposition;
 
 /// <summary>
 /// A section is a main part of the backoffice application

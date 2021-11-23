@@ -1,4 +1,4 @@
-﻿namespace zero.Backoffice.Sections;
+﻿namespace zero.Backoffice.UIComposition;
 
 /// <summary>
 /// Manage the page tree in this section

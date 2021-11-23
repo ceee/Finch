@@ -1,4 +1,4 @@
-﻿namespace zero.Backoffice.Sections;
+﻿namespace zero.Backoffice.UIComposition;
 
 /// <summary>
 /// Global list entities

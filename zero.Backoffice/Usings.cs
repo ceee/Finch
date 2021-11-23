@@ -26,4 +26,4 @@ global using zero.Backoffice;
 global using zero.Backoffice.Models;
 global using zero.Backoffice.Modules;
 global using zero.Backoffice.Configuration;
-global using zero.Backoffice.Sections;
+global using zero.Backoffice.UIComposition;

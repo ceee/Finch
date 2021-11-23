@@ -1,4 +1,4 @@
-﻿namespace zero.Backoffice.Sections;
+﻿namespace zero.Backoffice.UIComposition;
 
 /// <summary>
 /// A child section is a sub-navigation item of a section

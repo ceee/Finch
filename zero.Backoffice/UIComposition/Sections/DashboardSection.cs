@@ -1,4 +1,4 @@
-﻿namespace zero.Backoffice.Sections;
+﻿namespace zero.Backoffice.UIComposition;
 
 /// <summary>
 /// The dashboard aggregates data from all sections

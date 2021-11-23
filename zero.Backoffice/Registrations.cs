@@ -6,6 +6,6 @@ internal class Registrations
   {
     new CountriesModule(),
     new SearchModule(),
-    new BackofficeSectionModule()
+    new BackofficeUICompositionModule()
   };
 }

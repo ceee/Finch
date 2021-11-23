@@ -1,4 +1,4 @@
-﻿namespace zero.Backoffice.Modules;
+﻿namespace zero.Backoffice.UIComposition;
 
 public class BackofficeSectionPermissions : PermissionProvider
 {

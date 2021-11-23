@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace zero.Backoffice.Sections;
+namespace zero.Backoffice.UIComposition;
 
-internal class BackofficeSectionModule : ZeroModule
+internal class BackofficeUICompositionModule : ZeroModule
 {
   /// <inheritdoc />
   public override void Register(IZeroModuleConfiguration config)
@@ -12,6 +12,10 @@ internal class BackofficeSectionModule : ZeroModule
     config.Services.AddSingleton<IBackofficeSection, SpacesSection>();
     config.Services.AddSingleton<IBackofficeSection, MediaSection>();
     config.Services.AddSingleton<IBackofficeSection, SettingsSection>();
+
+    config.Services.AddSingleton<ISettingsGroup, SystemSettings>();
+    config.Services.AddSingleton<ISettingsGroup, ApplicationSettings>();
+
     config.Services.AddScoped<IPermissionProvider, CountryPermissions>();
   }
 
