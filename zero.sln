@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Core", "old\zero.Core\zero.Core.csproj", "{7BFF3DDE-F910-4CE1-9B94-846059CE80DA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Commerce", "plugins\zero.Commerce\zero.Commerce.csproj", "{63A8AD15-15F0-4555-BD62-C38B4465FFC1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Web", "old\zero.Web\zero.Web.csproj", "{06156006-7684-41EC-8BD4-3B2A762147CD}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "zero.Backoffice.UI", "zero.Backoffice.UI\", "{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -45,8 +41,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{6FAA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Backoffice", "zero.Backoffice\zero.Backoffice.csproj", "{355432DA-01AF-4E1E-B87F-8A8D99E52411}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "old", "old", "{DECD7B35-5ECB-4B4B-BF62-B66F96B156FE}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Core", "zero.Core\zero.Core.csproj", "{CED2A7FA-8D35-4A2A-AF57-8B95307547CB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Web", "zero.Web\zero.Web.csproj", "{1E4EE00E-96BB-4382-AE6D-4AA2B8C600B7}"
@@ -57,18 +51,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7BFF3DDE-F910-4CE1-9B94-846059CE80DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7BFF3DDE-F910-4CE1-9B94-846059CE80DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7BFF3DDE-F910-4CE1-9B94-846059CE80DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7BFF3DDE-F910-4CE1-9B94-846059CE80DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{63A8AD15-15F0-4555-BD62-C38B4465FFC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{63A8AD15-15F0-4555-BD62-C38B4465FFC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63A8AD15-15F0-4555-BD62-C38B4465FFC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63A8AD15-15F0-4555-BD62-C38B4465FFC1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06156006-7684-41EC-8BD4-3B2A762147CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06156006-7684-41EC-8BD4-3B2A762147CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06156006-7684-41EC-8BD4-3B2A762147CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06156006-7684-41EC-8BD4-3B2A762147CD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Release|Any CPU.ActiveCfg = Debug|Any CPU
@@ -98,9 +84,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7BFF3DDE-F910-4CE1-9B94-846059CE80DA} = {DECD7B35-5ECB-4B4B-BF62-B66F96B156FE}
 		{63A8AD15-15F0-4555-BD62-C38B4465FFC1} = {6FAA92A8-CA1A-48EA-9857-C9092971B4D1}
-		{06156006-7684-41EC-8BD4-3B2A762147CD} = {DECD7B35-5ECB-4B4B-BF62-B66F96B156FE}
 		{C23CF90A-DB90-427F-816C-0E2FE20E29D0} = {6FAA92A8-CA1A-48EA-9857-C9092971B4D1}
 		{A8E5F34F-5400-4F92-96C6-7F91645BC220} = {6FAA92A8-CA1A-48EA-9857-C9092971B4D1}
 	EndGlobalSection
