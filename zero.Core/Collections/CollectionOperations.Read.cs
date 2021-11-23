@@ -1,17 +1,12 @@
-﻿namespace zero.Core;
-using Raven.Client.Documents.Indexes;
+﻿using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using zero.Core.Entities;
-using zero.Core.Extensions;
 
-public abstract partial class EntityCollection<T>
+namespace zero.Collections;
+
+public abstract partial class CollectionOperations
 {
   /// <inheritdoc />
-  public virtual async Task<T> Load(string id, string changeVector = null)
+  public virtual async Task<T> Load<T>(string id, string changeVector = null) where T : ZeroIdEntity, new()
   {
     if (id.IsNullOrWhiteSpace())
     {
@@ -27,7 +22,7 @@ public abstract partial class EntityCollection<T>
 
 
   /// <inheritdoc />
-  public virtual async Task<Dictionary<string, T>> Load(IEnumerable<string> ids)
+  public virtual async Task<Dictionary<string, T>> Load<T>(IEnumerable<string> ids) where T : ZeroIdEntity, new()
   {
     ids = ids.Distinct().ToArray();
 
@@ -45,25 +40,27 @@ public abstract partial class EntityCollection<T>
 
 
   /// <inheritdoc />
-  public virtual async Task<ListResult<T>> Load(ListQuery<T> query)
+  public virtual async Task<ListResult<T>> Load<T>(ListQuery<T> query) where T : ZeroIdEntity, new()
   {
-    return await Session.Query<T>().ToQueriedListAsyncX(query); // TODO whenActive + AsyncX update for ZeroEntity
+    return await Session.Query<T>().FilterAsync(query);
   }
 
 
   /// <inheritdoc />
-  public virtual async Task<ListResult<T>> Load<TIndex>(ListQuery<T> query) where TIndex : AbstractCommonApiForIndexes, new()
+  public virtual async Task<ListResult<T>> Load<T, TIndex>(ListQuery<T> query) 
+    where T : ZeroIdEntity, new() 
+    where TIndex : AbstractCommonApiForIndexes, new()
   {
-    return await Session.Query<T, TIndex>().ToQueriedListAsyncX(query);
+    return await Session.Query<T, TIndex>().FilterAsync(query);
   }
 
 
   /// <inheritdoc />
-  public virtual async Task<List<T>> LoadAll()
+  public virtual async Task<List<T>> LoadAll<T>() where T : ZeroIdEntity, new()
   {
     List<T> items = new();
 
-    await foreach (T item in Stream())
+    await foreach (T item in Stream<T>())
     {
       items.Add(item);
     }
@@ -73,11 +70,11 @@ public abstract partial class EntityCollection<T>
 
 
   /// <inheritdoc />
-  public virtual IAsyncEnumerable<T> Stream() => Stream(null);
+  public virtual IAsyncEnumerable<T> Stream<T>() where T : ZeroIdEntity, new() => Stream<T>(null);
 
 
   /// <inheritdoc />
-  public virtual async IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IRavenQueryable<T>> expression)
+  public virtual async IAsyncEnumerable<T> Stream<T>(Func<IRavenQueryable<T>, IRavenQueryable<T>> expression) where T : ZeroIdEntity, new()
   {
     IRavenQueryable<T> query = Session.Query<T>();
 

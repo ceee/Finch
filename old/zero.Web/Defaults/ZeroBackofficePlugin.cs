@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using zero.Web.Sections;
 using zero.Web.ViewHelpers;
 
 namespace zero.Web.Defaults
@@ -10,16 +8,9 @@ namespace zero.Web.Defaults
   {
     public override void Configure(IZeroOptions zero)
     {
-      zero.Sections.Add<DashboardSection>();
-      zero.Sections.Add<PagesSection>();
-      zero.Sections.Add<SpacesSection>();
-      zero.Sections.Add<MediaSection>();
-      zero.Sections.Add<SettingsSection>();
-
       zero.Settings.AddGroup<SystemSettings>();
       zero.Settings.AddGroup<ApplicationSettings>();
 
-      zero.Permissions.AddCollection<SectionPermissions>();
       zero.Permissions.AddCollection<ModulePermissions>();
       zero.Permissions.AddCollection<SettingsPermissions>();
       zero.Permissions.AddCollection<SpacePermissions>();
@@ -62,7 +53,6 @@ namespace zero.Web.Defaults
 
       services.AddScoped<ICollectionContext, CollectionContext>();
       services.AddScoped(typeof(ICollectionContext<>), typeof(CollectionContext<>));
-      services.AddScoped(typeof(IInterceptorRunner<>), typeof(InterceptorRunner<>));
 
       services.AddScoped<IBackofficeSearchService, BackofficeSearchService>();
     }

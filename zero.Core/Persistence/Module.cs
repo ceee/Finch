@@ -13,6 +13,8 @@ internal class PersistenceModule : ZeroModule
     config.Services.AddSingleton<IZeroDocumentStore, ZeroDocumentStore>(CreateRavenStore);
     config.Services.AddScoped<IZeroStore, ZeroStore>();
     config.Services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();
+    config.Services.AddScoped<ICollectionContext, CollectionContext>();
+    config.Services.AddScoped<ICollectionOperations, CollectionOperations>();
   }
 
 
@@ -34,14 +36,14 @@ internal class PersistenceModule : ZeroModule
     IZeroDocumentStore store = new ZeroDocumentStore(options)
     {
       Urls = new string[1] { options.For<RavenOptions>().Url },
-      Conventions = // TODO activate and test this
+      Conventions =
+      {
+        AggressiveCache =
         {
-          AggressiveCache =
-          {
-            Duration = TimeSpan.FromHours(1),
-            Mode = AggressiveCacheMode.TrackChanges
-          }
+          Duration = TimeSpan.FromHours(1),
+          Mode = AggressiveCacheMode.TrackChanges
         }
+      }
     };
 
     conventionsBuilder.Run(store.Conventions);

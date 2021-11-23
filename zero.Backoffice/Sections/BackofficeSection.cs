@@ -3,7 +3,7 @@
 /// <summary>
 /// A section is a main part of the backoffice application
 /// </summary>
-public class Section : ISection, IChildSection
+public class BackofficeSection : IBackofficeSection, IChildBackofficeSection
 {
   /// <inheritdoc />
   public string Alias { get; set; }
@@ -20,12 +20,12 @@ public class Section : ISection, IChildSection
   public string Color { get; set; }
 
   /// <inheritdoc />
-  public IList<IChildSection> Children { get; } = new List<IChildSection>();
+  public IList<IChildBackofficeSection> Children { get; } = new List<IChildBackofficeSection>();
 
 
-  public Section() { }
+  public BackofficeSection() { }
 
-  public Section(string alias, string name, string icon = null, string color = null)
+  public BackofficeSection(string alias, string name, string icon = null, string color = null)
   {
     Alias = alias;
     Name = name;

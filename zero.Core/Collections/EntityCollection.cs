@@ -1,14 +1,8 @@
-﻿namespace zero.Core;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using zero.Core.Database;
-using zero.Core.Entities;
-using zero.Core.Validation;
 
+namespace zero.Collections;
 
 public abstract partial class EntityCollection<T> : IEntityCollection<T> where T : ZeroIdEntity, new()
 {
@@ -25,25 +19,58 @@ public abstract partial class EntityCollection<T> : IEntityCollection<T> where T
 
   protected EntityCollectionOptions Options { get; set; }
 
-  protected IInterceptorRunner<T> Interceptors { get; private set; }
+  protected IInterceptors Interceptors { get; private set; }
+
+  protected ICollectionOperations Operations { get; private set; }
 
 
-  public EntityCollection(ICollectionContext<T> collectionContext)
+  public EntityCollection(ICollectionContext collectionContext)
   {
+    Operations = collectionContext.Operations;
     Context = collectionContext.Context;
     Interceptors = collectionContext.Interceptors;
     Options = new(true);
   }
 
 
-  /// <summary>
-  /// Get new instance of an entity
-  /// </summary>
-  public virtual Task<T> Empty()
-  {
-    return Task.FromResult(new T());
-  }
+  /// <inheritdoc />
+  public virtual Task<T> Empty() => Operations.Empty<T>();
 
+  /// <inheritdoc />
+  public virtual Task<T> Load(string id, string changeVector = null) => Operations.Load<T>(id, changeVector);
+
+  /// <inheritdoc />
+  public virtual Task<Dictionary<string, T>> Load(IEnumerable<string> ids) => Operations.Load<T>(ids);
+
+  /// <inheritdoc />
+  public virtual Task<ListResult<T>> Load(ListQuery<T> query) => Operations.Load(query);
+
+  /// <inheritdoc />
+  public virtual Task<ListResult<T>> Load<TIndex>(ListQuery<T> query) where TIndex : AbstractCommonApiForIndexes, new() => Operations.Load<T, TIndex>(query);
+
+  /// <inheritdoc />
+  public virtual Task<List<T>> LoadAll() => Operations.LoadAll<T>();
+
+  /// <inheritdoc />
+  public virtual IAsyncEnumerable<T> Stream() => Operations.Stream<T>();
+
+  /// <inheritdoc />
+  public virtual IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IRavenQueryable<T>> expression) => Operations.Stream<T>(expression);
+
+  /// <inheritdoc />
+  public virtual Task<EntityResult<T>> Save(T model) => Operations.Save(model, async m => await Validate(m));
+
+  /// <inheritdoc />
+  public virtual Task<EntityResult<T>> Delete(T model) => Operations.Delete(model);
+
+  /// <inheritdoc />
+  public virtual Task<int> Delete(IEnumerable<T> models) => Operations.Delete(models);
+
+  /// <inheritdoc />
+  public virtual Task<EntityResult<T>> Delete(string id) => Operations.Delete<T>(id);
+
+  /// <inheritdoc />
+  public virtual Task<int> Delete(IEnumerable<string> ids) => Operations.Delete<T>(ids);
 
   /// <inheritdoc />
   public virtual async Task<ValidationResult> Validate(T model)
@@ -63,10 +90,7 @@ public abstract partial class EntityCollection<T> : IEntityCollection<T> where T
   /// <summary>
   /// Do only return the model when it is set to active or inactive entities are included with IncludeInactive()
   /// </summary>
-  protected virtual T WhenActive(T model)
-  {
-    return model != null && (Options.IncludeInactive || (model is ZeroEntity ? (model as ZeroEntity).IsActive : true)) ? model : default;
-  }
+  protected virtual T WhenActive(T model) => model != null && (Options.IncludeInactive || (model is ZeroEntity ? (model as ZeroEntity).IsActive : true)) ? model : default;
 }
 
 

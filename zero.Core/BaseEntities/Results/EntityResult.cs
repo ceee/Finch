@@ -1,7 +1,7 @@
 ﻿using FluentValidation.Results;
 using System.Runtime.Serialization;
 
-namespace zero.Persistence;
+namespace zero;
 
 [DataContract(Name = "result", Namespace = "")]
 public class EntityResult<T>

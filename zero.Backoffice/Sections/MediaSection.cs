@@ -3,7 +3,7 @@
 /// <summary>
 /// Media items (images, videos, documents) grouped in folders
 /// </summary>
-public class MediaSection : IInternalSection
+public class MediaSection : IInternalBackofficeSection
 {
   /// <inheritdoc />
   public string Alias => Constants.Sections.Media;
@@ -18,5 +18,5 @@ public class MediaSection : IInternalSection
   public string Color => "#d82853";
 
   /// <inheritdoc />
-  public IList<IChildSection> Children => new List<IChildSection>();
+  public IList<IChildBackofficeSection> Children => new List<IChildBackofficeSection>();
 }

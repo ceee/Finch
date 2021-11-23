@@ -3,7 +3,7 @@
 /// <summary>
 /// A child section is a sub-navigation item of a section
 /// </summary>
-public interface IChildSection
+public interface IChildBackofficeSection
 {
   /// <summary>
   /// The section alias which acts as the url slug for navigation

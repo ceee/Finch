@@ -66,8 +66,6 @@ public class ZeroOptions : IZeroOptions
   ///// <inheritdoc />
   //public ApplicationOptions Applications { get; set; }
 
-  ///// <inheritdoc />
-  //public SectionOptions Sections { get; private set; }
 
   ///// <inheritdoc />
   //public FeatureOptions Features { get; private set; }

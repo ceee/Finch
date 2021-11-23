@@ -22,3 +22,4 @@ global using zero.Rendering;
 global using zero.Routing;
 global using zero.Utils;
 global using zero.Validation;
+global using zero.Collections;

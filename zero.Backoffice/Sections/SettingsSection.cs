@@ -3,7 +3,7 @@
 /// <summary>
 /// Website and backoffice settings
 /// </summary>
-public class SettingsSection : IInternalSection
+public class SettingsSection : IInternalBackofficeSection
 {
   /// <inheritdoc />
   public string Alias => Constants.Sections.Settings;
@@ -18,5 +18,5 @@ public class SettingsSection : IInternalSection
   public string Color => null;
 
   /// <inheritdoc />
-  public IList<IChildSection> Children => new List<IChildSection>();
+  public IList<IChildBackofficeSection> Children => new List<IChildBackofficeSection>();
 }

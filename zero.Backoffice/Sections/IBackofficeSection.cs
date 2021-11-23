@@ -3,12 +3,12 @@
 /// <summary>
 /// Internal section
 /// </summary>
-public interface IInternalSection : ISection { }
+internal interface IInternalBackofficeSection : IBackofficeSection { }
 
 /// <summary>
 /// A section is a main part of the backoffice application
 /// </summary>
-public interface ISection
+public interface IBackofficeSection
 {
   /// <summary>
   /// The section alias which acts as the url slug for navigation
@@ -33,5 +33,5 @@ public interface ISection
   /// <summary>
   /// Children are displayed as a sub-navigation in the main nav area
   /// </summary>
-  IList<IChildSection> Children { get; }
+  IList<IChildBackofficeSection> Children { get; }
 }

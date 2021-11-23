@@ -3,7 +3,7 @@
 /// <summary>
 /// Global list entities
 /// </summary>
-public class SpacesSection : IInternalSection
+public class SpacesSection : IInternalBackofficeSection
 {
   /// <inheritdoc />
   public string Alias => Constants.Sections.Spaces;
@@ -18,5 +18,5 @@ public class SpacesSection : IInternalSection
   public string Color => "#f9c202";
 
   /// <inheritdoc />
-  public IList<IChildSection> Children => new List<IChildSection>();
+  public IList<IChildBackofficeSection> Children => new List<IChildBackofficeSection>();
 }
