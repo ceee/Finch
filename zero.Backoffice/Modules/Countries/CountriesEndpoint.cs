@@ -15,6 +15,6 @@ public class CountriesController : ZeroBackofficeCollectionController<Country, I
   public override Task<ListResult<Country>> GetByQuery([FromQuery] ListBackofficeQuery<Country> query)
   {
     query.OrderQuery = q => q.OrderByDescending(x => x.IsPreferred).ThenBy(x => x.Name);
-    return Collection.Load<zero_Countries>(query);
+    return Collection.Load<zero_Backoffice_Countries_Listing>(query);
   }
 }

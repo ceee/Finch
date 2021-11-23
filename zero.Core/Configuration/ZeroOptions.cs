@@ -79,9 +79,6 @@ public class ZeroOptions : IZeroOptions
   //public ModuleOptions Modules { get; private set; }
 
   ///// <inheritdoc />
-  //public PermissionOptions Permissions { get; private set; }
-
-  ///// <inheritdoc />
   //public SettingsOptions Settings { get; private set; }
 
   ///// <inheritdoc />
