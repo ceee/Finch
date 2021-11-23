@@ -4,7 +4,7 @@ using Raven.Client.Documents.Linq;
 
 namespace zero.Collections;
 
-public abstract partial class EntityCollection<T> : IEntityCollection<T> where T : ZeroIdEntity, new()
+public abstract class EntityCollection<T> : IEntityCollection<T> where T : ZeroIdEntity, new()
 {
   /// <inheritdoc />
   public Guid Guid { get; private set; } = Guid.NewGuid();
@@ -29,7 +29,7 @@ public abstract partial class EntityCollection<T> : IEntityCollection<T> where T
     Operations = collectionContext.Operations;
     Context = collectionContext.Context;
     Interceptors = collectionContext.Interceptors;
-    Options = new(true);
+    Options = new(IncludeInactive: true);
   }
 
 

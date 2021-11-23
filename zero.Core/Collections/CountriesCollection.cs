@@ -2,9 +2,9 @@
 
 namespace zero.Collections;
 
-public class CountriesCollection : EntityCollection<Country>, ICountriesCollection
+public class CountriesCollection : CachableEntityCollection<Country>, ICountriesCollection
 {
-  public CountriesCollection(ICollectionContext context) : base(context) { }
+  public CountriesCollection(ICollectionContext context, ICollectionCache cache) : base(context, cache) { }
 
   /// <inheritdoc />
   protected override void ValidationRules(ZeroValidator<Country> validator)
