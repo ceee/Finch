@@ -212,6 +212,40 @@ public class UserService : BackofficeApi, IUserService
 
     return EntityResult<ZeroUser>.Success(user);
   }
+
+
+  /// <inheritdoc />
+  public async Task<bool> TrySwitchApp(string appId)
+  {
+    IZeroDocumentSession session = Store.Session(global: true);
+    ZeroUser user = await GetUser();
+
+    if (user == null || appId.IsNullOrEmpty())
+    {
+      return false;
+    }
+
+    string[] allowedAppIds = user.GetAllowedAppIds();
+
+    bool isMainId = appId.Equals(user.AppId, StringComparison.InvariantCultureIgnoreCase);
+    bool isAllowedId = allowedAppIds.Contains(appId, StringComparer.InvariantCultureIgnoreCase);
+
+    if (user.IsSuper || isMainId || isAllowedId)
+    {
+      user.CurrentAppId = appId;
+
+      //byte[] bytes = new byte[20];
+      //RandomNumberGenerator.Fill(bytes);
+      //user.SecurityStamp = Base32.ToBase32(bytes); // TODO update security stamp but Base32 is .net core internal
+
+      await session.StoreAsync(user);
+      await session.SaveChangesAsync();
+
+      return true;
+    }
+
+    return false;
+  }
 }
 
 
@@ -272,4 +306,9 @@ public interface IUserService : IBackofficeApi
   /// Disables a user
   /// </summary>
   Task<EntityResult<ZeroUser>> Disable(ZeroUser user);
+
+  /// <summary>
+  /// Tries to switch the currently loaded backoffice application for the current user
+  /// </summary>
+  Task<bool> TrySwitchApp(string appId);
 }

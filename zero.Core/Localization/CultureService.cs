@@ -10,7 +10,7 @@ public class CultureService : ICultureService
     return CultureInfo.GetCultures(CultureTypes.AllCultures)
       .Where(x => !x.Name.IsNullOrWhiteSpace())
       .Select(x => new CultureInfo(x.Name))
-      .Where(x => codes.Length > 0 ? codes.Contains(x.Name, StringComparer.InvariantCultureIgnoreCase) : true)
+      .Where(x => codes.Length == 0 || codes.Contains(x.Name, StringComparer.InvariantCultureIgnoreCase))
       .OrderBy(x => x.DisplayName)
       .Select(x => new Culture()
       {

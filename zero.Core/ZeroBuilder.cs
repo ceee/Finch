@@ -13,9 +13,8 @@ public class ZeroBuilder
 
   public virtual IMvcBuilder Mvc { get; }
 
-  IConfiguration Configuration;
-
-  IZeroStartupOptions StartupOptions;
+  readonly IConfiguration Configuration;
+  readonly IZeroStartupOptions StartupOptions;
 
 
   public ZeroBuilder(IServiceCollection services, IConfiguration configuration, Action<IZeroStartupOptions> setupAction)

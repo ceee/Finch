@@ -70,17 +70,13 @@ public abstract partial class StoreOperations
   {
     List<T> items = new();
 
-    await foreach (T item in Stream<T>())
+    await foreach (T item in Stream<T>(null))
     {
       items.Add(item);
     }
 
     return items;
   }
-
-
-  /// <inheritdoc />
-  public virtual IAsyncEnumerable<T> Stream<T>() where T : ZeroIdEntity, new() => Stream<T>(null);
 
 
   /// <inheritdoc />

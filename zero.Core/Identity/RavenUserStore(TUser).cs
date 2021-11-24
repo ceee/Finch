@@ -57,7 +57,7 @@ public partial class RavenUserStore<TUser> :
   {
     IZeroDocumentSession session = Store.Session(Global);
 
-    if (await IsEmailReserved(session, user))
+    if (await IsEmailReserved(session, user, cancellationToken))
     {
       return IdentityResult.Failed(new IdentityError
       {
@@ -103,7 +103,7 @@ public partial class RavenUserStore<TUser> :
       });
     }
 
-    if (source.Email != user.Email && await IsEmailReserved(Store.Session(Global), user))
+    if (source.Email != user.Email && await IsEmailReserved(Store.Session(Global), user, cancellationToken))
     {
       return IdentityResult.Failed(new IdentityError
       {
@@ -337,8 +337,8 @@ public partial class RavenUserStore<TUser> :
   /// <inheritdoc />
   public async Task<IList<TUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
   {
-    UserClaim userClaim = new UserClaim(claim);
-    return await ScopeQuery(Store.Session(Global).Query<TUser>()).Where(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value)).ToListAsync();
+    UserClaim userClaim = new(claim);
+    return await ScopeQuery(Store.Session(Global).Query<TUser>()).Where(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value)).ToListAsync(token: cancellationToken);
   }
 
 
@@ -360,8 +360,8 @@ public partial class RavenUserStore<TUser> :
   public async Task ReplaceClaimAsync(TUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
   {
     IZeroDocumentSession session = Store.Session(Global);
-    UserClaim userClaim = new UserClaim(claim);
-    UserClaim newUserClaim = new UserClaim(newClaim);
+    UserClaim userClaim = new(claim);
+    UserClaim newUserClaim = new(newClaim);
 
     user.Claims.Remove(userClaim);
     user.Claims.Add(newUserClaim);

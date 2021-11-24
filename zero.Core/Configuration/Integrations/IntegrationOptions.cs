@@ -2,17 +2,17 @@
 
 namespace zero.Configuration;
 
-public class IntegrationOptions : OptionsEnumerable<IntegrationType>, IOptionsEnumerable
+public class IntegrationOptions : List<IntegrationType>
 {
   public void Add<T>(IntegrationType<T> integration) where T : Integration, new()
   {
-    Items.Add(IntegrationType.Convert(integration));
+    Add(IntegrationType.Convert(integration));
   }
 
 
   public void Add<T>(string alias, string name, string description, List<string> tags = default, string imagePath = null, IValidator validator = null) where T : Integration, new()
   {
-    Items.Add(new IntegrationType(typeof(T))
+    Add(new IntegrationType(typeof(T))
     {
       Alias = alias,
       Name = name,
@@ -26,7 +26,7 @@ public class IntegrationOptions : OptionsEnumerable<IntegrationType>, IOptionsEn
 
   public void Add(Type type, string alias, string name, string description, List<string> tags = default, string imagePath = null, IValidator validator = null)
   {
-    Items.Add(new IntegrationType(type)
+    Add(new IntegrationType(type)
     {
       Alias = alias,
       Name = name,

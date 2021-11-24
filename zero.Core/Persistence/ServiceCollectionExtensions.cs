@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
 using Raven.Client.Http;
 
@@ -6,12 +7,15 @@ namespace zero.Persistence;
 
 internal static class ServiceCollectionExtensions
 {
-  public static IServiceCollection AddZeroPersistence(this IServiceCollection services)
+  public static IServiceCollection AddZeroPersistence(this IServiceCollection services, IConfiguration config)
   {
     services.AddSingleton<IZeroDocumentConventionsBuilder, ZeroDocumentConventionsBuilder>();
     services.AddSingleton<IZeroDocumentStore, ZeroDocumentStore>(CreateRavenStore);
     services.AddScoped<IZeroStore, ZeroStore>();
     services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();
+
+    services.AddOptions<RavenOptions>().Bind(config.GetSection("Zero:Raven"));
+
     return services;
   }
 

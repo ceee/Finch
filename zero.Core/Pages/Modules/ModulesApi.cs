@@ -24,10 +24,10 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public async Task<IList<ModuleType>> GetModuleTypes(string[] tags = default, string pageId = default)
+    public async Task<IList<PageModuleType>> GetModuleTypes(string[] tags = default, string pageId = default)
     {
-      IEnumerable<ModuleType> types = Options.Modules.GetAllItems();
-      List<ModuleType> modules = types.ToList();
+      IEnumerable<PageModuleType> types = Options.Modules.GetAllItems();
+      List<PageModuleType> modules = types.ToList();
       Page page = null;
 
       if (!pageId.IsNullOrEmpty())
@@ -53,7 +53,7 @@ namespace zero.Core.Api
 
 
     /// <inheritdoc />
-    public ModuleType GetModuleType(string alias)
+    public PageModuleType GetModuleType(string alias)
     {
       return Options.Modules.GetAllItems().FirstOrDefault(x => x.Alias == alias);
     }
@@ -65,11 +65,11 @@ namespace zero.Core.Api
     /// <summary>
     /// Get all available module types (can be limited to the passed tags)
     /// </summary>
-    Task<IList<ModuleType>> GetModuleTypes(string[] tags = default, string pageId = default);
+    Task<IList<PageModuleType>> GetModuleTypes(string[] tags = default, string pageId = default);
 
     /// <summary>
     /// Get a specific module type by alias
     /// </summary>
-    ModuleType GetModuleType(string alias);
+    PageModuleType GetModuleType(string alias);
   }
 }

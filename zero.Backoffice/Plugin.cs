@@ -56,6 +56,9 @@ public class ZeroBackofficePlugin : ZeroPlugin
       Prefix = "fth"
     });
 
+    options.SupportedLanguages = new string[2] { "en-US", "de-DE" };
+    options.DefaultLanguage = options.SupportedLanguages[0];
+
     //Map<Page>().Display((x, res, opts) =>
     //{
     //  PageType pageType = opts.Pages.GetByAlias(x.PageTypeAlias);

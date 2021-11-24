@@ -1,25 +1,18 @@
-﻿using System.Linq;
-using zero.Core.Entities;
+﻿using zero.Core.Entities;
 
-namespace zero.Configuration;
+namespace zero.Spaces;
 
-public class SpaceOptions : OptionsEnumerable<Space>, IOptionsEnumerable
+public class SpaceOptions : List<Space>
 {
-  public SpaceOptions()
-  {
-
-  }
-
-
   public void Add<T>() where T : Space, new()
   {
-    Items.Add(new T());
+    Add(new T());
   }
 
 
   public void AddList<T>(string alias, string name, string description, string icon) where T : SpaceContent, new()
   {
-    Items.Add(new Space()
+    Add(new Space()
     {
       Alias = alias,
       View = SpaceView.List,
@@ -33,7 +26,7 @@ public class SpaceOptions : OptionsEnumerable<Space>, IOptionsEnumerable
 
   public void AddEditor<T>(string alias, string name, string description, string icon) where T : SpaceContent, new()
   {
-    Items.Add(new Space()
+    Add(new Space()
     {
       Alias = alias,
       View = SpaceView.Editor,
@@ -47,7 +40,7 @@ public class SpaceOptions : OptionsEnumerable<Space>, IOptionsEnumerable
 
   public void AddSeparator()
   {
-    Space lastSpace = Items.LastOrDefault();
+    Space lastSpace = this.LastOrDefault();
 
     if (lastSpace != null)
     {
@@ -58,7 +51,7 @@ public class SpaceOptions : OptionsEnumerable<Space>, IOptionsEnumerable
 
   public void AddCustom<T>(string componentPath, string alias, string name, string description, string icon) where T : SpaceContent, new()
   {
-    Items.Add(new Space()
+    Add(new Space()
     {
       Alias = alias,
       View = SpaceView.Custom,
@@ -73,7 +66,7 @@ public class SpaceOptions : OptionsEnumerable<Space>, IOptionsEnumerable
 
   public void AddCustom(string componentPath, string alias, string name, string description, string icon)
   {
-    Items.Add(new Space()
+    Add(new Space()
     {
       Alias = alias,
       View = SpaceView.Custom,

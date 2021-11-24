@@ -6,6 +6,19 @@ namespace zero.Configuration;
 
 public class ZeroOptions : IZeroOptions
 {
+  /// <inheritdoc />
+  public bool Initialized => !String.IsNullOrEmpty(For<RavenOptions>()?.Database);
+
+  /// <inheritdoc />
+  public string Version { get; set; }
+
+  /// <inheritdoc />
+  public string ZeroPath { get; set; }
+
+  /// <inheritdoc />
+  public TimeSpan TokenExpiration { get; set; }
+
+
   protected IServiceProvider ServiceProvider { get; set; }
 
   protected ConcurrentDictionary<Type, object> OptionsCache { get; private set; } = new();
@@ -14,16 +27,6 @@ public class ZeroOptions : IZeroOptions
   public ZeroOptions(IServiceProvider serviceProvider)
   {
     ServiceProvider = serviceProvider;
-
-    //SupportedLanguages = new string[2] { "en-US", "de-DE" };
-    //DefaultLanguage = SupportedLanguages[0];
-    //TokenExpiration = 60 * 3;
-    //BackofficePath = "/zero";
-    //ExcludedPaths = new() { };
-    //Raven = new()
-    //{
-    //  CollectionPrefix = String.Empty
-    //};
   }
 
 
@@ -41,54 +44,6 @@ public class ZeroOptions : IZeroOptions
 
     return value as TOptions;
   }
-
-
-
-  /// <inheritdoc />
-  public bool Initialized => !String.IsNullOrEmpty(For<RavenOptions>()?.Database);
-
-  /// <inheritdoc />
-  public string Version { get; set; }
-
-  /// <inheritdoc />
-  public string ZeroPath { get; set; }
-
-  ///// <inheritdoc />
-  //public string DefaultLanguage { get; set; }
-
-  ///// <inheritdoc />
-  //public string[] SupportedLanguages { get; private set; }
-
-  ///// <inheritdoc />
-  //public int TokenExpiration { get; set; }
-
-  ///// <inheritdoc />
-  //public RavenOptions Raven { get; set; }
-
-  ///// <inheritdoc />
-  //public ApplicationOptions Applications { get; set; }
-
-
-  ///// <inheritdoc />
-  //public FeatureOptions Features { get; private set; }
-
-  ///// <inheritdoc />
-  //public PageOptions Pages { get; private set; }
-
-  ///// <inheritdoc />
-  //public ModuleOptions Modules { get; private set; }
-
-  ///// <inheritdoc />
-  //public SettingsOptions Settings { get; private set; }
-
-  ///// <inheritdoc />
-  //public SpaceOptions Spaces { get; private set; }
-
-  ///// <inheritdoc />
-  //public IntegrationOptions Integrations { get; private set; }
-
-  ///// <inheritdoc />
-  //public BlueprintOptions Blueprints { get; private set; }
 }
 
 
@@ -111,32 +66,12 @@ public interface IZeroOptions
   bool Initialized { get; }
 
   /// <summary>
+  /// Expiration of a generated change token for an entity
+  /// </summary>
+  TimeSpan TokenExpiration { get; set; }
+
+  /// <summary>
   /// Get typed options (proxy to IOptions<TOptions>)
   /// </summary>
   TOptions For<TOptions>() where TOptions : class;
-
-  ///// <summary>
-  ///// Default language ISO code
-  ///// </summary>
-  //string DefaultLanguage { get; set; }
-
-    ///// <summary>
-    ///// Language ISO codes which are supported by the zero backoffice
-    ///// </summary>
-    //string[] SupportedLanguages { get; }
-
-    ///// <summary>
-    ///// Expiration in minutes of a generated change token for an entity
-    ///// </summary>
-    //int TokenExpiration { get; set; }
-
-    ///// <summary>
-    ///// RavenDB configuration data
-    ///// </summary>
-    //RavenOptions Raven { get; set; }
-
-    ///// <summary>
-    ///// Application options
-    ///// </summary>
-    //ApplicationOptions Applications { get; set; }
 }

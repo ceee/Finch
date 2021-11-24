@@ -26,4 +26,14 @@ public class BackofficeOptions
   /// Options for configuring the vite development server
   /// </summary>
   public ZeroDevOptions DevServer { get; set; } = new();
+
+  /// <summary>
+  /// Default language ISO code
+  /// </summary>
+  public string DefaultLanguage { get; set; }
+
+  /// <summary>
+  /// Language ISO codes which are supported by the zero backoffice
+  /// </summary>
+  public string[] SupportedLanguages { get; internal set; }
 }

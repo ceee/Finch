@@ -137,24 +137,23 @@ namespace zero.Core.Collections
       // write additional image data + thumbnail
       if (media.Type == MediaType.Image)
       {
-        using (Image<Rgba32> image = Image.Load<Rgba32>(filePath))
+        using Image<Rgba32> image = Image.Load<Rgba32>(filePath);
+
+        media.ImageMeta = GetImageMeta(image);
+
+        Image<Rgba32> imageFrame = media.ImageMeta.Frames > 1 ? image.Frames.CloneFrame(0) : image;
+
+        media.PreviewSource = SaveThumbnail(media, imageFrame, PREVIEW_EXTENSION, new ResizeOptions()
         {
-          media.ImageMeta = GetImageMeta(image);
+          Size = new Size(210, 210),
+          Mode = ResizeMode.Min
+        });
 
-          Image<Rgba32> imageFrame = media.ImageMeta.Frames > 1 ? image.Frames.CloneFrame(0) : image;
-
-          media.PreviewSource = SaveThumbnail(media, imageFrame, PREVIEW_EXTENSION, new ResizeOptions()
-          {
-            Size = new Size(210, 210),
-            Mode = ResizeMode.Min
-          });
-
-          media.ThumbnailSource = SaveThumbnail(media, imageFrame, THUMB_EXTENSION, new ResizeOptions()
-          {
-            Size = new Size(100, 100),
-            Mode = ResizeMode.Max
-          });
-        }
+        media.ThumbnailSource = SaveThumbnail(media, imageFrame, THUMB_EXTENSION, new ResizeOptions()
+        {
+          Size = new Size(100, 100),
+          Mode = ResizeMode.Max
+        });
       }
 
       return media;

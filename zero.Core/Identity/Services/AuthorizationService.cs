@@ -71,7 +71,7 @@ public class AuthorizationService : IAuthorizationService
 
   public EntityPermission GetPermissionForEntity<T>(T model, string permissionKey) where T : ZeroEntity
   {
-    EntityPermission result = new EntityPermission();
+    EntityPermission result = new();
 
     if (!IsLoggedIn())
     {

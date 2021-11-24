@@ -109,7 +109,7 @@ public abstract partial class StoreOperations : IStoreOperations
   /// </summary>
   protected virtual T WhenActive<T>(T model) where T : ZeroIdEntity, new()
   {
-    return model != null && (Options.IncludeInactive || (model is ZeroEntity ? (model as ZeroEntity).IsActive : true)) ? model : default;
+    return model != null && (Options.IncludeInactive || (model is not ZeroEntity || (model as ZeroEntity).IsActive)) ? model : default;
   }
 }
 
@@ -166,11 +166,6 @@ public interface IStoreOperations
   /// <summary>
   /// Stream the collection
   /// </summary>
-  IAsyncEnumerable<T> Stream<T>() where T : ZeroIdEntity, new();
-
-  /// <summary>
-  /// Stream the collection
-  /// </summary>
   IAsyncEnumerable<T> Stream<T>(Func<IRavenQueryable<T>, IQueryable<T>> expression) where T : ZeroIdEntity, new();
 
   /// <summary>
@@ -187,21 +182,6 @@ public interface IStoreOperations
   /// Deletes an entity
   /// </summary>
   Task<EntityResult<T>> Delete<T>(T model) where T : ZeroIdEntity, new();
-
-  /// <summary>
-  /// Deletes entities
-  /// </summary>
-  Task<int> Delete<T>(IEnumerable<T> models) where T : ZeroIdEntity, new();
-
-  /// <summary>
-  /// Deletes an entity by Id
-  /// </summary>
-  Task<EntityResult<T>> Delete<T>(string id) where T : ZeroIdEntity, new();
-
-  /// <summary>
-  /// Deletes entities by Id
-  /// </summary>
-  Task<int> Delete<T>(IEnumerable<string> ids) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Loads all children for an entity
@@ -237,9 +217,4 @@ public interface IStoreOperations
   /// Deletes an entity with all descendents
   /// </summary>
   Task<EntityResult<string[]>> DeleteWithDescendants<T>(T model) where T : ZeroIdEntity, IZeroTreeEntity, new();
-
-  /// <summary>
-  /// Deletes an entity by Id with all descendents
-  /// </summary>
-  Task<EntityResult<string[]>> DeleteWithDescendants<T>(string id) where T : ZeroIdEntity, IZeroTreeEntity, new();
 }

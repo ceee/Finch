@@ -14,10 +14,10 @@ public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> w
   public virtual Task<EntityResult<T>> Copy(string id, string newParentId) => Operations.Copy<T>(id, newParentId, async (model, parentId) => await IsAllowedAsChild(model, parentId));
 
   /// <inheritdoc />
-  public virtual Task<EntityResult<T>> CopyWithDescendants(string id, string newParentId) => Operations.Copy<T>(id, newParentId, async (model, parentId) => await IsAllowedAsChild(model, parentId));
+  public virtual Task<EntityResult<T>> CopyWithDescendants(string id, string newParentId) => Operations.CopyWithDescendants<T>(id, newParentId, async (model, parentId) => await IsAllowedAsChild(model, parentId));
 
   /// <inheritdoc />
-  public virtual Task<EntityResult<T>> Move(string id, string newParentId) => Operations.Copy<T>(id, newParentId, async (model, parentId) => await IsAllowedAsChild(model, parentId));
+  public virtual Task<EntityResult<T>> Move(string id, string newParentId) => Operations.Move<T>(id, newParentId, async (model, parentId) => await IsAllowedAsChild(model, parentId));
 
   /// <inheritdoc />
   public virtual Task<EntityResult<IOrderedEnumerable<T>>> Sort(string[] sortedIds) => Operations.Sort<T>(sortedIds);

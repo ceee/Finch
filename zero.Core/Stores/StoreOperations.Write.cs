@@ -18,7 +18,7 @@ public abstract partial class StoreOperations
       return EntityResult<T>.Fail("@errors.onsave.empty");
     }
 
-    bool isUpdate = model.Id.IsNullOrEmpty() ? false : await Session.Advanced.ExistsAsync(model.Id);
+    bool isUpdate = !model.Id.IsNullOrEmpty() && await Session.Advanced.ExistsAsync(model.Id);
 
     // prepare model
     PrepareForSave(model);

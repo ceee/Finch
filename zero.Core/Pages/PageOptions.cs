@@ -1,28 +1,19 @@
-﻿using System;
-using System.Linq;
-using zero.Core.Entities;
+﻿namespace zero.Pages;
 
-namespace zero.Configuration;
-
-public class PageOptions : OptionsEnumerable<PageType>, IOptionsEnumerable
+public class PageOptions : List<PageType>
 {
-  public PageOptions()
-  {
-      
-  }
-
   public string Root { get; set; } = Constants.Pages.DefaultRootPageTypeAlias;
 
 
   public void Add<T>(PageType<T> pageType) where T : Page, new()
   {
-    Items.Add(PageType.Convert(pageType));
+    Add(PageType.Convert(pageType));
   }
 
 
   public void Add<T>(string alias, string name, string description, string icon) where T : Page, new()
   {
-    Items.Add(new PageType(typeof(T))
+    Add(new PageType(typeof(T))
     {
       Alias = alias,
       Name = name,
@@ -34,7 +25,7 @@ public class PageOptions : OptionsEnumerable<PageType>, IOptionsEnumerable
 
   public void Add(Type type, string alias, string name, string description, string icon)
   {
-    Items.Add(new PageType(type)
+    Add(new PageType(type)
     {
       Alias = alias,
       Name = name,
@@ -45,6 +36,6 @@ public class PageOptions : OptionsEnumerable<PageType>, IOptionsEnumerable
 
   public PageType GetByAlias(string alias)
   {
-    return Items.FirstOrDefault(x => x.Alias == alias);
+    return this.FirstOrDefault(x => x.Alias == alias);
   }
 }

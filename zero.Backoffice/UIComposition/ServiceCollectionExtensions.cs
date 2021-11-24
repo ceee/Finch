@@ -17,6 +17,8 @@ public static class ServiceCollectionExtensions
 
     services.AddScoped<IPermissionProvider, CountryPermissions>();
 
+    services.AddOptions<BackofficeSettingsOptions>();
+
     return services;
   }
 }

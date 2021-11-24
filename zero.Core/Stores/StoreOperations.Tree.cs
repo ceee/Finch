@@ -162,13 +162,9 @@ public abstract partial class StoreOperations
       return EntityResult<string[]>.Fail("@errors.ondelete.idnotfound");
     }
 
-    await Delete(pages.ToArray());
+    await this.Delete(pages.ToArray());
     return EntityResult<string[]>.Success(pages.Select(x => x.Id).ToArray());
   }
-
-
-  /// <inheritdoc />
-  public async Task<EntityResult<string[]>> DeleteWithDescendants<T>(string id) where T : ZeroIdEntity, IZeroTreeEntity, new() => await DeleteWithDescendants(await Load<T>(id));
 
 
   /// <summary>

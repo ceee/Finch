@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using zero.Core.Entities;
+﻿namespace zero.Pages;
 
-namespace zero.Configuration;
-
-public class ModuleOptions : OptionsEnumerable<ModuleType>, IOptionsEnumerable
+public class PageModuleOptions : List<PageModuleType>
 {
-  public void Add<T>(ModuleType<T> moduleType) where T : Module, new()
+  public void Add<T>(PageModuleType<T> moduleType) where T : PageModule, new()
   {
-    Items.Add(ModuleType.Convert(moduleType));
+    Add(PageModuleType.Convert(moduleType));
   }
 
 
-  public void Add<T>(string alias, string name, string description, string icon, string group = null, List<string> tags = null, List<string> disallowedPageTypes = null) where T : Module, new()
+  public void Add<T>(string alias, string name, string description, string icon, string group = null, List<string> tags = null, List<string> disallowedPageTypes = null) where T : PageModule, new()
   {
-    Items.Add(new ModuleType(typeof(T))
+    Add(new PageModuleType(typeof(T))
     {
       Alias = alias,
       Name = name,
@@ -29,7 +25,7 @@ public class ModuleOptions : OptionsEnumerable<ModuleType>, IOptionsEnumerable
 
   public void Add(Type type, string alias, string name, string description, string icon, string group = null, List<string> tags = null, List<string> disallowedPageTypes = null)
   {
-    Items.Add(new ModuleType(type)
+    Add(new PageModuleType(type)
     {
       Alias = alias,
       Name = name,

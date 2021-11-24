@@ -22,6 +22,12 @@ public class AuthenticationService : IAuthenticationService
   /// <inheritdoc />
   public bool IsLoggedIn()
   {
+    //ClaimsPrincipal principal = HttpContextAccessor.HttpContext.User;
+    //bool isAuthenticated = principal.Identity.IsAuthenticated;
+    //bool isZeroUser = principal.HasClaim(Constants.Auth.Claims.IsZero, PermissionsValue.True);
+    //bool isSignedIn = SignInManager.IsSignedIn(principal);
+    //return isAuthenticated && isZeroUser && isSignedIn;
+
     return SignInManager.IsSignedIn(Context.BackofficeUser);
   }
 
@@ -48,29 +54,9 @@ public class AuthenticationService : IAuthenticationService
 
 
   /// <inheritdoc />
-  public IList<Permission> GetPermissions(string prefix = null)
-  {
-    return new List<Permission>(); // TODO
-    //return Context.BackofficeUser.Claims
-    //  .Where(claim => claim.Type == Constants.Auth.Claims.Permission && (prefix == null || claim.Value.StartsWith(prefix)))
-    //  .Select(claim => Permission.FromClaim(claim, prefix))
-    //  .ToList();
-  }
-
-
-  /// <inheritdoc />
-  public Permission GetPermission(string key = null)
-  {
-    return new Permission();
-    //Claim claim = Context.BackofficeUser.Claims.FirstOrDefault(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(key + ":"));
-    //return Permission.FromClaim(claim);
-  }
-
-
-  /// <inheritdoc />
   public async Task<EntityResult> Login(string email, string password, bool isPersistent)
   {
-    EntityResult result = new EntityResult();
+    EntityResult result = new();
 
     ZeroUser user = await SignInManager.UserManager.FindByNameAsync(email);
 
@@ -127,40 +113,6 @@ public class AuthenticationService : IAuthenticationService
   {
     return SignInManager.UserManager.GetUserId(Context.BackofficeUser);
   }
-
-
-  /// <inheritdoc />
-  public async Task<bool> TrySwitchApp(string appId)
-  {
-    IZeroDocumentSession session = Store.Session(global: true);
-    ZeroUser user = await GetUser();
-
-    if (user == null || appId.IsNullOrEmpty())
-    {
-      return false;
-    }
-
-    string[] allowedAppIds = user.GetAllowedAppIds();
-
-    bool isMainId = appId.Equals(user.AppId, StringComparison.InvariantCultureIgnoreCase);
-    bool isAllowedId = allowedAppIds.Contains(appId, StringComparer.InvariantCultureIgnoreCase);
-
-    if (user.IsSuper || isMainId || isAllowedId)
-    {
-      user.CurrentAppId = appId;
-
-      //byte[] bytes = new byte[20];
-      //RandomNumberGenerator.Fill(bytes);
-      //user.SecurityStamp = Base32.ToBase32(bytes); // TODO update security stamp but Base32 is .net core internal
-
-      await session.StoreAsync(user);
-      await session.SaveChangesAsync();
-
-      return true;
-    }
-
-    return false;
-  }
 }
 
 
@@ -200,19 +152,4 @@ public interface IAuthenticationService
   /// Get the ID of the currently logged in user
   /// </summary>
   string GetUserId();
-
-  /// <summary>
-  /// Get all permissions for the current user with an optional prefix
-  /// </summary>
-  IList<Permission> GetPermissions(string prefix = null);
-
-  /// <summary>
-  /// Get a single permissions by key
-  /// </summary>
-  Permission GetPermission(string key = null);
-
-  /// <summary>
-  /// Tries to switch the currently loaded backoffice application for the current user
-  /// </summary>
-  Task<bool> TrySwitchApp(string appId);
 }

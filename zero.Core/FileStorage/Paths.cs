@@ -17,19 +17,17 @@ public class Paths : IPaths
 
   protected IWebHostEnvironment Env { get; set; }
 
-  private bool IsDebug { get; set; }
-
   public const string MEDIA_FOLDER = "Uploads";
 
   public const char PATH_SEPARATOR = '/';
 
-  private static char[] InvalidFilenameChars = null;
+  static char[] InvalidFilenameChars = null;
 
-  private const char REPLACEMENT_CHAR = '-';
+  const char REPLACEMENT_CHAR = '-';
 
-  private FileExtensionContentTypeProvider FileExtensionContentTypeProvider { get; set; }
+  FileExtensionContentTypeProvider FileExtensionContentTypeProvider { get; set; }
 
-  private static Dictionary<char, string> Replacements = new Dictionary<char, string>()
+  static readonly Dictionary<char, string> Replacements = new()
   {
     { 'ä', "ae" },
     { 'ü', "ue" },
@@ -38,10 +36,9 @@ public class Paths : IPaths
   };
 
 
-  public Paths(IWebHostEnvironment env, bool isDebug)
+  public Paths(IWebHostEnvironment env)
   {
     Env = env;
-    IsDebug = isDebug;
     WebRoot = env.WebRootPath;
     ContentRoot = env.ContentRootPath;
     SecureRoot = Path.Combine(ContentRoot, "wwwroot.secure");
@@ -133,9 +130,9 @@ public class Paths : IPaths
     // lowercase for string
     value = value.ToLower();
 
-    StringBuilder sb = new StringBuilder(value.Length);
+    StringBuilder sb = new(value.Length);
 
-    var invalids = InvalidFilenameChars ?? (InvalidFilenameChars = Path.GetInvalidFileNameChars());
+    var invalids = InvalidFilenameChars ??= Path.GetInvalidFileNameChars();
     bool changed = false;
 
     for (int i = 0; i < value.Length; i++)

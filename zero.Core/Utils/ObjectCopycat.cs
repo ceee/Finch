@@ -8,7 +8,7 @@ public class ObjectCopycat
 {
   const string SEPARATOR = ".";
 
-  static Type STRING_TYPE = typeof(string);
+  static readonly Type STRING_TYPE = typeof(string);
 
   static ConcurrentDictionary<string, IEnumerable<PropertyInfo>> PublicPropertiesPerType { get; set; } = new();
 

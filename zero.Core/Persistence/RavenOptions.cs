@@ -9,13 +9,13 @@ public class RavenOptions
 
   public string Database { get; set; }
 
-  public string CollectionPrefix { get; set; }
+  public string CollectionPrefix { get; set; } = String.Empty;
 
   public RavenIndexesOptions Indexes { get; set; } = new();
 }
 
 
-public class RavenIndexesOptions : OptionsEnumerable<RavenIndexesOptions.Map>, IOptionsEnumerable
+public class RavenIndexesOptions : List<RavenIndexesOptions.Map>
 {
   public class Map
   {
@@ -35,17 +35,17 @@ public class RavenIndexesOptions : OptionsEnumerable<RavenIndexesOptions.Map>, I
 
   public void Add<T>() where T : IZeroIndexDefinition, new()
   {
-    Items.Add(new(typeof(T), () => new T()));
+    base.Add(new Map(typeof(T), () => new T()));
   }
 
   public void Add(Type indexType)
   {
-    Items.Add(new(indexType, () => (IZeroIndexDefinition)Activator.CreateInstance(indexType)));
+    base.Add(new Map(indexType, () => (IZeroIndexDefinition)Activator.CreateInstance(indexType)));
   }
 
   public void Add<T>(T index) where T : IZeroIndexDefinition
   {
-    Items.Add(new(typeof(T), () => index));
+    base.Add(new Map(typeof(T), () => index));
   }
 
   public void AddRange(params Type[] indexes)
@@ -65,17 +65,17 @@ public class RavenIndexesOptions : OptionsEnumerable<RavenIndexesOptions.Map>, I
 
   public void Replace(Type origin, Type replaceWith)
   {
-    var item = Items.FirstOrDefault(x => x.Type == origin);
+    var item = this.FirstOrDefault(x => x.Type == origin);
     if (item != null)
     {
-      Items.Remove(item);
+      Remove(item);
     }
     Add(replaceWith);
   }
 
   public IEnumerable<IZeroIndexDefinition> BuildAll(IZeroOptions options, IDocumentStore store)
   {
-    foreach (Map map in Items)
+    foreach (Map map in this)
     {
       IZeroIndexDefinition index = map.CreateIndex.Compile().Invoke();
       index.Setup(options, store);
@@ -86,7 +86,7 @@ public class RavenIndexesOptions : OptionsEnumerable<RavenIndexesOptions.Map>, I
 }
 
 
-public class RavenIndexModifiersOptions : OptionsEnumerable<RavenIndexModifiersOptions.Modifier>, IOptionsEnumerable
+public class RavenIndexModifiersOptions : List<RavenIndexModifiersOptions.Modifier>
 {
   public class Modifier
   {
@@ -97,7 +97,7 @@ public class RavenIndexModifiersOptions : OptionsEnumerable<RavenIndexModifiersO
 
   public void Add<T>(Action<T> modify) where T : IZeroIndexDefinition, new()
   {
-    Items.Add(new()
+    Add(new()
     {
       Type = typeof(T),
       Modify = x => modify((T)x)
@@ -110,7 +110,7 @@ public class RavenIndexModifiersOptions : OptionsEnumerable<RavenIndexModifiersO
 
   public IEnumerable<Modifier> GetAllForType(Type type)
   {
-    foreach (Modifier modifier in Items.Where(x => x.Type.IsAssignableFrom(type)))
+    foreach (Modifier modifier in this.Where(x => x.Type.IsAssignableFrom(type)))
     {
       yield return modifier;
     }

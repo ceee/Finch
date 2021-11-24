@@ -12,6 +12,7 @@ internal static class ServiceCollectionExtensions
     {
       opts.Version = "0.0.1-alpha.1";
       opts.ZeroPath = "/zero";
+      opts.TokenExpiration = TimeSpan.FromHours(3);
     });
     services.AddTransient<IZeroOptions>(factory => factory.GetService<IOptionsMonitor<ZeroOptions>>().CurrentValue);
     return services;

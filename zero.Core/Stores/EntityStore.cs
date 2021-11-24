@@ -51,9 +51,6 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, n
   public virtual Task<List<T>> LoadAll() => Operations.LoadAll<T>();
 
   /// <inheritdoc />
-  public virtual IAsyncEnumerable<T> Stream() => Operations.Stream<T>();
-
-  /// <inheritdoc />
   public virtual IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IQueryable<T>> expression) => Operations.Stream<T>(expression);
 
   /// <inheritdoc />
@@ -64,15 +61,6 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, n
 
   /// <inheritdoc />
   public virtual Task<EntityResult<T>> Delete(T model) => Operations.Delete(model);
-
-  /// <inheritdoc />
-  public virtual Task<int> Delete(IEnumerable<T> models) => Operations.Delete(models);
-
-  /// <inheritdoc />
-  public virtual Task<EntityResult<T>> Delete(string id) => Operations.Delete<T>(id);
-
-  /// <inheritdoc />
-  public virtual Task<int> Delete(IEnumerable<string> ids) => Operations.Delete<T>(ids);
 
   /// <inheritdoc />
   public virtual async Task<ValidationResult> Validate(T model)
@@ -92,7 +80,7 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, n
   /// <summary>
   /// Do only return the model when it is set to active or inactive entities are included with IncludeInactive()
   /// </summary>
-  protected virtual T WhenActive(T model) => model != null && (Config.IncludeInactive || (model is ZeroEntity ? (model as ZeroEntity).IsActive : true)) ? model : default;
+  protected virtual T WhenActive(T model) => model != null && (Config.IncludeInactive || (model is not ZeroEntity || (model as ZeroEntity).IsActive)) ? model : default;
 }
 
 
@@ -143,11 +131,6 @@ public interface IEntityStore<T> where T : ZeroIdEntity, new()
   /// <summary>
   /// Stream the collection
   /// </summary>
-  IAsyncEnumerable<T> Stream();
-
-  /// <summary>
-  /// Stream the collection
-  /// </summary>
   IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IQueryable<T>> expression);
 
   /// <summary>
@@ -169,19 +152,4 @@ public interface IEntityStore<T> where T : ZeroIdEntity, new()
   /// Deletes an entity
   /// </summary>
   Task<EntityResult<T>> Delete(T model);
-
-  /// <summary>
-  /// Deletes entities
-  /// </summary>
-  Task<int> Delete(IEnumerable<T> models);
-
-  /// <summary>
-  /// Deletes an entity by Id
-  /// </summary>
-  Task<EntityResult<T>> Delete(string id);
-
-  /// <summary>
-  /// Deletes entities by Id
-  /// </summary>
-  Task<int> Delete(IEnumerable<string> ids);
 }
