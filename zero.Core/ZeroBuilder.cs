@@ -44,6 +44,7 @@ public class ZeroBuilder
     services.AddZeroLocalization();
     services.AddZeroMails();
     services.AddZeroPages();
+    services.AddZeroMedia();
     services.AddZeroPersistence();
     services.AddZeroRendering();
     services.AddZeroRouting();

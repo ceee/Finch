@@ -27,12 +27,17 @@ public class ZeroBackofficePlugin : ZeroPlugin
     services.AddHostedService<ZeroDevService>();
     services.AddTransient<IZeroVue, ZeroVue>();
 
-    // register all modules
-    ZeroModuleConfiguration moduleConfig = new(services, configuration);
-    foreach (ZeroModule module in Registrations.Modules)
-    {
-      module.Register(moduleConfig);
-    }
+    services.AddZeroBackofficeUIComposition();
+
+    //services.AddTransient<ISectionsApi, SectionsApi>();
+    //services.AddTransient<ISettingsApi, SettingsApi>();
+    //services.AddTransient<ISpacesApi, SpacesApi>();
+    //services.AddTransient<IModulesApi, ModulesApi>();
+
+    //services.AddTransient<IIntegrationService, IntegrationService>();
+    //services.AddTransient<IIntegrationsCollection, IntegrationsCollection>();
+
+    //services.AddScoped<IBackofficeSearchService, BackofficeSearchService>();
 
     PostConfigureServices?.Invoke(services, configuration);
   }
@@ -40,7 +45,6 @@ public class ZeroBackofficePlugin : ZeroPlugin
 
   protected void ConfigureOptions(BackofficeOptions options, IWebHostEnvironment env)
   {
-    options.Path = "/zero";
     options.Search.Enabled = true;
     options.DevServer.WorkingDirectory = Path.Combine(env.ContentRootPath, "..", "Zero.Web.UI", "App");
 

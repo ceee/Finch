@@ -16,6 +16,7 @@ global using zero.FileStorage;
 global using zero.Identity;
 global using zero.Localization;
 global using zero.Mails;
+global using zero.Media;
 global using zero.Pages;
 global using zero.Persistence;
 global using zero.Rendering;

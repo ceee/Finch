@@ -16,6 +16,8 @@ internal static class ServiceCollectionExtensions
       raven.Indexes.Add<Pages_ByHierarchy>();
       raven.Indexes.Add<Pages_ByType>();
       raven.Indexes.Add<Pages_WithChildren>();
+
+      opts.For<PageOptions>().Add<PageFolder>(Constants.Pages.FolderAlias, "@page.folder.name", "@page.folder.description", "fth-folder");
     });
     return services;
   }
