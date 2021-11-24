@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using Newtonsoft.Json;
+using System.Collections.Concurrent;
 using System.Reflection;
 
 namespace zero.Utils;
@@ -11,6 +12,12 @@ public class ObjectCopycat
 
   static ConcurrentDictionary<string, IEnumerable<PropertyInfo>> PublicPropertiesPerType { get; set; } = new();
 
+
+  public static T Clone<T>(T obj)
+  {
+    Type type = obj.GetType();
+    return (T)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(obj), type);
+  }
 
 
   public static T CopyProperties<T>(T source, T target, params string[] exceptions)

@@ -41,7 +41,7 @@ public class ApplicationResolver : IApplicationResolver
 
     Application app;
 
-    if (context.IsBackofficeRequest(Options.BackofficePath))
+    if (context.IsBackofficeRequest(Options.ZeroPath))
     {
       app = await ResolveFromUser(user);
     }

@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace zero.Stores;
+namespace zero.Localization;
 
-public class CountriesStore : CachableEntityStore<Country>, ICountriesStore
+public class CountriesStore : EntityStore<Country>, ICountriesStore
 {
-  public CountriesStore(IStoreContext context, IStoreCache cache) : base(context, cache) { }
+  public CountriesStore(IStoreContext context) : base(context) { }
 
   /// <inheritdoc />
   protected override void ValidationRules(ZeroValidator<Country> validator)

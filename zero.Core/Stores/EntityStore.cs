@@ -10,18 +10,17 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, n
   public Guid Guid { get; private set; } = Guid.NewGuid();
 
   /// <inheritdoc />
-  public IZeroDocumentSession Session => Context.Store.Session();
-
-
-  protected record EntityCollectionOptions(bool IncludeInactive);
+  public IZeroDocumentSession Session => Context.Store.Session(Config.Database);
 
   protected IZeroContext Context { get; private set; }
 
-  protected EntityCollectionOptions Options { get; set; }
+  protected StoreConfig Config { get; private set; } = new();
 
   protected IInterceptors Interceptors { get; private set; }
 
   protected IStoreOperations Operations { get; private set; }
+
+  protected IZeroOptions Options { get; private set; }
 
 
   public EntityStore(IStoreContext collectionContext)
@@ -29,7 +28,7 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, n
     Operations = collectionContext.Operations;
     Context = collectionContext.Context;
     Interceptors = collectionContext.Interceptors;
-    Options = new(IncludeInactive: true);
+    Options = collectionContext.Options;
   }
 
 
@@ -93,13 +92,23 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, n
   /// <summary>
   /// Do only return the model when it is set to active or inactive entities are included with IncludeInactive()
   /// </summary>
-  protected virtual T WhenActive(T model) => model != null && (Options.IncludeInactive || (model is ZeroEntity ? (model as ZeroEntity).IsActive : true)) ? model : default;
+  protected virtual T WhenActive(T model) => model != null && (Config.IncludeInactive || (model is ZeroEntity ? (model as ZeroEntity).IsActive : true)) ? model : default;
 }
 
 
 
 public interface IEntityStore<T> where T : ZeroIdEntity, new()
 {
+  /// <summary>
+  /// Id for this store
+  /// </summary>
+  Guid Guid { get; }
+
+  /// <summary>
+  /// Access the current document session
+  /// </summary>
+  IZeroDocumentSession Session { get; }
+
   /// <summary>
   /// Get new instance of an entity
   /// </summary>

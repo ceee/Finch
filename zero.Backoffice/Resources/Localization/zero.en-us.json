@@ -215,6 +215,10 @@
       "parentnotallowed": "The page is not allowed as a children of the selected parent",
       "sortingmultipleparents": "Sorting pages is only allowed for a specific parent page"
     },
+    "treeentity": {
+      "parentnotallowed": "This entity is not allowed as a children of the selected parent",
+      "sortingmultipleparents": "The selected entities have multiple parents, which is not allowed"
+    },
     "forms": {
       "email_invalid": "The email address is not valid",
       "emails_invalid": "The email address(es) is/are not valid",

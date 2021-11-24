@@ -6,6 +6,9 @@ internal static class ServiceCollectionExtensions
 {
   public static IServiceCollection AddZeroPages(this IServiceCollection services)
   {
+    services.AddScoped<IPagesStore, PagesStore>();
+    services.AddScoped<IPageTypeService, PageTypeService>();
+
     services.Configure<ZeroOptions>(opts =>
     {
       RavenOptions raven = opts.For<RavenOptions>();

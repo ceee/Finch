@@ -12,11 +12,11 @@ using zero.Web.Models;
 
 namespace zero.Web.Controllers
 {
-  public class PagesController : BackofficeCollectionController<Page, IPagesCollection>
+  public class PagesController : BackofficeCollectionController<Page, IPageService>
   {
     IRoutes Routes;
 
-    public PagesController(IPagesCollection collection, IRoutes routes) : base(collection)
+    public PagesController(IPageService collection, IRoutes routes) : base(collection)
     {
       Routes = routes;
     }

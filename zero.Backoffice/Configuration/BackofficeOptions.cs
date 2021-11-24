@@ -3,11 +3,6 @@
 public class BackofficeOptions
 {
   /// <summary>
-  /// URL path to the backoffice (defaults to /zero)
-  /// </summary>
-  public string Path { get; set; }
-
-  /// <summary>
   /// Paths in the backoffice which are not handled by zero
   /// </summary>
   public List<string> ExcludedPaths { get; private set; } = new();

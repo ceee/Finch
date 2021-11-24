@@ -8,7 +8,11 @@ internal static class ServiceCollectionExtensions
 {
   public static IServiceCollection AddZeroConfiguration(this IServiceCollection services, IConfiguration config)
   {
-    services.AddOptions<ZeroOptions>().Bind(config.GetSection("Zero")).Configure(opts => { });
+    services.AddOptions<ZeroOptions>().Bind(config.GetSection("Zero")).Configure(opts =>
+    {
+      opts.Version = "0.0.1-alpha.1";
+      opts.ZeroPath = "/zero";
+    });
     services.AddTransient<IZeroOptions>(factory => factory.GetService<IOptionsMonitor<ZeroOptions>>().CurrentValue);
     return services;
   }

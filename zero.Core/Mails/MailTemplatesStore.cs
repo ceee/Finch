@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Raven.Client.Documents;
 
-namespace zero.Stores;
+namespace zero.Mails;
 
 public class MailTemplatesStore : EntityStore<MailTemplate>, IMailTemplatesStore
 {

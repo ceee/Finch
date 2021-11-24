@@ -13,7 +13,6 @@ public class ZeroOptions : IZeroOptions
 
   public ZeroOptions(IServiceProvider serviceProvider)
   {
-    Version = "0.0.1-alpha.1";
     ServiceProvider = serviceProvider;
 
     //SupportedLanguages = new string[2] { "en-US", "de-DE" };
@@ -49,7 +48,10 @@ public class ZeroOptions : IZeroOptions
   public bool Initialized => !String.IsNullOrEmpty(For<RavenOptions>()?.Database);
 
   /// <inheritdoc />
-  public string Version { get; private set; }
+  public string Version { get; set; }
+
+  /// <inheritdoc />
+  public string ZeroPath { get; set; }
 
   ///// <inheritdoc />
   //public string DefaultLanguage { get; set; }
@@ -93,10 +95,15 @@ public class ZeroOptions : IZeroOptions
 public interface IZeroOptions
 {
   /// <summary>
+  /// Path to the backoffice. Defaults to /zero
+  /// </summary>
+  string ZeroPath { get; set; }
+
+  /// <summary>
   /// The currently active version
   /// This should not be set manually, as it is used for setup and migrations and incremented automatically
   /// </summary>
-  string Version { get; }
+  string Version { get; set; }
 
   /// <summary>
   /// Whether this zero instance is initialized (setup is completed)

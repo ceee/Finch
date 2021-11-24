@@ -10,9 +10,9 @@ using zero.Core.Identity;
 namespace zero.Web.Controllers
 {
   [ZeroAuthorize(Permissions.Settings.Translations, PermissionsValue.Read)]
-  public class TranslationsController : ZeroBackofficeCollectionController<Translation, ITranslationsCollection>
+  public class TranslationsController : ZeroBackofficeCollectionController<Translation, ITranslationsStore>
   {
-    public TranslationsController(ITranslationsCollection collection) : base(collection) { }
+    public TranslationsController(ITranslationsStore collection) : base(collection) { }
 
     public override async Task<Paged<Translation>> GetByQuery([FromQuery] ListBackofficeQuery<Translation> query)
     {

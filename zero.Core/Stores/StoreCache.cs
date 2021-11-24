@@ -24,16 +24,16 @@ public class StoreCache : IStoreCache
     return false;
   }
 
-  public IStoreCache For(CachableEntityStoreOptions options)
-  {
-    return this;
-  }
+  //public IStoreCache For(CachableEntityStoreOptions options)
+  //{
+  //  return this;
+  //}
 }
 
 
 public interface IStoreCache
 {
-  IStoreCache For(CachableEntityStoreOptions options);
+  //IStoreCache For(CachableEntityStoreOptions options);
 
   bool TryGetValue<T>(string id, out T model);
 }

@@ -7,6 +7,7 @@ internal static class ServiceCollectionExtensions
   public static IServiceCollection AddZeroApplications(this IServiceCollection services)
   {
     services.AddScoped<IApplicationResolver, ApplicationResolver>();
+    services.AddScoped<IApplicationStore, ApplicationStore>();
     return services;
   }
 }

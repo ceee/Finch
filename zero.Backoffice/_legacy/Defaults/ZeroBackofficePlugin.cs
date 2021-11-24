@@ -21,7 +21,7 @@ namespace zero.Web.Defaults
 
       services.AddTransient<ICountriesStore, CountriesStore>();
       services.AddTransient<ILanguagesStore, LanguagesStore>();
-      services.AddTransient<ITranslationsCollection, TranslationsCollection>();
+      services.AddTransient<ITranslationsStore, TranslationsCollection>();
       services.AddTransient<IMediaCollection, MediaCollection>();
       services.AddTransient<IMediaFolderCollection, MediaFolderCollection>();
       services.AddTransient<IPagesCollection, PagesCollection>();

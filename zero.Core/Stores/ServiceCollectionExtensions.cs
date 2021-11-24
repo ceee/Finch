@@ -9,11 +9,6 @@ internal static class ServiceCollectionExtensions
     services.AddScoped<IStoreContext, StoreContext>();
     services.AddScoped<IStoreOperations, StoreOperations>();
     services.AddSingleton<IStoreCache, StoreCache>();
-
-    services.AddScoped<ICountriesStore, CountriesStore>();
-    services.AddScoped<ILanguagesStore, LanguagesStore>();
-    services.AddScoped<IMailTemplatesStore, MailTemplatesStore>();
-
     return services;
   }
 }

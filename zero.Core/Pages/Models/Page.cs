@@ -5,7 +5,7 @@
 /// The backoffice rendering is done by an IRenderer
 /// </summary>
 [RavenCollection("Pages")]
-public class Page : ZeroEntity
+public class Page : ZeroEntity, IZeroTreeEntity
 {
   /// <summary>
   /// Use this field (when filled out) instead of the alias for URL generation

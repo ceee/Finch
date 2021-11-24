@@ -202,4 +202,44 @@ public interface IStoreOperations
   /// Deletes entities by Id
   /// </summary>
   Task<int> Delete<T>(IEnumerable<string> ids) where T : ZeroIdEntity, new();
+
+  /// <summary>
+  /// Loads all children for an entity
+  /// </summary>
+  Task<Paged<T>> LoadChildren<T>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, IZeroTreeEntity, new();
+
+  /// <summary>
+  /// Get descendants by query (by using the specified index)
+  /// </summary>
+  Task<Paged<T>> LoadChildren<T, TIndex>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, IZeroTreeEntity, new() where TIndex : AbstractCommonApiForIndexes, new();
+
+  /// <summary>
+  /// Update sorting of entities on a specific level
+  /// </summary>
+  Task<EntityResult<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, IZeroTreeEntity, new();
+
+  /// <summary>
+  /// Move an entity to a new parent
+  /// </summary>
+  Task<EntityResult<T>> Move<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new();
+
+  /// <summary>
+  /// Copies an entity to a new location
+  /// </summary>
+  Task<EntityResult<T>> Copy<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new();
+
+  /// <summary>
+  /// Copies an entity with descendants to a new location
+  /// </summary>
+  Task<EntityResult<T>> CopyWithDescendants<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new();
+
+  /// <summary>
+  /// Deletes an entity with all descendents
+  /// </summary>
+  Task<EntityResult<string[]>> DeleteWithDescendants<T>(T model) where T : ZeroIdEntity, IZeroTreeEntity, new();
+
+  /// <summary>
+  /// Deletes an entity by Id with all descendents
+  /// </summary>
+  Task<EntityResult<string[]>> DeleteWithDescendants<T>(string id) where T : ZeroIdEntity, IZeroTreeEntity, new();
 }

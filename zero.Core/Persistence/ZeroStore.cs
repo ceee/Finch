@@ -53,7 +53,7 @@ public class ZeroStore : IZeroStore
   /// <inheritdoc />
   public IZeroDocumentSession Session(bool global, string database = null, ZeroSessionResolution resolution = ZeroSessionResolution.Reuse, SessionOptions options = null)
   {
-    return Session(global ? Options.Raven.Database : database, resolution, options);
+    return Session(global ? Options.For<RavenOptions>().Database : database, resolution, options);
   }
 }
 

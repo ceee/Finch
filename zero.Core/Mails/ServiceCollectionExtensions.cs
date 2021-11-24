@@ -8,6 +8,7 @@ internal static class ServiceCollectionExtensions
   {
     services.AddScoped<IMailProvider, MailProvider>();
     services.AddScoped<IMailDispatcher, LoggerMailDispatcher>();
+    services.AddScoped<IMailTemplatesStore, MailTemplatesStore>();
     return services;
   }
 }

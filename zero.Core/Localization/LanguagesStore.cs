@@ -1,31 +1,10 @@
 ﻿using FluentValidation;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
-using System.Globalization;
 
-namespace zero.Stores;
+namespace zero.Localization;
 
 public class LanguagesStore : EntityStore<Language>, ILanguagesStore
 {
   public LanguagesStore(IStoreContext context) : base(context) { }
-
-
-  /// <inheritdoc />
-  public List<Culture> GetAllCultures(params string[] codes)
-  {
-    return CultureInfo.GetCultures(CultureTypes.AllCultures)
-      .Where(x => !x.Name.IsNullOrWhiteSpace())
-      .Select(x => new CultureInfo(x.Name))
-      .Where(x => codes.Length > 0 ? codes.Contains(x.Name, StringComparer.InvariantCultureIgnoreCase) : true)
-      .OrderBy(x => x.DisplayName)
-      .Select(x => new Culture()
-      {
-        Code = x.Name,
-        Name = x.DisplayName
-      })
-      .ToList();
-  }
-
 
   /// <inheritdoc />
   protected override void ValidationRules(ZeroValidator<Language> validator)
@@ -42,10 +21,4 @@ public class LanguagesStore : EntityStore<Language>, ILanguagesStore
 }
 
 
-public interface ILanguagesStore : IEntityStore<Language>
-{
-  /// <summary>
-  /// Get all available cultures
-  /// </summary>
-  List<Culture> GetAllCultures(params string[] codes);
-}
+public interface ILanguagesStore : IEntityStore<Language> { }
