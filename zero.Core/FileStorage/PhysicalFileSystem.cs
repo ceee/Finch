@@ -5,17 +5,32 @@ namespace zero.FileStorage;
 
 public class PhysicalFileSystem : IFileSystem
 {
-  readonly string basePath;
+  readonly string _root;
 
 
-  public PhysicalFileSystem(string basePath)
+  public PhysicalFileSystem(string root)
   {
-    this.basePath = basePath;
+    _root = root;
   }
 
 
   /// <inheritdoc />
-  public Task<IFileMeta> GetFileInfo(string path, CancellationToken cancellationToken = default)
+  public virtual Task<bool> Exists(string path, CancellationToken cancellationToken = default)
+  {
+    try
+    {
+      string resolvedPath = ResolvePath(path);
+      return Task.FromResult(File.Exists(resolvedPath) || Directory.Exists(resolvedPath));
+    }
+    catch (Exception ex) when (ex is not FileSystemException)
+    {
+      throw new FileSystemException($"Could not get file exists info for path '{path}'", ex);
+    }
+  }
+
+
+  /// <inheritdoc />
+  public virtual Task<IFileMeta> GetFileInfo(string path, CancellationToken cancellationToken = default)
   {
     try
     {
@@ -38,7 +53,7 @@ public class PhysicalFileSystem : IFileSystem
 
 
   /// <inheritdoc />
-  public Task<Stream> StreamFile(string path, CancellationToken cancellationToken = default)
+  public virtual Task<Stream> StreamFile(string path, CancellationToken cancellationToken = default)
   {
     try
     {
@@ -59,7 +74,7 @@ public class PhysicalFileSystem : IFileSystem
 
 
   /// <inheritdoc />
-  public async Task CreateFile(string path, Stream fileStream, bool overwrite = false, CancellationToken cancellationToken = default)
+  public virtual async Task CreateFile(string path, Stream fileStream, bool overwrite = false, CancellationToken cancellationToken = default)
   {
     try
     {
@@ -85,7 +100,7 @@ public class PhysicalFileSystem : IFileSystem
 
 
   /// <inheritdoc />
-  public Task DeleteFile(string path, CancellationToken cancellationToken = default)
+  public virtual Task DeleteFile(string path, CancellationToken cancellationToken = default)
   {
     try
     {
@@ -101,7 +116,7 @@ public class PhysicalFileSystem : IFileSystem
 
 
   /// <inheritdoc />
-  public Task MoveFile(string oldPath, string newPath, CancellationToken cancellationToken = default)
+  public virtual Task MoveFile(string oldPath, string newPath, CancellationToken cancellationToken = default)
   {
     try
     {
@@ -129,7 +144,7 @@ public class PhysicalFileSystem : IFileSystem
 
 
   /// <inheritdoc />
-  public Task CopyFile(string oldPath, string newPath, CancellationToken cancellationToken = default)
+  public virtual Task CopyFile(string oldPath, string newPath, CancellationToken cancellationToken = default)
   {
     try
     {
@@ -157,11 +172,11 @@ public class PhysicalFileSystem : IFileSystem
 
 
   /// <inheritdoc />
-  public Task<IFileMeta> GetDirectoryInfo(string path, CancellationToken cancellationToken = default) => GetFileInfo(path, cancellationToken);
+  public virtual Task<IFileMeta> GetDirectoryInfo(string path, CancellationToken cancellationToken = default) => GetFileInfo(path, cancellationToken);
 
 
   /// <inheritdoc />
-  public IAsyncEnumerable<IFileMeta> GetDirectoryContent(string path = null, bool recursive = false, CancellationToken cancellationToken = default)
+  public virtual IAsyncEnumerable<IFileMeta> GetDirectoryContent(string path = null, bool recursive = false, CancellationToken cancellationToken = default)
   {
     try
     {
@@ -177,13 +192,13 @@ public class PhysicalFileSystem : IFileSystem
       results.AddRange(Directory.GetDirectories(resolvedPath, "*", searchOption).Select(f =>
       {
         PhysicalDirectoryInfo fileSystemInfo = new(new DirectoryInfo(f));
-        return new PhysicalFileMeta(fileSystemInfo, ResolvePath(f.Substring(basePath.Length)));
+        return new PhysicalFileMeta(fileSystemInfo, ResolvePath(f.Substring(_root.Length)));
       }));
 
       results.AddRange(Directory.GetFiles(resolvedPath, "*", searchOption).Select(f =>
       {
         PhysicalFileInfo fileSystemInfo = new(new FileInfo(f));
-        return new PhysicalFileMeta(fileSystemInfo, ResolvePath(f.Substring(basePath.Length)));
+        return new PhysicalFileMeta(fileSystemInfo, ResolvePath(f.Substring(_root.Length)));
       }));
 
       return results.ToAsyncEnumerable();
@@ -196,7 +211,7 @@ public class PhysicalFileSystem : IFileSystem
 
 
   /// <inheritdoc />
-  public Task CreateDirectory(string path, CancellationToken cancellationToken = default)
+  public virtual Task CreateDirectory(string path, CancellationToken cancellationToken = default)
   {
     try
     {
@@ -222,7 +237,7 @@ public class PhysicalFileSystem : IFileSystem
 
 
   /// <inheritdoc />
-  public Task DeleteDirectory(string path, bool recursive = false, CancellationToken cancellationToken = default)
+  public virtual Task DeleteDirectory(string path, bool recursive = false, CancellationToken cancellationToken = default)
   {
     try
     {
@@ -240,23 +255,23 @@ public class PhysicalFileSystem : IFileSystem
   /// <summary>
   /// Creates a fully-usable absolte path from the given path
   /// </summary>
-  protected string ResolvePath(string path)
+  protected virtual string ResolvePath(string path)
   {
     try
     {
       if (path.IsNullOrWhiteSpace())
       {
-        return basePath;
+        return _root;
       }
 
       // normalize path
       path = path.Replace('\\', '/').FullTrim().Trim('/');
 
-      string physicalPath = Path.Combine(basePath, path);
+      string physicalPath = Path.Combine(_root, path);
 
       // do not allow paths which are outside this file system
       // the boundaries are set be the basePath which is assigned in the file system constructor
-      if (!Path.GetFullPath(physicalPath).StartsWith(basePath, StringComparison.InvariantCultureIgnoreCase))
+      if (!Path.GetFullPath(physicalPath).StartsWith(_root, StringComparison.InvariantCultureIgnoreCase))
       {
         throw new FileSystemException($"The path '{path}' is outside the file system");
       }

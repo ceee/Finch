@@ -7,6 +7,27 @@ public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> w
 {
   public TreeEntityStore(IStoreContext collectionContext) : base(collectionContext) { }
 
+
+  /// <inheritdoc />
+  public override async Task<EntityResult<T>> Create(T model)
+  {
+    if (!await IsAllowedAsChild(model, model.ParentId))
+    {
+      return EntityResult<T>.Fail("@errors.treeentity.parentnotallowed");
+    }
+    return await base.Create(model);
+  }
+
+  /// <inheritdoc />
+  public override async Task<EntityResult<T>> Update(T model)
+  {
+    if (!await IsAllowedAsChild(model, model.ParentId))
+    {
+      return EntityResult<T>.Fail("@errors.treeentity.parentnotallowed");
+    }
+    return await base.Update(model);
+  }
+
   /// <inheritdoc />
   public virtual Task<bool> IsAllowedAsChild(T model, string parentId) => Task.FromResult(true);
 

@@ -222,15 +222,15 @@ namespace zero.Core.Collections
     /// <summary>
     /// Create image data if available
     /// </summary>
-    protected virtual MediaImageMeta GetImageMeta(Image<Rgba32> image)
+    protected virtual MediaImageMetadata GetImageMeta(Image<Rgba32> image)
     {
       var pngMetadata = image.Metadata.GetPngMetadata();
 
-      return new MediaImageMeta()
+      return new MediaImageMetadata()
       {
         Width = image.Width,
         Height = image.Height,
-        CreatedDate = new DateTimeOffset(image.Metadata.IccProfile?.Header?.CreationDate ?? DateTime.Now),
+        ImageTakenDate = new DateTimeOffset(image.Metadata.IccProfile?.Header?.CreationDate ?? DateTime.Now),
         DPI = image.Metadata.HorizontalResolution,
         ColorSpace = image.Metadata.IccProfile?.Header?.DataColorSpace.ToString(),
         HasTransparency = pngMetadata?.HasTransparency ?? false,

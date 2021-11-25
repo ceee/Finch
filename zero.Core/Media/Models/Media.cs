@@ -4,7 +4,7 @@
 /// A media file (can contain an image or other media like videos and documents)
 /// </summary>
 [RavenCollection("Media")]
-public class Media : ZeroEntity
+public class Media : ZeroEntity, IZeroTreeEntity
 {
   /// <summary>
   /// Id/name of the phyiscal folder which is stored on disk/cloud
@@ -12,9 +12,9 @@ public class Media : ZeroEntity
   public string FileId { get; set; }
 
   /// <summary>
-  /// Id of the media folder
+  /// Id of the parent folder
   /// </summary>
-  public string FolderId { get; set; }
+  public string ParentId { get; set; }
 
   /// <summary>
   /// Alternative text which is used when the image can't be loaded
@@ -29,17 +29,13 @@ public class Media : ZeroEntity
   /// <summary>
   /// Path of the media item
   /// </summary>
-  public string Source { get; set; }
+  public string Path { get; set; }
 
   /// <summary>
-  /// For images this is the source for a 100x100px thumbnail
+  /// Define custom thumbnails which are generated on upload 
+  /// (see IZeroOptions.For<MediaOption>().Thumbnails)
   /// </summary>
-  public string ThumbnailSource { get; set; }
-
-  /// <summary>
-  /// For images this is the source for a [proportional]x210px thumbnail
-  /// </summary>
-  public string PreviewSource { get; set; }
+  public Dictionary<string, string> Thumbnails { get; set; } = new();
 
   /// <summary>
   /// Filesize in bytes
@@ -49,7 +45,7 @@ public class Media : ZeroEntity
   /// <summary>
   /// Meta data for images
   /// </summary>
-  public MediaImageMeta ImageMeta { get; set; }
+  public MediaImageMetadata ImageMeta { get; set; }
 
   /// <summary>
   /// Optional focal point for an image

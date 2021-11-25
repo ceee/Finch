@@ -5,6 +5,11 @@ namespace zero.FileStorage;
 public interface IFileSystem
 {
   /// <summary>
+  /// Determines whether a file or directory at the given path already exists
+  /// </summary>
+  Task<bool> Exists(string path, CancellationToken cancellationToken = default);
+
+  /// <summary>
   /// Get information of a file
   /// </summary>
   Task<IFileMeta> GetFileInfo(string path, CancellationToken cancellationToken = default);

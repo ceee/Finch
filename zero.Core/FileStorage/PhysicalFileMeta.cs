@@ -5,11 +5,14 @@ namespace zero.FileStorage;
 public class PhysicalFileMeta : IFileMeta
 {
   /// <inheritdoc />
+  public string Name { get; }
+
+  /// <inheritdoc />
   public string Path { get; }
 
   /// <inheritdoc />
-  public string Name { get; }
-
+  public string AbsolutePath { get; }
+  
   /// <inheritdoc />
   public string DirectoryPath { get; }
 
@@ -29,6 +32,7 @@ public class PhysicalFileMeta : IFileMeta
   public PhysicalFileMeta(IFileInfo fileInfo, string path)
   {
     Path = path;
+    AbsolutePath = fileInfo.PhysicalPath;
     Name = fileInfo.Name;
     DirectoryPath = path.Substring(0, path.Length - fileInfo.Name.Length).TrimEnd('/');
     LastModifiedDate = fileInfo.LastModified;

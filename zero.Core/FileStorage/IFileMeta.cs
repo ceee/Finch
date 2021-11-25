@@ -1,11 +1,16 @@
 ﻿namespace zero.FileStorage;
 
-public interface IFileInfo
+public interface IFileMeta
 {
   /// <summary>
   /// Full path of the item within the file system
   /// </summary>
   string Path { get; }
+
+  /// <summary>
+  /// Absolute path of the item
+  /// </summary>
+  string AbsolutePath { get; }
 
   /// <summary>
   /// Name of the item

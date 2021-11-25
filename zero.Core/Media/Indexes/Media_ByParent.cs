@@ -27,7 +27,7 @@ public class Media_ByParent : ZeroMultiMapIndex<MediaListItem>
       CreatedDate = item.CreatedDate,
       IsFolder = false,
       Name = item.Name,
-      Image = item.PreviewSource,
+      Image = item.PathPreview,
       Children = 0,
       Size = item.Size,
       IsShared = item.Blueprint != null,

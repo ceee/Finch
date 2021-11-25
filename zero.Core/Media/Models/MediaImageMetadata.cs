@@ -3,7 +3,7 @@
 /// <summary>
 /// Metadata for images
 /// </summary>
-public class MediaImageMeta
+public class MediaImageMetadata
 {
   /// <summary>
   /// Width in pixels
@@ -23,7 +23,7 @@ public class MediaImageMeta
   /// <summary>
   /// Date the image was taken
   /// </summary>
-  public DateTimeOffset? CreatedDate { get; set; }
+  public DateTimeOffset? ImageTakenDate { get; set; }
 
   /// <summary>
   /// Original color space of the image

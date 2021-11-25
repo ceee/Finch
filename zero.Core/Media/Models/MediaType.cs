@@ -2,6 +2,7 @@
 
 public enum MediaType
 {
-  File = 0,
-  Image = 1
+  Folder = 0,
+  File = 1,
+  Image = 2
 }
