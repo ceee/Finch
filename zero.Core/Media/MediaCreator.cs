@@ -23,7 +23,7 @@ public class MediaCreator : IMediaCreator
 
 
   /// <inheritdoc />
-  public async Task<Media> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default)
+  public async Task<EntityResult<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default)
   {
     string fileExtension = Path.GetExtension(filename);
     string normalizedFilename = Safenames.File(filename);
@@ -34,7 +34,7 @@ public class MediaCreator : IMediaCreator
     if (!isImage && !isDocument)
     {
       // TODO error
-      return null;
+      return EntityResult<Media>.Fail("ERROR");
     }
 
     Media model = await Store.Empty();
@@ -67,7 +67,7 @@ public class MediaCreator : IMediaCreator
       // TODO save thumbnails
     }
 
-    return model;
+    return EntityResult<Media>.Success(model);
   }
 
 
@@ -162,5 +162,5 @@ public interface IMediaCreator
   /// Uploads a file by using the attached file system
   /// </summary>
   /// <returns>A temporary media file which can be persisted in a store</returns>
-  Task<Media> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default);
+  Task<EntityResult<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default);
 }

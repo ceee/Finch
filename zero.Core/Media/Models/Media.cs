@@ -6,6 +6,11 @@
 [RavenCollection("Media")]
 public class Media : ZeroEntity, IZeroTreeEntity
 {
+  public Media()
+  {
+    IsActive = true;
+  }
+
   /// <summary>
   /// Id/name of the phyiscal folder which is stored on disk/cloud
   /// </summary>

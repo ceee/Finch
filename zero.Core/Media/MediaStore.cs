@@ -1,4 +1,6 @@
-﻿namespace zero.Media;
+﻿using FluentValidation;
+
+namespace zero.Media;
 
 public class MediaStore : TreeEntityStore<Media>, IMediaStore
 {
@@ -21,6 +23,19 @@ public class MediaStore : TreeEntityStore<Media>, IMediaStore
 
     Media parent = await Load(parentId);
     return parent != null && parent.Type == MediaType.Folder;
+  }
+
+
+  /// <inheritdoc />
+  protected override void ValidationRules(ZeroValidator<Media> validator)
+  {
+    validator.RuleFor(x => x.Name).Length(2, 120);
+    validator.RuleFor(x => x.IsActive).Equal(true);
+
+    validator.When(x => x.Type == MediaType.Folder, () =>
+    {
+      validator.RuleFor(x => x.ParentId).Exists(Context.Store);
+    });
   }
 }
 

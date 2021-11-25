@@ -11,16 +11,16 @@ internal static class ServiceCollectionExtensions
 {
   public static IServiceCollection AddZeroMedia(this IServiceCollection services, IConfiguration config)
   {
-    services.AddScoped<IMediaStore, MediaStore>();
-    services.AddScoped<IMediaCreator, MediaCreator>();
-    services.AddScoped<IMediaManagement, MediaManagement>();
-
     services.AddSingleton<IMediaFileSystem, MediaFileSystem>(svc =>
     {
       IOptions<MediaOptions> options = svc.GetRequiredService<IOptions<MediaOptions>>();
       IWebHostEnvironment env = svc.GetRequiredService<IWebHostEnvironment>();
       return new(Path.Combine(env.WebRootPath, options.Value.FolderPath), options.Value.PublicPathPrefix);
     });
+
+    services.AddScoped<IMediaStore, MediaStore>();
+    services.AddScoped<IMediaCreator, MediaCreator>();
+    services.AddScoped<IMediaManagement, MediaManagement>();
 
     services.AddOptions<MediaOptions>().Bind(config.GetSection("Zero:Media")).Configure(opts =>
     {

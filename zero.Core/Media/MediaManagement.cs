@@ -1,4 +1,6 @@
-﻿namespace zero.Media;
+﻿using System.IO;
+
+namespace zero.Media;
 
 public class MediaManagement : IMediaManagement
 {
@@ -6,11 +8,34 @@ public class MediaManagement : IMediaManagement
 
   protected IMediaStore Store { get; set; }
 
+  protected IMediaCreator Creator { get; set; }
 
-  public MediaManagement(IMediaFileSystem fileSystem, IMediaStore store)
+
+  public MediaManagement(IMediaFileSystem fileSystem, IMediaStore store, IMediaCreator creator)
   {
     FileSystem = fileSystem;
     Store = store;
+    Creator = creator;
+  }
+
+
+
+  /// <inheritdoc />
+  public virtual string GetPublicFilePath(Media file, string thumbnailKey = null)
+  {
+    string path = file?.Path;
+
+    if (!thumbnailKey.IsNullOrWhiteSpace())
+    {
+      path = file?.Thumbnails?.GetValueOrDefault(thumbnailKey);
+    }
+
+    if (path.IsNullOrEmpty())
+    {
+      return null;
+    }
+
+    return FileSystem.MapToPublicPath(path);
   }
 
 
@@ -35,6 +60,13 @@ public class MediaManagement : IMediaManagement
   {
     // TODO delete in file system
     return await Store.Delete(file);
+  }
+
+
+  /// <inheritdoc />
+  public virtual async Task<EntityResult<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default)
+  {
+    return await Creator.UploadFile(fileStream, filename, folderId, cancellationToken);
   }
 
 
@@ -83,6 +115,18 @@ public class MediaManagement : IMediaManagement
 
 public interface IMediaManagement
 {
+  /// <summary>
+  /// Get publicly accessible file path for a media file
+  /// </summary>
+  /// <param name="file">The media file</param>
+  /// <param name="thumbnailKey">An optional thumbnail key which returns the path to a generated thumbnail</param>
+  string GetPublicFilePath(Media file, string thumbnailKey = null);
+
+  /// <summary>
+  /// Uploads a file and persists it
+  /// </summary>
+  Task<EntityResult<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default);
+
   /// <summary>
   /// Get a media folder by id
   /// </summary>

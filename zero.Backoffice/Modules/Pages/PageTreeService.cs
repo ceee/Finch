@@ -18,6 +18,7 @@ public class PageTreeService : IPageTreeService
     Pages = pages;
     Routes = routes;
     PageOptions = options.For<PageOptions>();
+    IMediaManagement media;
   }
 
 

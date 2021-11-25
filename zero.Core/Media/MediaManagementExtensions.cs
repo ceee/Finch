@@ -1,7 +1,30 @@
-﻿namespace zero.Media
+﻿using Microsoft.AspNetCore.Http;
+using System.IO;
+
+namespace zero.Media
 {
   public static class MediaManagementExtensions
   {
+    /// <summary>
+    /// Uploads a file and persists it
+    /// </summary>
+    public static async Task<EntityResult<Media>> UploadFile(this IMediaManagement media, IFormFile formFile, string folderId = null, CancellationToken cancellationToken = default)
+    {
+      using Stream stream = formFile.OpenReadStream();
+      return await media.UploadFile(stream, formFile.FileName, folderId, cancellationToken);
+    }
+
+
+    /// <summary>
+    /// Uploads a file and persists it
+    /// </summary>
+    public static async Task<EntityResult<Media>> UploadFile(this IMediaManagement media, byte[] fileBytes, string filename, string folderId = null, CancellationToken cancellationToken = default)
+    {
+      using Stream stream = new MemoryStream(fileBytes);
+      return await media.UploadFile(stream, filename, folderId, cancellationToken);
+    }
+
+
     /// <summary>
     /// Rename and store a media folder
     /// </summary>
@@ -55,12 +78,12 @@
     /// <summary>
     /// Deletes a folder by id
     /// </summary>
-    public static async Task<EntityResult<Media>> DeleteFolder(this IMediaManagement media, string folderId)
+    public static async Task<EntityResult<string[]>> DeleteFolder(this IMediaManagement media, string folderId)
     {
       Media folder = await media.GetFolder(folderId);
       if (folder == null)
       {
-        return EntityResult<Media>.Fail("@errors.idnotfound");
+        return EntityResult<string[]>.Fail("@errors.idnotfound");
       }
 
       return await media.DeleteFolder(folder);
