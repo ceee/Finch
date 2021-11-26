@@ -2,7 +2,7 @@
 
 namespace zero.Identity;
 
-public class Permission
+public struct Permission
 {
   /// <summary>
   /// Full key (stored in left part claim value) of the permission
@@ -14,25 +14,11 @@ public class Permission
   /// </summary>
   public string Label { get; set; }
 
-  /// <summary>
-  /// Optional description text
-  /// </summary>
-  public string Description { get; set; }
-
-
-  public Permission() { }
 
   public Permission(string key, string label)
   {
     Key = key;
     Label = label;
-  }
-
-  public Permission(string key, string label, string description)
-  {
-    Key = key;
-    Label = label;
-    Description = description;
   }
 
   ///// <summary>

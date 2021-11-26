@@ -13,6 +13,7 @@ public class CountriesController : ZeroBackofficeApiController
 
 
   [HttpGet("empty")]
+  [ZeroAuthorize(CountryPermissions.Create)]
   public virtual async Task<ActionResult<CountryDisplay>> Empty()
   {
     Country model = await Store.Empty();
@@ -27,6 +28,7 @@ public class CountriesController : ZeroBackofficeApiController
 
 
   [HttpGet("{id}")]
+  [ZeroAuthorize(CountryPermissions.Read)]
   public virtual async Task<ActionResult<CountryDisplay>> Get(string id, string changeVector = null)
   {
     Country model = await Store.Load(id, changeVector);
@@ -41,6 +43,7 @@ public class CountriesController : ZeroBackofficeApiController
 
 
   [HttpGet]
+  [ZeroAuthorize(CountryPermissions.Read)]
   public virtual async Task<ActionResult<Paged>> Get(ListQuery<Country> query)
   {
     Paged<Country> result = await Store.Load<zero_Backoffice_Countries_Listing>(query.Page, query.PageSize, q => q.Filter(query));
@@ -49,6 +52,7 @@ public class CountriesController : ZeroBackofficeApiController
 
 
   [HttpPost]
+  [ZeroAuthorize(CountryPermissions.Create)]
   public virtual async Task<ActionResult<Result>> Create(CountrySave saveModel)
   {
     Country model = Mapper.Map<CountrySave, Country>(saveModel);
@@ -65,6 +69,7 @@ public class CountriesController : ZeroBackofficeApiController
 
 
   [HttpPut("{id}")]
+  [ZeroAuthorize(CountryPermissions.Update)]
   public virtual async Task<ActionResult<Result>> Update(string id, CountrySave updateModel)
   {
     if (id != updateModel.Id)
@@ -86,6 +91,7 @@ public class CountriesController : ZeroBackofficeApiController
 
 
   [HttpDelete("{id}")]
+  [ZeroAuthorize(CountryPermissions.Delete)]
   public virtual async Task<ActionResult<Result>> Delete(string id)
   {
     Country model = await Store.Load(id);

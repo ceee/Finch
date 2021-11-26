@@ -10,6 +10,8 @@ public static class ServiceCollectionExtensions
   {
     services.AddScoped<IPageTreeService, PageTreeService>();
 
+    services.AddSingleton<IPermissionProvider, CountryPermissions>();
+
     services.Configure<RavenOptions>(opts =>
     {
       opts.Indexes.Add<zero_Backoffice_Countries_Listing>();

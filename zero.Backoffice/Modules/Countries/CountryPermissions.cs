@@ -4,14 +4,18 @@ public class CountryPermissions : PermissionProvider
 {
   public CountryPermissions() : base("@settings.application.countries.name") { }
 
-  static string Prefix = "countries.";
-
-  public static readonly Permission Create = new(Prefix + "create", "@permission.states.create");
-  public static readonly Permission Read   = new(Prefix + "read",   "@permission.states.read");
-  public static readonly Permission Update = new(Prefix + "update", "@permission.states.update");
-  public static readonly Permission Delete = new(Prefix + "delete", "@permission.states.delete");
+  public const string Create = "zero.country.create";
+  public const string Read   = "zero.country.read";
+  public const string Update = "zero.country.update";
+  public const string Delete = "zero.country.delete";
 
 
   /// <inheritdoc />
-  public override IEnumerable<Permission> GetPermissions() => new[] { Create, Read, Update, Delete };
+  public override IEnumerable<Permission> GetPermissions() => new Permission[] 
+  { 
+    new(Create, "@permission.states.create"),
+    new(Read, "@permission.states.read"),
+    new(Update, "@permission.states.update"),
+    new(Delete, "@permission.states.delete")
+  };
 }
