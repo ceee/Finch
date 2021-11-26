@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace zero;
 
@@ -19,7 +18,7 @@ public class ZeroApplicationBuilder : IZeroApplicationBuilder
     App.UseAuthentication();
     App.UseAuthorization();
 
-    ZeroModuleInitializer.ConfigureAll(app.ApplicationServices.GetRequiredService<IZeroOptions>());
+    //ZeroModuleInitializer.ConfigureAll(app.ApplicationServices.GetRequiredService<IZeroOptions>());
   }
 
 

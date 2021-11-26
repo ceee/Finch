@@ -8,8 +8,9 @@ internal static class ServiceCollectionExtensions
   {
     services.AddScoped<ICultureResolver, CultureResolver>();
     services.AddScoped<ICultureService, CultureService>();
-    services.AddScoped<ICountriesStore, CountriesStore>();
-    services.AddScoped<ILanguagesStore, LanguagesStore>();
+    services.AddScoped<ICountryStore, CountryStore>();
+    services.AddScoped<ILanguageStore, LanguageStore>();
+    services.AddScoped<ITranslationStore, TranslationStore>();
     services.AddScoped<ILocalizer, Localizer>();
     return services;
   }

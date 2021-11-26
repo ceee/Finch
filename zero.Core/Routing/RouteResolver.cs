@@ -93,7 +93,7 @@ public class RouteResolver : Routes, IRouteResolver
   /// <inheritdoc />
   public async Task<IRouteModel> ResolveUrl(HttpContext context)
   {
-    if (!Options.SetupCompleted || context.IsBackofficeRequest(Options.BackofficePath))
+    if (!Options.Initialized || context.IsBackofficeRequest(Options.ZeroPath))
     {
       return null;
     }

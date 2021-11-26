@@ -57,6 +57,8 @@ public class RedirectAutomation : IRedirectAutomation
   /// <inheritdoc />
   public async Task DeleteForRoutes(params Route[] routes)
   {
+    await Task.Delay(0);
+
     if (routes.Length < 1)
     {
       return;

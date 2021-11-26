@@ -65,7 +65,7 @@ public class BlueprintInterceptor : Interceptor<ZeroEntity>, IBlueprintIntercept
 
       if (child == null)
       {
-        child = model.Clone();
+        child = ObjectCopycat.Clone(model);
         child.Blueprint = new() { Id = model.Id };
       }
       else

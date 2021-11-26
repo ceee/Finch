@@ -1,4 +1,6 @@
-﻿namespace zero.Pages;
+﻿using FluentValidation;
+
+namespace zero.Pages;
 
 public class PagesStore : TreeEntityStore<Page>, IPagesStore
 {
@@ -39,6 +41,14 @@ public class PagesStore : TreeEntityStore<Page>, IPagesStore
     }
 
     return model;
+  }
+
+
+  /// <inheritdoc />
+  protected override void ValidationRules(ZeroValidator<Page> validator)
+  {
+    validator.RuleFor(x => x.Name).NotEmpty();
+    validator.RuleFor(x => x.PageTypeAlias).NotEmpty();
   }
 }
 

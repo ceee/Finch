@@ -2,9 +2,9 @@
 
 namespace zero.Localization;
 
-public class LanguagesStore : EntityStore<Language>, ILanguagesStore
+public class LanguageStore : EntityStore<Language>, ILanguageStore
 {
-  public LanguagesStore(IStoreContext context) : base(context) { }
+  public LanguageStore(IStoreContext context) : base(context) { }
 
   /// <inheritdoc />
   protected override void ValidationRules(ZeroValidator<Language> validator)
@@ -21,4 +21,4 @@ public class LanguagesStore : EntityStore<Language>, ILanguagesStore
 }
 
 
-public interface ILanguagesStore : IEntityStore<Language> { }
+public interface ILanguageStore : IEntityStore<Language> { }

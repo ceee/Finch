@@ -10,13 +10,13 @@ public class PageUrlBuilder : IPageUrlBuilder
 
   protected IZeroStore Store { get; private set; }
 
-  protected IZeroOptions Options { get; private set; }
+  protected PageOptions Options { get; private set; }
 
 
   public PageUrlBuilder(IZeroStore store, IZeroOptions options)
   {
     Store = store;
-    Options = options;
+    Options = options.For<PageOptions>();
   }
 
 
@@ -70,7 +70,7 @@ public class PageUrlBuilder : IPageUrlBuilder
     {
       alias = page.UrlAlias;
     }
-    else if (page.PageTypeAlias == Options.Pages.Root)
+    else if (page.PageTypeAlias == Options.Root)
     {
       return String.Empty;
     }

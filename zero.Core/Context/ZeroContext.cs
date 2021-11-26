@@ -83,15 +83,15 @@ public class ZeroContext : IZeroContext
       return;
     }
 
-    if (!Options.SetupCompleted)
-    {
-      return;
-    }
+    //if (!Options.SetupCompleted)
+    //{
+    //  return;
+    //} // TODO setup
 
     _resolved = true;
 
     // check if the current request is a backoffice request
-    IsBackofficeRequest = context.IsBackofficeRequest(Options.BackofficePath);
+    IsBackofficeRequest = context.IsBackofficeRequest(Options.ZeroPath);
 
     // get the currently logged-in backoffice user
     BackofficeUser = new ClaimsPrincipal();

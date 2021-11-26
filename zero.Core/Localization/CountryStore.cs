@@ -2,9 +2,9 @@
 
 namespace zero.Localization;
 
-public class CountriesStore : EntityStore<Country>, ICountriesStore
+public class CountryStore : EntityStore<Country>, ICountryStore
 {
-  public CountriesStore(IStoreContext context) : base(context) { }
+  public CountryStore(IStoreContext context) : base(context) { }
 
   /// <inheritdoc />
   protected override void ValidationRules(ZeroValidator<Country> validator)
@@ -15,4 +15,4 @@ public class CountriesStore : EntityStore<Country>, ICountriesStore
 }
 
 
-public interface ICountriesStore : IEntityStore<Country> { }
+public interface ICountryStore : IEntityStore<Country> { }

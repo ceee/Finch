@@ -22,7 +22,7 @@ public static class AuthenticationBuilderExtensions
 
         options.CookieManager = new ContextualCookieManager((ctx, key) =>
         {
-          return ctx.Request.Path.ToString().StartsWith(zero.BackofficePath.EnsureStartsWith('/').TrimEnd('/'));
+          return ctx.Request.Path.ToString().StartsWith(zero.ZeroPath.EnsureStartsWith('/').TrimEnd('/'));
         });
 
         options.Events.OnRedirectToLogin = ctx =>
@@ -68,7 +68,7 @@ public static class AuthenticationBuilderExtensions
       .Configure<IZeroOptions>((options, zero) =>
       {
         options.Scheme = scheme;
-        options.Path = isBackoffice ? zero.BackofficePath : "/";
+        options.Path = isBackoffice ? zero.ZeroPath : "/";
       });
 
     var optionsBuilder = services

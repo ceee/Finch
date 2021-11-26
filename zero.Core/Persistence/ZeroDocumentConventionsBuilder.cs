@@ -122,9 +122,10 @@ public class ZeroDocumentConventionsBuilder : IZeroDocumentConventionsBuilder
   /// </summary>
   protected virtual string TransformTypeCollectionNameToDocumentIdPrefix(string name)
   {
-    if (!Options.Raven.CollectionPrefix.IsNullOrWhiteSpace())
+    RavenOptions options = Options.For<RavenOptions>();
+    if (!options.CollectionPrefix.IsNullOrWhiteSpace())
     {
-      name = Options.Raven.CollectionPrefix.EnsureEndsWith(IdentityPartsSeparator) + name.TrimStart(Options.Raven.CollectionPrefix);
+      name = options.CollectionPrefix.EnsureEndsWith(IdentityPartsSeparator) + name.TrimStart(options.CollectionPrefix);
     }
 
     return name.ToCamelCaseId();

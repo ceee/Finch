@@ -23,21 +23,20 @@ public class PageTypeService : IPageTypeService
   /// <inheritdoc />
   public IList<PageType> GetPageTypes()
   {
-    return PageOptions.GetAllItems().ToList();
+    return PageOptions;
   }
 
 
   /// <inheritdoc />
   public PageType GetPageType(string pageTypeAlias)
   {
-    return PageOptions.GetAllItems().FirstOrDefault(x => x.Alias == pageTypeAlias);
+    return PageOptions.FirstOrDefault(x => x.Alias == pageTypeAlias);
   }
 
 
   /// <inheritdoc />
   public async Task<IList<PageType>> GetAllowedPageTypes(string pageParentId = null)
   {
-    IEnumerable<PageType> types = PageOptions.GetAllItems();
     List<Page> parents = new();
 
     var session = Context.Store.Session();
@@ -63,10 +62,10 @@ public class PageTypeService : IPageTypeService
     // if there is no registered handler we just allow all page types
     if (handler == null)
     {
-      return types.ToList();
+      return PageOptions;
     }
 
-    return (await handler.GetAllowedPageTypes(Context.Application, types, parents))?.ToList() ?? new();
+    return (await handler.GetAllowedPageTypes(Context.Application, PageOptions, parents))?.ToList() ?? new();
   }
 }
 

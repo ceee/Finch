@@ -16,9 +16,14 @@ public class UserRolesService : IUserRolesService
 
   private ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
+  protected IZeroContext Context { get; private set; }
 
-  public UserRolesService(IHttpContextAccessor httpContextAccessor, UserManager<ZeroUser> userManager, RoleManager<ZeroUserRole> roleManager, IStoreContext store)
+  protected IZeroDocumentSession Session => Context.Store.Session();
+
+
+  public UserRolesService(IZeroContext context, IHttpContextAccessor httpContextAccessor, UserManager<ZeroUser> userManager, RoleManager<ZeroUserRole> roleManager, IStoreContext store)
   {
+    Context = context;
     HttpContextAccessor = httpContextAccessor;
     UserManager = userManager;
     RoleManager = roleManager;
@@ -42,12 +47,12 @@ public class UserRolesService : IUserRolesService
   /// <inheritdoc />
   public async Task<EntityResult<ZeroUserRole>> Save(ZeroUserRole model)
   {
-    ValidationResult validation = await new UserRoleValidator().ValidateAsync(model);
+    //ValidationResult validation = await new UserRoleValidator().ValidateAsync(model);
 
-    if (!validation.IsValid)
-    {
-      return EntityResult<ZeroUserRole>.Fail(validation);
-    }
+    //if (!validation.IsValid)
+    //{
+    //  return EntityResult<ZeroUserRole>.Fail(validation);
+    //}
 
     if (model.Id.IsNullOrEmpty())
     {

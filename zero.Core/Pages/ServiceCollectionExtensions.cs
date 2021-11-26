@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace zero.Pages;
@@ -10,6 +9,7 @@ internal static class ServiceCollectionExtensions
   {
     services.AddScoped<IPagesStore, PagesStore>();
     services.AddScoped<IPageTypeService, PageTypeService>();
+    services.AddScoped<IPageModuleTypeService, PageModuleTypeService>();
 
     services.AddOptions<PageOptions>().Bind(config.GetSection("Zero:Pages"));
     services.AddOptions<PageModuleOptions>().Bind(config.GetSection("Zero:PageModules"));

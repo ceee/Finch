@@ -47,13 +47,13 @@ public class PageModuleType
   /// <summary>
   /// Defining tags for a module type allows you to query for them
   /// </summary>
-  public List<string> Tags { get; set; } = new List<string>();
+  public List<string> Tags { get; set; } = new();
 
   /// <summary>
   /// Page types where this module type is not allowed.
   /// This will only work when operating within the page context.
   /// </summary>
-  public List<string> DisallowedPageTypes { get; set; } = new List<string>();
+  public List<string> DisallowedPageTypes { get; set; } = new();
 
 
   public PageModuleType(Type type)

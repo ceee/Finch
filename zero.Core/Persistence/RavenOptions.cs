@@ -75,11 +75,13 @@ public class RavenIndexesOptions : List<RavenIndexesOptions.Map>
 
   public IEnumerable<IZeroIndexDefinition> BuildAll(IZeroOptions options, IDocumentStore store)
   {
+    RavenOptions ravenOptions = options.For<RavenOptions>();
+
     foreach (Map map in this)
     {
       IZeroIndexDefinition index = map.CreateIndex.Compile().Invoke();
       index.Setup(options, store);
-      index.RunModifiers(options);
+      index.RunModifiers(ravenOptions);
       yield return index;
     }
   }

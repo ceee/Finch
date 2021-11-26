@@ -2,9 +2,9 @@
 
 public static class ZeroIndexExtensions
 {
-  internal static void RunModifiers<T>(this T index, IZeroOptions options) where T : IZeroIndexDefinition 
+  internal static void RunModifiers<T>(this T index, RavenOptions options) where T : IZeroIndexDefinition 
   {
-    IEnumerable<RavenIndexModifiersOptions.Modifier> modifiers = options.Raven.Indexes.Modifiers.GetAllForType(index.GetType());
+    IEnumerable<RavenIndexModifiersOptions.Modifier> modifiers = options.Indexes.Modifiers.GetAllForType(index.GetType());
 
     foreach (RavenIndexModifiersOptions.Modifier modifier in modifiers)
     {

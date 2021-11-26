@@ -10,7 +10,7 @@ public class BlueprintService : IBlueprintService
   public BlueprintService(IZeroOptions options)
   {
     Options = options;
-    Blueprints = Options.Blueprints.GetAllItems();
+    Blueprints = Options.For<BlueprintOptions>();
   }
 
 

@@ -24,19 +24,21 @@ public class PageRouteResolverHelper
 
   public async Task<HashSet<Route>> ResolveAllFor<T>(RoutingContext context, Func<Page, bool> predicate = null)
   {
+    RoutingOptions options = context.Context.Options.For<RoutingOptions>();
+
     string fullKey = typeof(T).Name.ToString().ToLower() + ":" + context.Context.AppId;
 
     if (!PageRouteCache.TryGetValue(fullKey, out HashSet<(Page, Route)> routes))
     {
       List<Page> pages = new();
-      IEnumerable<Expression<Func<Page, bool>>> resolvers = context.Context.Options.Routing.PageResolvers.GetAll(typeof(T));
+      IEnumerable<Expression<Func<Page, bool>>> resolvers = options.PageResolvers.GetAll(typeof(T));
 
       foreach (Expression<Func<Page, bool>> resolver in resolvers.Reverse())
       {
         pages.AddRange(await context.Session.Query<Page>().Where(resolver).ToListAsync());
       }
 
-      Dictionary<string, Page> idToPage = pages.ToDictionary(x => context.Context.Options.Routing.PageRouteIdBuilder.Generate(x), x => x);
+      Dictionary<string, Page> idToPage = pages.ToDictionary(x => options.PageRouteIdBuilder.Generate(x), x => x);
       Dictionary<string, Route> idToRoute = await context.Session.LoadAsync<Route>(idToPage.Select(x => x.Key));
 
       routes = new();
@@ -63,19 +65,20 @@ public class PageRouteResolverHelper
 
   public async Task<HashSet<Page>> ResolveAllPagesFor<T>(RoutingContext context, Func<Page, bool> predicate = null)
   {
+    RoutingOptions options = context.Context.Options.For<RoutingOptions>();
     string fullKey = typeof(T).Name.ToString().ToLower() + ":" + context.Context.AppId;
 
     if (!PageRouteCache.TryGetValue(fullKey, out HashSet<(Page, Route)> routes))
     {
       List<Page> pages = new();
-      IEnumerable<Expression<Func<Page, bool>>> resolvers = context.Context.Options.Routing.PageResolvers.GetAll(typeof(T));
+      IEnumerable<Expression<Func<Page, bool>>> resolvers = options.PageResolvers.GetAll(typeof(T));
 
       foreach (Expression<Func<Page, bool>> resolver in resolvers.Reverse())
       {
         pages.AddRange(await context.Session.Query<Page>().Where(resolver).ToListAsync());
       }
 
-      Dictionary<string, Page> idToPage = pages.ToDictionary(x => context.Context.Options.Routing.PageRouteIdBuilder.Generate(x), x => x);
+      Dictionary<string, Page> idToPage = pages.ToDictionary(x => options.PageRouteIdBuilder.Generate(x), x => x);
       Dictionary<string, Route> idToRoute = await context.Session.LoadAsync<Route>(idToPage.Select(x => x.Key));
 
       routes = new();
@@ -102,19 +105,20 @@ public class PageRouteResolverHelper
 
   public async Task<Dictionary<Page, Route>> ResolveAllForAsDictionary<T>(RoutingContext context, Func<(Page, Route), bool> predicate = null)
   {
+    RoutingOptions options = context.Context.Options.For<RoutingOptions>();
     string fullKey = typeof(T).Name.ToString().ToLower() + ":" + context.Context.AppId;
 
     if (!PageRouteCache.TryGetValue(fullKey, out HashSet<(Page, Route)> routes))
     {
       List<Page> pages = new();
-      IEnumerable<Expression<Func<Page, bool>>> resolvers = context.Context.Options.Routing.PageResolvers.GetAll(typeof(T));
+      IEnumerable<Expression<Func<Page, bool>>> resolvers = options.PageResolvers.GetAll(typeof(T));
 
       foreach (Expression<Func<Page, bool>> resolver in resolvers.Reverse())
       {
         pages.AddRange(await context.Session.Query<Page>().Where(resolver).ToListAsync());
       }
 
-      Dictionary<string, Page> idToPage = pages.ToDictionary(x => context.Context.Options.Routing.PageRouteIdBuilder.Generate(x), x => x);
+      Dictionary<string, Page> idToPage = pages.ToDictionary(x => options.PageRouteIdBuilder.Generate(x), x => x);
       Dictionary<string, Route> idToRoute = await context.Session.LoadAsync<Route>(idToPage.Select(x => x.Key));
 
       routes = new();

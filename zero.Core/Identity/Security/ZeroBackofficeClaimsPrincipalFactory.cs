@@ -50,12 +50,13 @@ public class ZeroBackofficeClaimsPrincipalFactory<TUser, TRole> : ZeroClaimsPrin
     }
 
     // get all allowed app ids
-    string[] appIds = claims
-      .Where(x => x.Type == Constants.Auth.Claims.Permission && x.Value.StartsWith(Permissions.Applications))
-      .Select(x => Permission.FromClaim(x, Permissions.Applications))
-      .Where(x => x.IsTrue)
-      .Select(x => x.NormalizedKey)
-      .ToArray();
+    //string[] appIds = claims
+    //  .Where(x => x.Type == Constants.Auth.Claims.Permission && x.Value.StartsWith(Permissions.Applications))
+    //  .Select(x => Permission.FromClaim(x, Permissions.Applications))
+    //  .Where(x => x.IsTrue)
+    //  .Select(x => x.NormalizedKey)
+    //  .ToArray();
+    string[] appIds = Array.Empty<string>(); // TODO permissions
 
     string currentAppId = user.CurrentAppId ?? user.AppId;
 

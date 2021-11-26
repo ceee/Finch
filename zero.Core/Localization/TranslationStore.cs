@@ -2,9 +2,9 @@
 
 namespace zero.Localization;
 
-public class TranslationsStore : EntityStore<Translation>, ITranslationsStore
+public class TranslationStore : EntityStore<Translation>, ITranslationStore
 {
-  public TranslationsStore(IStoreContext context) : base(context) { }
+  public TranslationStore(IStoreContext context) : base(context) { }
 
 
   /// <inheritdoc />
@@ -22,7 +22,7 @@ public class TranslationsStore : EntityStore<Translation>, ITranslationsStore
 }
 
 
-public interface ITranslationsStore : IEntityStore<Translation>
+public interface ITranslationStore : IEntityStore<Translation>
 {
   /// <summary>
   /// Get a translated string by id

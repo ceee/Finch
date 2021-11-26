@@ -31,11 +31,6 @@ public class ZeroBackofficePlugin : ZeroPlugin
 
     //services.AddTransient<ISectionsApi, SectionsApi>();
     //services.AddTransient<ISettingsApi, SettingsApi>();
-    //services.AddTransient<ISpacesApi, SpacesApi>();
-    //services.AddTransient<IModulesApi, ModulesApi>();
-
-    //services.AddTransient<IIntegrationService, IntegrationService>();
-    //services.AddTransient<IIntegrationsCollection, IntegrationsCollection>();
 
     //services.AddScoped<IBackofficeSearchService, BackofficeSearchService>();
 

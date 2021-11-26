@@ -75,7 +75,7 @@ public class RequestUrlResolver : IRequestUrlResolver
 
     HttpRequest request = HttpContextAccessor.HttpContext.Request;
 
-    string suffix = IsBackoffice ? Options.BackofficePath : String.Empty;
+    string suffix = IsBackoffice ? Options.ZeroPath : String.Empty;
 
     return $"{request.Scheme}://{request.Host.Host}{GetPortUrlPart(request)}{suffix}{(includePath ? request.PathBase.ToUriComponent() : String.Empty)}";
   }

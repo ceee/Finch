@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -6,7 +7,7 @@ namespace zero.Routing;
 
 internal static class ServiceCollectionExtensions
 {
-  public static IServiceCollection AddZeroRouting(this IServiceCollection services)
+  public static IServiceCollection AddZeroRouting(this IServiceCollection services, IConfiguration config)
   {
     services.AddScoped<IRequestUrlResolver, RequestUrlResolver>();
     services.AddScoped<IRoutes, Routes>();
@@ -20,6 +21,8 @@ internal static class ServiceCollectionExtensions
     services.AddScoped<ZeroRoutesTransformer>();
     services.TryAddEnumerable(ServiceDescriptor.Singleton<MatcherPolicy, NotFoundSelectorPolicy>());
     services.AddScoped<IInterceptor, ZeroEntityRouteInterceptor>();
+
+    services.AddOptions<RoutingOptions>().Bind(config.GetSection("Zero:Routing"));
 
     services.Configure<ZeroOptions>(opts =>
     {

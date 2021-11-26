@@ -6,13 +6,16 @@ public static class BackofficeUserExtensions
   {
     if (user == null)
     {
-      return new string[0] { };
+      return Array.Empty<string>();
     }
 
-    IEnumerable<Permission> permissions = user.Claims
-      .Where(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(Permissions.Applications))
-      .Select(x => Permission.FromClaim(x.ToClaim(), Permissions.Applications));
 
-    return permissions.Where(x => x.IsTrue).Select(x => x.NormalizedKey).ToArray();
+    return Array.Empty<string>();
+    // TODO permissions
+    //IEnumerable<Permission> permissions = user.Claims
+    //  .Where(claim => claim.Type == Constants.Auth.Claims.Permission && claim.Value.StartsWith(Permissions.Applications))
+    //  .Select(x => Permission.FromClaim(x.ToClaim(), Permissions.Applications));
+
+    //return permissions.Where(x => x.IsTrue).Select(x => x.NormalizedKey).ToArray();
   }
 }

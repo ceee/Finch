@@ -1,6 +1,6 @@
 ﻿namespace zero.Identity;
 
-[RavenCollection("Roles")]
+[RavenCollection("UserRoles")]
 public class ZeroUserRole : ZeroIdentityRole
 {
   /// <summary>

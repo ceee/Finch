@@ -13,6 +13,7 @@ internal static class ServiceCollectionExtensions
     services.AddSingleton<IZeroDocumentStore, ZeroDocumentStore>(CreateRavenStore);
     services.AddScoped<IZeroStore, ZeroStore>();
     services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();
+    services.AddSingleton<IRevisionService, RevisionService>();
 
     services.AddOptions<RavenOptions>().Bind(config.GetSection("Zero:Raven"));
 

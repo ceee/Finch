@@ -15,6 +15,9 @@ internal static class ServiceCollectionExtensions
       opts.TokenExpiration = TimeSpan.FromHours(3);
     });
     services.AddTransient<IZeroOptions>(factory => factory.GetService<IOptionsMonitor<ZeroOptions>>().CurrentValue);
+
+    services.AddOptions<FeatureOptions>().Bind(config.GetSection("Zero:Features"));
+
     return services;
   }
 }

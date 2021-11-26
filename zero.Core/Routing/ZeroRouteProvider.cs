@@ -109,7 +109,9 @@ public abstract class ZeroRouteProvider : IRouteProvider
   /// <inheritdoc />
   public virtual RouteEndpoint Map(RoutingContext context, IRouteModel route)
   {
-    IEnumerable<Func<IRouteModel, RouteEndpoint>> resolvers = context.Context.Options.Routing.EndpointResolvers.GetAll(route.GetType());
+    RoutingOptions options = context.Context.Options.For<RoutingOptions>();
+
+    IEnumerable<Func<IRouteModel, RouteEndpoint>> resolvers = options.EndpointResolvers.GetAll(route.GetType());
 
     foreach (Func<IRouteModel, RouteEndpoint> resolver in resolvers.Reverse())
     {
@@ -121,7 +123,7 @@ public abstract class ZeroRouteProvider : IRouteProvider
       }
     }
 
-    return context.Context.Options.Routing.DefaultEndpoint;
+    return options.DefaultEndpoint;
   }
 
   /// <inheritdoc />

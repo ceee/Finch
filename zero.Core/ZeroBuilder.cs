@@ -33,8 +33,8 @@ public class ZeroBuilder
     new AssemblyDiscovery(Mvc).Execute(StartupOptions.AssemblyDiscoveryRules);
 
 
-    services.AddZeroApplications();
-    services.AddZeroBlueprints();
+    services.AddZeroApplications(Configuration);
+    services.AddZeroBlueprints(Configuration);
     services.AddZeroCommunication();
     services.AddZeroConfiguration(Configuration);
     services.AddZeroContext();
@@ -46,7 +46,7 @@ public class ZeroBuilder
     services.AddZeroMedia(Configuration);
     services.AddZeroPersistence(Configuration);
     services.AddZeroRendering();
-    services.AddZeroRouting();
+    services.AddZeroRouting(Configuration);
     services.AddZeroStores();
 
     //Mvc.AddNewtonsoftJson(x =>

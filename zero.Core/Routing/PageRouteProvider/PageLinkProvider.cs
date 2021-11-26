@@ -7,12 +7,12 @@ public class PageLinkProvider : ILinkProvider
   public const string AREA = "zero.pages";
 
   protected IRoutes Routes { get; set; }
-  protected IZeroOptions Options { get; set; } 
+  protected IPageTypeService PageTypeService { get; set; }
 
-  public PageLinkProvider(IRoutes routes, IZeroOptions options)
+  public PageLinkProvider(IRoutes routes, IPageTypeService pageTypeService)
   {
     Routes = routes;
-    Options = options;
+    PageTypeService = pageTypeService;
   }
 
 
@@ -63,7 +63,7 @@ public class PageLinkProvider : ILinkProvider
       return null;
     }
 
-    PageType pageType = Options.Pages.GetAllItems().FirstOrDefault(x => x.Alias == page.PageTypeAlias);
+    PageType pageType = PageTypeService.GetPageType(page.PageTypeAlias);
 
     string url = await Routes.GetUrl<Page>(page);
 

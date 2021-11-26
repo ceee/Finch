@@ -4,7 +4,7 @@ public class Paged<T> : Paged
 {
   public IList<T> Items { get; set; } = new List<T>();
 
-  public Paged(IList<T> items, long totalItems, long pageNumber, long pageSize) : this(totalItems, pageNumber, pageSize)
+  public Paged(IList<T> items, long totalItems, long pageNumber, long pageSize) : base(totalItems, pageNumber, pageSize)
   {
     Items = items;
   }
