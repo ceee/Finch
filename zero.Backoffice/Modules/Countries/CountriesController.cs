@@ -53,14 +53,14 @@ public class CountriesController : ZeroBackofficeApiController
   {
     Country model = Mapper.Map<CountrySave, Country>(saveModel);
     Result<Country> result = await Store.Create(model);
-    Result<CountryDisplay> mappedResult = Mapper.Map<Country, CountryDisplay>(result);
 
     if (result.IsSuccess)
     {
+      Result<CountryDisplay> mappedResult = Mapper.Map<Country, CountryDisplay>(result);
       return CreatedAtAction(nameof(CountriesController.Get), new { id = model.Id }, mappedResult);
     }
 
-    return mappedResult;
+    return result.WithoutModel();
   }
 
 
@@ -81,7 +81,7 @@ public class CountriesController : ZeroBackofficeApiController
       return NoContent();
     }
 
-    return Mapper.Map<Country, CountryDisplay>(result);
+    return result.WithoutModel();
   }
 
 
