@@ -1,6 +1,6 @@
 ﻿using Raven.Client.Documents.Indexes;
 
-namespace zero.Backoffice.Modules;
+namespace zero.Backoffice.Modules.Countries;
 
 public class zero_Backoffice_Countries_Listing : ZeroIndex<Country>
 {

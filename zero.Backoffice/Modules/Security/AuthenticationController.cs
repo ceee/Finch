@@ -22,25 +22,25 @@ namespace zero.Web.Controllers
     public async Task<EditModel<ZeroUser>> GetUser() => Edit(await Api.GetUser());
 
  
-    public EntityResult IsLoggedIn() => EntityResult.Maybe(Api.IsLoggedIn());
+    public Result IsLoggedIn() => Result.Maybe(Api.IsLoggedIn());
 
 
     [HttpPost]
-    public async Task<EntityResult> LoginUser([FromBody] LoginModel model) => await Api.Login(model.Email, model.Password, model.IsPersistent);
+    public async Task<Result> LoginUser([FromBody] LoginModel model) => await Api.Login(model.Email, model.Password, model.IsPersistent);
 
 
     [HttpPost, ZeroAuthorize]
-    public async Task<EntityResult> LogoutUser()
+    public async Task<Result> LogoutUser()
     {
       await Api.Logout();
-      return EntityResult.Success();
+      return Result.Success();
     }
 
 
     [HttpPost, ZeroAuthorize]
-    public async Task<EntityResult> SwitchApp(string appId)
+    public async Task<Result> SwitchApp(string appId)
     {
-      return EntityResult.Maybe(await Api.TrySwitchApp(appId));
+      return Result.Maybe(await Api.TrySwitchApp(appId));
     }
   }
 }

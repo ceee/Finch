@@ -1,66 +1,107 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace zero.Backoffice.Modules;
+namespace zero.Backoffice.Modules.Countries;
 
-/// <summary>
-/// | GET /zero/api/countries/empty
-/// | GET /zero/api/countries/{id}
-/// | GET /zero/api/countries/{id}/revisions
-/// | GET /zero/api/countries[type,query,filter,...]
-/// | POST /zero/api/countries
-/// | PUT /zero/api/countries/{id}
-/// | DELETE /zero/api/countries/{id}
-/// </summary>
 public class CountriesController : ZeroBackofficeApiController
 {
-  protected ICountriesStore Collection { get; set; }
+  protected ICountryStore Store { get; set; }
 
-  public CountriesController(ICountriesStore collection)
+  public CountriesController(ICountryStore store)
   {
-    Collection = collection;
+    Store = store;
   }
 
 
   [HttpGet("empty")]
-  public virtual async Task<Country> New()
+  public virtual async Task<ActionResult<CountryDisplay>> Empty()
   {
-    return await Collection.Empty();
+    Country model = await Store.Empty();
+
+    if (model == null)
+    {
+      return NotFound();
+    }
+
+    return Mapper.Map<Country, CountryDisplay>(model);
   }
+
 
   [HttpGet("{id}")]
-  public virtual async Task<Country> Get(string id, string changeVector = null)
+  public virtual async Task<ActionResult<CountryDisplay>> Get(string id, string changeVector = null)
   {
-    return await Collection.Load(id, changeVector);
+    Country model = await Store.Load(id, changeVector);
+
+    if (model == null)
+    {
+      return NotFound();
+    }
+
+    return Mapper.Map<Country, CountryDisplay>(model);
   }
+
 
   [HttpGet]
-  public virtual async Task<Paged<Country>> Get(ListBackofficeQuery<Country> query)
+  public virtual async Task<ActionResult<Paged>> Get(ListQuery<Country> query)
   {
-    return await Collection.Load<zero_Backoffice_Countries_Listing>(query.Page, query.PageSize, q => q.OrderByDescending(x => x.CreatedDate));
+    Paged<Country> result = await Store.Load<zero_Backoffice_Countries_Listing>(query.Page, query.PageSize, q => q.Filter(query));
+    return Mapper.Map<Country, CountryBasic>(result);
   }
-
-  //[HttpGet("{id}/revisions")]
-  //public virtual async Task<List<Revision<Country>>> GetRevisions(string id)
-  //{
-  //  return await Collection.GetRevisions(id);
-  //}
 
 
   [HttpPost]
-  public virtual async Task<EntityResult<Country>> Create(Country country)
+  public virtual async Task<ActionResult<Result>> Create(CountrySave saveModel)
   {
-    return await Collection.Create(country);
+    Country model = Mapper.Map<CountrySave, Country>(saveModel);
+    Result<Country> result = await Store.Create(model);
+    Result<CountryDisplay> mappedResult = Mapper.Map<Country, CountryDisplay>(result);
+
+    if (result.IsSuccess)
+    {
+      return CreatedAtAction(nameof(CountriesController.Get), new { id = model.Id }, mappedResult);
+    }
+
+    return mappedResult;
   }
+
 
   [HttpPut("{id}")]
-  public virtual async Task<EntityResult<Country>> Update(string id, Country country)
+  public virtual async Task<ActionResult<Result>> Update(string id, CountrySave updateModel)
   {
-    return await Collection.Update(country);
+    if (id != updateModel.Id)
+    {
+      return BadRequest(BackofficeConstants.HttpErrors.NoIdMatchOnUpdate);
+    }
+
+    Country model = Mapper.Map<CountrySave, Country>(updateModel);
+    model.Id = id;
+    Result<Country> result = await Store.Update(model);
+
+    if (result.IsSuccess)
+    {
+      return NoContent();
+    }
+
+    return Mapper.Map<Country, CountryDisplay>(result);
   }
 
+
   [HttpDelete("{id}")]
-  public virtual async Task<EntityResult<Country>> Delete(string id)
+  public virtual async Task<ActionResult<Result>> Delete(string id)
   {
-    return await Collection.Delete(id);
+    Country model = await Store.Load(id);
+
+    if (model == null)
+    {
+      return NotFound();
+    }
+
+    Result<Country> result = await Store.Delete(model);
+
+    if (result.IsSuccess)
+    {
+      return NoContent();
+    }
+
+    return result.WithoutModel();
   }
 }

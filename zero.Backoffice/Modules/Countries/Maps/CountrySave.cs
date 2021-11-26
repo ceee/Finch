@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace zero.Backoffice.Modules;
+namespace zero.Backoffice.Modules.Countries;
 
-public class CountryEditModel : ObsoleteEditModel
+public class CountrySave : SaveModel<Country>
 {
   public string Name { get; set; }
 

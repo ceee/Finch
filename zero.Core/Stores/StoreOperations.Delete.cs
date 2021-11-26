@@ -3,11 +3,11 @@
 public abstract partial class StoreOperations
 {
   /// <inheritdoc />
-  public virtual async Task<EntityResult<T>> Delete<T>(T model) where T : ZeroIdEntity, new()
+  public virtual async Task<Result<T>> Delete<T>(T model) where T : ZeroIdEntity, new()
   {
     if (model == null)
     {
-      return EntityResult<T>.Fail("@errors.ondelete.idnotfound");
+      return Result<T>.Fail("@errors.ondelete.idnotfound");
     }
 
     InterceptorInstruction<T> instruction = Interceptors.ForDelete(model);
@@ -21,6 +21,6 @@ public abstract partial class StoreOperations
     await instruction.Complete();
     await Session.SaveChangesAsync();
 
-    return EntityResult<T>.Success();
+    return Result<T>.Success();
   }
 }

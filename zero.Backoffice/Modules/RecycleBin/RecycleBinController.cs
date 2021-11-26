@@ -26,11 +26,11 @@ namespace zero.Web.Controllers
 
 
     [HttpDelete]
-    public async Task<EntityResult<RecycledEntity>> Delete([FromQuery] string id) => await Api.Delete(id);
+    public async Task<Result<RecycledEntity>> Delete([FromQuery] string id) => await Api.Delete(id);
 
 
     [HttpDelete]
-    public async Task<EntityResult<RecycledEntity>> DeleteByGroup([FromQuery] string group) => await Api.DeleteByGroup(group);
+    public async Task<Result<RecycledEntity>> DeleteByGroup([FromQuery] string group) => await Api.DeleteByGroup(group);
 
   }
 }

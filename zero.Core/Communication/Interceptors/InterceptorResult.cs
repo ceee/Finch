@@ -15,5 +15,5 @@ public class InterceptorResult<T>
   /// <summary>
   /// Set a result. This will prevent further execution of the operation and cancels all subsequent interceptors
   /// </summary>
-  public EntityResult<T> Result { get; set; }
+  public Result<T> Result { get; set; }
 }

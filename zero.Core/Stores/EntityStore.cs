@@ -54,13 +54,13 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, n
   public virtual IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IQueryable<T>> expression) => Operations.Stream<T>(expression);
 
   /// <inheritdoc />
-  public virtual Task<EntityResult<T>> Create(T model) => Operations.Create(model, async m => await Validate(m));
+  public virtual Task<Result<T>> Create(T model) => Operations.Create(model, async m => await Validate(m));
 
   /// <inheritdoc />
-  public virtual Task<EntityResult<T>> Update(T model) => Operations.Update(model, async m => await Validate(m));
+  public virtual Task<Result<T>> Update(T model) => Operations.Update(model, async m => await Validate(m));
 
   /// <inheritdoc />
-  public virtual Task<EntityResult<T>> Delete(T model) => Operations.Delete(model);
+  public virtual Task<Result<T>> Delete(T model) => Operations.Delete(model);
 
   /// <inheritdoc />
   public virtual async Task<ValidationResult> Validate(T model)
@@ -141,15 +141,15 @@ public interface IEntityStore<T> where T : ZeroIdEntity, new()
   /// <summary>
   /// Creates an entity with an optional validator
   /// </summary>
-  Task<EntityResult<T>> Create(T model);
+  Task<Result<T>> Create(T model);
 
   /// <summary>
   /// Updates an entity with an optional validator
   /// </summary>
-  Task<EntityResult<T>> Update(T model);
+  Task<Result<T>> Update(T model);
 
   /// <summary>
   /// Deletes an entity
   /// </summary>
-  Task<EntityResult<T>> Delete(T model);
+  Task<Result<T>> Delete(T model);
 }

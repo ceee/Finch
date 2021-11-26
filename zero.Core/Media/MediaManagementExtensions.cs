@@ -23,7 +23,7 @@ namespace zero.Media
     /// <summary>
     /// Uploads a file and persists it
     /// </summary>
-    public static async Task<EntityResult<Media>> UploadFile(this IMediaManagement media, IFormFile formFile, string folderId = null, CancellationToken cancellationToken = default)
+    public static async Task<Result<Media>> UploadFile(this IMediaManagement media, IFormFile formFile, string folderId = null, CancellationToken cancellationToken = default)
     {
       using Stream stream = formFile.OpenReadStream();
       return await media.UploadFile(stream, formFile.FileName, folderId, cancellationToken);
@@ -33,7 +33,7 @@ namespace zero.Media
     /// <summary>
     /// Uploads a file and persists it
     /// </summary>
-    public static async Task<EntityResult<Media>> UploadFile(this IMediaManagement media, byte[] fileBytes, string filename, string folderId = null, CancellationToken cancellationToken = default)
+    public static async Task<Result<Media>> UploadFile(this IMediaManagement media, byte[] fileBytes, string filename, string folderId = null, CancellationToken cancellationToken = default)
     {
       using Stream stream = new MemoryStream(fileBytes);
       return await media.UploadFile(stream, filename, folderId, cancellationToken);
@@ -43,7 +43,7 @@ namespace zero.Media
     /// <summary>
     /// Rename and store a media folder
     /// </summary>
-    public static async Task<EntityResult<Media>> RenameFolder(this IMediaManagement media, Media folder, string newName)
+    public static async Task<Result<Media>> RenameFolder(this IMediaManagement media, Media folder, string newName)
     {
       folder.Name = newName;
       return await media.UpdateFolder(folder);
@@ -53,12 +53,12 @@ namespace zero.Media
     /// <summary>
     /// Rename and store a media folder
     /// </summary>
-    public static async Task<EntityResult<Media>> RenameFolder(this IMediaManagement media, string folderId, string newName)
+    public static async Task<Result<Media>> RenameFolder(this IMediaManagement media, string folderId, string newName)
     {
       Media folder = await media.GetFolder(folderId);
       if (folder == null)
       {
-        return EntityResult<Media>.Fail("@errors.idnotfound");
+        return Result<Media>.Fail("@errors.idnotfound");
       }
 
       return await RenameFolder(media, folder, newName);
@@ -68,7 +68,7 @@ namespace zero.Media
     /// <summary>
     /// Move a media folder to a new parent
     /// </summary>
-    public static async Task<EntityResult<Media>> MoveFolder(this IMediaManagement media, Media folder, string newParentId)
+    public static async Task<Result<Media>> MoveFolder(this IMediaManagement media, Media folder, string newParentId)
     {
       folder.ParentId = newParentId;
       return await media.UpdateFolder(folder);
@@ -78,12 +78,12 @@ namespace zero.Media
     /// <summary>
     /// Move a media folder to a new parent
     /// </summary>
-    public static async Task<EntityResult<Media>> MoveFolder(this IMediaManagement media, string folderId, string newParentId)
+    public static async Task<Result<Media>> MoveFolder(this IMediaManagement media, string folderId, string newParentId)
     {
       Media folder = await media.GetFolder(folderId);
       if (folder == null)
       {
-        return EntityResult<Media>.Fail("@errors.idnotfound");
+        return Result<Media>.Fail("@errors.idnotfound");
       }
 
       return await MoveFolder(media, folder, newParentId);
@@ -93,12 +93,12 @@ namespace zero.Media
     /// <summary>
     /// Deletes a folder by id
     /// </summary>
-    public static async Task<EntityResult<string[]>> DeleteFolder(this IMediaManagement media, string folderId)
+    public static async Task<Result<string[]>> DeleteFolder(this IMediaManagement media, string folderId)
     {
       Media folder = await media.GetFolder(folderId);
       if (folder == null)
       {
-        return EntityResult<string[]>.Fail("@errors.idnotfound");
+        return Result<string[]>.Fail("@errors.idnotfound");
       }
 
       return await media.DeleteFolder(folder);

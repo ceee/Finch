@@ -14,7 +14,7 @@ namespace zero.Web.Controllers
   {
     public TranslationsController(ITranslationsStore collection) : base(collection) { }
 
-    public override async Task<Paged<Translation>> GetByQuery([FromQuery] ListBackofficeQuery<Translation> query)
+    public override async Task<Paged<Translation>> GetByQuery([FromQuery] ListQuery<Translation> query)
     {
       query.SearchFor(entity => entity.Key, entity => entity.Value);
       query.OrderQuery = q => q.OrderByDescending(x => x.CreatedDate);

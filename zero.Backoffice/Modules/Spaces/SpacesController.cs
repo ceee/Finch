@@ -35,7 +35,7 @@ namespace zero.Web.Controllers
     public List<Space> GetAll() => Api.GetAll().Where(space => CanReadSpace(space.Alias)).ToList();
 
 
-    public async Task<IActionResult> GetList([FromQuery] string alias, [FromQuery] ListBackofficeQuery<SpaceContent> query = null)
+    public async Task<IActionResult> GetList([FromQuery] string alias, [FromQuery] ListQuery<SpaceContent> query = null)
     {
       if (!CanReadSpace(alias))
       {

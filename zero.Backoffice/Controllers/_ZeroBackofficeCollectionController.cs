@@ -34,22 +34,22 @@ public abstract class _ZeroBackofficeCollectionController<TEntity, TCollection> 
   }
 
 
-  public virtual async Task<EditModel<TEntity>> GetById([FromQuery] string id, [FromQuery] string changeVector = null) => Edit(await Collection.Load(id, changeVector));
+  public virtual async Task<DisplayModel<TEntity>> GetById([FromQuery] string id, [FromQuery] string changeVector = null) => Edit(await Collection.Load(id, changeVector));
 
 
   public virtual async Task<Dictionary<string, TEntity>> GetByIds([FromQuery] string[] ids) => await Collection.Load(ids);
 
 
-  public virtual async Task<EditModel<TEntity>> GetEmpty() => Edit(await Collection.Empty());
+  public virtual async Task<DisplayModel<TEntity>> GetEmpty() => Edit(await Collection.Empty());
 
 
-  public virtual async Task<Paged<TEntity>> GetByQuery([FromQuery] ListBackofficeQuery<TEntity> query)
+  public virtual async Task<Paged<TEntity>> GetByQuery([FromQuery] ListQuery<TEntity> query)
   {
     return await Collection.Load(query);
   }
 
 
-  public virtual async Task<Paged<Revision>> GetRevisions([FromQuery] string id, [FromQuery] ListBackofficeQuery<TEntity> query)
+  public virtual async Task<Paged<Revision>> GetRevisions([FromQuery] string id, [FromQuery] ListQuery<TEntity> query)
   {
     return null; // TODO
     //return await Collection.GetRevisions(id, query.Page, query.PageSize);
@@ -63,9 +63,9 @@ public abstract class _ZeroBackofficeCollectionController<TEntity, TCollection> 
 
 
   [HttpPost]
-  public virtual async Task<EntityResult<TEntity>> Save([FromBody] TEntity model) => await Collection.Save(model);
+  public virtual async Task<Result<TEntity>> Save([FromBody] TEntity model) => await Collection.Save(model);
 
 
   [HttpDelete]
-  public virtual async Task<EntityResult<TEntity>> Delete([FromQuery] string id) => await Collection.Delete(id);
+  public virtual async Task<Result<TEntity>> Delete([FromQuery] string id) => await Collection.Delete(id);
 }

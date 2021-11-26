@@ -34,7 +34,7 @@ public class PagesController : ZeroBackofficeApiController
   }
 
   [HttpGet]
-  public virtual async Task<Paged<Page>> Get(ListBackofficeQuery<Page> query)
+  public virtual async Task<Paged<Page>> Get(ListQuery<Page> query)
   {
     return await Store.Load<zero_Backoffice_Countries_Listing>(query.Page, query.PageSize, q => q.OrderByDescending(x => x.CreatedDate));
   }
@@ -47,19 +47,19 @@ public class PagesController : ZeroBackofficeApiController
 
 
   [HttpPost]
-  public virtual async Task<EntityResult<Page>> Create(Country model)
+  public virtual async Task<Result<Page>> Create(Country model)
   {
     return await Store.Create(model);
   }
 
   [HttpPut("{id}")]
-  public virtual async Task<EntityResult<Page>> Update(string id, Country model)
+  public virtual async Task<Result<Page>> Update(string id, Country model)
   {
     return await Store.Update(model);
   }
 
   [HttpDelete("{id}")]
-  public virtual async Task<EntityResult<Page>> Delete(string id)
+  public virtual async Task<Result<Page>> Delete(string id)
   {
     return await Store.Delete(id);
   }

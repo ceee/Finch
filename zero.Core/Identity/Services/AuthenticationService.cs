@@ -54,9 +54,9 @@ public class AuthenticationService : IAuthenticationService
 
 
   /// <inheritdoc />
-  public async Task<EntityResult> Login(string email, string password, bool isPersistent)
+  public async Task<Result> Login(string email, string password, bool isPersistent)
   {
-    EntityResult result = new();
+    Result result = new();
 
     ZeroUser user = await SignInManager.UserManager.FindByNameAsync(email);
 
@@ -97,7 +97,7 @@ public class AuthenticationService : IAuthenticationService
       return result;
     }
 
-    return EntityResult.Success();
+    return Result.Success();
   }
 
 
@@ -141,7 +141,7 @@ public interface IAuthenticationService
   /// <summary>
   /// Logs a zero-user in and sets cookie
   /// </summary>
-  Task<EntityResult> Login(string email, string password, bool isPersistent);
+  Task<Result> Login(string email, string password, bool isPersistent);
 
   /// <summary>
   /// Logs out the current user

@@ -45,7 +45,7 @@ public class UserRolesService : IUserRolesService
 
 
   /// <inheritdoc />
-  public async Task<EntityResult<ZeroUserRole>> Save(ZeroUserRole model)
+  public async Task<Result<ZeroUserRole>> Save(ZeroUserRole model)
   {
     //ValidationResult validation = await new UserRoleValidator().ValidateAsync(model);
 
@@ -72,25 +72,25 @@ public class UserRolesService : IUserRolesService
       model.Id = id;
     }
 
-    return EntityResult<ZeroUserRole>.Success(model);
+    return Result<ZeroUserRole>.Success(model);
   }
 
 
   /// <inheritdoc />
-  public async Task<EntityResult<ZeroUserRole>> Delete(string id)
+  public async Task<Result<ZeroUserRole>> Delete(string id)
   {
     ZeroUserRole country = await Session.LoadAsync<ZeroUserRole>(id);
 
     if (country == null)
     {
-      return EntityResult<ZeroUserRole>.Fail("@errors.ondelete.idnotfound");
+      return Result<ZeroUserRole>.Fail("@errors.ondelete.idnotfound");
     }
 
     Session.Delete(country);
 
     await Session.SaveChangesAsync();
 
-    return EntityResult<ZeroUserRole>.Success();
+    return Result<ZeroUserRole>.Success();
   }
 }
 
@@ -110,10 +110,10 @@ public interface IUserRolesService
   /// <summary>
   /// Create or update a role
   /// </summary>
-  Task<EntityResult<ZeroUserRole>> Save(ZeroUserRole model);
+  Task<Result<ZeroUserRole>> Save(ZeroUserRole model);
 
   /// <summary>
   /// Deletes a role
   /// </summary>
-  Task<EntityResult<ZeroUserRole>> Delete(string id);
+  Task<Result<ZeroUserRole>> Delete(string id);
 }

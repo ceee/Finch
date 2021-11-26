@@ -32,10 +32,10 @@ namespace zero.Web.Controllers
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<ZeroUserRole>> Save([FromBody] ZeroUserRole model) => await Api.Save(model);
+    public async Task<Result<ZeroUserRole>> Save([FromBody] ZeroUserRole model) => await Api.Save(model);
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<ZeroUserRole>> Delete([FromQuery] string id) => await Api.Delete(id);
+    public async Task<Result<ZeroUserRole>> Delete([FromQuery] string id) => await Api.Delete(id);
   }
 }

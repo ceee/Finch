@@ -171,17 +171,17 @@ public interface IStoreOperations
   /// <summary>
   /// Creates an entity with an optional validator
   /// </summary>
-  Task<EntityResult<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
+  Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Updates an entity with an optional validator
   /// </summary>
-  Task<EntityResult<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
+  Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Deletes an entity
   /// </summary>
-  Task<EntityResult<T>> Delete<T>(T model) where T : ZeroIdEntity, new();
+  Task<Result<T>> Delete<T>(T model) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Loads all children for an entity
@@ -196,25 +196,25 @@ public interface IStoreOperations
   /// <summary>
   /// Update sorting of entities on a specific level
   /// </summary>
-  Task<EntityResult<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, IZeroTreeEntity, new();
+  Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, IZeroTreeEntity, new();
 
   /// <summary>
   /// Move an entity to a new parent
   /// </summary>
-  Task<EntityResult<T>> Move<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new();
+  Task<Result<T>> Move<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new();
 
   /// <summary>
   /// Copies an entity to a new location
   /// </summary>
-  Task<EntityResult<T>> Copy<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new();
+  Task<Result<T>> Copy<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new();
 
   /// <summary>
   /// Copies an entity with descendants to a new location
   /// </summary>
-  Task<EntityResult<T>> CopyWithDescendants<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new();
+  Task<Result<T>> CopyWithDescendants<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new();
 
   /// <summary>
   /// Deletes an entity with all descendents
   /// </summary>
-  Task<EntityResult<string[]>> DeleteWithDescendants<T>(T model) where T : ZeroIdEntity, IZeroTreeEntity, new();
+  Task<Result<string[]>> DeleteWithDescendants<T>(T model) where T : ZeroIdEntity, IZeroTreeEntity, new();
 }

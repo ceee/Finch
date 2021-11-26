@@ -83,22 +83,22 @@ namespace zero.Web.Controllers
 
 
     [HttpPost]
-    public async Task<EntityResult<IList<Page>>> SaveSorting([FromBody] string[] ids) => await Collection.SaveSorting(ids);
+    public async Task<Result<IList<Page>>> SaveSorting([FromBody] string[] ids) => await Collection.SaveSorting(ids);
 
 
     [HttpPost]
-    public async Task<EntityResult<Page>> Move([FromBody] ActionCopyModel model) => await Collection.Move(model.Id, model.DestinationId);
+    public async Task<Result<Page>> Move([FromBody] ActionCopyModel model) => await Collection.Move(model.Id, model.DestinationId);
 
 
     [HttpPost]
-    public async Task<EntityResult<Page>> Copy([FromBody] ActionCopyModel model) => await Collection.Copy(model.Id, model.DestinationId, model.IncludeDescendants);
+    public async Task<Result<Page>> Copy([FromBody] ActionCopyModel model) => await Collection.Copy(model.Id, model.DestinationId, model.IncludeDescendants);
 
 
     [HttpPost]
-    public async Task<EntityResult<string[]>> Restore([FromBody] ActionCopyModel model) => await Collection.Restore(model.Id, model.IncludeDescendants);
+    public async Task<Result<string[]>> Restore([FromBody] ActionCopyModel model) => await Collection.Restore(model.Id, model.IncludeDescendants);
 
 
     [HttpDelete]
-    public async Task<EntityResult<string[]>> DeleteRecursive([FromQuery] string id) => await Collection.Delete(id, recursive: true, moveToRecycleBin: true);
+    public async Task<Result<string[]>> DeleteRecursive([FromQuery] string id) => await Collection.Delete(id, recursive: true, moveToRecycleBin: true);
   }
 }

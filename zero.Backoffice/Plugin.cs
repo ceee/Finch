@@ -27,6 +27,12 @@ public class ZeroBackofficePlugin : ZeroPlugin
     services.AddHostedService<ZeroDevService>();
     services.AddTransient<IZeroVue, ZeroVue>();
 
+    //Mvc.AddNewtonsoftJson(x =>
+    //{
+    //  // TODO this shall only be configurated for backoffice controllers
+    //  BackofficeJsonSerlializerSettings.Setup(x.SerializerSettings);
+    //});
+
     services.AddZeroBackofficeUIComposition();
 
     //services.AddTransient<ISectionsApi, SectionsApi>();

@@ -21,6 +21,6 @@ namespace zero.Web.Controllers
 
 
     [HttpPost]
-    public async Task<EntityResult<MediaFolder>> Move([FromBody] ActionCopyModel model) => await Collection.Move(model.Id, model.DestinationId);
+    public async Task<Result<MediaFolder>> Move([FromBody] ActionCopyModel model) => await Collection.Move(model.Id, model.DestinationId);
   }
 }

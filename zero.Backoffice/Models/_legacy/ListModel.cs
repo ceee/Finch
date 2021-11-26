@@ -1,6 +1,6 @@
 ﻿namespace zero.Web.Models
 {
-  public abstract class ListModel
+  public abstract class ListModel<T> where T : ZeroIdEntity
   {
     /// <summary>
     /// Id of the entity

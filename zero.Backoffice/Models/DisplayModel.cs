@@ -1,27 +1,20 @@
 ﻿namespace zero.Backoffice.Models;
 
-public class EditModel : EditModel<object> { }
-
-public class EditModel<T>
+public abstract class DisplayModel<T> : ZeroIdEntity where T : ZeroIdEntity
 {
-  /// <summary>
-  /// Model
-  /// </summary>
-  public T Entity { get; set; }
-
   /// <summary>
   /// Meta data
   /// </summary>
-  public EditMetaModel Meta { get; set; } = new();
+  public DisplayModelMeta Meta { get; set; } = new();
   
   /// <summary>
   /// Permissions for this entity
   /// </summary>
-  public EditPermissionModel Permissions { get; set; } = new();
+  public DisplayModelPermissions Permissions { get; set; } = new();
 }
 
 
-public class EditMetaModel
+public class DisplayModelMeta
 {
   /// <summary>
   /// Wehther this entity is application aware
@@ -44,7 +37,7 @@ public class EditMetaModel
 }
 
 
-public class EditPermissionModel
+public class DisplayModelPermissions
 {
   /// <summary>
   /// Whether an entity of this type can be created

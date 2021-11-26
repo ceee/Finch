@@ -32,12 +32,12 @@ namespace zero.Web.Controllers
 
 
     [HttpPost]
-    public async Task<EntityResult<Integration>> Save([FromBody] Integration model) => await Collection.Save(model);
+    public async Task<Result<Integration>> Save([FromBody] Integration model) => await Collection.Save(model);
 
     [HttpPost]
-    public async Task<EntityResult<Integration>> SaveActiveState([FromBody] Integration model) => model.IsActive ? await Collection.Activate(model.Alias) : await Collection.Deactivate(model.Alias);
+    public async Task<Result<Integration>> SaveActiveState([FromBody] Integration model) => model.IsActive ? await Collection.Activate(model.Alias) : await Collection.Deactivate(model.Alias);
 
     [HttpDelete]
-    public async Task<EntityResult<Integration>> Delete([FromQuery] string alias) => await Collection.DeleteByAlias(alias);
+    public async Task<Result<Integration>> Delete([FromQuery] string alias) => await Collection.DeleteByAlias(alias);
   }
 }

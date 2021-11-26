@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace zero.Backoffice.Controllers;
 
@@ -7,5 +8,5 @@ namespace zero.Backoffice.Controllers;
 //[ServiceFilter(typeof(BackofficeFilterAttribute))]
 public abstract class ZeroBackofficeApiController : ZeroBackofficeController
 {
-  
+  protected IMapper Mapper { get; private set; }
 }

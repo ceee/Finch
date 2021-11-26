@@ -26,7 +26,7 @@ public class BlueprintChildInterceptor : Interceptor<ZeroEntity>, IBlueprintInte
     }
 
     InterceptorResult<ZeroEntity> result = new();
-    result.Result = EntityResult<ZeroEntity>.Fail("@blueprint.errors.cannotDeleteChild");
+    result.Result = Result<ZeroEntity>.Fail("@blueprint.errors.cannotDeleteChild");
     return Task.FromResult(result);
   }
 }

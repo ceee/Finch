@@ -14,11 +14,11 @@ global using zero.Extensions;
 global using zero.Identity;
 global using zero.Localization;
 global using zero.Media;
+global using zero.Models;
 global using zero.Pages;
 global using zero.Persistence;
 global using zero.Routing;
 global using zero.Utils;
-global using zero.Models;
 
 global using zero.Backoffice.Configuration;
 global using zero.Backoffice.Controllers;
@@ -26,3 +26,4 @@ global using zero.Backoffice.Models;
 global using zero.Backoffice.Modules;
 global using zero.Backoffice.UIComposition;
 global using zero.Backoffice.DevServer;
+global using zero.Backoffice.Mapper;

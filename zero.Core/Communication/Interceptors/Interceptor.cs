@@ -66,7 +66,7 @@ public abstract partial class Interceptor<T> : Interceptor, IInterceptor<T> wher
     {
       Continue = result.Continue,
       InterceptorHash = result.InterceptorHash,
-      Result = result.Result != null ? EntityResult<ZeroIdEntity>.From(result.Result, result.Result.Model) : null
+      Result = result.Result != null ? Result<ZeroIdEntity>.From(result.Result, result.Result.Model) : null
     };
   }
 }

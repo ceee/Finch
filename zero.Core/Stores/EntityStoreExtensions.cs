@@ -13,7 +13,7 @@ public static class EntityStoreExtensions
   /// <summary>
   /// Deletes an entity by Id
   /// </summary>
-  public static async Task<EntityResult<T>> Delete<T>(this IEntityStore<T> store, string id) where T : ZeroIdEntity, new() => await store.Delete(await store.Load(id));
+  public static async Task<Result<T>> Delete<T>(this IEntityStore<T> store, string id) where T : ZeroIdEntity, new() => await store.Delete(await store.Load(id));
 
 
   /// <summary>
@@ -31,7 +31,7 @@ public static class EntityStoreExtensions
 
     foreach (T model in models)
     {
-      EntityResult<T> result = await store.Delete(model);
+      Result<T> result = await store.Delete(model);
       successCount += result.IsSuccess ? 1 : 0;
     }
 
@@ -42,5 +42,5 @@ public static class EntityStoreExtensions
   /// <summary>
   /// Deletes an entity by Id with all descendents
   /// </summary>
-  public static async Task<EntityResult<string[]>> DeleteWithDescendants<T>(this ITreeEntityStore<T> store, string id) where T : ZeroIdEntity, IZeroTreeEntity, new() => await store.DeleteWithDescendants(await store.Load(id));
+  public static async Task<Result<string[]>> DeleteWithDescendants<T>(this ITreeEntityStore<T> store, string id) where T : ZeroIdEntity, IZeroTreeEntity, new() => await store.DeleteWithDescendants(await store.Load(id));
 }

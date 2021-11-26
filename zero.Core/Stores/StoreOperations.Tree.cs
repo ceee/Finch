@@ -39,7 +39,7 @@ public abstract partial class StoreOperations
 
 
   /// <inheritdoc />
-  public async Task<EntityResult<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, IZeroTreeEntity, new()
+  public async Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, IZeroTreeEntity, new()
   {
     Dictionary<string, T> items = await Load<T>(sortedIds);
     uint index = 0;
@@ -47,7 +47,7 @@ public abstract partial class StoreOperations
     // contains multiple parents, therefore fail
     if (items.Select(x => x.Value?.ParentId).Distinct().Count() > 1)
     {
-      return EntityResult<IOrderedEnumerable<T>>.Fail("@errors.treeentity.sortingmultipleparents");
+      return Result<IOrderedEnumerable<T>>.Fail("@errors.treeentity.sortingmultipleparents");
     }
 
     foreach (var item in items)
@@ -57,24 +57,24 @@ public abstract partial class StoreOperations
       await Update(item.Value);
     }
 
-    return EntityResult<IOrderedEnumerable<T>>.Success(items.Select(x => x.Value).OrderByDescending(x => x.Sort));
+    return Result<IOrderedEnumerable<T>>.Success(items.Select(x => x.Value).OrderByDescending(x => x.Sort));
   }
 
 
   /// <inheritdoc />
-  public async Task<EntityResult<T>> Move<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new()
+  public async Task<Result<T>> Move<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new()
   {
     T model = await Load<T>(id);
     T parent = await Load<T>(newParentId);
 
     if (model == null || (!newParentId.IsNullOrEmpty() && parent == null))
     {
-      return EntityResult<T>.Fail("@errors.idnotfound");
+      return Result<T>.Fail("@errors.idnotfound");
     }
 
     if (isParentAllowed != null && !await isParentAllowed(model, newParentId))
     {
-      return EntityResult<T>.Fail("@errors.treeentity.parentnotallowed");
+      return Result<T>.Fail("@errors.treeentity.parentnotallowed");
     }
 
     model.ParentId = parent?.Id;
@@ -84,24 +84,24 @@ public abstract partial class StoreOperations
 
 
   /// <inheritdoc />
-  public Task<EntityResult<T>> Copy<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new() => Copy<T>(id, newParentId, false, isParentAllowed);
+  public Task<Result<T>> Copy<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new() => Copy<T>(id, newParentId, false, isParentAllowed);
 
 
   /// <inheritdoc />
-  public Task<EntityResult<T>> CopyWithDescendants<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new() => Copy<T>(id, newParentId, true, isParentAllowed);
+  public Task<Result<T>> CopyWithDescendants<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new() => Copy<T>(id, newParentId, true, isParentAllowed);
 
 
   /// <summary>
   /// Copies an entity (with optional descendants) to a new location
   /// </summary>
-  protected async Task<EntityResult<T>> Copy<T>(string id, string newParentId, bool includeDescendants, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new()
+  protected async Task<Result<T>> Copy<T>(string id, string newParentId, bool includeDescendants, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new()
   {
     T model = await Load<T>(id);
     T parent = await Load<T>(newParentId);
 
     if (model == null || (!newParentId.IsNullOrEmpty() && parent == null))
     {
-      return EntityResult<T>.Fail("@errors.idnotfound");
+      return Result<T>.Fail("@errors.idnotfound");
     }
 
     string baseId = model.Id;
@@ -119,7 +119,7 @@ public abstract partial class StoreOperations
     // check if new parent is allowed
     if (isParentAllowed != null && !await isParentAllowed(model, newParentId))
     {
-      return EntityResult<T>.Fail("@errors.treeentity.parentnotallowed");
+      return Result<T>.Fail("@errors.treeentity.parentnotallowed");
     }
 
     // recursive function to store descendants
@@ -148,22 +148,22 @@ public abstract partial class StoreOperations
       await AddChildren(baseId, model.Id);
     }
 
-    return EntityResult<T>.Success(model);
+    return Result<T>.Success(model);
   }
 
 
   /// <inheritdoc />
-  public async Task<EntityResult<string[]>> DeleteWithDescendants<T>(T model) where T : ZeroIdEntity, IZeroTreeEntity, new()
+  public async Task<Result<string[]>> DeleteWithDescendants<T>(T model) where T : ZeroIdEntity, IZeroTreeEntity, new()
   {
     List<T> pages = await GetDescendantsAndSelf(model);
 
     if (pages.Count < 1)
     {
-      return EntityResult<string[]>.Fail("@errors.ondelete.idnotfound");
+      return Result<string[]>.Fail("@errors.ondelete.idnotfound");
     }
 
     await this.Delete(pages.ToArray());
-    return EntityResult<string[]>.Success(pages.Select(x => x.Id).ToArray());
+    return Result<string[]>.Success(pages.Select(x => x.Id).ToArray());
   }
 
 

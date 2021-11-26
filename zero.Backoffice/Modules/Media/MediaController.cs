@@ -35,13 +35,13 @@ namespace zero.Web.Controllers
 
 
     [HttpPost]
-    public async Task<EntityResult<Media>> Upload(IFormFile file, [FromForm] string folderId) => await Collection.Save(await Collection.Upload(file, folderId));
+    public async Task<Result<Media>> Upload(IFormFile file, [FromForm] string folderId) => await Collection.Save(await Collection.Upload(file, folderId));
 
     [HttpPost]
     public async Task<Media> UploadTemporary(IFormFile file, [FromForm] string folderId) => await Collection.Upload(file, folderId);
 
     [HttpPost]
-    public async Task<EntityResult<Media>> Move([FromBody] ActionCopyModel model) => await Collection.Move(model.Id, model.DestinationId);
+    public async Task<Result<Media>> Move([FromBody] ActionCopyModel model) => await Collection.Move(model.Id, model.DestinationId);
 
 
     public async Task<MediaListResultModel> GetAll([FromQuery] MediaListQuery query)

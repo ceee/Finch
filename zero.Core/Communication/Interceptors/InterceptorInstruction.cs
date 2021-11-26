@@ -12,7 +12,7 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
 
   public Type ModelType { get; private set; }
 
-  public EntityResult<T> Result { get; private set; }
+  public Result<T> Result { get; private set; }
 
   protected IZeroContext Context { get; private set; }
 
@@ -78,7 +78,7 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
       // we cancel all further interceptors if a result is available and return this instead
       if (result.Result != null)
       {
-        Result = EntityResult<T>.From(result.Result, result.Result.Model as T);
+        Result = Result<T>.From(result.Result, result.Result.Model as T);
         return false;
       }
 

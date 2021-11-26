@@ -51,7 +51,7 @@ public class UserService : IUserService
 
 
   /// <inheritdoc />
-  public async Task<EntityResult<ZeroUser>> Save(ZeroUser model)
+  public async Task<Result<ZeroUser>> Save(ZeroUser model)
   {
     bool updateSecurityStamp = false;
     bool isUpdate = false;
@@ -63,7 +63,7 @@ public class UserService : IUserService
       updateSecurityStamp = origin != null && model.PasswordHash != origin.PasswordHash;
     }
 
-    EntityResult<ZeroUser> result = isUpdate ? await Operations.Update(model) : await Operations.Create(model);
+    Result<ZeroUser> result = isUpdate ? await Operations.Update(model) : await Operations.Create(model);
 
     if (updateSecurityStamp)
     {
@@ -75,33 +75,33 @@ public class UserService : IUserService
 
 
   /// <inheritdoc />
-  public async Task<EntityResult<ZeroUser>> Delete(string id)
+  public async Task<Result<ZeroUser>> Delete(string id)
   {
     return await Operations.Delete<ZeroUser>(id);
   }
 
 
   /// <inheritdoc />
-  public async Task<EntityResult<string>> HashPassword(ZeroUser user, string currentPassword, string newPassword, string confirmNewPassword)
+  public async Task<Result<string>> HashPassword(ZeroUser user, string currentPassword, string newPassword, string confirmNewPassword)
   {
     if (newPassword != confirmNewPassword)
     {
-      return EntityResult<string>.Fail(nameof(newPassword), "@errors.changepassword.newpasswordsnotmatching");
+      return Result<string>.Fail(nameof(newPassword), "@errors.changepassword.newpasswordsnotmatching");
     }
 
     if (currentPassword.IsNullOrWhiteSpace() || newPassword.IsNullOrWhiteSpace())
     {
-      return EntityResult<string>.Fail(nameof(currentPassword), "@errors.changepassword.emptyfields");
+      return Result<string>.Fail(nameof(currentPassword), "@errors.changepassword.emptyfields");
     }
 
     if (user == null)
     {
-      return EntityResult<string>.Fail("@errors.changepassword.nouser");
+      return Result<string>.Fail("@errors.changepassword.nouser");
     }
 
     if (UserManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash, currentPassword) != PasswordVerificationResult.Success)
     {
-      return EntityResult<string>.Fail("@errors.changepassword.passwordincorrect");
+      return Result<string>.Fail("@errors.changepassword.passwordincorrect");
     }
 
     // validate new password
@@ -123,7 +123,7 @@ public class UserService : IUserService
 
     if (!isValid)
     {
-      EntityResult<string> result = EntityResult<string>.Fail();
+      Result<string> result = Result<string>.Fail();
       foreach (IdentityError error in errors)
       {
         result.AddError(error.Description);
@@ -131,28 +131,28 @@ public class UserService : IUserService
       return result;
     }
 
-    return EntityResult<string>.Success(UserManager.PasswordHasher.HashPassword(user, newPassword));
+    return Result<string>.Success(UserManager.PasswordHasher.HashPassword(user, newPassword));
   }
 
 
   /// <inheritdoc />
-  public async Task<EntityResult<ZeroUser>> UpdatePassword(ZeroUser user, string currentPassword, string newPassword)
+  public async Task<Result<ZeroUser>> UpdatePassword(ZeroUser user, string currentPassword, string newPassword)
   {
     if (currentPassword.IsNullOrWhiteSpace() || newPassword.IsNullOrWhiteSpace())
     {
-      return EntityResult<ZeroUser>.Fail(nameof(currentPassword), "@errors.changepassword.emptyfields");
+      return Result<ZeroUser>.Fail(nameof(currentPassword), "@errors.changepassword.emptyfields");
     }
 
     if (user == null)
     {
-      return EntityResult<ZeroUser>.Fail("@errors.changepassword.nouser");
+      return Result<ZeroUser>.Fail("@errors.changepassword.nouser");
     }
 
     IdentityResult identityResult = await UserManager.ChangePasswordAsync(user as ZeroUser, currentPassword, newPassword);
 
     if (!identityResult.Succeeded)
     {
-      EntityResult<ZeroUser> result = EntityResult<ZeroUser>.Fail();
+      Result<ZeroUser> result = Result<ZeroUser>.Fail();
         
       foreach (IdentityError error in identityResult.Errors)
       {
@@ -162,19 +162,19 @@ public class UserService : IUserService
       return result;
     }
 
-    return EntityResult<ZeroUser>.Success(user);
+    return Result<ZeroUser>.Success(user);
   }
 
 
   /// <inheritdoc />
-  public async Task<EntityResult<ZeroUser>> Enable(ZeroUser user)
+  public async Task<Result<ZeroUser>> Enable(ZeroUser user)
   {
     return await UpdateActiveState(user, true);
   }
 
 
   /// <inheritdoc />
-  public async Task<EntityResult<ZeroUser>> Disable(ZeroUser user)
+  public async Task<Result<ZeroUser>> Disable(ZeroUser user)
   {
     return await UpdateActiveState(user, false);
   }
@@ -184,7 +184,7 @@ public class UserService : IUserService
   /// Updates the active state of user.
   /// If IsActive=false, the user cannot login anymore
   /// </summary>
-  async Task<EntityResult<ZeroUser>> UpdateActiveState(ZeroUser user, bool isActive)
+  async Task<Result<ZeroUser>> UpdateActiveState(ZeroUser user, bool isActive)
   {
     user.IsActive = isActive;
 
@@ -192,7 +192,7 @@ public class UserService : IUserService
 
     if (!identityResult.Succeeded)
     {
-      EntityResult<ZeroUser> result = EntityResult<ZeroUser>.Fail();
+      Result<ZeroUser> result = Result<ZeroUser>.Fail();
 
       foreach (IdentityError error in identityResult.Errors)
       {
@@ -204,7 +204,7 @@ public class UserService : IUserService
 
     await UserManager.UpdateSecurityStampAsync(user as ZeroUser);
 
-    return EntityResult<ZeroUser>.Success(user);
+    return Result<ZeroUser>.Success(user);
   }
 
 
@@ -268,33 +268,33 @@ public interface IUserService
   /// <summary>
   /// Creates or updates a user
   /// </summary>
-  Task<EntityResult<ZeroUser>> Save(ZeroUser model);
+  Task<Result<ZeroUser>> Save(ZeroUser model);
 
   /// <summary>
   /// Deletes a user
   /// </summary>
-  Task<EntityResult<ZeroUser>> Delete(string id);
+  Task<Result<ZeroUser>> Delete(string id);
 
   /// <summary>
   /// Changes the password of the current user.
   /// User is logged out if this operation succeeds.
   /// </summary>
-  Task<EntityResult<ZeroUser>> UpdatePassword(ZeroUser user, string currentPassword, string newPassword);
+  Task<Result<ZeroUser>> UpdatePassword(ZeroUser user, string currentPassword, string newPassword);
 
   /// <summary>
   /// Tries to hash a new password
   /// </summary>
-  Task<EntityResult<string>> HashPassword(ZeroUser user, string currentPassword, string newPassword, string confirmNewPassword);
+  Task<Result<string>> HashPassword(ZeroUser user, string currentPassword, string newPassword, string confirmNewPassword);
 
   /// <summary>
   /// Enables a user
   /// </summary>
-  Task<EntityResult<ZeroUser>> Enable(ZeroUser user);
+  Task<Result<ZeroUser>> Enable(ZeroUser user);
 
   /// <summary>
   /// Disables a user
   /// </summary>
-  Task<EntityResult<ZeroUser>> Disable(ZeroUser user);
+  Task<Result<ZeroUser>> Disable(ZeroUser user);
 
   /// <summary>
   /// Tries to switch the currently loaded backoffice application for the current user

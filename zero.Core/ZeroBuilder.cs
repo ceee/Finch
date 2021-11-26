@@ -49,12 +49,6 @@ public class ZeroBuilder
     services.AddZeroRouting(Configuration);
     services.AddZeroStores();
 
-    //Mvc.AddNewtonsoftJson(x =>
-    //{
-    //  // TODO this shall only be configurated for backoffice controllers
-    //  BackofficeJsonSerlializerSettings.Setup(x.SerializerSettings);
-    //});
-
     //if (Environment.GetEnvironmentVariable("DOTNET_WATCH") == "1")
     //{
     //  Mvc.AddRazorRuntimeCompilation();

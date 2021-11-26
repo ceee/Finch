@@ -29,7 +29,7 @@ namespace zero.Web.Controllers
     public async Task<IList<Application>> GetAll() => await Api.GetAll();
 
 
-    public async Task<Paged<Application>> GetByQuery([FromQuery] ListBackofficeQuery<Application> query) => await Api.GetByQuery(query);
+    public async Task<Paged<Application>> GetByQuery([FromQuery] ListQuery<Application> query) => await Api.GetByQuery(query);
 
 
     public IReadOnlyCollection<Feature> GetAllFeatures() => Options.Features.GetAllItems();
@@ -37,11 +37,11 @@ namespace zero.Web.Controllers
 
     [HttpPost]
     [ZeroAuthorize(Permissions.Settings.Applications, PermissionsValue.Update)]
-    public async Task<EntityResult<Application>> Save([FromBody] Application model) => await Api.Save(model);
+    public async Task<Result<Application>> Save([FromBody] Application model) => await Api.Save(model);
 
 
     [HttpDelete]
     [ZeroAuthorize(Permissions.Settings.Applications, PermissionsValue.Update)]
-    public async Task<EntityResult<Application>> Delete([FromQuery] string id) => await Api.Delete(id);
+    public async Task<Result<Application>> Delete([FromQuery] string id) => await Api.Delete(id);
   }
 }

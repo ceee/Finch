@@ -37,7 +37,7 @@ public class ZeroSetupController : Controller
   {
     model.ContentRootPath = Env.ContentRootPath;
 
-    EntityResult<SetupModel> result = await Api.Install(model);
+    Result<SetupModel> result = await Api.Install(model);
 
     if (result.IsSuccess)
     {

@@ -29,7 +29,7 @@ namespace zero.Web.Controllers
     public async Task<EditModel<ZeroUser>> GetById([FromQuery] string id) => Edit(await Api.GetUserById(id));
 
 
-    public async Task<Paged<ZeroUser>> GetAll([FromQuery] ListBackofficeQuery<ZeroUser> query) => await Api.GetByQuery(query);
+    public async Task<Paged<ZeroUser>> GetAll([FromQuery] ListQuery<ZeroUser> query) => await Api.GetByQuery(query);
 
 
     public IList<PermissionCollection> GetAllPermissions() => PermissionsApi.GetAll();
@@ -55,13 +55,13 @@ namespace zero.Web.Controllers
 
 
     [ZeroAuthorize]
-    public async Task<EntityResult<ZeroUser>> UpdatePassword([FromBody] UserPasswordEditModel model)
+    public async Task<Result<ZeroUser>> UpdatePassword([FromBody] UserPasswordEditModel model)
     {
-      EntityResult<ZeroUser> result;
+      Result<ZeroUser> result;
 
       if (model.NewPassword != model.ConfirmNewPassword)
       {
-        result = EntityResult<ZeroUser>.Fail(nameof(model.NewPassword), "@errors.changepassword.newpasswordsnotmatching");
+        result = Result<ZeroUser>.Fail(nameof(model.NewPassword), "@errors.changepassword.newpasswordsnotmatching");
       }
       else
       {
@@ -79,7 +79,7 @@ namespace zero.Web.Controllers
 
 
     [ZeroAuthorize]
-    public async Task<EntityResult<string>> HashPassword([FromBody] UserPasswordEditModel model)
+    public async Task<Result<string>> HashPassword([FromBody] UserPasswordEditModel model)
     {
       ZeroUser user = await Api.GetUserById(model.UserId);
       return await Api.HashPassword(user, model.CurrentPassword, model.NewPassword, model.ConfirmNewPassword);
@@ -87,7 +87,7 @@ namespace zero.Web.Controllers
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<ZeroUser>> Disable([FromBody] ZeroUser model)
+    public async Task<Result<ZeroUser>> Disable([FromBody] ZeroUser model)
     {
       ZeroUser entity = await Api.GetUserById(model.Id);
       return await Api.Disable(entity);
@@ -95,7 +95,7 @@ namespace zero.Web.Controllers
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<ZeroUser>> Enable([FromBody] ZeroUser model)
+    public async Task<Result<ZeroUser>> Enable([FromBody] ZeroUser model)
     {
       ZeroUser entity = await Api.GetUserById(model.Id);
       return await Api.Enable(entity);
@@ -103,15 +103,15 @@ namespace zero.Web.Controllers
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<ZeroUser>> Save([FromBody] ZeroUser model) => await Api.Save(model);
+    public async Task<Result<ZeroUser>> Save([FromBody] ZeroUser model) => await Api.Save(model);
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
     // TODO do not need settings.users authorization for editing current user profiles
-    public async Task<EntityResult<ZeroUser>> SaveCurrent([FromBody] ZeroUser model) => await Api.Save(model);
+    public async Task<Result<ZeroUser>> SaveCurrent([FromBody] ZeroUser model) => await Api.Save(model);
 
 
     [ZeroAuthorize(Permissions.Settings.Users, PermissionsValue.Update)]
-    public async Task<EntityResult<ZeroUser>> Delete([FromQuery] string id) => await Api.Delete(id);
+    public async Task<Result<ZeroUser>> Delete([FromQuery] string id) => await Api.Delete(id);
   }
 }

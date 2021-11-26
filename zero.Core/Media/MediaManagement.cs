@@ -48,7 +48,7 @@ public class MediaManagement : IMediaManagement
 
 
   /// <inheritdoc />
-  public virtual async Task<EntityResult<Media>> UpdateFile(Media file)
+  public virtual async Task<Result<Media>> UpdateFile(Media file)
   {
     // TODO check new file/image/media
     return await Store.Update(file);
@@ -56,7 +56,7 @@ public class MediaManagement : IMediaManagement
 
 
   /// <inheritdoc />
-  public virtual async Task<EntityResult<Media>> DeleteFile(Media file)
+  public virtual async Task<Result<Media>> DeleteFile(Media file)
   {
     // TODO delete in file system
     return await Store.Delete(file);
@@ -64,7 +64,7 @@ public class MediaManagement : IMediaManagement
 
 
   /// <inheritdoc />
-  public virtual async Task<EntityResult<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default)
+  public virtual async Task<Result<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default)
   {
     return await Creator.UploadFile(fileStream, filename, folderId, cancellationToken);
   }
@@ -79,7 +79,7 @@ public class MediaManagement : IMediaManagement
 
 
   /// <inheritdoc />
-  public virtual async Task<EntityResult<Media>> CreateFolder(Media folder)
+  public virtual async Task<Result<Media>> CreateFolder(Media folder)
   {
     folder.IsActive = true;
     folder.Type = MediaType.Folder;
@@ -88,7 +88,7 @@ public class MediaManagement : IMediaManagement
 
 
   /// <inheritdoc />
-  public virtual async Task<EntityResult<Media>> CreateFolder(string name, string parentId = null)
+  public virtual async Task<Result<Media>> CreateFolder(string name, string parentId = null)
   {
     Media media = await Store.Empty();
     media.Name = name;
@@ -98,14 +98,14 @@ public class MediaManagement : IMediaManagement
 
 
   /// <inheritdoc />
-  public virtual async Task<EntityResult<Media>> UpdateFolder(Media folder)
+  public virtual async Task<Result<Media>> UpdateFolder(Media folder)
   {
     return await Store.Update(folder);
   }
 
 
   /// <inheritdoc />
-  public virtual async Task<EntityResult<string[]>> DeleteFolder(Media folder)
+  public virtual async Task<Result<string[]>> DeleteFolder(Media folder)
   {
     // TODO recursive
     return await Store.DeleteWithDescendants(folder);
@@ -130,17 +130,17 @@ public interface IMediaManagement
   /// <summary>
   /// Update and store a media file
   /// </summary>
-  Task<EntityResult<Media>> UpdateFile(Media file);
+  Task<Result<Media>> UpdateFile(Media file);
 
   /// <summary>
   /// Deletes a media file (collection entry as well as physical file)
   /// </summary>
-  Task<EntityResult<Media>> DeleteFile(Media file);
+  Task<Result<Media>> DeleteFile(Media file);
 
   /// <summary>
   /// Uploads a file and persists it
   /// </summary>
-  Task<EntityResult<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default);
+  Task<Result<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get a media folder by id
@@ -150,20 +150,20 @@ public interface IMediaManagement
   /// <summary>
   /// Creates a new media folder
   /// </summary>
-  Task<EntityResult<Media>> CreateFolder(Media folder);
+  Task<Result<Media>> CreateFolder(Media folder);
 
   /// <summary>
   /// Creates a new media folder
   /// </summary>
-  Task<EntityResult<Media>> CreateFolder(string name, string parentId = null);
+  Task<Result<Media>> CreateFolder(string name, string parentId = null);
 
   /// <summary>
   /// Rename and store a media folder
   /// </summary>
-  Task<EntityResult<Media>> UpdateFolder(Media folder);
+  Task<Result<Media>> UpdateFolder(Media folder);
 
   /// <summary>
   /// Deletes a folder, as well as all descendant folders and files
   /// </summary>
-  Task<EntityResult<string[]>> DeleteFolder(Media folder);
+  Task<Result<string[]>> DeleteFolder(Media folder);
 }
