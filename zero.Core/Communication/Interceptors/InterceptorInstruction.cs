@@ -78,7 +78,7 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
       // we cancel all further interceptors if a result is available and return this instead
       if (result.Result != null)
       {
-        Result = Result<T>.From(result.Result, result.Result.Model as T);
+        Result = result.Result.ConvertTo(result.Result.Model as T);
         return false;
       }
 
