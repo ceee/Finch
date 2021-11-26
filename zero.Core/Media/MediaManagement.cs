@@ -123,6 +123,21 @@ public interface IMediaManagement
   string GetPublicFilePath(Media file, string thumbnailKey = null);
 
   /// <summary>
+  /// Get a media file by id
+  /// </summary>
+  Task<Media> GetFile(string id);
+
+  /// <summary>
+  /// Update and store a media file
+  /// </summary>
+  Task<EntityResult<Media>> UpdateFile(Media file);
+
+  /// <summary>
+  /// Deletes a media file (collection entry as well as physical file)
+  /// </summary>
+  Task<EntityResult<Media>> DeleteFile(Media file);
+
+  /// <summary>
   /// Uploads a file and persists it
   /// </summary>
   Task<EntityResult<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default);
@@ -146,7 +161,6 @@ public interface IMediaManagement
   /// Rename and store a media folder
   /// </summary>
   Task<EntityResult<Media>> UpdateFolder(Media folder);
-
 
   /// <summary>
   /// Deletes a folder, as well as all descendant folders and files

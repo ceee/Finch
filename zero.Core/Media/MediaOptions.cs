@@ -14,4 +14,3 @@ public class MediaOptions
 
   public Dictionary<string, ResizeOptions> Thumbnails { get; set; }
 }
-}

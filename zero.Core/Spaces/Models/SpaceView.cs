@@ -1,9 +1,8 @@
-﻿namespace zero.Core.Entities
+﻿namespace zero.Spaces;
+
+public enum SpaceView
 {
-  public enum SpaceView
-  {
-    List,
-    Editor,
-    Custom
-  }
+  List,
+  Editor,
+  Custom
 }

@@ -19,14 +19,6 @@ public class Media_ByChildren : ZeroMultiMapIndex<Media_ByChildren.Result>
     AddMap<Media>(items => items.Select(item => new Result()
     {
       Id = item.Id,
-      ParentId = item.FolderId,
-      ChildrenCount = 1,
-      ChildrenIds = new string[] { }
-    }));
-
-    AddMap<MediaFolder>(items => items.Select(item => new Result()
-    {
-      Id = item.Id,
       ParentId = item.ParentId,
       ChildrenCount = 1,
       ChildrenIds = new string[] { }

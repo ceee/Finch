@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace zero.Identity;
 
-public class UserRolesService : BackofficeApi, IUserRolesService
+public class UserRolesService : IUserRolesService
 {
   protected IHttpContextAccessor HttpContextAccessor { get; set; }
 
@@ -17,7 +17,7 @@ public class UserRolesService : BackofficeApi, IUserRolesService
   private ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
 
 
-  public UserRolesService(IHttpContextAccessor httpContextAccessor, UserManager<ZeroUser> userManager, RoleManager<ZeroUserRole> roleManager, IStoreContext store) : base(store, isCoreDatabase: true)
+  public UserRolesService(IHttpContextAccessor httpContextAccessor, UserManager<ZeroUser> userManager, RoleManager<ZeroUserRole> roleManager, IStoreContext store)
   {
     HttpContextAccessor = httpContextAccessor;
     UserManager = userManager;
@@ -90,7 +90,7 @@ public class UserRolesService : BackofficeApi, IUserRolesService
 }
 
 
-public interface IUserRolesService : IBackofficeApi
+public interface IUserRolesService
 {
   /// <summary>
   /// Get all user roles

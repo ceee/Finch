@@ -1,18 +1,16 @@
-﻿using zero.Core.Entities;
+﻿namespace zero.Spaces;
 
-namespace zero.Spaces;
-
-public class SpaceOptions : List<Space>
+public class SpaceOptions : List<SpaceType>
 {
-  public void Add<T>() where T : Space, new()
+  public void Add<T>() where T : SpaceType, new()
   {
     Add(new T());
   }
 
 
-  public void AddList<T>(string alias, string name, string description, string icon) where T : SpaceContent, new()
+  public void AddList<T>(string alias, string name, string description, string icon) where T : Space, new()
   {
-    Add(new Space()
+    Add(new SpaceType()
     {
       Alias = alias,
       View = SpaceView.List,
@@ -24,9 +22,9 @@ public class SpaceOptions : List<Space>
   }
 
 
-  public void AddEditor<T>(string alias, string name, string description, string icon) where T : SpaceContent, new()
+  public void AddEditor<T>(string alias, string name, string description, string icon) where T : Space, new()
   {
-    Add(new Space()
+    Add(new SpaceType()
     {
       Alias = alias,
       View = SpaceView.Editor,
@@ -40,7 +38,7 @@ public class SpaceOptions : List<Space>
 
   public void AddSeparator()
   {
-    Space lastSpace = this.LastOrDefault();
+    SpaceType lastSpace = this.LastOrDefault();
 
     if (lastSpace != null)
     {
@@ -49,9 +47,9 @@ public class SpaceOptions : List<Space>
   }
 
 
-  public void AddCustom<T>(string componentPath, string alias, string name, string description, string icon) where T : SpaceContent, new()
+  public void AddCustom<T>(string componentPath, string alias, string name, string description, string icon) where T : Space, new()
   {
-    Add(new Space()
+    Add(new SpaceType()
     {
       Alias = alias,
       View = SpaceView.Custom,
@@ -66,7 +64,7 @@ public class SpaceOptions : List<Space>
 
   public void AddCustom(string componentPath, string alias, string name, string description, string icon)
   {
-    Add(new Space()
+    Add(new SpaceType()
     {
       Alias = alias,
       View = SpaceView.Custom,

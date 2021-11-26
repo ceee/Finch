@@ -38,13 +38,13 @@ public class ZeroBuilder
     services.AddZeroCommunication();
     services.AddZeroConfiguration(Configuration);
     services.AddZeroContext();
-    services.AddZeroFileStorage();
+    services.AddZeroFileStorage(Configuration);
     services.AddZeroIdentity();
     services.AddZeroLocalization();
     services.AddZeroMails();
-    services.AddZeroPages();
-    services.AddZeroMedia();
-    services.AddZeroPersistence();
+    services.AddZeroPages(Configuration);
+    services.AddZeroMedia(Configuration);
+    services.AddZeroPersistence(Configuration);
     services.AddZeroRendering();
     services.AddZeroRouting();
     services.AddZeroStores();

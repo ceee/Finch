@@ -39,8 +39,7 @@ internal static class ServiceCollectionExtensions
       RavenOptions raven = opts.For<RavenOptions>();
       raven.Indexes.Add<Media_ByChildren>();
       raven.Indexes.Add<Media_ByParent>();
-      raven.Indexes.Add<MediaFolder_ByHierarchy>();
-      raven.Indexes.Add<MediaFolders_WithChildren>();
+      raven.Indexes.Add<Media_ByHierarchy>();
     });
     return services;
   }

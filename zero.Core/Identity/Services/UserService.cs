@@ -4,13 +4,19 @@ using Raven.Client.Documents.Linq;
 
 namespace zero.Identity;
 
-public class UserService : BackofficeApi, IUserService
+public class UserService : IUserService
 {
   protected UserManager<ZeroUser> UserManager { get; private set; }
 
-  public UserService(IStoreContext store, UserManager<ZeroUser> userManager) : base(store, isCoreDatabase: true)
+  protected IStoreOperations Operations { get; private set; }
+
+  protected IZeroContext Context { get; private set; }
+
+  public UserService(IStoreContext store, IStoreOperations operations, IZeroContext context, UserManager<ZeroUser> userManager)
   {
     UserManager = userManager;
+    Operations = operations;
+    Context = context;
   }
 
 
@@ -33,28 +39,14 @@ public class UserService : BackofficeApi, IUserService
   /// <inheritdoc />
   public async Task<Dictionary<string, ZeroUser>> GetByIds(params string[] ids)
   {
-    return await GetByIds<ZeroUser>(ids);
+    return await Operations.Load<ZeroUser>(ids);
   }
 
 
   /// <inheritdoc />
-  public async Task<IList<ZeroUser>> GetAll()
+  public async Task<Paged<ZeroUser>> GetAll(int pageNumber, int pageSize)
   {
-    return await Session.Query<ZeroUser>()
-      .OrderByDescending(x => x.CreatedDate)
-      .ToListAsync();
-  }
-
-
-  /// <inheritdoc />
-  public async Task<Paged<ZeroUser>> GetByQuery(ListQuery<ZeroUser> query)
-  {
-    string currentUserId = UserManager.GetUserId(Context.Context.BackofficeUser);
-
-    query.SearchSelector = user => user.Name;
-
-    return await Session.Query<ZeroUser>()
-      .ToQueriedListAsync(query);
+    return await Operations.Load<ZeroUser>(pageNumber, pageSize, q => q.OrderByDescending(x => x.CreatedDate));
   }
 
 
@@ -62,14 +54,16 @@ public class UserService : BackofficeApi, IUserService
   public async Task<EntityResult<ZeroUser>> Save(ZeroUser model)
   {
     bool updateSecurityStamp = false;
+    bool isUpdate = false;
 
     if (!model.Id.IsNullOrEmpty())
     {
       ZeroUser origin = await GetUserById(model.Id);
+      isUpdate = origin != null;
       updateSecurityStamp = origin != null && model.PasswordHash != origin.PasswordHash;
     }
 
-    EntityResult<ZeroUser> result = await SaveModel(model); //, new UserValidator<User>());
+    EntityResult<ZeroUser> result = isUpdate ? await Operations.Update(model) : await Operations.Create(model);
 
     if (updateSecurityStamp)
     {
@@ -83,7 +77,7 @@ public class UserService : BackofficeApi, IUserService
   /// <inheritdoc />
   public async Task<EntityResult<ZeroUser>> Delete(string id)
   {
-    return await DeleteById<ZeroUser>(id);
+    return await Operations.Delete<ZeroUser>(id);
   }
 
 
@@ -217,8 +211,8 @@ public class UserService : BackofficeApi, IUserService
   /// <inheritdoc />
   public async Task<bool> TrySwitchApp(string appId)
   {
-    IZeroDocumentSession session = Store.Session(global: true);
-    ZeroUser user = await GetUser();
+    IZeroDocumentSession session = Context.Store.Session(global: true);
+    ZeroUser user = await UserManager.GetUserAsync(Context.BackofficeUser);
 
     if (user == null || appId.IsNullOrEmpty())
     {
@@ -249,7 +243,7 @@ public class UserService : BackofficeApi, IUserService
 }
 
 
-public interface IUserService : IBackofficeApi
+public interface IUserService
 {
   /// <summary>
   /// Find user by id
@@ -267,14 +261,9 @@ public interface IUserService : IBackofficeApi
   Task<Dictionary<string, ZeroUser>> GetByIds(params string[] ids);
 
   /// <summary>
-  /// Get all users for the selected application
+  /// Get all users for the current application
   /// </summary>
-  Task<IList<ZeroUser>> GetAll();
-
-  /// <summary>
-  /// Get all available users (with query)
-  /// </summary>
-  Task<Paged<ZeroUser>> GetByQuery(ListQuery<ZeroUser> query);
+  Task<Paged<ZeroUser>> GetAll(int pageNumber, int pageSize);
 
   /// <summary>
   /// Creates or updates a user

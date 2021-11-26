@@ -6,6 +6,21 @@ namespace zero.Media
   public static class MediaManagementExtensions
   {
     /// <summary>
+    /// Get publicly accessible file path for a media file
+    /// </summary>
+    /// <param name="mediaId">ID of a media file</param>
+    /// <param name="thumbnailKey">An optional thumbnail key which returns the path to a generated thumbnail</param>
+    public static async Task<string> GetPublicFilePath(this IMediaManagement media, string mediaId, string thumbnailKey = null)
+    {
+      Media file = await media.GetFile(mediaId);
+      if (file == null)
+      {
+        return null;
+      }
+      return media.GetPublicFilePath(file, thumbnailKey);
+    }
+
+    /// <summary>
     /// Uploads a file and persists it
     /// </summary>
     public static async Task<EntityResult<Media>> UploadFile(this IMediaManagement media, IFormFile formFile, string folderId = null, CancellationToken cancellationToken = default)

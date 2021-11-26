@@ -6,28 +6,14 @@ public class Media_ByParent : ZeroMultiMapIndex<MediaListItem>
 {
   protected override void Create()
   {
-    AddMap<MediaFolder>(items => items.Select(item => new MediaListItem
+    AddMap<Media>(items => items.Select(item => new MediaListItem
     {
       Id = item.Id,
       ParentId = item.ParentId,
       CreatedDate = item.CreatedDate,
-      IsFolder = true,
-      Name = item.Name,
-      Image = null,
-      Children = 0,
-      Size = 0,
-      IsShared = item.Blueprint != null,
-      AspectRatio = 0
-    }));
-
-    AddMap<Media>(items => items.Select(item => new MediaListItem
-    {
-      Id = item.Id,
-      ParentId = item.FolderId,
-      CreatedDate = item.CreatedDate,
       IsFolder = false,
       Name = item.Name,
-      Image = item.PathPreview,
+      Image = item.Thumbnails["thumb"],
       Children = 0,
       Size = item.Size,
       IsShared = item.Blueprint != null,

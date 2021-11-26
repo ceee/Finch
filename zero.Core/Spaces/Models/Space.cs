@@ -1,25 +1,13 @@
-﻿using System;
+﻿namespace zero.Spaces;
 
-namespace zero.Core.Entities
+/// <summary>
+/// 
+/// </summary>
+[RavenCollection("Spaces")]
+public class Space : ZeroEntity
 {
-  public class Space
-  {
-    public string Alias { get; set; }
-
-    public string EditorAlias { get; set; }
-
-    public Type Type { get; set; }
-
-    public SpaceView View { get; set; }
-
-    public string ComponentPath { get; set; }
-
-    public string Name { get; set; }
-
-    public string Description { get; set; }
-
-    public string Icon { get; set; }
-
-    public bool LineBelow { get; set; }
-  }
+  /// <summary>
+  /// Associated space
+  /// </summary>
+  public string SpaceTypeAlias { get; set; }
 }
