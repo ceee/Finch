@@ -6,7 +6,7 @@ using zero.Routing;
 
 namespace zero.Web;
 
-public abstract class ZeroController : ZeroController<RouteModel> { }
+public abstract class ZeroController : ZeroController<IRouteModel> { }
 
 
 public abstract class ZeroController<T> : Controller where T : class, IRouteModel

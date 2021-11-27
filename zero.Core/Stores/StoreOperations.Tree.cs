@@ -5,7 +5,7 @@ using Raven.Client.Documents.Session;
 
 namespace zero.Stores;
 
-public abstract partial class StoreOperations
+public partial class StoreOperations : IStoreOperations
 {
   /// <inheritdoc />
   public virtual Task<bool> IsAllowedAsChild<T>(T model, string parentId) where T : ZeroIdEntity, IZeroTreeEntity, new()

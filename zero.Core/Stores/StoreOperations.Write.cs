@@ -2,7 +2,7 @@
 
 namespace zero.Stores;
 
-public abstract partial class StoreOperations
+public partial class StoreOperations : IStoreOperations
 {
   /// <inheritdoc />
   public virtual Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new() => Save(model, validate);

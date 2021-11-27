@@ -20,13 +20,13 @@ public class Interceptors : IInterceptors
 
 
   /// <inheritdoc />
-  public InterceptorInstruction<T> ForCreate<T>(T model) where T : ZeroIdEntity, new() => new(Context, Registrations, Logger, InterceptorRunType.Create, model);
+  public InterceptorInstruction<T> ForCreate<T>(T model) where T : ZeroIdEntity, new() => new(this, Context, Registrations, Logger, InterceptorRunType.Create, model);
 
   /// <inheritdoc />
-  public InterceptorInstruction<T> ForUpdate<T>(T model) where T : ZeroIdEntity, new() => new(Context, Registrations, Logger, InterceptorRunType.Update, model);
+  public InterceptorInstruction<T> ForUpdate<T>(T model) where T : ZeroIdEntity, new() => new(this, Context, Registrations, Logger, InterceptorRunType.Update, model);
 
   /// <inheritdoc />
-  public InterceptorInstruction<T> ForDelete<T>(T model) where T : ZeroIdEntity, new() => new(Context, Registrations, Logger, InterceptorRunType.Delete, model);
+  public InterceptorInstruction<T> ForDelete<T>(T model) where T : ZeroIdEntity, new() => new(this, Context, Registrations, Logger, InterceptorRunType.Delete, model);
 }
 
 

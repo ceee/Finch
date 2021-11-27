@@ -18,7 +18,7 @@ public class ZeroMediaHelper : IZeroMediaHelper
   /// <summary>
   /// Media cache for repetitive queries within an HTTP request
   /// </summary>
-  ConcurrentDictionary<string, Media> Cache { get; set; } = new();
+  ConcurrentDictionary<string, Media.Media> Cache { get; set; } = new();
 
 
   public ZeroMediaHelper(IZeroStore store, bool global = false)
@@ -33,16 +33,16 @@ public class ZeroMediaHelper : IZeroMediaHelper
 
 
   /// <inheritdoc />
-  public async Task<Media> GetById(string id)
+  public async Task<Media.Media> GetById(string id)
   {
     if (id.IsNullOrEmpty())
     {
       return null;
     }
 
-    if (!Cache.TryGetValue(id, out Media media))
+    if (!Cache.TryGetValue(id, out Media.Media media))
     {
-      media = await Store.Session(Global).LoadAsync<Media>(id);
+      media = await Store.Session(Global).LoadAsync<Media.Media>(id);
       Cache.TryAdd(id, media);
     }
 
@@ -51,14 +51,14 @@ public class ZeroMediaHelper : IZeroMediaHelper
 
 
   /// <inheritdoc />
-  public async Task<Dictionary<string, Media>> GetByIds(string[] ids)
+  public async Task<Dictionary<string, Media.Media>> GetByIds(string[] ids)
   {
     HashSet<string> remoteIds = new HashSet<string>();
-    Dictionary<string, Media> items = new Dictionary<string, Media>();
+    Dictionary<string, Media.Media> items = new Dictionary<string, Media.Media>();
 
     foreach (string id in ids)
     {
-      if (Cache.TryGetValue(id, out Media media))
+      if (Cache.TryGetValue(id, out Media.Media media))
       {
         items.TryAdd(id, media);
       }
@@ -70,7 +70,7 @@ public class ZeroMediaHelper : IZeroMediaHelper
 
     if (remoteIds.Count > 0)
     {
-      Dictionary<string, Media> remoteItems = await Store.Session(Global).LoadAsync<Media>(remoteIds);
+      Dictionary<string, Media.Media> remoteItems = await Store.Session(Global).LoadAsync<Media.Media>(remoteIds);
 
       foreach (var item in remoteItems)
       {
@@ -86,16 +86,16 @@ public class ZeroMediaHelper : IZeroMediaHelper
   /// <inheritdoc />
   public async Task<string> GetUrl(string id, bool isAbsolute = false)
   {
-    Media media = await GetById(id);
-    return media?.Source.TrimStart("url://");
+    Media.Media media = await GetById(id);
+    return media?.Path.TrimStart("url://");
   }
 
 
   /// <inheritdoc />
   public async Task<Dictionary<string, string>> GetUrls(string[] ids, bool isAbsolute = false)
   {
-    Dictionary<string, Media> medias = await GetByIds(ids);
-    return medias.ToDictionary(x => x.Key, x => x.Value?.Source.TrimStart("url://"));
+    Dictionary<string, Media.Media> medias = await GetByIds(ids);
+    return medias.ToDictionary(x => x.Key, x => x.Value?.Path.TrimStart("url://"));
   }
 }
 
@@ -107,12 +107,12 @@ public interface IZeroMediaHelper
   /// <summary>
   /// Get media by Id
   /// </summary>
-  Task<Media> GetById(string id);
+  Task<Media.Media> GetById(string id);
 
   /// <summary>
   /// Get media items by Ids
   /// </summary>
-  Task<Dictionary<string, Media>> GetByIds(string[] ids);
+  Task<Dictionary<string, Media.Media>> GetByIds(string[] ids);
 
   /// <summary>
   /// Get source for a media item

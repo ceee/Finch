@@ -5,7 +5,7 @@ using Raven.Client.Documents.Session;
 
 namespace zero.Stores;
 
-public abstract partial class StoreOperations
+public partial class StoreOperations : IStoreOperations
 {
   /// <inheritdoc />
   public virtual async Task<T> Load<T>(string id, string changeVector = null) where T : ZeroIdEntity, new()

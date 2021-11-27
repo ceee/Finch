@@ -14,14 +14,12 @@ public class BlueprintInterceptor : Interceptor<ZeroEntity>, IBlueprintIntercept
 
   protected IBlueprintService BlueprintService { get; set; }
 
-  protected IInterceptors Interceptors { get; set; }
-
   IList<Application> apps;
 
   string configuredZeroDatabase;
 
 
-  public BlueprintInterceptor(IZeroContext context, IZeroStore store, ILogger<BlueprintInterceptor> logger, IBlueprintService blueprintService, IInterceptors interceptors)
+  public BlueprintInterceptor(IZeroContext context, IZeroStore store, ILogger<BlueprintInterceptor> logger, IBlueprintService blueprintService)
   {
     Gravity = -1;
     Context = context;
@@ -29,7 +27,6 @@ public class BlueprintInterceptor : Interceptor<ZeroEntity>, IBlueprintIntercept
     Logger = logger;
     BlueprintService = blueprintService;
     configuredZeroDatabase = context.Options.For<RavenOptions>().Database;
-    Interceptors = interceptors;
   }
 
   /// <summary>
@@ -75,7 +72,7 @@ public class BlueprintInterceptor : Interceptor<ZeroEntity>, IBlueprintIntercept
 
       count += 1;
 
-      InterceptorInstruction<ZeroEntity> interceptor = update ? Interceptors.ForUpdate(model) : Interceptors.ForCreate(model);
+      InterceptorInstruction<ZeroEntity> interceptor = update ? args.Interceptors.ForUpdate(model) : args.Interceptors.ForCreate(model);
       interceptor.Filter(x => x is not IBlueprintInterceptor);
 
       await interceptor.Start();
@@ -105,7 +102,7 @@ public class BlueprintInterceptor : Interceptor<ZeroEntity>, IBlueprintIntercept
 
       count += 1;
 
-      InterceptorInstruction<ZeroEntity> interceptor = Interceptors.ForDelete(model);
+      InterceptorInstruction<ZeroEntity> interceptor = args.Interceptors.ForDelete(model);
       interceptor.Filter(x => x is not IBlueprintInterceptor);
 
       await interceptor.Start();

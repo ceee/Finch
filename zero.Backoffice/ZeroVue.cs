@@ -291,7 +291,7 @@ public class ZeroVue : IZeroVue
   /// </summary>
   Dictionary<string, string> CreateTranslations(string culture)
   {
-    var zeroTranslations = CreateTranslationsForFile("O:/zero/zero.Web/Resources/Localization/zero.en-us.json", culture); // TODO
+    var zeroTranslations = CreateTranslationsForFile("O:/zero/zero.Backoffice/Resources/Localization/zero.en-us.json", culture); // TODO
 
     foreach (IZeroPlugin plugin in Plugins)
     {

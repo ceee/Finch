@@ -18,6 +18,8 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
 
   protected IEnumerable<IInterceptor> Interceptors { get; private set; }
 
+  protected IInterceptors InterceptorHandler { get; private set; }
+
   protected ILogger<IInterceptor> Logger { get; private set; }
 
   protected Dictionary<string, InterceptorParameters> CachedParameters { get; private set; } = new();
@@ -25,8 +27,9 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
   protected Func<IInterceptor, bool> InterceptorFilter { get; private set; } = x => true;
 
 
-  internal InterceptorInstruction(IZeroContext context, IEnumerable<IInterceptor> registrations, ILogger<IInterceptor> logger, InterceptorRunType runtype, T model)
+  internal InterceptorInstruction(IInterceptors interceptors, IZeroContext context, IEnumerable<IInterceptor> registrations, ILogger<IInterceptor> logger, InterceptorRunType runtype, T model)
   {
+    InterceptorHandler = interceptors;
     Context = context;
     Guid = Guid.NewGuid();
     Logger = logger;
@@ -60,7 +63,8 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
       {
         Context = Context,
         Store = Context.Store,
-        Properties = new()
+        Properties = new(),
+        Interceptors = InterceptorHandler
       };
 
       if (!interceptor.CanHandle(parameters, ModelType))

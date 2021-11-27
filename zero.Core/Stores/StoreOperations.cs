@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace zero.Stores;
 
-public abstract partial class StoreOperations : IStoreOperations
+public partial class StoreOperations : IStoreOperations
 {
   /// <inheritdoc />
   public IZeroDocumentSession Session => Context.Store.Session();
@@ -19,10 +19,10 @@ public abstract partial class StoreOperations : IStoreOperations
   protected IInterceptors Interceptors { get; private set; }
 
 
-  public StoreOperations(IStoreContext collectionContext)
+  public StoreOperations(IZeroContext context, IInterceptors interceptors)
   {
-    Context = collectionContext.Context;
-    Interceptors = collectionContext.Interceptors;
+    Context = context;
+    Interceptors = interceptors;
     Options = new(true);
   }
 

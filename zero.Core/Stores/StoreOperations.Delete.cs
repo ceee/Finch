@@ -1,6 +1,6 @@
 ﻿namespace zero.Stores;
 
-public abstract partial class StoreOperations
+public partial class StoreOperations : IStoreOperations
 {
   /// <inheritdoc />
   public virtual async Task<Result<T>> Delete<T>(T model) where T : ZeroIdEntity, new()
