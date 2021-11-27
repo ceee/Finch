@@ -81,11 +81,6 @@ public class CountriesController : ZeroBackofficeApiController
     model.Id = id;
     Result<Country> result = await Store.Update(model);
 
-    if (result.IsSuccess)
-    {
-      return NoContent();
-    }
-
     return result.WithoutModel();
   }
 
@@ -102,11 +97,6 @@ public class CountriesController : ZeroBackofficeApiController
     }
 
     Result<Country> result = await Store.Delete(model);
-
-    if (result.IsSuccess)
-    {
-      return NoContent();
-    }
 
     return result.WithoutModel();
   }
