@@ -18,6 +18,11 @@ public static class ListQueryExtensions
 
   public static IQueryable<T> Filter<T>(this IRavenQueryable<T> source, ListQuery<T> listQuery) where T : ZeroIdEntity
   {
+    if (listQuery == null)
+    {
+      return source;
+    }
+
     Type collectionType = typeof(T);
     Type zeroType = typeof(ZeroEntity);
     bool isZeroType = zeroType.IsAssignableFrom(collectionType);

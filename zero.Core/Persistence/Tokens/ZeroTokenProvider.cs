@@ -35,7 +35,7 @@ public class ZeroTokenProvider : IZeroTokenProvider
 
     string tokenKey = Random(length);
 
-    SecurityToken securityToken = new SecurityToken()
+    SecurityToken securityToken = new()
     {
       Id = TokenToId(tokenKey),
       Token = tokenKey,

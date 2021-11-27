@@ -15,7 +15,7 @@ public static class ServiceCollectionExtensions
     services.AddSingleton<ISettingsGroup, SystemSettings>();
     services.AddSingleton<ISettingsGroup, ApplicationSettings>();
 
-    services.AddScoped<IPermissionProvider, CountryPermissions>();
+    services.AddScoped<IPermissionProvider, SectionPermissions>();
 
     services.AddOptions<BackofficeSettingsOptions>();
 

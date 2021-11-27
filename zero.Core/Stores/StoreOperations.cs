@@ -109,7 +109,7 @@ public abstract partial class StoreOperations : IStoreOperations
   /// </summary>
   protected virtual T WhenActive<T>(T model) where T : ZeroIdEntity, new()
   {
-    return model != null && (Options.IncludeInactive || (model is not ZeroEntity || (model as ZeroEntity).IsActive)) ? model : default;
+    return model != null && (Options.IncludeInactive || model is not ZeroEntity || (model as ZeroEntity).IsActive) ? model : default;
   }
 }
 

@@ -1,5 +1,26 @@
-﻿using zero.Core;
-using zero.Core.Identity;
+﻿namespace zero.Backoffice.UIComposition;
+
+public class SettingsPermissions : PermissionProvider
+{
+  public SettingsPermissions() : base("@permissions.collections.settings") { }
+
+  public const string Dashboard = "zero.sections.dashboard";
+  public const string Pages = "zero.sections.pages";
+  public const string Spaces = "zero.sections.spaces";
+  public const string Media = "zero.sections.media";
+  public const string Settings = "zero.sections.settings";
+
+
+  /// <inheritdoc />
+  public override IEnumerable<Permission> GetPermissions() => new Permission[]
+  {
+    new(Dashboard, "@sections.item.dashboard"),
+    new(Pages, "@sections.item.pages"),
+    new(Spaces, "@sections.item.spaces"),
+    new(Media, "@sections.item.media"),
+    new(Settings, "@sections.item.settings")
+  };
+}
 
 //namespace zero.Backoffice.UIComposition;
 

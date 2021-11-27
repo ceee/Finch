@@ -20,22 +20,22 @@ namespace zero.Web.Controllers
     }
 
     [HttpPost]
-    public async Task<IList<PreviewModel>> GetPreviews([FromBody] List<Link> links)
+    public async Task<IList<PickerPreviewModel>> GetPreviews([FromBody] List<Link> links)
     {
       IZeroDocumentSession session = Store.Session();
-      IList<PreviewModel> previews = new List<PreviewModel>();
+      IList<PickerPreviewModel> previews = new List<PickerPreviewModel>();
 
       foreach (Link link in links)
       {
         ILinkProvider provider = Links.GetProvider(link);
-        PreviewModel model = null;
+        PickerPreviewModel model = null;
 
         if (provider != null)
         {
           model = await provider.Preview(session, link);
         }
 
-        previews.Add(model ?? new PreviewModel()
+        previews.Add(model ?? new PickerPreviewModel()
         {
           HasError = true,
           Icon = "fth-alert-circle color-red",

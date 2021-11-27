@@ -35,7 +35,7 @@ namespace zero.Web.Controllers
     public IList<PermissionCollection> GetAllPermissions() => PermissionsApi.GetAll();
 
 
-    public async Task<IEnumerable<SelectModel>> GetForPicker() => (await Api.GetAll()).Select(x => new SelectModel()
+    public async Task<IEnumerable<PickerModel>> GetForPicker() => (await Api.GetAll()).Select(x => new PickerModel()
     {
       Id = x.Id,
       Name = x.Name,
@@ -43,9 +43,9 @@ namespace zero.Web.Controllers
     });
 
 
-    public async Task<IList<PreviewModel>> GetPreviews([FromQuery] List<string> ids)
+    public async Task<IList<PickerPreviewModel>> GetPreviews([FromQuery] List<string> ids)
     {
-      return Previews(await Api.GetByIds(ids.ToArray()), item => new PreviewModel()
+      return Previews(await Api.GetByIds(ids.ToArray()), item => new PickerPreviewModel()
       {
         Id = item.Id,
         Icon = item.AvatarId,

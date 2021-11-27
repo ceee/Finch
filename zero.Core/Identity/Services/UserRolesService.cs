@@ -14,14 +14,12 @@ public class UserRolesService : IUserRolesService
 
   protected RoleManager<ZeroUserRole> RoleManager { get; private set; }
 
-  private ClaimsPrincipal Principal => HttpContextAccessor.HttpContext?.User;
-
   protected IZeroContext Context { get; private set; }
 
   protected IZeroDocumentSession Session => Context.Store.Session();
 
 
-  public UserRolesService(IZeroContext context, IHttpContextAccessor httpContextAccessor, UserManager<ZeroUser> userManager, RoleManager<ZeroUserRole> roleManager, IStoreContext store)
+  public UserRolesService(IZeroContext context, IHttpContextAccessor httpContextAccessor, UserManager<ZeroUser> userManager, RoleManager<ZeroUserRole> roleManager)
   {
     Context = context;
     HttpContextAccessor = httpContextAccessor;

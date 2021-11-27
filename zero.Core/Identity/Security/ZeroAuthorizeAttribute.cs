@@ -6,38 +6,29 @@ namespace zero.Identity;
 
 public class ZeroAuthorizeAttribute : TypeFilterAttribute
 {
-  public ZeroAuthorizeAttribute() : this(true, String.Empty, String.Empty) { }
+  public ZeroAuthorizeAttribute() : this(true, String.Empty) { }
 
-  public ZeroAuthorizeAttribute(bool enabled) : this(enabled, String.Empty, String.Empty) { }
+  public ZeroAuthorizeAttribute(bool enabled) : this(enabled, String.Empty) { }
 
-  public ZeroAuthorizeAttribute(string permission, string value) : this(true, permission, value) { }
+  public ZeroAuthorizeAttribute(params string[] permissionKeys) : this(true, permissionKeys) { }
 
-  public ZeroAuthorizeAttribute(string value) : this(true, String.Empty, value)
+  public ZeroAuthorizeAttribute(bool enabled, params string[] permissionKeys) : base(typeof(ZeroAuthorizeFilter))
   {
-    throw new NotImplementedException("Please use the constructor with (string permission, string value) params");
-    // TODO this is not implemented yet ^^
-  }
-
-  public ZeroAuthorizeAttribute(bool enabled, string permission, params string[] values) : base(typeof(ZeroAuthorizeFilter))
-  {
-    Arguments = new object[] { enabled, permission, values };
+    Arguments = new object[] { enabled, permissionKeys };
   }
 }
 
 
 public class ZeroAuthorizeFilter : IAuthorizationFilter
 {
-  string Permission { get; set; }
-
-  List<string> PermissionValues { get; set; }
+  IEnumerable<string> PermissionKeys { get; set; }
 
   bool Enabled { get; set; }
 
 
-  public ZeroAuthorizeFilter(bool enabled, string permission, string[] values) : base()
+  public ZeroAuthorizeFilter(bool enabled, IEnumerable<string> permissionKeys) : base()
   {
-    Permission = permission;
-    PermissionValues = values.ToList();
+    PermissionKeys = permissionKeys;
     Enabled = enabled;
   }
 
@@ -70,7 +61,7 @@ public class ZeroAuthorizeFilter : IAuthorizationFilter
     // find all filters which could possible interrupt/override this filter
     // these are filters which handle the same permission or disable authorization
     ZeroAuthorizeFilter[] siblingFilters = authFilters
-      .Where(filter => !filter.Enabled || filter.Permission.Equals(Permission, StringComparison.InvariantCultureIgnoreCase))
+      .Where(filter => !filter.Enabled) //|| filter.PermissionKey.Equals(PermissionKey, StringComparison.InvariantCultureIgnoreCase))
       .ToArray();
 
     // get index of the current filter
@@ -94,50 +85,50 @@ public class ZeroAuthorizeFilter : IAuthorizationFilter
     }
 
     // check claims
-    if (!Permission.IsNullOrEmpty())
-    {
-      bool isSuperUser = false; // TODO user.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
-      bool hasPassed = isSuperUser;
+    //if (!PermissionKey.IsNullOrEmpty())
+    //{
+    //  bool isSuperUser = false; // TODO user.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
+    //  bool hasPassed = isSuperUser;
 
-      if (!isSuperUser)
-      {
-        // automatically request write permission for methods which start with `Save` or `Delete` or `Post` or `Put`
-        string actionName = ((Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor)context.ActionDescriptor).ActionName;
+    //  if (!isSuperUser)
+    //  {
+    //    // automatically request write permission for methods which start with `Save` or `Delete` or `Post` or `Put`
+    //    string actionName = ((Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor)context.ActionDescriptor).ActionName;
 
-        if (actionName.StartsWith("Create"))
-        {
-          PermissionValues.Add(PermissionsValue.Create);
-        }
-        if (actionName.StartsWith("Update") || actionName.StartsWith("Save"))
-        {
-          PermissionValues.Add(PermissionsValue.Update);
-        }
-        if (actionName.StartsWith("Delete") || actionName.StartsWith("Remove"))
-        {
-          PermissionValues.Add(PermissionsValue.Delete);
-        }
+    //    //if (actionName.StartsWith("Create"))
+    //    //{
+    //    //  PermissionValues.Add(PermissionsValue.Create);
+    //    //}
+    //    //if (actionName.StartsWith("Update") || actionName.StartsWith("Save"))
+    //    //{
+    //    //  PermissionValues.Add(PermissionsValue.Update);
+    //    //}
+    //    //if (actionName.StartsWith("Delete") || actionName.StartsWith("Remove"))
+    //    //{
+    //    //  PermissionValues.Add(PermissionsValue.Delete);
+    //    //}
 
-        foreach (string value in PermissionValues)
-        {
-          bool fulfillsClaim = user.HasClaim(Constants.Auth.Claims.Permission, Permission + ":" + value);
+    //    //foreach (string value in PermissionValues)
+    //    //{
+    //    //  bool fulfillsClaim = user.HasClaim(Constants.Auth.Claims.Permission, PermissionKey + ":" + value);
 
-          if (!fulfillsClaim && value == PermissionsValue.Read)
-          {
-            fulfillsClaim = user.HasClaim(Constants.Auth.Claims.Permission, Permission + ":" + PermissionsValue.Update);
-          }
+    //    //  if (!fulfillsClaim && value == PermissionsValue.Read)
+    //    //  {
+    //    //    fulfillsClaim = user.HasClaim(Constants.Auth.Claims.Permission, PermissionKey + ":" + PermissionsValue.Update);
+    //    //  }
 
-          if (fulfillsClaim)
-          {
-            hasPassed = true;
-            break;
-          }
-        }
-      }
+    //    //  if (fulfillsClaim)
+    //    //  {
+    //    //    hasPassed = true;
+    //    //    break;
+    //    //  }
+    //    //}
+    //  }
 
       //if (!hasPassed) // TODO 
       //{
       //  context.Result = new StatusCodeResult(403);
       //}
-    }
+    //}
   }
 }

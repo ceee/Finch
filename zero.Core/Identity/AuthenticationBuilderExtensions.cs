@@ -31,11 +31,8 @@ public static class AuthenticationBuilderExtensions
           return Task.CompletedTask;
         };
       });
-        
-      if (setupAction != null)
-      {
-        setupAction(b);
-      }
+
+      setupAction?.Invoke(b);
     });
   }
 
@@ -89,10 +86,7 @@ public static class AuthenticationBuilderExtensions
         options.AccessDeniedPath = opts.Path;
       });
 
-    if (setupAction != null)
-    {
-      setupAction(optionsBuilder);
-    }
+    setupAction?.Invoke(optionsBuilder);
 
     builder.AddScheme<CookieAuthenticationOptions, CookieAuthenticationHandler>(scheme, displayName, null);
 

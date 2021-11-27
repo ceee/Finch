@@ -78,7 +78,7 @@ public class AuthorizationService : IAuthorizationService
       return result;
     }
 
-    Type type = typeof(T);
+    //Type type = typeof(T);
     bool isSuperUser = Principal.HasClaim(Constants.Auth.Claims.IsSuper, PermissionsValue.True);
 
     //result.IsAppAware = AppAwareType.IsAssignableFrom(type); // TODO appx
@@ -94,9 +94,9 @@ public class AuthorizationService : IAuthorizationService
       return result;
     }
 
-    Permission permission = GetPermission(permissionKey);
+    Permission? permission = GetPermission(permissionKey);
 
-    if (permission != null)
+    if (permission == null)
     {
 
     }

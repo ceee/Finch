@@ -155,7 +155,7 @@ public class ZeroContextScope : IDisposable
 
   public IZeroStore Store { get; set; }
 
-  Application _originalApp = null;
+  readonly Application _originalApp = null;
 
 
   internal ZeroContextScope(IZeroContext context, Application app, Application originalApp)

@@ -18,9 +18,9 @@ public abstract class _ZeroBackofficeCollectionController<TEntity, TCollection> 
   [Obsolete]
   protected Func<IRavenQueryable<TEntity>, IRavenQueryable<TEntity>> DefaultQuery { get; set; }
 
-  protected Action<TEntity, PreviewModel> PreviewTransform { get; set; }
+  protected Action<TEntity, PickerPreviewModel> PreviewTransform { get; set; }
 
-  protected Action<TEntity, SelectModel> PickerTransform { get; set; }
+  protected Action<TEntity, PickerModel> PickerTransform { get; set; }
 
 
   public ZeroBackofficeCollectionController(TCollection collection)
@@ -56,10 +56,10 @@ public abstract class _ZeroBackofficeCollectionController<TEntity, TCollection> 
   }
 
 
-  public virtual async Task<IEnumerable<SelectModel>> GetForPicker() => await SelectList(Collection.Stream(), PickerTransform);
+  public virtual async Task<IEnumerable<PickerModel>> GetForPicker() => await SelectList(Collection.Stream(), PickerTransform);
 
 
-  public virtual async Task<IList<PreviewModel>> GetPreviews([FromQuery] List<string> ids) => Previews(await Collection.Load(ids), PreviewTransform);
+  public virtual async Task<IList<PickerPreviewModel>> GetPreviews([FromQuery] List<string> ids) => Previews(await Collection.Load(ids), PreviewTransform);
 
 
   [HttpPost]

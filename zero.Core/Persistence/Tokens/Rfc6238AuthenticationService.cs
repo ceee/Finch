@@ -33,7 +33,7 @@ public static class Rfc6238AuthenticationService
     var hash = hashAlgorithm.ComputeHash(ApplyModifier(timestepAsBytes, modifier));
 
     // Generate DT string
-    var offset = hash[hash.Length - 1] & 0xf;
+    var offset = hash[^1] & 0xf;
     Debug.Assert(offset + 4 < hash.Length);
     var binaryCode = (hash[offset] & 0x7f) << 24
                       | (hash[offset + 1] & 0xff) << 16
@@ -73,10 +73,8 @@ public static class Rfc6238AuthenticationService
 
     // Allow a variance of no greater than 9 minutes in either direction
     var currentTimeStep = GetCurrentTimeStepNumber();
-    using (var hashAlgorithm = new HMACSHA1(securityToken))
-    {
-      return ComputeTotp(hashAlgorithm, currentTimeStep, modifier);
-    }
+    using var hashAlgorithm = new HMACSHA1(securityToken);
+    return ComputeTotp(hashAlgorithm, currentTimeStep, modifier);
   }
 
   public static bool ValidateCode(byte[] securityToken, int code, string modifier = null)

@@ -35,7 +35,7 @@ internal class ZeroPluginInitializer
   {
     try
     {
-      T plugin = new T();
+      T plugin = new();
 
       plugin.ConfigureServices(services, configuration);
       services.Configure<ZeroOptions>(opts => plugin.Configure(opts));

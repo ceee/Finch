@@ -27,3 +27,4 @@ global using zero.Backoffice.Modules;
 global using zero.Backoffice.UIComposition;
 global using zero.Backoffice.DevServer;
 global using zero.Backoffice.Mapper;
+global using zero.Backoffice.Abstractions;

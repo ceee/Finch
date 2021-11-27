@@ -18,7 +18,7 @@ public class ZeroBackofficeClaimsPrincipalFactory<TUser, TRole> : ZeroClaimsPrin
     List<Claim> claims = await CreateClaimList(user);
 
     // create the user identity
-    ClaimsIdentity identity = new ClaimsIdentity(claims, AuthOptions.Scheme, Constants.Auth.Claims.UserName, Constants.Auth.Claims.Role); // "Identity.Application"
+    ClaimsIdentity identity = new(claims, AuthOptions.Scheme, Constants.Auth.Claims.UserName, Constants.Auth.Claims.Role); // "Identity.Application"
 
     if (BackofficeUserIdentity.TryCreate(identity, out BackofficeUserIdentity userIdentity))
     {

@@ -35,7 +35,7 @@ namespace zero.Web.Controllers
     }
 
 
-    public override async Task<IList<PreviewModel>> GetPreviews([FromQuery] List<string> ids)
+    public override async Task<IList<PickerPreviewModel>> GetPreviews([FromQuery] List<string> ids)
     {
       IReadOnlyCollection<PageType> pageTypes = Options.Pages.GetAllItems();
       Dictionary<string, Page> pages = await Collection.GetByIds(ids.ToArray());
@@ -45,7 +45,7 @@ namespace zero.Web.Controllers
       {
         routes.TryGetValue(item, out Route route);
 
-        PreviewModel model = new()
+        PickerPreviewModel model = new()
         {
           Id = item.Id,
           Icon = pageTypes.FirstOrDefault(x => x.Alias == item.PageTypeAlias)?.Icon ?? "fth-folder",

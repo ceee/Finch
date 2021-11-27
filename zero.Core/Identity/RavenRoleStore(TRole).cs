@@ -37,7 +37,7 @@ public class RavenRoleStore<TRole> : IRoleStore<TRole>, IRoleClaimStore<TRole>
   public async Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
   {
     IZeroDocumentSession session = Store.Session(Global);
-    await session.StoreAsync(role);
+    await session.StoreAsync(role, cancellationToken);
     await session.SaveChangesAsync(cancellationToken);
     return IdentityResult.Success;
   }
@@ -135,7 +135,7 @@ public class RavenRoleStore<TRole> : IRoleStore<TRole>, IRoleClaimStore<TRole>
   /// <inheritdoc/>
   public Task AddClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken = default)
   {
-    role.Claims.Add(new UserClaim(claim));
+    role.Claims.Add(new(claim));
     return Task.CompletedTask;
   }
 
@@ -150,7 +150,7 @@ public class RavenRoleStore<TRole> : IRoleStore<TRole>, IRoleClaimStore<TRole>
   /// <inheritdoc/>
   public Task RemoveClaimAsync(TRole role, Claim claim, CancellationToken cancellationToken = default)
   {
-    UserClaim userClaim = new UserClaim(claim);
+    UserClaim userClaim = new(claim);
     role.Claims = role.Claims.Except(new List<UserClaim>() { userClaim }, new UserClaimComparer()).ToList();
     return Task.CompletedTask;
   }

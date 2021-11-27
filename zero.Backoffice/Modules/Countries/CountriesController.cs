@@ -6,9 +6,13 @@ public class CountriesController : ZeroBackofficeApiController
 {
   protected ICountryStore Store { get; set; }
 
-  public CountriesController(ICountryStore store)
+  protected IPickerProvider<Country> Picker { get; set; }
+
+
+  public CountriesController(ICountryStore store, IPickerProvider<Country> picker)
   {
     Store = store;
+    Picker = picker;
   }
 
 
@@ -24,6 +28,23 @@ public class CountriesController : ZeroBackofficeApiController
     }
 
     return Mapper.Map<Country, CountryDisplay>(model);
+  }
+
+
+  [HttpGet("pick")]
+  [ZeroAuthorize(CountryPermissions.Read)]
+  public virtual async Task<ActionResult<Paged>> Pick(ListQuery<Country> query)
+  {
+    query.OrderQuery = q => q.OrderByDescending(x => x.IsPreferred).ThenBy(x => x.Name);
+    return await Picker.PickFrom(query.Page, query.PageSize, query);
+  }
+
+
+  [HttpGet("pick")]
+  [ZeroAuthorize(CountryPermissions.Read)]
+  public virtual async Task<ActionResult<List<PickerPreviewModel>>> Pick(string[] ids)
+  {
+    return await Picker.GetPreviews(ids);
   }
 
 
@@ -46,6 +67,7 @@ public class CountriesController : ZeroBackofficeApiController
   [ZeroAuthorize(CountryPermissions.Read)]
   public virtual async Task<ActionResult<Paged>> Get(ListQuery<Country> query)
   {
+    query.OrderQuery = q => q.OrderByDescending(x => x.IsPreferred).ThenBy(x => x.Name);
     Paged<Country> result = await Store.Load<zero_Backoffice_Countries_Listing>(query.Page, query.PageSize, q => q.Filter(query));
     return Mapper.Map<Country, CountryBasic>(result);
   }

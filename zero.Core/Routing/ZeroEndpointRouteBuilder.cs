@@ -5,7 +5,7 @@ namespace zero.Routing;
 
 public class ZeroEndpointRouteBuilder : IZeroEndpointRouteBuilder
 {
-  IEndpointRouteBuilder _builder;
+  readonly IEndpointRouteBuilder _builder;
 
   public IServiceProvider ServiceProvider => _builder.ServiceProvider;
 

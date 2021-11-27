@@ -9,15 +9,15 @@ public static class ZeroBackofficeControllerExtensions
   /// <summary>
   /// Transform entities to a preview list
   /// </summary>
-  public static List<PreviewModel> TransformToPreviewModels<T>(this ZeroBackofficeController controller, Dictionary<string, T> items, Action<T, PreviewModel> transform = null) where T : ZeroIdEntity
+  public static List<PickerPreviewModel> TransformToPreviewModels<T>(this ZeroBackofficeController controller, Dictionary<string, T> items, Action<T, PickerPreviewModel> transform = null) where T : ZeroIdEntity
   {
-    List<PreviewModel> previews = new();
+    List<PickerPreviewModel> previews = new();
 
     foreach (var item in items)
     {
       if (item.Value == null)
       {
-        previews.Add(new PreviewModel()
+        previews.Add(new PickerPreviewModel()
         {
           HasError = true,
           Icon = "fth-alert-circle color-red",
@@ -28,7 +28,7 @@ public static class ZeroBackofficeControllerExtensions
         continue;
       }
 
-      PreviewModel model = new() { Id = item.Value.Id };
+      PickerPreviewModel model = new() { Id = item.Value.Id };
 
       if (item.Value is ZeroEntity)
       {
@@ -46,13 +46,13 @@ public static class ZeroBackofficeControllerExtensions
   /// <summary>
   /// Transform entities to a select list
   /// </summary>
-  public static List<SelectModel> TransformToSelectModels<T>(this ZeroBackofficeController controller, IEnumerable<T> enumerable, Action<T, SelectModel> transform = null) where T : ZeroIdEntity
+  public static List<PickerModel> TransformToSelectModels<T>(this ZeroBackofficeController controller, IEnumerable<T> enumerable, Action<T, PickerModel> transform = null) where T : ZeroIdEntity
   {
-    List<SelectModel> items = new();
+    List<PickerModel> items = new();
 
     foreach (T item in enumerable)
     {
-      SelectModel model = new()
+      PickerModel model = new()
       {
         Id = item.Id
       };

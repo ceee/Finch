@@ -10,6 +10,7 @@ public static class ServiceCollectionExtensions
   {
     services.AddScoped<IPageTreeService, PageTreeService>();
 
+    services.AddScoped<IPickerProvider<Country>, CountryPickerProvider>();
     services.AddSingleton<IPermissionProvider, CountryPermissions>();
 
     services.Configure<RavenOptions>(opts =>

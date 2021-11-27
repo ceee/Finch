@@ -1,6 +1,6 @@
 ﻿namespace zero.Backoffice.Models;
 
-public class PreviewModel
+public class PickerPreviewModel
 {
   public string Id { get; set; }
 

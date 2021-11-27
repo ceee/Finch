@@ -81,9 +81,9 @@ public class ZeroClaimsPrinicipalFactory<TUser> : UserClaimsPrincipalFactory<TUs
     List<Claim> claims = await CreateClaimList(user);
 
     // create the user identity
-    ClaimsIdentity identity = new ClaimsIdentity(claims, AuthOptions.Scheme, Constants.Auth.Claims.UserName, Constants.Auth.Claims.Role); // "Identity.Application"
+    ClaimsIdentity identity = new(claims, AuthOptions.Scheme, Constants.Auth.Claims.UserName, Constants.Auth.Claims.Role); // "Identity.Application"
 
-    bool isUserIdentity = UserIdentity.TryCreate(identity, AuthOptions.Scheme, out UserIdentity userIdentity);
+    UserIdentity.TryCreate(identity, AuthOptions.Scheme, out UserIdentity userIdentity);
     return userIdentity;
   }
 
@@ -93,7 +93,7 @@ public class ZeroClaimsPrinicipalFactory<TUser> : UserClaimsPrincipalFactory<TUs
     string userId = await UserManager.GetUserIdAsync(user);
     string userName = await UserManager.GetUserNameAsync(user);
 
-    List<Claim> claims = new List<Claim>();
+    List<Claim> claims = new();
 
     claims.Add(new Claim(Constants.Auth.Claims.IsZero, PermissionsValue.False));
     claims.Add(new Claim(Constants.Auth.Claims.UserId, userId));

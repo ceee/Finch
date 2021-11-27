@@ -12,7 +12,10 @@ public abstract class PermissionProvider : IPermissionProvider
   }
 
   /// <inheritdoc />
-  public virtual IEnumerable<Permission> GetPermissions() => new List<Permission>();
+  public virtual IEnumerable<string> Requires() => Array.Empty<string>();
+
+  /// <inheritdoc />
+  public virtual IEnumerable<Permission> GetPermissions() => Array.Empty<Permission>();
 
 
   /// <inheritdoc />
@@ -26,6 +29,11 @@ public interface IPermissionProvider
   /// Name (can be a localization) which is displayed in the permission group
   /// </summary>
   string Name { get; }
+
+  /// <summary>
+  /// In order for this permissions to work, the specified provider requires the following permission
+  /// </summary>
+  IEnumerable<string> Requires() => Array.Empty<string>();
 
   /// <summary>
   /// Get all permissions for this provider.
