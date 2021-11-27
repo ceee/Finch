@@ -2,7 +2,7 @@
 using Raven.Client.Documents.Queries;
 using Raven.Client.Documents.Session;
 
-namespace zero.Backoffice.Modules;
+namespace zero.Backoffice.Modules.Search;
 
 public class BackofficeSearchService : IBackofficeSearchService
 {
@@ -35,7 +35,7 @@ public class BackofficeSearchService : IBackofficeSearchService
 
     List<SearchResult> items = new();
 
-    IReadOnlyCollection<SearchIndexMap> maps = Options.For<SearchOptions>().GetAllItems();
+    IEnumerable<SearchIndexMap> maps = Options.For<SearchOptions>();
 
     foreach (ZeroEntity result in results)
     {

@@ -1,9 +1,8 @@
-﻿namespace zero.Web.Models
-{
-  public class ZeroBackofficeModel
-  {
-    public int Port { get; set; }
+﻿namespace zero.Backoffice;
 
-    public IZeroVue Vue { get; set; }
-  }
+public class ZeroBackofficeModel
+{
+  public int Port { get; set; }
+
+  public IZeroVue Vue { get; set; }
 }

@@ -1,71 +1,71 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Raven.Client.Documents.Linq;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using zero.Core;
-using zero.Core.Entities;
+﻿//using Microsoft.AspNetCore.Mvc;
+//using Raven.Client.Documents.Linq;
+//using System;
+//using System.Collections.Generic;
+//using System.Threading.Tasks;
+//using zero.Core;
+//using zero.Core.Entities;
 
 
-namespace zero.Backoffice;
+//namespace zero.Backoffice;
 
-public abstract class _ZeroBackofficeCollectionController<TEntity, TCollection> : ZeroBackofficeController
-  where TEntity : ZeroIdEntity, new()
-  where TCollection : IStoreOperations<TEntity>
-{
-  protected TCollection Collection { get; private set; }
+//public abstract class _ZeroBackofficeCollectionController<TEntity, TCollection> : ZeroBackofficeController
+//  where TEntity : ZeroIdEntity, new()
+//  where TCollection : IStoreOperations<TEntity>
+//{
+//  protected TCollection Collection { get; private set; }
 
-  [Obsolete]
-  protected Func<IRavenQueryable<TEntity>, IRavenQueryable<TEntity>> DefaultQuery { get; set; }
+//  [Obsolete]
+//  protected Func<IRavenQueryable<TEntity>, IRavenQueryable<TEntity>> DefaultQuery { get; set; }
 
-  protected Action<TEntity, PickerPreviewModel> PreviewTransform { get; set; }
+//  protected Action<TEntity, PickerPreviewModel> PreviewTransform { get; set; }
 
-  protected Action<TEntity, PickerModel> PickerTransform { get; set; }
-
-
-  public ZeroBackofficeCollectionController(TCollection collection)
-  {
-    Collection = collection;
-  }
-
-  public override void OnScopeChanged(string scope)
-  {
-    //Collection.ApplyScope(scope);
-  }
+//  protected Action<TEntity, PickerModel> PickerTransform { get; set; }
 
 
-  public virtual async Task<DisplayModel<TEntity>> GetById([FromQuery] string id, [FromQuery] string changeVector = null) => Edit(await Collection.Load(id, changeVector));
+//  public ZeroBackofficeCollectionController(TCollection collection)
+//  {
+//    Collection = collection;
+//  }
+
+//  public override void OnScopeChanged(string scope)
+//  {
+//    //Collection.ApplyScope(scope);
+//  }
 
 
-  public virtual async Task<Dictionary<string, TEntity>> GetByIds([FromQuery] string[] ids) => await Collection.Load(ids);
+//  public virtual async Task<DisplayModel<TEntity>> GetById([FromQuery] string id, [FromQuery] string changeVector = null) => Edit(await Collection.Load(id, changeVector));
 
 
-  public virtual async Task<DisplayModel<TEntity>> GetEmpty() => Edit(await Collection.Empty());
+//  public virtual async Task<Dictionary<string, TEntity>> GetByIds([FromQuery] string[] ids) => await Collection.Load(ids);
 
 
-  public virtual async Task<Paged<TEntity>> GetByQuery([FromQuery] ListQuery<TEntity> query)
-  {
-    return await Collection.Load(query);
-  }
+//  public virtual async Task<DisplayModel<TEntity>> GetEmpty() => Edit(await Collection.Empty());
 
 
-  public virtual async Task<Paged<Revision>> GetRevisions([FromQuery] string id, [FromQuery] ListQuery<TEntity> query)
-  {
-    return null; // TODO
-    //return await Collection.GetRevisions(id, query.Page, query.PageSize);
-  }
+//  public virtual async Task<Paged<TEntity>> GetByQuery([FromQuery] ListQuery<TEntity> query)
+//  {
+//    return await Collection.Load(query);
+//  }
 
 
-  public virtual async Task<IEnumerable<PickerModel>> GetForPicker() => await SelectList(Collection.Stream(), PickerTransform);
+//  public virtual async Task<Paged<Revision>> GetRevisions([FromQuery] string id, [FromQuery] ListQuery<TEntity> query)
+//  {
+//    return null; // TODO
+//    //return await Collection.GetRevisions(id, query.Page, query.PageSize);
+//  }
 
 
-  public virtual async Task<IList<PickerPreviewModel>> GetPreviews([FromQuery] List<string> ids) => Previews(await Collection.Load(ids), PreviewTransform);
+//  public virtual async Task<IEnumerable<PickerModel>> GetForPicker() => await SelectList(Collection.Stream(), PickerTransform);
 
 
-  [HttpPost]
-  public virtual async Task<Result<TEntity>> Save([FromBody] TEntity model) => await Collection.Save(model);
+//  public virtual async Task<IList<PickerPreviewModel>> GetPreviews([FromQuery] List<string> ids) => Previews(await Collection.Load(ids), PreviewTransform);
 
 
-  [HttpDelete]
-  public virtual async Task<Result<TEntity>> Delete([FromQuery] string id) => await Collection.Delete(id);
-}
+//  [HttpPost]
+//  public virtual async Task<Result<TEntity>> Save([FromBody] TEntity model) => await Collection.Save(model);
+
+
+//  [HttpDelete]
+//  public virtual async Task<Result<TEntity>> Delete([FromQuery] string id) => await Collection.Delete(id);
+//}

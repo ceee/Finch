@@ -1,4 +1,4 @@
-﻿namespace zero.Backoffice.Modules;
+﻿namespace zero.Backoffice.Modules.Search;
 
 public class SearchResult
 {

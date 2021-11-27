@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿//using Microsoft.AspNetCore.Mvc;
 
-namespace zero.Backoffice.Modules;
+//namespace zero.Backoffice.Modules;
 
-[ZeroAuthorize]
-public class SearchController : BackofficeController
-{
-  IBackofficeSearchService SearchService;
+//[ZeroAuthorize]
+//public class SearchController : BackofficeController
+//{
+//  IBackofficeSearchService SearchService;
 
-  public SearchController(IBackofficeSearchService searchService)
-  {
-    SearchService = searchService;
-  }
+//  public SearchController(IBackofficeSearchService searchService)
+//  {
+//    SearchService = searchService;
+//  }
 
-  public async Task<Paged<SearchResult>> Query([FromQuery] string query) => await SearchService.Query(query);
-}
+//  public async Task<Paged<SearchResult>> Query([FromQuery] string query) => await SearchService.Query(query);
+//}

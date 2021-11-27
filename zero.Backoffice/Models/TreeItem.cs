@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents an item in a tree
 /// </summary>
-public class TreeItem
+public struct TreeItem
 {
   /// <summary>
   /// Id of the item
@@ -43,7 +43,7 @@ public class TreeItem
   /// <summary>
   /// Displays a small icon (with hover text) next to the main item icon
   /// </summary>
-  public TreeItemModifier Modifier { get; set; }
+  public TreeItemModifier? Modifier { get; set; }
 
   /// <summary>
   /// Whether this item has children

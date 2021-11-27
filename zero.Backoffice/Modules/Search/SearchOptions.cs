@@ -1,13 +1,13 @@
-﻿namespace zero.Backoffice.Modules;
+﻿namespace zero.Backoffice.Modules.Search;
 
-public class SearchOptions : OptionsEnumerable<SearchIndexMap>, IOptionsEnumerable
+public class SearchOptions : List<SearchIndexMap>
 {
   public bool Enabled { get; set; }
 
   public SearchIndexMap<T> Map<T>(string icon = null) where T : ZeroEntity, new()
   {
     SearchIndexMap<T> map = new(icon);
-    Items.Add(map);
+    Add(map);
     return map;
   }
 }

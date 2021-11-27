@@ -2,7 +2,7 @@
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 
-namespace zero.Backoffice.Modules;
+namespace zero.Backoffice.Modules.Pages;
 
 public class PageTreeService : IPageTreeService
 {
@@ -18,16 +18,14 @@ public class PageTreeService : IPageTreeService
     Pages = pages;
     Routes = routes;
     PageOptions = options.For<PageOptions>();
-    IMediaManagement media;
   }
 
 
   /// <inheritdoc />
   public async Task<IList<TreeItem>> GetChildren(string parentId = null, string activeId = null, string search = null)
   {
-    IList<TreeItem> items = new List<TreeItem>();
-    IReadOnlyCollection<PageType> pageTypes = PageOptions.GetAllItems();
-    string[] openIds = new string[0] { };
+    List<TreeItem> items = new();
+    string[] openIds = Array.Empty<string>();
     Paged<Page> pages = null;
     IList<Pages_WithChildren.Result> children = null;
     bool isSearch = !search.IsNullOrWhiteSpace();
@@ -79,7 +77,7 @@ public class PageTreeService : IPageTreeService
 
 
     // function to get modifier icon
-    TreeItemModifier GetModifier(Page page)
+    TreeItemModifier? GetModifier(Page page)
     {
       if (page.PublishDate > DateTimeOffset.Now || page.UnpublishDate > DateTimeOffset.Now)
       {
@@ -96,7 +94,7 @@ public class PageTreeService : IPageTreeService
     // build tree
     foreach (Page page in pages.Items)
     {
-      PageType pageType = pageTypes.FirstOrDefault(x => x.Alias == page.PageTypeAlias);
+      PageType pageType = PageOptions.FirstOrDefault(x => x.Alias == page.PageTypeAlias);
 
       if (pageType == null)
       {

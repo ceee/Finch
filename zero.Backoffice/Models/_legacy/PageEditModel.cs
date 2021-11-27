@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using zero.Core.Entities;
+﻿//using System.Collections.Generic;
+//using zero.Core.Entities;
 
-namespace zero.Web.Models
-{
-  public class PageEditModel<T> : EditModel<T> where T : Page
-  {
-    public PageType PageType { get; set; }
+//namespace zero.Web.Models
+//{
+//  public class PageEditModel<T> : EditModel<T> where T : Page
+//  {
+//    public PageType PageType { get; set; }
 
-    public Paged<Revision> Revisions { get; set; }
+//    public Paged<Revision> Revisions { get; set; }
 
-    public List<string> Urls { get; set; } = new();
-  }
-}
+//    public List<string> Urls { get; set; } = new();
+//  }
+//}

@@ -1,6 +1,6 @@
 ﻿namespace zero.Backoffice.Models;
 
-public class PickerModel
+public struct PickerModel
 {
   public string Id { get; set; }
 

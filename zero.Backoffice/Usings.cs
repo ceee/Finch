@@ -11,6 +11,7 @@ global using zero.Stores;
 global using zero.Configuration;
 global using zero.Context;
 global using zero.Extensions;
+global using zero.FileStorage;
 global using zero.Identity;
 global using zero.Localization;
 global using zero.Media;

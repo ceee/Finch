@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 
 namespace zero.Backoffice;
 
-class ZeroBackofficeMvcOptions : IConfigureOptions<MvcOptions>
+internal class ZeroBackofficeMvcOptions : IConfigureOptions<MvcOptions>
 {
   IZeroOptions Options { get; set; }
 
@@ -14,7 +14,6 @@ class ZeroBackofficeMvcOptions : IConfigureOptions<MvcOptions>
 
   public void Configure(MvcOptions options)
   {
-    string backofficePath = Options.For<BackofficeOptions>().Path;
-    options.Conventions.Add(new ZeroBackofficeControllerModelConvention(backofficePath));
+    options.Conventions.Add(new ZeroBackofficeControllerModelConvention(Options.ZeroPath));
   }
 }

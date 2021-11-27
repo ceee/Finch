@@ -61,10 +61,4 @@ public static class ListQueryExtensions
 
     return queryable;
   }
-
-
-  public static Paged<ZeroIdEntity> Convert<T>(this Paged<T> result, ListQueryDisplayType displayType) where T : ZeroIdEntity
-  {
-
-  }
 }

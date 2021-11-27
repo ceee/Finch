@@ -16,10 +16,9 @@ public static class ServiceCollectionExtensions
 
   public static ZeroBuilder AddBackoffice<T>(this ZeroBuilder builder, Action<BackofficeOptions> options) where T : ZeroBackofficePlugin, IZeroPlugin, new()
   {
-    return builder.AddPlugin<T>(services =>
+    return builder.AddPlugin(services =>
     {
-      T plugin = new T();
-
+      T plugin = new();
       plugin.PostConfigureServices = (services, configuration) =>
       {
         services.Configure<BackofficeOptions>(opts => options(opts));

@@ -1,11 +1,11 @@
-﻿using System;
+﻿//using System;
 
-namespace zero.Web.Models
-{
-  public class ListItemModel : ListModel
-  {
-    public string Name { get; set; }
+//namespace zero.Web.Models
+//{
+//  public class ListItemModel : ListModel
+//  {
+//    public string Name { get; set; }
 
-    public bool IsActive { get; set; }
-  }
-}
+//    public bool IsActive { get; set; }
+//  }
+//}

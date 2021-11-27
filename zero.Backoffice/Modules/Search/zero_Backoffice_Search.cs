@@ -1,6 +1,6 @@
 ﻿using Raven.Client.Documents;
 
-namespace zero.Backoffice.Modules;
+namespace zero.Backoffice.Modules.Search;
 
 public class zero_Backoffice_Search : ZeroJavascriptIndex
 {
@@ -8,7 +8,7 @@ public class zero_Backoffice_Search : ZeroJavascriptIndex
   {
     // TODO index.Conventions is null, but needed for collection name retrieval
 
-    foreach (var map in options.For<SearchOptions>().GetAllItems())
+    foreach (var map in options.For<SearchOptions>())
     {
       Maps.Add(map.BuildInstruction(store));
     }

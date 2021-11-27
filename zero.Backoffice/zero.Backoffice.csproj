@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Modules_legacy\**" />
+    <EmbeddedResource Remove="Modules_legacy\**" />
+    <None Remove="Modules_legacy\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
@@ -18,5 +24,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\zero.Core\zero.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Modules\Search\" />
   </ItemGroup>
 </Project>

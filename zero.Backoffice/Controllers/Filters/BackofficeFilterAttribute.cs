@@ -15,7 +15,7 @@ public class BackofficeFilterAttribute : IActionFilter
     {
       if (context.HttpContext.Request.Query.TryGetValue(SCOPE_KEY, out var scope))
       {
-        (context.Controller as ZeroBackofficeController).OnScopeChanged(scope.ToString());
+        //(context.Controller as ZeroBackofficeController).OnScopeChanged(scope.ToString()); 
       }
     }
   }

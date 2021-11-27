@@ -1,4 +1,6 @@
-﻿namespace zero.Backoffice.Configuration;
+﻿using zero.Backoffice.Modules.Search;
+
+namespace zero.Backoffice.Configuration;
 
 public class BackofficeOptions
 {

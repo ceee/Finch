@@ -1,26 +1,24 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using zero.Core.Utils;
 
-namespace zero.Core.Options
+namespace zero.Backoffice;
+
+internal class BackofficeJsonSerlializerSettings : JsonSerializerSettings
 {
-  public class BackofficeJsonSerlializerSettings : JsonSerializerSettings
+  public BackofficeJsonSerlializerSettings()
   {
-    public BackofficeJsonSerlializerSettings()
-    {
-      Setup(this);
-    }
+    Setup(this);
+  }
 
 
-    public static void Setup(JsonSerializerSettings settings)
-    {
-      settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-      //settings.Converters.Add(new RefJsonConverter());
-      //settings.ContractResolver = new ZeroJsonContractResolver();
-      settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-      settings.TypeNameHandling = TypeNameHandling.Objects;
-      //settings.SerializationBinder = new ZeroInterfaceBinder();
-    }
+  public static void Setup(JsonSerializerSettings settings)
+  {
+    settings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+    //settings.Converters.Add(new RefJsonConverter());
+    //settings.ContractResolver = new ZeroJsonContractResolver();
+    settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    settings.TypeNameHandling = TypeNameHandling.Objects;
+    //settings.SerializationBinder = new ZeroInterfaceBinder();
   }
 }
