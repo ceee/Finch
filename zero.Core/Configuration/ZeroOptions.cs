@@ -19,15 +19,9 @@ public class ZeroOptions : IZeroOptions
   public TimeSpan TokenExpiration { get; set; }
 
 
-  protected IServiceProvider ServiceProvider { get; set; }
+  internal IServiceProvider ServiceProvider { get; set; }
 
   protected ConcurrentDictionary<Type, object> OptionsCache { get; private set; } = new();
-
-
-  public ZeroOptions(IServiceProvider serviceProvider)
-  {
-    ServiceProvider = serviceProvider;
-  }
 
 
   /// <inheritdoc />

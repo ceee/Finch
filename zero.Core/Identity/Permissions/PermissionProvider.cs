@@ -3,47 +3,19 @@
 public abstract class PermissionProvider : IPermissionProvider
 {
   /// <inheritdoc />
-  public string Name { get; private set; }
-
-
-  public PermissionProvider(string name)
-  {
-    Name = name;
-  }
-
-  /// <inheritdoc />
-  public virtual IEnumerable<string> Requires() => Array.Empty<string>();
-
-  /// <inheritdoc />
-  public virtual IEnumerable<Permission> GetPermissions() => Array.Empty<Permission>();
-
-
-  /// <inheritdoc />
-  public virtual Task<IEnumerable<Permission>> GetPermissionsAsync() => Task.FromResult(GetPermissions());
+  public virtual Task Configure(IPermissionContext context) => Task.CompletedTask;
 }
 
 
 public interface IPermissionProvider
 {
   /// <summary>
-  /// Name (can be a localization) which is displayed in the permission group
+  /// Manage permissions (add/remove/update permission groups and containing permissions)
   /// </summary>
-  string Name { get; }
+  Task Configure(IPermissionContext context);
 
   /// <summary>
   /// In order for this permissions to work, the specified provider requires the following permission
   /// </summary>
-  IEnumerable<string> Requires() => Array.Empty<string>();
-
-  /// <summary>
-  /// Get all permissions for this provider.
-  /// These permissions can be granted to roles or individual users.
-  /// </summary>
-  IEnumerable<Permission> GetPermissions();
-
-  /// <summary>
-  /// Get all permissions for this provider.
-  /// These permissions can be granted to roles or individual users.
-  /// </summary>
-  Task<IEnumerable<Permission>> GetPermissionsAsync();
+  //IEnumerable<string> Requires() => Array.Empty<string>();
 }

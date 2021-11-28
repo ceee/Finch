@@ -12,7 +12,7 @@ public static class ZeroIdentityExtensions
   {
     services.AddZeroIdentityCore<TUser>();
 
-    IdentityBuilder builder = new IdentityBuilder(typeof(TUser), typeof(TRole), services);
+    IdentityBuilder builder = new(typeof(TUser), typeof(TRole), services);
 
     builder.AddDefaultTokenProviders();
 
@@ -33,7 +33,7 @@ public static class ZeroIdentityExtensions
   {
     services.AddZeroIdentityCore<TUser>();
 
-    IdentityBuilder builder = new IdentityBuilder(typeof(TUser), services);
+    IdentityBuilder builder = new(typeof(TUser), services);
 
     builder.AddDefaultTokenProviders();
     builder.AddUserStore<RavenUserStore<TUser>>();

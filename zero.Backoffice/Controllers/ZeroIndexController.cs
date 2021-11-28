@@ -4,7 +4,7 @@ namespace zero.Backoffice.Controllers;
 
 [ZeroAuthorize(false)]
 [DisableBrowserCache]
-public abstract class ZeroIndexController : Controller
+public class ZeroIndexController : Controller
 {
   IZeroVue ZeroVue { get; set; }
   IZeroOptions Options { get; set; }

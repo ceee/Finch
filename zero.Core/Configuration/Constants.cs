@@ -13,7 +13,7 @@ public static class Constants
   {
     public const string SystemUser = "system";
     public const string DefaultScheme = "zeroScheme";
-    public const string BackofficeDisplayName = "Zero Bacckoffice";
+    public const string BackofficeDisplayName = "Zero Backoffice";
     public const string BackofficeScheme = "zeroBackoffice";
     public const string BackofficeCookieName = "zero.be.session";
     public const string DefaultCookieName = "zero.session";
@@ -34,10 +34,23 @@ public static class Constants
     }
   }
 
+
+  public static class Permissions
+  {
+    public static class Groups
+    {
+      public const string Sections = "zero.permissions.groups.sections";
+      public const string Spaces = "zero.permissions.groups.spaces";
+      public const string Settings = "zero.permissions.groups.settings";
+      public const string Pages = "zero.permissions.groups.pages";
+      public const string Modules = "zero.permissions.groups.modules";
+    }
+  }
+
+
   public static class Database
   {
     public const string ReservationPrefix = "zero.";
-    public const string CoreIdPrefix = "core.";
     public const string Expires = Raven.Client.Constants.Documents.Metadata.Expires;
   }
 

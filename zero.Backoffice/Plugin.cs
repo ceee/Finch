@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using System.IO;
+using zero.Backoffice.Modules;
 
 namespace zero.Backoffice;
 
@@ -34,11 +36,13 @@ public class ZeroBackofficePlugin : ZeroPlugin
     //});
 
     services.AddZeroBackofficeUIComposition();
+    services.AddZeroBackofficeModules(configuration);
 
     //services.AddTransient<ISectionsApi, SectionsApi>();
     //services.AddTransient<ISettingsApi, SettingsApi>();
 
     //services.AddScoped<IBackofficeSearchService, BackofficeSearchService>();
+
 
     PostConfigureServices?.Invoke(services, configuration);
   }

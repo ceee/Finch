@@ -28,6 +28,8 @@ public class ZeroBuilder
     StartupOptions.AssemblyDiscoveryRules.Add(new ZeroAssemblyDiscoveryRule());
     setupAction?.Invoke(StartupOptions);
 
+    services.AddControllers();
+
 
     // adds and discovers additional and built-in assemblies
     new AssemblyDiscovery(Mvc).Execute(StartupOptions.AssemblyDiscoveryRules);

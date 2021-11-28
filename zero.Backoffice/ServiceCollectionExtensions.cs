@@ -6,7 +6,7 @@ public static class ServiceCollectionExtensions
 {
   public static ZeroBuilder AddBackoffice<T>(this ZeroBuilder builder) where T : ZeroBackofficePlugin, IZeroPlugin, new()
   {
-    return builder.AddBackoffice<T>();
+    return builder.AddBackoffice<T>(_ => { });
   }
 
   public static ZeroBuilder AddBackoffice(this ZeroBuilder builder)
@@ -26,10 +26,5 @@ public static class ServiceCollectionExtensions
 
       return plugin;
     });
-  }
-
-  public static ZeroBuilder AddStories(this ZeroBuilder builder, Action<BackofficeOptions> options)
-  {
-    return builder.AddBackoffice<ZeroBackofficePlugin>(options);
   }
 }

@@ -2,22 +2,32 @@
 
 public class SectionPermissions : PermissionProvider
 {
-  public SectionPermissions() : base("@permissions.collections.sections") { }
-
-  public const string Dashboard = "zero.sections.dashboard";
-  public const string Pages = "zero.sections.pages";
-  public const string Spaces = "zero.sections.spaces";
-  public const string Media = "zero.sections.media";
-  public const string Settings = "zero.sections.settings";
+  protected IEnumerable<IBackofficeSection> Sections { get; private set; }
 
 
-  /// <inheritdoc />
-  public override IEnumerable<Permission> GetPermissions() => new Permission[] 
-  { 
-    new(Dashboard, "@sections.item.dashboard"),
-    new(Pages, "@sections.item.pages"),
-    new(Spaces, "@sections.item.spaces"),
-    new(Media, "@sections.item.media"),
-    new(Settings, "@sections.item.settings")
-  };
+  public SectionPermissions(IEnumerable<IBackofficeSection> sections)
+  {
+    Sections = sections;
+  }
+
+
+  public override Task Configure(IPermissionContext context)
+  {
+    PermissionGroup group = new("zero.sections", "@permissions.collections.sections");
+
+    foreach (IBackofficeSection section in Sections)
+    {
+      Permission permission = new("zero.sections." + section.Alias, section.Name);
+
+      foreach (IChildBackofficeSection child in section.Children)
+      {
+        Permission childPermission = new(permission.Key + "." + child.Alias, child.Name);
+        permission.Children.Add(childPermission);
+      }
+
+      group.Add(permission);
+    }
+
+    return Task.CompletedTask;
+  }
 }

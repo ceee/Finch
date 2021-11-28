@@ -14,11 +14,23 @@ public struct Permission
   /// </summary>
   public string Label { get; set; }
 
+  /// <summary>
+  /// When a permission is disabled it can not be updated anymore
+  /// </summary>
+  public bool IsDisabled { get; set; }
+
+  /// <summary>
+  /// Child permissions
+  /// </summary>
+  public HashSet<Permission> Children { get; set; }
+
 
   public Permission(string key, string label)
   {
     Key = key;
     Label = label;
+    IsDisabled = false;
+    Children = new();
   }
 
   ///// <summary>

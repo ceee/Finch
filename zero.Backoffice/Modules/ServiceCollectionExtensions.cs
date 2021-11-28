@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using zero.Backoffice.Modules.Countries;
 using zero.Backoffice.Modules.Pages;
@@ -20,6 +21,14 @@ public static class ServiceCollectionExtensions
     {
       opts.Indexes.Add<zero_Backoffice_Countries_Listing>();
       opts.Indexes.Add<zero_Backoffice_Search>();
+    });
+
+    services.Configure<BackofficeOptions>(opts =>
+    {
+      opts.Mapper.Configure(maps =>
+      {
+        maps.AddProfile<CountryMapperProfile>();
+      });
     });
 
     return services;

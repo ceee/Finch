@@ -22,8 +22,8 @@ internal static class ServiceCollectionExtensions
     services.AddScoped<IUserService, UserService>();
     services.AddScoped<IUserRolesService, UserRolesService>();
 
-    services.AddAuthentication(Constants.Auth.BackofficeScheme);
-    //.AddZeroBackofficeCookie<BackofficeUser, BackofficeUserRole>(); // TODO
+    services.AddAuthentication(Constants.Auth.BackofficeScheme)
+      .AddZeroBackofficeCookie<ZeroUser, ZeroUserRole>();
 
     services.AddAuthorization();
     return services;

@@ -63,7 +63,7 @@ public class CountriesController : ZeroBackofficeApiController
   }
 
 
-  [HttpGet]
+  [HttpGet("")]
   [ZeroAuthorize(CountryPermissions.Read)]
   public virtual async Task<ActionResult<Paged>> Get(ListQuery<Country> query)
   {
@@ -73,7 +73,7 @@ public class CountriesController : ZeroBackofficeApiController
   }
 
 
-  [HttpPost]
+  [HttpPost("")]
   [ZeroAuthorize(CountryPermissions.Create)]
   public virtual async Task<ActionResult<Result>> Create(CountrySave saveModel)
   {
