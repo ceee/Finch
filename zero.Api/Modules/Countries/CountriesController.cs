@@ -21,6 +21,8 @@ public class CountriesController : ZeroApiController
   [ZeroAuthorize(CountryPermissions.Create)]
   public virtual async Task<ActionResult<DisplayModel>> Empty()
   {
+    throw new NotImplementedException("TEST ZERO");
+
     Country model = await Store.Empty();
 
     if (model == null)

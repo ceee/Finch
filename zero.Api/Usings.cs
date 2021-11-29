@@ -4,6 +4,7 @@ global using System.Collections.Generic;
 global using System.Linq;
 global using System.Threading;
 global using System.Threading.Tasks;
+global using System.Text.Json.Serialization;
 
 global using zero.Applications;
 global using zero.Architecture;
