@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>zero.Backoffice</PackageId>
+    <PackageId>zero.Api</PackageId>
     <Version>0.1.0</Version>
     <LangVersion>preview</LangVersion>
     <TargetFramework>net6.0</TargetFramework>
@@ -20,6 +20,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\zero.Core\zero.Core.csproj" />
-	<ProjectReference Include="..\zero.Api\zero.Api.csproj" />
   </ItemGroup>
 </Project>

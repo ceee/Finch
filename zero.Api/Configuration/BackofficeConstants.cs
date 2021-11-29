@@ -1,4 +1,4 @@
-﻿namespace zero.Backoffice.Configuration;
+﻿namespace zero.Api.Configuration;
 
 public static class BackofficeConstants
 {

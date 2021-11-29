@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using System.Linq.Expressions;
-using zero.Backoffice.Modules.Search;
-
-namespace zero.Backoffice.Configuration;
+﻿namespace zero.Backoffice.Configuration;
 
 public class BackofficeOptions
 {
@@ -22,11 +18,6 @@ public class BackofficeOptions
   public ExternalServicesOptions ExternalServices { get; set; } = new();
 
   /// <summary>
-  /// Configure search maps
-  /// </summary>
-  public SearchOptions Search { get; set; } = new();
-
-  /// <summary>
   /// Options for configuring the vite development server
   /// </summary>
   public ZeroDevOptions DevServer { get; set; } = new();
@@ -40,9 +31,4 @@ public class BackofficeOptions
   /// Language ISO codes which are supported by the zero backoffice
   /// </summary>
   public string[] SupportedLanguages { get; internal set; }
-
-  /// <summary>
-  /// Configuration for AutoMapper
-  /// </summary>
-  public BackofficeMaps Mapper { get; private set; } = new();
 }

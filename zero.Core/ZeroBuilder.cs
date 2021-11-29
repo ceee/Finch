@@ -50,6 +50,7 @@ public class ZeroBuilder
     services.AddZeroRendering();
     services.AddZeroRouting(Configuration);
     services.AddZeroStores();
+    services.AddZeroMapper();
 
     //if (Environment.GetEnvironmentVariable("DOTNET_WATCH") == "1")
     //{

@@ -20,12 +20,9 @@ global using zero.Pages;
 global using zero.Persistence;
 global using zero.Routing;
 global using zero.Utils;
+global using zero.Mapper;
 
 global using zero.Backoffice.Configuration;
 global using zero.Backoffice.Controllers;
-global using zero.Backoffice.Models;
-global using zero.Backoffice.Modules;
 global using zero.Backoffice.UIComposition;
 global using zero.Backoffice.DevServer;
-global using zero.Backoffice.Mapper;
-global using zero.Backoffice.Abstractions;

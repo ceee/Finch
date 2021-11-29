@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using zero.Api.Controllers;
 
-namespace zero.Backoffice;
+namespace zero.Api;
 
 internal class ZeroBackofficeMvcOptions : IConfigureOptions<MvcOptions>
 {
