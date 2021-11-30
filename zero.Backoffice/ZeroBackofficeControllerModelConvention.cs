@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace zero.Api.Controllers;
+namespace zero.Backoffice;
 
 public class ZeroBackofficeControllerModelConvention : IApplicationModelConvention
 {
   readonly AttributeRouteModel RouteModel;
 
-  readonly Type BaseClass = typeof(ZeroApiController);
+  readonly Type BaseClass = typeof(ZeroBackofficeController);
 
 
   public ZeroBackofficeControllerModelConvention(string backofficePath)

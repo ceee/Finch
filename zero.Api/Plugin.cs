@@ -22,8 +22,7 @@ public class ZeroApiPlugin : ZeroPlugin
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddOptions<ApiOptions>().Bind(configuration.GetSection("Zero:Api")).Configure<IWebHostEnvironment>(ConfigureOptions);
-    services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, ZeroBackofficeMvcOptions>());
-
+    services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, ZeroApiMvcOptions>());
     //Mvc.AddNewtonsoftJson(x =>
     //{
     //  // TODO this shall only be configurated for backoffice controllers
@@ -33,11 +32,6 @@ public class ZeroApiPlugin : ZeroPlugin
     services.AddScoped<IZeroMapper, ZeroMapper>();
 
     services.AddZeroBackofficeModules(configuration);
-
-    services.AddControllers(opts =>
-    {
-      opts.Conventions.Add(new RouteTokenTransformerConvention(new ApiParameterTransformer()));
-    });
 
     //services.AddTransient<ISectionsApi, SectionsApi>();
     //services.AddTransient<ISettingsApi, SettingsApi>();
