@@ -4,17 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace zero.FileStorage;
 
-internal static class ServiceCollectionExtensions
+public class FileStorageModule : ZeroModule
 {
-  public static IServiceCollection AddZeroFileStorage(this IServiceCollection services, IConfiguration config)
+  public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddScoped<IPaths>(factory => new Paths(factory.GetService<IWebHostEnvironment>()));
 
-    services.AddOptions<FileSystemOptions>().Bind(config.GetSection("Zero:FileSystem")).Configure(opts =>
+    services.AddOptions<FileSystemOptions>().Bind(configuration.GetSection("Zero:FileSystem")).Configure(opts =>
     {
       opts.ZeroAssetsPath = "zero";
     });
-
-    return services;
   }
 }

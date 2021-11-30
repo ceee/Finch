@@ -5,9 +5,9 @@ using Raven.Client.Http;
 
 namespace zero.Persistence;
 
-internal static class ServiceCollectionExtensions
+public class PersistenceModule : ZeroModule
 {
-  public static IServiceCollection AddZeroPersistence(this IServiceCollection services, IConfiguration config)
+  public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddSingleton<IZeroDocumentConventionsBuilder, ZeroDocumentConventionsBuilder>();
     services.AddSingleton<IZeroDocumentStore, ZeroDocumentStore>(CreateRavenStore);
@@ -15,16 +15,13 @@ internal static class ServiceCollectionExtensions
     services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();
     services.AddScoped<IRevisionService, RevisionService>();
 
-    services.AddOptions<RavenOptions>().Bind(config.GetSection("Zero:Raven"));
-
-    return services;
+    services.AddOptions<RavenOptions>().Bind(configuration.GetSection("Zero:Raven"));
   }
-
 
   /// <summary>
   /// Creates and configures the raven store
   /// </summary>
-  static ZeroDocumentStore CreateRavenStore(IServiceProvider services)
+  protected ZeroDocumentStore CreateRavenStore(IServiceProvider services)
   {
     IZeroOptions options = services.GetService<IZeroOptions>();
     IZeroDocumentConventionsBuilder conventionsBuilder = services.GetService<IZeroDocumentConventionsBuilder>();

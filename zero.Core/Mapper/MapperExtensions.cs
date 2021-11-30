@@ -24,9 +24,14 @@ public static class MapperExtensions
     return mapper.Map<TDestination>(source, typeof(TSource), default);
   }
 
-  public static Paged<TDestination> Map<TSource, TDestination>(this IZeroMapper mapper, Paged<TSource> source)
+  public static Paged<TDestination> Map<TSource, TDestination>(this IZeroMapper mapper, Paged<TSource> source, Action<TSource, TDestination> modify = null)
   {
-    return source.MapTo(srcItem => mapper.Map<TSource, TDestination>(srcItem));
+    return source.MapTo(srcItem =>
+    {
+      TDestination destination = mapper.Map<TSource, TDestination>(srcItem);
+      modify?.Invoke(srcItem, destination);
+      return destination;
+    });
   }
 
   public static Result<TDestination> Map<TSource, TDestination>(this IZeroMapper mapper, Result<TSource> source)

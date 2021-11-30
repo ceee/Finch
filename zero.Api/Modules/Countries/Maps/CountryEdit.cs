@@ -1,6 +1,6 @@
 ﻿namespace zero.Api.Modules.Countries;
 
-public class CountryDisplay : DisplayModel<Country>
+public class CountryEdit : DisplayModel<Country>
 {
   public bool IsPreferred { get; set; }
 

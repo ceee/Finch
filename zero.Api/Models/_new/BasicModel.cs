@@ -26,4 +26,10 @@ public abstract class BasicModel<T> : ZeroIdEntity where T : ZeroEntity
   /// Date of creation
   /// </summary>
   public DateTimeOffset CreatedDate { get; set; }
+
+  /// <summary>
+  /// API link for this entity
+  /// </summary>
+  [JsonPropertyName("@link")]
+  public string Link { get; set; }
 }

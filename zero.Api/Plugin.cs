@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -32,6 +33,11 @@ public class ZeroApiPlugin : ZeroPlugin
     services.AddScoped<IZeroMapper, ZeroMapper>();
 
     services.AddZeroBackofficeModules(configuration);
+
+    services.AddControllers(opts =>
+    {
+      opts.Conventions.Add(new RouteTokenTransformerConvention(new ApiParameterTransformer()));
+    });
 
     //services.AddTransient<ISectionsApi, SectionsApi>();
     //services.AddTransient<ISettingsApi, SettingsApi>();

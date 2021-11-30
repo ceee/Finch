@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
-namespace zero.Identity;
+namespace zero.Applications;
 
-internal static class ServiceCollectionExtensions
+public class IdentityModule : ZeroModule
 {
-  public static IServiceCollection AddZeroIdentity(this IServiceCollection services)
+  public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<CookieAuthenticationOptions>, PostConfigureCookieAuthenticationOptions>());
 
@@ -26,6 +27,5 @@ internal static class ServiceCollectionExtensions
       .AddZeroBackofficeCookie<ZeroUser, ZeroUserRole>();
 
     services.AddAuthorization();
-    return services;
   }
 }

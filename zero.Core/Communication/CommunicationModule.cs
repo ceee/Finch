@@ -3,13 +3,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace zero.Communication;
 
-internal static class ServiceCollectionExtensions
+public class CommunicationModule : ZeroModule
 {
-  public static IServiceCollection AddZeroCommunication(this IServiceCollection services)
+  public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddScoped<IInterceptors, Interceptors>();
     services.AddSingleton<IMessageAggregator, MessageAggregator>();
     services.AddTransient<IHandlerHolder, HandlerHolder>();
-    return services;
   }
 }

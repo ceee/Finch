@@ -7,9 +7,9 @@ using System.IO;
 
 namespace zero.Media;
 
-internal static class ServiceCollectionExtensions
+public class MediaModule : ZeroModule
 {
-  public static IServiceCollection AddZeroMedia(this IServiceCollection services, IConfiguration config)
+  public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddSingleton<IMediaFileSystem, MediaFileSystem>(svc =>
     {
@@ -22,7 +22,7 @@ internal static class ServiceCollectionExtensions
     services.AddScoped<IMediaCreator, MediaCreator>();
     services.AddScoped<IMediaManagement, MediaManagement>();
 
-    services.AddOptions<MediaOptions>().Bind(config.GetSection("Zero:Media")).Configure(opts =>
+    services.AddOptions<MediaOptions>().Bind(configuration.GetSection("Zero:Media")).Configure(opts =>
     {
       opts.FolderPath = "uploads";
       opts.AllowedOtherFileExtensions = new() { ".pdf" };
@@ -41,6 +41,5 @@ internal static class ServiceCollectionExtensions
       raven.Indexes.Add<Media_ByParent>();
       raven.Indexes.Add<Media_ByHierarchy>();
     });
-    return services;
   }
 }

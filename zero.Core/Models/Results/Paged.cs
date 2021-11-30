@@ -13,10 +13,15 @@ public class Paged<T> : Paged
   {
     return new Paged<TTarget>(Items.Select(x => convertItem(x)).Where(x => x != null).ToList(), TotalItems, Page, PageSize);
   }
+
+  public override IEnumerable GetItems()
+  {
+    return Items;
+  }
 }
 
 
-public class Paged
+public abstract class Paged
 {
   public long Page { get; protected set; }
 
@@ -55,4 +60,6 @@ public class Paged
     }
     return 0;
   }
+
+  public abstract IEnumerable GetItems();
 }

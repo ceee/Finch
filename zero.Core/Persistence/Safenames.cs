@@ -58,7 +58,7 @@ public class Safenames
     }
 
     char previous = default;
-    StringBuilder output = new StringBuilder();
+    StringBuilder output = new();
 
     for (int i = 0; i < value.Length; i++)
     {

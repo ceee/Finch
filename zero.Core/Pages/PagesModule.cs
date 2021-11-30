@@ -3,16 +3,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace zero.Pages;
 
-internal static class ServiceCollectionExtensions
+public class PagesModule : ZeroModule
 {
-  public static IServiceCollection AddZeroPages(this IServiceCollection services, IConfiguration config)
+  public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddScoped<IPagesStore, PagesStore>();
     services.AddScoped<IPageTypeService, PageTypeService>();
     services.AddScoped<IPageModuleTypeService, PageModuleTypeService>();
 
-    services.AddOptions<PageOptions>().Bind(config.GetSection("Zero:Pages"));
-    services.AddOptions<PageModuleOptions>().Bind(config.GetSection("Zero:PageModules"));
+    services.AddOptions<PageOptions>().Bind(configuration.GetSection("Zero:Pages"));
+    services.AddOptions<PageModuleOptions>().Bind(configuration.GetSection("Zero:PageModules"));
 
     services.Configure<ZeroOptions>(opts =>
     {
@@ -24,6 +24,5 @@ internal static class ServiceCollectionExtensions
 
       opts.For<PageOptions>().Add<PageFolder>(Constants.Pages.FolderAlias, "@page.folder.name", "@page.folder.description", "fth-folder");
     });
-    return services;
   }
 }

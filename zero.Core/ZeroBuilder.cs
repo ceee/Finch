@@ -30,27 +30,27 @@ public class ZeroBuilder
 
     services.AddControllers();
 
-
     // adds and discovers additional and built-in assemblies
     new AssemblyDiscovery(Mvc).Execute(StartupOptions.AssemblyDiscoveryRules);
 
+    AddModule<ConfigurationModule>();
+    AddModule<ContextModule>();
+    AddModule<ArchitectureModule>();
+    AddModule<CommunicationModule>();
+    AddModule<IdentityModule>();
+    AddModule<ApplicationModule>();
+    AddModule<PersistenceModule>();
+    AddModule<StoresModule>();
+    AddModule<FileStorageModule>();
+    AddModule<MapperModule>();
+    AddModule<LocalizationModule>();
+    AddModule<RenderingModule>();
 
-    services.AddZeroApplications(Configuration);
-    services.AddZeroBlueprints(Configuration);
-    services.AddZeroCommunication();
-    services.AddZeroConfiguration(Configuration);
-    services.AddZeroContext();
-    services.AddZeroFileStorage(Configuration);
-    services.AddZeroIdentity();
-    services.AddZeroLocalization();
-    services.AddZeroMails();
-    services.AddZeroPages(Configuration);
-    services.AddZeroMedia(Configuration);
-    services.AddZeroPersistence(Configuration);
-    services.AddZeroRendering();
-    services.AddZeroRouting(Configuration);
-    services.AddZeroStores();
-    services.AddZeroMapper();
+    AddModule<RoutingModule>();
+    AddModule<MailsModule>();
+    AddModule<MediaModule>();
+    AddModule<PagesModule>();
+    AddModule<SpacesModule>();
 
     //if (Environment.GetEnvironmentVariable("DOTNET_WATCH") == "1")
     //{
@@ -68,6 +68,13 @@ public class ZeroBuilder
   public ZeroBuilder WithOptions(Action<ZeroOptions> configureOptions)
   {
     Services.Configure(configureOptions);
+    return this;
+  }
+
+
+  public ZeroBuilder AddModule<T>() where T : class, IZeroModule, new()
+  {
+    ZeroModuleCollection.AddModule<T>(Services, Configuration);
     return this;
   }
 

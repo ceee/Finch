@@ -3,16 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace zero.Architecture;
 
-internal static class ServiceCollectionExtensions
+public class ArchitectureModule : ZeroModule
 {
-  public static IServiceCollection AddZeroBlueprints(this IServiceCollection services, IConfiguration config)
+  public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddScoped<IBlueprintService, BlueprintService>();
     services.AddScoped<IInterceptor, BlueprintInterceptor>();
     services.AddScoped<IInterceptor, BlueprintChildInterceptor>();
-
-    services.AddOptions<BlueprintOptions>().Bind(config.GetSection("Zero:Blueprints"));
-
-    return services;
+    services.AddOptions<BlueprintOptions>().Bind(configuration.GetSection("Zero:Blueprints"));
   }
 }

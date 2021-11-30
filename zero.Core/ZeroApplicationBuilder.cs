@@ -13,6 +13,7 @@ public class ZeroApplicationBuilder : IZeroApplicationBuilder
   {
     App = app;
     App.UseStaticFiles();
+    App.UseExceptionHandler("/zero/api/error");
     App.UseMiddleware<ZeroContextMiddleware>();
     App.UseRouting();
     App.UseAuthentication();

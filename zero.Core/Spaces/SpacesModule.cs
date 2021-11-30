@@ -3,16 +3,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace zero.Spaces;
 
-internal static class ServiceCollectionExtensions
+public class SpacesModule : ZeroModule
 {
-  public static IServiceCollection AddZeroSpaces(this IServiceCollection services, IConfiguration config)
+  public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddScoped<ISpaceStore, SpaceStore>();
     services.AddScoped<ISpaceTypeService, SpaceTypeService>();
     services.AddScoped<ISpaceService, SpaceService>();
 
-    services.AddOptions<SpaceOptions>().Bind(config.GetSection("Zero:Spaces"));
-
-    return services;
+    services.AddOptions<SpaceOptions>().Bind(configuration.GetSection("Zero:Spaces"));
   }
 }

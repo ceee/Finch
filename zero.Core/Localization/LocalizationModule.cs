@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace zero.Localization;
 
-internal static class ServiceCollectionExtensions
+public class LocalizationModule : ZeroModule
 {
-  public static IServiceCollection AddZeroLocalization(this IServiceCollection services)
+  public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddScoped<ICultureResolver, CultureResolver>();
     services.AddScoped<ICultureService, CultureService>();
@@ -12,6 +13,5 @@ internal static class ServiceCollectionExtensions
     services.AddScoped<ILanguageStore, LanguageStore>();
     services.AddScoped<ITranslationStore, TranslationStore>();
     services.AddScoped<ILocalizer, Localizer>();
-    return services;
   }
 }

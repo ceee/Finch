@@ -5,7 +5,7 @@ public class CountryMapperProfile : ZeroMapperProfile
   public override void Configure(IZeroMapper mapper)
   {
     mapper.Define<Country, CountryBasic>((source, ctx) => new(), Map);
-    mapper.Define<Country, CountryDisplay>((source, ctx) => new(), Map);
+    mapper.Define<Country, CountryEdit>((source, ctx) => new(), Map);
     mapper.Define<Country, PickerModel>((source, ctx) => new(), Map);
     mapper.Define<Country, PickerPreviewModel>((source, ctx) => new(), Map);
     mapper.Define<CountrySave, Country>((source, ctx) => new(), Map);
@@ -19,7 +19,7 @@ public class CountryMapperProfile : ZeroMapperProfile
     target.IsPreferred = source.IsPreferred;
   }
 
-  void Map(Country source, CountryDisplay target, IZeroMapperContext ctx)
+  void Map(Country source, CountryEdit target, IZeroMapperContext ctx)
   {
     this.MapDisplayData(source, target);
     target.Code = source.Code;

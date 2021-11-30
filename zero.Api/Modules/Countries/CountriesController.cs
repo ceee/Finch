@@ -7,19 +7,15 @@ public class CountriesController : ZeroApiController
 {
   protected ICountryStore Store { get; set; }
 
-  protected IPickerProvider<Country> Picker { get; set; }
-
-
-  public CountriesController(ICountryStore store, IPickerProvider<Country> picker)
+  public CountriesController(ICountryStore store)
   {
     Store = store;
-    Picker = picker;
   }
 
 
   [HttpGet("empty")]
   [ZeroAuthorize(CountryPermissions.Create)]
-  public virtual async Task<ActionResult<DisplayModel>> Empty()
+  public virtual async Task<ActionResult<CountryEdit>> Empty()
   {
     throw new NotImplementedException("TEST ZERO");
 
@@ -30,32 +26,13 @@ public class CountriesController : ZeroApiController
       return NotFound();
     }
 
-    return Mapper.Map<Country, CountryDisplay>(model);
-  }
-
-
-  [HttpGet("pick")]
-  [ZeroAuthorize(CountryPermissions.Read)]
-  public virtual async Task<ActionResult<Paged>> Pick([FromQuery] ListQuery<Country> query)
-  {
-    query.OrderQuery = q => q.OrderByDescending(x => x.IsPreferred).ThenBy(x => x.Name);
-    Paged<Country> result = await Store.Load<zero_Backoffice_Countries_Listing>(query.Page, query.PageSize, q => q.Filter(query));
-    return Mapper.Map<Country, PickerModel>(result);
-  }
-
-
-  [HttpGet("pickpreview")]
-  [ZeroAuthorize(CountryPermissions.Read)]
-  public virtual async Task<ActionResult<IEnumerable>> Pick([FromQuery] string[] ids)
-  {
-    Dictionary<string, Country> model = await Store.Load(ids);
-    return Mapper.Map<Country, PickerPreviewModel>(model);
+    return Mapper.Map<Country, CountryEdit>(model);
   }
 
 
   [HttpGet("{id}")]
   [ZeroAuthorize(CountryPermissions.Read)]
-  public virtual async Task<ActionResult<DisplayModel>> Get(string id, string changeVector = null)
+  public virtual async Task<ActionResult<CountryEdit>> Get(string id, string changeVector = null)
   {
     Country model = await Store.Load(id, changeVector);
 
@@ -64,7 +41,7 @@ public class CountriesController : ZeroApiController
       return NotFound();
     }
 
-    return Mapper.Map<Country, CountryDisplay>(model);
+    return Mapper.Map<Country, CountryEdit>(model);
   }
 
 
@@ -74,7 +51,11 @@ public class CountriesController : ZeroApiController
   {
     query.OrderQuery = q => q.OrderByDescending(x => x.IsPreferred).ThenBy(x => x.Name);
     Paged<Country> result = await Store.Load<zero_Backoffice_Countries_Listing>(query.Page, query.PageSize, q => q.Filter(query));
-    return Mapper.Map<Country, CountryBasic>(result);
+
+    return Mapper.Map<Country, CountryBasic>(result, (src, dest) =>
+    {
+      dest.Link = Url.Action(nameof(CountriesController.Get), new { id = dest.Id });
+    });
   }
 
 
@@ -87,7 +68,7 @@ public class CountriesController : ZeroApiController
 
     if (result.IsSuccess)
     {
-      Result<CountryDisplay> mappedResult = Mapper.Map<Country, CountryDisplay>(result);
+      Result<CountryEdit> mappedResult = Mapper.Map<Country, CountryEdit>(result);
       return CreatedAtAction(nameof(CountriesController.Get), new { id = model.Id }, mappedResult);
     }
 
@@ -96,7 +77,7 @@ public class CountriesController : ZeroApiController
       return result.WithoutModel();
     }
 
-    return Mapper.Map<Country, CountryDisplay>(result);
+    return Mapper.Map<Country, CountryEdit>(result);
   }
 
 
@@ -126,7 +107,7 @@ public class CountriesController : ZeroApiController
     }
 
     // TODO add Preference-Applied header, see https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md#76-standard-response-headers
-    return Mapper.Map<Country, CountryDisplay>(result);
+    return Mapper.Map<Country, CountryEdit>(result);
   }
 
 
