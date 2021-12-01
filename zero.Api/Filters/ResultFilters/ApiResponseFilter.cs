@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace zero.Api.Filters;
@@ -19,6 +20,7 @@ public class ApiResponseFilterAttribute : ResultFilterAttribute
           Model = result.Value,
           Success = true,
           Status = result.StatusCode.Value,
+          ChangeToken = context.HttpContext.Items[ApiConstants.ChangeVector] as string,
           Metadata = new ModelApiResponseMetadata()
           {
             RequestDate = started,

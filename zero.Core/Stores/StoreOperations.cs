@@ -169,6 +169,11 @@ public interface IStoreOperations
   IAsyncEnumerable<T> Stream<T>(Func<IRavenQueryable<T>, IQueryable<T>> expression) where T : ZeroIdEntity, new();
 
   /// <summary>
+  /// Get the change vector for a model
+  /// </summary>
+  string GetChangeVector<T>(T model) where T : ZeroIdEntity, new();
+
+  /// <summary>
   /// Creates an entity with an optional validator
   /// </summary>
   Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();

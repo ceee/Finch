@@ -43,6 +43,8 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
       return NotFound();
     }
 
+    HttpContext.Items[ApiConstants.ChangeVector] = Store.GetChangeVector(model);
+
     return Mapper.Map<TModel, T>(model);
   }
 
@@ -91,18 +93,23 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
-  protected async Task<ActionResult<Result>> UpdateModel<T, TEdit>(string id, T updateModel) where T : SaveModel<TModel> where TEdit : DisplayModel<TModel>
+  protected async Task<ActionResult<Result>> UpdateModel<T, TEdit>(string id, T updateModel, string changeToken = null) where T : SaveModel<TModel> where TEdit : DisplayModel<TModel>
   {
     if (id != updateModel.Id)
     {
-      return BadRequest(BackofficeConstants.HttpErrors.NoIdMatchOnUpdate);
+      return BadRequest(ApiConstants.HttpErrors.NoIdMatchOnUpdate);
     }
 
     TModel model = await Store.Load(id);
 
     if (model == null)
     {
-      return BadRequest(BackofficeConstants.HttpErrors.IdNotFound);
+      return BadRequest(ApiConstants.HttpErrors.IdNotFound);
+    }
+
+    if (!changeToken.IsNullOrEmpty() && Store.GetChangeVector(model) != changeToken)
+    {
+      return BadRequest(ApiConstants.HttpErrors.ChangeTokenMismatch);
     }
 
     Mapper.Map(updateModel, model);

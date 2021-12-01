@@ -54,6 +54,9 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, n
   public virtual IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IQueryable<T>> expression) => Operations.Stream<T>(expression);
 
   /// <inheritdoc />
+  public virtual string GetChangeVector(T model) => Operations.GetChangeVector(model);
+
+  /// <inheritdoc />
   public virtual Task<Result<T>> Create(T model) => Operations.Create(model, async m => await Validate(m));
 
   /// <inheritdoc />
@@ -132,6 +135,11 @@ public interface IEntityStore<T> where T : ZeroIdEntity, new()
   /// Stream the collection
   /// </summary>
   IAsyncEnumerable<T> Stream(Func<IRavenQueryable<T>, IQueryable<T>> expression);
+
+  /// <summary>
+  /// Get the change vector for a model (Proxy to IAsyncDocumentSession.GetChangeVectorFor<>)
+  /// </summary>
+  string GetChangeVector(T model);
 
   /// <summary>
   /// Validates an entity in this collection

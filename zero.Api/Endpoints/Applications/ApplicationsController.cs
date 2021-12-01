@@ -33,7 +33,7 @@ public class ApplicationsController : ZeroApiEntityStoreController<Application, 
 
   [HttpPut("{id}")]
   [ZeroAuthorize(ApplicationPermissions.Update)]
-  public virtual Task<ActionResult<Result>> Update(string id, ApplicationSave updateModel) => UpdateModel<ApplicationSave, ApplicationEdit>(id, updateModel);
+  public virtual Task<ActionResult<Result>> Update(string id, ApplicationSave updateModel, [FromQuery] string changeToken = null) => UpdateModel<ApplicationSave, ApplicationEdit>(id, updateModel, changeToken);
 
 
   [HttpDelete("{id}")]

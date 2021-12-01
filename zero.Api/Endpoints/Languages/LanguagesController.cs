@@ -32,7 +32,7 @@ public class LanguagesController : ZeroApiEntityStoreController<Language, ILangu
 
   [HttpPut("{id}")]
   [ZeroAuthorize(LanguagePermissions.Update)]
-  public virtual Task<ActionResult<Result>> Update(string id, LanguageSave updateModel) => UpdateModel<LanguageSave, LanguageEdit>(id, updateModel);
+  public virtual Task<ActionResult<Result>> Update(string id, LanguageSave updateModel, [FromQuery] string changeToken = null) => UpdateModel<LanguageSave, LanguageEdit>(id, updateModel, changeToken);
 
 
   [HttpDelete("{id}")]

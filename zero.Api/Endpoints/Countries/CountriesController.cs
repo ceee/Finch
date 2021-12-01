@@ -36,7 +36,7 @@ public class CountriesController : ZeroApiEntityStoreController<Country, ICountr
 
   [HttpPut("{id}")]
   [ZeroAuthorize(CountryPermissions.Update)]
-  public virtual Task<ActionResult<Result>> Update(string id, CountrySave updateModel) => UpdateModel<CountrySave, CountryEdit>(id, updateModel);
+  public virtual Task<ActionResult<Result>> Update(string id, CountrySave updateModel, [FromQuery] string changeToken = null) => UpdateModel<CountrySave, CountryEdit>(id, updateModel, changeToken);
 
 
   [HttpDelete("{id}")]

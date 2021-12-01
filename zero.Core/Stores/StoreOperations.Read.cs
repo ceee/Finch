@@ -102,4 +102,11 @@ public partial class StoreOperations : IStoreOperations
       yield return stream.Current.Document;
     }
   }
+
+
+  /// <inheritdoc />
+  public virtual string GetChangeVector<T>(T model) where T : ZeroIdEntity, new()
+  {
+    return Session.Advanced.GetChangeVectorFor(model);
+  }
 }
