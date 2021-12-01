@@ -26,6 +26,7 @@ global using zero.Utils;
 global using zero.Api.Configuration;
 global using zero.Api.Controllers;
 global using zero.Api.Models;
-global using zero.Api.Modules;
+global using zero.Api.Endpoints;
 global using zero.Api.Abstractions;
 global using zero.Api.Extensions;
+global using zero.Api.Filters;

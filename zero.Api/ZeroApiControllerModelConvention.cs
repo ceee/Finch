@@ -1,30 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using System.Reflection;
 using System.Text;
 
 namespace zero.Api.Controllers;
 
 public class ZeroApiControllerModelConvention : IControllerModelConvention
 {
-  readonly AttributeRouteModel RouteModel;
+  readonly AttributeRouteModel AppAwareRouteModel;
+
+  readonly AttributeRouteModel AppUnawareRouteModel;
 
   readonly Type BaseClass = typeof(ZeroApiController);
+
+  readonly bool RuntimeIsAppAware = false;
 
 
   public ZeroApiControllerModelConvention(string zeroPath, string apiPath = "api", bool isAppAware = false)
   {
-    StringBuilder path = new();
-    path.Append(zeroPath.EnsureEndsWith('/'));
-    path.Append(apiPath.TrimStart('/').EnsureEndsWith('/'));
-
-    if (isAppAware)
-    {
-      path.Append("{zero_app_slug}/");
-    }
-
-    path.Append("[controller]");
-
-    RouteModel = new AttributeRouteModel(new RouteAttribute(path.ToString()));
+    RuntimeIsAppAware = isAppAware;
+    AppAwareRouteModel = BuildRouteModel(zeroPath, apiPath, true);
+    AppUnawareRouteModel = BuildRouteModel(zeroPath, apiPath, false);
   }
 
 
@@ -37,7 +33,26 @@ public class ZeroApiControllerModelConvention : IControllerModelConvention
 
     if (controller.ControllerType.IsSubclassOf(BaseClass))
     {
-      controller.Selectors[0].AttributeRouteModel = RouteModel;
+      bool isAppAware = RuntimeIsAppAware && controller.ControllerType.GetCustomAttribute<ZeroSystemApiAttribute>() == null;
+
+      controller.Selectors[0].AttributeRouteModel = isAppAware ? AppAwareRouteModel : AppUnawareRouteModel;
     }
+  }
+
+
+  protected AttributeRouteModel BuildRouteModel(string zeroPath, string apiPath, bool appAware = false)
+  {
+    StringBuilder path = new();
+    path.Append(zeroPath.EnsureEndsWith('/'));
+    path.Append(apiPath.TrimStart('/').EnsureEndsWith('/'));
+
+    if (appAware)
+    {
+      path.Append("{zero_app_slug}/");
+    }
+
+    path.Append("[controller]");
+
+    return new AttributeRouteModel(new RouteAttribute(path.ToString()));
   }
 }

@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 
 namespace zero.Architecture;
 
-internal class ZeroModuleCollection
+public class ZeroModuleCollection
 {
   static ConcurrentDictionary<Type, IZeroModule> _modules = new();
 

@@ -39,6 +39,27 @@ public class ZeroMapper : IZeroMapper
 
 
   /// <inheritdoc />
+  public void Override<TSource, TDestination>(Func<TSource, IZeroMapperContext, TDestination> ctor, Action<TSource, TDestination, IZeroMapperContext, Action<TSource, TDestination, IZeroMapperContext>> map)
+  {
+    Type sourceType = typeof(TSource);
+    Type destinationType = typeof(TDestination);
+
+    var sourceMaps = MapDefinitions.GetValueOrDefault(sourceType);
+    var sourceCtors = ConstructorDefinitions.GetValueOrDefault(sourceType);
+
+    if (sourceMaps == null || sourceCtors == null || !sourceMaps.ContainsKey(destinationType))
+    {
+      return;
+    }
+
+    var baseMap = sourceMaps[destinationType];
+
+    sourceCtors[destinationType] = (source, ctx) => ctor((TSource)source, ctx);
+    sourceMaps[destinationType] = (source, destination, ctx) => map((TSource)source, (TDestination)destination, ctx, (source, destination, ctx) => baseMap(source, destination, ctx));
+  }
+
+
+  /// <inheritdoc />
   public TDestination Map<TDestination>(object source, Type sourceType, TDestination destination = default)
   {
     if (source == null)
@@ -158,6 +179,9 @@ public interface IZeroMapper
   /// Register a new mapping
   /// </summary>
   void Define<TSource, TDestination>(Func<TSource, IZeroMapperContext, TDestination> ctor, Action<TSource, TDestination, IZeroMapperContext> map);
+
+  /// <inheritdoc />
+  void Override<TSource, TDestination>(Func<TSource, IZeroMapperContext, TDestination> ctor, Action<TSource, TDestination, IZeroMapperContext, Action<TSource, TDestination, IZeroMapperContext>> map);
 
   /// <summary>
   /// Map a source type to the destination type

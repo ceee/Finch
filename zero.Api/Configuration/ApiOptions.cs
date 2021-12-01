@@ -1,4 +1,4 @@
-﻿using zero.Api.Modules.Search;
+﻿using zero.Api.Endpoints.Search;
 
 namespace zero.Api.Configuration;
 

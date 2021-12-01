@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace zero;
 
@@ -22,6 +25,13 @@ public class ZeroBuilder
     Services = services;
     Mvc = services.AddMvc();
     Configuration = configuration;
+
+    //Mvc.AddNewtonsoftJson(x =>
+    //{
+    //  x.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+    //  x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    //  x.SerializerSettings.TypeNameHandling = TypeNameHandling.Objects;
+    //});
 
     // create startup options
     StartupOptions = new ZeroStartupOptions(Mvc);

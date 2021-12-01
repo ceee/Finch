@@ -700,6 +700,10 @@
   },
 
   "search": {
+    "permissions": {
+      "search_group": "Search",
+      "search": "Use search"
+    },
     "collection": {
       "page": "Page",
       "mediaFolder": "Media folder"

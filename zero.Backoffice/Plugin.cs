@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
@@ -22,12 +23,6 @@ public class ZeroBackofficePlugin : ZeroPlugin
     services.AddOptions<BackofficeOptions>().Bind(configuration.GetSection("Zero:Backoffice")).Configure<IWebHostEnvironment>(ConfigureOptions);
     services.AddHostedService<ZeroDevService>();
     services.AddTransient<IZeroVue, ZeroVue>();
-
-    //Mvc.AddNewtonsoftJson(x =>
-    //{
-    //  // TODO this shall only be configurated for backoffice controllers
-    //  BackofficeJsonSerlializerSettings.Setup(x.SerializerSettings);
-    //});
 
     services.AddZeroBackofficeUIComposition();
 

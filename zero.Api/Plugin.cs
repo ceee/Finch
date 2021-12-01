@@ -5,6 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using zero.Api.Endpoints.Countries;
+using zero.Api.Endpoints.Languages;
+using zero.Api.Endpoints.Search;
 
 namespace zero.Api;
 
@@ -23,21 +26,13 @@ public class ZeroApiPlugin : ZeroPlugin
   {
     services.AddOptions<ApiOptions>().Bind(configuration.GetSection("Zero:Api")).Configure<IWebHostEnvironment>(ConfigureOptions);
     services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, ZeroApiMvcOptions>());
-    //Mvc.AddNewtonsoftJson(x =>
-    //{
-    //  // TODO this shall only be configurated for backoffice controllers
-    //  BackofficeJsonSerlializerSettings.Setup(x.SerializerSettings);
-    //});
 
     services.AddScoped<IZeroMapper, ZeroMapper>();
 
-    services.AddZeroBackofficeModules(configuration);
-
-    //services.AddTransient<ISectionsApi, SectionsApi>();
-    //services.AddTransient<ISettingsApi, SettingsApi>();
-
-    //services.AddScoped<IBackofficeSearchService, BackofficeSearchService>();
-
+    ZeroModuleCollection.AddModule<Endpoints.Applications.ApplicationModule>(services, configuration);
+    ZeroModuleCollection.AddModule<CountryModule>(services, configuration);
+    ZeroModuleCollection.AddModule<LanguageModule>(services, configuration);
+    ZeroModuleCollection.AddModule<SearchModule>(services, configuration);
 
     PostConfigureServices?.Invoke(services, configuration);
   }

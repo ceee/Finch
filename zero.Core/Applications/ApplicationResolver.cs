@@ -109,6 +109,11 @@ public class ApplicationResolver : IApplicationResolver
   /// <inheritdoc />
   public async Task<Application> ResolveFromRequest(HttpContext context)
   {
+    if (!Options.For<ApplicationOptions>().EnableMultiple)
+    {
+      return (await GetApplications()).FirstOrDefault();
+    }
+
     IApplicationResolverHandler handler = Handler.Get<IApplicationResolverHandler>();
     Application app = handler?.Resolve(context.Request, await GetApplications());
 
