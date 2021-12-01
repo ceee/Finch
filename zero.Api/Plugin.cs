@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using zero.Api.Endpoints.Countries;
-using zero.Api.Endpoints.Languages;
-using zero.Api.Endpoints.Search;
 
 namespace zero.Api;
 
@@ -30,9 +26,11 @@ public class ZeroApiPlugin : ZeroPlugin
     services.AddScoped<IZeroMapper, ZeroMapper>();
 
     ZeroModuleCollection.AddModule<Endpoints.Applications.ApplicationModule>(services, configuration);
-    ZeroModuleCollection.AddModule<CountryModule>(services, configuration);
-    ZeroModuleCollection.AddModule<LanguageModule>(services, configuration);
-    ZeroModuleCollection.AddModule<SearchModule>(services, configuration);
+    ZeroModuleCollection.AddModule<Endpoints.Countries.CountryModule>(services, configuration);
+    ZeroModuleCollection.AddModule<Endpoints.Languages.LanguageModule>(services, configuration);
+    ZeroModuleCollection.AddModule<Endpoints.Search.SearchModule>(services, configuration);
+    ZeroModuleCollection.AddModule<Endpoints.Translations.TranslationModule>(services, configuration);
+    ZeroModuleCollection.AddModule<Endpoints.Mails.MailModule>(services, configuration);
 
     PostConfigureServices?.Invoke(services, configuration);
   }

@@ -78,13 +78,15 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
     TModel model = Mapper.Map<T, TModel>(saveModel);
     Result<TModel> result = await Store.Create(model);
 
+    bool minimalResponse = Hints.ResponsePreference == ApiResponsePreference.Minimal;
+
     if (result.IsSuccess)
     {
-      Result<T> mappedResult = Mapper.Map<TModel, T>(result);
-      return Created(GetAction(model), mappedResult);
+      Result<TEdit> mappedResult = Mapper.Map<TModel, TEdit>(result);
+      return Created(GetAction(model), minimalResponse ? null : mappedResult);
     }
 
-    if (Hints.ResponsePreference == ApiResponsePreference.Minimal)
+    if (minimalResponse)
     {
       return result.WithoutModel();
     }

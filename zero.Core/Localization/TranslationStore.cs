@@ -16,7 +16,7 @@ public class TranslationStore : EntityStore<Translation>, ITranslationStore
 
   protected override void ValidationRules(ZeroValidator<Translation> validator)
   {
-    validator.RuleFor(x => x.Key).Length(2, 300).Unique(Context.Store);
+    validator.RuleFor(x => x.Key).NotEmpty().Length(2, 300).Unique(Context.Store);
     validator.RuleFor(x => x.Value).MaximumLength(10 * 1000);
   }
 }
