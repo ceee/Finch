@@ -1,6 +1,6 @@
 ﻿namespace zero.Routing;
 
-public abstract class ZeroRouteProvider<T> : ZeroRouteProvider, IRouteProvider<T> where T : IZeroRouteEntity
+public abstract class ZeroRouteProvider<T> : ZeroRouteProvider, IRouteProvider<T> where T : ISupportsRouting
 {
   public ZeroRouteProvider(string alias) : base(alias) { }
 
@@ -11,31 +11,31 @@ public abstract class ZeroRouteProvider<T> : ZeroRouteProvider, IRouteProvider<T
   public virtual Task<Route> Create(RoutingContext context, T model) => base.Create(context, model);
 
   /// <inheritdoc />
-  public sealed override Task<Route> Create(RoutingContext context, IZeroRouteEntity model) => Create(context, (T)model);
+  public sealed override Task<Route> Create(RoutingContext context, ISupportsRouting model) => Create(context, (T)model);
 
   /// <inheritdoc />
   public virtual string Key(T model) => model.Hash;
 
   /// <inheritdoc />
-  public sealed override string Key(IZeroRouteEntity model) => Key((T)model);
+  public sealed override string Key(ISupportsRouting model) => Key((T)model);
 
   /// <inheritdoc />
   public virtual Task<bool> IsRouteStale(RoutingContext context, T previous, T current) => Task.FromResult(true);
 
   /// <inheritdoc />
-  public sealed override Task<bool> IsRouteStale(RoutingContext context, IZeroRouteEntity previous, IZeroRouteEntity current) => IsRouteStale(context, (T)previous, (T)current);
+  public sealed override Task<bool> IsRouteStale(RoutingContext context, ISupportsRouting previous, ISupportsRouting current) => IsRouteStale(context, (T)previous, (T)current);
 
   /// <inheritdoc />
   public virtual string Id(T model) => base.Id(model);
 
   /// <inheritdoc />
-  public sealed override string Id(IZeroRouteEntity model) => base.Id(model);
+  public sealed override string Id(ISupportsRouting model) => base.Id(model);
 
   /// <inheritdoc />
   public virtual async Task<Route> Find(RoutingContext context, T model) => await context.Session.LoadAsync<Route>(Id(model));
 
   /// <inheritdoc />
-  public sealed override Task<Route> Find(RoutingContext context, IZeroRouteEntity model) => Find(context, (T)model);
+  public sealed override Task<Route> Find(RoutingContext context, ISupportsRouting model) => Find(context, (T)model);
 
   /// <inheritdoc />
   public virtual async Task<Dictionary<T, Route>> Find(RoutingContext context, params T[] models)
@@ -53,9 +53,9 @@ public abstract class ZeroRouteProvider<T> : ZeroRouteProvider, IRouteProvider<T
   }
 
   /// <inheritdoc />
-  public sealed override async Task<Dictionary<IZeroRouteEntity, Route>> Find(RoutingContext context, params IZeroRouteEntity[] models)
+  public sealed override async Task<Dictionary<ISupportsRouting, Route>> Find(RoutingContext context, params ISupportsRouting[] models)
   {
-    return (await Find(context, models.Select(x => (T)x).ToArray())).ToDictionary(x => (IZeroRouteEntity)x.Key, x => x.Value);
+    return (await Find(context, models.Select(x => (T)x).ToArray())).ToDictionary(x => (ISupportsRouting)x.Key, x => x.Value);
   }
 }
 
@@ -81,7 +81,7 @@ public abstract class ZeroRouteProvider : IRouteProvider
   public virtual bool CanHandle(Type type) => false;
 
   /// <inheritdoc />
-  public virtual Task<Route> Create(RoutingContext context, IZeroRouteEntity model) => Task.FromResult(new Route()
+  public virtual Task<Route> Create(RoutingContext context, ISupportsRouting model) => Task.FromResult(new Route()
   {
     Id = Id(model),
     ProviderAlias = Alias,
@@ -89,22 +89,22 @@ public abstract class ZeroRouteProvider : IRouteProvider
   });
 
   /// <inheritdoc />
-  public virtual string Key(IZeroRouteEntity model) => model.Hash;
+  public virtual string Key(ISupportsRouting model) => model.Hash;
 
   /// <inheritdoc />
   public virtual IAsyncEnumerable<Route> Seed(RoutingContext context) => AsyncEnumerable.Empty<Route>();
 
   /// <inheritdoc />
-  public virtual IAsyncEnumerable<Route> SeedOnUpdate<T>(RoutingContext context, T model) where T : IZeroRouteEntity => AsyncEnumerable.Empty<Route>();
+  public virtual IAsyncEnumerable<Route> SeedOnUpdate<T>(RoutingContext context, T model) where T : ISupportsRouting => AsyncEnumerable.Empty<Route>();
 
   /// <inheritdoc />
   public virtual Task<IRouteModel> Model(RoutingContext context, RouteResponse response) => Task.FromResult((IRouteModel)new RouteModel() { Route = response.Route });
 
   /// <inheritdoc />
-  public virtual Task<bool> IsRouteStale(RoutingContext context, IZeroRouteEntity previous, IZeroRouteEntity current) => Task.FromResult(true);
+  public virtual Task<bool> IsRouteStale(RoutingContext context, ISupportsRouting previous, ISupportsRouting current) => Task.FromResult(true);
 
   /// <inheritdoc />
-  public virtual string Id(IZeroRouteEntity model) => "routes." + Alias + "." + Key(model);
+  public virtual string Id(ISupportsRouting model) => "routes." + Alias + "." + Key(model);
 
   /// <inheritdoc />
   public virtual RouteEndpoint Map(RoutingContext context, IRouteModel route)
@@ -127,16 +127,16 @@ public abstract class ZeroRouteProvider : IRouteProvider
   }
 
   /// <inheritdoc />
-  public virtual async Task<Route> Find(RoutingContext context, IZeroRouteEntity model) => await context.Session.LoadAsync<Route>(Id(model));
+  public virtual async Task<Route> Find(RoutingContext context, ISupportsRouting model) => await context.Session.LoadAsync<Route>(Id(model));
 
   /// <inheritdoc />
-  public virtual async Task<Dictionary<IZeroRouteEntity, Route>> Find(RoutingContext context, params IZeroRouteEntity[] models)
+  public virtual async Task<Dictionary<ISupportsRouting, Route>> Find(RoutingContext context, params ISupportsRouting[] models)
   {
-    Dictionary<string, IZeroRouteEntity> idMap = models.ToDistinctDictionary(x => Id(x), x => x);
+    Dictionary<string, ISupportsRouting> idMap = models.ToDistinctDictionary(x => Id(x), x => x);
     Dictionary<string, Route> routes = await context.Session.LoadAsync<Route>(idMap.Select(x => x.Key));
-    Dictionary<IZeroRouteEntity, Route> result = new();
+    Dictionary<ISupportsRouting, Route> result = new();
 
-    foreach ((string id, IZeroRouteEntity model) in idMap)
+    foreach ((string id, ISupportsRouting model) in idMap)
     {
       result.Add(model, routes.GetValueOrDefault(id));
     }
@@ -146,7 +146,7 @@ public abstract class ZeroRouteProvider : IRouteProvider
 }
 
 
-public interface IRouteProvider<T> : IRouteProvider where T : IZeroRouteEntity
+public interface IRouteProvider<T> : IRouteProvider where T : ISupportsRouting
 {
   /// <summary>
   /// Generate unique route key for a model
@@ -196,17 +196,17 @@ public interface IRouteProvider
   /// <summary>
   /// Generate unique route key for a model
   /// </summary>
-  string Key(IZeroRouteEntity model);
+  string Key(ISupportsRouting model);
 
   /// <summary>
   /// Generate unique ID for a model
   /// </summary>
-  string Id(IZeroRouteEntity model);
+  string Id(ISupportsRouting model);
 
   /// <summary>
   /// Create route entity from a model
   /// </summary>
-  Task<Route> Create(RoutingContext context, IZeroRouteEntity model);
+  Task<Route> Create(RoutingContext context, ISupportsRouting model);
 
   /// <summary>
   /// Get all models which should be provided and handled by this instance
@@ -216,7 +216,7 @@ public interface IRouteProvider
   /// <summary>
   /// Get all models which should be updated when an entity changes
   /// </summary>
-  IAsyncEnumerable<Route> SeedOnUpdate<T>(RoutingContext context, T model) where T : IZeroRouteEntity;
+  IAsyncEnumerable<Route> SeedOnUpdate<T>(RoutingContext context, T model) where T : ISupportsRouting;
 
   /// <summary>
   /// Converts a route to a model which is passed to the endpoint
@@ -227,7 +227,7 @@ public interface IRouteProvider
   /// Determines whether the route for previous is stale and needs to be refreshed 
   /// based on comparison with the previous version
   /// </summary>
-  Task<bool> IsRouteStale(RoutingContext context, IZeroRouteEntity previous, IZeroRouteEntity current);
+  Task<bool> IsRouteStale(RoutingContext context, ISupportsRouting previous, ISupportsRouting current);
 
   /// <summary>
   /// Map a route model to an endpoint
@@ -237,10 +237,10 @@ public interface IRouteProvider
   /// <summary>
   /// Find a persisted route for an entity
   /// </summary>
-  Task<Route> Find(RoutingContext context, IZeroRouteEntity model);
+  Task<Route> Find(RoutingContext context, ISupportsRouting model);
 
   /// <summary>
   /// Find persisted routes for entities
   /// </summary>
-  Task<Dictionary<IZeroRouteEntity, Route>> Find(RoutingContext context, params IZeroRouteEntity[] models);
+  Task<Dictionary<ISupportsRouting, Route>> Find(RoutingContext context, params ISupportsRouting[] models);
 }

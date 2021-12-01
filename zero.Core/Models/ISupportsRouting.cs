@@ -1,6 +1,6 @@
 ﻿namespace zero.Models;
 
-public interface IZeroRouteEntity
+public interface ISupportsRouting
 {
   /// <summary>
   /// Id of the entity

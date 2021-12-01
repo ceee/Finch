@@ -173,7 +173,7 @@ public class ZeroEntityRouteInterceptor : Interceptor<ZeroEntity>
   /// <summary>
   /// Get route dependencies for an entity
   /// </summary>
-  protected async Task<List<Route>> GetDependencies<T>(RoutingContext context, T model) where T : IZeroRouteEntity
+  protected async Task<List<Route>> GetDependencies<T>(RoutingContext context, T model) where T : ISupportsRouting
   {
     string[] ids = new[] { model.Id };
     return await context.Session.Query<Route, Routes_ByDependencies>().Where(x => x.Dependencies.ContainsAny(ids)).ToListAsync();

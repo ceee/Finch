@@ -10,5 +10,7 @@ public class StoresModule : ZeroModule
     services.AddScoped<IStoreContext, StoreContext>();
     services.AddScoped<IStoreOperations, StoreOperations>();
     services.AddSingleton<IStoreCache, StoreCache>();
+
+    services.AddOptions<FlavorOptions>();
   }
 }

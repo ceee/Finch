@@ -191,35 +191,35 @@ public interface IStoreOperations
   /// <summary>
   /// Loads all children for an entity
   /// </summary>
-  Task<Paged<T>> LoadChildren<T>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, IZeroTreeEntity, new();
+  Task<Paged<T>> LoadChildren<T>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, ISupportsTrees, new();
 
   /// <summary>
   /// Get descendants by query (by using the specified index)
   /// </summary>
-  Task<Paged<T>> LoadChildren<T, TIndex>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, IZeroTreeEntity, new() where TIndex : AbstractCommonApiForIndexes, new();
+  Task<Paged<T>> LoadChildren<T, TIndex>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, ISupportsTrees, new() where TIndex : AbstractCommonApiForIndexes, new();
 
   /// <summary>
   /// Update sorting of entities on a specific level
   /// </summary>
-  Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, IZeroTreeEntity, new();
+  Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, ISupportsTrees, new();
 
   /// <summary>
   /// Move an entity to a new parent
   /// </summary>
-  Task<Result<T>> Move<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new();
+  Task<Result<T>> Move<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, ISupportsTrees, new();
 
   /// <summary>
   /// Copies an entity to a new location
   /// </summary>
-  Task<Result<T>> Copy<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new();
+  Task<Result<T>> Copy<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, ISupportsTrees, new();
 
   /// <summary>
   /// Copies an entity with descendants to a new location
   /// </summary>
-  Task<Result<T>> CopyWithDescendants<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new();
+  Task<Result<T>> CopyWithDescendants<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, ISupportsTrees, new();
 
   /// <summary>
   /// Deletes an entity with all descendents
   /// </summary>
-  Task<Result<string[]>> DeleteWithDescendants<T>(T model) where T : ZeroIdEntity, IZeroTreeEntity, new();
+  Task<Result<string[]>> DeleteWithDescendants<T>(T model) where T : ZeroIdEntity, ISupportsTrees, new();
 }

@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace zero.Models;
 
 [DebuggerDisplay("Id = {Id,nq}, Name = {Name}, Alias = {Alias}")]
-public class ZeroEntity : ZeroIdEntity, IZeroDbConventions, IZeroRouteEntity
+public class ZeroEntity : ZeroIdEntity, ISupportsPersistence, ISupportsRouting, ISupportsFlavors
 {
   /// <summary>
   /// Full name of the entity
@@ -65,6 +65,11 @@ public class ZeroEntity : ZeroIdEntity, IZeroDbConventions, IZeroRouteEntity
   /// Language of the entity
   /// </summary>
   public string LanguageId { get; set; }
+
+  /// <summary>
+  /// Alias of the used flavor (uses default if empty)
+  /// </summary>
+  public string Flavor { get; set; }
 
   /// <summary>
   /// [Warning] This field is always empty when bound to the database.

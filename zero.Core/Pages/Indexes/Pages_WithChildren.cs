@@ -4,7 +4,7 @@ namespace zero.Pages;
 
 public class Pages_WithChildren : ZeroIndex<Page, Pages_WithChildren.Result>
 {
-  public class Result : ZeroIdEntity, IZeroDbConventions
+  public class Result : ZeroIdEntity, ISupportsPersistence
   {
     public string ParentId { get; set; }
 

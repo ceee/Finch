@@ -8,14 +8,14 @@ namespace zero.Stores;
 public partial class StoreOperations : IStoreOperations
 {
   /// <inheritdoc />
-  public virtual Task<bool> IsAllowedAsChild<T>(T model, string parentId) where T : ZeroIdEntity, IZeroTreeEntity, new()
+  public virtual Task<bool> IsAllowedAsChild<T>(T model, string parentId) where T : ZeroIdEntity, ISupportsTrees, new()
   {
     return Task.FromResult(true);
   }
 
 
   /// <inheritdoc />
-  public async Task<Paged<T>> LoadChildren<T>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, IZeroTreeEntity, new()
+  public async Task<Paged<T>> LoadChildren<T>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, ISupportsTrees, new()
   {
     IRavenQueryable<T> queryable = Session.Query<T>().Where(x => x.ParentId == parentId).Statistics(out QueryStatistics statistics);
     querySelector ??= x => x.OrderBy(x => x.Sort);
@@ -27,7 +27,7 @@ public partial class StoreOperations : IStoreOperations
 
   /// <inheritdoc />
   public async Task<Paged<T>> LoadChildren<T, TIndex>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) 
-    where T : ZeroIdEntity, IZeroTreeEntity, new() 
+    where T : ZeroIdEntity, ISupportsTrees, new() 
     where TIndex : AbstractCommonApiForIndexes, new()
   {
     IRavenQueryable<T> queryable = Session.Query<T, TIndex>().Where(x => x.ParentId == parentId).Statistics(out QueryStatistics statistics);
@@ -39,7 +39,7 @@ public partial class StoreOperations : IStoreOperations
 
 
   /// <inheritdoc />
-  public async Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, IZeroTreeEntity, new()
+  public async Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, ISupportsTrees, new()
   {
     Dictionary<string, T> items = await Load<T>(sortedIds);
     uint index = 0;
@@ -62,7 +62,7 @@ public partial class StoreOperations : IStoreOperations
 
 
   /// <inheritdoc />
-  public async Task<Result<T>> Move<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new()
+  public async Task<Result<T>> Move<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, ISupportsTrees, new()
   {
     T model = await Load<T>(id);
     T parent = await Load<T>(newParentId);
@@ -84,17 +84,17 @@ public partial class StoreOperations : IStoreOperations
 
 
   /// <inheritdoc />
-  public Task<Result<T>> Copy<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new() => Copy<T>(id, newParentId, false, isParentAllowed);
+  public Task<Result<T>> Copy<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, ISupportsTrees, new() => Copy<T>(id, newParentId, false, isParentAllowed);
 
 
   /// <inheritdoc />
-  public Task<Result<T>> CopyWithDescendants<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new() => Copy<T>(id, newParentId, true, isParentAllowed);
+  public Task<Result<T>> CopyWithDescendants<T>(string id, string newParentId, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, ISupportsTrees, new() => Copy<T>(id, newParentId, true, isParentAllowed);
 
 
   /// <summary>
   /// Copies an entity (with optional descendants) to a new location
   /// </summary>
-  protected async Task<Result<T>> Copy<T>(string id, string newParentId, bool includeDescendants, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, IZeroTreeEntity, new()
+  protected async Task<Result<T>> Copy<T>(string id, string newParentId, bool includeDescendants, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, ISupportsTrees, new()
   {
     T model = await Load<T>(id);
     T parent = await Load<T>(newParentId);
@@ -153,7 +153,7 @@ public partial class StoreOperations : IStoreOperations
 
 
   /// <inheritdoc />
-  public async Task<Result<string[]>> DeleteWithDescendants<T>(T model) where T : ZeroIdEntity, IZeroTreeEntity, new()
+  public async Task<Result<string[]>> DeleteWithDescendants<T>(T model) where T : ZeroIdEntity, ISupportsTrees, new()
   {
     List<T> pages = await GetDescendantsAndSelf(model);
 
@@ -170,7 +170,7 @@ public partial class StoreOperations : IStoreOperations
   /// <summary>
   /// Get an entity with all its descendants
   /// </summary>
-  async Task<List<T>> GetDescendantsAndSelf<T>(T model) where T : ZeroIdEntity, IZeroTreeEntity, new()
+  async Task<List<T>> GetDescendantsAndSelf<T>(T model) where T : ZeroIdEntity, ISupportsTrees, new()
   {
     List<T> items = new() { model };
 

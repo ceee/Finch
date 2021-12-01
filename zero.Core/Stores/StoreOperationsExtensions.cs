@@ -41,5 +41,5 @@ public static class StoreOperationsExtensions
   /// <summary>
   /// Deletes an entity by Id with all descendents
   /// </summary>
-  public static async Task<Result<string[]>> DeleteWithDescendants<T>(this IStoreOperations ops, string id) where T : ZeroIdEntity, IZeroTreeEntity, new() => await ops.DeleteWithDescendants(await ops.Load<T>(id));
+  public static async Task<Result<string[]>> DeleteWithDescendants<T>(this IStoreOperations ops, string id) where T : ZeroIdEntity, ISupportsTrees, new() => await ops.DeleteWithDescendants(await ops.Load<T>(id));
 }

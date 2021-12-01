@@ -1,6 +1,6 @@
 ﻿namespace zero.Models;
 
-public interface IZeroTreeEntity
+public interface ISupportsTrees
 {
   /// <summary>
   /// Id of the entity

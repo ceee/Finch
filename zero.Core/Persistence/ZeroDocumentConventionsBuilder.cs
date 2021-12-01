@@ -9,7 +9,7 @@ public class ZeroDocumentConventionsBuilder : IZeroDocumentConventionsBuilder
 {
   protected HashSet<Type> PolymorphTypes { get; private set; } = new();
 
-  protected Type AcceptsZeroConventionsType { get; set; } = typeof(IZeroDbConventions);
+  protected Type AcceptsZeroConventionsType { get; set; } = typeof(ISupportsPersistence);
 
   protected char IdentityPartsSeparator { get; set; } = '.';
 

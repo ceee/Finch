@@ -23,19 +23,19 @@ public class Routes : IRoutes
 
 
   /// <inheritdoc />
-  public async Task<string> GetUrl<T>(T model) where T : IZeroRouteEntity => (await GetRoute(model))?.Url;
+  public async Task<string> GetUrl<T>(T model) where T : ISupportsRouting => (await GetRoute(model))?.Url;
 
 
   /// <inheritdoc />
-  public async Task<string> GetUrl<T>(string id) where T : IZeroRouteEntity => (await GetRoute<T>(id))?.Url;
+  public async Task<string> GetUrl<T>(string id) where T : ISupportsRouting => (await GetRoute<T>(id))?.Url;
 
 
   /// <inheritdoc />
-  public async Task<Dictionary<T, string>> GetUrls<T>(params T[] models) where T : IZeroRouteEntity => (await GetRoutes(models)).ToDictionary(x => x.Key, x => x.Value?.Url);
+  public async Task<Dictionary<T, string>> GetUrls<T>(params T[] models) where T : ISupportsRouting => (await GetRoutes(models)).ToDictionary(x => x.Key, x => x.Value?.Url);
 
 
   /// <inheritdoc />
-  public async Task<Route> GetRoute<T>(string id) where T : IZeroRouteEntity
+  public async Task<Route> GetRoute<T>(string id) where T : ISupportsRouting
   {
     T model = await GetContext().Session.LoadAsync<T>(id);
     return await GetRoute(model);
@@ -43,7 +43,7 @@ public class Routes : IRoutes
 
 
   /// <inheritdoc />
-  public async Task<Route> GetRoute<T>(T model) where T : IZeroRouteEntity
+  public async Task<Route> GetRoute<T>(T model) where T : ISupportsRouting
   {
     if (model == null)
     {
@@ -61,7 +61,7 @@ public class Routes : IRoutes
 
 
   /// <inheritdoc />
-  public async Task<Dictionary<T, Route>> GetRoutes<T>(params T[] models) where T : IZeroRouteEntity
+  public async Task<Dictionary<T, Route>> GetRoutes<T>(params T[] models) where T : ISupportsRouting
   {
     if (models.Length < 1)
     {
@@ -81,12 +81,12 @@ public class Routes : IRoutes
     }
 
     RoutingContext context = GetContext();
-    return (await routeProvider.Find(context, models.Select(x => (IZeroRouteEntity)x).ToArray())).ToDictionary(x => (T)x.Key, x => x.Value);
+    return (await routeProvider.Find(context, models.Select(x => (ISupportsRouting)x).ToArray())).ToDictionary(x => (T)x.Key, x => x.Value);
   }
 
 
   /// <inheritdoc />
-  public virtual bool TryGetProvider<T>(T model, out IRouteProvider provider) where T : IZeroRouteEntity
+  public virtual bool TryGetProvider<T>(T model, out IRouteProvider provider) where T : ISupportsRouting
   {
     Type type = model.GetType();
     provider = Providers.OrderByDescending(x => x.Priority).FirstOrDefault(x => x.CanHandle(type));
@@ -126,7 +126,7 @@ public class Routes : IRoutes
   /// <summary>
   /// Find a persisted route for an entity
   /// </summary>
-  protected virtual async Task<Route> FindRoute(IRouteProvider provider, RoutingContext context, IZeroRouteEntity model)
+  protected virtual async Task<Route> FindRoute(IRouteProvider provider, RoutingContext context, ISupportsRouting model)
   {
     return await provider.Find(context, model);
   }
@@ -146,37 +146,37 @@ public interface IRoutes
   /// <summary>
   /// Get the URL for an entity
   /// </summary>
-  Task<string> GetUrl<T>(T model) where T : IZeroRouteEntity;
+  Task<string> GetUrl<T>(T model) where T : ISupportsRouting;
 
   /// <summary>
   /// Get the URL for an entity
   /// </summary>
-  Task<string> GetUrl<T>(string id) where T : IZeroRouteEntity;
+  Task<string> GetUrl<T>(string id) where T : ISupportsRouting;
 
   /// <summary>
   /// Get URLs for multiple entities
   /// </summary>
-  Task<Dictionary<T, string>> GetUrls<T>(params T[] models) where T : IZeroRouteEntity;
+  Task<Dictionary<T, string>> GetUrls<T>(params T[] models) where T : ISupportsRouting;
 
   /// <summary> 
   /// Get the route object for an entity
   /// </summary>
-  Task<Route> GetRoute<T>(T model) where T : IZeroRouteEntity;
+  Task<Route> GetRoute<T>(T model) where T : ISupportsRouting;
 
   /// <summary> 
   /// Get the route object for an entity
   /// </summary>
-  Task<Route> GetRoute<T>(string id) where T : IZeroRouteEntity;
+  Task<Route> GetRoute<T>(string id) where T : ISupportsRouting;
 
   /// <summary>
   /// Get routes for multiple entities
   /// </summary>
-  Task<Dictionary<T, Route>> GetRoutes<T>(params T[] models) where T : IZeroRouteEntity;
+  Task<Dictionary<T, Route>> GetRoutes<T>(params T[] models) where T : ISupportsRouting;
 
   /// <summary>
   /// Find a provider for a certain entity
   /// </summary>
-  bool TryGetProvider<T>(T model, out IRouteProvider provider) where T : IZeroRouteEntity;
+  bool TryGetProvider<T>(T model, out IRouteProvider provider) where T : ISupportsRouting;
 
   /// <summary>
   /// Find a provider by alias

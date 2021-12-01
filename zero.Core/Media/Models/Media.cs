@@ -4,7 +4,7 @@
 /// A media file (can contain an image or other media like videos and documents)
 /// </summary>
 [RavenCollection("Media")]
-public class Media : ZeroEntity, IZeroTreeEntity
+public class Media : ZeroEntity, ISupportsTrees
 {
   public Media()
   {

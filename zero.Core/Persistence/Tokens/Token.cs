@@ -1,7 +1,7 @@
 ﻿namespace zero.Persistence;
 
 [RavenCollection("Tokens")]
-public class SecurityToken : IZeroDbConventions
+public class SecurityToken : ISupportsPersistence
 {
   public string Id { get; set; }
 

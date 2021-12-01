@@ -4,7 +4,7 @@ namespace zero.Pages;
 
 public class Pages_ByHierarchy : ZeroIndex<Page, Pages_ByHierarchy.Result>
 {
-  public class Result : ZeroIdEntity, IZeroDbConventions
+  public class Result : ZeroIdEntity, ISupportsPersistence
   {
     public string Name { get; set; }
 

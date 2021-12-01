@@ -3,7 +3,7 @@ using Raven.Client.Documents.Linq;
 
 namespace zero.Stores;
 
-public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> where T : ZeroIdEntity, IZeroTreeEntity, new()
+public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> where T : ZeroIdEntity, ISupportsTrees, new()
 {
   public TreeEntityStore(IStoreContext collectionContext) : base(collectionContext) { }
 
@@ -60,7 +60,7 @@ public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> w
 
 
 
-public interface ITreeEntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, IZeroTreeEntity, new()
+public interface ITreeEntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, ISupportsTrees, new()
 {
   /// <summary>
   /// Determines whether a model is allowed as a child for a new parent.
