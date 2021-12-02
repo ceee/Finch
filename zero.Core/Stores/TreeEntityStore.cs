@@ -3,7 +3,7 @@ using Raven.Client.Documents.Linq;
 
 namespace zero.Stores;
 
-public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> where T : ZeroIdEntity, ISupportsTrees, new()
+public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> where T : ZeroIdEntity, ISupportsTrees, ISupportsFlavors, new()
 {
   public TreeEntityStore(IStoreContext collectionContext) : base(collectionContext) { }
 

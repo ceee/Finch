@@ -70,7 +70,7 @@ public class PageUrlBuilder : IPageUrlBuilder
     {
       alias = page.UrlAlias;
     }
-    else if (page.PageTypeAlias == Options.Root)
+    else if (page.Flavor == Options.Root)
     {
       return String.Empty;
     }

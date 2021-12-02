@@ -4,7 +4,7 @@ using Raven.Client.Documents.Linq;
 
 namespace zero.Stores;
 
-public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, new()
+public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, ISupportsFlavors, new()
 {
   /// <inheritdoc />
   public Guid Guid { get; private set; } = Guid.NewGuid();
@@ -34,6 +34,12 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, n
 
   /// <inheritdoc />
   public virtual Task<T> Empty() => Operations.Empty<T>();
+
+  /// <inheritdoc />
+  public virtual Task<T> Empty(string flavor) => Operations.Empty<T>(flavor);
+
+  /// <inheritdoc />
+  public virtual Task<TFlavor> Empty<TFlavor>(string flavor) where TFlavor : T => Operations.Empty<T, TFlavor>(flavor);
 
   /// <inheritdoc />
   public virtual Task<T> Load(string id, string changeVector = null) => Operations.Load<T>(id, changeVector);
@@ -104,6 +110,16 @@ public interface IEntityStore<T> where T : ZeroIdEntity, new()
   /// Get new instance of an entity
   /// </summary>
   Task<T> Empty();
+
+  /// <summary>
+  /// Get new instance of an entity with a specific flavor
+  /// </summary>
+  Task<T> Empty(string flavor);
+
+  /// <summary>
+  /// Get new instance of an entity with a specific flavor
+  /// </summary>
+  Task<TFlavor> Empty<TFlavor>(string flavor) where TFlavor : T;
 
   /// <summary>
   /// Get an entity by Id

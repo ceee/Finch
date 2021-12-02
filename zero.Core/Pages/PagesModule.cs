@@ -14,15 +14,18 @@ public class PagesModule : ZeroModule
     services.AddOptions<PageOptions>().Bind(configuration.GetSection("Zero:Pages"));
     services.AddOptions<PageModuleOptions>().Bind(configuration.GetSection("Zero:PageModules"));
 
-    services.Configure<ZeroOptions>(opts =>
+    services.Configure<RavenOptions>(opts =>
     {
-      RavenOptions raven = opts.For<RavenOptions>();
-      raven.Indexes.Add<Pages_AsHistory>();
-      raven.Indexes.Add<Pages_ByHierarchy>();
-      raven.Indexes.Add<Pages_ByType>();
-      raven.Indexes.Add<Pages_WithChildren>();
+      opts.Indexes.Add<Pages_AsHistory>();
+      opts.Indexes.Add<Pages_ByHierarchy>();
+      opts.Indexes.Add<Pages_ByType>();
+      opts.Indexes.Add<Pages_WithChildren>();
+    });
 
-      opts.For<PageOptions>().Add<PageFolder>(Constants.Pages.FolderAlias, "@page.folder.name", "@page.folder.description", "fth-folder");
+    services.Configure<FlavorOptions>(opts =>
+    {
+      opts.Provide<Page>();
+      opts.Add<Page, PageFolder>(Constants.Pages.FolderAlias, "@page.folder.name", "@page.folder.description", "fth-folder");
     });
   }
 }

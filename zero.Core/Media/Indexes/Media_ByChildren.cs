@@ -4,7 +4,7 @@ namespace zero.Media;
 
 public class Media_ByChildren : ZeroMultiMapIndex<Media_ByChildren.Result>
 {
-  public class Result : ZeroIdEntity, ISupportsPersistence
+  public class Result : ZeroIdEntity, ISupportsDbConventions
   {
     public string ParentId { get; set; }
 

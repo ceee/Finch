@@ -41,5 +41,11 @@ public class MediaModule : ZeroModule
       raven.Indexes.Add<Media_ByParent>();
       raven.Indexes.Add<Media_ByHierarchy>();
     });
+
+    //services.Configure<FlavorOptions>(opts =>
+    //{
+    //  // TODO should we use MediaType here?
+    //  opts.Provide<Media>("zero.media", "@media.name", icon: "fth-image");
+    //});
   }
 }

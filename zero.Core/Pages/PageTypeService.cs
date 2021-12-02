@@ -9,33 +9,33 @@ public class PageTypeService : IPageTypeService
 
   protected IHandlerHolder Handler { get; private set; }
 
-  protected PageOptions PageOptions { get; set; }
+  protected FlavorOptions Flavors { get; set; }
 
 
   public PageTypeService(IZeroContext context, IZeroOptions options, IHandlerHolder handler)
   {
     Context = context;
     Handler = handler;
-    PageOptions = options.For<PageOptions>();
+    Flavors = options.For<FlavorOptions>();
   }
 
 
   /// <inheritdoc />
-  public IList<PageType> GetPageTypes()
+  public IEnumerable<FlavorConfig> GetAll()
   {
-    return PageOptions;
+    return Flavors.GetAll<Page>();
   }
 
 
   /// <inheritdoc />
-  public PageType GetPageType(string pageTypeAlias)
+  public FlavorConfig GetByAlias(string flavorAlias)
   {
-    return PageOptions.FirstOrDefault(x => x.Alias == pageTypeAlias);
+    return Flavors.Get<Page>(flavorAlias);
   }
 
 
   /// <inheritdoc />
-  public async Task<IList<PageType>> GetAllowedPageTypes(string pageParentId = null)
+  public async Task<IEnumerable<FlavorConfig>> GetAllowedFlavors(string pageParentId = null)
   {
     List<Page> parents = new();
 
@@ -62,10 +62,10 @@ public class PageTypeService : IPageTypeService
     // if there is no registered handler we just allow all page types
     if (handler == null)
     {
-      return PageOptions;
+      return Flavors.GetAll<Page>();
     }
 
-    return (await handler.GetAllowedPageTypes(Context.Application, PageOptions, parents))?.ToList() ?? new();
+    return (await handler.GetAllowedPageTypes(Context.Application, Flavors.GetAll<Page>(), parents))?.ToList() ?? new();
   }
 }
 
@@ -75,15 +75,15 @@ public interface IPageTypeService
   /// <summary>
   /// Get all available page types
   /// </summary>
-  IList<PageType> GetPageTypes();
+  IEnumerable<FlavorConfig> GetAll();
 
   /// <summary>
   /// Get all page types which are allowed below a selected parent page
   /// </summary>
-  Task<IList<PageType>> GetAllowedPageTypes(string pageParentId = null);
+  Task<IEnumerable<FlavorConfig>> GetAllowedFlavors(string pageParentId = null);
 
   /// <summary>
   /// Get a specific page type by alias
   /// </summary>
-  PageType GetPageType(string pageTypeAlias);
+  FlavorConfig GetByAlias(string flavorAlias);
 }

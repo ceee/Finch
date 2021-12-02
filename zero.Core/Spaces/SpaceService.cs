@@ -11,25 +11,9 @@ public class SpaceService : SpaceStore, ISpaceService
   public ISpaceTypeService Types { get; protected set; }
 
 
-  public SpaceService(IStoreContext store, ISpaceTypeService spaceTypeService) : base(store, spaceTypeService)
+  public SpaceService(IStoreContext store, ISpaceTypeService spaceTypeService) : base(store)
   {
-    Types = SpaceTypes;
-  }
-
-
-  /// <inheritdoc />
-  public Task<T> Empty<T>(string spaceType) where T : Space, new()
-  {
-    SpaceType type = SpaceTypes.GetByAlias(spaceType);
-
-    if (type == null)
-    {
-      return Task.FromResult<T>(null);
-    }
-
-    T model = new();
-    model.SpaceTypeAlias = type.Alias;
-    return Task.FromResult(model);
+    Types = spaceTypeService;
   }
 
 
@@ -69,7 +53,7 @@ public class SpaceService : SpaceStore, ISpaceService
   /// <inheritdoc />
   public async Task<Paged<T>> Load<T>(string spaceType, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> expression = null) where T : Space, new()
   {
-    IRavenQueryable<T> queryable = Session.Query<T>().Where(x => x.SpaceTypeAlias == spaceType).Statistics(out QueryStatistics statistics);
+    IRavenQueryable<T> queryable = Session.Query<T>().Where(x => x.Flavor == spaceType).Statistics(out QueryStatistics statistics);
     expression ??= x => x;
 
     List<T> result = await expression(queryable).Paging(pageNumber, pageSize).ToListAsync();
@@ -82,7 +66,7 @@ public class SpaceService : SpaceStore, ISpaceService
     where T : Space, new()
     where TIndex : AbstractCommonApiForIndexes, new()
   {
-    IRavenQueryable<T> queryable = Session.Query<T, TIndex>().Where(x => x.SpaceTypeAlias == spaceType).Statistics(out QueryStatistics statistics);
+    IRavenQueryable<T> queryable = Session.Query<T, TIndex>().Where(x => x.Flavor == spaceType).Statistics(out QueryStatistics statistics);
     expression ??= x => x;
 
     List<T> result = await expression(queryable).Paging(pageNumber, pageSize).ToListAsync();
@@ -97,11 +81,6 @@ public interface ISpaceService : ISpaceStore
   /// Service for retrieving space types
   /// </summary>
   ISpaceTypeService Types { get; }
-
-  /// <summary>
-  /// Get editor item for a space
-  /// </summary>
-  Task<T> Empty<T>(string spaceType) where T : Space, new();
 
   /// <summary>
   /// Get editor item for a space

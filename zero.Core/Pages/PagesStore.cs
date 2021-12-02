@@ -16,15 +16,15 @@ public class PagesStore : TreeEntityStore<Page>, IPagesStore
   /// <inheritdoc />
   public override async Task<bool> IsAllowedAsChild(Page model, string parentId)
   {
-    IList<PageType> pageTypes = await PageTypes.GetAllowedPageTypes(parentId);
-    return pageTypes.Any(x => x.Alias == model.PageTypeAlias);
+    IEnumerable<FlavorConfig> pageTypes = await PageTypes.GetAllowedFlavors(parentId);
+    return pageTypes.Any(x => x.Alias == model.Flavor);
   }
 
 
   /// <inheritdoc />
-  public async Task<Page> Empty(string pageType, string parentId = null)
+  public async Task<Page> Empty(string pageTypeAlias, string parentId = null)
   {
-    PageType type = PageTypes.GetPageType(pageType);
+    FlavorConfig type = PageTypes.GetByAlias(pageTypeAlias);
 
     if (type == null)
     {
@@ -32,7 +32,7 @@ public class PagesStore : TreeEntityStore<Page>, IPagesStore
     }
 
     Page model = await Empty();
-    model.PageTypeAlias = type.Alias;
+    model.Flavor = type.Alias;
     model.ParentId = parentId;
 
     if (!await IsAllowedAsChild(model, parentId))
@@ -48,7 +48,7 @@ public class PagesStore : TreeEntityStore<Page>, IPagesStore
   protected override void ValidationRules(ZeroValidator<Page> validator)
   {
     validator.RuleFor(x => x.Name).NotEmpty();
-    validator.RuleFor(x => x.PageTypeAlias).NotEmpty();
+    validator.RuleFor(x => x.Flavor).NotEmpty();
   }
 }
 

@@ -63,9 +63,9 @@ public class PageLinkProvider : ILinkProvider
       return null;
     }
 
-    PageType pageType = PageTypeService.GetPageType(page.PageTypeAlias);
+    FlavorConfig pageType = PageTypeService.GetByAlias(page.Flavor);
 
-    string url = await Routes.GetUrl<Page>(page);
+    string url = await Routes.GetUrl(page);
 
     return new()
     {

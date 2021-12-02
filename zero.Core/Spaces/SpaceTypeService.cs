@@ -6,36 +6,35 @@ public class SpaceTypeService : ISpaceTypeService
 
   protected IHandlerHolder Handler { get; private set; }
 
-  protected SpaceOptions SpaceOptions { get; set; }
+  protected FlavorOptions Flavors { get; set; }
 
 
   public SpaceTypeService(IZeroContext context, IZeroOptions options, IHandlerHolder handler)
   {
     Context = context;
     Handler = handler;
-    SpaceOptions = options.For<SpaceOptions>();
+    Flavors = options.For<FlavorOptions>();
   }
 
 
   /// <inheritdoc />
   public IList<SpaceType> GetAll()
   {
-    return SpaceOptions;
+    return Flavors.GetAll<Space>().Select(x => (SpaceType)x).ToList();
   }
 
 
   /// <inheritdoc />
-  public SpaceType GetByAlias(string pageTypeAlias)
+  public SpaceType GetByAlias(string spaceTypeAlias)
   {
-    return SpaceOptions.FirstOrDefault(x => x.Alias == pageTypeAlias);
+    return Flavors.Get<Space>(spaceTypeAlias) as SpaceType;
   }
 
 
   /// <inheritdoc />
   public SpaceType GetByType<T>() where T : Space
   {
-    Type type = typeof(T);
-    return SpaceOptions.FirstOrDefault(x => x.Type == type);
+    return Flavors.Get<Space, T>() as SpaceType;
   }
 }
 

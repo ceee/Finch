@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace zero.Models;
 
 [DebuggerDisplay("Id = {Id,nq}, Name = {Name}, Alias = {Alias}")]
-public class ZeroEntity : ZeroIdEntity, ISupportsPersistence, ISupportsRouting, ISupportsFlavors
+public class ZeroEntity : ZeroIdEntity, ISupportsDbConventions, ISupportsRouting, ISupportsFlavors
 {
   /// <summary>
   /// Full name of the entity
@@ -78,3 +78,4 @@ public class ZeroEntity : ZeroIdEntity, ISupportsPersistence, ISupportsRouting, 
   [JsonIgnore]
   public string Url { get; set; }
 }
+ 

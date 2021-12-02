@@ -16,11 +16,6 @@ public class Page : ZeroEntity, ISupportsTrees
   public string ParentId { get; set; }
 
   /// <summary>
-  /// Alias of the used page type
-  /// </summary>
-  public string PageTypeAlias { get; set; }
-
-  /// <summary>
   /// Date when the page is published
   /// </summary>
   public DateTimeOffset? PublishDate { get; set; }

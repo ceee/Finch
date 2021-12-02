@@ -4,7 +4,7 @@ namespace zero.Media;
 
 public class Media_ByHierarchy : ZeroIndex<Media, Media_ByHierarchy.Result>
 {
-  public class Result : ZeroIdEntity, ISupportsPersistence
+  public class Result : ZeroIdEntity, ISupportsDbConventions
   {
     public string Name { get; set; }
 

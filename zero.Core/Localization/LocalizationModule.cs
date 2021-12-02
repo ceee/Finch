@@ -13,12 +13,5 @@ public class LocalizationModule : ZeroModule
     services.AddScoped<ILanguageStore, LanguageStore>();
     services.AddScoped<ITranslationStore, TranslationStore>();
     services.AddScoped<ILocalizer, Localizer>();
-
-    services.Configure<FlavorOptions>(opts =>
-    {
-      opts.Provide<Country>("zero.country", "Country", "Default country", "fth-flag");
-      opts.Provide<Language>("zero.language", "Language", "Default language", "fth-flag");
-      opts.Provide<Translation>("zero.translation", "Translation", "Default translation", "fth-flag");
-    });
   }
 }

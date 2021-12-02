@@ -2,5 +2,5 @@
 
 public interface IPageTypeHandler : IHandler
 {
-  Task<IEnumerable<PageType>> GetAllowedPageTypes(Application application, IEnumerable<PageType> registeredTypes, IEnumerable<Page> parents);
+  Task<IEnumerable<FlavorConfig>> GetAllowedPageTypes(Application application, IEnumerable<FlavorConfig> registeredTypes, IEnumerable<Page> parents);
 }

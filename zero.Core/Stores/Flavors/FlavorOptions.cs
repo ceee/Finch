@@ -7,29 +7,63 @@ public class FlavorOptions
   readonly ConcurrentDictionary<Type, List<FlavorConfig>> Flavors = new();
 
 
-  public void Provide<TEntity>(string alias, string name, string description = null, string icon = null)
-    where TEntity : ISupportsFlavors, new()
+  public IEnumerable<FlavorConfig> GetAll<TEntity>()
   {
-    Provide(_ => new TEntity(), alias, name, description, icon);
+    return GetAll(typeof(TEntity));
   }
 
 
-  public void Provide<TEntity>(Func<FlavorConfig, TEntity> construct, string alias, string name, string description = null, string icon = null)
+  public IEnumerable<FlavorConfig> GetAll(Type type)
+  {
+    return Flavors.GetValueOrDefault(type, new());
+  }
+
+
+  public FlavorConfig Get<TEntity, TFlavor>()
+  {
+    return Get(typeof(TEntity), typeof(TFlavor));
+  }
+
+
+  public FlavorConfig Get<TEntity>(string alias)
+  {
+    return Get(typeof(TEntity), alias);
+  }
+
+
+  public FlavorConfig Get(Type baseType, Type flavorType)
+  {
+    List<FlavorConfig> flavors = Flavors.GetValueOrDefault(baseType, new());
+    return flavors.FirstOrDefault(x => x.FlavorType == flavorType);
+  }
+
+
+  public FlavorConfig Get(Type baseType, string alias)
+  {
+    List<FlavorConfig> flavors = Flavors.GetValueOrDefault(baseType, new());
+    return flavors.FirstOrDefault(x => x.Alias == alias);
+  }
+
+
+  public void Provide<TEntity>()
+    where TEntity : ISupportsFlavors, new()
+  {
+    Provide(_ => new TEntity());
+  }
+
+
+  public void Provide<TEntity>(Func<FlavorConfig, TEntity> construct)
     where TEntity : ISupportsFlavors
   {
     Type type = typeof(TEntity);
 
     if (Flavors.ContainsKey(type))
     {
-      throw new KeyNotFoundException($"Already a provider for type '{type.Name}' registered.");
+      return;
     }
 
     FlavorProviderConfig config = new(type)
     {
-      Alias = alias,
-      Name = name,
-      Description = description,
-      Icon = icon,
       Construct = _ => construct(_)
     };
 
@@ -41,36 +75,46 @@ public class FlavorOptions
 
 
   public void Add<TEntity, TFlavor>(string alias, string name, string description = null, string icon = null) 
-    where TEntity : ISupportsFlavors
+    where TEntity : ISupportsFlavors, new()
     where TFlavor : TEntity, new()
   {
-    Add(typeof(TEntity), typeof(TFlavor), _ => new TFlavor(), alias, name, description, icon);
+    Add<TEntity, TFlavor>(typeof(TFlavor), _ => new TFlavor(), alias, name, description, icon);
   }
 
 
   public void Add<TEntity, TFlavor>(Func<FlavorConfig, TFlavor> construct, string alias, string name, string description = null, string icon = null)
-    where TEntity : ISupportsFlavors
+    where TEntity : ISupportsFlavors, new()
     where TFlavor : TEntity, new()
   {
-    Add(typeof(TEntity), typeof(TFlavor), construct, alias, name, description, icon);
+    Add<TEntity, TFlavor>(typeof(TFlavor), construct, alias, name, description, icon);
   }
 
 
-  void Add<TFlavor>(Type baseEntityType, Type flavorType, Func<FlavorConfig, TFlavor> construct, string alias, string name, string description = null, string icon = null)
+  public void Add<TEntity, TFlavor>(Type flavorType, Func<FlavorConfig, TFlavor> construct, string alias, string name, string description = null, string icon = null)
+    where TEntity : ISupportsFlavors, new()
+    where TFlavor : TEntity, new()
   {
-    if (!Flavors.ContainsKey(baseEntityType))
-    {
-      throw new KeyNotFoundException($"No provider for type '{baseEntityType.Name}' found. Use Provide<>() first.");
-    }
-
-    FlavorConfig config = new(flavorType)
+    Add<TEntity, TFlavor>(new(flavorType)
     {
       Alias = alias,
       Name = name,
       Description = description,
       Icon = icon,
       Construct = _ => construct(_)
-    };
+    });
+  }
+
+
+  public void Add<TEntity, TFlavor>(FlavorConfig config)
+    where TEntity : ISupportsFlavors, new()
+    where TFlavor : TEntity, new()
+  {
+    Type baseEntityType = typeof(TEntity);
+
+    if (!Flavors.ContainsKey(baseEntityType))
+    {
+      Provide<TEntity>();
+    }
 
     Flavors[baseEntityType].Add(config);
   }

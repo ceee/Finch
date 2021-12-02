@@ -37,7 +37,7 @@ public class PageRouteProvider : ZeroRouteProvider<Page>
     route.Url = UrlBuilder.GetUrl(model, parents);
     route.DependsOn(model.Id);
     route.DependsOn(parents.Select(x => x.Id).ToArray());
-    route.Param(PAGE_TYPE_PARAM, model.PageTypeAlias);
+    route.Param(PAGE_TYPE_PARAM, model.Flavor);
     route.Param(PAGE_ID_PARAM, model.Id);
     route.Param(PAGE_IS_FOLDER, model is PageFolder);
 

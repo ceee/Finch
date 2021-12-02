@@ -16,9 +16,17 @@ public class HandlerHolder : IHandlerHolder
   {
     return Services.GetService<T>();
   }
+
+
+  public IEnumerable<T> GetAll<T>() where T : IHandler
+  {
+    return Services.GetService<IEnumerable<T>>();
+  }
 }
 
 public interface IHandlerHolder
 {
   T Get<T>() where T : IHandler;
+
+  IEnumerable<T> GetAll<T>() where T : IHandler;
 }

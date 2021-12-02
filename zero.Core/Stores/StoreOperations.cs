@@ -18,21 +18,15 @@ public partial class StoreOperations : IStoreOperations
 
   protected IInterceptors Interceptors { get; private set; }
 
+  protected FlavorOptions Flavors { get; private set; }
 
-  public StoreOperations(IZeroContext context, IInterceptors interceptors)
+
+  public StoreOperations(IZeroContext context, IInterceptors interceptors, IZeroOptions options)
   {
     Context = context;
     Interceptors = interceptors;
     Options = new(true);
-  }
-
-
-  /// <summary>
-  /// Get new instance of an entity
-  /// </summary>
-  public virtual Task<T> Empty<T>() where T : ZeroIdEntity, new()
-  {
-    return Task.FromResult(new T());
+    Flavors = options.For<FlavorOptions>();
   }
 
 
@@ -121,6 +115,18 @@ public interface IStoreOperations
   /// Get new instance of an entity
   /// </summary>
   Task<T> Empty<T>() where T : ZeroIdEntity, new();
+
+  /// <summary>
+  /// Get new instance of an entity with a specific flavor
+  /// </summary>
+  Task<T> Empty<T>(string flavor) where T : ZeroIdEntity, ISupportsFlavors, new();
+
+  /// <summary>
+  /// Get new instance of an entity with a specific flavor
+  /// </summary>
+  Task<TFlavor> Empty<T, TFlavor>(string flavor)
+    where T : ZeroIdEntity, ISupportsFlavors, new()
+    where TFlavor : T;
 
   /// <summary>
   /// Generate model Id by using configured document store conventions

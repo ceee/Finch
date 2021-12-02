@@ -10,14 +10,14 @@ public class PageTreeService : IPageTreeService
 
   protected IRoutes Routes { get; set; }
 
-  protected PageOptions PageOptions { get; set; }
+  protected IPageTypeService PageTypes { get; set; }
 
 
-  public PageTreeService(IPagesStore pages, IZeroOptions options, IRoutes routes)
+  public PageTreeService(IPagesStore pages, IPageTypeService pageTypes, IRoutes routes)
   {
     Pages = pages;
     Routes = routes;
-    PageOptions = options.For<PageOptions>();
+    PageTypes = pageTypes;
   }
 
 
@@ -94,7 +94,7 @@ public class PageTreeService : IPageTreeService
     // build tree
     foreach (Page page in pages.Items)
     {
-      PageType pageType = PageOptions.FirstOrDefault(x => x.Alias == page.PageTypeAlias);
+      FlavorConfig pageType = PageTypes.GetByAlias(page.Flavor);
 
       if (pageType == null)
       {

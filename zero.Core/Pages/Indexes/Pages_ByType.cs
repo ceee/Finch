@@ -8,9 +8,9 @@ public class Pages_ByType : ZeroIndex<Page>
   {
     Map = items => items.Select(item => new
     {
-      PageTypeAlias = item.PageTypeAlias
+      PageTypeAlias = item.Flavor
     });
 
-    Index(x => x.PageTypeAlias, FieldIndexing.Exact);
+    Index(x => x.Flavor, FieldIndexing.Exact);
   }
 }

@@ -4,7 +4,7 @@
 /// A change token holds a reference to a database entity
 /// This is used to verify change requests for entities in the zero backoffice
 /// </summary>
-public class ChangeToken : ISupportsPersistence
+public class ChangeToken : ISupportsDbConventions
 {
   public string Id { get; set; }
 

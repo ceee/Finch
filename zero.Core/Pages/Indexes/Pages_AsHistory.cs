@@ -4,7 +4,7 @@ namespace zero.Pages;
 
 public class Pages_AsHistory : ZeroIndex<Page, Pages_AsHistory.Result>
 {
-  public class Result : ZeroIdEntity, ISupportsPersistence
+  public class Result : ZeroIdEntity, ISupportsDbConventions
   {
     public DateTimeOffset LastModified { get; set; }
   }
