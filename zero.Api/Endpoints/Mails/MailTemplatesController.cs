@@ -12,7 +12,7 @@ public class MailTemplatesController : ZeroApiEntityStoreController<MailTemplate
 
   [HttpGet("empty")]
   [ZeroAuthorize(MailPermissions.Create)]
-  public virtual Task<ActionResult<MailEdit>> Empty() => EmptyModel<MailEdit>();
+  public virtual Task<ActionResult<MailEdit>> Empty(string flavor = null) => EmptyModel<MailEdit>(flavor);
 
 
   [HttpGet("{id}")]

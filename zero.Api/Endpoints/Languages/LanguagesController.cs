@@ -12,7 +12,7 @@ public class LanguagesController : ZeroApiEntityStoreController<Language, ILangu
 
   [HttpGet("empty")]
   [ZeroAuthorize(LanguagePermissions.Create)]
-  public virtual Task<ActionResult<LanguageEdit>> Empty() => EmptyModel<LanguageEdit>();
+  public virtual Task<ActionResult<LanguageEdit>> Empty(string flavor = null) => EmptyModel<LanguageEdit>(flavor);
 
 
   [HttpGet("{id}")]

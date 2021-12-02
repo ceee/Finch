@@ -178,7 +178,9 @@
     "idnotfound": "Could not find an entity for the given ID",
     "onsave": {
       "notallowed": "You are not allowed to edit this resource",
-      "empty": "You need to pass a model"
+      "empty": "You need to pass a model",
+      "noidmatch": "Do not fill out the Id field when creating a resource",
+      "flavornotfound": "Could not find a registration for this resource flavor"
     },
     "ondelete": {
       "idnotfound": "Could not find an entity for the given ID"

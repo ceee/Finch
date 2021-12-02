@@ -1,7 +1,7 @@
 ﻿namespace zero.Api.Models;
 
 
-public abstract class DisplayModel<T> : ZeroIdEntity where T : ZeroEntity
+public abstract class DisplayModel<T> : ZeroIdEntity, ISupportsFlavors where T : ZeroEntity
 {
   /// <summary>
   /// Full name of the entity
@@ -57,4 +57,9 @@ public abstract class DisplayModel<T> : ZeroIdEntity where T : ZeroEntity
   /// Language of the entity
   /// </summary>
   public string LanguageId { get; set; }
+
+  /// <summary>
+  /// Configured flavor of this entity
+  /// </summary>
+  public string Flavor { get; set; }
 }

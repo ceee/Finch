@@ -15,6 +15,7 @@ public static class IMapperProfileExtensions
     target.Key = source.Key;
     target.IsActive = source.IsActive;
     target.CreatedDate = source.CreatedDate;
+    target.Flavor = source.Flavor;
   }
 
 
@@ -31,6 +32,7 @@ public static class IMapperProfileExtensions
     target.Key = source.Key;
     target.IsActive = source.IsActive;
     target.CreatedDate = source.CreatedDate;
+    target.Flavor = source.Flavor;
 
     target.Sort = source.Sort;
     target.Hash = source.Hash;
@@ -53,5 +55,6 @@ public static class IMapperProfileExtensions
     target.Key = source.Key;
     target.Sort = source.Sort;
     target.IsActive = source.IsActive;
+    target.Flavor = source.Flavor;
   }
 }

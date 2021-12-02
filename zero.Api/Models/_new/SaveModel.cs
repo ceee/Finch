@@ -1,6 +1,6 @@
 ﻿namespace zero.Api.Models;
 
-public abstract class SaveModel<T> : ZeroIdEntity where T : ZeroEntity
+public abstract class SaveModel<T> : ZeroIdEntity, ISupportsFlavors where T : ZeroEntity
 {
   /// <summary>
   /// Full name of the entity
@@ -26,4 +26,9 @@ public abstract class SaveModel<T> : ZeroIdEntity where T : ZeroEntity
   /// Whether the entity is visible in the frontend
   /// </summary>
   public bool IsActive { get; set; }
+
+  /// <summary>
+  /// Configured flavor of this entity
+  /// </summary>
+  public string Flavor { get; set; }
 }

@@ -18,7 +18,29 @@ public partial class StoreOperations : IStoreOperations
       return Result<T>.Fail("@errors.onsave.empty");
     }
 
-    bool isUpdate = !model.Id.IsNullOrEmpty() && await Session.Advanced.ExistsAsync(model.Id);
+    bool isUpdate = false;
+
+    // check if the Id for a model already exists
+    if (!model.Id.IsNullOrEmpty())
+    {
+      bool exists = await Session.Advanced.ExistsAsync(model.Id);
+
+      if (!exists)
+      {
+        return Result<T>.Fail("@errors.onsave.noidmatch");
+      }
+
+      isUpdate = true;
+    }
+
+    // validate flavor
+    if (model is ISupportsFlavors flavorModel && !flavorModel.Flavor.IsNullOrEmpty())
+    {
+      if (!Flavors.Exists<T>(flavorModel.Flavor))
+      {
+        return Result<T>.Fail("@errors.onsave.flavornotfound");
+      }   
+    }
 
     // prepare model
     PrepareForSave(model);

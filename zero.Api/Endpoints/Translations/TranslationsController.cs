@@ -12,7 +12,7 @@ public class TranslationsController : ZeroApiEntityStoreController<Translation, 
 
   [HttpGet("empty")]
   [ZeroAuthorize(TranslationPermissions.Create)]
-  public virtual Task<ActionResult<TranslationEdit>> Empty() => EmptyModel<TranslationEdit>();
+  public virtual Task<ActionResult<TranslationEdit>> Empty(string flavor = null) => EmptyModel<TranslationEdit>(flavor);
 
 
   [HttpGet("{id}")]

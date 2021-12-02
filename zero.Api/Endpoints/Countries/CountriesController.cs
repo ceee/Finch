@@ -12,7 +12,7 @@ public class CountriesController : ZeroApiEntityStoreController<Country, ICountr
 
   [HttpGet("empty")]
   [ZeroAuthorize(CountryPermissions.Create)]
-  public virtual Task<ActionResult<CountryEdit>> Empty() => EmptyModel<CountryEdit>();
+  public virtual Task<ActionResult<CountryEdit>> Empty(string flavor = null) => EmptyModel<CountryEdit>(flavor);
 
 
   [HttpGet("{id}")]

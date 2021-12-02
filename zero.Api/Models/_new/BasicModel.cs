@@ -1,6 +1,6 @@
 ﻿namespace zero.Api.Models;
 
-public abstract class BasicModel<T> : ZeroIdEntity where T : ZeroEntity
+public abstract class BasicModel<T> : ZeroIdEntity, ISupportsFlavors where T : ZeroEntity
 {
   /// <summary>
   /// Full name of the entity
@@ -32,4 +32,9 @@ public abstract class BasicModel<T> : ZeroIdEntity where T : ZeroEntity
   /// </summary>
   [JsonPropertyName("@link")]
   public string Link { get; set; }
+
+  /// <summary>
+  /// Configured flavor of this entity
+  /// </summary>
+  public string Flavor { get; set; }
 }

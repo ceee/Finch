@@ -34,6 +34,19 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
+  protected async Task<ActionResult<T>> EmptyModel<T>(string flavor) where T : DisplayModel<TModel>
+  {
+    TModel model = await Store.Empty(flavor);
+
+    if (model == null)
+    {
+      return NotFound();
+    }
+
+    return Mapper.Map<TModel, T>(model);
+  }
+
+
   protected async Task<ActionResult<T>> GetModel<T>(string id, string changeVector = null) where T : DisplayModel<TModel>
   {
     TModel model = await Store.Load(id, changeVector);
@@ -75,7 +88,8 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
 
   protected async Task<ActionResult<Result>> CreateModel<T, TEdit>(T saveModel) where T : SaveModel<TModel> where TEdit : DisplayModel<TModel>
   {
-    TModel model = Mapper.Map<T, TModel>(saveModel);
+    TModel emptyModel = saveModel.Flavor.IsNullOrEmpty() ? await Store.Empty() : await Store.Empty(saveModel.Flavor);
+    TModel model = Mapper.Map(saveModel, emptyModel);
     Result<TModel> result = await Store.Create(model);
 
     bool minimalResponse = Hints.ResponsePreference == ApiResponsePreference.Minimal;

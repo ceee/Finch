@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace zero.Pages;
+namespace zero.Stores;
 
 public class FlavorOptions
 {
@@ -42,6 +42,13 @@ public class FlavorOptions
   {
     List<FlavorConfig> flavors = Flavors.GetValueOrDefault(baseType, new());
     return flavors.FirstOrDefault(x => x.Alias == alias);
+  }
+
+
+  public bool Exists<TEntity>(string alias)
+  {
+    List<FlavorConfig> flavors = Flavors.GetValueOrDefault(typeof(TEntity), new());
+    return flavors.Any(x => x.Alias == alias);
   }
 
 
