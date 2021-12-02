@@ -33,13 +33,10 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
 
 
   /// <inheritdoc />
-  public virtual Task<T> Empty() => Operations.Empty<T>();
+  public virtual Task<T> Empty(string flavor = null) => Operations.Empty<T>(flavor);
 
   /// <inheritdoc />
-  public virtual Task<T> Empty(string flavor) => Operations.Empty<T>(flavor);
-
-  /// <inheritdoc />
-  public virtual Task<TFlavor> Empty<TFlavor>(string flavor) where TFlavor : T => Operations.Empty<T, TFlavor>(flavor);
+  public virtual Task<TFlavor> Empty<TFlavor>(string flavor) where TFlavor : T, new() => Operations.Empty<T, TFlavor>(flavor);
 
   /// <inheritdoc />
   public virtual Task<T> Load(string id, string changeVector = null) => Operations.Load<T>(id, changeVector);
@@ -107,19 +104,14 @@ public interface IEntityStore<T> where T : ZeroIdEntity, new()
   IZeroDocumentSession Session { get; }
 
   /// <summary>
-  /// Get new instance of an entity
+  /// Get new instance of an entity (with an optional flavor)
   /// </summary>
-  Task<T> Empty();
+  Task<T> Empty(string flavor = null);
 
   /// <summary>
   /// Get new instance of an entity with a specific flavor
   /// </summary>
-  Task<T> Empty(string flavor);
-
-  /// <summary>
-  /// Get new instance of an entity with a specific flavor
-  /// </summary>
-  Task<TFlavor> Empty<TFlavor>(string flavor) where TFlavor : T;
+  Task<TFlavor> Empty<TFlavor>(string flavor) where TFlavor : T, new();
 
   /// <summary>
   /// Get an entity by Id

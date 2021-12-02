@@ -24,8 +24,11 @@ public class PagesModule : ZeroModule
 
     services.Configure<FlavorOptions>(opts =>
     {
-      opts.Provide<Page>();
-      opts.Add<Page, PageFolder>(Constants.Pages.FolderAlias, "@page.folder.name", "@page.folder.description", "fth-folder");
+      opts.Configure<Page>(cfg =>
+      {
+        cfg.CanUseWithoutFlavors = false;
+        cfg.Add<PageFolder>(Constants.Pages.FolderAlias, "@page.folder.name", "@page.folder.description", "fth-folder");
+      });
     });
   }
 }

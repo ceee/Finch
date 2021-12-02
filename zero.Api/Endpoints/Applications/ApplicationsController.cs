@@ -13,7 +13,7 @@ public class ApplicationsController : ZeroApiEntityStoreController<Application, 
 
   [HttpGet("empty")]
   [ZeroAuthorize(ApplicationPermissions.Create)]
-  public virtual Task<ActionResult<ApplicationEdit>> Empty() => EmptyModel<ApplicationEdit>();
+  public virtual Task<ActionResult<ApplicationEdit>> Empty(string flavor = null) => EmptyModel<ApplicationEdit>(flavor);
 
 
   [HttpGet("{id}")]

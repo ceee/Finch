@@ -112,21 +112,16 @@ public partial class StoreOperations : IStoreOperations
 public interface IStoreOperations
 {
   /// <summary>
-  /// Get new instance of an entity
+  /// Get new instance of an entity (with an optional flavor)
   /// </summary>
-  Task<T> Empty<T>() where T : ZeroIdEntity, new();
-
-  /// <summary>
-  /// Get new instance of an entity with a specific flavor
-  /// </summary>
-  Task<T> Empty<T>(string flavor) where T : ZeroIdEntity, ISupportsFlavors, new();
+  Task<T> Empty<T>(string flavor = null) where T : ZeroIdEntity, ISupportsFlavors, new();
 
   /// <summary>
   /// Get new instance of an entity with a specific flavor
   /// </summary>
   Task<TFlavor> Empty<T, TFlavor>(string flavor)
     where T : ZeroIdEntity, ISupportsFlavors, new()
-    where TFlavor : T;
+    where TFlavor : T, new();
 
   /// <summary>
   /// Generate model Id by using configured document store conventions

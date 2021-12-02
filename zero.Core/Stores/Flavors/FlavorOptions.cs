@@ -4,80 +4,80 @@ namespace zero.Stores;
 
 public class FlavorOptions
 {
-  readonly ConcurrentDictionary<Type, List<FlavorConfig>> Flavors = new();
+  public ConcurrentDictionary<Type, FlavorProvider> Providers { get; private set; } = new();
 
 
-  public IEnumerable<FlavorConfig> GetAll<TEntity>()
+  public void Configure<TEntity>(Action<FlavorProviderOptions<TEntity>> configure) where TEntity : ISupportsFlavors, new()
   {
-    return GetAll(typeof(TEntity));
+    Type type = typeof(TEntity);
+    FlavorProvider provider = Providers.GetOrAdd(type, _ => new() { BaseType = type });
+    configure(new FlavorProviderOptions<TEntity>(this, provider));
   }
 
 
-  public IEnumerable<FlavorConfig> GetAll(Type type)
+  public bool CanUseWithoutFlavors<TEntity>() where TEntity : ISupportsFlavors, new()
   {
-    return Flavors.GetValueOrDefault(type, new());
+    return Providers.GetValueOrDefault(typeof(TEntity), new()).CanUseWithoutFlavors;
+  }
+
+  public string DefaultFlavorFor<TEntity>() where TEntity : ISupportsFlavors, new()
+  {
+    FlavorProvider provider = Providers.GetValueOrDefault(typeof(TEntity), new());
+
+    if (!provider.Flavors.Any())
+    {
+      return null;
+    }
+
+    if (provider.DefaultFlavor.HasValue() && provider.Flavors.Any(x => x.Alias == provider.DefaultFlavor))
+    {
+      return provider.DefaultFlavor;
+    }
+
+    return provider.Flavors.First().Alias;
   }
 
 
-  public FlavorConfig Get<TEntity, TFlavor>()
-  {
-    return Get(typeof(TEntity), typeof(TFlavor));
-  }
+  public IEnumerable<FlavorConfig> GetAll<TEntity>() => GetAll(typeof(TEntity));
 
 
-  public FlavorConfig Get<TEntity>(string alias)
-  {
-    return Get(typeof(TEntity), alias);
-  }
+  public IEnumerable<FlavorConfig> GetAll(Type type) => Providers.GetValueOrDefault(type, new()).Flavors;
+
+
+  public FlavorConfig Get<TEntity, TFlavor>() => Get(typeof(TEntity), typeof(TFlavor));
+
+
+  public FlavorConfig Get<TEntity, TFlavor>(string alias) => Get(typeof(TEntity), typeof(TFlavor), alias);
+
+
+  public FlavorConfig Get<TEntity>(string alias) => Get(typeof(TEntity), alias);
 
 
   public FlavorConfig Get(Type baseType, Type flavorType)
   {
-    List<FlavorConfig> flavors = Flavors.GetValueOrDefault(baseType, new());
-    return flavors.FirstOrDefault(x => x.FlavorType == flavorType);
+    FlavorProvider provider = Providers.GetValueOrDefault(baseType, new());
+    return provider.Flavors.FirstOrDefault(x => x.FlavorType == flavorType);
+  }
+
+
+  public FlavorConfig Get(Type baseType, Type flavorType, string alias)
+  {
+    FlavorProvider provider = Providers.GetValueOrDefault(baseType, new());
+    return provider.Flavors.FirstOrDefault(x => x.FlavorType == flavorType && x.Alias == alias);
   }
 
 
   public FlavorConfig Get(Type baseType, string alias)
   {
-    List<FlavorConfig> flavors = Flavors.GetValueOrDefault(baseType, new());
-    return flavors.FirstOrDefault(x => x.Alias == alias);
+    FlavorProvider provider = Providers.GetValueOrDefault(baseType, new());
+    return provider.Flavors.FirstOrDefault(x => x.Alias == alias);
   }
 
 
   public bool Exists<TEntity>(string alias)
   {
-    List<FlavorConfig> flavors = Flavors.GetValueOrDefault(typeof(TEntity), new());
-    return flavors.Any(x => x.Alias == alias);
-  }
-
-
-  public void Provide<TEntity>()
-    where TEntity : ISupportsFlavors, new()
-  {
-    Provide(_ => new TEntity());
-  }
-
-
-  public void Provide<TEntity>(Func<FlavorConfig, TEntity> construct)
-    where TEntity : ISupportsFlavors
-  {
-    Type type = typeof(TEntity);
-
-    if (Flavors.ContainsKey(type))
-    {
-      return;
-    }
-
-    FlavorProviderConfig config = new(type)
-    {
-      Construct = _ => construct(_)
-    };
-
-    if (!Flavors.TryAdd(type, new() { config }))
-    {
-      throw new Exception($"Could not add flavor provider '{type.Name}'");
-    }
+    FlavorProvider provider = Providers.GetValueOrDefault(typeof(TEntity), new());
+    return provider.Flavors.Any(x => x.Alias == alias);
   }
 
 
@@ -117,12 +117,7 @@ public class FlavorOptions
     where TFlavor : TEntity, new()
   {
     Type baseEntityType = typeof(TEntity);
-
-    if (!Flavors.ContainsKey(baseEntityType))
-    {
-      Provide<TEntity>();
-    }
-
-    Flavors[baseEntityType].Add(config);
+    FlavorProvider provider = Providers.GetOrAdd(baseEntityType, _ => new() { BaseType = baseEntityType });
+    provider.Flavors.Add(config);
   }
 }

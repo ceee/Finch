@@ -1,23 +1,10 @@
 ﻿namespace zero.Stores;
 
-internal class FlavorProviderConfig : FlavorConfig
-{
-  public FlavorProviderConfig(Type type) : base(type)
-  {
-    IsDefault = true;
-  }
-}
-
 /// <summary>
 /// A flavor config holds information about a flavor implementation
 /// </summary>
 public class FlavorConfig
 {
-  /// <summary>
-  /// Whether this is the default flavor
-  /// </summary>
-  public bool IsDefault { get; internal set; }
-
   /// <summary>
   /// Type of the associated entity
   /// </summary>

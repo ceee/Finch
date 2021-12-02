@@ -21,19 +21,6 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
-  protected async Task<ActionResult<T>> EmptyModel<T>() where T : DisplayModel<TModel>
-  {
-    TModel model = await Store.Empty();
-
-    if (model == null)
-    {
-      return NotFound();
-    }
-
-    return Mapper.Map<TModel, T>(model);
-  }
-
-
   protected async Task<ActionResult<T>> EmptyModel<T>(string flavor) where T : DisplayModel<TModel>
   {
     TModel model = await Store.Empty(flavor);
