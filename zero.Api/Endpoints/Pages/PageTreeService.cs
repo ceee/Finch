@@ -4,6 +4,7 @@ using Raven.Client.Documents.Session;
 
 namespace zero.Api.Endpoints.Pages;
 
+[Obsolete("Move to zero.Backoffice")]
 public class PageTreeService : IPageTreeService
 {
   protected IPagesStore Pages { get; private set; }

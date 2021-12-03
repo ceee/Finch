@@ -405,6 +405,7 @@
       "password_placeholder": "Enter your password"
     },
     "errors": {
+      "unknown": "An unknown login error happened",
       "wrongcredentials": "Email or password is wrong",
       "lockedout": "The user has been locked out due to many failed password attempts",
       "disabled": "The user has been deactivated",
@@ -724,47 +725,6 @@
     },
     "errors": {
       "cannotDeleteChild": "Entities which are synchronized with a blueprint cannot be deleted"
-    }
-  },
-
-  "_test": {
-    "fields": {
-      "name": "Name",
-      "position": "Position",
-      "image": "Image",
-      "email": "Email",
-      "videoUri": "Video URL",
-      "isvisible": "Visible",
-      "facebook": "Facebook",
-      "facebook_text": "Link to facebook page",
-      "youtube": "Youtube",
-      "youtube_text": "Link to youtube channel",
-      "twitter": "Twitter",
-      "twitter_text": "Link to twitter profile",
-      "xIconPicker": "Icon",
-      "xTextarea": "Description",
-      "addresses": "Addresses",
-      "addresses_text": "Enter as many addresses as you wish",
-      "xCustom": "Generate",
-      "xRte": "Description as HTML",
-      "xMedia": "Images",
-      "xState": "Select media type",
-      "address": {
-        "city": "City",
-        "street": "Street",
-        "no": "No",
-        "countries": "Country",
-        "name": "Name",
-        "iso": "ISO Code"
-      },
-      "hideInNavigation": "Hide in navigation",
-      "hideInTitle": "Hide in title",
-      "titleOverride": "Override title",
-      "titleOverrideAll": "Override full title",
-      "seoDescription": "SEO Description",
-      "seoImage": "Image",
-      "noFollow": "No follow",
-      "noIndex": "No index"
     }
   }
 }

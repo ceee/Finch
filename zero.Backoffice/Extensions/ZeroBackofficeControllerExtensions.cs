@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using System.IO;
 using zero.Api.Controllers;
 
-namespace zero.Backoffice.Controllers;
+namespace zero.Backoffice.Extensions;
 
 public static class ZeroBackofficeControllerExtensions
 {

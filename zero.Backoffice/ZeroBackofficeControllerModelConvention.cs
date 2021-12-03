@@ -1,34 +1,41 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
+﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using System.Reflection;
+using zero.Api.Controllers;
+using zero.Api.Filters;
 
 namespace zero.Backoffice;
 
-public class ZeroBackofficeControllerModelConvention : IApplicationModelConvention
+public class ZeroBackofficeControllerModelConvention : ZeroApiControllerModelConvention
 {
-  readonly AttributeRouteModel RouteModel;
+  readonly AttributeRouteModel AppAwareRouteModel;
+
+  readonly AttributeRouteModel AppUnawareRouteModel;
 
   readonly Type BaseClass = typeof(ZeroBackofficeController);
 
+  readonly bool RuntimeIsAppAware = false;
 
-  public ZeroBackofficeControllerModelConvention(string backofficePath)
+
+  public ZeroBackofficeControllerModelConvention(string zeroPath, string backofficeApiPath = "backoffice", bool isAppAware = false) : base(zeroPath, backofficeApiPath, isAppAware)
   {
-    RouteModel = new AttributeRouteModel(new RouteAttribute(backofficePath.TrimEnd('/') + "/api/[controller]"));
+    RuntimeIsAppAware = isAppAware;
+    AppAwareRouteModel = BuildRouteModel(zeroPath, backofficeApiPath, true);
+    AppUnawareRouteModel = BuildRouteModel(zeroPath, backofficeApiPath, false);
   }
 
 
   /// <summary>
   /// Configure routing model for all backoffice controllers
   /// </summary>
-  public void Apply(ApplicationModel application)
+  public override void Apply(ControllerModel controller)
   {
-    foreach (var controller in application.Controllers)
-    {
-      bool hasAttributeRouteModels = controller.Selectors.Any(selector => selector.AttributeRouteModel != null);
+    bool hasAttributeRouteModels = controller.Selectors.Any(selector => selector.AttributeRouteModel != null);
 
-      if (controller.ControllerType.IsSubclassOf(BaseClass))
-      {
-        controller.Selectors[0].AttributeRouteModel = RouteModel;
-      }
+    if (controller.ControllerType.IsSubclassOf(BaseClass))
+    {
+      bool isAppAware = RuntimeIsAppAware && controller.ControllerType.GetCustomAttribute<ZeroSystemApiAttribute>() == null;
+
+      controller.Selectors[0].AttributeRouteModel = isAppAware ? AppAwareRouteModel : AppUnawareRouteModel;
     }
   }
 }

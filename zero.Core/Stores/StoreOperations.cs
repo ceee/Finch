@@ -114,12 +114,13 @@ public interface IStoreOperations
   /// <summary>
   /// Get new instance of an entity (with an optional flavor)
   /// </summary>
-  Task<T> Empty<T>(string flavor = null) where T : ZeroIdEntity, ISupportsFlavors, new();
+  Task<T> Empty<T>(string flavorAlias = null) where T : ZeroIdEntity, ISupportsFlavors, new();
 
   /// <summary>
   /// Get new instance of an entity with a specific flavor
   /// </summary>
-  Task<TFlavor> Empty<T, TFlavor>(string flavor)
+  /// <param name="flavorAlias">Optional alias. If left out the default flavor is used (if configured)</param>
+  Task<TFlavor> Empty<T, TFlavor>(string flavorAlias = null)
     where T : ZeroIdEntity, ISupportsFlavors, new()
     where TFlavor : T, new();
 

@@ -1,4 +1,6 @@
-﻿namespace zero.Stores;
+﻿using System.Text.Json.Serialization;
+
+namespace zero.Stores;
 
 /// <summary>
 /// A flavor config holds information about a flavor implementation
@@ -8,6 +10,7 @@ public class FlavorConfig
   /// <summary>
   /// Type of the associated entity
   /// </summary>
+  [JsonIgnore]
   public Type FlavorType { get; private set; }
 
   /// <summary>
@@ -31,6 +34,7 @@ public class FlavorConfig
   public string Icon { get; set; }
 
 
+  [JsonIgnore]
   public Func<FlavorConfig, object> Construct { get; set; }
 
 

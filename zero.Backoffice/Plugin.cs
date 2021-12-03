@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using System.IO;
+using zero.Backoffice.Endpoints.Account;
 
 namespace zero.Backoffice;
 
@@ -21,8 +24,10 @@ public class ZeroBackofficePlugin : ZeroPlugin
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddOptions<BackofficeOptions>().Bind(configuration.GetSection("Zero:Backoffice")).Configure<IWebHostEnvironment>(ConfigureOptions);
+    services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, ZeroBackofficeMvcOptions>());
     services.AddHostedService<ZeroDevService>();
     services.AddTransient<IZeroVue, ZeroVue>();
+    services.AddSingleton<IMapperProfile, AccountMapperProfile>();
 
     services.AddZeroBackofficeUIComposition();
 

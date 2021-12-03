@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using zero.Api.Controllers;
 
 namespace zero.Backoffice.Endpoints.Links;
 
-public class LinksController : ZeroApiController
+public class LinksController : ZeroBackofficeController
 {
   readonly IZeroStore Store;
   readonly ILinks Links;

@@ -27,7 +27,7 @@ public class ZeroApiControllerModelConvention : IControllerModelConvention
   /// <summary>
   /// Configure routing model for all backoffice controllers
   /// </summary>
-  public void Apply(ControllerModel controller)
+  public virtual void Apply(ControllerModel controller)
   {
     bool hasAttributeRouteModels = controller.Selectors.Any(selector => selector.AttributeRouteModel != null);
 

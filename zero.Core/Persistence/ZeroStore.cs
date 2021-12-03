@@ -15,7 +15,16 @@ public class ZeroStore : IZeroStore
   protected Dictionary<string, IZeroDocumentSession> ScopedSessions { get; set; } = new();
 
   /// <inheritdoc />
-  public string ResolvedDatabase { get; set; }
+  string _resolvedDatabase = null;
+  public string ResolvedDatabase
+  {
+    get => _resolvedDatabase;
+    set
+    {
+      _resolvedDatabase = value;
+      Raven.ResolvedDatabase = value;
+    }
+  }
 
 
   /// <inheritdoc />

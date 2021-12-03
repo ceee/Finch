@@ -16,7 +16,7 @@ public class PagesStore : TreeEntityStore<Page>, IPagesStore
   /// <inheritdoc />
   public override async Task<bool> IsAllowedAsChild(Page model, string parentId)
   {
-    IEnumerable<FlavorConfig> pageTypes = await PageTypes.GetAllowedFlavors(parentId);
+    IEnumerable<FlavorConfig> pageTypes = await PageTypes.GetAllowedTypes(parentId);
     return pageTypes.Any(x => x.Alias == model.Flavor);
   }
 
@@ -31,8 +31,7 @@ public class PagesStore : TreeEntityStore<Page>, IPagesStore
       return null;
     }
 
-    Page model = await Empty();
-    model.Flavor = type.Alias;
+    Page model = await base.Empty(pageTypeAlias);
     model.ParentId = parentId;
 
     if (!await IsAllowedAsChild(model, parentId))

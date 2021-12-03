@@ -31,6 +31,7 @@ public class ZeroApiPlugin : ZeroPlugin
     ZeroModuleCollection.AddModule<Endpoints.Search.SearchModule>(services, configuration);
     ZeroModuleCollection.AddModule<Endpoints.Translations.TranslationModule>(services, configuration);
     ZeroModuleCollection.AddModule<Endpoints.Mails.MailModule>(services, configuration);
+    ZeroModuleCollection.AddModule<Endpoints.Pages.PageModule>(services, configuration);
 
     PostConfigureServices?.Invoke(services, configuration);
   }

@@ -3,28 +3,35 @@
 public partial class StoreOperations : IStoreOperations
 {
   /// <inheritdoc />
-  public virtual Task<T> Empty<T>(string flavor = null) where T : ZeroIdEntity, ISupportsFlavors, new() => Empty<T, T>(flavor);
+  public virtual Task<T> Empty<T>(string flavorAlias = null) where T : ZeroIdEntity, ISupportsFlavors, new() => Empty<T, T>(flavorAlias);
 
 
   /// <inheritdoc />
-  public virtual Task<TFlavor> Empty<T, TFlavor>(string flavor)
+  public virtual Task<TFlavor> Empty<T, TFlavor>(string flavorAlias = null)
     where T : ZeroIdEntity, ISupportsFlavors, new()
     where TFlavor : T, new()
   {
     // throw if this entity is not allowed to be created without a flavor
-    if (flavor.IsNullOrEmpty() && !Flavors.CanUseWithoutFlavors<T>())
+    if (flavorAlias.IsNullOrEmpty() && !Flavors.CanUseWithoutFlavors<T>())
     {
-      throw new ArgumentException("Can not create instance of an entity which is configured to to be only used as a flavor", nameof(flavor));
+      string defaultFlavor = Flavors.DefaultFlavorFor<T>();
+
+      if (defaultFlavor.IsNullOrEmpty())
+      {
+        throw new ArgumentException("Can not create instance of an entity which is configured to to be only used as a flavor", nameof(flavorAlias));
+      }
+
+      flavorAlias = defaultFlavor;
     }
 
     // return default instance if no flavor is required
-    if (flavor.IsNullOrEmpty())
+    if (flavorAlias.IsNullOrEmpty())
     {
       return Task.FromResult<TFlavor>(new());
     }
 
     // try to load and construct a specific flavor
-    FlavorConfig config = Flavors.Get<T>(flavor);
+    FlavorConfig config = Flavors.Get<T>(flavorAlias);
     TFlavor result = config?.Construct(config) as TFlavor;
 
     if (result == null)
@@ -32,7 +39,7 @@ public partial class StoreOperations : IStoreOperations
       return Task.FromResult<TFlavor>(default);
     }
 
-    result.Flavor = flavor;
+    result.Flavor = flavorAlias;
     return Task.FromResult(result);
   }
 }

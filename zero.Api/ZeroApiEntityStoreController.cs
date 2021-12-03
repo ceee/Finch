@@ -3,7 +3,9 @@ using Raven.Client.Documents.Indexes;
 
 namespace zero.Api.Controllers;
 
-public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiController where TModel : ZeroEntity, new() where TStore : IEntityStore<TModel>
+public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiController 
+  where TModel : ZeroEntity, new() 
+  where TStore : IEntityStore<TModel>
 {
   protected TStore Store { get; set; }
 
@@ -21,9 +23,9 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
-  protected async Task<ActionResult<T>> EmptyModel<T>(string flavor) where T : DisplayModel<TModel>
+  protected async Task<ActionResult<T>> EmptyModel<T>(string flavorAlias = null) where T : DisplayModel<TModel>
   {
-    TModel model = await Store.Empty(flavor);
+    TModel model = await Store.Empty(flavorAlias);
 
     if (model == null)
     {

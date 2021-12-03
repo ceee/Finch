@@ -35,7 +35,7 @@ public class PageTypeService : IPageTypeService
 
 
   /// <inheritdoc />
-  public async Task<IEnumerable<FlavorConfig>> GetAllowedFlavors(string pageParentId = null)
+  public async Task<IEnumerable<FlavorConfig>> GetAllowedTypes(string pageParentId = null)
   {
     List<Page> parents = new();
 
@@ -80,7 +80,7 @@ public interface IPageTypeService
   /// <summary>
   /// Get all page types which are allowed below a selected parent page
   /// </summary>
-  Task<IEnumerable<FlavorConfig>> GetAllowedFlavors(string pageParentId = null);
+  Task<IEnumerable<FlavorConfig>> GetAllowedTypes(string pageParentId = null);
 
   /// <summary>
   /// Get a specific page type by alias

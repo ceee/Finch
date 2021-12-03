@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\index.tpl.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 

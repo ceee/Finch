@@ -28,6 +28,18 @@ public class SchemedSignInManager<TUser> : SignInManager<TUser> where TUser : Ze
 
 
   /// <inheritdoc />
+  public override Task<bool> CanSignInAsync(TUser user)
+  {
+    if (!user.IsActive)
+    {
+      return Task.FromResult(false);
+    }
+
+    return base.CanSignInAsync(user);
+  }
+
+
+  /// <inheritdoc />
   public override bool IsSignedIn(ClaimsPrincipal principal)
   {
     if (principal?.Identities == null)

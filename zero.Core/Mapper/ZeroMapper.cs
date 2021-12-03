@@ -68,6 +68,12 @@ public class ZeroMapper : IZeroMapper
     }
 
     Type destinationType = typeof(TDestination);
+
+    if (destinationType == source.GetType())
+    {
+      return (TDestination)source;
+    }
+
     ZeroMapperContext mapperContext = new(this);
 
     var constructor = GetConstructor(sourceType, destinationType);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using zero.Identity.Models;
 
 namespace zero.Identity;
 
@@ -54,50 +55,29 @@ public class AuthenticationService : IAuthenticationService
 
 
   /// <inheritdoc />
-  public async Task<Result> Login(string email, string password, bool isPersistent)
+  public async Task<LoginResult> Login(string email, string password, bool isPersistent)
   {
-    Result result = new();
-
-    ZeroUser user = await SignInManager.UserManager.FindByNameAsync(email);
-
-    if (user == null)
-    {
-      result.AddError("@login.errors.wrongcredentials"); // TODO we don't need translations here, but return an enum, so the app itself can translate the error
-      return result;
-    }
-    // TODO probably move this logic into a custom SignInManager which overrides CanSignInAsync()
-    // see https://stackoverflow.com/a/35484758/670860
-    else if (!user.IsActive)
-    {
-      result.AddError("@login.errors.disabled");
-      return result;
-    }
-
-    SignInResult signInResult = await SignInManager.PasswordSignInAsync(user, password, isPersistent, true);
+    SignInResult signInResult = await SignInManager.PasswordSignInAsync(email, password, isPersistent, true);
 
     if (!signInResult.Succeeded)
     {
       if (signInResult.IsLockedOut)
       {
-        result.AddError("@login.errors.lockedout");
+        return LoginResult.LockedOut;
       }
       else if (signInResult.IsNotAllowed)
       {
-        result.AddError("@login.errors.notallowed");
+        return LoginResult.NotAllowed;
       }
       else if (signInResult.RequiresTwoFactor)
       {
-        result.AddError("@login.errors.requirestwofactor");
+        return LoginResult.RequiresTwoFactor;
       }
-      else
-      {
-        result.AddError("@login.errors.wrongcredentials");
-      }
-
-      return result;
+      
+      return LoginResult.WrongCredentials;
     }
 
-    return Result.Success();
+    return LoginResult.Success;
   }
 
 
@@ -141,7 +121,7 @@ public interface IAuthenticationService
   /// <summary>
   /// Logs a zero-user in and sets cookie
   /// </summary>
-  Task<Result> Login(string email, string password, bool isPersistent);
+  Task<LoginResult> Login(string email, string password, bool isPersistent);
 
   /// <summary>
   /// Logs out the current user

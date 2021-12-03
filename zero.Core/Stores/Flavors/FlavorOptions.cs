@@ -34,7 +34,7 @@ public class FlavorOptions
       return provider.DefaultFlavor;
     }
 
-    return provider.Flavors.First().Alias;
+    return null;
   }
 
 

@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
+using System.Reflection;
 
 namespace zero.Localization;
 
@@ -7,7 +9,6 @@ public class Localizer : ILocalizer
   protected Dictionary<string, string> Cache { get; private set; } = new();
 
   protected IZeroStore Store { get; private set; }
-
 
   public Localizer(IZeroStore store)
   {
@@ -82,7 +83,7 @@ public class Localizer : ILocalizer
   /// </summary>
   protected virtual Translation LoadTranslation(string key)
   {
-    return Store.Session().Query<Translation>().FirstOrDefault(x => x.Key == key); // TODO I guess this throws ^^
+    return Store.Session().Synchronous.Query<Translation>().FirstOrDefault(x => x.Key == key);
   }
 }
 

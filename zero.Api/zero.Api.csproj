@@ -15,6 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Endpoints\Pages\ModulesController.cs" />
+    <Compile Remove="Endpoints\Pages\_PagesController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 

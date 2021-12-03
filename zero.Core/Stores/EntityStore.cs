@@ -33,10 +33,10 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
 
 
   /// <inheritdoc />
-  public virtual Task<T> Empty(string flavor = null) => Operations.Empty<T>(flavor);
+  public virtual Task<T> Empty(string flavorAlias = null) => Operations.Empty<T>(flavorAlias);
 
   /// <inheritdoc />
-  public virtual Task<TFlavor> Empty<TFlavor>(string flavor) where TFlavor : T, new() => Operations.Empty<T, TFlavor>(flavor);
+  public virtual Task<TFlavor> Empty<TFlavor>(string flavorAlias = null) where TFlavor : T, new() => Operations.Empty<T, TFlavor>(flavorAlias);
 
   /// <inheritdoc />
   public virtual Task<T> Load(string id, string changeVector = null) => Operations.Load<T>(id, changeVector);
@@ -106,12 +106,12 @@ public interface IEntityStore<T> where T : ZeroIdEntity, new()
   /// <summary>
   /// Get new instance of an entity (with an optional flavor)
   /// </summary>
-  Task<T> Empty(string flavor = null);
+  Task<T> Empty(string flavorAlias = null);
 
   /// <summary>
   /// Get new instance of an entity with a specific flavor
   /// </summary>
-  Task<TFlavor> Empty<TFlavor>(string flavor) where TFlavor : T, new();
+  Task<TFlavor> Empty<TFlavor>(string flavorAlias = null) where TFlavor : T, new();
 
   /// <summary>
   /// Get an entity by Id

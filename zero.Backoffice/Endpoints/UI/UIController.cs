@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections;
-using zero.Api.Controllers;
 using zero.Api.Endpoints.Applications;
 
 namespace zero.Backoffice.Endpoints.UI;
 
-public class UIController : ZeroApiController
+public class UIController : ZeroBackofficeController
 {
   readonly IEnumerable<IBackofficeSection> Sections;
   readonly IEnumerable<ISettingsGroup> SettingsGroups;
