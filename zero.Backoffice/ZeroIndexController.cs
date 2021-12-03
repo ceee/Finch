@@ -14,8 +14,6 @@ public class ZeroIndexController : Controller
   IAuthenticationService AuthService { get; set; }
   IIconRepository IconRepository { get; set; }
 
-  string[] JsDevModulePaths = new[] { "/vite/client", "/app/app.js" };
-
   public ZeroIndexController(IZeroVue zeroVue, IZeroOptions options, IAuthenticationService authService, IIconRepository iconRepository)
   {
     ZeroVue = zeroVue;
@@ -33,17 +31,40 @@ public class ZeroIndexController : Controller
     }
 
     string config = await ZeroVue.ConfigAsJson();
-    bool isLoggedIn = AuthService.IsLoggedIn();
     int port = Options.For<BackofficeOptions>().DevServer.Port;
+    string domain = "http://localhost:" + port;
 
-    string resourceName = $"zero.Backoffice.Resources.backoffice.tpl.html";
+    if (AuthService.IsLoggedIn())
+    {
+      return await RenderBackoffice(domain, config);
+    }
+    else
+    {
+      return await RenderAuth(domain, config);
+    }
+  }
 
-    string template = await LoadTemplate(resourceName);
 
-    string content = TokenReplacement.Apply(template, new()
+  async Task<ActionResult> RenderAuth(string domain, string config)
+  {
+    string content = TokenReplacement.Apply(await LoadTemplate("zero.Backoffice.Resources.auth.tpl.html"), new()
     {
       { "css", String.Empty },
-      { "js", String.Join(String.Empty, GetJsModules("http://localhost:" + port)) },
+      { "js", String.Join(String.Empty, GetJsModules(domain, new[] { "/vite/client", "/app/app-auth.js" })) },
+      { "svg", ZeroVue.GetIconSvg() },
+      { "config", config }
+    });
+
+    return Content(content, "text/html");
+  }
+
+
+  async Task<ActionResult> RenderBackoffice(string domain, string config)
+  {
+    string content = TokenReplacement.Apply(await LoadTemplate("zero.Backoffice.Resources.backoffice.tpl.html"), new()
+    {
+      { "css", String.Empty },
+      { "js", String.Join(String.Empty, GetJsModules(domain, new[] { "/vite/client", "/app/app.js" })) },
       { "svg", await IconRepository.GetCompiledSvg() },
       { "config", config }
     });
@@ -52,27 +73,9 @@ public class ZeroIndexController : Controller
   }
 
 
-  //async Task<ActionResult> Login()
-  //{
-  //  string content = TokenReplacement.Apply(await LoadTemplate("zero.Backoffice.Resources.backoffice.tpl.html"), new()
-  //  {
-  //    { "css", String.Empty },
-  //    { "js", String.Join(String.Empty, GetJsModules("http://localhost:" + port)) },
-  //    { "svg", ZeroVue.GetIconSvg() },
-  //    { "config", config }
-  //  });
-  //}
-
-
-  //async Task<ActionResult> Backoffice()
-  //{
-
-  //}
-
-
-  IEnumerable<string> GetJsModules(string domain)
+  IEnumerable<string> GetJsModules(string domain, string[] modules)
   {
-    return JsDevModulePaths.Select(path => $"<script type='module' src='{domain.TrimEnd('/')}{path.EnsureStartsWith('/')}'></script>");
+    return modules.Select(path => $"<script type='module' src='{domain.TrimEnd('/')}{path.EnsureStartsWith('/')}'></script>");
   }
 
 
