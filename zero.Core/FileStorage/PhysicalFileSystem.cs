@@ -15,6 +15,20 @@ public class PhysicalFileSystem : IFileSystem
 
 
   /// <inheritdoc />
+  public virtual string Map(string path)
+  {
+    return ResolvePath(path);
+  }
+
+
+  /// <inheritdoc />
+  public virtual string MapToPublicPath(string path)
+  {
+    return path.EnsureStartsWith('/');
+  }
+
+
+  /// <inheritdoc />
   public virtual Task<bool> Exists(string path, CancellationToken cancellationToken = default)
   {
     try
@@ -268,10 +282,11 @@ public class PhysicalFileSystem : IFileSystem
       path = path.Replace('\\', '/').FullTrim().Trim('/');
 
       string physicalPath = Path.Combine(_root, path);
+      string rootPath = Path.GetFullPath(_root);
 
       // do not allow paths which are outside this file system
       // the boundaries are set be the basePath which is assigned in the file system constructor
-      if (!Path.GetFullPath(physicalPath).StartsWith(_root, StringComparison.InvariantCultureIgnoreCase))
+      if (!Path.GetFullPath(physicalPath).StartsWith(rootPath, StringComparison.InvariantCultureIgnoreCase))
       {
         throw new FileSystemException($"The path '{path}' is outside the file system");
       }

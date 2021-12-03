@@ -12,17 +12,11 @@ public class MediaFileSystem : PhysicalFileSystem, IMediaFileSystem
 
 
   /// <inheritdoc />
-  public virtual string MapToPublicPath(string path)
+  public override string MapToPublicPath(string path)
   {
     return PublicPathPrefix + path.TrimStart('/');
   }
 }
 
 
-public interface IMediaFileSystem : IFileSystem
-{
-  /// <summary>
-  /// Map an internal path to a public accessible path
-  /// </summary>
-  string MapToPublicPath(string path);
-}
+public interface IMediaFileSystem : IFileSystem { }

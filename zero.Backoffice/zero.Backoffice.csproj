@@ -18,7 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\index.tpl.html" />
+    <EmbeddedResource Include="Resources\login.tpl.html" />
+    <EmbeddedResource Include="Resources\backoffice.tpl.html" />
   </ItemGroup>
 
   <ItemGroup>

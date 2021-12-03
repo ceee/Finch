@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using System.IO;
 using zero.Backoffice.Endpoints.Account;
+using zero.Backoffice.Services;
 
 namespace zero.Backoffice;
 
@@ -29,6 +30,15 @@ public class ZeroBackofficePlugin : ZeroPlugin
     services.AddTransient<IZeroVue, ZeroVue>();
     services.AddSingleton<IMapperProfile, AccountMapperProfile>();
 
+    services.AddSingleton<IIconRepository, IconRepository>();
+
+    services.AddSingleton<IBackofficeAssetFileSystem, BackofficeAssetFileSystem>(svc =>
+    {
+      IOptions<BackofficeOptions> options = svc.GetRequiredService<IOptions<BackofficeOptions>>();
+      IWebHostEnvironment env = svc.GetRequiredService<IWebHostEnvironment>();
+      return new(Path.Combine(env.WebRootPath, options.Value.AssetPath));
+    });
+
     services.AddZeroBackofficeUIComposition();
 
     //services.AddTransient<ISectionsApi, SectionsApi>();
@@ -43,13 +53,16 @@ public class ZeroBackofficePlugin : ZeroPlugin
 
   protected void ConfigureOptions(BackofficeOptions options, IWebHostEnvironment env)
   {
+    options.ExcludedPaths.Add("resources");
+    options.AssetPath = "zero/resources";
+
     options.DevServer.WorkingDirectory = Path.Combine(env.ContentRootPath, "..", "Zero.Web.UI", "App");
 
     options.IconSets.Add(new BackofficeIconSet()
     {
       Alias = "feather",
       Name = "Feather",
-      SpritePath = "/assets/icons/feather.svg",
+      SpritePath = "icons/feather.svg",
       Prefix = "fth"
     });
 

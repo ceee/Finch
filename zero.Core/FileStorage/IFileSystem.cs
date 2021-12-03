@@ -5,6 +5,16 @@ namespace zero.FileStorage;
 public interface IFileSystem
 {
   /// <summary>
+  /// Map a relative path to an absolute internal path 
+  /// </summary>
+  string Map(string path);
+
+  /// <summary>
+  /// Map an internal path to a public accessible path
+  /// </summary>
+  string MapToPublicPath(string path);
+
+  /// <summary>
   /// Determines whether a file or directory at the given path already exists
   /// </summary>
   Task<bool> Exists(string path, CancellationToken cancellationToken = default);

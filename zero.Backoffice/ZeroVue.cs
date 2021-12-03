@@ -63,7 +63,6 @@ public class ZeroVue : IZeroVue
     config.Alias = CreateAliases();
     config.AppId = Context.AppId;
     //config.SharedAppId = Constants.Database.SharedAppId; // TODO appx
-    config.Icons = CreateIconSets();
     config.MultiApps = Options.For<ApplicationOptions>().EnableMultiple;
 
     ZeroUser user = await AuthenticationApi.GetUser();
@@ -349,57 +348,6 @@ public class ZeroVue : IZeroVue
   }
 
 
-  IList<ZeroVueIconSet> CreateIconSets()
-  {
-    List<ZeroVueIconSet> result = new();
-    IEnumerable<BackofficeIconSet> sets = Options.For<BackofficeOptions>().IconSets;
-
-    StringBuilder svg = new();
-
-    foreach (BackofficeIconSet set in sets)
-    {
-      string path = Paths.Map(set.SpritePath.TrimStart('/'));
-
-      if (!File.Exists(path))
-      {
-        Logger.LogWarning("Could not load icon set {alias} from path {path}", set.Alias, path);
-        continue;
-      }
-
-      string svgContent = File.ReadAllText(path, Encoding.UTF8);
-      XDocument xml = XDocument.Parse(svgContent);
-      IEnumerable<XElement> symbols = xml.Descendants().Where(x => x.Name.LocalName == "symbol"); // ("symbol");
-
-      if (!symbols.Any())
-      {
-        Logger.LogWarning("Icon set {alias} does not contain any <symbol>", set.Alias);
-        continue;
-      }
-
-      ZeroVueIconSet iconSet = new()
-      {
-        Alias = set.Alias,
-        Name = set.Name,
-        Prefix = set.Prefix
-      };
-
-      foreach (XElement symbol in symbols)
-      {
-        string symbolAlias = set.Prefix + "-" + symbol.Attribute("id").Value.ToString();
-        symbol.SetAttributeValue("id", symbolAlias);
-        svg.Append(symbol.ToString().RemoveNewLines());
-        iconSet.Icons.Add(symbolAlias);
-      }
-
-      result.Add(iconSet);
-    }
-
-    IconSymbolsSvg = svg.ToString();
-
-    return result;
-  }
-
-
   List<ZeroVueBlueprint> CreateBlueprints()
   {
     List<ZeroVueBlueprint> items = new();
@@ -489,8 +437,6 @@ public class ZeroVueConfig
 
   public Dictionary<string, object> Overrides { get; set; } = new Dictionary<string, object>();
 
-  public IList<ZeroVueIconSet> Icons { get; set; } = new List<ZeroVueIconSet>();
-
   public ZeroVueServices Services { get; set; } = new();
 
   public IList<ZeroVueBlueprint> Blueprints { get; set; } = new List<ZeroVueBlueprint>();
@@ -556,17 +502,6 @@ public class ZeroVueApplication
   public string Name { get; set; }
 
   public string Image { get; set; }
-}
-
-public class ZeroVueIconSet
-{
-  public string Alias { get; set; }
-
-  public string Name { get; set; }
-
-  public string Prefix { get; set; }
-
-  public HashSet<string> Icons { get; set; } = new();
 }
 
 public class ZeroVueServices

@@ -3,6 +3,11 @@
 public class BackofficeOptions
 {
   /// <summary>
+  /// Public path to zero assets
+  /// </summary>
+  public string AssetPath { get; set; }
+
+  /// <summary>
   /// Paths in the backoffice which are not handled by zero
   /// </summary>
   public List<string> ExcludedPaths { get; private set; } = new();
