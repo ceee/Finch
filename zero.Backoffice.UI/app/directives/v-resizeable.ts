@@ -1,6 +1,6 @@
 
 // object (new) that handles resizing of an element
-export var Resizable = function (element, params)
+const Resizable = function (element, params)
 {
   const prefix = 'zero.ui-resizable.';
   const cacheKey = prefix + (params.save || 'none');
@@ -123,5 +123,16 @@ export var Resizable = function (element, params)
       this.update(+localStorage.getItem(cacheKey));
       this.value = newValue;
     }
+  }
+};
+
+/**
+ * resize an element
+ */
+export default {
+  bind(el, binding)
+  {
+    let resizable = new Resizable(el, binding.value);
+    resizable.listen();
   }
 };

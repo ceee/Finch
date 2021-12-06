@@ -9,15 +9,13 @@ export type TranslationState = {
 export const useTranslationStore = defineStore('zero.translations', {
   state: () => ({
     culture: null,
-    translations: {}
+    translations: { name: 'Mini' }
   } as TranslationState),
 
-  getters: {
-    getTranslation(key: string): string
+  actions: {
+    find(key: string): string
     {
-      return this.state.translations[key.toLowerCase()];
+      return this.translations[key.toLowerCase()];
     }
-  },
-
-  actions: {}
+  }
 });

@@ -2,8 +2,6 @@
 import { extendObject } from '../utils/objects';
 import { useTranslationStore } from '../stores/translations';
 
-const translationStore = useTranslationStore();
-
 export interface LocalizeOptions
 {
   force: boolean,
@@ -33,7 +31,8 @@ export const localize = (key: string, options?: LocalizeOptions): string =>
   }
 
   key = hasAtSign ? key.slice(1) : key;
-  const value = translationStore.getTranslation(key);
+  const store = useTranslationStore();
+  const value = store.find(key);
 
   // TODO only return key if in debug mode
   if (!params.hideEmpty && (!value || typeof value !== 'string'))
