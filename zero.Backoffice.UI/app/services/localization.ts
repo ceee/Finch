@@ -1,0 +1,60 @@
+import { extend as _extend, each as _each } from 'underscore';
+
+const translations = {}; // TODO vue load translations from config
+
+
+export interface LocalizeOptions
+{
+  force: boolean,
+  tokens: object,
+  hideEmpty: boolean
+}
+
+
+export const localize = (key: string, options?: LocalizeOptions): string =>
+{
+  let params = _extend({
+    force: false,
+    tokens: {},
+    hideEmpty: false
+  }, options || {});
+
+  if (!key)
+  {
+    return '';
+  }
+
+  const hasAtSign = key.indexOf('@') === 0;
+
+  if (!params.force && !hasAtSign)
+  {
+    return replaceTokens(key, params.tokens);
+  }
+
+  key = hasAtSign ? key.slice(1) : key;
+  const value = translations[key.toLowerCase()];
+
+  // TODO only return key if in debug mode
+  if (!params.hideEmpty && (!value || typeof value !== 'string'))
+  {
+    return '[' + key + ']';
+  }
+
+  return replaceTokens(value, params.tokens);
+};
+
+
+export const replaceTokens = (value: string, tokens: object): string =>
+{
+  if (!value || value.indexOf('{') < 0)
+  {
+    return value;
+  }
+
+  _each(tokens, (replacement, key) =>
+  {
+    value = value.replace("{" + key + "}", replacement);
+  });
+
+  return value;
+};

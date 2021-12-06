@@ -1,4 +1,5 @@
-﻿import axios from 'axios';
+﻿
+import axios from 'axios';
 
 const getConfig = config =>
 {
@@ -56,13 +57,14 @@ export async function send(config)
 export function collection(base)
 {
   return {
-    getById: async (id, config) => await get(base + 'getById', { ...config, params: { id } }),
+    getById: async (id, changeVector, config) => await get(base + 'getById', { ...config, params: { id, changeVector } }),
     getByIds: async (ids, config) => await get(base + 'getByIds', { ...config, params: { ids } }),
     getEmpty: async config => await get(base + 'getEmpty', { ...config }),
     getByQuery: async (query, config) => await get(base + 'getByQuery', { ...config, params: { query } }),
     getAll: async (config) => await get(base + 'getAll', { ...config }),
     getPreviews: async (ids, config) => await get(base + 'getPreviews', { ...config, params: { ids } }),
     getForPicker: async (config) => await get(base + 'getForPicker', { ...config }),
+    getRevisions: async (id, query, config) => await get(base + 'getRevisions', { ...config, params: { id, query } }),
     save: async (model, config) => await post(base + 'save', model, { ...config }),
     delete: async (id, config) => await del(base + 'delete', { ...config, params: { id } })
   };

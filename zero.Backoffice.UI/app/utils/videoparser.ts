@@ -2,13 +2,14 @@
 export const YOUTUBE_REGEX = /youtu(?:\.be|be\.com)\/(?:.*v(?:\/|=)|(?:.*\/)?)([a-zA-Z0-9-_]+)/gim;
 export const VIMEO_REGEX = /vimeo\.com\/(\d+)($|\/)/gim;
 
+let youTubeApiKey = "xxx"; // TODO vue use from config
 
 /**
  * Get video ID from an URL.
  * This currently works for YouTube and Vimeo links.
  * @param {string} url
  */
-export let getVideoId = url =>
+export function getVideoId(url: string): string
 {
   if (!url)
   {
@@ -30,16 +31,32 @@ export let getVideoId = url =>
 };
 
 
+export interface VideoMetadata
+{
+  id: string,
+  url: string,
+  success: boolean,
+  data: object,
+  image: string,
+  title: string,
+  description: string
+}
+
+
 /**
  * Get metadata for a vimeo ID.
  * @param {string} id
  */
-export let getVimeoMetadata = async id =>
+export async function getVimeoMetadata(id: string): Promise<VideoMetadata>
 {
   let result = {
     id,
     url: `https://vimeo.com/${id}`,
-    success: false
+    success: false,
+    data: null,
+    image: null,
+    title: null,
+    description: null
   };
 
   let response = await fetch(`https://vimeo.com/api/v2/video/${id}.json`);
@@ -62,22 +79,24 @@ export let getVimeoMetadata = async id =>
  * Get metdata for a YouTube ID.
  * @param {string} url
  */
-export let getYoutubeMetadata = async id =>
+export async function getYoutubeMetadata(id: string): Promise<VideoMetadata>
 {
-  const apiKey = __zero.services.youTubeApiKey;
-
   let result = {
     id,
     image: `https://i3.ytimg.com/vi/${id}/maxresdefault.jpg`,
     url: `https://www.youtube.com/watch?v=${id}`,
-    success: true
+    success: false,
+    data: null,
+    title: null,
+    description: null
   };
 
-  if (apiKey)
+
+  if (youTubeApiKey)
   {
     result.success = false;
 
-    let response = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&key=${apiKey}`);
+    let response = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&key=${youTubeApiKey}`);
 
     if (response.ok)
     {
@@ -94,17 +113,12 @@ export let getYoutubeMetadata = async id =>
         result.description = result.data.description;
         result.success = true;
       }
-    }
-
-    return result;
+    }   
   }
   else
   {
-    return {
-      id,
-      image: `https://i3.ytimg.com/vi/${id}/maxresdefault.jpg`,
-      url: `https://www.youtube.com/watch?v=${id}`,
-      success: true
-    };
+    result.success = true;
   }
+
+  return result;
 };

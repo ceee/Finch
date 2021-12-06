@@ -18,8 +18,6 @@
 
 
 <script>
-  import { warn } from 'zero/helpers/debug.js';
-
   export default {
     name: 'uiDropdownButton',
 
@@ -82,7 +80,7 @@
 
       if (!this.dropdown)
       {
-        warn('ui-dropdown-button: Could not find parent <ui-dropdown />');
+        console.warn('ui-dropdown-button: Could not find parent <ui-dropdown />');
       }
     },
 

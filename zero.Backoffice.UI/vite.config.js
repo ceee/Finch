@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
-const { createVuePlugin } = require('vite-plugin-vue2');
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
 
 let loadedPlugins = JSON.parse(process.env.ZERO_PLUGINS || "[]");
 
@@ -53,44 +54,19 @@ fs.writeFile(path.resolve(__dirname, 'app/plugins.generated.js'), pluginFileCont
   //file written successfully
 })
 
-const myPlugin = () => ({
-  name: 'configure-server',
-  configureServer(server)
-  {
-    var watcher = server.watcher;
-    watcher
-      .on('add', path => console.log(`watch: ${path}`));
-    var files = watcher.getWatched();
-    console.log('watcher:');
-    console.log(files);
-
-    // https://github.com/paulmillr/chokidar#api
-
-    //server.middlewares.use((req, res, next) =>
-    //{
-    //  console.log(req.url);
-    //  next();
-    //  // custom handle request...
-    //})
-  }
-})
-
-/**
- * @type {import('vite').UserConfig}
- */
-let config = {
+let config = defineConfig({
   server: {
     port: process.env.PORT || 3399,
     cors: true
   },
-  plugins: [createVuePlugin(), ...zeroPlugins, myPlugin()],
+  plugins: [vue(), ...zeroPlugins],
   alias: {
     '@zero': path.resolve(__dirname, 'app/'),
     'zero': path.resolve(__dirname, 'app/'),
     ...pluginAliases,
-    'vue': 'vue/dist/vue.esm.js',
+    //'vue': 'vue/dist/vue.esm.js',
     'tiptap': 'tiptap/dist/tiptap.esm.js',
-    'zerox': path.resolve(__dirname, 'app/zerox.js')
+    //'zerox': path.resolve(__dirname, 'app/zerox.js')
   },
   build: {
     manifest: true,
@@ -108,7 +84,7 @@ let config = {
       }
     }
   }
-};
+});
 
 console.log('root: ' + config.root);
 
