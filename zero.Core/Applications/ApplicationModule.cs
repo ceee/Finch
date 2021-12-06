@@ -9,6 +9,7 @@ public class ApplicationModule : ZeroModule
   {
     services.AddScoped<IApplicationResolver, ApplicationResolver>();
     services.AddScoped<IApplicationStore, ApplicationStore>();
-    services.AddOptions<ApplicationOptions>().Bind(configuration.GetSection("Zero:Applications"));
+    services.AddScoped<IApplicationRegistry, ApplicationRegistry>();
+    //services.AddOptions<ApplicationOptions>().Bind(configuration.GetSection("Zero:Applications"));
   }
 }

@@ -10,7 +10,7 @@ namespace zero.Backoffice;
 public class DebugController : ZeroBackofficeController
 {
   [HttpGet("icons")]
-  public async Task<ActionResult> GetIcons([FromServices] IIconRepository icons)
+  public async Task<ActionResult> GetIcons([FromServices] IIconService icons)
   {
     return Ok(await icons.GetSets());
   }

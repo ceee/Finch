@@ -1,10 +1,10 @@
-﻿using zero.Api.Endpoints.Applications;
+﻿//using zero.Api.Endpoints.Applications;
 
-namespace zero.Backoffice.Endpoints.UI;
+//namespace zero.Backoffice.Endpoints.UI;
 
-public class UIViewModel
-{
-  public List<ZeroVueSettingsGroup> Groups { get; set; }
+//public class UIViewModel
+//{
+//  public List<ZeroVueSettingsGroup> Groups { get; set; }
 
-  public List<ApplicationBasic> Applications { get; set; }
-}
+//  public List<ApplicationBasic> Applications { get; set; }
+//}

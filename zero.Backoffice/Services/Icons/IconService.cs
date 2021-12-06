@@ -7,13 +7,13 @@ using System.Xml.Linq;
 
 namespace zero.Backoffice.Services;
 
-public class IconRepository : IIconRepository
+public class IconService : IIconService
 {
   protected IOptions<BackofficeOptions> Options { get; set; }
 
   protected IBackofficeAssetFileSystem FileSystem { get; set; }
 
-  protected ILogger<IconRepository> Logger { get; set; }
+  protected ILogger<IconService> Logger { get; set; }
 
   protected ConcurrentBag<BackofficeIconSetPresentation> CachedSets { get; private set; } = new();
 
@@ -22,7 +22,7 @@ public class IconRepository : IIconRepository
   protected bool IsLoaded { get; set; }
 
 
-  public IconRepository(IOptions<BackofficeOptions> options, IBackofficeAssetFileSystem fileSystem, ILogger<IconRepository> logger)
+  public IconService(IOptions<BackofficeOptions> options, IBackofficeAssetFileSystem fileSystem, ILogger<IconService> logger)
   {
     Options = options;
     FileSystem = fileSystem;
@@ -99,7 +99,7 @@ public class IconRepository : IIconRepository
 }
 
 
-public interface IIconRepository
+public interface IIconService
 {
   /// <summary>
   /// Get all registered icon sets with all their containing icons

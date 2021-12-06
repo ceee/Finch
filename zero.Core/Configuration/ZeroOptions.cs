@@ -18,6 +18,9 @@ public class ZeroOptions : IZeroOptions
   /// <inheritdoc />
   public TimeSpan TokenExpiration { get; set; }
 
+  /// <inheritdoc />
+  public List<ApplicationRegistration> Applications { get; set; } = new();
+
 
   internal IServiceProvider ServiceProvider { get; set; }
 
@@ -63,6 +66,11 @@ public interface IZeroOptions
   /// Expiration of a generated change token for an entity
   /// </summary>
   TimeSpan TokenExpiration { get; set; }
+
+  /// <summary>
+  /// Contains all registered applications
+  /// </summary>
+  List<ApplicationRegistration> Applications { get; set; }
 
   /// <summary>
   /// Get typed options (proxy to IOptions<TOptions>)

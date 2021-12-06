@@ -12,9 +12,9 @@ public class ZeroIndexController : Controller
   IZeroVue ZeroVue { get; set; }
   IZeroOptions Options { get; set; }
   IAuthenticationService AuthService { get; set; }
-  IIconRepository IconRepository { get; set; }
+  IIconService IconRepository { get; set; }
 
-  public ZeroIndexController(IZeroVue zeroVue, IZeroOptions options, IAuthenticationService authService, IIconRepository iconRepository)
+  public ZeroIndexController(IZeroVue zeroVue, IZeroOptions options, IAuthenticationService authService, IIconService iconRepository)
   {
     ZeroVue = zeroVue;
     Options = options;
@@ -34,14 +34,23 @@ public class ZeroIndexController : Controller
     int port = Options.For<BackofficeOptions>().DevServer.Port;
     string domain = "http://localhost:" + port;
 
-    if (AuthService.IsLoggedIn())
+    string content = TokenReplacement.Apply(await LoadTemplate("zero.Backoffice.Resources.backoffice.tpl.html"), new()
     {
-      return await RenderBackoffice(domain, config);
-    }
-    else
-    {
-      return await RenderAuth(domain, config);
-    }
+      { "css", String.Empty },
+      { "js", String.Join(String.Empty, GetJsModules(domain, new[] { "/vite/client", "/app/app.ts" })) },
+      { "svg", await IconRepository.GetCompiledSvg() },
+      { "config", config }
+    });
+
+    return Content(content, "text/html");
+    //if (AuthService.IsLoggedIn())
+    //{
+    //  return await RenderBackoffice(domain, config);
+    //}
+    //else
+    //{
+    //  return await RenderAuth(domain, config);
+    //}
   }
 
 
@@ -51,7 +60,7 @@ public class ZeroIndexController : Controller
     {
       { "css", String.Empty },
       { "js", String.Join(String.Empty, GetJsModules(domain, new[] { "/vite/client", "/app/app-auth.js" })) },
-      { "svg", ZeroVue.GetIconSvg() },
+      { "svg", await IconRepository.GetCompiledSvg() },
       { "config", config }
     });
 

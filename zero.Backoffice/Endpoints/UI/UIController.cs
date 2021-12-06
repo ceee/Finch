@@ -1,84 +1,51 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 using zero.Api.Endpoints.Applications;
+using zero.Backoffice.Services;
 
 namespace zero.Backoffice.Endpoints.UI;
 
 public class UIController : ZeroBackofficeController
 {
-  readonly IEnumerable<IBackofficeSection> Sections;
   readonly IEnumerable<ISettingsGroup> SettingsGroups;
   readonly IAuthenticationService AuthenticationService;
   readonly IAuthorizationService AuthorizationService;
   readonly IApplicationStore ApplicationStore;
+  readonly IIconService IconService;
+  readonly IResourceService ResourceService;
+  readonly ISectionService SectionService;
 
-  public UIController(IEnumerable<IBackofficeSection> sections, IEnumerable<ISettingsGroup> settingsGroups, 
-    IAuthenticationService authenticationService, IAuthorizationService authorizationService, IApplicationStore applicationStore)
+  public UIController(IEnumerable<ISettingsGroup> settingsGroups, 
+    IAuthenticationService authenticationService, IAuthorizationService authorizationService, IApplicationStore applicationStore, IIconService iconService, IResourceService resourceService, ISectionService sectionService)
   {
-    Sections = sections;
     SettingsGroups = settingsGroups;
     AuthenticationService = authenticationService;
     AuthorizationService = authorizationService; 
     ApplicationStore = applicationStore;
+    IconService = iconService;
+    ResourceService = resourceService;
+    SectionService = sectionService;
   }
 
   [HttpGet("sections")]
   //[ZeroAuthorize(CountryPermissions.Create)]
-  public ActionResult<IEnumerable> GetSections() => Ok(Sections);
+  public async Task<ActionResult<IEnumerable>> GetSections() => Ok(await SectionService.GetSections());
 
 
-  [HttpGet("sections/settings")]
-  public async Task<dynamic> GetAreas()
+  [HttpGet("settingareas")]
+  public async Task<ActionResult<IEnumerable>> GetSettingGroups() => Ok(await SectionService.GetSettingsAreas());
+
+
+  [HttpGet("iconsets")]
+  public async Task<ActionResult<IEnumerable>> GetIconSets()
   {
-    bool isSuperUser = AuthenticationService.IsSuper();
-    IList<Permission> permissions = AuthorizationService.GetPermissions(Permissions.Settings.PREFIX);
+    return Ok(await IconService.GetSets());
+  }
 
-    List<ZeroVueSettingsGroup> groups = new();
 
-    foreach (ISettingsGroup group in SettingsGroups)
-    {
-      List<ZeroVueSettingsArea> areas = new();
-
-      foreach (SettingsArea area in group.Areas)
-      {
-        //if (!isSuperUser && !Permission.CanReadKey(permissions, area.Alias, true))
-        //{
-        //  continue;
-        //}
-
-        ZeroVueSettingsArea vueArea = new()
-        {
-          Alias = area.Alias,
-          Name = area.Name,
-          Description = area.Description,
-          Icon = area.Icon,
-          Url = area.CustomUrl.Or(Constants.Sections.Settings.EnsureStartsWith('/') + Safenames.Alias(area.Alias).EnsureStartsWith('/'))
-        };
-
-        areas.Add(vueArea);
-      }
-
-      if (areas.Count > 0)
-      {
-        groups.Add(new()
-        {
-          Name = group.Name,
-          Items = areas
-        });
-      }
-    }
-
-    List<Application> applications = await ApplicationStore.LoadAll();// new List<Application>();
-
-    //if (Permission.CanReadKey(permissions, Permissions.Settings.Applications, false))
-    //{
-    //  applications = await ApplicationsApi.GetAll();
-    //}
-
-    return new UIViewModel()
-    {
-      Groups = groups,
-      Applications = applications.Select(x => Mapper.Map<Application, ApplicationBasic>(x)).ToList()
-    };
+  [HttpGet("translations")]
+  public async Task<ActionResult<Dictionary<string, string>>> GetTranslations()
+  {
+    return Ok(await ResourceService.GetTranslations("en-us"));
   }
 }

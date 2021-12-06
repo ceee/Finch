@@ -43,7 +43,7 @@ loadedPlugins.forEach(pluginPath =>
 
 pluginFileContent += "export default [ " + pluginNames.join(', ') + " ];";
 
-fs.writeFile(path.resolve(__dirname, 'app/core/plugins.js'), pluginFileContent, err =>
+fs.writeFile(path.resolve(__dirname, 'app/plugins.generated.js'), pluginFileContent, err =>
 {
   if (err)
   {

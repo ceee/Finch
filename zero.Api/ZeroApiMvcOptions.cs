@@ -18,7 +18,7 @@ internal class ZeroApiMvcOptions : IConfigureOptions<MvcOptions>
 
   public void Configure(MvcOptions options)
   {
-    options.Conventions.Add(new ZeroApiControllerModelConvention(Options.ZeroPath, isAppAware: Options.For<ApplicationOptions>().EnableMultiple));
+    options.Conventions.Add(new ZeroApiControllerModelConvention(Options.ZeroPath, isAppAware: Options.Applications.Count > 1));
     options.Conventions.Add(new RouteTokenTransformerConvention(new ApiParameterTransformer()));
   }
 }

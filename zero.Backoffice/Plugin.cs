@@ -30,7 +30,9 @@ public class ZeroBackofficePlugin : ZeroPlugin
     services.AddTransient<IZeroVue, ZeroVue>();
     services.AddSingleton<IMapperProfile, AccountMapperProfile>();
 
-    services.AddSingleton<IIconRepository, IconRepository>();
+    services.AddSingleton<IIconService, IconService>();
+    services.AddSingleton<IResourceService, ResourceService>();
+    services.AddSingleton<ISectionService, SectionService>();
 
     services.AddSingleton<IBackofficeAssetFileSystem, BackofficeAssetFileSystem>(svc =>
     {

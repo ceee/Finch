@@ -109,7 +109,7 @@ public class ApplicationResolver : IApplicationResolver
   /// <inheritdoc />
   public async Task<Application> ResolveFromRequest(HttpContext context)
   {
-    if (!Options.For<ApplicationOptions>().EnableMultiple)
+    if (Options.Applications.Count < 2)
     {
       return (await GetApplications()).FirstOrDefault();
     }
