@@ -1,7 +1,8 @@
-import { extend as _extend, each as _each } from 'underscore';
 
-const translations = {}; // TODO vue load translations from config
+import { extendObject } from '../utils/objects';
+import { useTranslationStore } from '../stores/translations';
 
+const translationStore = useTranslationStore();
 
 export interface LocalizeOptions
 {
@@ -13,7 +14,7 @@ export interface LocalizeOptions
 
 export const localize = (key: string, options?: LocalizeOptions): string =>
 {
-  let params = _extend({
+  let params = extendObject({
     force: false,
     tokens: {},
     hideEmpty: false
@@ -32,7 +33,7 @@ export const localize = (key: string, options?: LocalizeOptions): string =>
   }
 
   key = hasAtSign ? key.slice(1) : key;
-  const value = translations[key.toLowerCase()];
+  const value = translationStore.getTranslation(key);
 
   // TODO only return key if in debug mode
   if (!params.hideEmpty && (!value || typeof value !== 'string'))
@@ -44,17 +45,17 @@ export const localize = (key: string, options?: LocalizeOptions): string =>
 };
 
 
-export const replaceTokens = (value: string, tokens: object): string =>
+export const replaceTokens = (value: string, tokens: Record<string, string>): string =>
 {
   if (!value || value.indexOf('{') < 0)
   {
     return value;
   }
 
-  _each(tokens, (replacement, key) =>
+  for (const key in tokens)
   {
-    value = value.replace("{" + key + "}", replacement);
-  });
+    value = value.replace("{" + key + "}", tokens[key]);
+  }
 
   return value;
 };
