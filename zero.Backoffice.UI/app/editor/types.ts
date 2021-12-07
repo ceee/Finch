@@ -5,36 +5,36 @@ export interface ZeroEditor
 }
 
 
-export class ZeroFieldComponent
+export class ZeroFieldComponent // TODO this needs to extend a vue component
+{
+
+}
+
+export class ConfigurableZeroFieldComponent<TConfiguration = any> extends ZeroFieldComponent
 {
 
 }
 
 
-export class ZeroEditorCanvasFieldBase<TModel>
+export class ZeroEditorCanvasBase<TModel>
 {
-  field<TField>(path: string, component: ZeroFieldComponent): ZeroEditorField<TModel, TField>
+  field<TField, TConfiguration>(path: string, component: ZeroFieldComponent | ConfigurableZeroFieldComponent<TConfiguration>): ZeroEditorField<TModel, TField, TConfiguration>
   {
     return new ZeroEditorField();
   }
 }
 
 
-export class ZeroEditorCanvasBase<TModel> extends ZeroEditorCanvasFieldBase<TModel>
+export class ZeroEditorCanvasBaseWithFieldset<TModel> extends ZeroEditorCanvasBase<TModel>
 {
-  field<TField>(path: string, component: ZeroFieldComponent): ZeroEditorField<TModel, TField>
+  fieldset(): ZeroEditorCanvasBase<TModel>
   {
-    return new ZeroEditorField();
-  }
-
-  fieldset(): ZeroEditorCanvasFieldBase<TModel>
-  {
-    return new ZeroEditorCanvasFieldBase();
+    return new ZeroEditorCanvasBase();
   }
 }
 
 
-export class ZeroEditorCanvas<TModel> extends ZeroEditorCanvasBase<TModel>
+export class ZeroEditorCanvas<TModel> extends ZeroEditorCanvasBaseWithFieldset<TModel>
 {
   tab(alias: string, name: string): ZeroEditorTab<TModel>
   {
@@ -43,7 +43,7 @@ export class ZeroEditorCanvas<TModel> extends ZeroEditorCanvasBase<TModel>
 }
 
 
-export class ZeroEditorTab<TModel> extends ZeroEditorCanvasBase <TModel>
+export class ZeroEditorTab<TModel> extends ZeroEditorCanvasBaseWithFieldset <TModel>
 {
   alias: string;
   name: string;
@@ -60,14 +60,14 @@ export class ZeroEditorTab<TModel> extends ZeroEditorCanvasBase <TModel>
 export declare type BooleanExpression<TModel, TField> = (model: TModel, value: TField) => boolean;
 
 
-export class ZeroEditorField<TModel, TField>
+export class ZeroEditorField<TModel, TField, TConfiguration>
 {
-  when(condition: BooleanExpression<TModel, TField>): ZeroEditorField<TModel, TField>
+  when(condition: BooleanExpression<TModel, TField>): ZeroEditorField<TModel, TField, TConfiguration>
   {
     return this;
   }
 
-  required(required: boolean | BooleanExpression<TModel, TField>): ZeroEditorField<TModel, TField>
+  required(required: boolean | BooleanExpression<TModel, TField>): ZeroEditorField<TModel, TField, TConfiguration>
   {
     return this;
   }
