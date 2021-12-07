@@ -2,5 +2,7 @@
 export interface Zero
 {
   version: string;
-  start: () => void;
+  useZero: () => void;
+  useRouter: () => void;
+  usePlugins: () => void;
 }

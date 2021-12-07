@@ -1,16 +1,24 @@
 
 import { App } from 'vue';
-import { Router } from 'vue-router';
 import { ZeroInstallOptions } from './types/zeroInstallOptions';
+import { ZeroPluginOptions } from './types/zeroPluginOptions';
 import { Zero } from './types/zero';
+import { createRouter, RouteRecordRaw, RouterOptions } from 'vue-router';
 import registerDirectives from '../directives/register';
 import registerComponents from '../components/register';
+import registerFormComponents from '../forms/components/register';
+import { getRouterConfig, appendRouterGuards } from './router/routerConfig';
+import countryPlugin from '../modules/countries/plugin';
 
 export class ZeroRuntime implements Zero
 {
   _app: App;
   _options: ZeroInstallOptions;
+  _routerConfig: RouterOptions;
 
+  /**
+   * version of zero backoffice
+   **/
   get version(): string
   {
     return "0.0.1";
@@ -20,13 +28,50 @@ export class ZeroRuntime implements Zero
   {
     this._app = app;
     this._options = options || {};
-
-    console.info('[zero installed]');
+    this._routerConfig = getRouterConfig('/zero', this);
   }
 
-  start()
+
+  /**
+   * register core components
+   **/
+  useZero()
   {
-    registerDirectives(this._app);
-    registerComponents(this._app);
+    let app = this._app;
+
+    registerDirectives(app);
+    registerComponents(app);
+    registerFormComponents(app);
+  }
+
+
+  /**
+   * create plugin options which are passed to install() for all plugins
+   **/
+  usePlugins()
+  {
+    const pluginOptions = {
+      vue: this._app,
+      routes: this._routerConfig.routes,
+      route(route: RouteRecordRaw)
+      {
+        this.routes.push(route);
+      }
+    } as ZeroPluginOptions;
+
+    // install all plugins
+    countryPlugin.install(pluginOptions);
+  }
+
+
+  /**
+   * after all plugins were installed we can create the router 
+   * with the designated routes
+   **/
+  useRouter()
+  {
+    const router = createRouter(this._routerConfig);
+    appendRouterGuards(router);
+    this._app.use(router);
   }
 }

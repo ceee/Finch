@@ -1,10 +1,13 @@
 
 import { App } from 'vue';
-import registerGeneric from './generic/register';
-import registerTabs from './tabs/register';
+import * as components from './index';
 
 export default function (app: App)
 {
-  registerGeneric(app);
-  registerTabs(app);
+  for (var key in components)
+  {
+    let component = components[key];
+
+    app.component(key, component.default || component);
+  }
 };

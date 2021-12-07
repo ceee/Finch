@@ -57,7 +57,15 @@ fs.writeFile(path.resolve(__dirname, 'app/plugins.generated.js'), pluginFileCont
 let config = defineConfig({
   server: {
     port: process.env.PORT || 3399,
-    cors: true
+    cors: true,
+    proxy: {
+      '/zero/api': {
+        target: 'http://localhost:2320',
+        changeOrigin: true,
+        secure: false,
+        ws: false
+      }
+    }
   },
   plugins: [vue(), ...zeroPlugins],
   build: {
@@ -67,6 +75,9 @@ let config = defineConfig({
     terserOptions: {
       compress: false
     },
+    //alias: {
+    //  'tiptap': 'tiptap/dist/tiptap.esm.js',
+    //},
     rollupOptions: {
       output: {
         format: 'es',
@@ -83,6 +94,7 @@ let config = defineConfig({
 if (process.env.NODE_ENV === 'production')
 {
   config.base = '/zero/';
+  //config.alias.tiptap = 'node_modules/tiptap/dist/tiptap.esm.js';
 }
 
 export default config;

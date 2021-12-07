@@ -1,7 +1,34 @@
 ﻿
 import axios from 'axios';
+import { AxiosRequestConfig } from 'axios';
 
-const getConfig = config =>
+export interface ZeroRequestConfig extends AxiosRequestConfig
+{
+  scope?: string;
+}
+
+export interface ZeroRequestQuery
+{
+  /**
+   * Current page index (starts at 1) 
+   **/
+  page?: number;
+  /**
+   * Items per page (defaults to 30)
+   **/
+  pageSize?: number;
+  /**
+   * Limit query to specified IDs
+   **/
+  ids?: string[];
+  /**
+   * Search query string
+   **/
+  search?: string;
+}
+
+
+function getConfig(config?: ZeroRequestConfig): ZeroRequestConfig
 {
   config = config || {};
   if (config.scope)
@@ -12,33 +39,33 @@ const getConfig = config =>
   return config;
 };
 
-export async function get(url, config: any = null)
+export async function get(url: string, config?: ZeroRequestConfig)
 {
   return await send({ method: 'get', url, ...config });
 }
 
-export async function post(url, data: any = null, config: any = null)
+export async function post(url: string, data: any, config?: ZeroRequestConfig)
 {
   return await send({ method: 'post', url, data, ...config });
 }
 
-export async function del(url, config: any = null)
+export async function del(url: string, config?: ZeroRequestConfig)
 {
   return await send({ method: 'delete', url, ...config });
 }
 
-export async function put(url, data: any = null, config: any = null)
+export async function put(url: string, data: any, config?: ZeroRequestConfig)
 {
   return await send({ method: 'put', url, data, ...config });
 }
 
-export async function patch(url, data: any = null, config: any = null)
+export async function patch(url: string, data: any, config?: ZeroRequestConfig)
 {
   return await send({ method: 'patch', url, data, ...config });
 }
 
 
-export async function send(config)
+export async function send(config: ZeroRequestConfig)
 {
   config = getConfig(config);
 
@@ -54,63 +81,63 @@ export async function send(config)
 }
 
 
-export function collection(base)
-{
-  return {
-    getById: async (id, changeVector, config) => await get(base + 'getById', { ...config, params: { id, changeVector } }),
-    getByIds: async (ids, config) => await get(base + 'getByIds', { ...config, params: { ids } }),
-    getEmpty: async config => await get(base + 'getEmpty', { ...config }),
-    getByQuery: async (query, config) => await get(base + 'getByQuery', { ...config, params: { query } }),
-    getAll: async (config) => await get(base + 'getAll', { ...config }),
-    getPreviews: async (ids, config) => await get(base + 'getPreviews', { ...config, params: { ids } }),
-    getForPicker: async (config) => await get(base + 'getForPicker', { ...config }),
-    getRevisions: async (id, query, config) => await get(base + 'getRevisions', { ...config, params: { id, query } }),
-    save: async (model, config) => await post(base + 'save', model, { ...config }),
-    delete: async (id, config) => await del(base + 'delete', { ...config, params: { id } })
-  };
-}
+//export function collection(base)
+//{
+//  return {
+//    getById: async (id, changeVector, config) => await get(base + 'getById', { ...config, params: { id, changeVector } }),
+//    getByIds: async (ids, config) => await get(base + 'getByIds', { ...config, params: { ids } }),
+//    getEmpty: async config => await get(base + 'getEmpty', { ...config }),
+//    getByQuery: async (query, config) => await get(base + 'getByQuery', { ...config, params: { query } }),
+//    getAll: async (config) => await get(base + 'getAll', { ...config }),
+//    getPreviews: async (ids, config) => await get(base + 'getPreviews', { ...config, params: { ids } }),
+//    getForPicker: async (config) => await get(base + 'getForPicker', { ...config }),
+//    getRevisions: async (id, query, config) => await get(base + 'getRevisions', { ...config, params: { id, query } }),
+//    save: async (model, config) => await post(base + 'save', model, { ...config }),
+//    delete: async (id, config) => await del(base + 'delete', { ...config, params: { id } })
+//  };
+//}
 
 
-export function download(response)
-{
-  let filename = response.headers["zero-filename"] || 'download.bin';
+//export function download(response)
+//{
+//  let filename = response.headers["zero-filename"] || 'download.bin';
 
-  // code from: https://github.com/kennethjiang/js-file-download/blob/master/file-download.js
+//  // code from: https://github.com/kennethjiang/js-file-download/blob/master/file-download.js
 
-  var blob = response.data;
-  if (typeof window.navigator.msSaveBlob !== 'undefined')
-  {
-    // IE workaround for "HTML7007: One or more blob URLs were
-    // revoked by closing the blob for which they were created.
-    // These URLs will no longer resolve as the data backing
-    // the URL has been freed."
-    window.navigator.msSaveBlob(blob, filename);
-  }
-  else
-  {
-    var blobURL = (window.URL && window.URL.createObjectURL) ? window.URL.createObjectURL(blob) : window.webkitURL.createObjectURL(blob);
-    var tempLink = document.createElement('a');
-    tempLink.style.display = 'none';
-    tempLink.href = blobURL;
-    tempLink.setAttribute('download', filename);
+//  var blob = response.data;
+//  if (typeof window.navigator.msSaveBlob !== 'undefined')
+//  {
+//    // IE workaround for "HTML7007: One or more blob URLs were
+//    // revoked by closing the blob for which they were created.
+//    // These URLs will no longer resolve as the data backing
+//    // the URL has been freed."
+//    window.navigator.msSaveBlob(blob, filename);
+//  }
+//  else
+//  {
+//    var blobURL = (window.URL && window.URL.createObjectURL) ? window.URL.createObjectURL(blob) : window.webkitURL.createObjectURL(blob);
+//    var tempLink = document.createElement('a');
+//    tempLink.style.display = 'none';
+//    tempLink.href = blobURL;
+//    tempLink.setAttribute('download', filename);
 
-    // Safari thinks _blank anchor are pop ups. We only want to set _blank
-    // target if the browser does not support the HTML5 download attribute.
-    // This allows you to download files in desktop safari if pop up blocking
-    // is enabled.
-    if (typeof tempLink.download === 'undefined')
-    {
-      tempLink.setAttribute('target', '_blank');
-    }
+//    // Safari thinks _blank anchor are pop ups. We only want to set _blank
+//    // target if the browser does not support the HTML5 download attribute.
+//    // This allows you to download files in desktop safari if pop up blocking
+//    // is enabled.
+//    if (typeof tempLink.download === 'undefined')
+//    {
+//      tempLink.setAttribute('target', '_blank');
+//    }
 
-    document.body.appendChild(tempLink);
-    tempLink.click();
+//    document.body.appendChild(tempLink);
+//    tempLink.click();
 
-    // Fixes "webkit blob resource error 1"
-    setTimeout(function ()
-    {
-      document.body.removeChild(tempLink);
-      window.URL.revokeObjectURL(blobURL);
-    }, 200)
-  }
-};
+//    // Fixes "webkit blob resource error 1"
+//    setTimeout(function ()
+//    {
+//      document.body.removeChild(tempLink);
+//      window.URL.revokeObjectURL(blobURL);
+//    }, 200)
+//  }
+//};

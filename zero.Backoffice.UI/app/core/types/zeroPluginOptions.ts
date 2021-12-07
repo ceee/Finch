@@ -1,13 +1,12 @@
 
+import { RouteRecordRaw } from 'vue-router';
 import { App } from 'vue';
-import { Zero } from './zero';
-import { ZeroPluginOptions } from './zeroPluginOptions';
 
-
-export interface ZeroPlugin
+export interface ZeroPluginOptions
 {
-  name: string;
-  install: (zero: ZeroPluginOptions) => void;
+  vue: App;
+  routes: RouteRecordRaw[];
+  route: (route: RouteRecordRaw) => void;
 }
 
 //export class Zero

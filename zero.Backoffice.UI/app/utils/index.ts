@@ -7,3 +7,4 @@ export * from './numbers';
 export * from './objects';
 export * from './videoparser';
 export * from './arrays';
+export * from './timing';

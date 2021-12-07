@@ -54,6 +54,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   protected async Task<ActionResult<Paged>> GetModels<T>(ListQuery<TModel> query) where T : BasicModel<TModel>
   {
     query.OrderQuery ??= q => q.OrderByDescending(x => x.CreatedDate);
+    query.SearchSelector ??= x => x.Name;
     Paged<TModel> result = await Store.Load(query.Page, query.PageSize, q => q.Filter(query));
 
     return Mapper.Map<TModel, T>(result, (src, dest) =>
@@ -66,6 +67,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   protected async Task<ActionResult<Paged>> GetModels<T, TIndex>(ListQuery<TModel> query) where T : BasicModel<TModel> where TIndex : AbstractCommonApiForIndexes, new()
   {
     query.OrderQuery ??= q => q.OrderByDescending(x => x.CreatedDate);
+    query.SearchSelector ??= x => x.Name;
     Paged<TModel> result = await Store.Load<TIndex>(query.Page, query.PageSize, q => q.Filter(query));
 
     return Mapper.Map<TModel, T>(result, (src, dest) =>

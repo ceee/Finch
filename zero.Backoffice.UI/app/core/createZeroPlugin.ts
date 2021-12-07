@@ -1,6 +1,5 @@
 
 import { App } from 'vue';
-import { Router } from 'vue-router';
 import { ZeroRuntime, ZeroInstallOptions } from './index';
 
 
@@ -12,7 +11,9 @@ export function createZeroPlugin(options?: ZeroInstallOptions)
       const zero = new ZeroRuntime(app, options);
       app.config.globalProperties.zero = zero;
 
-      zero.start();
+      zero.useZero();
+      zero.usePlugins();
+      zero.useRouter();
     }
   };
 }

@@ -11,12 +11,7 @@
 </template>
 
 <script>
-
-  import DashboardElement from '../../dashboard/element.vue';
-
-  export default {
-    components: { DashboardElement }
-  }
+  export default {}
 </script>
 
 <style lang="scss">
