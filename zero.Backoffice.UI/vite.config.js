@@ -60,14 +60,6 @@ let config = defineConfig({
     cors: true
   },
   plugins: [vue(), ...zeroPlugins],
-  alias: {
-    '@zero': path.resolve(__dirname, 'app/'),
-    'zero': path.resolve(__dirname, 'app/'),
-    ...pluginAliases,
-    //'vue': 'vue/dist/vue.esm.js',
-    'tiptap': 'tiptap/dist/tiptap.esm.js',
-    //'zerox': path.resolve(__dirname, 'app/zerox.js')
-  },
   build: {
     manifest: true,
     outDir: 'dist/zero',
@@ -86,15 +78,11 @@ let config = defineConfig({
   }
 });
 
-console.log('root: ' + config.root);
+//console.log('root: ' + config.root);
 
 if (process.env.NODE_ENV === 'production')
 {
   config.base = '/zero/';
-  config.alias.tiptap = 'node_modules/tiptap/dist/tiptap.esm.js';
-  config.alias.underscore = 'node_modules/underscore/underscore-esm.js';
-  config.alias.axios = 'node_modules/axios/dist/axios.js';
-  config.alias.dayjs = 'node_modules/dayjs/esm/index.js';
 }
 
 export default config;

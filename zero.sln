@@ -5,6 +5,27 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Commerce", "plugins\zero.Commerce\zero.Commerce.csproj", "{63A8AD15-15F0-4555-BD62-C38B4465FFC1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{1CE271AD-3D9F-46EA-9938-066560A77E54}"
+	ProjectSection(SolutionItems) = preProject
+		build\build-bootstrap.ps1 = build\build-bootstrap.ps1
+		build\build-tmp.ps1 = build\build-tmp.ps1
+		build\build.ps1 = build\build.ps1
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Stories", "plugins\zero.Stories\zero.Stories.csproj", "{C23CF90A-DB90-427F-816C-0E2FE20E29D0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Forms", "plugins\zero.Forms\zero.Forms.csproj", "{A8E5F34F-5400-4F92-96C6-7F91645BC220}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{6FAA92A8-CA1A-48EA-9857-C9092971B4D1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Backoffice", "zero.Backoffice\zero.Backoffice.csproj", "{355432DA-01AF-4E1E-B87F-8A8D99E52411}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Core", "zero.Core\zero.Core.csproj", "{CED2A7FA-8D35-4A2A-AF57-8B95307547CB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Web", "zero.Web\zero.Web.csproj", "{1E4EE00E-96BB-4382-AE6D-4AA2B8C600B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Api", "zero.Api\zero.Api.csproj", "{C0442589-3915-43B5-9F78-2D5F9E8D8C94}"
+EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "zero.Web.UI", "zero.Backoffice.UI\", "{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
@@ -26,27 +47,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "zero.Web.UI", "zero.Backoff
 		SlnRelativePath = "zero.Backoffice.UI\"
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{1CE271AD-3D9F-46EA-9938-066560A77E54}"
-	ProjectSection(SolutionItems) = preProject
-		build\build-bootstrap.ps1 = build\build-bootstrap.ps1
-		build\build-tmp.ps1 = build\build-tmp.ps1
-		build\build.ps1 = build\build.ps1
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Stories", "plugins\zero.Stories\zero.Stories.csproj", "{C23CF90A-DB90-427F-816C-0E2FE20E29D0}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Forms", "plugins\zero.Forms\zero.Forms.csproj", "{A8E5F34F-5400-4F92-96C6-7F91645BC220}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{6FAA92A8-CA1A-48EA-9857-C9092971B4D1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Backoffice", "zero.Backoffice\zero.Backoffice.csproj", "{355432DA-01AF-4E1E-B87F-8A8D99E52411}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Core", "zero.Core\zero.Core.csproj", "{CED2A7FA-8D35-4A2A-AF57-8B95307547CB}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Web", "zero.Web\zero.Web.csproj", "{1E4EE00E-96BB-4382-AE6D-4AA2B8C600B7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Api", "zero.Api\zero.Api.csproj", "{C0442589-3915-43B5-9F78-2D5F9E8D8C94}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,10 +57,6 @@ Global
 		{63A8AD15-15F0-4555-BD62-C38B4465FFC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63A8AD15-15F0-4555-BD62-C38B4465FFC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63A8AD15-15F0-4555-BD62-C38B4465FFC1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{C23CF90A-DB90-427F-816C-0E2FE20E29D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C23CF90A-DB90-427F-816C-0E2FE20E29D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C23CF90A-DB90-427F-816C-0E2FE20E29D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -85,6 +81,10 @@ Global
 		{C0442589-3915-43B5-9F78-2D5F9E8D8C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0442589-3915-43B5-9F78-2D5F9E8D8C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0442589-3915-43B5-9F78-2D5F9E8D8C94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CE1A69A-35DB-4748-AE1C-86F5BC2E11D4}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
