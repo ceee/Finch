@@ -1,4 +1,4 @@
-﻿<template>
+﻿<!--<template>
   <div class="ui-native-select" :disabled="disabled">
     <select :value="value" @input="onChange($event)" :disabled="disabled">
       <option :value="null"></option>
@@ -44,4 +44,4 @@
 
     }
   }
-</script>
+</script>-->

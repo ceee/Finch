@@ -11,12 +11,10 @@
 </template>
 
 <script>
-  import UiEditor from 'zero/editor/editor.vue';
-  import UiEditorOverlay from 'zero/editor/editor-overlay.vue';
-  import Overlay from 'zero/helpers/overlay.js';
-  import Editor from 'zero/core/editor.ts';
-  import Strings from 'zero/helpers/strings.js';
-  import Arrays from 'zero/helpers/arrays.js';
+  import UiEditor from '../editor.vue';
+  import UiEditorOverlay from '../editor-overlay.vue';
+  //import Overlay from 'zero/helpers/overlay.js';
+  import { convertHtmlToText, arrayMove } from '../../utils';
 
   export default {
 
@@ -118,29 +116,29 @@
         }
 
         // open editing overlay
-        return Overlay.open({
-          component: UiEditorOverlay,
-          display: 'editor',
-          editor: this.editor,
-          title: this.title || '@ui.edit.title',
-          model: item,
-          width: this.width,
-          parentModel,
-          create: isAdd
-        }).then(value =>
-        {
-          if (isAdd)
-          {
-            this.items.push(value);
-          }
-          else
-          {
-            const index = this.items.indexOf(item);
-            this.removeItem(index);
-            this.items.splice(index, 0, value);
-          }
-          this.onChange();
-        });
+        //return Overlay.open({
+        //  component: UiEditorOverlay,
+        //  display: 'editor',
+        //  editor: this.editor,
+        //  title: this.title || '@ui.edit.title',
+        //  model: item,
+        //  width: this.width,
+        //  parentModel,
+        //  create: isAdd
+        //}).then(value =>
+        //{
+        //  if (isAdd)
+        //  {
+        //    this.items.push(value);
+        //  }
+        //  else
+        //  {
+        //    const index = this.items.indexOf(item);
+        //    this.removeItem(index);
+        //    this.items.splice(index, 0, value);
+        //  }
+        //  this.onChange();
+        //});
       },
 
 
@@ -160,13 +158,13 @@
       getName(item)
       {
         let name = typeof this.itemLabel === 'function' ? this.itemLabel(item) : null;
-        return Strings.htmlToText(name ?? '@ui.item');
+        return convertHtmlToText(name ?? '@ui.item');
       },
 
 
       getDescription(item)
       {
-        return Strings.htmlToText(typeof this.itemDescription === 'function' ? this.itemDescription(item) : '');
+        return convertHtmlToText(typeof this.itemDescription === 'function' ? this.itemDescription(item) : '');
       },
 
 
@@ -178,7 +176,7 @@
 
       onSortingUpdated(ev)
       {
-        this.items = Arrays.move(this.items, ev.oldIndex, ev.newIndex);
+        this.items = arrayMove(this.items, ev.oldIndex, ev.newIndex);
         this.onChange();
         //this.$emit('input', this.multiple ? result : (result.length > 0 ? result[0] : null));
       },

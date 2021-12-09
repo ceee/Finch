@@ -1,6 +1,6 @@
 ﻿
 import { generateId } from '../utils/numbers';
-import EditorField from './editor-field.ts';
+import EditorField from './editor-field';
 
 class Editor
 {

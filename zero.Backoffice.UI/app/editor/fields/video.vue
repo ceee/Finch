@@ -1,4 +1,4 @@
-﻿<template>
+﻿<!--<template>
   <video-picker :value="value" @input="$emit('input', $event)" :disabled="disabled" v-bind="{ disabled, limit }" title="Select a video" />
 </template>
 
@@ -25,4 +25,4 @@
 
     components: { VideoPicker }
   }
-</script>
+</script>-->

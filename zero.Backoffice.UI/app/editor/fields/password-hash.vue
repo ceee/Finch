@@ -7,8 +7,8 @@
 
 
 <script>
-  import Overlay from 'zero/helpers/overlay.js';
-  import PasswordChangeOverlay from 'zero/components/overlays/password-change.vue';
+  //import Overlay from 'zero/helpers/overlay.js';
+  //import PasswordChangeOverlay from 'zero/components/overlays/password-change.vue';
 
   export default {
     props: {
@@ -32,12 +32,12 @@
 
       open()
       {
-        return Overlay.open({
-          component: PasswordChangeOverlay
-        }).then(hash =>
-        {
-          this.$emit('input', hash);
-        });
+        //return Overlay.open({
+        //  component: PasswordChangeOverlay
+        //}).then(hash =>
+        //{
+        //  this.$emit('input', hash);
+        //});
       }
 
     }

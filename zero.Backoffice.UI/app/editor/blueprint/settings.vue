@@ -1,4 +1,4 @@
-﻿<template>
+﻿<!--<template>
   <ui-overlay-editor class="blueprint-settings">
     <template v-slot:header>
       <ui-header-bar title="Synchronisation" :back-button="false" :close-button="true" />
@@ -220,4 +220,4 @@
     color: var(--color-primary);
     font-weight: 400;
   }*/
-</style>
+</style>-->

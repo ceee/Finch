@@ -1,4 +1,4 @@
-﻿<template>
+﻿<!--<template>
   <div class="blueprint" v-if="value && (isParent || isChild)">
     <div class="blueprint-box">
       <template v-if="isChild">
@@ -294,7 +294,7 @@
       margin-top: -2px;
     }
   }
-</style>
+</style>-->
 
 <!--
 
