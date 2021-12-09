@@ -41,8 +41,9 @@
     <ui-dropdown class="app-nav-account" v-if="account.user" align="left bottom">
       <template v-slot:button>
         <button type="button" class="app-nav-account-button">
-          <ui-thumbnail v-if="false && account.user.avatarId" class="-image" :media="account.user.avatarId" :alt="account.user.name" />
-          <span v-else class="-image"><ui-icon symbol="fth-user"></ui-icon></span>
+          <ui-thumbnail class="-image" :media="account.user.avatarId" :alt="account.user.name">
+            <ui-icon symbol="fth-user"></ui-icon>
+          </ui-thumbnail>
           <p class="-text"><strong>{{account.user.name}}</strong></p>
           <ui-icon symbol="fth-more-horizontal" class="-arrow" />
         </button>

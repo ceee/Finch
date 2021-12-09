@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Net.Http.Headers;
 using System.Collections;
+using System.IO;
 using zero.Backoffice.Services;
 
 namespace zero.Backoffice.Endpoints.UI;
@@ -13,9 +16,10 @@ public class UIController : ZeroBackofficeController
   readonly IIconService IconService;
   readonly IResourceService ResourceService;
   readonly ISectionService SectionService;
+  readonly IMediaManagement Media;
 
   public UIController(IEnumerable<ISettingsGroup> settingsGroups, 
-    IAuthenticationService authenticationService, IAuthorizationService authorizationService, IApplicationStore applicationStore, IIconService iconService, IResourceService resourceService, ISectionService sectionService)
+    IAuthenticationService authenticationService, IAuthorizationService authorizationService, IApplicationStore applicationStore, IIconService iconService, IResourceService resourceService, ISectionService sectionService, IMediaManagement media)
   {
     SettingsGroups = settingsGroups;
     AuthenticationService = authenticationService;
@@ -24,6 +28,7 @@ public class UIController : ZeroBackofficeController
     IconService = iconService;
     ResourceService = resourceService;
     SectionService = sectionService;
+    Media = media;
   }
 
   [HttpGet("sections")]
@@ -46,5 +51,45 @@ public class UIController : ZeroBackofficeController
   public async Task<ActionResult<Dictionary<string, string>>> GetTranslations()
   {
     return Ok(await ResourceService.GetTranslations("en-us"));
+  }
+
+
+  [HttpGet("mediapreview")]
+  public async Task<IActionResult> GetSource([FromQuery] string id)
+  {
+    Media.Media media = await Media.GetFile(id);
+
+    if (media == null)
+    {
+      return NotFound();
+    }
+
+    string path = Media.GetPublicFilePath(media);
+
+    if (path == null)
+    {
+      return NotFound();
+    }
+
+    if (path.StartsWith("url://"))
+    {
+      path = path.Substring(6);
+    }
+
+    FileExtensionContentTypeProvider provider = new();
+    string contentType;
+    if (!provider.TryGetContentType(Path.GetFileName(path), out contentType))
+    {
+      contentType = "application/octet-stream";
+    }
+
+    try
+    {
+      return File(await Media.GetFileStream(media), contentType, DateTimeOffset.Now, EntityTagHeaderValue.Any);
+    }
+    catch (FileSystemException)
+    {
+      return NotFound();
+    }
   }
 }

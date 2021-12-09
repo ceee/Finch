@@ -40,6 +40,25 @@ public class MediaManagement : IMediaManagement
 
 
   /// <inheritdoc />
+  public virtual async Task<Stream> GetFileStream(Media file, string thumbnailKey = null)
+  {
+    string path = file?.Path;
+
+    if (!thumbnailKey.IsNullOrWhiteSpace())
+    {
+      path = file?.Thumbnails?.GetValueOrDefault(thumbnailKey);
+    }
+
+    if (path.IsNullOrEmpty())
+    {
+      return null;
+    }
+
+    return await FileSystem.StreamFile(path);
+  }
+
+
+  /// <inheritdoc />
   public virtual async Task<Media> GetFile(string id)
   {
     Media file = await Store.Load(id);
@@ -121,6 +140,11 @@ public interface IMediaManagement
   /// <param name="file">The media file</param>
   /// <param name="thumbnailKey">An optional thumbnail key which returns the path to a generated thumbnail</param>
   string GetPublicFilePath(Media file, string thumbnailKey = null);
+
+  /// <summary>
+  /// Get file stream for a media file (stream has to be disposed manually)
+  /// </summary>
+  Task<Stream> GetFileStream(Media file, string thumbnailKey = null);
 
   /// <summary>
   /// Get a media file by id

@@ -21,6 +21,19 @@ namespace zero.Media
     }
 
     /// <summary>
+    /// Get file stream for a media file (stream has to be disposed manually)
+    /// </summary>
+    public static async Task<Stream> GetFileStream(this IMediaManagement media, string mediaId, string thumbnailKey = null)
+    {
+      Media file = await media.GetFile(mediaId);
+      if (file == null)
+      {
+        return null;
+      }
+      return await media.GetFileStream(file, thumbnailKey);
+    }
+
+    /// <summary>
     /// Uploads a file and persists it
     /// </summary>
     public static async Task<Result<Media>> UploadFile(this IMediaManagement media, IFormFile formFile, string folderId = null, CancellationToken cancellationToken = default)

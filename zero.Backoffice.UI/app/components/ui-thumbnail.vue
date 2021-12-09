@@ -1,5 +1,6 @@
 ﻿<template>
-  <img :src="src" />
+  <img v-if="media && !hasError" :src="src" @error="onError" />
+  <span v-else><slot></slot></span>
 </template>
 
 
@@ -20,10 +21,19 @@
       }
     },
 
+    data: () => ({
+      hasError: false
+    }),
+
     computed: {
       src()
       {
-        return 'zero/api/media/getSource/?id=' + this.media + '&size=' + this.size;
+        return this.media ? ('/zero/api/backoffice/ui/mediapreview/?id=' + this.media + '&size=' + this.size) : null;
+      },
+
+      onError(ev)
+      {
+        this.hasError = true;
       }
     }
   });
