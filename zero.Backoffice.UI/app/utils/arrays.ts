@@ -1,4 +1,6 @@
 
+import { groupBy as _groupBy } from 'underscore';
+
 const arrayMoveMutate = (array: any[], from: number, to: number) =>
 {
   const startIndex = to < 0 ? array.length + to : to;
@@ -51,6 +53,16 @@ export function arrayRemove(array: any[], value: any): number
 
   array.splice(index, 1);
   return index;
+}
+
+
+/**
+ * Groups an array by a property key
+ * @returns {any} Array groups
+ */
+export function arrayGroupBy(array: any[], key: string): any
+{
+  return _groupBy(array, key);
 }
 
 

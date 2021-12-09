@@ -68,16 +68,19 @@ export async function patch(url: string, data: any, config?: ZeroRequestConfig)
 export async function send(config: ZeroRequestConfig)
 {
   config = getConfig(config);
+  const result = await axios(config);
+  return result.data;
 
-  try
-  {
-    const result = await axios(config);
-    return result.data;
-  }
-  catch (err)
-  {
-    // TODO handle errors
-  }
+  //try
+  //{
+  //  const result = await axios(config);
+  //  return result.data;
+  //}
+  //catch (err)
+  //{
+  //  console.error('axios err: ' + err);
+  //  // TODO handle errors
+  //}
 }
 
 

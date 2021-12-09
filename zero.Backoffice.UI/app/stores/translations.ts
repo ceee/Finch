@@ -1,5 +1,6 @@
 
 import { defineStore } from 'pinia';
+import uiApi from '../ui/api';
 
 export type TranslationState = {
   culture: string,
@@ -9,13 +10,18 @@ export type TranslationState = {
 export const useTranslationStore = defineStore('zero.translations', {
   state: () => ({
     culture: null,
-    translations: { name: 'Mini' }
+    translations: { }
   } as TranslationState),
 
   actions: {
     find(key: string): string
     {
       return this.translations[key.toLowerCase()];
+    },
+
+    async setup()
+    {
+      this.translations = await uiApi.getTranslations();
     }
   }
 });

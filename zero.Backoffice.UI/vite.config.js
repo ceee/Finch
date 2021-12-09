@@ -67,7 +67,20 @@ let config = defineConfig({
       }
     }
   },
-  plugins: [vue(), ...zeroPlugins],
+  resolve: {
+    alias: {
+      vue: '@vue/compat'
+    }
+  },
+  plugins: [vue({
+    template: {
+      compilerOptions: {
+        compatConfig: {
+          MODE: 2
+        }
+      }
+    }
+  }), ...zeroPlugins],
   build: {
     manifest: true,
     outDir: 'dist/zero',

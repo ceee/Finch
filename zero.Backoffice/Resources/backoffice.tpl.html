@@ -19,13 +19,6 @@
   <body class="theme-light theme-rounded">
     <div id="app"></div>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">{svg}</svg>
-
-    <script id="zeroconfig" type="application/json">{config}</script>
-    <script>
-      window.__zero = JSON.parse(document.getElementById('zeroconfig').innerHTML);
-      window.zero = window.__zero;
-    </script>
-
     {js}
   </body>
 

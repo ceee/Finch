@@ -6,9 +6,9 @@ import { Zero } from './types/zero';
 import { createRouter, RouteRecordRaw, RouterOptions } from 'vue-router';
 import registerDirectives from '../directives/register';
 import registerComponents from '../components/register';
-import registerFormComponents from '../forms/components/register';
+import registerFormComponents from '../forms/register';
 import { getRouterConfig, appendRouterGuards } from './router/routerConfig';
-import countryPlugin from '../modules/countries/plugin';
+import { countryPlugin, applicationPlugin } from '../modules';
 
 export class ZeroRuntime implements Zero
 {
@@ -61,6 +61,7 @@ export class ZeroRuntime implements Zero
 
     // install all plugins
     countryPlugin.install(pluginOptions);
+    applicationPlugin.install(pluginOptions);
   }
 
 

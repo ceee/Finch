@@ -13,7 +13,6 @@ import './settings/_font-sizes.scss';
 import './settings/_shadows.scss';
 
 import './canvas/_canvas.scss';
-import './canvas/_navigation.scss';
 
 import './modules/_button.scss';
 import './modules/_headlines.scss';

@@ -1,9 +1,4 @@
 
-const isServer = vNode =>
-{
-  return typeof vNode.componentInstance !== 'undefined' && vNode.componentInstance.$isServer;
-};
-
 const isPopup = (popupItem, elements) =>
 {
   if (!popupItem || !elements)
@@ -79,7 +74,7 @@ export default {
 
     setTimeout(() =>
     {
-      !isServer(vNode) && document.addEventListener('click', handler);
+      document.addEventListener('click', handler);
     }, 200);
   },
 
@@ -93,7 +88,7 @@ export default {
 
   unbind(el, binding, vNode)
   {
-    !isServer(vNode) && document.removeEventListener('click', el.__vueClickOutside__.handler);
+    document.removeEventListener('click', el.__vueClickOutside__.handler);
     delete el.__vueClickOutside__;
   }
 };

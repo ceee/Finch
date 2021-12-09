@@ -1,4 +1,4 @@
-﻿//using zero.Api.Endpoints.Applications;
+﻿//using zero.Backoffice.Endpoints.Applications;
 
 //namespace zero.Backoffice.Endpoints.UI;
 

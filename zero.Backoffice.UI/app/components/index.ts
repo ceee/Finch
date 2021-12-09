@@ -11,6 +11,11 @@ import uiStateButton from './ui-state-button.vue';
 import uiMessage from './ui-message.vue';
 import uiPagination from './ui-pagination.vue';
 import uiError from './ui-error.vue';
+import uiLocalize from './ui-localize.vue';
+import uiThumbnail from './ui-thumbnail.vue';
+import uiDropdownSeparator from './ui-dropdown-separator.vue';
+import uiDropdownButton from './ui-dropdown-button.vue';
+import uiDropdown from './ui-dropdown.vue';
 
 export {
   uiIcon,
@@ -25,5 +30,10 @@ export {
   uiStateButton,
   uiMessage,
   uiPagination,
-  uiError
+  uiError,
+  uiLocalize,
+  uiThumbnail,
+  uiDropdownSeparator,
+  uiDropdownButton,
+  uiDropdown
 };
