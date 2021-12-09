@@ -1,0 +1,156 @@
+﻿
+.editor
+{
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 var(--padding) var(--padding);
+
+  &:not(.display-tabs), &.hide-tabs
+  {
+    .ui-tabs-list
+    {
+      display: none;
+    }
+
+    .ui-tab, .editor-infos
+    {
+      margin-top: 0;
+    }
+    
+    .editor-aside
+    {
+      margin-top: 0;
+    }
+  }
+
+  &.has-sidebar
+  {
+    max-width: 1580px;
+    display: grid;
+    grid-template-columns: minmax(auto, 1fr) 260px;
+    grid-gap: 0 var(--padding);
+  }
+}
+
+.editor.has-below .ui-tab.ui-box
+{
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.editor.display-boxes .ui-tab
+{
+  display: inherit !important;
+}
+
+.editor.display-boxes .ui-tab + .ui-tab
+{
+  margin-top: var(--padding-m);
+}
+
+.editor-tab-headline
+{
+  font-size: var(--font-size-l) !important; 
+  font-weight: 900 !important;
+  margin-bottom: var(--padding) !important;
+}
+
+.editor-tabs
+{
+  .ui-tabs-list
+  {
+    padding: 0;
+    margin-bottom: 0;
+  }
+
+  .ui-tab
+  {
+    margin: 0;
+  }
+}
+
+.editor-aside
+{
+  margin-top: 58px;
+}
+
+.editor-infos
+{
+  display: block;
+  //border-top: 1px solid var(--color-line-onbg);
+}
+
+.theme-dark .editor-infos
+{
+  border-top: none;
+}
+
+.editor-infos .ui-box
+{
+  margin: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  display: flex;
+  gap: var(--padding-l);
+}
+
+.editor-infos .ui-property
+{
+  flex-direction: column;
+  border-top: none;
+  margin: 0;
+  padding: 0;
+  grid-gap: 6px !important;
+}
+
+.editor-infos .ui-property-label
+{
+  font-size: var(--font-size-s);
+  font-weight: 400;
+  color: var(--color-text-dim);
+  width: 100%;
+  padding-right: 0;
+}
+
+.editor-infos .ui-property-content
+{
+  font-size: var(--font-size-s);
+  font-weight: 400;
+  color: var(--color-text-dim);
+}
+
+.editor-infos-aside .ui-property + .ui-property
+{
+  margin-top: 0;
+  padding-top: 0; 
+  border-top: none;
+}
+
+.editor-aside-links
+{
+  display: flex;
+  width: 100%;
+  margin-bottom: -5px;
+}
+
+.editor-aside-links .ui-link
+{
+  color: var(--color-text-dim);
+  font-size: var(--font-size-s); 
+  text-decoration: none !important;
+  position: relative;
+}
+
+.editor-aside-links .ui-link + .ui-link
+{
+  margin-left: 20px;
+}
+
+.editor-aside-links .ui-link + .ui-link:before
+{
+  content: '·';
+  position: absolute;
+  left: -12px;
+  top: -1px;
+}

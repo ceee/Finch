@@ -1,8 +1,6 @@
 ﻿
-import Localization from 'zero/helpers/localization.js';
-import BlueprintApi from 'zero/api/blueprint.js';
-import Arrays from 'zero/helpers/arrays.js';
-
+import { localize } from '../services/localization';
+import { arrayRemove } from '../utils/arrays';
 
 function unlocked(config, model, field)
 {
@@ -43,9 +41,9 @@ function isBlueprintParent(config, route, model)
 
 async function lock(config, model, field)
 {
-  Arrays.remove(model.blueprint.desync, field.path);
-  let blueprint = await BlueprintApi.getById(model.blueprint.id);
-  return blueprint[field.path];
+  arrayRemove(model.blueprint.desync, field.path);
+  //let blueprint = await BlueprintApi.getById(model.blueprint.id);
+  //return blueprint[field.path];
 }
 
 
@@ -118,8 +116,8 @@ export function createBlueprintConfig(zero, editor, model)
     {
       fields.push({
         path: alias,
-        label: Localization.localize("@ui.entityfields." + alias),
-        description: Localization.localize("@ui.entityfields." + alias + "_text", { hideEmpty: true }),
+        label: localize("@ui.entityfields." + alias),
+        description: localize("@ui.entityfields." + alias + "_text", { hideEmpty: true }),
         synced: model => !model.blueprint || model.blueprint.desync.indexOf(alias) < 0
       });
     }
@@ -139,7 +137,7 @@ export function createBlueprintConfig(zero, editor, model)
         fields.push({
           path: alias,
           label: field.options.label || editor.templateLabel(alias),
-          description: Localization.localize(field.options.description || editor.templateDescription(alias), { hideEmpty: true }),
+          description: localize(field.options.description || editor.templateDescription(alias), { hideEmpty: true }),
           synced: model => !model.blueprint || model.blueprint.desync.indexOf(alias) < 0
         });
       }

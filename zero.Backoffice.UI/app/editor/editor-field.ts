@@ -185,7 +185,7 @@ class EditorField
    */
   text(maxLength, placeholder)
   {
-    return this._setComponent(() => import('../editor/fields/text.vue'), { maxLength, placeholder });
+    return this._setComponent(() => import('./fields/text.vue'), { maxLength, placeholder });
   }
 
 
@@ -197,7 +197,7 @@ class EditorField
    */
   password(maxLength, placeholder)
   {
-    return this._setComponent(() => import('../editor/fields/password.vue'), { maxLength, placeholder });
+    return this._setComponent(() => import('./fields/password.vue'), { maxLength, placeholder });
   }
 
 
@@ -208,7 +208,7 @@ class EditorField
    */
   passwordHash(maxLength)
   {
-    return this._setComponent(() => import('../editor/fields/password-hash.vue'), { maxLength });
+    return this._setComponent(() => import('./fields/password-hash.vue'), { maxLength });
   }
 
 
@@ -219,7 +219,7 @@ class EditorField
    */
   currency(placeholder)
   {
-    return this._setComponent(() => import('../editor/fields/currency.vue'), { placeholder });
+    return this._setComponent(() => import('./fields/currency.vue'), { placeholder });
   }
 
 
@@ -231,7 +231,7 @@ class EditorField
    */
   number(maxLength, placeholder)
   {
-    return this._setComponent(() => import('../editor/fields/number.vue'), { maxLength, placeholder });
+    return this._setComponent(() => import('./fields/number.vue'), { maxLength, placeholder });
   }
 
 
@@ -245,7 +245,7 @@ class EditorField
    */
   rte(options)
   {
-    return this._setComponent(() => import('../editor/fields/rte.vue'), { ...options });
+    return this._setComponent(() => import('./fields/rte.vue'), { ...options });
   }
 
 
@@ -264,7 +264,7 @@ class EditorField
    */
   select(items, options)
   {
-    return this._setComponent(() => import('../editor/fields/select.vue'), { items, ...options });
+    return this._setComponent(() => import('./fields/select.vue'), { items, ...options });
   }
 
 
@@ -275,7 +275,7 @@ class EditorField
    */
   textarea(maxLength)
   {
-    return this._setComponent(() => import('../editor/fields/textarea.vue'), { maxLength });
+    return this._setComponent(() => import('./fields/textarea.vue'), { maxLength });
   }
 
 
@@ -291,7 +291,7 @@ class EditorField
   toggle(options)
   {
     this.options.vertical = false;
-    return this._setComponent(() => import('../editor/fields/toggle.vue'), { ...options });
+    return this._setComponent(() => import('./fields/toggle.vue'), { ...options });
   }
 
 
@@ -303,7 +303,7 @@ class EditorField
   output(render)
   {
     this._isReadOnly = true;
-    return this._setComponent(() => import('../editor/fields/output.vue'), { render });
+    return this._setComponent(() => import('./fields/output.vue'), { render });
   }
 
 
@@ -314,7 +314,7 @@ class EditorField
    */
   alias(namePath)
   {
-    return this._setComponent(() => import('../editor/fields/alias.vue'), { namePath });
+    return this._setComponent(() => import('./fields/alias.vue'), { namePath });
   }
 
 
@@ -330,7 +330,7 @@ class EditorField
    */
   checkList(items, options)
   {
-    return this._setComponent(() => import('../editor/fields/checklist.vue'), { items, ...options });
+    return this._setComponent(() => import('./fields/checklist.vue'), { items, ...options });
   }
 
 
@@ -340,7 +340,7 @@ class EditorField
    */
   colorPicker()
   {
-    return this._setComponent(() => import('../editor/fields/colorpicker.vue'));
+    return this._setComponent(() => import('./fields/colorpicker.vue'));
   }
 
 
@@ -351,7 +351,7 @@ class EditorField
    */
   countryPicker(limit)
   {
-    return this._setComponent(() => import('../editor/fields/countrypicker.vue'), { limit });
+    return this._setComponent(() => import('./fields/countrypicker.vue'), { limit });
   }
 
 
@@ -362,7 +362,7 @@ class EditorField
    */
   spacePicker(limit)
   {
-    return this._setComponent(() => import('../editor/fields/spacepicker.vue'), { limit });
+    return this._setComponent(() => import('./fields/spacepicker.vue'), { limit });
   }
 
 
@@ -372,7 +372,7 @@ class EditorField
    */
   culturePicker()
   {
-    return this._setComponent(() => import('../editor/fields/culturepicker.vue'));
+    return this._setComponent(() => import('./fields/culturepicker.vue'));
   }
 
 
@@ -383,7 +383,7 @@ class EditorField
    */
   mailTemplatePicker(limit)
   {
-    return this._setComponent(() => import('../editor/fields/mailtemplatepicker.vue'), { limit });
+    return this._setComponent(() => import('./fields/mailtemplatepicker.vue'), { limit });
   }
 
 
@@ -399,7 +399,7 @@ class EditorField
    */
   datePicker(options)
   {
-    return this._setComponent(() => import('../editor/fields/datepicker.vue'), { ...options });
+    return this._setComponent(() => import('./fields/datepicker.vue'), { ...options });
   }
 
 
@@ -418,7 +418,7 @@ class EditorField
    */
   dateRangePicker(options)
   {
-    return this._setComponent(() => import('../editor/fields/daterangepicker.vue'), { ...options });
+    return this._setComponent(() => import('./fields/daterangepicker.vue'), { ...options });
   }
 
 
@@ -429,7 +429,7 @@ class EditorField
    */
   iconPicker(iconSetAlias)
   {
-    return this._setComponent(() => import('../editor/fields/iconPicker.vue'), { set: iconSetAlias });
+    return this._setComponent(() => import('./fields/iconPicker.vue'), { set: iconSetAlias });
   }
 
 
@@ -441,7 +441,7 @@ class EditorField
    */
   pagePicker(options)
   {
-    return this._setComponent(() => import('../editor/fields/pagepicker.vue'), { ...options });
+    return this._setComponent(() => import('./fields/pagepicker.vue'), { ...options });
   }
 
 
@@ -458,7 +458,7 @@ class EditorField
    */
   linkPicker(options)
   {
-    return this._setComponent(() => import('../editor/fields/linkpicker.vue'), { ...options });
+    return this._setComponent(() => import('./fields/linkpicker.vue'), { ...options });
   }
 
 
@@ -471,7 +471,7 @@ class EditorField
    */
   inputList(limit, maxItemLength, addLabel)
   {
-    return this._setComponent(() => import('../editor/fields/inputlist.vue'), { limit, maxItemLength, addLabel });
+    return this._setComponent(() => import('./fields/inputlist.vue'), { limit, maxItemLength, addLabel });
   }
 
 
@@ -483,7 +483,7 @@ class EditorField
    */
   tags(limit, maxItemLength)
   {
-    return this._setComponent(() => import('../editor/fields/tags.vue'), { limit, maxItemLength });
+    return this._setComponent(() => import('./fields/tags.vue'), { limit, maxItemLength });
   }
 
 
@@ -493,7 +493,7 @@ class EditorField
    */
   languagePicker()
   {
-    return this._setComponent(() => import('../editor/fields/language.vue'));
+    return this._setComponent(() => import('./fields/language.vue'));
   }
 
 
@@ -504,7 +504,7 @@ class EditorField
    */
   modules(tags)
   {
-    return this._setComponent(() => import('../editor/fields/modules.vue'), { tags });
+    return this._setComponent(() => import('./fields/modules.vue'), { tags });
   }
 
 
@@ -524,7 +524,7 @@ class EditorField
    */
   nested(editor, options)
   {
-    return this._setComponent(() => import('../editor/fields/nested.vue'), { editor, ...options });
+    return this._setComponent(() => import('./fields/nested.vue'), { editor, ...options });
   }
 
 
@@ -535,7 +535,7 @@ class EditorField
    */
   state(items)
   {
-    return this._setComponent(() => import('../editor/fields/state.vue'), { items });
+    return this._setComponent(() => import('./fields/state.vue'), { items });
   }
 
 
@@ -551,7 +551,7 @@ class EditorField
    */
   media(options)
   {
-    return this._setComponent(() => import('../editor/fields/media.vue'), { ...options });
+    return this._setComponent(() => import('./fields/media.vue'), { ...options });
   }
 
 
@@ -567,7 +567,7 @@ class EditorField
    */
   image(options)
   {
-    return this._setComponent(() => import('../editor/fields/media.vue'), { ...options, fileExtensions: ['.jpg', '.jpeg', '.png', '.webp', '.svg'] });
+    return this._setComponent(() => import('./fields/media.vue'), { ...options, fileExtensions: ['.jpg', '.jpeg', '.png', '.webp', '.svg'] });
   }
 
 
@@ -578,7 +578,7 @@ class EditorField
    */
   video(limit)
   {
-    return this._setComponent(() => import('../editor/fields/video.vue'), { limit });
+    return this._setComponent(() => import('./fields/video.vue'), { limit });
   }
 
 

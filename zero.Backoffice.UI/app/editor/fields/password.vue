@@ -1,12 +1,12 @@
 ﻿<template>
-  <input :model-value="modelValue" @input="$emit('input', $event.target.value)" type="text" class="ui-input" v-placeholder="{ placeholder, model: entity }" :maxlength="maxLength" :disabled="disabled" />
+  <input :value="value" @input="$emit('input', $event.target.value)" type="password" class="ui-input" v-placeholder="{ placeholder, model: entity }" :maxlength="maxLength" :disabled="disabled" />
 </template>
 
 
 <script>
   export default {
     props: {
-      modelValue: {
+      value: {
         type: String,
         default: null
       },
@@ -19,7 +19,7 @@
         default: false
       },
       placeholder: {
-        type: [String, Function],
+        type: String,
         default: null
       },
       entity: Object

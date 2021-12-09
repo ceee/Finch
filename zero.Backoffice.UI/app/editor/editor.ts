@@ -1,5 +1,5 @@
 ﻿
-import Strings from 'zero/helpers/strings.js';
+import { generateId } from '../utils/numbers';
 import EditorField from './editor-field.ts';
 
 class Editor
@@ -25,7 +25,7 @@ class Editor
   tabs = [];
   fields = [];
 
-  blueprintAlias = null;
+  blueprintAlias?: string;
 
   options = {
     disabled: false,
@@ -167,7 +167,7 @@ class Editor
    */
   infoTab()
   {
-    return this.tab('infos', '@ui.tab_infos', x => 0, false, 'is-blank', () => import('../editor/editor-infos.vue'));
+    return this.tab('infos', '@ui.tab_infos', x => 0, false, 'is-blank', () => import('./editor-infos.vue'));
   }
 
 
@@ -340,7 +340,7 @@ class Editor
    */
   _createFieldset(tab)
   {
-    let id = Strings.guid();
+    let id = generateId();
 
     return {
       id,
