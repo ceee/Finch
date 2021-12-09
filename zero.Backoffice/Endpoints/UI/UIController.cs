@@ -54,8 +54,8 @@ public class UIController : ZeroBackofficeController
   }
 
 
-  [HttpGet("mediapreview")]
-  public async Task<IActionResult> GetSource([FromQuery] string id)
+  [HttpGet("mediapreview/{id}/{size?}")]
+  public async Task<IActionResult> GetSource(string id, string size = null)
   {
     Media.Media media = await Media.GetFile(id);
 

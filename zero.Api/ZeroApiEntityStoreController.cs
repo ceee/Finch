@@ -23,7 +23,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
-  protected async Task<ActionResult<T>> EmptyModel<T>(string flavorAlias = null) where T : DisplayModel<TModel>
+  protected async Task<ActionResult<T>> EmptyModel<T>(string flavorAlias = null, Action<T> modify = null) where T : DisplayModel<TModel>
   {
     TModel model = await Store.Empty(flavorAlias);
 
@@ -32,7 +32,9 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
       return NotFound();
     }
 
-    return Mapper.Map<TModel, T>(model);
+    T result = Mapper.Map<TModel, T>(model);
+    modify?.Invoke(result);
+    return result;
   }
 
 

@@ -28,7 +28,7 @@
     computed: {
       src()
       {
-        return this.media ? ('/zero/api/backoffice/ui/mediapreview/?id=' + this.media + '&size=' + this.size) : null;
+        return this.media ? ('/zero/api/backoffice/ui/mediapreview/' + this.media + (this.size ? ('/' + this.size) : '')) : null;
       },
 
       onError(ev)

@@ -38,7 +38,7 @@ public class Media : ZeroEntity, ISupportsTrees
 
   /// <summary>
   /// Define custom thumbnails which are generated on upload 
-  /// (see IZeroOptions.For<MediaOption>().Thumbnails)
+  /// (see IZeroOptions.For<MediaOptions>().Thumbnails)
   /// </summary>
   public Dictionary<string, string> Thumbnails { get; set; } = new();
 

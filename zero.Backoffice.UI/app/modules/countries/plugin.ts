@@ -10,7 +10,7 @@ export default {
   install(app: ZeroPluginOptions)
   {
     app.vue.component('ui-countrypicker', defineAsyncComponent(Picker));
-    app.route({ path: '/countries', component: Page });
+    app.route({ path: '/settings/countries', component: Page });
 
     //app.editor('country', null);
     //app.editorField('')

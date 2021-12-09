@@ -7,7 +7,7 @@
         <img src="/Assets/zero-dark.svg" class="show-dark" v-localize:alt="'@zero.name'" /> 
       </h1>
       
-      <ui-button icon="fth-search" :stroke="2.5" type="blank" class="app-nav-search" @click="openSearch" /> 
+      <!--<ui-button icon="fth-search" :stroke="2.5" type="blank" class="app-nav-search" @click="openSearch" />--> 
     </div>
 
     <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">
@@ -16,7 +16,7 @@
       </template>
       <ui-dropdown-button v-for="app in applications" :value="app" :key="app.id" :label="app.name" :selected="app.id === appId" @click="applicationChanged" :prevent="true" />
       <ui-dropdown-separator />
-      <ui-dropdown-button label="Add new application" icon="fth-plus" @click="addApplication" />
+      <!--<ui-dropdown-button label="Add new application" icon="fth-plus" @click="addApplication" />-->
       <ui-dropdown-button label="Manage apps" icon="fth-edit-2" @click="manageApplications" />
     </ui-dropdown>
     <div v-else class="app-nav-switch is-fake"></div>
