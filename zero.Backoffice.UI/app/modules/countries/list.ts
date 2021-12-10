@@ -1,14 +1,14 @@
 ﻿
-import List from 'zero/core/list.ts';
-import CountriesApi from 'zero/api/countries.js';
+import List from '../../schemas/list/list';
+import api from './api';
 
 const list = new List('countries');
 const prefix = '@country.fields.';
 
 list.templateLabel = x => prefix + x;
-list.link = zero.alias.settings.countries + '-edit';
+list.link = 'countries-edit';
 
-list.onFetch(filter => CountriesApi.getByQuery(filter));
+list.onFetch(filter => api.getByQuery(filter));
 
 list.column('flag', { width: 62, canSort: false, hideLabel: true }).custom((value, model) => `<i class="ui-icon" data-symbol="flag-${model.code.toLowerCase()}"></i>`, true, 'flag');
 list.column('name').name();

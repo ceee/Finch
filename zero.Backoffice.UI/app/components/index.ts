@@ -8,6 +8,7 @@ import uiDotButton from './ui-dot-button.vue';
 import uiIconButton from './ui-icon-button.vue';
 import uiSelectButton from './ui-select-button.vue';
 import uiStateButton from './ui-state-button.vue';
+import uiAddButton from './ui-add-button.vue';
 import uiMessage from './ui-message.vue';
 import uiPagination from './ui-pagination.vue';
 import uiError from './ui-error.vue';
@@ -16,6 +17,8 @@ import uiThumbnail from './ui-thumbnail.vue';
 import uiDropdownSeparator from './ui-dropdown-separator.vue';
 import uiDropdownButton from './ui-dropdown-button.vue';
 import uiDropdown from './ui-dropdown.vue';
+import uiHeaderBar from './ui-header-bar.vue';
+import uiCalendar from './ui-calendar.vue';
 
 export {
   uiIcon,
@@ -28,6 +31,7 @@ export {
   uiIconButton,
   uiSelectButton,
   uiStateButton,
+  uiAddButton,
   uiMessage,
   uiPagination,
   uiError,
@@ -35,5 +39,7 @@ export {
   uiThumbnail,
   uiDropdownSeparator,
   uiDropdownButton,
-  uiDropdown
+  uiDropdown,
+  uiHeaderBar,
+  uiCalendar
 };

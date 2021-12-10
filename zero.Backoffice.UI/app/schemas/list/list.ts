@@ -1,10 +1,12 @@
 ﻿
-import ListColumn from './list-column.ts';
-import ListAction from './list-action.ts';
+import ListColumn from './list-column';
+import ListAction from './list-action';
+import { ListSchema } from 'zero/schemas';
 
-class List
+class List implements ListSchema
 {
-  _alias;
+  alias: string;
+
   _fetch;
   _filterOptions;
 
@@ -42,7 +44,7 @@ class List
    */
   onClick = null;
 
-  columns = [];
+  columns: ListColumn[] = [];
 
   componentConfig = {
     active: false,
@@ -136,13 +138,7 @@ class List
 
   constructor(alias)
   {
-    this._alias = alias;
-  }
-
-
-  get alias()
-  {
-    return this._alias;
+    this.alias = alias;
   }
 
   get filterOptions()

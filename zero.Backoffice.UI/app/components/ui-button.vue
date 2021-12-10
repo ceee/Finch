@@ -1,5 +1,5 @@
 ﻿<template>
-  <button :type="buttonType" class="ui-button has-state" :class="buttonClass" :disabled="disabled || state == 'loading' || !isDefaultState">
+  <button :type="buttonType" class="ui-button has-state" :class="buttonClass" :disabled="disabled || state == 'loading' || !isDefaultState" @click="tryClick">
     <span v-if="label" class="ui-button-text" v-localize:html="label"></span>
     <ui-icon v-if="caret" :symbol="caretSymbol" class="ui-button-caret" />
     <ui-icon v-if="icon" :symbol="icon" class="ui-button-icon" :stroke="stroke" />
@@ -148,6 +148,14 @@
             this.stateDisplay = STATE_DEFAULT;
           }, this.stateDuration);
         }
+      }
+    },
+
+    methods: {
+
+      tryClick(ev)
+      {
+        this.$emit('click', ev);
       }
     }
   }

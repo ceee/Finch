@@ -5,25 +5,21 @@
     <button v-if="clear && value" type="button" class="ui-datepicker-input-button" @click="clearInput"><ui-icon symbol="fth-x" :size="15" /></button>
 
     <ui-dropdown ref="overlay" class="ui-datepicker-overlay" @opened="overlayOpened">
-      <datepicker-overlay :value="value" @change="onSelect" :options="pickerOptions" />
+      <ui-calendar :today="value" @change="onSelect" :options="pickerOptions" />
     </ui-dropdown>
   </div>
 </template>
 
 
 <script>
-  import Strings from 'zero/helpers/strings.js';
-  import DatepickerOverlay from './overlay.vue';
-  import { extend as _extend } from 'underscore';
-  import dayjs from 'dayjs';
+  import { generateId } from '../../utils/numbers';
+  import { formatDate, toIsoDate } from '../../utils/dates';
 
   const DATETIME_FORMAT = 'DD.MM.YY HH:mm';
   const DATE_FORMAT = 'DD.MM.YY';
 
   export default {
     name: 'uiDatepicker',
-
-    components: { DatepickerOverlay },
 
     props: {
       value: {
@@ -86,7 +82,7 @@
 
     mounted()
     {
-      this.id = 'datepicker-' + Strings.guid();
+      this.id = 'datepicker-' + generateId();
       this.updateOptions();
       this.updateOutput();
     },
@@ -96,7 +92,7 @@
 
       updateOutput()
       {
-        this.output = Strings.date(this.value, this.format || (this.time ? DATETIME_FORMAT : DATE_FORMAT));
+        this.output = formatDate(this.value, this.format || (this.time ? DATETIME_FORMAT : DATE_FORMAT));
       },
 
 
@@ -113,7 +109,7 @@
 
       onSelect(date)
       {
-        let dateStr = dayjs(date).toISOString();
+        let dateStr = toIsoDate(date);
         this.setValue(dateStr);
         this.$refs.overlay.hide();
         document.activeElement.blur();

@@ -1,12 +1,15 @@
 
 import { RouteRecordRaw } from 'vue-router';
 import { App } from 'vue';
+import { ZeroSchemaProp } from 'zero/schemas';
 
 export interface ZeroPluginOptions
 {
   vue: App;
   routes: RouteRecordRaw[];
   route: (route: RouteRecordRaw) => void;
+  schemas: Record<string, ZeroSchemaProp>;
+  schema: (alias: string, schema: ZeroSchemaProp) => void;
 }
 
 //export class Zero

@@ -22,6 +22,8 @@
 
 
 <script>
+  import { applicationApi } from '../modules/applications';
+
   export default {
     props: {
       label: {
@@ -47,24 +49,25 @@
     },
 
     data: () => ({
-      component: null
+      applications: []
     }),
-
-    created()
-    {
-      this.component = zero.overrides['add-button'] || null;
-    },
 
     computed: {
       application()
       {
-        return this.zero.config.applications.find(x => x.id === this.zero.config.appId);
+        return this.applications.length ? this.applications[0] : null; //.find(x => x.id === this.zero.config.appId);
       },
       blueprintsEnabled()
       {
-        let blueprint = this.zero.config.blueprints.find(x => x.alias == this.blueprintAlias);
-        return this.blueprintAlias && blueprint && blueprint.enabled;
+        return false;
+        //let blueprint = this.zero.config.blueprints.find(x => x.alias == this.blueprintAlias);
+        //return this.blueprintAlias && blueprint && blueprint.enabled;
       }
+    },
+
+    async created()
+    {
+      this.applications = (await applicationApi.getByQuery({ pageSize: 100 })).items;
     },
 
     methods: {

@@ -1,3 +1,4 @@
+import { ZeroSchema } from "zero/schemas";
 
 export interface Zero
 {
@@ -5,4 +6,9 @@ export interface Zero
   useZero: () => void;
   useRouter: () => void;
   usePlugins: () => void;
+
+  /**
+   * get a defined list or editor schema
+   **/
+  getSchema(alias: string): Promise<ZeroSchema | null>;
 }

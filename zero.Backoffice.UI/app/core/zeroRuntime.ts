@@ -9,12 +9,14 @@ import registerComponents from '../components/register';
 import registerFormComponents from '../forms/register';
 import { getRouterConfig, appendRouterGuards } from './router/routerConfig';
 import { countryPlugin, applicationPlugin, settingsPlugin } from '../modules';
+import { ZeroSchema, ZeroSchemaProp } from 'zero/schemas';
 
 export class ZeroRuntime implements Zero
 {
   _app: App;
   _options: ZeroInstallOptions;
   _routerConfig: RouterOptions;
+  _schemas: Record<string, ZeroSchemaProp> = {};
 
   /**
    * version of zero backoffice
@@ -53,9 +55,14 @@ export class ZeroRuntime implements Zero
     const pluginOptions = {
       vue: this._app,
       routes: this._routerConfig.routes,
+      schemas: this._schemas,
       route(route: RouteRecordRaw)
       {
         this.routes.push(route);
+      },
+      schema(alias: 'string', schema: ZeroSchemaProp)
+      {
+        this.schemas[alias] = schema;
       }
     } as ZeroPluginOptions;
 
@@ -75,5 +82,27 @@ export class ZeroRuntime implements Zero
     const router = createRouter(this._routerConfig);
     appendRouterGuards(router);
     this._app.use(router);
+  }
+
+
+  /**
+   * get a defined list or editor schema
+   **/
+  async getSchema(alias: string): Promise<ZeroSchema | null>
+  {
+    const schema = this._schemas[alias];
+
+    if (!schema)
+    {
+      return Promise.resolve(null);
+    }
+
+    if (typeof schema === 'function')
+    {
+      const res = await schema();
+      return res.default;
+    }
+
+    return Promise.resolve(schema);
   }
 }

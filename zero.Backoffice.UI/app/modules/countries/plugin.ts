@@ -1,17 +1,16 @@
 import { ZeroPlugin, ZeroPluginOptions } from '../../core';
 import { defineAsyncComponent } from 'vue';
 
-const Picker = () => import('./ui-countrypicker.vue');
-const Page = () => import('./_page.vue');
-
 export default {
   name: "zero.countries",
 
   install(app: ZeroPluginOptions)
   {
-    app.vue.component('ui-countrypicker', defineAsyncComponent(Picker));
-    app.route({ path: '/settings/countries', component: Page });
+    app.vue.component('ui-countrypicker', defineAsyncComponent(() => import('./ui-countrypicker.vue')));
+    app.route({ path: '/settings/countries', component: () => import('./countries.vue') });
 
+    app.schema('countries', () => import('./list'));
+    app.schema('country', () => import('./editor'));
     //app.editor('country', null);
     //app.editorField('')
   }

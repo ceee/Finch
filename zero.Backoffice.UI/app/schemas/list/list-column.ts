@@ -1,8 +1,6 @@
 ﻿
-import MediaApi from 'zero/api/media.js';
-import Strings from 'zero/helpers/strings.js';
-import Localization from 'zero/helpers/localization.js';
-import EmptyImg from '../../assets/empty.png';
+import { formatDate } from '../../utils/dates';
+import { localize } from '../../services/localization';
 
 class ListColumn
 {
@@ -113,7 +111,7 @@ class ListColumn
       let result = value;
       if (opts.localize)
       {
-        result = Localization.localize(value, opts.tokens || {});
+        result = localize(value, opts.tokens || {});
       }
       return result;
     }
@@ -147,7 +145,7 @@ class ListColumn
   {
     this._type = 'date';
     this._funcOptions = { format: 'short', ...options };
-    this._func = (value, opts) => Strings.date(value, opts.format);
+    this._func = (value, opts) => formatDate(value, opts.format);
     return this;
   }
 
@@ -202,7 +200,7 @@ class ListColumn
   {
     this._type = 'image';
     this._asHtml = true;
-    this._func = (value, opts) => value ? `<img src="${MediaApi.getImageSource(value)}" @error="$event.target.src=${EmptyImg}" class="ui-table-field-image">` : '';
+    this._func = (value, opts) => value ? `<img src="/zero/api/backoffice/ui/mediapreview/${(value)}" class="ui-table-field-image">` : '';
     return this;
   }
 

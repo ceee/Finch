@@ -1,5 +1,5 @@
 
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 const DATE_FORMAT = 'DD.MM.YY';
 const TIME_FORMAT = 'HH:mm';
@@ -32,4 +32,14 @@ export function formatDate(value: string, format?: string): string
   }
 
   return dayjs(value).format(format);
+}
+
+
+/**
+ * Parses a date string and formats as an ISO date
+ * @returns {string} ISO date
+ */
+export function toIsoDate(value: string): string
+{
+  return dayjs(value).toISOString();
 }

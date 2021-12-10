@@ -28,7 +28,7 @@
 
 
 <script>
-  import Overlay from 'zero/helpers/overlay.js';
+  //import Overlay from 'zero/helpers/overlay.js';
 
   export default {
     name: 'uiHeaderBar',
@@ -78,7 +78,7 @@
       },
       onClose()
       {
-        Overlay.close();
+       // Overlay.close();
       }
     }
   }

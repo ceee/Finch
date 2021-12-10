@@ -10,8 +10,7 @@
 
 
 <script>
-  import Strings from 'zero/helpers/strings.js';
-  import { extend as _extend } from 'underscore';
+  import { generateId } from '../../utils/numbers';
 
   export default {
     name: 'uiColorpicker',
@@ -42,7 +41,7 @@
 
     created()
     {
-      this.id = 'colorpicker-' + Strings.guid();
+      this.id = 'colorpicker-' + generateId();
     },
 
     methods: {

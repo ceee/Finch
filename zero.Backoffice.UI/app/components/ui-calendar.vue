@@ -1,16 +1,17 @@
 ﻿<template>
-  <div ref="calendar" class="ui-datepicker-overlay"></div>
+  <div ref="calendar" class="ui-calendar"></div>
 </template>
 
 
 <script>
   import flatpickr from 'flatpickr';
-  import { extend as _extend } from 'underscore';
+  import { extendObject } from '../utils/objects';
 
   export default {
+    name: 'uiCalendar',
 
     props: {
-      value: String,
+      today: String,
       options: {
         type: Object,
         default: () => { }
@@ -31,11 +32,11 @@
         return;
       }
 
-      flatpickr(this.$refs.calendar, _extend({
+      flatpickr(this.$refs.calendar, extendObject({
         inline: true,
         enableTime: true,
         time_24hr: true,
-        defaultDate: this.value,
+        defaultDate: this.today,
         minuteIncrement: 1,
         onChange(dates)
         {
@@ -49,7 +50,7 @@
 </script>
 
 <style lang="scss">
-  .ui-datepicker-overlay
+  .ui-calendar
   {
     
   }
