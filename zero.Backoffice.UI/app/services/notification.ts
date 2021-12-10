@@ -11,8 +11,8 @@ export type NotificationType = 'default' | 'success' | 'error' | 'warning';
 
 export interface NotificationOptions
 {
-  type: NotificationType,
-  label: string,
+  type?: NotificationType,
+  label?: string,
   text?: string,
   persistent?: boolean,
   duration?: number

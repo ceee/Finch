@@ -9,7 +9,8 @@ import registerComponents from '../components/register';
 import registerFormComponents from '../forms/register';
 import { getRouterConfig, appendRouterGuards } from './router/routerConfig';
 import { countryPlugin, applicationPlugin, settingsPlugin } from '../modules';
-import { ZeroSchema, ZeroSchemaProp } from 'zero/schemas';
+import { ZeroSchema } from 'zero/schemas';
+import { ZeroSchemaProp } from './zero';
 
 export class ZeroRuntime implements Zero
 {
@@ -90,7 +91,7 @@ export class ZeroRuntime implements Zero
    **/
   async getSchema(alias: string): Promise<ZeroSchema | null>
   {
-    const schema = this._schemas[alias];
+    const schema: ZeroSchemaProp = this._schemas[alias];
 
     if (!schema)
     {

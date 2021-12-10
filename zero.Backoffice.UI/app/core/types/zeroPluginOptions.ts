@@ -1,7 +1,7 @@
 
 import { RouteRecordRaw } from 'vue-router';
 import { App } from 'vue';
-import { ZeroSchemaProp } from 'zero/schemas';
+import { ZeroSchemaProp } from '../zero';
 
 export interface ZeroPluginOptions
 {

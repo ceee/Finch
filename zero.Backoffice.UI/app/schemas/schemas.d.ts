@@ -1,3 +1,4 @@
+
 declare module 'zero/schemas'
 {
   export interface ZeroSchema
@@ -15,6 +16,4 @@ declare module 'zero/schemas'
   {
 
   }
-
-  declare type ZeroSchemaProp = ZeroSchema | Promise<ZeroSchema>;
 }

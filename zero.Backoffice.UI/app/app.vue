@@ -6,6 +6,7 @@
       <div class="app-main">
         <router-view></router-view>
       </div>
+      <app-notifications />
     </template>
   </div>
 </template>
@@ -15,6 +16,7 @@
   import './styles/styles';
   import AppLogin from './account/login.vue';
   import AppNavigation from './ui/app-navigation.vue';
+  import AppNotifications from './ui/app-notifications.vue';
   import { useAccountStore } from './account/store';
   import { useUiStore } from './ui/store';
   import { useTranslationStore } from './stores/translations';
@@ -24,7 +26,7 @@
   export default defineComponent({
     name: 'app',
 
-    components: { AppLogin, AppNavigation },
+    components: { AppLogin, AppNavigation, AppNotifications },
 
     data: () => ({
       initialized: false,

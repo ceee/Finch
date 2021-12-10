@@ -11,7 +11,5 @@ export default {
 
     app.schema('countries', () => import('./list'));
     app.schema('country', () => import('./editor'));
-    //app.editor('country', null);
-    //app.editorField('')
   }
 } as ZeroPlugin;

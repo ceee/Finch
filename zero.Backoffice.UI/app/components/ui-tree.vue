@@ -23,11 +23,14 @@
 </template>
 
 
-<script>
-  import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
+<script lang="ts">
+  import { defineComponent } from 'vue';
+  import UiTreeItem from './ui-tree-item.vue';
 
-  export default {
+  export default defineComponent({
     name: 'uiTree',
+
+    components: { UiTreeItem },
 
     props: {
       depth: {
@@ -235,7 +238,7 @@
       }
 
     }
-  }
+  })
 </script>
 
 

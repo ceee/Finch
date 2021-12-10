@@ -22,10 +22,10 @@
 </template>
 
 
-<script>
-  import { each as _each, extend as _extend, debounce as _debounce, isArray as _isArray } from 'underscore';
+<script lang="ts">
+  import { defineComponent } from 'vue';
 
-  export default {
+  export default defineComponent({
     name: 'uiTreeItem',
 
     props: {
@@ -114,7 +114,7 @@
       // get all classes for a tree item
       getClasses(item)
       {
-        return { 
+        return {
           'has-icon': !!item.icon,
           'has-children': item.hasChildren,
           'is-inactive': item.isInactive,
@@ -149,7 +149,7 @@
         }
       }
     }
-  }
+  })
 </script>
 
 
