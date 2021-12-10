@@ -60,7 +60,7 @@ let config = defineConfig({
     cors: true,
     proxy: {
       '/zero/api': {
-        target: 'http://localhost:2320',
+        target: 'http://localhost:2100',
         changeOrigin: true,
         secure: false,
         ws: false

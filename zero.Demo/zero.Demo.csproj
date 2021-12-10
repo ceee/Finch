@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <RootNamespace>zero.Demo</RootNamespace>
+    <AssemblyName>zero.Demo</AssemblyName>
+    <ImplicitUsings>true</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\zero.Core\zero.Core.csproj" />
+    <ProjectReference Include="..\zero.Backoffice\zero.Backoffice.csproj" />
+    <ProjectReference Include="..\zero.Api\zero.Api.csproj" />
+    <ProjectReference Include="..\zero.Web\zero.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+</Project>
