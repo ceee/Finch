@@ -3,7 +3,7 @@
     <ui-header-bar title="@country.list" :count="count" :back-button="true">
       <ui-table-filter :attach="$refs.table" />
       <ui-add-button :route="createRoute" blueprint-alias="country" />
-      <ui-button type="accent" @click="showNotification()" label="load" />
+      <ui-button type="accent" @click="loadData()" label="load" />
     </ui-header-bar>
     <div class="ui-blank-box">
       <!--<ui-table ref="table" config="countries" @count="count = $event" />-->
@@ -15,6 +15,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import * as notifications from '../../services/notification';
+  import api from './api';
 
   export default defineComponent({
     data: () => ({
@@ -30,8 +31,9 @@
 
       async loadData()
       {
-        var schema = await this.zero.getSchema('country');
-        console.info(schema);
+        //var schema = await this.zero.getSchema('country');
+        var result = await api.getByQuery({ pageSize: 10 });
+        console.info(result);
       }
     }
   });
