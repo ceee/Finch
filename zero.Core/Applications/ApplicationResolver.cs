@@ -41,14 +41,15 @@ public class ApplicationResolver : IApplicationResolver
 
     Application app;
 
-    if (context.IsBackofficeRequest(Options.ZeroPath))
-    {
-      app = await ResolveFromUser(user);
-    }
-    else
-    {
-      app = await ResolveFromRequest(context);
-    }
+    //if (context.IsBackofficeRequest(Options.ZeroPath))
+    //{
+    //  app = await ResolveFromUser(user);
+    //}
+    //else
+    //{
+    //  app = await ResolveFromRequest(context);
+    //}
+    app = await ResolveFromRequest(context);
 
     if (app == null)
     {
@@ -109,10 +110,10 @@ public class ApplicationResolver : IApplicationResolver
   /// <inheritdoc />
   public async Task<Application> ResolveFromRequest(HttpContext context)
   {
-    if (Options.Applications.Count < 2)
-    {
-      return (await GetApplications()).FirstOrDefault();
-    }
+    //if (Options.Applications.Count < 2)
+    //{
+    //  return (await GetApplications()).FirstOrDefault();
+    //}
 
     IApplicationResolverHandler handler = Handler.Get<IApplicationResolverHandler>();
     Application app = handler?.Resolve(context.Request, await GetApplications());

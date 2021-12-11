@@ -9,6 +9,7 @@ public class DevApplicationResolverHandler : IApplicationResolverHandler
   static Dictionary<int, string> PortMap = new()
   {
     { 2310, "app.hofbauer" },
+    { 2100, "app.hofbauer" },
     { 2300, "app.brothers" },
     { 2320, "app.sporthuber" }
   };
@@ -21,8 +22,6 @@ public class DevApplicationResolverHandler : IApplicationResolverHandler
 
   public Application Resolve(HttpRequest request, IEnumerable<Application> applications)
   {
-    return applications.First(x => x.Id == "app.hofbauer");
-
     //if (!Env.IsDevelopment())
     //{
     //  return null;

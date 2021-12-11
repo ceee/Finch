@@ -33,7 +33,7 @@ public class RouteBulkRefresher
 
       await scope.Store.Raven.PurgeAsync<Route>(scope.Database);
 
-      RoutingContext context = new(scope.Store, scope.Context, session);
+      RoutingContext context = new(scope.Store, Context, session);
 
       foreach (IRouteProvider provider in Providers.OrderByDescending(x => x.Priority))
       {

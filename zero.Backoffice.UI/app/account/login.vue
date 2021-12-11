@@ -23,7 +23,7 @@
       </div>
 
       <div class="app-auth-bottom">
-        <ui-button class="app-auth-confirm" type="accent" :submit="true" label="@login.button" :state="state" />
+        <ui-button class="app-auth-confirm" type="accent big" :submit="true" label="@login.button" :state="state" />
         <!--<ui-button type="blank" label="@login.button_forgot" />-->
       </div>
     </form>
@@ -114,7 +114,7 @@
     grid-template-rows: 1fr auto;
     align-items: stretch;
     max-width: 100%;
-    width: 520px;
+    width: 420px;
     background: var(--color-box);
     box-shadow: var(--shadow-short);
     border-radius: var(--radius);
@@ -135,7 +135,7 @@
 
   .app-auth-image
   {
-    height: 15px;
+    height: 16px;
   }
 
   .app-auth .ui-property + .ui-property
@@ -147,7 +147,13 @@
 
   .app-auth-bottom
   {
+    margin: calc(-1 * var(--padding));
     margin-top: 3rem;
+    padding: var(--padding);
+    background: var(--color-box-nested);
+    border-top: 1px solid var(--color-line-onbg);
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
   }
 
   .app-auth .ui-message

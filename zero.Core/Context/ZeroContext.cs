@@ -37,6 +37,9 @@ public class ZeroContext : IZeroContext
   /// <inheritdoc />
   public IServiceProvider Services { get; private set; }
 
+  /// <inheritdoc />
+  public ZeroContextScope Scope { get; private set; }
+
 
   protected IApplicationResolver AppResolver { get; private set; }
 
@@ -107,27 +110,16 @@ public class ZeroContext : IZeroContext
     Application = await AppResolver.Resolve(context, BackofficeUser);
     AppId = Application.Id;
 
+    Logger.LogDebug("Resolved {appId} for request {uri}", AppId, context.Request.Host.ToString() + context.Request.Path.Value.EnsureStartsWith('/'));
+
     // set default database for document store
     Store.ResolvedDatabase = Application.Database;
 
     // set current culture
     await CultureResolver.Resolve(this);
-  }
 
-
-  /// <inheritdoc />
-  public void Override(Application app)
-  {
-    Application = app;
-    AppId = app?.Id;
-    Store.ResolvedDatabase = app?.Database;
-  }
-
-
-  /// <inheritdoc />
-  public ZeroContextScope CreateScope(Application app)
-  {
-    return new(this, app, Application);
+    // set context scope 
+    Scope = new(Store, Store.ResolvedDatabase, Application);
   }
 
 
@@ -141,37 +133,69 @@ public class ZeroContext : IZeroContext
 
   /// <inheritdoc />
   public void Remove<T>() => ValueCollection.Remove<T>();
+
+
+  /// <inheritdoc />
+  public ZeroContextScope CreateScope(Application app)
+  {
+    ApplyScope(app.Database, app);
+    return new ZeroContextScope(Store, app.Database, app, Scope, scope =>
+    {
+      Scope = scope.Previous;
+      ApplyScope(Scope.Database, Scope.Application);
+    });
+  }
+
+
+  /// <inheritdoc />
+  public ZeroContextScope CreateScope(string database)
+  {
+    ApplyScope(database);
+    return new ZeroContextScope(Store, database, null, Scope, scope =>
+    {
+      Scope = scope.Previous;
+      ApplyScope(Scope.Database, Scope.Application);
+    });
+  }
+
+
+  /// <summary>
+  /// Apply a database scope
+  /// </summary>
+  void ApplyScope(string database, Application app = null)
+  {
+    Application = app;
+    AppId = app?.Id;
+    Store.ResolvedDatabase = database;
+  }
 }
 
 
 
 public class ZeroContextScope : IDisposable
 {
-  public IZeroContext Context { get; }
-
-  public Application App { get; set; }
-
-  public string Database { get; set; }
+  public ZeroContextScope(IZeroStore store, string database, Application application, ZeroContextScope previous = null, Action<ZeroContextScope> onDispose = null)
+  {
+    Store = store;
+    Database = database;
+    Application = application;
+    Previous = previous;
+    _onDispose = onDispose;
+  }
 
   public IZeroStore Store { get; set; }
 
-  readonly Application _originalApp = null;
+  public Application Application { get; private set; }
 
+  public string Database { get; private set; }
 
-  internal ZeroContextScope(IZeroContext context, Application app, Application originalApp)
-  {
-    Context = context;
-    App = app;
-    Database = app.Database;
-    Store = context.Store;
-    _originalApp = originalApp;
-    Context.Override(app);
-  }
+  public ZeroContextScope Previous { get; private set; }
 
-  /// <inheritdoc />
+  Action<ZeroContextScope> _onDispose = null;
+
   public void Dispose()
   {
-    Context.Override(_originalApp);
+    _onDispose?.Invoke(this);
   }
 }
 
@@ -220,6 +244,11 @@ public interface IZeroContext
   IServiceProvider Services { get; }
 
   /// <summary>
+  /// Current context scope
+  /// </summary>
+  ZeroContextScope Scope { get; }
+
+  /// <summary>
   /// Matching (frontend) path route
   /// </summary>
   Route Route { get; }
@@ -236,16 +265,6 @@ public interface IZeroContext
   Task Resolve(HttpContext context);
 
   /// <summary>
-  /// Overrides the resolved application for this context instance
-  /// </summary>
-  void Override(Application app);
-
-  /// <summary>
-  /// SCOPE
-  /// </summary>
-  ZeroContextScope CreateScope(Application app);
-
-  /// <summary>
   /// Get a custom property from this scoped context
   /// </summary>
   T Get<T>();
@@ -259,4 +278,14 @@ public interface IZeroContext
   /// Remove a custom property from this scoped context
   /// </summary>
   void Remove<T>();
+
+  /// <summary>
+  /// Scope the current context to a specific application database
+  /// </summary>
+  ZeroContextScope CreateScope(Application app);
+
+  /// <summary>
+  /// Scope the current context to a specific database
+  /// </summary>
+  ZeroContextScope CreateScope(string database);
 }

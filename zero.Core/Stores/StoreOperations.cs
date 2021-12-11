@@ -10,11 +10,11 @@ public partial class StoreOperations : IStoreOperations
   /// <inheritdoc />
   public IZeroDocumentSession Session => Context.Store.Session();
 
-  protected record EntityCollectionOptions(bool IncludeInactive);
+  protected record OperationOptions(bool IncludeInactive);
 
   protected IZeroContext Context { get; private set; }
 
-  protected EntityCollectionOptions Options { get; set; }
+  protected OperationOptions Options { get; set; }
 
   protected IInterceptors Interceptors { get; private set; }
 
