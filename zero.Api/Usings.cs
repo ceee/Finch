@@ -22,6 +22,7 @@ global using zero.Models;
 global using zero.Pages;
 global using zero.Persistence;
 global using zero.Routing;
+global using zero.Spaces;
 global using zero.Utils;
 
 global using zero.Api.Configuration;

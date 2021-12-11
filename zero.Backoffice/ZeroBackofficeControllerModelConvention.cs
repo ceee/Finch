@@ -16,7 +16,7 @@ public class ZeroBackofficeControllerModelConvention : ZeroApiControllerModelCon
   readonly bool RuntimeIsAppAware = false;
 
 
-  public ZeroBackofficeControllerModelConvention(string zeroPath, string backofficeApiPath = "api/backoffice", bool isAppAware = false) : base(zeroPath, backofficeApiPath, isAppAware)
+  public ZeroBackofficeControllerModelConvention(string zeroPath, string backofficeApiPath = "backoffice", bool isAppAware = false) : base(zeroPath, backofficeApiPath, isAppAware)
   {
     RuntimeIsAppAware = isAppAware;
     AppAwareRouteModel = BuildRouteModel(zeroPath, backofficeApiPath, true);

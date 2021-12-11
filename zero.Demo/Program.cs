@@ -5,6 +5,8 @@ using zero.Backoffice;
 using zero.Backoffice.DevServer;
 using zero.Demo;
 using zero.Routing;
+using zero.Spaces;
+using zero.Stores;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,11 @@ ZeroBuilder zero = builder.Services
 builder.Services.Configure<ZeroDevOptions>(opts =>
 {
   opts.Enabled = false;
+});
+
+builder.Services.Configure<FlavorOptions>(opts =>
+{
+  opts.AddSpaceList<TeamMember>("team", "Team", "Members of our team", "fth-users", "spaces.team");
 });
 
 var app = builder.Build();

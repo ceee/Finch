@@ -33,6 +33,7 @@ public class ZeroApiPlugin : ZeroPlugin
     ZeroModuleCollection.AddModule<Endpoints.Mails.MailModule>(services, configuration);
     ZeroModuleCollection.AddModule<Endpoints.Pages.PageModule>(services, configuration);
     ZeroModuleCollection.AddModule<Endpoints.Media.MediaModule>(services, configuration);
+    ZeroModuleCollection.AddModule<Endpoints.Spaces.SpaceModule>(services, configuration);
 
     PostConfigureServices?.Invoke(services, configuration);
   }

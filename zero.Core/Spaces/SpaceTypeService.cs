@@ -18,9 +18,9 @@ public class SpaceTypeService : ISpaceTypeService
 
 
   /// <inheritdoc />
-  public IList<SpaceType> GetAll()
+  public IEnumerable<SpaceType> GetAll()
   {
-    return Flavors.GetAll<Space>().Select(x => (SpaceType)x).ToList();
+    return Flavors.GetAll<Space>().Select(x => (SpaceType)x);
   }
 
 
@@ -44,7 +44,7 @@ public interface ISpaceTypeService
   /// <summary>
   /// Get all available space types
   /// </summary>
-  IList<SpaceType> GetAll();
+  IEnumerable<SpaceType> GetAll();
 
   /// <summary>
   /// Get a specific space type by alias

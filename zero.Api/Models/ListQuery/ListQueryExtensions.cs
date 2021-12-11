@@ -16,7 +16,7 @@ public static class ListQueryExtensions
     return JsonConvert.DeserializeObject<ListQuery<T>>(options);
   }
 
-  public static IQueryable<T> Filter<T>(this IRavenQueryable<T> source, ListQuery<T> listQuery) where T : ZeroIdEntity
+  public static IQueryable<T> Filter<T>(this IQueryable<T> source, ListQuery<T> listQuery) where T : ZeroIdEntity
   {
     if (listQuery == null)
     {
