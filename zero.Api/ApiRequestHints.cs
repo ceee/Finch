@@ -2,7 +2,7 @@
 
 public struct ApiRequestHints
 {
-  public ApiResponsePreference ResponsePreference { get; set; }
+  public ApiResponsePreference ResponsePreference { get; set; } = ApiResponsePreference.Representation;
 }
 
 

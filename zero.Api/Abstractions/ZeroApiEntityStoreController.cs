@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Raven.Client.Documents.Indexes;
 
-namespace zero.Api.Controllers;
+namespace zero.Api.Abstractions;
 
 public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiController 
   where TModel : ZeroEntity, new() 
@@ -47,7 +47,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
       return NotFound();
     }
 
-    HttpContext.Items[ApiConstants.ChangeVector] = Store.GetChangeVector(model);
+    HttpContext.Items[ApiConstants.ChangeVector] = Store.GetChangeToken(model);
 
     return Mapper.Map<TModel, T>(model);
   }
@@ -116,7 +116,9 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
       return BadRequest(ApiConstants.HttpErrors.IdNotFound);
     }
 
-    if (!changeToken.IsNullOrEmpty() && Store.GetChangeVector(model) != changeToken)
+    string storedChangeToken = Store.GetChangeToken(model);
+
+    if (!changeToken.IsNullOrEmpty() && storedChangeToken != changeToken)
     {
       return BadRequest(ApiConstants.HttpErrors.ChangeTokenMismatch);
     }

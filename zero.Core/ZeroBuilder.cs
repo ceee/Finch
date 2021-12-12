@@ -13,6 +13,8 @@ public class ZeroBuilder
 
   public virtual IMvcBuilder Mvc { get; }
 
+  public ZeroModuleCollection Modules { get; } = new();
+
   readonly IConfiguration Configuration;
   readonly IZeroStartupOptions StartupOptions;
 
@@ -33,24 +35,26 @@ public class ZeroBuilder
     // adds and discovers additional and built-in assemblies
     new AssemblyDiscovery(Mvc).Execute(StartupOptions.AssemblyDiscoveryRules);
 
-    AddModule<ConfigurationModule>();
-    AddModule<ContextModule>();
-    AddModule<ArchitectureModule>();
-    AddModule<CommunicationModule>();
-    AddModule<IdentityModule>();
-    AddModule<ApplicationModule>();
-    AddModule<PersistenceModule>();
-    AddModule<StoresModule>();
-    AddModule<FileStorageModule>();
-    AddModule<MapperModule>();
-    AddModule<LocalizationModule>();
-    AddModule<RenderingModule>();
+    Modules.Add<ConfigurationModule>();
+    Modules.Add<ContextModule>();
+    Modules.Add<ArchitectureModule>();
+    Modules.Add<CommunicationModule>();
+    Modules.Add<IdentityModule>();
+    Modules.Add<ApplicationModule>();
+    Modules.Add<PersistenceModule>();
+    Modules.Add<StoresModule>();
+    Modules.Add<FileStorageModule>();
+    Modules.Add<MapperModule>();
+    Modules.Add<LocalizationModule>();
+    Modules.Add<RenderingModule>();
 
-    AddModule<RoutingModule>();
-    AddModule<MailsModule>();
-    AddModule<MediaModule>();
-    AddModule<PagesModule>();
-    AddModule<SpacesModule>();
+    Modules.Add<RoutingModule>();
+    Modules.Add<MailsModule>();
+    Modules.Add<MediaModule>();
+    Modules.Add<PagesModule>();
+    Modules.Add<SpacesModule>();
+
+    Modules.ConfigureServices(services, configuration);
 
     //if (Environment.GetEnvironmentVariable("DOTNET_WATCH") == "1")
     //{
@@ -68,13 +72,6 @@ public class ZeroBuilder
   public ZeroBuilder WithOptions(Action<ZeroOptions> configureOptions)
   {
     Services.Configure(configureOptions);
-    return this;
-  }
-
-
-  public ZeroBuilder AddModule<T>() where T : class, IZeroModule, new()
-  {
-    ZeroModuleCollection.AddModule<T>(Services, Configuration);
     return this;
   }
 

@@ -9,9 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Endpoints\Users\Users\**" />
+    <Compile Remove="Endpoints\Users\Users\**" />
     <Compile Remove="Modules_legacy\**" />
+    <Compile Remove="_notimplemented\RecycleBin\**" />
+    <EmbeddedResource Remove="Endpoints\Users\Users\**" />
+    <EmbeddedResource Remove="Endpoints\Users\Users\**" />
     <EmbeddedResource Remove="Modules_legacy\**" />
+    <EmbeddedResource Remove="_notimplemented\RecycleBin\**" />
+    <None Remove="Endpoints\Users\Users\**" />
+    <None Remove="Endpoints\Users\Users\**" />
     <None Remove="Modules_legacy\**" />
+    <None Remove="_notimplemented\RecycleBin\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,5 +34,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\zero.Core\zero.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Endpoints\Users\" />
+    <Folder Include="Endpoints\Integrations\" />
+    <Folder Include="_notimplemented\" />
   </ItemGroup>
 </Project>

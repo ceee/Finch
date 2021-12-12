@@ -1,15 +1,15 @@
 ﻿namespace zero.Configuration;
 
-public static class Constants
+public static partial class Constants
 {
   public const string ErrorFieldNone = "__zero_no_field";
 
-  public static class Tabs
+  public static partial class Tabs
   {
     public const string General = "general";
   }
 
-  public static class Auth
+  public static partial class Auth
   {
     public const string SystemUser = "system";
     public const string DefaultScheme = "zeroScheme";
@@ -18,7 +18,7 @@ public static class Constants
     public const string BackofficeCookieName = "zero.be.session";
     public const string DefaultCookieName = "zero.session";
 
-    public static class Claims
+    public static partial class Claims
     {
       public const string IsZero = "zero.claim.iszero";
       public const string IsSuper = "zero.claim.issuper";
@@ -35,9 +35,9 @@ public static class Constants
   }
 
 
-  public static class Permissions
+  public static partial class Permissions
   {
-    public static class Groups
+    public static partial class Groups
     {
       public const string Sections = "zero.permissions.groups.sections";
       public const string Spaces = "zero.permissions.groups.spaces";
@@ -48,13 +48,13 @@ public static class Constants
   }
 
 
-  public static class Database
+  public static partial class Database
   {
     public const string ReservationPrefix = "zero.";
     public const string Expires = Raven.Client.Constants.Documents.Metadata.Expires;
   }
 
-  public static class Sections
+  public static partial class Sections
   {
     public const string Dashboard = "dashboard";
     public const string Pages = "pages";
@@ -63,7 +63,7 @@ public static class Constants
     public const string Settings = "settings";
   }
 
-  public static class Settings
+  public static partial class Settings
   {
     public const string Updates = "updates";
     public const string Applications = "applications";
@@ -78,7 +78,7 @@ public static class Constants
     public const string CreatePlugin = "createplugin";
   }
 
-  public static class PermissionCollections
+  public static partial class PermissionCollections
   {
     public const string Sections = "permissionCollectionSections";
     public const string Spaces = "permissionCollectionSpaces";
@@ -86,14 +86,14 @@ public static class Constants
     public const string Modules = "permissionCollectionModules";
   }
 
-  public static class Pages
+  public static partial class Pages
   {
     public const string FolderAlias = "zero.folder";
     public const string DefaultRootPageTypeAlias = "root";
     public const string PageRouteProviderAlias = "zero.pages";
   }
 
-  public static class Routing
+  public static partial class Routing
   {
     public const string InternalRoutePrefix = "/__zero/";
 

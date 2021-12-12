@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Raven.Client.Documents.Indexes;
 
-namespace zero.Api.Controllers;
+namespace zero.Api.Abstractions;
 
 public abstract class ZeroApiTreeEntityStoreController<TModel, TStore> : ZeroApiEntityStoreController<TModel, TStore> 
   where TModel : ZeroEntity, ISupportsTrees, new() 

@@ -2,7 +2,7 @@
 
 namespace zero.Api;
 
-public static class ServiceCollectionExtensions
+public static class ZeroBuilderExtensions
 {
   public static ZeroBuilder AddApi<T>(this ZeroBuilder builder) where T : ZeroApiPlugin, IZeroPlugin, new()
   {

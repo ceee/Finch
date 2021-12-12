@@ -22,7 +22,7 @@ public class BlueprintChildInterceptor : Interceptor<ZeroEntity>, IBlueprintInte
   {
     if (model.Blueprint == null)
     {
-      return default;
+      return Task.FromResult<InterceptorResult<ZeroEntity>>(default);
     }
 
     InterceptorResult<ZeroEntity> result = new();

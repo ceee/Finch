@@ -173,7 +173,7 @@ public interface IStoreOperations
   /// <summary>
   /// Get the change vector for a model
   /// </summary>
-  string GetChangeVector<T>(T model) where T : ZeroIdEntity, new();
+  string GetChangeToken<T>(T model) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Creates an entity with an optional validator

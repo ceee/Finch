@@ -1,16 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using zero.Api.Controllers;
+using zero.Api.Filters;
 
-namespace zero.Backoffice.Controllers;
+namespace zero.Api.Abstractions;
 
 [ApiController]
 [ZeroAuthorize]
 [DisableBrowserCache]
+[ApiMetadataFilter]
+[ApiResponseFilter]
 //[ServiceFilter(typeof(ModelStateValidationFilterAttribute))]
 //[ServiceFilter(typeof(BackofficeFilterAttribute))]
-public abstract class ZeroBackofficeController : ControllerBase
+public abstract class ZeroApiController : ControllerBase
 {
   IZeroMapper _mapper;
   protected IZeroMapper Mapper => _mapper ?? (_mapper = HttpContext?.RequestServices?.GetService<IZeroMapper>());
+
+
+  protected ApiRequestHints Hints { get; set; } = new();
 }

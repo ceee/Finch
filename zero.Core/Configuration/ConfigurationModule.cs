@@ -6,6 +6,8 @@ namespace zero.Configuration;
 
 public class ConfigurationModule : ZeroModule
 {
+  public override int Order => -1000;
+
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddOptions<ZeroOptions>().Configure<IServiceProvider>((opts, svc) =>

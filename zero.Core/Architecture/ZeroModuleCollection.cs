@@ -1,42 +1,38 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
 
 namespace zero.Architecture;
 
-public class ZeroModuleCollection
+public class ZeroModuleCollection : ZeroModule
 {
-  static ConcurrentDictionary<Type, IZeroModule> _modules = new();
-
-
-  /// <summary>
-  /// Get all registered modules
-  /// </summary>
-  public static IEnumerable<IZeroModule> GetAll() => _modules.Values;
+  ConcurrentDictionary<Type, IZeroModule> _modules = new();
 
 
   /// <summary>
   /// Adds a zero module
   /// </summary>
-  public static void AddModule<T>(IServiceCollection services, IConfiguration configuration) where T : class, IZeroModule, new()
+  public void Add<T>() where T : class, IZeroModule, new()
   {
-    AddModule(services, configuration, new T());
+    Add(new T());
   }
 
 
   /// <summary>
   /// Adds a zero module
   /// </summary>
-  public static void AddModule<T>(IServiceCollection services, IConfiguration configuration, T moduleInstance) where T : IZeroModule
+  public void Add<T>(T moduleInstance) where T : IZeroModule
   {
-    AddModule(typeof(T), services, configuration, moduleInstance);
+    Add(typeof(T), moduleInstance);
   }
 
 
   /// <summary>
   /// Adds a zero module
   /// </summary>
-  public static void AddModule(Type moduleType, IServiceCollection services, IConfiguration configuration, IZeroModule moduleInstance)
+  public void Add(Type moduleType, IZeroModule moduleInstance)
   {
     if (_modules.ContainsKey(moduleType))
     {
@@ -44,7 +40,26 @@ public class ZeroModuleCollection
     }
 
     _modules.TryAdd(moduleType, moduleInstance);
+  }
 
-    moduleInstance.ConfigureServices(services, configuration);
+
+  /// <inheritdoc />
+  public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+  {
+    foreach (var module in _modules.OrderBy(x => x.Value.Order))
+    {
+      Console.WriteLine(module.Key.ToString());
+      module.Value.ConfigureServices(services, configuration);
+    }
+  }
+
+
+  /// <inheritdoc />
+  public override void Configure(IApplicationBuilder app, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
+  {
+    foreach (var module in _modules.OrderBy(x => x.Value.ConfigureOrder))
+    {
+      module.Value.Configure(app, routes, serviceProvider);
+    }
   }
 }

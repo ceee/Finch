@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace zero;
 
-public static class ZeroServiceCollectionExtensions
+public static class ServiceCollectionExtensions
 {
   public static ZeroBuilder AddZero(this IServiceCollection services, IConfiguration configuration)
   {

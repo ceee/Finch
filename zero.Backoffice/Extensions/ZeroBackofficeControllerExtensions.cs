@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using System.IO;
-using zero.Api.Controllers;
+using zero.Api.Abstractions;
 
 namespace zero.Backoffice.Extensions;
 

@@ -30,4 +30,13 @@ public class IdGenerator
 
     //return Guid.NewGuid().ToString();
   }
+
+
+  /// <summary>
+  /// Creates a simple hash from a string
+  /// </summary>
+  public static string HashString(string value)
+  {
+    return value.GetHashCode().ToString().Replace("-", String.Empty);
+  }
 }

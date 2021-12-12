@@ -105,8 +105,9 @@ public partial class StoreOperations : IStoreOperations
 
 
   /// <inheritdoc />
-  public virtual string GetChangeVector<T>(T model) where T : ZeroIdEntity, new()
+  public virtual string GetChangeToken<T>(T model) where T : ZeroIdEntity, new()
   {
-    return Session.Advanced.GetChangeVectorFor(model);
+    string changeVector = Session.Advanced.GetChangeVectorFor(model);
+    return IdGenerator.HashString(changeVector);
   }
 }

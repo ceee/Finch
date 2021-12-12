@@ -4,14 +4,20 @@ namespace zero.Routing;
 
 public static class ZeroEndpointRouteBuilderExtensions
 {
-  public static IZeroEndpointRouteBuilder MapZeroBackoffice(this IZeroEndpointRouteBuilder endpoints, string path = "/zero")
+  public static void UseZeroBackoffice(this IApplicationBuilder app, string path = "/zero")
   {
-    //IZeroOptions options = app.ApplicationServices.GetService<IZeroOptions>(); // TODO oO
-    // see https://our.umbraco.com/documentation/reference/routing/custom-routes#where-to-put-your-routing-logic
-    //string path = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
+    //app.UseWhen(ctx => ctx.Request.Path.StartsWithSegments(path + "/api"), app1 =>
+    //{
+    //  app1.UseEndpoints(endpoints =>
+    //  {
+    //    //IZeroOptions options = app.ApplicationServices.GetService<IZeroOptions>(); // TODO oO
+    //    // see https://our.umbraco.com/documentation/reference/routing/custom-routes#where-to-put-your-routing-logic
+    //    //string path = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
+    //    //endpoints.MapFallbackToController(path + "/{**path}", "Index", "ZeroIndex");
 
-    endpoints.MapFallbackToController(path + "/{**path}", "Index", "ZeroIndex");
-    return endpoints;
+    //    //endpoints.MapControllers();
+    //  });
+    //});
   }
 
 

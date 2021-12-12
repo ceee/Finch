@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -10,7 +12,6 @@ namespace zero.Api;
 public class ZeroApiPlugin : ZeroPlugin
 {
   internal Action<IServiceCollection, IConfiguration> PostConfigureServices = null;
-
 
   public ZeroApiPlugin()
   {
@@ -23,19 +24,40 @@ public class ZeroApiPlugin : ZeroPlugin
     services.AddOptions<ApiOptions>().Bind(configuration.GetSection("Zero:Api")).Configure<IWebHostEnvironment>(ConfigureOptions);
     services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, ZeroApiMvcOptions>());
 
-    services.AddScoped<IZeroMapper, ZeroMapper>();
+    ZeroModuleCollection modules = new();
 
-    ZeroModuleCollection.AddModule<Endpoints.Applications.ApplicationModule>(services, configuration);
-    ZeroModuleCollection.AddModule<Endpoints.Countries.CountryModule>(services, configuration);
-    ZeroModuleCollection.AddModule<Endpoints.Languages.LanguageModule>(services, configuration);
-    ZeroModuleCollection.AddModule<Endpoints.Search.SearchModule>(services, configuration);
-    ZeroModuleCollection.AddModule<Endpoints.Translations.TranslationModule>(services, configuration);
-    ZeroModuleCollection.AddModule<Endpoints.Mails.MailModule>(services, configuration);
-    ZeroModuleCollection.AddModule<Endpoints.Pages.PageModule>(services, configuration);
-    ZeroModuleCollection.AddModule<Endpoints.Media.MediaModule>(services, configuration);
-    ZeroModuleCollection.AddModule<Endpoints.Spaces.SpaceModule>(services, configuration);
+    modules.Add<Endpoints.Applications.ApplicationModule>();
+    modules.Add<Endpoints.Countries.CountryModule>();
+    modules.Add<Endpoints.Languages.LanguageModule>();
+    modules.Add<Endpoints.Search.SearchModule>();
+    modules.Add<Endpoints.Translations.TranslationModule>();
+    modules.Add<Endpoints.Mails.MailModule>();
+    modules.Add<Endpoints.Pages.PageModule>();
+    modules.Add<Endpoints.Media.MediaModule>();
+    modules.Add<Endpoints.Spaces.SpaceModule>();
 
+    modules.ConfigureServices(services, configuration);
+      
     PostConfigureServices?.Invoke(services, configuration);
+  }
+
+
+  public override void Configure(IApplicationBuilder app, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
+  {
+    string path = "/zero/api";
+
+    app.UseWhen(ctx => ctx.Request.Path.StartsWithSegments(path), appScoped =>
+    {
+      appScoped.UseEndpoints(endpoints =>
+      {
+        //IZeroOptions options = app.ApplicationServices.GetService<IZeroOptions>(); // TODO oO
+        // see https://our.umbraco.com/documentation/reference/routing/custom-routes#where-to-put-your-routing-logic
+        //string path = options.BackofficePath.EnsureStartsWith('/').TrimEnd('/');
+        //endpoints.MapFallbackToController(path + "/{**path}", "Index", "ZeroIndex");
+
+        //endpoints.MapControllers();
+      });
+    });
   }
 
 

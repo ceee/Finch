@@ -2,7 +2,7 @@
 
 namespace zero;
 
-public static class ZeroApplicationBuilderExtensions
+public static class ApplicationBuilderExtensions
 {
   public static IZeroApplicationBuilder UseZero(this IApplicationBuilder app) => new ZeroApplicationBuilder(app);
 }

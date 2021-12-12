@@ -13,13 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddTransient<IApplicationResolverHandler, DevApplicationResolverHandler>();
 
-ZeroBuilder zero = builder.Services
-      .AddZero(builder.Configuration, opts =>
-      {
-        opts.Mvc.AddApplicationPart(typeof(Program).Assembly);
-      })
-      .AddApi()
-      .AddBackoffice();
+builder.Services
+  .AddZero(builder.Configuration)
+  .AddApi()
+  .AddBackoffice();
 
 builder.Services.Configure<ZeroDevOptions>(opts =>
 {
@@ -41,11 +38,13 @@ if (!app.Environment.IsDevelopment())
 
 app.UseZero().WithEndpoints(x =>
 {
-  x.MapControllerRoute("default", "api/{controller}/{action=Index}/{id?}");
+  //x.MapControllerRoute("default", "api/{controller}/{action=Index}/{id?}");
   x.MapRazorPages();
   x.MapZeroRoutes();
-  x.MapZeroBackoffice();
-  //x.MapFallbackToController("Index", "Error");
+  //x.MapZeroBackoffice();
+  x.MapFallbackToController("Index", "Error");
 });
+
+//app.UseZeroBackoffice();
 
 app.Run();

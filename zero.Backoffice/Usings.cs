@@ -22,6 +22,7 @@ global using zero.Routing;
 global using zero.Utils;
 global using zero.Mapper;
 
+global using zero.Backoffice.Abstractions;
 global using zero.Backoffice.Configuration;
 global using zero.Backoffice.Controllers;
 global using zero.Backoffice.UIComposition;

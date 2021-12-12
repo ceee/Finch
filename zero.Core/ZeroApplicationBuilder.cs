@@ -47,3 +47,15 @@ public interface IZeroApplicationBuilder
 
   IZeroApplicationBuilder WithMiddleware(Action<IApplicationBuilder> configure);
 }
+
+
+public class ZeroApplicationBuilderContext
+{
+
+}
+
+
+public class ZeroEndpointBuilderContext
+{
+
+}
