@@ -27,3 +27,5 @@ global using zero.Backoffice.Configuration;
 global using zero.Backoffice.Controllers;
 global using zero.Backoffice.UIComposition;
 global using zero.Backoffice.DevServer;
+
+global using zero.Api.Attributes;

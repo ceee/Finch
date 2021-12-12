@@ -30,5 +30,6 @@ global using zero.Api.Controllers;
 global using zero.Api.Models;
 global using zero.Api.Endpoints;
 global using zero.Api.Abstractions;
+global using zero.Api.Attributes;
 global using zero.Api.Extensions;
 global using zero.Api.Filters;

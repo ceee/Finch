@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using zero.Api.Filters;
 
 namespace zero.Api.Abstractions;
 
 [ApiController]
 [ZeroAuthorize]
-[DisableBrowserCache]
+[DisableBrowserCacheFilter]
 [ApiMetadataFilter]
 [ApiResponseFilter]
 //[ServiceFilter(typeof(ModelStateValidationFilterAttribute))]

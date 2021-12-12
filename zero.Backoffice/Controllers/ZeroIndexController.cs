@@ -6,7 +6,7 @@ using zero.Backoffice.Services;
 namespace zero.Backoffice.Controllers;
 
 [ZeroAuthorize(false)]
-[DisableBrowserCache]
+[DisableBrowserCacheFilter]
 public class ZeroIndexController : Controller
 {
   IZeroVue ZeroVue { get; set; }

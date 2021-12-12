@@ -48,7 +48,6 @@ public class ZeroModuleCollection : ZeroModule
   {
     foreach (var module in _modules.OrderBy(x => x.Value.Order))
     {
-      Console.WriteLine(module.Key.ToString());
       module.Value.ConfigureServices(services, configuration);
     }
   }

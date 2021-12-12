@@ -6,7 +6,7 @@ namespace zero.Backoffice.Abstractions;
 
 [ApiController]
 [ZeroAuthorize]
-[DisableBrowserCache]
+[DisableBrowserCacheFilter]
 //[ServiceFilter(typeof(ModelStateValidationFilterAttribute))]
 //[ServiceFilter(typeof(BackofficeFilterAttribute))]
 public abstract class ZeroBackofficeController : ControllerBase

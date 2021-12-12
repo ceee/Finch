@@ -7,7 +7,7 @@ namespace zero.Api.Controllers;
 /// <summary>
 /// Ensures that the request is not cached by the browser
 /// </summary>
-public class DisableBrowserCacheAttribute : ActionFilterAttribute
+public class DisableBrowserCacheFilterAttribute : ActionFilterAttribute
 {
   public override void OnResultExecuting(ResultExecutingContext context)
   {
