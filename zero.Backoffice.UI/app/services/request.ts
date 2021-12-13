@@ -1,9 +1,11 @@
 ﻿
 import axios from 'axios';
 import { AxiosRequestConfig } from 'axios';
+import { paths } from '../options';
 
 export interface ZeroRequestConfig extends AxiosRequestConfig
 {
+  raw?: boolean;
   scope?: string;
 }
 
@@ -31,11 +33,27 @@ export interface ZeroRequestQuery
 function getConfig(config?: ZeroRequestConfig): ZeroRequestConfig
 {
   config = config || {};
+
   if (config.scope)
   {
     config.params = config.params || {};
     config.params.scope = config.scope;
   }
+
+  if (!config.raw)
+  {
+    config.baseURL = paths.api;
+
+    if (config.url != null && config.url.indexOf('{app}') > -1)
+    {
+      config.url = config.url.replace('{app}', 'hofbauer');
+    }
+    if (config.baseURL != null && config.baseURL.indexOf('{app}') > -1)
+    {
+      config.baseURL = config.baseURL.replace('{app}', 'hofbauer');
+    }
+  }
+
   return config;
 };
 

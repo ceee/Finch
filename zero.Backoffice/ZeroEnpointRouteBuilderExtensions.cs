@@ -7,7 +7,7 @@ public static class ZeroEndpointRouteBuilderExtensions
   public static void MapZeroBackoffice(this IZeroEndpointRouteBuilder endpoints, string path = "/zero")
   {
     endpoints.MapFallbackToController(path.EnsureEndsWith('/') + "{**path}", "Index", "ZeroIndex");
-    endpoints.MapFallbackToController(path.EnsureEndsWith('/') + "backoffice/{**path}", "Index", "NotFoundZeroApi");
+    //endpoints.MapFallbackToController(path.EnsureEndsWith('/') + "backoffice/{**path}", "Index", "NotFoundZeroApi");
     //app.UseWhen(ctx => ctx.Request.Path.StartsWithSegments(path + "/api"), app1 =>
     //{
     //  app1.UseEndpoints(endpoints =>

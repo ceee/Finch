@@ -49,8 +49,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "zero.Backoffice.UI", "zero.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Demo", "zero.Demo\zero.Demo.csproj", "{8AD56129-2104-4DF5-A08E-1A94A8EC205B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.ApiTry", "zero.ApiTry\zero.ApiTry.csproj", "{F49F6297-FECF-4355-8A8B-72AB29B794B2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,10 +91,6 @@ Global
 		{8AD56129-2104-4DF5-A08E-1A94A8EC205B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AD56129-2104-4DF5-A08E-1A94A8EC205B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AD56129-2104-4DF5-A08E-1A94A8EC205B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F49F6297-FECF-4355-8A8B-72AB29B794B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F49F6297-FECF-4355-8A8B-72AB29B794B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F49F6297-FECF-4355-8A8B-72AB29B794B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F49F6297-FECF-4355-8A8B-72AB29B794B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

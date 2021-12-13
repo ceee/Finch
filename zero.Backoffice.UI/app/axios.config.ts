@@ -7,7 +7,7 @@ import Qs from 'qs';
 //  throw Exception('window.zero and zero.apiPath (= base path to the backoffice API) have to be configured');
 //}
 
-Axios.defaults.baseURL = '/zero/api/';
+//Axios.defaults.baseURL = '/zero/api/';
 Axios.defaults.withCredentials = true;
 
 Axios.defaults.paramsSerializer = (params) =>

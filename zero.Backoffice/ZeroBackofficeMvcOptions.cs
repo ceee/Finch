@@ -15,6 +15,6 @@ internal class ZeroBackofficeMvcOptions : IConfigureOptions<MvcOptions>
 
   public void Configure(MvcOptions options)
   {
-    options.Conventions.Add(new ZeroBackofficeControllerModelConvention(Options.ZeroPath + "/backoffice", Options.Applications.Count > 1));
+    options.Conventions.Add(new ZeroBackofficeControllerModelConvention(Options.ZeroPath + "/api", Options.Applications.Count > 1));
   }
 }
