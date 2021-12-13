@@ -8,17 +8,23 @@ public class ErrorController : ZeroApiController
   [HttpGet("")]
   public virtual ActionResult<ApiResponse> Index()
   {
-    IExceptionHandlerFeature exception = HttpContext.Features.Get<IExceptionHandlerFeature>();
-
     return new ErrorApiResponse()
     {
       Success = false,
-      Status = HttpContext.Response.StatusCode,
-      Error = new()
-      {
-        ApiPath = exception.Path,
-        Message = exception.Error.Message
-      }
+      Status = HttpContext.Response.StatusCode
     };
+
+    //IExceptionHandlerFeature exception = HttpContext.Features.Get<IExceptionHandlerFeature>();
+
+    //return new ErrorApiResponse()
+    //{
+    //  Success = false,
+    //  Status = HttpContext.Response.StatusCode,
+    //  Error = new()
+    //  {
+    //    ApiPath = exception.Path,
+    //    Message = exception.Error.Message
+    //  }
+    //};
   }
 }

@@ -39,10 +39,9 @@ if (!app.Environment.IsDevelopment())
 app.UseZero().WithEndpoints(x =>
 {
   //x.MapControllerRoute("default", "api/{controller}/{action=Index}/{id?}");
+  x.MapControllers();
   x.MapRazorPages();
   x.MapZeroRoutes();
-  //x.MapZeroBackoffice();
-  x.MapFallbackToController("Index", "Error");
 });
 
 //app.UseZeroBackoffice();

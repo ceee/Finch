@@ -40,7 +40,7 @@ public class SetupController : Controller
   //}
 
 
-  [HttpGet]
+  [HttpGet("/api/setup/indexes")]
   public async Task<IActionResult> Indexes([FromServices] IZeroStore store, [FromServices] IZeroContext context)
   {
     var indexes = context.Options.For<RavenOptions>().Indexes;
@@ -57,7 +57,7 @@ public class SetupController : Controller
   }
 
 
-  [HttpGet]
+  [HttpGet("/api/setup/routes")]
   public async Task<IActionResult> Routes([FromServices] IZeroStore store, [FromServices] IZeroContext context, [FromServices] IEnumerable<IRouteProvider> providers)
   {
     RouteBulkRefresher refresher = new(store, context, providers);

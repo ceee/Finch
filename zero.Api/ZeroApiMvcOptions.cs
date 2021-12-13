@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -18,7 +17,7 @@ internal class ZeroApiMvcOptions : IConfigureOptions<MvcOptions>
 
   public void Configure(MvcOptions options)
   {
-    options.Conventions.Add(new ZeroApiControllerModelConvention(Options.ZeroPath, isAppAware: Options.Applications.Count > 1));
-    options.Conventions.Add(new RouteTokenTransformerConvention(new ApiParameterTransformer()));
+    Console.WriteLine("Configure API");
+    options.Conventions.Add(new ZeroApiControllerModelConvention(Options.ZeroPath + "/api", isAppAware: Options.Applications.Count > 1));
   }
 }

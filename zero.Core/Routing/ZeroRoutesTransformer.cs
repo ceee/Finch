@@ -6,7 +6,7 @@ namespace zero.Routing;
 
 public class ZeroRoutesTransformer : DynamicRouteValueTransformer
 {
-  IRouteResolver RouteResolver;
+  readonly IRouteResolver RouteResolver;
 
 	public ZeroRoutesTransformer(IRouteResolver routeResolver)
   {
@@ -30,7 +30,7 @@ public class ZeroRoutesTransformer : DynamicRouteValueTransformer
 			return null;
     }
 
-		httpContext.Features.Set(route);
+		httpContext.Features.Set<IRouteModel>(route);
 
 		RouteEndpoint endpoint = RouteResolver.MapEndpoint(route);
 

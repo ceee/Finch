@@ -5,9 +5,8 @@ namespace zero.Api.Abstractions;
 
 [ApiController]
 [ZeroAuthorize]
-[DisableBrowserCacheFilter]
-[ApiMetadataFilter]
-[ApiResponseFilter]
+//[ApiMetadataFilter]
+//[ApiResponseFilter]
 //[ServiceFilter(typeof(ModelStateValidationFilterAttribute))]
 //[ServiceFilter(typeof(BackofficeFilterAttribute))]
 public abstract class ZeroApiController : ControllerBase

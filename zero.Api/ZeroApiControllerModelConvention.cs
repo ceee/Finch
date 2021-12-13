@@ -7,20 +7,24 @@ namespace zero.Api.Controllers;
 
 public class ZeroApiControllerModelConvention : IControllerModelConvention
 {
+  protected Type BaseClassType { get; set; } = typeof(ZeroApiController);
+
   readonly AttributeRouteModel AppAwareRouteModel;
 
   readonly AttributeRouteModel AppUnawareRouteModel;
 
-  readonly Type BaseClass = typeof(ZeroApiController);
+  readonly Type SystemApiType = typeof(ZeroSystemApiAttribute);
+
+  readonly ApiParameterTransformer Transformer = new();
 
   readonly bool RuntimeIsAppAware = false;
 
 
-  public ZeroApiControllerModelConvention(string zeroPath, string apiPath = "api", bool isAppAware = false)
+  public ZeroApiControllerModelConvention(string path, bool isAppAware = false)
   {
     RuntimeIsAppAware = isAppAware;
-    AppAwareRouteModel = BuildRouteModel(zeroPath, apiPath, true);
-    AppUnawareRouteModel = BuildRouteModel(zeroPath, apiPath, false);
+    AppAwareRouteModel = BuildRouteModel(path, true);
+    AppUnawareRouteModel = BuildRouteModel(path, false);
   }
 
 
@@ -31,20 +35,25 @@ public class ZeroApiControllerModelConvention : IControllerModelConvention
   {
     bool hasAttributeRouteModels = controller.Selectors.Any(selector => selector.AttributeRouteModel != null);
 
-    if (controller.ControllerType.IsSubclassOf(BaseClass))
+    if (controller.ControllerType.IsSubclassOf(BaseClassType))
     {
-      bool isAppAware = RuntimeIsAppAware && controller.ControllerType.GetCustomAttribute<ZeroSystemApiAttribute>() == null;
+      bool isAppAware = RuntimeIsAppAware && controller.ControllerType.GetCustomAttribute(SystemApiType) == null;
 
       controller.Selectors[0].AttributeRouteModel = isAppAware ? AppAwareRouteModel : AppUnawareRouteModel;
+      controller.Filters.Add(new DisableBrowserCacheFilterAttribute());
+
+      foreach (var action in controller.Actions)
+      {
+        action.RouteParameterTransformer = Transformer;
+      }
     }
   }
 
 
-  protected AttributeRouteModel BuildRouteModel(string zeroPath, string apiPath, bool appAware = false)
+  protected AttributeRouteModel BuildRouteModel(string pathSegment, bool appAware = false)
   {
     StringBuilder path = new();
-    path.Append(zeroPath.EnsureEndsWith('/'));
-    path.Append(apiPath.TrimStart('/').EnsureEndsWith('/'));
+    path.Append(pathSegment.EnsureSurroundedWith('/'));
 
     if (appAware)
     {
