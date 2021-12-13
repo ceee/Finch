@@ -41,6 +41,8 @@ app.UseZero().WithEndpoints(x =>
   //x.MapControllerRoute("default", "api/{controller}/{action=Index}/{id?}");
   x.MapControllers();
   x.MapRazorPages();
+  x.MapZeroApi();
+  x.MapZeroBackoffice();
   x.MapZeroRoutes();
 });
 

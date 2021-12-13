@@ -20,22 +20,27 @@ public class DevApplicationResolverHandler : IApplicationResolverHandler
   }
 
 
-  public Application Resolve(HttpRequest request, IEnumerable<Application> applications)
+  public bool TryResolve(HttpContext context, IEnumerable<Application> applications, out Application resolved)
   {
+    resolved = null;
+
     //if (!Env.IsDevelopment())
     //{
-    //  return null;
+    //  return false;
     //}
-    if (request.Host.Host.Contains("ngrok.io"))
+
+    if (context.Request.Host.Host.Contains("ngrok.io"))
     {
-      return applications.First(x => x.Id == "app.hofbauer");
+      resolved = applications.First(x => x.Id == "app.hofbauer");
+      return true;
     }
 
-    if (request.Host.Port.HasValue && PortMap.TryGetValue(request.Host.Port.Value, out string appId))
+    if (context.Request.Host.Port.HasValue && PortMap.TryGetValue(context.Request.Host.Port.Value, out string appId))
     {
-      return applications.FirstOrDefault(x => x.Id == appId);
+      resolved = applications.FirstOrDefault(x => x.Id == appId);
+      return true;
     }
 
-    return null;
+    return false;
   }
 }

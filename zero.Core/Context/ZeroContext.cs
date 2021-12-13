@@ -110,7 +110,7 @@ public class ZeroContext : IZeroContext
     Application = await AppResolver.Resolve(context, BackofficeUser);
     AppId = Application.Id;
 
-    Logger.LogDebug("Resolved {appId} for request {uri}", AppId, context.Request.Host.ToString() + context.Request.Path.Value.EnsureStartsWith('/'));
+    Logger.LogInformation("Resolved {appId} ({uri})", AppId, context.Request.Host.ToString() + context.Request.Path.Value.EnsureStartsWith('/'));
 
     // set default database for document store
     Store.ResolvedDatabase = Application.Database;

@@ -4,5 +4,5 @@ namespace zero.Applications;
 
 public interface IApplicationResolverHandler : IHandler
 {
-  Application Resolve(HttpRequest request, IEnumerable<Application> applications);
+  bool TryResolve(HttpContext context, IEnumerable<Application> applications, out Application resolved);
 }

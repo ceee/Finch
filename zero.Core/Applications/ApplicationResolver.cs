@@ -39,26 +39,62 @@ public class ApplicationResolver : IApplicationResolver
       return null;
     }
 
-    Application app;
+    Application app = null;
 
-    //if (context.IsBackofficeRequest(Options.ZeroPath))
-    //{
-    //  app = await ResolveFromUser(user);
-    //}
-    //else
-    //{
-    //  app = await ResolveFromRequest(context);
-    //}
-    app = await ResolveFromRequest(context);
+    if (context.IsBackofficeRequest(Options.ZeroPath))
+    {
+      ZeroUser userEntity = await GetBackofficeUser(user);
+      app = await ResolveFromBackofficeHandlers(context, userEntity) ?? await ResolveFromUser(userEntity);
+    }
 
     if (app == null)
     {
-      //Logger.LogWarning("Could not resolve application for host {host}", context.Request.Host);
-      IList<Application> apps = await GetApplications();
-      app = apps.FirstOrDefault();
+      app = await ResolveFromHandlers(context) ?? await ResolveFromRequest(context);
+    }
+
+    if (app == null)
+    {
+      Logger.LogWarning("Could not resolve application for host {host}", context.Request.Host);
+      return null;
     }
 
     return app;
+  }
+
+
+  /// <inheritdoc />
+  public async Task<Application> ResolveFromHandlers(HttpContext context)
+  {
+    IList<Application> apps = await GetApplications();
+    IEnumerable<IApplicationResolverHandler> handlers = Handler.GetAll<IApplicationResolverHandler>();
+
+    foreach (IApplicationResolverHandler handler in handlers)
+    {
+      if (handler.TryResolve(context, apps, out Application resolved))
+      {
+        return resolved;
+      }
+    }
+
+    return null;
+  }
+
+
+  /// <inheritdoc />
+  public async Task<Application> ResolveFromBackofficeHandlers(HttpContext context, ZeroUser user)
+  {
+    IList<Application> apps = await GetApplications();
+    IEnumerable<IBackofficeApplicationResolverHandler> handlers = Handler.GetAll<IBackofficeApplicationResolverHandler>();
+
+    foreach (IBackofficeApplicationResolverHandler handler in handlers)
+    {
+      if (handler.TryResolve(context, apps, user, out Application resolved))
+      {
+        return resolved;
+      }
+    }
+
+    return null;
   }
 
 
@@ -108,37 +144,15 @@ public class ApplicationResolver : IApplicationResolver
 
 
   /// <inheritdoc />
-  public async Task<Application> ResolveFromRequest(HttpContext context)
-  {
-    //if (Options.Applications.Count < 2)
-    //{
-    //  return (await GetApplications()).FirstOrDefault();
-    //}
-
-    IApplicationResolverHandler handler = Handler.Get<IApplicationResolverHandler>();
-    Application app = handler?.Resolve(context.Request, await GetApplications());
-
-    if (app == null)
-    {
-      app = await ResolveFromUri(context.Request.GetEncodedUrl());
-    }
-
-    return app;
-  }
+  public Task<Application> ResolveFromRequest(HttpContext context) => ResolveFromUri(context.Request.GetEncodedUrl());
 
 
   /// <inheritdoc />
-  public async Task<Application> ResolveFromUri(string uriString)
-  {
-    return ResolveFromUriInternal(new Uri(uriString, UriKind.Absolute), await GetApplications());
-  }
+  public async Task<Application> ResolveFromUri(string uriString) => ResolveFromUriInternal(new Uri(uriString, UriKind.Absolute), await GetApplications());
 
 
   /// <inheritdoc />
-  public async Task<Application> ResolveFromUri(Uri uri)
-  {
-    return ResolveFromUriInternal(uri, await GetApplications());
-  }
+  public async Task<Application> ResolveFromUri(Uri uri) => ResolveFromUriInternal(uri, await GetApplications());
 
 
   /// <summary>

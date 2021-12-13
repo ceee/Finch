@@ -57,7 +57,9 @@ public class ZeroApiControllerModelConvention : IControllerModelConvention
 
     if (appAware)
     {
-      path.Append("{zero_app_slug}/");
+      path.Append("{zero_app_key}/");
+      // TODO add route constraint which only allows registered app-ids
+      // see https://nemi-chand.github.io/creating-custom-routing-constraint-in-aspnet-core-mvc/
     }
 
     path.Append("[controller]");
