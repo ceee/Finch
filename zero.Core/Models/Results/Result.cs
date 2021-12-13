@@ -30,6 +30,26 @@ public class Result
   public static Result Success() => new() { IsSuccess = true };
 
   public static Result Fail() => new() { };
+
+  public static Result Fail(string property, string message)
+  {
+    Result result = new();
+    result.Errors.Add(new(property, message));
+    return result;
+  }
+
+  public static Result Fail(string message)
+  {
+    Result result = new();
+    result.AddError(message);
+    return result;
+  }
+
+  public static Result Fail(ValidationResult validation) => new(validation);
+
+  public static Result Fail(ResultError error) => Fail(error.Property, error.Message);
+
+  public static Result Fail(IEnumerable<ResultError> errors) => new() { IsSuccess = !errors.Any(), Errors = errors.ToList() };
 }
 
 
@@ -49,25 +69,25 @@ public class Result<T> : Result
 
   public new static Result<T> Fail() => new() { };
 
-  public static Result<T> Fail(string property, string message)
+  public new static Result<T> Fail(string property, string message)
   {
     Result<T> result = new();
     result.Errors.Add(new(property, message));
     return result;
   }
 
-  public static Result<T> Fail(string message)
+  public new static Result<T> Fail(string message)
   {
     Result<T> result = new();
     result.AddError(message);
     return result;
   }
 
-  public static Result<T> Fail(ValidationResult validation) => new(validation);
+  public new static Result<T> Fail(ValidationResult validation) => new(validation);
 
-  public static Result<T> Fail(ResultError error) => Fail(error.Property, error.Message);
+  public new static Result<T> Fail(ResultError error) => Fail(error.Property, error.Message);
 
-  public static Result<T> Fail(IEnumerable<ResultError> errors) => new() { IsSuccess = !errors.Any(), Errors = errors.ToList() };
+  public new static Result<T> Fail(IEnumerable<ResultError> errors) => new() { IsSuccess = !errors.Any(), Errors = errors.ToList() };
 }
 
 

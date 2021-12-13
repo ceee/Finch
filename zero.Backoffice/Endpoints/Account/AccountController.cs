@@ -31,22 +31,28 @@ public class AccountController : ZeroBackofficeController
 
   [HttpGet("loggedin")]
   [ZeroAuthorize(false)]
-  public ActionResult<bool> LoggedIn() => AuthService.IsLoggedIn();
+  public ActionResult<LoggedInResponseModel> LoggedIn() => new LoggedInResponseModel() { LoggedIn = AuthService.IsLoggedIn() };
 
 
   [HttpPost("login")]
   [ZeroAuthorize(false)]
   //[ValidateAntiForgeryToken]
-  public async Task<ActionResult> Login(LoginModel model)
+  public async Task<ActionResult<Result>> Login(LoginModel model)
   {
     LoginResult result = await AuthService.Login(model.Email, model.Password, model.IsPersistent);
 
     if (result != LoginResult.Success)
     {
-      return BadRequest(result.ToString()); // TODO translate resource
+      return Result.Fail(result.ToString());
     }
 
-    return Ok();
+    ZeroUser user = await AuthService.GetUser();
+
+    return Result<LoginSuccessModel>.Success(new()
+    {
+      User = Mapper.Map<ZeroUser, UserModel>(user),
+      ApiKey = "myapikey"
+    });
   }
 
 

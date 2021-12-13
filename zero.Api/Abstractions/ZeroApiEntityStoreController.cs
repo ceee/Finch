@@ -47,7 +47,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
       return NotFound();
     }
 
-    HttpContext.Items[ApiConstants.ChangeVector] = Store.GetChangeToken(model);
+    HttpContext.Items[ApiConstants.ChangeToken] = Store.GetChangeToken(model);
 
     return Mapper.Map<TModel, T>(model);
   }

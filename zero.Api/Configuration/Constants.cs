@@ -2,7 +2,7 @@
 
 public static class ApiConstants
 {
-  public const string ChangeVector = "zero.api.change_vector";
+  public const string ChangeToken = "zero.api.change_vector";
 
   public static class HttpErrors
   {

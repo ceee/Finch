@@ -4,10 +4,7 @@ namespace zero.Api.Endpoints.Countries;
 
 public class CountriesController : ZeroApiEntityStoreController<Country, ICountryStore>
 {
-  public CountriesController(ICountryStore store) : base(store)
-  {
-
-  }
+  public CountriesController(ICountryStore store) : base(store) { }
 
 
   [HttpGet("empty")]

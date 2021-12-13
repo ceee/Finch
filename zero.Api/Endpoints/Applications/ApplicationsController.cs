@@ -5,10 +5,7 @@ namespace zero.Api.Endpoints.Applications;
 [ZeroSystemApi]
 public class ApplicationsController : ZeroApiEntityStoreController<Application, IApplicationStore>
 {
-  public ApplicationsController(IApplicationStore store) : base(store)
-  {
-
-  }
+  public ApplicationsController(IApplicationStore store) : base(store) { }
 
 
   [HttpGet("empty")]

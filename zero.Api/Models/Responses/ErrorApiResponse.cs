@@ -2,7 +2,7 @@
 
 public class ErrorApiResponse : ApiResponse
 {
-  public ErrorApiResponseError Error { get; set; }
+  public List<ErrorApiResponseError> Errors { get; set; } = new();
 }
 
 public class ErrorApiResponseError

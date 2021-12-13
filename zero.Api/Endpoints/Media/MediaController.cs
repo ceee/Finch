@@ -31,7 +31,7 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
       return NotFound();
     }
 
-    HttpContext.Items[ApiConstants.ChangeVector] = Store.GetChangeToken(model);
+    HttpContext.Items[ApiConstants.ChangeToken] = Store.GetChangeToken(model);
 
     if (model.Type == MediaType.Folder)
     {
