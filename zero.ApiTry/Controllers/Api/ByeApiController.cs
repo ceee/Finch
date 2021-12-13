@@ -2,7 +2,8 @@
 
 namespace zero.ApiTry
 {
-  public class HelloController : AppApiController
+  [ZeroSystemApi]
+  public class ByeController : AppApiController
   {
     [HttpGet("")]
     public ActionResult Get()
@@ -10,7 +11,7 @@ namespace zero.ApiTry
       return new JsonResult(new
       {
         success = true,
-        text = "Hello",
+        text = "Bye",
         url = Url.Action()
       });
     }

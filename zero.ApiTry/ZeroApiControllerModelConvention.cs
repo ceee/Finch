@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using System.Reflection;
 using System.Text;
+using zero.Extensions;
 
 namespace zero.ApiTry;
 
@@ -13,11 +13,15 @@ public class ZeroApiControllerModelConvention : IControllerModelConvention
 
   readonly Type BaseClass = typeof(AppApiController);
 
+  readonly Type SystemApiType = typeof(ZeroSystemApiAttribute);
 
-  public ZeroApiControllerModelConvention(string zeroPath, string apiPath = "api")
+  readonly ApiParameterTransformer Transformer = new();
+
+
+  public ZeroApiControllerModelConvention(string apiPath = "/zero/api")
   {
-    AppAwareRouteModel = BuildRouteModel(zeroPath, apiPath, true);
-    AppUnawareRouteModel = BuildRouteModel(zeroPath, apiPath, false);
+    AppAwareRouteModel = BuildRouteModel(apiPath, true);
+    AppUnawareRouteModel = BuildRouteModel(apiPath, false);
   }
 
 
@@ -30,16 +34,22 @@ public class ZeroApiControllerModelConvention : IControllerModelConvention
 
     if (controller.ControllerType.IsSubclassOf(BaseClass))
     {
-      controller.Selectors[0].AttributeRouteModel = AppUnawareRouteModel;
+      bool isSystemApi = controller.Attributes.Any(x => x.GetType() == SystemApiType);
+      controller.Selectors[0].AttributeRouteModel = isSystemApi ? AppUnawareRouteModel : AppAwareRouteModel;
+      controller.Filters.Add(new DisableBrowserCacheFilterAttribute());
+
+      foreach (var action in controller.Actions)
+      {
+        action.RouteParameterTransformer = Transformer;
+      }
     }
   }
 
 
-  protected AttributeRouteModel BuildRouteModel(string zeroPath, string apiPath, bool appAware = false)
+  protected AttributeRouteModel BuildRouteModel(string apiPath, bool appAware = false)
   {
     StringBuilder path = new();
-    path.Append(zeroPath + '/');
-    path.Append(apiPath.TrimStart('/').EnsureEndsWith('/'));
+    path.Append(apiPath.EnsureSurroundedWith('/'));
 
     if (appAware)
     {

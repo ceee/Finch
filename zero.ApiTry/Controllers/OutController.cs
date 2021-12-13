@@ -2,15 +2,16 @@
 
 namespace zero.ApiTry
 {
-  public class HelloController : AppApiController
+  [ApiController]
+  public class OutController : ControllerBase
   {
-    [HttpGet("")]
+    [HttpGet("get")]
     public ActionResult Get()
     {
       return new JsonResult(new
       {
         success = true,
-        text = "Hello",
+        text = "Out",
         url = Url.Action()
       });
     }
