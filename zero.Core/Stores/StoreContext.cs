@@ -10,18 +10,15 @@ public class StoreContext : IStoreContext
 
   public IInterceptors Interceptors { get; private set; }
 
-  public IStoreOperations Operations { get; private set; }
-
   public IStoreCache Cache { get; private set; }
 
 
-  public StoreContext(IZeroContext context, IInterceptors interceptors, IStoreOperations operations, IStoreCache cache)
+  public StoreContext(IZeroContext context, IInterceptors interceptors, IStoreCache cache)
   {
     Store = context.Store;
     Options = context.Options;
     Context = context;
     Interceptors = interceptors;
-    Operations = operations;
     Cache = cache;
   }
 }
@@ -36,8 +33,6 @@ public interface IStoreContext
   IZeroOptions Options { get; }
 
   IInterceptors Interceptors { get; }
-
-  IStoreOperations Operations { get; }
 
   IStoreCache Cache { get; }
 }

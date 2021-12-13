@@ -25,10 +25,10 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
 
   public EntityStore(IStoreContext collectionContext)
   {
-    Operations = collectionContext.Operations;
     Context = collectionContext.Context;
     Interceptors = collectionContext.Interceptors;
     Options = collectionContext.Options;
+    Operations = new StoreOperations(Context, Interceptors, Options, Config);
   }
 
 

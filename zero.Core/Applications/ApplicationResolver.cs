@@ -17,7 +17,12 @@ public class ApplicationResolver : IApplicationResolver
 
   protected IHandlerHolder Handler { get; private set; }
 
-  private IList<Application> Apps { get; set; }
+  IList<Application> _apps;
+
+  /// <summary>
+  /// The system application is bound to the context in case no application was resolved
+  /// </summary>
+  SystemApplication _systemApplication;
 
 
 
@@ -27,6 +32,14 @@ public class ApplicationResolver : IApplicationResolver
     Options = options;
     Logger = logger;
     Handler = handler;
+
+    _systemApplication = new()
+    {
+      Id = "system",
+      Name = "zero system",
+      Database = Options.For<RavenOptions>().Database,
+      Alias = "system"
+    };
   }
 
 
@@ -36,18 +49,17 @@ public class ApplicationResolver : IApplicationResolver
     if (context?.Request == null)
     {
       Logger.LogWarning("Could not resolve application as HTTP request is null");
-      return null;
+      return _systemApplication;
     }
 
-    Application app = null;
+    Application app;
 
     if (context.IsBackofficeRequest(Options.ZeroPath))
     {
       ZeroUser userEntity = await GetBackofficeUser(user);
-      app = await ResolveFromBackofficeHandlers(context, userEntity) ?? await ResolveFromUser(userEntity);
+      app = await ResolveFromBackofficeHandlers(context, userEntity) ?? _systemApplication;
     }
-
-    if (app == null)
+    else
     {
       app = await ResolveFromHandlers(context) ?? await ResolveFromRequest(context);
     }
@@ -55,7 +67,7 @@ public class ApplicationResolver : IApplicationResolver
     if (app == null)
     {
       Logger.LogWarning("Could not resolve application for host {host}", context.Request.Host);
-      return null;
+      return _systemApplication;
     }
 
     return app;
@@ -187,14 +199,14 @@ public class ApplicationResolver : IApplicationResolver
   /// </summary>
   async Task<IList<Application>> GetApplications()
   {
-    if (Apps != null)
+    if (_apps != null)
     {
-      return Apps;
+      return _apps;
     }
 
     IAsyncDocumentSession session = Store.Session(global: true);
-    Apps = await session.Query<Application>().ToListAsync();
-    return Apps;
+    _apps = await session.Query<Application>().ToListAsync();
+    return _apps;
   }
 
 

@@ -6,6 +6,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
+  import { paths } from '../options';
 
   export default defineComponent({
     name: 'uiThumbnail',
@@ -17,7 +18,7 @@
       },
       size: {
         type: String,
-        default: 'thumbnail'
+        default: 'thumb'
       }
     },
 
@@ -28,7 +29,7 @@
     computed: {
       src()
       {
-        return this.media ? ('/zero/api/backoffice/ui/mediapreview/' + this.media + (this.size ? ('/' + this.size) : '')) : null;
+        return this.media ? (paths.api.replace('{app}', 'hofbauer') + '/media/' + this.media + '/' + this.size + '.tmp') : null;
       },
 
       onError(ev)

@@ -8,32 +8,34 @@ namespace zero.Stores;
 public partial class StoreOperations : IStoreOperations
 {
   /// <inheritdoc />
-  public IZeroDocumentSession Session => Context.Store.Session();
+  public IZeroDocumentSession Session => Context.Store.Session(_overrideDatabase);
 
   protected record OperationOptions(bool IncludeInactive);
 
   protected IZeroContext Context { get; private set; }
 
-  protected OperationOptions Options { get; set; }
-
   protected IInterceptors Interceptors { get; private set; }
 
   protected FlavorOptions Flavors { get; private set; }
 
+  protected StoreConfig Config { get; private set; }
 
-  public StoreOperations(IZeroContext context, IInterceptors interceptors, IZeroOptions options)
+  string _overrideDatabase = null;
+
+
+  public StoreOperations(IZeroContext context, IInterceptors interceptors, IZeroOptions options, StoreConfig config)
   {
     Context = context;
     Interceptors = interceptors;
-    Options = new(true);
     Flavors = options.For<FlavorOptions>();
+    Config = config;
   }
 
 
   /// <inheritdoc />
   public async Task<string> GenerateId<T>(T model) where T : ZeroIdEntity
   {
-    IZeroDocumentSession session = Context.Store.Session();
+    IZeroDocumentSession session = Session;
     return await session.Advanced.DocumentStore.Conventions.GenerateDocumentIdAsync(session.Advanced.DocumentStore.Database, model);
   }
 
@@ -103,7 +105,7 @@ public partial class StoreOperations : IStoreOperations
   /// </summary>
   protected virtual T WhenActive<T>(T model) where T : ZeroIdEntity, new()
   {
-    return model != null && (Options.IncludeInactive || model is not ZeroEntity || (model as ZeroEntity).IsActive) ? model : default;
+    return model != null && (Config.IncludeInactive || model is not ZeroEntity || (model as ZeroEntity).IsActive) ? model : default;
   }
 }
 

@@ -12,10 +12,14 @@ public class UserService : IUserService
 
   protected IZeroContext Context { get; private set; }
 
-  public UserService(IStoreContext store, IStoreOperations operations, IZeroContext context, UserManager<ZeroUser> userManager)
+  public UserService(IStoreContext store, IZeroContext context, UserManager<ZeroUser> userManager)
   {
     UserManager = userManager;
-    Operations = operations;
+    Operations = new StoreOperations(store.Context, store.Interceptors, store.Options, new()
+    {
+      IncludeInactive = false,
+      Database = store.Options.For<RavenOptions>().Database
+    });
     Context = context;
   }
 

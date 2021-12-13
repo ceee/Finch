@@ -6,6 +6,7 @@ import { paths } from '../options';
 export interface ZeroRequestConfig extends AxiosRequestConfig
 {
   raw?: boolean;
+  system?: boolean;
   scope?: string;
 }
 
@@ -44,13 +45,15 @@ function getConfig(config?: ZeroRequestConfig): ZeroRequestConfig
   {
     config.baseURL = paths.api;
 
+    const appKey = config.system ? 'system' : 'hofbauer'; // TODO
+
     if (config.url != null && config.url.indexOf('{app}') > -1)
     {
-      config.url = config.url.replace('{app}', 'hofbauer');
+      config.url = config.url.replace('{app}', appKey);
     }
     if (config.baseURL != null && config.baseURL.indexOf('{app}') > -1)
     {
-      config.baseURL = config.baseURL.replace('{app}', 'hofbauer');
+      config.baseURL = config.baseURL.replace('{app}', appKey);
     }
   }
 
