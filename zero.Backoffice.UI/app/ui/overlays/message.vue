@@ -10,7 +10,7 @@
 
 
 <script>
-  import Overlay from 'zero/helpers/overlay.js'
+  //import Overlay from 'zero/helpers/overlay.js'
 
   export default {
 
