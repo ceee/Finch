@@ -65,6 +65,7 @@
   import { useAccountStore } from '../account/store';
   import { useUiStore } from '../ui/store';
   import { applicationApi } from '../modules/applications';
+  import accountApi from '../account/api';
   import EventHub from '../services/eventhub';
 
   //const compactCacheKey = 'zero.navigation.compact';
@@ -89,10 +90,10 @@
     {
       this.ui = useUiStore();
       this.account = useAccountStore();
-      this.applications = (await applicationApi.getByQuery({ pageSize: 100 })).items;
+      this.applications = (await applicationApi.getByQuery({ pageSize: 100 })).data;
       this.currentApplication = this.applications[0];
       this.appId = this.currentApplication.id;
-      //this.compact = localStorage.getItem(compactCacheKey) === 'true';
+      //this.compact = localStorage.getItem(compactCacheKey) === 'true';s
       //this.darkTheme = localStorage.getItem(themeCacheKey) === 'dark';
       //this.buildUser(AuthApi.user);
     },
@@ -120,9 +121,10 @@
         opts.hide();
       },
 
-      logout(item, opts)
+      async logout(item, opts)
       {
-        AuthApi.logout();
+        await accountApi.logout();
+        this.account.user = null;
         opts.hide();
       },
 

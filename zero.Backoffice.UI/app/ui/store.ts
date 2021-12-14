@@ -19,9 +19,9 @@ export const useUiStore = defineStore('zero.ui', {
         api.getIconSets()
       ]);
 
-      this.sections = values[0] as UiSection[];
-      this.settingGroups = values[1] as UiSettingsGroup[];
-      this.iconSets = values[2] as UiIconSet[];
+      this.sections = values[0].data as UiSection[];
+      this.settingGroups = values[1].data as UiSettingsGroup[];
+      this.iconSets = values[2].data as UiIconSet[];
     }
   }
 });

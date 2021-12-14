@@ -34,29 +34,29 @@ function getConfig(config?: ApiRequestConfig): ApiRequestConfig
   return config;
 };
 
-export async function get(url: string, config?: ApiRequestConfig)
+export function get(url: string, config?: ApiRequestConfig)
 {
-  return await send({ method: 'get', url, ...config });
+  return send({ method: 'get', url, ...config });
 }
 
-export async function post(url: string, data: any, config?: ApiRequestConfig)
+export function post(url: string, data: any, config?: ApiRequestConfig)
 {
-  return await send({ method: 'post', url, data, ...config });
+  return send({ method: 'post', url, data, ...config });
 }
 
-export async function del(url: string, config?: ApiRequestConfig)
+export function del(url: string, config?: ApiRequestConfig)
 {
-  return await send({ method: 'delete', url, ...config });
+  return send({ method: 'delete', url, ...config });
 }
 
-export async function put(url: string, data: any, config?: ApiRequestConfig)
+export function put(url: string, data: any, config?: ApiRequestConfig)
 {
-  return await send({ method: 'put', url, data, ...config });
+  return send({ method: 'put', url, data, ...config });
 }
 
-export async function patch(url: string, data: any, config?: ApiRequestConfig)
+export function patch(url: string, data: any, config?: ApiRequestConfig)
 {
-  return await send({ method: 'patch', url, data, ...config });
+  return send({ method: 'patch', url, data, ...config });
 }
 
 

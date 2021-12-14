@@ -63,19 +63,24 @@
         this.rejectReason = null;
         this.state = 'loading';
 
-        try
+        const response = await api.login(this.model);
+
+        if (response.success)
         {
-          const response = await api.login(this.model);
-          this.state = 'success';
-          await useUiStore().setup();
-          accountStore.user = await api.getUser();
+          const userResponse = await api.getUser();
+
+          if (userResponse.success)
+          {
+            this.state = 'success';
+            accountStore.user = (await api.getUser()).data;
+            await useUiStore().setup();
+            return;
+          }
         }
-        catch
-        {
-          accountStore.user = null;
-          this.state = 'error';
-          return;
-        }
+
+        accountStore.user = null;
+        this.state = 'error';
+        return;
       }
     }
   })

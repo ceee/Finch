@@ -3,11 +3,11 @@ import { get, post, ApiRequestConfig, ApiResponse } from '../services/request';
 
 export default {
 
-  getUser: async (config?: ApiRequestConfig): Promise<ApiResponse<AccountUser>> => await get('backoffice/account/user', { ...config }),
+  getUser: (config?: ApiRequestConfig): Promise<ApiResponse<AccountUser>> => get('backoffice/account/user', { ...config }),
 
-  isAuthenticated: async (config?: ApiRequestConfig): Promise<ApiResponse<AccountLoggedInResponse>> => await get('backoffice/account/loggedin', { ...config }),
+  isAuthenticated: (config?: ApiRequestConfig): Promise<ApiResponse<AccountLoggedInResponse>> => get('backoffice/account/loggedin', { ...config }),
 
-  login: async (model: AccountLoginModel, config?: ApiRequestConfig): Promise<ApiResponse<AccountLoginResponse>> => await post('backoffice/account/login', model, { ...config }),
+  login: (model: AccountLoginModel, config?: ApiRequestConfig): Promise<ApiResponse<AccountLoginResponse>> => post('backoffice/account/login', model, { ...config }),
 
-  logout: async (config?: ApiRequestConfig) => await post('backoffice/account/logout', null, { ...config })
+  logout: (config?: ApiRequestConfig) => post('backoffice/account/logout', null, { ...config })
 };

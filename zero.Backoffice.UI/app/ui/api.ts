@@ -3,11 +3,11 @@ import { get, ApiResponse, ApiRequestConfig } from '../services/request';
 
 export default {
 
-  getSections: async (config?: ApiRequestConfig): Promise<ApiResponse<UiSection[]>> => await get('backoffice/ui/sections', { ...config }),
+  getSections: (config?: ApiRequestConfig): Promise<ApiResponse<UiSection[]>> => get('backoffice/ui/sections', { ...config }),
 
-  getSettingGroups: async (config?: ApiRequestConfig): Promise<ApiResponse<UiSettingsGroup[]>> => await get('backoffice/ui/settingareas', { ...config }),
+  getSettingGroups: (config?: ApiRequestConfig): Promise<ApiResponse<UiSettingsGroup[]>> => get('backoffice/ui/settingareas', { ...config }),
 
-  getIconSets: async (config?: ApiRequestConfig): Promise<ApiResponse<UiIconSet[]>> => await get('backoffice/ui/iconsets', { ...config }),
+  getIconSets: (config?: ApiRequestConfig): Promise<ApiResponse<UiIconSet[]>> => get('backoffice/ui/iconsets', { ...config }),
 
-  getTranslations: async (config?: ApiRequestConfig): Promise<ApiResponse<Record<string, string>>> => await get('backoffice/ui/translations', { ...config }),
+  getTranslations: (config?: ApiRequestConfig): Promise<ApiResponse<Record<string, string>>> => get('backoffice/ui/translations', { ...config }),
 };
