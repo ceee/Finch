@@ -18,10 +18,13 @@ public class ApiResponseFilterAttribute : ResultFilterAttribute
         {
           Success = true,
           Status = result.StatusCode.Value,
-          Page = paged.Page,
-          PageSize = paged.PageSize,
-          TotalPages = paged.TotalPages,
-          TotalItems = paged.TotalItems,
+          Paging = new()
+          {
+            Page = paged.Page,
+            PageSize = paged.PageSize,
+            TotalPages = paged.TotalPages,
+            TotalItems = paged.TotalItems
+          },
           Data = paged.GetItems()
         };
       }
@@ -77,7 +80,7 @@ public class ApiResponseFilterAttribute : ResultFilterAttribute
           response = new TokenizedDataApiResponse() { ChangeToken = token };
         }
 
-        response.Success = true;
+        response.Success = result.StatusCode.Value >= 200 && result.StatusCode.Value <= 299;
         response.Status = result.StatusCode.Value;
         response.Data = result.Value;
         result.Value = response;

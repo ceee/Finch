@@ -36,12 +36,14 @@
     async mounted()
     {
       this.accountStore = useAccountStore();
-      try
+
+      let userResponse = await accountApi.getUser();
+
+      if (userResponse.success)
       {
-        this.accountStore.user = await accountApi.getUser();
+        this.accountStore.user = userResponse.data;
         await useUiStore().setup();
       }
-      catch { }
 
       await useTranslationStore().setup();
 

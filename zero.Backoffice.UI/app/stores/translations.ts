@@ -21,7 +21,8 @@ export const useTranslationStore = defineStore('zero.translations', {
 
     async setup()
     {
-      this.translations = await uiApi.getTranslations();
+      var result = await uiApi.getTranslations();
+      this.translations = result.data;
     }
   }
 });

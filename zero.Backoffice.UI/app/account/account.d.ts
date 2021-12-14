@@ -14,6 +14,12 @@ declare module 'zero/account'
     flavor?: string;
   }
 
+  export interface AccountLoginResponse
+  {
+    user: AccountUser;
+    apiKey: string;
+  }
+
   export interface AccountStoreState
   {
     user?: AccountUser;
@@ -24,5 +30,10 @@ declare module 'zero/account'
     email: string;
     password: string;
     isPersistent: boolean;
+  }
+
+  export interface AccountLoggedInResponse
+  {
+    loggedIn: boolean;
   }
 }

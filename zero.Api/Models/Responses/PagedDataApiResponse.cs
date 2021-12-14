@@ -2,6 +2,12 @@
 
 public class PagedDataApiResponse : DataApiResponse
 {
+  public PagedDataApiResponsePaging Paging { get; set; }
+}
+
+
+public class PagedDataApiResponsePaging
+{
   public long Page { get; set; }
 
   public long PageSize { get; set; }

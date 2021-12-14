@@ -1,37 +1,11 @@
 ﻿
 import axios from 'axios';
-import { AxiosRequestConfig } from 'axios';
 import { paths } from '../options';
+import { ApiRequestConfig } from './request.types';
 
-export interface ZeroRequestConfig extends AxiosRequestConfig
-{
-  raw?: boolean;
-  system?: boolean;
-  scope?: string;
-}
+export * from './request.types';
 
-export interface ZeroRequestQuery
-{
-  /**
-   * Current page index (starts at 1) 
-   **/
-  page?: number;
-  /**
-   * Items per page (defaults to 30)
-   **/
-  pageSize?: number;
-  /**
-   * Limit query to specified IDs
-   **/
-  ids?: string[];
-  /**
-   * Search query string
-   **/
-  search?: string;
-}
-
-
-function getConfig(config?: ZeroRequestConfig): ZeroRequestConfig
+function getConfig(config?: ApiRequestConfig): ApiRequestConfig
 {
   config = config || {};
 
@@ -60,33 +34,33 @@ function getConfig(config?: ZeroRequestConfig): ZeroRequestConfig
   return config;
 };
 
-export async function get(url: string, config?: ZeroRequestConfig)
+export async function get(url: string, config?: ApiRequestConfig)
 {
   return await send({ method: 'get', url, ...config });
 }
 
-export async function post(url: string, data: any, config?: ZeroRequestConfig)
+export async function post(url: string, data: any, config?: ApiRequestConfig)
 {
   return await send({ method: 'post', url, data, ...config });
 }
 
-export async function del(url: string, config?: ZeroRequestConfig)
+export async function del(url: string, config?: ApiRequestConfig)
 {
   return await send({ method: 'delete', url, ...config });
 }
 
-export async function put(url: string, data: any, config?: ZeroRequestConfig)
+export async function put(url: string, data: any, config?: ApiRequestConfig)
 {
   return await send({ method: 'put', url, data, ...config });
 }
 
-export async function patch(url: string, data: any, config?: ZeroRequestConfig)
+export async function patch(url: string, data: any, config?: ApiRequestConfig)
 {
   return await send({ method: 'patch', url, data, ...config });
 }
 
 
-export async function send(config: ZeroRequestConfig)
+export async function send(config: ApiRequestConfig)
 {
   config = getConfig(config);
   const result = await axios(config);

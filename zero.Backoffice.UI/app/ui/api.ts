@@ -1,13 +1,13 @@
 import { UiIconSet, UiSection, UiSettingsGroup } from 'zero/ui';
-import { get, ZeroRequestConfig } from '../services/request';
+import { get, ApiResponse, ApiRequestConfig } from '../services/request';
 
 export default {
 
-  getSections: async (config?: ZeroRequestConfig): Promise<UiSection[]> => await get('backoffice/ui/sections', { ...config }),
+  getSections: async (config?: ApiRequestConfig): Promise<ApiResponse<UiSection[]>> => await get('backoffice/ui/sections', { ...config }),
 
-  getSettingGroups: async (config?: ZeroRequestConfig): Promise<UiSettingsGroup[]> => await get('backoffice/ui/settingareas', { ...config }),
+  getSettingGroups: async (config?: ApiRequestConfig): Promise<ApiResponse<UiSettingsGroup[]>> => await get('backoffice/ui/settingareas', { ...config }),
 
-  getIconSets: async (config?: ZeroRequestConfig): Promise<UiIconSet[]> => await get('backoffice/ui/iconsets', { ...config }),
+  getIconSets: async (config?: ApiRequestConfig): Promise<ApiResponse<UiIconSet[]>> => await get('backoffice/ui/iconsets', { ...config }),
 
-  getTranslations: async (config?: ZeroRequestConfig): Promise<Record<string, string>> => await get('backoffice/ui/translations', { ...config }),
+  getTranslations: async (config?: ApiRequestConfig): Promise<ApiResponse<Record<string, string>>> => await get('backoffice/ui/translations', { ...config }),
 };
