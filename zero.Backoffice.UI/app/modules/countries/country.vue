@@ -9,10 +9,6 @@
   </ui-form>
 </template>
 
-<!--<template>
-  <ui-editor-form config="country" class="country" />
-</template>-->
-
 
 <script>
   import api from './api';

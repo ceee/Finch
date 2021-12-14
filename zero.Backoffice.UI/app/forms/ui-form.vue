@@ -12,7 +12,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import FormErrorView from './form-error-view.vue';
-  //import Overlay from 'zero/helpers/overlay.js'
+  import * as overlays from '../services/overlay';
   import * as notifications from '../services/notification';
   import { arrayGroupBy } from '../utils/arrays';
 
@@ -200,27 +200,32 @@
 
 
       // handle delete event
-      onDelete(promise)
+      async onDelete(promise)
       {
-        Overlay.confirmDelete().then(opts =>
-        {
-          opts.state('loading');
+        const overlay = await overlays.confirmDelete();
 
-          promise().then(response =>
-          {
-            if (response.success)
-            {
-              opts.state('success');
-              opts.hide();
-              this.$router.go(-1);
-              notifications.success('@deleteoverlay.success', '@deleteoverlay.success_text');
-            }
-            else
-            {
-              opts.errors(response.errors);
-            }
-          });
-        });
+        if (overlay.eventType == 'close')
+        {
+          return;
+        }
+
+        const opts = overlay.value;
+
+        opts.state('loading');
+        const response = await promise();
+
+        if (response.success)
+        {
+          opts.state('success');
+          opts.close();
+          this.$router.go(-1);
+          notifications.success('@deleteoverlay.success', '@deleteoverlay.success_text');
+        }
+        else
+        {
+          opts.state('error');
+          opts.errors(response.errors);
+        }
       },
 
 

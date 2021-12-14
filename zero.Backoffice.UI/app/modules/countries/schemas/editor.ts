@@ -1,5 +1,5 @@
 ﻿
-import Editor from '../../editor/editor';
+import Editor from '../../../editor/editor';
 
 const editor = new Editor('country', '@country.fields.');
 editor.blueprintAlias = 'country';

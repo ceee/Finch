@@ -6,6 +6,7 @@
       <div class="app-main">
         <router-view></router-view>
       </div>
+      <app-overlays />
       <app-notifications />
     </template>
   </div>
@@ -17,6 +18,7 @@
   import AppLogin from './account/login.vue';
   import AppNavigation from './ui/app-navigation.vue';
   import AppNotifications from './ui/app-notifications.vue';
+  import AppOverlays from './ui/app-overlays.vue';
   import { useAccountStore } from './account/store';
   import { useUiStore } from './ui/store';
   import { useTranslationStore } from './stores/translations';
@@ -26,7 +28,7 @@
   export default defineComponent({
     name: 'app',
 
-    components: { AppLogin, AppNavigation, AppNotifications },
+    components: { AppLogin, AppNavigation, AppNotifications, AppOverlays },
 
     data: () => ({
       initialized: false,

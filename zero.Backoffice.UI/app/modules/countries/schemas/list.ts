@@ -1,6 +1,6 @@
 ﻿
-import List from '../../schemas/list/list';
-import api from './api';
+import List from '../../../schemas/list/list';
+import api from '../api';
 
 const list = new List('countries');
 const prefix = '@country.fields.';

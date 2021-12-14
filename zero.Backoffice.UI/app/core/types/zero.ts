@@ -8,6 +8,8 @@ export interface Zero
   useRouter: () => void;
   usePlugins: () => void;
 
+  runtimeVariables: Record<string, any>;
+
   /**
    * get a defined list or editor schema
    **/

@@ -4,7 +4,7 @@
       <div class="app-overlay-outer" :display="instance.display" v-for="(instance, index) in instances" :key="instance.id" 
            :style="{ transform: instance.display !== 'editor' ? null : 'translateX(' + (editorLength - index - 1) * -120 + 'px)' }"
            :class="instance.class || ''">
-        <div class="app-overlay-bg" @click="close(instance)"></div>
+        <div class="app-overlay-bg" @click="remove(instance)"></div>
         <div open class="app-overlay" :data-alias="instance.alias" :style="{ width: instance.width ? (instance.width + 'px') : null }" :class="'theme-' + instance.theme" :display="instance.display">
           <component :is="instance.component" :model.sync="instance.model" :config="instance" v-bind="instance" title=""></component>
         </div>
@@ -14,13 +14,17 @@
 </template>
 
 
-<script>
-  import Overlay from 'zero/helpers/overlay.js'
-  import { filter as _filter } from 'underscore';
+<script lang="ts">
+  import emitter from '../services/eventhub';
+  import { event_showOverlay, event_closeOverlays, event_finalizeOverlay, event_closeOverlay } from '../services/overlay';
+  import { arrayRemove } from '../utils/arrays';
+  import { defineComponent } from 'vue';
 
-  export default {
+  export default defineComponent({
+    name: 'app-overlays',
+
     data: () => ({
-      instances: Overlay.instances
+      instances: []
     }),
 
     computed: {
@@ -30,14 +34,21 @@
       }
     },
 
+    created()
+    {
+      emitter.on(event_showOverlay, overlay => this.add(overlay));
+      emitter.on(event_closeOverlays, () => this.instances = []);
+      emitter.on(event_finalizeOverlay, opts => this.finalize(opts.eventType, opts.instance, opts.value, opts.force));
+      emitter.on(event_closeOverlay, overlay => this.remove(overlay, true));
+    },
+
     mounted()
     {
       this.$el.addEventListener('keyup', e =>
       {
         if (e.key === "Escape" && this.instances.length) 
         {
-          let instance = this.instances[this.instances.length - 1];
-          instance.close();
+          this.instances[this.instances.length - 1].close();
         }
       });
     },
@@ -48,15 +59,29 @@
     },
 
     methods: {
-      close(instance)
+
+      add(instance)
       {
-        if (instance.softdismiss !== false)
+        this.instances.push(instance);
+      },
+
+      remove(instance, force)
+      {
+        if (instance.softdismiss !== false || force)
         {
-          instance.close();
+          arrayRemove(this.instances, instance);
+        }
+      },
+
+      finalize(eventType, instance, value, force)
+      {
+        if ((eventType === 'close' && force) || (eventType === 'confirm' && instance.autoclose))
+        {
+          this.remove(instance);
         }
       }
     }
-  }
+  })
 </script>
 
 
@@ -140,7 +165,7 @@
     width: auto;
     position: absolute;
     left: auto;
-    right: 0; 
+    right: 0;
     top: 0;
     bottom: 0;
     box-shadow: var(--shadow-overlay);
@@ -172,7 +197,7 @@
   }
 
   .overlay-enter, .overlay-leave-to
-  { 
+  {
     .app-overlay-bg
     {
       opacity: 0;
@@ -190,5 +215,4 @@
       transform: scale(1) translateX(100%);
     }
   }
-
 </style>

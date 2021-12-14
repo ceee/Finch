@@ -34,6 +34,11 @@ export class ZeroRuntime implements Zero
    **/
   options: ZeroOptions;
 
+  /**
+   * runtime variables
+   **/
+  runtimeVariables: Record<string, any> = {};
+
   constructor(app: App, options?: ZeroInstallOptions)
   {
     this._app = app;

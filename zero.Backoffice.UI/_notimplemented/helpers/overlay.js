@@ -13,61 +13,6 @@ export default new Vue({
 
   methods: {
 
-    // sets a new active dropdown so the old one gets auto-closed
-    setDropdown(instance)
-    {
-      if (this.dropdownInstance != null)
-      {
-        this.dropdownInstance.hide();
-      }
-
-      this.dropdownInstance = instance;
-    },
-
-    // open a deletion confirm dialog with the given options
-    confirmDelete(title, text)
-    {
-      let options = _extend({
-        title: typeof title === 'string' ? title : '@deleteoverlay.title',
-        text: text || '@deleteoverlay.text',
-        confirmLabel: '@deleteoverlay.confirm',
-        confirmType: 'danger',
-        closeLabel: '@deleteoverlay.close',
-        component: AppConfirm,
-        autoclose: false,
-        softdismiss: false
-      }, typeof title === 'object' ? title : {});
-
-      return this.open(options);
-    },
-
-    // open a confirm dialog with the given options
-    confirm(title, text)
-    {
-      let options = _extend({
-        title: title,
-        text: text,
-        component: AppConfirm,
-        autoclose: true,
-        softdismiss: false
-      }, typeof title === 'object' ? title : {});
-
-      return this.open(options);
-    },
-
-
-    // open a message dialog with the given options
-    message(title, text)
-    {
-      this.open(_extend({
-        title: title,
-        text: text,
-        component: AppMessage,
-        autoclose: true,
-        softdismiss: true
-      }, typeof title === 'object' ? title : {})).then(() => {}, () => {});
-    },
-
 
     // opens an overlay
     open(options)

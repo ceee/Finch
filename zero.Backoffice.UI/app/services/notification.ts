@@ -5,7 +5,7 @@ import { generateId } from '../utils/numbers';
 
 
 export const event_showNotification = 'zero.notification.show';
-export const event_hideNotifications = 'zero.notification.hide';
+export const event_hideNotifications = 'zero.notification.hideall';
 
 export type NotificationType = 'default' | 'success' | 'error' | 'warning';
 
@@ -44,7 +44,7 @@ export function error(label: string, text?: string, options?: NotificationOption
   return sendInternal('error', label, text, options);
 }
 
-export function hideAll(label: string, text?: string, options?: NotificationOptions)
+export function hideAll()
 {
   emitter.emit(event_hideNotifications);
 }

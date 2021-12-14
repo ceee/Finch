@@ -14,6 +14,8 @@
   //import Overlay from 'zero/helpers/overlay.js';
   import { defineComponent } from 'vue';
 
+  const varKey = 'zero.ui-dropdown.current';
+
   export default defineComponent({
     name: 'uiDropdown',
 
@@ -81,6 +83,14 @@
         {
           return;
         }
+
+        if (this.zero.runtimeVariables[varKey])
+        {
+          this.zero.runtimeVariables[varKey].hide();
+        }
+
+        this.zero.runtimeVariables[varKey] = this;
+
         //Overlay.setDropdown(this);
         this.open = true;
         //this.position();
@@ -95,6 +105,7 @@
         }
         this.open = false;
         this.$emit('closed');
+        this.zero.runtimeVariables[varKey] = null;
       },
 
       position()
