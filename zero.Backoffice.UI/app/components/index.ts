@@ -20,6 +20,8 @@ import uiDropdown from './ui-dropdown.vue';
 import uiHeaderBar from './ui-header-bar.vue';
 import uiCalendar from './ui-calendar.vue';
 import uiTree from './ui-tree.vue';
+import uiTable from './ui-table.vue';
+import uiTableFilter from './ui-table-filter.vue';
 
 export {
   uiIcon,
@@ -43,5 +45,7 @@ export {
   uiDropdown,
   uiHeaderBar,
   uiCalendar,
-  uiTree
+  uiTree,
+  uiTable,
+  uiTableFilter
 };

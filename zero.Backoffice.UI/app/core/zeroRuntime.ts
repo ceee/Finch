@@ -2,7 +2,7 @@
 import { App } from 'vue';
 import { ZeroInstallOptions } from './types/zeroInstallOptions';
 import { ZeroPluginOptions } from './types/zeroPluginOptions';
-import { Zero } from './types/zero';
+import { Zero, ZeroOptions } from './types/zero';
 import { createRouter, RouteRecordRaw, RouterOptions } from 'vue-router';
 import registerDirectives from '../directives/register';
 import registerComponents from '../components/register';
@@ -11,11 +11,12 @@ import { getRouterConfig, appendRouterGuards } from './router/routerConfig';
 import { countryPlugin, applicationPlugin, settingsPlugin } from '../modules';
 import { ZeroSchema } from 'zero/schemas';
 import { ZeroSchemaProp } from './zero';
+import * as zeroOptions from '../options';
 
 export class ZeroRuntime implements Zero
 {
   _app: App;
-  _options: ZeroInstallOptions;
+  _installOptions: ZeroInstallOptions;
   _routerConfig: RouterOptions;
   _schemas: Record<string, ZeroSchemaProp> = {};
 
@@ -27,11 +28,17 @@ export class ZeroRuntime implements Zero
     return "0.0.1";
   }
 
+  /**
+   * options
+   **/
+  options: ZeroOptions;
+
   constructor(app: App, options?: ZeroInstallOptions)
   {
     this._app = app;
-    this._options = options || {};
+    this._installOptions = options || {};
     this._routerConfig = getRouterConfig('/zero', this);
+    this.options = zeroOptions;
   }
 
 
