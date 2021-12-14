@@ -5,17 +5,17 @@
     </header>
     <div class="editor" :class="['display-' + display, { 'has-sidebar': asideDefined, 'hide-tabs': tabs.length < 2, 'has-below': belowDefined }]">
       <ui-tabs class="editor-tabs">
-        <ui-tab v-if="!tab.disabled(modelValue)" v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(modelValue)" :key="index">
+        <ui-tab v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :hidden="tab.disabled(value)" :key="index">
           <h3 v-if="display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
           <slot name="blueprint">
-            <blueprint-property v-if="modelValue && editorConfig.blueprint" :model-value="modelValue" :meta="meta" :config="editorConfig.blueprint" />
+            <!--<blueprint-property v-if="value && editorConfig.blueprint" :model-value="value" :meta="meta" :config="editorConfig.blueprint" />-->
           </slot>
           <div class="ui-property ui-property-parent" v-for="fieldset in tab.fieldsets">
-            <editor-component v-for="(field, fieldIndex) in fieldset.fields" :disabled="disabled" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :model-value="modelValue"
+            <editor-component v-for="(field, fieldIndex) in fieldset.fields" :disabled="disabled" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value"
                               :class="field.options.class" :data-cols="!!field.options.fieldset" :style="{ 'grid-column': field.options.fieldset ? 'span ' + field.options.fieldsetColumns : null }" />
 
           </div>
-          <component v-if="tab.component" :is="tab.component" v-model="modelValue" />
+          <component v-if="tab.component" :is="tab.component" v-model="value" />
         </ui-tab>
       </ui-tabs>
       <aside class="editor-aside" v-if="asideDefined">
@@ -35,8 +35,9 @@
   import EditorAside from './editor-aside.vue';
   import { createBlueprintConfig } from './editor-blueprint';
   import BlueprintProperty from './blueprint/property.vue';
+  import { defineComponent } from 'vue';
 
-  export default {
+  export default defineComponent({
     name: 'uiEditor',
 
     provide: function ()
@@ -60,7 +61,7 @@
         type: Boolean,
         default: false
       },
-      modelValue: {
+      value: {
         type: Object
       },
       onConfigure: {
@@ -93,10 +94,10 @@
       }
     },
 
-    created()
+    async created()
     {
-      this.editorConfig = typeof this.config === 'string' ? this.zero.getEditor(this.config) : this.config;
-      this.editorConfig.blueprint = createBlueprintConfig(this.zero, this.editorConfig, this.modelValue);
+      this.editorConfig = typeof this.config === 'string' ? await this.zero.getSchema(this.config) : this.config;
+      this.editorConfig.blueprint = null; //createBlueprintConfig(this.zero, this.editorConfig, this.value);
 
       this.tabs = this.editorConfig.tabs.map(tab =>
       {
@@ -121,8 +122,8 @@
 
       onChange()
       {
-        this.$emit('input', this.modelValue);
+        this.$emit('input', this.value);
       }
     }
-  }
+  })
 </script>

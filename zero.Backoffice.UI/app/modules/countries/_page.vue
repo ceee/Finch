@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="root">
-    countries óÒ<br />
+    country óÒ<br />
     <ui-search v-model="search" @submit="doSearch" />
     <div v-for="item in items" :key="item.id">
       {{item.name}}

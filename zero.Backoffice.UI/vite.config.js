@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import pluginRewriteAll from 'vite-plugin-rewrite-all'
 
 let loadedPlugins = JSON.parse(process.env.ZERO_PLUGINS || "[]");
 
@@ -72,15 +73,19 @@ let config = defineConfig({
       vue: '@vue/compat'
     }
   },
-  plugins: [vue({
-    template: {
-      compilerOptions: {
-        compatConfig: {
-          MODE: 2
+  plugins: [
+    pluginRewriteAll(),
+    vue({
+      template: {
+        compilerOptions: {
+          compatConfig: {
+            MODE: 2
+          }
         }
       }
-    }
-  }), ...zeroPlugins],
+    }),
+    ...zeroPlugins
+  ],
   build: {
     manifest: true,
     outDir: 'dist/zero',

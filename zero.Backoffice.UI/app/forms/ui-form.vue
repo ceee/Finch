@@ -104,52 +104,25 @@
       },
 
       // loads data on creation of the form
-      load(promise)
+      async load(promise)
       {
         this.loadingState = 'loading';
+        const response = await promise();
 
-        return new Promise((resolve, reject) =>
+        if (!response.success)
         {
-          promise
-            .then(
-              response =>
-              {
-                if (response.meta && typeof response.meta.canEdit === 'boolean')
-                {
-                  this.canEdit = response.meta.canEdit;
+          this.loadingState = 'error';
+          this.loadingError = response.errors[0].message;
+          return null;
+        }
 
-                  //if (response.entity)
-                  //{
-                  //  if (!response.entity.id && this.$route.params.scope === zero.sharedAppId)
-                  //  {
-                  //    response.entity.appId = zero.sharedAppId;
-                  //  }
-
-                  //  this.isShared = response.entity.appId === zero.sharedAppId;
-                  //} // TODO appx
-                }
-
-                resolve(response);
-
-                this.loadingState = 'default';
-                this.$nextTick(() =>
-                {
-                  this.$emit('loaded', this);
-                });
-              },
-              (error) =>
-              {
-                this.loadingState = 'error';
-                this.loadingError = error;
-                reject(error);
-              }
-            )
-            .catch(exception =>
-            {
-              this.loadingState = 'error';
-              this.loadingError = exception;
-            });
+        this.canEdit = true;
+        this.loadingState = 'default';
+        this.$nextTick(() =>
+        {
+          this.$emit('loaded', this);
         });
+        return response.data;
       },
 
       // handles a promise as result of the form submission

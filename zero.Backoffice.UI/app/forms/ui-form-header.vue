@@ -1,21 +1,21 @@
 ﻿<template>
   <ui-header-bar class="ui-form-header" :back-button="true">
     <template v-slot:title>
-      <h2 class="ui-header-bar-title" :class="{'is-empty': title && !modelValue.name && !titleDisabled}">
+      <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name && !titleDisabled}">
         <template v-for="prefix in prefixes">
           <span class="-minor -prefix" v-localize:html="prefix"></span>
           <ui-icon class="-chevron" symbol="fth-chevron-right" :size="14" />
         </template>
         <ui-error field="name" />
-        <input v-if="!titleDisabled" class="ui-form-header-title-input" type="text" v-model="modelValue.name" v-localize:placeholder="title" :readonly="titleDisabled || disabled" />
-        <!--<ui-alias class="ui-form-header-title-alias" v-if="hasAlias" v-model="modelValue.alias" :name="modelValue.name" :disabled="disabled" />-->
-        <span v-if="titleDisabled" v-localize="forceTitle ? title : (modelValue.name || title)"></span>
+        <input v-if="!titleDisabled" class="ui-form-header-title-input" type="text" v-model="value.name" v-localize:placeholder="title" :readonly="titleDisabled || disabled" />
+        <!--<ui-alias class="ui-form-header-title-alias" v-if="hasAlias" v-model="value.alias" :name="value.name" :disabled="disabled" />-->
+        <span v-if="titleDisabled" v-localize="forceTitle ? title : (value.name || title)"></span>
       </h2>
     </template>
     <div class="ui-form-header-aside">
       <slot></slot>
-      <div v-if="!activeDisabled && typeof modelValue.isActive !== 'undefined'" class="ui-form-header-toggle">
-        <ui-toggle v-model="modelValue.isActive" class="is-accent" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" :disabled="disabled" />
+      <div v-if="!activeDisabled && typeof value.isActive !== 'undefined'" class="ui-form-header-toggle">
+        <ui-toggle v-model:on="value.isActive" class="is-accent" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" :disabled="disabled" />
       </div>
       <slot name="buttons"></slot>
       <ui-dropdown v-if="actionsDefined" align="right">
@@ -47,8 +47,9 @@
       prefix: {
         type: [String, Array]
       },
-      modelValue: {
-        type: Object
+      value: {
+        type: Object,
+        default: {}
       },
       canDelete: {
         type: Boolean,

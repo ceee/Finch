@@ -12,7 +12,7 @@
                :can-unlock="canUnlock || false"
                @unlock="unlock"
                @lock="lock">
-    <component :is="config.component" v-bind="config.componentOptions" :model-value="model" :entity="modelValue" :meta="meta" @input="onChange" :disabled="isDisabled" />
+    <component :is="config.component" v-bind="config.componentOptions" :value="model" :entity="value" :meta="meta" @input="onChange" :disabled="isDisabled" />
     <p v-if="config.options.helpText" class="ui-property-help" v-localize="config.options.helpText"></p>
   </ui-property>
 </template>
@@ -38,7 +38,7 @@
         type: Object,
         required: true
       },
-      modelValue: {
+      value: {
         type: Object,
         required: true
       },
@@ -49,7 +49,7 @@
     },
 
     watch: {
-      modelValue: {
+      value: {
         deep: true,
         handler: function ()
         {
@@ -74,15 +74,15 @@
     computed: {
       isHidden()
       {
-        return this.loaded && typeof this.config.options.condition === 'function' && !this.config.options.condition(this.modelValue, this);
+        return this.loaded && typeof this.config.options.condition === 'function' && !this.config.options.condition(this.value, this);
       },
       isRequired()
       {
-        return typeof this.config.isRequired === 'function' ? this.config.isRequired(this.modelValue) : this.config.isRequired;
+        return typeof this.config.isRequired === 'function' ? this.config.isRequired(this.value) : this.config.isRequired;
       },
       isDisabled()
       {
-        return this.manualDisabled || this.disabled || (typeof this.config.options.disabled === 'boolean' && this.config.options.disabled) || (typeof this.config.options.disabled === 'function' && this.config.options.disabled(this.modelValue, this.model));
+        return this.manualDisabled || this.disabled || (typeof this.config.options.disabled === 'boolean' && this.config.options.disabled) || (typeof this.config.options.disabled === 'function' && this.config.options.disabled(this.value, this.model));
       },
       label()
       {
@@ -94,11 +94,11 @@
       },
       isLocked()
       {
-        return !this.editor.blueprint.unlocked(this.modelValue, this.config);
+        return this.editor.blueprint && !this.editor.blueprint.unlocked(this.value, this.config);
       },
       canUnlock()
       {
-        return this.editor.blueprint.canUnlock(this.modelValue, this.config);
+        return this.editor.blueprint && this.editor.blueprint.canUnlock(this.value, this.config);
       }
     },
 
@@ -107,7 +107,7 @@
       rebuildModel()
       {
         this.selector = selectorToArray(this.config.path);
-        let currentValue = this.modelValue;
+        let currentValue = this.value;
         let found = false;
 
         if (!this.selector || !this.selector.length || !currentValue)
@@ -132,6 +132,8 @@
 
           this.model = found ? currentValue : null;
         }
+
+        //console.info(this.config.path + ' => ' + this.model);
       },
 
 
@@ -141,19 +143,19 @@
 
         if (typeof value === 'function')
         {
-          value(this.modelValue);
+          value(this.value);
         }
         else
         {
-          setObjectValue(this.modelValue, this.selector, value);
+          setObjectValue(this.value, this.selector, value);
         }
-        this.$emit('input', this.modelValue);
+        this.$emit('input', this.value);
 
         if (typeof this.config.options.onChange === 'function')
         {
           this.config.options.onChange(value, {
             oldValue,
-            model: this.modelValue,
+            model: this.value,
             component: this
           });
         }
@@ -181,7 +183,7 @@
 
       async lock()
       {
-        let originalValue = await this.editor.blueprint.lock(this.modelValue, this.config);
+        let originalValue = await this.editor.blueprint.lock(this.value, this.config);
         this.onChange(originalValue);
       }
     }

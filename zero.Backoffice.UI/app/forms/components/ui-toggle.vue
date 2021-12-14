@@ -1,10 +1,10 @@
 ﻿ <template>
-  <div class="ui-toggle" :class="{'is-disabled': disabled, 'is-negative': negative, 'is-active': modelValue, 'is-content-left': contentLeft }">
-    <input type="checkbox" :value="modelValue" @input="onChange" :disabled="disabled" />
-    <span class="ui-toggle-switch" :class="{ 'is-active': modelValue }"><i></i></span>
-    <i class="fth-minus-circle ui-toggle-off-warning" v-if="offContent && !modelValue && offWarning"></i>
-    <span class="ui-toggle-text" v-if="onContent && modelValue" v-localize="onContent"></span>
-    <span class="ui-toggle-text" v-if="offContent && !modelValue" v-localize="offContent"></span>
+  <div class="ui-toggle" :class="{'is-disabled': disabled, 'is-negative': negative, 'is-active': on, 'is-content-left': contentLeft }">
+    <input type="checkbox" :value="on" @input="onChange" :disabled="disabled" />
+    <span class="ui-toggle-switch" :class="{ 'is-active': on }"><i></i></span>
+    <i class="fth-minus-circle ui-toggle-off-warning" v-if="offContent && !on && offWarning"></i>
+    <span class="ui-toggle-text" v-if="onContent && on" v-localize="onContent"></span>
+    <span class="ui-toggle-text" v-if="offContent && !on" v-localize="offContent"></span>
   </div>
 </template>
 
@@ -14,7 +14,7 @@
     name: 'uiToggle',
 
     props: {
-      modelValue: {
+      on: {
         type: Boolean,
         default: false
       },
@@ -48,7 +48,7 @@
 
       onChange(ev)
       {
-        this.$emit('update:modelValue', !this.modelValue);
+        this.$emit('update:on', !this.on);
       }
     }
   }

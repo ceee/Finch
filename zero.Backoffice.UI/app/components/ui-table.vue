@@ -232,7 +232,6 @@
 
       getLink(item)
       {
-        return '/'; // TODO
         if (!this.listConfig.link)
         {
           return null;
