@@ -28,12 +28,6 @@ public abstract class BasicModel<T> : ZeroIdEntity, ISupportsFlavors where T : Z
   public DateTimeOffset CreatedDate { get; set; }
 
   /// <summary>
-  /// API link for this entity
-  /// </summary>
-  [JsonPropertyName("@link")]
-  public string Link { get; set; }
-
-  /// <summary>
   /// Configured flavor of this entity
   /// </summary>
   public string Flavor { get; set; }

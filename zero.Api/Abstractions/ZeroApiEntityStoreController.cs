@@ -19,7 +19,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
 
   protected virtual string GetAction(TModel model)
   {
-    return Url.Action(GetActionMethod, new { id = model.Id });
+    return Url.Action(GetActionMethod, ControllerContext.ActionDescriptor.ControllerName, new { id = model.Id, changeVector = default(string) });
   }
 
 
@@ -59,10 +59,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
     query.SearchSelector ??= x => x.Name;
     Paged<TModel> result = await Store.Load(query.Page, query.PageSize, q => q.Filter(query));
 
-    return Mapper.Map<TModel, T>(result, (src, dest) =>
-    {
-      dest.Link = GetAction(src);
-    });
+    return Mapper.Map<TModel, T>(result);
   }
 
 
@@ -72,10 +69,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
     query.SearchSelector ??= x => x.Name;
     Paged<TModel> result = await Store.Load<TIndex>(query.Page, query.PageSize, q => q.Filter(query));
 
-    return Mapper.Map<TModel, T>(result, (src, dest) =>
-    {
-      dest.Link = GetAction(src);
-    });
+    return Mapper.Map<TModel, T>(result);
   }
 
 
@@ -83,6 +77,10 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   {
     TModel emptyModel = saveModel.Flavor.IsNullOrEmpty() ? await Store.Empty() : await Store.Empty(saveModel.Flavor);
     TModel model = Mapper.Map(saveModel, emptyModel);
+
+    string xo = Url.ActionLink(GetActionMethod, ControllerContext.ActionDescriptor.ControllerName, new { id = "countries.xo" }); // TODO fails
+    return Result<TModel>.Fail(xo);
+
     Result<TModel> result = await Store.Create(model);
 
     bool minimalResponse = Hints.ResponsePreference == ApiResponsePreference.Minimal;
@@ -90,7 +88,8 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
     if (result.IsSuccess)
     {
       Result<TEdit> mappedResult = Mapper.Map<TModel, TEdit>(result);
-      return Created(GetAction(model), minimalResponse ? null : mappedResult);
+      string actionLink = GetAction(model);
+      return Created(actionLink, minimalResponse ? null : mappedResult);
     }
 
     if (minimalResponse)

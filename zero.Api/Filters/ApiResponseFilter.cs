@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -10,45 +11,85 @@ public class ApiResponseFilterAttribute : ResultFilterAttribute
   {
     if (context.Result is ObjectResult result)
     {
+      // format paged results
       if (result.Value is Paged paged)
       {
-        result.Value = GetPagedResult(context, paged);
+        result.Value = new PagedDataApiResponse()
+        {
+          Success = true,
+          Status = result.StatusCode.Value,
+          Page = paged.Page,
+          PageSize = paged.PageSize,
+          TotalPages = paged.TotalPages,
+          TotalItems = paged.TotalItems,
+          Data = paged.GetItems()
+        };
       }
 
+      // format model results
+      if (typeof(ZeroIdEntity).IsAssignableFrom(result.DeclaredType))
+      {
+        DataApiResponse response = new();
+
+        if (context.HttpContext.Items.TryGetValue(ApiConstants.ChangeToken, out object tokenObj) && tokenObj is string token)
+        {
+          response = new TokenizedDataApiResponse() { ChangeToken = token };
+        }
+
+        response.Success = true;
+        response.Status = result.StatusCode.Value;
+        response.Data = result.Value;
+        result.Value = response;
+      }
+
+      // format patch results
       if (result.Value is Result model)
       {
+        ApiResponse response = new DataApiResponse();
 
+        if (!model.IsSuccess)
+        {
+          response = new ErrorApiResponse()
+          {
+            Errors = model.Errors.Select(x => new ErrorApiResponseError()
+            {
+              Category = ApiErrorCodes.Categories.Validation,
+              Code = "// TODO",
+              Property = x.Property,
+              Message = x.Message
+            }).ToList()
+          };     
+        }
+        else if (context.HttpContext.Items.TryGetValue(ApiConstants.ChangeToken, out object tokenObj) && tokenObj is string token)
+        {
+          response = new TokenizedDataApiResponse() 
+          { 
+            Data = model.GetModel(),
+            ChangeToken = token 
+          };
+        }
+        else
+        {
+          response = new DataApiResponse()
+          {
+            Data = model.GetModel()
+          };
+        }
+
+        response.Success = model.IsSuccess;
+        response.Status = !model.IsSuccess ? StatusCodes.Status400BadRequest : StatusCodes.Status200OK;
+
+        result.StatusCode = response.Status;
+        result.Value = response;
       }
 
+      // append metadata
       if (result.Value is ApiResponse apiResponse)
       {
-        apiResponse.Success = true;
-        apiResponse.Status = result.StatusCode.Value;
         apiResponse.Metadata =  GetMetadata(context);
       }
     }
   }
-
-
-  PagedDataApiResponse GetPagedResult(ResultExecutingContext context, Paged paged)
-  {
-    return new PagedDataApiResponse()
-    {
-      Page = paged.Page,
-      PageSize = paged.PageSize,
-      TotalPages = paged.TotalPages,
-      TotalItems = paged.TotalItems
-    };
-  }
-
-
-  //PagedDataApiResponse GetModelResult(ResultExecutingContext context, Result model)
-  //{
-  //  return new DataApiResponse()
-  //  {
-      
-  //  };
-  //}
 
 
   ApiResponseMetadata GetMetadata(ResultExecutingContext context)

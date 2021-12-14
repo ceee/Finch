@@ -15,10 +15,7 @@ public abstract class ZeroApiTreeEntityStoreController<TModel, TStore> : ZeroApi
     query.OrderQuery ??= q => q.OrderByDescending(x => x.CreatedDate);
     Paged<TModel> result = await Store.LoadChildren(parentId, query.Page, query.PageSize, q => q.Filter(query));
 
-    return Mapper.Map<TModel, T>(result, (src, dest) =>
-    {
-      dest.Link = GetAction(src);
-    });
+    return Mapper.Map<TModel, T>(result);
   }
 
 
@@ -27,10 +24,7 @@ public abstract class ZeroApiTreeEntityStoreController<TModel, TStore> : ZeroApi
     query.OrderQuery ??= q => q.OrderByDescending(x => x.CreatedDate);
     Paged<TModel> result = await Store.LoadChildren<TIndex>(parentId, query.Page, query.PageSize, q => q.Filter(query));
 
-    return Mapper.Map<TModel, T>(result, (src, dest) =>
-    {
-      dest.Link = GetAction(src);
-    });
+    return Mapper.Map<TModel, T>(result);
   }
 
 

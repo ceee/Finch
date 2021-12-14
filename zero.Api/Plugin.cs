@@ -24,6 +24,7 @@ public class ZeroApiPlugin : ZeroPlugin
     services.AddOptions<ApiOptions>().Bind(configuration.GetSection("Zero:Api")).Configure<IWebHostEnvironment>(ConfigureOptions);
     services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, ZeroApiMvcOptions>());
     services.AddTransient<IBackofficeApplicationResolverHandler, ApiApplicationResolverHandler>();
+    services.AddTransient<ApiUnhandledExceptionMiddleware>();
 
     ZeroModuleCollection modules = new();
 

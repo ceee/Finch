@@ -14,10 +14,7 @@ public class Paged<T> : Paged
     return new Paged<TTarget>(Items.Select(x => convertItem(x)).Where(x => x != null).ToList(), TotalItems, Page, PageSize);
   }
 
-  public override IEnumerable GetItems()
-  {
-    return Items;
-  }
+  public override IEnumerable GetItems() => Items;
 }
 
 
@@ -61,5 +58,5 @@ public abstract class Paged
     return 0;
   }
 
-  public abstract IEnumerable GetItems();
+  public virtual IEnumerable GetItems() => Array.Empty<object>();
 }

@@ -25,6 +25,8 @@ public class Result
     }).ToList();
   }
 
+  public virtual object GetModel() => null;
+
   public static Result Maybe(bool isSuccess) => isSuccess ? Success() : Fail();
 
   public static Result Success() => new() { IsSuccess = true };
@@ -88,6 +90,8 @@ public class Result<T> : Result
   public new static Result<T> Fail(ResultError error) => Fail(error.Property, error.Message);
 
   public new static Result<T> Fail(IEnumerable<ResultError> errors) => new() { IsSuccess = !errors.Any(), Errors = errors.ToList() };
+
+  public override object GetModel() => Model;
 }
 
 
