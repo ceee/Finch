@@ -19,7 +19,9 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
 
   protected virtual string GetAction(TModel model)
   {
-    return Url.Action(GetActionMethod, ControllerContext.ActionDescriptor.ControllerName, new { id = model.Id, changeVector = default(string) });
+    return "/"; // TODO Url.Action does not work anymore,
+                // probably due to ZeroApiControllerModelConvention, which rewrites AttributeRouteModel
+    //return Url.Action(GetActionMethod, ControllerContext.ActionDescriptor.ControllerName, new { id = model.Id, changeVector = default(string) });
   }
 
 
@@ -78,9 +80,6 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
     TModel emptyModel = saveModel.Flavor.IsNullOrEmpty() ? await Store.Empty() : await Store.Empty(saveModel.Flavor);
     TModel model = Mapper.Map(saveModel, emptyModel);
 
-    string xo = Url.ActionLink(GetActionMethod, ControllerContext.ActionDescriptor.ControllerName, new { id = "countries.xo" }); // TODO fails
-    return Result<TModel>.Fail(xo);
-
     Result<TModel> result = await Store.Create(model);
 
     bool minimalResponse = Hints.ResponsePreference == ApiResponsePreference.Minimal;
@@ -88,16 +87,10 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
     if (result.IsSuccess)
     {
       Result<TEdit> mappedResult = Mapper.Map<TModel, TEdit>(result);
-      string actionLink = GetAction(model);
-      return Created(actionLink, minimalResponse ? null : mappedResult);
+      return Created(GetAction(model), minimalResponse ? null : mappedResult);
     }
 
-    if (minimalResponse)
-    {
-      return result.WithoutModel();
-    }
-
-    return Mapper.Map<TModel, TEdit>(result);
+    return result.WithoutModel();
   }
 
 
@@ -105,21 +98,21 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   {
     if (id != updateModel.Id)
     {
-      return BadRequest(ApiConstants.HttpErrors.NoIdMatchOnUpdate);
+      return BadRequest(Result.Fail(nameof(id), "@errors.onupdate.noidmatch"));
     }
 
     TModel model = await Store.Load(id);
 
     if (model == null)
     {
-      return BadRequest(ApiConstants.HttpErrors.IdNotFound);
+      return BadRequest(Result.Fail(nameof(id), "@errors.idnotfound"));
     }
 
     string storedChangeToken = Store.GetChangeToken(model);
 
     if (!changeToken.IsNullOrEmpty() && storedChangeToken != changeToken)
     {
-      return BadRequest(ApiConstants.HttpErrors.ChangeTokenMismatch);
+      return BadRequest(Result.Fail("@errors.onupdate.changetokenmismatch"));
     }
 
     Mapper.Map(updateModel, model);

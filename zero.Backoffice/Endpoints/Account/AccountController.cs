@@ -16,13 +16,13 @@ public class AccountController : ZeroBackofficeController
 
 
   [HttpGet("user")]
-  public async Task<ActionResult<UserModel>> GetUser()
+  public async Task<ActionResult<object>> GetUser()
   {
     ZeroUser user = await AuthService.GetUser();
 
     if (user == null)
     {
-      return BadRequest("notfound");
+      return Unauthorized();
     }
 
     return Mapper.Map<ZeroUser, UserModel>(user);

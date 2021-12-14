@@ -176,6 +176,7 @@
 
   "errors": {
     "idnotfound": "Could not find an entity for the given ID",
+    "childnotallowed": "Not allowed as a child entity",
     "onsave": {
       "notallowed": "You are not allowed to edit this resource",
       "empty": "You need to pass a model",
@@ -184,6 +185,10 @@
     },
     "ondelete": {
       "idnotfound": "Could not find an entity for the given ID"
+    },
+    "onupdate": {
+      "noidmatch": "The Id as part of the URL does not match the Id of the model",
+      "changetokenmismatch": "The change token is not valid anymore"
     },
     "http": {
       "403": "Unauthorized",

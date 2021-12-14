@@ -26,24 +26,8 @@ public class ApiResponseFilterAttribute : ResultFilterAttribute
         };
       }
 
-      // format model results
-      if (typeof(ZeroIdEntity).IsAssignableFrom(result.DeclaredType))
-      {
-        DataApiResponse response = new();
-
-        if (context.HttpContext.Items.TryGetValue(ApiConstants.ChangeToken, out object tokenObj) && tokenObj is string token)
-        {
-          response = new TokenizedDataApiResponse() { ChangeToken = token };
-        }
-
-        response.Success = true;
-        response.Status = result.StatusCode.Value;
-        response.Data = result.Value;
-        result.Value = response;
-      }
-
       // format patch results
-      if (result.Value is Result model)
+      else if (result.Value is Result model)
       {
         ApiResponse response = new DataApiResponse();
 
@@ -58,14 +42,14 @@ public class ApiResponseFilterAttribute : ResultFilterAttribute
               Property = x.Property,
               Message = x.Message
             }).ToList()
-          };     
+          };
         }
         else if (context.HttpContext.Items.TryGetValue(ApiConstants.ChangeToken, out object tokenObj) && tokenObj is string token)
         {
-          response = new TokenizedDataApiResponse() 
-          { 
+          response = new TokenizedDataApiResponse()
+          {
             Data = model.GetModel(),
-            ChangeToken = token 
+            ChangeToken = token
           };
         }
         else
@@ -77,9 +61,25 @@ public class ApiResponseFilterAttribute : ResultFilterAttribute
         }
 
         response.Success = model.IsSuccess;
-        response.Status = !model.IsSuccess ? StatusCodes.Status400BadRequest : StatusCodes.Status200OK;
+        response.Status = !model.IsSuccess ? StatusCodes.Status400BadRequest : result.StatusCode.Value;
 
         result.StatusCode = response.Status;
+        result.Value = response;
+      }
+
+      // format model results
+      else
+      {
+        DataApiResponse response = new();
+
+        if (context.HttpContext.Items.TryGetValue(ApiConstants.ChangeToken, out object tokenObj) && tokenObj is string token)
+        {
+          response = new TokenizedDataApiResponse() { ChangeToken = token };
+        }
+
+        response.Success = true;
+        response.Status = result.StatusCode.Value;
+        response.Data = result.Value;
         result.Value = response;
       }
 
@@ -87,6 +87,7 @@ public class ApiResponseFilterAttribute : ResultFilterAttribute
       if (result.Value is ApiResponse apiResponse)
       {
         apiResponse.Metadata =  GetMetadata(context);
+        context.HttpContext.Response.Headers["X-Variant"] = "api-response";
       }
     }
   }

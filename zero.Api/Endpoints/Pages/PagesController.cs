@@ -16,7 +16,7 @@ public class PagesController : ZeroApiTreeEntityStoreController<Page, IPagesStor
 
   [HttpGet("empty")]
   [ZeroAuthorize(PagePermissions.Create)]
-  public virtual async Task<ActionResult<PageEdit>> Empty(string flavor, string parentId = null)
+  public virtual async Task<ActionResult<object>> Empty(string flavor, string parentId = null)
   {
     Page page = await Store.Empty(flavor, parentId);
 
@@ -27,7 +27,7 @@ public class PagesController : ZeroApiTreeEntityStoreController<Page, IPagesStor
 
     if (!await Store.IsAllowedAsChild(page, parentId))
     {
-      return BadRequest(ApiConstants.HttpErrors.ChildNotAllowed);
+      return BadRequest(Result.Fail("@errors.childnotallowed"));
     }
 
     PageEdit model = new()

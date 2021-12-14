@@ -5,8 +5,27 @@ using zero.Stores;
 
 namespace zero.Demo.Controllers;
 
-public class TestController : Controller
+public class TestController : ControllerBase
 {
+  [HttpGet("")]
+  public ActionResult Get(string id, string changeVector = null)
+  {
+    return new JsonResult(new
+    {
+      id = id
+    });
+  }
+
+
+  [HttpGet("/test/url")]
+  public ActionResult GetUrl()
+  {
+    return new JsonResult(new
+    {
+      url = Url.Action("Get", new { id = "myid" })
+    });
+  }
+
   //[HttpGet]
   //public async Task<ActionResult> Scoping([FromServices] IZeroContext ctx, [FromServices] IStoreOperations ops)
   //{

@@ -17,7 +17,6 @@ internal class ZeroApiMvcOptions : IConfigureOptions<MvcOptions>
 
   public void Configure(MvcOptions options)
   {
-    Console.WriteLine("Configure API");
     options.Conventions.Add(new ZeroApiControllerModelConvention(Options.ZeroPath + "/api", isAppAware: Options.Applications.Count > 1));
   }
 }
