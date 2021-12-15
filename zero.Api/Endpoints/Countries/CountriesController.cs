@@ -9,12 +9,12 @@ public class CountriesController : ZeroApiEntityStoreController<Country, ICountr
 
   [HttpGet("empty")]
   [ZeroAuthorize(CountryPermissions.Create)]
-  public virtual Task<ActionResult<CountryEdit>> Empty(string flavor = null) => EmptyModel<CountryEdit>(flavor);
+  public virtual Task<ActionResult<Country>> Empty(string flavor = null) => EmptyModel(flavor);
 
 
   [HttpGet("{id}")]
   [ZeroAuthorize(CountryPermissions.Read)]
-  public virtual Task<ActionResult<CountryEdit>> Get(string id, string changeVector = null) => GetModel<CountryEdit>(id, changeVector);
+  public virtual Task<ActionResult<Country>> Get(string id, string changeVector = null) => GetModel(id, changeVector);
 
 
   [HttpGet("")]
@@ -22,18 +22,18 @@ public class CountriesController : ZeroApiEntityStoreController<Country, ICountr
   public virtual Task<ActionResult<Paged>> Get([FromQuery] ListQuery<Country> query)
   {
     query.OrderQuery = q => q.OrderByDescending(x => x.IsPreferred).ThenBy(x => x.Name);
-    return GetModels<CountryBasic, zero_Api_Countries_Listing>(query);
+    return GetModelsByIndex<CountryBasic, zero_Api_Countries_Listing>(query);
   }
 
 
   [HttpPost("")]
   [ZeroAuthorize(CountryPermissions.Create)]
-  public virtual Task<ActionResult<Result>> Create(CountrySave saveModel) => CreateModel<CountrySave, CountryEdit>(saveModel);
+  public virtual Task<ActionResult<Result>> Create(Country saveModel) => CreateModel(saveModel);
 
 
   [HttpPut("{id}")]
   [ZeroAuthorize(CountryPermissions.Update)]
-  public virtual Task<ActionResult<Result>> Update(string id, CountrySave updateModel, [FromQuery] string changeToken = null) => UpdateModel<CountrySave, CountryEdit>(id, updateModel, changeToken);
+  public virtual Task<ActionResult<Result>> Update(string id, Country updateModel, [FromQuery] string changeToken = null) => UpdateModel(id, updateModel, changeToken);
 
 
   [HttpDelete("{id}")]

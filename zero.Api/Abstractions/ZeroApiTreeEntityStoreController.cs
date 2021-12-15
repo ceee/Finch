@@ -19,12 +19,30 @@ public abstract class ZeroApiTreeEntityStoreController<TModel, TStore> : ZeroApi
   }
 
 
-  protected async Task<ActionResult<Paged>> GetChildModels<T, TIndex>(string parentId, ListQuery<TModel> query) where T : BasicModel<TModel> where TIndex : AbstractCommonApiForIndexes, new()
+  protected async Task<ActionResult<Paged>> GetChildModels(string parentId, ListQuery<TModel> query)
+  {
+    query.OrderQuery ??= q => q.OrderByDescending(x => x.CreatedDate);
+    Paged<TModel> result = await Store.LoadChildren(parentId, query.Page, query.PageSize, q => q.Filter(query));
+
+    return result;
+  }
+
+
+  protected async Task<ActionResult<Paged>> GetChildModelsByIndex<T, TIndex>(string parentId, ListQuery<TModel> query) where T : BasicModel<TModel> where TIndex : AbstractCommonApiForIndexes, new()
   {
     query.OrderQuery ??= q => q.OrderByDescending(x => x.CreatedDate);
     Paged<TModel> result = await Store.LoadChildren<TIndex>(parentId, query.Page, query.PageSize, q => q.Filter(query));
 
     return Mapper.Map<TModel, T>(result);
+  }
+
+
+  protected async Task<ActionResult<Paged>> GetChildModelsByIndex<TIndex>(string parentId, ListQuery<TModel> query) where TIndex : AbstractCommonApiForIndexes, new()
+  {
+    query.OrderQuery ??= q => q.OrderByDescending(x => x.CreatedDate);
+    Paged<TModel> result = await Store.LoadChildren<TIndex>(parentId, query.Page, query.PageSize, q => q.Filter(query));
+
+    return result;
   }
 
 
@@ -40,15 +58,33 @@ public abstract class ZeroApiTreeEntityStoreController<TModel, TStore> : ZeroApi
   }
 
 
+  protected async Task<ActionResult<Result>> MoveModel(string pageId, string newParentId)
+  {
+    return await PutOperation(async () => await Store.Move(pageId, newParentId));
+  }
+
+
   protected async Task<ActionResult<Result>> CopyModel<TEdit>(string pageId, string newParentId) where TEdit : DisplayModel<TModel>
   {
     return await PutOperation<TEdit>(async () => await Store.Copy(pageId, newParentId));
   }
 
 
+  protected async Task<ActionResult<Result>> CopyModel(string pageId, string newParentId)
+  {
+    return await PutOperation(async () => await Store.Copy(pageId, newParentId));
+  }
+
+
   protected async Task<ActionResult<Result>> CopyModelWithDescendants<TEdit>(string pageId, string newParentId) where TEdit : DisplayModel<TModel>
   {
     return await PutOperation<TEdit>(async () => await Store.CopyWithDescendants(pageId, newParentId));
+  }
+
+
+  protected async Task<ActionResult<Result>> CopyModelWithDescendants(string pageId, string newParentId)
+  {
+    return await PutOperation(async () => await Store.CopyWithDescendants(pageId, newParentId));
   }
 
 
@@ -77,5 +113,18 @@ public abstract class ZeroApiTreeEntityStoreController<TModel, TStore> : ZeroApi
     }
 
     return Mapper.Map<TModel, TEdit>(result);
+  }
+
+
+  async Task<ActionResult<Result>> PutOperation(Func<Task<Result<TModel>>> action)
+  {
+    Result<TModel> result = await action();
+
+    if (Hints.ResponsePreference == ApiResponsePreference.Minimal)
+    {
+      return result.WithoutModel();
+    }
+
+    return result;
   }
 }

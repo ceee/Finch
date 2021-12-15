@@ -25,7 +25,7 @@ public class MailTemplatesController : ZeroApiEntityStoreController<MailTemplate
   public virtual Task<ActionResult<Paged>> Get([FromQuery] ListQuery<MailTemplate> query)
   {
     query.SearchFor(entity => entity.Name, entity => entity.Key, entity => entity.Subject);
-    return GetModels<MailBasic, zero_Api_MailTemplates_Listing>(query);
+    return GetModelsByIndex<MailBasic, zero_Api_MailTemplates_Listing>(query);
   }
 
 

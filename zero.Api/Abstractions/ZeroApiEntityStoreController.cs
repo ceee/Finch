@@ -40,6 +40,20 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
+  protected async Task<ActionResult<TModel>> EmptyModel(string flavorAlias = null, Action<TModel> modify = null)
+  {
+    TModel model = await Store.Empty(flavorAlias);
+
+    if (model == null)
+    {
+      return NotFound();
+    }
+
+    modify?.Invoke(model);
+    return model;
+  }
+
+
   protected async Task<ActionResult<T>> GetModel<T>(string id, string changeVector = null) where T : DisplayModel<TModel>
   {
     TModel model = await Store.Load(id, changeVector);
@@ -55,6 +69,21 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
+  protected async Task<ActionResult<TModel>> GetModel(string id, string changeVector = null)
+  {
+    TModel model = await Store.Load(id, changeVector);
+
+    if (model == null)
+    {
+      return NotFound();
+    }
+
+    HttpContext.Items[ApiConstants.ChangeToken] = Store.GetChangeToken(model);
+
+    return model;
+  }
+
+
   protected async Task<ActionResult<Paged>> GetModels<T>(ListQuery<TModel> query) where T : BasicModel<TModel>
   {
     query.OrderQuery ??= q => q.OrderByDescending(x => x.CreatedDate);
@@ -65,13 +94,31 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
-  protected async Task<ActionResult<Paged>> GetModels<T, TIndex>(ListQuery<TModel> query) where T : BasicModel<TModel> where TIndex : AbstractCommonApiForIndexes, new()
+  protected async Task<ActionResult<Paged>> GetModels(ListQuery<TModel> query)
+  {
+    query.OrderQuery ??= q => q.OrderByDescending(x => x.CreatedDate);
+    query.SearchSelector ??= x => x.Name;
+    Paged<TModel> result = await Store.Load(query.Page, query.PageSize, q => q.Filter(query));
+    return result;
+  }
+
+
+  protected async Task<ActionResult<Paged>> GetModelsByIndex<T, TIndex>(ListQuery<TModel> query) where T : BasicModel<TModel> where TIndex : AbstractCommonApiForIndexes, new()
   {
     query.OrderQuery ??= q => q.OrderByDescending(x => x.CreatedDate);
     query.SearchSelector ??= x => x.Name;
     Paged<TModel> result = await Store.Load<TIndex>(query.Page, query.PageSize, q => q.Filter(query));
 
     return Mapper.Map<TModel, T>(result);
+  }
+
+
+  protected async Task<ActionResult<Paged>> GetModelsByIndex<TIndex>(ListQuery<TModel> query) where TIndex : AbstractCommonApiForIndexes, new()
+  {
+    query.OrderQuery ??= q => q.OrderByDescending(x => x.CreatedDate);
+    query.SearchSelector ??= x => x.Name;
+    Paged<TModel> result = await Store.Load<TIndex>(query.Page, query.PageSize, q => q.Filter(query));
+    return result;
   }
 
 
@@ -88,6 +135,21 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
     {
       Result<TEdit> mappedResult = Mapper.Map<TModel, TEdit>(result);
       return Created(GetAction(model), minimalResponse ? null : mappedResult);
+    }
+
+    return result.WithoutModel();
+  }
+
+
+  protected async Task<ActionResult<Result>> CreateModel(TModel saveModel)
+  {
+    Result<TModel> result = await Store.Create(saveModel);
+
+    bool minimalResponse = Hints.ResponsePreference == ApiResponsePreference.Minimal;
+
+    if (result.IsSuccess)
+    {
+      return Created(GetAction(saveModel), minimalResponse ? null : saveModel);
     }
 
     return result.WithoutModel();
@@ -126,6 +188,38 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
 
     // TODO add Preference-Applied header, see https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md#76-standard-response-headers
     return Mapper.Map<TModel, TEdit>(result);
+  }
+
+
+  protected async Task<ActionResult<Result>> UpdateModel(string id, TModel updateModel, string changeToken = null)
+  {
+    if (id != updateModel.Id)
+    {
+      return BadRequest(Result.Fail(nameof(id), "@errors.onupdate.noidmatch"));
+    }
+
+    TModel model = await Store.Load(id);
+
+    if (model == null)
+    {
+      return BadRequest(Result.Fail(nameof(id), "@errors.idnotfound"));
+    }
+
+    string storedChangeToken = Store.GetChangeToken(model);
+
+    if (!changeToken.IsNullOrEmpty() && storedChangeToken != changeToken)
+    {
+      return BadRequest(Result.Fail("@errors.onupdate.changetokenmismatch"));
+    }
+
+    Result<TModel> result = await Store.Update(updateModel);
+
+    if (Hints.ResponsePreference == ApiResponsePreference.Minimal)
+    {
+      return result.WithoutModel();
+    }
+
+    return result;
   }
 
 

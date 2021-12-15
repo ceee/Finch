@@ -12,12 +12,12 @@ public class TranslationsController : ZeroApiEntityStoreController<Translation, 
 
   [HttpGet("empty")]
   [ZeroAuthorize(TranslationPermissions.Create)]
-  public virtual Task<ActionResult<TranslationEdit>> Empty(string flavor = null) => EmptyModel<TranslationEdit>(flavor);
+  public virtual Task<ActionResult<Translation>> Empty(string flavor = null) => EmptyModel(flavor);
 
 
   [HttpGet("{id}")]
   [ZeroAuthorize(TranslationPermissions.Read)]
-  public virtual Task<ActionResult<TranslationEdit>> Get(string id, string changeVector = null) => GetModel<TranslationEdit>(id, changeVector);
+  public virtual Task<ActionResult<Translation>> Get(string id, string changeVector = null) => GetModel(id, changeVector);
 
 
   [HttpGet("")]
@@ -25,18 +25,18 @@ public class TranslationsController : ZeroApiEntityStoreController<Translation, 
   public virtual Task<ActionResult<Paged>> Get([FromQuery] ListQuery<Translation> query)
   {
     query.SearchFor(x => x.Key, x => x.Value);
-    return GetModels<TranslationBasic, zero_Api_Translations_Listing>(query);
+    return GetModelsByIndex<zero_Api_Translations_Listing>(query);
   }
 
 
   [HttpPost("")]
   [ZeroAuthorize(TranslationPermissions.Create)]
-  public virtual Task<ActionResult<Result>> Create(TranslationSave saveModel) => CreateModel<TranslationSave, TranslationEdit>(saveModel);
+  public virtual Task<ActionResult<Result>> Create(Translation saveModel) => CreateModel(saveModel);
 
 
   [HttpPut("{id}")]
   [ZeroAuthorize(TranslationPermissions.Update)]
-  public virtual Task<ActionResult<Result>> Update(string id, TranslationSave updateModel, [FromQuery] string changeToken = null) => UpdateModel<TranslationSave, TranslationEdit>(id, updateModel, changeToken);
+  public virtual Task<ActionResult<Result>> Update(string id, Translation updateModel, [FromQuery] string changeToken = null) => UpdateModel(id, updateModel, changeToken);
 
 
   [HttpDelete("{id}")]
