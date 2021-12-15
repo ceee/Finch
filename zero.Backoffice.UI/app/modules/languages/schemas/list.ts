@@ -1,14 +1,14 @@
 ﻿
-import List from 'zero/core/list.ts';
-import LanguagesApi from 'zero/api/languages.js';
+import List from '../../../schemas/list/list';
+import api from '../api';
 
 const list = new List('languages');
 const prefix = '@language.fields.';
 
 list.templateLabel = x => prefix + x;
-list.link = zero.alias.settings.languages + '-edit';
+list.link = 'languages-edit';
 
-list.onFetch(filter => LanguagesApi.getByQuery(filter));
+list.onFetch(filter => api.getByQuery(filter));
 
 list.column('name').name();
 list.column('code').text();

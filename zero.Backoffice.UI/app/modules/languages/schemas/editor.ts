@@ -1,7 +1,7 @@
 ﻿
-import Editor from 'zero/core/editor.ts';
+import Editor from '../../../editor/editor';
 
-const editor = new Editor('language', '@language.fields.');
+const editor = new Editor('languages:edit', '@language.fields.');
 editor.blueprintAlias = 'language';
 editor.field('name', { label: '@ui.name' }).text(60).required();
 editor.field('code').text(10).required();

@@ -9,7 +9,7 @@ import registerComponents from '../components/register';
 import registerFormComponents from '../forms/register';
 import registerEditorComponents from '../editor/register';
 import { getRouterConfig, appendRouterGuards } from './router/routerConfig';
-import { countryPlugin, applicationPlugin, settingsPlugin } from '../modules';
+import { countryPlugin, applicationPlugin, settingsPlugin, languagePlugin } from '../modules';
 import { ZeroSchema } from 'zero/schemas';
 import { ZeroSchemaProp } from './zero';
 import * as zeroOptions from '../options';
@@ -85,6 +85,7 @@ export class ZeroRuntime implements Zero
     countryPlugin.install(pluginOptions);
     applicationPlugin.install(pluginOptions);
     settingsPlugin.install(pluginOptions);
+    languagePlugin.install(pluginOptions);
   }
 
 
