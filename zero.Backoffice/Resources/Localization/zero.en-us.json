@@ -19,6 +19,7 @@
     "actions": "Actions",
     "back": "Go back",
     "close": "Close",
+    "cancel": "Cancel",
     "confirm": "Confirm",
     "save": "Save",
     "create": "Create",
@@ -264,6 +265,11 @@
       "newPassword": "New password",
       "confirmNewPassword": "Confirm new password"
     }
+  },
+
+  "addoverlay": {
+    "title": "Create entity",
+    "gotoeditor": "Next"
   },
 
   "sections": {

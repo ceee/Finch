@@ -4,6 +4,7 @@ using zero.Applications;
 using zero.Backoffice;
 using zero.Backoffice.DevServer;
 using zero.Demo;
+using zero.Localization;
 using zero.Routing;
 using zero.Spaces;
 using zero.Stores;
@@ -26,6 +27,9 @@ builder.Services.Configure<ZeroDevOptions>(opts =>
 builder.Services.Configure<FlavorOptions>(opts =>
 {
   opts.AddSpaceList<TeamMember>("team", "Team", "Members of our team", "fth-users", "spaces.team");
+
+  //opts.Add<Country, EuropeanCountry>("eu_country", "EU country", "A country within the European Union", "fth-globe");
+  //opts.Add<Country, AmericanCountry>("usa_country", "USA", "A country in the United States", "fth-flag");
 });
 
 var app = builder.Build();
@@ -49,3 +53,14 @@ app.UseZero().WithEndpoints(x =>
 //app.UseZeroBackoffice();
 
 app.Run();
+
+
+public class EuropeanCountry : Country
+{
+  public string EuName { get; set; }
+}
+
+public class AmericanCountry : Country
+{
+  public string State { get; set; }
+}

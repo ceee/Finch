@@ -1,9 +1,9 @@
 ﻿<template>
   <div class="app-confirm">
-    <h2 class="ui-headline" v-localize="config.title"></h2>
-    <p v-localize:html="config.text"></p>
+    <h2 class="ui-headline" v-localize="model.title"></h2>
+    <p v-localize:html="model.text"></p>
     <div class="app-confirm-buttons">
-      <ui-button type="light" :label="config.closeLabel" @click="config.close"></ui-button>
+      <ui-button type="light" label="@ui.close" @click="config.close"></ui-button>
     </div>
   </div>
 </template>

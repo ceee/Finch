@@ -1,4 +1,6 @@
-﻿namespace zero.Stores;
+﻿using System.Text.Json.Serialization;
+
+namespace zero.Stores;
 
 /// <summary>
 /// A flavor provider is attached to an entity (which has ISupportsFlavors) and contains all flavors
@@ -9,6 +11,7 @@ public class FlavorProvider
 
   public string DefaultFlavor { get; set; }
 
+  [JsonIgnore]
   public Type BaseType { get; set; }
 
   public List<FlavorConfig> Flavors { get; set; } = new();

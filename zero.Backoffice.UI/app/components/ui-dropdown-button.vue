@@ -2,7 +2,7 @@
   <button v-if="!confirming" :disabled="disabled" type="button" @click="onClick" class="ui-dropdown-button" :class="{ 'has-icon': icon, 'is-active': selected, 'is-multiline': multiline }">
     <ui-icon v-if="icon" :symbol="icon" class="ui-dropdown-button-icon" />
     <span><ui-localize :value="label" /><span v-if="false && confirm && !confirming"> &hellip;</span><span v-if="false && confirming">?</span></span>  
-    <ui-icon v-if="selected" symbol="check" class="ui-dropdown-button-selected" />
+    <ui-icon v-if="selected" symbol="fth-check" class="ui-dropdown-button-selected" />
     <i v-if="loading" class="ui-dropdown-button-progress"></i>
   </button>
   <div v-if="confirming" class="ui-dropdown-button-confirmation">

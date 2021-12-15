@@ -106,18 +106,18 @@
       // loads data on creation of the form
       async load(promise)
       {
-        this.loadingState = 'loading';
+        this.setState('loading');
         const response = await promise();
 
         if (!response.success)
         {
-          this.loadingState = 'error';
+          this.setState('error');
           this.loadingError = response.errors[0].message;
           return null;
         }
 
         this.canEdit = true;
-        this.loadingState = 'default';
+        this.setState('default');
         this.$nextTick(() =>
         {
           this.$emit('loaded', this);
@@ -126,59 +126,31 @@
       },
 
       // handles a promise as result of the form submission
-      handle(promise, isCreate)
+      async handle(response, isCreate)
       {
         this.setState('loading');
+        console.info('handle out', response);
+        this.clearErrors();
 
-        let handleError = (errors, reject) =>
+        if (!response.success)
         {
           this.setState('error');
-          this.setErrors(errors);
-          reject(errors);
-        };
+          this.setErrors(response.errors);
+          return null;
+        }
 
-        return new Promise((resolve, reject) =>
+        this.setState('success');
+        this.setDirty(false);
+
+        if (response.data && this.route && response.status === 201)
         {
-          promise
-            .then(
-              response =>
-              {
-                this.clearErrors();
+          let routeObj = typeof this.route === 'object' ? this.route : { name: this.route };
+          routeObj.params = routeObj.params || {};
+          routeObj.query = this.$route.query || {};
+          routeObj.params.id = response.model.id;
 
-                if (response.success)
-                {
-                  this.setState('success');
-                  this.setDirty(false);
-                  resolve(response);
-
-                  if (response.model && this.route && this.$route.name !== this.route)
-                  {
-                    let routeObj = typeof this.route === 'object' ? this.route : { name: this.route };
-                    routeObj.params = routeObj.params || {};
-                    routeObj.query = this.$route.query || {};
-                    routeObj.params.id = response.model.id;
-
-                    this.$router.replace(routeObj);
-                  }
-                }
-                else
-                {
-                  handleError(response.errors, reject);
-                }
-              },
-              errors =>
-              {
-                handleError(errors, reject);
-              }
-            )
-            .catch(exception =>
-            {
-              this.setState('error');
-
-              // TODO should we throw here, probably show an error overlay
-              throw exception;
-            });
-        });
+          this.$router.replace(routeObj);
+        }
       },
 
 

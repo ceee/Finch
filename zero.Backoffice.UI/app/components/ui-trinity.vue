@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-overlay-editor">
+  <div class="ui-trinity">
     <header>
       <slot name="header"></slot>
     </header>
@@ -15,12 +15,12 @@
 
 <script>
   export default {
-
+    name: 'uiTrinity'
   }
 </script>
 
 <style lang="scss">
-  .ui-overlay-editor
+  .ui-trinity
   {
     display: grid;
     grid-template-rows: auto 1fr auto;

@@ -12,21 +12,43 @@ export const event_finalizeOverlay = 'zero.overlay.finalize';
 export type OverlayDisplay = 'dialog' | 'editor';
 export type OverlayTheme = 'default' | 'light' | 'dark';
 
+export interface OverlaySelectItem
+{
+  name: string;
+  description?: string;
+  icon: string;
+}
+
 export interface OverlayOptions
 {
-  alias?: string,
-  display?: OverlayDisplay,
-  width?: number,
-  autoclose?: boolean,
-  softdismiss?: boolean,
-  component?: any,
-  theme?: OverlayTheme,
-  model?: any
+  alias?: string;
+  display?: OverlayDisplay;
+  width?: number;
+  autoclose?: boolean;
+  softdismiss?: boolean;
+  component?: any;
+  theme?: OverlayTheme;
+  model?: any;
 }
 
 export interface OverlayInstance extends OverlayOptions
 {
-  id: string
+  id: string;
+}
+
+
+export function select(title: string, items: OverlaySelectItem[] | Promise<OverlaySelectItem[]>)
+{
+  return open({
+    alias: 'select',
+    model: {
+      title,
+      items
+    },
+    autoclose: true,
+    softdismiss: true,
+    component: () => import('../ui/overlays/select.vue')
+  });
 }
 
 
@@ -66,7 +88,7 @@ export function confirm(title: string, text?: string)
 }
 
 
-export function messsage(title: string, text?: string)
+export function message(title: string, text?: string)
 {
   return open({
     alias: 'message',

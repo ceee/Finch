@@ -10,5 +10,13 @@ public class SpacesModule : ZeroModule
     services.AddScoped<ISpaceStore, SpaceStore>();
     services.AddScoped<ISpaceTypeService, SpaceTypeService>();
     services.AddScoped<ISpaceService, SpaceService>();
+
+    services.Configure<FlavorOptions>(opts =>
+    {
+      opts.Configure<Space>(cfg =>
+      {
+        cfg.CanUseWithoutFlavors = false;
+      });
+    });
   }
 }

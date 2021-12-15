@@ -34,16 +34,13 @@
       }
     },
 
-    created()
+    mounted()
     {
       emitter.on(event_showOverlay, overlay => this.add(overlay));
       emitter.on(event_closeOverlays, () => this.instances = []);
       emitter.on(event_finalizeOverlay, opts => this.finalize(opts.eventType, opts.instance, opts.value, opts.force));
       emitter.on(event_closeOverlay, overlay => this.remove(overlay, true));
-    },
 
-    mounted()
-    {
       this.$el.addEventListener('keyup', e =>
       {
         if (e.key === "Escape" && this.instances.length) 
@@ -65,19 +62,16 @@
         this.instances.push(instance);
       },
 
-      remove(instance, force)
+      remove(instance)
       {
-        if (instance.softdismiss !== false || force)
-        {
-          arrayRemove(this.instances, instance);
-        }
+        emitter.emit(event_finalizeOverlay, { eventType: 'close', instance, force: true });
       },
 
       finalize(eventType, instance, value, force)
       {
         if ((eventType === 'close' && force) || (eventType === 'confirm' && instance.autoclose))
         {
-          this.remove(instance);
+          arrayRemove(this.instances, instance);
         }
       }
     }

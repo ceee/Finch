@@ -2,15 +2,15 @@ import { get, post, put, del, ApiRequestConfig, ApiRequestQuery } from '../../se
 
 export default {
 
-  getEmpty: async (flavor?: string, config?: ApiRequestConfig) => await get("countries/empty", { ...config, params: { flavor } }),
+  getEmpty: (flavor?: string, config?: ApiRequestConfig) => get("countries/empty", { ...config, params: { flavor } }),
 
-  getById: async (id: string, changeVector?: string, config?: ApiRequestConfig) => await get('countries/' + id, { ...config, params: { changeVector } }),
+  getById: (id: string, changeVector?: string, config?: ApiRequestConfig) => get('countries/' + id, { ...config, params: { changeVector } }),
 
-  getByQuery: async (query: ApiRequestQuery, config?: ApiRequestConfig) => await get('countries', { ...config, params: { ...query } }),
+  getByQuery: (query: ApiRequestQuery, config?: ApiRequestConfig) => get('countries', { ...config, params: { ...query } }),
 
-  create: async (model: any, config?: ApiRequestConfig) => await post('countries', model, config),
+  create: (model: any, config?: ApiRequestConfig) => post('countries', model, config),
 
-  update: async (model: any, config?: ApiRequestConfig) => await put('countries/' + model.id, model, config),
+  update: (model: any, config?: ApiRequestConfig) => put('countries/' + model.id, model, config),
 
-  delete: async (id: string, config?: ApiRequestConfig) => await del('countries/' + id, config),
+  delete: (id: string, config?: ApiRequestConfig) => del('countries/' + id, config),
 };

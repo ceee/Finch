@@ -1,30 +1,77 @@
 ﻿<template>
-  <div class="ui-add-button">
-    <ui-button v-if="!blueprintsEnabled" :type="type" :label="label" @click="onClick(false)" :disabled="disabled" /> <!-- :attach="true"-->
-    <ui-dropdown v-else ref="dropdown" align="right">
-      <template v-slot:button>
-        <ui-button :label="label" :type="type" :disabled="disabled" />
-      </template>
-      <div class="ui-add-button-items">
-        <button type="button" class="ui-add-button-item" @click="onClick(true)" :disabled="disabled">
-          <ui-icon symbol="fth-cloud" :size="20" />
-          <span class="-text">All apps</span>
-        </button>
-        <span class="ui-add-button-items-line"></span>
-        <button type="button" class="ui-add-button-item" @click="onClick(false)" :disabled="disabled">
-          <ui-icon symbol="fth-arrow-right" :size="20" />
-          <span class="-text">{{application.name}}</span>
-        </button>
+
+  <ui-button v-if="!hasDropdown" :type="type" :label="label" @click="onConfirm(null, false)" :disabled="disabled" />
+
+  <ui-dropdown v-else ref="dropdown" align="right">
+
+    <template v-slot:button>
+      <ui-button :label="label" :type="type" :disabled="disabled" />
+    </template>
+
+    <template v-if="flavors.length > 0">
+      <ui-dropdown-button v-for="(flavor, index) in flavors" :key="index" :icon="flavor.icon" :value="flavor" :label="flavor.name" :prevent="true" @click="selectFlavor" :selected="selectedflavor == flavor.alias" />
+      <ui-dropdown-separator />
+      <div class="ui-decision">
+        <ui-toggle v-model:on="asBlueprint" :on-content="'Shared'" :off-content="'Not shared'" />
       </div>
-    </ui-dropdown>
-  </div>
+      <ui-dropdown-separator />
+      <div class="ui-decision-button">
+        <ui-button label="@addoverlay.gotoeditor" type="accent" icon="fth-arrow-right" :disabled="disabled" @click="onConfirm(selectedflavor, asBlueprint)" />
+      </div>
+    </template>
+
+    <div v-else class="ui-add-button-items">
+      <button type="button" class="ui-add-button-item" @click="onConfirm(null, true)" :disabled="disabled">
+        <ui-icon symbol="fth-cloud" :size="20" />
+        <span class="-text">Shared</span>
+      </button>
+      <span class="ui-add-button-items-line"></span>
+      <button type="button" class="ui-add-button-item" @click="onConfirm(null, false)" :disabled="disabled">
+        <ui-icon symbol="fth-arrow-right" :size="20" />
+        <span class="-text">Local</span>
+      </button>
+    </div>
+
+  </ui-dropdown>
 </template>
 
+<style lang="scss">
+  .ui-decision
+  {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 16px;
+    font-size: var(--font-size);
+  }
 
-<script>
-  import { applicationApi } from '../modules/applications';
+  .ui-decision-button
+  {
+    padding: 16px 16px;
+  }
 
-  export default {
+  .ui-dropdown.theme-dark .ui-decision 
+  {
+    .ui-toggle-switch:not(.is-active)
+    {
+      background: var(--color-bg);
+    }
+
+    input:focus + .ui-toggle-switch
+    {
+      border-color: transparent;
+      box-shadow: none;
+    }
+  }
+</style>
+
+
+<script lang="ts">
+  import { useUiStore } from '../ui/store';
+  import { defineComponent } from 'vue';
+  import { UiFlavorProvider } from 'zero/ui';
+
+  export default defineComponent({
     props: {
       label: {
         type: String,
@@ -38,7 +85,7 @@
         type: [String, Object],
         default: null
       },
-      blueprintAlias: {
+      alias: {
         type: String,
         default: null
       },
@@ -49,17 +96,20 @@
     },
 
     data: () => ({
-      applications: []
+      flavors: [],
+      loading: false,
+      asBlueprint: false,
+      selectedflavor: null
     }),
 
     computed: {
-      application()
+      hasDropdown()
       {
-        return this.applications.length ? this.applications[0] : null; //.find(x => x.id === this.zero.config.appId);
+        return this.flavors.length > 0 || this.blueprintsEnabled;
       },
       blueprintsEnabled()
       {
-        return false;
+        return true;
         //let blueprint = this.zero.config.blueprints.find(x => x.alias == this.blueprintAlias);
         //return this.blueprintAlias && blueprint && blueprint.enabled;
       }
@@ -67,40 +117,75 @@
 
     async created()
     {
-      this.applications = (await applicationApi.getByQuery({ pageSize: 100 })).items;
+      this.buildFlavors();
     },
 
     methods: {
 
-      onClick(createBlueprint)
+      buildFlavors()
       {
-        if (this.$refs.dropdown)
+        let flavors = [];
+        let flavorConfig = null;
+
+        if (this.alias)
         {
-          this.$refs.dropdown.hide();
+          flavorConfig = useUiStore().flavors[this.alias];
         }
 
+        flavorConfig = flavorConfig || {
+          canUseWithoutFlavors: true,
+          flavors: []
+        } as UiFlavorProvider;
+
+        flavors = JSON.parse(JSON.stringify(flavorConfig.flavors));
+
+        if (flavorConfig.canUseWithoutFlavors && flavors.length > 0)
+        {
+          flavors.splice(0, 0, {
+            name: 'Default',
+            description: 'Create the default entity',
+            alias: null,
+            icon: 'fth-box'
+          });
+        }
+
+        this.flavors = flavors;
+      },
+
+
+      selectFlavor(flavor, opts)
+      {
+        this.selectedflavor = flavor.alias;
+      },
+
+
+      onConfirm(flavor, shared)
+      {
         if (!!this.route)
         {
           let routeObj = typeof this.route === 'object' ? this.route : { name: this.route };
           routeObj.query = routeObj.query || {};
-
-          if (createBlueprint)
+          if (flavor)
           {
-            routeObj.query.scope = 'shared';
+            routeObj.query.flavor = flavor;
           }
-
+          if (shared)
+          {
+            routeObj.query.shared = true;
+          }
           this.$router.push(routeObj);
         }
 
-        this.$emit('click', false);
+        this.$emit('click', { flavor, shared });
       }
 
     }
 
-  }
+  })
 </script>
 
 <style>
+  
   .ui-add-button
   {
     display: flex;

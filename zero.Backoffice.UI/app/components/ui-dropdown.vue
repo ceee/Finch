@@ -42,7 +42,7 @@
 
       hasButton()
       {
-        return this.$scopedSlots.hasOwnProperty('button');
+        return this.$slots.hasOwnProperty('button');
       },
 
       dropdownClasses()

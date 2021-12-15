@@ -3,21 +3,21 @@
     <!--<h2 class="ui-headline" v-localize="configuration.title"></h2>-->
     <ui-loading v-if="loading" />
     <div v-if="!loading">
-      <div v-if="list.length && configuration.parent" class="ui-select-overlay-parent">
+      <!--<div v-if="list.length && configuration.parent" class="ui-select-overlay-parent">
         <span v-localize="title"></span>: <strong>{{configuration.parent.name}}</strong>
-      </div>
+      </div>-->
       <div class="ui-select-overlay-items">
         <button type="button" v-for="item in list" class="ui-select-overlay-item" @click="onSelect(item)">
-          <ui-icon class="ui-select-overlay-item-icon" :symbol="item[configuration.iconKey]" :size="22" />
+          <ui-icon class="ui-select-overlay-item-icon" :symbol="item.icon || 'fth-box'" :size="22" />
           <span class="ui-select-overlay-item-text">
-            <ui-localize :value="item[configuration.labelKey]" />
-            <span v-if="item[configuration.descriptionKey]" v-localize="item[configuration.descriptionKey]"></span>
+            <strong class="-title"><ui-localize :value="item.name" /></strong>
+            <span class="-desc" v-if="item.description" v-localize="item.description"></span>
           </span>
         </button>
       </div>
       <ui-message type="error" v-if="!list.length" text="@page.create.nonavailable" />
       <!--<div class="app-confirm-buttons">
-        <ui-button type="light" :label="config.closeLabel" @click="config.close"></ui-button>
+        <ui-button type="light" label="@ui.close" @click="config.close"></ui-button>
       </div>-->
     </div>
   </div>
@@ -25,24 +25,14 @@
 
 
 <script>
-  import Overlay from 'zero/helpers/overlay.js';
-
-  const defaultConfig = {
-    title: '@ui.create',
-    labelKey: 'name',
-    descriptionKey: 'description',
-    iconKey: 'icon',
-    items: null
-  };
-
   export default {
 
     props: {
+      model: Object,
       config: Object
     },
 
     data: () => ({
-      configuration: defaultConfig,
       list: [],
       loading: false,
       disabled: false
@@ -51,7 +41,6 @@
 
     mounted()
     {
-      this.configuration = { ...defaultConfig, ...this.config };
       this.loading = true;
       this.load();
     },
@@ -60,9 +49,9 @@
     methods: {
       load()
       {
-        if (typeof this.configuration.items === 'function')
+        if (typeof this.model.items === 'function')
         {
-          this.configuration.items().then(res =>
+          this.model.items().then(res =>
           {
             this.list = res;
             this.loading = false;
@@ -70,7 +59,7 @@
         }
         else
         {
-          this.list = JSON.parse(JSON.stringify(this.configuration.items));
+          this.list = JSON.parse(JSON.stringify(this.model.items));
           this.loading = false;
         }
       },
@@ -87,6 +76,7 @@
   .ui-select-overlay
   {
     text-align: left;
+    margin-top: -8px;
     
     .ui-message
     {
@@ -113,7 +103,7 @@
 
   .ui-select-overlay-items
   {
-    margin: 0 -16px;
+    margin: 0 0;
     //margin-top: var(--padding);
     max-height: 490px;
     overflow-y: auto;
@@ -128,17 +118,17 @@
     align-items: center;
     position: relative;
     color: var(--color-text);
-    padding: 16px;
+    padding: 0;
     border-radius: var(--radius);
 
-    &:hover, &:focus
+    /*&:hover, &:focus
     {
       background: var(--color-tree-selected);
-    }
+    }*/
 
     & + .ui-select-overlay-item
     {
-      margin-top: 2px;
+      margin-top: var(--padding-s);
     }
   }
 
@@ -147,7 +137,7 @@
     display: flex;
     flex-direction: column;
 
-    span
+    .-desc
     {
       color: var(--color-text-dim);
       margin-top: 3px;

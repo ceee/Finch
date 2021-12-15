@@ -29,7 +29,7 @@ Axios.interceptors.response.use(
   {
     if (error.response && error.response.headers['x-variant'] == 'api-response')
     {
-      return Promise.resolve(error.response.data);
+      return Promise.resolve(error.response);
     }
 
     if (error.response && error.response.status === 401)

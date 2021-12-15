@@ -6,6 +6,7 @@ declare module 'zero/ui'
     sections: UiSection[];
     settingGroups: UiSettingsGroup[];
     iconSets: UiIconSet[];
+    flavors: Record<string, UiFlavorProvider>;
   }
 
   export interface UiSection
@@ -40,5 +41,20 @@ declare module 'zero/ui'
     name: string;
     prefix: string;
     icons: string[];
+  }
+
+  export interface UiFlavorProvider
+  {
+    canUseWithoutFlavors: boolean;
+    defaultFlavor?: string;
+    flavors: UiFlavorConfig[];
+  }
+
+  export interface UiFlavorConfig
+  {
+    alias?: string;
+    name: string;
+    description: string;
+    icon: string;
   }
 }

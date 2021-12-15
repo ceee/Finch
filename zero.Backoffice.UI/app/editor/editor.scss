@@ -22,6 +22,11 @@
     {
       margin-top: 0;
     }
+
+    .ui-tab.ui-box:first-child
+    {
+      border-top-left-radius: var(--radius);
+    }
   }
 
   &.has-sidebar

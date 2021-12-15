@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections;
+using System.Reflection;
 using zero.Backoffice.Services;
 
 namespace zero.Backoffice.Endpoints.UI;
@@ -9,12 +10,14 @@ public class UIController : ZeroBackofficeController
   readonly IIconService IconService;
   readonly IResourceService ResourceService;
   readonly ISectionService SectionService;
+  readonly IZeroOptions Options;
 
-  public UIController(IIconService iconService, IResourceService resourceService, ISectionService sectionService)
+  public UIController(IIconService iconService, IResourceService resourceService, ISectionService sectionService, IZeroOptions options)
   {
     IconService = iconService;
     ResourceService = resourceService;
     SectionService = sectionService;
+    Options = options;
   }
 
   [HttpGet("sections")]
@@ -37,5 +40,20 @@ public class UIController : ZeroBackofficeController
   public async Task<ActionResult<Dictionary<string, string>>> GetTranslations()
   {
     return Ok(await ResourceService.GetTranslations("en-us"));
+  }
+
+
+  [HttpGet("flavors")]
+  public ActionResult<Dictionary<string, FlavorProvider>> GetFlavors()
+  {
+    Dictionary<string, FlavorProvider> result = new();
+
+    foreach ((Type type, FlavorProvider provider) in Options.For<FlavorOptions>().Providers)
+    {
+      string key = type.GetCustomAttribute<RavenCollectionAttribute>(true)?.Name ?? type.Name;
+      result[Safenames.Alias(key)] = provider;
+    }
+
+    return result;
   }
 }

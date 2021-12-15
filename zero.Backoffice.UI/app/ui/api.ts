@@ -1,4 +1,4 @@
-import { UiIconSet, UiSection, UiSettingsGroup } from 'zero/ui';
+import { UiFlavorProvider, UiIconSet, UiSection, UiSettingsGroup } from 'zero/ui';
 import { get, ApiResponse, ApiRequestConfig } from '../services/request';
 
 export default {
@@ -10,4 +10,6 @@ export default {
   getIconSets: (config?: ApiRequestConfig): Promise<ApiResponse<UiIconSet[]>> => get('backoffice/ui/iconsets', { ...config }),
 
   getTranslations: (config?: ApiRequestConfig): Promise<ApiResponse<Record<string, string>>> => get('backoffice/ui/translations', { ...config }),
+
+  getFlavors: (config?: ApiRequestConfig): Promise<ApiResponse<Record<string, UiFlavorProvider>>> => get('backoffice/ui/flavors', { ...config })
 };

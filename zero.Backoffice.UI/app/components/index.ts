@@ -22,6 +22,7 @@ import uiCalendar from './ui-calendar.vue';
 import uiTree from './ui-tree.vue';
 import uiTable from './ui-table.vue';
 import uiTableFilter from './ui-table-filter.vue';
+import uiTrinity from './ui-trinity.vue';
 
 export {
   uiIcon,
@@ -47,5 +48,6 @@ export {
   uiCalendar,
   uiTree,
   uiTable,
-  uiTableFilter
+  uiTableFilter,
+  uiTrinity
 };
