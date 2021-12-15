@@ -72,6 +72,11 @@ public class ZeroEntity : ZeroIdEntity, ISupportsDbConventions, ISupportsRouting
   public string Flavor { get; set; }
 
   /// <summary>
+  /// Additional properties for this entity
+  /// </summary>
+  public Dictionary<string, object> Properties { get; set; } = new();
+
+  /// <summary>
   /// [Warning] This field is always empty when bound to the database.
   /// It is only filled in the app-code for routing.
   /// </summary>
