@@ -23,6 +23,7 @@ import uiTree from './ui-tree.vue';
 import uiTable from './ui-table.vue';
 import uiTableFilter from './ui-table-filter.vue';
 import uiTrinity from './ui-trinity.vue';
+import uiPick from './ui-pick.vue';
 
 export {
   uiIcon,
@@ -49,5 +50,6 @@ export {
   uiTree,
   uiTable,
   uiTableFilter,
-  uiTrinity
+  uiTrinity,
+  uiPick
 };

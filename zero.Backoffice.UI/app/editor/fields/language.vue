@@ -1,4 +1,4 @@
-﻿<!--<template>
+﻿<template>
   <div class="ui-native-select" :disabled="disabled">
     <select :value="value" @input="onChange($event)" :disabled="disabled">
       <option :value="null"></option>
@@ -9,7 +9,7 @@
 
 
 <script>
-  import LanguagesApi from 'zero/api/languages.js';
+  import api from '../../modules/languages/api';
 
   export default {
     props: {
@@ -29,9 +29,9 @@
 
     mounted()
     {
-      LanguagesApi.getForPicker().then(res =>
+      api.getByQuery().then(res =>
       {
-        this.items = res;
+        this.items = res.data;
       });
     },
 
@@ -44,4 +44,4 @@
 
     }
   }
-</script>-->
+</script>
