@@ -35,36 +35,6 @@
   </ui-dropdown>
 </template>
 
-<style lang="scss">
-  .ui-decision
-  {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px 16px;
-    font-size: var(--font-size);
-  }
-
-  .ui-decision-button
-  {
-    padding: 16px 16px;
-  }
-
-  .ui-dropdown.theme-dark .ui-decision 
-  {
-    .ui-toggle-switch:not(.is-active)
-    {
-      background: var(--color-bg);
-    }
-
-    input:focus + .ui-toggle-switch
-    {
-      border-color: transparent;
-      box-shadow: none;
-    }
-  }
-</style>
-
 
 <script lang="ts">
   import { useUiStore } from '../ui/store';
@@ -99,24 +69,21 @@
       flavors: [],
       loading: false,
       asBlueprint: false,
-      selectedflavor: null
+      allowBlueprint: false,
+      selectedflavor: null,
+      store: null
     }),
 
     computed: {
       hasDropdown()
       {
-        return this.flavors.length > 0 || this.blueprintsEnabled;
-      },
-      blueprintsEnabled()
-      {
-        return true;
-        //let blueprint = this.zero.config.blueprints.find(x => x.alias == this.blueprintAlias);
-        //return this.blueprintAlias && blueprint && blueprint.enabled;
+        return this.flavors.length > 0 || this.allowBlueprint;
       }
     },
 
     async created()
     {
+      this.store = useUiStore();
       this.buildFlavors();
     },
 
@@ -129,8 +96,10 @@
 
         if (this.alias)
         {
-          flavorConfig = useUiStore().flavors[this.alias];
+          flavorConfig = this.store.flavors[this.alias];
         }
+
+        this.allowBlueprint = this.store.blueprints.indexOf(this.alias) > -1;
 
         flavorConfig = flavorConfig || {
           canUseWithoutFlavors: true,
@@ -167,11 +136,11 @@
           routeObj.query = routeObj.query || {};
           if (flavor)
           {
-            routeObj.query.flavor = flavor;
+            routeObj.query['zero.flavor'] = flavor;
           }
           if (shared)
           {
-            routeObj.query.shared = true;
+            routeObj.query['zero.shared'] = true;
           }
           this.$router.push(routeObj);
         }
@@ -186,6 +155,34 @@
 
 <style>
   
+  .ui-decision
+  {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 16px;
+    font-size: var(--font-size);
+  }
+
+  .ui-decision-button
+  {
+    padding: 16px 16px;
+  }
+
+  .ui-dropdown.theme-dark .ui-decision 
+  {
+    .ui-toggle-switch:not(.is-active)
+    {
+      background: var(--color-bg);
+    }
+
+    input:focus + .ui-toggle-switch
+    {
+      border-color: transparent;
+      box-shadow: none;
+    }
+  }
+
   .ui-add-button
   {
     display: flex;

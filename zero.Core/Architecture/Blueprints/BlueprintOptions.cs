@@ -6,16 +6,16 @@ public class BlueprintOptions : List<Blueprint>
 
   public void Add<T>() where T : Blueprint, new()
   {
-    Add(new T());
+    base.Add(new T());
   }
 
   public void Add<T>(Blueprint<T> implementation) where T : ZeroEntity, new()
   {
-    Add(implementation);
+    base.Add(implementation);
   }
 
   public void Add<T>(Action<Blueprint<T>> createExpression = null) where T : ZeroEntity, new()
   {
-    Add(new DefaultBlueprint<T>(createExpression));
+    base.Add(new DefaultBlueprint<T>(createExpression));
   }
 }

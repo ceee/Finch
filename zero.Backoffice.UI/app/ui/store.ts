@@ -8,7 +8,8 @@ export const useUiStore = defineStore('zero.ui', {
     sections: [],
     settingGroups: [],
     iconSets: [],
-    flavors: []
+    flavors: [],
+    blueprints: []
   } as UiStoreState),
 
   actions: {
@@ -18,13 +19,15 @@ export const useUiStore = defineStore('zero.ui', {
         api.getSections(),
         api.getSettingGroups(),
         api.getIconSets(),
-        api.getFlavors()
+        api.getFlavors(),
+        api.getBlueprints()
       ]);
 
       this.sections = values[0].data as UiSection[];
       this.settingGroups = values[1].data as UiSettingsGroup[];
       this.iconSets = values[2].data as UiIconSet[];
       this.flavors = values[3].data as Record<string, UiFlavorProvider>;
+      this.blueprints = values[4].data as string[];
     }
   }
 });

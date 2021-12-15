@@ -16,15 +16,7 @@ Axios.defaults.paramsSerializer = (params) =>
 };
 
 Axios.interceptors.response.use(
-  response =>
-  {
-    //if (response.headers['x-variant'] == 'api-response')
-    //{
-    //  return response.data;
-    //}
-
-    return response;
-  },
+  response => response,
   error =>
   {
     if (error.response && error.response.headers['x-variant'] == 'api-response')
@@ -45,18 +37,31 @@ Axios.interceptors.response.use(
 
 Axios.interceptors.request.use(config =>
 {
-  if (location.search)
+  if (!config.params)
   {
-    var query = Qs.parse(location.search.substring(1));
-    if (query.scope)
-    {
-      if (!config.params)
-      {
-        config.params = {};
-      }
-      config.params['scope'] = query.scope;
-    }
+    config.params = {};
   }
+
+  let locationQuery = Qs.parse(location.search.substring(1));
+  let appKey = 'hofbauer';
+
+  // set app key to system when required
+  if (config.params['zero.system'] === true || locationQuery['zero.shared'] === "true")
+  {
+    delete config.params['zero.system'];
+    appKey = 'system';
+  }
+
+  // rewrite URLs to replace {app} placeholder
+  if (config.url != null && config.url.indexOf('{app}') > -1)
+  {
+    config.url = config.url.replace('{app}', appKey);
+  }
+  if (config.baseURL != null && config.baseURL.indexOf('{app}') > -1)
+  {
+    config.baseURL = config.baseURL.replace('{app}', appKey);
+  }
+
   return config;
 }, error => Promise.reject(error));
 

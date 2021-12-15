@@ -40,6 +40,12 @@ public class BlueprintService : IBlueprintService
     blueprint = Blueprints.FirstOrDefault(x => x.ContentType.IsAssignableFrom(type));
     return blueprint != null;
   }
+
+  /// <inheritdoc />
+  public Dictionary<Type, Blueprint> GetAllBlueprints()
+  {
+    return Blueprints.ToDictionary(x => x.ContentType, x => x);
+  }
 }
 
 
@@ -62,4 +68,9 @@ public interface IBlueprintService
   bool TryGetBlueprint<T>(out Blueprint blueprint);
 
   bool TryGetBlueprint(Type type, out Blueprint blueprint);
+
+  /// <summary>
+  /// Get all registered blueprint configurations
+  /// </summary>
+  Dictionary<Type, Blueprint> GetAllBlueprints();
 }

@@ -7,6 +7,7 @@ declare module 'zero/ui'
     settingGroups: UiSettingsGroup[];
     iconSets: UiIconSet[];
     flavors: Record<string, UiFlavorProvider>;
+    blueprints: string[];
   }
 
   export interface UiSection

@@ -1,6 +1,7 @@
 using zero;
 using zero.Api;
 using zero.Applications;
+using zero.Architecture;
 using zero.Backoffice;
 using zero.Backoffice.DevServer;
 using zero.Demo;
@@ -30,6 +31,11 @@ builder.Services.Configure<FlavorOptions>(opts =>
 
   //opts.Add<Country, EuropeanCountry>("eu_country", "EU country", "A country within the European Union", "fth-globe");
   //opts.Add<Country, AmericanCountry>("usa_country", "USA", "A country in the United States", "fth-flag");
+});
+
+builder.Services.Configure<BlueprintOptions>(opts =>
+{
+  opts.Add<Country>();
 });
 
 var app = builder.Build();

@@ -56,4 +56,19 @@ public class UIController : ZeroBackofficeController
 
     return result;
   }
+
+
+  [HttpGet("blueprints")]
+  public ActionResult<IEnumerable<string>> GetBlueprints()
+  {
+    HashSet<string> result = new();
+
+    foreach (Blueprint blueprint in Options.For<BlueprintOptions>())
+    {
+      string key = blueprint.ContentType.GetCustomAttribute<RavenCollectionAttribute>(true)?.Name ?? blueprint.Alias;
+      result.Add(Safenames.Alias(key));
+    }
+
+    return result;
+  }
 }

@@ -5,35 +5,6 @@ import { ApiRequestConfig } from './request.types';
 
 export * from './request.types';
 
-function getConfig(config?: ApiRequestConfig): ApiRequestConfig
-{
-  config = config || {};
-
-  if (config.scope)
-  {
-    config.params = config.params || {};
-    config.params.scope = config.scope;
-  }
-
-  if (!config.raw)
-  {
-    config.baseURL = paths.api;
-
-    const appKey = config.system ? 'system' : 'hofbauer'; // TODO
-
-    if (config.url != null && config.url.indexOf('{app}') > -1)
-    {
-      config.url = config.url.replace('{app}', appKey);
-    }
-    if (config.baseURL != null && config.baseURL.indexOf('{app}') > -1)
-    {
-      config.baseURL = config.baseURL.replace('{app}', appKey);
-    }
-  }
-
-  return config;
-};
-
 export function get(url: string, config?: ApiRequestConfig)
 {
   return send({ method: 'get', url, ...config });
@@ -62,7 +33,15 @@ export function patch(url: string, data: any, config?: ApiRequestConfig)
 
 export async function send(config: ApiRequestConfig)
 {
-  config = getConfig(config);
+  if (!config.raw)
+  {
+    config.baseURL = paths.api;
+  }
+  if (config.system)
+  {
+    config.params['zero.system'] = true;
+  }
+
   const result = await axios(config);
   return result.data;
 

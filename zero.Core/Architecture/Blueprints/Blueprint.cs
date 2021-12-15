@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Text.Json.Serialization;
 
 namespace zero.Architecture;
 
@@ -161,6 +162,7 @@ public abstract class Blueprint
   /// <summary>
   /// Type of the associated entity
   /// </summary>
+  [JsonIgnore]
   public Type ContentType { get; private set; }
 
   public string Alias { get; private set; }
