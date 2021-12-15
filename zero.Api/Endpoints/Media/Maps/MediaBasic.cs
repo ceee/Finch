@@ -1,8 +1,14 @@
 ﻿namespace zero.Api.Endpoints.Media;
 
-public class MediaBasic : BasicModel<zero.Media.Media>
+public class MediaBasic : ZeroIdEntity
 {
-  public bool IsPreferred { get; set; }
+  public string ParentId { get; set; }
 
-  public string Code { get; set; }
+  public string Name { get; set; }
+
+  public bool IsFolder { get; set; }
+
+  public string Image { get; set; }
+
+  public int Children { get; set; }
 }

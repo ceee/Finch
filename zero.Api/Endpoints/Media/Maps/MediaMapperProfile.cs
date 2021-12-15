@@ -14,8 +14,12 @@ public class MediaMapperProfile : ZeroMapperProfile
 
   protected virtual void Map(zero.Media.Media source, MediaBasic target, IZeroMapperContext ctx)
   {
-    this.MapBasicData(source, target);
-    
+    target.Id = source.Id;
+    target.Name = source.Name;
+    target.ParentId = source.ParentId;
+    target.IsFolder = source.Type == MediaType.Folder;
+    target.Image = null;
+    target.Children = 0; 
   }
 
   protected virtual void Map(zero.Media.Media source, MediaEdit target, IZeroMapperContext ctx)

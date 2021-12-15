@@ -17,28 +17,20 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
 
   [HttpGet("empty")]
   [ZeroAuthorize(MediaPermissions.Create)]
-  public virtual async Task<ActionResult<MediaEdit>> Empty(MediaType type, string flavor = null) => await EmptyModel<MediaEdit>(flavor, x => x.Type = type);
+  public virtual async Task<ActionResult<zero.Media.Media>> Empty(MediaType type, string flavor = null) => await EmptyModel(flavor, x => x.Type = type);
 
 
   [HttpGet("{id}")]
   [ZeroAuthorize(MediaPermissions.Read)]
-  public virtual async Task<ActionResult<MediaEdit>> Get(string id, string changeVector = null)
+  public virtual async Task<ActionResult<zero.Media.Media>> Get(string id, string changeVector = null) => await GetModel(id, changeVector);
+
+
+  [HttpGet("{parentId}/children")]
+  [ZeroAuthorize(MediaPermissions.Read)]
+  public virtual async Task<ActionResult<Paged>> GetChildren(string parentId, [FromQuery] ListQuery<zero.Media.Media> query)
   {
-    zero.Media.Media model = await Store.Load(id, changeVector);
-
-    if (model == null)
-    {
-      return NotFound();
-    }
-
-    HttpContext.Items[ApiConstants.ChangeToken] = Store.GetChangeToken(model);
-
-    if (model.Type == MediaType.Folder)
-    {
-      return Mapper.Map<zero.Media.Media, MediaFolderEdit>(model);
-    }
-
-    return Mapper.Map<zero.Media.Media, MediaFileEdit>(model);
+    query.OrderQuery = q => q.OrderBy(x => x.Type).OrderByDescending(x => x.CreatedDate);
+    return await GetChildModelsByIndex<MediaBasic, zero_Api_Media_Listing>(parentId == "root" ? null : parentId, query);
   }
 
 

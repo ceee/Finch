@@ -25,7 +25,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
-  protected async Task<ActionResult<T>> EmptyModel<T>(string flavorAlias = null, Action<T> modify = null) where T : DisplayModel<TModel>
+  protected async Task<ActionResult<T>> EmptyModel<T>(string flavorAlias = null, Action<T> modify = null)
   {
     TModel model = await Store.Empty(flavorAlias);
 
@@ -54,7 +54,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
-  protected async Task<ActionResult<T>> GetModel<T>(string id, string changeVector = null) where T : DisplayModel<TModel>
+  protected async Task<ActionResult<T>> GetModel<T>(string id, string changeVector = null)
   {
     TModel model = await Store.Load(id, changeVector);
 
@@ -84,7 +84,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
-  protected async Task<ActionResult<Paged>> GetModels<T>(ListQuery<TModel> query) where T : BasicModel<TModel>
+  protected async Task<ActionResult<Paged>> GetModels<T>(ListQuery<TModel> query)
   {
     query.OrderQuery ??= q => q.OrderByDescending(x => x.CreatedDate);
     query.SearchSelector ??= x => x.Name;
@@ -103,7 +103,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
-  protected async Task<ActionResult<Paged>> GetModelsByIndex<T, TIndex>(ListQuery<TModel> query) where T : BasicModel<TModel> where TIndex : AbstractCommonApiForIndexes, new()
+  protected async Task<ActionResult<Paged>> GetModelsByIndex<T, TIndex>(ListQuery<TModel> query) where TIndex : AbstractCommonApiForIndexes, new()
   {
     query.OrderQuery ??= q => q.OrderByDescending(x => x.CreatedDate);
     query.SearchSelector ??= x => x.Name;
@@ -122,7 +122,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
-  protected async Task<ActionResult<Result>> CreateModel<T, TEdit>(T saveModel) where T : SaveModel<TModel> where TEdit : DisplayModel<TModel>
+  protected async Task<ActionResult<Result>> CreateModel<T, TEdit>(T saveModel) where T : ISupportsFlavors
   {
     TModel emptyModel = saveModel.Flavor.IsNullOrEmpty() ? await Store.Empty() : await Store.Empty(saveModel.Flavor);
     TModel model = Mapper.Map(saveModel, emptyModel);
@@ -156,7 +156,7 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
   }
 
 
-  protected async Task<ActionResult<Result>> UpdateModel<T, TEdit>(string id, T updateModel, string changeToken = null) where T : SaveModel<TModel> where TEdit : DisplayModel<TModel>
+  protected async Task<ActionResult<Result>> UpdateModel<T, TEdit>(string id, T updateModel, string changeToken = null) where T : ZeroIdEntity
   {
     if (id != updateModel.Id)
     {

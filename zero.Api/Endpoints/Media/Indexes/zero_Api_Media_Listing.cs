@@ -9,10 +9,14 @@ public class zero_Api_Media_Listing : ZeroIndex<zero.Media.Media>
     Map = items => items.Select(item => new
     {
       Name = item.Name,
-      ParentId = item.ParentId
+      ParentId = item.ParentId,
+      CreatedDate = item.CreatedDate,
+      Type = item.Type
     });
 
     Index(x => x.Name, FieldIndexing.Search);
     Index(x => x.ParentId, FieldIndexing.Exact);
+    Index(x => x.CreatedDate, FieldIndexing.Exact);
+    Index(x => x.Type, FieldIndexing.Exact);
   }
 }
