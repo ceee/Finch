@@ -29,8 +29,9 @@ builder.Services.Configure<FlavorOptions>(opts =>
 {
   opts.AddSpaceList<TeamMember>("team", "Team", "Members of our team", "fth-users", "spaces.team");
 
-  //opts.Add<Country, EuropeanCountry>("eu_country", "EU country", "A country within the European Union", "fth-globe");
-  //opts.Add<Country, AmericanCountry>("usa_country", "USA", "A country in the United States", "fth-flag");
+  opts.Configure<Country>(x => x.CanUseWithoutFlavors = false);
+  opts.Add<Country, EuropeanCountry>("eu_country", "EU country", "A country within the European Union", "fth-globe");
+  opts.Add<Country, AmericanCountry>("usa_country", "USA", "A country in the United States", "fth-flag");
 });
 
 builder.Services.Configure<BlueprintOptions>(opts =>

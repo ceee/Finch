@@ -118,6 +118,10 @@
           });
         }
 
+        if (flavors.length > 0)
+        {
+          this.selectedflavor = flavors[0].alias;
+        }
         this.flavors = flavors;
       },
 
@@ -153,7 +157,7 @@
   })
 </script>
 
-<style>
+<style lang="scss">
   
   .ui-decision
   {

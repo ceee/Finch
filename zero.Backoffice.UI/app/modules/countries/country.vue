@@ -27,7 +27,7 @@
 
       async onLoad(form)
       {
-        const response = await form.load(() => this.id ? api.getById(this.id) : api.getEmpty(this.$route.query.flavor));
+        const response = await form.load(() => this.id ? api.getById(this.id) : api.getEmpty(this.$route.query['zero.flavor']));
         this.model = response;
       },
 
