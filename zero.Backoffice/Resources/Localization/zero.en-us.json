@@ -671,8 +671,14 @@
       "frames": "Frames"
     },
     "deleteoverlay": {
-      "folder_text": "This will delete the folder and all its descendants including subfolders and files. Are you sure?",
-      "folder_success_text": "You have successfully deleted this folder"
+      "title": "Delete media",
+      "folder_text": "This will delete the selected items as well as all its descendants including subfolders and files.<br><br>Database entries as well as persisted files are deleted.<br>Are you sure?",
+      "warning": "You are about to delete <b>{folders}</b> folder(s) and <b>{files}</b> file(s).",
+      "folder_success_text": "You have successfully deleted this folder",
+      "start": {
+        "title": "Progress",
+        "button": "Start deletion"
+      }
     },
     "child_count_1": "{count} item",
     "child_count_x": "{count} items"

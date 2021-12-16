@@ -102,6 +102,23 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
   }
 
 
+  [HttpGet("bulk/descendants")]
+  [ZeroAuthorize(MediaPermissions.Update)]
+  public virtual async Task<ActionResult<MediaDescendantStatistics>> GetDescendantStatistics([FromQuery] string[] ids)
+  {
+    List<Result<string>> results = new();
+
+    int folderCount = await Store.Session.Query<MediaTreeHierarchyIndexResult, zero_Api_Media_Hierarchy>().CountAsync(x => x.Path.ContainsAny(ids) && x.IsFolder);
+    int fileCount = await Store.Session.Query<MediaTreeHierarchyIndexResult, zero_Api_Media_Hierarchy>().CountAsync(x => x.Path.ContainsAny(ids) && !x.IsFolder);
+
+    return new MediaDescendantStatistics()
+    {
+      Files = fileCount,
+      Folders = folderCount
+    };
+  }
+
+
   //[HttpGet("")]
   //[ZeroAuthorize(MediaPermissions.Read)]
   //public virtual Task<ActionResult<Paged>> Get([FromQuery] ListQuery<zero.Media.Media> query)

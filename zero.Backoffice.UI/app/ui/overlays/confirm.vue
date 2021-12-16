@@ -3,6 +3,7 @@
     <h2 class="ui-headline" v-localize="model.title"></h2>
     <p v-localize:html="model.text"></p>
     <ui-error ref="error" style="margin-top: 25px;" />
+    <ui-message v-if="model.warning" type="error" :text="model.warning" style="margin-top: 25px;" />
     <div class="app-confirm-buttons">
       <ui-button :type="model.confirmType" :state="state" :label="model.confirmLabel" @click="confirm"></ui-button>
       <ui-button type="light" :label="model.closeLabel" :disabled="state == 'loading'" @click="config.close(true)"></ui-button>

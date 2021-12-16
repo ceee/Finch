@@ -70,7 +70,7 @@
     background: var(--color-accent-info-bg);
     color: var(--color-accent-info);
     display: inline-grid;
-    padding: 8px 12px 7px 12px;
+    padding: 12px 12px 11px 12px;
     grid-template-columns: auto 1fr;
     gap: 12px;
     border-radius: var(--radius-inner);

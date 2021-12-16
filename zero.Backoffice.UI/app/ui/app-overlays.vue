@@ -141,7 +141,7 @@
 
   .app-overlay .ui-headline
   {
-    margin-bottom: 0.4em;
+    margin-bottom: var(--padding-m);
   }
 
   .app-overlay[display="dialog"] .ui-form-loading

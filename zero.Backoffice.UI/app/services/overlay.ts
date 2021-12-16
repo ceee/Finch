@@ -52,13 +52,14 @@ export function select(title: string, items: OverlaySelectItem[] | Promise<Overl
 }
 
 
-export function confirmDelete(title?: string, text?: string)
+export function confirmDelete(title?: string, text?: string, warningText?: string, options?: OverlayOptions)
 {
-  return open({
+  return open(extendObject({
     alias: 'confirm',
     model: {
       title: typeof title === 'string' ? title : '@deleteoverlay.title',
-      text: typeof text === 'string' ? title : '@deleteoverlay.text',
+      warning: warningText,
+      text: typeof text === 'string' ? text : '@deleteoverlay.text',
       confirmLabel: '@deleteoverlay.confirm',
       confirmType: 'danger',
       closeLabel: '@deleteoverlay.close',
@@ -66,7 +67,7 @@ export function confirmDelete(title?: string, text?: string)
     autoclose: false,
     softdismiss: true,
     component: () => import('../ui/overlays/confirm.vue')
-  });
+  }, options || {}));
 }
 
 

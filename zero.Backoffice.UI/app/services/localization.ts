@@ -4,9 +4,9 @@ import { useTranslationStore } from '../stores/translations';
 
 export interface LocalizeOptions
 {
-  force: boolean,
-  tokens: object,
-  hideEmpty: boolean
+  force?: boolean,
+  tokens?: Record<string, string>,
+  hideEmpty?: boolean
 }
 
 
@@ -16,7 +16,7 @@ export const localize = (key: string, options?: LocalizeOptions): string =>
     force: false,
     tokens: {},
     hideEmpty: false
-  }, options || {});
+  }, options || {}) as LocalizeOptions;
 
   if (!key)
   {

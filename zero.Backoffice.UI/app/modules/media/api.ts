@@ -17,6 +17,8 @@ export default {
 
   bulkMove: (ids: string[], parentId: string, config?: ApiRequestConfig) => put(`media/bulk/move`, { parentId, ids }, { ...config }),
 
+  bulkGetDescendants: (ids: string[], config?: ApiRequestConfig) => get(`media/bulk/descendants`, { ...config, params: { ids } }),
+
   //create: (model: any, config?: ApiRequestConfig) => post('countries', model, config),
 
   //update: (model: any, config?: ApiRequestConfig) => put('countries/' + model.id, model, config),

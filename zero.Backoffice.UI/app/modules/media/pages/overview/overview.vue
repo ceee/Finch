@@ -135,9 +135,9 @@
       },
 
 
-      remove(items: any[])
+      async remove(items: any[])
       {
-
+        const deleted = await actions.remove(items);
       }
     }
 
