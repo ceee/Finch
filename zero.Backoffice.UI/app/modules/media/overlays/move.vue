@@ -8,10 +8,13 @@
       <ui-button type="accent" label="@ui.move.action" @click="onSave" :state="state" :disabled="!loaded" />
     </template>
 
-    <p class="pages-move-text" v-localize:html="{ key: '@ui.move.text', tokens: { name: model.name } }"></p>
-    <div class="ui-box pages-move-items">
-      <ui-tree v-if="loaded" ref="tree" :get="getItems" @select="onSelect" :selection="selected" />
+    <div v-if="loaded">
+      <p class="pages-move-text" v-localize:html="{ key: '@ui.move.text', tokens: { name: model.name } }"></p>
+      <div class="ui-box pages-move-items">
+        <ui-tree v-if="loaded" ref="tree" :get="getItems" @select="onSelect" :selection="selected" />
+      </div>
     </div>
+    <ui-loading v-else />
   </ui-trinity>
 </template>
 
@@ -79,7 +82,7 @@
           return Promise.resolve(this.cache[id]);
         }
 
-        const response = await api.getFolderChildren(id, { pageSize: 50 });
+        const response = await api.getFolderChildren(id, { pageSize: 50 }); // TODO we need paging support for <ui-tree />
         const items = response.data;
 
         if (!parent)
@@ -114,24 +117,10 @@
         })
 
         this.cache[id] = result;
-
         return result;
-
-          //response.forEach(item =>
-          //{
-          //  //item.disabled = true;
-          //  item.isSelected = this.model.parentId == item.id;
-
-          //  if (item.isSelected)
-          //  {
-          //    this.prevItem = item;
-          //  }
-          //  item.disabled = item.id === 'recyclebin' || item.id == this.model.id;
-          //  item.hasActions = false;
-          //});
       },
 
-      onSave()
+      async onSave()
       {
         if (this.model.parentId == this.newParentId)
         {
@@ -140,6 +129,10 @@
         }
 
         this.state = 'loading';
+
+        const result = await api.bulkMove(this.ids, this.newParentId);
+
+        this.config.confirm(result);
 
         // TODO 
         // 1. bulk move
@@ -169,7 +162,6 @@
 <style lang="scss">
   .pages-move .ui-box
   {
-    margin: 0;
     padding: 16px 0;
 
     .ui-tree-item.is-disabled
@@ -191,17 +183,12 @@
         font-size: 16px;
         color: var(--color-primary);
       }
-      
+
       .ui-tree-item-text
       {
         font-weight: bold;
       }
     }
-  }
-
-  .pages-move content
-  {
-    padding-top: 0;
   }
 
   .pages-move-text

@@ -17,7 +17,7 @@
       <template v-if="selected.length < 1">
         <ui-search v-model="gridConfig.search" class="onbg" />
       </template>
-      <media-selection v-else :selected="selected" @clear="clearSelection" @move="actions.move" @remove="actions.remove" />
+      <media-selection v-else :selected="selected" @clear="clearSelection" @move="move" @remove="remove" />
     </ui-header-bar>
 
     <div class="ui-view-box">
@@ -26,7 +26,7 @@
           <template v-if="selected.length < 1" v-slot:actions="props">
             <ui-dropdown-button v-if="props.item && props.item.isFolder" label="@ui.open.title" icon="fth-arrow-right" @click="goToFolder(props.item.id)" />
             <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(props.item, props.item.isFolder)" />
-            <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(props.item, props.item.isFolder)" />
+            <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move([props.item])" />
             <ui-dropdown-button label="@ui.selection.select" icon="fth-check-circle-2" @click="$refs.grid.select(props.item)" />
             <ui-dropdown-separator />
             <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove(props.item, props.item.isFolder)" />
@@ -46,7 +46,7 @@
   import api from '../../api';
   import MediaItem from './overview-item.vue';
   import MediaSelection from './overview-selection.vue';
-  import { Actions } from './overview-actions';
+  import actions from './overview-actions';
 
   export default defineComponent({
     props: ['parentId'],
@@ -54,7 +54,6 @@
     components: { MediaItem, MediaSelection },
 
     data: () => ({
-      actions: null,
       paging: {},
       hierarchy: {},
       search: null,
@@ -90,12 +89,6 @@
     },
 
 
-    mounted()
-    {
-      this.actions = new Actions();
-    },
-
-
     methods: {
       async getItems(query)
       {
@@ -115,10 +108,12 @@
         return await api.getChildren(this.id, query);
       },
 
+
       onSelected(selection)
       {
         this.selected = selection;
       },
+
 
       clearSelection()
       {
@@ -126,6 +121,23 @@
         {
           this.$refs.grid.clearSelection();
         }
+      },
+
+
+      async move(items: any[])
+      {
+        const updates = await actions.move(items);
+        this.clearSelection();
+        if (updates)
+        {
+          await this.$refs.grid.update();
+        }
+      },
+
+
+      remove(items: any[])
+      {
+
       }
     }
 

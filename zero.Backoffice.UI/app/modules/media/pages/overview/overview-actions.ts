@@ -1,21 +1,15 @@
 
 import api from '../../api';
 import * as overlays from '../../../../services/overlay';
+import * as notifications from '../../../../services/notification';
 
 
-export class Actions
-{
-  constructor()
-  {
-
-  }
-
+export default {
 
   remove(items: any[])
   {
     console.info({ action: 'remove', items });
-  }
-
+  },
 
   async move(items: any[])
   {
@@ -30,7 +24,10 @@ export class Actions
       }
     });
 
-    console.info(result);
-   
+    if (result.value)
+    {
+      notifications.success('Successfully moved', `Moved ${items.length} items to new location`);
+      return items.map(x => x.id);
+    }
   }
 };

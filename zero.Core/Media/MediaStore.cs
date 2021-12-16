@@ -6,7 +6,7 @@ public class MediaStore : TreeEntityStore<Media>, IMediaStore
 {
   public MediaStore(IStoreContext context) : base(context)
   {
-    
+    Config.IncludeInactive = true;
   }
 
   /// <summary>

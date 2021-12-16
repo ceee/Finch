@@ -24,7 +24,7 @@
     //border: 2px solid var(--color-box);
     //border-left-color: var(--color-text);
     border: 2px solid transparent;
-    border-left-color: black;
+    border-left-color: var(--color-text);
     will-change: transform;
     animation: loadingRotation 0.8s linear infinite;
 

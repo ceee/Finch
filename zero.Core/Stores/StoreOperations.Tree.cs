@@ -30,7 +30,7 @@ public partial class StoreOperations : IStoreOperations
       return Array.Empty<T>();
     }
 
-    List<string> ids = result.Path.ToList();
+    List<string> ids = result.Path ?? new();
     ids.Add(id);
 
     return (await Session.LoadAsync<T>(ids)).Select(x => x.Value).ToArray();
