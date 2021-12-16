@@ -19,7 +19,7 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
 
   [HttpGet("empty")]
   [ZeroAuthorize(MediaPermissions.Create)]
-  public virtual async Task<ActionResult<zero.Media.Media>> Empty(MediaType type, string flavor = null) => await EmptyModel(flavor, x => x.Type = type);
+  public virtual async Task<ActionResult<zero.Media.Media>> Empty(bool folder = false, string flavor = null) => await EmptyModel(flavor, x => x.IsFolder = folder);
 
 
   [HttpGet("{id}")]
@@ -29,12 +29,12 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
 
   [HttpGet("{id}/children")]
   [ZeroAuthorize(MediaPermissions.Read)]
-  public virtual async Task<ActionResult<Paged>> GetChildren(string id, [FromQuery] ListQuery<zero.Media.Media> query)
+  public virtual async Task<ActionResult<Paged>> GetChildren(string id, [FromQuery] ListQuery<zero.Media.Media> query, [FromQuery] bool folders = false)
   {
     id = id == "root" ? null : id;
 
-    query.OrderQuery = q => q.OrderBy(x => x.Type).OrderByDescending(x => x.CreatedDate);
-    Paged<zero.Media.Media> result = await Store.LoadChildren<zero_Api_Media_Listing>(id, query.Page, query.PageSize, q => q.Filter(query));
+    query.OrderQuery = q => q.OrderByDescending(x => x.IsFolder).ThenByDescending(x => x.CreatedDate);
+    Paged<zero.Media.Media> result = await Store.LoadChildren<zero_Api_Media_Listing>(id, query.Page, query.PageSize, q => q.WhereIf(x => x.IsFolder, folders).Filter(query));
     Paged<MediaBasic> mappedResult = Mapper.Map<zero.Media.Media, MediaBasic>(result);
 
     // get children for all folders
@@ -48,7 +48,12 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
     {
       if (item.IsFolder)
       {
-        item.Children = children.FirstOrDefault(x => x.Id == item.Id)?.ChildCount ?? 0;
+        zero_Api_Media_ChildCounts.Result childCounts = children.FirstOrDefault(x => x.Id == item.Id);
+
+        if (childCounts != null)
+        {
+          item.Children = folders ? childCounts.ChildFolderCount : childCounts.ChildCount;
+        }
       }
     }
 
@@ -62,6 +67,38 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
   {
     id = id == "root" ? null : id;
     return await Store.GetHierarchy<zero_Api_Media_Hierarchy>(id);
+  }
+
+
+  [HttpPut("bulk/move")]
+  [ZeroAuthorize(MediaPermissions.Update)]
+  public virtual async Task<ActionResult<IEnumerable<Result>>> BulkMove(MediaBulkMoveOperation operation)
+  {
+    List<Result<string>> results = new();
+
+    foreach (string id in operation.Ids)
+    {
+      Result<zero.Media.Media> result = await Store.Move(id, operation.ParentId);
+      results.Add(result.ConvertTo(id));
+    }
+
+    return results;
+  }
+
+
+  [HttpDelete("bulk/delete")]
+  [ZeroAuthorize(MediaPermissions.Update)]
+  public virtual async Task<ActionResult<IEnumerable<Result>>> BulkDelete(MediaBulkDeleteOperation operation)
+  {
+    List<Result<string>> results = new();
+
+    foreach (string id in operation.Ids)
+    {
+      Result<string[]> result = await Store.DeleteWithDescendants(id);
+      results.Add(result.ConvertTo(id));
+    }
+
+    return results;
   }
 
 

@@ -14,19 +14,20 @@
         </h2>
       </template>
 
-      <ui-search v-model="gridConfig.search" class="onbg" />
-
-      {{selected}}
+      <template v-if="selected.length < 1">
+        <ui-search v-model="gridConfig.search" class="onbg" />
+      </template>
+      <media-selection v-else :selected="selected" @clear="clearSelection" @move="actions.move" @remove="actions.remove" />
     </ui-header-bar>
 
     <div class="ui-view-box">
-      <div class="media-items" :class="{ 'is-selecting': selecting }">
+      <div class="media-items" :class="{ 'is-selecting': selected.length > 0 }">
         <ui-datagrid ref="grid" v-model="gridConfig" @select="onSelected" @count="count = $event">
-          <template v-slot:actions="props">
+          <template v-if="selected.length < 1" v-slot:actions="props">
             <ui-dropdown-button v-if="props.item && props.item.isFolder" label="@ui.open.title" icon="fth-arrow-right" @click="goToFolder(props.item.id)" />
             <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(props.item, props.item.isFolder)" />
             <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(props.item, props.item.isFolder)" />
-            <ui-dropdown-button label="Select" icon="fth-check-circle" @click="$refs.grid.select(props.item)" />
+            <ui-dropdown-button label="@ui.selection.select" icon="fth-check-circle-2" @click="$refs.grid.select(props.item)" />
             <ui-dropdown-separator />
             <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove(props.item, props.item.isFolder)" />
           </template>
@@ -44,13 +45,16 @@
   import { defineComponent } from 'vue';
   import api from '../../api';
   import MediaItem from './overview-item.vue';
+  import MediaSelection from './overview-selection.vue';
+  import { Actions } from './overview-actions';
 
   export default defineComponent({
     props: ['parentId'],
 
-    components: { MediaItem },
+    components: { MediaItem, MediaSelection },
 
     data: () => ({
+      actions: null,
       paging: {},
       hierarchy: {},
       search: null,
@@ -72,9 +76,23 @@
     },
 
 
+    watch: {
+      '$route': function (val)
+      {
+        this.clearSelection();
+      }
+    },
+
+
     created()
     {
       this.gridConfig.items = this.getItems;
+    },
+
+
+    mounted()
+    {
+      this.actions = new Actions();
     },
 
 
@@ -89,6 +107,7 @@
         query.search = this.gridConfig.search;
         query.folderId = this.parentId;
         query.searchIsGlobal = true;
+        query.pageSize = 50;
 
         const hierarchy = await api.getHierarchy(this.id);
         this.hierarchy = hierarchy.data;
@@ -99,6 +118,14 @@
       onSelected(selection)
       {
         this.selected = selection;
+      },
+
+      clearSelection()
+      {
+        if (this.$refs.grid)
+        {
+          this.$refs.grid.clearSelection();
+        }
       }
     }
 

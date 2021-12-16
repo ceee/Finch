@@ -40,7 +40,7 @@ public class MediaCreator : IMediaCreator
     Media model = await Store.Empty();
     model.Name = normalizedFilename;
     model.ParentId = folderId;
-    model.Type = isImage ? MediaType.Image : MediaType.File;
+    model.IsFolder = false;
 
     // create directory which hosts the media file
     // the media directory is a flat folder where each folder contains one media file (+ thumbs)

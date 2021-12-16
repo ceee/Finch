@@ -15,9 +15,9 @@ export function post(url: string, data: any, config?: ApiRequestConfig)
   return send({ method: 'post', url, data, ...config });
 }
 
-export function del(url: string, config?: ApiRequestConfig)
+export function del(url: string, data: any, config?: ApiRequestConfig)
 {
-  return send({ method: 'delete', url, ...config });
+  return send({ method: 'delete', url, data, ...config });
 }
 
 export function put(url: string, data: any, config?: ApiRequestConfig)

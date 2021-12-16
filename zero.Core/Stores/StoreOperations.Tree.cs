@@ -56,7 +56,9 @@ public partial class StoreOperations : IStoreOperations
     IRavenQueryable<T> queryable = Session.Query<T, TIndex>().Where(x => x.ParentId == parentId).Statistics(out QueryStatistics statistics);
     querySelector ??= x => x.OrderBy(x => x.Sort);
 
-    List<T> result = await querySelector(queryable).Paging(pageNumber, pageSize).ToListAsync();
+    var query = querySelector(queryable).Paging(pageNumber, pageSize);
+
+    List<T> result = await query.ToListAsync();
     return new Paged<T>(result, statistics.TotalResults, pageNumber, pageSize);
   }
 

@@ -22,7 +22,7 @@ public class MediaStore : TreeEntityStore<Media>, IMediaStore
     }
 
     Media parent = await Load(parentId);
-    return parent != null && parent.Type == MediaType.Folder;
+    return parent != null && parent.IsFolder;
   }
 
 
@@ -32,7 +32,7 @@ public class MediaStore : TreeEntityStore<Media>, IMediaStore
     validator.RuleFor(x => x.Name).Length(2, 120);
     validator.RuleFor(x => x.IsActive).Equal(true);
 
-    validator.When(x => x.Type == MediaType.Folder, () =>
+    validator.When(x => x.IsFolder, () =>
     {
       validator.RuleFor(x => x.ParentId).Exists(Context.Store);
     });

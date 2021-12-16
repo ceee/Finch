@@ -12,5 +12,5 @@ export default {
 
   update: (model: any, config?: ApiRequestConfig) => put('languages/' + model.id, model, config),
 
-  delete: (id: string, config?: ApiRequestConfig) => del('languages/' + id, config),
+  delete: (id: string, config?: ApiRequestConfig) => del('languages/' + id, null, config),
 };

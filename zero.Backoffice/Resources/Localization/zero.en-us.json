@@ -51,6 +51,10 @@
     },
     "name": "Name",
     "select": "Select",
+    "selection": {
+      "select": "Select",
+      "deselect": "Deselect"
+    },
     "icon": "Icon",
     "icon_select": "Select an icon",
     "tab_general": "General",
@@ -646,7 +650,9 @@
       "addfile_text": "Add one or more files to the current filter"
     },
     "selection": {
-      "clear": "Clear selection"
+      "clear": "Clear selection",
+      "selected": "{count} selected",
+      "selectaction": "Action"
     },
     "fields": {
       "foldername_placeholder": "Enter a name ...",

@@ -61,12 +61,12 @@
     border-radius: var(--radius);
   }
 
-  .media-items.is-selecting .media-item
+  .ui-datagrid-outer.is-selecting .media-item
   {
-    opacity: .5; 
+    opacity: .55;
   }
 
-  .media-items.is-selecting .media-item.is-selected
+  .ui-datagrid-outer.is-selecting .media-item.is-selected
   {
     opacity: 1;
   }
@@ -121,9 +121,10 @@
     left: -10px;
     top: -10px;
     background: var(--color-accent);
-    color: white;
+    color: var(--color-accent-fg);
     box-shadow: 1px 1px 0 1px var(--color-shadow);
     font-size: 11px;
+
     .is-selected &
     {
       display: inline-flex;

@@ -26,7 +26,7 @@ public class MediaMapperProfile : ZeroMapperProfile
     target.Id = source.Id;
     target.Name = source.Name;
     target.ParentId = source.ParentId;
-    target.IsFolder = source.Type == MediaType.Folder;
+    target.IsFolder = source.IsFolder;
     target.Children = 0;
     target.Size = source.Size;
 
@@ -40,7 +40,7 @@ public class MediaMapperProfile : ZeroMapperProfile
   protected virtual void Map(zero.Media.Media source, MediaEdit target, IZeroMapperContext ctx)
   {
     this.MapDisplayData(source, target);
-    target.Type = source.Type;
+    target.IsFolder = source.IsFolder;
     target.ParentId = source.ParentId;
   }
 

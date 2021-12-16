@@ -2,5 +2,5 @@
 
 public class MediaSave : SaveModel<zero.Media.Media>
 {
-  public MediaType Type { get; set; }
+  public bool IsFolder { get; set; }
 }

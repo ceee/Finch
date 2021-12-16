@@ -52,39 +52,39 @@ public abstract class ZeroApiTreeEntityStoreController<TModel, TStore> : ZeroApi
   }
 
 
-  protected async Task<ActionResult<Result>> MoveModel<TEdit>(string pageId, string newParentId)
+  protected async Task<ActionResult<Result>> MoveModel<TEdit>(string id, string newParentId)
   {
-    return await PutOperation<TEdit>(async () => await Store.Move(pageId, newParentId));
+    return await PutOperation<TEdit>(async () => await Store.Move(id, newParentId));
   }
 
 
-  protected async Task<ActionResult<Result>> MoveModel(string pageId, string newParentId)
+  protected async Task<ActionResult<Result>> MoveModel(string id, string newParentId)
   {
-    return await PutOperation(async () => await Store.Move(pageId, newParentId));
+    return await PutOperation(async () => await Store.Move(id, newParentId));
   }
 
 
-  protected async Task<ActionResult<Result>> CopyModel<TEdit>(string pageId, string newParentId)
+  protected async Task<ActionResult<Result>> CopyModel<TEdit>(string id, string newParentId)
   {
-    return await PutOperation<TEdit>(async () => await Store.Copy(pageId, newParentId));
+    return await PutOperation<TEdit>(async () => await Store.Copy(id, newParentId));
   }
 
 
-  protected async Task<ActionResult<Result>> CopyModel(string pageId, string newParentId)
+  protected async Task<ActionResult<Result>> CopyModel(string id, string newParentId)
   {
-    return await PutOperation(async () => await Store.Copy(pageId, newParentId));
+    return await PutOperation(async () => await Store.Copy(id, newParentId));
   }
 
 
-  protected async Task<ActionResult<Result>> CopyModelWithDescendants<TEdit>(string pageId, string newParentId)
+  protected async Task<ActionResult<Result>> CopyModelWithDescendants<TEdit>(string id, string newParentId)
   {
-    return await PutOperation<TEdit>(async () => await Store.CopyWithDescendants(pageId, newParentId));
+    return await PutOperation<TEdit>(async () => await Store.CopyWithDescendants(id, newParentId));
   }
 
 
-  protected async Task<ActionResult<Result>> CopyModelWithDescendants(string pageId, string newParentId)
+  protected async Task<ActionResult<Result>> CopyModelWithDescendants(string id, string newParentId)
   {
-    return await PutOperation(async () => await Store.CopyWithDescendants(pageId, newParentId));
+    return await PutOperation(async () => await Store.CopyWithDescendants(id, newParentId));
   }
 
 

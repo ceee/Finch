@@ -9,8 +9,13 @@ export default {
 
   getChildren: (id: string, query: ApiRequestQuery, config?: ApiRequestConfig) => get(`media/${id}/children`, { ...config, params: { ...query } }),
 
+  getFolderChildren: (id: string, query: ApiRequestQuery, config?: ApiRequestConfig) => get(`media/${id}/children`, { ...config, params: { ...query, folders: true } }),
+
   getHierarchy: (id: string, config?: ApiRequestConfig) => get(`media/${id}/hierarchy`, { ...config }),
 
+  bulkDelete: (ids: string[], config?: ApiRequestConfig) => del(`media/bulk/delete`, { ids }, { ...config }),
+
+  bulkMove: (ids: string[], parentId: string, config?: ApiRequestConfig) => put(`media/bulk/move`, { parentId, ids }, { ...config }),
 
   //create: (model: any, config?: ApiRequestConfig) => post('countries', model, config),
 

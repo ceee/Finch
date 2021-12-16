@@ -62,7 +62,7 @@ public class MediaManagement : IMediaManagement
   public virtual async Task<Media> GetFile(string id)
   {
     Media file = await Store.Load(id);
-    return file != null && file.Type != MediaType.Folder ? file : null;
+    return file != null && !file.IsFolder ? file : null;
   }
 
 
@@ -93,7 +93,7 @@ public class MediaManagement : IMediaManagement
   public virtual async Task<Media> GetFolder(string id)
   {
     Media folder = await Store.Load(id);
-    return folder != null && folder.Type == MediaType.Folder ? folder : null;
+    return folder != null && folder.IsFolder ? folder : null;
   }
 
 
@@ -101,7 +101,7 @@ public class MediaManagement : IMediaManagement
   public virtual async Task<Result<Media>> CreateFolder(Media folder)
   {
     folder.IsActive = true;
-    folder.Type = MediaType.Folder;
+    folder.IsFolder = true;
     return await Store.Create(folder);
   }
 

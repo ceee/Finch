@@ -82,7 +82,7 @@
     computed: {
       actionsDefined()
       {
-        return this.$scopedSlots.hasOwnProperty('actions');
+        return this.$slots.hasOwnProperty('actions');
       }
     },
 

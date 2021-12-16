@@ -12,5 +12,5 @@ export default {
 
   update: (model: any, config?: ApiRequestConfig) => put('countries/' + model.id, model, config),
 
-  delete: (id: string, config?: ApiRequestConfig) => del('countries/' + id, config),
+  delete: (id: string, config?: ApiRequestConfig) => del('countries/' + id, null, config),
 };

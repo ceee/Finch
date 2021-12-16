@@ -12,5 +12,5 @@ export default {
 
   update: async (model: any, config?: ApiRequestConfig) => await put('applications/' + model.id, model, { ...config, system: true }),
 
-  delete: async (id: string, config?: ApiRequestConfig) => await del('applications/' + id, { ...config, system: true }),
+  delete: async (id: string, config?: ApiRequestConfig) => await del('applications/' + id, null, { ...config, system: true }),
 };

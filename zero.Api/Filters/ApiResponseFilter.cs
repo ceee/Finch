@@ -70,6 +70,35 @@ public class ApiResponseFilterAttribute : ResultFilterAttribute
         result.Value = response;
       }
 
+      // format bulk patch results
+      else if (result.Value is IEnumerable<Result<string>> list)
+      {
+        int countSucceeded = list.Count(x => x.IsSuccess);
+        int countFailed = list.Count() - countSucceeded;
+
+        BulkOperationApiResponse response = countFailed > 0 ? new BulkOperationWithErrorsApiResponse() : new BulkOperationApiResponse();
+
+        response.CountSucceeded = countSucceeded;
+        response.CountFailed = countFailed;
+
+        if (countFailed > 0 && response is BulkOperationWithErrorsApiResponse errorResponse)
+        {
+          errorResponse.Errors = list.Where(x => !x.IsSuccess).SelectMany(x => x.Errors.Select(e => new BulkOperationErrorApiResponseError()
+          {
+            AffectedId = x.Model,
+            Category = ApiErrorCodes.Categories.Validation,
+            Code = "// TODO",
+            Property = e.Property,
+            Message = e.Message
+          })).ToList();
+        }
+
+        response.Success = countSucceeded > 0;
+        response.Status = countSucceeded < 1 ? StatusCodes.Status400BadRequest : result.StatusCode.Value;
+        result.StatusCode = response.Status;
+        result.Value = response;
+      }
+
       // format model results
       else
       {

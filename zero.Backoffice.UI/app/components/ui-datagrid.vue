@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-datagrid-outer">
+  <div class="ui-datagrid-outer" :class="{'is-selecting': configuration.selectable && selected.length > 0}">
     <div class="ui-datagrid">
       <div class="ui-datagrid-items" :style="'grid-template-columns: repeat(auto-fill, minmax(' + configuration.width + 'px, 1fr))'" :class="{'is-block': configuration.block }">
         <div class="ui-datagrid-item" v-for="(item, index) in items" :key="index" v-on:contextmenu="onRightClicked(item, $event)">
@@ -107,7 +107,8 @@
       },
       debouncedUpdate: null,
       actionProps: {
-        item: null
+        item: null,
+        selected: false
       },
       selected: []
     }),
@@ -233,6 +234,7 @@
 
         this.actionProps.item = item;
         this.actionProps.event = ev;
+        this.actionProps.selected = this.configuration.selectable && this.selected.indexOf(item) > -1;
 
         dropdown.toggle();
 

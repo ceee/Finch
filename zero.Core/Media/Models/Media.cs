@@ -12,6 +12,11 @@ public class Media : ZeroEntity, ISupportsTrees
   }
 
   /// <summary>
+  /// Whether this media item is a folder or a file
+  /// </summary>
+  public bool IsFolder { get; set; }
+
+  /// <summary>
   /// Id/name of the phyiscal folder which is stored on disk/cloud
   /// </summary>
   public string FileId { get; set; }
@@ -56,9 +61,4 @@ public class Media : ZeroEntity, ISupportsTrees
   /// Optional focal point for an image
   /// </summary>
   public MediaFocalPoint FocalPoint { get; set; }
-
-  /// <summary>
-  /// Type of the media
-  /// </summary>
-  public MediaType Type { get; set; }
 }
