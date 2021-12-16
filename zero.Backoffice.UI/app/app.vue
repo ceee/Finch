@@ -46,6 +46,10 @@
         this.accountStore.user = userResponse.data;
         await useUiStore().setup();
       }
+      else
+      {
+        await useUiStore().setup(true);
+      }
 
       await useTranslationStore().setup();
 

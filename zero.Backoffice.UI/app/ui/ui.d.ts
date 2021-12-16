@@ -3,11 +3,18 @@ declare module 'zero/ui'
 {
   export interface UiStoreState
   {
+    preferences: UiPreferences;
+
     sections: UiSection[];
     settingGroups: UiSettingsGroup[];
     iconSets: UiIconSet[];
     flavors: Record<string, UiFlavorProvider>;
     blueprints: string[];
+  }
+
+  export interface UiPreferences
+  {
+    theme: 'default' | 'dark' | 'light';
   }
 
   export interface UiSection

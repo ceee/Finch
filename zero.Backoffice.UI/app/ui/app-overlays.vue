@@ -50,11 +50,6 @@
       });
     },
 
-    beforeDestroy()
-    {
-      this.$el.removeEventListener('keyup');
-    },
-
     methods: {
 
       add(instance)
