@@ -203,6 +203,11 @@ public interface IStoreOperations
   Task<Paged<T>> LoadChildren<T, TIndex>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, ISupportsTrees, new() where TIndex : AbstractCommonApiForIndexes, new();
 
   /// <summary>
+  /// Get tree hierarchy for an entity
+  /// </summary>
+  Task<T[]> GetHierarchy<T, TIndex>(string id) where T : ZeroIdEntity, ISupportsTrees, new() where TIndex : ZeroTreeHierarchyIndex<T>, new();
+
+  /// <summary>
   /// Update sorting of entities on a specific level
   /// </summary>
   Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, ISupportsTrees, new();

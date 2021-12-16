@@ -271,9 +271,7 @@ code
   background: transparent;
   border-radius: var(--radius);
 
-  $media-pattern-size: 10px;
-  $media-pattern-color-a: #ddd;
-  $media-pattern-color-b: #aaa;
+  --media-pattern-size: 10px;
 
   &:before
   {
@@ -283,10 +281,27 @@ code
     height: 100%;
     left: 0;
     top: 0;
-    background-position: 0px 0px, #{$media-pattern-size / 2} #{$media-pattern-size / 2};
-    background-size: #{$media-pattern-size} #{$media-pattern-size};
-    background-image: linear-gradient(45deg, #{$media-pattern-color-b} 25%, transparent 25%, transparent 75%, #{$media-pattern-color-b} 75%, #{$media-pattern-color-b} 100%),
-      linear-gradient(45deg, #{$media-pattern-color-b} 25%, #{$media-pattern-color-a} 25%, #{$media-pattern-color-a} 75%, #{$media-pattern-color-b} 75%, #{$media-pattern-color-b} 100%);
+    background-position: 0px 0px, calc(var(--media-pattern-size) / 2) calc(var(--media-pattern-size) / 2);
+    background-size: var(--media-pattern-size) var(--media-pattern-size);
+
+    background-image: 
+      linear-gradient(
+        45deg, 
+        var(--color-pattern-transparent-b) 25%, 
+        transparent 25%, 
+        transparent 75%, 
+        var(--color-pattern-transparent-b) 75%, 
+        var(--color-pattern-transparent-b) 100%
+      ),
+      linear-gradient(
+        45deg, 
+        var(--color-pattern-transparent-b) 25%, 
+        var(--color-pattern-transparent-a) 25%, 
+        var(--color-pattern-transparent-a) 75%, 
+        var(--color-pattern-transparent-b) 75%, 
+        var(--color-pattern-transparent-b) 100%
+      );
+
     border-radius: var(--radius);
   }
 }

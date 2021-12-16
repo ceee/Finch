@@ -13,6 +13,8 @@ public class MediaModule : ZeroModule
     services.Configure<RavenOptions>(opts =>
     {
       opts.Indexes.Add<zero_Api_Media_Listing>();
+      opts.Indexes.Add<zero_Api_Media_ChildCounts>();
+      opts.Indexes.Add<zero_Api_Media_Hierarchy>();
     });
   }
 }

@@ -1,5 +1,5 @@
 ﻿<template>
-  <router-link :to="link" class="media-item">
+  <router-link :to="link" class="media-item" :class="{ 'is-selected': selected}">
     <div class="media-item-preview" :class="{'media-pattern': value.image, 'is-covered': covered }">
       <span class="media-item-check"><ui-icon symbol="fth-check" :size="14" /></span>
       <img class="media-item-image" v-if="value.image" :src="value.image" />
@@ -7,8 +7,8 @@
     </div>
     <p class="media-item-text">
       <span :title="value.name">{{value.name}} <!--<ui-icon symbol="fth-cloud" v-if="value.isShared" :size="15" class="media-item-shared" />--></span>
-      <!--<span class="-minor" v-if="!value.isFolder"><br><span v-filesize="value.size"></span></span>-->
-      <span class="-minor" v-if="value.isFolder"><br><span v-localize="{ key: value.children === 1 ? '@media.child_count_1' : '@media.child_count_x', tokens: { count: value.children }}"></span></span>
+      <span class="-minor" v-if="!value.isFolder"><br><span v-filesize="value.size"></span></span>
+      <span class="-minor" v-else><br><span v-localize="{ key: value.children === 1 ? '@media.child_count_1' : '@media.child_count_x', tokens: { count: value.children }}"></span></span>
     </p>
   </router-link>
 </template>
@@ -50,11 +50,11 @@
   .media-item
   {
     width: 100%;
-    min-height: 200px;
+    min-height: 140px;
     display: grid;
     grid-template-rows: auto 1fr;
     gap: 10px;
-    align-items: center;
+    align-items: flex-start;
     line-height: 1.4;
     color: var(--color-text);
     font-size: var(--font-size);
@@ -77,7 +77,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 200px;
+    height: 130px;
     width: 100%;
     background: var(--color-box);
     border-radius: var(--radius);
@@ -85,11 +85,12 @@
     position: relative;
     text-align: center;
     box-shadow: var(--shadow-short);
+    border: 2px solid transparent;
   }
 
   .media-item.is-selected .media-item-preview
   { 
-    //border: 3px solid var(--color-primary); 
+    border-color: var(--color-accent); 
   }
 
   .media-item-image
@@ -112,16 +113,15 @@
     display: none;
     justify-content: center;
     align-items: center;
-    width: 30px;
-    height: 30px;
+    width: 22px;
+    height: 22px;
     border-radius: 20px;
-    border: 5px solid var(--color-bg);
     position: absolute;
     z-index: 2;
-    left: -13px;
-    top: -13px;
-    background: var(--color-primary);
-    color: var(--color-primary-text);
+    left: -10px;
+    top: -10px;
+    background: var(--color-accent);
+    color: white;
     box-shadow: 1px 1px 0 1px var(--color-shadow);
     font-size: 11px;
     .is-selected &

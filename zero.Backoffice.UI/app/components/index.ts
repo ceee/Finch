@@ -24,6 +24,7 @@ import uiTable from './ui-table.vue';
 import uiTableFilter from './ui-table-filter.vue';
 import uiTrinity from './ui-trinity.vue';
 import uiPick from './ui-pick.vue';
+import uiDatagrid from './ui-datagrid.vue';
 
 export {
   uiIcon,
@@ -51,5 +52,6 @@ export {
   uiTable,
   uiTableFilter,
   uiTrinity,
-  uiPick
+  uiPick,
+  uiDatagrid
 };

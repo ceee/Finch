@@ -118,6 +118,10 @@
   --color-table-hover: #{$color-bg-shade-2};
   --color-table-highlight: #{$color-bg-shade-3};
 
+  // pattern
+  --color-pattern-transparent-a: #{$color-bg-shade-2};
+  --color-pattern-transparent-b: #{$color-bg-shade-5};
+
   // misc
   --color-required-marker: var(--color-accent);
   --color-synchronized: #{$color-secondary};

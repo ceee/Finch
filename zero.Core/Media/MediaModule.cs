@@ -15,7 +15,7 @@ public class MediaModule : ZeroModule
     {
       IOptions<MediaOptions> options = svc.GetRequiredService<IOptions<MediaOptions>>();
       IWebHostEnvironment env = svc.GetRequiredService<IWebHostEnvironment>();
-      return new(Path.Combine(env.WebRootPath, options.Value.FolderPath), options.Value.PublicPathPrefix);
+      return new(Path.Combine(env.WebRootPath, options.Value.FolderPath), options.Value.PublicPathPrefix + options.Value.FolderPath.EnsureStartsWith('/'));
     });
 
     services.AddScoped<IMediaStore, MediaStore>();

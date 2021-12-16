@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 
 namespace zero.Persistence;
 
+
 public abstract class ZeroJavascriptIndex : AbstractJavaScriptIndexCreationTask, IZeroIndexDefinition
 {
   public ZeroJavascriptIndex() { Create(); }

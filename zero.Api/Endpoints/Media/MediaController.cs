@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Net.Http.Headers;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 using System.IO;
 
 namespace zero.Api.Endpoints.Media;
@@ -25,12 +27,41 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
   public virtual async Task<ActionResult<zero.Media.Media>> Get(string id, string changeVector = null) => await GetModel(id, changeVector);
 
 
-  [HttpGet("{parentId}/children")]
+  [HttpGet("{id}/children")]
   [ZeroAuthorize(MediaPermissions.Read)]
-  public virtual async Task<ActionResult<Paged>> GetChildren(string parentId, [FromQuery] ListQuery<zero.Media.Media> query)
+  public virtual async Task<ActionResult<Paged>> GetChildren(string id, [FromQuery] ListQuery<zero.Media.Media> query)
   {
+    id = id == "root" ? null : id;
+
     query.OrderQuery = q => q.OrderBy(x => x.Type).OrderByDescending(x => x.CreatedDate);
-    return await GetChildModelsByIndex<MediaBasic, zero_Api_Media_Listing>(parentId == "root" ? null : parentId, query);
+    Paged<zero.Media.Media> result = await Store.LoadChildren<zero_Api_Media_Listing>(id, query.Page, query.PageSize, q => q.Filter(query));
+    Paged<MediaBasic> mappedResult = Mapper.Map<zero.Media.Media, MediaBasic>(result);
+
+    // get children for all folders
+    string[] folderIds = mappedResult.Items.Where(x => x.IsFolder).Select(x => x.Id).ToArray();
+    IList<zero_Api_Media_ChildCounts.Result> children = await Store.Session.Query<zero_Api_Media_ChildCounts.Result, zero_Api_Media_ChildCounts>()
+      .ProjectInto<zero_Api_Media_ChildCounts.Result>()
+      .Where(x => x.Id.In(folderIds))
+      .ToListAsync();
+
+    foreach (MediaBasic item in mappedResult.Items)
+    {
+      if (item.IsFolder)
+      {
+        item.Children = children.FirstOrDefault(x => x.Id == item.Id)?.ChildCount ?? 0;
+      }
+    }
+
+    return mappedResult;
+  }
+
+
+  [HttpGet("{id}/hierarchy")]
+  [ZeroAuthorize(MediaPermissions.Read)]
+  public virtual async Task<ActionResult<zero.Media.Media[]>> GetHierarchy(string id)
+  {
+    id = id == "root" ? null : id;
+    return await Store.GetHierarchy<zero_Api_Media_Hierarchy>(id);
   }
 
 

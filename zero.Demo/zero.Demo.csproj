@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+    <Content Remove="wwwroot/uploads/**/*" />
+    <None Remove="wwwroot/uploads/**/*" />
   </ItemGroup>
 
 </Project>

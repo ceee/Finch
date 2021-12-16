@@ -15,6 +15,29 @@ public partial class StoreOperations : IStoreOperations
 
 
   /// <inheritdoc />
+  public async Task<T[]> GetHierarchy<T, TIndex>(string id) 
+    where T : ZeroIdEntity, ISupportsTrees, new() 
+    where TIndex : ZeroTreeHierarchyIndex<T>, new()
+  {
+    ZeroTreeHierarchyIndexResult result = await Session.Query<ZeroTreeHierarchyIndexResult, TIndex>()
+      .ProjectInto<ZeroTreeHierarchyIndexResult>()
+      .Include<ZeroTreeHierarchyIndexResult, T>(x => x.Path)
+      .Include<ZeroTreeHierarchyIndexResult, T>(x => x.Id)
+      .FirstOrDefaultAsync(x => x.Id == id);
+
+    if (result == null)
+    {
+      return Array.Empty<T>();
+    }
+
+    List<string> ids = result.Path.ToList();
+    ids.Add(id);
+
+    return (await Session.LoadAsync<T>(ids)).Select(x => x.Value).ToArray();
+  }
+
+
+  /// <inheritdoc />
   public async Task<Paged<T>> LoadChildren<T>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, ISupportsTrees, new()
   {
     IRavenQueryable<T> queryable = Session.Query<T>().Where(x => x.ParentId == parentId).Statistics(out QueryStatistics statistics);

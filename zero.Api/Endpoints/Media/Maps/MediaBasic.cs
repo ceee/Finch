@@ -11,4 +11,6 @@ public class MediaBasic : ZeroIdEntity
   public string Image { get; set; }
 
   public int Children { get; set; }
+  
+  public long Size { get; set; }
 }

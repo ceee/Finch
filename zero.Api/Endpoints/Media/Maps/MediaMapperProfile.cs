@@ -2,6 +2,15 @@
 
 public class MediaMapperProfile : ZeroMapperProfile
 {
+  protected IMediaFileSystem FileSystem { get; private set; }
+
+
+  public MediaMapperProfile(IMediaFileSystem fileSystem)
+  {
+    FileSystem = fileSystem;
+  }
+
+
   public override void Configure(IZeroMapper mapper)
   {
     mapper.Define<zero.Media.Media, MediaBasic>((source, ctx) => new(), Map);
@@ -18,8 +27,14 @@ public class MediaMapperProfile : ZeroMapperProfile
     target.Name = source.Name;
     target.ParentId = source.ParentId;
     target.IsFolder = source.Type == MediaType.Folder;
-    target.Image = null;
-    target.Children = 0; 
+    target.Children = 0;
+    target.Size = source.Size;
+
+    if (source.Thumbnails.Any())
+    {
+      string path = source.Thumbnails.GetValueOrDefault("preview");
+      target.Image = path.IsNullOrEmpty() ? null : FileSystem.MapToPublicPath(path);
+    }
   }
 
   protected virtual void Map(zero.Media.Media source, MediaEdit target, IZeroMapperContext ctx)

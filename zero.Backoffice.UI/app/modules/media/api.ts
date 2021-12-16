@@ -7,7 +7,10 @@ export default {
 
   getById: (id: string, changeVector?: string, config?: ApiRequestConfig) => get('media/' + id, { ...config, params: { changeVector } }),
 
-  getChildren: (parentId: string, query: ApiRequestQuery, config?: ApiRequestConfig) => get(`media/${parentId}/children`, { ...config, params: { ...query } }),
+  getChildren: (id: string, query: ApiRequestQuery, config?: ApiRequestConfig) => get(`media/${id}/children`, { ...config, params: { ...query } }),
+
+  getHierarchy: (id: string, config?: ApiRequestConfig) => get(`media/${id}/hierarchy`, { ...config }),
+
 
   //create: (model: any, config?: ApiRequestConfig) => post('countries', model, config),
 

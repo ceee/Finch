@@ -6,7 +6,7 @@ public class MediaOptions
 {
   public string FolderPath { get; set; }
 
-  public string PublicPathPrefix { get; set; }
+  public string PublicPathPrefix { get; set; } = string.Empty;
 
   public List<string> AllowedOtherFileExtensions { get; set; }
 

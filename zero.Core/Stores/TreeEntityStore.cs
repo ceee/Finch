@@ -32,6 +32,17 @@ public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> w
   public virtual Task<bool> IsAllowedAsChild(T model, string parentId) => Task.FromResult(true);
 
   /// <inheritdoc />
+  public virtual Task<Paged<T>> LoadChildren(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = null)
+    => Operations.LoadChildren(parentId, pageNumber, pageSize, querySelector);
+
+  /// <inheritdoc />
+  public virtual Task<Paged<T>> LoadChildren<TIndex>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = null) where TIndex : AbstractCommonApiForIndexes, new()
+    => Operations.LoadChildren<T, TIndex>(parentId, pageNumber, pageSize, querySelector);
+
+  /// <inheritdoc />
+  public virtual Task<T[]> GetHierarchy<TIndex>(string id) where TIndex : ZeroTreeHierarchyIndex<T>, new() => Operations.GetHierarchy<T, TIndex>(id);
+
+  /// <inheritdoc />
   public virtual Task<Result<T>> Copy(string id, string newParentId) => Operations.Copy<T>(id, newParentId, async (model, parentId) => await IsAllowedAsChild(model, parentId));
 
   /// <inheritdoc />
@@ -48,14 +59,6 @@ public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> w
 
   /// <inheritdoc />
   public virtual Task<Result<string[]>> DeleteWithDescendants(string id) => Operations.DeleteWithDescendants<T>(id);
-
-  /// <inheritdoc />
-  public virtual Task<Paged<T>> LoadChildren(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = null) 
-    => Operations.LoadChildren(parentId, pageNumber, pageSize, querySelector);
-
-  /// <inheritdoc />
-  public virtual Task<Paged<T>> LoadChildren<TIndex>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = null) where TIndex : AbstractCommonApiForIndexes, new() 
-    => Operations.LoadChildren<T, TIndex>(parentId, pageNumber, pageSize, querySelector);
 }
 
 
@@ -77,6 +80,11 @@ public interface ITreeEntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
   /// Get descendants by query (by using the specified index)
   /// </summary>
   Task<Paged<T>> LoadChildren<TIndex>(string parentId, int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where TIndex : AbstractCommonApiForIndexes, new();
+
+  /// <summary>
+  /// Get tree hierarchy for an entity
+  /// </summary>
+  Task<T[]> GetHierarchy<TIndex>(string id) where TIndex : ZeroTreeHierarchyIndex<T>, new();
 
   /// <summary>
   /// Update sorting of entities on a specific level

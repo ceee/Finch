@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-searchinput">
-    <input ref="input" type="search" :value="modelValue" @input="onChange" @keyup.enter="onSubmit" class="ui-input" v-localize:placeholder="placeholder" />
+    <input ref="input" type="search" :value="value" @input="onChange" @keyup.enter="onSubmit" class="ui-input" v-localize:placeholder="placeholder" />
     <slot name="button" v-bind="{ onSubmit: onSubmit }">
       <button type="button" class="ui-searchinput-button" v-localize:title="'@ui.search.button'" @click="onSubmit">
         <ui-icon symbol="fth-search" />
@@ -15,7 +15,7 @@
     name: 'uiSearch',
 
     props: {
-      modelValue: {
+      value: {
         type: String,
         default: ''
       },
@@ -33,9 +33,10 @@
 
       onChange(ev)
       {
-        this.$emit('change', ev.target.value);
+        //this.$emit('change', ev.target.value);
         this.$emit('input', ev.target.value);
-        this.$emit('update:modelValue', ev.target.value);
+        //this.$emit('update:value', ev.target.value);
+        //this.$emit('update:modelValue', ev.target.value);
       },
 
       onSubmit(ev)
