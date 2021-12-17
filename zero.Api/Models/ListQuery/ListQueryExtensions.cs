@@ -28,6 +28,11 @@ public static class ListQueryExtensions
     bool isZeroType = zeroType.IsAssignableFrom(collectionType);
 
     IQueryable<T> queryable = source;
+
+    if (listQuery.AdditionalQuery != null)
+    {
+      queryable = listQuery.AdditionalQuery.Compile()(queryable);
+    }
     
     if (listQuery.Ids.Length > 0)
     {

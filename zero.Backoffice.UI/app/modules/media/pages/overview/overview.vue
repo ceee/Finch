@@ -23,6 +23,11 @@
     <div class="ui-view-box">
       <div class="media-items" :class="{ 'is-selecting': selected.length > 0 }">
         <ui-datagrid ref="grid" v-model="gridConfig" @select="onSelected" @count="count = $event">
+
+          <template v-slot:before>
+            <media-drop />
+          </template>
+
           <template v-if="selected.length < 1" v-slot:actions="props">
             <ui-dropdown-button v-if="props.item && props.item.isFolder" label="@ui.open.title" icon="fth-arrow-right" @click="goToFolder(props.item.id)" />
             <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(props.item, props.item.isFolder)" />
@@ -46,12 +51,13 @@
   import api from '../../api';
   import MediaItem from './overview-item.vue';
   import MediaSelection from './overview-selection.vue';
+  import MediaDrop from './drop.vue';
   import actions from './overview-actions';
 
   export default defineComponent({
     props: ['parentId'],
 
-    components: { MediaItem, MediaSelection },
+    components: { MediaItem, MediaSelection, MediaDrop },
 
     data: () => ({
       paging: {},
@@ -102,10 +108,10 @@
         query.searchIsGlobal = true;
         query.pageSize = 50;
 
-        const hierarchy = await api.getHierarchy(this.id);
+        const hierarchy = await api.folders.getHierarchy(this.id);
         this.hierarchy = hierarchy.data;
 
-        return await api.getChildren(this.id, query);
+        return await api.folders.getChildren(this.id, query);
       },
 
 
@@ -127,9 +133,9 @@
       async move(items: any[])
       {
         const updates = await actions.move(items);
-        this.clearSelection();
         if (updates)
         {
+          this.clearSelection();
           await this.$refs.grid.update();
         }
       },

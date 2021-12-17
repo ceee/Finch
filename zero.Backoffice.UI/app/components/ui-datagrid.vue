@@ -1,7 +1,8 @@
 ﻿<template>
   <div class="ui-datagrid-outer" :class="{'is-selecting': configuration.selectable && selected.length > 0}">
     <div class="ui-datagrid">
-      <div class="ui-datagrid-items" :style="'grid-template-columns: repeat(auto-fill, minmax(' + configuration.width + 'px, 1fr))'" :class="{'is-block': configuration.block }">
+      <div class="ui-datagrid-items" v-if="!isLoading" :style="'grid-template-columns: repeat(auto-fill, minmax(' + configuration.width + 'px, 1fr))'" :class="{'is-block': configuration.block }">
+        <slot name="before"></slot>
         <div class="ui-datagrid-item" v-for="(item, index) in items" :key="index" v-on:contextmenu="onRightClicked(item, $event)">
           <button v-if="configuration.selectable && selected.length > 0" type="button" class="ui-datagrid-cell-select" @click="select(item)"></button>
           <slot :item="item" :selected="configuration.selectable && selected.indexOf(item) > -1"></slot>
@@ -10,7 +11,7 @@
       </div>
 
       <div class="ui-datagrid-empty" v-if="!isLoading && items.length < 1">
-        <i class="ui-datagrid-empty-icon fth-list"></i>
+        <ui-icon symbol="fth-list" :size="34" class="ui-datagrid-empty-icon" />
         There are no items to show in this list
       </div>
 
@@ -347,7 +348,6 @@
 
   .ui-datagrid-empty-icon
   {
-    font-size: 34px;
     margin-bottom: 20px;
   }
 

@@ -14,6 +14,8 @@ public class ListQuery<T>
 
   public Expression<Func<T, object>>[] SearchSelectors { get; private set; } = new Expression<Func<T, object>>[0] { };
 
+  public Expression<Func<IQueryable<T>, IQueryable<T>>> AdditionalQuery { get; set; } = null;
+
   public string OrderBy { get; set; } = "createdDate";
 
   public ListQueryOrderType OrderType { get; set; } = ListQueryOrderType.String;

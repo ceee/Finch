@@ -82,7 +82,7 @@
           return Promise.resolve(this.cache[id]);
         }
 
-        const response = await api.getFolderChildren(id, { pageSize: 50 }); // TODO we need paging support for <ui-tree />
+        const response = await api.folders.getChildren(id, false, { pageSize: 50 }); // TODO we need paging support for <ui-tree />
         const items = response.data;
 
         if (!parent)
@@ -130,7 +130,7 @@
 
         this.state = 'loading';
 
-        const result = await api.bulkMove(this.ids, this.newParentId);
+        const result = await api.bulk.move(this.ids, this.newParentId);
 
         this.config.confirm(result);
 

@@ -5,10 +5,12 @@
       <img class="media-item-image" v-if="value.image" :src="value.image" />
       <span class="media-item-icon" v-if="!value.image"><ui-icon :symbol="(value.isFolder ? 'fth-folder' : 'fth-file')" :size="26" :stroke-width="2" /></span>
     </div>
-    <p class="media-item-text">
-      <span :title="value.name">{{value.name}} <!--<ui-icon symbol="fth-cloud" v-if="value.isShared" :size="15" class="media-item-shared" />--></span>
-      <span class="-minor" v-if="!value.isFolder"><br><span v-filesize="value.size"></span></span>
-      <span class="-minor" v-else><br><span v-localize="{ key: value.children === 1 ? '@media.child_count_1' : '@media.child_count_x', tokens: { count: value.children }}"></span></span>
+    <p v-if="value.isFolder" class="media-item-text" :title="value.name">
+      {{value.name}} <!--<ui-icon symbol="fth-cloud" v-if="value.isShared" :size="15" class="media-item-shared" />-->
+      <span class="-minor"> ({{value.children}})<!--<span v-localize="{ key: value.children === 1 ? '@media.child_count_1' : '@media.child_count_x', tokens: { count: value.children }}"></span>--></span>
+    </p>
+    <p v-else class="media-item-text -minor">
+      <span v-filesize:0="value.size"></span> | <span :title="value.name">{{value.name}}</span>    
     </p>
   </router-link>
 </template>
@@ -140,7 +142,7 @@
     padding-right: 16px;
     font-weight: bold;
 
-    .-minor
+    &.-minor, .-minor
     {
       font-weight: 400;
       color: var(--color-text-dim);

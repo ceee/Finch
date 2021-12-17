@@ -1,27 +1,60 @@
-import { MediaType } from 'zero/media';
 import { get, post, put, del, ApiRequestConfig, ApiRequestQuery } from '../../services/request';
 
-export default {
 
-  getEmpty: (type: MediaType, flavor?: string, config?: ApiRequestConfig) => get("media/empty", { ...config, params: { type, flavor } }),
+const files = {
+
+  getEmpty: (flavor?: string, config?: ApiRequestConfig) => get("media/empty", { ...config, params: { flavor } }),
 
   getById: (id: string, changeVector?: string, config?: ApiRequestConfig) => get('media/' + id, { ...config, params: { changeVector } }),
 
-  getChildren: (id: string, query: ApiRequestQuery, config?: ApiRequestConfig) => get(`media/${id}/children`, { ...config, params: { ...query } }),
-
-  getFolderChildren: (id: string, query: ApiRequestQuery, config?: ApiRequestConfig) => get(`media/${id}/children`, { ...config, params: { ...query, folders: true } }),
+  getByQuery: (query: ApiRequestQuery, config?: ApiRequestConfig) => get('media', { ...config, params: { ...query } }),
 
   getHierarchy: (id: string, config?: ApiRequestConfig) => get(`media/${id}/hierarchy`, { ...config }),
 
-  bulkDelete: (ids: string[], config?: ApiRequestConfig) => del(`media/bulk/delete`, { ids }, { ...config }),
+  create: (model: any, config?: ApiRequestConfig) => post('media', model, config),
 
-  bulkMove: (ids: string[], parentId: string, config?: ApiRequestConfig) => put(`media/bulk/move`, { parentId, ids }, { ...config }),
+  update: (model: any, config?: ApiRequestConfig) => put('media/' + model.id, model, config),
 
-  bulkGetDescendants: (ids: string[], config?: ApiRequestConfig) => get(`media/bulk/descendants`, { ...config, params: { ids } }),
+  move: (id: string, parentId: string, config?: ApiRequestConfig) => put(`media/${id}/move/${parentId}`, {}, { ...config }),
 
-  //create: (model: any, config?: ApiRequestConfig) => post('countries', model, config),
+  delete: (id: string, config?: ApiRequestConfig) => del('media/' + id, config)
+};
 
-  //update: (model: any, config?: ApiRequestConfig) => put('countries/' + model.id, model, config),
 
-  //delete: (id: string, config?: ApiRequestConfig) => del('countries/' + id, config),
+const folders = {
+
+  getEmpty: (flavor?: string, config?: ApiRequestConfig) => get("media/folders/empty", { ...config, params: { flavor } }),
+
+  getById: (id: string, changeVector?: string, config?: ApiRequestConfig) => get('media/folders/' + id, { ...config, params: { changeVector } }),
+
+  getByQuery: (query: ApiRequestQuery, config?: ApiRequestConfig) => get('media/folders', { ...config, params: { ...query } }),
+
+  getChildren: (id: string, includeFiles: boolean, query: ApiRequestQuery, config?: ApiRequestConfig) => get(`media/folders/${id}/children`, { ...config, params: { ...query, files: includeFiles } }),
+
+  getHierarchy: (id: string, config?: ApiRequestConfig) => get(`media/folders/${id}/hierarchy`, { ...config }),
+
+  create: (model: any, config?: ApiRequestConfig) => post('media/folders/', model, config),
+
+  update: (model: any, config?: ApiRequestConfig) => put('media/folders/' + model.id, model, config),
+
+  move: (id: string, parentId: string, config?: ApiRequestConfig) => put(`media/folders/${id}/move/${parentId}`, {}, { ...config }),
+
+  delete: (id: string, config?: ApiRequestConfig) => del('media/folders/' + id, config)
+};
+
+
+const bulk = {
+
+  delete: (ids: string[], config?: ApiRequestConfig) => del(`media/bulk/delete`, { ids }, { ...config }),
+
+  move: (ids: string[], parentId: string, config?: ApiRequestConfig) => put(`media/bulk/move`, { parentId, ids }, { ...config }),
+
+  getDescendants: (ids: string[], config?: ApiRequestConfig) => get(`media/bulk/descendants`, { ...config, params: { ids } }),
+};
+
+
+export default {
+  ...files,
+  folders,
+  bulk
 };

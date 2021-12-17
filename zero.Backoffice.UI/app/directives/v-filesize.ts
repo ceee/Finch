@@ -8,6 +8,6 @@ export default (el, binding) =>
 {
   if (binding.value !== binding.oldValue)
   {
-    el.innerText = getFilesize(binding.value);
+    el.innerText = getFilesize(binding.value, typeof binding.arg !== 'undefined' ? +binding.arg : 1);
   }
 };

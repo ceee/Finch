@@ -10,7 +10,7 @@ export default {
   async remove(items: any[])
   {
     const ids = items.map(x => x.id);
-    const response = await api.bulkGetDescendants(ids);
+    const response = await api.bulk.getDescendants(ids);
 
     const result = await overlays.confirmDelete("@media.deleteoverlay.title", '@media.deleteoverlay.folder_text', localize('@media.deleteoverlay.warning', {
       tokens: {

@@ -7,7 +7,7 @@ const UNITS = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
  * Generate human-readable filesize from byte number
  * @returns {string} Readable filesize
  */
-export function getFilesize(bytes: number): string
+export function getFilesize(bytes: number, decimalPlaces: number = 1): string
 {
   if (typeof bytes !== 'number')
   {
@@ -26,5 +26,5 @@ export function getFilesize(bytes: number): string
     ++u;
   } while (Math.abs(bytes) >= thresh && u < UNITS.length - 1);
 
-  return bytes.toFixed(1) + ' ' + UNITS[u];
+  return bytes.toFixed(decimalPlaces) + ' ' + UNITS[u];
 }
