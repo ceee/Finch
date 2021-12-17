@@ -33,7 +33,7 @@ const folders = {
 
   getHierarchy: (id: string, config?: ApiRequestConfig) => get(`media/folders/${id}/hierarchy`, { ...config }),
 
-  create: (model: any, config?: ApiRequestConfig) => post('media/folders/', model, config),
+  create: (model: any, config?: ApiRequestConfig) => post('media/folders', model, config),
 
   update: (model: any, config?: ApiRequestConfig) => put('media/folders/' + model.id, model, config),
 

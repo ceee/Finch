@@ -92,7 +92,7 @@
     "move": {
       "title": "Move",
       "action": "Move",
-      "text": "Select the new parent for <b>{name}</b> in the tree structure below."
+      "text": "Select the new parent for <b>{name}</b> in the tree structure below.",
     },
     "copy": {
       "title": "Copy",
@@ -640,7 +640,7 @@
   "media": {
     "list": "Media",
     "name": "Media",
-    "addfolder": "Add a new folder",
+    "addfolder": "Add folder",
     "editfolder": "Edit folder",
     "actions": {
       "folderdropdown": "Folder",

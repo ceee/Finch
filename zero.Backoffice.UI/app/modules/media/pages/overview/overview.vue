@@ -16,6 +16,7 @@
 
       <template v-if="selected.length < 1">
         <ui-search v-model="gridConfig.search" class="onbg" />
+        <ui-button type="accent" label="@media.addfolder" @click="addFolder" />
       </template>
       <media-selection v-else :selected="selected" @clear="clearSelection" @move="move" @remove="remove" />
     </ui-header-bar>
@@ -53,6 +54,7 @@
   import MediaSelection from './overview-selection.vue';
   import MediaDrop from './drop.vue';
   import actions from './overview-actions';
+  import * as overlays from '../../../../services/overlay';
 
   export default defineComponent({
     props: ['parentId'],
@@ -144,6 +146,23 @@
       async remove(items: any[])
       {
         const deleted = await actions.remove(items);
+      },
+
+
+      async addFolder()
+      {
+        const result = await overlays.open({
+          component: () => import('../../overlays/createfolder.vue'),
+          model: { parentId: this.parentId },
+          display: 'dialog'
+        });
+
+        if (result.eventType === 'confirm' && result.value)
+        {
+          await this.$refs.grid.update();
+        }
+
+        //.then(item => this.goToFolder(item.model.id));
       }
     }
 

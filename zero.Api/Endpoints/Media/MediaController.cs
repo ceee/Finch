@@ -163,7 +163,11 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
 
   [HttpPost("folders")]
   [ZeroAuthorize(MediaPermissions.Create)]
-  public virtual Task<ActionResult<Result>> CreateFolder(zero.Media.Media saveModel) => CreateModel(saveModel);
+  public virtual Task<ActionResult<Result>> CreateFolder(zero.Media.Media saveModel)
+  {
+    saveModel.IsFolder = true;
+    return CreateModel(saveModel);
+  }
 
 
   [HttpPut("folders/{id}")]
@@ -211,7 +215,11 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
 
   [HttpPost("")]
   [ZeroAuthorize(MediaPermissions.Create)]
-  public virtual Task<ActionResult<Result>> Create(zero.Media.Media saveModel) => CreateModel(saveModel);
+  public virtual Task<ActionResult<Result>> Create(zero.Media.Media saveModel)
+  {
+    saveModel.IsFolder = false;
+    return CreateModel(saveModel);
+  }
 
 
   [HttpPut("{id}")]

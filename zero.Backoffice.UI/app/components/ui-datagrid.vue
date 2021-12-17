@@ -309,6 +309,7 @@
       shiftSelect(item)
       {
         // TODO implement shift selection (this is only a part of it)
+        // for selection area see Viselect https://simonwep.github.io/selection/
 
         const last = this.selected[this.selected.length - 1];
 
