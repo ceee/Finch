@@ -56,6 +56,14 @@
     },
 
 
+    computed: {
+      multiple()
+      {
+        return this.ids.length > 1;
+      }
+    },
+
+
     methods: {
 
       onSelect(item)
@@ -130,16 +138,17 @@
 
         this.state = 'loading';
 
-        const result = await api.bulk.move(this.ids, this.newParentId);
+        if (this.multiple)
+        {
+          const result = await api.bulk.move(this.ids, this.newParentId);
+          this.config.confirm(result);
+        }
+        else
+        {
+          const result = await api.move(this.ids[0], this.newParentId);
+          this.config.confirm(result);
+        }
 
-        this.config.confirm(result);
-
-        // TODO 
-        // 1. bulk move
-        // 2. close overlay
-        // 3. update current output
-        // 4. show notification
-        // 5. eventually bulk result
 
         //(this.config.isFolder ? MediaFolderApi : MediaApi).move(this.model.id, this.selected.id).then(res =>
         //{

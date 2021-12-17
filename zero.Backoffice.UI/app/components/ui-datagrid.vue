@@ -4,7 +4,7 @@
       <div class="ui-datagrid-items" v-if="!isLoading" :style="'grid-template-columns: repeat(auto-fill, minmax(' + configuration.width + 'px, 1fr))'" :class="{'is-block': configuration.block }">
         <slot name="before"></slot>
         <div class="ui-datagrid-item" v-for="(item, index) in items" :key="index" v-on:contextmenu="onRightClicked(item, $event)">
-          <button v-if="configuration.selectable && selected.length > 0" type="button" class="ui-datagrid-cell-select" @click="select(item)"></button>
+          <button v-if="configuration.selectable && selected.length > 0" type="button" class="ui-datagrid-cell-select" @click.exact="select(item)" @click.shift="shiftSelect(item)"></button>
           <slot :item="item" :selected="configuration.selectable && selected.indexOf(item) > -1"></slot>
         </div>
         <slot name="below"></slot>
@@ -305,6 +305,32 @@
 
         this.$emit('select', this.selected, this);
       },
+
+      shiftSelect(item)
+      {
+        // TODO implement shift selection (this is only a part of it)
+
+        const last = this.selected[this.selected.length - 1];
+
+        if (last)
+        {
+          let startIndex = this.items.indexOf(last);
+          let endIndex = this.items.indexOf(item);
+
+          if (startIndex > endIndex)
+          {
+            const tempIndex = endIndex;
+            endIndex = startIndex;
+            startIndex = tempIndex;
+          }
+
+          for (let index = startIndex; index <= endIndex; index++)
+          {
+            this.selected.push(this.items[index]);
+          }
+        }
+      },
+
 
       clearSelection()
       {

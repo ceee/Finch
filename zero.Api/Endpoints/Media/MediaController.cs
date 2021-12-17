@@ -161,22 +161,22 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
   }
 
 
-  [HttpPost("")]
+  [HttpPost("folders")]
   [ZeroAuthorize(MediaPermissions.Create)]
   public virtual Task<ActionResult<Result>> CreateFolder(zero.Media.Media saveModel) => CreateModel(saveModel);
 
 
-  [HttpPut("{id}")]
+  [HttpPut("folders/{id}")]
   [ZeroAuthorize(MediaPermissions.Update)]
   public virtual Task<ActionResult<Result>> UpdateFolder(string id, zero.Media.Media updateModel, [FromQuery] string changeToken = null) => UpdateModel(id, updateModel, changeToken);
 
 
-  [HttpPut("{id}/move/{destinationId}")]
+  [HttpPut("folders/{id}/move/{destinationId}")]
   [ZeroAuthorize(MediaPermissions.Read)]
   public virtual async Task<ActionResult<Result>> MoveFolder(string id, string destinationId) => await MoveModel(id, NormalizeParentId(destinationId));
 
 
-  [HttpDelete("{id}")]
+  [HttpDelete("folders/{id}")]
   [ZeroAuthorize(MediaPermissions.Delete)]
   public virtual Task<ActionResult<Result>> DeleteFolder(string id) => DeleteModelWithDescendants(id);
 

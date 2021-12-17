@@ -45,7 +45,9 @@ export default {
       width: 560,
       model: {
         parentId: items[0].parentId,
-        name: items.length + ' items',
+        name: items.length === 1 ? items[0].name : localize('@media.child_count_x', {
+          tokens: { count: items.length }
+        }),
         items: items
       }
     });

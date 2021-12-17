@@ -5,7 +5,7 @@ import { useTranslationStore } from '../stores/translations';
 export interface LocalizeOptions
 {
   force?: boolean,
-  tokens?: Record<string, string>,
+  tokens?: Record<string, any>,
   hideEmpty?: boolean
 }
 
