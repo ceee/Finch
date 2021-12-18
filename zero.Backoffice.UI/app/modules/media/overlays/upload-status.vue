@@ -5,7 +5,7 @@
     <div class="ui-media-upload-items">
       <button type="button" v-for="item in items" class="ui-media-upload-item">
         <img class="-preview" v-if="item.isImage" :src="item.source" />
-        <span class="-preview" v-if="!item.isImage"><i class="fth-file"></i></span>
+        <span class="-preview" v-if="!item.isImage"><ui-icon symbol="fth-file" :size="20" /></span>
         <p class="ui-media-upload-item-text">
           {{item.name}}
           <span class="-minor">
@@ -20,8 +20,8 @@
     </div>
 
     <div class="app-confirm-buttons">
-      <!--<ui-button v-if="!disabled" type="action" :submit="true" label="@ui.save"></ui-button>-->
-      <ui-button type="light" :label="config.closeLabel" :disabled="loading" @click="config.close"></ui-button>
+      <ui-button v-if="!disabled" type="action" label="Upload" @click="upload"></ui-button>
+      <ui-button type="light" label="@ui.close" :disabled="loading" @click="config.close"></ui-button>
     </div>
   </div>
 </template>
@@ -47,6 +47,8 @@
     mounted()
     {
       const files = this.model;
+
+      console.info(files);
       let items = [];
 
       if (!files || files.length < 1)
@@ -71,37 +73,41 @@
           error: null
         });
       }
-
-
-      for (var i = 0; i < this.items.length; i++)
-      {
-        let item = this.items[i];
-
-        api.uploadtest(item.file, this.config.folderId, progress =>
-        {
-          item.progress = progress;
-        }).then(res =>
-        {
-          if (res.success)
-          {
-            item.source = res.model.thumbnailSource || res.model.source;
-            item.isImage = res.model.type === 'image';
-            item.success = true;
-          }
-          else
-          {
-            item.success = false;
-            // TODO output error
-          }
-        });
-      }
     },
 
     methods: {
 
+      upload()
+      {
+        for (var i = 0; i < this.items.length; i++)
+        {
+          let item = this.items[i];
+
+          api.uploadtest(item.file, progress =>
+          {
+            console.info({ name: item.file.name, progress });
+            item.progress = progress;
+          }).then(res =>
+          {
+            console.info('success');
+            //if (res.success)
+            //{
+            //  item.source = res.model.thumbnailSource || res.model.source;
+            //  item.isImage = res.model.type === 'image';
+            //  item.success = true;
+            //}
+            //else
+            //{
+            //  item.success = false;
+            //  // TODO output error
+            //}
+          });
+        }
+      },
+
       onSubmit()
       {
-         
+
       }
     }
   }
@@ -160,7 +166,6 @@
       text-align: center;
       font-size: 22px;
     }
-
     /*&.is-upload .-preview
     {
       background: var(--color-primary);

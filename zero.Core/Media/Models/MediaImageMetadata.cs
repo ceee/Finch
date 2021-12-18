@@ -6,6 +6,22 @@
 public class MediaImageMetadata
 {
   /// <summary>
+  /// Alternative text which is used when the image can't be loaded
+  /// </summary>
+  public string AlternativeText { get; set; }
+
+  /// <summary>
+  /// Define custom thumbnails which are generated on upload 
+  /// (see IZeroOptions.For<MediaOptions>().Thumbnails)
+  /// </summary>
+  public Dictionary<string, string> Thumbnails { get; set; } = new();
+
+  /// <summary>
+  /// Optional focal point for an image
+  /// </summary>
+  public MediaFocalPoint FocalPoint { get; set; }
+
+  /// <summary>
   /// Width in pixels
   /// </summary>
   public int Width { get; set; }

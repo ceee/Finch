@@ -198,19 +198,21 @@ public abstract class ZeroApiEntityStoreController<TModel, TStore> : ZeroApiCont
       return BadRequest(Result.Fail(nameof(id), "@errors.onupdate.noidmatch"));
     }
 
-    TModel model = await Store.Load(id);
+    // TODO throws error on save: Attempted to associate a different object with id ...
+    // we need to map props to new object
+    //TModel model = await Store.Load(id);
 
-    if (model == null)
-    {
-      return BadRequest(Result.Fail(nameof(id), "@errors.idnotfound"));
-    }
+    //if (model == null)
+    //{
+    //  return BadRequest(Result.Fail(nameof(id), "@errors.idnotfound"));
+    //}
 
-    string storedChangeToken = Store.GetChangeToken(model);
+    //string storedChangeToken = Store.GetChangeToken(model);
 
-    if (!changeToken.IsNullOrEmpty() && storedChangeToken != changeToken)
-    {
-      return BadRequest(Result.Fail("@errors.onupdate.changetokenmismatch"));
-    }
+    //if (!changeToken.IsNullOrEmpty() && storedChangeToken != changeToken)
+    //{
+    //  return BadRequest(Result.Fail("@errors.onupdate.changetokenmismatch"));
+    //}
 
     Result<TModel> result = await Store.Update(updateModel);
 

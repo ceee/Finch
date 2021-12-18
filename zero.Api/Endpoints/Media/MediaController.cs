@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Net.Http.Headers;
 using Raven.Client.Documents;
@@ -38,6 +39,13 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
   public MediaController(IMediaStore store, IMediaManagement media) : base(store)
   {
     Media = media;
+  }
+
+  [HttpPost("uploadtest")]
+  public async Task<ActionResult> Upload(IFormFile file)
+  {
+    await Task.Delay(2000);
+    return Ok();
   }
 
   #region bulk operations

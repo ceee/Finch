@@ -27,11 +27,6 @@ public class Media : ZeroEntity, ISupportsTrees
   public string ParentId { get; set; }
 
   /// <summary>
-  /// Alternative text which is used when the image can't be loaded
-  /// </summary>
-  public string AlternativeText { get; set; }
-
-  /// <summary>
   /// Additional caption text
   /// </summary>
   public string Caption { get; set; }
@@ -42,12 +37,6 @@ public class Media : ZeroEntity, ISupportsTrees
   public string Path { get; set; }
 
   /// <summary>
-  /// Define custom thumbnails which are generated on upload 
-  /// (see IZeroOptions.For<MediaOptions>().Thumbnails)
-  /// </summary>
-  public Dictionary<string, string> Thumbnails { get; set; } = new();
-
-  /// <summary>
   /// Filesize in bytes
   /// </summary>
   public long Size { get; set; }
@@ -56,9 +45,4 @@ public class Media : ZeroEntity, ISupportsTrees
   /// Meta data for images
   /// </summary>
   public MediaImageMetadata ImageMeta { get; set; }
-
-  /// <summary>
-  /// Optional focal point for an image
-  /// </summary>
-  public MediaFocalPoint FocalPoint { get; set; }
 }

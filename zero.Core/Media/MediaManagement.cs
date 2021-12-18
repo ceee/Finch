@@ -27,7 +27,7 @@ public class MediaManagement : IMediaManagement
 
     if (!thumbnailKey.IsNullOrWhiteSpace())
     {
-      path = file?.Thumbnails?.GetValueOrDefault(thumbnailKey);
+      path = file?.ImageMeta?.Thumbnails?.GetValueOrDefault(thumbnailKey);
     }
 
     if (path.IsNullOrEmpty())
@@ -46,7 +46,7 @@ public class MediaManagement : IMediaManagement
 
     if (!thumbnailKey.IsNullOrWhiteSpace())
     {
-      path = file?.Thumbnails?.GetValueOrDefault(thumbnailKey);
+      path = file?.ImageMeta?.Thumbnails?.GetValueOrDefault(thumbnailKey);
     }
 
     if (path.IsNullOrEmpty())

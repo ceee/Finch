@@ -65,15 +65,3 @@
     }
   }
 </script>
-
-<style lang="scss">
-  .app-confirm-buttons
-  {
-    margin-top: 40px;
-  }
-
-  .app-confirm p
-  {
-    line-height: 1.4;
-  }
-</style>

@@ -154,7 +154,7 @@ public class ZeroVue : IZeroVue
     {
       Id = app.Id,
       Name = app.Name,
-      Image = app.IconId.IsNullOrEmpty() ? null : media.GetValueOrDefault(app.IconId)?.Thumbnails.GetValueOrDefault("thumb")
+      Image = app.IconId.IsNullOrEmpty() ? null : media.GetValueOrDefault(app.IconId)?.ImageMeta?.Thumbnails.GetValueOrDefault("thumb")
     }).ToList();
   }
 

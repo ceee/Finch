@@ -8,11 +8,9 @@
           <ui-error :catch-all="true" />
         </ui-property>
       </div>
-      <br /><br />
       <div class="app-confirm-buttons">
-        <ui-button type="accent" v-if="!disabled" :submit="true" :state="form.state" :label="model.id ? '@ui.save' : '@ui.create'"></ui-button>
+        <ui-button type="accent" v-if="!disabled" :submit="true" :state="form.state" :label="model.id ? '@ui.update' : '@ui.create'"></ui-button>
         <ui-button type="light" label="@ui.close" :disabled="loading" @click="config.close"></ui-button>
-        <ui-button v-if="!disabled && model.id" type="light" label="@ui.delete" @click="onDelete" style="float:right;"></ui-button>
       </div>
     </div>
   </ui-form>
@@ -58,37 +56,6 @@
         {
           this.config.confirm(response.data);
         }
-      },
-
-
-      //onDelete(item, opts)
-      //{
-      //  opts.hide();
-      //  thi
-
-      //onLoad(form)
-      //{
-      //  form.load(!this.model.id ? MediaFolderApi.getEmpty() : MediaFolderApi.getById(this.model.id)).then(response =>
-      //  {
-      //    this.disabled = false; //!response.canEdit;
-      //    this.item = response.entity;
-      //    this.item.parentId = this.model.parentId;
-      //    this.loading = false;
-      //  });
-      //},
-
-
-      //onSubmit(form)
-      //{
-      //  form.handle(MediaFolderApi.save(this.item)).then(response =>
-      //  {
-      //    this.config.confirm(response, this.config);
-      //  });
-      //},
-
-      onDelete()
-      {
-        //this.config.confirm({ deleted: true });
       }
     }
   }

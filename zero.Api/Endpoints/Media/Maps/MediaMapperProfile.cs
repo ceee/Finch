@@ -30,9 +30,9 @@ public class MediaMapperProfile : ZeroMapperProfile
     target.Children = 0;
     target.Size = source.Size;
 
-    if (source.Thumbnails.Any())
+    if (source.ImageMeta != null && source.ImageMeta.Thumbnails.Any())
     {
-      string path = source.Thumbnails.GetValueOrDefault("preview");
+      string path = source.ImageMeta.Thumbnails.GetValueOrDefault("preview");
       target.Image = path.IsNullOrEmpty() ? null : FileSystem.MapToPublicPath(path);
     }
   }
@@ -54,13 +54,13 @@ public class MediaMapperProfile : ZeroMapperProfile
   protected virtual void Map(zero.Media.Media source, MediaFileEdit target, IZeroMapperContext ctx)
   {
     Map(source, (MediaEdit)target, ctx);
-    target.AlternativeText = source.AlternativeText;
+    target.AlternativeText = source.ImageMeta?.AlternativeText;
     target.Caption = source.Caption;
     target.Path = source.Path;
-    target.Thumbnails = source.Thumbnails;
+    target.Thumbnails = source.ImageMeta?.Thumbnails;
     target.Size = source.Size;
     target.ImageMeta = source.ImageMeta;
-    target.FocalPoint = source.FocalPoint;
+    target.FocalPoint = source.ImageMeta?.FocalPoint;
 }
 
 

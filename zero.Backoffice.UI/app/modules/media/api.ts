@@ -17,7 +17,27 @@ const files = {
 
   move: (id: string, parentId: string, config?: ApiRequestConfig) => put(`media/${id}/move/${parentId}`, {}, { ...config }),
 
-  delete: (id: string, config?: ApiRequestConfig) => del('media/' + id, config)
+  delete: (id: string, config?: ApiRequestConfig) => del('media/' + id, config),
+
+  //uploadtest: (model: any, config?: ApiRequestConfig) => post('media/uploadtest', model, config),
+
+  uploadtest: async (file, onProgress) =>
+  {
+    var data = new FormData();
+    data.append('file', file);
+    //data.append('folderId', folderId);
+
+    return await post('media/uploadtest', data, {
+      onUploadProgress: (progressEvent) =>
+      {
+        if (typeof onProgress === 'function')
+        {
+          var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          onProgress(percentCompleted);
+        }
+      }
+    });
+  }
 };
 
 

@@ -13,7 +13,7 @@ public class Media_ByParent : ZeroMultiMapIndex<MediaListItem>
       CreatedDate = item.CreatedDate,
       IsFolder = false,
       Name = item.Name,
-      Image = item.Thumbnails["thumb"],
+      Image = item.ImageMeta != null ? item.ImageMeta.Thumbnails["thumb"] : null,
       Children = 0,
       Size = item.Size,
       IsShared = item.Blueprint != null,

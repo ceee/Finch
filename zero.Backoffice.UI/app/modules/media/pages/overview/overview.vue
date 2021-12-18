@@ -16,7 +16,7 @@
 
       <template v-if="selected.length < 1">
         <ui-search v-model="gridConfig.search" class="onbg" />
-        <ui-button type="accent" label="@media.addfolder" @click="addFolder" />
+        <ui-button type="accent" label="@media.addfolder" @click="editFolder()" />
       </template>
       <media-selection v-else :selected="selected" @clear="clearSelection" @move="move" @remove="remove" />
     </ui-header-bar>
@@ -30,12 +30,20 @@
           </template>
 
           <template v-if="selected.length < 1" v-slot:actions="props">
-            <ui-dropdown-button v-if="props.item && props.item.isFolder" label="@ui.open.title" icon="fth-arrow-right" @click="goToFolder(props.item.id)" />
-            <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="edit(props.item, props.item.isFolder)" />
-            <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move([props.item])" />
-            <ui-dropdown-button label="@ui.selection.select" icon="fth-check-circle-2" @click="$refs.grid.select(props.item)" />
-            <ui-dropdown-separator />
-            <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove(props.item, props.item.isFolder)" />
+            <template v-if="props.item && props.item.isFolder">
+              <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="editFolder(props.item)" />
+              <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move([props.item])" />
+              <ui-dropdown-button label="@ui.selection.select" icon="fth-check-circle-2" @click="$refs.grid.select(props.item)" />
+              <ui-dropdown-separator />
+              <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove([props.item])" />
+            </template>
+            <template v-if="props.item && !props.item.isFolder">
+              <ui-dropdown-button label="@ui.open.title" icon="fth-arrow-right" @click="goToFolder(props.item.id)" />
+              <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move([props.item])" />
+              <ui-dropdown-button label="@ui.selection.select" icon="fth-check-circle-2" @click="$refs.grid.select(props.item)" />
+              <ui-dropdown-separator />
+              <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove([props.item])" />
+            </template>
           </template>
 
           <template v-slot:default="props">
@@ -149,11 +157,11 @@
       },
 
 
-      async addFolder()
+      async editFolder(item)
       {
         const result = await overlays.open({
-          component: () => import('../../overlays/createfolder.vue'),
-          model: { parentId: this.parentId },
+          component: () => import('../../overlays/editfolder.vue'),
+          model: item || { parentId: this.parentId },
           display: 'dialog'
         });
 
