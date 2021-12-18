@@ -127,6 +127,11 @@ public class ApiResponseFilterAttribute : ResultFilterAttribute
 
   ApiResponseMetadata GetMetadata(ResultExecutingContext context)
   {
+    if (!context.HttpContext.Items.ContainsKey("zero.action.started"))
+    {
+      return new();
+    }
+
     DateTimeOffset started = (DateTimeOffset)context.HttpContext.Items["zero.action.started"];
     TimeSpan duration = DateTimeOffset.Now - started;
 

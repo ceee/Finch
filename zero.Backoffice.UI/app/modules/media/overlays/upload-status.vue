@@ -1,27 +1,20 @@
 ﻿<template>
   <div class="ui-media-upload">
-    <h2 class="ui-headline" v-localize="'Upload status'"></h2>
+    <h2 class="ui-headline" v-localize="'@media.upload.headline'"></h2>
 
-    <div class="ui-media-upload-items">
-      <button type="button" v-for="item in items" class="ui-media-upload-item">
-        <img class="-preview" v-if="item.isImage" :src="item.source" />
-        <span class="-preview" v-if="!item.isImage"><ui-icon symbol="fth-file" :size="20" /></span>
-        <p class="ui-media-upload-item-text">
-          {{item.name}}
-          <span class="-minor">
-            <br>
-            <span v-if="item.progress < 100 && !item.error && !item.success" class="ui-media-upload-item-progress">
-              <span class="-inner" :style="{ width: item.progress + '%' }"></span>
-            </span>
-            <span v-if="item.success">Completed</span>
-          </span>
-        </p>
-      </button>
+    <div class="ui-media-upload-progress">
+      <ui-progress :value="progress" :animated="!finished" />
+      <p class="ui-media-upload-progress-text" v-if="!finished">Uploading {{completed + 1}} of {{fileCount}} ...</p>
+      <p class="ui-media-upload-progress-text" v-else>Completed</p>
+      <!--<upload-status-item :file="model[4]" />-->
     </div>
 
-    <div class="app-confirm-buttons">
-      <ui-button v-if="!disabled" type="action" label="Upload" @click="upload"></ui-button>
-      <ui-button type="light" label="@ui.close" :disabled="loading" @click="config.close"></ui-button>
+    <!--<div class="ui-media-upload-items">
+      <upload-status-item v-for="file in model.files" :file="file" />
+    </div>-->
+
+    <div class="app-confirm-buttons" v-if="finished && hasErrors">
+      <ui-button type="light" label="@ui.close" :disabled="loading" @click="config.confirm(null)"></ui-button>
     </div>
   </div>
 </template>
@@ -30,84 +23,74 @@
 <script lang="ts">
   import api from '../api';
   import { generateId } from '../../../utils/numbers';
+  import UploadStatusItem from './upload-status-item.vue';
 
   export default {
 
     props: {
-      model: FileList,
+      model: {
+        type: Object,
+        default: () => ({
+          files: [],
+          folderId: null
+        })
+      },
       config: Object
     },
 
     data: () => ({
+      progress: 0,
+      completed: 0,
       loading: false,
-      items: []
+      items: [],
+      hasErrors: false
     }),
 
 
-    mounted()
+    components: { UploadStatusItem },
+
+
+    computed: {
+      fileCount()
+      {
+        return this.model.files.length;
+      },
+      finished()
+      {
+        return this.completed >= this.fileCount;
+      }
+    },
+
+
+    async mounted()
     {
-      const files = this.model;
-
-      console.info(files);
-      let items = [];
-
-      if (!files || files.length < 1)
-      {
-        return;
-      }
-
-      for (var i = 0; i < files.length; i++)
-      {
-        let file = files[i];
-
-        this.items.push({
-          id: 'upload:' + generateId(),
-          name: file.name,
-          size: file.size,
-          mimeType: file.type,
-          source: null,
-          progress: 0,
-          file: file,
-          isImage: false,
-          success: false,
-          error: null
-        });
-      }
+      await this.upload();
     },
 
     methods: {
 
-      upload()
+      async upload()
       {
-        for (var i = 0; i < this.items.length; i++)
+        const files = [...this.model.files];
+        const combinedSize = files.reduce((prev, current, idx) => prev + current.size, 0);
+
+        for (const file of files)
         {
-          let item = this.items[i];
+          const factor = file.size / combinedSize;
+          const progressBefore = this.progress;
 
-          api.uploadtest(item.file, progress =>
+          await api.upload(file, this.model.folderId, progress =>
           {
-            console.info({ name: item.file.name, progress });
-            item.progress = progress;
-          }).then(res =>
-          {
-            console.info('success');
-            //if (res.success)
-            //{
-            //  item.source = res.model.thumbnailSource || res.model.source;
-            //  item.isImage = res.model.type === 'image';
-            //  item.success = true;
-            //}
-            //else
-            //{
-            //  item.success = false;
-            //  // TODO output error
-            //}
+            this.progress = progressBefore + progress * factor;
           });
+
+          this.completed += 1;
         }
-      },
 
-      onSubmit()
-      {
-
+        if (!this.hasErrors)
+        {
+          this.config.confirm(null);
+        }
       }
     }
   }
@@ -136,74 +119,12 @@
     overflow-y: auto;
   }
 
-  .ui-media-upload-item
+  .ui-media-upload-progress-text
   {
-    width: 100%;
-    height: 70px;
-    display: grid;
-    grid-template-columns: 70px 1fr;
-    gap: 15px;
-    align-items: center;
-    line-height: 1.4;
-
-    & + .ui-media-upload-item
-    {
-      margin-top: 15px;
-    }
-
-    .-preview
-    {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      height: 70px;
-      width: 70px;
-      object-fit: cover;
-      background: var(--color-bg-mid);
-      border-radius: var(--radius);
-      position: relative;
-      text-align: center;
-      font-size: 22px;
-    }
-    /*&.is-upload .-preview
-    {
-      background: var(--color-primary);
-      color: var(--color-primary-text);
-    }*/
-
-    .-extension
-    {
-      font-size: 12px;
-      font-style: normal;
-      margin-top: 8px;
-    }
-
-    .-minor
-    {
-      color: var(--color-text-light);
-      font-size: var(--font-size-s);
-    }
+    margin-top: var(--padding-xs);
+    font-size: var(--font-size-s);
+    color: var(--color-text-dim);
   }
 
-  .ui-media-upload-item-progress
-  {
-    display: block;
-    width: 50%;
-    height: 8px;
-    margin-top: 6px;
-    border-radius: 2px;
-    background: var(--color-bg-mid);
-    position: relative;
 
-    .-inner
-    {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      border-radius: 2px;
-      background: var(--color-primary);
-    }
-  }
 </style>

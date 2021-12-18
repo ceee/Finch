@@ -26,7 +26,7 @@
         <ui-datagrid ref="grid" v-model="gridConfig" @select="onSelected" @count="count = $event">
 
           <template v-slot:before>
-            <media-drop />
+            <media-drop :folder-id="parentId" @completed="refresh" />
           </template>
 
           <template v-if="selected.length < 1" v-slot:actions="props">
@@ -122,6 +122,12 @@
         this.hierarchy = hierarchy.data;
 
         return await api.folders.getChildren(this.id, query);
+      },
+
+
+      async refresh()
+      {
+        await this.$refs.grid.update();
       },
 
 

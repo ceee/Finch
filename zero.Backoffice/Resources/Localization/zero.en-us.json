@@ -681,7 +681,12 @@
       }
     },
     "child_count_1": "{count} item",
-    "child_count_x": "{count} items"
+    "child_count_x": "{count} items",
+    "upload": {
+      "headline": "Upload",
+      "multipleHeadline": "Uploading {count} items...",
+      "singleHeadline": "Uploading..."
+    }
   },
 
   "mailTemplate": {

@@ -1,6 +1,10 @@
-﻿using SixLabors.ImageSharp;
+﻿using Shorthand.ImageSharp.WebP;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System.IO;
 
 namespace zero.Media;
@@ -64,48 +68,36 @@ public class MediaCreator : IMediaCreator
       using Image<Rgba32> image = await Image.LoadAsync<Rgba32>(fileInfo.AbsolutePath);
       model.ImageMeta = GetImageMetadata(image);
 
-      // TODO save thumbnails
+      string extension = Path.GetExtension(model.Path);
+
+      foreach ((string key, ResizeOptions opts) in Options.Thumbnails)
+      {
+        Image<Rgba32> imageFrame = image.Frames.Count > 1 ? image.Frames.CloneFrame(0) : image.Clone();
+        imageFrame.Mutate(x => x.Resize(opts));
+
+        using MemoryStream stream = new();
+        //image.Save(stream, new WebPEncoder()
+        //{
+        //  Quality = 70
+        //});
+        await imageFrame.SaveAsync(stream, new JpegEncoder()
+        {
+          Quality = 80
+        }, cancellationToken);
+
+        stream.Position = 0;
+
+        string thumbFilename = normalizedFilename.TrimEnd(extension) + "." + Safenames.File(key) + ".jpg";
+        string path = directory + '/' + thumbFilename;
+
+        await FileSystem.CreateFile(path, stream, cancellationToken: cancellationToken);
+
+        model.ImageMeta.Thumbnails[key] = path;
+      }
     }
 
     return Result<Media>.Success(model);
   }
-
-
-  //public virtual async Task<string> CreateImageThumbnails(Image<Rgba32> image, CancellationToken cancellationToken = default)
-  //{
-  //  foreach ((string key, ResizeOptions opts) in Options.Thumbnails)
-  //  {
-  //    Image<Rgba32> imageFrame = image.Frames.Count > 1 ? image.Frames.CloneFrame(0) : image.Clone();
-  //    imageFrame.Mutate(x => x.Resize(opts));
-  //  }
-  //  string source = SaveThumbnail(media, imageFrame, PREVIEW_EXTENSION, new ResizeOptions()
-  //  {
-  //    Size = new Size(210, 210),
-  //    Mode = ResizeMode.Min
-  //  });
-
-  //  //media.ThumbnailSource = SaveThumbnail(media, imageFrame, THUMB_EXTENSION, new ResizeOptions()
-  //  //{
-  //  //  Size = new Size(100, 100),
-  //  //  Mode = ResizeMode.Max
-  //  //});
-  //}
-
-
-  /// <summary>
-  /// Saves a thumbnail of an image
-  /// </summary>
-  //public virtual string SaveThumbnail(Media media, Image<Rgba32> image, string extensionPrefix, ResizeOptions resizeOptions)
-  //{
-  //  string extension = Path.GetExtension(media.Path);
-
-  //  image.Mutate(x => x.Resize(resizeOptions));
-
-  //  string thumbFileName = media.Name.TrimEnd(extension) + extensionPrefix + extension;
-  //  image.Save()
-  //  image.Save(Path.Combine(Paths.Media, media.FileId, thumbFileName));
-  //  return Path.Combine(PATH_PREFIX, media.FileId, thumbFileName).Replace(Path.DirectorySeparatorChar, PATH_SEPARATOR);
-  //}
 
 
   /// <inheritdoc />

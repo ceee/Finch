@@ -25,6 +25,7 @@ import uiTableFilter from './ui-table-filter.vue';
 import uiTrinity from './ui-trinity.vue';
 import uiPick from './ui-pick.vue';
 import uiDatagrid from './ui-datagrid.vue';
+import uiProgress from './ui-progress.vue';
 
 export {
   uiIcon,
@@ -53,5 +54,6 @@ export {
   uiTableFilter,
   uiTrinity,
   uiPick,
-  uiDatagrid
+  uiDatagrid,
+  uiProgress
 };

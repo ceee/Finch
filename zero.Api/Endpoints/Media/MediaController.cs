@@ -41,13 +41,6 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
     Media = media;
   }
 
-  [HttpPost("uploadtest")]
-  public async Task<ActionResult> Upload(IFormFile file)
-  {
-    await Task.Delay(2000);
-    return Ok();
-  }
-
   #region bulk operations
 
   [HttpPut("bulk/move")]
@@ -223,10 +216,18 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
 
   [HttpPost("")]
   [ZeroAuthorize(MediaPermissions.Create)]
-  public virtual Task<ActionResult<Result>> Create(zero.Media.Media saveModel)
+  public virtual async Task<ActionResult<Result>> Create([FromForm] IFormFile file, [FromForm] string folderId = null)
   {
-    saveModel.IsFolder = false;
-    return CreateModel(saveModel);
+    Result<zero.Media.Media> result = await Media.UploadFile(file, folderId);
+
+    bool minimalResponse = Hints.ResponsePreference == ApiResponsePreference.Minimal;
+
+    if (result.IsSuccess)
+    {
+      return Created(GetAction(result.Model), minimalResponse ? null : result.Model);
+    }
+
+    return result.WithoutModel();
   }
 
 

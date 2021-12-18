@@ -1,7 +1,10 @@
 ﻿<template>
-  <form enctype="multipart/form-data" class="media-overview-drop" :class="{ 'is-dragging': dragging }" 
-        @dragenter.prevent="onDragEnter" @dragleave.prevent="onDragLeave" @dragover.prevent="" @drop.prevent.stop="onDrop">
-    <ui-icon symbol="fth-upload" :size="26" :stroke-width="2" />
+  <form enctype="multipart/form-data" class="media-overview-drop-outer" dropzone=""
+        @dragenter.prevent="onDragEnter" @dragleave.prevent="onDragLeave" @dragover.prevent="" @drop.prevent.stop="onDrop($event.dataTransfer.files)">
+    <div class="media-overview-drop" :class="{ 'is-dragging': dragging }">
+      <ui-icon symbol="fth-upload" :size="26" :stroke-width="2" />
+      <input type="file" multiple class="-input" @change="onDrop($event.target.files)" />
+    </div>
   </form>
 </template>
 
@@ -12,7 +15,10 @@
     name: 'mediaOverviewDrop',
 
     props: {
-      
+      folderId: {
+        type: String,
+        required: false
+      }
     },
 
     data: () => ({
@@ -22,15 +28,24 @@
 
     methods: {
 
-      async onDrop(ev)
+      async onDrop(files)
       {
-        console.info(ev.dataTransfer);
         this.dragging = false;
 
         const result = await overlays.open({
           component: () => import('../../overlays/upload-status.vue'),
-          model: ev.dataTransfer.files
+          width: 420,
+          softdismiss: false,
+          model: {
+            files,
+            folderId: this.folderId
+          }
         });
+
+        if (result.eventType === 'confirm')
+        {
+          this.$emit('completed', files);
+        }
       },
 
       onDragEnter(ev)
@@ -60,10 +75,29 @@
     box-shadow: var(--shadow-short);
     border: 1px dashed var(--color-line-dashed-onbg);
     color: var(--color-text);
+    position: relative;
+    cursor: pointer;
 
     &.is-dragging
     {
       border-color: var(--color-accent);
+    }
+
+    .-input
+    {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      height: 130px;
+      opacity: 0;
+    }
+
+    input[type=file],
+    input[type=file]::-webkit-file-upload-button
+    {
+      cursor: pointer;
     }
   }
 

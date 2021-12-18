@@ -85,7 +85,14 @@ public class MediaManagement : IMediaManagement
   /// <inheritdoc />
   public virtual async Task<Result<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default)
   {
-    return await Creator.UploadFile(fileStream, filename, folderId, cancellationToken);
+    Result<Media> result = await Creator.UploadFile(fileStream, filename, folderId, cancellationToken);
+
+    if (!result.IsSuccess)
+    {
+      return result;
+    }
+
+    return await Store.Create(result.Model);
   }
 
 

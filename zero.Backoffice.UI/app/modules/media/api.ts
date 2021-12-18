@@ -11,7 +11,7 @@ const files = {
 
   getHierarchy: (id: string, config?: ApiRequestConfig) => get(`media/${id}/hierarchy`, { ...config }),
 
-  create: (model: any, config?: ApiRequestConfig) => post('media', model, config),
+  //create: (model: any, config?: ApiRequestConfig) => post('media', model, config),
 
   update: (model: any, config?: ApiRequestConfig) => put('media/' + model.id, model, config),
 
@@ -21,13 +21,17 @@ const files = {
 
   //uploadtest: (model: any, config?: ApiRequestConfig) => post('media/uploadtest', model, config),
 
-  uploadtest: async (file, onProgress) =>
+  upload: async (file: File, folderId?: string, onProgress?: any) =>
   {
     var data = new FormData();
     data.append('file', file);
-    //data.append('folderId', folderId);
 
-    return await post('media/uploadtest', data, {
+    if (folderId)
+    {
+      data.append('folderId', folderId);
+    }
+
+    return await post('media', data, {
       onUploadProgress: (progressEvent) =>
       {
         if (typeof onProgress === 'function')

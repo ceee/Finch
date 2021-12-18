@@ -4,7 +4,7 @@
       <div class="app-overlay-outer" :display="instance.display" v-for="(instance, index) in instances" :key="instance.id" 
            :style="{ transform: instance.display !== 'editor' ? null : 'translateX(' + (editorLength - index - 1) * -120 + 'px)' }"
            :class="instance.class || ''">
-        <div class="app-overlay-bg" @click="remove(instance)"></div>
+        <div class="app-overlay-bg" @click="tryRemove(instance)"></div>
         <div open class="app-overlay" :data-alias="instance.alias" :style="{ width: instance.width ? (instance.width + 'px') : null }" :class="'theme-' + instance.theme" :display="instance.display">
           <component :is="instance.component" :model.sync="instance.model" :config="instance" v-bind="instance" title=""></component>
         </div>
@@ -55,6 +55,14 @@
       add(instance)
       {
         this.instances.push(instance);
+      },
+
+      tryRemove(instance)
+      {
+        if (instance.softdismiss)
+        {
+          this.remove(instance);
+        }
       },
 
       remove(instance)
@@ -121,7 +129,6 @@
     border: none !important;
     box-shadow: var(--shadow-overlay-dialog);
     padding: var(--padding);
-    padding-top: 40px;
     text-align: left;
     position: relative;
     -webkit-backface-visibility: hidden;
@@ -141,7 +148,7 @@
 
   .app-overlay .ui-headline
   {
-    margin-bottom: var(--padding-m);
+    margin-bottom: var(--padding);
   }
 
   .app-overlay[display="dialog"] .ui-form-loading
