@@ -49,6 +49,11 @@ public class ZeroEntityRouteInterceptor : Interceptor<ZeroEntity>
     string id = model.Id;
     List<Route> dependencies = await GetDependencies(context, model);
 
+    if (!dependencies.Any())
+    {
+      return;
+    }
+
     await context.Store.Raven.PurgeAsync<Route>(context.Context.Application.Database, $"where c.Dependencies IN ($id)", new Raven.Client.Parameters()
     {
       { "id", id }
@@ -163,6 +168,11 @@ public class ZeroEntityRouteInterceptor : Interceptor<ZeroEntity>
     foreach (var kvp in urlUpdates)
     {
       await RedirectAutomation.AddForRoute(kvp.Key, kvp.Value);
+    }
+
+    if (countRoutes < 1 && countObsoleteRoutes < 1)
+    {
+      return;
     }
 
     int countUpdatedRoutes = countObsoleteRoutes - obsoleteRoutes.Count;

@@ -223,7 +223,7 @@
       onChange()
       {
         const query = Qs.stringify(this.listConfig.paramsToQuery(this.query));
-        const path = this.$route.href + (query ? '?' + query : '');
+        const path = this.$route.href.split('?')[0] + (query ? '?' + query : '');
 
         history.replaceState(null, null, path);
         this.debouncedUpdate();

@@ -114,14 +114,12 @@
         }
 
         query.search = this.gridConfig.search;
-        query.folderId = this.parentId;
-        query.searchIsGlobal = true;
-        query.pageSize = 50;
+        query.pageSize = 30;
 
         const hierarchy = await api.folders.getHierarchy(this.id);
         this.hierarchy = hierarchy.data;
 
-        return await api.folders.getChildren(this.id, query);
+        return await api.folders.getChildren(this.id, true, query);
       },
 
 

@@ -35,6 +35,7 @@
 <script>
   import UiPagination from './ui-pagination.vue';
   import { debounce, extendObject } from '../utils';
+  import Qs from 'qs';
 
   const defaultConfig = {
     order: {
@@ -151,8 +152,8 @@
       {
         if (initial)
         {
-          this.filter.page = 1;
-          this.filter.search = null;
+          this.filter.page = +this.$route.query.page || 1;
+          this.filter.search = this.$route.query.search;
         }
 
         const result = await this.configuration.items(this.filter);
@@ -188,7 +189,7 @@
       setPage(index)
       {
         this.filter.page = index;
-        this.debouncedUpdate();
+        this.onChange();
       },
 
       // sort by a column
@@ -208,7 +209,7 @@
           this.filter.orderIsDescending = true;
         }
 
-        this.debouncedUpdate();
+        this.onChange();
       },
 
 
@@ -220,6 +221,28 @@
           ev.preventDefault();
           this.onActionsClicked(item, ev);
         }
+      },
+
+
+      // a property has changed and therefore we update the URL and table content
+      onChange()
+      {
+        let params = {};
+
+        if (+this.filter.page > 1)
+        {
+          params.page = +this.filter.page;
+        }
+        if (this.filter.search)
+        {
+          params.search = this.filter.search;
+        }
+
+        const query = Qs.stringify(params);
+        const path = this.$route.href.split('?')[0] + (query ? '?' + query : '');
+
+        history.replaceState(null, null, path);
+        this.debouncedUpdate();
       },
 
 
