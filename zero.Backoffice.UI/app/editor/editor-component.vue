@@ -1,5 +1,5 @@
-﻿<template>
-  <ui-property v-if="!isHidden" 
+﻿-<template>
+  <ui-property v-if="loaded && !isHidden" 
                :field="config.path" 
                :label="label" 
                :hide-label="config.options.hideLabel"
@@ -119,7 +119,7 @@
         {
           for (var key of this.selector)
           {
-            if (key in currentValue)
+            if (currentValue && key in currentValue)
             {
               found = true;
               currentValue = currentValue[key];
@@ -132,8 +132,6 @@
 
           this.model = found ? currentValue : null;
         }
-
-        //console.info(this.config.path + ' => ' + this.model);
       },
 
 

@@ -33,7 +33,7 @@ public class MediaCreator : IMediaCreator
     string normalizedFilename = Safenames.File(filename);
 
     bool isImage = Options.AllowedImageFileExtensions.Contains(fileExtension, StringComparer.InvariantCultureIgnoreCase);
-    bool isDocument = !isImage && Options.AllowedOtherFileExtensions.Contains(filename, StringComparer.InvariantCultureIgnoreCase);
+    bool isDocument = !isImage && Options.AllowedOtherFileExtensions.Contains(fileExtension, StringComparer.InvariantCultureIgnoreCase);
 
     if (!isImage && !isDocument)
     {

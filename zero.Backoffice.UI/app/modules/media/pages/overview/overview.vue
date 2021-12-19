@@ -31,7 +31,7 @@
 
           <template v-if="selected.length < 1" v-slot:actions="props">
             <template v-if="props.item && props.item.isFolder">
-              <ui-dropdown-button label="@ui.edit.title" icon="fth-edit-2" @click="editFolder(props.item)" />
+              <ui-dropdown-button label="@ui.rename.title" icon="fth-edit-2" @click="editFolder(props.item)" />
               <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move([props.item])" />
               <ui-dropdown-button label="@ui.selection.select" icon="fth-check-circle-2" @click="$refs.grid.select(props.item)" />
               <ui-dropdown-separator />

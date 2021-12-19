@@ -4,8 +4,7 @@
 
 
 <script>
-  import dayjs from 'dayjs';
-  import Strings from 'zero/helpers/strings.js';
+  import { formatDate } from '../utils/dates';
 
   export default {
     name: 'uiDate',
@@ -53,11 +52,11 @@
 
         if (!this.split)
         {
-          this.output = Strings.date(this.value, this.format);
+          this.output = formatDate(this.value, this.format);
         }
         else
         {
-          this.output = Strings.date(this.value, 'short') + ' <span class="-minor">' + Strings.date(this.value, 'time') + '</span>';
+          this.output = formatDate(this.value, 'short') + ' <span class="-minor">' + formatDate(this.value, 'time') + '</span>';
         }
       }
 

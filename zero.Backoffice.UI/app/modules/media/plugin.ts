@@ -12,6 +12,6 @@ export default {
     app.route({ name: 'media-edit', path: '/media/edit/:id?', component: () => import('./pages/detail/detail.vue'), props: true });
 
     //app.schema('countries', () => import('./schemas/list'));
-    //app.schema('countries:edit', () => import('./schemas/editor'));
+    app.schema('media:edit', () => import('./schemas/editor'));
   }
 } as ZeroPlugin;

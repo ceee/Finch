@@ -1,18 +1,19 @@
 ﻿<template>
-  <router-link :to="link" class="media-item" :class="{ 'is-selected': selected}">
-    <div class="media-item-preview" :class="{'media-pattern': value.image, 'is-covered': covered }">
+  <div class="media-item" :class="{ 'is-selected': selected}">
+    <router-link :to="link" class="media-item-preview" :class="{'media-pattern': !value.isFolder, 'is-covered': covered }">
       <span class="media-item-check"><ui-icon symbol="fth-check" :size="14" /></span>
       <img class="media-item-image" v-if="value.image" :src="value.image" />
       <span class="media-item-icon" v-if="!value.image"><ui-icon :symbol="(value.isFolder ? 'fth-folder' : 'fth-file')" :size="26" :stroke-width="2" /></span>
-    </div>
+    </router-link>
     <p v-if="value.isFolder" class="media-item-text" :title="value.name">
+      <!--<input type="text" v-model="value.name" />-->
       {{value.name}} <!--<ui-icon symbol="fth-cloud" v-if="value.isShared" :size="15" class="media-item-shared" />-->
       <span class="-minor"> ({{value.children}})<!--<span v-localize="{ key: value.children === 1 ? '@media.child_count_1' : '@media.child_count_x', tokens: { count: value.children }}"></span>--></span>
     </p>
     <p v-else class="media-item-text -minor">
-      <span v-filesize:0="value.size"></span> | <span :title="value.name">{{value.name}}</span>    
+      <span v-filesize:0="value.size"></span> | <span :title="value.name">{{value.name}}</span>
     </p>
-  </router-link>
+  </div>
 </template>
 
 <script>
@@ -88,6 +89,7 @@
     text-align: center;
     box-shadow: var(--shadow-short);
     border: 2px solid transparent;
+    color: var(--color-text);
   }
 
   .media-item.is-selected .media-item-preview
@@ -102,6 +104,11 @@
     object-fit: contain; 
     position: relative;
     border-radius: var(--radius);
+    z-index: 1;
+  }
+
+  .media-item-icon
+  {
     z-index: 1;
   }
 
@@ -155,5 +162,14 @@
     color: var(--color-synchronized);
     position: relative;
     top: 2px;
+  }
+
+  .media-item input[type="text"]
+  {
+    border: none;
+    height: auto;
+    padding: 0;
+    background: none;
+    width: auto;
   }
 </style>

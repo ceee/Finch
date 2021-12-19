@@ -23,6 +23,11 @@ export const localize = (key: string, options?: LocalizeOptions): string =>
     return '';
   }
 
+  if (!isNaN(key))
+  {
+    return key;
+  }
+
   const hasAtSign = key.indexOf('@') === 0;
 
   if (!params.force && !hasAtSign)

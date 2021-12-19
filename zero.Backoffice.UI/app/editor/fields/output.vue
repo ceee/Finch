@@ -5,7 +5,7 @@
 <script>
   export default {
     props: {
-      value: [Object, String, Array, Number, Boolean],
+      value: Object,
       entity: Object,
       render: Function
     },

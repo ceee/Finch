@@ -19,8 +19,6 @@ const files = {
 
   delete: (id: string, config?: ApiRequestConfig) => del('media/' + id, config),
 
-  //uploadtest: (model: any, config?: ApiRequestConfig) => post('media/uploadtest', model, config),
-
   upload: async (file: File, folderId?: string, onProgress?: any) =>
   {
     var data = new FormData();

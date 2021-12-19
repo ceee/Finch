@@ -5,7 +5,7 @@
     </header>
     <div class="editor" :class="['display-' + display, { 'has-sidebar': asideDefined, 'hide-tabs': tabs.length < 2, 'has-below': belowDefined }]">
       <ui-tabs class="editor-tabs">
-        <ui-tab v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :label="tab.name" :count="tab.count(value)" :hidden="tab.disabled(value)" :key="index">
+        <ui-tab v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :data-alias="tab.alias" :label="tab.name" :count="tab.count(value)" :hidden="tab.disabled(value)" :key="index">
           <h3 v-if="display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
           <slot name="blueprint">
             <!--<blueprint-property v-if="value && editorConfig.blueprint" :model-value="value" :meta="meta" :config="editorConfig.blueprint" />-->

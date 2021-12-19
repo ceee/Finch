@@ -642,6 +642,7 @@
     "name": "Media",
     "addfolder": "Add folder",
     "editfolder": "Edit folder",
+    "untitledName": "[untitled]",
     "actions": {
       "folderdropdown": "Folder",
       "addfolder": "Create folder",
@@ -658,17 +659,20 @@
       "foldername_placeholder": "Enter a name ...",
       "caption": "Caption",
       "caption_text": "Additional caption text",
-      "dimension": "Dimension",
       "size": "Size",
       "date": "Last modified at",
       "filename": "Filename",
       "source": "File",
-      "alternativeText": "Alternative text",
-      "alternativeText_text": "Text which is used when the image can't be loaded",
-      "dpi": "DPI",
-      "colorSpace": "Color space",
-      "hasTransparency": "Has transparency",
-      "frames": "Frames"
+      "imageMeta": {
+        "alternativeText": "Alternative text",
+        "alternativeText_text": "Text which is used when the image can't be loaded",
+        "dpi": "DPI",
+        "colorSpace": "Color space",
+        "hasTransparency": "Has transparency",
+        "frames": "Frames",
+        "imageTakenDate": "Date taken",
+        "dimension": "Dimension"
+      }
     },
     "deleteoverlay": {
       "title": "Delete media",

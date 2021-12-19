@@ -26,6 +26,7 @@ import uiTrinity from './ui-trinity.vue';
 import uiPick from './ui-pick.vue';
 import uiDatagrid from './ui-datagrid.vue';
 import uiProgress from './ui-progress.vue';
+import uiDate from './ui-date.vue';
 
 export {
   uiIcon,
@@ -55,5 +56,6 @@ export {
   uiTrinity,
   uiPick,
   uiDatagrid,
-  uiProgress
+  uiProgress,
+  uiDate
 };
