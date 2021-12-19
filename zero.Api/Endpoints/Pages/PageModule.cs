@@ -10,9 +10,10 @@ public class PageModule : ZeroModule
     services.AddSingleton<IPermissionProvider, PagePermissions>();
     services.AddSingleton<IMapperProfile, PageMapperProfile>();
 
-    //services.Configure<RavenOptions>(opts =>
-    //{
-    //  opts.Indexes.Add<zero_Api_MailTemplates_Listing>();
-    //});
+    services.Configure<RavenOptions>(opts =>
+    {
+      opts.Indexes.Add<zero_Api_Pages_Listing>();
+      opts.Indexes.Add<zero_Api_Pages_ChildCounts>();
+    });
   }
 }

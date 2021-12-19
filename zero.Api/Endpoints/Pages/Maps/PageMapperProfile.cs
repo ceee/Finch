@@ -11,7 +11,7 @@ public class PageMapperProfile : ZeroMapperProfile
 
   protected virtual void Map(Page source, PageBasic target, IZeroMapperContext ctx)
   {
-    this.MapBasicData(source, target);
+    //this.MapBasicData(source, target);
   }
 
   //protected virtual void Map(CountrySave source, Country target, IZeroMapperContext ctx)
