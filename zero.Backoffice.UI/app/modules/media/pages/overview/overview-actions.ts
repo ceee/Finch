@@ -26,13 +26,29 @@ export default {
           title: "@media.deleteoverlay.start.title",
           warning: null,
           text: null,
+          autoclose: false,
           confirmLabel: "@media.deleteoverlay.start.button",
           confirmType: 'danger',
           closeLabel: '@deleteoverlay.close'
         }
       });
-      result.close();
-      console.info(confirmResult);
+      //result.close();
+      //console.info(confirmResult);
+
+      if (confirmResult.eventType === 'confirm')
+      {
+        confirmResult.value.state('loading');
+        await api.bulk.delete(ids);
+        confirmResult.value.state('success');
+
+        confirmResult.close();
+        result.close();
+        return ids;
+      }
+      else
+      {
+        result.close();
+      }
     }
 
   },

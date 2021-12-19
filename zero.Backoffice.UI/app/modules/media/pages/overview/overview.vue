@@ -114,7 +114,7 @@
         }
 
         query.search = this.gridConfig.search;
-        query.pageSize = 30;
+        query.pageSize = 50;
 
         const hierarchy = await api.folders.getHierarchy(this.id);
         this.hierarchy = hierarchy.data;
@@ -157,7 +157,12 @@
 
       async remove(items: any[])
       {
-        const deleted = await actions.remove(items);
+        const deletes = await actions.remove(items);
+        if (deletes)
+        {
+          this.clearSelection();
+          await this.$refs.grid.update();
+        }
       },
 
 

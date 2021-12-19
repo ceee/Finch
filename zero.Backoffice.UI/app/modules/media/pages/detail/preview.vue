@@ -2,7 +2,7 @@
   <div class="media-detail-file media-pattern">
     <div v-if="model.imageMeta" ref="image" class="media-detail-file-image" @click="setFocalPoint" @dblclick="model.imageMeta.focalPoint = null">
       <ui-thumbnail v-if="model.id" :media="model.id" size="preview" />
-      <span class="media-detail-file-focal-point" :style="getFocalPointStyle(model.imageMeta.focalPoint)"></span>
+      <span class="media-detail-file-focal-point" :style="getFocalPointStyle(model.imageMeta.focalPoint)"><span class="-dot"></span></span>
     </div>
     <div v-else class="media-detail-file-generic">
       <ui-icon symbol="fth-file-text" :size="64" :stroke="1" />
@@ -106,6 +106,7 @@
     display: inline-block;
     border-radius: var(--radius);
     position: relative;
+    overflow: hidden;
   }
 
   .media-detail-file-generic
@@ -136,13 +137,56 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    margin: -8px 0 0 -8px;
+    margin: -9px 0 0 -9px;
     width: 16px;
     height: 16px;
-    border-radius: 20px;
-    background: white;
-    border: 3px solid #222;
-    box-shadow: 1px 1px 2px rgba(0,0,0,0.4);
     z-index: 2;
+    mix-blend-mode: soft-light;
+    //opacity: 0.15;
+
+    /*.-dot
+    {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      background: white;
+      border: 1px solid #222;
+      box-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+      position: relative;
+      z-index: 1;
+    }*/
+
+    &:before, &:after
+    {
+      content: '';
+      position: absolute;
+      background: black;
+      mix-blend-mode: soft-light;
+    }
+
+    &:before
+    {
+      top: 50%;
+      left: -550px;
+      width: 1100px;
+      height: 1px;
+    }
+
+    &:after
+    {
+      left: 50%;
+      top: -550px;
+      height: 1100px;
+      width: 1px;
+    }
   }
+
+  /*.media-detail-file-image:hover .media-detail-file-focal-point
+  {
+    &:before, &:after
+    {
+      opacity: 1;
+    }
+  }*/
 </style>
