@@ -15,7 +15,7 @@
       </template>
 
       <template v-if="selected.length < 1">
-        <ui-search v-model="gridConfig.search" class="onbg" />
+        <!--<ui-search v-model="gridConfig.search" class="onbg" />-->
         <ui-button type="accent" label="@media.addfolder" @click="editFolder()" />
       </template>
       <media-selection v-else :selected="selected" @clear="clearSelection" @move="move" @remove="remove" />
