@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using System.IO;
 using zero.Backoffice.Endpoints.Account;
+using zero.Backoffice.Endpoints.Pages;
 using zero.Backoffice.Services;
 
 namespace zero.Backoffice;
@@ -29,6 +30,7 @@ public class ZeroBackofficePlugin : ZeroPlugin
     services.AddHostedService<ZeroDevService>();
     services.AddTransient<IZeroVue, ZeroVue>();
     services.AddSingleton<IMapperProfile, AccountMapperProfile>();
+    services.AddScoped<IPageTreeService, PageTreeService>();
 
     services.AddSingleton<IIconService, IconService>();
     services.AddSingleton<IResourceService, ResourceService>();

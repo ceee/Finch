@@ -65,7 +65,7 @@
           return this.cache[key];
         }
 
-        const response = await api.getChildren(parent || 'root', { pageSize: 1000 });
+        const response = await api.tree.getChildren(parent || 'root', this.id);
         const items = response.data.map(x => this.buildItem(x));
 
         this.cache[key] = items;
@@ -75,27 +75,12 @@
 
       buildItem(item)
       {
-        const flavor = this.flavors.find(x => x.alias == item.flavor);
-
-
-        return {
-          id: item.id,
-          parentId: item.parentId,
-          sort: 0,
-          name: item.name,
-          icon: flavor ? flavor.icon : 'fth-box',
-          isOpen: false,
-          modifier: null,
-          hasChildren: item.children > 0,
-          childCount: item.children,
-          isInactive: false,
-          hasActions: false,
-          disabled: false,
-          url: {
-            name: 'pages-edit',
-            params: { id: item.id }
-          }
+        item.url =  {
+          name: 'pages-edit',
+          params: { id: item.id }
         };
+
+        return item;
       }
 
     }

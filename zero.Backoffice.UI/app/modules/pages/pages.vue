@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="page-container">
-    <page-tree />
+    <page-tree :id="$route.params.id" />
   </div>
 </template>
 
@@ -10,6 +10,8 @@
   import PageTree from './partials/page-tree.vue';
 
   export default defineComponent({
+
+    props: [ 'id' ],
 
     components: { PageTree },
 

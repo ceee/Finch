@@ -4,6 +4,12 @@ export default {
 
   getChildren: (id: string, query: ApiRequestQuery, config?: ApiRequestConfig) => get(`pages/${id}/children`, { ...config, params: { ...query } }),
 
+  tree: {
+
+    getChildren: (id: string, activeId?: string, search?: string, config?: ApiRequestConfig) => get(`backoffice/pages/${id}/children`, { ...config, params: { activeId, search } }),
+
+  }
+
   //getTypes: (config?: ApiRequestConfig) => get('spaces/types', { ...config }),
 
   //getType: (alias: string, config?: ApiRequestConfig) => get('spaces/types/' + alias, { ...config }),

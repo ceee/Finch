@@ -1,10 +1,10 @@
 ﻿using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
+using zero.Api.Models;
 
-namespace zero.Api.Endpoints.Pages;
+namespace zero.Backoffice.Endpoints.Pages;
 
-[Obsolete("Move to zero.Backoffice")]
 public class PageTreeService : IPageTreeService
 {
   protected IPagesStore Pages { get; private set; }
@@ -23,8 +23,13 @@ public class PageTreeService : IPageTreeService
 
 
   /// <inheritdoc />
-  public async Task<IList<TreeItem>> GetChildren(string parentId = null, string activeId = null, string search = null)
+  public async Task<List<TreeItem>> GetChildren(string parentId = null, string activeId = null, string search = null)
   {
+    if (parentId == "root")
+    {
+      parentId = null;
+    }
+
     List<TreeItem> items = new();
     string[] openIds = Array.Empty<string>();
     Paged<Page> pages = null;
@@ -99,7 +104,7 @@ public class PageTreeService : IPageTreeService
 
       if (pageType == null)
       {
-        continue;
+        //continue;
         // TODO the page type does not exist anymore
       }
 
@@ -113,7 +118,7 @@ public class PageTreeService : IPageTreeService
         ChildCount = childCount,
         ParentId = page.ParentId,
         Sort = page.Sort,
-        Icon = pageType.Icon,
+        Icon = pageType?.Icon ?? "fth-box",
         IsOpen = openIds.Contains(page.Id),
         IsInactive = !page.IsActive,
         HasActions = true,
@@ -146,5 +151,5 @@ public interface IPageTreeService
   /// <summary>
   /// Get page children as tree items
   /// </summary>
-  Task<IList<TreeItem>> GetChildren(string parentId = null, string activeId = null, string search = null);
+  Task<List<TreeItem>> GetChildren(string parentId = null, string activeId = null, string search = null);
 }
