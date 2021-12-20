@@ -1,10 +1,10 @@
-﻿<!--<template>
-  <ui-overlay-editor class="blueprint-settings">
+﻿<template>
+  <ui-trinity class="blueprint-settings">
     <template v-slot:header>
       <ui-header-bar title="Synchronisation" :back-button="false" :close-button="true" />
     </template>
     <template v-slot:footer>
-      <ui-button type="light onbg" label="@ui.close" @click="config.hide" />
+      <ui-button type="light onbg" label="@ui.close" @click="config.close" />
       <ui-button type="primary" label="@ui.confirm" @click="onSave" :state="state" />
     </template>
 
@@ -14,25 +14,26 @@
       <ui-property class="blueprint-settings-tableheader" :key="-1" label="Property" :vertical="false">
         <b>Synchronized</b>
       </ui-property>
-      <ui-property v-for="(field, index) in items" v-if="!field.disabled" :key="index" :label="field.label" :description="field.description" :vertical="false" :class="{'not-synced': !field.synced}">
-        <ui-toggle v-model="field.synced" />
-      </ui-property>
+      <template v-for="(field, index) in items">
+        <ui-property v-if="!field.disabled" :key="index" :label="field.label" :description="field.description" :vertical="false" :class="{'not-synced': !field.synced}">
+          <ui-toggle v-model:on="field.synced" />
+        </ui-property>
+      </template>
     </div>
-  </ui-overlay-editor>
+  </ui-trinity>
 </template>
 
 
 <script>
-  import Arrays from 'zero/helpers/arrays.js';
-  import Localization from 'zero/helpers/localization.js';
-  import BlueprintApi from 'zero/api/blueprint.js';
+  import { arrayRemove } from '../../utils/arrays';
+  //import Localization from 'zero/helpers/localization.js';
+  //import BlueprintApi from 'zero/api/blueprint.js';
 
   export default {
 
     props: {
       model: Object,
-      config: Object,
-      blueprintConfig: Object
+      config: Object
     },
 
     data: () => ({
@@ -45,10 +46,10 @@
 
     mounted()
     {
-      this.blueprintConfig.fields.forEach(field =>
+      this.model.blueprintConfig.fields.forEach(field =>
       {
         let item = JSON.parse(JSON.stringify(field));
-        item.synced = field.synced(this.model);
+        item.synced = field.synced(this.model.value);
         this.items.push(item);
       });
       this.loaded = true;
@@ -61,16 +62,16 @@
       {
         this.state = 'loading';
 
-        let desync = JSON.parse(JSON.stringify(this.model.blueprint.desync));
+        let desync = JSON.parse(JSON.stringify(this.model.value.blueprint.desync));
         let resync = [];
 
         this.items.forEach(field =>
         {
-          let desynced = this.model.blueprint.desync.indexOf(field.path) > -1;
+          let desynced = this.model.value.blueprint.desync.indexOf(field.path) > -1;
 
           if (field.synced && desynced)
           {
-            Arrays.remove(desync, field.path);
+            arrayRemove(desync, field.path);
             resync.push(field.path);
           }
           else if (!field.synced && !desynced)
@@ -79,17 +80,17 @@
           }
         });
 
-        this.model.blueprint.desync = desync;
+        this.model.value.blueprint.desync = desync;
 
         // we need to revert changed values which were switch backed to synchronised state
         // to do this we load the blueprint entity and its copy properties
 
         if (resync.length > 0)
         {
-          BlueprintApi.getById(this.model.blueprint.id).then(blueprint =>
+          BlueprintApi.getById(this.model.value.blueprint.id).then(blueprint =>
           {
             this.config.confirm({
-              blueprint: this.model.blueprint,
+              blueprint: this.model.value.blueprint,
               update: entity =>
               {
                 resync.forEach(path =>
@@ -104,7 +105,7 @@
         {
           //this.state = 'success';
           this.config.confirm({
-            blueprint: this.model.blueprint
+            blueprint: this.model.value.blueprint
           });
         }
 
@@ -220,4 +221,4 @@
     color: var(--color-primary);
     font-weight: 400;
   }*/
-</style>-->
+</style>

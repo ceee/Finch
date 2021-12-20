@@ -1,4 +1,4 @@
-﻿<!--<template>
+﻿<template>
   <div class="blueprint" v-if="value && (isParent || isChild)">
     <div class="blueprint-box">
       <template v-if="isChild">
@@ -28,9 +28,7 @@
 
 
 <script>
-  import Overlay from 'zero/helpers/overlay.js';
-  import SettingsOverlay from './settings.vue';
-  import Localization from 'zero/helpers/localization.js';
+  import * as overlays from '../../services/overlay';
 
   export default {
     props: {
@@ -89,25 +87,28 @@
 
     methods: {
 
-      openSettings()
+      async openSettings()
       {
-        const editor = typeof this.editor === 'string' ? this.zero.getEditor(this.editor) : this.editor;
+        const editor = typeof this.editor === 'string' ? this.zero.getSchema(this.editor) : this.editor;
 
-        return Overlay.open({
-          component: SettingsOverlay,
+        const result = await overlays.open({
+          component: () => import('./settings.vue'),
           display: 'editor',
-          model: this.value,
-          blueprintConfig: this.config
-        }).then(res =>
-        {
-          this.value.blueprint = res.blueprint;
-          this.$emit('input', res.blueprint);
-          if (typeof res.update === 'function')
-          {
-            res.update(this.value);
+          model: {
+            value: this.value,
+            blueprintConfig: this.config
           }
-          //EventHub.$emit('page.update');
         });
+
+        console.info(result);
+        return;
+        this.value.blueprint = res.blueprint;
+        this.$emit('input', res.blueprint);
+        if (typeof res.update === 'function')
+        {
+          res.update(this.value);
+        }
+        //EventHub.$emit('page.update');
       },
 
       bind()
@@ -294,11 +295,11 @@
       margin-top: -2px;
     }
   }
-</style>-->
+</style>
 
-<!--
 
-  <button type="button" class="ui-property-lock" v-if="locked" > <i class="fth-lock" > </i > </button >
+
+  <!--<button type="button" class="ui-property-lock" v-if="locked" > <i class="fth-lock" > </i > </button >
   /*.ui-property.is-locked
   {
 
@@ -317,6 +318,6 @@
     position: relative;
     top: -1px;
     margin-right: 8px;
-  }
+  }-->
 
--->
+

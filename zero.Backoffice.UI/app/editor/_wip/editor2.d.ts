@@ -1,6 +1,6 @@
 
 
-declare module 'zero/editor'
+declare module 'zerox/editor'
 {
   export interface FieldSupportsMaxLength
   {

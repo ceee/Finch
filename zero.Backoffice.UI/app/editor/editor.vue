@@ -8,7 +8,7 @@
         <ui-tab v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :data-alias="tab.alias" :label="tab.name" :count="tab.count(value)" :hidden="tab.disabled(value)" :key="index">
           <h3 v-if="display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
           <slot name="blueprint">
-            <!--<blueprint-property v-if="value && editorConfig.blueprint" :model-value="value" :meta="meta" :config="editorConfig.blueprint" />-->
+            <blueprint-property v-if="value && editorConfig.blueprint" :value="value" :meta="meta" :config="editorConfig.blueprint" />
           </slot>
           <div class="ui-property ui-property-parent" v-for="fieldset in tab.fieldsets">
             <editor-component v-for="(field, fieldIndex) in fieldset.fields" :disabled="disabled" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value"
@@ -97,7 +97,7 @@
     async created()
     {
       this.editorConfig = typeof this.config === 'string' ? await this.zero.getSchema(this.config) : this.config;
-      this.editorConfig.blueprint = null; //createBlueprintConfig(this.zero, this.editorConfig, this.value);
+      this.editorConfig.blueprint = createBlueprintConfig(this.zero, this.editorConfig, this.value);
 
       this.tabs = this.editorConfig.tabs.map(tab =>
       {

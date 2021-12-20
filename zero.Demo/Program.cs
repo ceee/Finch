@@ -37,6 +37,7 @@ builder.Services.Configure<FlavorOptions>(opts =>
 builder.Services.Configure<BlueprintOptions>(opts =>
 {
   opts.Add<Country>();
+  opts.Add<Language>();
 });
 
 var app = builder.Build();

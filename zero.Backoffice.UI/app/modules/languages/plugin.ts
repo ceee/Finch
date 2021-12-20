@@ -1,4 +1,5 @@
 import { ZeroPlugin, ZeroPluginOptions } from '../../core';
+import { TextFieldOptions } from 'zero/editor';
 import { defineAsyncComponent } from 'vue';
 
 export default {

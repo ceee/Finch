@@ -1,6 +1,7 @@
 ﻿
 import { localize } from '../services/localization';
 import { arrayRemove } from '../utils/arrays';
+import { useUiStore } from '../ui/store';
 
 function unlocked(config, model, field)
 {
@@ -78,10 +79,11 @@ function unlock(config, model, field)
  */
 export function createBlueprintConfig(zero, editor, model)
 {
+  const store = useUiStore();
   let blueprintAlias = editor.blueprintAlias;
-  let config = zero.config.blueprints.find(x => x.alias == blueprintAlias);
+  let canBeBlueprinted = store.blueprints.indexOf(blueprintAlias) > -1;
 
-  if (!blueprintAlias || !config)
+  if (!blueprintAlias || !canBeBlueprinted)
   {
     return {
       alias: blueprintAlias,
@@ -89,13 +91,15 @@ export function createBlueprintConfig(zero, editor, model)
       canUnlock: () => false,
       isBlueprintParent: () => false,
       isBlueprintChild: () => false,
-      lock: () => {},
-      unlock: () => {},
+      lock: () => { },
+      unlock: () => { },
       fields: []
     };
   }
 
-  
+  let config = {
+    unlocked: []
+  }
 
   // check for blueprint availability
   //config.isParent = this.value && this.$route.query.scope === 'shared';
@@ -112,15 +116,15 @@ export function createBlueprintConfig(zero, editor, model)
   {
     processed.push(alias);
 
-    if (config.unlocked.indexOf(alias) > -1)
-    {
+    //if (config.unlocked.indexOf(alias) > -1)
+    //{
       fields.push({
         path: alias,
         label: localize("@ui.entityfields." + alias),
         description: localize("@ui.entityfields." + alias + "_text", { hideEmpty: true }),
         synced: model => !model.blueprint || model.blueprint.desync.indexOf(alias) < 0
       });
-    }
+    //}
   });
 
   // add blueprint setting for custom fields

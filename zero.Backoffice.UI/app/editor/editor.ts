@@ -34,9 +34,9 @@ class Editor
   };
 
 
-  constructor(alias, prefix)
+  constructor(prefix)
   {
-    this._alias = alias;
+    this._alias = null;
     this._prefix = prefix || '';
   }
 

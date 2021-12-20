@@ -1,5 +1,5 @@
 
-import { App } from 'vue';
+import { App, Component } from 'vue';
 import { ZeroInstallOptions } from './types/zeroInstallOptions';
 import { ZeroPluginOptions } from './types/zeroPluginOptions';
 import { Zero, ZeroOptions } from './types/zero';
@@ -10,6 +10,7 @@ import registerFormComponents from '../forms/register';
 import registerEditorComponents from '../editor/register';
 import { getRouterConfig, appendRouterGuards } from './router/routerConfig';
 import { countryPlugin, applicationPlugin, settingsPlugin, languagePlugin, mediaPlugin, spacePlugin, pagePlugin } from '../modules';
+import editorPlugin from '../editor/new/plugin';
 import { ZeroSchema } from 'zero/schemas';
 import { ZeroSchemaProp } from './zero';
 import * as zeroOptions from '../options';
@@ -20,6 +21,7 @@ export class ZeroRuntime implements Zero
   _installOptions: ZeroInstallOptions;
   _routerConfig: RouterOptions;
   _schemas: Record<string, ZeroSchemaProp> = {};
+  _fieldTypes: Record<string, Component> = {};
 
   /**
    * version of zero backoffice
@@ -71,17 +73,24 @@ export class ZeroRuntime implements Zero
       vue: this._app,
       routes: this._routerConfig.routes,
       schemas: this._schemas,
+      fieldTypes: this._fieldTypes,
       route(route: RouteRecordRaw)
       {
         this.routes.push(route);
       },
-      schema(alias: 'string', schema: ZeroSchemaProp)
+      schema(alias: string, schema: ZeroSchemaProp)
       {
         this.schemas[alias] = schema;
+      },
+      fieldType(alias: string, component: Component)
+      {
+        this.fieldTypes[alias] = component;
       }
     } as ZeroPluginOptions;
 
+
     // install all plugins
+    editorPlugin.install(pluginOptions);
     countryPlugin.install(pluginOptions);
     applicationPlugin.install(pluginOptions);
     settingsPlugin.install(pluginOptions);

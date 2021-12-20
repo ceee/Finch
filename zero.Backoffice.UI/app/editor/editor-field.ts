@@ -166,6 +166,31 @@ class EditorField
 
 
   /**
+   * Create a preview for this field
+   * This is only used in list filters, ...
+   * @param {object} options - Custom options
+   * @param {string} options.icon - Custom icon
+   * @param {string|function} options.preview - Render the preview when this filter has been filled out
+   * @param {boolean} options.hasValue - Determine if the filter has a value or not
+   * @returns {EditorField}
+   */
+  preview(options)
+  {
+    this._preview = { ...this.preview, ...options };
+    return this;
+  }
+
+
+
+
+
+
+
+
+
+
+
+  /**
    * Render a custom component
    * @param {object} component - The custom vue component
    * @param {object} [options] - Custom options
@@ -579,22 +604,6 @@ class EditorField
   video(limit)
   {
     return this._setComponent(() => import('./fields/video.vue'), { limit });
-  }
-
-
-  /**
-   * Create a preview for this field
-   * This is only used in list filters, ...
-   * @param {object} options - Custom options
-   * @param {string} options.icon - Custom icon
-   * @param {string|function} options.preview - Render the preview when this filter has been filled out
-   * @param {boolean} options.hasValue - Determine if the filter has a value or not
-   * @returns {EditorField}
-   */
-  preview(options)
-  {
-    this._preview = { ...this.preview, ...options };
-    return this;
   }
 }
 
