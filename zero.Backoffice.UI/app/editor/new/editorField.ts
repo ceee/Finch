@@ -2,14 +2,6 @@
 import { Component, defineAsyncComponent } from 'vue';
 import { EditorField, EditorFieldConfiguration, TextFieldOptions, EditorFieldDefinition } from 'zero/editor';
 
-export const fieldTypes: Record<string, Function> = {};
-
-
-fieldTypes.text = function (options?: TextFieldOptions)
-{
-  return field.custom(defineAsyncComponent(() => import('./fields/text.vue')), options);
-};
-
 
 export const createFieldProxy = (field: EditorFieldBase) => new Proxy(field, {
   get: function (target: EditorFieldBase, prop: string | symbol, receiver: any): any
@@ -21,15 +13,11 @@ export const createFieldProxy = (field: EditorFieldBase) => new Proxy(field, {
     }
 
     // handle dynamic fields + extensions
-    if (fieldTypes[prop])
+    return (...args) =>
     {
-      const fieldDefinition = fieldTypes[prop];
-      console.info({ target, prop, receiver });
-      //return fieldDefinition()
-      return 
-    }
-    
-    return undefined;
+      target.custom(prop, args);
+      return target;
+    };
   }
 })// as EditorField;
 
@@ -54,7 +42,7 @@ export class EditorFieldBase
 {
   alias: string;
   configuration: EditorFieldConfiguration;
-  component?: Component;
+  fieldType?: string;
   options?: any;
 
   constructor(alias: string, config?: EditorFieldConfiguration)
@@ -112,9 +100,9 @@ export class EditorFieldBase
    * @param {Component} component - The component to render (can be an async component too)
    * @param {T} [options] = Custom options to pass to this editor
    */
-  custom<T>(component: Component, options?: T): EditorField
+  custom<T>(fieldType: string, options?: T): EditorField
   {
-    this.component = component;
+    this.fieldType = fieldType;
     this.options = options;
     return this;
   }

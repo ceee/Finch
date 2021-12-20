@@ -3,7 +3,9 @@ import { Editor } from '../../../editor/new/editor';
 
 const editor = new Editor(); //'@country.fields.');
 
-editor.field('name').setRequired(true).text({ maxLength: 80 });
+const field = editor.field('name').setRequired(true).text({ maxLength: 80 });
+
+console.info(editor);
 
 export default editor;
 
