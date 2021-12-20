@@ -25,7 +25,7 @@ export const createFieldProxy = (field: EditorFieldBase) => new Proxy(field, {
 export function createFieldConfiguration(): EditorFieldConfiguration
 {
   return {
-    required: false,
+    optional: false,
     readonly: false,
     hidden: false,
     label: null,
@@ -40,23 +40,23 @@ export function createFieldConfiguration(): EditorFieldConfiguration
 
 export class EditorFieldBase
 {
-  alias: string;
+  path: string;
   configuration: EditorFieldConfiguration;
   fieldType?: string;
   options?: any;
 
-  constructor(alias: string, config?: EditorFieldConfiguration)
+  constructor(path: string, config?: EditorFieldConfiguration)
   {
-    this.alias = alias;
+    this.path = path;
     this.configuration = config || createFieldConfiguration();
   }
 
 
   /**
-   * Set this field as required
+   * Set this field as optional
    * @param {function|boolean} [condition] - Optionally only require this field when a condition is fulfilled or reset the required state with true/false
    */
-  setRequired(condition: Function | boolean): EditorField
+  setOptional(condition: Function | boolean): EditorField
   {
     this.configuration.required = condition;
     return this;

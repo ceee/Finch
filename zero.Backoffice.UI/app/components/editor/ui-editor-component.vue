@@ -19,9 +19,9 @@
 
 
 <script>
-  import { selectorToArray } from '../utils/arrays';
-  import { setObjectValue } from '../utils/objects';
-  import { localize } from '../services/localization';
+  import { selectorToArray } from '../../utils/arrays';
+  import { setObjectValue } from '../../utils/objects';
+  import { localize } from '../../services/localization';
   //import Overlay from 'zero/helpers/overlay.js';
 
   export default {

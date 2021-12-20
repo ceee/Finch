@@ -19,3 +19,18 @@ export class Editor
     return proxy;
   }
 }
+
+
+//export interface Editor
+//{
+//  field(alias: string, config?: EditorFieldConfiguration): EditorField;
+//}
+
+
+export declare type EditorBuilderExpression = (editor: Editor) => void;
+
+
+export function createEditor(): Editor
+{
+  return new Editor();
+}

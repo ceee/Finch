@@ -1,22 +1,10 @@
 ﻿
-import { Editor } from '../../../editor/new/editor';
+import { ZeroEditor } from "../../../schemas/editor/editor";
 
-const editor = new Editor(); //'@country.fields.');
+const editor = new ZeroEditor();
 
-const field = editor.field('name').setRequired(true).text({ maxLength: 80 });
-
-console.info(editor);
+editor.field('name').text({ maxLength: 120 });
+editor.field('code').text({ maxLength: 2 });
+editor.field('isPreferred', { optional: true }).toggle();
 
 export default editor;
-
-//import Editor from '../../../editor/editor';
-
-//const editor = new Editor('@country.fields.');
-//editor.blueprintAlias = 'countries';
-
-//editor.field('name', { label: '@ui.name' }).text(120).required();
-////editor.field('alias', { label: '@ui.alias' }).text().required();
-//editor.field('code').text(2).required();
-//editor.field('isPreferred').toggle();
-
-//export default editor;

@@ -27,6 +27,8 @@
 
 <script>
   export default {
+    name: 'uiEditorInfos',
+
     props: {
       modelValue: {
         type: [Object, Array]

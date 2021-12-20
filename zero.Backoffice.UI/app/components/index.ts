@@ -28,6 +28,10 @@ import uiDatagrid from './ui-datagrid.vue';
 import uiProgress from './ui-progress.vue';
 import uiDate from './ui-date.vue';
 
+import uiEditor from './editor/ui-editor.vue';
+import uiEditorInfos from './editor/ui-editor-infos.vue';
+import uiEditorHeader from './editor/ui-editor-header.vue';
+
 export {
   uiIcon,
   uiLoading,
@@ -57,5 +61,9 @@ export {
   uiPick,
   uiDatagrid,
   uiProgress,
-  uiDate
+  uiDate,
+
+  uiEditor,
+  uiEditorInfos,
+  uiEditorHeader
 };

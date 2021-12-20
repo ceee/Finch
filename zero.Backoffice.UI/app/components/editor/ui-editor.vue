@@ -30,12 +30,13 @@
 
 
 <script>
-  import './editor.scss';
-  import EditorComponent from './editor-component.vue';
-  import EditorAside from './editor-aside.vue';
-  import { createBlueprintConfig } from './editor-blueprint';
-  import BlueprintProperty from './blueprint/property.vue';
+  import './ui-editor.scss';
+  import EditorComponent from './ui-editor-component.vue';
+  //import { createBlueprintConfig } from './editor-blueprint';
+  //import BlueprintProperty from './blueprint/property.vue';
   import { defineComponent } from 'vue';
+
+  let createBlueprintConfig = () => null;
 
   export default defineComponent({
     name: 'uiEditor',
@@ -70,7 +71,7 @@
       },
     },
 
-    components: { EditorComponent, EditorAside, BlueprintProperty },
+    components: { EditorComponent },
 
     data: () => ({
       editorConfig: {},

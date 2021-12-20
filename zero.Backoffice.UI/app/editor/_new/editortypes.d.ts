@@ -1,13 +1,13 @@
-import { Component } from "vue";
+﻿import { Component } from 'vue';
 
 declare module 'zero/editor'
 {
   export interface EditorFieldConfiguration
   {
     /**
-     * Whether this field is required (additional validation is done on the server)
+     * Whether this field is optional or required (additional validation is done on the server)
      */
-    required?: Function | boolean;
+    optional?: Function | boolean;
     /**
      * Whether this field is readonly and can't be changed
      */
@@ -56,10 +56,10 @@ declare module 'zero/editor'
   export interface EditorField
   {
     /**
-     * Set this field as required
+     * Set this field as optional
      * @param {function|boolean} [condition] - Optionally only require this field when a condition is fulfilled or reset the required state with true/false
      */
-    setRequired(condition: Function | boolean): EditorField;
+    setOptional(condition: Function | boolean): EditorField;
 
     /**
      * Whether the input next to the headline or below

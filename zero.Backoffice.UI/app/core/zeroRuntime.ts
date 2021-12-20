@@ -7,13 +7,14 @@ import { createRouter, RouteRecordRaw, RouterOptions } from 'vue-router';
 import registerDirectives from '../directives/register';
 import registerComponents from '../components/register';
 import registerFormComponents from '../forms/register';
-import registerEditorComponents from '../editor/register';
+//import registerEditorComponents from '../editor/register';
 import { getRouterConfig, appendRouterGuards } from './router/routerConfig';
 import { countryPlugin, applicationPlugin, settingsPlugin, languagePlugin, mediaPlugin, spacePlugin, pagePlugin } from '../modules';
-import editorPlugin from '../editor/new/plugin';
+import editorPlugin from '../editor/_new/plugin';
 import { ZeroSchema } from 'zero/schemas';
 import { ZeroSchemaProp } from './zero';
 import * as zeroOptions from '../options';
+import { createEditor } from '../editor/_new/editor';
 
 export class ZeroRuntime implements Zero
 {
@@ -60,7 +61,7 @@ export class ZeroRuntime implements Zero
     registerDirectives(app);
     registerComponents(app);
     registerFormComponents(app);
-    registerEditorComponents(app);
+    //registerEditorComponents(app);
   }
 
 
@@ -128,6 +129,14 @@ export class ZeroRuntime implements Zero
     if (typeof schema === 'function')
     {
       const res = await schema();
+
+      if (typeof res.default === 'function')
+      {
+        const editor = createEditor();
+        res.default(editor);
+        return editor;
+      }
+
       return res.default;
     }
 
