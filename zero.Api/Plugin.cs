@@ -37,6 +37,7 @@ public class ZeroApiPlugin : ZeroPlugin
     modules.Add<Endpoints.Pages.PageModule>();
     modules.Add<Endpoints.Media.MediaModule>();
     modules.Add<Endpoints.Spaces.SpaceModule>();
+    modules.Add<Endpoints.Integrations.IntegrationModule>();
 
     modules.ConfigureServices(services, configuration);
       

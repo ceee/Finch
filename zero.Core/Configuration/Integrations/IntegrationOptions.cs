@@ -4,13 +4,7 @@ namespace zero.Configuration;
 
 public class IntegrationOptions : List<IntegrationType>
 {
-  public void Add<T>(IntegrationType<T> integration) where T : Integration, new()
-  {
-    Add(IntegrationType.Convert(integration));
-  }
-
-
-  public void Add<T>(string alias, string name, string description, List<string> tags = default, string imagePath = null, IValidator validator = null) where T : Integration, new()
+  public void Add<T>(string alias, string name, string description, string editorAlias = null, List<string> tags = default, string imagePath = null, IValidator validator = null) where T : IntegrationModel, new()
   {
     Add(new IntegrationType(typeof(T))
     {
@@ -19,12 +13,14 @@ public class IntegrationOptions : List<IntegrationType>
       Description = description,
       ImagePath = imagePath,
       Tags = tags,
-      Validator = validator
+      Validator = validator,
+      Construct = cfg => new T(),
+      EditorAlias = editorAlias
     });
   }
 
 
-  public void Add(Type type, string alias, string name, string description, List<string> tags = default, string imagePath = null, IValidator validator = null)
+  public void Add(Type type, string alias, string name, string description, string editorAlias = null, List<string> tags = default, string imagePath = null, IValidator validator = null)
   {
     Add(new IntegrationType(type)
     {
@@ -33,7 +29,9 @@ public class IntegrationOptions : List<IntegrationType>
       Description = description,
       ImagePath = imagePath,
       Tags = tags,
-      Validator = validator
+      Validator = validator,
+      Construct = cfg => Activator.CreateInstance(type),
+      EditorAlias = editorAlias
     });
   }
 }

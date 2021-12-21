@@ -19,7 +19,7 @@ public class SpacesController : ZeroApiEntityStoreController<Space, ISpaceStore>
 
   [HttpGet("types/{alias}")]
   [ZeroAuthorize(SpacePermissions.Read)]
-  public virtual ActionResult<SpaceType> GetTypes(string alias) => Ok(SpaceTypes.GetByAlias(alias));
+  public virtual ActionResult<SpaceType> GetType(string alias) => Ok(SpaceTypes.GetByAlias(alias));
 
   [HttpGet("{alias}")]
   [ZeroAuthorize(SpacePermissions.Read)]

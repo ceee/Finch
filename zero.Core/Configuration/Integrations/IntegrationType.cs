@@ -1,20 +1,35 @@
-﻿namespace zero.Configuration;
+﻿using FluentValidation;
+using System.Text.Json.Serialization;
+
+namespace zero.Configuration;
 
 /// <summary>
 /// An integration is an application part which has a public configuration per app.
 /// It's up to the user to provide functionality.
 /// </summary>
-public class IntegrationType<T> : IntegrationType where T : Integration, new()
+public class IntegrationType
 {
-  public IntegrationType() : base(typeof(T)) { }
-}
+  /// <summary>
+  /// Type of the associated entity
+  /// </summary>
+  [JsonIgnore]
+  public Type ModelType { get; private set; }
 
-/// <summary>
-/// An integration is an application part which has a public configuration per app.
-/// It's up to the user to provide functionality.
-/// </summary>
-public class IntegrationType : OptionsType
-{
+  /// <summary>
+  /// Alias to find the editor schema
+  /// </summary>
+  public string EditorAlias { get; set; }
+
+  /// <summary>
+  /// Alias for querying
+  /// </summary>
+  public string Alias { get; set; }
+
+  /// <summary>
+  /// Name of the flavor
+  /// </summary>
+  public string Name { get; set; }
+
   /// <summary>
   /// Group integrations by tags
   /// </summary>
@@ -30,22 +45,17 @@ public class IntegrationType : OptionsType
   /// </summary>
   public string ImagePath { get; set; }
 
+  /// <summary>
+  /// Set a validator for this integration
+  /// </summary>
+  [JsonIgnore]
+  public IValidator Validator { get; set; }
+
+  [JsonIgnore]
+  public Func<FlavorConfig, object> Construct { get; set; }
 
   public IntegrationType(Type type)
   {
-    ContentType = type;
-  }
-
-  public static IntegrationType Convert<T>(IntegrationType<T> model) where T : Integration, new()
-  {
-    return new(model.ContentType)
-    {
-      Alias = model.Alias,
-      Name = model.Name,
-      Description = model.Description,
-      ImagePath = model.ImagePath,
-      Tags = model.Tags,
-      Validator = model.Validator
-    };
+    ModelType = type;
   }
 }

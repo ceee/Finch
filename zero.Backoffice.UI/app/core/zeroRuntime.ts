@@ -19,7 +19,8 @@ import
   spacePlugin,
   pagePlugin,
   mailTemplatePlugin,
-  translationPlugin
+  translationPlugin,
+  integrationPlugin
 } from '../modules';
 import editorPlugin from '../editor/plugin';
 import { ZeroSchema } from 'zero/schemas';
@@ -112,6 +113,7 @@ export class ZeroRuntime implements Zero
     pagePlugin.install(pluginOptions);
     mailTemplatePlugin.install(pluginOptions);
     translationPlugin.install(pluginOptions);
+    integrationPlugin.install(pluginOptions);
   }
 
 

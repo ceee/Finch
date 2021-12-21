@@ -52,4 +52,10 @@ public static class MapperExtensions
 
     return model;
   }
+
+
+  public static IEnumerable<TDestination> Map<TSource, TDestination>(this IZeroMapper mapper, IEnumerable<TSource> source)
+  {
+    return source.Select(x => mapper.Map<TSource, TDestination>(x));
+  }
 }

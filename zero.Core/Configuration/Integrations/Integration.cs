@@ -5,7 +5,7 @@
 /// It's up to the user to provide functionality.
 /// </summary>
 [RavenCollection("Integrations")]
-public class Integration : ZeroEntity
+public class IntegrationModel : ZeroEntity
 {
   /// <inheritdoc />
   public string TypeAlias { get; set; }

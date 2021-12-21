@@ -1,41 +1,31 @@
-﻿//using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 
-//namespace zero.Api.Endpoints.Integrations;
+namespace zero.Api.Endpoints.Integrations;
 
-//public class IntegrationsController : ZeroApiController
-//{
-//  public IntegrationsController(IIntegrationService store)
-//  {
+public class IntegrationsController : ZeroApiController
+{
+  readonly IIntegrationTypeService IntegrationTypes;
 
-//  }
-
-
-//  [HttpGet("empty")]
-//  [ZeroAuthorize(LanguagePermissions.Create)]
-//  public virtual Task<ActionResult<Language>> Empty(string flavor = null) => EmptyModel(flavor);
+  public IntegrationsController(IIntegrationTypeService integrationTypes)
+  {
+    IntegrationTypes = integrationTypes;
+  }
 
 
-//  [HttpGet("{id}")]
-//  [ZeroAuthorize(LanguagePermissions.Read)]
-//  public virtual Task<ActionResult<Language>> Get(string id, string changeVector = null) => GetModel(id, changeVector);
+  [HttpGet("types")]
+  //[ZeroAuthorize(SpacePermissions.Read)]
+  public virtual ActionResult<IEnumerable> GetTypes()
+  {
+    IEnumerable<IntegrationTypeDisplay> result = Mapper.Map<IntegrationType, IntegrationTypeDisplay>(IntegrationTypes.GetAll());
+    return Ok(result);
+  }
 
-
-//  [HttpGet("")]
-//  [ZeroAuthorize(LanguagePermissions.Read)]
-//  public virtual Task<ActionResult<Paged>> Get([FromQuery] ListQuery<Language> query) => GetModelsByIndex<LanguageBasic, zero_Api_Languages_Listing>(query);
-
-
-//  [HttpPost("")]
-//  [ZeroAuthorize(LanguagePermissions.Create)]
-//  public virtual Task<ActionResult<Result>> Create(Language saveModel) => CreateModel(saveModel);
-
-
-//  [HttpPut("{id}")]
-//  [ZeroAuthorize(LanguagePermissions.Update)]
-//  public virtual Task<ActionResult<Result>> Update(string id, Language updateModel, [FromQuery] string changeToken = null) => UpdateModel(id, updateModel, changeToken);
-
-
-//  [HttpDelete("{id}")]
-//  [ZeroAuthorize(LanguagePermissions.Delete)]
-//  public virtual Task<ActionResult<Result>> Delete(string id) => DeleteModel(id);
-//}
+  [HttpGet("types/{alias}")]
+  //[ZeroAuthorize(SpacePermissions.Read)]
+  public virtual ActionResult<SpaceType> GetTypes(string alias)
+  {
+    IntegrationTypeDisplay result = Mapper.Map<IntegrationType, IntegrationTypeDisplay>(IntegrationTypes.GetByAlias(alias));
+    return Ok(result);
+  }
+}

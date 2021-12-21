@@ -4,6 +4,7 @@ using zero.Applications;
 using zero.Architecture;
 using zero.Backoffice;
 using zero.Backoffice.DevServer;
+using zero.Configuration;
 using zero.Demo;
 using zero.Localization;
 using zero.Routing;
@@ -39,6 +40,12 @@ builder.Services.Configure<BlueprintOptions>(opts =>
   opts.Add<Country>();
   opts.Add<Language>();
   opts.Add<Translation>();
+});
+
+builder.Services.Configure<IntegrationOptions>(opts =>
+{
+  opts.Add<FathomAnalyticsIntegration>("analytics.fathom", "Fathom Analytics", "Connect your website to Fathom and track page views", tags: new() { "analytics" }, imagePath: "/assets/fathom.png");
+  opts.Add<GoogleAnalyticsIntegration>("analytics.google", "Google Analytics", "Connect your website to google analytics", tags: new() { "analytics" }, imagePath: "/assets/googleanalytics.png");
 });
 
 var app = builder.Build();

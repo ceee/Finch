@@ -1,22 +1,71 @@
 ﻿<template>
-  <div class="translations">
-    <ui-header-bar title="@translation.list" :count="count" :back-button="true">
-      <ui-table-filter :attach="$refs.table" />
-      <ui-add-button :route="createRoute" alias="translations" />
-    </ui-header-bar>
-    <div class="ui-blank-box">
-      <ui-table ref="table" config="translations" @count="count = $event" />
+  <div class="integrations">
+    <ui-header-bar title="@integration.list" :count="count" :back-button="true" />
+    <div class="ui-box">
+      <!--<h2 v-if="available.length > 0" class="ui-headline integrations-headline">Available</h2>-->
+      <integration-item v-for="(item, index) in items" :key="index" :model="item" @change="onChanged" @onActiveChange="onActiveChanged" />
     </div>
   </div>
 </template>
 
 
-<script lang="ts">
+<script>
+  import api from './api';
+  import IntegrationItem from './integrations-item.vue';
+
   export default {
     data: () => ({
       count: 0,
-      createRoute: 'translations-edit'
-    })
-  
+      items: []
+    }),
+
+    components: { IntegrationItem },
+
+    mounted()
+    {
+      this.load();
+    },
+
+    methods: {
+
+      async load()
+      {
+        const result = await api.getTypes();
+        this.items = result.data;
+      },
+
+      onChanged()
+      {
+        this.load();
+      },
+
+      onActiveChanged(model)
+      {
+        model.isLoading = true;
+
+        //IntegrationsApi.saveActiveState({ alias: model.type.alias, isActive: model.isActive }).then(res =>
+        //{
+        //  if (!res.success)
+        //  {
+        //    model.isActive = !model.isActive;
+        //    //Notification.error('@integration.errors.couldnotupdatestate', res.errors[0].message);
+        //  }
+        //  model.isLoading = false;
+        //});
+      }
+    }
   }
 </script>
+
+<style lang="scss">
+  h2.ui-headline.integrations-headline
+  {
+    font-family: var(--font);
+    color: var(--color-text);
+    margin: 0 0 var(--padding);
+    font-size: var(--font-size-l);
+    font-weight: 700;
+    padding-bottom: var(--padding-m);
+    border-bottom: 1px dashed var(--color-line-dashed); 
+  }
+</style>
