@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-rte :value="value" @input="$emit('input', $event)" :disabled="disabled" v-bind="{ maxLength, placeholder, setup }" />
+  <ui-rte :value="value" @input="$emit('input', $event)" :disabled="config.disabled" v-bind="{ maxLength, placeholder, setup }" />
 </template>
 
 
@@ -7,8 +7,7 @@
   export default {
     props: {
       value: String,
-      entity: Object,
-      disabled: Boolean,
+      config: Object,
 
       maxLength: {
         type: Number,

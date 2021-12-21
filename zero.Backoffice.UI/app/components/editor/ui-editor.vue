@@ -22,11 +22,12 @@
                               :value="value"
                               :field="field"
                               :disabled="disabled" 
+                              :system="system"
                               :class="field.configuration.classes"
                               @input="onChange" />
 
           </div>
-          <component v-else :is="tab.component" v-model="value" />
+          <component v-else :is="tab.component" v-model="value" :system="system" />
         </ui-tab>
       </ui-tabs>
       <aside class="editor-aside" v-if="asideDefined">
@@ -77,6 +78,10 @@
         type: Boolean,
         default: false
       },
+      scope: {
+        type: Boolean,
+        default: true
+      },
       value: {
         type: Object
       },
@@ -93,6 +98,7 @@
       editorConfig: {},
       loaded: false,
       tabs: [],
+      system: false,
       currentFieldset: null
     }),
 
@@ -113,6 +119,7 @@
 
     async created()
     {
+      this.system = this.$route.query.scope == 'system';
       const schema = typeof this.config === 'string' ? await this.zero.getSchema(this.config) : this.config;
       const editor = compileEditor(this.zero, schema);
 

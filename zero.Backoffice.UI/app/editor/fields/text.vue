@@ -1,5 +1,5 @@
 ﻿<template>
-  <input :value="value" @input="$emit('input', $event.target.value)" type="text" class="ui-input" v-placeholder="{ placeholder, model: entity }" :maxlength="maxLength" :disabled="disabled" />
+  <input :value="value" @input="$emit('input', $event.target.value)" type="text" class="ui-input" v-placeholder="{ placeholder, model: config.model }" :maxlength="maxLength" :disabled="config.disabled" />
 </template>
 
 
@@ -7,8 +7,7 @@
   export default {
     props: {
       value: String,
-      entity: Object,
-      disabled: Boolean,
+      config: Object,
 
       maxLength: {
         type: Number,

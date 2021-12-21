@@ -6,6 +6,8 @@ export class ZeroEditor extends ZeroEditorCanvas
 {
   resourcePrefix?: string;
 
+  system: boolean = false;
+
   onLabelCreate = (field: ZeroEditorField): string =>
   {
     return field.configuration.label || (this.resourcePrefix ? this.resourcePrefix + field.path : '@nolabel[' + field.path + ']');

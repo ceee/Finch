@@ -1,6 +1,6 @@
 ﻿<template>
-  <div class="ui-native-select" :disabled="disabled">
-    <select :value="value" @input="onChange($event)" :disabled="disabled">
+  <div class="ui-native-select" :disabled="config.disabled">
+    <select :value="value" @input="onChange($event)" :disabled="config.disabled">
       <option :value="null"></option>
       <option v-for="item in items" :value="item.id">{{item.name}}</option>
     </select>
@@ -14,8 +14,7 @@
   export default {
     props: {
       value: String,
-      entity: Object,
-      disabled: Boolean
+      config: Object
     },
 
     data: () => ({
@@ -24,7 +23,7 @@
 
     async mounted()
     {
-      const result = await api.getByQuery({});
+      const result = await api.getByQuery({}, { system: this.config.system });
       this.items = result.data;
     },
 

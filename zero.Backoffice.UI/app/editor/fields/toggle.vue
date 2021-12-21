@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-toggle :on="value" @update:on="$emit('input', $event)" :disabled="disabled" v-bind="{ negative, onContent, offContent }" />
+  <ui-toggle :on="value" @update:on="$emit('input', $event)" :disabled="config.disabled" v-bind="{ negative, onContent, offContent }" />
 </template>
 
 
@@ -7,8 +7,7 @@
   export default {
     props: {
       value: Boolean,
-      entity: Object,
-      disabled: Boolean,
+      config: Object,
 
       negative: Boolean,
       onContent: String,

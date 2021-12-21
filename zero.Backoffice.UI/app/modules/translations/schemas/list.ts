@@ -1,14 +1,14 @@
 ﻿
-import List from 'zero/core/list.ts';
-import TranslationsApi from 'zero/api/translations.js';
+import List from '../../../schemas/list/list';
+import api from '../api';
 
 const list = new List('translations');
 const prefix = '@translation.fields.';
 
 list.templateLabel = x => prefix + x;
-list.link = zero.alias.settings.translations + '-edit';
+list.link = 'translations-edit';
 
-list.onFetch(filter => TranslationsApi.getByQuery(filter));
+list.onFetch(filter => api.getByQuery(filter));
 
 list.column('key', { width: 420 }).name();
 list.column('value').text();

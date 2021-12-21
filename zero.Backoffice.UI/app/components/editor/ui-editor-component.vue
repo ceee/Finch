@@ -8,7 +8,10 @@
                :disabled="isDisabled"
                :vertical="!field.horizontal"
                >
-    <component :is="field.component" v-bind="field.options" :field="field" :value="model" :entity="value" :meta="meta" @input="onChange" />
+    <component :is="field.component" v-bind="field.options" 
+               :value="model" 
+               :config="config"
+               @input="onChange" />
     <p v-if="field.helpText" class="ui-property-help" v-localize="field.helpText"></p>
   </ui-property>
 
@@ -49,6 +52,10 @@
         type: Boolean,
         default: false
       },
+      system: {
+        type: Boolean,
+        default: false
+      },
     },
 
     watch: {
@@ -63,6 +70,7 @@
 
     data: () => ({
       model: null,
+      config: {},
       loaded: false,
       manualDisabled: false,
       selector: null
@@ -97,6 +105,14 @@
 
       rebuildModel()
       {
+        this.config = {
+          model: this.value,
+          field: this.field,
+          meta: this.meta,
+          disabled: this.isDisabled,
+          system: this.system
+        };
+
         this.selector = selectorToArray(this.field.path);
         let currentValue = this.value;
         let found = false;

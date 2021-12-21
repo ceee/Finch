@@ -10,6 +10,12 @@ declare module 'zero/schemas'
     text(options?: TextFieldOptions): ZeroEditorField;
 
     /**
+     * Render a text area
+     * @param {TextFieldOptions} [options] - Custom options
+     */
+    textarea(options?: TextFieldOptions): ZeroEditorField;
+
+    /**
      * Render a number input
      * @param {NumberFieldOptions} [options] - Custom options
      */
@@ -26,6 +32,18 @@ declare module 'zero/schemas'
      * @param {RteFieldOptions} [options] - Custom options
      */
     rte(options?: RteFieldOptions): ZeroEditorField;
+
+    /**
+     * Output a value
+     * @param {OutputFieldOptions} [options] - Custom options
+     */
+    output(options?: OutputFieldOptions): ZeroEditorField;
+
+    /**
+     * Select one of the predefined values
+     * @param {StateFieldOptions} options - Custom options
+     */
+    state(options: StateFieldOptions): ZeroEditorField;
   }
 
 
@@ -41,5 +59,22 @@ declare module 'zero/schemas'
   export interface FieldSupportsSetup
   {
     setup: boolean;
+  }
+
+  export interface OutputFieldOptions
+  {
+    render: (value: any, model: any) => string;
+  }
+
+  export interface StateFieldOptions
+  {
+    items: StateFieldItem[];
+  }
+
+  export interface StateFieldItem
+  {
+    value: any;
+    label: string;
+    disabled?: boolean;
   }
 }

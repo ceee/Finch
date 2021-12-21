@@ -38,6 +38,7 @@ builder.Services.Configure<BlueprintOptions>(opts =>
 {
   opts.Add<Country>();
   opts.Add<Language>();
+  opts.Add<Translation>();
 });
 
 var app = builder.Build();

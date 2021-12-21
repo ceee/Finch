@@ -6,14 +6,15 @@
   export default {
     props: {
       value: Object,
-      entity: Object,
+      config: Object,
+
       render: Function
     },
 
     computed: {
       output()
       {
-        return typeof this.render === 'function' ? this.render(this.value, this.entity) : this.value;
+        return typeof this.render === 'function' ? this.render(this.value, this.config.model) : this.value;
       }
     }
   }
