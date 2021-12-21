@@ -1,10 +1,12 @@
 ﻿
-import { ZeroEditor } from "../../../schemas/editor/editor";
+import { ZeroEditor } from "../../../editor/editor";
 
 const editor = new ZeroEditor();
 
+editor.resourcePrefix = '@country.fields.';
+
 editor.field('name').text({ maxLength: 120 });
 editor.field('code').text({ maxLength: 2 });
-editor.field('isPreferred', { optional: true }).toggle();
+editor.field('isPreferred', { optional: true, horizontal: true }).toggle();
 
 export default editor;

@@ -1,13 +1,15 @@
 ﻿
-export default {};
-//import Editor from '../../../editor/editor';
+import { ZeroEditor } from '../../../editor/editor';
 
-//const editor = new Editor('@language.fields.');
+const editor = new ZeroEditor();
+
+editor.resourcePrefix = '@language.fields.';
+
 //editor.blueprintAlias = 'languages';
-//editor.field('name', { label: '@ui.name' }).text(60).required();
-//editor.field('code').text(10).required();
-//editor.field('inheritedLanguageId').languagePicker();
-//editor.field('isDefault').toggle();
-//editor.field('isOptional').toggle();
+editor.field('name', { label: '@ui.name' }).text({ maxLength: 60 });
+editor.field('code').text({ maxLength: 5 });
+editor.field('inheritedLanguageId', { optional: true }).languagePicker();
+editor.field('isDefault', { optional: true, horizontal: true }).toggle();
+editor.field('isOptional', { optional: true, horizontal: true }).toggle();
 
-//export default editor;
+export default editor;

@@ -1,43 +1,40 @@
 ﻿-<template>
-  <ui-property v-if="loaded && !field.hidden(value)"
-               :field="field.path"
-               :hide-label="field.hideLabel"
-               :label="field.label"
-               :description="description"
-               :required="!field.optional(value)"
+  <ui-property v-if="loaded && !isHidden" 
+               :field="config.path" 
+               :label="label" 
+               :hide-label="config.options.hideLabel"
+               :description="description" 
+               :required="isRequired" 
                :disabled="isDisabled"
-               :vertical="!field.horizontal"
-               >
-    <component :is="field.component" v-bind="field.options" :field="field" :value="model" :entity="value" :meta="meta" @input="onChange" />
-    <p v-if="field.helpText" class="ui-property-help" v-localize="field.helpText"></p>
-  </ui-property>
-
-  <!--<ui-property v-if="loaded && !isHidden"
-               :vertical="field.configuration.vertical"
+               :vertical="config.options.vertical"
                :class="{'is-disabled': isDisabled }"
                :locked="isLocked"
                :can-unlock="canUnlock || false"
                @unlock="unlock"
                @lock="lock">
     <component :is="config.component" v-bind="config.componentOptions" :value="model" :entity="value" :meta="meta" @input="onChange" :disabled="isDisabled" />
-    <p v-if="field.configuration.helpText" class="ui-property-help" v-localize="field.configuration.helpText"></p>
-  </ui-property>-->
+    <p v-if="config.options.helpText" class="ui-property-help" v-localize="config.options.helpText"></p>
+  </ui-property>
 </template>
 
 
 <script>
-  import { selectorToArray, setObjectValue } from '../../utils';
+  import { selectorToArray } from '../../utils/arrays';
+  import { setObjectValue } from '../../utils/objects';
   import { localize } from '../../services/localization';
-  import { defineComponent } from 'vue';
   //import Overlay from 'zero/helpers/overlay.js';
 
-  export default defineComponent({
+  export default {
     name: 'uiEditorComponent',
 
     inject: [ 'meta' ],
 
     props: {
-      field: {
+      config: {
+        type: Object,
+        required: true
+      },
+      editor: {
         type: Object,
         required: true
       },
@@ -75,29 +72,41 @@
     },
 
     computed: {
-      description()
+      isHidden()
       {
-        return localize(this.field.description, { hideEmpty: true });
+        return this.loaded && typeof this.config.options.condition === 'function' && !this.config.options.condition(this.value, this);
+      },
+      isRequired()
+      {
+        return typeof this.config.isRequired === 'function' ? this.config.isRequired(this.value) : this.config.isRequired;
       },
       isDisabled()
       {
-        return this.manualDisabled || this.disabled || this.field.readonly(this.model);
+        return this.manualDisabled || this.disabled || (typeof this.config.options.disabled === 'boolean' && this.config.options.disabled) || (typeof this.config.options.disabled === 'function' && this.config.options.disabled(this.value, this.model));
+      },
+      label()
+      {
+        return this.config.options.label || this.editor.templateLabel(this.config.path);
+      },
+      description()
+      {
+        return localize(this.config.options.description || this.editor.templateDescription(this.config.path), { hideEmpty: true });
+      },
+      isLocked()
+      {
+        return this.editor.blueprint && !this.editor.blueprint.unlocked(this.value, this.config);
+      },
+      canUnlock()
+      {
+        return this.editor.blueprint && this.editor.blueprint.canUnlock(this.value, this.config);
       }
-      //isLocked()
-      //{
-      //  return this.editor.blueprint && !this.editor.blueprint.unlocked(this.value, this.field);
-      //},
-      //canUnlock()
-      //{
-      //  return this.editor.blueprint && this.editor.blueprint.canUnlock(this.value, this.field);
-      //}
     },
 
     methods: {
 
       rebuildModel()
       {
-        this.selector = selectorToArray(this.field.path);
+        this.selector = selectorToArray(this.config.path);
         let currentValue = this.value;
         let found = false;
 
@@ -138,18 +147,16 @@
         {
           setObjectValue(this.value, this.selector, value);
         }
-
         this.$emit('input', this.value);
 
-        // TODO
-        //if (typeof this.field.configuration.onChange === 'function')
-        //{
-        //  this.field.configuration.onChange(value, {
-        //    oldValue,
-        //    model: this.value,
-        //    component: this
-        //  });
-        //}
+        if (typeof this.config.options.onChange === 'function')
+        {
+          this.config.options.onChange(value, {
+            oldValue,
+            model: this.value,
+            component: this
+          });
+        }
       },
 
 
@@ -167,16 +174,16 @@
         //  confirmLabel: 'Confirm',
         //  closeLabel: 'Cancel'
         //}).then(
-        //  async () => await this.editor.blueprint.unlock(this.value, this.field),
+        //  async () => await this.editor.blueprint.unlock(this.value, this.config),
         //  () => {}
         //);
       },
 
       async lock()
       {
-        //let originalValue = await this.editor.blueprint.lock(this.value, this.field);
-        //this.onChange(originalValue);
+        let originalValue = await this.editor.blueprint.lock(this.value, this.config);
+        this.onChange(originalValue);
       }
     }
-  })
+  }
 </script>

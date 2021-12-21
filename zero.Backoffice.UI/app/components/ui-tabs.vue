@@ -1,8 +1,12 @@
 ﻿<template>
   <div class="ui-tabs">
     <div role="tablist" class="ui-tabs-list">
-      <button type="button" v-for="(tab, index) in tabs" class="ui-tabs-list-item" :key="index" :class="{ 'is-active': tab.active, 'has-errors': tab.hasErrors }" :disabled="tab.disabled" 
-              :aria-selected="tab.active" role="tab" @click="select(index)">
+      <button type="button" v-for="(tab, index) in tabs" class="ui-tabs-list-item" :key="index" 
+              :class="{ 'is-active': tab.active, 'has-errors': tab.hasErrors }" 
+              :disabled="tab.disabled" 
+              :aria-selected="tab.active" 
+              role="tab" 
+              @click="select(index)">
         <ui-icon v-if="tab.hasErrors" class="ui-tabs-list-item-error" :size="16" symbol="fth-alert-circle"></ui-icon>
         <span v-localize="tab.label"></span>
         <i v-if="tab.countOutput > 0" class="ui-tabs-list-item-count">{{tab.countOutput}}</i>

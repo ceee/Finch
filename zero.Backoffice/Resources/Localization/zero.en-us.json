@@ -530,6 +530,7 @@
     "list": "Countries",
     "name": "Country",
     "fields": {
+      "name": "Name",
       "code": "Code",
       "code_text": "Code in ISO 3166-1 format which is used to display the appropriate flag",
       "isPreferred": "Show on top"
@@ -702,6 +703,7 @@
       "recipient": "Recipient"
     },
     "fields": {
+      "name": "Name",
       "key": "Key",
       "key_text": "Used to query for the template in code",
       "subject": "Subject",

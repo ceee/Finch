@@ -1,5 +1,5 @@
 ﻿<template>
-  <section v-show="active && !hidden" class="ui-tab" :aria-hidden="!active" role="tabpanel">
+  <section v-show="active && !hide" class="ui-tab" :aria-hidden="!active" role="tabpanel">
     <slot />
   </section>
 </template>
@@ -23,7 +23,7 @@
         type: Boolean,
         default: false
       },
-      hidden: {
+      hide: {
         type: Boolean,
         default: false
       }

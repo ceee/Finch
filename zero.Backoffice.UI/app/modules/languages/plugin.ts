@@ -14,5 +14,7 @@ export default {
 
     app.schema('languages', () => import('./schemas/list'));
     app.schema('languages:edit', () => import('./schemas/editor'));
+
+    app.fieldType('languagePicker', defineAsyncComponent(() => import('./field-languagepicker.vue')));
   }
 } as ZeroPlugin;

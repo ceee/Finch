@@ -1,21 +1,32 @@
 ﻿<template>
   <div class="editor-outer" v-if="loaded">
     <header class="editor-above" v-if="aboveDefined">
-      <slot name="above" v-bind:config="editorConfig"></slot>
+      <!--<slot name="above" v-bind:config="editorConfig"></slot>-->
     </header>
-    <div class="editor" :class="['display-' + display, { 'has-sidebar': asideDefined, 'hide-tabs': tabs.length < 2, 'has-below': belowDefined }]">
+    <div class="editor" :class="['display-' + display, { 'has-sidebar': asideDefined, 'hide-tabs': editorConfig.tabs.length < 2, 'has-below': belowDefined }]">
       <ui-tabs class="editor-tabs">
-        <ui-tab v-for="(tab, index) in tabs" class="ui-box" :class="tab.class" :data-alias="tab.alias" :label="tab.name" :count="tab.count(value)" :hidden="tab.disabled(value)" :key="index">
+        <ui-tab v-for="(tab, index) in editorConfig.tabs" :key="index" class="ui-box" 
+                :class="tab.class" 
+                :data-alias="tab.alias" 
+                :label="tab.name"
+                :count="tab.count(value)" 
+                :hide="tab.hidden(value)"
+                :disabled="tab.disabled(value)">
           <h3 v-if="display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
           <slot name="blueprint">
-            <blueprint-property v-if="value && editorConfig.blueprint" :value="value" :meta="meta" :config="editorConfig.blueprint" />
+            <!--<blueprint-property v-if="value && editorConfig.blueprint" :value="value" :meta="meta" :config="editorConfig.blueprint" />-->
           </slot>
-          <div class="ui-property ui-property-parent" v-for="fieldset in tab.fieldsets">
-            <editor-component v-for="(field, fieldIndex) in fieldset.fields" :disabled="disabled" :key="fieldIndex" :config="field" @input="onChange" :editor="editorConfig" :value="value"
-                              :class="field.options.class" :data-cols="!!field.options.fieldset" :style="{ 'grid-column': field.options.fieldset ? 'span ' + field.options.fieldsetColumns : null }" />
+          <div v-if="!tab.component" class="ui-property ui-property-parent" v-for="(fieldset, fieldsetIndex) in tab.fieldsets" :key="fieldsetIndex">
+
+            <editor-component v-for="(field, fieldIndex) in fieldset.fields" :key="fieldIndex"
+                              :value="value"
+                              :field="field"
+                              :disabled="disabled" 
+                              :class="field.configuration.classes"
+                              @input="onChange" />
 
           </div>
-          <component v-if="tab.component" :is="tab.component" v-model="value" />
+          <component v-else :is="tab.component" v-model="value" />
         </ui-tab>
       </ui-tabs>
       <aside class="editor-aside" v-if="asideDefined">
@@ -30,11 +41,15 @@
 
 
 <script>
+  // :data-cols="!!field.options.fieldset" 
+  // :style="{ 'grid-column': field.options.fieldset ? 'span ' + field.options.fieldsetColumns : null }"
+
   import './ui-editor.scss';
   import EditorComponent from './ui-editor-component.vue';
   //import { createBlueprintConfig } from './editor-blueprint';
   //import BlueprintProperty from './blueprint/property.vue';
   import { defineComponent } from 'vue';
+  import { compileEditor } from '../../editor/compile';
 
   let createBlueprintConfig = () => null;
 
@@ -74,6 +89,7 @@
     components: { EditorComponent },
 
     data: () => ({
+      display: 'tabs',
       editorConfig: {},
       loaded: false,
       tabs: [],
@@ -83,36 +99,25 @@
     computed: {
       aboveDefined()
       {
-        return this.$scopedSlots.hasOwnProperty('above');
+        return this.$slots.hasOwnProperty('above');
       },
       asideDefined()
       {
-        return this.$scopedSlots.hasOwnProperty('aside');
+        return this.$slots.hasOwnProperty('aside');
       },
       belowDefined()
       {
-        return this.$scopedSlots.hasOwnProperty('below');
+        return this.$slots.hasOwnProperty('below');
       }
     },
 
     async created()
     {
-      this.editorConfig = typeof this.config === 'string' ? await this.zero.getSchema(this.config) : this.config;
-      this.editorConfig.blueprint = createBlueprintConfig(this.zero, this.editorConfig, this.value);
+      const schema = typeof this.config === 'string' ? await this.zero.getSchema(this.config) : this.config;
+      const editor = compileEditor(this.zero, schema);
 
-      this.tabs = this.editorConfig.tabs.map(tab =>
-      {
-        let fieldsets = this.editorConfig.getFieldsets(tab);
-
-        return {
-          ...tab,
-          count: value => typeof tab.count === 'number' ? tab.count : (typeof tab.count === 'function' ? tab.count(value) : 0),
-          disabled: value => typeof tab.disabled === 'boolean' ? tab.disabled : (typeof tab.disabled === 'function' ? tab.disabled(value) : false),
-          fieldsets
-        };
-      });
-
-      this.display = this.editorConfig.options.display || 'tabs';
+      this.editorConfig = editor;
+      //this.editorConfig.blueprint = createBlueprintConfig(this.zero, this.editorConfig, this.value);
 
       this.onConfigure(this);
 

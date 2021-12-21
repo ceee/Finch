@@ -6,14 +6,10 @@
 <script>
   export default {
     props: {
-      value: {
-        type: String,
-        default: null
-      },
-      disabled: {
-        type: Boolean,
-        default: false
-      },
+      value: String,
+      entity: Object,
+      disabled: Boolean,
+
       maxLength: {
         type: Number,
         default: null
@@ -25,8 +21,7 @@
       setup: {
         type: Function,
         default: () => { }
-      },
-      config: Object
+      }
     }
   }
 </script>

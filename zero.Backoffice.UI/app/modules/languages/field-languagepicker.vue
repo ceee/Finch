@@ -9,30 +9,23 @@
 
 
 <script>
-  import api from '../../modules/languages/api';
+  import api from './api';
 
   export default {
     props: {
-      value: {
-        type: String
-      },
-      config: Object,
-      disabled: {
-        type: Boolean,
-        default: false
-      }
+      value: String,
+      entity: Object,
+      disabled: Boolean
     },
 
     data: () => ({
       items: []
     }),
 
-    mounted()
+    async mounted()
     {
-      api.getByQuery().then(res =>
-      {
-        this.items = res.data;
-      });
+      const result = await api.getByQuery({});
+      this.items = result.data;
     },
 
     methods: {

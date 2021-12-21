@@ -258,7 +258,7 @@
   {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-gap: var(--padding) var(--padding-m);
+    grid-gap: 0; //var(--padding) var(--padding-m);
 
     > .ui-property
     {

@@ -1,13 +1,13 @@
 ﻿
-import List from 'zero/core/list.ts';
-import MailTemplatesApi from 'zero/api/mailTemplates.js';
+import List from '../../../schemas/list/list';
+import api from '../api';
 
 const list = new List('mailTemplates');
 
 list.templateLabel = x => '@mailTemplate.fields.' + x;
-list.link = zero.alias.settings.mails + '-edit';
+list.link = 'mailtemplates-edit';
 
-list.onFetch(filter => MailTemplatesApi.getByQuery(filter));
+list.onFetch(filter => api.getByQuery(filter));
 
 list.column('name').name();
 list.column('subject').text();

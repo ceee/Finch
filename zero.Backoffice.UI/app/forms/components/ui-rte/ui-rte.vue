@@ -48,7 +48,7 @@
     components: { EditorContent, BubbleMenu, EditorMenuBar },
 
     props: {
-      modelValue: {
+      value: {
         type: String,
         default: ''
       },
@@ -80,7 +80,7 @@
     }),
 
     watch: {
-      modelValue()
+      value()
       {
         if (!this.blocked)
         {
@@ -163,13 +163,13 @@
     methods: {
       init()
       {
-        this.editor.commands.setContent(this.modelValue, false);
+        this.editor.commands.setContent(this.value, false);
       },
 
       onChange(content)
       {
         this.blocked = true;
-        this.$emit('update:modelValue', content);
+        this.$emit('update:value', content);
         this.$nextTick(() => this.blocked = false);
       },
 

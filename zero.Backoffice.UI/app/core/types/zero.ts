@@ -1,3 +1,4 @@
+import { Component } from "vue";
 import { ZeroSchema } from "zero/schemas";
 
 export interface Zero
@@ -9,6 +10,11 @@ export interface Zero
   usePlugins: () => void;
 
   runtimeVariables: Record<string, any>;
+
+  /**
+   * get a defined field type component
+   **/
+  getFieldTypeComponent(alias: string): Component | undefined;
 
   /**
    * get a defined list or editor schema

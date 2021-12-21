@@ -1,4 +1,6 @@
 ﻿import { ZeroEditorField } from "zero/schemas";
+import { extendObject } from '../utils/objects';
+import { ZeroFieldType } from "./_new/types";
 
 export declare type BooleanExpression = (model: any, value: any) => boolean;
 
@@ -13,7 +15,7 @@ export const createFieldProxy = (field: ZeroEditorFieldImpl) => new Proxy(field,
     }
 
     // handle dynamic fields + extensions
-    return (...args) =>
+    return (args) =>
     {
       target.custom(prop, args);
       return target;
@@ -22,17 +24,18 @@ export const createFieldProxy = (field: ZeroEditorFieldImpl) => new Proxy(field,
 })// as EditorField;
 
 
+// @ts-ignore
 export class ZeroEditorFieldImpl implements ZeroEditorField
 {
   path: string;
   configuration: ZeroEditorFieldConfiguration;
-  fieldType?: string;
+  fieldType: string;
   options?: any;
 
   constructor(path: string, config?: ZeroEditorFieldConfiguration)
   {
     this.path = path;
-    this.configuration = config || createDefaultFieldConfiguration();
+    this.configuration = extendObject(createDefaultFieldConfiguration(), config || {}) as ZeroEditorFieldConfiguration;
   }
 
 
@@ -105,7 +108,8 @@ export function createDefaultFieldConfiguration(): ZeroEditorFieldConfiguration
     description: null,
     helpText: null,
     classes: null,
-    horizontal: false
+    horizontal: false,
+    sort: 0
   } as ZeroEditorFieldConfiguration;
 }
 
@@ -147,5 +151,9 @@ export interface ZeroEditorFieldConfiguration
   /**
    * Whether to render the label next to the input
    **/
-  horizontal?: boolean
+  horizontal?: boolean,
+  /**
+   * Sort order for fields within the editor canvas
+   **/
+  sort?: number
 }

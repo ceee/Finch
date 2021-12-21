@@ -1,3 +1,4 @@
+import { ZeroEditorFieldConfiguration } from "./editor-field";
 
 declare module 'zero/schemas'
 {
@@ -19,6 +20,26 @@ declare module 'zero/schemas'
 
   export interface ZeroEditorField
   {
+    /**
+     * Model path
+     */
+    path: string;
+
+    /**
+     * Field configuration
+     */
+    configuration: ZeroEditorFieldConfiguration;
+
+    /**
+     * Type of the field which has to be registered in the zero runtime
+     */
+    fieldType: string;
+
+    /**
+     * Custom options which are passed to the component
+     */
+    options?: any;
+
     /**
      * Set this field as optional
      * @param {function|boolean} [condition] - Optionally only require this field when a condition is fulfilled or reset the required state with true/false

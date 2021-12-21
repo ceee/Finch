@@ -9,8 +9,8 @@ import registerComponents from '../components/register';
 import registerFormComponents from '../forms/register';
 //import registerEditorComponents from '../editor/register';
 import { getRouterConfig, appendRouterGuards } from './router/routerConfig';
-import { countryPlugin, applicationPlugin, settingsPlugin, languagePlugin, mediaPlugin, spacePlugin, pagePlugin } from '../modules';
-import editorPlugin from '../editor/_new/plugin';
+import { countryPlugin, applicationPlugin, settingsPlugin, languagePlugin, mediaPlugin, spacePlugin, pagePlugin, mailTemplatePlugin } from '../modules';
+import editorPlugin from '../editor/plugin';
 import { ZeroSchema } from 'zero/schemas';
 import { ZeroSchemaProp } from './zero';
 import * as zeroOptions from '../options';
@@ -99,6 +99,7 @@ export class ZeroRuntime implements Zero
     mediaPlugin.install(pluginOptions);
     spacePlugin.install(pluginOptions);
     pagePlugin.install(pluginOptions);
+    mailTemplatePlugin.install(pluginOptions);
   }
 
 
@@ -111,6 +112,15 @@ export class ZeroRuntime implements Zero
     const router = createRouter(this._routerConfig);
     appendRouterGuards(router);
     this._app.use(router);
+  }
+
+
+  /**
+   * get a defined field type component
+   **/
+  getFieldTypeComponent(alias: string): Component | undefined
+  {
+    return this._fieldTypes[alias];
   }
 
 
