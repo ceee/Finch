@@ -27,22 +27,25 @@
 
       async onLoad(form)
       {
-        const response = await form.load(() => this.id ? api.getById(this.id, undefined, { system: this.$route.query.scope == 'system' }) : api.getEmpty(this.$route.query['zero.flavor']));
+        var config = { system: this.$route.query['zero.scope'] == 'system' };
+        const response = await form.load(() => this.id ? api.getById(this.id, undefined, config) : api.getEmpty(this.$route.query['zero.flavor'], config));
         this.model = response;
       },
 
 
       async onSubmit(form)
       {
-        const response = this.id ? await api.update(this.model) : await api.create(this.model);
+        var config = { system: this.$route.query['zero.scope'] == 'system' };
+        const response = this.id ? await api.update(this.model, config) : await api.create(this.model, config);
         await form.handle(response);
       },
 
 
       onDelete(item, opts)
       {
+        var config = { system: this.$route.query['zero.scope'] == 'system' };
         opts.hide();
-        this.$refs.form.onDelete(api.delete.bind(this, this.id));
+        this.$refs.form.onDelete(api.delete.bind(this, this.id, config));
       }
     }
   }

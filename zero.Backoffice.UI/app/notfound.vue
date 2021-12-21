@@ -16,7 +16,7 @@
         <span>Path</span>
         <template v-for="(route, index) in routes" :key="index">
           <span>{{index + 1}}.</span>
-          <b>{{route.name}} <em v-if="route.parent">[parent:{{route.parent}}]</em></b>
+          <b>{{route.name}} <em v-if="route.parent">[{{route.parent}}]</em></b>
           <span>{{route.path}}</span>
         </template>
       </div>
@@ -60,11 +60,7 @@
       rebuild()
       {
         this.path = this.$route.path;
-        this.routes = [];
-
         let routes = [];
-
-        console.info(this.$router.getRoutes().reverse());
 
         this.$router.getRoutes().reverse().forEach(route =>
         {
@@ -161,6 +157,11 @@
       {
         color: var(--color-text-dim);
       }
+    }
+
+    b
+    {
+      font-weight: 700;
     }
 
     em

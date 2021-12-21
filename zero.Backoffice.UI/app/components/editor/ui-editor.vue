@@ -119,7 +119,7 @@
 
     async created()
     {
-      this.system = this.$route.query.scope == 'system';
+      this.system = this.$route.query['zero.scope'] == 'system';
       const schema = typeof this.config === 'string' ? await this.zero.getSchema(this.config) : this.config;
       const editor = compileEditor(this.zero, schema);
 
