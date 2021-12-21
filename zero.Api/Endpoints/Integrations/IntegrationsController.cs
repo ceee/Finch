@@ -1,43 +1,41 @@
 ﻿//using Microsoft.AspNetCore.Mvc;
-//using System.Collections.Generic;
-//using System.Threading.Tasks;
-//using zero.Core.Collections;
-//using zero.Core.Entities;
-//using zero.Core.Integrations;
-//using zero.Web.Models;
 
-//namespace zero.Web.Controllers
+//namespace zero.Api.Endpoints.Integrations;
+
+//public class IntegrationsController : ZeroApiController
 //{
-//  //[ZeroAuthorize(Permissions.Sections.PREFIX + "commerce", PermissionsValue.Read)]
-//  public class IntegrationsController : BackofficeController
+//  public IntegrationsController(IIntegrationService store)
 //  {
-//    IIntegrationsCollection Collection;
 
-//    public IntegrationsController(IIntegrationsCollection collection)
-//    {
-//      Collection = collection;
-//    }
-
-
-//    public EditModel<Integration> GetEmpty([FromQuery] string alias) => Edit(Collection.GetEmpty(alias));
-
-
-//    public async Task<EditModel<Integration>> GetByAlias([FromQuery] string alias) => Edit(await Collection.GetByAlias(alias));
-
-
-//    public async Task<Paged<Integration>> Load([FromQuery] ListQuery<Integration> query) => await Collection.Load(query);
-
-
-//    public async Task<IList<IntegrationTypeWithStatus>> GetTypes() => await Collection.GetTypesWithStatus();
-
-
-//    [HttpPost]
-//    public async Task<Result<Integration>> Save([FromBody] Integration model) => await Collection.Save(model);
-
-//    [HttpPost]
-//    public async Task<Result<Integration>> SaveActiveState([FromBody] Integration model) => model.IsActive ? await Collection.Activate(model.Alias) : await Collection.Deactivate(model.Alias);
-
-//    [HttpDelete]
-//    public async Task<Result<Integration>> Delete([FromQuery] string alias) => await Collection.DeleteByAlias(alias);
 //  }
+
+
+//  [HttpGet("empty")]
+//  [ZeroAuthorize(LanguagePermissions.Create)]
+//  public virtual Task<ActionResult<Language>> Empty(string flavor = null) => EmptyModel(flavor);
+
+
+//  [HttpGet("{id}")]
+//  [ZeroAuthorize(LanguagePermissions.Read)]
+//  public virtual Task<ActionResult<Language>> Get(string id, string changeVector = null) => GetModel(id, changeVector);
+
+
+//  [HttpGet("")]
+//  [ZeroAuthorize(LanguagePermissions.Read)]
+//  public virtual Task<ActionResult<Paged>> Get([FromQuery] ListQuery<Language> query) => GetModelsByIndex<LanguageBasic, zero_Api_Languages_Listing>(query);
+
+
+//  [HttpPost("")]
+//  [ZeroAuthorize(LanguagePermissions.Create)]
+//  public virtual Task<ActionResult<Result>> Create(Language saveModel) => CreateModel(saveModel);
+
+
+//  [HttpPut("{id}")]
+//  [ZeroAuthorize(LanguagePermissions.Update)]
+//  public virtual Task<ActionResult<Result>> Update(string id, Language updateModel, [FromQuery] string changeToken = null) => UpdateModel(id, updateModel, changeToken);
+
+
+//  [HttpDelete("{id}")]
+//  [ZeroAuthorize(LanguagePermissions.Delete)]
+//  public virtual Task<ActionResult<Result>> Delete(string id) => DeleteModel(id);
 //}

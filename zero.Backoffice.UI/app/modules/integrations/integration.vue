@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-form ref="form" class="translation" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model:value="model" prefix="@translation.list" title="@translation.name" :disabled="disabled" :is-create="!id" :state="form.state" :active-disabled="true" :can-delete="meta.canDelete" @delete="onDelete" />
+    <ui-form-header v-model:value="model" prefix="@translation.list" title="@translation.name" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
     <ui-editor config="translations:edit" v-model="model" :meta="meta" :disabled="disabled" :scope="true">
       <template v-slot:below>
         <ui-editor-infos v-model="model" :disabled="disabled" />

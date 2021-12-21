@@ -6,6 +6,7 @@
         <router-link :to="item.url || '/'" v-for="item in group.items" :key="item.name" class="settings-group-item">
           <span class="settings-group-item-icon">
             <ui-icon :symbol="item.icon || 'fth-settings'" :size="18" />
+            <span v-if="item.alias === 'applications'" class="settings-group-item-count">{{appCount}}</span>
           </span>
           <p class="settings-group-item-text">
             <strong v-localize="item.name"></strong>
@@ -24,12 +25,14 @@
 
 <script>
   import { useUiStore } from '../../ui/store';
+  import { useAppStore } from '../applications/store';
 
   export default {
     name: 'app-settings',
 
     data: () => ({
       page: true,
+      appCount: 0,
       groups: [],
       tokens: {
         'zero_version': '0.0.1',
@@ -40,6 +43,7 @@
     mounted()
     {
       this.groups = useUiStore().settingGroups;
+      this.appCount = useAppStore().applications.length;
     }
   }
 </script>
@@ -89,6 +93,7 @@
     box-shadow: var(--shadow-short);
     color: var(--color-text);
     transition: color 0.2s ease;
+    position: relative;
   }
 
   a.settings-group-item:hover .settings-group-item-icon
@@ -108,5 +113,23 @@
       margin-bottom: 5px;
       color: var(--color-text);
     }
+  }
+
+  .settings-group-item-count
+  {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--color-accent);
+    color: var(--color-accent-fg);
+    height: 22px;
+    width: 22px;
+    line-height: 22px;
+    padding: 0 0;
+    text-align: center;
+    border-radius: 16px;
+    position: absolute;
+    top: -4px;
+    right: -4px;
   }
 </style>

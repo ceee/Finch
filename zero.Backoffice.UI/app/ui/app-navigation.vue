@@ -10,11 +10,11 @@
       <!--<ui-button icon="fth-search" :stroke="2.5" type="blank" class="app-nav-search" @click="openSearch" />--> 
     </div>
 
-    <ui-dropdown v-if="applications.length > 0" class="app-nav-switch">
+    <ui-dropdown v-if="currentApplication && appStore.applications.length > 0" class="app-nav-switch">
       <template v-slot:button>
         <ui-button type="light block" :label="currentApplication.name" caret="right" />
       </template>
-      <ui-dropdown-button v-for="app in applications" :value="app" :key="app.id" :label="app.name" :selected="app.id === appId" @click="applicationChanged" :prevent="true" />
+      <ui-dropdown-button v-for="app in appStore.applications" :value="app" :key="app.id" :label="app.name" :selected="app.id === appId" @click="applicationChanged" :prevent="true" />
       <ui-dropdown-separator />
       <!--<ui-dropdown-button label="Add new application" icon="fth-plus" @click="addApplication" />-->
       <ui-dropdown-button label="Manage apps" icon="fth-edit-2" @click="manageApplications" />
@@ -64,7 +64,7 @@
   import { defineComponent } from 'vue';
   import { useAccountStore } from '../account/store';
   import { useUiStore } from '../ui/store';
-  import { applicationApi } from '../modules/applications';
+  import { useAppStore } from '../modules/applications/store';
   import accountApi from '../account/api';
   import EventHub from '../services/eventhub';
 
@@ -77,6 +77,7 @@
     data: () => ({
       account: null,
       ui: null,
+      appStore: null,
       appId: null,
       applications: [],
       sections: [],
@@ -86,16 +87,19 @@
       themeSwitchTimeout: null
     }),
 
-    async created()
+    created()
     {
       this.ui = useUiStore();
       this.account = useAccountStore();
-      this.applications = (await applicationApi.getByQuery({ pageSize: 100 })).data;
-      this.currentApplication = this.applications[0];
+      this.appStore = useAppStore();
+    },
+
+
+    mounted()
+    {
+      console.info(this.appStore);
+      this.currentApplication = this.appStore.applications[0];
       this.appId = this.currentApplication.id;
-      //this.compact = localStorage.getItem(compactCacheKey) === 'true';s
-      //this.darkTheme = localStorage.getItem(themeCacheKey) === 'dark';
-      //this.buildUser(AuthApi.user);
     },
 
 

@@ -12,7 +12,10 @@ public class TranslationMapperProfile : ZeroMapperProfile
 
   protected virtual void Map(Translation source, TranslationBasic target, IZeroMapperContext ctx)
   {
-    this.MapBasicData(source, target);
+    target.Id = source.Id;
+    target.Key = source.Key;
+    target.Flavor = source.Flavor;
+    target.CreatedDate = source.CreatedDate;
     target.Value = source.Value;
     target.Display = source.Display;
   }

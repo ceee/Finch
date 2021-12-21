@@ -25,7 +25,7 @@ public class TranslationsController : ZeroApiEntityStoreController<Translation, 
   public virtual Task<ActionResult<Paged>> Get([FromQuery] ListQuery<Translation> query)
   {
     query.SearchFor(x => x.Key, x => x.Value);
-    return GetModelsByIndex<zero_Api_Translations_Listing>(query);
+    return GetModelsByIndex<TranslationBasic, zero_Api_Translations_Listing>(query);
   }
 
 

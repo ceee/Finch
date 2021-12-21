@@ -22,6 +22,7 @@
   import { useAccountStore } from './account/store';
   import { useUiStore } from './ui/store';
   import { useTranslationStore } from './stores/translations';
+  import { useAppStore } from './modules/applications/store';
   import accountApi from './account/api';
   import { defineComponent } from 'vue';
 
@@ -44,6 +45,7 @@
       if (userResponse.success)
       {
         this.accountStore.user = userResponse.data;
+        await useAppStore().setup();
         await useUiStore().setup();
       }
       else

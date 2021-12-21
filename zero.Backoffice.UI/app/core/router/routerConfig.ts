@@ -18,21 +18,8 @@ export function getRouterConfig(basePath: string, zero: Zero): RouterOptions
     routes: []
   } as RouterOptions;
 
-  //options.routes.push({
-  //  name: 'xroot',
-  //  path: '/',
-  //  component: () => import('../../_root.vue'),
-  //  meta: {
-  //    name: 'Root name',
-  //    alias: 'rootalias',
-  //    section: 'Root section'
-  //  }
-  //} as RouteRecordRaw);
-
-  options.routes.push({ path: '/', component: () => import('../../_root.vue') });
-  options.routes.push({ path: '/about', component: () => import('../../_about.vue') });
-
-  // TODO add zero routes
+  options.routes.push({ name: 'dashboard', path: '/', redirect: { name: 'pages' } });
+  options.routes.push({ name: '404', path: '/:pathMatch(.*)', component: () => import('../../notfound.vue') });
 
   return options;
 }
