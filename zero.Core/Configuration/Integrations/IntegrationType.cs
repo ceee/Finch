@@ -52,7 +52,7 @@ public class IntegrationType
   public IValidator Validator { get; set; }
 
   [JsonIgnore]
-  public Func<FlavorConfig, object> Construct { get; set; }
+  public Func<IntegrationType, Integration> Construct { get; set; }
 
   public IntegrationType(Type type)
   {

@@ -20,6 +20,7 @@ public class ConfigurationModule : ZeroModule
 
     services.AddTransient<IZeroOptions, ZeroOptions>(factory => factory.GetService<IOptions<ZeroOptions>>().Value);
     services.AddScoped<IIntegrationTypeService, IntegrationTypeService>();
+    services.AddScoped<IIntegrationStore, IntegrationStore>();
 
     services.AddOptions<FeatureOptions>().Bind(configuration.GetSection("Zero:Features"));
     services.AddOptions<IntegrationOptions>();

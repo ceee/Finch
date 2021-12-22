@@ -2,7 +2,7 @@
 
 namespace zero.Demo
 {
-  public class GoogleAnalyticsIntegration : IntegrationModel
+  public class GoogleAnalyticsIntegration : Integration
   {
     /// <summary>
     /// Provided tracking ID from Google

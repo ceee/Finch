@@ -126,8 +126,13 @@ export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorFi
 }
 
 
-export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEditor
+export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEditor | null
 {
+  if (!editor)
+  {
+    return null;
+  }
+
   let model = {
     alias: editor.alias,
     blueprint: null,

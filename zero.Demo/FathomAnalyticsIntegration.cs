@@ -2,7 +2,7 @@
 
 namespace zero.Demo
 {
-  public class FathomAnalyticsIntegration : IntegrationModel
+  public class FathomAnalyticsIntegration : Integration
   {
     /// <summary>
     /// ID of the site in Fathom

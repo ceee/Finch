@@ -28,7 +28,7 @@
 
 
 <script>
-  import * as overlays from '../../../services/overlay';
+  import * as overlays from '../../services/overlay';
 
   export default {
     name: 'uiEditorBlueprintProperty',

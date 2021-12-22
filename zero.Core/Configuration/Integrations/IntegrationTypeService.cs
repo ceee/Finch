@@ -32,7 +32,7 @@ public class IntegrationTypeService : IIntegrationTypeService
 
 
   /// <inheritdoc />
-  public IntegrationType GetByType<T>() where T : IntegrationModel
+  public IntegrationType GetByType<T>() where T : Integration
   {
     Type type = typeof(T);
     return Types.FirstOrDefault(x => x.ModelType == type);
@@ -55,5 +55,5 @@ public interface IIntegrationTypeService
   /// <summary>
   /// Get a specific integration type by model type.
   /// </summary>
-  IntegrationType GetByType<T>() where T : IntegrationModel;
+  IntegrationType GetByType<T>() where T : Integration;
 }

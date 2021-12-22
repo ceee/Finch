@@ -291,7 +291,7 @@
 
     .ui-icon
     {
-      color: var(--color-text);
+      color: var(--color-accent);
       margin-top: -2px;
     }
   }

@@ -23,8 +23,8 @@
 
 
 <script>
-  import { selectorToArray, setObjectValue } from '../../utils';
-  import { localize } from '../../services/localization';
+  import { selectorToArray, setObjectValue } from '../utils';
+  import { localize } from '../services/localization';
   import { defineComponent } from 'vue';
   //import Overlay from 'zero/helpers/overlay.js';
 

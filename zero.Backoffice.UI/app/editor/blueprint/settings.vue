@@ -25,7 +25,7 @@
 
 
 <script>
-  import { arrayRemove } from '../../../utils/arrays';
+  import { arrayRemove } from '../../utils/arrays';
   //import Localization from 'zero/helpers/localization.js';
   //import BlueprintApi from 'zero/api/blueprint.js';
 

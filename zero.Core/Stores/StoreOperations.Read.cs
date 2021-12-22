@@ -42,6 +42,14 @@ public partial class StoreOperations : IStoreOperations
 
 
   /// <inheritdoc />
+  public virtual async Task<bool> Any<T>(Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, new()
+  {
+    querySelector ??= x => x;
+    return await querySelector(Session.Query<T>()).AnyAsync();
+  }
+
+
+  /// <inheritdoc />
   public virtual async Task<Paged<T>> Load<T>(int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, new()
   {
     IRavenQueryable<T> queryable = Session.Query<T>().Statistics(out QueryStatistics statistics);

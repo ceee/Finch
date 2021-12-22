@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Raven.Client.Documents.Indexes;
+using System.Text.Json;
+using zero.Configuration;
 using zero.Context;
 using zero.Persistence;
 using zero.Routing;
+using zero.Utils;
 
 namespace zero.Demo.Controllers;
 
@@ -38,6 +41,19 @@ public class SetupController : Controller
 
   //  return Json(result);
   //}
+
+
+  [HttpGet("/api/setup/json")]
+  public async Task<IActionResult> TestJson([FromServices] IIntegrationStore store)
+  {
+    Integration integration = await store.Load("analytics.fathom");
+
+    JsonFlavorVariantConverter converter = new();
+    JsonSerializerOptions opts = new();
+    opts.Converters.Add(converter);
+
+    return Content(JsonSerializer.Serialize(integration, opts), "application/json");
+  }
 
 
   [HttpGet("/api/setup/indexes")]

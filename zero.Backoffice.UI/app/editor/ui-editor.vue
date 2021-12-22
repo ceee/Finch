@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="editor-outer" v-if="loaded">
+  <div class="editor-outer" v-if="loaded && editorConfig">
     <header class="editor-above" v-if="aboveDefined">
       <!--<slot name="above" v-bind:config="editorConfig"></slot>-->
     </header>
@@ -38,6 +38,15 @@
       </aside>
     </div>
   </div>
+  <div class="editor-outer" v-if="loaded && !editorConfig">
+    <div class="page page-error" style="min-height: 400px;">
+      <ui-icon symbol="fth-cloud-snow" class="page-error-icon" :size="82" />
+      <p class="page-error-text">
+        <strong class="page-error-headline">Could not find editor</strong><br>
+        <span v-if="typeof config === 'string'">Please register an editor schema with the alias:<br />[{{config}}]</span>
+      </p>
+    </div>
+  </div>
 </template>
 
 
@@ -49,7 +58,7 @@
   import EditorComponent from './ui-editor-component.vue';
   import BlueprintProperty from './blueprint/property.vue';
   import { defineComponent } from 'vue';
-  import { compileEditor } from '../../editor/compile';
+  import { compileEditor } from './compile';
 
   export default defineComponent({
     name: 'uiEditor',
@@ -118,8 +127,7 @@
     {
       this.system = this.$route.query['zero.scope'] == 'system';
       const schema = typeof this.config === 'string' ? await this.zero.getSchema(this.config) : this.config;
-      const editor = compileEditor(this.zero, schema);
-      this.editorConfig = editor;
+      this.editorConfig = compileEditor(this.zero, schema);
 
       this.onConfigure(this);
 

@@ -142,6 +142,11 @@ public interface IStoreOperations
   T PrepareForSave<T>(T model) where T : ZeroIdEntity;
 
   /// <summary>
+  /// Check if any items exist in this collection (with optional query)
+  /// </summary>
+  Task<bool> Any<T>(Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, new();
+
+  /// <summary>
   /// Get an entity by Id
   /// </summary>
   Task<T> Load<T>(string id, string changeVector = null) where T : ZeroIdEntity, new();

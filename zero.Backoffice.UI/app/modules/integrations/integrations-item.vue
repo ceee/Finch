@@ -4,9 +4,7 @@
       <span class="integrations-item-icon" :style="{'background-color': hasColor ? model.color : null }">
         <ui-icon :symbol="model.icon || 'fth-box'" :size="26" />
       </span>
-      <!--<button type="button" v-if="!model.isConfigured" @click="open" class="ui-button type-primary type-block">
-        <span class="ui-button-text" v-localize="'Setup'" />
-      </button>
+      <!--
       <button type="button" v-else @click="open" class="ui-button type-primary type-block">
         <span class="ui-button-text" v-localize="'Edit'" />
       </button>-->
@@ -20,9 +18,10 @@
           <span v-localize="model.description"></span>
         </template>
       </p>
-      <div class="integrations-item-tags">
+      <!--<div class="integrations-item-tags">
         <span class="ui-tag" v-for="tag in model.tags">{{tag}}</span>
-      </div>
+      </div>-->
+      <ui-button class="integrations-item-button" type="action small" v-if="!model.isConfigured" v-localize="'Setup'" @click="open" />
       <ui-toggle class="integrations-item-toggle" v-if="model.isConfigured" v-model="model.isActivacted" @input="$emit('onActiveChange', model)" on-content="Active" off-content="Active" />
     </main>  
   </div>
@@ -30,7 +29,7 @@
 
 
 <script>
-  //import Overlay from 'zero/helpers/overlay.js';
+  import * as overlays from '../../services/overlay';
 
   export default {
     props: {
@@ -52,20 +51,19 @@
     },
 
     methods: {
-      open()
+      async open()
       {
-        // open editing overlay
-        //return Overlay.open({
-        //  component: () => import('./integration.vue'),
-        //  display: 'editor',
-        //  model: this.model.type,
-        //  isCreate: !this.model.isConfigured,
-        //  alias: this.model.type.alias,
-        //  width: 960
-        //}).then(value =>
-        //{
-        //  this.$emit('change', value);
-        //});
+        const result = await overlays.open({
+          component: () => import('./integration.vue'),
+          display: 'editor',
+          model: this.model,
+          width: 960
+        });
+
+        if (result.eventType === 'confirm')
+        {
+          this.$emit('change', value);
+        }
       }
     }
   }
@@ -80,6 +78,11 @@
     grid-template-columns: auto 1fr;
     gap: var(--padding);
     align-items: flex-start; 
+
+    > aside
+    {
+      align-self: stretch;
+    }
   }
 
   .integrations-item .ui-button.type-block
@@ -95,9 +98,14 @@
     padding-top: var(--padding-m);
   }
 
+  .integrations-item-button
+  {
+    margin-top: var(--padding-s);
+  }
+
   .integrations-item-tags
   {
-    margin-top: var(--padding-s); 
+    margin-top: var(--padding-s);
   }
 
   .integrations-item-icon
@@ -106,7 +114,8 @@
     justify-content: center;
     align-items: center;
     width: 120px;
-    height: 90px;
+    min-height: 90px;
+    height: 100%;
     font-size: 22px;
     text-align: center;
     background: var(--color-box-nested);
@@ -123,7 +132,7 @@
   {
     line-height: 1.3;
     color: var(--color-text-dim);
-    margin: 0.5em 0 0;
+    margin: 0;
     max-width: 820px;
   } 
 

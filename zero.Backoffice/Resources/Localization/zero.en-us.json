@@ -544,8 +544,10 @@
     "errors": {
       "typenotfound": "The integration type does not exist",
       "multiplenotallowed": "Can not create multiple integrations per type",
+      "alreadycreated": "You have already created an integration for this type",
       "notfound": "Could not find a matching integration",
-      "couldnotupdatestate": "Not updated"
+      "couldnotupdatestate": "Not updated",
+      "noaliasmatch": "The alias as part of the URL does not match the alias of the model"
     },
     "fields": {
     }
