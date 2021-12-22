@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace zero.Stores;
@@ -11,5 +12,7 @@ public class StoresModule : ZeroModule
     services.AddSingleton<IStoreCache, StoreCache>();
 
     services.AddOptions<FlavorOptions>();
+
+    services.ConfigureOptions<ConfigureFlavorJsonOptions>();
   }
 }

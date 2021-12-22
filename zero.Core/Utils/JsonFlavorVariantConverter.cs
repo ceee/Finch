@@ -5,9 +5,12 @@ namespace zero.Utils;
 
 public class JsonFlavorVariantConverter : JsonConverter<ISupportsFlavors>
 {
-  public JsonFlavorVariantConverter() : base()
-  {
+  protected FlavorOptions Flavors { get; private set; }
 
+
+  public JsonFlavorVariantConverter(IZeroOptions options) : base()
+  {
+    Flavors = options.For<FlavorOptions>();
   }
 
 
@@ -40,14 +43,17 @@ public class JsonFlavorVariantConverter : JsonConverter<ISupportsFlavors>
 
     while (reader.Read()) { }
 
-    return new ZeroEntity() { Flavor = flavor };
+    FlavorConfig config = Flavors.Get(typeToConvert, flavor);
+
+    return config.Construct(config) as ISupportsFlavors;
   }
 
 
   public override void Write(Utf8JsonWriter writer, ISupportsFlavors value, JsonSerializerOptions options)
   {
     JsonSerializerOptions newOptions = new(options);
-    JsonConverter toRemove = newOptions.GetConverter(typeof(JsonFlavorVariantConverter));
+    Type thisType = typeof(JsonFlavorVariantConverter);
+    JsonConverter toRemove = newOptions.Converters.FirstOrDefault(x => x.GetType() == thisType);
     newOptions.Converters.Remove(toRemove);
     JsonSerializer.Serialize(writer, value, value.GetType(), newOptions);
   }

@@ -1,7 +1,9 @@
 ﻿//using zero.Mapper;
 //using zero.Spaces;
 
-//namespace zero.Demo;
+using zero.Localization;
+
+namespace zero.Demo;
 
 //public class Mapper : ZeroMapperProfile
 //{
@@ -21,3 +23,14 @@
 //    target.InheritedLanguageId = source.InheritedLanguageId;
 //  }
 //}
+
+
+public class EuropeanCountry : Country
+{
+  public string EuName { get; set; }
+}
+
+public class AmericanCountry : Country
+{
+  public string State { get; set; }
+}

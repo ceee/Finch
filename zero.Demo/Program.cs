@@ -69,14 +69,3 @@ app.UseZero().WithEndpoints(x =>
 //app.UseZeroBackoffice();
 
 app.Run();
-
-
-public class EuropeanCountry : Country
-{
-  public string EuName { get; set; }
-}
-
-public class AmericanCountry : Country
-{
-  public string State { get; set; }
-}

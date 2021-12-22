@@ -3,12 +3,14 @@ using Raven.Client.Documents.Indexes;
 using System.Text.Json;
 using zero.Configuration;
 using zero.Context;
+using zero.Localization;
 using zero.Persistence;
 using zero.Routing;
 using zero.Utils;
 
 namespace zero.Demo.Controllers;
 
+[ApiController]
 public class SetupController : Controller
 {
   //ISetupApi Api;
@@ -44,15 +46,21 @@ public class SetupController : Controller
 
 
   [HttpGet("/api/setup/json")]
-  public async Task<IActionResult> TestJson([FromServices] IIntegrationStore store)
+  public async Task<IActionResult> TestJson([FromServices] ICountryStore store, [FromServices] IZeroOptions options)
   {
-    Integration integration = await store.Load("analytics.fathom");
+    Country country = await store.Load("countries.dke3yq05fgc7");
 
-    JsonFlavorVariantConverter converter = new();
+    JsonFlavorVariantConverter converter = new(options);
     JsonSerializerOptions opts = new();
     opts.Converters.Add(converter);
 
-    return Content(JsonSerializer.Serialize(integration, opts), "application/json");
+    return Content(JsonSerializer.Serialize(country, opts), "application/json");
+  }
+
+  [HttpPost("/api/setup/postjson")]
+  public IActionResult PostTestJson(Country country)
+  {
+    return Json(new { type = country.GetType().FullName });
   }
 
 
