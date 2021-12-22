@@ -10,7 +10,7 @@ export interface LocalizeOptions
 }
 
 
-export const localize = (key: string, options?: LocalizeOptions): string =>
+export const localize = (key: string | null, options?: LocalizeOptions): string =>
 {
   let params = extendObject({
     force: false,

@@ -2,12 +2,16 @@ import { Component } from "vue";
 import { ZeroEditorField } from "zero/schemas";
 import { Zero } from "../core";
 import { ZeroEditor } from "./editor";
+import { createBlueprintConfig } from "./editor-blueprint";
 import { ZeroEditorCanvasBase, ZeroEditorTab } from "./editor-canvas";
 import { ZeroEditorFieldConfiguration } from "./editor-field";
+import { localize } from '../services/localization';
 
 
 export interface ZeroCompiledEditor
 {
+  alias: string;
+  blueprint: any;
   tabs: ZeroCompiledEditorTab[];
 }
 
@@ -108,8 +112,8 @@ export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorFi
       return false;
     },
 
-    label: editor.onLabelCreate(field),
-    description: editor.onDescriptionCreate(field),
+    label: editor.onLabelCreate(field),  
+    description: localize(editor.onDescriptionCreate(field), { hideEmpty: true }),
     hideLabel: field.configuration.hideLabel,
     helpText: field.configuration.helpText,
     classes: field.configuration.classes,
@@ -125,6 +129,8 @@ export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorFi
 export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEditor
 {
   let model = {
+    alias: editor.alias,
+    blueprint: null,
     tabs: []
   } as ZeroCompiledEditor;
 
@@ -219,6 +225,8 @@ export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEdito
       model.tabs.push(tab);
     }
   });
+
+  model.blueprint = createBlueprintConfig(model.alias, model);
 
   return model;
 }

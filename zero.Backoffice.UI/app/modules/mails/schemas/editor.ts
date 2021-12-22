@@ -1,7 +1,7 @@
 ﻿
 import { ZeroEditor } from "../../../editor/editor";
 
-const editor = new ZeroEditor();
+const editor = new ZeroEditor('mailtemplates');
 
 editor.resourcePrefix = '@mailTemplate.fields.';
 

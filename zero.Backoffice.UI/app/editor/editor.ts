@@ -1,9 +1,10 @@
-﻿import { Component, ComponentPropsOptions } from "vue";
-import { EditorSchema, ZeroEditorField } from "zero/schemas";
+﻿import { ZeroEditorField } from "zero/schemas";
 import { ZeroEditorCanvas } from "./editor-canvas";
 
 export class ZeroEditor extends ZeroEditorCanvas
 {
+  alias: string;
+
   resourcePrefix?: string;
 
   system: boolean = false;
@@ -19,8 +20,9 @@ export class ZeroEditor extends ZeroEditorCanvas
   };
 
 
-  constructor()
+  constructor(alias: string)
   {
     super();
+    this.alias = alias;
   }
 }

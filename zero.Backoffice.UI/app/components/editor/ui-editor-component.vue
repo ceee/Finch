@@ -7,6 +7,11 @@
                :required="!field.optional(value)"
                :disabled="isDisabled"
                :vertical="!field.horizontal"
+               :class="{'is-disabled': isDisabled }"
+               :locked="isLocked"
+               :can-unlock="canUnlock || false"
+               @unlock="unlock"
+               @lock="lock"
                >
     <component :is="field.component" v-bind="field.options" 
                :value="model" 
@@ -14,17 +19,6 @@
                @input="onChange" />
     <p v-if="field.helpText" class="ui-property-help" v-localize="field.helpText"></p>
   </ui-property>
-
-  <!--<ui-property v-if="loaded && !isHidden"
-               :vertical="field.configuration.vertical"
-               :class="{'is-disabled': isDisabled }"
-               :locked="isLocked"
-               :can-unlock="canUnlock || false"
-               @unlock="unlock"
-               @lock="lock">
-    <component :is="config.component" v-bind="config.componentOptions" :value="model" :entity="value" :meta="meta" @input="onChange" :disabled="isDisabled" />
-    <p v-if="field.configuration.helpText" class="ui-property-help" v-localize="field.configuration.helpText"></p>
-  </ui-property>-->
 </template>
 
 
@@ -90,15 +84,15 @@
       isDisabled()
       {
         return this.manualDisabled || this.disabled || this.field.readonly(this.model);
+      },
+      isLocked()
+      {
+        return false; //this.editor.blueprint && !this.editor.blueprint.unlocked(this.value, this.field);
+      },
+      canUnlock()
+      {
+        return false; // this.editor.blueprint && this.editor.blueprint.canUnlock(this.value, this.field);
       }
-      //isLocked()
-      //{
-      //  return this.editor.blueprint && !this.editor.blueprint.unlocked(this.value, this.field);
-      //},
-      //canUnlock()
-      //{
-      //  return this.editor.blueprint && this.editor.blueprint.canUnlock(this.value, this.field);
-      //}
     },
 
     methods: {

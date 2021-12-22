@@ -1,7 +1,7 @@
 ﻿
 import { ZeroEditor } from '../../../editor/editor';
 
-const editor = new ZeroEditor();
+const editor = new ZeroEditor('translations');
 
 editor.resourcePrefix = '@translation.fields.';
 

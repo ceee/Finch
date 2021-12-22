@@ -2,6 +2,7 @@
 import { localize } from '../services/localization';
 import { arrayRemove } from '../utils/arrays';
 import { useUiStore } from '../ui/store';
+import { ZeroCompiledEditor } from './compile';
 
 function unlocked(config, model, field)
 {
@@ -77,16 +78,17 @@ function unlock(config, model, field)
  * @param {string} alias - Alias for the tab
  * @returns {EditorBlueprint}
  */
-export function createBlueprintConfig(zero, editor, model)
+export function createBlueprintConfig(alias: string, editor: ZeroCompiledEditor)
 {
   const store = useUiStore();
-  let blueprintAlias = editor.blueprintAlias;
+  let blueprintAlias = editor.alias;
   let canBeBlueprinted = store.blueprints.indexOf(blueprintAlias) > -1;
 
   if (!blueprintAlias || !canBeBlueprinted)
   {
     return {
       alias: blueprintAlias,
+      isEnabled: false,
       unlocked: () => true,
       canUnlock: () => false,
       isBlueprintParent: () => false,
@@ -128,28 +130,35 @@ export function createBlueprintConfig(zero, editor, model)
   });
 
   // add blueprint setting for custom fields
-  editor.fields.forEach(field =>
+  editor.tabs.forEach(tab =>
   {
-    let alias = field.path;
-
-    if (processed.indexOf(alias) < 0)
+    tab.fieldsets.forEach(set =>
     {
-      processed.push(alias);
-
-      if (config.unlocked.indexOf(alias) > -1 || config.unlocked.find(x => alias.indexOf(x + '.') === 0))
+      set.fields.forEach(field =>
       {
-        fields.push({
-          path: alias,
-          label: field.options.label || editor.templateLabel(alias),
-          description: localize(field.options.description || editor.templateDescription(alias), { hideEmpty: true }),
-          synced: model => !model.blueprint || model.blueprint.desync.indexOf(alias) < 0
-        });
-      }
-    }
+        let alias = field.path;
+
+        if (processed.indexOf(alias) < 0)
+        {
+          processed.push(alias);
+
+          if (config.unlocked.indexOf(alias) > -1 || config.unlocked.find(x => alias.indexOf(x + '.') === 0))
+          {
+            fields.push({
+              path: alias,
+              label: field.label,
+              description: field.description,
+              synced: model => !model.blueprint || model.blueprint.desync.indexOf(alias) < 0
+            });
+          }
+        }
+      });
+    });
   });
 
   return {
     alias: blueprintAlias,
+    isEnabled: true,
     unlocked: (model, field) => unlocked(config, model, field),
     canUnlock: (model, field) => canUnlock(config, model, field),
     unlock: async (model, field) => await unlock(config, model, field),

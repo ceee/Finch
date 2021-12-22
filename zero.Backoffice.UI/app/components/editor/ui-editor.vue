@@ -14,7 +14,7 @@
                 :disabled="tab.disabled(value)">
           <h3 v-if="display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
           <slot name="blueprint">
-            <!--<blueprint-property v-if="value && editorConfig.blueprint" :value="value" :meta="meta" :config="editorConfig.blueprint" />-->
+            <blueprint-property v-if="value && editorConfig.blueprint.isEnabled" :value="value" :meta="meta" :config="editorConfig.blueprint" />
           </slot>
           <div v-if="!tab.component" class="ui-property ui-property-parent" v-for="(fieldset, fieldsetIndex) in tab.fieldsets" :key="fieldsetIndex">
 
@@ -47,12 +47,9 @@
 
   import './ui-editor.scss';
   import EditorComponent from './ui-editor-component.vue';
-  //import { createBlueprintConfig } from './editor-blueprint';
-  //import BlueprintProperty from './blueprint/property.vue';
+  import BlueprintProperty from './blueprint/property.vue';
   import { defineComponent } from 'vue';
   import { compileEditor } from '../../editor/compile';
-
-  let createBlueprintConfig = () => null;
 
   export default defineComponent({
     name: 'uiEditor',
@@ -91,7 +88,7 @@
       },
     },
 
-    components: { EditorComponent },
+    components: { EditorComponent, BlueprintProperty },
 
     data: () => ({
       display: 'tabs',
@@ -122,9 +119,7 @@
       this.system = this.$route.query['zero.scope'] == 'system';
       const schema = typeof this.config === 'string' ? await this.zero.getSchema(this.config) : this.config;
       const editor = compileEditor(this.zero, schema);
-
       this.editorConfig = editor;
-      //this.editorConfig.blueprint = createBlueprintConfig(this.zero, this.editorConfig, this.value);
 
       this.onConfigure(this);
 

@@ -2,7 +2,7 @@
 import { ZeroEditor } from "../../../editor/editor";
 import { formatDate } from '../../../utils/dates';
 
-const editor = new ZeroEditor();
+const editor = new ZeroEditor('countries');
 
 editor.resourcePrefix = '@country.fields.';
 

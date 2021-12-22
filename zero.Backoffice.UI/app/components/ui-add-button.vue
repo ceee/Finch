@@ -144,7 +144,7 @@
           }
           if (shared)
           {
-            routeObj.query['zero.scope'] = 'shared';
+            routeObj.query['zero.scope'] = 'system';
           }
           this.$router.push(routeObj);
         }
