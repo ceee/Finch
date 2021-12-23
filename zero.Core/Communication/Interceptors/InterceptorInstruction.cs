@@ -18,11 +18,11 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
 
   protected IEnumerable<IInterceptor> Interceptors { get; private set; }
 
+  protected Dictionary<IInterceptor, InterceptorParameters> InterceptorCache { get; private set; } = new();
+
   protected IInterceptors InterceptorHandler { get; private set; }
 
   protected ILogger<IInterceptor> Logger { get; private set; }
-
-  protected Dictionary<string, InterceptorParameters> CachedParameters { get; private set; } = new();
 
   protected Func<IInterceptor, bool> InterceptorFilter { get; private set; } = x => true;
 
@@ -71,13 +71,14 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
       {
         continue;
       }
+    
 
       Logger.LogDebug("Run interceptor {interceptor} for {type}:{operation}", interceptor.Name, ModelType, Runtype);
 
       InterceptorResult<ZeroIdEntity> result = (await HandleBefore(interceptor, parameters)) ?? new();
       result.InterceptorHash = IdGenerator.Create(32);
 
-      CachedParameters.Add(interceptor.Hash, parameters);
+      InterceptorCache.Add(interceptor, parameters);
 
       // we cancel all further interceptors if a result is available and return this instead
       if (result.Result != null)
@@ -104,9 +105,9 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
   /// </summary>
   public async Task Complete()
   {
-    foreach (IInterceptor interceptor in GetInterceptors())
+    foreach ((IInterceptor interceptor, InterceptorParameters parameters) in InterceptorCache)
     {
-      await HandleAfter(interceptor, CachedParameters.GetValueOrDefault(interceptor.Hash));
+      await HandleAfter(interceptor, parameters);
     }
   }
 
