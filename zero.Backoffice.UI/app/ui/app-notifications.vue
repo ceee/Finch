@@ -1,15 +1,13 @@
 ﻿<template>
-  <div class="app-notifications" :class="{ 'has-multiple': instances.length > 1 }">
-    <transition-group name="app-notifications" :duration="400">
-      <div class="app-notification" v-for="instance in instances" :key="instance.id" :type="instance.type">
-        <p class="-text">
-          <b v-localize="instance.label"></b>
-          <span v-if="instance.text" v-localize="instance.text"></span>
-        </p>
-        <ui-icon-button @click="remove(instance)" type="action small" icon="fth-x" title="@ui.close" />
-      </div>
-    </transition-group>
-  </div>
+  <transition-group tag="div" name="app-notifications" :duration="4000" class="app-notifications" :class="{ 'has-multiple': instances.length > 1 }">
+    <div class="app-notification" v-for="instance in instances" :key="instance.id" :type="instance.type">
+      <p class="-text">
+        <b v-localize="instance.label"></b>
+        <span v-if="instance.text" v-localize="instance.text"></span>
+      </p>
+      <ui-icon-button @click="remove(instance)" type="action small" icon="fth-x" title="@ui.close" />
+    </div>
+  </transition-group>
 </template>
 
 

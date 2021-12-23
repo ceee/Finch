@@ -17,8 +17,8 @@
     </div>
 
     <div v-if="entity.source">
-      <a :href="entity.source" target="_blank" v-if="entity.type === 'image'" class="ui-link media-upload-preview-remove">Open</a>
-      <button type="button" class="ui-link media-upload-preview-remove" @click="removeFile" v-if="!disabled">Remove file</button>
+      <a :href="entity.source" target="_blank" v-if="entity.type === 'image'" class="ui-linktext media-upload-preview-remove">Open</a>
+      <button type="button" class="ui-linktext media-upload-preview-remove" @click="removeFile" v-if="!disabled">Remove file</button>
     </div>
 
     <div v-if="!entity.source && !disabled" class="ui-select-button type-light">

@@ -4,11 +4,11 @@
       <template v-slot:title>
         <h2 class="ui-header-bar-title">
           <span class="media-items-hierarchy-item">
-            <router-link :to="{ name: 'media' }" v-localize="'@media.name'"></router-link>
+            <ui-link :to="{ name: 'media' }" v-localize="'@media.name'"></ui-link>
             <ui-icon class="-chevron" v-if="hierarchy.length > 0" symbol="fth-chevron-right" />
           </span>
           <span v-for="(item, index) in hierarchy" :key="item.id" class="media-items-hierarchy-item">
-            <router-link :to="{ name: 'media', params: { parentId: item.id } }" v-localize="item.name"></router-link>
+            <ui-link :to="{ name: 'media', params: { parentId: item.id } }" v-localize="item.name"></ui-link>
             <ui-icon class="-chevron" v-if="index < hierarchy.length - 1" symbol="fth-chevron-right" />
           </span>
         </h2>

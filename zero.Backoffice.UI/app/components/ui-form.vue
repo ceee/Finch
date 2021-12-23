@@ -7,7 +7,7 @@
     <div v-if="loadingState === 'error'">
       error [not implemented]
     </div>
-    <form-error-view v-if="loadingState === 'error'" :error="loadingError" />
+    <!--<form-error-view v-if="loadingState === 'error'" :error="loadingError" />-->
   </form>
 </template>
 

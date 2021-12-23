@@ -4,7 +4,7 @@
       <template v-slot:title>
         <h2 class="ui-header-bar-title">
           <span v-for="(item, index) in hierarchy" :key="item.id" class="media-items-hierarchy-item">
-            <router-link :to="{ name: 'media', params: { id: item.id } }" v-localize="item.name"></router-link>
+            <ui-link :to="{ name: 'media', params: { id: item.id } }" v-localize="item.name"></ui-link>
             <ui-icon v-if="index < hierarchy.length - 1" symbol="fth-chevron-right" />
           </span>
         </h2>

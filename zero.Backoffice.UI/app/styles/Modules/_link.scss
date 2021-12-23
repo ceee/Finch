@@ -1,6 +1,6 @@
 ﻿
 
-.ui-link, a.ui-link
+.ui-linktext, a.ui-linktext
 {
   color: var(--color-text);
   text-decoration: underline dotted var(--color-text) !important;
@@ -26,12 +26,12 @@
   }
 }
 
-.ui-silent-link
+.ui-silent-linktext
 {
   color: var(--color-text);
 }
 
-.ui-silent-link:hover
+.ui-silent-linktext:hover
 {
   color: var(--color-text);
   text-decoration: underline dotted var(--color-text) !important;

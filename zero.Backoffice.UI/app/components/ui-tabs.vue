@@ -4,7 +4,7 @@
       <button type="button" v-for="(tab, index) in tabs" class="ui-tabs-list-item" :key="index" 
               :class="{ 'is-active': tab.active, 'has-errors': tab.hasErrors }" 
               :disabled="tab.disabled" 
-              :aria-selected="tab.active" 
+              :aria-selected="tab.active ? true : null" 
               role="tab" 
               @click="select(index)">
         <ui-icon v-if="tab.hasErrors" class="ui-tabs-list-item-error" :size="16" symbol="fth-alert-circle"></ui-icon>

@@ -1,16 +1,14 @@
 ﻿<template>
-  <div class="app-overlays" :class="{ 'has-multiple': instances.length > 1 }">
-    <transition-group name="overlay" :duration="600">
-      <div class="app-overlay-outer" :display="instance.display" v-for="(instance, index) in instances" :key="instance.id" 
-           :style="{ transform: instance.display !== 'editor' ? null : 'translateX(' + (editorLength - index - 1) * -120 + 'px)' }"
-           :class="instance.class || ''">
-        <div class="app-overlay-bg" @click="tryRemove(instance)"></div>
-        <div open class="app-overlay" :data-alias="instance.alias" :style="{ width: instance.width ? (instance.width + 'px') : null }" :class="'theme-' + instance.theme" :display="instance.display">
-          <component :is="instance.component" :model.sync="instance.model" :config="instance" v-bind="instance" title=""></component>
-        </div>
+  <transition-group name="overlay" :duration="600" tag="div" class="app-overlays" :class="{ 'has-multiple': instances.length > 1 }">
+    <div class="app-overlay-outer" :display="instance.display" v-for="(instance, index) in instances" :key="instance.id" 
+          :style="{ transform: instance.display !== 'editor' ? null : 'translateX(' + (editorLength - index - 1) * -120 + 'px)' }"
+          :class="instance.class || ''">
+      <div class="app-overlay-bg" @click="tryRemove(instance)"></div>
+      <div open class="app-overlay" :data-alias="instance.alias" :style="{ width: instance.width ? (instance.width + 'px') : null }" :class="'theme-' + instance.theme" :display="instance.display">
+        <component :is="instance.component" :model.sync="instance.model" :config="instance" v-bind="instance" title=""></component>
       </div>
-    </transition-group>
-  </div>
+    </div>
+  </transition-group>
 </template>
 
 

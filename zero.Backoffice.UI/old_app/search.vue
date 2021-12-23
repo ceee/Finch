@@ -5,13 +5,13 @@
         <ui-button class="app-search-submit" :submit="true" type="blank" icon="fth-search" />
       </form>
       <div v-if="list.items.length" class="app-search-items">
-        <router-link :to="item.url" v-for="item in list.items" :key="item.id" class="app-search-item" @click.native="config.close">
+        <ui-link :to="item.url" v-for="item in list.items" :key="item.id" class="app-search-item" @click.native="config.close">
           <ui-icon :symbol="item.icon" :size="18" class="app-search-item-icon" />
           <span class="app-search-item-text">
             <span class="app-search-item-name">{{item.name}} <span class="app-search-item-group" v-localize="item.group"></span></span>
             <span class="app-search-item-description" v-if="item.description">{{item.description}}</span>
           </span>
-        </router-link>
+        </ui-link>
       </div>
   </div>
 </template>

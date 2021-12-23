@@ -1,10 +1,10 @@
 ﻿<template>
   <div class="media-item" :class="{ 'is-selected': selected}">
-    <router-link :to="link" class="media-item-preview" :class="{'media-pattern': !value.isFolder, 'is-covered': covered }">
+    <ui-link :to="link" class="media-item-preview" :class="{'media-pattern': !value.isFolder, 'is-covered': covered }">
       <span class="media-item-check"><ui-icon symbol="fth-check" :size="14" /></span>
       <img class="media-item-image" v-if="value.image" :src="value.image" />
       <span class="media-item-icon" v-if="!value.image"><ui-icon :symbol="(value.isFolder ? 'fth-folder' : 'fth-file')" :size="26" :stroke-width="2" /></span>
-    </router-link>
+    </ui-link>
     <p v-if="value.isFolder" class="media-item-text" :title="value.name">
       <!--<input type="text" v-model="value.name" />-->
       {{value.name}} <!--<ui-icon symbol="fth-cloud" v-if="value.isShared" :size="15" class="media-item-shared" />-->

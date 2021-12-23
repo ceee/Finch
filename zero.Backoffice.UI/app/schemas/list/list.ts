@@ -35,7 +35,7 @@ class List implements ZeroSchema
   templateLabel = field => field;
 
   /**
-   * Build a link for a row (returns options passed to <router-link /> or a route name where id-param is automatically inserted)
+   * Build a link for a row (returns options passed to <ui-link /> or a route name where id-param is automatically inserted)
    */
   link = null;
 

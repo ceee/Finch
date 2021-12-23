@@ -10,7 +10,7 @@
           <ui-button class="blueprint-button-settings" type="blank small" icon="fth-settings" 
                      :title="{ key: value.blueprint.desync.length > 0 ? '@blueprint.hint.xUnlocked' : '@blueprint.hint.settingsButton', tokens: { count: value.blueprint.desync.length }}" 
                      @click="openSettings" />
-          <router-link replace :to="switchLink" class="ui-button type-light type-small" v-localize="'@blueprint.hint.goToBlueprint'"></router-link>
+          <ui-link replace :to="switchLink" class="ui-button type-light type-small" v-localize="'@blueprint.hint.goToBlueprint'"></ui-link>
         </aside>
       </template>
       <template v-if="isParent">
@@ -19,7 +19,7 @@
           <p v-localize:html="value.id ? '@blueprint.hint.parentText' : '@blueprint.hint.parentCreateText'"></p>
         </div>
         <aside v-if="value.id">
-          <router-link replace :to="switchLink" class="ui-button type-light type-small" v-localize="'@blueprint.hint.goToChild'"></router-link>
+          <ui-link replace :to="switchLink" class="ui-button type-light type-small" v-localize="'@blueprint.hint.goToChild'"></ui-link>
         </aside>
       </template>
     </div>
@@ -104,12 +104,12 @@
 
         console.info(result);
         return;
-        this.value.blueprint = res.blueprint;
-        this.$emit('input', res.blueprint);
-        if (typeof res.update === 'function')
-        {
-          res.update(this.value);
-        }
+        //this.value.blueprint = res.blueprint;
+        //this.$emit('input', res.blueprint);
+        //if (typeof res.update === 'function')
+        //{
+        //  res.update(this.value);
+        //}
         //EventHub.$emit('page.update');
       },
 

@@ -1,5 +1,5 @@
 ﻿<template>
-  <router-link :to="link" class="media-item">
+  <ui-link :to="link" class="media-item">
     <div class="media-item-preview" :class="{'media-pattern': value.image, 'is-covered': covered }">
       <span class="media-item-check"><ui-icon symbol="fth-check" :size="14" /></span>
       <img class="media-item-image" v-if="value.image" :src="value.image" />
@@ -10,7 +10,7 @@
       <span class="-minor" v-if="!value.isFolder"><br><span v-filesize="value.size"></span></span>
       <span class="-minor" v-if="value.isFolder"><br><span v-localize="{ key: value.children === 1 ? '@media.child_count_1' : '@media.child_count_x', tokens: { count: value.children }}"></span></span>
     </p>
-  </router-link>
+  </ui-link>
 </template>
 
 <script>

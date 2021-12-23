@@ -139,7 +139,7 @@
   margin-bottom: -5px;
 }
 
-.editor-aside-links .ui-link
+.editor-aside-links .ui-linktext
 {
   color: var(--color-text-dim);
   font-size: var(--font-size-s); 
@@ -147,12 +147,12 @@
   position: relative;
 }
 
-.editor-aside-links .ui-link + .ui-link
+.editor-aside-links .ui-linktext + .ui-linktext
 {
   margin-left: 20px;
 }
 
-.editor-aside-links .ui-link + .ui-link:before
+.editor-aside-links .ui-linktext + .ui-linktext:before
 {
   content: '·';
   position: absolute;

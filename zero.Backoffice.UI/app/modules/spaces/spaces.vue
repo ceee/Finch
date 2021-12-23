@@ -4,13 +4,13 @@
       <ui-header-bar title="@space.list" />
 
       <div class="spaces-tree-items">
-        <router-link :to="{ name: 'spaces-view', params: { alias: item.alias } }" v-for="item in spaces" :key="item.alias" class="spaces-tree-item" :class="{ 'has-line': item.lineBelow }">
+        <ui-link :to="{ name: 'spaces-view', params: { alias: item.alias } }" v-for="item in spaces" :key="item.alias" class="spaces-tree-item" :class="{ 'has-line': item.lineBelow }">
           <ui-icon class="spaces-tree-item-icon" :symbol="item.icon" />
           <span class="spaces-tree-item-text">
             <span v-localize="item.name"></span>
             <span class="-minor" v-if="item.description" v-localize="item.description"></span>
           </span>
-        </router-link>
+        </ui-link>
       </div>
       <div class="spaces-tree-resizable ui-resizable"></div>
     </div>

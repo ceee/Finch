@@ -23,16 +23,16 @@
 
     <nav class="app-nav-inner">
       <template v-for="section in ui.sections">
-        <router-link :to="section.url" class="app-nav-item" :alias="section.alias" :class="{ 'has-children': hasChildren(section) }">
+        <ui-link :to="section.url" class="app-nav-item" :alias="section.alias" :class="{ 'has-children': hasChildren(section) }">
           <ui-icon :symbol="section.icon" class="app-nav-item-icon" :size="18" />
           <span class="app-nav-item-text" v-localize="section.name"></span>
           <ui-icon v-if="hasChildren(section)" symbol="fth-chevron-down" class="app-nav-item-arrow" />
-        </router-link>
+        </ui-link>
         <transition name="app-nav-children">
           <div class="app-nav-children" v-if="hasChildren(section) && $route.path.indexOf('/' + section.alias) === 0">
-            <router-link v-for="child in section.children" v-bind:key="child.alias" :to="child.url" class="app-nav-child">
+            <ui-link v-for="child in section.children" v-bind:key="child.alias" :to="child.url" class="app-nav-child">
               <span class="app-nav-child-text" v-localize="child.name"></span>
-            </router-link>
+            </ui-link>
           </div>
         </transition>
       </template>

@@ -2,7 +2,7 @@
   <div class="page-editor-info">
     <div class="ui-box" v-if="!isCreate">
       <ui-property label="@page.infotab.links" :is-text="true" :vertical="false">
-        <a v-for="url in urls" class="ui-link" :href="url" target="_blank"><ui-icon symbol="fth-external-link"></ui-icon> {{url}}</a>
+        <a v-for="url in urls" class="ui-linktext" :href="url" target="_blank"><ui-icon symbol="fth-external-link"></ui-icon> {{url}}</a>
       </ui-property>
       <!--<ui-property label="@page.infotab.revisions" :is-text="true" :vertical="false">-->
       <!--<ui-revisions :get="getRevisions" />-->

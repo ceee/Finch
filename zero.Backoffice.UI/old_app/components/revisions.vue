@@ -3,12 +3,12 @@
     <div class="ui-revision" v-for="revision in items">
       <span class="ui-revision-action" v-localize="'@revisions.actions.updated'"></span>
       <ui-date class="ui-revision-date" v-model="revision.date" format="long" :split="true" />
-      <router-link :to="{ name: userRoute, params: { id: revision.user.id }}" v-if="revision.user" class="ui-revision-user">
+      <ui-link :to="{ name: userRoute, params: { id: revision.user.id }}" v-if="revision.user" class="ui-revision-user">
         <img class="ui-revision-user-image" v-if="revision.user" :src="getImage(revision.user.avatarId)" :alt="revision.user.name" />
         <span v-if="revision.user" class="ui-revision-user-name">{{revision.user.name}}</span>
-      </router-link>
+      </ui-link>
       <div v-else></div>
-      <button type="button" class="ui-link is-minor" v-localize="'@revisions.view'"></button>
+      <button type="button" class="ui-linktext is-minor" v-localize="'@revisions.view'"></button>
     </div>
     <ui-pagination v-if="pages > 1" :pages="pages" :page="page" @change="setPage" />
   </div>

@@ -3,7 +3,7 @@
     <div class="settings-group" v-for="group in groups">
       <h2 class="ui-headline settings-group-headline" v-localize="group.name"></h2>
       <div class="settings-group-items">
-        <router-link :to="item.url || '/'" v-for="item in group.items" :key="item.name" class="settings-group-item">
+        <ui-link :to="item.url || '/'" v-for="item in group.items" :key="item.name" class="settings-group-item">
           <span class="settings-group-item-icon">
             <ui-icon :symbol="item.icon || 'fth-settings'" :size="18" />
             <span v-if="item.alias === 'applications'" class="settings-group-item-count">{{appCount}}</span>
@@ -15,7 +15,7 @@
               <ui-localize :value="item.description" :tokens="tokens" />
             </template>
           </p>
-        </router-link>
+        </ui-link>
       </div>
     </div>
     <router-view name="footer"></router-view>

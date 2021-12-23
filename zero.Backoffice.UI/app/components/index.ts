@@ -37,6 +37,7 @@ import uiDatepicker from './ui-datepicker.vue';
 import uiSelect from './ui-select.vue';
 import uiForm from './ui-form.vue';
 import uiFormHeader from './ui-form-header.vue';
+import uiLink from './ui-link.vue';
 
 export {
   uiIcon,
@@ -77,5 +78,6 @@ export {
   uiDatepicker,
   uiSelect,
   uiForm,
-  uiFormHeader
+  uiFormHeader,
+  uiLink
 };

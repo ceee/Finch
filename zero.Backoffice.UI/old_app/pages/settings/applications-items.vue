@@ -1,13 +1,13 @@
 ﻿<template>
   <div class="apps-items">
-    <router-link v-for="app in value" :key="app.id" :to="getAppLink(app)" class="apps-item">
+    <ui-link v-for="app in value" :key="app.id" :to="getAppLink(app)" class="apps-item">
       <strong class="apps-item-name">{{app.name}}</strong>
       <span class="apps-item-minor">{{app.domains[0]}}</span>
       <span class="apps-item-status" :class="{ 'is-active': app.isActive }" v-localize="getStatus(app)"></span>
-    </router-link>
-    <router-link :to="getAddLink()" class="apps-items-add" v-if="zero.config.multiApps">
+    </ui-link>
+    <ui-link :to="getAddLink()" class="apps-items-add" v-if="zero.config.multiApps">
       <ui-icon symbol="fth-plus" :size="24" />
-    </router-link>
+    </ui-link>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-daterangepicker" :class="{'is-disabled': disabled }">
-    <button v-if="!inline" type="button" class="ui-link" @click="schedule" v-localize="scheduleLocalize" :disabled="disabled"></button>
+    <button v-if="!inline" type="button" class="ui-linktext" @click="schedule" v-localize="scheduleLocalize" :disabled="disabled"></button>
     <div v-if="inline && value" class="ui-daterangepicker-inline">
       <div class="ui-daterangepicker-group">
         <ui-property :vertical="true">
@@ -147,7 +147,7 @@
 </script>
 
 <style lang="scss">
-  .ui-daterangepicker.is-primary .ui-link
+  .ui-daterangepicker.is-primary .ui-linktext
   {
     color: var(--color-primary);
     font-weight: 700;
