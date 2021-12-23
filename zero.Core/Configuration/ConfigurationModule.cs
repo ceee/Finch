@@ -23,7 +23,13 @@ public class ConfigurationModule : ZeroModule
     services.AddScoped<IIntegrationStore, IntegrationStore>();
 
     services.AddOptions<FeatureOptions>().Bind(configuration.GetSection("Zero:Features"));
-    services.AddOptions<IntegrationOptions>();
-    services.ConfigureOptions<ConfigureIntegrationJsonOptions>();
+
+    services.Configure<FlavorOptions>(opts =>
+    {
+      opts.Configure<Integration>(cfg =>
+      {
+        cfg.CanUseWithoutFlavors = false;
+      });
+    });
   }
 }

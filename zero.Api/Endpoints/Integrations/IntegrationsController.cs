@@ -116,7 +116,7 @@ public class IntegrationsController : ZeroApiController
   //[ZeroAuthorize(CountryPermissions.Update)]
   public virtual async Task<ActionResult<Result>> Update(string alias, Integration updateModel, [FromQuery] string changeToken = null)
   {
-    if (alias != updateModel.TypeAlias)
+    if (alias != updateModel.Flavor)
     {
       return BadRequest(Result.Fail(nameof(alias), "@integration.errors.noaliasmatch"));
     }

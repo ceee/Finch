@@ -6,36 +6,35 @@ public class IntegrationTypeService : IIntegrationTypeService
 
   protected IHandlerHolder Handler { get; private set; }
 
-  protected IntegrationOptions Types { get; set; }
+  protected FlavorOptions Flavors { get; set; }
 
 
   public IntegrationTypeService(IZeroContext context, IZeroOptions options, IHandlerHolder handler)
   {
     Context = context;
     Handler = handler;
-    Types = options.For<IntegrationOptions>();
+    Flavors = options.For<FlavorOptions>();
   }
 
 
   /// <inheritdoc />
   public IEnumerable<IntegrationType> GetAll()
   {
-    return Types;
+    return Flavors.GetAll<Integration>().Select(x => (IntegrationType)x);
   }
 
 
   /// <inheritdoc />
   public IntegrationType GetByAlias(string integrationTypeAlias)
   {
-    return Types.FirstOrDefault(x => x.Alias == integrationTypeAlias);
+    return Flavors.Get<Integration>(integrationTypeAlias) as IntegrationType;
   }
 
 
   /// <inheritdoc />
   public IntegrationType GetByType<T>() where T : Integration
   {
-    Type type = typeof(T);
-    return Types.FirstOrDefault(x => x.ModelType == type);
+    return Flavors.Get<Integration, T>() as IntegrationType;
   }
 }
 

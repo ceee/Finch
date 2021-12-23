@@ -5,7 +5,7 @@ namespace zero.Backoffice.Services;
 
 public class SectionService : ISectionService
 {
-  protected IOptions<BackofficeOptions> Options { get; set; }
+  protected IZeroOptions Options { get; set; }
 
   protected IBackofficeAssetFileSystem FileSystem { get; set; }
 
@@ -16,7 +16,7 @@ public class SectionService : ISectionService
   protected IEnumerable<ISettingsGroup> SettingsGroups { get; set; }
 
 
-  public SectionService(IOptions<BackofficeOptions> options, IBackofficeAssetFileSystem fileSystem, ILogger<ISectionService> logger, IEnumerable<IBackofficeSection> sections, IEnumerable<ISettingsGroup> settingsGroups)
+  public SectionService(IZeroOptions options, IBackofficeAssetFileSystem fileSystem, ILogger<ISectionService> logger, IEnumerable<IBackofficeSection> sections, IEnumerable<ISettingsGroup> settingsGroups)
   {
     Options = options;
     FileSystem = fileSystem;
@@ -88,7 +88,7 @@ public class SectionService : ISectionService
 
     List<BackofficeSettingGroupPresentation> groups = new();
 
-    //bool hasIntegrations = Options.For<IntegrationOptions>().Any();
+    bool hasIntegrations = Options.For<FlavorOptions>().GetAll<Integration>().Any();
 
     foreach (SettingsGroup group in SettingsGroups)
     {
@@ -100,10 +100,11 @@ public class SectionService : ISectionService
         //{
         //  continue;
         //}
-        //if (area.Alias == Constants.Settings.Integrations && !hasIntegrations)
-        //{
-        //  continue;
-        //}
+
+        if (area.Alias == Constants.Settings.Integrations && !hasIntegrations)
+        {
+          continue;
+        }
 
         //bool isPlugin = !(area is InternalSettingsArea);
 

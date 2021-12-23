@@ -7,13 +7,9 @@ namespace zero.Configuration;
 /// An integration is an application part which has a public configuration per app.
 /// It's up to the user to provide functionality.
 /// </summary>
-public class IntegrationType
+public class IntegrationType : FlavorConfig
 {
-  /// <summary>
-  /// Type of the associated entity
-  /// </summary>
-  [JsonIgnore]
-  public Type ModelType { get; private set; }
+  public IntegrationType(Type type) : base(type) { }
 
   /// <summary>
   /// Alias to find the editor schema
@@ -21,24 +17,9 @@ public class IntegrationType
   public string EditorAlias { get; set; }
 
   /// <summary>
-  /// Alias for querying
-  /// </summary>
-  public string Alias { get; set; }
-
-  /// <summary>
-  /// Name of the flavor
-  /// </summary>
-  public string Name { get; set; }
-
-  /// <summary>
   /// Group integrations by tags
   /// </summary>
   public List<string> Tags { get; set; } = new();
-
-  /// <summary>
-  /// Optional description
-  /// </summary>
-  public string Description { get; set; }
 
   /// <summary>
   /// Image of the integration
@@ -50,12 +31,4 @@ public class IntegrationType
   /// </summary>
   [JsonIgnore]
   public IValidator Validator { get; set; }
-
-  [JsonIgnore]
-  public Func<IntegrationType, Integration> Construct { get; set; }
-
-  public IntegrationType(Type type)
-  {
-    ModelType = type;
-  }
 }

@@ -9,6 +9,4 @@ namespace zero.Configuration;
 [RavenCollection("Integrations")]
 public class Integration : ZeroEntity
 {
-  /// <inheritdoc />
-  public string TypeAlias { get; set; }
 }

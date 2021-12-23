@@ -29,10 +29,13 @@ builder.Services.Configure<ZeroDevOptions>(opts =>
 builder.Services.Configure<FlavorOptions>(opts =>
 {
   opts.AddSpaceList<TeamMember>("team", "Team", "Members of our team", "fth-users", "spaces.team");
+  opts.AddIntegration<FathomAnalyticsIntegration>("analytics.fathom", "Fathom Analytics", "Connect your website to Fathom and track page views", tags: new() { "analytics" }, imagePath: "/assets/fathom.png");
+  opts.AddIntegration<GoogleAnalyticsIntegration>("analytics.google", "Google Analytics", "Connect your website to google analytics", tags: new() { "analytics" }, imagePath: "/assets/googleanalytics.png");
 
   opts.Configure<Country>(x => x.CanUseWithoutFlavors = false);
   opts.Add<Country, EuropeanCountry>("eu_country", "EU country", "A country within the European Union", "fth-globe");
   opts.Add<Country, AmericanCountry>("usa_country", "USA", "A country in the United States", "fth-flag");
+
 });
 
 builder.Services.Configure<BlueprintOptions>(opts =>
@@ -40,12 +43,6 @@ builder.Services.Configure<BlueprintOptions>(opts =>
   opts.Add<Country>();
   opts.Add<Language>();
   opts.Add<Translation>();
-});
-
-builder.Services.Configure<IntegrationOptions>(opts =>
-{
-  opts.Add<FathomAnalyticsIntegration>("analytics.fathom", "Fathom Analytics", "Connect your website to Fathom and track page views", tags: new() { "analytics" }, imagePath: "/assets/fathom.png");
-  opts.Add<GoogleAnalyticsIntegration>("analytics.google", "Google Analytics", "Connect your website to google analytics", tags: new() { "analytics" }, imagePath: "/assets/googleanalytics.png");
 });
 
 var app = builder.Build();

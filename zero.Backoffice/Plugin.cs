@@ -34,7 +34,7 @@ public class ZeroBackofficePlugin : ZeroPlugin
 
     services.AddSingleton<IIconService, IconService>();
     services.AddSingleton<IResourceService, ResourceService>();
-    services.AddSingleton<ISectionService, SectionService>();
+    services.AddScoped<ISectionService, SectionService>();
 
     services.AddSingleton<IBackofficeAssetFileSystem, BackofficeAssetFileSystem>(svc =>
     {

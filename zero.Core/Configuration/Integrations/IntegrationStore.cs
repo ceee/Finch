@@ -17,24 +17,16 @@ public class IntegrationStore : IIntegrationStore
 
 
   /// <inheritdoc />
-  public virtual Task<Integration> Empty(string alias)
+  public virtual async Task<Integration> Empty(string alias)
   {
-    IntegrationType type = IntegrationTypes.GetByAlias(alias);
-    Integration integration = type?.Construct(type);
-
-    if (integration != null)
-    {
-      integration.TypeAlias = alias;
-    }
-
-    return Task.FromResult(integration);
+    return await Operations.Empty<Integration>(alias);
   }
 
 
   /// <inheritdoc />
   public virtual async Task<Integration> Load(string alias)
   {
-    Paged<Integration> result = await Operations.Load<Integration>(1, 1, q => q.Where(x => x.TypeAlias == alias));
+    Paged<Integration> result = await Operations.Load<Integration>(1, 1, q => q.Where(x => x.Flavor == alias));
     return result.Items.FirstOrDefault();
   }
 
@@ -104,19 +96,19 @@ public class IntegrationStore : IIntegrationStore
       return Result<Integration>.Fail("@integration.errors.notfound");
     }
 
-    IntegrationType type = IntegrationTypes.GetByAlias(model.TypeAlias);
+    IntegrationType type = IntegrationTypes.GetByAlias(model.Flavor);
 
     if (type == null)
     {
       return Result<Integration>.Fail("@integration.errors.typenotfound");
     }
 
-    if (create && await Operations.Any<Integration>(q => q.Where(x => x.TypeAlias == model.TypeAlias)))
+    if (create && await Operations.Any<Integration>(q => q.Where(x => x.Flavor == model.Flavor)))
     {
       return Result<Integration>.Fail("@integration.errors.multiplenotallowed");
     }
 
-    if (!create && await Operations.Any<Integration>(q => q.Where(x => x.TypeAlias == model.TypeAlias && x.Id != model.Id)))
+    if (!create && await Operations.Any<Integration>(q => q.Where(x => x.Flavor == model.Flavor && x.Id != model.Id)))
     {
       return Result<Integration>.Fail("@integration.errors.alreadycreated");
     }
