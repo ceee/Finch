@@ -1,9 +1,9 @@
 ﻿
 import ListColumn from './list-column';
 import ListAction from './list-action';
-import { ListSchema } from 'zero/schemas';
+import { ZeroSchema } from 'zero/schemas';
 
-class List implements ListSchema
+class List implements ZeroSchema
 {
   alias: string;
 

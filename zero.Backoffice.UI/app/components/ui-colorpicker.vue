@@ -10,7 +10,7 @@
 
 
 <script>
-  import { generateId } from '../../utils/numbers';
+  import { generateId } from '../utils/numbers';
 
   export default {
     name: 'uiColorpicker',

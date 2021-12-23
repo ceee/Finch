@@ -97,7 +97,6 @@
 
     mounted()
     {
-      console.info(this.appStore);
       this.currentApplication = this.appStore.applications[0];
       this.appId = this.currentApplication.id;
     },

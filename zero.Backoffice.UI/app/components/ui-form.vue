@@ -4,6 +4,9 @@
     <div v-if="loadingState == 'loading'" class="ui-form-loading">
       <i class="ui-form-loading-progress"></i>
     </div>
+    <div v-if="loadingState === 'error'">
+      error [not implemented]
+    </div>
     <form-error-view v-if="loadingState === 'error'" :error="loadingError" />
   </form>
 </template>
@@ -11,7 +14,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import FormErrorView from './form-error-view.vue';
+  //import FormErrorView from './form-error-view.vue';
   import * as overlays from '../services/overlay';
   import * as notifications from '../services/notification';
   import { arrayGroupBy } from '../utils/arrays';
@@ -19,7 +22,7 @@
   export default defineComponent({
     name: 'uiForm',
 
-    components: { FormErrorView },
+    //components: { FormErrorView },
 
     props: {
       errorComponents: {

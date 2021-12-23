@@ -59,7 +59,7 @@ export interface ZeroCompiledEditorField
 
 export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorField): ZeroCompiledEditorField | undefined
 {
-  const component = zero.getFieldTypeComponent(field.fieldType);
+  const component = field.customComponent || zero.getFieldTypeComponent(field.fieldType);
 
   if (!component)
   {

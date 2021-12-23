@@ -27,6 +27,16 @@ import uiPick from './ui-pick.vue';
 import uiDatagrid from './ui-datagrid.vue';
 import uiProgress from './ui-progress.vue';
 import uiDate from './ui-date.vue';
+import uiRte from './ui-rte/ui-rte.vue';
+import uiCheckList from './ui-check-list.vue';
+import uiSearch from './ui-search.vue';
+import uiToggle from './ui-toggle.vue';
+import uiProperty from './ui-property.vue';
+import uiColorpicker from './ui-colorpicker.vue';
+import uiDatepicker from './ui-datepicker.vue';
+import uiSelect from './ui-select.vue';
+import uiForm from './ui-form.vue';
+import uiFormHeader from './ui-form-header.vue';
 
 export {
   uiIcon,
@@ -57,5 +67,15 @@ export {
   uiPick,
   uiDatagrid,
   uiProgress,
-  uiDate
+  uiDate,
+  uiRte,
+  uiCheckList,
+  uiSearch,
+  uiToggle,
+  uiProperty,
+  uiColorpicker,
+  uiDatepicker,
+  uiSelect,
+  uiForm,
+  uiFormHeader
 };

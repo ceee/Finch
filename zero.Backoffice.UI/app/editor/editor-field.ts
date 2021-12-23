@@ -1,6 +1,6 @@
-﻿import { ZeroEditorField } from "zero/schemas";
+﻿import { Component } from "vue";
+import { ZeroEditorField } from "zero/schemas";
 import { extendObject } from '../utils/objects';
-import { ZeroFieldType } from "./_new/types";
 
 export declare type BooleanExpression = (model: any, value: any) => boolean;
 
@@ -10,14 +10,16 @@ export const createFieldProxy = (field: ZeroEditorFieldImpl) => new Proxy(field,
   {
     // handle internals
     if (prop in target)
-    {   
-      return target[prop]; // @tsignore
+    {
+      // @ts-ignore
+      return target[prop];
     }
 
     // handle dynamic fields + extensions
-    return (args) =>
+    return (args: any) =>
     {
-      target.custom(prop, args);
+      target.fieldType = prop;
+      target.options = args;
       return target;
     };
   }
@@ -29,8 +31,9 @@ export class ZeroEditorFieldImpl implements ZeroEditorField
 {
   path: string;
   configuration: ZeroEditorFieldConfiguration;
-  fieldType: string;
+  fieldType: string | symbol;
   options?: any;
+  customComponent?: Component;
 
   constructor(path: string, config?: ZeroEditorFieldConfiguration)
   {
@@ -87,9 +90,9 @@ export class ZeroEditorFieldImpl implements ZeroEditorField
    * @param {Component} component - The component to render (can be an async component too)
    * @param {T} [options] = Custom options to pass to this editor
    */
-  custom<T>(fieldType: string, options?: T): ZeroEditorField
+  component(component: Component, options?: any): ZeroEditorField
   {
-    this.fieldType = fieldType;
+    this.customComponent = component;
     this.options = options;
     return this;
   }

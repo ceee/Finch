@@ -34,8 +34,8 @@
 
 
 <script lang="ts">
-  import { generateId } from '../../../utils/numbers';
-  import { debounce } from '../../../utils/timing';
+  import { generateId } from '../../utils/numbers';
+  import { debounce } from '../../utils/timing';
   import { Editor, EditorContent, BubbleMenu } from '@tiptap/vue-3';
   // import { Placeholder } from '@tiptap/vue-3';
   import EditorMenuBar from './rte.menubar';

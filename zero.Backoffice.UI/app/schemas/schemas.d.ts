@@ -5,15 +5,4 @@ declare module 'zero/schemas'
   {
     alias: string;
   }
-
-  export interface EditorSchema extends ZeroSchema
-  {
-    
-  }
-
-
-  export interface ListSchema extends ZeroSchema
-  {
-
-  }
 }

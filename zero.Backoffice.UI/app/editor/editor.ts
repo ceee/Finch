@@ -1,7 +1,7 @@
-﻿import { ZeroEditorField } from "zero/schemas";
+﻿import { ZeroEditorField, ZeroSchema } from "zero/schemas";
 import { ZeroEditorCanvas } from "./editor-canvas";
 
-export class ZeroEditor extends ZeroEditorCanvas
+export class ZeroEditor extends ZeroEditorCanvas implements ZeroSchema
 {
   alias: string;
 

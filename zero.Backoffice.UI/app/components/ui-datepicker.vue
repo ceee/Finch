@@ -12,8 +12,8 @@
 
 
 <script>
-  import { generateId } from '../../utils/numbers';
-  import { formatDate, toIsoDate } from '../../utils/dates';
+  import { generateId } from '../utils/numbers';
+  import { formatDate, toIsoDate } from '../utils/dates';
 
   const DATETIME_FORMAT = 'DD.MM.YY HH:mm';
   const DATE_FORMAT = 'DD.MM.YY';
