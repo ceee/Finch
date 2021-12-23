@@ -3,7 +3,7 @@
     <ui-header-bar title="@integration.list" :count="count" :back-button="true" />
     <div class="ui-box">
       <!--<h2 v-if="available.length > 0" class="ui-headline integrations-headline">Available</h2>-->
-      <integration-item v-for="(item, index) in items" :key="index" :model="item" @change="onChanged" @onActiveChange="onActiveChanged" />
+      <integration-item v-for="(item, index) in items" :key="index" :model="item" @change="onChanged" />
     </div>
   </div>
 </template>
@@ -37,21 +37,6 @@
       onChanged()
       {
         this.load();
-      },
-
-      onActiveChanged(model)
-      {
-        model.isLoading = true;
-
-        //IntegrationsApi.saveActiveState({ alias: model.type.alias, isActive: model.isActive }).then(res =>
-        //{
-        //  if (!res.success)
-        //  {
-        //    model.isActive = !model.isActive;
-        //    //Notification.error('@integration.errors.couldnotupdatestate', res.errors[0].message);
-        //  }
-        //  model.isLoading = false;
-        //});
       }
     }
   }

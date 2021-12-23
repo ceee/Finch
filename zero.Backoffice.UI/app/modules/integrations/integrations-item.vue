@@ -4,15 +4,10 @@
       <span class="integrations-item-icon" :style="{'background-color': hasColor ? model.color : null }">
         <ui-icon :symbol="model.icon || 'fth-box'" :size="26" />
       </span>
-      <!--
-      <button type="button" v-else @click="open" class="ui-button type-primary type-block">
-        <span class="ui-button-text" v-localize="'Edit'" />
-      </button>-->
     </aside>
     <main>
       <p class="integrations-item-text">
         <strong v-localize="model.name"></strong>
-        <ui-icon symbol="fth-check-circle" v-if="model.isConfigured" :size="13" />
         <template v-if="model.description">
           <br>
           <span v-localize="model.description"></span>
@@ -21,8 +16,13 @@
       <!--<div class="integrations-item-tags">
         <span class="ui-tag" v-for="tag in model.tags">{{tag}}</span>
       </div>-->
-      <ui-button class="integrations-item-button" type="action small" v-if="!model.isConfigured" v-localize="'Setup'" @click="open" />
-      <ui-toggle class="integrations-item-toggle" v-if="model.isConfigured" v-model="model.isActivacted" @input="$emit('onActiveChange', model)" on-content="Active" off-content="Active" />
+      <div class="integrations-item-bottom">
+        <ui-button class="integrations-item-button" type="action small" v-if="!model.isConfigured" v-localize="'Setup'" @click="open" />
+        <ui-button class="integrations-item-button" type="action small" v-else v-localize="'Edit'" @click="open" />
+        <span class="integrations-item-active" v-if="model.isConfigured && model.isActivated">
+          <ui-icon symbol="fth-check-circle" :size="16" /> <span>Active</span>
+        </span>
+      </div>
     </main>  
   </div>
 </template>
@@ -62,7 +62,7 @@
 
         if (result.eventType === 'confirm')
         {
-          this.$emit('change', value);
+          this.$emit('change', result.value);
         }
       }
     }
@@ -98,16 +98,6 @@
     padding-top: var(--padding-m);
   }
 
-  .integrations-item-button
-  {
-    margin-top: var(--padding-s);
-  }
-
-  .integrations-item-tags
-  {
-    margin-top: var(--padding-s);
-  }
-
   .integrations-item-icon
   {
     display: inline-flex;
@@ -136,13 +126,6 @@
     max-width: 820px;
   } 
 
-  .integrations-item-text .ui-icon
-  {
-    color: var(--color-primary); 
-    margin-left: 0.5em; 
-    font-size: 1.1em;
-  }
-
   .integrations-item-text strong
   {
     display: inline-block;
@@ -151,8 +134,24 @@
     font-size: var(--font-size);
   }
 
-  .integrations-item-toggle
+  .integrations-item-active
   {
-    margin-top: var(--padding-m); 
+    margin-left: var(--padding-s);
+    display: inline-flex;
+    align-items: center;
+    font-weight: 700;
+    color: var(--color-accent);
+
+    .ui-icon
+    {
+      margin-right: var(--padding-xxs);
+    }
+  }
+
+  .integrations-item-bottom
+  {
+    margin-top: var(--padding-m);
+    display: flex;
+    align-items: center;
   }
 </style>

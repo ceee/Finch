@@ -6,6 +6,7 @@ using zero.Context;
 using zero.Localization;
 using zero.Persistence;
 using zero.Routing;
+using zero.Stores;
 using zero.Utils;
 
 namespace zero.Demo.Controllers;
@@ -46,21 +47,16 @@ public class SetupController : Controller
 
 
   [HttpGet("/api/setup/json")]
-  public async Task<IActionResult> TestJson([FromServices] ICountryStore store, [FromServices] IZeroOptions options)
+  public async Task<IActionResult> TestJson([FromServices] ICountryStore store)
   {
-    Country country = await store.Load("countries.dke3yq05fgc7");
-
-    JsonFlavorVariantConverter converter = new(options);
-    JsonSerializerOptions opts = new();
-    opts.Converters.Add(converter);
-
-    return Content(JsonSerializer.Serialize(country, opts), "application/json");
+    Country country = await store.Load("countries.v6m7gg7fkung");
+    return Json(country);
   }
 
   [HttpPost("/api/setup/postjson")]
   public IActionResult PostTestJson(Country country)
   {
-    return Json(new { type = country.GetType().FullName });
+    return Json(new { type = country.GetType().FullName, model = country });
   }
 
 

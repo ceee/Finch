@@ -1,5 +1,5 @@
 ﻿<template>
-  <button type="button" class="ui-icon-button" :disabled="disabled" :class="'type-' + type.split(' ').join(' type-')" @click="tryClick" v-localize:title="title">
+  <button type="button" class="ui-icon-button" :disabled="disabled" :class="'type-' + type.split(' ').join(' type-')" @click="$emit('click', $event)" v-localize:title="title">
     <span class="sr-only" v-localize="title"></span>
     <ui-icon class="ui-button-icon" :symbol="icon" :size="size" :stroke="stroke" />
   </button>
@@ -9,6 +9,8 @@
 <script>
   export default {
     name: 'uiIconButton',
+
+    emits: ['click'],
 
     props: {
       state: {
@@ -36,19 +38,6 @@
         default: 14
       },
       disabled: Boolean
-    },
-
-    mounted ()
-    {
-      
-    },
-
-    methods: {
-
-      tryClick(ev)
-      {
-        this.$emit('click', ev);
-      }
     }
   }
 </script>

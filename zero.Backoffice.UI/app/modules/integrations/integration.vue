@@ -3,14 +3,15 @@
     <ui-trinity class="ui-editor-overlay integration">
 
       <template v-slot:header>
-        <ui-header-bar :title="integration.name" prefix="@integration.list" :back-button="false" :close-button="true" />
+        <ui-header-bar :title="integration.name" prefix="@integration.list" :back-button="false" :close-button="true" @close="config.close" />
       </template>
 
       <template v-slot:footer>
+        <ui-toggle v-if="integration.isConfigured" class="is-accent" v-model:on="model.isActive" on-content="Active" off-content="Inactive" :content-left="true" style="margin-right: 30px;" />
         <ui-button type="light onbg" label="@ui.close" @click="config.close"></ui-button>
         <template v-if="integration.isConfigured">
           <ui-button type="light onbg" label="@ui.remove" @click="onDelete"></ui-button>
-          <ui-button v-if="!disabled" type="primary" :submit="true" label="@ui.save" :state="form.state" :disabled="loading"></ui-button>
+          <ui-button v-if="!disabled" type="accent" :submit="true" label="@ui.save" :state="form.state" :disabled="loading"></ui-button>
         </template>
         <template v-if="!integration.isConfigured && !disabled">
           <ui-button type="light onbg" :submit="true" label="@ui.save" :state="form.state" :disabled="loading"></ui-button>
@@ -95,16 +96,20 @@
 
         if (result.eventType === 'confirm')
         {
-          result.state('loading');
+          result.value.state('loading');
 
           const response = await api.delete(this.integration.alias);
 
           if (response.success)
           {
-            result.state('success');
+            result.value.state('success');
             result.close();
             //Notification.success('@deleteoverlay.success', '@deleteoverlay.success_text');
             this.config.confirm(response);
+          }
+          else
+          {
+            result.value.state('error');
           }
         }
       }

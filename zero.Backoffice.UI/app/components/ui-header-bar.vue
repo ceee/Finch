@@ -20,7 +20,7 @@
       </div>
       <div class="ui-header-bar-aside">
         <slot></slot>
-        <ui-icon-button class="ui-header-bar-close" v-if="closeButton" @click="onClose" icon="fth-x" title="@ui.close" />
+        <ui-icon-button class="ui-header-bar-close" v-if="closeButton" @click="$emit('close')" icon="fth-x" title="@ui.close" />
       </div>
     </div>
   </div>
@@ -28,10 +28,10 @@
 
 
 <script>
-  //import Overlay from 'zero/helpers/overlay.js';
-
   export default {
     name: 'uiHeaderBar',
+
+    emits: ['close'],
 
     props: {
       title: {
@@ -75,10 +75,6 @@
       onBack()
       {
         this.$router.go(-1);
-      },
-      onClose()
-      {
-       // Overlay.close();
       }
     }
   }

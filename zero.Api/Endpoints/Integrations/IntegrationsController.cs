@@ -21,7 +21,7 @@ public class IntegrationsController : ZeroApiController
   //[ZeroAuthorize(SpacePermissions.Read)]
   public virtual async Task<ActionResult<IEnumerable>> GetTypes()
   {
-    IEnumerable<IntegrationTypeDisplay> result = Mapper.Map<IntegrationType, IntegrationTypeDisplay>(IntegrationTypes.GetAll());
+    IEnumerable<IntegrationTypeDisplay> result = Mapper.Map<IntegrationType, IntegrationTypeDisplay>(IntegrationTypes.GetAll()).ToList();
 
     foreach (IntegrationTypeDisplay display in result)
     {

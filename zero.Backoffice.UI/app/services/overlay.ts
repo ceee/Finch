@@ -142,6 +142,8 @@ export function open(options: OverlayOptions)
 
   return new Promise((resolve, reject) =>
   {
+    // TODO see Integrations => Delete integration (confirm dialog)
+    // this fucks up finalize logic for multiple active overlays
     emitter.on(event_finalizeOverlay, (opts: any) =>
     {
       opts.close = () =>

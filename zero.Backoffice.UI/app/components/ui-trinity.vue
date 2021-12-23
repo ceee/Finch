@@ -24,7 +24,7 @@
   {
     display: grid;
     grid-template-rows: auto 1fr auto;
-    height: 100vh; 
+    height: 100vh;
 
     > header
     {
@@ -36,6 +36,7 @@
       display: flex;
       justify-content: flex-end;
       padding: 20px var(--padding);
+      align-items: center;
       //background: var(--color-overlay-footer);
     }
 
