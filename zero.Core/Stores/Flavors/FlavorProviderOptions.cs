@@ -1,6 +1,6 @@
 ﻿namespace zero.Stores;
 
-public class FlavorProviderOptions<TEntity> where TEntity : ISupportsFlavors, new()
+public class FlavorProviderOptions<TEntity> where TEntity : class, ISupportsFlavors, new()
 {
   readonly Type _baseType;
   readonly FlavorOptions _options;

@@ -8,7 +8,6 @@ public abstract class JsonDiscriminatorConverter<T> : JsonConverter<T> where T :
   Type _type;
   string _discriminatorPropertyName;
 
-
   public JsonDiscriminatorConverter(string discriminatorPropertyName) : base()
   {
     _discriminatorPropertyName = discriminatorPropertyName;
@@ -58,7 +57,7 @@ public abstract class JsonDiscriminatorConverter<T> : JsonConverter<T> where T :
   }
 
 
-  JsonSerializerOptions CreateOptions(JsonSerializerOptions baseOptions)
+  protected virtual JsonSerializerOptions CreateOptions(JsonSerializerOptions baseOptions)
   {
     JsonSerializerOptions newOptions = new(baseOptions);
     JsonConverter toRemove = newOptions.Converters.FirstOrDefault(x => x.GetType() == _type);

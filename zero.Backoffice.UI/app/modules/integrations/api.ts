@@ -12,7 +12,7 @@ export default {
 
   create: (model: any, config?: ApiRequestConfig) => post('integrations', model, config),
 
-  update: (model: any, config?: ApiRequestConfig) => put('integrations/' + model.typeAlias, model, config),
+  update: (model: any, config?: ApiRequestConfig) => put('integrations/' + model.flavor, model, config),
 
   activate: (alias: string, config?: ApiRequestConfig) => put('integrations/' + alias + '/activate', null, config),
 

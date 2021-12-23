@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
 using System.Text.Json;
 using zero.Configuration;
@@ -47,11 +48,40 @@ public class SetupController : Controller
 
 
   [HttpGet("/api/setup/json")]
-  public async Task<IActionResult> TestJson([FromServices] ICountryStore store)
+  public async Task<IActionResult> TestJson([FromServices] IZeroStore store, [FromServices] IZeroOptions options)
   {
-    Country country = await store.Load("countries.v6m7gg7fkung");
-    return Json(country);
+    using var session = store.Session();
+    var items = await session.Query<Integration>().ToListAsync();
+
+    JsonSerializerOptions opts = new();
+    opts.Converters.Add(new JsonFlavorVariantConverterFactory(options));
+
+    var json = JsonSerializer.Serialize(items, opts);
+    return Content(json, "application/json");
   }
+
+
+  [HttpGet("/api/setup/json1")]
+  public async Task<IActionResult> TestJson1([FromServices] IZeroStore store, [FromServices] IZeroOptions options)
+  {
+    using var session = store.Session();
+    var items = await session.Query<Integration>().ToListAsync();
+
+    JsonSerializerOptions opts = new();
+    opts.Converters.Add(new JsonFlavorVariantConverterFactory(options));
+
+    return Json(items, opts);
+  }
+
+
+  //[HttpGet("/api/setup/json")]
+  //public async Task<IActionResult> TestJson([FromServices] ICountryStore store)
+  //{
+  //  var countries = await store.Load(pageNumber: 1, pageSize: 10);
+  //  var json = JsonSerializer.Serialize(countries);
+  //  return Json(json, "application/json");
+  //}
+
 
   [HttpPost("/api/setup/postjson")]
   public IActionResult PostTestJson(Country country)

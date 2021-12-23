@@ -15,4 +15,10 @@ public class FlavorProvider
   public Type BaseType { get; set; }
 
   public List<FlavorConfig> Flavors { get; set; } = new();
+
+  /// <summary>
+  /// Flavor discriminator converter 
+  /// </summary>
+  [JsonIgnore]
+  public Func<FlavorProvider, JsonConverter> ConverterCreator { get; set; }
 }

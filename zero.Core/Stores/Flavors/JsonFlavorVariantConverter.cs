@@ -1,18 +1,33 @@
-﻿namespace zero.Stores;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
-public class JsonFlavorVariantConverter : JsonDiscriminatorConverter<ZeroEntity>
+namespace zero.Stores;
+
+internal class JsonFlavorVariantConverter<T> : JsonDiscriminatorConverter<T> where T : class, ISupportsFlavors, new()
 {
-  protected FlavorOptions Flavors { get; private set; }
+  protected FlavorProvider Provider { get; private set; }
+
+  Type _factoryType = typeof(JsonFlavorVariantConverterFactory);
 
 
-  public JsonFlavorVariantConverter(IZeroOptions options) : base("flavor")
+  public JsonFlavorVariantConverter(FlavorProvider provider) : base("flavor")
   {
-    Flavors = options.For<FlavorOptions>();
+    Provider = provider;
   }
+
 
   protected override Type GetTypeFromDiscriminator(Type requestedType, string discriminator)
   {
-    FlavorConfig config = Flavors.Get(requestedType, discriminator);
+    FlavorConfig config = Provider.Flavors.FirstOrDefault(x => x.Alias.Equals(discriminator, StringComparison.InvariantCultureIgnoreCase));
     return config?.FlavorType ?? requestedType;
+  }
+
+
+  protected override JsonSerializerOptions CreateOptions(JsonSerializerOptions baseOptions)
+  {
+    JsonSerializerOptions newOptions = base.CreateOptions(baseOptions);
+    JsonConverter toRemove = newOptions.Converters.FirstOrDefault(x => x.GetType() == _factoryType);
+    newOptions.Converters.Remove(toRemove);
+    return newOptions;
   }
 }

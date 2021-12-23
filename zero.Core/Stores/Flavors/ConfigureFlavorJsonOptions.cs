@@ -15,6 +15,6 @@ public class ConfigureFlavorJsonOptions : IConfigureOptions<JsonOptions>
 
   public void Configure(JsonOptions options)
   {
-    options.JsonSerializerOptions.Converters.Add(new JsonFlavorVariantConverter(zeroOptions));
+    options.JsonSerializerOptions.Converters.Add(new JsonFlavorVariantConverterFactory(zeroOptions));
   }
 }

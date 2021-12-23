@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Text.Json.Serialization;
 
 namespace zero.Stores;
 
@@ -6,21 +7,20 @@ public class FlavorOptions
 {
   public ConcurrentDictionary<Type, FlavorProvider> Providers { get; private set; } = new();
 
-
-  public void Configure<TEntity>(Action<FlavorProviderOptions<TEntity>> configure) where TEntity : ISupportsFlavors, new()
+  public void Configure<TEntity>(Action<FlavorProviderOptions<TEntity>> configure) where TEntity : class, ISupportsFlavors, new()
   {
     Type type = typeof(TEntity);
-    FlavorProvider provider = Providers.GetOrAdd(type, _ => new() { BaseType = type });
+    FlavorProvider provider = Providers.GetOrAdd(type, _ => CreateProvider<TEntity>());
     configure(new FlavorProviderOptions<TEntity>(this, provider));
   }
 
 
-  public bool CanUseWithoutFlavors<TEntity>() where TEntity : ISupportsFlavors, new()
+  public bool CanUseWithoutFlavors<TEntity>() where TEntity : class, ISupportsFlavors, new()
   {
     return Providers.GetValueOrDefault(typeof(TEntity), new()).CanUseWithoutFlavors;
   }
 
-  public string DefaultFlavorFor<TEntity>() where TEntity : ISupportsFlavors, new()
+  public string DefaultFlavorFor<TEntity>() where TEntity : class, ISupportsFlavors, new()
   {
     FlavorProvider provider = Providers.GetValueOrDefault(typeof(TEntity), new());
 
@@ -82,7 +82,7 @@ public class FlavorOptions
 
 
   public void Add<TEntity, TFlavor>(string alias, string name, string description = null, string icon = null) 
-    where TEntity : ISupportsFlavors, new()
+    where TEntity : class, ISupportsFlavors, new()
     where TFlavor : TEntity, new()
   {
     Add<TEntity, TFlavor>(typeof(TFlavor), _ => new TFlavor(), alias, name, description, icon);
@@ -90,7 +90,7 @@ public class FlavorOptions
 
 
   public void Add<TEntity, TFlavor>(Func<FlavorConfig, TFlavor> construct, string alias, string name, string description = null, string icon = null)
-    where TEntity : ISupportsFlavors, new()
+    where TEntity : class, ISupportsFlavors, new()
     where TFlavor : TEntity, new()
   {
     Add<TEntity, TFlavor>(typeof(TFlavor), construct, alias, name, description, icon);
@@ -98,7 +98,7 @@ public class FlavorOptions
 
 
   public void Add<TEntity, TFlavor>(Type flavorType, Func<FlavorConfig, TFlavor> construct, string alias, string name, string description = null, string icon = null)
-    where TEntity : ISupportsFlavors, new()
+    where TEntity : class, ISupportsFlavors, new()
     where TFlavor : TEntity, new()
   {
     Add<TEntity, TFlavor>(new(flavorType)
@@ -113,11 +113,22 @@ public class FlavorOptions
 
 
   public void Add<TEntity, TFlavor>(FlavorConfig config)
-    where TEntity : ISupportsFlavors, new()
+    where TEntity : class, ISupportsFlavors, new()
     where TFlavor : TEntity, new()
   {
     Type baseEntityType = typeof(TEntity);
-    FlavorProvider provider = Providers.GetOrAdd(baseEntityType, _ => new() { BaseType = baseEntityType });
+    FlavorProvider provider = Providers.GetOrAdd(baseEntityType, _ => CreateProvider<TEntity>());
     provider.Flavors.Add(config);
+  }
+
+
+  FlavorProvider CreateProvider<TEntity>()
+    where TEntity : class, ISupportsFlavors, new()
+  {
+    return new FlavorProvider()
+    {
+      BaseType = typeof(TEntity),
+      ConverterCreator = cfg => new JsonFlavorVariantConverter<TEntity>(cfg)
+    };
   }
 }
