@@ -11,13 +11,19 @@ export default {
   getEmpty: (alias: string, config?: ApiRequestConfig) => get("spaces/empty", { ...config, params: { alias } }),
 
 
-  //getById: (id: string, changeVector?: string, config?: ApiRequestConfig) => get('countries/' + id, { ...config, params: { changeVector } }),
+  //getByAlias: async alias => await get(base + 'getByAlias', { params: { alias } }),
 
-  //getByQuery: (query: ApiRequestQuery, config?: ApiRequestConfig) => get('countries', { ...config, params: { ...query } }),
+  //getAll: async () => await get(base + 'getAll'),
 
-  //create: (model: any, config?: ApiRequestConfig) => post('countries', model, config),
+  //getList: async (alias, query) =>
+  //{
+  //  query.alias = alias;
+  //  return await get(base + 'getList', { params: query })
+  //},
 
-  //update: (model: any, config?: ApiRequestConfig) => put('countries/' + model.id, model, config),
+  //getContent: async (alias, contentId) => await get(base + 'getContent', { params: { alias, contentId } }),
 
-  //delete: (id: string, config?: ApiRequestConfig) => del('countries/' + id, null, config),
+  //save: async model => await post(base + 'save', model),
+
+  //delete: async (alias, id) => await del(base + 'delete', { params: { alias, id } })
 };

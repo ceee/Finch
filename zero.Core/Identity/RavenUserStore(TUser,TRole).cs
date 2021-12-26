@@ -9,10 +9,10 @@ namespace zero.Identity;
 
 public partial class RavenUserStore<TUser, TRole> : RavenUserStore<TUser>,
   IUserRoleStore<TUser>
-  where TUser : ZeroIdentityUser
-  where TRole : ZeroIdentityRole
+  where TUser : ZeroIdentityUser, new()
+  where TRole : ZeroIdentityRole, new()
 {
-  public RavenUserStore(IZeroStore store, IZeroOptions options, bool global = false) : base(store, options, global) { }
+  public RavenUserStore(IStoreContext context, bool global = false) : base(context, global) { }
 
 
   /// <inheritdoc />
@@ -33,7 +33,7 @@ public partial class RavenUserStore<TUser, TRole> : RavenUserStore<TUser>,
   /// <inheritdoc />
   public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
   {
-    return await ScopeQuery(Store.Session(Global).Query<TUser>()).Where(x => roleName.In(x.RoleIds)).ToListAsync();
+    return await ScopeQuery(Session.Query<TUser>()).Where(x => roleName.In(x.RoleIds)).ToListAsync();
   }
 
 

@@ -7,8 +7,8 @@ namespace zero.Identity;
 public static class ZeroIdentityExtensions
 {
   public static IdentityBuilder AddZeroIdentity<TUser, TRole>(this IServiceCollection services) 
-    where TUser : ZeroIdentityUser
-    where TRole : ZeroIdentityRole
+    where TUser : ZeroIdentityUser, new()
+    where TRole : ZeroIdentityRole, new()
   {
     services.AddZeroIdentityCore<TUser>();
 
@@ -29,7 +29,7 @@ public static class ZeroIdentityExtensions
 
 
   public static IdentityBuilder AddZeroIdentity<TUser>(this IServiceCollection services)
-    where TUser : ZeroIdentityUser
+    where TUser : ZeroIdentityUser, new()
   {
     services.AddZeroIdentityCore<TUser>();
 
@@ -45,7 +45,7 @@ public static class ZeroIdentityExtensions
 
 
   static IServiceCollection AddZeroIdentityCore<TUser>(this IServiceCollection services)
-    where TUser : ZeroIdentityUser
+    where TUser : ZeroIdentityUser, new()
   {
     services.AddHttpContextAccessor();
     services.AddOptions();

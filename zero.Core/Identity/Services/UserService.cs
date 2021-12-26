@@ -17,7 +17,7 @@ public class UserService : IUserService
     UserManager = userManager;
     Operations = new StoreOperations(store.Context, store.Interceptors, store.Options, new()
     {
-      IncludeInactive = false,
+      IncludeInactive = true,
       Database = store.Options.For<RavenOptions>().Database
     });
     Context = context;

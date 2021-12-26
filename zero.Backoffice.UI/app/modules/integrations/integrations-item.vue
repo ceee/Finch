@@ -17,8 +17,11 @@
         <span class="ui-tag" v-for="tag in model.tags">{{tag}}</span>
       </div>-->
       <div class="integrations-item-bottom">
-        <ui-button class="integrations-item-button" type="action small" v-if="!model.isConfigured" v-localize="'Setup'" @click="open" />
-        <ui-button class="integrations-item-button" type="action small" v-else v-localize="'Edit'" @click="open" />
+        <!--<ui-add-button :route="createRoute" alias="countries" v-if="!model.isConfigured">
+          <ui-button class="integrations-item-button" type="action small" v-localize="'Setup'" />
+        </ui-add-button>-->
+        <ui-button v-if="!model.isConfigured" class="integrations-item-button" type="action small" v-localize="'Setup'" @click="open" />
+        <ui-button v-else class="integrations-item-button" type="action small" v-localize="'Edit'" @click="open" />
         <span class="integrations-item-active" v-if="model.isConfigured && model.isActivated">
           <ui-icon symbol="fth-check-circle" :size="16" /> <span>Active</span>
         </span>

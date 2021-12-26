@@ -5,7 +5,9 @@
   <ui-dropdown v-else ref="dropdown" align="right">
 
     <template v-slot:button>
-      <ui-button :label="label" :type="type" :disabled="disabled" />
+      <slot>
+        <ui-button :label="label" :type="type" :disabled="disabled" />
+      </slot>
     </template>
 
     <template v-if="flavors.length > 0">

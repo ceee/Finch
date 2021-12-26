@@ -8,7 +8,7 @@ namespace zero.Stores;
 public partial class StoreOperations : IStoreOperations
 {
   /// <inheritdoc />
-  public IZeroDocumentSession Session => Context.Store.Session(_overrideDatabase);
+  public IZeroDocumentSession Session => Context.Store.Session(_overrideDatabase ?? Config.Database);
 
   protected record OperationOptions(bool IncludeInactive);
 

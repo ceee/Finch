@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
-using Raven.Client.Documents.Session;
 using System.Security.Claims;
 
 namespace zero.Identity;
 
-public partial class RavenUserStore<TUser> : 
+
+public partial class RavenUserStore<TUser> :
+  EntityStore<TUser>,
   IUserStore<TUser>,
   IUserEmailStore<TUser>,
   IUserLockoutStore<TUser>,
@@ -14,20 +15,15 @@ public partial class RavenUserStore<TUser> :
   IUserClaimStore<TUser>,
   IUserSecurityStampStore<TUser>,
   IProtectedUserStore<TUser>
-  where TUser : ZeroIdentityUser
+  where TUser : ZeroIdentityUser, new()
 {
-  protected IZeroStore Store { get; private set; }
-
-  protected IZeroOptions Options { get; private set; }
-
   protected bool Global { get; private set; }
 
-
-  public RavenUserStore(IZeroStore store, IZeroOptions options, bool global = false)
+  public RavenUserStore(IStoreContext storeContext, bool global = false) : base(storeContext)
   {
-    Store = store;
-    Options = options;
-    Global = global;
+    Global = global; 
+    Config.Database = global ? Options.For<RavenOptions>().Database : null;
+    Config.IncludeInactive = true;
   }
 
 
@@ -45,9 +41,9 @@ public partial class RavenUserStore<TUser> :
   /// <summary>
   /// Whether an email is already reserved
   /// </summary>
-  protected virtual async Task<bool> IsEmailReserved(IAsyncDocumentSession session, TUser user, CancellationToken cancellationToken = default)
+  protected virtual async Task<bool> IsEmailReserved(TUser user, CancellationToken cancellationToken = default)
   {
-    TUser existingUser = await ScopeQuery(session.Query<TUser>()).FirstOrDefaultAsync(x => x.Email == user.Email, cancellationToken);
+    TUser existingUser = await ScopeQuery(Session.Query<TUser>()).FirstOrDefaultAsync(x => x.Email == user.Email, cancellationToken);
     return existingUser != null && existingUser.Id != user.Id;
   }
 
@@ -55,9 +51,7 @@ public partial class RavenUserStore<TUser> :
   /// <inheritdoc />
   public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
   {
-    IZeroDocumentSession session = Store.Session(Global);
-
-    if (await IsEmailReserved(session, user, cancellationToken))
+    if (await IsEmailReserved(user, cancellationToken))
     {
       return IdentityResult.Failed(new IdentityError
       {
@@ -66,9 +60,7 @@ public partial class RavenUserStore<TUser> :
       });
     }
 
-    await session.StoreAsync(user, cancellationToken);
-    await session.SaveChangesAsync(cancellationToken);
-
+    Result<TUser> result = await Create(user);
     return IdentityResult.Success;
   }
 
@@ -76,13 +68,7 @@ public partial class RavenUserStore<TUser> :
   /// <inheritdoc />
   public async Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
   {
-    IZeroDocumentSession session = Store.Session(Global);
-
-    TUser source = await session.LoadAsync<TUser>(user.Id, cancellationToken);
-
-    session.Delete(source);
-    await session.SaveChangesAsync(cancellationToken);
-
+    Result result = await Delete(user);
     return IdentityResult.Success;
   }
 
@@ -90,9 +76,7 @@ public partial class RavenUserStore<TUser> :
   /// <inheritdoc />
   public async Task<IdentityResult> UpdateAsync(TUser user, CancellationToken cancellationToken)
   {
-    using IZeroDocumentSession session = Store.Session(Global);
-    using IAsyncDocumentSession newSession = Store.Session(Global, null, ZeroSessionResolution.Create, new SessionOptions() { NoCaching = true });
-    TUser source = await newSession.LoadAsync<TUser>(user.Id, cancellationToken);
+    TUser source = await Load(user.Id);
 
     if (source == null)
     {
@@ -103,7 +87,7 @@ public partial class RavenUserStore<TUser> :
       });
     }
 
-    if (source.Email != user.Email && await IsEmailReserved(Store.Session(Global), user, cancellationToken))
+    if (source.Email != user.Email && await IsEmailReserved(user, cancellationToken))
     {
       return IdentityResult.Failed(new IdentityError
       {
@@ -112,8 +96,7 @@ public partial class RavenUserStore<TUser> :
       });
     }
 
-    await session.StoreAsync(user, cancellationToken);
-    await session.SaveChangesAsync(cancellationToken);
+    await Update(user);
 
     return IdentityResult.Success;
   }
@@ -122,14 +105,14 @@ public partial class RavenUserStore<TUser> :
   /// <inheritdoc />
   public async Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
   {
-    return await ScopeQuery(Store.Session(Global).Query<TUser>()).FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+    return await ScopeQuery(Session.Query<TUser>()).FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
   }
 
 
   /// <inheritdoc />
   public async Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
   {
-    return await ScopeQuery(Store.Session(Global).Query<TUser>()).FirstOrDefaultAsync(x => x.Username == normalizedUserName, cancellationToken);
+    return await ScopeQuery(Session.Query<TUser>()).FirstOrDefaultAsync(x => x.Username == normalizedUserName, cancellationToken);
   }
 
 
@@ -196,7 +179,7 @@ public partial class RavenUserStore<TUser> :
   /// <inheritdoc />
   public async Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
   {
-    return await Store.Session(Global).Query<TUser>().FirstOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
+    return await Session.Query<TUser>().FirstOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
   }
 
 
@@ -320,10 +303,8 @@ public partial class RavenUserStore<TUser> :
   /// <inheritdoc />
   public async Task AddClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
   {
-    IZeroDocumentSession session = Store.Session(Global);
     user.Claims.AddRange(claims.Select(claim => new UserClaim(claim)));
-    await session.StoreAsync(user, cancellationToken);
-    await session.SaveChangesAsync(cancellationToken);
+    await Update(user);
   }
 
 
@@ -338,35 +319,30 @@ public partial class RavenUserStore<TUser> :
   public async Task<IList<TUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
   {
     UserClaim userClaim = new(claim);
-    return await ScopeQuery(Store.Session(Global).Query<TUser>()).Where(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value)).ToListAsync(token: cancellationToken);
+    return await ScopeQuery(Session.Query<TUser>()).Where(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value)).ToListAsync(token: cancellationToken);
   }
 
 
   /// <inheritdoc />
   public async Task RemoveClaimsAsync(TUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
   {
-    IZeroDocumentSession session = Store.Session(Global);
     IEnumerable<UserClaim> userClaims = claims.Select(c => new UserClaim(c)).ToList();
 
     user.Claims = user.Claims.Except(userClaims, new UserClaimComparer()).ToList();
 
-    await session.StoreAsync(user, cancellationToken);
-    await session.SaveChangesAsync(cancellationToken);
-
+    await Update(user);
   }
 
 
   /// <inheritdoc />
   public async Task ReplaceClaimAsync(TUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
   {
-    IZeroDocumentSession session = Store.Session(Global);
     UserClaim userClaim = new(claim);
     UserClaim newUserClaim = new(newClaim);
 
     user.Claims.Remove(userClaim);
     user.Claims.Add(newUserClaim);
 
-    await session.StoreAsync(user, cancellationToken);
-    await session.SaveChangesAsync(cancellationToken);
+    await Update(user);
   }
 }

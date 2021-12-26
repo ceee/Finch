@@ -9,3 +9,4 @@ export * from './pages';
 export * from './mails';
 export * from './translations';
 export * from './integrations';
+export * from './users';

@@ -6,24 +6,23 @@ using System.Security.Claims;
 
 namespace zero.Identity;
 
-public class RavenRoleStore<TRole> : IRoleStore<TRole>, IRoleClaimStore<TRole> 
-  where TRole : ZeroIdentityRole
+public class RavenRoleStore<TRole> : 
+  EntityStore<TRole>,
+  IRoleStore<TRole>, 
+  IRoleClaimStore<TRole> 
+  where TRole : ZeroIdentityRole, new()
 {
-  protected IZeroStore Store { get; private set; }
-
-  protected IZeroOptions Options { get; private set; }
-
   protected IdentityErrorDescriber ErrorDescriber { get; private set; }
 
   protected bool Global { get; private set; }
 
 
-  public RavenRoleStore(IZeroStore store, IZeroOptions options, IdentityErrorDescriber describer = null, bool global = false)
+  public RavenRoleStore(IStoreContext storeContext, IdentityErrorDescriber describer = null, bool global = false) : base(storeContext)
   {
-    Store = store;
-    Options = options;
-    ErrorDescriber = describer ?? new IdentityErrorDescriber();
     Global = global;
+    Config.Database = global ? Options.For<RavenOptions>().Database : null;
+    Config.IncludeInactive = true;
+    ErrorDescriber = describer ?? new IdentityErrorDescriber();
   }
 
 
@@ -36,9 +35,7 @@ public class RavenRoleStore<TRole> : IRoleStore<TRole>, IRoleClaimStore<TRole>
   /// <inheritdoc/>
   public async Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
   {
-    IZeroDocumentSession session = Store.Session(Global);
-    await session.StoreAsync(role, cancellationToken);
-    await session.SaveChangesAsync(cancellationToken);
+    await Create(role);
     return IdentityResult.Success;
   }
 
@@ -48,9 +45,7 @@ public class RavenRoleStore<TRole> : IRoleStore<TRole>, IRoleClaimStore<TRole>
   {
     try
     {
-      IZeroDocumentSession session = Store.Session(Global);
-      await session.StoreAsync(role, cancellationToken);
-      await session.SaveChangesAsync(cancellationToken);
+      await Update(role);
     }
     catch (ConcurrencyException)
     {
@@ -65,9 +60,7 @@ public class RavenRoleStore<TRole> : IRoleStore<TRole>, IRoleClaimStore<TRole>
   {
     try
     {
-      IZeroDocumentSession session = Store.Session(Global);
-      session.Delete(role);
-      await session.SaveChangesAsync(cancellationToken);
+      await Delete(role);
     }
     catch (ConcurrencyException)
     {
@@ -107,14 +100,14 @@ public class RavenRoleStore<TRole> : IRoleStore<TRole>, IRoleClaimStore<TRole>
   /// <inheritdoc/>
   public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
   {
-    return await ScopeQuery(Store.Session(Global).Query<TRole>()).FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken);
+    return await ScopeQuery(Session.Query<TRole>()).FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken);
   }
 
 
   /// <inheritdoc/>
   public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
   {
-    return await ScopeQuery(Store.Session(Global).Query<TRole>()).FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
+    return await ScopeQuery(Session.Query<TRole>()).FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
   }
 
 

@@ -200,7 +200,7 @@ class ListColumn
   {
     this._type = 'image';
     this._asHtml = true;
-    this._func = (value, opts) => value ? `<img src="/zero/api/backoffice/ui/mediapreview/${(value)}" class="ui-table-field-image">` : '';
+    this._func = (value, opts) => value ? `<img src="/zero/api/system/media/${(value)}/thumb.tmp" class="ui-table-field-image">` : '';
     return this;
   }
 
