@@ -3,6 +3,22 @@ using System.Text.Json.Serialization;
 
 namespace zero.Architecture;
 
+public sealed class DefaultShallowBlueprint : Blueprint<ZeroEntity>
+{
+  public DefaultShallowBlueprint(Type type) : base()
+  {
+    Alias = "shallow.default";
+    ContentType = type;
+    LockAll();
+  }
+
+
+  protected override BlueprintField<ZeroEntity> AddField(Expression<Func<ZeroEntity, object>> selector)
+  {
+    throw new InvalidOperationException("Shallow blueprints can not contain unlocked fields");
+  }
+}
+
 /// <summary>
 /// 
 /// </summary>
@@ -80,7 +96,7 @@ public class Blueprint<T> : Blueprint where T : ZeroEntity, new()
   /// <summary>
   /// Lock a field so it always get synchronized no and cannot be changed
   /// </summary>
-  public void LockAll()
+  public virtual void LockAll()
   {
     UnlockedFields = new();
   }
@@ -89,19 +105,19 @@ public class Blueprint<T> : Blueprint where T : ZeroEntity, new()
   /// <summary>
   /// Lock a field so it always get synchronized no and cannot be changed
   /// </summary>
-  public void Lock(Expression<Func<T, object>> selector)
+  public virtual void Lock(Expression<Func<T, object>> selector)
   {
     RemoveField(selector);
   }
 
 
-  public void Unlock(Expression<Func<T, object>> selector)
+  public virtual void Unlock(Expression<Func<T, object>> selector)
   {
     AddField(selector);
   }
 
 
-  public void UnlockDefaults()
+  public virtual void UnlockDefaults()
   {
     AddField(x => x.Name);
     AddField(x => x.Alias);
@@ -124,7 +140,7 @@ public class Blueprint<T> : Blueprint where T : ZeroEntity, new()
   /// <summary>
   /// Get existing field or create a new one
   /// </summary>
-  protected BlueprintField<T> AddField(Expression<Func<T, object>> selector)
+  protected virtual BlueprintField<T> AddField(Expression<Func<T, object>> selector)
   {
     BlueprintField<T> tempField = new(selector);
     BlueprintField<T> storedField = UnlockedFields.FirstOrDefault(x => x.FieldName.Equals(tempField.FieldName, StringComparison.InvariantCultureIgnoreCase));
@@ -142,7 +158,7 @@ public class Blueprint<T> : Blueprint where T : ZeroEntity, new()
   /// <summary>
   /// Removes a field
   /// </summary>
-  protected void RemoveField(Expression<Func<T, object>> selector)
+  protected virtual void RemoveField(Expression<Func<T, object>> selector)
   {
     BlueprintField<T> tempField = new(selector);
 
@@ -163,9 +179,9 @@ public abstract class Blueprint
   /// Type of the associated entity
   /// </summary>
   [JsonIgnore]
-  public Type ContentType { get; private set; }
+  public Type ContentType { get; protected set; }
 
-  public string Alias { get; private set; }
+  public string Alias { get; protected set; }
 
   /// <summary>
   /// String comparer for property name comparison

@@ -48,7 +48,7 @@ public class BlueprintInterceptor : Interceptor<ZeroEntity>, IBlueprintIntercept
   {
     if (!BlueprintService.TryGetBlueprint(model, out Blueprint blueprint))
     {
-      return;
+      blueprint = new DefaultShallowBlueprint(model.GetType());
     }
 
     int count = 0;
@@ -63,7 +63,10 @@ public class BlueprintInterceptor : Interceptor<ZeroEntity>, IBlueprintIntercept
       if (child == null)
       {
         child = ObjectCopycat.Clone(model);
-        child.Blueprint = new() { Id = model.Id };
+        child.Blueprint = new()
+        {
+          TargetId = model.Id
+        };
       }
       else
       {

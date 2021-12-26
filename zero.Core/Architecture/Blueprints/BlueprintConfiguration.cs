@@ -8,7 +8,7 @@ public class BlueprintConfiguration
   /// <summary>
   /// Id of the entity the synchronisation is based upon
   /// </summary>
-  public string Id { get; set; }
+  public string TargetId { get; set; }
 
   /// <summary>
   /// A shallow copy of a blueprint can not be changed and is always fully synchronised with the parent entity
