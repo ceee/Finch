@@ -10,7 +10,7 @@ export default {
 
   //create: (model: any, config?: ApiRequestConfig) => post('countries', model, config),
 
-  //update: (model: any, config?: ApiRequestConfig) => put('countries/' + model.id, model, config),
+  update: (model: any, config?: ApiRequestConfig) => put('users/' + model.id, model, config),
 
   //delete: (id: string, config?: ApiRequestConfig) => del('countries/' + id, null, config),
 

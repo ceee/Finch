@@ -62,9 +62,10 @@ public class UserService : IUserService
 
     if (!model.Id.IsNullOrEmpty())
     {
-      ZeroUser origin = await GetUserById(model.Id);
-      isUpdate = origin != null;
-      updateSecurityStamp = origin != null && model.PasswordHash != origin.PasswordHash;
+      // TODO throws "Attempted to associate a different object with id ..."
+      //ZeroUser origin = await GetUserById(model.Id);
+      isUpdate = true; // origin != null;
+      updateSecurityStamp = true; // origin != null && model.PasswordHash != origin.PasswordHash;
     }
 
     Result<ZeroUser> result = isUpdate ? await Operations.Update(model) : await Operations.Create(model);

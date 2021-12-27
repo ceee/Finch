@@ -53,10 +53,10 @@
     }),
 
     watch: {
-      '$route': function ()
-      {
-        this.$emit('load', this);
-      },
+      //'$route': function (val)
+      //{
+      //  this.$emit('load', this);
+      //},
       state(val)
       {
         this.slotProps.state = val;

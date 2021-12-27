@@ -53,9 +53,24 @@ public class UsersController : ZeroApiController
   //public virtual Task<ActionResult<Result>> Create(ZeroUser saveModel) => CreateModel(saveModel);
 
 
-  //[HttpPut("{id}")]
-  //[ZeroAuthorize(UserPermissions.Update)]
-  //public virtual Task<ActionResult<Result>> Update(string id, ZeroUser updateModel, [FromQuery] string changeToken = null) => UpdateModel(id, updateModel, changeToken);
+  [HttpPut("{id}")]
+  [ZeroAuthorize(UserPermissions.Update)]
+  public virtual async Task<ActionResult<Result>> Update(string id, ZeroUser updateModel, [FromQuery] string changeToken = null)
+  {
+    if (id != updateModel.Id)
+    {
+      return BadRequest(Result.Fail(nameof(id), "@errors.onupdate.noidmatch"));
+    }
+
+    Result<ZeroUser> result = await Users.Save(updateModel);
+
+    if (Hints.ResponsePreference == ApiResponsePreference.Minimal)
+    {
+      return result.WithoutModel();
+    }
+
+    return result;
+  }
 
 
   //[HttpDelete("{id}")]
