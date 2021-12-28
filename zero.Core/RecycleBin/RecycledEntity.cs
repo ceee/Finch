@@ -2,7 +2,7 @@
 
 //namespace zero.Core.Entities
 //{
-//  [Collection("RecycleBin")]
+//  [RavenCollection("RecycleBin")]
 //  public class RecycledEntity : ZeroEntity
 //  {
 //    /// <summary>

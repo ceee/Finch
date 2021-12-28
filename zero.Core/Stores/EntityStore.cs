@@ -10,11 +10,11 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
   public Guid Guid { get; private set; } = Guid.NewGuid();
 
   /// <inheritdoc />
-  public IZeroDocumentSession Session => Context.Store.Session(Config.Database);
+  public IZeroDocumentSession Session => Operations.Session;
 
   protected IZeroContext Context { get; private set; }
 
-  protected StoreConfig Config { get; private set; } = new();
+  protected StoreConfig Config => Operations.Config;
 
   protected IInterceptors Interceptors { get; private set; }
 
@@ -28,7 +28,7 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
     Context = collectionContext.Context;
     Interceptors = collectionContext.Interceptors;
     Options = collectionContext.Options;
-    Operations = new StoreOperations(Context, Interceptors, Options, Config);
+    Operations = new StoreOperations(collectionContext);
   }
 
 

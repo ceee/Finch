@@ -32,8 +32,4 @@
   <ItemGroup>
     <ProjectReference Include="..\zero.Core\zero.Core.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Endpoints\Users\" />
-  </ItemGroup>
 </Project>

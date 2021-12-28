@@ -5,10 +5,17 @@ using System.Security.Claims;
 
 namespace zero.Stores;
 
-public partial class StoreOperations : IStoreOperations
+public partial class StoreOperations : 
+  IStoreOperations,
+  ISharedStoreOperations,
+  IStoreOperationsWithInactive,
+  ISharedStoreOperationsWithInactive
 {
   /// <inheritdoc />
   public IZeroDocumentSession Session => Context.Store.Session(_overrideDatabase ?? Config.Database);
+
+  /// <inheritdoc />
+  public StoreConfig Config { get; set; }
 
   protected record OperationOptions(bool IncludeInactive);
 
@@ -18,17 +25,15 @@ public partial class StoreOperations : IStoreOperations
 
   protected FlavorOptions Flavors { get; private set; }
 
-  protected StoreConfig Config { get; private set; }
-
   string _overrideDatabase = null;
 
 
-  public StoreOperations(IZeroContext context, IInterceptors interceptors, IZeroOptions options, StoreConfig config)
+  public StoreOperations(IStoreContext context, StoreConfig config = null)
   {
-    Context = context;
-    Interceptors = interceptors;
-    Flavors = options.For<FlavorOptions>();
-    Config = config;
+    Context = context.Context;
+    Interceptors =  context.Interceptors;
+    Flavors = context.Options.For<FlavorOptions>();
+    Config = config ?? new();
   }
 
 
@@ -113,6 +118,16 @@ public partial class StoreOperations : IStoreOperations
 
 public interface IStoreOperations
 {
+  /// <summary>
+  /// Access to the current session
+  /// </summary>
+  IZeroDocumentSession Session { get; }
+
+  /// <summary>
+  /// Configure operations
+  /// </summary>
+  StoreConfig Config { get; set; }
+
   /// <summary>
   /// Get new instance of an entity (with an optional flavor)
   /// </summary>
@@ -237,3 +252,8 @@ public interface IStoreOperations
   /// </summary>
   Task<Result<string[]>> DeleteWithDescendants<T>(T model) where T : ZeroIdEntity, ISupportsTrees, new();
 }
+
+
+public interface ISharedStoreOperations : IStoreOperations { }
+public interface IStoreOperationsWithInactive : IStoreOperations { }
+public interface ISharedStoreOperationsWithInactive : IStoreOperations { }

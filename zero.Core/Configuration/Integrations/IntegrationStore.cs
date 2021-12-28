@@ -9,10 +9,10 @@ public class IntegrationStore : IIntegrationStore
   protected IIntegrationTypeService IntegrationTypes { get; private set; }
 
 
-  public IntegrationStore(IStoreContext context, IIntegrationTypeService integrationTypes)
+  public IntegrationStore(IStoreOperationsWithInactive operations, IIntegrationTypeService integrationTypes)
   {
     IntegrationTypes = integrationTypes;
-    Operations = new StoreOperations(context.Context, context.Interceptors, context.Options, new StoreConfig() { IncludeInactive = true });
+    Operations = operations;
   }
 
 
