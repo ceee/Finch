@@ -12,7 +12,7 @@ public partial class StoreOperations : IStoreOperations
 
     InterceptorInstruction<T> instruction = Interceptors.ForDelete(model);
 
-    if (!await instruction.Start())
+    if (!await instruction.Start(this))
     {
       return instruction.Result;
     }

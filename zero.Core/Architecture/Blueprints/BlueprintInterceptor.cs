@@ -78,7 +78,7 @@ public class BlueprintInterceptor : Interceptor<ZeroEntity>, IBlueprintIntercept
       InterceptorInstruction<ZeroEntity> interceptor = update ? args.Interceptors.ForUpdate(model) : args.Interceptors.ForCreate(model);
       interceptor.Filter(x => x is not IBlueprintInterceptor);
 
-      await interceptor.Start();
+      await interceptor.Start(args.Operations);
       await session.StoreAsync(child);
       await interceptor.Complete();
       await session.SaveChangesAsync();
@@ -108,7 +108,7 @@ public class BlueprintInterceptor : Interceptor<ZeroEntity>, IBlueprintIntercept
       InterceptorInstruction<ZeroEntity> interceptor = args.Interceptors.ForDelete(model);
       interceptor.Filter(x => x is not IBlueprintInterceptor);
 
-      await interceptor.Start();
+      await interceptor.Start(args.Operations);
       session.Delete(model.Id);      
       await interceptor.Complete();
       await session.SaveChangesAsync();

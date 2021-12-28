@@ -18,6 +18,11 @@ public class InterceptorParameters
   public IInterceptors Interceptors { get; internal set; }
 
   /// <summary>
+  /// Access to operations
+  /// </summary>
+  public IStoreOperations Operations { get; internal set; }
+
+  /// <summary>
   /// Parameters from the interceptor which ran on before the operation (only available for completed operations)
   /// </summary>
   public Dictionary<string, object> Properties { get; set; } = new();

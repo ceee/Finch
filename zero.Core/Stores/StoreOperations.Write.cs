@@ -64,7 +64,7 @@ public partial class StoreOperations : IStoreOperations
     // run interceptor
     InterceptorInstruction<T> instruction = isUpdate ? Interceptors.ForUpdate(model) : Interceptors.ForCreate(model);
 
-    if (!await instruction.Start())
+    if (!await instruction.Start(this))
     {
       return instruction.Result;
     }
