@@ -46,12 +46,6 @@ public abstract class ZeroApiTreeEntityStoreController<TModel, TStore> : ZeroApi
   }
 
 
-  protected async Task<ActionResult<Result>> SortModels(string[] ids)
-  {
-    return await Store.Sort(ids);
-  }
-
-
   protected async Task<ActionResult<Result>> MoveModel<TEdit>(string id, string newParentId)
   {
     return await PutOperation<TEdit>(async () => await Store.Move(id, NormalizeParentId(newParentId)));

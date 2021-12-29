@@ -224,7 +224,7 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
 
     if (result.IsSuccess)
     {
-      return Created(GetAction(result.Model), minimalResponse ? null : result.Model);
+      return Created("/", minimalResponse ? null : result.Model); // TODO correct URL
     }
 
     return result.WithoutModel();

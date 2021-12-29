@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace zero.Models;
 
 [DebuggerDisplay("Id = {Id,nq}, Name = {Name}, Alias = {Alias}")]
-public class ZeroEntity : ZeroIdEntity, ISupportsDbConventions, ISupportsRouting, ISupportsFlavors
+public class ZeroEntity : ZeroIdEntity, ISupportsDbConventions, ISupportsRouting, ISupportsFlavors, ISupportsSorting
 {
   /// <summary>
   /// Full name of the entity

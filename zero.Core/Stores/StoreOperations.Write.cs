@@ -76,4 +76,27 @@ public partial class StoreOperations : IStoreOperations
 
     return Result<T>.Success(model);
   }
+
+
+  /// <inheritdoc />
+  public async Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, ISupportsSorting, new()
+  {
+    Dictionary<string, T> items = await Load<T>(sortedIds);
+    uint index = 0;
+
+    // contains multiple parents, therefore fail
+    if (typeof(ISupportsTrees).IsAssignableFrom(typeof(T)) && items.Select(x => (x.Value as ISupportsTrees)?.ParentId).Distinct().Count() > 1)
+    {
+      return Result<IOrderedEnumerable<T>>.Fail("@errors.treeentity.sortingmultipleparents");
+    }
+
+    foreach (var item in items)
+    {
+      item.Value.Sort = index;
+      index += 10;
+      await Update(item.Value);
+    }
+
+    return Result<IOrderedEnumerable<T>>.Success(items.Select(x => x.Value).OrderByDescending(x => x.Sort));
+  }
 }

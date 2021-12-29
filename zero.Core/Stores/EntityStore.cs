@@ -4,7 +4,7 @@ using Raven.Client.Documents.Linq;
 
 namespace zero.Stores;
 
-public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, ISupportsFlavors, new()
+public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, ISupportsFlavors, ISupportsSorting, new()
 {
   /// <inheritdoc />
   public Guid Guid { get; private set; } = Guid.NewGuid();
@@ -66,6 +66,9 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
   public virtual Task<Result<T>> Update(T model) => Operations.Update(model, async m => await Validate(m));
 
   /// <inheritdoc />
+  public virtual Task<Result<IOrderedEnumerable<T>>> Sort(string[] sortedIds) => Operations.Sort<T>(sortedIds);
+
+  /// <inheritdoc />
   public virtual Task<Result<T>> Delete(T model) => Operations.Delete(model);
 
   /// <inheritdoc />
@@ -91,7 +94,7 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
 
 
 
-public interface IEntityStore<T> where T : ZeroIdEntity, new()
+public interface IEntityStore<T> where T : ZeroIdEntity, ISupportsFlavors, ISupportsSorting, new()
 {
   /// <summary>
   /// Id for this store
@@ -163,6 +166,11 @@ public interface IEntityStore<T> where T : ZeroIdEntity, new()
   /// Updates an entity with an optional validator
   /// </summary>
   Task<Result<T>> Update(T model);
+
+  /// <summary>
+  /// Update sorting of entities on a specific level
+  /// </summary>
+  Task<Result<IOrderedEnumerable<T>>> Sort(string[] sortedIds);
 
   /// <summary>
   /// Deletes an entity

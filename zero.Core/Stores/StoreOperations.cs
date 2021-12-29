@@ -210,6 +210,9 @@ public interface IStoreOperations
   /// </summary>
   Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
 
+  /// <inheritdoc />
+  Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, ISupportsSorting, new();
+
   /// <summary>
   /// Deletes an entity
   /// </summary>
@@ -229,11 +232,6 @@ public interface IStoreOperations
   /// Get tree hierarchy for an entity
   /// </summary>
   Task<T[]> GetHierarchy<T, TIndex>(string id) where T : ZeroIdEntity, ISupportsTrees, new() where TIndex : ZeroTreeHierarchyIndex<T>, new();
-
-  /// <summary>
-  /// Update sorting of entities on a specific level
-  /// </summary>
-  Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, ISupportsTrees, new();
 
   /// <summary>
   /// Move an entity to a new parent

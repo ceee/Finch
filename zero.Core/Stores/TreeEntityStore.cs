@@ -3,7 +3,7 @@ using Raven.Client.Documents.Linq;
 
 namespace zero.Stores;
 
-public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> where T : ZeroIdEntity, ISupportsTrees, ISupportsFlavors, new()
+public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> where T : ZeroIdEntity, ISupportsTrees, ISupportsFlavors, ISupportsSorting, new()
 {
   public TreeEntityStore(IStoreContext collectionContext) : base(collectionContext) { }
 
@@ -52,9 +52,6 @@ public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> w
   public virtual Task<Result<T>> Move(string id, string newParentId) => Operations.Move<T>(id, newParentId, async (model, parentId) => await IsAllowedAsChild(model, parentId));
 
   /// <inheritdoc />
-  public virtual Task<Result<IOrderedEnumerable<T>>> Sort(string[] sortedIds) => Operations.Sort<T>(sortedIds);
-
-  /// <inheritdoc />
   public virtual Task<Result<string[]>> DeleteWithDescendants(T model) => Operations.DeleteWithDescendants(model);
 
   /// <inheritdoc />
@@ -63,7 +60,7 @@ public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> w
 
 
 
-public interface ITreeEntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, ISupportsTrees, new()
+public interface ITreeEntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, ISupportsTrees, ISupportsFlavors, ISupportsSorting, new()
 {
   /// <summary>
   /// Determines whether a model is allowed as a child for a new parent.
@@ -85,11 +82,6 @@ public interface ITreeEntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
   /// Get tree hierarchy for an entity
   /// </summary>
   Task<T[]> GetHierarchy<TIndex>(string id) where TIndex : ZeroTreeHierarchyIndex<T>, new();
-
-  /// <summary>
-  /// Update sorting of entities on a specific level
-  /// </summary>
-  Task<Result<IOrderedEnumerable<T>>> Sort(string[] sortedIds);
 
   /// <summary>
   /// Move an entity to a new parent
