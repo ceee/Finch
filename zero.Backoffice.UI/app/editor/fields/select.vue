@@ -26,7 +26,6 @@
 
     created()
     {
-      console.info(this);
       this.rebuild();
     },
 
