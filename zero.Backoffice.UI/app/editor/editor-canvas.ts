@@ -23,16 +23,22 @@ export class ZeroEditorCanvasBase
 }
 
 
+interface OnFieldsetCreate
+{
+  (set: ZeroEditorCanvasBase): void;
+}
+
+
 export class ZeroEditorCanvasBaseWithFieldset extends ZeroEditorCanvasBase
 {
   fieldsets: ZeroEditorCanvasBase[] = [];
 
-  fieldset(): ZeroEditorCanvasBase
+  fieldset(onCreate: OnFieldsetCreate): void
   {
     const fieldset = new ZeroEditorCanvasBase();
     fieldset.sort = (this.fieldsets.length + 1) * 10;
     this.fieldsets.push(fieldset);
-    return fieldset;
+    onCreate(fieldset);
   }
 }
 

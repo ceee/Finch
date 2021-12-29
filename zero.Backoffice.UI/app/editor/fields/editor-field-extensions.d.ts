@@ -44,6 +44,12 @@ declare module 'zero/schemas'
      * @param {StateFieldOptions} options - Custom options
      */
     state(options: StateFieldOptions): ZeroEditorField;
+
+    /**
+     * Select one of the predefined values
+     * @param {SelectFieldOptions} options - Custom options
+     */
+    select(options: SelectFieldOptions): ZeroEditorField;
   }
 
 
@@ -68,10 +74,16 @@ declare module 'zero/schemas'
 
   export interface StateFieldOptions
   {
-    items: StateFieldItem[];
+    items: SelectFieldItem[];
   }
 
-  export interface StateFieldItem
+  export interface SelectFieldOptions
+  {
+    items: SelectFieldItem[];
+    emptyOption?: boolean | null;
+  }
+
+  export interface SelectFieldItem
   {
     value: any;
     label: string;
