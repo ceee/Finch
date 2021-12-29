@@ -12,10 +12,12 @@
 
     <template v-if="flavors.length > 0">
       <ui-dropdown-button v-for="(flavor, index) in flavors" :key="index" :icon="flavor.icon" :value="flavor" :label="flavor.name" :prevent="true" @click="selectFlavor" :selected="selectedflavor == flavor.alias" />
-      <ui-dropdown-separator />
-      <div class="ui-decision">
-        <ui-toggle v-model:on="asBlueprint" :on-content="'Shared'" :off-content="'Not shared'" />
-      </div>
+      <template v-if="allowBlueprint">
+        <ui-dropdown-separator />
+        <div class="ui-decision">
+          <ui-toggle v-model:on="asBlueprint" :on-content="'Shared'" :off-content="'Not shared'" />
+        </div>
+      </template>
       <ui-dropdown-separator />
       <div class="ui-decision-button">
         <ui-button label="@addoverlay.gotoeditor" type="accent" icon="fth-arrow-right" :disabled="disabled" @click="onConfirm(selectedflavor, asBlueprint)" />

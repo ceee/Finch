@@ -8,6 +8,6 @@ export default (el, binding) =>
 {
   if (binding.value !== binding.oldValue)
   {
-    el.innerText = toCurrency(binding.value);
+    el.innerHTML = toCurrency(binding.value);
   }
 };
