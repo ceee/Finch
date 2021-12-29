@@ -78,6 +78,7 @@ let config = defineConfig({
   resolve: {
     alias: {
       vue: '@vue/compat',
+      zero: path.resolve(__dirname, 'app'),
       ...pluginAliases,
     }
   },
