@@ -10,7 +10,7 @@ let loadedPlugins = JSON.parse(process.env.ZERO_PLUGINS || "[]");
 if (!process.env.ZERO_PLUGINS)
 {
   //loadedPlugins = ["../zero.Commerce/Plugin", "../zero.Stories/Plugin", "../zero.Forms/Plugin", "../../Laola/Laola.Backoffice/Plugin"];
-  loadedPlugins = ["../plugins/zero.Commerce/zero.Commerce.Plugin"]
+  loadedPlugins = ["../plugins/zero.Commerce/Backoffice/Plugin"]
   //loadedPlugins = [];
 }
 
