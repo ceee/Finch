@@ -4,6 +4,7 @@ using zero.Applications;
 using zero.Architecture;
 using zero.Backoffice;
 using zero.Backoffice.DevServer;
+using zero.Commerce;
 using zero.Configuration;
 using zero.Demo;
 using zero.Localization;
@@ -17,9 +18,13 @@ builder.Services.AddRazorPages();
 builder.Services.AddTransient<IApplicationResolverHandler, DevApplicationResolverHandler>();
 
 builder.Services
-  .AddZero(builder.Configuration)
+  .AddZero(builder.Configuration, cfg =>
+  {
+    cfg.Mvc.AddApplicationPart(typeof(CommercePlugin).Assembly);
+  })
   .AddApi()
-  .AddBackoffice();
+  .AddBackoffice()
+  .AddCommerce();
 
 builder.Services.Configure<ZeroDevOptions>(opts =>
 {

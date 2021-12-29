@@ -14,6 +14,9 @@ public class BackofficeSection : IBackofficeSection, IChildBackofficeSection
   /// <inheritdoc />
   public string Icon { get; set; }
 
+  /// <inheritdoc />
+  public int Sort { get; set; }
+
   /// <summary>
   /// HEX color (#aabbcc or #abc). Defaults to a neutral color
   /// </summary>
@@ -25,11 +28,12 @@ public class BackofficeSection : IBackofficeSection, IChildBackofficeSection
 
   public BackofficeSection() { }
 
-  public BackofficeSection(string alias, string name, string icon = null, string color = null)
+  public BackofficeSection(string alias, string name, string icon = null, string color = null, int sort = 0)
   {
     Alias = alias;
     Name = name;
     Icon = icon;
     Color = color;
+    Sort = sort;
   }
 }

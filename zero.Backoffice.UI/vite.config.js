@@ -10,7 +10,8 @@ let loadedPlugins = JSON.parse(process.env.ZERO_PLUGINS || "[]");
 if (!process.env.ZERO_PLUGINS)
 {
   //loadedPlugins = ["../zero.Commerce/Plugin", "../zero.Stories/Plugin", "../zero.Forms/Plugin", "../../Laola/Laola.Backoffice/Plugin"];
-  loadedPlugins = [];
+  loadedPlugins = ["../plugins/zero.Commerce/zero.Commerce.Plugin"]
+  //loadedPlugins = [];
 }
 
 let zeroPlugins = [];
@@ -40,12 +41,12 @@ loadedPlugins.forEach(pluginPath =>
   }
 
   pluginNames.push(name);
-  pluginFileContent += "import " + name + " from '" + alias + "/plugin.js';\n";
+  pluginFileContent += "import " + name + " from '" + alias + "/plugin';\n";
 });
 
 pluginFileContent += "export default [ " + pluginNames.join(', ') + " ];";
 
-fs.writeFile(path.resolve(__dirname, 'app/plugins.generated.js'), pluginFileContent, err =>
+fs.writeFile(path.resolve(__dirname, 'app/plugins.generated.ts'), pluginFileContent, err =>
 {
   if (err)
   {
@@ -76,7 +77,8 @@ let config = defineConfig({
   },
   resolve: {
     alias: {
-      vue: '@vue/compat'
+      vue: '@vue/compat',
+      ...pluginAliases,
     }
   },
   plugins: [

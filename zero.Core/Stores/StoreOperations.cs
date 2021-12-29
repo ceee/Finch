@@ -72,10 +72,8 @@ public partial class StoreOperations :
     // set IDs
     AutoSetIds(model);
 
-    if (model is ZeroEntity)
+    if (model is ZeroEntity zeroModel)
     {
-      ZeroEntity zeroModel = model as ZeroEntity;
-
       // get current user
       string userId = Context.BackofficeUser.FindFirstValue(Constants.Auth.Claims.UserId);
 
@@ -101,6 +99,11 @@ public partial class StoreOperations :
       zeroModel.Hash ??= IdGenerator.Create();
     }
 
+    if (model is IAlwaysActive activeModel)
+    {
+      activeModel.IsActive = true;
+    }
+
     return model;
   }
 
@@ -110,7 +113,7 @@ public partial class StoreOperations :
   /// </summary>
   protected virtual T WhenActive<T>(T model) where T : ZeroIdEntity, new()
   {
-    return model != null && (Config.IncludeInactive || model is not ZeroEntity || (model as ZeroEntity).IsActive) ? model : default;
+    return model != null && (Config.IncludeInactive || model is IAlwaysActive || model is not ZeroEntity || (model as ZeroEntity).IsActive) ? model : default;
   }
 }
 

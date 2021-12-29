@@ -18,5 +18,8 @@ public class PagesSection : IInternalBackofficeSection
   public string Color => "#0cb0f5";
 
   /// <inheritdoc />
+  public int Sort => 100;
+
+  /// <inheritdoc />
   public IList<IChildBackofficeSection> Children => new List<IChildBackofficeSection>();
 }

@@ -286,10 +286,4 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
   }
 
   #endregion
-
-
-  string NormalizeParentId(string id)
-  {
-    return id == "root" ? null : id;
-  }
 }

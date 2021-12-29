@@ -9,6 +9,8 @@ public class Paged<T> : Paged
     Items = items;
   }
 
+  public Paged(long totalItems, long pageNumber, long pageSize) : base(totalItems, pageNumber, pageSize) { }
+
   public Paged<TTarget> MapTo<TTarget>(Func<T, TTarget> convertItem)
   {
     return new Paged<TTarget>(Items.Select(x => convertItem(x)).Where(x => x != null).ToList(), TotalItems, Page, PageSize);

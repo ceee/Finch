@@ -16,7 +16,7 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
 
   protected IZeroContext Context { get; private set; }
 
-  protected IEnumerable<IInterceptor> Interceptors { get; private set; }
+  protected Lazy<IEnumerable<IInterceptor>> Interceptors { get; private set; }
 
   protected Dictionary<IInterceptor, InterceptorParameters> InterceptorCache { get; private set; } = new();
 
@@ -27,7 +27,7 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
   protected Func<IInterceptor, bool> InterceptorFilter { get; private set; } = x => true;
 
 
-  internal InterceptorInstruction(IInterceptors interceptors, IZeroContext context, IEnumerable<IInterceptor> registrations, ILogger<IInterceptor> logger, InterceptorRunType runtype, T model)
+  internal InterceptorInstruction(IInterceptors interceptors, IZeroContext context, Lazy<IEnumerable<IInterceptor>> registrations, ILogger<IInterceptor> logger, InterceptorRunType runtype, T model)
   {
     InterceptorHandler = interceptors;
     Context = context;
@@ -37,7 +37,6 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
     Model = model;
 
     ModelType = model.GetType();
-    Interceptors = registrations.OrderByDescending(x => x.Gravity);
   }
 
 
@@ -115,7 +114,7 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
 
   protected IEnumerable<IInterceptor> GetInterceptors()
   {
-    return Interceptors.Where(InterceptorFilter).OrderByDescending(x => x.Gravity);
+    return Interceptors.Value.Where(InterceptorFilter).OrderByDescending(x => x.Gravity);
   }
 
 

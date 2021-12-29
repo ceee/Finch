@@ -18,5 +18,8 @@ public class SpacesSection : IInternalBackofficeSection
   public string Color => "#f9c202";
 
   /// <inheritdoc />
+  public int Sort => 200;
+
+  /// <inheritdoc />
   public IList<IChildBackofficeSection> Children => new List<IChildBackofficeSection>();
 }

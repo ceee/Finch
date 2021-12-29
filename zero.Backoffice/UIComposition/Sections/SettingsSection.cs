@@ -18,5 +18,8 @@ public class SettingsSection : IInternalBackofficeSection
   public string Color => null;
 
   /// <inheritdoc />
+  public int Sort => 1000;
+
+  /// <inheritdoc />
   public IList<IChildBackofficeSection> Children => new List<IChildBackofficeSection>();
 }

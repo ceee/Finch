@@ -18,5 +18,8 @@ public class DashboardSection : IInternalBackofficeSection
   public string Color => null;
 
   /// <inheritdoc />
+  public int Sort => 0;
+
+  /// <inheritdoc />
   public IList<IChildBackofficeSection> Children => new List<IChildBackofficeSection>();
 }

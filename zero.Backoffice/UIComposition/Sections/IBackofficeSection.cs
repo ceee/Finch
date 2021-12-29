@@ -34,4 +34,9 @@ public interface IBackofficeSection
   /// Children are displayed as a sub-navigation in the main nav area
   /// </summary>
   IList<IChildBackofficeSection> Children { get; }
+
+  /// <summary>
+  /// Sort order
+  /// </summary>
+  int Sort { get; }
 }

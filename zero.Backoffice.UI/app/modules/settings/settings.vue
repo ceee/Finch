@@ -122,7 +122,7 @@
     strong
     {
       display: inline-block;
-      margin-bottom: 5px;
+      margin-bottom: 3px;
       color: var(--color-text);
     }
   }

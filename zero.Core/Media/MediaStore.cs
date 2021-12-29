@@ -4,10 +4,7 @@ namespace zero.Media;
 
 public class MediaStore : TreeEntityStore<Media>, IMediaStore
 {
-  public MediaStore(IStoreContext context) : base(context)
-  {
-    Config.IncludeInactive = true;
-  }
+  public MediaStore(IStoreContext context) : base(context) { }
 
   /// <summary>
   /// A media (either file or folder) can only be saved for the following circumstances:

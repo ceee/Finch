@@ -6,12 +6,12 @@ public class Interceptors : IInterceptors
 {
   protected IZeroContext Context { get; set; }
 
-  protected IEnumerable<IInterceptor> Registrations { get; set; }
+  protected Lazy<IEnumerable<IInterceptor>> Registrations { get; set; }
 
   protected ILogger<IInterceptor> Logger { get; set; }
 
 
-  public Interceptors(IZeroContext context, IEnumerable<IInterceptor> registrations, ILogger<IInterceptor> logger)
+  public Interceptors(IZeroContext context, Lazy<IEnumerable<IInterceptor>> registrations, ILogger<IInterceptor> logger)
   {
     Context = context;
     Registrations = registrations;

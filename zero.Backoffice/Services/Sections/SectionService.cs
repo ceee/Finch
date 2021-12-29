@@ -34,7 +34,7 @@ public class SectionService : ISectionService
 
     List<BackofficeSectionPresentation> sections = new();
 
-    foreach (IBackofficeSection section in Sections)
+    foreach (IBackofficeSection section in Sections.OrderBy(x => x.Sort))
     {
       //if (!isSuperUser && !Permission.CanReadKey(permissions, section.Alias, true))
       //{
@@ -114,7 +114,7 @@ public class SectionService : ISectionService
           Name = area.Name,
           Description = area.Description,
           Icon = area.Icon,
-          Url = Constants.Sections.Settings.EnsureStartsWith('/') + Safenames.Alias(area.Alias).EnsureStartsWith('/'),
+          Url = Constants.Sections.Settings.EnsureStartsWith('/') + area.CustomUrl.Or(Safenames.Alias(area.Alias)).EnsureStartsWith('/'),
           IsPlugin = true
         };
 

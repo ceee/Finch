@@ -70,8 +70,6 @@ public class PagesController : ZeroApiTreeEntityStoreController<Page, IPagesStor
   [ZeroAuthorize(PagePermissions.Read)]
   public virtual async Task<ActionResult<Paged>> GetChildren(string id, [FromQuery] ListQuery<Page> query)
   {
-    id = NormalizeParentId(id);
-
     query.SearchFor(x => x.Name);
     query.OrderQuery = q => q.OrderByDescending(x => x.Sort).ThenByDescending(x => x.CreatedDate);
     Paged<Page> result = await Store.LoadChildren<zero_Api_Pages_Listing>(id, query.Page, query.PageSize, q => q.Filter(query));
@@ -79,12 +77,6 @@ public class PagesController : ZeroApiTreeEntityStoreController<Page, IPagesStor
     return result;
     //Paged<PageBasic> mappedResult = Mapper.Map<Page, PageBasic>(result);
     //return mappedResult;
-  }
-
-
-  string NormalizeParentId(string id)
-  {
-    return id == "root" ? null : id;
   }
 
 

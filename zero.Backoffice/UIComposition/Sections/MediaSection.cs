@@ -18,5 +18,8 @@ public class MediaSection : IInternalBackofficeSection
   public string Color => "#d82853";
 
   /// <inheritdoc />
+  public int Sort => 300;
+
+  /// <inheritdoc />
   public IList<IChildBackofficeSection> Children => new List<IChildBackofficeSection>();
 }

@@ -26,6 +26,7 @@ import editorPlugin from '../editor/plugin';
 import { ZeroSchema } from 'zero/schemas';
 import { ZeroSchemaProp } from './zero';
 import * as zeroOptions from '../options';
+import plugins from '../plugins.generated';
 
 export class ZeroRuntime implements Zero
 {
@@ -113,6 +114,11 @@ export class ZeroRuntime implements Zero
     translationPlugin.install(pluginOptions);
     integrationPlugin.install(pluginOptions);
     userPlugin.install(pluginOptions);
+
+    plugins.forEach(plugin =>
+    {
+      plugin.install(pluginOptions);
+    });
   }
 
 

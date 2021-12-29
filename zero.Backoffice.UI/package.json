@@ -6,6 +6,9 @@
     "dev": "vite",
     "build": "vite build"
   },
+  "workspaces": [
+    "../plugins/zero.Commerce/zero.Commerce.Plugin" 
+  ],
   "dependencies": {
     "axios": "^0.24.0",
     "dayjs": "^1.10.7",

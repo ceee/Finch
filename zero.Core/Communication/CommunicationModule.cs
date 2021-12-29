@@ -10,5 +10,6 @@ public class CommunicationModule : ZeroModule
     services.AddScoped<IInterceptors, Interceptors>();
     services.AddSingleton<IMessageAggregator, MessageAggregator>();
     services.AddTransient<IHandlerHolder, HandlerHolder>();
+    services.AddTransient(typeof(Lazy<>), typeof(LazilyResolved<>));
   }
 }
