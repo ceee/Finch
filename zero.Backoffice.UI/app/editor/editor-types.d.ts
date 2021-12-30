@@ -19,6 +19,9 @@ declare module 'zero/schemas'
   export type NumberFieldOptions = FieldSupportsMaxLength | FieldSupportsPlaceholder;
 
 
+  export type ZeroEditorDisplay = 'tabs' | 'boxes';
+
+
   export interface ZeroEditorField
   {
     /**

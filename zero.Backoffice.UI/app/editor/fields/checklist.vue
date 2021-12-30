@@ -5,7 +5,7 @@
                  :limit="limit"
                  :label-key="labelKey"
                  :id-key="idKey"
-                 :disabled="disabled" />
+                 :disabled="config.disabled" />
 </template>
 
 <script>
@@ -15,10 +15,7 @@
         type: Array,
         default: () => []
       },
-      disabled: {
-        type: Boolean,
-        default: false
-      },
+      config: Object,
       items: {
         type: [Array, Function, Promise],
         required: true

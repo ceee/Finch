@@ -50,6 +50,24 @@ declare module 'zero/schemas'
      * @param {SelectFieldOptions} options - Custom options
      */
     select(options: SelectFieldOptions): ZeroEditorField;
+
+    /**
+     * Create a tag list
+     * @param {TagFieldOptions} options - Custom options
+     */
+    tags(options?: TagFieldOptions): ZeroEditorField;
+
+    /**
+     * Create a list of checkboxes
+     * @param {ChecklistFieldOptions} options - Custom options
+     */
+    checklist(options: ChecklistFieldOptions): ZeroEditorField;
+
+    /**
+     * Create a list of inputs
+     * @param {ChecklistFieldOptions} options - Custom options
+     */
+    inputlist(options: ChecklistFieldOptions): ZeroEditorField;
   }
 
 
@@ -88,5 +106,28 @@ declare module 'zero/schemas'
     value: any;
     label: string;
     disabled?: boolean;
+  }
+
+  export interface TagFieldOptions
+  {
+    limit?: number;
+    maxTagLength?: number;
+    autocompleteScope?: string;
+  }
+
+  export interface ChecklistFieldOptions
+  {
+    items: SelectFieldItem[];
+    limit?: number;
+    reverse?: boolean | null;
+    labelKey?: string;
+    idKey?: string;
+  }
+
+  export interface InputlistFieldOptions
+  {
+    limit?: number;
+    maxItemLength?: number;
+    addLabel?: string;
   }
 }

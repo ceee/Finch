@@ -1,4 +1,4 @@
-﻿import { ZeroEditorField, ZeroSchema } from "zero/schemas";
+﻿import { ZeroEditorField, ZeroSchema, ZeroEditorDisplay } from "zero/schemas";
 import { ZeroEditorCanvas } from "./editor-canvas";
 
 export class ZeroEditor extends ZeroEditorCanvas implements ZeroSchema
@@ -8,6 +8,8 @@ export class ZeroEditor extends ZeroEditorCanvas implements ZeroSchema
   resourcePrefix?: string;
 
   system: boolean = false;
+
+  display: ZeroEditorDisplay = 'tabs';
 
   onLabelCreate = (field: ZeroEditorField): string =>
   {

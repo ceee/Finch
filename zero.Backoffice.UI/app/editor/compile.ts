@@ -1,5 +1,5 @@
 import { Component } from "vue";
-import { ZeroEditorField } from "zero/schemas";
+import { ZeroEditorField, ZeroEditorDisplay } from "zero/schemas";
 import { Zero } from "../core";
 import { ZeroEditor } from "./editor";
 import { createBlueprintConfig } from "./editor-blueprint";
@@ -12,6 +12,7 @@ export interface ZeroCompiledEditor
 {
   alias: string;
   blueprint: any;
+  display: ZeroEditorDisplay;
   tabs: ZeroCompiledEditorTab[];
 }
 
@@ -136,6 +137,7 @@ export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEdito
   let model = {
     alias: editor.alias,
     blueprint: null,
+    display: editor.display,
     tabs: []
   } as ZeroCompiledEditor;
 

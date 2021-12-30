@@ -38,6 +38,8 @@ import uiSelect from './ui-select.vue';
 import uiForm from './ui-form.vue';
 import uiFormHeader from './ui-form-header.vue';
 import uiLink from './ui-link.vue';
+import uiInputList from './ui-input-list.vue';
+import uiTags from './ui-tags.vue';
 
 export {
   uiIcon,
@@ -79,5 +81,7 @@ export {
   uiSelect,
   uiForm,
   uiFormHeader,
-  uiLink
+  uiLink,
+  uiInputList,
+  uiTags
 };

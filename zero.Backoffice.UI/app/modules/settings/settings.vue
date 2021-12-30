@@ -91,6 +91,11 @@
     grid-template-columns: auto 1fr;
     gap: 20px;
     align-items: center;
+
+    /*&:hover .settings-group-item-icon
+    {
+      transform: rotate(5deg);
+    }*/
   }
 
   .settings-group-item-icon
@@ -104,7 +109,7 @@
     border-radius: var(--radius);
     box-shadow: var(--shadow-short);
     color: var(--color-text);
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, transform 0.2s ease;
     position: relative;
   }
 

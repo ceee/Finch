@@ -13,7 +13,6 @@
 <script>
   export default {
     name: 'uiInputList',
-
     props: {
       addLabel: {
         type: String,
@@ -40,49 +39,41 @@
         default: false
       },
     },
-
     data: () => ({
       items: []
     }),
-
     watch: {
       value(value)
       {
-        this.reload();
+        this.items = (value || []).map(item =>
+        {
+          return { value: item };
+        });
       }
     },
-
     mounted()
     {
-      this.reload();
-    },
-
-    methods: {
-
-      reload()
+      this.items = (this.value || []).map(item =>
       {
-        this.items = this.value.map(item => ({ value: item }));
-      },
-
+        return { value: item };
+      });
+    },
+    methods: {
       onChange()
       {
         this.$emit('input', this.items.map(item => item.value));
-        this.$emit('change', this.items.map(item => item.value));
       },
-
       addItem()
       {
         this.items.push({
           value: null
         });
         this.onChange();
-
         this.$nextTick(() =>
         {
           this.$el.querySelector('.ui-input-list-item:last-of-type input').focus();
         });
       },
-
       removeItem(item)
       {
         const index = this.items.indexOf(item);

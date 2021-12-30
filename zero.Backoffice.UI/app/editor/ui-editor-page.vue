@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-form ref="form" class="editor-page" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model:value="model" :prefix="prefix" :title="title" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" />
+    <ui-form-header v-model:value="model" :prefix="prefix" :title="title" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="canDelete" @delete="onDelete" />
     <ui-editor :config="editor" v-model="model" :meta="meta" :disabled="disabled" :scope="true">
       <template v-slot:below>
         <ui-editor-infos v-model="model" :disabled="disabled" />
@@ -40,6 +40,10 @@
       route: {
         type: String,
         required: false
+      },
+      canDelete: {
+        type: Boolean,
+        default: true
       }
     },
 

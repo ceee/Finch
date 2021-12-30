@@ -12,4 +12,7 @@ export default function createFields(app: ZeroPluginOptions): void
   app.fieldType('state', defineAsyncComponent(() => import('./state.vue')));
   app.fieldType('textarea', defineAsyncComponent(() => import('./textarea.vue')));
   app.fieldType('select', defineAsyncComponent(() => import('./select.vue')));
+  app.fieldType('tags', defineAsyncComponent(() => import('./tags.vue')));
+  app.fieldType('checklist', defineAsyncComponent(() => import('./checklist.vue')));
+  app.fieldType('inputlist', defineAsyncComponent(() => import('./inputlist.vue')));
 }

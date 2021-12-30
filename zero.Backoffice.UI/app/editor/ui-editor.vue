@@ -3,7 +3,7 @@
     <header class="editor-above" v-if="aboveDefined">
       <!--<slot name="above" v-bind:config="editorConfig"></slot>-->
     </header>
-    <div class="editor" :class="['display-' + display, { 'has-sidebar': asideDefined, 'hide-tabs': editorConfig.tabs.length < 2, 'has-below': belowDefined }]">
+    <div class="editor" :class="['display-' + editorConfig.display, { 'has-sidebar': asideDefined, 'hide-tabs': editorConfig.tabs.length < 2, 'has-below': belowDefined }]">
       <ui-tabs class="editor-tabs">
         <ui-tab v-for="(tab, index) in editorConfig.tabs" :key="index" class="ui-box" 
                 :class="tab.class" 
@@ -12,7 +12,7 @@
                 :count="tab.count(value)" 
                 :hide="tab.hidden(value)"
                 :disabled="tab.disabled(value)">
-          <h3 v-if="display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
+          <h3 v-if="editorConfig.display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
           <slot name="blueprint">
             <blueprint-property v-if="value && editorConfig.blueprint.isEnabled" :value="value" :meta="meta" :config="editorConfig.blueprint" />
           </slot>
@@ -100,7 +100,6 @@
     components: { EditorComponent, BlueprintProperty },
 
     data: () => ({
-      display: 'tabs',
       editorConfig: {},
       loaded: false,
       tabs: [],

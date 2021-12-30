@@ -35,6 +35,7 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
     Logger = logger;
     Runtype = runtype;
     Model = model;
+    Interceptors = registrations;
 
     ModelType = model.GetType();
   }

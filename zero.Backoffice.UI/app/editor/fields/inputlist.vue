@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-input-list :value="value" @input="$emit('input', $event)" :add-label="addLabel" :disabled="disabled" 
+  <ui-input-list :value="value" @input="$emit('input', $event)" :add-label="addLabel" :disabled="config.disabled" 
                  :max-items="limit"
                  :inline="true" :max-length="maxItemLength" />
 </template>
@@ -11,10 +11,7 @@
         type: Array,
         default: () => []
       },
-      disabled: {
-        type: Boolean,
-        default: false
-      },
+      config: Object,
       limit: {
         type: Number,
         default: 10
