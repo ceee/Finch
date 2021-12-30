@@ -112,7 +112,8 @@ export function createDefaultFieldConfiguration(): ZeroEditorFieldConfiguration
     helpText: null,
     classes: null,
     horizontal: false,
-    sort: 0
+    sort: 0,
+    preview: undefined
   } as ZeroEditorFieldConfiguration;
 }
 
@@ -158,5 +159,26 @@ export interface ZeroEditorFieldConfiguration
   /**
    * Sort order for fields within the editor canvas
    **/
-  sort?: number
+  sort?: number,
+  /**
+   * Sort order for fields within the editor canvas
+   **/
+  preview?: ZeroEditorFieldFilterPreview
+}
+
+
+export interface ZeroEditorFieldFilterPreview
+{
+  /**
+   * Icon which is displayed next to the filter option
+   */
+  icon?: string;
+  /**
+   * Checks whether the selected value for the filter option is valid and if it should be marked as selected
+   */
+  selected?: (value: any, model: any) => boolean;
+  /**
+   * Renders the filter value which is previewed
+   */
+  value?: (value: any, model: any) => string;
 }
