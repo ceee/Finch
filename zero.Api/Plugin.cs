@@ -26,6 +26,8 @@ public class ZeroApiPlugin : ZeroPlugin
     services.AddTransient<IBackofficeApplicationResolverHandler, ApiApplicationResolverHandler>();
     services.AddTransient<ApiUnhandledExceptionMiddleware>();
 
+    services.ConfigureOptions<ConfigureApiJsonOptions>();
+
     ZeroModuleCollection modules = new();
 
     modules.Add<Endpoints.Applications.ApplicationModule>();

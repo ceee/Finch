@@ -12,9 +12,11 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
   /// <inheritdoc />
   public IZeroDocumentSession Session => Operations.Session;
 
+  /// <inheritdoc />
+  public StoreConfig Config => Operations.Config;
+
   protected IZeroContext Context { get; private set; }
 
-  protected StoreConfig Config => Operations.Config;
 
   protected IInterceptors Interceptors { get; private set; }
 
@@ -105,6 +107,11 @@ public interface IEntityStore<T> where T : ZeroIdEntity, ISupportsFlavors, ISupp
   /// Access the current document session
   /// </summary>
   IZeroDocumentSession Session { get; }
+
+  /// <summary>
+  /// Configure the store
+  /// </summary>
+  StoreConfig Config { get; }
 
   /// <summary>
   /// Get new instance of an entity (with an optional flavor)

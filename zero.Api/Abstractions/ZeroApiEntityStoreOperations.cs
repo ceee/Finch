@@ -19,6 +19,7 @@ public class ZeroApiEntityStoreOperations<TModel, TStore>
   {
     Controller = controller;
     Store = store;
+    Store.Config.IncludeInactive = true;
   }
 
 

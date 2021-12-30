@@ -71,6 +71,21 @@ public static class RavenQueryableExtensions
   }
 
 
+  public static IQueryable<T> WhereIf<T>(this IQueryable<T> source, Expression<Func<T, bool>> predicate, bool condition, Expression<Func<T, bool>> elsePredicate = null)
+  {
+    if (!condition)
+    {
+      if (elsePredicate != null)
+      {
+        return source.Where(elsePredicate);
+      }
+      return source;
+    }
+
+    return source.Where(predicate);
+  }
+
+
   public static IQueryable<T> SearchIf<T>(this IQueryable<T> source, Expression<Func<T, object>> fieldSelector, string searchTerms, string suffix = null, string prefix = null, SearchOperator @operator = SearchOperator.Or)
   {
     if (String.IsNullOrWhiteSpace(searchTerms))
