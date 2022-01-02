@@ -200,7 +200,8 @@ class ListColumn
   {
     this._type = 'image';
     this._asHtml = true;
-    this._func = (value, opts) => value ? `<img src="/zero/api/system/media/${(value)}/thumb.tmp" class="ui-table-field-image">` : '';
+    // TODO correct app ID
+    this._func = (value, opts) => value ? `<img src="/zero/api/hofbauer/media/${(value)}/thumb.tmp" class="ui-table-field-image">` : '';
     return this;
   }
 
