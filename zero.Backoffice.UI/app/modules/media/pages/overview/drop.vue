@@ -38,7 +38,7 @@
           softdismiss: false,
           model: {
             files,
-            folderId: this.folderId
+            folderId: this.folderId == 'root' ? null : this.folderId
           }
         });
 

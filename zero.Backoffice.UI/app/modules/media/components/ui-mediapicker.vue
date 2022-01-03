@@ -95,7 +95,7 @@
           }
         });
 
-        if (result.eventType == 'confirm')
+        if (result.eventType == 'confirm' && result.value)
         {
           this.add(result.value);
         }

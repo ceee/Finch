@@ -25,7 +25,7 @@
         <ui-datagrid ref="grid" v-model="gridConfig" @select="onSelected" @count="count = $event">
 
           <template v-slot:before>
-            <media-drop :folder-id="parentId" @completed="refresh" />
+            <media-drop :folder-id="id" @completed="refresh" />
           </template>
 
           <template v-if="selected.length < 1" v-slot:actions="props">
