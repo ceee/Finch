@@ -1,6 +1,6 @@
 
 $font-icon-name: 'Feather';
-$font-text-name: 'Lato';
+$font-text-name: 'Manrope';
 
 @mixin font-face($font-family, $file-path, $weight: normal, $style: normal)
 {
@@ -17,13 +17,19 @@ $font-text-name: 'Lato';
 
 @include font-face($font-icon-name, '/Assets/Fonts/Feather/feather', 400);
 
-@include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Light', 100);
+//@include font-face($font-text-name, '/Assets/Fonts/Manrope[wght]', 700);
 
-@include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Regular', 400);
+@font-face
+{
+  font-family: $font-text-name;
+  src: url('/Assets/Fonts/Manrope[wght].woff2') format('woff2');
+}
+
+/*@include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Regular', 400);
 
 @include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Bold', 700);
 
-@include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Black', 900);
+@include font-face($font-text-name, '/Assets/Fonts/Lato/LatoLatin-Black', 900);*/
 
 /*@font-face {
   font-family: 'Inter';
