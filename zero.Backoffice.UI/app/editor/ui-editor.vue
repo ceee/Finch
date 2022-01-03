@@ -23,7 +23,10 @@
                               :field="field"
                               :disabled="disabled" 
                               :system="system"
+                              :data-xo="JSON.stringify(field.configuration)"
                               :class="field.configuration.classes"
+                              :x-data-cols="fieldset.hasColumns" 
+                              :x-style="{ 'grid-column': fieldset.hasColumns ? 'span ' + field.configuration.columns : null }"
                               @input="onChange" />
 
           </div>

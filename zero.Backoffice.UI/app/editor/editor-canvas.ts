@@ -6,6 +6,7 @@ export class ZeroEditorCanvasBase
 {
   fields: ZeroEditorField[] = [];
   sort: number = 0;
+  isFake: boolean = false;
 
   field(path: string, config?: ZeroEditorFieldConfiguration): ZeroEditorField
   {

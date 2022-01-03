@@ -15,4 +15,5 @@ export default function createFields(app: ZeroPluginOptions): void
   app.fieldType('tags', defineAsyncComponent(() => import('./tags.vue')));
   app.fieldType('checklist', defineAsyncComponent(() => import('./checklist.vue')));
   app.fieldType('inputlist', defineAsyncComponent(() => import('./inputlist.vue')));
+  app.fieldType('nested', defineAsyncComponent(() => import('./nested.vue')));
 }

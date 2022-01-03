@@ -34,6 +34,7 @@ export interface ZeroCompiledEditorTab
 export interface ZeroCompiledEditorFieldset
 {
   fields: ZeroCompiledEditorField[];
+  hasColumns: boolean;
 }
 
 
@@ -55,6 +56,7 @@ export interface ZeroCompiledEditorField
   classes: string | null;
   horizontal: boolean;
   sort: number;
+  columns: number;
 }
 
 
@@ -119,7 +121,8 @@ export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorFi
     helpText: field.configuration.helpText,
     classes: field.configuration.classes,
     horizontal: field.configuration.horizontal,
-    sort: field.configuration.sort
+    sort: field.configuration.sort,
+    columns: 12
 
   } as ZeroCompiledEditorField;
 
@@ -179,26 +182,32 @@ export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEdito
     // add default fieldset if none are defined
     if (!fieldsets.length)
     {
-      fieldsets.push(new ZeroEditorCanvasBase());
+      const fakeFieldset = new ZeroEditorCanvasBase();
+      fakeFieldset.isFake = false;
+      fieldsets.push(fakeFieldset);
     }
 
     fieldsets.forEach((editorFieldset, fieldsetIndex) =>
     {
       let fieldset = {
         sort: editorFieldset.sort,
-        fields: []
+        fields: [],
+        hasColumns: !editorFieldset.isFake
       } as ZeroCompiledEditorFieldset;
 
       let fields = [];
 
       // add fields (which are not part of a fieldset) to the first fieldset
-      if (fieldsetIndex == 0 && editor.fields.length)
+      if (fieldsetIndex == fieldsets.length - 1)
       {
-        fields.push(...editor.fields);
-      }
-      if (fieldsetIndex == 0 && editorTab.fields.length)
-      {
-        fields.push(...editorTab.fields);
+        if (editor.fields.length)
+        {
+          fields.push(...editor.fields);
+        }
+        if (editorTab.fields.length)
+        {
+          fields.push(...editorTab.fields);
+        }
       }
 
       // push registered fields
@@ -232,6 +241,7 @@ export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEdito
       model.tabs.push(tab);
     }
   });
+
 
   model.blueprint = createBlueprintConfig(model.alias, model);
 

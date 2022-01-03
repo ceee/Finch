@@ -14,7 +14,7 @@
       <ui-loading v-if="loading" :is-big="true" />
 
       <div v-if="!loading" class="ui-editor-overlay-editor">
-        <ui-editor :config="model.editor" v-model="entity" :meta="meta" :is-page="false" infos="none" :disabled="disabled" />
+        <ui-editor :config="model.editor" v-model="entity" :meta="meta" :is-page="false" infos="none" :disabled="disabled" :scope="true" />
       </div>
 
     </ui-trinity>
@@ -49,7 +49,7 @@
         this.meta = {
           //parentModel: this.config.parentModel
         };
-        this.entity = JSON.parse(JSON.stringify(this.model.entity));
+        this.entity = JSON.parse(JSON.stringify(this.model.value));
         this.loading = false;
       },
 

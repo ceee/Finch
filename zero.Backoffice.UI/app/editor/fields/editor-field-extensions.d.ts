@@ -1,3 +1,4 @@
+import { ZeroEditor } from "../editor";
 
 declare module 'zero/schemas'
 {
@@ -68,6 +69,12 @@ declare module 'zero/schemas'
      * @param {ChecklistFieldOptions} options - Custom options
      */
     inputlist(options: ChecklistFieldOptions): ZeroEditorField;
+
+    /**
+     * Create a nested editor
+     * @param {NestedFieldOptions} options - Custom options
+     */
+    nested(options: NestedFieldOptions): ZeroEditorField;
   }
 
 
@@ -128,6 +135,19 @@ declare module 'zero/schemas'
   {
     limit?: number;
     maxItemLength?: number;
+    addLabel?: string;
+  }
+
+  export interface NestedFieldOptions
+  {
+    editor: string | ZeroEditor;
+    limit?: number;
+    title?: string;
+    itemLabel?: ((value: any, model: any) => string);
+    itemDescription?: ((value: any, model: any) => string);
+    itemIcon?: string | ((value: any, model: any) => string);
+    width?: number;
+    template?: any;
     addLabel?: string;
   }
 }
