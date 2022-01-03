@@ -268,6 +268,7 @@
       // set a new filter
       setFilter(filter)
       {
+        console.info('filter', filter);
         this.query.filter = filter;
         this.onChange();
       },

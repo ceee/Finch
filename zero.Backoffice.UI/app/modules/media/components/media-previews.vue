@@ -1,7 +1,10 @@
 ﻿<template>
-  <div v-for="item in items" :key="item.id" class="ui-media-preview media-pattern" :title="item.name">
-    <img class="-image" v-if="item.preview" :src="item.preview" />
-    <span class="-icon" v-if="!item.preview"><ui-icon :symbol="(item.isFolder ? 'fth-folder' : 'fth-file')" :size="22" :stroke-width="2" /></span>
+  <div v-for="item in items" :key="item.id" class="ui-media-preview" :class="{ 'media-pattern': !item.error, 'has-error': item.error }" v-localize:title="{ key: item.error ? item.error : item.name, tokens: { id: item.id } }">
+    <template v-if="!item.error">
+      <img class="-image" v-if="item.preview" :src="item.preview" />
+      <span class="-icon" v-if="!item.preview"><ui-icon :symbol="(item.isFolder ? 'fth-folder' : 'fth-file')" :size="22" :stroke-width="2" /></span>
+    </template>
+    <ui-icon v-else symbol="fth-alert-circle" :size="22" />
     <ui-icon-button class="-remove" type="action" icon="fth-x" :stroke="2.5" @click="$emit('remove', item)" />
   </div> 
 </template>
@@ -86,7 +89,8 @@
           if (!model)
           {
             model = {
-              error: 'notfound'
+              id,
+              error: '@media.notfound'
             };
           }
           else
@@ -127,6 +131,12 @@
     text-align: center;
     color: var(--color-text);
     position: relative;
+  }
+
+  .ui-media-preview.has-error
+  {
+    background: var(--color-box-nested);
+    color: var(--color-negative);
   }
 
   .ui-media-preview .-image

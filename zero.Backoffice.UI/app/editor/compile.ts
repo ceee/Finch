@@ -4,7 +4,7 @@ import { Zero } from "../core";
 import { ZeroEditor } from "./editor";
 import { createBlueprintConfig } from "./editor-blueprint";
 import { ZeroEditorCanvasBase, ZeroEditorTab } from "./editor-canvas";
-import { ZeroEditorFieldConfiguration } from "./editor-field";
+import { ZeroEditorFieldConfiguration, ZeroEditorFieldFilterPreview } from "./editor-field";
 import { localize } from '../services/localization';
 
 
@@ -57,6 +57,7 @@ export interface ZeroCompiledEditorField
   horizontal: boolean;
   sort: number;
   columns: number;
+  preview?: ZeroEditorFieldFilterPreview;
 }
 
 
@@ -122,7 +123,12 @@ export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorFi
     classes: field.configuration.classes,
     horizontal: field.configuration.horizontal,
     sort: field.configuration.sort,
-    columns: 12
+    columns: 12,
+    preview: field.configuration.preview ? {
+      icon: field.configuration.preview.icon || 'fth-square',
+      selected: field.configuration.preview.selected || (x => !!x),
+      value: field.configuration.preview.value || (x => x ? x : null)
+    } : null
 
   } as ZeroCompiledEditorField;
 

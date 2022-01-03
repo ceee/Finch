@@ -21,7 +21,7 @@
         textarea: 'A textarea\nfor you',
         state: 'red',
         images: ['media.zpkxfjkgciom', 'media.w2cntwlrcueb', 'media.1waxp46ho8hu'],
-        docs: null
+        docs: 'media.xoooo'
       },
       route: 'demo',
       disabled: false

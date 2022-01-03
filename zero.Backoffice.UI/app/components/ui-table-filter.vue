@@ -14,12 +14,12 @@
     </ui-dropdown>
     <ui-button v-if="hasFilter && !storedFilters.length" type="light onbg" label="Filter" @click="addOrEditFilter()" />
 
-    <!--<ui-dropdown v-if="!hideSelection && selection.length > 0" align="right">
+    <ui-dropdown v-if="!hideSelection && selection.length > 0" align="right">
       <template v-slot:button>
         <ui-button type="light" :label="selectedText" caret="down" />
       </template>
       <slot name="actions"></slot>
-    </ui-dropdown>-->
+    </ui-dropdown>
 
     <ui-dropdown v-if="actions && actions.length > 0" align="right">
       <template v-slot:button>
@@ -34,6 +34,7 @@
 <script>
   //import Overlay from 'zero/helpers/overlay.js';
   import { generateId } from '../utils/numbers';
+  import * as overlays from '../services/overlay';
   //import FilterOverlay from './table-filter-overlay.vue';
 
   const KEY_PREFIX = 'zero.ui-table-filter.';
@@ -62,6 +63,7 @@
       filterOptions: null,
       //hideFilter: true,
       //hideSelection: true,
+      selection: [],
       storedFilters: [],
       currentFilter: null,
       actions: []
@@ -178,7 +180,7 @@
       },
 
 
-      addOrEditFilter(id)
+      async addOrEditFilter(id)
       {
         let model = { name: null, filter: this.filterOptions.template };
 
@@ -187,33 +189,39 @@
           model = this.storedFilters.find(x => x.id === id);
         }
 
-        //return Overlay.open({
-        //  component: FilterOverlay,
-        //  display: 'editor',
-        //  title: 'Filter',
-        //  editor: this.filterOptions.editor,
-        //  template: this.filterOptions.template,
-        //  model: model,
-        //  isCreate: !id
-        //}).then(value =>
-        //{
-        //  if (value.remove && id)
-        //  {
-        //    this.removeFilter(id);
-        //    return;
-        //  }
+        const result = await overlays.open({
+          component: () => import('./ui-table-filter-overlay.vue'),
+          display: 'editor',
+          model: {
+            title: 'Filter',
+            editor: this.filterOptions.editor,
+            template: this.filterOptions.template,
+            value: model,
+            isCreate: !id
+          }
+        });
 
-        //  if (value.filterName)
-        //  {
-        //    id = this.saveFilter(value.filterName, value.model, id);
-        //  }
+        if (result.eventType == 'confirm')
+        {
+          const value = result.value;
 
-        //  this.setFilter({
-        //    id,
-        //    name: value.filterName,
-        //    filter: value.model
-        //  });
-        //});
+          if (value.remove && id)
+          {
+            this.removeFilter(id);
+            return;
+          }
+
+          if (value.filterName)
+          {
+            id = this.saveFilter(value.filterName, value.model, id);
+          }
+
+          this.setFilter({
+            id,
+            name: value.filterName,
+            filter: value.model
+          });
+        }
       }
     }
   }

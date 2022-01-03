@@ -1,15 +1,15 @@
 ﻿<template>
   <ui-form class="ui-table-filter-overlay" ref="form" v-slot="form" @submit="onSubmit" @load="onLoad">
-    <ui-overlay-editor class="ui-module-overlay">
+    <ui-trinity class="ui-module-overlay">
 
       <template v-slot:header>
-        <ui-header-bar :title="config.title" :back-button="false" :close-button="true" />
+        <ui-header-bar :title="model.title" :back-button="false" :close-button="true" />
       </template>
 
       <template v-slot:footer>
-        <ui-button type="light onbg" label="@ui.close" @click="config.hide"></ui-button>
-        <ui-button v-if="!config.isCreate" type="light onbg" label="@ui.remove" @click="onRemove"></ui-button>
-        <ui-button type="primary" :submit="true" label="@ui.confirm" :state="form.state" :disabled="loading || disabled"></ui-button>
+        <ui-button type="light onbg" label="@ui.close" @click="config.close"></ui-button>
+        <ui-button v-if="!model.isCreate" type="light onbg" label="@ui.remove" @click="onRemove"></ui-button>
+        <ui-button type="accent" :submit="true" label="@ui.confirm" :state="form.state" :disabled="loading || disabled"></ui-button>
       </template>
 
       <ui-loading v-if="loading" :is-big="true" />
@@ -21,13 +21,13 @@
       </div>-->
 
       <div v-if="!loading" class="ui-box">
-        <div v-for="(field, index) in fields" class="ui-table-filter-overlay-group" :class="{ 'is-open': activeFilter === index, 'has-value': field.hasValue(model[field.path]) }">
+        <div v-for="(field, index) in fields" class="ui-table-filter-overlay-group" :class="{ 'is-open': activeFilter === index, 'has-value': field.preview.selected(value[field.path]) }">
           <div class="ui-table-filter-overlay-group-head">
-            <ui-select-button :label="getFieldLabel(field.field)" :icon="field.icon" :description="field.preview(model[field.path])" @click="toggleFilter(field, index)" />
+            <ui-select-button :label="field.label" :icon="field.preview.icon" :description="field.preview.value(value[field.path])" @click="toggleFilter(field, index)" />
             <ui-button class="ui-table-filter-overlay-group-clear" type="blank" label="Clear" @click="clearFilter(field, index)" />
           </div>
           <div v-show="activeFilter === index" class="ui-table-filter-overlay-group-content">
-            <editor-component :config="field.field" :editor="editor" v-model="model" @input="onFieldChange" :disabled="disabled" />
+            <ui-editor-component :field="field" :value="value" @input="onFieldChange" :disabled="disabled" />
           </div>
         </div>
       </div>
@@ -38,17 +38,18 @@
         </ui-property>
       </div>
 
-    </ui-overlay-editor>
+    </ui-trinity>
   </ui-form>
 </template>
 
 
 <script>
-  import EditorComponent from 'zero/editor/editor-component.vue';
+  import { compileEditor } from '../editor/compile';
 
   export default {
 
     props: {
+      model: Object,
       config: Object
     },
 
@@ -61,17 +62,15 @@
     },
 
     data: () => ({
+      value: {},
       loading: true,
       disabled: false,
-      model: {},
       template: null,
       editor: null,
       fields: [],
       filterName: null,
       activeFilter: null
     }),
-
-    components: { EditorComponent },
 
     methods: {
 
@@ -87,28 +86,35 @@
 
       clearFilter(filter, index)
       {
-        this.model[filter.path] = JSON.parse(JSON.stringify(this.template[filter.path]));
-      },
-
-      getFieldLabel(field)
-      {
-        return field.options.label || this.editor.templateLabel(field.path);
+        this.value[filter.path] = JSON.parse(JSON.stringify(this.template[filter.path]));
       },
       
       onLoad()
       {
         this.loading = true;
-        this.template = JSON.parse(JSON.stringify(this.config.template || {}));
-        this.model = JSON.parse(JSON.stringify(this.config.model.filter || this.template));
-        this.editor = this.config.editor;
-        this.filterName = this.config.model.name;
-        this.fields = this.editor.fields.map(x =>
+        this.template = JSON.parse(JSON.stringify(this.model.template || {}));
+        this.value = JSON.parse(JSON.stringify(this.model.value.filter || this.template));
+        this.editor =  compileEditor(this.zero, this.model.editor);
+        this.filterName = this.model.value.name;
+        this.fields = [];
+
+
+        this.editor.tabs.forEach(tab =>
         {
-          return {
-            field: x,
-            path: x.path,
-            ...x.previewOptions
-          };
+          tab.fieldsets.forEach(set =>
+          {
+            set.fields.forEach(field =>
+            {
+              if (!field.preview)
+              {
+                console.warn('[zero] All fields in a filter need filled-out preview options');
+              }
+              else
+              {
+                this.fields.push(field);
+              }
+            });
+          });
         });
 
         this.loading = false;
@@ -117,7 +123,7 @@
       onSubmit()
       {
         this.config.confirm({
-          model: this.model,
+          model: this.value,
           filterName: this.filterName
         });
       },

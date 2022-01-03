@@ -653,6 +653,7 @@
       "addfile": "Upload files",
       "addfile_text": "Add one or more files to the current filter"
     },
+    "notfound": "Could not find media ({id})",
     "selection": {
       "clear": "Clear selection",
       "selected": "{count} selected",

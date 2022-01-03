@@ -1,6 +1,6 @@
 ﻿<template>
-  <div class="ui-native-select" :disabled="disabled">
-    <select :value="value" @input="onChange" :disabled="disabled">
+  <div class="ui-native-select" :disabled="config.disabled">
+    <select :value="value" @input="onChange" :disabled="config.disabled">
       <option v-if="emptyOption"></option>
       <option v-for="option in options" :value="option.value" v-localize="option.label"></option>
     </select>
@@ -38,7 +38,7 @@
           this.onChange({ target: { value: this.value } });
         }
       },
-      'config.model': {
+      'config.model.addresses': {
         deep: true,
         handler()
         {
@@ -71,7 +71,14 @@
 
       onChange(ev)
       {
-        this.$emit('input', ev.target.value ? ev.target.value : null);
+        let value = ev.target.value || null;
+
+        if (value && !this.options.find(x => x.value == value))
+        {
+          value = null;
+        }
+
+        this.$emit('input', value);
       }
     }
   }

@@ -72,7 +72,6 @@
     min-height: 130px;
     border-radius: var(--radius);
     align-self: flex-start;
-    box-shadow: var(--shadow-short);
     border: 1px dashed var(--color-line-dashed-onbg);
     color: var(--color-text);
     position: relative;

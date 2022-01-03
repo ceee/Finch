@@ -5,17 +5,16 @@ const editor = new ZeroEditor('translations');
 
 editor.resourcePrefix = '@translation.fields.';
 
-const set = editor.fieldset();
 
-set.field('key').text({ maxLength: 300 });
-set.field('display').state({
+editor.field('key').text({ maxLength: 300 });
+editor.field('display').state({
   items: [
-    { label: '@translation.display.text', value: 0 },
-    { label: '@translation.display.html', value: 1 }
+    { label: '@translation.display.text', value: 'text' },
+    { label: '@translation.display.html', value: 'html' }
   ]
 });
 
-editor.field('value').setHidden(x => x.display === 0).rte();
-editor.field('value').setHidden(x => x.display === 1).textarea();
+editor.field('value').setHidden(x => x.display === 'text').rte();
+editor.field('value').setHidden(x => x.display === 'html').textarea();
 
 export default editor;
