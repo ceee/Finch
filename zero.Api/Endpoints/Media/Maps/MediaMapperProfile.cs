@@ -30,10 +30,15 @@ public class MediaMapperProfile : ZeroMapperProfile
     target.Children = 0;
     target.Size = source.Size;
 
+    if (source.Path.HasValue())
+    {
+      target.Source = FileSystem.MapToPublicPath(source.Path);
+    }
+
     if (source.ImageMeta != null && source.ImageMeta.Thumbnails.Any())
     {
       string path = source.ImageMeta.Thumbnails.GetValueOrDefault("preview");
-      target.Image = path.IsNullOrEmpty() ? null : FileSystem.MapToPublicPath(path);
+      target.Preview = path.IsNullOrEmpty() ? null : FileSystem.MapToPublicPath(path);
     }
   }
 

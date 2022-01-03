@@ -6,6 +6,8 @@ const editor = new ZeroEditor('demo');
 
 editor.field('name', { label: 'Text' }).text({ maxLength: 120 });
 editor.field('isActive', { label: 'Toggle', horizontal: true }).toggle();
+editor.field('images', { label: 'Images' }).image({ limit: 4 });
+editor.field('docs', { label: 'Documents' }).media({ limit: 1 });
 editor.field('number', { label: 'Number' }).number();
 editor.field('output', { label: 'Number' }).output();
 editor.field('rte', { label: 'Number' }).rte();

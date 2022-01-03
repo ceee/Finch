@@ -1,27 +1,26 @@
 ﻿<template>
-  <div class="media-content">
-    <ui-header-bar :back-button="!!parentId">
-      <template v-slot:title>
-        <h2 class="ui-header-bar-title">
-          <span class="media-items-hierarchy-item">
-            <ui-link :to="{ name: 'media' }" v-localize="'@media.name'"></ui-link>
-            <ui-icon class="-chevron" v-if="hierarchy.length > 0" symbol="fth-chevron-right" />
-          </span>
-          <span v-for="(item, index) in hierarchy" :key="item.id" class="media-items-hierarchy-item">
-            <ui-link :to="{ name: 'media', params: { parentId: item.id } }" v-localize="item.name"></ui-link>
-            <ui-icon class="-chevron" v-if="index < hierarchy.length - 1" symbol="fth-chevron-right" />
-          </span>
-        </h2>
-      </template>
+  <ui-trinity class="media-overlay">
+    <template v-slot:header>
+      <ui-header-bar title="Select media" :close-button="true" @close="config.close">
+        <template v-slot:title>
+          <h2 class="ui-header-bar-title">
+            <span class="media-items-hierarchy-item">
+              <button type="button" v-localize="'@media.name'" @click="selectItem('root')"></button>
+              <ui-icon class="-chevron" v-if="hierarchy.length > 0" symbol="fth-chevron-right" />
+            </span>
+            <span v-for="(item, index) in hierarchy" :key="item.id" class="media-items-hierarchy-item">
+              <button type="button" v-localize="item.name" @click="selectItem(item.id)"></button>
+              <ui-icon class="-chevron" v-if="index < hierarchy.length - 1" symbol="fth-chevron-right" />
+            </span>
+          </h2>
+        </template>
+      </ui-header-bar>
+    </template>
+    <template v-slot:footer>
+      <ui-button type="light onbg" label="@ui.close" @click="config.close" />
+    </template>
 
-      <template v-if="selected.length < 1">
-        <!--<ui-search v-model="gridConfig.search" class="onbg" />-->
-        <ui-button type="accent" label="@media.addfolder" @click="editFolder()" />
-      </template>
-      <media-selection v-else :selected="selected" @clear="clearSelection" @move="move" @remove="remove" />
-    </ui-header-bar>
-
-    <div class="ui-view-box">
+    <div v-if="loaded">
       <div class="media-items" :class="{ 'is-selecting': selected.length > 0 }">
         <ui-datagrid ref="grid" v-model="gridConfig" @select="onSelected" @count="count = $event">
 
@@ -47,30 +46,36 @@
           </template>
 
           <template v-slot:default="props">
-            <media-item :value="props.item" :selected="props.selected" :link="getLink(props.item)" />
+            <media-item :value="props.item" :selected="props.selected" @click="onItemClick" />
           </template>
         </ui-datagrid>
       </div>
     </div>
-  </div>
+    <ui-loading v-else />
+  </ui-trinity>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue';
-  import api from '../../api';
-  import MediaItem from './overview-item.vue';
-  import MediaSelection from './overview-selection.vue';
-  import MediaDrop from './drop.vue';
-  import actions from './overview-actions';
-  import * as overlays from '../../../../services/overlay';
 
-  export default defineComponent({
-    props: ['parentId'],
+<script>
+  import api from '../api';
+  import MediaItem from '../pages/overview/overview-item.vue';
+  import MediaSelection from '../pages/overview/overview-selection.vue';
+  import MediaDrop from '../pages/overview/drop.vue';
+  //import MediaFolderApi from 'zero/api/media-folder.js';
+  //import MediaApi from 'zero/api/media.js';
+  //import Notification from 'zero/helpers/notification.js'
+
+  export default {
+
+    props: {
+      model: Object,
+      config: Object
+    },
 
     components: { MediaItem, MediaSelection, MediaDrop },
 
     data: () => ({
-      paging: {},
+      id: null,
       hierarchy: {},
       search: null,
       selected: [],
@@ -78,30 +83,19 @@
         search: null,
         width: 180,
         selectable: true,
-        items: null
+        items: null,
+        setQuery: false,
+        scrollContainer: null
       },
     }),
-
-
-    computed: {
-      id()
-      {
-        return this.$route.params.parentId || 'root';
-      }
-    },
-
-
-    watch: {
-      '$route': function (val)
-      {
-        this.clearSelection();
-      }
-    },
 
 
     created()
     {
       this.gridConfig.items = this.getItems;
+      this.gridConfig.scrollContainerSelector = '.media-overlay content';
+      this.id = this.config.parentId || 'root';
+      this.loaded = true;
     },
 
 
@@ -130,14 +124,23 @@
       },
 
 
-      getLink(item)
+      async onItemClick(item)
       {
         if (item.isFolder)
         {
-          return { name: 'media', params: { parentId: item.id } };
+          await this.selectItem(item.id);
         }
+        else
+        {
+          this.config.confirm(item);
+        }
+      },
 
-        return { name: 'media-edit', params: { id: item.id } };
+
+      async selectItem(id)
+      {
+        this.id = id;
+        await this.refresh();
       },
 
 
@@ -155,65 +158,11 @@
         }
       },
 
-
-      async move(items: any[])
-      {
-        const updates = await actions.move(items);
-        if (updates)
-        {
-          this.clearSelection();
-          await this.$refs.grid.update();
-        }
-      },
-
-
-      async remove(items: any[])
-      {
-        const deletes = await actions.remove(items);
-        if (deletes)
-        {
-          this.clearSelection();
-          await this.$refs.grid.update();
-        }
-      },
-
-
-      async editFolder(item)
-      {
-        const result = await overlays.open({
-          component: () => import('../../overlays/editfolder.vue'),
-          model: item || { parentId: this.parentId },
-          display: 'dialog'
-        });
-
-        if (result.eventType === 'confirm' && result.value)
-        {
-          await this.$refs.grid.update();
-        }
-
-        //.then(item => this.goToFolder(item.model.id));
-      }
     }
-
-  });
+  }
 </script>
 
-
-
 <style lang="scss">
-  .media
-  {
-    width: 100%;
-    height: 100vh;
-    overflow-y: auto;
-  }
-
-  .media-content
-  {
-    height: 100vh;
-    overflow-y: auto;
-  }
-
   .media-items-hierarchy-item
   {
     font-family: var(--font);
@@ -225,18 +174,19 @@
     display: flex;
     align-items: center;
 
-    a
+    button
     {
       color: var(--color-text-dim);
+      font-size: var(--font-size-l);
     }
 
-    &:last-child a
+    &:last-child button
     {
       font-weight: 700;
       color: var(--color-text);
     }
 
-    a:hover
+    button:hover
     {
       color: var(--color-text);
     }

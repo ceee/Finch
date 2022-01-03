@@ -8,7 +8,9 @@ public class MediaBasic : ZeroIdEntity
 
   public bool IsFolder { get; set; }
 
-  public string Image { get; set; }
+  public string Source { get; set; }
+
+  public string Preview { get; set; }
 
   public int Children { get; set; }
   

@@ -6,7 +6,10 @@ export default {
 
   install(app: ZeroPluginOptions)
   {
-    //app.vue.component('ui-countrypicker', defineAsyncComponent(() => import('./ui-countrypicker.vue')));
+    app.vue.component('ui-mediapicker', defineAsyncComponent(() => import('./components/ui-mediapicker.vue')));
+
+    app.fieldType('media', defineAsyncComponent(() => import('./components/field-mediapicker.vue')));
+    app.fieldType('image', defineAsyncComponent(() => import('./components/field-imagepicker.vue')));
 
     app.route({ name: 'media', path: '/media/:parentId?', component: () => import('./pages/overview/overview.vue'), props: true });
     app.route({ name: 'media-edit', path: '/media/edit/:id?', component: () => import('./pages/detail/detail.vue'), props: true });
@@ -15,3 +18,36 @@ export default {
     app.schema('media:edit', () => import('./schemas/editor'));
   }
 } as ZeroPlugin;
+
+
+declare module 'zero/schemas'
+{
+  export interface ZeroEditorField
+  {
+    /**
+     * Renders a media picker
+     * @param {MediaFieldOptions} [options] - Custom options
+     */
+    media(options?: MediaFieldOptions): ZeroEditorField;
+
+    /**
+     * Renders an image picker
+     * @param {MediaBaseFieldOptions} [options] - Custom options
+     */
+    image(options?: MediaBaseFieldOptions): ZeroEditorField;
+  }
+
+  export type MediaTypeFor = 'all' | 'images' | 'videos' | 'documents';
+
+  export interface MediaBaseFieldOptions extends PickerFieldOptions
+  {
+    disableSelect?: boolean;
+    disableUpload?: boolean;
+    fileExtensions?: Array<string>;
+  }
+
+  export interface MediaFieldOptions extends MediaBaseFieldOptions
+  {
+    for?: MediaTypeFor;
+  }
+}

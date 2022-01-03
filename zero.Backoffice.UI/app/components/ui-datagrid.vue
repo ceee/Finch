@@ -55,7 +55,11 @@
     // for block items
     block: false,
     // ability to select items
-    selectable: false
+    selectable: false,
+    // whether the query params should be set for page + search
+    setQuery: true,
+    // custom scroll container
+    scrollContainerSelector: null
   };
 
   export default {
@@ -167,7 +171,7 @@
 
         if (!initial && this.configuration.scrollToTop)
         {
-          let container = document.querySelector('.app-main');
+          let container = document.querySelector(this.configuration.scrollContainerSelector || '.app-main');
 
           if (container)
           {
@@ -227,21 +231,24 @@
       // a property has changed and therefore we update the URL and table content
       onChange()
       {
-        let params = {};
-
-        if (+this.filter.page > 1)
+        if (this.configuration.setQuery)
         {
-          params.page = +this.filter.page;
-        }
-        if (this.filter.search)
-        {
-          params.search = this.filter.search;
-        }
+          let params = {};
 
-        const query = Qs.stringify(params);
-        const path = this.$route.href.split('?')[0] + (query ? '?' + query : '');
+          if (+this.filter.page > 1)
+          {
+            params.page = +this.filter.page;
+          }
+          if (this.filter.search)
+          {
+            params.search = this.filter.search;
+          }
 
-        history.replaceState(null, null, path);
+          const query = Qs.stringify(params);
+          const path = this.$route.href.split('?')[0] + (query ? '?' + query : '');
+
+          history.replaceState(null, null, path);
+        }
         this.debouncedUpdate();
       },
 

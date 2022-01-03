@@ -14,6 +14,10 @@ public class MediaFileSystem : PhysicalFileSystem, IMediaFileSystem
   /// <inheritdoc />
   public override string MapToPublicPath(string path)
   {
+    if (path.IsNullOrEmpty())
+    {
+      return null;
+    }
     return PublicPathPrefix + path.TrimStart('/');
   }
 }

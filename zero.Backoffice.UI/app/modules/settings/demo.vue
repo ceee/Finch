@@ -19,7 +19,9 @@
         output: 'This is an output',
         rte: '',
         textarea: 'A textarea\nfor you',
-        state: 'red'
+        state: 'red',
+        images: ['media.zpkxfjkgciom', 'media.w2cntwlrcueb', 'media.1waxp46ho8hu'],
+        docs: null
       },
       route: 'demo',
       disabled: false
