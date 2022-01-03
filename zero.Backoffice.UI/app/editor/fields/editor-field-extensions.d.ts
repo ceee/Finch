@@ -150,4 +150,9 @@ declare module 'zero/schemas'
     template?: any;
     addLabel?: string;
   }
+
+  export interface PickerFieldOptions
+  {
+    limit?: number;
+  }
 }

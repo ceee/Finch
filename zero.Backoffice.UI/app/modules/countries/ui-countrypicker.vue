@@ -1,19 +1,19 @@
 ﻿<template>
   <div class="ui-countrypicker" :class="{'is-disabled': disabled }">
-    country picker
-    <!--<ui-pick :config="pickerConfig" :value="value" @input="onChange" :disabled="disabled" />-->
+    <ui-pick :config="pickerConfig" :value="value" @input="onChange" :disabled="disabled" />
   </div>
 </template>
 
 
 <script>
   import api from './api';
+  import { extendObject } from '../../utils';
 
   export default {
     name: 'uiCountrypicker',
 
     props: {
-      modelValue: {
+      value: {
         type: [String, Array],
         default: null
       },
@@ -36,26 +36,40 @@
       pickerConfig: {}
     }),
 
-    //created()
-    //{
-    //  this.pickerConfig = _extend({
-    //    scope: 'country',
-    //    items: CountriesApi.getForPicker,
-    //    previews: CountriesApi.getPreviews,
-    //    limit: this.limit,
-    //    multiple: this.limit > 1,
-    //    preview: {
+    created()
+    {
+      const mapItem = item => ({
+        id: item.id,
+        name: item.name,
+        icon: 'flag-' + item.code.toLowerCase()
+      });
+
+      this.pickerConfig = extendObject({
+        scope: 'country',
+        items: async search =>
+        {
+          const res = await api.getByQuery({ search });
+          return Promise.resolve(res.data.map(mapItem));
+        },
+        previews: async ids =>
+        {
+          const res = await api.getByQuery({ ids });
+          return Promise.resolve(res.data.map(mapItem));
+        },
+        limit: this.limit,
+        multiple: this.limit > 1,
+        preview: {
           
-    //    }
-    //  }, this.options);
-    //},
+        }
+      }, this.options);
+    },
 
 
-    //methods: {
-    //  onChange(value)
-    //  {
-    //    this.$emit('input', value);
-    //  }
-    //}
+    methods: {
+      onChange(value)
+      {
+        this.$emit('input', value);
+      }
+    }
   }
 </script>
