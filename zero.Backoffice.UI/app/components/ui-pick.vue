@@ -45,7 +45,10 @@
       <!-- items -->
       <div class="ui-pick-overlay-items">
         <button v-for="item in items" :key="item[configuration.keys.id]" type="button" class="ui-pick-overlay-item" @click="select(item)" :class="{'is-selected': isSelected(item) }">
-          <ui-icon v-if="item[configuration.keys.icon]" class="-icon" :symbol="item[configuration.keys.icon]" />
+          <ui-icon v-if="item[configuration.keys.icon] && !configuration.list.iconAsImage" class="-icon" :symbol="item[configuration.keys.icon]" />
+          <span v-else="item[configuration.keys.icon]" class="-image">
+            <ui-thumbnail :media="item[configuration.keys.icon]" :alt="item[configuration.keys.name]" />
+          </span>
           <div class="ui-pick-overlay-item-title">
             <span class="-name" v-localize="item[configuration.keys.name]"></span>
             <span v-if="item[configuration.keys.description] && configuration.list.description" class="-text" v-localize="item[configuration.keys.description]"></span>
@@ -113,7 +116,9 @@
 
     list: {
       // output description text if available (second line)
-      description: false
+      description: false,
+      // displays an image instead of an icon in the list
+      iconAsImage: false
     },
 
     preview: {
@@ -605,6 +610,12 @@
     }
   }
 
+  .theme-dark .ui-pick-overlay-search .ui-input
+  {
+    background: var(--color-bg-shade-1);
+    box-shadow: none !important;
+  }
+
   .ui-pick-overlay 
   {
     .ui-dropdown
@@ -686,13 +697,13 @@
 
     &:hover
     {
-      background: var(--color-tree-selected);
+      background: var(--color-dropdown-selected);
     }
 
     &.is-selected
     {
       padding-right: 40px;
-      
+
       .-name
       {
         font-weight: 600;
@@ -711,8 +722,22 @@
 
     .-icon
     {
-      font-size: var(--font-size-l);
       margin-right: var(--padding-s);
+    }
+
+    .-image
+    {
+      display: inline-flex;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin-right: var(--padding-xs);
+
+      img
+      {
+        max-width: 100%;
+        max-height: 100%;
+      }
     }
   }
 
