@@ -10,7 +10,8 @@ class ListColumn
     hideLabel: false,
     width: null,
     canSort: false,
-    class: ''
+    class: '',
+    primary: false
   };
 
   _type = null;
@@ -201,7 +202,7 @@ class ListColumn
     this._type = 'image';
     this._asHtml = true;
     // TODO correct app ID
-    this._func = (value, opts) => value ? `<img src="/zero/api/hofbauer/media/${(value)}/thumb.tmp" class="ui-table-field-image">` : '';
+    this._func = (value, opts) => value ? `<img src="/zero/api/hofbauer/backoffice/ui/thumbnail/${(value)}-thumb.tmp" onerror="this.classList.add('is-error')" class="ui-table-field-image">` : '';
     return this;
   }
 
@@ -238,7 +239,8 @@ class ListColumn
   name()
   {
     this.options.label = '@ui.name';
-    this.options.class = 'is-name';
+    this.options.class = 'is-name is-primary';
+    this.options.primary = true;
     this._type = 'text';
     this._asHtml = true;
     this._func = (value, opts, model) =>

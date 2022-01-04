@@ -21,7 +21,7 @@
       <slot name="topRow"></slot>
 
       <component :is="component" v-for="(item, index) in items" :key="index" :to="getLink(item)" type="button" class="ui-table-row" :class="{ 'is-selected': selected.indexOf(item) > -1 }" @click="onRowClick(item)">
-        <div v-for="column in columns" :key="column.path" class="ui-table-cell" :class="column.options.class" :style="column.flex" :table-field="column.path" :field-type="column.type" v-table-value="{ column, item }"></div>
+        <div v-for="column in columns" :key="column.path" class="ui-table-cell" :class="column.class" :style="column.flex" :table-field="column.path" :field-type="column.type" v-table-value="{ column, item }"></div>
         <button type="button" v-if="listConfig.selectable" table-field="table_selectable" class="ui-table-cell is-selectable" @click.prevent.stop="select(item)">
           <span class="ui-native-check">
             <input type="checkbox" :checked="selected.indexOf(item) > -1" />
@@ -156,12 +156,20 @@
         //this.listConfig.selectable = true;
         this.columns = this.listConfig.columns.map(column =>
         {
-          return {
+          let col = {
             ...column,
+            class: column.options.class || '',
             column: column,
             label: column.options.hideLabel ? null : (column.options.label || this.listConfig.templateLabel(column.path)),
             flex: column.options.width ? { 'flex': '0 1 ' + column.options.width + 'px' } : {}
           };
+
+          if (column.options.primary)
+          {
+            col.class += ' is-primary';
+          }
+
+          return col;
         });
         this.query = { ...this.listConfig.query, ...this.listConfig.queryToParams(this.$route.query) };
         this.component = !!this.listConfig.link ? 'router-link' : (!!this.listConfig.onClick ? 'button' : 'div');
@@ -199,7 +207,7 @@
 
         if (!initial) //&& this.configuration.scrollToTop)
         {
-          let container = document.querySelector('.app-main');
+          let container = document.querySelector(this.listConfig.scrollContainerSelector || '.app-main');
 
           if (container)
           {

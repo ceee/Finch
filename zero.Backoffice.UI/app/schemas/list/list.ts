@@ -53,6 +53,8 @@ class List implements ZeroSchema
     block: false
   };
 
+  scrollContainerSelector = null;
+
   actions = [];
 
 

@@ -100,12 +100,11 @@ a.ui-table-row:hover, button.ui-table-row:hover
   min-height: 58px;
   min-width: 20px;
   line-height: 20px;
-  color: var(--color-text);
 
   &:first-child
   {
     border-left: none;
-  }
+  } 
 
   &.is-multiline
   {
@@ -131,6 +130,13 @@ a.ui-table-row:hover, button.ui-table-row:hover
 
 .ui-table-row:not(.ui-table-head) .ui-table-cell
 {
+  color: var(--color-text-dim);
+
+  &.is-primary, &:first-child
+  {
+    color: var(--color-text);
+  }
+
   &.is-vertical
   {
     flex-direction: column;
@@ -257,4 +263,9 @@ a.ui-table-row:hover, button.ui-table-row:hover
 .ui-table-field-image
 {
   border-radius: 3px;
+
+  &.is-error
+  {
+    opacity: 0;
+  }
 }

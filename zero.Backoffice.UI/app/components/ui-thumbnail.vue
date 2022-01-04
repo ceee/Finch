@@ -29,7 +29,7 @@
     computed: {
       src()
       {
-        return this.media ? (paths.api.replace('{app}', 'hofbauer') + '/media/' + this.media + '/' + this.size + '.tmp') : null;
+        return this.media ? (paths.api.replace('{app}', 'hofbauer') + '/backoffice/ui/thumbnail/' + this.media + '-' + this.size + '.tmp') : null;
       },
 
       onError(ev)

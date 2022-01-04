@@ -70,7 +70,11 @@
       },
       isActive()
       {
-        return this.value && this.isLink && ((!!this.value.id && this.value.id === this.activeId) || this.value.id == this.$route.params.id || (this.value.url && !this.value.url.params && this.value.url.name === this.$route.name));
+        return this.value && this.isLink && (
+          (!!this.value.id && this.value.id === this.activeId)
+          || this.value.id == this.$route.params.id
+          || (this.value.url && !this.value.url.params && this.value.url.name === this.$route.name && !this.$route.params.id)
+        );
       }
     },
 
@@ -158,15 +162,22 @@
   .ui-tree-item
   {
     display: grid;
-    grid-template-columns: auto 1fr auto auto; 
+    grid-template-columns: auto 1fr auto auto;
     align-items: center;
     font-size: var(--font-size);
     padding: 0 var(--padding) 0 0;
-    height: 54px;
+    //height: 54px;
+    height: 58px;
+    border-top: 1px dashed var(--color-line-dashed);
     color: var(--color-text);
     position: relative;
     transition: color 0.2s ease;
     position: relative;
+
+    .theme-dark &
+    {
+      border-top: 1px dashed var(--color-line);
+    }
 
     &:hover > .ui-tree-item-actions
     {
@@ -195,7 +206,7 @@
       font-family: "Feather";
       content: "\e83e";
       font-size: 16px;
-      color: var(--color-primary); 
+      color: var(--color-primary);
       z-index: 2;
     }
 
@@ -203,6 +214,11 @@
     {
       font-weight: bold;
     }
+  }
+
+  .ui-tree-header + .ui-tree-item
+  {
+    margin-top: -8px;
   }
 
   .ui-tree-item-link

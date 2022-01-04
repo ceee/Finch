@@ -249,11 +249,6 @@
     overflow-x: hidden;
   }
 
-  .ui-tree-header + .ui-tree-item
-  {
-    margin-top: -18px;
-  }
-
   .ui-tree-dropdown .ui-dropdown
   {
     position: fixed;

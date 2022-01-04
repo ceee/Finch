@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Net.Http.Headers;
 using System.Collections;
+using System.IO;
 using System.Reflection;
 using zero.Backoffice.Services;
 
@@ -11,13 +14,15 @@ public class UIController : ZeroBackofficeController
   readonly IResourceService ResourceService;
   readonly ISectionService SectionService;
   readonly IZeroOptions Options;
+  readonly IMediaManagement Media;
 
-  public UIController(IIconService iconService, IResourceService resourceService, ISectionService sectionService, IZeroOptions options)
+  public UIController(IIconService iconService, IResourceService resourceService, ISectionService sectionService, IZeroOptions options, IMediaManagement media)
   {
     IconService = iconService;
     ResourceService = resourceService;
     SectionService = sectionService;
     Options = options;
+    Media = media;
   }
 
   [HttpGet("sections")]
@@ -70,5 +75,45 @@ public class UIController : ZeroBackofficeController
     }
 
     return result;
+  }
+
+
+  [HttpGet("thumbnail/{id}-{size}.tmp")]
+  public async Task<IActionResult> GetThumbnail(string id, string size)
+  {
+    zero.Media.Media media = await Media.GetFile(id);
+
+    if (media == null)
+    {
+      return Ok();
+    }
+
+    string path = Media.GetPublicFilePath(media, size);
+
+    if (path == null)
+    {
+      return Ok();
+    }
+
+    if (path.StartsWith("url://"))
+    {
+      path = path.Substring(6);
+    }
+
+    FileExtensionContentTypeProvider provider = new();
+    string contentType;
+    if (!provider.TryGetContentType(Path.GetFileName(path), out contentType))
+    {
+      contentType = "application/octet-stream";
+    }
+
+    try
+    {
+      return File(await Media.GetFileStream(media, size), contentType, DateTimeOffset.Now, EntityTagHeaderValue.Any);
+    }
+    catch (FileSystemException)
+    {
+      return Ok();
+    }
   }
 }
