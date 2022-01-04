@@ -691,7 +691,7 @@
 
     &.is-selected
     {
-      padding-right: 32px;
+      padding-right: 40px;
       
       .-name
       {

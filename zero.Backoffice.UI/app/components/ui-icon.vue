@@ -32,7 +32,7 @@
 
       symbolName()
       {
-        return this.symbol && this.symbol.split(' ')[0];
+        return this.symbol && this.symbol.split(' ')[0].trim();
       },
       classes()
       {
@@ -44,7 +44,7 @@
       },
       href()
       {
-        return (this.file || '') + '#' + this.symbolName.trim();
+        return (this.file || '') + '#' + this.symbolName;
       }
     }
   }
