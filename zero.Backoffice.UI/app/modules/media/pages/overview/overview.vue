@@ -218,7 +218,7 @@
   {
     font-family: var(--font);
     margin: 0;
-    font-size: var(--font-size-l);
+    font-size: var(--font-size-xl);
     font-weight: 400;
     color: var(--color-text-dim);
     min-height: 22px;

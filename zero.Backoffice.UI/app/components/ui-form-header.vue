@@ -18,7 +18,7 @@
         <ui-toggle v-model:on="value.isActive" class="is-accent" off-content="@ui.inactive" :off-warning="true" on-content="@ui.active" :content-left="true" :disabled="disabled" />
       </div>
       <slot name="buttons"></slot>
-      <ui-dropdown v-if="actionsDefined" align="right">
+      <ui-dropdown v-if="actionsDefined" align="right" theme="default">
         <template v-slot:button>
           <ui-button type="light onbg" label="@ui.actions" caret="down" />
         </template>

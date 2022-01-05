@@ -55,6 +55,9 @@
 
   // ----------------------------------------------------------------------------------
 
+  --color-accent: #{$color-primary};
+  --color-accent-fg: #{$color-primary-fg};
+
   // accent colors
   --color-primary: #{$color-primary};
   --color-primary-low: #{$color-primary-low};

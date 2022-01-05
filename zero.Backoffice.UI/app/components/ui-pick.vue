@@ -24,7 +24,7 @@
     </div>    
 
     <!-- overlay -->
-    <ui-dropdown ref="overlay" class="ui-pick-overlay" @opened="overlayOpened">
+    <ui-dropdown ref="overlay" class="ui-pick-overlay" @opened="overlayOpened" :theme="configuration.theme">
 
       <!-- headline -->
       <div class="ui-pick-overlay-head">
@@ -95,6 +95,8 @@
     autoOpen: false,
     // picker has pagination
     paging: false,
+    // theme for the dropdown
+    theme: 'dark',
 
     keys: {
       // id key

@@ -150,7 +150,7 @@
     font-family: var(--font);
     color: var(--color-text);
     margin: 0;
-    font-size: var(--font-size-l);
+    font-size: var(--font-size-xl);
     font-weight: 700;
     display: flex;
     align-items: center;

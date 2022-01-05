@@ -363,7 +363,7 @@
       color: var(--color-text);
       background: var(--color-tree-selected);
       font-weight: 700;
-      border-right: 3px solid var(--color-accent);
+      //border-right: 3px solid var(--color-accent);
 
       .app-nav-item-icon
       {
