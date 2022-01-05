@@ -5,6 +5,9 @@ import api from './api';
 
 const THEME_KEY = 'zero.theme';
 
+export let sectionMods = [];
+export let settingsMods = [];
+
 export const useUiStore = defineStore('zero.ui', {
   state: () => ({
     preferences: {
@@ -41,6 +44,16 @@ export const useUiStore = defineStore('zero.ui', {
       this.iconSets = values[2].data as UiIconSet[];
       this.flavors = values[3].data as Record<string, UiFlavorProvider>;
       this.blueprints = values[4].data as string[];
+
+      sectionMods.forEach(mod =>
+      {
+        mod(this.sections);
+      });
+
+      settingsMods.forEach(mod =>
+      {
+        mod(this.settingGroups);
+      });
     },
 
     setTheme(theme: 'default' | 'light' | 'dark')

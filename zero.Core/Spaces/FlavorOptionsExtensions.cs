@@ -2,6 +2,11 @@
 
 public static class FlavorOptionsExtensions
 {
+  public static void AddSpace<T, TEntity>(this FlavorOptions options) where T : SpaceType, new() where TEntity : Space, new()
+  {
+    options.Add<Space, TEntity>(new T());
+  }
+
   public static void AddSpaceList<T>(this FlavorOptions options, string alias, string name, string description, string icon, string editorAlias = null) where T : Space, new()
   {
     options.Add<Space, T>(new SpaceType(typeof(T))

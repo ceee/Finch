@@ -10,7 +10,7 @@ let loadedPlugins = JSON.parse(process.env.ZERO_PLUGINS || "[]");
 if (!process.env.ZERO_PLUGINS)
 {
   //loadedPlugins = ["../zero.Commerce/Plugin", "../zero.Stories/Plugin", "../zero.Forms/Plugin", "../../Laola/Laola.Backoffice/Plugin"];
-  loadedPlugins = ["../plugins/zero.Commerce/Backoffice/Plugin"]
+  loadedPlugins = ["../plugins/zero.Commerce/Backoffice/Plugin", "../../Laola/Laola.Backoffice/Plugin"]
   //loadedPlugins = [];
 }
 
@@ -62,13 +62,13 @@ let config = defineConfig({
     cors: true,
     proxy: {
       '/zero/api': {
-        target: 'http://localhost:2100',
+        target: 'http://localhost:2310',
         changeOrigin: true,
         secure: false,
         ws: false
       },
       '/uploads': {
-        target: 'http://localhost:2100',
+        target: 'http://localhost:2310',
         changeOrigin: true,
         secure: false,
         ws: false
