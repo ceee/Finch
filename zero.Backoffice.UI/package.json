@@ -7,7 +7,7 @@
     "build": "vite build"
   },
   "workspaces": [
-    "../plugins/zero.Commerce/Backoffice/Plugin" 
+    "../plugins/zero.Commerce/Backoffice/Plugin"
   ],
   "dependencies": {
     "axios": "^0.24.0",

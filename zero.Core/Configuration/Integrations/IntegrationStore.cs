@@ -1,4 +1,6 @@
 ﻿using FluentValidation.Results;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
 
 namespace zero.Configuration;
 
@@ -28,6 +30,36 @@ public class IntegrationStore : IIntegrationStore
   {
     Paged<Integration> result = await Operations.Load<Integration>(1, 1, q => q.Where(x => x.Flavor == alias));
     return result.Items.FirstOrDefault();
+  }
+
+
+  /// <inheritdoc />
+  public async Task<IList<Integration>> LoadByTag(string tag)
+  {
+    IEnumerable<IntegrationType> types = IntegrationTypes.GetByTag(tag);
+
+    if (!types.Any())
+    {
+      return new List<Integration>();
+    }
+
+    string[] aliases = types.Select(x => x.Alias).ToArray();
+    return await Operations.Session.Query<Integration>().Where(x => x.Flavor.In(aliases)).ToListAsync();
+  }
+
+
+  /// <inheritdoc />
+  public async Task<bool> Any(string tag)
+  {
+    IEnumerable<IntegrationType> types = IntegrationTypes.GetByTag(tag);
+
+    if (!types.Any())
+    {
+      return false;
+    }
+
+    string[] aliases = types.Select(x => x.Alias).ToArray();
+    return await Operations.Session.Query<Integration>().AnyAsync(x => x.Flavor.In(aliases) && x.IsActive);
   }
 
 
@@ -129,6 +161,16 @@ public interface IIntegrationStore
   /// Get an integration by integration alias
   /// </summary>
   Task<Integration> Load(string alias);
+
+  /// <summary>
+  /// Get all integrations by a certain tag
+  /// </summary>
+  Task<IList<Integration>> LoadByTag(string tag);
+
+  /// <summary>
+  /// Check if there are any activated integrations for a certain tag
+  /// </summary>
+  Task<bool> Any(string tag);
 
   /// <summary>
   /// Get the change vector for a model (Proxy to IAsyncDocumentSession.GetChangeVectorFor<>)

@@ -74,4 +74,21 @@ public static class ServiceCollectionExtensions
     services.RemoveAll<TService>();
     services.Add(new ServiceDescriptor(typeof(TService), implementationFactory, lifetime));
   }
+
+
+  /// <summary>
+  /// Adds or overrides an implementation
+  /// </summary>
+  public static void Replace<TService, TOldImplementation, TNewImplementation>(this IServiceCollection services)
+    where TService : class
+    where TOldImplementation : class, TService
+    where TNewImplementation : class, TService
+  {
+    ServiceDescriptor oldDescriptor = services.FirstOrDefault(x => x.ImplementationType == typeof(TOldImplementation));
+    if (oldDescriptor != null)
+    {
+      services.Remove(oldDescriptor);
+      services.Add(new ServiceDescriptor(typeof(TService), typeof(TNewImplementation), oldDescriptor.Lifetime));
+    }
+  }
 }

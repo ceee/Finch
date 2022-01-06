@@ -48,21 +48,7 @@ public partial class StoreOperations :
   /// <inheritdoc />
   public T AutoSetIds<T>(T model)
   {
-    // find all Raven Ids
-    List<ObjectTraverser.Result<GenerateIdAttribute>> ravenIds = ObjectTraverser.FindAttribute<GenerateIdAttribute>(model);
-
-    // set unset Raven Ids
-    foreach (ObjectTraverser.Result<GenerateIdAttribute> item in ravenIds)
-    {
-      string id = item.Property.GetValue(item.Parent, null) as string;
-      if (id.IsNullOrWhiteSpace())
-      {
-        id = item.Item.Length.HasValue ? IdGenerator.Create(item.Item.Length.Value) : IdGenerator.Create();
-        item.Property.SetValue(item.Parent, id);
-      }
-    }
-
-    return model;
+    return IdGenerator.Autofill(model);
   }
 
 

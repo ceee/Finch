@@ -36,6 +36,13 @@ public class IntegrationTypeService : IIntegrationTypeService
   {
     return Flavors.Get<Integration, T>() as IntegrationType;
   }
+
+
+  /// <inheritdoc />
+  public IEnumerable<IntegrationType> GetByTag(string tag)
+  {
+    return GetAll().Where(x => x.Tags.Contains(tag, StringComparer.InvariantCultureIgnoreCase));
+  }
 }
 
 
@@ -55,4 +62,9 @@ public interface IIntegrationTypeService
   /// Get a specific integration type by model type.
   /// </summary>
   IntegrationType GetByType<T>() where T : Integration;
+
+  /// <summary>
+  /// Get all integrations with a certain tag.
+  /// </summary>
+  IEnumerable<IntegrationType> GetByTag(string tag);
 }

@@ -39,4 +39,27 @@ public class IdGenerator
   {
     return value.GetHashCode().ToString().Replace("-", String.Empty);
   }
+
+
+  /// <summary>
+  /// Autofill IDs on an object with [GenerateId] attributes
+  /// </summary>
+  public static T Autofill<T>(T model)
+  {
+    // find all Raven Ids
+    List<ObjectTraverser.Result<GenerateIdAttribute>> ravenIds = ObjectTraverser.FindAttribute<GenerateIdAttribute>(model);
+
+    // set unset Raven Ids
+    foreach (ObjectTraverser.Result<GenerateIdAttribute> item in ravenIds)
+    {
+      string id = item.Property.GetValue(item.Parent, null) as string;
+      if (id.IsNullOrWhiteSpace())
+      {
+        id = item.Item.Length.HasValue ? Create(item.Item.Length.Value) : Create();
+        item.Property.SetValue(item.Parent, id);
+      }
+    }
+
+    return model;
+  }
 }

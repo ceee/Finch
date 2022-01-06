@@ -14,7 +14,7 @@ public class UsersController : ZeroApiController
 
   [HttpGet("empty")]
   [ZeroAuthorize(UserPermissions.Create)]
-  public virtual async Task<ActionResult<ZeroUser>> Empty(string flavor = null)
+  public virtual ActionResult<ZeroUser> Empty(string flavor = null)
   {
     return new ZeroUser();
   }
