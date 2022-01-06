@@ -269,3 +269,44 @@ a.ui-table-row:hover, button.ui-table-row:hover
     opacity: 0;
   }
 }
+
+
+.ui-table-cell .state
+{
+  display: inline-flex;
+  align-self: center;
+  align-items: center;
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  font-weight: 600;
+  background: var(--color-table-highlight);
+  padding: 4px 12px;
+  border-radius: 20px;
+
+  &[data-state="completed"], &[data-state="cancelled"]
+  {
+    font-weight: 400;
+    color: var(--color-text-dim);
+  }
+  /*&[data-payment-state="none"], &[data-payment-state="pending"], &[data-payment-state="cancelled"], &[data-payment-state="refunded"]
+  {
+    font-weight: 400;
+    color: var(--color-text-dim);
+  }*/
+  &[data-payment-state]
+  {
+    font-weight: 400;
+    color: var(--color-text-dim);
+  }
+
+  &[data-payment-state="error"]
+  {
+    color: var(--color-accent-error);
+    background: var(--color-accent-error-bg);
+  }
+}
+
+.ui-table-row:hover .ui-table-cell .state
+{
+  background: var(--color-bg-shade-4);
+}
