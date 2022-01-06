@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace zero.Architecture;
 
-public class ArchitectureModule : ZeroModule
+internal class ZeroArchitectureModule : ZeroModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {

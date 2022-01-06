@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace zero.FileStorage;
 
-public class FileStorageModule : ZeroModule
+internal class ZeroFileStorageModule : ZeroModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {

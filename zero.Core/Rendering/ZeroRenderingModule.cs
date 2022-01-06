@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace zero.Mapper;
+namespace zero.Rendering;
 
-public class MapperModule : ZeroModule
+public class ZeroRenderingModule : ZeroModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
-    services.AddScoped<IZeroMapper, ZeroMapper>();
+    services.AddScoped<IRazorRenderer, RazorRenderer>();
   }
 }

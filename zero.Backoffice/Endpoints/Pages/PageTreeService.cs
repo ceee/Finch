@@ -33,7 +33,7 @@ public class PageTreeService : IPageTreeService
     List<TreeItem> items = new();
     string[] openIds = Array.Empty<string>();
     Paged<Page> pages = null;
-    IList<Pages_WithChildren.Result> children = null;
+    IList<zero_Pages_WithChildren.Result> children = null;
     bool isSearch = !search.IsNullOrWhiteSpace();
 
     if (isSearch)
@@ -60,9 +60,9 @@ public class PageTreeService : IPageTreeService
       // get hierarchy so we know if we should set the page to open
       if (!activeId.IsNullOrEmpty())
       {
-        Pages_ByHierarchy.Result result = await Pages.Session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
-          .ProjectInto<Pages_ByHierarchy.Result>()
-          .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
+        zero_Pages_ByHierarchy.Result result = await Pages.Session.Query<zero_Pages_ByHierarchy.Result, zero_Pages_ByHierarchy>()
+          .ProjectInto<zero_Pages_ByHierarchy.Result>()
+          .Include<zero_Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
           .FirstOrDefaultAsync(x => x.Id == activeId);
 
         if (result != null)
@@ -75,8 +75,8 @@ public class PageTreeService : IPageTreeService
       // get children for all pages
       string[] pageIds = pages.Items.Select(x => x.Id).ToArray();
 
-      children = await Pages.Session.Query<Pages_WithChildren.Result, Pages_WithChildren>()
-        .ProjectInto<Pages_WithChildren.Result>()
+      children = await Pages.Session.Query<zero_Pages_WithChildren.Result, zero_Pages_WithChildren>()
+        .ProjectInto<zero_Pages_WithChildren.Result>()
         .Where(x => x.Id.In(pageIds))
         .ToListAsync();
     }

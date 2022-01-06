@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace zero.Routing;
 
-public class RoutingModule : ZeroModule
+internal class ZeroRoutingModule : ZeroModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {

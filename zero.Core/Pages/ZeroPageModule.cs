@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace zero.Pages;
 
-internal class PagesModule : ZeroModule
+internal class ZeroPageModule : ZeroModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
@@ -16,10 +16,10 @@ internal class PagesModule : ZeroModule
 
     services.Configure<RavenOptions>(opts =>
     {
-      opts.Indexes.Add<Pages_AsHistory>();
-      opts.Indexes.Add<Pages_ByHierarchy>();
-      opts.Indexes.Add<Pages_ByType>();
-      opts.Indexes.Add<Pages_WithChildren>();
+      opts.Indexes.Add<zero_Pages_AsHistory>();
+      opts.Indexes.Add<zero_Pages_ByHierarchy>();
+      opts.Indexes.Add<zero_Pages_ByType>();
+      opts.Indexes.Add<zero_Pages_WithChildren>();
     });
 
     services.Configure<FlavorOptions>(opts =>

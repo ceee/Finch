@@ -2,7 +2,7 @@
 
 namespace zero.Pages;
 
-public class Pages_AsHistory : ZeroIndex<Page, Pages_AsHistory.Result>
+public class zero_Pages_AsHistory : ZeroIndex<Page, zero_Pages_AsHistory.Result>
 {
   public class Result : ZeroIdEntity, ISupportsDbConventions
   {

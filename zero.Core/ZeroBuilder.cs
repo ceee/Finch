@@ -13,7 +13,7 @@ public class ZeroBuilder
 
   public virtual IMvcBuilder Mvc { get; }
 
-  public ZeroModuleCollection Modules { get; } = new();
+  protected ZeroModuleCollection Modules { get; } = new();
 
   readonly IConfiguration Configuration;
   readonly IZeroStartupOptions StartupOptions;
@@ -35,24 +35,23 @@ public class ZeroBuilder
     // adds and discovers additional and built-in assemblies
     new AssemblyDiscovery(Mvc).Execute(StartupOptions.AssemblyDiscoveryRules);
 
-    Modules.Add<ConfigurationModule>();
-    Modules.Add<ContextModule>();
-    Modules.Add<ArchitectureModule>();
-    Modules.Add<CommunicationModule>();
-    Modules.Add<IdentityModule>();
-    Modules.Add<ApplicationModule>();
-    Modules.Add<PersistenceModule>();
-    Modules.Add<StoresModule>();
-    Modules.Add<FileStorageModule>();
-    Modules.Add<MapperModule>();
-    Modules.Add<LocalizationModule>();
-    Modules.Add<RenderingModule>();
-
-    Modules.Add<RoutingModule>();
-    Modules.Add<MailsModule>();
-    Modules.Add<MediaModule>();
-    Modules.Add<PagesModule>();
-    Modules.Add<SpacesModule>();
+    Modules.Add<ZeroApplicationModule>();
+    Modules.Add<ZeroArchitectureModule>();
+    Modules.Add<ZeroCommunicationModule>();
+    Modules.Add<ZeroConfigurationModule>();
+    Modules.Add<ZeroContextModule>();
+    Modules.Add<ZeroFileStorageModule>();
+    Modules.Add<ZeroIdentityModule>();
+    Modules.Add<ZeroLocalizationModule>();
+    Modules.Add<ZeroMailModule>();
+    Modules.Add<ZeroMapperModule>();
+    Modules.Add<ZeroMediaModule>();
+    Modules.Add<ZeroPageModule>();
+    Modules.Add<ZeroPersistenceModule>();
+    Modules.Add<ZeroRenderingModule>();
+    Modules.Add<ZeroRoutingModule>();
+    Modules.Add<ZeroSpaceModule>();
+    Modules.Add<ZeroStoreModule>();
 
     Modules.ConfigureServices(services, configuration);
 

@@ -173,7 +173,7 @@ public class PageRouteResolverHelper
   /// </summary>
   protected virtual async Task<string[]> GetChildIds(RoutingContext context, params string[] pageIds)
   {
-    return await context.Session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
+    return await context.Session.Query<zero_Pages_ByHierarchy.Result, zero_Pages_ByHierarchy>()
       .Where(x => x.PathIds.In(pageIds))
       .Select(x => x.Id)
       .ToArrayAsync();

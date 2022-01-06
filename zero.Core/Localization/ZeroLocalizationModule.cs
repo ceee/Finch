@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace zero.Localization;
 
-internal class LocalizationModule : ZeroModule
+internal class ZeroLocalizationModule : ZeroModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {

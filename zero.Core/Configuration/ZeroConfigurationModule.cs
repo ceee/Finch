@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace zero.Configuration;
 
-public class ConfigurationModule : ZeroModule
+internal class ZeroConfigurationModule : ZeroModule
 {
   public override int Order => -1000;
 

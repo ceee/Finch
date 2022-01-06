@@ -2,7 +2,7 @@
 
 namespace zero.Pages;
 
-public class Pages_ByType : ZeroIndex<Page>
+public class zero_Pages_ByType : ZeroIndex<Page>
 {
   protected override void Create()
   {

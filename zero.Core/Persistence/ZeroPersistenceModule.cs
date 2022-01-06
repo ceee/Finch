@@ -5,7 +5,7 @@ using Raven.Client.Http;
 
 namespace zero.Persistence;
 
-public class PersistenceModule : ZeroModule
+internal class ZeroPersistenceModule : ZeroModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {

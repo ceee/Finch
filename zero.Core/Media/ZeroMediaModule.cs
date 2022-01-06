@@ -7,7 +7,7 @@ using System.IO;
 
 namespace zero.Media;
 
-public class MediaModule : ZeroModule
+internal class ZeroMediaModule : ZeroModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {

@@ -2,7 +2,7 @@
 
 namespace zero.Pages;
 
-public class Pages_ByHierarchy : ZeroIndex<Page, Pages_ByHierarchy.Result>
+public class zero_Pages_ByHierarchy : ZeroIndex<Page, zero_Pages_ByHierarchy.Result>
 {
   public class Result : ZeroIdEntity, ISupportsDbConventions
   {

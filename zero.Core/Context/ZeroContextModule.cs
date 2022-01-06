@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace zero.Rendering;
+namespace zero.Context;
 
-public class RenderingModule : ZeroModule
+internal class ZeroContextModule : ZeroModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
-    services.AddScoped<IRazorRenderer, RazorRenderer>();
+    services.AddScoped<IZeroContext, ZeroContext>();
+    services.AddHttpContextAccessor();
   }
 }

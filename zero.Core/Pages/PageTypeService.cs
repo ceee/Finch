@@ -43,10 +43,10 @@ public class PageTypeService : IPageTypeService
 
     if (!pageParentId.IsNullOrEmpty())
     {
-      Pages_ByHierarchy.Result result = await session.Query<Pages_ByHierarchy.Result, Pages_ByHierarchy>()
-        .ProjectInto<Pages_ByHierarchy.Result>()
-        .Include<Pages_ByHierarchy.Result, Page>(x => x.Id)
-        .Include<Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
+      zero_Pages_ByHierarchy.Result result = await session.Query<zero_Pages_ByHierarchy.Result, zero_Pages_ByHierarchy>()
+        .ProjectInto<zero_Pages_ByHierarchy.Result>()
+        .Include<zero_Pages_ByHierarchy.Result, Page>(x => x.Id)
+        .Include<zero_Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
         .FirstOrDefaultAsync(x => x.Id == pageParentId);
 
       if (result != null)

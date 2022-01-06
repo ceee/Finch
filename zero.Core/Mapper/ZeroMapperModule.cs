@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace zero.Context;
+namespace zero.Mapper;
 
-public class ContextModule : ZeroModule
+internal class ZeroMapperModule : ZeroModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
-    services.AddScoped<IZeroContext, ZeroContext>();
-    services.AddHttpContextAccessor();
+    services.AddScoped<IZeroMapper, ZeroMapper>();
   }
 }
