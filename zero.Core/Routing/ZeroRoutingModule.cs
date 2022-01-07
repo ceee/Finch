@@ -18,7 +18,7 @@ internal class ZeroRoutingModule : ZeroModule
     services.AddScoped<ILinks, Links>();
     services.AddScoped<ILinkProvider, PageLinkProvider>();
     services.AddScoped<ILinkProvider, RawLinkProvider>();
-    services.AddScoped<ZeroRoutesTransformer>();
+    services.AddTransient<ZeroRoutesTransformer>();
     services.TryAddEnumerable(ServiceDescriptor.Singleton<MatcherPolicy, NotFoundSelectorPolicy>());
     services.AddScoped<IInterceptor, ZeroEntityRouteInterceptor>();
 

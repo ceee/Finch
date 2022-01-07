@@ -107,15 +107,15 @@ public abstract class ZeroRouteProvider : IRouteProvider
   public virtual string Id(ISupportsRouting model) => "routes." + Alias + "." + Key(model);
 
   /// <inheritdoc />
-  public virtual RouteEndpoint Map(RoutingContext context, IRouteModel route)
+  public virtual IRouteEndpoint Map(RoutingContext context, IRouteModel route)
   {
     RoutingOptions options = context.Context.Options.For<RoutingOptions>();
 
-    IEnumerable<Func<IRouteModel, RouteEndpoint>> resolvers = options.EndpointResolvers.GetAll(route.GetType());
+    IEnumerable<Func<IRouteModel, IRouteEndpoint>> resolvers = options.EndpointResolvers.GetAll(route.GetType());
 
-    foreach (Func<IRouteModel, RouteEndpoint> resolver in resolvers.Reverse())
+    foreach (Func<IRouteModel, IRouteEndpoint> resolver in resolvers.Reverse())
     {
-      RouteEndpoint endpoint = resolver(route);
+      IRouteEndpoint endpoint = resolver(route);
 
       if (endpoint != null)
       {
@@ -232,7 +232,7 @@ public interface IRouteProvider
   /// <summary>
   /// Map a route model to an endpoint
   /// </summary>
-  RouteEndpoint Map(RoutingContext context, IRouteModel route);
+  IRouteEndpoint Map(RoutingContext context, IRouteModel route);
 
   /// <summary>
   /// Find a persisted route for an entity

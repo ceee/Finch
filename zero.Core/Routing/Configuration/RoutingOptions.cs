@@ -5,7 +5,7 @@ public class RoutingOptions
   public RoutingOptions()
   {
     PageRouteIdBuilder = new PageRouteIdBuilder();
-    DefaultEndpoint = new("ZeroFrontend", "Index");
+    DefaultEndpoint = new ControllerRouteEndpoint("ZeroFrontend", "Index");
     EndpointResolvers = new();
     PageResolvers = new();
     //ErrorReexecutionPath = "/error";
@@ -16,10 +16,10 @@ public class RoutingOptions
   public IPageRouteIdBuilder PageRouteIdBuilder { get; set; }
 
 
-  public RouteEndpoint NotFoundEndpoint { get; set; }
+  public IRouteEndpoint NotFoundEndpoint { get; set; }
 
 
-  public RouteEndpoint DefaultEndpoint { get; set; }
+  public IRouteEndpoint DefaultEndpoint { get; set; }
 
   /// <summary>
   /// 

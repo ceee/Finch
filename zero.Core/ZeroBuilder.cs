@@ -31,6 +31,7 @@ public class ZeroBuilder
     setupAction?.Invoke(StartupOptions);
 
     services.AddControllers();
+    services.AddRazorPages();
 
     // adds and discovers additional and built-in assemblies
     new AssemblyDiscovery(Mvc).Execute(StartupOptions.AssemblyDiscoveryRules);

@@ -7,11 +7,11 @@ public class RoutingEndpointOptions
   class ResolverMap
   {
     public Type Type { get; set; }
-    public Func<IRouteModel, RouteEndpoint> Impl { get; set; }
+    public Func<IRouteModel, IRouteEndpoint> Impl { get; set; }
   }
 
 
-  public void Add<T>(Func<T, RouteEndpoint> resolver) where T : class, IRouteModel
+  public void Add<T>(Func<T, IRouteEndpoint> resolver) where T : class, IRouteModel
   {
     Resolvers.Add(new()
     {
@@ -20,7 +20,7 @@ public class RoutingEndpointOptions
     });
   }
 
-  public void Replace<T>(Func<T, RouteEndpoint> resolver) where T : class, IRouteModel
+  public void Replace<T>(Func<T, IRouteEndpoint> resolver) where T : class, IRouteModel
   {
     Remove<T>();
     Add(resolver);
@@ -32,17 +32,17 @@ public class RoutingEndpointOptions
     Resolvers.RemoveWhere(x => x.Type == type);
   }
 
-  public Func<IRouteModel, RouteEndpoint> Get<T>() where T : IRouteModel => Get(typeof(T));
+  public Func<IRouteModel, IRouteEndpoint> Get<T>() where T : IRouteModel => Get(typeof(T));
 
-  public IEnumerable<Func<IRouteModel, RouteEndpoint>> GetAll<T>() where T : IRouteModel => GetAll(typeof(T));
+  public IEnumerable<Func<IRouteModel, IRouteEndpoint>> GetAll<T>() where T : IRouteModel => GetAll(typeof(T));
 
-  public Func<IRouteModel, RouteEndpoint> Get(Type type)
+  public Func<IRouteModel, IRouteEndpoint> Get(Type type)
   {
     ResolverMap map = Resolvers.LastOrDefault(x => x.Type == type);
     return map?.Impl;
   }
 
-  public IEnumerable<Func<IRouteModel, RouteEndpoint>> GetAll(Type type)
+  public IEnumerable<Func<IRouteModel, IRouteEndpoint>> GetAll(Type type)
   {
     IEnumerable<ResolverMap> maps = Resolvers.Where(x => x.Type == type);
     return maps.Select(map => map.Impl).Where(x => x != null);

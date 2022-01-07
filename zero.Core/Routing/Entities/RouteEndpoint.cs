@@ -1,23 +1,47 @@
-﻿namespace zero.Routing;
+﻿using Microsoft.AspNetCore.Routing;
 
-public class RouteEndpoint
+namespace zero.Routing;
+
+public class ControllerRouteEndpoint : IRouteEndpoint
 {
-  public RouteEndpoint(string controller, string action = "Index")
+  public string Controller { get; set; }
+
+  public string Action { get; set; }
+
+  public ControllerRouteEndpoint(string controller, string action = "Index")
   {
-    Type = RouteEndpointType.Controller;
     Controller = controller;
     Action = action;
   }
 
-  public RouteEndpointType Type { get; set; }
-
-  public string Controller { get; set; }
-
-  public string Action { get; set; }
+  public virtual void Apply(RouteValueDictionary values)
+  {
+    values["controller"] = Controller;
+    values["action"] = Action;
+  }
 }
 
 
-public enum RouteEndpointType
+public class PageRouteEndpoint : IRouteEndpoint
 {
-  Controller = 0
+  public string Page { get; set; }
+
+  public PageRouteEndpoint(string page)
+  {
+    Page = page;
+  }
+
+  public virtual void Apply(RouteValueDictionary values)
+  {
+    values["page"] = Page;
+  }
+}
+
+
+public interface IRouteEndpoint
+{
+  /// <summary>
+  /// Append values to the RouteValueDictionary
+  /// </summary>
+  void Apply(RouteValueDictionary values);
 }

@@ -22,7 +22,7 @@ public class RouteResolver : Routes, IRouteResolver
   /// <inheritdoc />
   public async Task<IRouteModel> ResolveUrl(HttpContext context, Application application, string path)
   {
-    IZeroDocumentSession session = Store.Session();
+    IZeroDocumentSession session = Store.Session(application.Database);
 
     path = path.Length > 1 ? path.TrimEnd(PATH_SEPERATOR) : path;
 
@@ -98,7 +98,7 @@ public class RouteResolver : Routes, IRouteResolver
       return null;
     }
 
-    Application app = await AppResolver.ResolveFromRequest(context);
+    Application app = await AppResolver.Resolve(context, Context.BackofficeUser);
     string path = context.Request.Path;
 
     if (app == null)
@@ -111,7 +111,7 @@ public class RouteResolver : Routes, IRouteResolver
 
 
   /// <inheritdoc />
-  public RouteEndpoint MapEndpoint(IRouteModel route)
+  public IRouteEndpoint MapEndpoint(IRouteModel route)
   {
     if (TryGetProvider(route.Route.ProviderAlias, out IRouteProvider provider))
     {
@@ -152,5 +152,5 @@ public interface IRouteResolver
   /// <summary>
   /// Get endpoint the route maps to
   /// </summary>
-  RouteEndpoint MapEndpoint(IRouteModel route);
+  IRouteEndpoint MapEndpoint(IRouteModel route);
 }

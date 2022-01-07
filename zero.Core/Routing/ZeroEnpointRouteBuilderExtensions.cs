@@ -23,7 +23,8 @@ public static class ZeroEndpointRouteBuilderExtensions
 
   public static IZeroEndpointRouteBuilder MapZeroRoutes(this IZeroEndpointRouteBuilder endpoints)
   {
-    endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("/{**url}", state: null, order: 10);
+    endpoints.MapDynamicControllerRoute<ZeroRoutesTransformer>("/{**url}", state: ZeroRoutesTransformerType.Controller, order: 10);
+    endpoints.MapDynamicPageRoute<ZeroRoutesTransformer>("/{**url}", state: ZeroRoutesTransformerType.Page, order: 11);
     return endpoints;
   }
 }
