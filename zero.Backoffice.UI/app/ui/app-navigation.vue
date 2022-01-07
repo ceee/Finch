@@ -30,8 +30,9 @@
         </ui-link>
         <transition name="app-nav-children">
           <div class="app-nav-children" v-if="hasChildren(section) && $route.path.indexOf('/' + section.alias) === 0">
-            <ui-link v-for="child in section.children" v-bind:key="child.alias" :to="child.url" class="app-nav-child">
+            <ui-link v-for="child in section.children" v-bind:key="child.alias" :alias="child.alias" :to="child.url" class="app-nav-child">
               <span class="app-nav-child-text" v-localize="child.name"></span>
+              <span class="app-nav-child-count" v-if="child.count > 0">{{child.count}}</span>
             </ui-link>
           </div>
         </transition>
@@ -453,6 +454,25 @@
       margin-top: -3px;
       top: 50%;
     }
+  }
+
+  .app-nav-child-count
+  {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: var(--color-bg-shade-3);
+    color: var(--color-text);
+    height: 20px;
+    line-height: 20px;
+    padding: 0 8px;
+    border-radius: 16px;
+    letter-spacing: 0.5px;
+    font-style: normal;
+    margin-left: 10px;
+    position: relative;
+    top: 1px;
   }
 
 

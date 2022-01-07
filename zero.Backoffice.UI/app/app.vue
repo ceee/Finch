@@ -55,6 +55,8 @@
 
       await useTranslationStore().setup();
 
+      this.zero.runPlugins();
+
       this.initialized = true;
     },
 

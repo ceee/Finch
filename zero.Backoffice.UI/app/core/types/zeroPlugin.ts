@@ -8,6 +8,7 @@ export interface ZeroPlugin
 {
   name: string;
   install: (zero: ZeroPluginOptions) => void;
+  run?: (zero: Zero) => void;
 }
 
 //export class Zero

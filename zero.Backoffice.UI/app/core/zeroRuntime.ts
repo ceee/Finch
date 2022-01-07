@@ -28,6 +28,13 @@ import { ZeroSchemaProp } from './zero';
 import * as zeroOptions from '../options';
 import plugins from '../plugins.generated';
 
+plugins.push(
+  countryPlugin, applicationPlugin, settingsPlugin, languagePlugin,
+  mediaPlugin, spacePlugin, pagePlugin, mailTemplatePlugin,
+  translationPlugin, integrationPlugin, userPlugin
+);
+
+
 export class ZeroRuntime implements Zero
 {
   _app: App;
@@ -100,24 +107,22 @@ export class ZeroRuntime implements Zero
       }
     } as ZeroPluginOptions;
 
-
     // install all plugins
-    editorPlugin.install(pluginOptions);
-    countryPlugin.install(pluginOptions);
-    applicationPlugin.install(pluginOptions);
-    settingsPlugin.install(pluginOptions);
-    languagePlugin.install(pluginOptions);
-    mediaPlugin.install(pluginOptions);
-    spacePlugin.install(pluginOptions);
-    pagePlugin.install(pluginOptions);
-    mailTemplatePlugin.install(pluginOptions);
-    translationPlugin.install(pluginOptions);
-    integrationPlugin.install(pluginOptions);
-    userPlugin.install(pluginOptions);
-
     plugins.forEach(plugin =>
     {
       plugin.install(pluginOptions);
+    });
+  }
+
+
+  runPlugins()
+  {
+    plugins.forEach(plugin =>
+    {
+      if (typeof plugin.run === 'function')
+      {
+        plugin.run(this);
+      }
     });
   }
 

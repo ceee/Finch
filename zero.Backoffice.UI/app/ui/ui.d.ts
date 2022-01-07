@@ -24,6 +24,7 @@ declare module 'zero/ui'
     icon: string;
     url: string;
     isExternal: boolean;
+    count: number;
     children: UiSection[];
   }
 
