@@ -14,14 +14,18 @@ public class ZeroApplicationBuilder : IZeroApplicationBuilder
     App = app;
     App.UseStaticFiles();
     //App.UseExceptionHandler("/zero/api/error");
-
-    // TODO 
-    // UseRouting() + UseMiddleware() works for Backoffice (Frontend can't resolve route as context not available yet)
-    // UseMiddleware() + UseRouting() works for Frontend (Backoffice can't resolve context and falls back to the shared context...)
     App.UseMiddleware<ZeroContextMiddleware>();
     App.UseRouting();
     App.UseAuthentication();
     App.UseAuthorization();
+
+    ZeroBuilder.Modules.Configure(app, null, app.ApplicationServices);
+
+    foreach (IZeroPlugin plugin in ZeroBuilder.Plugins)
+    {
+      plugin.Configure(app, null, app.ApplicationServices);
+    }
+
 
     //ZeroModuleInitializer.ConfigureAll(app.ApplicationServices.GetRequiredService<IZeroOptions>());
   }
@@ -50,16 +54,4 @@ public interface IZeroApplicationBuilder
   void WithEndpoints(Action<IZeroEndpointRouteBuilder> endpoints);
 
   IZeroApplicationBuilder WithMiddleware(Action<IApplicationBuilder> configure);
-}
-
-
-public class ZeroApplicationBuilderContext
-{
-
-}
-
-
-public class ZeroEndpointBuilderContext
-{
-
 }

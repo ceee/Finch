@@ -13,10 +13,12 @@ public class ZeroBuilder
 
   public virtual IMvcBuilder Mvc { get; }
 
-  protected ZeroModuleCollection Modules { get; } = new();
+  internal static ZeroModuleCollection Modules { get; private set; } = new();
 
   readonly IConfiguration Configuration;
   readonly IZeroStartupOptions StartupOptions;
+
+  internal static HashSet<IZeroPlugin> Plugins { get; private set; } = new();
 
 
   public ZeroBuilder(IServiceCollection services, IConfiguration configuration, Action<IZeroStartupOptions> setupAction)
@@ -76,17 +78,11 @@ public class ZeroBuilder
   /// </summary>
   public ZeroBuilder AddPlugin<T>() where T : class, IZeroPlugin, new()
   {
-    ZeroPluginInitializer.AddPlugin<T>(Services, Configuration);
-    return this;
-  }
-
-
-  /// <summary>
-  /// Adds a zero plugin
-  /// </summary>
-  public ZeroBuilder AddPlugin<T>(Func<IServiceProvider, T> implementationFactory) where T : class, IZeroPlugin, new()
-  {
-    ZeroPluginInitializer.AddPlugin<T>(Services, Configuration, implementationFactory);
+    T plugin = new T();
+    plugin.ConfigureServices(Services, Configuration);
+    AssemblyDiscovery.Current.AddAssembly(typeof(T).Assembly);
+    Services.AddSingleton<IZeroPlugin, T>();
+    Plugins.Add(plugin);
     return this;
   }
 }

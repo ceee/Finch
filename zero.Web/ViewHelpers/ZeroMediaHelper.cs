@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using zero.Extensions;
+using zero.Media;
 using zero.Persistence;
 
 namespace zero.Web.ViewHelpers;
@@ -13,6 +14,8 @@ public class ZeroMediaHelper : IZeroMediaHelper
 
   public IZeroMediaHelper Core { get; private set; }
 
+  protected IMediaManagement MediaManagement { get; private set; }
+
   protected bool Global { get; set; }
 
   /// <summary>
@@ -21,13 +24,14 @@ public class ZeroMediaHelper : IZeroMediaHelper
   ConcurrentDictionary<string, Media.Media> Cache { get; set; } = new();
 
 
-  public ZeroMediaHelper(IZeroStore store, bool global = false)
+  public ZeroMediaHelper(IZeroStore store, IMediaManagement mediaManagement, bool global = false)
   {
     Store = store;
+    MediaManagement = mediaManagement;
 
     if (!global)
     {
-      Core = new ZeroMediaHelper(store, true);
+      Core = new ZeroMediaHelper(store, MediaManagement, true);
     }
   }
 
@@ -87,15 +91,44 @@ public class ZeroMediaHelper : IZeroMediaHelper
   public async Task<string> GetUrl(string id, bool isAbsolute = false)
   {
     Media.Media media = await GetById(id);
-    return media?.Path.TrimStart("url://");
+
+    if (media == null)
+    {
+      return null;
+    }
+
+    if (media.Path.StartsWith("url://"))
+    {
+      return media.Path.TrimStart("url://");
+    }
+
+    return MediaManagement.GetPublicFilePath(media);
   }
 
 
   /// <inheritdoc />
   public async Task<Dictionary<string, string>> GetUrls(string[] ids, bool isAbsolute = false)
   {
+    Dictionary<string, string> result = new();
     Dictionary<string, Media.Media> medias = await GetByIds(ids);
-    return medias.ToDictionary(x => x.Key, x => x.Value?.Path.TrimStart("url://"));
+
+    foreach ((string id, Media.Media media) in medias)
+    {
+      if (media == null)
+      {
+        result.Add(id, null);
+      }
+      else if (media.Path.StartsWith("url://"))
+      {
+        result.Add(id, media.Path.TrimStart("url://"));
+      }
+      else
+      {
+        result.Add(id, MediaManagement.GetPublicFilePath(media));
+      }
+    }
+
+    return result;
   }
 }
 
