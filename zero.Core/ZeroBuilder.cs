@@ -56,11 +56,6 @@ public class ZeroBuilder
 
     Modules.ConfigureServices(services, configuration);
 
-    //if (Environment.GetEnvironmentVariable("DOTNET_WATCH") == "1")
-    //{
-    //  Mvc.AddRazorRuntimeCompilation();
-    //} 
-
     // configure FluentValidation
     ValidatorOptions.Global.PropertyNameResolver = ValidatorCamelCasePropertyResolver.ResolvePropertyName;
   }
