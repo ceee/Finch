@@ -120,7 +120,7 @@ public class MailProvider : IMailProvider
 
     if (viewPath.IsNullOrEmpty())
     {
-      viewPath = $"~/Views/Mails/{message.Template.Key.Replace('.', '/')}.cshtml";
+      viewPath = Zero.Options.For<MailOptions>().BuildViewPath(message);
     }
 
     message.Body = await Renderer.ViewAsync(viewPath, message);
