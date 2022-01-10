@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Encodings.Web;
 
@@ -18,6 +19,8 @@ namespace zero.Rendering;
 public class RazorRenderer : IRazorRenderer, IDisposable
 {
   protected IRazorViewEngine ViewEngine { get; set; }
+
+  protected IRazorPageActivator PageActivator { get; set; }
 
   protected ITempDataDictionaryFactory TempDataDictionaryFactory { get; set; }
 
@@ -30,10 +33,11 @@ public class RazorRenderer : IRazorRenderer, IDisposable
   protected HtmlHelperOptions HtmlHelperOptions { get; set; }
 
 
-  public RazorRenderer(IRazorViewEngine viewEngine, IHttpContextAccessor httpContextAccessor, ITempDataDictionaryFactory tempDataDictionaryFactory, 
+  public RazorRenderer(IRazorViewEngine viewEngine, IRazorPageActivator pageActivator, IHttpContextAccessor httpContextAccessor, ITempDataDictionaryFactory tempDataDictionaryFactory, 
     IModelMetadataProvider modelMetadataProvider, IServiceProvider serviceProvider, IOptions<MvcViewOptions> mvcHelperOptions)
   {
     ViewEngine = viewEngine;
+    PageActivator = pageActivator;
     HttpContextAccessor = httpContextAccessor;
     TempDataDictionaryFactory = tempDataDictionaryFactory;
     ModelMetadataProvider = modelMetadataProvider;
@@ -114,6 +118,43 @@ public class RazorRenderer : IRazorRenderer, IDisposable
 
     result.WriteTo(stringWriter, HtmlEncoder.Default);
     await stringWriter.FlushAsync();
+    return stringWriter.ToString();
+  }
+
+
+  /// <summary>
+  /// Renders a razor page to a string
+  /// </summary>
+  public async Task<string> PageAsync(string view, object model = null)
+  {
+    return await PageAsync(BuildActionContext(), view, model);
+  }
+
+
+  /// <summary>
+  /// Renders a razor page to a string
+  /// </summary>
+  public async Task<string> PageAsync(ActionContext context, string page, object model = null)
+  {
+    IRazorPage pageResult = FindPage(context, page);
+
+    using StringWriter stringWriter = new();
+
+    RazorView view = new RazorView(ViewEngine, PageActivator, new List<IRazorPage>(), pageResult, HtmlEncoder.Default, new DiagnosticListener("ViewRenderService"));
+
+    ViewContext viewContext = BuildViewContext(context, stringWriter, view);
+    viewContext.RouteData = context.RouteData;
+    viewContext.ViewData.Model = model;
+
+    Microsoft.AspNetCore.Mvc.RazorPages.Page razorPage = (Microsoft.AspNetCore.Mvc.RazorPages.Page)pageResult;
+    razorPage.PageContext = new Microsoft.AspNetCore.Mvc.RazorPages.PageContext(viewContext);
+    razorPage.ViewContext = viewContext;
+
+    PageActivator.Activate(razorPage, viewContext);
+
+    await razorPage.ExecuteAsync();
+    await stringWriter.FlushAsync();
+
     return stringWriter.ToString();
   }
 
@@ -216,6 +257,30 @@ public class RazorRenderer : IRazorRenderer, IDisposable
   }
 
 
+  /// <summary>
+  /// Tries to find a page
+  /// </summary>
+  protected virtual IRazorPage FindPage(ActionContext actionContext, string pageName)
+  {
+    RazorPageResult getPageResult = ViewEngine.GetPage(executingFilePath: null, pagePath: pageName);
+    if (getPageResult.Page != null)
+    {
+      return getPageResult.Page;
+    }
+
+    RazorPageResult findPageResult = ViewEngine.FindPage(actionContext, pageName: pageName);
+    if (findPageResult.Page != null)
+    {
+      return findPageResult.Page;
+    }
+
+    IEnumerable<string> searchedLocations = getPageResult.SearchedLocations.Concat(findPageResult.SearchedLocations);
+    string errorMessage = String.Join(Environment.NewLine, new[] { $"Unable to find page '{pageName}'. The following locations were searched:" }.Concat(searchedLocations));
+
+    throw new InvalidOperationException(errorMessage);
+  }
+
+
   class GenericController : ControllerBase { }
 
 
@@ -270,6 +335,16 @@ public interface IRazorRenderer
   /// Renders a razor component to a string
   /// </summary>
   Task<string> ComponentAsync(string componentName, ActionContext context, object args = null);
+
+  /// <summary>
+  /// Renders a razor page to a string
+  /// </summary>
+  Task<string> PageAsync(string view, object model = null);
+
+  /// <summary>
+  /// Renders a razor page to a string
+  /// </summary>
+  Task<string> PageAsync(ActionContext context, string page, object model = null);
 
   /// <summary>
   /// Renders a razor view to a string

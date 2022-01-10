@@ -79,5 +79,11 @@ declare module 'zero/schemas'
      * @param {T} [options] = Custom options to pass to this editor
      */
     component(component: Component, options?: any): ZeroEditorField;
+
+    /**
+     * The expression argument is called when the value of the field changes
+     * @param {function} callback - function which is called
+     */
+    onChange(callback: Function): ZeroEditorField;
   }
 }

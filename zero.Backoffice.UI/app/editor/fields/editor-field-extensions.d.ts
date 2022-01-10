@@ -75,8 +75,23 @@ declare module 'zero/schemas'
      * @param {NestedFieldOptions} options - Custom options
      */
     nested(options: NestedFieldOptions): ZeroEditorField;
+
+    /**
+    * Create a date picker
+    * @param {DatePickerFieldOptions} options - Custom options
+    */
+    datePicker(options?: DatePickerFieldOptions): ZeroEditorField;
   }
 
+
+  export interface DatePickerFieldOptions
+  {
+    format?: string;
+    pickTime?: boolean;
+    maxDate?: string | Date;
+    minDate?: string | Date;
+    amPm?: boolean;
+  }
 
   export interface ToggleFieldOptions
   {

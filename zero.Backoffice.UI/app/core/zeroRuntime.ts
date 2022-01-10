@@ -29,7 +29,7 @@ import * as zeroOptions from '../options';
 import plugins from '../plugins.generated';
 
 plugins.push(
-  countryPlugin, applicationPlugin, settingsPlugin, languagePlugin,
+  editorPlugin, countryPlugin, applicationPlugin, settingsPlugin, languagePlugin,
   mediaPlugin, spacePlugin, pagePlugin, mailTemplatePlugin,
   translationPlugin, integrationPlugin, userPlugin
 );

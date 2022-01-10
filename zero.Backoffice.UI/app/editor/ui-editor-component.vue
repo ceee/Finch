@@ -151,15 +151,12 @@
 
         this.$emit('input', this.value);
 
-        // TODO
-        //if (typeof this.field.configuration.onChange === 'function')
-        //{
-        //  this.field.configuration.onChange(value, {
-        //    oldValue,
-        //    model: this.value,
-        //    component: this
-        //  });
-        //}
+        this.field.onChange({
+          value: value,
+          model: this.value,
+          oldValue,
+          component: this
+        })
       },
 
 

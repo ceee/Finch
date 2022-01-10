@@ -5,7 +5,6 @@
     </span>
     <span class="ui-select-button-icon is-image" v-if="isImage">
       <ui-thumbnail :media="source" :alt="icon" />
-      <img :src="source" :alt="icon" />
     </span>
     <div class="ui-select-button-content" v-if="label || description">
       <strong class="ui-select-button-label" v-localize:html="{ key: label, tokens: tokens }"></strong>

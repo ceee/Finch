@@ -3,7 +3,7 @@
     <ui-trinity class="ui-editor-overlay">
 
       <template v-slot:header>
-        <ui-header-bar :title="model.title" :back-button="false" :close-button="true" />
+        <ui-header-bar :title="model.title" :back-button="false" :close-button="true" @close="config.close(true)" />
       </template>
 
       <template v-slot:footer>

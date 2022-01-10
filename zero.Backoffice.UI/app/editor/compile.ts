@@ -38,6 +38,15 @@ export interface ZeroCompiledEditorFieldset
 }
 
 
+export interface ZeroCompiledEditorChangeEvent
+{
+  value: any;
+  oldValue: any;
+  model: any;
+  component: Component;
+}
+
+
 export interface ZeroCompiledEditorField
 {
   path: string;
@@ -58,6 +67,7 @@ export interface ZeroCompiledEditorField
   sort: number;
   columns: number;
   preview?: ZeroEditorFieldFilterPreview;
+  onChange: (event: ZeroCompiledEditorChangeEvent) => void;
 }
 
 
@@ -128,7 +138,15 @@ export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorFi
       icon: field.configuration.preview.icon || 'fth-square',
       selected: field.configuration.preview.selected || (x => !!x),
       value: field.configuration.preview.value || (x => x ? x : null)
-    } : null
+    } : null,
+
+    onChange(event: ZeroCompiledEditorChangeEvent)
+    {
+      (field.configuration.changeHandlers || []).forEach(handler =>
+      {
+        handler(event);
+      });
+    }
 
   } as ZeroCompiledEditorField;
 

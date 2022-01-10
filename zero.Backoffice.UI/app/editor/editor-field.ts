@@ -96,6 +96,17 @@ export class ZeroEditorFieldImpl implements ZeroEditorField
     this.options = options;
     return this;
   }
+
+
+  /**
+   * The expression argument is called when the value of the field changes
+   * @param {function} callback - function which is called
+   */
+  onChange(callback: Function): ZeroEditorField
+  {
+    this.configuration.changeHandlers.push(callback);
+    return this;
+  }
 }
 
 
@@ -113,7 +124,8 @@ export function createDefaultFieldConfiguration(): ZeroEditorFieldConfiguration
     classes: null,
     horizontal: false,
     sort: 0,
-    preview: undefined
+    preview: undefined,
+    changeHandlers: []
   } as ZeroEditorFieldConfiguration;
 }
 
@@ -163,7 +175,11 @@ export interface ZeroEditorFieldConfiguration
   /**
    * Sort order for fields within the editor canvas
    **/
-  preview?: ZeroEditorFieldFilterPreview
+  preview?: ZeroEditorFieldFilterPreview,
+  /**
+   * Handlers which get called on value change
+   **/
+  changeHandlers?: Array<Function>
 }
 
 

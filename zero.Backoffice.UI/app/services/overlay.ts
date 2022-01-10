@@ -71,7 +71,7 @@ export function confirmDelete(title?: string, text?: string, warningText?: strin
 }
 
 
-export function confirm(title: string, text?: string)
+export function confirm(title: string, text?: string, softdismiss?: boolean)
 {
   return open({
     alias: 'confirm',
@@ -80,10 +80,10 @@ export function confirm(title: string, text?: string)
       text,
       confirmLabel: '@ui.confirm',
       confirmType: 'default',
-      closeLabel: '@ui.close',
+      closeLabel: '@ui.cancel',
     },
     autoclose: false,
-    softdismiss: true,
+    softdismiss: typeof softdismiss !== 'undefined' ? softdismiss : true,
     component: () => import('../ui/overlays/confirm.vue')
   });
 }
@@ -101,6 +101,24 @@ export function message(title: string, text?: string)
     softdismiss: true,
     component: () => import('../ui/overlays/message.vue')
   });
+}
+
+
+export function editor(editorAlias: string, model: any, title?: string, options?: OverlayOptions)
+{
+  return open(extendObject({
+    alias: 'editor',
+    display: 'editor',
+    model: {
+      editor: editorAlias,
+      value: model,
+      title: title || '@ui.edit.title',
+    },
+    autoclose: false,
+    softdismiss: false,
+    component: () => import('../editor/ui-editor-overlay.vue'),
+    width: 820
+  }, options || {}));
 }
 
 
