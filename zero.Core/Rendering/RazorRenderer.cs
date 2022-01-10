@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -125,29 +126,20 @@ public class RazorRenderer : IRazorRenderer, IDisposable
   /// <summary>
   /// Renders a razor page to a string
   /// </summary>
-  public async Task<string> PageAsync(string view, object model = null)
+  public async Task<string> PageAsync<T>(T model) where T : PageModel
   {
-    return await PageAsync(BuildActionContext(), view, model);
-  }
-
-
-  /// <summary>
-  /// Renders a razor page to a string
-  /// </summary>
-  public async Task<string> PageAsync(ActionContext context, string page, object model = null)
-  {
-    IRazorPage pageResult = FindPage(context, page);
+    IRazorPage pageResult = FindPage(model.PageContext, model.PageContext.ActionDescriptor.RelativePath);
 
     using StringWriter stringWriter = new();
 
     RazorView view = new RazorView(ViewEngine, PageActivator, new List<IRazorPage>(), pageResult, HtmlEncoder.Default, new DiagnosticListener("ViewRenderService"));
 
-    ViewContext viewContext = BuildViewContext(context, stringWriter, view);
-    viewContext.RouteData = context.RouteData;
-    viewContext.ViewData.Model = model;
+    ViewContext viewContext = BuildViewContext(model.PageContext, stringWriter, view);
+    viewContext.RouteData = model.RouteData;
+    viewContext.ViewData = model.ViewData;
 
     Microsoft.AspNetCore.Mvc.RazorPages.Page razorPage = (Microsoft.AspNetCore.Mvc.RazorPages.Page)pageResult;
-    razorPage.PageContext = new Microsoft.AspNetCore.Mvc.RazorPages.PageContext(viewContext);
+    razorPage.PageContext = model.PageContext;
     razorPage.ViewContext = viewContext;
 
     PageActivator.Activate(razorPage, viewContext);
@@ -339,12 +331,7 @@ public interface IRazorRenderer
   /// <summary>
   /// Renders a razor page to a string
   /// </summary>
-  Task<string> PageAsync(string view, object model = null);
-
-  /// <summary>
-  /// Renders a razor page to a string
-  /// </summary>
-  Task<string> PageAsync(ActionContext context, string page, object model = null);
+  Task<string> PageAsync<T>(T model) where T : PageModel;
 
   /// <summary>
   /// Renders a razor view to a string
