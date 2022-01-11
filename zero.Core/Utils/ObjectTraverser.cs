@@ -220,7 +220,7 @@ public class ObjectTraverser
     }
 
     // check if our property is a primitive type
-    if (value == null || value.GetType().IsPrimitive || value is string || value is DateTime || value is DateTimeOffset || value is Uri)
+    if (value == null || value.GetType().IsPrimitive || value is string || value is DateTime || value is DateTimeOffset || value is Uri || value is System.Text.Json.JsonElement)
     {
       return;
     }

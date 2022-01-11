@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-native-select" :disabled="disabled">
-    <select :value="modelValue" @input="onChange" :disabled="disabled">
+    <select :value="value" @input="onChange" :disabled="disabled">
       <option v-if="emptyOption"></option>
       <option v-for="option in options" :value="option.key" v-localize="option.value"></option>
     </select>
@@ -13,7 +13,7 @@
     name: 'uiSelect',
 
     props: {
-      modelValue: [String, Number, Object],
+      value: [String, Number, Object],
       items: [Array, Function],
       entity: Object,
       disabled: Boolean,
@@ -38,7 +38,7 @@
         handler()
         {
           this.rebuild();
-          this.onChange({ target: { value: this.modelValue } });
+          this.onChange({ target: { value: this.value } });
         }
       },
       entity: {
@@ -46,7 +46,7 @@
         handler()
         {
           this.rebuild();
-          this.onChange({ target: { value: this.modelValue } });
+          this.onChange({ target: { value: this.value } });
         }
       }
     },
@@ -70,7 +70,8 @@
 
       onChange(ev)
       {
-        this.$emit('update:modelValue', ev.target.value ? ev.target.value : null);
+        this.$emit('update:value', ev.target.value ? ev.target.value : null);
+        this.$emit('input', ev.target.value ? ev.target.value : null);
       }
     }
   }
