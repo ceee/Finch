@@ -60,10 +60,17 @@
 
       const classes = computed(() => ({
         'is-active': isActive.value || currentRoute.path.startsWith(route.value.path),
-        'is-active-exact': isExactActive.value || currentRoute.path === route.value.path,
+        'is-active-exact': isExactActive.value || currentRoute.path === route.value.path
       }));
 
       return { attrs, isExternalLink, href, navigate, classes, disabled };
     },
   })
 </script>
+
+<style lang="scss">
+  .ui-link[aria-disabled]
+  {
+    pointer-events: none;
+  }
+</style>

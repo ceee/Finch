@@ -17,13 +17,13 @@
       <ui-dropdown-button v-for="app in appStore.applications" :value="app" :key="app.id" :label="app.name" :selected="app.id === appId" @click="applicationChanged" :prevent="true" />
       <ui-dropdown-separator />
       <!--<ui-dropdown-button label="Add new application" icon="fth-plus" @click="addApplication" />-->
-      <ui-dropdown-button label="Manage apps" icon="fth-edit-2" @click="manageApplications" />
+      <ui-dropdown-button :disabled="true" label="Manage apps" icon="fth-edit-2" @click="manageApplications" />
     </ui-dropdown>
     <div v-else class="app-nav-switch is-fake"></div>
 
     <nav class="app-nav-inner">
       <template v-for="section in ui.sections">
-        <ui-link :to="section.url" class="app-nav-item" :alias="section.alias" :class="{ 'has-children': hasChildren(section) }">
+        <ui-link :to="section.url" :disabled="sectionDisabled(section)" class="app-nav-item" :alias="section.alias" :class="{ 'has-children': hasChildren(section) }">
           <ui-icon :symbol="section.icon" class="app-nav-item-icon" :size="18" />
           <span class="app-nav-item-text" v-localize="section.name"></span>
           <ui-icon v-if="hasChildren(section)" symbol="fth-chevron-down" class="app-nav-item-arrow" />
@@ -49,8 +49,8 @@
           <ui-icon symbol="fth-more-horizontal" class="-arrow" />
         </button>
       </template>
-      <ui-dropdown-button label="Edit" icon="fth-edit-2" @click="editUser" />
-      <ui-dropdown-button label="Change password" icon="fth-lock" @click="changePassword" />
+      <ui-dropdown-button :disabled="true" label="Edit" icon="fth-edit-2" @click="editUser" />
+      <ui-dropdown-button :disabled="true" label="Change password" icon="fth-lock" @click="changePassword" />
       <!--<ui-dropdown-button label="Toggle sidebar" icon="fth-minimize-2" @click="toggleSidebar" />-->
       <ui-dropdown-button label="Dark theme" v-if="ui.preferences.theme !== 'dark'" icon="fth-moon" @click="ui.setTheme('dark')" />
       <ui-dropdown-button label="Light theme" v-else icon="fth-sun" @click="ui.setTheme('light')" />
@@ -110,6 +110,11 @@
         return section.children && section.children.length > 0;
       },
 
+      sectionDisabled(section)
+      {
+        return section.alias == 'pages' || section.alias == 'spaces';
+      },
+
       editUser(item, opts)
       {
         opts.hide();
@@ -152,11 +157,11 @@
       {
         //opts.loading(true);
 
-        AuthApi.switchApp(item.id).then(success =>
-        {
-          //opts.loading(false);
-          //opts.hide();
-        });
+        //AuthApi.switchApp(item.id).then(success =>
+        //{
+        //  //opts.loading(false);
+        //  //opts.hide();
+        //});
       },
 
       toggleSidebar()
@@ -346,6 +351,11 @@
     & + .app-nav-item
     {
       margin-top: 1px;
+    }
+
+    &[aria-disabled]
+    {
+      opacity: .7;
     }
 
     &:hover

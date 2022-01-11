@@ -18,7 +18,7 @@ export function getRouterConfig(basePath: string, zero: Zero): RouterOptions
     routes: []
   } as RouterOptions;
 
-  options.routes.push({ name: 'dashboard', path: '/', redirect: { name: 'pages' } });
+  options.routes.push({ name: 'dashboard', path: '/', component: () => import('../../dashboard.vue') });
   options.routes.push({ name: '404', path: '/:pathMatch(.*)', component: () => import('../../notfound.vue') });
 
   return options;

@@ -10,18 +10,18 @@ export default {
 
     //app.schema('spaces:default', () => import('./schemas/list-default'));
 
-    app.route({
-      name: 'pages',
-      path: '/pages',
-      component: () => import('./pages.vue'),
-      children: [
-        {
-          name: 'pages-edit',
-          path: 'edit/:id?',
-          props: true,
-          component: () => import('./page.vue')
-        }
-      ]
-    });
+    //app.route({
+    //  name: 'pages',
+    //  path: '/pages',
+    //  component: () => import('./pages.vue'),
+    //  children: [
+    //    {
+    //      name: 'pages-edit',
+    //      path: 'edit/:id?',
+    //      props: true,
+    //      component: () => import('./page.vue')
+    //    }
+    //  ]
+    //});
   }
 } as ZeroPlugin;

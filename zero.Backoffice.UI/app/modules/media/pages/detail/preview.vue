@@ -141,28 +141,28 @@
     width: 16px;
     height: 16px;
     z-index: 2;
-    mix-blend-mode: soft-light;
-    //opacity: 0.15;
+    //mix-blend-mode: soft-light;
+    opacity: 0.7;
 
-    /*.-dot
+    .-dot
     {
       display: block;
       width: 100%;
       height: 100%;
       border-radius: 20px;
       background: white;
-      border: 1px solid #222;
-      box-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+      border: 1px solid #333;
       position: relative;
       z-index: 1;
-    }*/
+    }
 
     &:before, &:after
     {
       content: '';
       position: absolute;
       background: black;
-      mix-blend-mode: soft-light;
+      opacity: 0.4;
+      //mix-blend-mode: soft-light;
     }
 
     &:before
