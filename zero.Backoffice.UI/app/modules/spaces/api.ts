@@ -8,22 +8,13 @@ export default {
 
   getByAlias: (alias: string, query?: ApiRequestQuery, config?: ApiRequestConfig) => get('spaces/' + alias, { ...config, params: { ...(query || {}) }}),
 
-  getEmpty: (alias: string, config?: ApiRequestConfig) => get("spaces/empty", { ...config, params: { alias } }),
+  getEmpty: (alias: string, config?: ApiRequestConfig) => get("spaces/" + alias + "/empty", { ...config }),
 
+  getById: (alias: string, id: string, config?: ApiRequestConfig) => get("spaces/" + alias + "/" + id, { ...config }),
 
-  //getByAlias: async alias => await get(base + 'getByAlias', { params: { alias } }),
+  create: (model: any, config?: ApiRequestConfig) => post('spaces', model, config),
 
-  //getAll: async () => await get(base + 'getAll'),
+  update: (model: any, config?: ApiRequestConfig) => put('spaces/' + model.id, model, config),
 
-  //getList: async (alias, query) =>
-  //{
-  //  query.alias = alias;
-  //  return await get(base + 'getList', { params: query })
-  //},
-
-  //getContent: async (alias, contentId) => await get(base + 'getContent', { params: { alias, contentId } }),
-
-  //save: async model => await post(base + 'save', model),
-
-  //delete: async (alias, id) => await del(base + 'delete', { params: { alias, id } })
+  delete: (id: string, config?: ApiRequestConfig) => del('spaces/' + id, null, config),
 };

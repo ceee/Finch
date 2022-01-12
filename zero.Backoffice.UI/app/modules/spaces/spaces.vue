@@ -120,11 +120,11 @@
 
           this.space = this.spaces.find(space => space.alias === this.$route.params.alias);
 
-          if (this.space.view === 1 || this.$route.params.id || this.$route.meta.create)
+          if (this.space.view === 'editor' || this.$route.params.id || this.$route.meta.create)
           {
             this.component = EditorComponent;
           }
-          else if (this.space.view === 0)
+          else if (this.space.view === 'list')
           {
             this.component = ListComponent;
           }

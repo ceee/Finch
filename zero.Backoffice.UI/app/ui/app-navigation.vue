@@ -112,7 +112,8 @@
 
       sectionDisabled(section)
       {
-        return section.alias == 'pages' || section.alias == 'spaces';
+        return false;
+        //return section.alias == 'pages' || section.alias == 'spaces';
       },
 
       editUser(item, opts)

@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-form ref="form" class="space-editor" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model="model" :title="space.name" :title-disabled="space.view === 'editor'" :disabled="disabled" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" :active-toggle="true" />
+    <ui-form-header v-model="model" :title="space.name" :title-disabled="space.view === 'editor'" :disabled="disabled" :is-create="isCreate" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete" :active-toggle="true" />
     <ui-editor v-if="editor" :config="editor" v-model="model" :meta="meta" :disabled="disabled" :active-toggle="false">
       <template v-slot:below>
         <ui-editor-infos v-model="model" :disabled="disabled" />
@@ -38,6 +38,10 @@
       isList()
       {
         return !!this.id;
+      },
+      isCreate()
+      {
+        return this.id === 'create';
       }
     },
 
@@ -49,33 +53,38 @@
 
       async setup()
       {
-        this.editor = await this.zero.getSchema('spaces.' + this.space.alias);
+        let alias = this.space.editorAlias || (this.space.alias + ':edit');
+        alias = alias.indexOf('spaces:') === 0 ? alias : 'spaces:' + alias;
+        this.editor = await this.zero.getSchema(alias);
       },
+
 
       async onLoad(form)
       {
         await this.setup();
 
-        const repsonse = await form.load(api.getContent(this.alias, this.id));
-
-        this.disabled = !response.meta.canEdit;
-        this.meta = response.meta;
-        this.model = response.entity;
-        this.route = { name: 'space-item', params: { alias: this.alias } };
+        var config = { system: this.$route.query['zero.scope'] == 'system' };
+        const response = await form.load(() => !this.isCreate ? api.getById(this.alias, this.id, undefined, config) : api.getEmpty(this.alias, config));
+        this.model = response;
+        //this.route = { name: 'spaces-edit', params: { alias: this.alias } };
       },
 
 
-      onSubmit(form)
+      async onSubmit(form)
       {
-        form.handle(api.save(this.model));
+        var config = { system: this.$route.query['zero.scope'] == 'system' };
+        const response = !this.isCreate ? await api.update(this.model, config) : await api.create(this.model, config);
+        await form.handle(response);
       },
 
 
       onDelete(item, opts)
       {
         opts.hide();
-        this.$refs.form.onDelete(api.delete.bind(this, this.alias, this.id));
-      }  
+        var config = { system: this.$route.query['zero.scope'] == 'system' };
+        this.$refs.form.onDelete(api.delete.bind(this, this.id, config));
+      }
+
     }
   })
 </script>

@@ -23,8 +23,8 @@
       loading: true,
       listRenderer: null,
       createRoute: {
-        name: 'space-create',
-        params: { alias: null }
+        name: 'spaces-edit',
+        params: { alias: null, id: 'create' }
       }
     }),
 
@@ -44,7 +44,7 @@
       {
         this.loading = true;
 
-        const alias = 'spaces.' + this.space.alias;
+        let alias = this.space.alias.indexOf('spaces:') === 0 ? this.space.alias : 'spaces:' + this.space.alias;
         const listRenderer = await this.zero.getSchema(alias) || await this.zero.getSchema('spaces:default');
 
         this.createRoute.params.alias = this.space.alias;

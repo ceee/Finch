@@ -10,24 +10,24 @@ export default {
 
     app.schema('spaces:default', () => import('./schemas/list-default'));
 
-    //app.route({
-    //  name: 'spaces',
-    //  path: '/spaces',
-    //  component: () => import('./spaces.vue'),
-    //  children: [
-    //    {
-    //      name: 'spaces-edit',
-    //      path: ':alias/edit/:id?',
-    //      props: true,
-    //      component: () => import('./spaces.vue')
-    //    },
-    //    {
-    //      name: 'spaces-view',
-    //      path: ':alias',
-    //      props: true,
-    //      component: () => import('./spaces.vue')
-    //    }
-    //  ]
-    //});
+    app.route({
+      name: 'spaces',
+      path: '/spaces',
+      component: () => import('./spaces.vue'),
+      children: [
+        {
+          name: 'spaces-edit',
+          path: ':alias/edit/:id?',
+          props: true,
+          component: () => import('./spaces.vue')
+        },
+        {
+          name: 'spaces-view',
+          path: ':alias',
+          props: true,
+          component: () => import('./spaces.vue')
+        }
+      ]
+    });
   }
 } as ZeroPlugin;

@@ -48,30 +48,25 @@ public class SpacesController : ZeroApiEntityStoreController<Space, ISpaceStore>
 
   [HttpGet("{alias}/empty")]
   [ZeroAuthorize(SpacePermissions.Create)]
-  public virtual async Task<ActionResult<Space>> Empty(string alias) => await Store.Empty(alias);
+  public virtual Task<ActionResult<Space>> Empty(string alias) => EmptyModel(alias);
 
 
-  //[HttpGet("{alias}/{id}")]
-  //[ZeroAuthorize(SpacePermissions.Read)]
-  //public virtual Task<ActionResult<LanguageEdit>> Get(string alias, string id, string changeVector = null) => GetModel<LanguageEdit>(id, changeVector);
+  [HttpGet("{alias}/{id}")]
+  [ZeroAuthorize(SpacePermissions.Read)]
+  public virtual Task<ActionResult<Space>> Get(string alias, string id, string changeVector = null) => GetModel(id, changeVector);
 
 
-  //[HttpGet("")]
-  //[ZeroAuthorize(SpacePermissions.Read)]
-  //public virtual Task<ActionResult<Paged>> Get([FromQuery] ListQuery<Language> query) => GetModels<LanguageBasic, zero_Api_Languages_Listing>(query);
+  [HttpPost("")]
+  [ZeroAuthorize(SpacePermissions.Create)]
+  public virtual Task<ActionResult<Result>> Create([FromBody] Space saveModel) => CreateModel(saveModel);
 
 
-  //[HttpPost("")]
-  //[ZeroAuthorize(SpacePermissions.Create)]
-  //public virtual Task<ActionResult<Result>> Create(LanguageSave saveModel) => CreateModel<LanguageSave, LanguageEdit>(saveModel);
+  [HttpPut("{id}")]
+  [ZeroAuthorize(SpacePermissions.Update)]
+  public virtual Task<ActionResult<Result>> Update(string id, [FromBody] Space updateModel, [FromQuery] string changeToken = null) => UpdateModel(id, updateModel, changeToken);
 
 
-  //[HttpPut("{id}")]
-  //[ZeroAuthorize(SpacePermissions.Update)]
-  //public virtual Task<ActionResult<Result>> Update(string id, LanguageSave updateModel, [FromQuery] string changeToken = null) => UpdateModel<LanguageSave, LanguageEdit>(id, updateModel, changeToken);
-
-
-  //[HttpDelete("{id}")]
-  //[ZeroAuthorize(SpacePermissions.Delete)]
-  //public virtual Task<ActionResult<Result>> Delete(string id) => DeleteModel(id);
+  [HttpDelete("{id}")]
+  [ZeroAuthorize(SpacePermissions.Delete)]
+  public virtual Task<ActionResult<Result>> Delete(string id) => DeleteModel(id);
 }
