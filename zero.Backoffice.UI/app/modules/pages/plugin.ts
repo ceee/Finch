@@ -9,6 +9,9 @@ export default {
     //app.vue.component('ui-countrypicker', defineAsyncComponent(() => import('./ui-countrypicker.vue')));
 
     //app.schema('spaces:default', () => import('./schemas/list-default'));
+    app.schema('pages:zero.folder', () => import('./schemas/folder-editor'));
+
+    app.linkArea('zero.pages', '@zero.config.linkareas.pages', () => import('./partials/linkpicker.vue'));
 
     app.route({
       name: 'pages',
@@ -29,5 +32,7 @@ export default {
         },
       ]
     });
+
+    app.link
   }
 } as ZeroPlugin;

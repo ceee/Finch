@@ -17,4 +17,5 @@ export default function createFields(app: ZeroPluginOptions): void
   app.fieldType('inputlist', defineAsyncComponent(() => import('./inputlist.vue')));
   app.fieldType('nested', defineAsyncComponent(() => import('./nested.vue')));
   app.fieldType('datePicker', defineAsyncComponent(() => import('./datePicker.vue')));
+  app.fieldType('iconPicker', defineAsyncComponent(() => import('./iconPicker.vue')));
 }

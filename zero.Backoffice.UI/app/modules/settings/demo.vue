@@ -25,6 +25,7 @@
         productId1: null,
         productId2: [],
         productId3: null,
+        link: null
       },
       route: 'demo',
       disabled: false

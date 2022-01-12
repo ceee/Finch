@@ -12,7 +12,7 @@ public class Link
 
   public string Title { get; set; }
 
-  public Dictionary<string, object> Values { get; set; } = new();
+  public Dictionary<string, string> Values { get; set; } = new();
 
   /// <summary>
   /// [Warning] This field is always empty when bound to the database.

@@ -41,7 +41,7 @@ public class PageLinkProvider : ILinkProvider
   /// <inheritdoc />
   public async Task<string> Resolve(Link link)
   {
-    link.Url = await Routes.GetUrl<Page>(link.Values.GetValueOrDefault<string>("id")) + (link.UrlSuffix ?? string.Empty);
+    link.Url = await Routes.GetUrl<Page>(link.Values.GetValueOrDefault("id")) + (link.UrlSuffix ?? string.Empty);
     return link.Url;
   }
 
@@ -49,7 +49,7 @@ public class PageLinkProvider : ILinkProvider
   /// <inheritdoc />
   public async Task<LinkPreview> Preview(IAsyncDocumentSession session, Link link)
   {
-    string id = link.Values.GetValueOrDefault<string>("id");
+    string id = link.Values.GetValueOrDefault("id");
 
     if (id.IsNullOrEmpty())
     {

@@ -25,6 +25,16 @@ export interface Zero
    * get a defined list or editor schema
    **/
   getSchema(alias: string): Promise<ZeroSchema | null>;
+
+  /**
+   * get all defined link areas
+   **/
+  linkAreas: ZeroLinkArea[];
+
+  /**
+   * get a defined link area by alias
+   **/
+  getLinkArea(alias: string): ZeroLinkArea | undefined;
 }
 
 export interface ZeroOptions
@@ -36,4 +46,11 @@ export interface ZeroPathOptions
 {
   root: string;
   api: string;
+}
+
+export interface ZeroLinkArea
+{
+  alias: string;
+  name: string;
+  component: Component;
 }

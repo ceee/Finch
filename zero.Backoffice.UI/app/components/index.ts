@@ -41,6 +41,7 @@ import uiFormHeader from './ui-form-header.vue';
 import uiLink from './ui-link.vue';
 import uiInputList from './ui-input-list.vue';
 import uiTags from './ui-tags.vue';
+import uiIconpicker from './ui-iconpicker.vue';
 
 export {
   uiIcon,
@@ -85,5 +86,6 @@ export {
   uiFormHeader,
   uiLink,
   uiInputList,
-  uiTags
+  uiTags,
+  uiIconpicker
 };

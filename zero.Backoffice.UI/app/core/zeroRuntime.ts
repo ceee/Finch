@@ -2,7 +2,7 @@
 import { App, Component } from 'vue';
 import { ZeroInstallOptions } from './types/zeroInstallOptions';
 import { ZeroPluginOptions } from './types/zeroPluginOptions';
-import { Zero, ZeroOptions } from './types/zero';
+import { Zero, ZeroLinkArea, ZeroOptions } from './types/zero';
 import { createRouter, RouteRecordRaw, RouterOptions } from 'vue-router';
 import registerDirectives from '../directives/register';
 import registerComponents from '../components/register';
@@ -20,7 +20,8 @@ import
   mailTemplatePlugin,
   translationPlugin,
   integrationPlugin,
-  userPlugin
+  userPlugin,
+  linksPlugin
 } from '../modules';
 import editorPlugin from '../editor/plugin';
 import { ZeroSchema } from 'zero/schemas';
@@ -33,7 +34,7 @@ import { Emitter, EventType } from 'mitt';
 plugins.push(
   editorPlugin, countryPlugin, applicationPlugin, settingsPlugin, languagePlugin,
   mediaPlugin, spacePlugin, pagePlugin, mailTemplatePlugin,
-  translationPlugin, integrationPlugin, userPlugin
+  translationPlugin, integrationPlugin, userPlugin, linksPlugin
 );
 
 
@@ -44,6 +45,7 @@ export class ZeroRuntime implements Zero
   _routerConfig: RouterOptions;
   _schemas: Record<string, ZeroSchemaProp> = {};
   _fieldTypes: Record<string, Component> = {};
+  _linkAreas: Record<string, ZeroLinkArea> = {};
 
   /**
    * version of zero backoffice
@@ -103,6 +105,7 @@ export class ZeroRuntime implements Zero
       routes: this._routerConfig.routes,
       schemas: this._schemas,
       fieldTypes: this._fieldTypes,
+      linkAreas: this._linkAreas,
       route(route: RouteRecordRaw)
       {
         this.routes.push(route);
@@ -111,9 +114,13 @@ export class ZeroRuntime implements Zero
       {
         this.schemas[alias] = schema;
       },
-      fieldType(alias: string, component: Component)
+      fieldType(alias: string, component: Component) // TODO v3 allow default field options
       {
         this.fieldTypes[alias] = component;
+      },
+      linkArea(alias: string, name: string, component: Component)
+      {
+        this.linkAreas[alias] = { alias, name, component };
       }
     } as ZeroPluginOptions;
 
@@ -177,5 +184,23 @@ export class ZeroRuntime implements Zero
     }
 
     return Promise.resolve(schema);
+  }
+
+
+  /**
+   * get all defined link areas
+   **/
+  get linkAreas(): ZeroLinkArea[]
+  {
+    return Object.values(this._linkAreas);
+  }
+
+
+  /**
+   * get a defined link area by alias
+   **/
+  getLinkArea(alias: string): ZeroLinkArea | undefined
+  {
+    return this._linkAreas[alias];
   }
 }

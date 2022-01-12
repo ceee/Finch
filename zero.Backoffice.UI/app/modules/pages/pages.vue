@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="page-container">
     <page-tree :id="$route.params.id" />
-    <router-view v-if="!isOverview"></router-view>
+    <router-view v-if="!isOverview" />
     <overview-actions v-if="isOverview" @create="create" />
   </div>
 </template>

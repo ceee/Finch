@@ -173,6 +173,9 @@
   },
 
   "links": {
+    "overlay": {
+      "title": "Select a link"
+    },
     "providers": {
       "page": "Pages",
       "media": "Media"

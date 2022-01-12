@@ -53,10 +53,16 @@
     }),
 
     watch: {
-      //'$route': function (val)
-      //{
-      //  this.$emit('load', this);
-      //},
+      '$route': {
+        deep: true,
+        handler: function (val)
+        {
+          this.$nextTick(() =>
+          {
+            this.$emit('load', this);
+          });
+        }
+      },
       state(val)
       {
         this.slotProps.state = val;

@@ -4,6 +4,7 @@ import { formatDate } from '../../utils/dates';
 
 const editor = new ZeroEditor('demo');
 
+editor.field('link').linkPicker();
 
 editor.field('productId1').productPicker({ variants: true });
 editor.field('productId2').productPicker({ limit: 5 });

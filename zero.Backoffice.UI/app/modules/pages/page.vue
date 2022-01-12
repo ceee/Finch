@@ -1,4 +1,211 @@
 ﻿<template>
-  page:<br />
-  {{$route.params}}
+  <ui-form ref="form" class="page page-editor" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
+    <ui-form-header v-model:value="model" title="@page.name" :disabled="disabled" :is-create="!id" :state="form.state" :active-toggle="!isFolder" :can-delete="meta.canDelete" @delete="onDelete">
+      <template v-slot:actions>
+        <!--<ui-dropdown-button v-if="!isFolder" label="@page.preview.title" icon="fth-eye" :disabled="disabled" @click="openPreview" />
+      <ui-dropdown-separator v-if="!isFolder" />-->
+        <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(model)" />
+        <ui-dropdown-button label="@ui.copy.title" icon="fth-copy" @click="copy(model)" />
+        <ui-dropdown-separator />
+      </template>
+    </ui-form-header>
+
+    <ui-editor v-if="!loading && editor" :config="editor" v-model="model" :is-page="true" infos="aside" :meta="meta" :disabled="disabled" :scope="true" :on-configure="onEditorConfigure">
+      <template v-slot:below>
+        <ui-editor-infos v-model="model" :disabled="disabled" />
+      </template>
+    </ui-editor>
+
+    <div v-if="isFolder">
+      <!-- // TODO list children -->
+    </div>
+  </ui-form>
 </template>
+
+
+<script lang="ts">
+  import { defineComponent } from 'vue';
+  import api from './api';
+
+  //import PageInfoTab from './page-info.vue';
+  //import Overlay from 'zero/helpers/overlay.js'
+  //import MoveOverlay from './overlays/move.vue'
+  //import CopyOverlay from './overlays/copy.vue'
+  //import Strings from 'zero/helpers/strings.js';
+
+  export default defineComponent({
+
+    name: 'page',
+
+    props: ['id', 'flavor', 'parent'],
+
+    data: () => ({
+      loading: true,
+      disabled: false,
+      editor: null,
+      actions: [],
+      meta: {},
+      pageType: {},
+      route: 'page',
+      model: {
+        id: null,
+        name: null,
+        options: {
+          hideInNavigation: false
+        },
+        link: null
+      },
+      isFolder: false
+    }),
+
+
+    computed: {
+      isCreate()
+      {
+        return this.$route.name === 'page-create';
+      }
+    },
+
+
+    mounted()
+    {
+      this.zero.events.on('page.sort', items =>
+      {
+        let item = items.find(x => x.id === this.id);
+        if (item)
+        {
+          this.model.sort = item.sort;
+        }
+      });
+
+      this.zero.events.on('page.move', item =>
+      {
+        if (item.id === this.id)
+        {
+          this.model.parentId = item.parentId;
+        }
+      });
+
+      this.zero.events.on('page.delete', ids =>
+      {
+        if (ids.indexOf(this.id) > -1)
+        {
+          this.$router.replace({ name: 'pages' });
+        }
+      });
+    },
+
+
+    methods: {
+
+      async onLoad(form)
+      {
+        this.loading = true;
+
+        var config = { system: this.$route.query['zero.scope'] == 'system' };
+        const response = await form.load(() => !this.isCreate ? api.getById(this.id, undefined, config) : api.getEmpty(this.flavor, this.parent, config));
+        this.model = response.page; 
+
+        if (this.model)
+        {
+          this.isFolder = this.model.flavor == 'zero.folder';
+          this.editor = 'pages:' + this.model.flavor;
+        }
+
+        this.loading = false;
+        //  this.disabled = !response.meta.canEdit;
+        //  this.editor = response.entity ? this.zero.getEditor('pages.' + response.entity.pageTypeAlias) : null;
+        //  this.model = response.entity;
+        //  this.meta = response.meta;
+        //  this.loading = false;
+        //});
+      },
+
+
+      onSubmit(form)
+      {
+        form.handle(PagesApi.save(this.model)).then(response =>
+        {
+          if (response.success)
+          {
+            EventHub.$emit('page.update', response.model);
+            this.model = response.model;
+
+            // store last edited page in localstorage
+            localStorage.setItem('zero.last-page.hofbauer' /* // TODO v3 appid + response.model.appId */, response.model.id);
+          }
+        });
+      },
+
+
+      onDelete(item, opts)
+      {
+        opts.hide();
+        this.$refs.form.onDelete(PagesApi.delete.bind(this, this.id));
+      },
+
+
+      onEditorConfigure(editor)
+      {
+        console.info('configure', editor);
+
+        //if (this.isFolder)
+        //{
+        //  return;
+        //}
+
+        //editor.tabs.push({
+        //  alias: 'zero.info',
+        //  name: '@page.info_tab',
+        //  class: 'is-info is-blank',
+        //  count: value => null,
+        //  disabled: value => false,
+        //  component: PageInfoTab,
+        //  fields: []
+        //});
+      }
+    }
+  })
+</script>
+
+<style lang="scss">
+  .page-editor
+  {
+    overflow-y: auto;
+    height: 100%;
+  }
+
+  .page-editor .ui-tab.is-info
+  {
+  }
+
+  .page-editor-info
+  {
+    .editor-infos
+    {
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .page-editor-preview-message
+  {
+    margin: -10px var(--padding) var(--padding);
+    background: var(--color-box-light);
+    color: var(--color-primary);
+    font-size: var(--font-size);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    position: relative;
+    line-height: 20px;
+    text-align: left;
+
+    .-buttons
+    {
+      display: flex;
+    }
+  }
+</style>

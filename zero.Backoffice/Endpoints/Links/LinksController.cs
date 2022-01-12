@@ -15,7 +15,7 @@ public class LinksController : ZeroBackofficeController
 
   [HttpPost("convert")]
   //[ZeroAuthorize(CountryPermissions.Create)]
-  public async Task<IList<LinkPreview>> ConvertToLinks([FromBody] List<Link> links)
+  public async Task<ActionResult<List<LinkPreview>>> ConvertToLinks([FromBody] List<Link> links)
   {
     IZeroDocumentSession session = Store.Session();
     List<LinkPreview> previews = new();

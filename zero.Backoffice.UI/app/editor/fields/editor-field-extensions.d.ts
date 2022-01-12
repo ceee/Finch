@@ -81,8 +81,20 @@ declare module 'zero/schemas'
     * @param {DatePickerFieldOptions} options - Custom options
     */
     datePicker(options?: DatePickerFieldOptions): ZeroEditorField;
+
+    /**
+    * Create an icon picker
+    * @param {DatePickerFieldOptions} options - Custom options
+    */
+    iconPicker(options?: IconPickerFieldOptions): ZeroEditorField;
   }
 
+
+  export interface IconPickerFieldOptions
+  {
+    set?: string;
+    colors?: boolean;
+  }
 
   export interface DatePickerFieldOptions
   {

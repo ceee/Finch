@@ -120,10 +120,10 @@
     i
     {
       display: inline-block;
-      height: 16px;
-      width: 16px;
+      height: 14px;
+      width: 14px;
       border-radius: 20px;
-      margin: 2px;
+      margin: 3px;
       background: var(--color-toggle-fg);
       transition: all 0.2s ease;
     }

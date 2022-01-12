@@ -6,6 +6,10 @@ export default {
     getChildren: (id: string, activeId?: string, search?: string, config?: ApiRequestConfig) => get(`backoffice/pages/${id}/children`, { ...config, params: { activeId, search } }),
   },
 
+  getEmpty: (flavor?: string, parentId?: string, config?: ApiRequestConfig) => get("pages/empty", { ...config, params: { flavor, parentId } }),
+
+  getById: (id: string, changeVector?: string, config?: ApiRequestConfig) => get('pages/' + id, { ...config, params: { changeVector } }),
+
   getChildren: (id: string, query: ApiRequestQuery, config?: ApiRequestConfig) => get(`pages/${id}/children`, { ...config, params: { ...query } }),
 
   getAllowedFlavors: (id: string, config?: ApiRequestConfig) => get(`pages/${id}/flavors`, { ...config }),

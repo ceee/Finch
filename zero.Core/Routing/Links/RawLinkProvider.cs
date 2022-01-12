@@ -32,7 +32,7 @@ public class RawLinkProvider : ILinkProvider
   /// <inheritdoc />
   public Task<string> Resolve(Link link)
   {
-    link.Url = link.Values.GetValueOrDefault<string>("url");
+    link.Url = link.Values.GetValueOrDefault("url");
     return Task.FromResult(link.Url);
   }
 
@@ -40,7 +40,7 @@ public class RawLinkProvider : ILinkProvider
   /// <inheritdoc />
   public Task<LinkPreview> Preview(IAsyncDocumentSession session, Link link)
   {
-    string url = link.Values.GetValueOrDefault<string>("url");
+    string url = link.Values.GetValueOrDefault("url");
 
     if (url.IsNullOrEmpty())
     {
