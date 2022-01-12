@@ -10,11 +10,15 @@ export default {
 
   getById: (id: string, changeVector?: string, config?: ApiRequestConfig) => get('pages/' + id, { ...config, params: { changeVector } }),
 
+  getByQuery: (query: ApiRequestQuery, config?: ApiRequestConfig) => get('pages', { ...config, params: { ...query } }),
+
   getChildren: (id: string, query: ApiRequestQuery, config?: ApiRequestConfig) => get(`pages/${id}/children`, { ...config, params: { ...query } }),
 
   getAllowedFlavors: (id: string, config?: ApiRequestConfig) => get(`pages/${id}/flavors`, { ...config }),
 
   getDependencies: (id: string, config?: ApiRequestConfig) => get(`backoffice/pages/${id}/dependencies`, { ...config }),
+
+  getPreviews: (ids: string[], config?: ApiRequestConfig) => get(`backoffice/pages/previews`, { ...config, params: { ids } }),
 
 
   create: (model: any, config?: ApiRequestConfig) => post('pages', model, config),

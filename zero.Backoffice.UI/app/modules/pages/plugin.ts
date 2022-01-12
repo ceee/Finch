@@ -6,9 +6,6 @@ export default {
 
   install(app: ZeroPluginOptions)
   {
-    //app.vue.component('ui-countrypicker', defineAsyncComponent(() => import('./ui-countrypicker.vue')));
-
-    //app.schema('spaces:default', () => import('./schemas/list-default'));
     app.schema('pages:zero.folder', () => import('./schemas/folder-editor'));
 
     app.linkArea('zero.pages', '@zero.config.linkareas.pages', () => import('./partials/linkpicker.vue'));
@@ -33,6 +30,26 @@ export default {
       ]
     });
 
-    app.link
+    app.vue.component('ui-pagepicker', defineAsyncComponent(() => import('./picker/ui-pagepicker.vue')));
+    app.fieldType('pagePicker', defineAsyncComponent(() => import('./picker/field-pagepicker.vue')));
   }
 } as ZeroPlugin;
+
+
+declare module 'zero/schemas'
+{
+  export interface ZeroEditorField
+  {
+    /**
+     * Renders a page picker
+     * @param {PagePickerFieldOptions} [options] - Custom options
+     */
+    pagePicker(options?: PagePickerFieldOptions): ZeroEditorField;
+  }
+
+  export interface PagePickerFieldOptions extends PickerFieldOptions
+  {
+    rootId?: string | ((model: any) => string);
+    disabledIds?: string[] | ((model: any) => string[]);
+  }
+}

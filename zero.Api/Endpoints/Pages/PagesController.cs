@@ -82,6 +82,15 @@ public class PagesController : ZeroApiTreeEntityStoreController<Page, IPagesStor
     return result;
   }
 
+  [HttpGet("")]
+  [ZeroAuthorize(PagePermissions.Read)]
+  public virtual Task<ActionResult<Paged>> Get([FromQuery] ListQuery<Page> query)
+  {
+    query.SearchFor(x => x.Name);
+    query.OrderQuery = q => q.OrderByDescending(x => x.Sort).ThenByDescending(x => x.CreatedDate);
+    return GetModelsByIndex<zero_Api_Pages_Listing>(query);
+  }
+
   [HttpPost("")]
   [ZeroAuthorize(PagePermissions.Create)]
   public virtual Task<ActionResult<Result>> Create(Page saveModel) => CreateModel(saveModel);

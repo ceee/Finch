@@ -131,7 +131,7 @@
       const schema = typeof this.config === 'string' ? await this.zero.getSchema(this.config) : this.config;
       this.editorConfig = compileEditor(this.zero, schema);
 
-      this.onConfigure(this);
+      this.onConfigure(this.editorConfig, this);
 
       this.loaded = true;
     },

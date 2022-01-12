@@ -8,12 +8,16 @@ public class PagesController : ZeroBackofficeController
 {
   readonly IPagesStore Store;
   readonly IPageTreeService PageTreeService;
+  readonly IPageTypeService PageTypeService;
+  readonly IRoutes Routes;
 
 
-  public PagesController(IPagesStore store, IPageTreeService pageTreeService)
+  public PagesController(IPagesStore store, IPageTreeService pageTreeService, IPageTypeService pageTypeService, IRoutes routes)
   {
     Store = store;
     PageTreeService = pageTreeService;
+    PageTypeService = pageTypeService;
+    Routes = routes;
   }
 
 
@@ -36,5 +40,46 @@ public class PagesController : ZeroBackofficeController
     {
       pages = descendantCount + 1
     };
+  }
+
+
+  [HttpGet("previews")]
+  public async Task<ActionResult<List<LinkPreview>>> GetPreviews([FromQuery] List<string> ids)
+  {
+    IEnumerable<FlavorConfig> pageTypes = PageTypeService.GetAll();
+    Dictionary<string, Page> pages = await Store.Load(ids.ToArray());
+    Dictionary<Page, Route> routes = await Routes.GetRoutes(pages.Where(x => x.Value != null).Select(x => x.Value).ToArray());
+
+    List<LinkPreview> previews = new();
+
+    foreach ((string id, Page page) in pages)
+    {
+      if (page != null)
+      {
+        routes.TryGetValue(page, out Route route);
+        FlavorConfig pageType = PageTypeService.GetByAlias(page.Flavor);
+
+        previews.Add(new()
+        {
+          Name = page.Name,
+          Text = route?.Url.Or("@page.picker.urlnotfound"),
+          Id = page.Id,
+          Icon = pageType?.Icon.Or("fth-folder")
+        });
+      }
+      else
+      {
+        previews.Add(new()
+        {
+          HasError = true,
+          Icon = "fth-alert-circle color-red",
+          Id = "tmp_" + IdGenerator.Create(),
+          Name = "@errors.preview.notfound",
+          Text = "@errors.preview.notfound_text"
+        });
+      }
+    }
+
+    return previews;
   }
 }

@@ -524,7 +524,8 @@
     },
 
     "picker": {
-      "headline": "Select a page"
+      "headline": "Select a page",
+      "urlnotfound": "URL not found"
     },
 
     "infotab": {

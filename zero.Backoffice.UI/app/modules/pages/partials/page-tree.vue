@@ -91,6 +91,7 @@
         if (item.id === 'recyclebin')
         {
           item.hasActions = false;
+          item.disabled = true;
           //item.url = {
           //  name: 'recyclebin'
           //};

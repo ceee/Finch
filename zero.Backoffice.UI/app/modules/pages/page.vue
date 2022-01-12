@@ -26,12 +26,8 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import api from './api';
-
-  //import PageInfoTab from './page-info.vue';
-  //import Overlay from 'zero/helpers/overlay.js'
-  //import MoveOverlay from './overlays/move.vue'
-  //import CopyOverlay from './overlays/copy.vue'
-  //import Strings from 'zero/helpers/strings.js';
+  import actions from './actions';
+  import PageInfoTab from './partials/page-info.vue';
 
   export default defineComponent({
 
@@ -144,22 +140,42 @@
       },
 
 
+      async move(item)
+      {
+        await actions.move(item);
+      },
+
+
+      async copy(item)
+      {
+        await actions.copy(item);
+      },
+
+
+      async remove(item)
+      {
+        await actions.remove(item);
+      },
+
+
       onEditorConfigure(editor)
       {
-        //if (this.isFolder)
-        //{
-        //  return;
-        //}
+        if (this.isFolder)
+        {
+          return;
+        }
 
-        //editor.tabs.push({
-        //  alias: 'zero.info',
-        //  name: '@page.info_tab',
-        //  class: 'is-info is-blank',
-        //  count: value => null,
-        //  disabled: value => false,
-        //  component: PageInfoTab,
-        //  fields: []
-        //});
+        editor.tabs.push({
+          alias: 'zero.info',
+          name: '@page.info_tab',
+          class: 'is-info is-blank',
+          sort: 99999,
+          fieldsets: [],
+          hidden: _ => false,
+          count: _ => null,
+          disabled: _ => false,
+          component: PageInfoTab
+        });
       }
     }
   })

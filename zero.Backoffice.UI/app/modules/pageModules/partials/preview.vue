@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-module-item" v-if="!loading" :data-module="alias" :class="{'can-edit': canEdit, 'no-preview': !preview }">
     <div class="ui-module-item-content" v-if="module" @click="emit('edit')">
-      <span v-if="!preview || !preview.hideLabel" class="ui-module-item-header" v-localize="module.name"><ui-icon :symbol="module.icon" /> <span v-localize="module.name"></span></span>
+      <span v-if="!preview || !preview.hideLabel" class="ui-module-item-header"><ui-icon :symbol="module.icon" /> <span v-localize="module.name"></span></span>
       <module-preview-inner v-if="tryRender && typeof preview.template === 'string'" :template="preview.template" :value="value" :options="preview" />
       <div v-if="tryRender && typeof preview.template !== 'string'" class="ui-module-preview-inner">
         <component :is="preview.template" :model="value" :options="preview" />
