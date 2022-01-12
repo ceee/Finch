@@ -1,12 +1,12 @@
 ﻿<template>
-  <ui-modules :value="[]" />
+  <ui-modules :value="value" @input="$emit('input', $event)" />
 </template>
 
 
 <script>
   export default {
     props: {
-      value: Object,
+      value: Array,
       config: Object,
       limit: {
         type: Number,

@@ -82,20 +82,34 @@
       },
 
 
-      selectModule()
+      async selectModule()
       {
-        overlays.open({
+        const result = await overlays.open({
           alias: 'modules-select',
-          component: ModuleSelectOverlay,
-          types: this.moduleTypes,
-          width: null
-        }).then(module => this.onAdd(module), () => { });
+          component: () => import('./overlays/select.vue'),
+          model: {
+            types: this.moduleTypes
+          },
+          width: 800
+        });
+
+        if (result.eventType == 'confirm')
+        {
+          this.onAdd(result.value);
+        }
       },
 
 
-      onAdd(module)
+      async onAdd(module)
       {
-        this.edit(module, null, true);
+        const response = await api.getEmpty(module.alias);
+
+        if (!response.success)
+        {
+          // TODO error
+        }
+
+        this.edit(module, response.data, true);
       },
 
 
@@ -108,10 +122,9 @@
       },
 
 
-      edit(module, model, isAdd)
+      async edit(module, model, isAdd)
       {
-        const alias = 'module.' + module.alias;
-        const editor = this.zero.getEditor(alias);
+        const editor = 'modules:' + module.alias;
 
         if (!editor)
         {
@@ -119,36 +132,33 @@
         }
 
         // some modules can have no fields for editing, so we add them directly
-        if (!editor.fields || editor.fields.length < 1)
-        {
-          return api.getEmpty(module.alias).then(res =>
-          {
-            this.items.push(res.entity);
-            this.onChange();
-          });
-        }
+        //if (!editor.fields || editor.fields.length < 1) // TODO
+        //{
+        //  return api.getEmpty(module.alias).then(res =>
+        //  {
+        //    this.items.push(res.entity);
+        //    this.onChange();
+        //  });
+        //}
 
         // open editing overlay
-        return overlays.open({
-          component: EditModuleOverlay,
-          display: 'editor',
-          module: module,
-          editor: editor,
-          model: model,
-          width: 820
-        }).then(value =>
+        const result = await overlays.editor(editor, model, module.name);
+
+        result.close();
+
+        if (result.eventType == 'confirm')
         {
           if (isAdd)
           {
-            this.items.push(value);
+            this.items.push(result.value);
           }
           else
           {
-            arrayReplace(this.items, model, value);
+            arrayReplace(this.items, model, result.value);
           }
 
           this.onChange();
-        });
+        }
       },
 
 

@@ -470,7 +470,8 @@
       "text": "Compose the page by adding modules"
     },
     "default_group": "Default",
-    "notfound": "Could not find a registered module <code>[{alias}]</code> in the code."
+    "notfound": "Could not find a registered module <code>[{alias}]</code> in the code.",
+    "noneavailable": "There are no modules available"
   },
 
   "page": {

@@ -13,9 +13,9 @@
           </span>
         </button>
       </div>
-      <ui-message type="error" v-if="!types.length" text="@page.create.nonavailable" />
+      <ui-message type="error" v-if="!types.length" text="@modules.noneavailable" />
       <div class="app-confirm-buttons">
-        <ui-button type="light" :label="config.closeLabel" @click="config.close"></ui-button>
+        <ui-button type="light" label="@ui.close" @click="config.close"></ui-button>
       </div>
     </div>
   </div>
@@ -23,8 +23,6 @@
 
 
 <script>
-  import ModulesApi from 'zero/api/modules.js';
-  import Overlay from 'zero/helpers/overlay.js';
   export default {
     props: {
       config: Object
@@ -42,8 +40,8 @@
     }),
     created()
     {
-      this.types = this.config.types;
-      this.model.parentId = this.config.parent ? this.config.parent.id : null;
+      this.types = this.config.model.types;
+      this.model.parentId = this.config.model.parent ? this.config.model.parent.id : null;
     },
     methods: {
       onSelect(item)
@@ -64,8 +62,7 @@
   {
     width: calc(100vw - 40px);
     max-width: 1080px;
-    height: calc(100vh - 40px);
-    max-height: 750px;
+    max-height: min(750px, calc(100vh - 40px));
   }
 
   .ui-modules-select
@@ -98,7 +95,7 @@
   .ui-modules-select-items
   {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 240px));
     grid-gap: var(--padding-m);
     margin: 0 -16px;
     padding: 0 16px;

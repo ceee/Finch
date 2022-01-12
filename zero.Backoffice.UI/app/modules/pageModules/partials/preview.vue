@@ -1,14 +1,14 @@
 ﻿<template>
-  <div class="ui-module-item" v-if="!loading" :data-module="alias" :class="{'can-edit': canEdit }">
+  <div class="ui-module-item" v-if="!loading" :data-module="alias" :class="{'can-edit': canEdit, 'no-preview': !preview }">
     <div class="ui-module-item-content" v-if="module" @click="emit('edit')">
-      <span v-if="!preview || !preview.hideLabel" class="ui-module-item-header" v-localize="module.name"></span>
+      <span v-if="!preview || !preview.hideLabel" class="ui-module-item-header" v-localize="module.name"><ui-icon :symbol="module.icon" /> <span v-localize="module.name"></span></span>
       <module-preview-inner v-if="tryRender && typeof preview.template === 'string'" :template="preview.template" :value="value" :options="preview" />
       <div v-if="tryRender && typeof preview.template !== 'string'" class="ui-module-preview-inner">
         <component :is="preview.template" :model="value" :options="preview" />
       </div>
     </div>
     <div class="ui-module-item-content" v-else>
-      <span class="ui-module-item-header is-error"><i class="fth-alert-circle"></i> {{alias}}</span>
+      <span class="ui-module-item-header is-error"><ui-icon symbol="fth-alert-circle" /> {{alias}}</span>
       <p class="ui-module-item-error" v-localize:html="{ key: '@modules.notfound', tokens: { alias: alias } }"></p>
     </div>
 
@@ -89,7 +89,7 @@
       },
       canEdit()
       {
-        return this.module && this.renderer && this.renderer.fields && this.renderer.fields.length > 0;
+        return true; //this.module && this.renderer && this.renderer.fields && this.renderer.fields.length > 0;
       }
     },
 
@@ -180,17 +180,22 @@
     line-height: 1.5;
     width: 100%;
 
-    i
+    .ui-icon
     {
       font-size: var(--font-size-l);
       margin-right: 10px;
-      position: relative;
-      top: -1px;
     }
 
     &.is-error
     {
       color: var(--color-accent-error);
+    }
+
+    .no-preview &
+    {
+      color: var(--color-text);
+      font-size: var(--font-size);
+      font-weight: 700;
     }
   }
 

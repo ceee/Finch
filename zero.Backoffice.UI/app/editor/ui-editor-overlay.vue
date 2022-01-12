@@ -50,7 +50,10 @@
           //parentModel: this.config.parentModel
         };
         this.entity = JSON.parse(JSON.stringify(this.model.value));
-        this.loading = false;
+        setTimeout(() =>
+        {
+          this.loading = false;
+        }, 500);
       },
 
 

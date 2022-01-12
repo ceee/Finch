@@ -14,6 +14,8 @@ internal class ZeroPageModule : ZeroModule
     services.AddOptions<PageOptions>().Bind(configuration.GetSection("Zero:Pages"));
     services.AddOptions<PageModuleOptions>().Bind(configuration.GetSection("Zero:PageModules"));
 
+    services.ConfigureOptions<ConfigureModuleTypeJsonOptions>();
+
     services.Configure<RavenOptions>(opts =>
     {
       opts.Indexes.Add<zero_Pages_AsHistory>();
