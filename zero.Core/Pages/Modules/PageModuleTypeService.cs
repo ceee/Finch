@@ -24,6 +24,29 @@ public class PageModuleTypeService : IPageModuleTypeService
 
 
   /// <inheritdoc />
+  public T GetEmpty<T>(string alias) where T : PageModule
+  {
+    PageModuleType type = GetModuleType(alias);
+    T module = type?.Construct(type) as T;
+
+    if (module == null)
+    {
+      return default;
+    }
+
+    module.ModuleTypeAlias = type.Alias;
+    module.Id = IdGenerator.Create(8);
+    module.IsActive = true;
+
+    return module;
+  }
+
+
+  /// <inheritdoc />
+  public PageModule GetEmpty(string alias) => GetEmpty<PageModule>(alias);
+
+
+  /// <inheritdoc />
   public async Task<IList<PageModuleType>> GetModuleTypes(string[] tags = default, string pageId = default)
   {
     List<PageModuleType> modules = Options;
@@ -61,6 +84,16 @@ public class PageModuleTypeService : IPageModuleTypeService
 
 public interface IPageModuleTypeService
 {
+  /// <summary>
+  /// Get a new instance of a page module of the specified type
+  /// </summary>
+  T GetEmpty<T>(string alias) where T : PageModule;
+
+  /// <summary>
+  /// Get a new instance of a page module of the specified type
+  /// </summary>
+  PageModule GetEmpty(string alias);
+
   /// <summary>
   /// Get all available module types (can be limited to the passed tags)
   /// </summary>

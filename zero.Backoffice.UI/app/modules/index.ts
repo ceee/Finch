@@ -11,3 +11,4 @@ export * from './translations';
 export * from './integrations';
 export * from './users';
 export * from './links';
+export * from './pageModules';

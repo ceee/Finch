@@ -147,8 +147,6 @@
 
       onEditorConfigure(editor)
       {
-        console.info('configure', editor);
-
         //if (this.isFolder)
         //{
         //  return;
