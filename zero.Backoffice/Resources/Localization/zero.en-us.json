@@ -179,6 +179,13 @@
     }
   },
 
+  "flavors": {
+    "default": {
+      "name": "Default",
+      "text": "Create the default entity"
+    }
+  },
+
   "errors": {
     "idnotfound": "Could not find an entity for the given ID",
     "childnotallowed": "Not allowed as a child entity",
@@ -194,6 +201,15 @@
     "onupdate": {
       "noidmatch": "The Id as part of the URL does not match the Id of the model",
       "changetokenmismatch": "The change token is not valid anymore"
+    },
+    "onmove": {
+      "title": "Could not move entity"
+    },
+    "oncopy": {
+      "title": "Could not copy entity"
+    },
+    "onsort": {
+      "title": "Could not sort entities"
     },
     "http": {
       "403": "Unauthorized",
@@ -510,6 +526,13 @@
     "infotab": {
       "links": "Link",
       "revisions": "Revisions"
+    },
+
+    "deleteoverlay": {
+      "title": "Delete page",
+      "text": "This will delete the page as well as all its descendants.<br>Are you sure?",
+      "warning": "You are about to delete <b>{pages}</b> page(s).",
+      "success_text": "You have successfully deleted this page"
     }
   },
 

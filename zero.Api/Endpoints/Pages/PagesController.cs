@@ -41,6 +41,11 @@ public class PagesController : ZeroApiTreeEntityStoreController<Page, IPagesStor
   }
 
 
+  [HttpGet("{id}/flavors")]
+  [ZeroAuthorize(PagePermissions.Read)]
+  public async Task<ActionResult<IEnumerable<FlavorConfig>>> GetAllowedFlavors(string id) => Ok(await PageTypeService.GetAllowedTypes(NormalizeParentId(id)));
+
+
   [HttpGet("{id}")]
   [ZeroAuthorize(PagePermissions.Read)]
   public virtual async Task<ActionResult<PageEdit>> Get(string id, string changeVector = null)
@@ -75,22 +80,41 @@ public class PagesController : ZeroApiTreeEntityStoreController<Page, IPagesStor
     Paged<Page> result = await Store.LoadChildren<zero_Api_Pages_Listing>(id, query.Page, query.PageSize, q => q.Filter(query));
 
     return result;
-    //Paged<PageBasic> mappedResult = Mapper.Map<Page, PageBasic>(result);
-    //return mappedResult;
+  }
+
+  [HttpPost("")]
+  [ZeroAuthorize(PagePermissions.Create)]
+  public virtual Task<ActionResult<Result>> Create(Page saveModel) => CreateModel(saveModel);
+
+
+  [HttpPut("{id}")]
+  [ZeroAuthorize(PagePermissions.Update)]
+  public virtual Task<ActionResult<Result>> Update(string id, Page updateModel, [FromQuery] string changeToken = null) => UpdateModel(id, updateModel, changeToken);
+
+
+  [HttpDelete("{id}")]
+  [ZeroAuthorize(PagePermissions.Delete)]
+  public virtual Task<ActionResult<Result>> Delete(string id) => DeleteModelWithDescendants(id);
+
+
+  [HttpPut("{id}/move/{destinationId}")]
+  [ZeroAuthorize(PagePermissions.Update)]
+  public virtual Task<ActionResult<Result>> Move(string id, string destinationId) => MoveModel(id, NormalizeParentId(destinationId));
+
+
+  [HttpPut("{id}/copy/{destinationId}")]
+  [ZeroAuthorize(PagePermissions.Update)]
+  public virtual Task<ActionResult<Result>> Move(string id, string destinationId, [FromQuery] bool includeDescendents = false)
+  {
+    destinationId = NormalizeParentId(destinationId);
+
+    return includeDescendents ?
+      CopyModelWithDescendants(id, destinationId)
+      : CopyModel(id, destinationId);
   }
 
 
-  //[HttpPost("")]
-  //[ZeroAuthorize(PagePermissions.Create)]
-  //public virtual Task<ActionResult<Result>> Create(MailSave saveModel) => CreateModel<MailSave, MailEdit>(saveModel);
-
-
-  //[HttpPut("{id}")]
-  //[ZeroAuthorize(PagePermissions.Update)]
-  //public virtual Task<ActionResult<Result>> Update(string id, MailSave updateModel, [FromQuery] string changeToken = null) => UpdateModel<MailSave, MailEdit>(id, updateModel, changeToken);
-
-
-  //[HttpDelete("{id}")]
-  //[ZeroAuthorize(PagePermissions.Delete)]
-  //public virtual Task<ActionResult<Result>> Delete(string id) => DeleteModel(id);
+  [HttpPut("sort")]
+  [ZeroAuthorize(PagePermissions.Update)]
+  public virtual Task<ActionResult<Result>> Sort([FromBody] string[] ids) => SortModels(ids);
 }

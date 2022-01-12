@@ -8,7 +8,7 @@ public class zero_Pages_ByType : ZeroIndex<Page>
   {
     Map = items => items.Select(item => new
     {
-      PageTypeAlias = item.Flavor
+      Flavor = item.Flavor
     });
 
     Index(x => x.Flavor, FieldIndexing.Exact);

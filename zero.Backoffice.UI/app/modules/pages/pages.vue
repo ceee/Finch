@@ -1,6 +1,8 @@
 ﻿<template>
   <div class="page-container">
     <page-tree :id="$route.params.id" />
+    <router-view v-if="!isOverview"></router-view>
+    <overview-actions v-if="isOverview" @create="create" />
   </div>
 </template>
 
@@ -8,12 +10,41 @@
   import api from './api';
   import { defineComponent } from 'vue';
   import PageTree from './partials/page-tree.vue';
+  import OverviewActions from './partials/overview-actions.vue';
+  import actions from './actions';
 
   export default defineComponent({
 
     props: [ 'id' ],
 
-    components: { PageTree },
+    components: { PageTree, OverviewActions },
+
+    data: () => ({
+      cache: []
+    }),
+
+    computed: {
+      isOverview()
+      {
+        return !this.$route.params.id && !this.$route.params.flavor && this.$route.name !== 'recyclebin';
+      }
+    },
+
+
+    mounted()
+    {
+      
+    },
+
+
+    methods: {
+
+      async create(parent)
+      {
+        await actions.create(this.$router, parent);
+      }
+
+    }
 
   });
 </script>

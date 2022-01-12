@@ -95,38 +95,13 @@
 
       buildFlavors()
       {
-        let flavors = [];
-        let flavorConfig = null;
-
-        if (this.alias)
-        {
-          flavorConfig = this.store.flavors[this.alias];
-        }
-
+        this.flavors = this.store.getFlavors(this.alias);
         this.allowBlueprint = this.store.blueprints.indexOf(this.alias) > -1;
 
-        flavorConfig = flavorConfig || {
-          canUseWithoutFlavors: true,
-          flavors: []
-        } as UiFlavorProvider;
-
-        flavors = JSON.parse(JSON.stringify(flavorConfig.flavors));
-
-        if (flavorConfig.canUseWithoutFlavors && flavors.length > 0)
+        if (this.flavors.length > 0)
         {
-          flavors.splice(0, 0, {
-            name: 'Default',
-            description: 'Create the default entity',
-            alias: null,
-            icon: 'fth-box'
-          });
+          this.selectedflavor = this.flavors[0].alias;
         }
-
-        if (flavors.length > 0)
-        {
-          this.selectedflavor = flavors[0].alias;
-        }
-        this.flavors = flavors;
       },
 
 

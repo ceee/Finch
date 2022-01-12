@@ -56,6 +56,28 @@ export const useUiStore = defineStore('zero.ui', {
       });
     },
 
+    getFlavors(alias: string)
+    {
+      let flavorConfig = this.flavors[alias] || {
+        canUseWithoutFlavors: true,
+        flavors: []
+      } as UiFlavorProvider;
+
+      let flavors = JSON.parse(JSON.stringify(flavorConfig.flavors));
+
+      if (flavorConfig.canUseWithoutFlavors && flavors.length > 0)
+      {
+        flavors.splice(0, 0, {
+          name: '@flavors.default.name',
+          description: '@flavors.default.text',
+          alias: null,
+          icon: 'fth-box'
+        });
+      }
+
+      return flavors;
+    },
+
     setTheme(theme: 'default' | 'light' | 'dark')
     {
       const dark = theme === 'dark';

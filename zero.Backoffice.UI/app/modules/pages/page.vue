@@ -1,3 +1,4 @@
 ﻿<template>
-  page
+  page:<br />
+  {{$route.params}}
 </template>

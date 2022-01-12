@@ -1,9 +1,14 @@
+import { Emitter, EventType } from "mitt";
 import { Component } from "vue";
 import { ZeroSchema } from "zero/schemas";
 
 export interface Zero
 {
   version: string;
+  /**
+   * access the event hub
+   **/
+  events: Emitter<Record<EventType, unknown>>;
   options: ZeroOptions;
   useZero: () => void;
   useRouter: () => void;

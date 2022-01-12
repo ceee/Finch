@@ -27,6 +27,8 @@ import { ZeroSchema } from 'zero/schemas';
 import { ZeroSchemaProp } from './zero';
 import * as zeroOptions from '../options';
 import plugins from '../plugins.generated';
+import eventHub from '../services/eventhub';
+import { Emitter, EventType } from 'mitt';
 
 plugins.push(
   editorPlugin, countryPlugin, applicationPlugin, settingsPlugin, languagePlugin,
@@ -49,6 +51,14 @@ export class ZeroRuntime implements Zero
   get version(): string
   {
     return "0.0.1";
+  }
+
+  /**
+   * access the event hub
+   **/
+  get events(): Emitter<Record<EventType, unknown>>
+  {
+    return eventHub;
   }
 
   /**

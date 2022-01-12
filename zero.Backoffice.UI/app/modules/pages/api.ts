@@ -2,13 +2,28 @@ import { get, post, put, del, ApiRequestConfig, ApiRequestQuery } from '../../se
 
 export default {
 
+  tree: {
+    getChildren: (id: string, activeId?: string, search?: string, config?: ApiRequestConfig) => get(`backoffice/pages/${id}/children`, { ...config, params: { activeId, search } }),
+  },
+
   getChildren: (id: string, query: ApiRequestQuery, config?: ApiRequestConfig) => get(`pages/${id}/children`, { ...config, params: { ...query } }),
 
-  tree: {
+  getAllowedFlavors: (id: string, config?: ApiRequestConfig) => get(`pages/${id}/flavors`, { ...config }),
 
-    getChildren: (id: string, activeId?: string, search?: string, config?: ApiRequestConfig) => get(`backoffice/pages/${id}/children`, { ...config, params: { activeId, search } }),
+  getDependencies: (id: string, config?: ApiRequestConfig) => get(`backoffice/pages/${id}/dependencies`, { ...config }),
 
-  }
+
+  create: (model: any, config?: ApiRequestConfig) => post('pages', model, config),
+
+  update: (model: any, config?: ApiRequestConfig) => put('pages/' + model.id, model, config),
+
+  move: (id: string, parentId: string, config?: ApiRequestConfig) => put(`pages/${id}/move/${parentId}`, {}, { ...config }),
+
+  copy: (id: string, parentId: string, includeDescendants?: boolean, config?: ApiRequestConfig) => put(`pages/${id}/move/${parentId}`, {}, { ...config, params: { includeDescendants: (includeDescendants || false) } }),
+
+  sort: (ids: string[], config?: ApiRequestConfig) => put('pages/sort', ids, config),
+
+  delete: (id: string, config?: ApiRequestConfig) => del('pages/' + id, null, config),
 
   //getTypes: (config?: ApiRequestConfig) => get('spaces/types', { ...config }),
 
