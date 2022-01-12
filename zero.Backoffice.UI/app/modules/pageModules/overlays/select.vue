@@ -60,8 +60,8 @@
 <style lang="scss">
   .app-overlay[data-alias="modules-select"]
   {
-    width: calc(100vw - 40px);
-    max-width: 1080px;
+    width: 100% !important;
+    max-width: min(1080px, calc(100vw - 40px));
     max-height: min(750px, calc(100vh - 40px));
   }
 
@@ -95,7 +95,7 @@
   .ui-modules-select-items
   {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 240px));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     grid-gap: var(--padding-m);
     margin: 0 -16px;
     padding: 0 16px;

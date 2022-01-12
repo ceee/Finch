@@ -16,6 +16,7 @@ public class PagesStore : TreeEntityStore<Page>, IPagesStore
   /// <inheritdoc />
   public override async Task<bool> IsAllowedAsChild(Page model, string parentId)
   {
+    return true; // TODO v3 this method fails as it is also called on move and update (which should not happen)
     IEnumerable<FlavorConfig> pageTypes = await PageTypes.GetAllowedTypes(parentId);
     return pageTypes.Any(x => x.Alias == model.Flavor);
   }

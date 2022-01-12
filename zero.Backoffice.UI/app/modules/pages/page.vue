@@ -122,26 +122,25 @@
       },
 
 
-      onSubmit(form)
+      async onSubmit(form)
       {
-        form.handle(PagesApi.save(this.model)).then(response =>
-        {
-          if (response.success)
-          {
-            EventHub.$emit('page.update', response.model);
-            this.model = response.model;
+        var config = { system: this.$route.query['zero.scope'] == 'system' };
+        const response = !this.isCreate ? await api.update(this.model, config) : await api.create(this.model, config);
+        await form.handle(response);
 
-            // store last edited page in localstorage
-            localStorage.setItem('zero.last-page.hofbauer' /* // TODO v3 appid + response.model.appId */, response.model.id);
-          }
-        });
+        if (response.success)
+        {
+          this.zero.events.emit('page.update', response.model);
+          this.model = response.data;
+          localStorage.setItem('zero.last-page.hofbauer' /* // TODO v3 appid + response.model.appId */, response.data.id);
+        }
       },
 
 
       onDelete(item, opts)
       {
         opts.hide();
-        this.$refs.form.onDelete(PagesApi.delete.bind(this, this.id));
+        this.$refs.form.onDelete(api.delete.bind(this, this.id));
       },
 
 
