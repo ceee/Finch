@@ -12,7 +12,7 @@ export default (el, binding) =>
     const isObject = typeof binding.value === 'object';
     let key = hasValue ? (isObject ? binding.value.key : binding.value) : null;
     let options = hasValue && isObject ? binding.value : null;
-    let html = isObject ? binding.value.html : binding.arg === 'html';
+    let html = isObject && binding.value ? binding.value.html : binding.arg === 'html';
 
     const result = hasValue ? localize(key, options) : '';
 
