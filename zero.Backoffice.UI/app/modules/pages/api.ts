@@ -27,7 +27,7 @@ export default {
 
   move: (id: string, parentId: string, config?: ApiRequestConfig) => put(`pages/${id}/move/${parentId}`, {}, { ...config }),
 
-  copy: (id: string, parentId: string, includeDescendants?: boolean, config?: ApiRequestConfig) => put(`pages/${id}/move/${parentId}`, {}, { ...config, params: { includeDescendants: (includeDescendants || false) } }),
+  copy: (id: string, parentId: string, includeDescendants?: boolean, config?: ApiRequestConfig) => put(`pages/${id}/copy/${parentId}`, {}, { ...config, params: { includeDescendants: (includeDescendants || false) } }),
 
   sort: (ids: string[], config?: ApiRequestConfig) => put('pages/sort', ids, config),
 

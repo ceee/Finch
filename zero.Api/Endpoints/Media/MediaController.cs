@@ -183,7 +183,7 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
 
   [HttpDelete("folders/{id}")]
   [ZeroAuthorize(MediaPermissions.Delete)]
-  public virtual Task<ActionResult<Result>> DeleteFolder(string id) => DeleteModelWithDescendants(id);
+  public virtual Task<ActionResult<Result<string[]>>> DeleteFolder(string id) => DeleteModelWithDescendants(id);
 
   #endregion
 

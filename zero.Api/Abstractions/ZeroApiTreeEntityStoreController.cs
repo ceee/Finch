@@ -82,7 +82,7 @@ public abstract class ZeroApiTreeEntityStoreController<TModel, TStore> : ZeroApi
   }
 
 
-  protected async Task<ActionResult<Result>> DeleteModelWithDescendants(string id)
+  protected async Task<ActionResult<Result<string[]>>> DeleteModelWithDescendants(string id)
   {
     TModel model = await Store.Load(id);
 
@@ -93,7 +93,7 @@ public abstract class ZeroApiTreeEntityStoreController<TModel, TStore> : ZeroApi
 
     Result<string[]> result = await Store.DeleteWithDescendants(model);
 
-    return result.WithoutModel();
+    return result;
   }
 
 

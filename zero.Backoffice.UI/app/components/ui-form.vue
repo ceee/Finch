@@ -121,7 +121,10 @@
         if (!response.success)
         {
           this.setState('error');
-          this.loadingError = response.errors[0].message;
+          if (response.errors)
+          {
+            this.loadingError = response.errors[0].message;
+          }
           return null;
         }
 
@@ -140,6 +143,8 @@
         this.setState('loading');
         this.clearErrors();
 
+        console.info(response);
+
         if (!response.success)
         {
           this.setState('error');
@@ -155,7 +160,7 @@
           let routeObj = typeof this.route === 'object' ? this.route : { name: this.route };
           routeObj.params = routeObj.params || {};
           routeObj.query = this.$route.query || {};
-          routeObj.params.id = response.model.id;
+          routeObj.params.id = response.data.id;
 
           this.$router.replace(routeObj);
         }

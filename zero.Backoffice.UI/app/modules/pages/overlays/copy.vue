@@ -126,7 +126,7 @@
 
         this.state = 'loading';
 
-        const result = await api.copy(this.id, (this.newParentId || 'root'), includeDescendants);
+        const result = await api.copy(this.id, (this.newParentId || 'root'), this.includeDescendants);
 
         if (result.success)
         {

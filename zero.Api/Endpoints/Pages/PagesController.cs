@@ -30,14 +30,7 @@ public class PagesController : ZeroApiTreeEntityStoreController<Page, IPagesStor
       return BadRequest(Result.Fail("@errors.childnotallowed"));
     }
 
-    PageEdit model = new()
-    {
-      Id = page.Id,
-      Page = page,
-      PageType = PageTypeService.GetByAlias(page.Flavor)
-    };
-
-    return model;
+    return page;
   }
 
 
@@ -48,27 +41,7 @@ public class PagesController : ZeroApiTreeEntityStoreController<Page, IPagesStor
 
   [HttpGet("{id}")]
   [ZeroAuthorize(PagePermissions.Read)]
-  public virtual async Task<ActionResult<PageEdit>> Get(string id, string changeVector = null)
-  {
-    Page page = await Store.Load(id, changeVector);
-
-    if (page == null)
-    {
-      return NotFound();
-    }
-
-    string url = await Routes.GetUrl(page);
-
-    PageEdit model = new()
-    {
-      Id = page.Id,
-      Page = page,
-      PageType = PageTypeService.GetByAlias(page.Flavor),
-      Urls = url.HasValue() ? new() { url } : new() { }
-    };
-
-    return model;
-  }
+  public virtual Task<ActionResult<Page>> Get(string id, string changeVector = null) => GetModel(id, changeVector);
 
 
   [HttpGet("{id}/children")]
@@ -103,7 +76,7 @@ public class PagesController : ZeroApiTreeEntityStoreController<Page, IPagesStor
 
   [HttpDelete("{id}")]
   [ZeroAuthorize(PagePermissions.Delete)]
-  public virtual Task<ActionResult<Result>> Delete(string id) => DeleteModelWithDescendants(id);
+  public virtual Task<ActionResult<Result<string[]>>> Delete(string id) => DeleteModelWithDescendants(id);
 
 
   [HttpPut("{id}/move/{destinationId}")]
@@ -113,11 +86,11 @@ public class PagesController : ZeroApiTreeEntityStoreController<Page, IPagesStor
 
   [HttpPut("{id}/copy/{destinationId}")]
   [ZeroAuthorize(PagePermissions.Update)]
-  public virtual Task<ActionResult<Result>> Move(string id, string destinationId, [FromQuery] bool includeDescendents = false)
+  public virtual Task<ActionResult<Result>> Copy(string id, string destinationId, [FromQuery] bool includeDescendants = false)
   {
     destinationId = NormalizeParentId(destinationId);
 
-    return includeDescendents ?
+    return includeDescendants ?
       CopyModelWithDescendants(id, destinationId)
       : CopyModel(id, destinationId);
   }

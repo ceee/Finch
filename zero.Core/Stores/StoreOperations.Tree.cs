@@ -98,7 +98,7 @@ public partial class StoreOperations : IStoreOperations
   /// </summary>
   protected async Task<Result<T>> Copy<T>(string id, string newParentId, bool includeDescendants, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, ISupportsTrees, new()
   {
-    T model = await Load<T>(id);
+    T model = ObjectCopycat.Clone(await Load<T>(id));
     T parent = await Load<T>(newParentId);
 
     if (model == null || (!newParentId.IsNullOrEmpty() && parent == null))
@@ -107,6 +107,7 @@ public partial class StoreOperations : IStoreOperations
     }
 
     string baseId = model.Id;
+    string originalParentId = model.ParentId;
 
     // update new page properties
     model.Id = null;
@@ -116,6 +117,13 @@ public partial class StoreOperations : IStoreOperations
     {
       zeroEntity.IsActive = false;
       zeroEntity.CreatedDate = DateTime.Now;
+
+      // update page name in case they are on the same level
+      string name = zeroEntity.Name;
+      if (originalParentId == parent?.Id || await Session.Query<Page>().AnyAsync(x => x.Name == name && x.ParentId == newParentId))
+      {
+        zeroEntity.Name += " (copy #" + IdGenerator.Create(4) + ")";
+      }
     }
 
     // check if new parent is allowed
@@ -124,33 +132,20 @@ public partial class StoreOperations : IStoreOperations
       return Result<T>.Fail("@errors.treeentity.parentnotallowed");
     }
 
+    Result<T> result = await Create(model);
+
     // recursive function to store descendants
-    async Task AddChildren(string oldParentId, string newParentId)
+    if (includeDescendants)
     {
-      List<T> children = await Session.Query<T>().Where(x => x.ParentId == oldParentId).ToListAsync();
+      List<T> children = await Session.Query<T>().Where(x => x.ParentId == baseId).ToListAsync();
 
       foreach (T child in children)
       {
-        T clonedChild = ObjectCopycat.Clone(child);
-        clonedChild.Id = null;
-        clonedChild.ParentId = newParentId;
-        if (clonedChild is ZeroEntity zeroEntity)
-        {
-          zeroEntity.IsActive = false;
-          zeroEntity.CreatedDate = DateTime.Now;
-        }
-
-        await Create(clonedChild);
-        await AddChildren(child.Id, clonedChild.Id);
+        await Copy(child.Id, model.Id, true, isParentAllowed);
       }
     }
 
-    if (includeDescendants)
-    {
-      await AddChildren(baseId, model.Id);
-    }
-
-    return Result<T>.Success(model);
+    return result;
   }
 
 

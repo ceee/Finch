@@ -4,7 +4,7 @@ import * as overlays from '../../services/overlay';
 import * as notifications from '../../services/notification';
 import { localize } from '../../services/localization';
 import { Router } from 'vue-router';
-
+import eventHub from '../../services/eventhub';
 
 export default {
 
@@ -42,7 +42,8 @@ export default {
 
     if (result.eventType == 'confirm')
     {
-      console.info('okay');
+      eventHub.emit('page.update');
+      eventHub.emit('page.move', result.value);
     }
   },
 
@@ -58,7 +59,8 @@ export default {
 
     if (result.eventType == 'confirm')
     {
-      console.info('okay');
+      eventHub.emit('page.update');
+      eventHub.emit('page.copy', result.value);
     }
   },
 
@@ -74,7 +76,8 @@ export default {
 
     if (result.eventType == 'confirm')
     {
-      console.info('okay');
+      eventHub.emit('page.update');
+      eventHub.emit('page.sort', result.value);
     }
   },
 
@@ -93,10 +96,13 @@ export default {
     {
       result.value.state('loading');
 
-      await api.delete(model.id);
+      const apiresult = await api.delete(model.id);
 
       result.value.state('success');
       result.value.close();
+
+      eventHub.emit('page.update');
+      eventHub.emit('page.delete', apiresult.data);
     }
   }
 

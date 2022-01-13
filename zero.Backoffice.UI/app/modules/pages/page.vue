@@ -42,7 +42,7 @@
       actions: [],
       meta: {},
       pageType: {},
-      route: 'page',
+      route: 'pages-edit',
       model: {
         id: null,
         name: null,
@@ -58,7 +58,7 @@
     computed: {
       isCreate()
       {
-        return this.$route.name === 'page-create';
+        return this.$route.name === 'pages-create' || !this.id;
       }
     },
 
@@ -100,7 +100,7 @@
 
         var config = { system: this.$route.query['zero.scope'] == 'system' };
         const response = await form.load(() => !this.isCreate ? api.getById(this.id, undefined, config) : api.getEmpty(this.flavor, this.parent, config));
-        this.model = response.page; 
+        this.model = response; 
 
         if (this.model)
         {
@@ -127,16 +127,20 @@
         if (response.success)
         {
           this.zero.events.emit('page.update', response.model);
+          if (this.isCreate)
+          {
+            this.zero.events.emit('page.create', response.model);
+          }
           this.model = response.data;
           localStorage.setItem('zero.last-page.hofbauer' /* // TODO v3 appid + response.model.appId */, response.data.id);
         }
       },
 
 
-      onDelete(item, opts)
+      async onDelete(item, opts)
       {
         opts.hide();
-        this.$refs.form.onDelete(api.delete.bind(this, this.id));
+        await actions.remove(this.model);
       },
 
 
@@ -149,12 +153,6 @@
       async copy(item)
       {
         await actions.copy(item);
-      },
-
-
-      async remove(item)
-      {
-        await actions.remove(item);
       },
 
 

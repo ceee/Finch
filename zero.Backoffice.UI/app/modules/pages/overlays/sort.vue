@@ -71,7 +71,7 @@
         if (result.success)
         {
           this.state = 'success';
-          this.config.confirm(result);
+          this.config.confirm(result.data);
         }
         else
         {

@@ -30,11 +30,13 @@ public class LinksController : ZeroBackofficeController
         model = await provider.Preview(session, link);
       }
 
+      string id = link.Values.GetValueOrDefault("id");
+
       previews.Add(model ?? new LinkPreview()
       {
         HasError = true,
         Icon = "fth-alert-circle color-red",
-        Id = "tmp_" + IdGenerator.Create(),
+        Id = id.Or("tmp_" + IdGenerator.Create()),
         Name = "@errors.preview.notfound",
         Text = "@errors.preview.notfound_text"
       });
