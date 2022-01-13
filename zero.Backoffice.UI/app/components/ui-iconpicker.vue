@@ -10,6 +10,8 @@
   import { open as openOverlay } from '../services/overlay';
   import { extendObject } from '../utils';
   import { useUiStore } from '../ui/store';
+  import * as notifications from '../services/notification';
+  import { localize } from '../services/localization';
 
   export default {
     name: 'uiIconpicker',
@@ -87,13 +89,20 @@
 
       loadSet()
       {
-        this.iconSet = this.store.iconSets.find(x => x.alias === this.set);
+        const alias = this.set || 'feather';
+        this.iconSet = this.store.iconSets.find(x => x.alias === alias);
       },
 
       async pick()
       {
         if (this.disabled)
         {
+          return;
+        }
+
+        if (!this.iconSet)
+        {
+          notifications.error("@iconpicker.notfound.title", localize("@iconpicker.notfound.text", { tokens: { name: this.set || '' } }));
           return;
         }
 

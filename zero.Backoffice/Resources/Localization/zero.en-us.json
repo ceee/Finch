@@ -620,7 +620,11 @@
   },
 
   "iconpicker": {
-    "title": "Pick an icon"
+    "title": "Pick an icon",
+    "notfound": {
+      "title": "Icon set not found",
+      "text": "Could not locate a registered icon set (\"{name}\")"
+    }
   },
 
   "colorpicker": {
