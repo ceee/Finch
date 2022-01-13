@@ -127,6 +127,8 @@
           width: this.width,
         });
 
+        console.info('nested result: ', result);
+
         if (result.eventType == 'confirm')
         {
           if (isAdd)
