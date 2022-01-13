@@ -161,7 +161,7 @@
       getName(item)
       {
         let name = typeof this.itemLabel === 'function' ? this.itemLabel(item) : null;
-        return convertHtmlToText(name ?? '@ui.item');
+        return convertHtmlToText(name || '@ui.item');
       },
 
 
