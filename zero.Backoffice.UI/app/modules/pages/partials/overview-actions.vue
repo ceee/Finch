@@ -52,7 +52,7 @@
               action()
               {
                 instance.$router.push({
-                  name: 'page',
+                  name: 'pages-edit',
                   params: { id: res.data.id }
                 });
               }

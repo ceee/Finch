@@ -112,7 +112,7 @@
 
       sectionDisabled(section)
       {
-        return false;
+        return section.alias == 'dashboard';
         //return section.alias == 'pages' || section.alias == 'spaces';
       },
 
