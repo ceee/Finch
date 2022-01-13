@@ -49,7 +49,7 @@
       system: {
         type: Boolean,
         default: false
-      },
+      }
     },
 
     watch: {

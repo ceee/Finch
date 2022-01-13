@@ -14,6 +14,7 @@ export interface ZeroCompiledEditor
   blueprint: any;
   display: ZeroEditorDisplay;
   tabs: ZeroCompiledEditorTab[];
+  origin: ZeroEditor;
 }
 
 
@@ -165,7 +166,8 @@ export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEdito
     alias: editor.alias,
     blueprint: null,
     display: editor.display,
-    tabs: []
+    tabs: [],
+    origin: editor,
   } as ZeroCompiledEditor;
 
   let tabs = [...editor.tabs.sort((a, b) => a.sort - b.sort)];

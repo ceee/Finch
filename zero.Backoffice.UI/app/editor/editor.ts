@@ -1,4 +1,5 @@
-﻿import { ZeroEditorField, ZeroSchema, ZeroEditorDisplay } from "zero/schemas";
+﻿import { Component } from "vue";
+import { ZeroEditorField, ZeroSchema, ZeroEditorDisplay } from "zero/schemas";
 import { ZeroEditorCanvas } from "./editor-canvas";
 
 export class ZeroEditor extends ZeroEditorCanvas implements ZeroSchema
@@ -27,4 +28,24 @@ export class ZeroEditor extends ZeroEditorCanvas implements ZeroSchema
     super();
     this.alias = alias;
   }
+}
+
+
+export class ZeroModuleEditor extends ZeroEditor
+{
+  preview: ZeroModuleEditorPreview;
+
+  constructor(alias: string)
+  {
+    super(alias);
+
+    this.preview = {
+      hideLabel: false
+    } as ZeroModuleEditorPreview;
+  }
+}
+
+export interface ZeroModuleEditorPreview
+{
+  hideLabel?: boolean;
 }

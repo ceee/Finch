@@ -13,6 +13,7 @@ export interface Zero
   useZero: () => void;
   useRouter: () => void;
   usePlugins: () => void;
+  runPlugins: () => void;
 
   runtimeVariables: Record<string, any>;
 

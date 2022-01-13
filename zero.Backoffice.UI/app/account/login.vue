@@ -71,14 +71,12 @@
 
           if (userResponse.success)
           {
+            this.zero.events.emit('zero.authenticate', userResponse.data);
             this.state = 'success';
-            accountStore.user = (await api.getUser()).data;
-            await useUiStore().setup();
             return;
           }
         }
 
-        accountStore.user = null;
         this.state = 'error';
         return;
       }

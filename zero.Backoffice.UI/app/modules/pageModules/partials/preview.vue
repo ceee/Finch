@@ -31,8 +31,10 @@
 
 
 <script>
+  import { ZeroModuleEditor } from '../../../editor/editor';
   import ModulePreviewInner from './preview-inner.vue';
 
+  const editorCache = {};
 
   export default {
     name: 'uiModulePreview',
@@ -101,15 +103,25 @@
 
     methods: {
 
-      render(value)
+      async render(value)
       {
         this.loading = true;
         this.module = this.types.find(x => x.alias == this.alias);
-        //this.renderer = this.zero.getEditor('module.' + this.alias);
-        //if (this.renderer)
-        //{
-        //  this.preview = this.renderer.previewOptions;
-        //}
+
+        const editorAlias = 'modules:' + this.module.alias;
+        let schema = editorCache[editorAlias];
+
+        if (!schema)
+        {
+          schema = await this.zero.getSchema(editorAlias);
+          editorCache[editorAlias] = schema;
+        }
+
+        if (schema && schema instanceof ZeroModuleEditor)
+        {
+          this.preview = schema.preview;
+        }
+
         this.$nextTick(() => this.loading = false);
       },
 

@@ -1,6 +1,6 @@
 ﻿<template>
-  <div class="app" v-if="initialized">
-    <app-login v-if="!accountStore.isAuthenticated" />
+  <div class="app" v-if="!loading">
+    <app-login v-if="!authenticated" />
     <template v-else>
       <app-navigation />
       <div class="app-main">
@@ -9,6 +9,9 @@
       <app-overlays />
       <app-notifications />
     </template>
+  </div>
+  <div class="app-loading" v-else>
+    <ui-loading />
   </div>
 </template>
 
@@ -19,12 +22,9 @@
   import AppNavigation from './ui/app-navigation.vue';
   import AppNotifications from './ui/app-notifications.vue';
   import AppOverlays from './ui/app-overlays.vue';
-  import { useAccountStore } from './account/store';
-  import { useUiStore } from './ui/store';
-  import { useTranslationStore } from './stores/translations';
-  import { useAppStore } from './modules/applications/store';
-  import accountApi from './account/api';
   import { defineComponent } from 'vue';
+  import startup from './startup';
+  import { AccountUser } from 'zero/account';
 
   export default defineComponent({
     name: 'app',
@@ -32,35 +32,45 @@
     components: { AppLogin, AppNavigation, AppNotifications, AppOverlays },
 
     data: () => ({
-      initialized: false,
-      accountStore: null
+      loading: true,
+      authenticated: false
     }),
 
-    async mounted()
+    mounted()
     {
-      this.accountStore = useAccountStore();
+      this.startup();
 
-      let userResponse = await accountApi.getUser();
-
-      if (userResponse.success)
-      {
-        this.accountStore.user = userResponse.data;
-        await useAppStore().setup();
-        await useUiStore().setup();
-      }
-      else
-      {
-        await useUiStore().setup(true);
-      }
-
-      await useTranslationStore().setup();
-
-      this.zero.runPlugins();
-
-      this.initialized = true;
+      this.zero.events.on('zero.authenticate', this.onAuthentication);
     },
 
 
+    methods: {
+
+      async startup()
+      {
+        const result = await startup(this.zero);
+        this.authenticated = result.authenticated;
+        this.loading = false;
+      },
+
+
+      async onAuthentication(user?: AccountUser)
+      {
+        await this.startup();
+      }
+
+    }
   });
 
 </script>
+
+<style lang="scss">
+  .app-loading
+  {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+  }
+</style>

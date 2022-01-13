@@ -134,8 +134,8 @@
       async logout(item, opts)
       {
         await accountApi.logout();
-        this.account.user = null;
         opts.hide();
+        this.zero.events.emit('zero.authenticate');
       },
 
       addApplication(item, opts)
