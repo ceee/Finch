@@ -1,5 +1,5 @@
 ﻿<template>
-  <span class="ui-property-output" v-localize="output"></span>
+  <span class="ui-property-output" v-localize="{ key: output, html: html }"></span>
 </template>
 
 <script>
@@ -8,6 +8,10 @@
       value: Object,
       config: Object,
 
+      html: {
+        type: Boolean,
+        default: false
+      },
       render: Function
     },
 

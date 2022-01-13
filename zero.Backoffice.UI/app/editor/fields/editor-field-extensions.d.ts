@@ -121,7 +121,8 @@ declare module 'zero/schemas'
 
   export interface OutputFieldOptions
   {
-    render: (value: any, model: any) => string;
+    html?: boolean;
+    render?: (value: any, model: any) => string;
   }
 
   export interface StateFieldOptions

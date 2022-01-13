@@ -6,7 +6,6 @@ import Text from '@tiptap/extension-text'
 import Bold from '@tiptap/extension-bold';
 import Code from '@tiptap/extension-code';
 import Italic from '@tiptap/extension-italic';
-//import Link from '@tiptap/extension-link';
 import Strike from '@tiptap/extension-strike';
 //import Underline from '@tiptap/ex';
 import History from '@tiptap/extension-history';
@@ -17,6 +16,8 @@ import BulletList from '@tiptap/extension-bullet-list';
 import OrderedList from '@tiptap/extension-ordered-list';
 import Heading from '@tiptap/extension-heading';
 import HardBreak from '@tiptap/extension-hard-break';
+import Image from '@tiptap/extension-image';
+import { ZeroLink, pickLink } from './extensions/link/link';
 
 export default function ()
 {
@@ -40,9 +41,7 @@ export default function ()
       Text,
       History,
       HardBreak,
-      //new Link({
-      //  target: '_blank'
-      //}), // TODO
+      ZeroLink,
       Bold,
       Code,
       Italic,
@@ -99,14 +98,15 @@ export default function ()
         onClick: editor => editor.chain().focus().toggleUnderline().run(),
         bubble: true
       },
-      //{
-      //  alias: 'strikethrough',
-      //  title: '@rte.strike',
-      //  symbol: 'fth-zap-off',
-      //  symbolSize: 14,
-      //  isActive: active => active.strike(),
-      //  onClick: (ev, cmd) => cmd.strike(ev)
-      //},
+      {
+        alias: 'strikethrough',
+        title: '@rte.strike',
+        symbol: 'fth-strikethrough',
+        symbolSize: 14,
+        isActive: editor => editor.isActive('strike'),
+        onClick: editor => editor.chain().focus().toggleStrike().run(),
+        bubble: true
+      },
       {
         alias: 'code',
         title: '@rte.code',
@@ -115,6 +115,14 @@ export default function ()
         isActive: editor => editor.isActive('code'),
         onClick: editor => editor.chain().focus().toggleCode().run(),
         bubble: true
+      },
+      {
+        alias: 'link',
+        title: '@rte.link',
+        symbol: 'fth-link-2',
+        symbolSize: 14,
+        isActive: editor => editor.isActive('link'),
+        onClick: editor => pickLink(editor)
       },
       {
         alias: 'line',

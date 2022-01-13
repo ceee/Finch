@@ -3,11 +3,13 @@
 
     <!--<bubble-menu :editor="editor" :tippy-options="{ duration: 100 }" v-if="editor && hasBubble">
       <div class="ui-rte-overlay-controls theme-dark is-active">
-        <div class="ui-rte-overlay-control-outer" v-for="cmd in editor.cmds" v-if="cmd && cmd.bubble && !cmd.isParent" :key="cmd.id">
-          <button type="button" :data-alias="cmd.alias" v-localize:title="cmd.title" class="ui-rte-overlay-control" :class="{ 'is-active': cmd.isActive(editor) }" @click="cmd.onClick(editor)">
-            <ui-icon :symbol="cmd.symbol" :size="cmd.symbolSize" />
-          </button>
-        </div>
+        <template v-for="cmd in cmds" :key="cmd.id">
+          <div class="ui-rte-overlay-control-outer" v-if="cmd && cmd.bubble && !cmd.isParent">
+            <button type="button" :data-alias="cmd.alias" v-localize:title="cmd.title" class="ui-rte-overlay-control" :class="{ 'is-active': cmd.isActive(editor) }" @click="cmd.onClick(editor)">
+              <ui-icon :symbol="cmd.symbol" :size="cmd.symbolSize" />
+            </button>
+          </div>
+        </template>
       </div>
     </bubble-menu>-->
 
@@ -16,14 +18,14 @@
         <button type="button" v-if="!cmd.isParent" :data-alias="cmd.alias" v-localize:title="cmd.title" class="ui-rte-control" :class="{ 'is-active': cmd.isActive(editor) }" @click="cmd.onClick(editor)">
           <ui-icon :symbol="cmd.symbol" :size="cmd.symbolSize" />
         </button>
-        <!--<ui-dropdown v-if="cmd.isParent" align="right">
+        <ui-dropdown v-if="cmd.isParent" align="right">
           <template v-slot:button>
             <button :data-alias="cmd.alias" type="button" v-localize:title="cmd.title" class="ui-rte-control" :class="{ 'is-active': cmd.isActive(editor) }">
               <ui-icon :symbol="cmd.symbol" :size="cmd.symbolSize" />
             </button>
           </template>
           <ui-dropdown-button v-for="child in cmd.children" :key="child.id" :label="child.title" @click="child.onClick(editor)" />
-        </ui-dropdown>-->
+        </ui-dropdown>
       </div>
     </div>
 
@@ -104,7 +106,7 @@
 
     created()
     {
-      this.onDebouncedChange = debounce(this.onChange, 350);
+      this.onDebouncedChange = debounce(this.onChange, 200);
     },
 
     mounted()
@@ -169,6 +171,7 @@
       onChange(content)
       {
         this.blocked = true;
+        this.$emit('input', content);
         this.$emit('update:value', content);
         this.$nextTick(() => this.blocked = false);
       },
@@ -218,6 +221,7 @@
     height: auto;
     min-height: 48px;
     padding-top: 9px;
+    padding-bottom: 14px;
     max-height: 420px;
     overflow-y: auto;
     border: none !important;
@@ -263,8 +267,8 @@
     background: var(--color-bg);
     border-radius: var(--radius);
     padding: 5px;
-    margin-bottom: 8px;
-    transform: translateX(-50%);
+    margin-bottom: 0;
+    transform: translateX(-50%) translateY(-100%);
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.2s, visibility 0.2s;

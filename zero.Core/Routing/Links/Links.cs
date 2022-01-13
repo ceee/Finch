@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Net;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace zero.Routing;
 
@@ -58,6 +61,49 @@ public class Links : ILinks
   {
     return Providers.LastOrDefault(x => x.CanProcess(link));
   }
+
+
+  /// <inheritdoc />
+  public async Task<string> Parse(string html)
+  {
+    MatchCollection matches =  Regex.Matches(html, "zero-link=\"(.+?)\"", RegexOptions.IgnoreCase);
+
+    foreach (Match match in matches)
+    {
+      if (!match.Success)
+      {
+        continue;
+      }
+
+      string valueJson = WebUtility.HtmlDecode(match.Groups[1].Value);
+      LinkFromRTE link = JsonSerializer.Deserialize<LinkFromRTE>(valueJson, new JsonSerializerOptions()
+      { 
+        PropertyNameCaseInsensitive = true
+      });
+
+      string url = await GetUrl(link.ToLink());
+      string href = url.HasValue() ? "href=\"" + url + "\"" : string.Empty;
+
+      html = html.Replace(match.Value, href);
+    }
+
+    return html;
+  }
+
+
+  class LinkFromRTE
+  {
+    public string Area { get; set; }
+    public string Suffix { get; set; }
+    public Dictionary<string, string> Values { get; set; } = new();
+
+    public Link ToLink() => new()
+    {
+      Area = Area,
+      UrlSuffix = Suffix,
+      Values = Values
+    };
+  }
 }
 
 public interface ILinks
@@ -81,4 +127,9 @@ public interface ILinks
   /// Find a provider by a specific type
   /// </summary>
   T GetProvider<T>() where T : class, ILinkProvider;
+
+  /// <summary>
+  /// Parses HTML which comes from the rich-text-editor and converts link references.
+  /// </summary>
+  Task<string> Parse(string html);
 }
