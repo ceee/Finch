@@ -196,6 +196,13 @@
         this.onChange();
       },
 
+      // search
+      search(query)
+      {
+        this.filter.search = query;
+        this.onChange();
+      },
+
       // sort by a column
       sort(column)
       {
@@ -338,6 +345,8 @@
 
       shiftSelect(item)
       {
+        return;
+
         // TODO implement shift selection (this is only a part of it)
         // for selection area see Viselect https://simonwep.github.io/selection/
 

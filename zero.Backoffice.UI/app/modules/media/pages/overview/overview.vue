@@ -5,18 +5,21 @@
         <h2 class="ui-header-bar-title">
           <span class="media-items-hierarchy-item">
             <ui-link :to="{ name: 'media' }" v-localize="'@media.name'"></ui-link>
-            <ui-icon class="-chevron" v-if="hierarchy.length > 0" symbol="fth-chevron-right" />
+            <ui-icon class="-chevron" v-if="hierarchy.length > 0 || searchMode" symbol="fth-chevron-right" />
           </span>
           <span v-for="(item, index) in hierarchy" :key="item.id" class="media-items-hierarchy-item">
             <ui-link :to="{ name: 'media', params: { parentId: item.id } }" v-localize="item.name"></ui-link>
-            <ui-icon class="-chevron" v-if="index < hierarchy.length - 1" symbol="fth-chevron-right" />
+            <ui-icon class="-chevron" v-if="index < hierarchy.length - 1 || searchMode" symbol="fth-chevron-right" />
+          </span>
+          <span v-if="searchMode" class="media-items-hierarchy-item">
+            <ui-link :to="{ name: 'media', params: { parentId: id }, query: { search: (search || '') } }"><ui-icon symbol="fth-search" /></ui-link>
           </span>
         </h2>
       </template>
 
       <template v-if="selected.length < 1">
-        <!--<ui-search v-model="gridConfig.search" class="onbg" />-->
-        <ui-button type="accent" label="@media.addfolder" @click="editFolder()" />
+        <ui-search v-model="search" class="onbg" />
+        <ui-button :disabled="searchMode" type="accent" label="@media.addfolder" @click="editFolder()" />
       </template>
       <media-selection v-else :selected="selected" @clear="clearSelection" @move="move" @remove="remove" />
     </ui-header-bar>
@@ -26,7 +29,7 @@
         <ui-datagrid ref="grid" v-model="gridConfig" @select="onSelected" @count="count = $event">
 
           <template v-slot:before>
-            <media-drop :folder-id="parentId" @completed="refresh" />
+            <media-drop v-if="!searchMode" :folder-id="parentId" @completed="refresh" />
           </template>
 
           <template v-if="selected.length < 1" v-slot:actions="props">
@@ -70,12 +73,12 @@
     components: { MediaItem, MediaSelection, MediaDrop },
 
     data: () => ({
+      loaded: false,
       paging: {},
-      hierarchy: {},
+      hierarchy: [],
       search: null,
       selected: [],
       gridConfig: {
-        search: null,
         width: 180,
         selectable: true,
         items: null
@@ -87,6 +90,10 @@
       id()
       {
         return this.$route.params.parentId || 'root';
+      },
+      searchMode()
+      {
+        return !!this.search;
       }
     },
 
@@ -95,6 +102,13 @@
       '$route': function (val)
       {
         this.clearSelection();
+      },
+      search(val)
+      {
+        if (this.loaded && this.$refs.grid)
+        {
+          this.$refs.grid.search(val);
+        }
       }
     },
 
@@ -102,6 +116,8 @@
     created()
     {
       this.gridConfig.items = this.getItems;
+      this.search = this.$route.query.search;
+      this.loaded = true;
     },
 
 
@@ -114,11 +130,18 @@
           query = {};
         }
 
-        query.search = this.gridConfig.search;
         query.pageSize = 50;
 
-        const hierarchy = await api.folders.getHierarchy(this.id);
-        this.hierarchy = hierarchy.data;
+        if (!query.search || !this.hierarchy.length)
+        {
+          const hierarchy = await api.folders.getHierarchy(this.id);
+          this.hierarchy = hierarchy.data;
+        }
+
+        if (query.search)
+        {
+          return await api.search(this.search, this.id, query);
+        }
 
         return await api.folders.getChildren(this.id, true, query);
       },
@@ -239,6 +262,12 @@
     a:hover
     {
       color: var(--color-text);
+    }
+
+    a .ui-icon
+    {
+      position: relative;
+      top: 2px;
     }
   }
 </style>

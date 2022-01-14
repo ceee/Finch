@@ -20,6 +20,13 @@ public class ObjectCopycat
   }
 
 
+  public static T CloneSpecific<T>(T obj)
+  {
+    Type type = obj.GetType();
+    return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj));
+  }
+
+
   public static T CopyProperties<T>(T source, T target, params string[] exceptions)
   {
     return CopyPropertiesInternal(source, target, null, exceptions);

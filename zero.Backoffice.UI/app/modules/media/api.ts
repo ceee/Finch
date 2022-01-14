@@ -11,6 +11,8 @@ const files = {
 
   getHierarchy: (id: string, config?: ApiRequestConfig) => get(`media/${id}/hierarchy`, { ...config }),
 
+  search: (searchQuery: string, parentId: string | null, query: ApiRequestQuery, config?: ApiRequestConfig) => get('media/search', { ...config, params: { ...query, q: searchQuery, parent: parentId } }),
+
   //create: (model: any, config?: ApiRequestConfig) => post('media', model, config),
 
   update: (model: any, config?: ApiRequestConfig) => put('media/' + model.id, model, config),

@@ -204,6 +204,52 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
   }
 
 
+  [HttpGet("search")]
+  [ZeroAuthorize(MediaPermissions.Read)]
+  public virtual async Task<ActionResult<Paged>> Search([FromQuery] ListQuery<zero.Media.Media> query, [FromQuery(Name = "q")] string searchQuery, [FromQuery] string parent = null, [FromQuery] bool includeSubfolders = true)
+  {
+    query.OrderQuery = q => q.OrderByScoreDescending().ThenByDescending(x => x.IsFolder).ThenByDescending(x => x.CreatedDate);
+    query.Search = null;
+
+    if (searchQuery.IsNullOrWhiteSpace())
+    {
+      return NotFound();
+    }
+
+    if (parent.HasValue())
+    {
+      List<string> descendantIds = await Store.Session.Query<MediaTreeHierarchyIndexResult, zero_Api_Media_Hierarchy>().Where(x => x.Path.Contains(parent) && x.IsFolder).Select(x => x.Id).ToListAsync();
+      descendantIds.Add(parent);
+      query.AdditionalQuery = q => q.Where(x => x.ParentId.In(descendantIds));
+    }
+
+    Paged<zero.Media.Media> result = await Store.Load<zero_Api_Media_Listing>(query.Page, query.PageSize, q => q
+      .SearchIf(x => x.Name, searchQuery, "*", "*", Raven.Client.Documents.Queries.SearchOperator.And)
+      .Filter(query)
+    );
+
+    Paged<MediaBasic> mappedResult = Mapper.Map<zero.Media.Media, MediaBasic>(result);
+
+    // get children for all folders
+    string[] folderIds = mappedResult.Items.Where(x => x.IsFolder).Select(x => x.Id).ToArray();
+    IList<zero_Api_Media_ChildCounts.Result> children = await Store.Session.Query<zero_Api_Media_ChildCounts.Result, zero_Api_Media_ChildCounts>()
+      .ProjectInto<zero_Api_Media_ChildCounts.Result>()
+      .Where(x => x.Id.In(folderIds))
+      .ToListAsync();
+
+    foreach (MediaBasic item in mappedResult.Items)
+    {
+      if (item.IsFolder)
+      {
+        zero_Api_Media_ChildCounts.Result childCounts = children.FirstOrDefault(x => x.Id == item.Id);
+        item.Children = childCounts?.ChildCount ?? 0;
+      }
+    }
+
+    return mappedResult;
+  }
+
+
   [HttpGet("{id}")]
   [ZeroAuthorize(MediaPermissions.Read)]
   public virtual async Task<ActionResult<zero.Media.Media>> Get(string id, string changeVector = null) => await GetModel(id, changeVector);
@@ -212,6 +258,19 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
   [HttpGet("{id}/hierarchy")]
   [ZeroAuthorize(MediaPermissions.Read)]
   public virtual async Task<ActionResult<zero.Media.Media[]>> GetHierarchy(string id) => await Store.GetHierarchy<zero_Api_Media_Hierarchy>(NormalizeParentId(id));
+
+
+  [HttpGet("{id}/search")]
+  [ZeroAuthorize(MediaPermissions.Read)]
+  public virtual async Task<ActionResult<Paged>> SearchByQueryAndParent(string id, [FromQuery] ListQuery<zero.Media.Media> query)
+  {
+    List<string> folderIds = await Store.Session.Query<MediaTreeHierarchyIndexResult, zero_Api_Media_Hierarchy>().Where(x => x.Path.Contains(id) && x.IsFolder).Select(x => x.Id).ToListAsync();
+    folderIds.Add(id);
+
+    query.AdditionalQuery = q => q.Where(x => x.ParentId.In(folderIds));
+
+    return await GetModelsByIndex<MediaBasic, zero_Api_Media_Listing>(query);
+  }
 
 
   [HttpPost("")]
