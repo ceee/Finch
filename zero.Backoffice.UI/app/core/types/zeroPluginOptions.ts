@@ -3,6 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 import { App, Component } from 'vue';
 import { ZeroSchemaProp } from '../zero';
 import { ZeroLinkArea } from './zero';
+import { ZeroSchema, ZeroSchemaExtension } from 'zero/schemas';
 
 export interface ZeroPluginOptions
 {
@@ -11,6 +12,8 @@ export interface ZeroPluginOptions
   route: (route: RouteRecordRaw) => void;
   schemas: Record<string, ZeroSchemaProp>;
   schema: (alias: string, schema: ZeroSchemaProp) => void;
+  schemaExtensions: ZeroSchemaExtension[];
+  extendSchema: (alias: string, extension: ((schema: ZeroSchema) => void)) => void;
   fieldTypes: Record<string, Component>;
   fieldType: (alias: string, component: Component) => void;
   linkAreas: Record<string, ZeroLinkArea>;

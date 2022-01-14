@@ -1,6 +1,6 @@
 import { Emitter, EventType } from "mitt";
 import { Component } from "vue";
-import { ZeroSchema } from "zero/schemas";
+import { ZeroSchema, ZeroSchemaExtension } from "zero/schemas";
 
 export interface Zero
 {
@@ -26,6 +26,11 @@ export interface Zero
    * get a defined list or editor schema
    **/
   getSchema(alias: string): Promise<ZeroSchema | null>;
+
+  /**
+   * get all defined extensions for a schema
+   **/
+  getSchemaExtensions(alias: string): ZeroSchemaExtension[];
 
   /**
    * get all defined link areas

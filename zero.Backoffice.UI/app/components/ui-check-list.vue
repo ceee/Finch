@@ -1,134 +1,151 @@
 ﻿<template>
-  <div class="ui-input-list" :class="{'is-disabled': disabled }">
-    <div v-for="item in items" class="ui-input-list-item">
-      <input v-model="item.value" type="text" class="ui-input" :maxlength="maxLength" :readonly="disabled" @input="onChange" size="5" />
-      <ui-icon-button type="light" icon="fth-x" @click="removeItem(item)" v-if="!disabled" />
-    </div>
-    <ui-button v-if="!disabled && !plusButton" type="light" :label="addLabel" @click="addItem" />
-    <ui-select-button v-if="!disabled && plusButton" icon="fth-plus" :label="items.length > 0 ? null : addLabel" @click="addItem" />
+  <div class="ui-check-list" :class="{'is-disabled': disabled, 'is-inline': inline }">
+    <label v-for="item in list" class="ui-native-check ui-check-list-item">
+      <input type="checkbox" :checked="isChecked(item)" @input="onChange(item)" :disabled="disabled" />
+      <span class="ui-native-check-toggle"></span>
+      <span v-localize="item[labelKey]"></span>
+      <span class="-desc" v-if="item[descriptionKey]" v-localize="item[descriptionKey]"></span>
+    </label>
   </div>
 </template>
 
 
 <script>
   export default {
-    name: 'uiInputList',
-
+    name: 'uiCheckList',
     props: {
-      addLabel: {
-        type: String,
-        default: '@ui.add'
-      },
       value: {
         type: Array,
         default: () => []
+      },
+      items: {
+        type: [Array, Function, Promise],
+        required: true
       },
       disabled: {
         type: Boolean,
         default: false
       },
-      maxItems: {
-        type: Number,
-        default: 100
-      },
-      maxLength: {
-        type: Number,
-        default: 200
-      },
-      plusButton: {
+      inline: {
         type: Boolean,
         default: false
       },
+      limit: {
+        type: Number,
+        default: 100
+      },
+      reverse: Boolean,
+      labelKey: {
+        type: String,
+        default: 'value'
+      },
+      descriptionKey: {
+        type: String,
+        default: 'description'
+      },
+      idKey: {
+        type: String,
+        default: 'key'
+      }
     },
 
     data: () => ({
-      items: []
+      list: []
     }),
 
     watch: {
-      value(value)
+      items()
       {
-        this.reload();
+        this.init();
       }
     },
 
     mounted()
     {
-      this.reload();
+      this.init();
     },
 
     methods: {
-
-      reload()
+      init()
       {
-        this.items = this.value.map(item => ({ value: item }));
-      },
-
-      onChange()
-      {
-        this.$emit('input', this.items.map(item => item.value));
-        this.$emit('change', this.items.map(item => item.value));
-      },
-
-      addItem()
-      {
-        this.items.push({
-          value: null
-        });
-        this.onChange();
-
-        this.$nextTick(() =>
+        if (typeof this.items === 'function')
         {
-          this.$el.querySelector('.ui-input-list-item:last-of-type input').focus();
-        });
+          this.items().then(res =>
+          {
+            this.list = res.data;
+          });
+        }
+        else
+        {
+          this.list = JSON.parse(JSON.stringify(this.items));
+        }
       },
 
-      removeItem(item)
+      isChecked(item)
       {
-        const index = this.items.indexOf(item);
-        this.items.splice(index, 1);
-        this.onChange();
+        let index = this.value.indexOf(item[this.idKey]);
+        return (!this.reverse && index > -1) || (this.reverse && index < 0);
+      },
+
+      onChange(item)
+      {
+        let index = this.value.indexOf(item[this.idKey]);
+        let value = JSON.parse(JSON.stringify(this.value));
+        if (index < 0)
+        {
+          value.push(item[this.idKey]);
+        }
+        else
+        {
+          value.splice(index, 1);
+        }
+
+        this.$emit('input', value);
       }
     }
   }
 </script>
 
 <style lang="scss">
-  .ui-input-list
+  .ui-check-list-item
   {
+    display: block;
   }
 
-  .ui-input-list-item
+  .ui-check-list .ui-check-list-item + .ui-check-list-item
   {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    background: var(--color-input);
-    border-radius: var(--radius);
-    margin-bottom: 6px;
+    margin-top: 8px;
+  }
 
-    .ui-input-list.is-disabled &
-    {
-      background: transparent;
-    }
+  .ui-alias + .ui-check-list-item
+  {
+    margin-top: 14px;
+  }
 
-    .ui-input
-    {
-      border-radius: var(--radius) 0 0 var(--radius);
-    }
+  .ui-check-list.is-inline .ui-check-list-item
+  {
+    display: inline-block;
+  }
 
-    .ui-icon-button
-    {
-      border-radius: 0 var(--radius) var(--radius) 0;
-      height: 48px;
-      width: 48px;
-      border-left: none;
-      background: transparent !important;
-      box-shadow: none;
-    }
+  .ui-check-list.is-inline .ui-check-list-item + .ui-check-list-item
+  {
+    margin-top: 0;
+    margin-left: 30px;
+  }
 
-    .ui-icon-button + .ui-icon-button
-    {
-      margin-left: 0;
-    }
+  .ui-check-list.is-inline .ui-check-list-item .ui-native-check-toggle
+  {
+    margin-right: 6px;
+  }
+
+  .ui-check-list-item .-desc
+  {
+    display: inline-block;
+    color: var(--color-text-dim);
+    font-size: var(--font-size-s);
+    margin-left: 0.5em;
+
+    &:before { content: '('; }
+    &:after { content: ')'; }
   }
 </style>

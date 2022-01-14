@@ -23,6 +23,12 @@ declare module 'zero/schemas'
     number(options?: NumberFieldOptions): ZeroEditorField;
 
     /**
+     * Render a password input
+     * @param {TextFieldOptions} [options] - Custom options
+     */
+    password(options?: TextFieldOptions): ZeroEditorField;
+
+    /**
      * Render a toggle
      * @param {ToggleFieldOptions} [options] - Custom options
      */
@@ -132,7 +138,7 @@ declare module 'zero/schemas'
 
   export interface SelectFieldOptions
   {
-    items: SelectFieldItem[];
+    items: SelectFieldItem[] | ((model: any) => SelectFieldItem[]);
     emptyOption?: boolean | null;
   }
 
@@ -156,6 +162,7 @@ declare module 'zero/schemas'
     limit?: number;
     reverse?: boolean | null;
     labelKey?: string;
+    descriptionKey?: string;
     idKey?: string;
   }
 

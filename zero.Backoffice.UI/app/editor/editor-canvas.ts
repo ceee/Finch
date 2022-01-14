@@ -21,6 +21,11 @@ export class ZeroEditorCanvasBase
     this.fields.push(proxy);
     return proxy;
   }
+
+  getField(path: string): ZeroEditorField | undefined
+  {
+    return this.fields.find(x => x.path == path);
+  }
 }
 
 
@@ -54,6 +59,11 @@ export class ZeroEditorCanvas extends ZeroEditorCanvasBaseWithFieldset
     tab.sort = (this.tabs.length + 1) * 10;
     this.tabs.push(tab);
     return tab;
+  }
+
+  getTab(alias: string): ZeroEditorTab | undefined
+  {
+    return this.tabs.find(x => x.alias == alias);
   }
 }
 

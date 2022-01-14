@@ -32,13 +32,15 @@
     watch: {
       items: {
         deep: true,
-        handler()
+        handler(val)
         {
-          this.rebuild();
-          this.onChange({ target: { value: this.value } });
+          if (typeof val !== 'function')
+          {
+            this.rebuild();
+          }
         }
       },
-      'config.model.addresses': {
+      'config.model': {
         deep: true,
         handler()
         {
@@ -52,20 +54,24 @@
       rebuild()
       {
         let items = [];
+        let options = [];
 
         if (!this.config.model || !this.items)
         {
-          this.options = items;
-          return;
+          options = items;
         }
-
-        if (typeof this.items === 'function')
+        else if (typeof this.items === 'function')
         {
-          this.options = this.items(this.config.model);
+          options = this.items(this.config.model);
         }
         else
         {
-          this.options = [...this.items];
+          options = [...this.items];
+        }
+
+        if (JSON.stringify(options) !== JSON.stringify(this.options))
+        {
+          this.options = options;
         }
       },
 
@@ -78,7 +84,13 @@
           value = null;
         }
 
+        if (this.value === value)
+        {
+          return;
+        }
+
         this.$emit('input', value);
+        this.$emit('update:value', value);
       }
     }
   }

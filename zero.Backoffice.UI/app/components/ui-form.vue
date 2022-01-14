@@ -143,8 +143,6 @@
         this.setState('loading');
         this.clearErrors();
 
-        console.info(response);
-
         if (!response.success)
         {
           this.setState('error');

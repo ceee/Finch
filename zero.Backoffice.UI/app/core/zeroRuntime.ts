@@ -25,7 +25,7 @@ import
   pageModulePlugin
 } from '../modules';
 import editorPlugin from '../editor/plugin';
-import { ZeroSchema } from 'zero/schemas';
+import { ZeroSchema, ZeroSchemaExtension } from 'zero/schemas';
 import { ZeroSchemaProp } from './zero';
 import * as zeroOptions from '../options';
 import plugins from '../plugins.generated';
@@ -45,6 +45,7 @@ export class ZeroRuntime implements Zero
   _installOptions: ZeroInstallOptions;
   _routerConfig: RouterOptions;
   _schemas: Record<string, ZeroSchemaProp> = {};
+  _schemaExtensions: ZeroSchemaExtension[] = [];
   _fieldTypes: Record<string, Component> = {};
   _linkAreas: Record<string, ZeroLinkArea> = {};
 
@@ -105,6 +106,7 @@ export class ZeroRuntime implements Zero
       vue: this._app,
       routes: this._routerConfig.routes,
       schemas: this._schemas,
+      schemaExtensions: this._schemaExtensions,
       fieldTypes: this._fieldTypes,
       linkAreas: this._linkAreas,
       route(route: RouteRecordRaw)
@@ -114,6 +116,10 @@ export class ZeroRuntime implements Zero
       schema(alias: string, schema: ZeroSchemaProp)
       {
         this.schemas[alias] = schema;
+      },
+      extendSchema(alias: string, extension: ((schema: ZeroSchema) => void))
+      {
+        this.schemaExtensions.push({ alias, extension });
       },
       fieldType(alias: string, component: Component) // TODO v3 allow default field options
       {
@@ -171,7 +177,7 @@ export class ZeroRuntime implements Zero
    **/
   async getSchema(alias: string): Promise<ZeroSchema | null>
   {
-    const schema: ZeroSchemaProp = this._schemas[alias];
+    let schema: ZeroSchemaProp = this._schemas[alias];
 
     if (!schema)
     {
@@ -181,10 +187,21 @@ export class ZeroRuntime implements Zero
     if (typeof schema === 'function')
     {
       const res = await schema();
-      return res.default;
+      schema = res.default as ZeroSchema;
     }
 
+    schema.alias = alias;
+
     return Promise.resolve(schema);
+  }
+
+
+  /**
+   * get all defined extensions for a schema
+   **/
+  getSchemaExtensions(alias: string): ZeroSchemaExtension[]
+  {
+    return this._schemaExtensions.filter(x => x.alias == alias);
   }
 
 

@@ -8,6 +8,8 @@ import { ZeroEditorFieldConfiguration, ZeroEditorFieldFilterPreview } from "./ed
 import { localize } from '../services/localization';
 
 
+let appliedExtensionsTo: string[] = [];
+
 export interface ZeroCompiledEditor
 {
   alias: string;
@@ -160,6 +162,18 @@ export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEdito
   if (!editor)
   {
     return null;
+  }
+
+  if (appliedExtensionsTo.indexOf(editor.alias) < 0)
+  {
+    appliedExtensionsTo.push(editor.alias);
+
+    let extensions = zero.getSchemaExtensions(editor.alias);
+
+    extensions.forEach(extension =>
+    {
+      extension.extension(editor);
+    });
   }
 
   let model = {

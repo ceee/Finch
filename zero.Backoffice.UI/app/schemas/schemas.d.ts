@@ -5,4 +5,10 @@ declare module 'zero/schemas'
   {
     alias: string;
   }
+
+  export interface ZeroSchemaExtension
+  {
+    alias: string;
+    extension: (schema: ZeroSchema) => void;
+  }
 }

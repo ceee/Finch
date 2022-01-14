@@ -127,8 +127,6 @@
           width: this.width,
         });
 
-        console.info('nested result: ', result);
-
         if (result.eventType == 'confirm')
         {
           if (isAdd)
@@ -141,6 +139,8 @@
             this.removeItem(index);
             this.items.splice(index, 0, result.value);
           }
+
+          this.onChange();
         }
       },
 
@@ -154,7 +154,9 @@
 
       onChange()
       {
-        this.$emit('input', this.multiple ? this.items : (this.items.length > 0 ? this.items[0] : null));
+        let value = this.multiple ? this.items : (this.items.length > 0 ? this.items[0] : null)
+        this.$emit('input', value);
+        this.$emit('update:value', value);
       },
 
 
