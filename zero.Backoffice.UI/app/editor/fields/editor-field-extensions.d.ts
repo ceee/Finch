@@ -89,6 +89,12 @@ declare module 'zero/schemas'
     datePicker(options?: DatePickerFieldOptions): ZeroEditorField;
 
     /**
+    * Create a date range picker
+    * @param {DateRangePickerFieldOptions} options - Custom options
+    */
+    dateRangePicker(options?: DateRangePickerFieldOptions): ZeroEditorField;
+
+    /**
     * Create an icon picker
     * @param {DatePickerFieldOptions} options - Custom options
     */
@@ -105,6 +111,13 @@ declare module 'zero/schemas'
   {
     set?: string;
     colors?: boolean;
+  }
+
+  export interface DateRangePickerFieldOptions extends DatePickerFieldOptions
+  {
+    inline?: boolean;
+    fromLabel?: string;
+    toLabel?: string;
   }
 
   export interface DatePickerFieldOptions

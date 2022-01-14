@@ -35,6 +35,7 @@ import uiToggle from './ui-toggle.vue';
 import uiProperty from './ui-property.vue';
 import uiColorpicker from './ui-colorpicker.vue';
 import uiDatepicker from './ui-datepicker.vue';
+import uiDaterangepicker from './ui-daterangepicker.vue';
 import uiSelect from './ui-select.vue';
 import uiForm from './ui-form.vue';
 import uiFormHeader from './ui-form-header.vue';
@@ -81,6 +82,7 @@ export {
   uiProperty,
   uiColorpicker,
   uiDatepicker,
+  uiDaterangepicker,
   uiSelect,
   uiForm,
   uiFormHeader,
