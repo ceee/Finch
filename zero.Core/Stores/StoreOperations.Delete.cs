@@ -18,6 +18,7 @@ public partial class StoreOperations : IStoreOperations
     }
 
     Session.Delete(model);
+    await Session.SaveChangesAsync();
     await instruction.Complete();
     await Session.SaveChangesAsync();
 

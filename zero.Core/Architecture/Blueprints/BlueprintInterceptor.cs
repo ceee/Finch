@@ -80,6 +80,7 @@ public class BlueprintInterceptor : Interceptor<ZeroEntity>, IBlueprintIntercept
 
       await interceptor.Start(args.Operations);
       await session.StoreAsync(child);
+      await session.SaveChangesAsync();
       await interceptor.Complete();
       await session.SaveChangesAsync();
     }
@@ -109,7 +110,8 @@ public class BlueprintInterceptor : Interceptor<ZeroEntity>, IBlueprintIntercept
       interceptor.Filter(x => x is not IBlueprintInterceptor);
 
       await interceptor.Start(args.Operations);
-      session.Delete(model.Id);      
+      session.Delete(model.Id);
+      await session.SaveChangesAsync();
       await interceptor.Complete();
       await session.SaveChangesAsync();
     }

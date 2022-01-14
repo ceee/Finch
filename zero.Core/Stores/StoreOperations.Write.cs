@@ -71,6 +71,7 @@ public partial class StoreOperations : IStoreOperations
 
     // store our model
     await Session.StoreAsync(model);
+    await Session.SaveChangesAsync();
     await instruction.Complete();
     await Session.SaveChangesAsync();
 

@@ -283,7 +283,7 @@
 
   .ui-tree-item-icon.is-dashed
   {
-    stroke-dasharray: 3.5px; 
+    stroke-dasharray: 3px; 
   }
 
   .ui-tree-item:hover .ui-tree-item-icon

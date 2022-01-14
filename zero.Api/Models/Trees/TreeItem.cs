@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents an item in a tree
 /// </summary>
-public struct TreeItem
+public class TreeItem
 {
   /// <summary>
   /// Id of the item
