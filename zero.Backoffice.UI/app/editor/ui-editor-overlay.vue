@@ -47,7 +47,7 @@
       onLoad(form)
       {
         this.meta = {
-          //parentModel: this.config.parentModel
+          parentModel: this.config.model.parentModel
         };
         this.entity = JSON.parse(JSON.stringify(this.model.value));
         this.$nextTick(() =>

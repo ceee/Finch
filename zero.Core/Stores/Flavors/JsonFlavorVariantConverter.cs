@@ -19,7 +19,7 @@ internal class JsonFlavorVariantConverter<T> : JsonDiscriminatorConverter<T> whe
   protected override Type GetTypeFromDiscriminator(Type requestedType, string discriminator)
   {
     FlavorConfig config = Provider.Flavors.FirstOrDefault(x => x.Alias.Equals(discriminator, StringComparison.InvariantCultureIgnoreCase));
-    return config?.FlavorType ?? requestedType;
+    return config?.FlavorType ?? Provider.FlavorlessType ?? requestedType;
   }
 
 

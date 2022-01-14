@@ -27,6 +27,18 @@ public class FlavorProviderOptions<TEntity> where TEntity : class, ISupportsFlav
 
   public Type BaseType => _provider.BaseType;
 
+  public Func<object> FlavorlessConstruct
+  {
+    get => _provider.FlavorlessConstruct;
+    set => _provider.FlavorlessConstruct = value;
+  }
+
+  public Type FlavorlessType
+  {
+    get => _provider.FlavorlessType;
+    set => _provider.FlavorlessType = value;
+  }
+
   public IEnumerable<FlavorConfig> GetAll() => _options.GetAll<TEntity>();
 
   public FlavorConfig Get<TFlavor>() => _options.Get(typeof(TEntity), typeof(TFlavor));

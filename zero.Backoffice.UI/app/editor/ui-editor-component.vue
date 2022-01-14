@@ -16,6 +16,7 @@
     <component :is="field.component" v-bind="field.options" 
                :value="model" 
                :config="config"
+               :meta="meta"
                @input="onChange" />
     <p v-if="field.helpText" class="ui-property-help" v-localize="field.helpText"></p>
   </ui-property>

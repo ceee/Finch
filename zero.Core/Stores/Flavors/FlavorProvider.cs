@@ -14,6 +14,12 @@ public class FlavorProvider
   [JsonIgnore]
   public Type BaseType { get; set; }
 
+  [JsonIgnore]
+  public Type FlavorlessType { get; set; }
+
+  [JsonIgnore]
+  public Func<object> FlavorlessConstruct { get; set; }
+
   public List<FlavorConfig> Flavors { get; set; } = new();
 
   /// <summary>
