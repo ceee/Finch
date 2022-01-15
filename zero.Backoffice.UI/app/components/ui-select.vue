@@ -2,7 +2,7 @@
   <div class="ui-native-select" :disabled="disabled">
     <select :value="value" @input="onChange" :disabled="disabled">
       <option v-if="emptyOption"></option>
-      <option v-for="option in options" :value="option.key" v-localize="option.value"></option>
+      <option v-for="option in options" :value="option.value" v-localize="option.label"></option>
     </select>
   </div>
 </template>

@@ -2,7 +2,7 @@
   <div class="ui-tabs">
     <div role="tablist" class="ui-tabs-list">
       <button type="button" v-for="(tab, index) in tabs" class="ui-tabs-list-item" :key="index" 
-              :class="{ 'is-active': tab.active, 'has-errors': tab.hasErrors }" 
+              :class="{ 'is-active': tab.active, 'has-errors': tab.hasErrors, 'is-hidden': tab.hide }" 
               :disabled="tab.disabled" 
               :aria-selected="tab.active ? true : null" 
               role="tab" 
@@ -158,6 +158,11 @@
     {
       cursor: default;
       color: var(--color-text-dim);
+    }
+
+    &.is-hidden
+    {
+      display: none;
     }
 
     &.is-active

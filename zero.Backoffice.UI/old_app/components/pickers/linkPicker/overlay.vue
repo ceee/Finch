@@ -80,8 +80,8 @@
       this.areaItems = this.areas.map(x =>
       {
         return {
-          key: x.alias,
-          value: x.name
+          value: x.alias,
+          label: x.name
         };
       });
 

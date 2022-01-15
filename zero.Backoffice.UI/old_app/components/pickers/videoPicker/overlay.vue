@@ -37,9 +37,9 @@
   import { debounce as _debounce } from 'underscore';
 
   const PROVIDERS = [
-    { value: '@videopicker.providers.html', key: 'html' },
-    { value: '@videopicker.providers.youtube', key: 'youtube' },
-    { value: '@videopicker.providers.vimeo', key: 'vimeo' },
+    { label: '@videopicker.providers.html', value: 'html' },
+    { label: '@videopicker.providers.youtube', value: 'youtube' },
+    { label: '@videopicker.providers.vimeo', value: 'vimeo' },
   ];
 
   export default {

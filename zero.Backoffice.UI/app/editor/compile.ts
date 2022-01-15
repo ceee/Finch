@@ -201,9 +201,9 @@ export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEdito
       sort: editorTab.sort,
       alias: editorTab.alias,
       class: null,
-      count: (model: any) => null,
-      disabled: (model: any) => false,
-      hidden: (model: any) => false,
+      count: editorTab.count,
+      disabled: editorTab.disabled,
+      hidden: editorTab.hidden,
       fieldsets: [],
       component: null
     } as ZeroCompiledEditorTab;

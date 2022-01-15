@@ -5,13 +5,13 @@
     </header>
     <div class="editor" :class="['display-' + editorConfig.display, { 'has-sidebar': asideDefined, 'hide-tabs': editorConfig.tabs.length < 2, 'has-below': belowDefined }]">
       <ui-tabs class="editor-tabs">
-        <ui-tab v-for="(tab, index) in editorConfig.tabs" :key="index" class="ui-box" 
-                :class="tab.class" 
-                :data-alias="tab.alias" 
+        <ui-tab v-for="(tab, index) in editorConfig.tabs" :key="index" class="ui-box"
+                :class="tab.class"
+                :data-alias="tab.alias"
                 :label="tab.name"
-                :count="tab.count(value)" 
-                :hide="tab.hidden(value)"
-                :disabled="tab.disabled(value)">
+                :count="value ? tab.count(value) : null"
+                :hide="value ? tab.hidden(value) : false"
+                :disabled="value ? tab.disabled(value) : false">
           <h3 v-if="editorConfig.display == 'boxes' && tab.name" class="ui-headline editor-tab-headline" v-localize="tab.name"></h3>
           <slot name="blueprint">
             <blueprint-property v-if="value && editorConfig.blueprint.isEnabled" :value="value" :meta="meta" :config="editorConfig.blueprint" />
@@ -21,11 +21,11 @@
             <editor-component v-for="(field, fieldIndex) in fieldset.fields" :key="fieldIndex"
                               :value="value"
                               :field="field"
-                              :disabled="disabled" 
+                              :disabled="disabled"
                               :system="system"
                               :data-xo="JSON.stringify(field.configuration)"
                               :class="field.configuration.classes"
-                              :x-data-cols="fieldset.hasColumns" 
+                              :x-data-cols="fieldset.hasColumns"
                               :x-style="{ 'grid-column': fieldset.hasColumns ? 'span ' + field.configuration.columns : null }"
                               @input="onChange" />
 

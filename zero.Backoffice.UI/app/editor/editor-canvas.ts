@@ -72,6 +72,9 @@ export class ZeroEditorTab extends ZeroEditorCanvasBaseWithFieldset
 {
   alias: string;
   name: string;
+  count: (model: any) => number | undefined = () => undefined;
+  hidden: (model: any) => boolean = () => false;
+  disabled: (model: any) => boolean = () => false;
 
   constructor(alias: string, name: string)
   {
@@ -79,4 +82,6 @@ export class ZeroEditorTab extends ZeroEditorCanvasBaseWithFieldset
     this.alias = alias;
     this.name = name;
   }
+
+
 }
