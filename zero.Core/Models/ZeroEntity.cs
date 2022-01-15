@@ -74,7 +74,7 @@ public class ZeroEntity : ZeroIdEntity, ISupportsDbConventions, ISupportsRouting
   /// <summary>
   /// Additional properties for this entity
   /// </summary>
-  public Dictionary<string, object> Properties { get; set; } = new();
+  public Dictionary<string, string> Properties { get; set; } = new();
 
   /// <summary>
   /// [Warning] This field is always empty when bound to the database.
