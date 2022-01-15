@@ -41,7 +41,7 @@ public class SpacesController : ZeroApiEntityStoreController<Space, ISpaceStore>
     }
 
     var stream = Store.Stream(q => q.Where(x => x.Flavor == alias));
-    Space item = await stream.FirstOrDefaultAsync();
+    Space item = (await stream.FirstOrDefaultAsync()) ?? (await Store.Empty<Space>(alias));
     return item;
   }
 

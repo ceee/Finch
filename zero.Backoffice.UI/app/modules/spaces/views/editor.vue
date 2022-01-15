@@ -41,7 +41,7 @@
       },
       isCreate()
       {
-        return this.id === 'create';
+        return this.id === 'create' || (this.space.view == 'editor' && this.model && !this.model.id);
       }
     },
 
@@ -64,7 +64,25 @@
         await this.setup();
 
         var config = { system: this.$route.query['zero.scope'] == 'system' };
-        const response = await form.load(() => !this.isCreate ? api.getById(this.alias, this.id, undefined, config) : api.getEmpty(this.alias, config));
+        const response = await form.load(() =>
+        {
+          if (this.space.view == 'editor')
+          {
+            return api.getByAlias(this.alias);
+          }
+          else if (!this.isCreate)
+          {
+            return api.getById(this.alias, this.id, undefined, config);
+          }
+
+          return api.getEmpty(this.alias, config)
+        });
+
+        if (this.space.view == 'editor' && !response.id)
+        {
+
+        }
+
         this.model = response;
         //this.route = { name: 'spaces-edit', params: { alias: this.alias } };
       },
