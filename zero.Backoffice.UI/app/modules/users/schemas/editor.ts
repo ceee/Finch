@@ -13,7 +13,8 @@ editor.resourcePrefix = '@user.fields.';
 //}).length;
 
 const general = editor.tab('general', '@ui.tab_general');
-const permissions = editor.tab('permissions', '@user.tab_permissions'); //, permissionsCount, x => !x.id);
+const permissions = editor.tab('permissions', '@user.tab_permissions');
+permissions.hidden = x => !x.id;
 
 general.field('name', { label: '@ui.name' }).text({ maxLength: 80 });
 general.field('email').text({ maxLength: 120 });
