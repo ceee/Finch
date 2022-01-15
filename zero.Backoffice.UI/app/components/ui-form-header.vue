@@ -183,7 +183,6 @@
     font-weight: 700;
     background: none;
     border: 1px dashed var(--color-line-dashed-onbg);
-
     /*&:hover, &:focus, .ui-header-bar-title.is-empty &
     {
       border: 1px dashed var(--color-text-dim-one);
@@ -192,6 +191,18 @@
     .-prefix + &
     {
       margin-left: 5px;
+    }
+
+    &[readonly]:focus-visible
+    {
+      outline: none;
+    }
+
+    &[readonly]
+    {
+      cursor: default;
+      border-color: transparent;
+      padding-left: 0;
     }
   }
 

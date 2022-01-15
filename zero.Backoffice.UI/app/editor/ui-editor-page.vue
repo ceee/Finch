@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-form ref="form" class="editor-page" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model:value="model" :prefix="prefix" :title="title" :disabled="readonly" :is-create="!id" :state="form.state" :can-delete="canDelete" @delete="onDelete" />
+    <ui-form-header v-model:value="model" :prefix="prefix" :title="title" :disabled="readonly" :is-create="!id" :state="form.state" :can-delete="canDelete" @delete="onInternalDelete" />
     <ui-editor :config="editor" v-model="model" :meta="meta" :disabled="readonly" :scope="true">
       <template v-slot:below>
         <ui-editor-infos v-model="model" :disabled="readonly" />
@@ -29,10 +29,6 @@
         type: String,
         required: true
       },
-      id: {
-        type: String,
-        required: false
-      },
       prefix: {
         type: String,
         required: false
@@ -44,6 +40,10 @@
       canDelete: {
         type: Boolean,
         default: true
+      },
+      onDelete: {
+        type: Function,
+        default: null
       },
       disabled: {
         type: [Boolean, Function],
@@ -81,17 +81,36 @@
 
       async onSubmit(form)
       {
+        let isCreate = !this.id;
+
         var config = { system: this.$route.query['zero.scope'] == 'system' };
-        const response = this.id ? await this.api.update(this.model, config) : await this.api.create(this.model, config);
+        const response = !isCreate ? await this.api.update(this.model, config) : await this.api.create(this.model, config);
         await form.handle(response);
+
+        if (response.success)
+        {
+          if (isCreate)
+          {
+            this.$emit('resource-created', response.data);
+          }
+          this.$emit('resource-updated', response.data);
+          this.model = response.data;
+        }
       },
 
 
-      onDelete(item, opts)
+      onInternalDelete(item, opts)
       {
         opts.hide();
-        var config = { system: this.$route.query['zero.scope'] == 'system' };
-        this.$refs.form.onDelete(this.api.delete.bind(this, this.id, config));
+        if (typeof this.onDelete === 'function')
+        {
+          this.onDelete(this.model, opts);
+        }
+        else
+        {
+          var config = { system: this.$route.query['zero.scope'] == 'system' };
+          this.$refs.form.onDelete(this.api.delete.bind(this, this.id, config));
+        }
       }
     }
   })
