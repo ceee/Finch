@@ -32,7 +32,7 @@ public class ZeroOptions : IZeroOptions
   {
     Type type = typeof(TOptions);
 
-    if (!OptionsCache.TryGetValue(type, out object value))
+    if (!OptionsCache.TryGetValue(type, out object value) && ServiceProvider != null)
     {
       IOptions<TOptions> options = ServiceProvider.GetService<IOptions<TOptions>>();
       value = options.Value;

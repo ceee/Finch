@@ -123,7 +123,7 @@ public class ZeroDocumentConventionsBuilder : IZeroDocumentConventionsBuilder
   protected virtual string TransformTypeCollectionNameToDocumentIdPrefix(string name)
   {
     RavenOptions options = Options.For<RavenOptions>();
-    if (!options.CollectionPrefix.IsNullOrWhiteSpace())
+    if (options != null && !options.CollectionPrefix.IsNullOrWhiteSpace())
     {
       name = options.CollectionPrefix.EnsureEndsWith(IdentityPartsSeparator) + name.TrimStart(options.CollectionPrefix);
     }
