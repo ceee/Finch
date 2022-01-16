@@ -94,6 +94,11 @@
         var config = { system: this.$route.query['zero.scope'] == 'system' };
         const response = !this.isCreate ? await api.update(this.model, config) : await api.create(this.model, config);
         await form.handle(response);
+
+        if (response.success)
+        {
+          this.model = response.data;
+        }
       },
 
 

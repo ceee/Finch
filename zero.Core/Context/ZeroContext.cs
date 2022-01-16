@@ -134,6 +134,23 @@ public class ZeroContext : IZeroContext
   /// <inheritdoc />
   public void Remove<T>() => ValueCollection.Remove<T>();
 
+  
+  /// <inheritdoc />
+  public void SetScope(Application app)
+  {
+    // TODO this is only used for console app as we do not have an HttpRequest there
+    // needs to be deleted and definitely replaced
+
+    _resolved = true;
+    IsBackofficeRequest = false;
+    BackofficeUser = new ClaimsPrincipal();
+    IsLoggedIntoBackoffice = false;
+    Application = app;
+    AppId = app.Id;
+    Store.ResolvedDatabase = Application.Database;
+    Scope = new(Store, Store.ResolvedDatabase, Application);
+  }
+
 
   /// <inheritdoc />
   public ZeroContextScope CreateScope(Application app)
@@ -278,6 +295,11 @@ public interface IZeroContext
   /// Remove a custom property from this scoped context
   /// </summary>
   void Remove<T>();
+
+  /// <summary>
+  /// Manually set a scope
+  /// </summary>
+  void SetScope(Application app);
 
   /// <summary>
   /// Scope the current context to a specific application database
