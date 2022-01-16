@@ -10,7 +10,7 @@
       </slot>
     </template>
 
-    <template v-if="flavors.length > 0">
+    <template v-if="flavors.length > 1">
       <ui-dropdown-button v-for="(flavor, index) in flavors" :key="index" :icon="flavor.icon" :value="flavor" :label="flavor.name" :prevent="true" @click="selectFlavor" :selected="selectedflavor == flavor.alias" />
       <template v-if="allowBlueprint">
         <ui-dropdown-separator />
@@ -81,7 +81,7 @@
     computed: {
       hasDropdown()
       {
-        return this.flavors.length > 0 || this.allowBlueprint;
+        return this.flavors.length > 1 || this.allowBlueprint;
       }
     },
 

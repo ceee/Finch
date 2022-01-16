@@ -62,4 +62,21 @@ public class FlavorProviderOptions<TEntity> where TEntity : class, ISupportsFlav
 
   public void Add<TFlavor>(FlavorConfig config)
     where TFlavor : TEntity, new() => _options.Add<TEntity, TFlavor>(config);
+
+  public void Remove(string alias)
+  {
+    FlavorProvider provider = _options.Providers.GetValueOrDefault(_baseType, new());
+    FlavorConfig flavor = provider.Flavors.FirstOrDefault(x => x.Alias == alias);
+
+    if (flavor != null)
+    {
+      provider.Flavors.Remove(flavor);
+    }
+  }
+
+  public void RemoveAll()
+  {
+    FlavorProvider provider = _options.Providers.GetValueOrDefault(_baseType, new());
+    provider.Flavors.Clear();
+  }
 }
