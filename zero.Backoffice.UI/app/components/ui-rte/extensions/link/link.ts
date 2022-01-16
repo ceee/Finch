@@ -59,7 +59,7 @@ declare module '@tiptap/core' {
 export async function pickLink(editor)
 {
   const result = await overlays.open({
-    component: () => import('../../../../modules/links/ui-linkpicker-overlay.vue'),
+    component: () => import('../../../../modules/links/picker/ui-linkpicker-overlay.vue'),
     display: 'editor',
     model: {
       value: null,

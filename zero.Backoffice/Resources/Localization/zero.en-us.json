@@ -5,7 +5,8 @@
     "config": {
       "linkareas": {
         "pages": "Pages",
-        "media": "Media"
+        "media": "Media",
+        "url": "Url"
       }
     }
   },
@@ -179,6 +180,19 @@
     "providers": {
       "page": "Pages",
       "media": "Media"
+    },
+    "target": {
+      "default": "Default",
+      "self": "Self (same tab)",
+      "blank": "Blank (new tab)"
+    },
+    "fields": {
+      "target": "Target",
+      "title": "Title",
+      "title_text": "Displayed when hovering the title",
+      "url": {
+        "url": "URL"
+      }
     }
   },
 

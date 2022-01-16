@@ -6,12 +6,12 @@ export default {
 
   install(app: ZeroPluginOptions)
   {
-    app.vue.component('ui-linkpicker', defineAsyncComponent(() => import('./ui-linkpicker.vue')));
+    app.vue.component('ui-linkpicker', defineAsyncComponent(() => import('./picker/ui-linkpicker.vue')));
+    app.vue.component('ui-linktarget', defineAsyncComponent(() => import('./components/ui-linktarget.vue')));
 
-    app.fieldType('linkPicker', defineAsyncComponent(() => import('./editor-linkpicker.vue')));
+    app.fieldType('linkPicker', defineAsyncComponent(() => import('./picker/editor-linkpicker.vue')));
 
-    //app.schema('countries', () => import('./schemas/list'));
-    //app.schema('countries:edit', () => import('./schemas/editor'));
+    app.linkArea('zero.url', '@zero.config.linkareas.url', () => import('./partials/url-linkpicker-area.vue'));
   }
 } as ZeroPlugin;
 

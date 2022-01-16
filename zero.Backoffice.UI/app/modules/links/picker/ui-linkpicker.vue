@@ -3,7 +3,7 @@
     <input ref="input" type="hidden" :value="value" />
     <div class="ui-linkpicker-previews" v-if="previews.length > 0">
       <div v-for="preview in previews" class="ui-linkpicker-preview">
-        <ui-select-button :icon="preview.icon" :label="preview.name" :description="preview.text" :disabled="disabled" @click="pick(preview.id)" :tokens="{ id: preview.id }" />
+        <ui-select-button :icon="preview.icon" :label="preview.name" :description="preview.text" :disabled="disabled" @click="pick(preview.origin)" :tokens="{ id: preview.id }" />
         <ui-icon-button v-if="!disabled" @click="remove(preview.id)" icon="fth-x" title="@ui.close" />
       </div>
     </div>
@@ -13,9 +13,8 @@
 
 
 <script>
-  import api from './api';
-  import * as overlays from '../../services/overlay';
-  import { extendObject } from '../../utils';
+  import api from '../api';
+  import * as overlays from '../../../services/overlay';
 
   export default {
     name: 'uiLinkpicker',
@@ -104,7 +103,12 @@
 
         const result = await api.convert(links);
 
-        this.previews = result.data;
+        let index = 0;
+        this.previews = result.data.map(x =>
+        {
+          x.origin = links[index++];
+          return x;
+        });
         this.$emit('previews', this.multiple ? this.previews : this.previews[0]);
       },
 
@@ -124,7 +128,7 @@
       },
 
 
-      async pick(id)
+      async pick(item)
       {
         if (this.disabled)
         {
@@ -135,7 +139,7 @@
           component: () => import('./ui-linkpicker-overlay.vue'),
           display: 'editor',
           model: {
-            value: this.multiple ? id : this.value,
+            value: this.multiple ? item : this.value,
             areas: this.areas,
             allowTitle: this.allowTitle,
             allowTarget: this.allowTarget,

@@ -130,10 +130,10 @@
     margin: 0 0 var(--padding-s);
   }
 
-  .ui-linkpicker-overlay .ui-property + .ui-property
+  /*.ui-linkpicker-overlay .ui-property + .ui-property
   {
     margin-top: 15px;
-  }
+  }*/
 
   .ui-linkpicker-overlay-area .ui-native-select
   {

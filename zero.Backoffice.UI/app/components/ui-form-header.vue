@@ -83,7 +83,7 @@
     computed: {
       actionsDefined()
       {
-        return !this.isCreate && (this.canDelete || this.$scopedSlots.hasOwnProperty('actions'));
+        return !this.isCreate && (this.canDelete || this.$slots.hasOwnProperty('actions'));
       },
       prefixes()
       {
