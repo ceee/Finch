@@ -50,10 +50,8 @@
   {
     position: relative;
     display: grid;
-    grid-gap: 40px;
+    grid-gap: 0 40px;
     grid-template-columns: minmax(auto, 1fr) auto;
-    margin: 0 -32px 0;
-    padding: 0 32px 0;
 
     &.is-disabled .ui-property-content,
     &.is-locked .ui-property-content
@@ -223,7 +221,8 @@
     font-size: var(--font-size-xs);
     color: var(--color-text-dim);
     margin: 15px 0 0;
-    letter-spacing: 0.3px;
+    line-height: 1.4;
+    //letter-spacing: 0.3px;
 
     &:before
     {

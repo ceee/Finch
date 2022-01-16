@@ -16,6 +16,7 @@
             <span class="ui-native-check-toggle"></span>
           </span>
         </button>
+        <div v-if="listConfig.hasOptions" table-field="table_options" class="ui-table-cell is-head is-options"></div>
       </header>
 
       <slot name="topRow"></slot>
@@ -28,6 +29,9 @@
             <span class="ui-native-check-toggle"></span>
           </span>
         </button>
+        <div v-if="listConfig.hasOptions" table-field="table_options" class="ui-table-cell is-options">
+          <slot name="options" v-bind="{ item, index }"></slot>
+        </div>
       </component>
 
       <div class="ui-table-empty" v-if="!isLoading && items.length < 1">

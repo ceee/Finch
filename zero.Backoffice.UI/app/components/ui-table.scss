@@ -118,13 +118,19 @@ a.ui-table-row:hover, button.ui-table-row:hover
     font-weight: bold;
   }
 
-  &.is-selectable
+  &.is-selectable, &.is-options
   {
     font-size: var(--font-size-l);
     flex: 0 1 40px;
     text-align: center;
     padding: 0;
     justify-content: center;
+  }
+
+  &.is-options
+  {
+    overflow: visible;
+    flex: 0 1 60px;
   }
 }
 

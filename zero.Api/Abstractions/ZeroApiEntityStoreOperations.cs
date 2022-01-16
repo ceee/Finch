@@ -8,7 +8,7 @@ public class ZeroApiEntityStoreOperations<TModel, TStore>
   where TModel : ZeroEntity, new() 
   where TStore : IEntityStore<TModel>
 {
-  protected TStore Store { get; set; }
+  public TStore Store { get; set; }
 
   IZeroMapper _mapper;
   protected IZeroMapper Mapper => _mapper ?? (_mapper = Controller.HttpContext?.RequestServices?.GetService<IZeroMapper>());

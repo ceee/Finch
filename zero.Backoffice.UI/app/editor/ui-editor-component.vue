@@ -18,7 +18,9 @@
                :config="config"
                :meta="meta"
                @input="onChange" />
-    <p v-if="field.helpText" class="ui-property-help" v-localize="field.helpText"></p>
+    <template v-slot:after>
+      <p v-if="field.helpText" class="ui-property-help" v-localize="field.helpText"></p>
+    </template>
   </ui-property>
 </template>
 
