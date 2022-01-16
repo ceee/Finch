@@ -42,6 +42,7 @@ public class UIController : ZeroBackofficeController
 
 
   [HttpGet("translations")]
+  [ZeroAuthorize(false)]
   public async Task<ActionResult<Dictionary<string, string>>> GetTranslations()
   {
     return Ok(await ResourceService.GetTranslations("en-us"));

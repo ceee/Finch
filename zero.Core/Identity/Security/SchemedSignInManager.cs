@@ -13,16 +13,16 @@ namespace zero.Identity;
 
 public class SchemedSignInManager<TUser> : SignInManager<TUser> where TUser : ZeroIdentityUser
 {
-  protected ZeroAuthOptions<TUser> AuthOptions { get; private set; }
+  protected IOptionsMonitor<ZeroAuthOptions<TUser>> AuthOptions { get; private set; }
 
   protected IZeroContext Zero { get; private set; }
 
   public SchemedSignInManager(UserManager<TUser> userManager, IHttpContextAccessor contextAccessor, IUserClaimsPrincipalFactory<TUser> claimsFactory,
-    IOptions<IdentityOptions> optionsAccessor, ILogger<SignInManager<TUser>> logger, IAuthenticationSchemeProvider schemes, IUserConfirmation<TUser> confirmation, IOptions<ZeroAuthOptions<TUser>> authOptions,
+    IOptions<IdentityOptions> optionsAccessor, ILogger<SignInManager<TUser>> logger, IAuthenticationSchemeProvider schemes, IUserConfirmation<TUser> confirmation, IOptionsMonitor<ZeroAuthOptions<TUser>> authOptions,
     IZeroContext zero)
     : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation)
   {
-    AuthOptions = authOptions.Value;
+    AuthOptions = authOptions;
     Zero = zero;
   }
 
@@ -46,7 +46,7 @@ public class SchemedSignInManager<TUser> : SignInManager<TUser> where TUser : Ze
     {
       return false;
     }
-    if (!principal.Identities.Any(x => x.AuthenticationType == AuthOptions.Scheme))
+    if (!principal.Identities.Any(x => x.AuthenticationType == AuthOptions.CurrentValue.Scheme))
     {
       return false;
     }
@@ -59,7 +59,7 @@ public class SchemedSignInManager<TUser> : SignInManager<TUser> where TUser : Ze
   /// <inheritdoc />
   public override async Task RefreshSignInAsync(TUser user)
   {
-    var auth = await Context.AuthenticateAsync(AuthOptions.Scheme);
+    var auth = await Context.AuthenticateAsync(AuthOptions.CurrentValue.Scheme);
     IList<Claim> claims = Array.Empty<Claim>();
 
     var authenticationMethod = auth?.Principal?.FindFirst(ClaimTypes.AuthenticationMethod);
@@ -90,13 +90,13 @@ public class SchemedSignInManager<TUser> : SignInManager<TUser> where TUser : Ze
     {
       userPrincipal.Identities.First().AddClaim(claim);
     }
-    await Context.SignInAsync(AuthOptions.Scheme, userPrincipal, authenticationProperties ?? new AuthenticationProperties());
+    await Context.SignInAsync(AuthOptions.CurrentValue.Scheme, userPrincipal, authenticationProperties ?? new AuthenticationProperties());
   }
 
 
   /// <inheritdoc />
   public override async Task SignOutAsync()
   {
-    await Context.SignOutAsync(AuthOptions.Scheme);
+    await Context.SignOutAsync(AuthOptions.CurrentValue.Scheme);
   }
 }

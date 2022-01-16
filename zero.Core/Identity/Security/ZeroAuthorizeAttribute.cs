@@ -35,7 +35,7 @@ public class ZeroAuthorizeFilter : IAuthorizationFilter
   public void OnAuthorization(AuthorizationFilterContext context)
   {
     // allow anonymous skips all authorization
-    if (true || !Enabled) // context.Filters.Any(item => item is IAllowAnonymousFilter) || 
+    if (!Enabled) // context.Filters.Any(item => item is IAllowAnonymousFilter) || 
     {
       return;
     }
@@ -60,8 +60,10 @@ public class ZeroAuthorizeFilter : IAuthorizationFilter
 
     // find all filters which could possible interrupt/override this filter
     // these are filters which handle the same permission or disable authorization
+    string permissionKey = PermissionKeys != null ? String.Join("-", PermissionKeys) : String.Empty;
+
     ZeroAuthorizeFilter[] siblingFilters = authFilters
-      .Where(filter => !filter.Enabled) //|| filter.PermissionKey.Equals(PermissionKey, StringComparison.InvariantCultureIgnoreCase))
+      .Where(filter => !filter.Enabled || permissionKey.Equals(filter.PermissionKeys != null ? String.Join("-", filter.PermissionKeys) : String.Empty, StringComparison.InvariantCultureIgnoreCase))
       .ToArray();
 
     // get index of the current filter

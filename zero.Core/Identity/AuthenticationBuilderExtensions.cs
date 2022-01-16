@@ -65,6 +65,7 @@ public static class AuthenticationBuilderExtensions
       .Configure<IZeroOptions>((options, zero) =>
       {
         options.Scheme = scheme;
+        Console.WriteLine("scheme: " + scheme + ", be: " + isBackoffice);
         options.Path = isBackoffice ? zero.ZeroPath : "/";
       });
 
@@ -72,7 +73,9 @@ public static class AuthenticationBuilderExtensions
       .AddOptions<CookieAuthenticationOptions>(scheme)
       .Configure<IOptionsMonitor<ZeroAuthOptions<TUser>>>((options, monitor) =>
       {
-        ZeroAuthOptions<TUser> opts = monitor.Get(scheme);
+        ZeroAuthOptions<TUser> opts = monitor.CurrentValue;
+
+        Console.WriteLine("scheme: " + scheme + ", oscheme: " + opts.Scheme + ", path: " + opts.Path);
 
         options.SlidingExpiration = true;
         options.ExpireTimeSpan = TimeSpan.FromDays(90);
