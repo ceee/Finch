@@ -81,9 +81,11 @@
 
       async onSubmit(form)
       {
-        let isCreate = !this.id;
+        form.setState('loading');
 
+        let isCreate = !this.id;
         var config = { system: this.$route.query['zero.scope'] == 'system' };
+
         const response = !isCreate ? await this.api.update(this.model, config) : await this.api.create(this.model, config);
         await form.handle(response);
 

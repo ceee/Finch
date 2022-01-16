@@ -183,7 +183,7 @@
 
 
       // handle delete event
-      async onDelete(promise)
+      async onDelete(promise, dontNavigate)
       {
         const overlay = await overlays.confirmDelete();
 
@@ -201,13 +201,18 @@
         {
           opts.state('success');
           opts.close();
-          this.$router.go(-1);
+          if (!dontNavigate)
+          {
+            this.$router.go(-1);
+          }
           notifications.success('@deleteoverlay.success', '@deleteoverlay.success_text');
+          return true;
         }
         else
         {
           opts.state('error');
           opts.errors(response.errors);
+          return false;
         }
       },
 
