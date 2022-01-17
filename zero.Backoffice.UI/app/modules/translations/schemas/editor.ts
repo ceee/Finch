@@ -7,7 +7,7 @@ editor.resourcePrefix = '@translation.fields.';
 
 
 editor.field('key').text({ maxLength: 300 });
-editor.field('display').state({
+editor.field('display', { readonly: true }).state({
   items: [
     { label: '@translation.display.text', value: 'text' },
     { label: '@translation.display.html', value: 'html' }
