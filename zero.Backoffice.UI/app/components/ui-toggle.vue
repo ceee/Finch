@@ -49,6 +49,7 @@
       onChange(ev)
       {
         this.$emit('update:on', !this.on);
+        this.$emit('input', !this.on);
       }
     }
   }

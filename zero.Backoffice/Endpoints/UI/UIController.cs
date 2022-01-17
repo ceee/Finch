@@ -15,12 +15,14 @@ public class UIController : ZeroBackofficeController
   readonly ISectionService SectionService;
   readonly IZeroOptions Options;
   readonly IMediaManagement Media;
+  readonly ICultureService CultureService;
 
-  public UIController(IIconService iconService, IResourceService resourceService, ISectionService sectionService, IZeroOptions options, IMediaManagement media)
+  public UIController(IIconService iconService, IResourceService resourceService, ISectionService sectionService, IZeroOptions options, IMediaManagement media, ICultureService cultureService)
   {
     IconService = iconService;
     ResourceService = resourceService;
     SectionService = sectionService;
+    CultureService = cultureService;  
     Options = options;
     Media = media;
   }
@@ -46,6 +48,13 @@ public class UIController : ZeroBackofficeController
   public async Task<ActionResult<Dictionary<string, string>>> GetTranslations()
   {
     return Ok(await ResourceService.GetTranslations("en-us"));
+  }
+
+
+  [HttpGet("cultures")]
+  public ActionResult<List<Culture>> GetCultures()
+  {
+    return Ok(CultureService.GetAllCultures(Options.For<BackofficeOptions>().SupportedLanguages));
   }
 
 

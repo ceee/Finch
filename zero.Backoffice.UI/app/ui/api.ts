@@ -11,6 +11,8 @@ export default {
 
   getTranslations: (config?: ApiRequestConfig): Promise<ApiResponse<Record<string, string>>> => get('backoffice/ui/translations', { ...config }),
 
+  getCultures: (config?: ApiRequestConfig): Promise<ApiResponse<Record<string, UiFlavorProvider>>> => get('backoffice/ui/cultures', { ...config }),
+
   getFlavors: (config?: ApiRequestConfig): Promise<ApiResponse<Record<string, UiFlavorProvider>>> => get('backoffice/ui/flavors', { ...config }),
 
   getBlueprints: (config?: ApiRequestConfig): Promise<ApiResponse<string[]>> => get('backoffice/ui/blueprints', { ...config }),

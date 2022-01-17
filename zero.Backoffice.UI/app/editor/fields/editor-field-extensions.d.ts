@@ -104,6 +104,11 @@ declare module 'zero/schemas'
     * Create a color picker
     */
     colorPicker(): ZeroEditorField;
+
+    /**
+    * Create a culture picker
+    */
+    culturePicker(): ZeroEditorField;
   }
 
 
