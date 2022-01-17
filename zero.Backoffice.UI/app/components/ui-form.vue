@@ -57,10 +57,11 @@
         deep: true,
         handler: function (val)
         {
-          this.$nextTick(() =>
-          {
-            this.$emit('load', this);
-          });
+          //console.info('route', val);
+          //this.$nextTick(() =>
+          //{
+          //  this.$emit('load', this);
+          //});
         }
       },
       state(val)
