@@ -209,7 +209,7 @@
         this.items = fetchResult.data;
         this.selected = [];
 
-        if (!initial) //&& this.configuration.scrollToTop)
+        if (!initial && !this.listConfig.preventScroll) //&& this.configuration.scrollToTop)
         {
           let container = document.querySelector(this.listConfig.scrollContainerSelector || '.app-main');
 

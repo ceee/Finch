@@ -11,7 +11,17 @@ export default async function startup(zero: Zero)
 {
   const accountStore = useAccountStore();
 
-  let userResponse = await accountApi.getUser();
+  let userResponse = null;
+
+  try
+  {
+    userResponse = await accountApi.getUser();
+  }
+  catch
+  {
+    userResponse = { success: false };
+  }
+
   const authenticated = userResponse.success;
   accountStore.user = authenticated ? userResponse.data : undefined;
 

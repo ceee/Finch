@@ -1,4 +1,5 @@
 ﻿import Axios from 'axios';
+import eventHub from './services/eventhub';
 //import Auth from 'zero/helpers/auth.js';
 import Qs from 'qs';
 
@@ -27,7 +28,8 @@ Axios.interceptors.response.use(
     if (error.response && error.response.status === 401)
     {
       console.error('[zero.axios] Auth failed. Please login again.');
-      return Promise.resolve(error.response);
+      eventHub.emit('zero.rejectauth');
+      return Promise.reject(error.response);
       //Auth.rejectUser("@login.rejectReasons.inactive");
       //Notification.error('Authentication failed. Please login again.', 3);
     }

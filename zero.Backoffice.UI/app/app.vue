@@ -41,6 +41,7 @@
       this.startup();
 
       this.zero.events.on('zero.authenticate', this.onAuthentication);
+      this.zero.events.on('zero.rejectauth', () => this.authenticated = false);
     },
 
 
