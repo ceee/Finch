@@ -12,6 +12,12 @@ public class ZeroModuleCollection : ZeroModule
 
 
   /// <summary>
+  /// Get all registered modules
+  /// </summary>
+  public IEnumerable<IZeroModule> GetAll() => _modules.Values;
+
+
+  /// <summary>
   /// Adds a zero module
   /// </summary>
   public void Add<T>() where T : class, IZeroModule, new()

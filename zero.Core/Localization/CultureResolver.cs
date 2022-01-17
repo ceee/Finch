@@ -17,7 +17,7 @@ public class CultureResolver : ICultureResolver
 
 
   /// <inheritdoc />
-  public async Task<CultureInfo> Resolve(IZeroContext context)
+  public Task<CultureInfo> Resolve(IZeroContext context)
   {
     // TODO this is just fake, we need to correctly resolve culture here
 
@@ -34,7 +34,7 @@ public class CultureResolver : ICultureResolver
       if (language == null)
       {
         Logger.LogWarning("Could not set request culture as there is no available Language stored");
-        return CultureInfo.CurrentCulture;
+        return Task.FromResult(CultureInfo.CurrentCulture);
       }
 
       try
@@ -53,11 +53,11 @@ public class CultureResolver : ICultureResolver
       catch (Exception ex)
       {
         Logger.LogError(ex, "Could not create culture from Language code {code}", language.Code);
-        return CultureInfo.CurrentCulture;
+        return Task.FromResult(CultureInfo.CurrentCulture);
       }
     }
 
-    return CultureInfo.CurrentCulture;
+    return Task.FromResult(CultureInfo.CurrentCulture);
   }
 }
 

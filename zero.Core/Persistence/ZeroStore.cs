@@ -37,6 +37,11 @@ public class ZeroStore : IZeroStore
     database ??= ResolvedDatabase;
     options ??= new SessionOptions() { Database = database };
 
+    if (!database.HasValue())
+    {
+      return Session(true, database, resolution, options);
+    }
+
     if (resolution == ZeroSessionResolution.Create)
     {
       return Raven.OpenAsyncSession(options) as IZeroDocumentSession;
