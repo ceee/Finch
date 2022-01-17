@@ -1,7 +1,7 @@
 ﻿namespace zero.Localization;
 
 [RavenCollection("Translations")]
-public class Translation : ZeroEntity
+public class Translation : ZeroEntity, IAlwaysActive
 {
   public Translation()
   {

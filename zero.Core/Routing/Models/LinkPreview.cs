@@ -11,4 +11,6 @@ public class LinkPreview
   public string Name { get; set; }
 
   public bool HasError { get; set; }
+
+  public bool IsActive { get; set; }
 }

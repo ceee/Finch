@@ -14,6 +14,8 @@ public class Link
 
   public Dictionary<string, string> Values { get; set; } = new();
 
+  public bool IsActive { get; set; } = true;
+
   /// <summary>
   /// [Warning] This field is always empty when bound to the database.
   /// It is only filled in the app-code for routing.

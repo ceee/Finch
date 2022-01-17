@@ -1,7 +1,7 @@
 ﻿namespace zero.Mails;
 
 [RavenCollection("MailTemplates")]
-public class MailTemplate : ZeroEntity
+public class MailTemplate : ZeroEntity, IAlwaysActive
 {
   /// <summary>
   /// Email address of the sender (overrides email from application)

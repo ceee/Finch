@@ -57,6 +57,38 @@ public class Links : ILinks
 
 
   /// <inheritdoc />
+  public async Task<Link> Resolve(Link link)
+  {
+    ILinkProvider provider = Providers.LastOrDefault(x => x.CanProcess(link));
+
+    if (provider == null)
+    {
+      Logger.LogWarning("Could not find provider for link with area {area}", link.Area);
+      return null;
+    }
+
+    await provider.Resolve(link);
+
+    return link;
+  }
+
+
+  /// <inheritdoc />
+  public async Task<Dictionary<Link, Link>> Resolve(params Link[] links)
+  {
+    Dictionary<Link, Link> result = new();
+
+    foreach (Link link in links)
+    {
+      Link resolved = await Resolve(link);
+      result.Add(link, resolved);
+    }
+
+    return result;
+  }
+
+
+  /// <inheritdoc />
   public ILinkProvider GetProvider(Link link)
   {
     return Providers.LastOrDefault(x => x.CanProcess(link));
@@ -117,6 +149,16 @@ public interface ILinks
   /// Get URLs from link objects by finding matching providers
   /// </summary>
   Task<Dictionary<Link, string>> GetUrls(params Link[] links);
+
+  /// <summary>
+  /// Get resolved Link from a link object by finding a provider which can resolve the link
+  /// </summary>
+  Task<Link> Resolve(Link link);
+
+  /// <summary>
+  /// Get resolved Link from link objects by finding matching providers
+  /// </summary>
+  Task<Dictionary<Link, Link>> Resolve(params Link[] links);
 
   /// <summary>
   /// Get the provider for a specific link

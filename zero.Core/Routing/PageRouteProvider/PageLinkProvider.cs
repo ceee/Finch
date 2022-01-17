@@ -8,11 +8,13 @@ public class PageLinkProvider : ILinkProvider
 
   protected IRoutes Routes { get; set; }
   protected IPageTypeService PageTypeService { get; set; }
+  protected IPagesStore Pages { get; set; }
 
-  public PageLinkProvider(IRoutes routes, IPageTypeService pageTypeService)
+  public PageLinkProvider(IRoutes routes, IPageTypeService pageTypeService, IPagesStore pages)
   {
     Routes = routes;
     PageTypeService = pageTypeService;
+    Pages = pages;
   }
 
 
@@ -41,7 +43,15 @@ public class PageLinkProvider : ILinkProvider
   /// <inheritdoc />
   public async Task<string> Resolve(Link link)
   {
-    link.Url = await Routes.GetUrl<Page>(link.Values.GetValueOrDefault("id")) + (link.UrlSuffix ?? string.Empty);
+    Page page = await Pages.Load(link.Values.GetValueOrDefault("id"));
+
+    if (page == null)
+    {
+      return null;
+    }
+
+    link.IsActive = page.IsActive;
+    link.Url = await Routes.GetUrl(page) + (link.UrlSuffix ?? string.Empty);
     return link.Url;
   }
 
@@ -72,6 +82,7 @@ public class PageLinkProvider : ILinkProvider
       Id = page.Id,
       Icon = pageType?.Icon ?? "fth-folder",
       Name = page.Name,
+      IsActive = page.IsActive,
       Text = url
     };
   }

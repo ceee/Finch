@@ -33,6 +33,7 @@ public class RawLinkProvider : ILinkProvider
   public Task<string> Resolve(Link link)
   {
     link.Url = link.Values.GetValueOrDefault("url");
+    link.IsActive = true;
     return Task.FromResult(link.Url);
   }
 
@@ -52,7 +53,8 @@ public class RawLinkProvider : ILinkProvider
       Id = url,
       Icon = "fth-link",
       Name = link.Title.Or("@ui.link"),
+      IsActive = true,
       Text = url
-    });
+    }); ;
   }
 }

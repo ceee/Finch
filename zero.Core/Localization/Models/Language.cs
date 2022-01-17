@@ -1,7 +1,7 @@
 ﻿namespace zero.Localization;
 
 [RavenCollection("Languages")]
-public class Language : ZeroEntity
+public class Language : ZeroEntity, IAlwaysActive
 {
   /// <summary>
   /// Language code (ISO 3166-1)
