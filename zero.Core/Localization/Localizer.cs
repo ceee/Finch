@@ -1,12 +1,11 @@
-﻿using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
+﻿using System.Collections.Concurrent;
 using System.Reflection;
 
 namespace zero.Localization;
 
 public class Localizer : ILocalizer
 {
-  protected Dictionary<string, string> Cache { get; private set; } = new();
+  protected ConcurrentDictionary<string, string> Cache { get; private set; } = new();
 
   protected IZeroStore Store { get; private set; }
 
@@ -38,11 +37,7 @@ public class Localizer : ILocalizer
       }
 
       value = translation.Value;
-
-      lock (Cache) // TOOD use concurrent dictionary
-      {
-        Cache[key] = value;
-      }
+      Cache.TryAdd(key, value);
     }
 
     if (tokens != null)

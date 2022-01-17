@@ -8,11 +8,13 @@ namespace zero.Routing;
 public class ZeroRoutesTransformer : DynamicRouteValueTransformer
 {
   readonly IRouteResolver RouteResolver;
+	readonly IMediaFileSystem MediaFileSystem;
 	readonly ILogger<ZeroRoutesTransformer> Logger;
 
-	public ZeroRoutesTransformer(IRouteResolver routeResolver, ILogger<ZeroRoutesTransformer> logger)
+	public ZeroRoutesTransformer(IRouteResolver routeResolver, IMediaFileSystem mediaFileSystem, ILogger<ZeroRoutesTransformer> logger)
   {
 		RouteResolver = routeResolver;
+		MediaFileSystem = mediaFileSystem;
 		Logger = logger;
 	}
 
@@ -46,6 +48,12 @@ public class ZeroRoutesTransformer : DynamicRouteValueTransformer
 		{
 			return null;
 		}
+
+		// do not continue if it is a media path
+		if (MediaFileSystem.IsMediaPath(httpContext.Request.Path))
+    {
+			return null;
+    }
 
 		// resolve route from URL
 		route = await RouteResolver.ResolveUrl(httpContext);

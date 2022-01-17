@@ -27,8 +27,9 @@ public class CultureResolver : ICultureResolver
     }
     else
     {
-      var session = context.Store.Session();
-      Language language = await session.Query<Language>().FirstOrDefaultAsync();
+      //var session = context.Store.Session();
+      //Language language = await session.Query<Language>().FirstOrDefaultAsync();
+      Language language = new() { Code = "de-DE" };
 
       if (language == null)
       {
