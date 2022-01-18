@@ -6,8 +6,8 @@
 
 
 <script>
-  import api from './api';
-  import { extendObject } from '../../utils';
+  import api from '../api';
+  import { extendObject } from '../../../utils';
 
   export default {
     name: 'uiMailtemplatepicker',

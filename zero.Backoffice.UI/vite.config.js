@@ -11,6 +11,7 @@ if (!process.env.ZERO_PLUGINS)
 {
   //loadedPlugins = ["../zero.Commerce/Plugin", "../zero.Stories/Plugin", "../zero.Forms/Plugin", "../../Laola/Laola.Backoffice/Plugin"];
   loadedPlugins = ["../plugins/zero.Commerce/Backoffice/Plugin", "../../Laola/Laola.Backoffice/Plugin"]
+  //loadedPlugins = ["../plugins/zero.Commerce/Backoffice/Plugin"]
   //loadedPlugins = [];
 }
 
@@ -77,7 +78,7 @@ let config = defineConfig({
   },
   resolve: {
     alias: {
-      vue: '@vue/compat',
+      vue: path.resolve(__dirname, 'node_modules/@vue/compat'),
       zero: path.resolve(__dirname, 'app'),
       ...pluginAliases,
     }
@@ -106,6 +107,9 @@ let config = defineConfig({
     //  'tiptap': 'tiptap/dist/tiptap.esm.js',
     //},
     rollupOptions: {
+      external: {
+        '@vue/compat': 'xoo/xoo.js'
+      },
       output: {
         format: 'es',
         entryFileNames: `[name].js`,
@@ -121,6 +125,12 @@ let config = defineConfig({
 if (process.env.NODE_ENV === 'production')
 {
   config.base = '/zero/';
+  //config.alias.tiptap = 'node_modules/tiptap/dist/tiptap.esm.js';
+
+  //config.alias.tiptap = 'node_modules/tiptap/dist/tiptap.esm.js';
+  //config.alias.underscore = 'node_modules/underscore/underscore-esm.js';
+  //config.alias.axios = 'node_modules/axios/dist/axios.js';
+  config.resolve.alias.dayjs = 'node_modules/dayjs/esm/index.js';
   //config.alias.tiptap = 'node_modules/tiptap/dist/tiptap.esm.js';
 }
 

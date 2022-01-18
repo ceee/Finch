@@ -273,7 +273,7 @@ deps/*.dll
 zero.Commerce/
 zero.Stories/
 zero.Forms/
-zero.Web.UI/package.json
-zero.Web.UI/package-lock.json
-zero.Web.UI/app/core/plugins.js
-zero.Web.UI/dist
+zero.Backoffice.UI/package.json
+zero.Backoffice.UI/package-lock.json
+zero.Backoffice.UI/app/core/plugins.js
+zero.Backoffice.UI/dist

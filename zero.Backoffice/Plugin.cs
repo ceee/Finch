@@ -28,7 +28,6 @@ public class ZeroBackofficePlugin : ZeroPlugin
     services.AddOptions<BackofficeOptions>().Bind(configuration.GetSection("Zero:Backoffice")).Configure<IWebHostEnvironment>(ConfigureOptions);
     services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, ZeroBackofficeMvcOptions>());
     services.AddHostedService<ZeroDevService>();
-    services.AddTransient<IZeroVue, ZeroVue>();
     services.AddSingleton<IMapperProfile, AccountMapperProfile>();
     services.AddScoped<IPageTreeService, PageTreeService>();
 
@@ -70,7 +69,7 @@ public class ZeroBackofficePlugin : ZeroPlugin
       Prefix = "fth"
     });
 
-    options.SupportedLanguages = new string[2] { "en-US", "de-DE" };
+    options.SupportedLanguages = new string[1] { "en-US" }; //, "de-DE" };
     options.DefaultLanguage = options.SupportedLanguages[0];
   }
 }

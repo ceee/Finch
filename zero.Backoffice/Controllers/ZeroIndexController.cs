@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using System.IO;
 using zero.Api.Controllers;
 using zero.Backoffice.Services;
@@ -9,17 +11,15 @@ namespace zero.Backoffice.Controllers;
 [DisableBrowserCacheFilter]
 public class ZeroIndexController : Controller
 {
-  IZeroVue ZeroVue { get; set; }
   IZeroOptions Options { get; set; }
-  IAuthenticationService AuthService { get; set; }
   IIconService IconRepository { get; set; }
+  IWebHostEnvironment Env { get; set; }
 
-  public ZeroIndexController(IZeroVue zeroVue, IZeroOptions options, IAuthenticationService authService, IIconService iconRepository)
+  public ZeroIndexController(IZeroOptions options, IIconService iconRepository, IWebHostEnvironment env)
   {
-    ZeroVue = zeroVue;
     Options = options;
-    AuthService = authService;
     IconRepository = iconRepository;
+    Env = env;
   }
 
 
@@ -30,54 +30,27 @@ public class ZeroIndexController : Controller
       return RedirectToAction("ZeroBackoffice", "Setup");
     }
 
-    string config = await ZeroVue.ConfigAsJson();
     int port = Options.For<BackofficeOptions>().DevServer.Port;
     string domain = "http://localhost:" + port;
 
-    string content = TokenReplacement.Apply(await LoadTemplate("zero.Backoffice.Resources.backoffice.tpl.html"), new()
+    Dictionary<string, string> model = new()
     {
-      { "css", String.Empty },
-      { "js", String.Join(String.Empty, GetJsModules(domain, new[] { "/vite/client", "/app/app.ts" })) },
-      { "svg", await IconRepository.GetCompiledSvg() },
-      { "config", config }
-    });
+      { "top", String.Empty },
+      { "bottom", String.Join(String.Empty, GetJsModules(domain, new[] { "/vite/client", "/app/app.ts" })) },
+      { "svg", await IconRepository.GetCompiledSvg() }
+    };
 
-    return Content(content, "text/html");
-    //if (AuthService.IsLoggedIn())
-    //{
-    //  return await RenderBackoffice(domain, config);
-    //}
-    //else
-    //{
-    //  return await RenderAuth(domain, config);
-    //}
-  }
-
-
-  async Task<ActionResult> RenderAuth(string domain, string config)
-  {
-    string content = TokenReplacement.Apply(await LoadTemplate("zero.Backoffice.Resources.auth.tpl.html"), new()
+    if (!Env.IsDevelopment() || true)
     {
-      { "css", String.Empty },
-      { "js", String.Join(String.Empty, GetJsModules(domain, new[] { "/vite/client", "/app/app-auth.js" })) },
-      { "svg", await IconRepository.GetCompiledSvg() },
-      { "config", config }
-    });
+      model["bottom"] = String.Empty;
+      model["top"] = @"
+        <script type='module' crossorigin src='/zero/index.js'></script>
+        <link rel='modulepreload' href='/zero/vendor.js' />
+        <link rel='stylesheet' href='/zero/index.css' />
+      ";
+    }
 
-    return Content(content, "text/html");
-  }
-
-
-  async Task<ActionResult> RenderBackoffice(string domain, string config)
-  {
-    string content = TokenReplacement.Apply(await LoadTemplate("zero.Backoffice.Resources.backoffice.tpl.html"), new()
-    {
-      { "css", String.Empty },
-      { "js", String.Join(String.Empty, GetJsModules(domain, new[] { "/vite/client", "/app/app.js" })) },
-      { "svg", await IconRepository.GetCompiledSvg() },
-      { "config", config }
-    });
-
+    string content = TokenReplacement.Apply(await LoadTemplate("zero.Backoffice.Resources.backoffice.tpl.html"), model);
     return Content(content, "text/html");
   }
 
@@ -94,11 +67,4 @@ public class ZeroIndexController : Controller
     using StreamReader reader = new(stream);
     return await reader.ReadToEndAsync();
   }
-}
-
-public class ZeroBackofficeModel
-{
-  public int Port { get; set; }
-
-  public IZeroVue Vue { get; set; }
 }

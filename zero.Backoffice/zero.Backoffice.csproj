@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\auth.tpl.html" />
     <EmbeddedResource Include="Resources\backoffice.tpl.html" />
   </ItemGroup>
 
