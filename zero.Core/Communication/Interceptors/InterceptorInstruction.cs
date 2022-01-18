@@ -10,6 +10,8 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
 
   public T Model { get; private set; }
 
+  public T PreviousModel { get; private set; }
+
   public Type ModelType { get; private set; }
 
   public Result<T> Result { get; private set; }
@@ -27,7 +29,7 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
   protected Func<IInterceptor, bool> InterceptorFilter { get; private set; } = x => true;
 
 
-  internal InterceptorInstruction(IInterceptors interceptors, IZeroContext context, Lazy<IEnumerable<IInterceptor>> registrations, ILogger<IInterceptor> logger, InterceptorRunType runtype, T model)
+  internal InterceptorInstruction(IInterceptors interceptors, IZeroContext context, Lazy<IEnumerable<IInterceptor>> registrations, ILogger<IInterceptor> logger, InterceptorRunType runtype, T model, T previousModel = null)
   {
     InterceptorHandler = interceptors;
     Context = context;
@@ -35,6 +37,7 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
     Logger = logger;
     Runtype = runtype;
     Model = model;
+    PreviousModel = previousModel;
     Interceptors = registrations;
 
     ModelType = model.GetType();
@@ -65,7 +68,8 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
         Store = Context.Store,
         Properties = new(),
         Interceptors = InterceptorHandler,
-        Operations = operations
+        Operations = operations,
+        PreviousModel = PreviousModel
       };
 
       if (!interceptor.CanHandle(parameters, ModelType))

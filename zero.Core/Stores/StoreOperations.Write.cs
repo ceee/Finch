@@ -18,14 +18,18 @@ public partial class StoreOperations : IStoreOperations
       return Result<T>.Fail("@errors.onsave.empty");
     }
 
+    T previousModel = null;
     bool isUpdate = false;
 
     // check if the Id for a model already exists
     if (!model.Id.IsNullOrEmpty())
     {
-      bool exists = await Session.Advanced.ExistsAsync(model.Id);
+      using (IZeroDocumentSession session = Context.Store.Session(resolution: ZeroSessionResolution.Create, options: new Raven.Client.Documents.Session.SessionOptions() { Database = Context.Store.ResolvedDatabase, NoCaching = true }))
+      {
+        previousModel = await session.LoadAsync<T>(model.Id);
+      }
 
-      if (!exists)
+      if (previousModel == null)
       {
         return Result<T>.Fail("@errors.onsave.noidmatch");
       }
@@ -62,7 +66,7 @@ public partial class StoreOperations : IStoreOperations
     }
 
     // run interceptor
-    InterceptorInstruction<T> instruction = isUpdate ? Interceptors.ForUpdate(model) : Interceptors.ForCreate(model);
+    InterceptorInstruction<T> instruction = isUpdate ? Interceptors.ForUpdate(model, previousModel) : Interceptors.ForCreate(model);
 
     if (!await instruction.Start(this))
     {

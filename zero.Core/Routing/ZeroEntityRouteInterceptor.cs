@@ -121,8 +121,7 @@ public class ZeroEntityRouteInterceptor : Interceptor<ZeroEntity>
     if (Routes.TryGetProvider(model, out IRouteProvider provider))
     {
       // return if the route is not stale
-      ZeroEntity previousModel = null;
-      if (previousModel != null && !(await provider.IsRouteStale(context, previousModel, model)))
+      if (args.PreviousModel is ZeroEntity previousZeroModel && !(await provider.IsRouteStale(context, previousZeroModel, model)))
       {
         return;
       }

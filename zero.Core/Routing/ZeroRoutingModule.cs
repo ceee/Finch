@@ -20,7 +20,7 @@ internal class ZeroRoutingModule : ZeroModule
     services.AddScoped<ILinkProvider, RawLinkProvider>();
     services.AddTransient<ZeroRoutesTransformer>();
     services.TryAddEnumerable(ServiceDescriptor.Singleton<MatcherPolicy, NotFoundSelectorPolicy>());
-    //services.AddScoped<IInterceptor, ZeroEntityRouteInterceptor>();
+    services.AddScoped<IInterceptor, ZeroEntityRouteInterceptor>();
 
     services.AddOptions<RoutingOptions>().Bind(configuration.GetSection("Zero:Routing"));
 

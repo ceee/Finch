@@ -61,6 +61,11 @@ public class PageUrlBuilder : IPageUrlBuilder
   {
     string alias;
 
+    if (page == null)
+    {
+      return null;
+    }
+
     if (page is PageFolder && !((PageFolder)page).IsPartOfRoute)
     {
       return null;

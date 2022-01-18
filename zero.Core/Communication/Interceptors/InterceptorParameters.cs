@@ -36,4 +36,9 @@ public class InterceptorParameters
   /// Get a typed property
   /// </summary>
   public bool TryGetProperty<TProp>(string key, out TProp property) => Properties.TryGetValue(key, out property);
+
+  /// <summary>
+  /// Holds a reference to the previously existing model when an update happens (can be null)
+  /// </summary>
+  public object PreviousModel { get; set; }
 }
