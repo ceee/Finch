@@ -19,7 +19,7 @@ public class ZeroBackofficePlugin : ZeroPlugin
   public ZeroBackofficePlugin()
   {
     Options.Name = "zero.Backoffice";
-    Options.LocalizationPaths.Add("~/Resources/Localization/zero.{lang}.json");
+    Options.LocalizationPaths.Add("Resources/Localization/zero.{lang}.json");
   }
 
 
@@ -40,6 +40,13 @@ public class ZeroBackofficePlugin : ZeroPlugin
       IOptions<BackofficeOptions> options = svc.GetRequiredService<IOptions<BackofficeOptions>>();
       IWebHostEnvironment env = svc.GetRequiredService<IWebHostEnvironment>();
       return new(Path.Combine(env.WebRootPath, options.Value.AssetPath));
+    });
+
+    services.AddSingleton<IBackofficeResourceFileSystem, BackofficeResourceFileSystem>(svc =>
+    {
+      IOptions<BackofficeOptions> options = svc.GetRequiredService<IOptions<BackofficeOptions>>();
+      IWebHostEnvironment env = svc.GetRequiredService<IWebHostEnvironment>();
+      return new(env.ContentRootPath);
     });
 
     services.AddZeroBackofficeUIComposition();

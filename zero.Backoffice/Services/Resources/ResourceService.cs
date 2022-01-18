@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.IO;
@@ -10,26 +12,32 @@ public class ResourceService : IResourceService
 {
   protected IOptions<BackofficeOptions> Options { get; set; }
 
-  protected IBackofficeAssetFileSystem FileSystem { get; set; }
+  protected IBackofficeAssetFileSystem AssetFileSystem { get; set; }
+
+  protected IBackofficeResourceFileSystem ResourceFileSystem { get; set; } 
 
   protected ILogger<IconService> Logger { get; set; }
 
   protected IEnumerable<IZeroPlugin> Plugins { get; set; }
 
+  protected IWebHostEnvironment Env { get; set; }
 
-  public ResourceService(IOptions<BackofficeOptions> options, IBackofficeAssetFileSystem fileSystem, ILogger<IconService> logger, IEnumerable<IZeroPlugin> plugins)
+
+  public ResourceService(IOptions<BackofficeOptions> options, IBackofficeAssetFileSystem assetFileSystem, IBackofficeResourceFileSystem resourceFileSystem, ILogger<IconService> logger, IEnumerable<IZeroPlugin> plugins, IWebHostEnvironment env)
   {
     Options = options;
-    FileSystem = fileSystem;
+    AssetFileSystem = assetFileSystem;
+    ResourceFileSystem = resourceFileSystem;
     Logger = logger;
     Plugins = plugins;
+    Env = env;
   }
 
 
   /// <inheritdoc />
   public Task<Dictionary<string, string>> GetTranslations(string cultureIsoCode)
   {
-    var zeroTranslations = CreateTranslationsForFile("O:/zero/zero.Backoffice/Resources/Localization/zero.en-us.json", cultureIsoCode); // TODO
+    Dictionary<string, string> zeroTranslations = new(); // CreateTranslationsForFile("O:/zero/zero.Backoffice/Resources/Localization/zero.en-us.json", cultureIsoCode); // TODO
 
     foreach (IZeroPlugin plugin in Plugins)
     {
@@ -54,20 +62,21 @@ public class ResourceService : IResourceService
   Dictionary<string, string> CreateTranslationsForFile(string path, string culture)
   {
     Dictionary<string, string> items = new();
-    culture = culture?.ToLower();
+    culture = culture.ToLower();
 
-    if (!culture.IsNullOrEmpty() && culture != "en-us")
+    if (path.Contains("{lang}"))
     {
-      items = CreateTranslationsForFile(path, "en-us");
-      path = path.Replace("en-us", culture);
+      path = path.Replace("{lang}", culture);
     }
 
-    if (!File.Exists(path))
+    string fullpath = Env.IsDevelopment() ? Path.Combine(AppContext.BaseDirectory, path) : ResourceFileSystem.Map(path);
+
+    if (!File.Exists(fullpath))
     {
       return items;
     }
 
-    string text = File.ReadAllText(path, Encoding.GetEncoding("ISO-8859-1"));
+    string text = File.ReadAllText(fullpath, Encoding.GetEncoding("ISO-8859-1"));
 
     JObject json = JObject.Parse(text);
     IEnumerable<JToken> tokens = json.Descendants().Where(p => !p.Any());

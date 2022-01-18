@@ -14,12 +14,14 @@ public class ZeroIndexController : Controller
   IZeroOptions Options { get; set; }
   IIconService IconRepository { get; set; }
   IWebHostEnvironment Env { get; set; }
+  IBackofficeAssetFileSystem AssetFileSystem { get; set; }
 
-  public ZeroIndexController(IZeroOptions options, IIconService iconRepository, IWebHostEnvironment env)
+  public ZeroIndexController(IZeroOptions options, IIconService iconRepository, IWebHostEnvironment env, IBackofficeAssetFileSystem assetFileSystem)
   {
     Options = options;
     IconRepository = iconRepository;
     Env = env;
+    AssetFileSystem = assetFileSystem;
   }
 
 
@@ -30,7 +32,9 @@ public class ZeroIndexController : Controller
       return RedirectToAction("ZeroBackoffice", "Setup");
     }
 
-    int port = Options.For<BackofficeOptions>().DevServer.Port;
+    BackofficeOptions options = Options.For<BackofficeOptions>();
+
+    int port = options.DevServer.Port;
     string domain = "http://localhost:" + port;
 
     Dictionary<string, string> model = new()
@@ -40,14 +44,19 @@ public class ZeroIndexController : Controller
       { "svg", await IconRepository.GetCompiledSvg() }
     };
 
-    if (!Env.IsDevelopment() || true)
+    if (!Env.IsDevelopment())
     {
-      model["bottom"] = String.Empty;
-      model["top"] = @"
-        <script type='module' crossorigin src='/zero/index.js'></script>
-        <link rel='modulepreload' href='/zero/vendor.js' />
-        <link rel='stylesheet' href='/zero/index.css' />
-      ";
+      string html = System.IO.File.ReadAllText(Path.Combine(Env.WebRootPath, "zero/index.html"));
+      return Content(html, "text/html");
+      //string assetHash = options.AssetHash;
+      //string suffix = assetHash.HasValue() ? "?v=" + assetHash : String.Empty;
+
+      //model["bottom"] = String.Empty;
+      //model["top"] = @$"
+      //  <script type='module' crossorigin src='/zero/index.js${suffix}'></script>
+      //  <link rel='modulepreload' href='/zero/vendor.js${suffix}' />
+      //  <link rel='stylesheet' href='/zero/index.css${suffix}' />
+      //";
     }
 
     string content = TokenReplacement.Apply(await LoadTemplate("zero.Backoffice.Resources.backoffice.tpl.html"), model);

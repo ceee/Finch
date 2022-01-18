@@ -18,7 +18,27 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Countries\countries.de-de.json" />
+    <None Remove="Resources\Countries\countries.en-us.json" />
+    <None Remove="Resources\Localization\zero.de-de.json" />
+    <None Remove="Resources\Localization\zero.en-us.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Resources\backoffice.tpl.html" />
+    
+    <Content Include="Resources\Countries\countries.de-de.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Countries\countries.en-us.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Localization\zero.de-de.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Localization\zero.en-us.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

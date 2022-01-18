@@ -99,17 +99,11 @@ let config = defineConfig({
   build: {
     manifest: true,
     outDir: 'dist/zero',
-    minify: false,
-    terserOptions: {
-      compress: false
-    },
-    //alias: {
-    //  'tiptap': 'tiptap/dist/tiptap.esm.js',
+    minify: 'esbuild',
+    //terserOptions: {
+    //  compress: false
     //},
     rollupOptions: {
-      external: {
-        '@vue/compat': 'xoo/xoo.js'
-      },
       output: {
         format: 'es',
         entryFileNames: `[name].js`,
@@ -120,18 +114,10 @@ let config = defineConfig({
   }
 });
 
-//console.log('root: ' + config.root);
-
 if (process.env.NODE_ENV === 'production')
 {
   config.base = '/zero/';
-  //config.alias.tiptap = 'node_modules/tiptap/dist/tiptap.esm.js';
-
-  //config.alias.tiptap = 'node_modules/tiptap/dist/tiptap.esm.js';
-  //config.alias.underscore = 'node_modules/underscore/underscore-esm.js';
-  //config.alias.axios = 'node_modules/axios/dist/axios.js';
   config.resolve.alias.dayjs = 'node_modules/dayjs/esm/index.js';
-  //config.alias.tiptap = 'node_modules/tiptap/dist/tiptap.esm.js';
 }
 
 export default config;
