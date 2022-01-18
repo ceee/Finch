@@ -204,75 +204,75 @@
   },
 
   "errors": {
-    "idnotfound": "Could not find an entity for the given ID",
-    "childnotallowed": "Not allowed as a child entity",
+    "idnotfound": "Element konnte nicht gefunden werden",
+    "childnotallowed": "Nicht erlaubt als Kind dieses Elements",
     "onsave": {
-      "notallowed": "You are not allowed to edit this resource",
-      "empty": "You need to pass a model",
-      "noidmatch": "Do not fill out the Id field when creating a resource",
-      "flavornotfound": "Could not find a registration for this resource flavor"
+      "notallowed": "Keine Berechtigung, um dieses Element zu bearbeiten",
+      "empty": "Es wurden keine Daten übermittelt",
+      "noidmatch": "Beim Erstellen von Elementen darf keine ID übermittelt werden",
+      "flavornotfound": "Variante des Elements konnte nicht gefunden werden"
     },
     "ondelete": {
-      "idnotfound": "Could not find an entity for the given ID"
+      "idnotfound": "Element konnte nicht gefunden werden"
     },
     "onupdate": {
-      "noidmatch": "The Id as part of the URL does not match the Id of the model",
-      "changetokenmismatch": "The change token is not valid anymore"
+      "noidmatch": "Die ID in der URL stimmt nicht mit jener in den Daten überein",
+      "changetokenmismatch": "Der Änderungs-Token ist nicht mehr gültig"
     },
     "onmove": {
-      "title": "Could not move entity"
+      "title": "Element konnte nicht verschoben werden"
     },
     "oncopy": {
-      "title": "Could not copy entity"
+      "title": "Element konnte nicht kopiert werden"
     },
     "onsort": {
-      "title": "Could not sort entities"
+      "title": "Elemente konnten nicht sortiert werden"
     },
     "http": {
-      "403": "Unauthorized",
-      "403_text": "You are not allowed to view this resource",
-      "404": "Not found",
-      "404_text": "The requested resource could not be found<br>({path})",
-      "409": "Conflict",
-      "409_text": "The operation could not be completed as it is not valid anymore. Please reload the page",
-      "4xx": "Client error",
-      "4xx_text": "There was an internal client error (code: {code})",
-      "504": "Timed out",
-      "504_text": "The backoffice did not receive a timely response from the server",
-      "5xx": "Server error",
-      "5xx_text": "There was an internal server error (code: {code})"
+      "403": "Unautorisiert",
+      "403_text": "Dieses Element kann nicht betrachtet werden",
+      "404": "Nicht gefunden",
+      "404_text": "Das angefragte Element konnte nicht gefunden werden<br>({path})",
+      "409": "Konflikt",
+      "409_text": "Die Operation konnte nicht abgeschlossen werden, da sie nicht mehr gültig ist. Bitte Seite neu laden.",
+      "4xx": "Anwenderfehler",
+      "4xx_text": "Interner Anwenderfehler (Code: {code})",
+      "504": "Zeitüberschreitung",
+      "504_text": "Der Server konnte nicht rechtzeitig auf eine Anfragen antworten",
+      "5xx": "Serverfehler",
+      "5xx_text": "Interner Serverfehler (Code: {code})"
     },
     "role": {
-      "emptyclaim": "A permission needs both a key and a value",
-      "nosection": "You have to select at least one section to give users access to"
+      "emptyclaim": "Eine Berechtigung benötigt einen Schlüssel und einen Wert",
+      "nosection": "Es muss zumindest ein Bereich ausgewählt werden, zu dem der Benutzer Zugang hat"
     },
     "changepassword": {
-      "emptyfields": "Please fill out all fields",
-      "nouser": "User is invalid",
-      "newpasswordsnotmatching": "The new password does not match the confirmation",
-      "passwordincorrect": "The current password for this user is wrong"
+      "emptyfields": "Es müssen alle Felder ausgefüllt werden",
+      "nouser": "Benutzer ist ungültig",
+      "newpasswordsnotmatching": "Das neue Passwort stimmt nicht mit deren Bestätigung überein",
+      "passwordincorrect": "Das aktuelle Passwort des Benutzers ist falsch"
     },
     "preview": {
-      "notfound": "Not found",
-      "notfound_text": "Could not find entity with ID \"{id}\""
+      "notfound": "Nicht gefunden",
+      "notfound_text": "Element mit der ID \"{id}\" konnte nicht gefunden werden"
     },
     "page": {
-      "parentnotallowed": "The page is not allowed as a children of the selected parent",
-      "sortingmultipleparents": "Sorting pages is only allowed for a specific parent page"
+      "parentnotallowed": "Die Seite ist als Kind der ausgewählten Überseite nicht erlaubt",
+      "sortingmultipleparents": "Seiten können nur auf derselben Hierarchieebene sortiert werden"
     },
     "treeentity": {
-      "parentnotallowed": "This entity is not allowed as a children of the selected parent",
-      "sortingmultipleparents": "The selected entities have multiple parents, which is not allowed"
+      "parentnotallowed": "Das Element ist als Kind des ausgewählten Überelements nicht erlaubt",
+      "sortingmultipleparents": "Elemente können nur auf derselben Hierarchieebene sortiert werden"
     },
     "forms": {
-      "email_invalid": "The email address is not valid",
-      "emails_invalid": "The email address(es) is/are not valid",
-      "hex_format": "The input is not in a valid HEX #aabbcc format",
-      "url_format": "The input is no well-formed URL",
-      "not_unique": "The property must be unique in this collection",
-      "not_unique_alone": "There must be at least one entity in this collection which fulfills this condition",
-      "culture": "Could not find a culture for the given ISO code",
-      "reference_notfound": "The reference could not be found"
+      "email_invalid": "Die E-Mail Adresse ist ungültig",
+      "emails_invalid": "Die E-Mail Adresse(n) ist/sind ungültig",
+      "hex_format": "Die Eingabe ist nicht im gültigen HEX #aabbcc Format",
+      "url_format": "Die Eingabe ist keine gütlige URL",
+      "not_unique": "Der Wert muss einmalig in dieser Kollektion sein",
+      "not_unique_alone": "Es muss zumindest ein Element in dieser Kollektion geben, das diese Bedingung erfüllt",
+      "culture": "Culture konnte für diesen ISO Code nicht gefunden werden",
+      "reference_notfound": "Die Referenz konnte nicht gefunden werden"
     }
   },
 
@@ -789,16 +789,16 @@
 
   "blueprint": {
     "hint": {
-      "childText": "<b>This entity is a child of a blueprint</b>. Its properties are automatically updated.",
-      "parentText": "This blueprint will <b>automatically pass changes</b> to its children.",
-      "parentCreateText": "This blueprint will create children in all registered apps and automatically pass changes to them.",
-      "goToBlueprint": "Blueprint",
-      "goToChild": "View child",
-      "settingsButton": "Settings",
-      "xUnlocked": "{count} unlocked"
+      "childText": "<b>Dieses Element basiert auf einer Blaupause</b>. Die Werte werden automatisch aktualisiert.",
+      "parentText": "Diese Blaupause <b>überträgt Änderungen automatisch</b> an alle Kind-Elemente.",
+      "parentCreateText": "Diese Blaupause erstellt Kind-Elemente in allen Applikationen und überträgt Änderungen an diese automatisch.",
+      "goToBlueprint": "Blaupause",
+      "goToChild": "Implementation",
+      "settingsButton": "Einstellungen",
+      "xUnlocked": "{count} freigeschalten"
     },
     "errors": {
-      "cannotDeleteChild": "Entities which are synchronized with a blueprint cannot be deleted"
+      "cannotDeleteChild": "Elemente, welche von einer Blaupause abhängig sind, können nicht gelöscht werden"
     }
   }
 }
