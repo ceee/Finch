@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-form ref="form" class="editor-page" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
+  <ui-form ref="form" class="editor-page" v-slot="form" @submit="onInternalSubmit" @load="onInternalLoad" :route="route">
     <ui-form-header v-model:value="model" :prefix="prefix" :title="title" :disabled="readonly" :is-create="!id" :state="form.state" :can-delete="canDelete" @delete="onInternalDelete" />
     <ui-editor :config="editor" v-model="model" :meta="meta" :disabled="readonly" :scope="true">
       <template v-slot:below>
@@ -45,6 +45,14 @@
         type: Function,
         default: null
       },
+      onLoad: {
+        type: Function,
+        default: null
+      },
+      onSubmit: {
+        type: Function,
+        default: null
+      },
       disabled: {
         type: [Boolean, Function],
         default: false
@@ -71,22 +79,40 @@
 
     methods: {
 
-      async onLoad(form)
+      async onInternalLoad(form)
       {
         var config = { system: this.$route.query['zero.scope'] == 'system' };
-        const response = await form.load(() => this.id ? this.api.getById(this.id, undefined, config) : this.api.getEmpty(this.$route.query['zero.flavor'], config));
-        this.model = response;
+
+        if (typeof this.onLoad === 'function')
+        {
+          this.model = await this.onLoad({ id: this.id, api: this.api, form, config});
+        }
+        else
+        {
+          const response = await form.load(() => this.id ? this.api.getById(this.id, undefined, config) : this.api.getEmpty(this.$route.query['zero.flavor'], config));
+          this.model = response;
+        }
+        
       },
 
 
-      async onSubmit(form)
+      async onInternalSubmit(form)
       {
         form.setState('loading');
 
         let isCreate = !this.id;
         var config = { system: this.$route.query['zero.scope'] == 'system' };
+        let response = null;
 
-        const response = !isCreate ? await this.api.update(this.model, config) : await this.api.create(this.model, config);
+        if (typeof this.onSubmit === 'function')
+        {
+          response = await this.onSubmit({ id: this.id, isCreate, config, form, model: this.model });
+        }
+        else
+        {
+          response = !isCreate ? await this.api.update(this.model, config) : await this.api.create(this.model, config);
+        }
+
         await form.handle(response);
 
         if (response.success)

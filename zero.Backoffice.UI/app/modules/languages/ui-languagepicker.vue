@@ -13,7 +13,7 @@
     name: 'uiLanguagepicker',
 
     props: {
-      modelValue: {
+      value: {
         type: [String, Array],
         default: null
       },
@@ -52,7 +52,7 @@
       onChange(value)
       {
         this.$emit('input', value);
-        this.$emit('update:modelValue', value);
+        this.$emit('update:value', value);
       }
     }
   }

@@ -101,6 +101,7 @@
         }
 
         this.$emit('input', value);
+        this.$emit('update:value', value);
       }
     }
   }

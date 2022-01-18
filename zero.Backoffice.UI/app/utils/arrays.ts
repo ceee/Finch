@@ -1,5 +1,5 @@
 
-import { groupBy as _groupBy } from 'underscore';
+import { groupBy as _groupBy, difference as _difference } from 'underscore';
 
 const arrayMoveMutate = (array: any[], from: number, to: number) =>
 {
@@ -80,3 +80,23 @@ export function selectorToArray(selector: string): string[]
   selector = selector.replace(/^\./, '');
   return selector.split('.');
 };
+
+
+/**
+ * Removes duplicate items from an array
+ * @returns {any[]} Unique array
+ */
+export function arrayUnique(array: any[]): any[]
+{
+  return [...new Set(array)];
+}
+
+
+/**
+ * Returns the different items from two arrays
+ * @returns {any[]} Difference
+ */
+export function arrayDifference(array: any[], other: any[]): any[]
+{
+  return _difference(array, other);
+}
