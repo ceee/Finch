@@ -8,6 +8,9 @@ public abstract class ZeroRouteProvider<T> : ZeroRouteProvider, IRouteProvider<T
   public override bool CanHandle(Type type) => typeof(T).IsAssignableFrom(type);
 
   /// <inheritdoc />
+  public override bool CanSeed(Type type) => CanHandle(type);
+
+  /// <inheritdoc />
   public virtual Task<Route> Create(RoutingContext context, T model) => base.Create(context, model);
 
   /// <inheritdoc />
@@ -79,6 +82,9 @@ public abstract class ZeroRouteProvider : IRouteProvider
 
   /// <inheritdoc />
   public virtual bool CanHandle(Type type) => false;
+
+  /// <inheritdoc />
+  public virtual bool CanSeed(Type type) => false;
 
   /// <inheritdoc />
   public virtual Task<Route> Create(RoutingContext context, ISupportsRouting model) => Task.FromResult(new Route()
@@ -192,6 +198,11 @@ public interface IRouteProvider
   /// Whether this provider can handle a certain entity type
   /// </summary>
   bool CanHandle(Type type);
+
+  /// <summary>
+  /// Whether this provider can handle seeding for a certain entity type
+  /// </summary>
+  bool CanSeed(Type type);
 
   /// <summary>
   /// Generate unique route key for a model

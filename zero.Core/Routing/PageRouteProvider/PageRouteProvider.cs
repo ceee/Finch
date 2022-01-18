@@ -96,8 +96,12 @@ public class PageRouteProvider : ZeroRouteProvider<Page>
   /// <summary>
   /// Get parents for a page
   /// </summary>
-  protected virtual async Task<IList<Page>> GetParents(RoutingContext context, Page model)
+  protected virtual async Task<List<Page>> GetParents(RoutingContext context, Page model)
   {
+    if (model == null)
+    {
+      return new();
+    }
     zero_Pages_ByHierarchy.Result result = await context.Session.Query<zero_Pages_ByHierarchy.Result, zero_Pages_ByHierarchy>()
       .ProjectInto<zero_Pages_ByHierarchy.Result>()
       .Include<zero_Pages_ByHierarchy.Result, Page>(x => x.Path.Select(p => p.Id))
@@ -105,7 +109,7 @@ public class PageRouteProvider : ZeroRouteProvider<Page>
       
     if (result == null)
     {
-      return new List<Page>();
+      return new();
     }
 
     return (await context.Session.LoadAsync<Page>(result.Path.Select(x => x.Id))).Select(x => x.Value).ToList();

@@ -95,6 +95,15 @@ public class Routes : IRoutes
 
 
   /// <inheritdoc />
+  public virtual bool TryGetProvider<T>(T model, bool forSeeding, out IRouteProvider provider) where T : ISupportsRouting
+  {
+    Type type = model.GetType();
+    provider = Providers.OrderByDescending(x => x.Priority).FirstOrDefault(x => x.CanHandle(type) && (!forSeeding || x.CanSeed(type)));
+    return provider != null;
+  }
+
+
+  /// <inheritdoc />
   public virtual bool TryGetProvider(string alias, out IRouteProvider provider)
   {
     provider = Providers.OrderByDescending(x => x.Priority).FirstOrDefault(x => x.Alias.Equals(alias, StringComparison.InvariantCultureIgnoreCase));
@@ -177,6 +186,11 @@ public interface IRoutes
   /// Find a provider for a certain entity
   /// </summary>
   bool TryGetProvider<T>(T model, out IRouteProvider provider) where T : ISupportsRouting;
+
+  /// <summary>
+  /// Find a provider for a certain entity
+  /// </summary>
+  bool TryGetProvider<T>(T model, bool forSeeding, out IRouteProvider provider) where T : ISupportsRouting;
 
   /// <summary>
   /// Find a provider by alias
