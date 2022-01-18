@@ -21,6 +21,13 @@ public class UserService : IUserService
 
 
   /// <inheritdoc />
+  public async Task<ZeroUser> GetCurrentUser()
+  {
+    return await UserManager.GetUserAsync(Context.BackofficeUser);
+  }
+
+
+  /// <inheritdoc />
   public async Task<ZeroUser> GetUserById(string id)
   {
     ZeroUser user = await UserManager.FindByIdAsync(id);
@@ -246,6 +253,11 @@ public class UserService : IUserService
 
 public interface IUserService
 {
+  /// <summary>
+  /// Get currently logged-in backoffice user
+  /// </summary>
+  Task<ZeroUser> GetCurrentUser();
+
   /// <summary>
   /// Find user by id
   /// </summary>
