@@ -46,7 +46,7 @@
       <div class="ui-pick-overlay-items">
         <button v-for="item in items" :key="item[configuration.keys.id]" type="button" class="ui-pick-overlay-item" @click="select(item)" :class="{'is-selected': isSelected(item) }">
           <ui-icon v-if="item[configuration.keys.icon] && !configuration.list.iconAsImage" class="-icon" :symbol="item[configuration.keys.icon]" />
-          <span v-else="item[configuration.keys.icon]" class="-image">
+          <span v-if="item[configuration.keys.icon] && configuration.list.iconAsImage" class="-image">
             <ui-thumbnail :media="item[configuration.keys.icon]" :alt="item[configuration.keys.name]" />
           </span>
           <div class="ui-pick-overlay-item-title">
@@ -565,6 +565,7 @@
       {
         this.$emit('input', value);
         this.$emit('change', value);
+        this.$emit('update:value', value);
 
         if (this.configuration.closeOnClick)
         {
