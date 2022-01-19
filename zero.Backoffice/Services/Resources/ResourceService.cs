@@ -62,14 +62,26 @@ public class ResourceService : IResourceService
   Dictionary<string, string> CreateTranslationsForFile(string path, string culture)
   {
     Dictionary<string, string> items = new();
-    culture = culture.ToLower();
+    culture = culture.Or("en-us").ToLower();
 
     if (path.Contains("{lang}"))
     {
       path = path.Replace("{lang}", culture);
     }
 
-    string fullpath = Env.IsDevelopment() ? Path.Combine(AppContext.BaseDirectory, path) : ResourceFileSystem.Map(path);
+    string fullpath = Path.Combine(AppContext.BaseDirectory, path);
+    
+    if (!Env.IsDevelopment())
+    {
+      try
+      {
+        fullpath = ResourceFileSystem.Map(path);
+      }
+      catch { }
+    }
+
+    Logger.LogInformation("translation path [0]: " + Path.Combine(AppContext.BaseDirectory, path));
+    Logger.LogInformation("translation path [1]: " + fullpath);
 
     if (!File.Exists(fullpath))
     {
