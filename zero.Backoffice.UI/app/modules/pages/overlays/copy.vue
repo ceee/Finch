@@ -118,11 +118,11 @@
 
       async onSave()
       {
-        if (this.model.parentId == this.newParentId)
-        {
-          this.config.close();
-          return;
-        }
+        //if (this.model.parentId == this.newParentId)
+        //{
+        //  this.config.close();
+        //  return;
+        //}
 
         this.state = 'loading';
 

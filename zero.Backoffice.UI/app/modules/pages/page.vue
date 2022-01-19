@@ -136,7 +136,7 @@
 
         if (response.success)
         {
-          this.zero.events.emit('page.update', response.model);
+          this.zero.events.emit('page.update', { action: 'save', create: this.isCreate, model: response.model });
           if (this.isCreate)
           {
             this.zero.events.emit('page.create', response.model);

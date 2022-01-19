@@ -26,7 +26,7 @@ export default {
           flavor: result.value.alias,
           parent: parent ? parent.id : undefined
         }
-      })
+      });
     }
   },
 
@@ -42,13 +42,13 @@ export default {
 
     if (result.eventType == 'confirm')
     {
-      eventHub.emit('page.update');
+      eventHub.emit('page.update', { action: 'move', model: result.value });
       eventHub.emit('page.move', result.value);
     }
   },
 
 
-  async copy(model: object)
+  async copy(router: Router, model: object)
   {
     const result = await overlays.open({
       component: () => import('./overlays/copy.vue'),
@@ -59,7 +59,13 @@ export default {
 
     if (result.eventType == 'confirm')
     {
-      eventHub.emit('page.update');
+      router.push({
+        name: 'pages-edit',
+        params: {
+          id: result.value.id
+        }
+      });
+      eventHub.emit('page.update', { action: 'copy', model: result.value });
       eventHub.emit('page.copy', result.value);
     }
   },
@@ -76,7 +82,7 @@ export default {
 
     if (result.eventType == 'confirm')
     {
-      eventHub.emit('page.update');
+      eventHub.emit('page.update', { action: 'sort', model: result.value });
       eventHub.emit('page.sort', result.value);
     }
   },
@@ -101,7 +107,7 @@ export default {
       result.value.state('success');
       result.value.close();
 
-      eventHub.emit('page.update');
+      eventHub.emit('page.update', { action: 'delete', model: apiresult.value });
       eventHub.emit('page.delete', apiresult.data);
     }
   }

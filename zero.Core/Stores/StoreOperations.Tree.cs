@@ -96,9 +96,10 @@ public partial class StoreOperations : IStoreOperations
   /// <summary>
   /// Copies an entity (with optional descendants) to a new location
   /// </summary>
-  protected async Task<Result<T>> Copy<T>(string id, string newParentId, bool includeDescendants, Func<T, string, Task<bool>> isParentAllowed = null) where T : ZeroIdEntity, ISupportsTrees, new()
+  protected async Task<Result<T>> Copy<T>(string id, string newParentId, bool includeDescendants, Func<T, string, Task<bool>> isParentAllowed = null, bool isDescendant = false) where T : ZeroIdEntity, ISupportsTrees, new()
   {
-    T model = ObjectCopycat.Clone(await Load<T>(id));
+    T originalModel = await Load<T>(id);
+    T model = ObjectCopycat.Clone(originalModel);
     T parent = await Load<T>(newParentId);
 
     if (model == null || (!newParentId.IsNullOrEmpty() && parent == null))
@@ -115,7 +116,7 @@ public partial class StoreOperations : IStoreOperations
 
     if (model is ZeroEntity zeroEntity)
     {
-      zeroEntity.IsActive = false;
+      zeroEntity.IsActive = !isDescendant ? false : (originalModel as ZeroEntity).IsActive;
       zeroEntity.CreatedDate = DateTime.Now;
 
       // update page name in case they are on the same level
@@ -141,7 +142,7 @@ public partial class StoreOperations : IStoreOperations
 
       foreach (T child in children)
       {
-        await Copy(child.Id, model.Id, true, isParentAllowed);
+        await Copy(child.Id, model.Id, true, isParentAllowed, true);
       }
     }
 

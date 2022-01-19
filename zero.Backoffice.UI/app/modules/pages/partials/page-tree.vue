@@ -59,10 +59,13 @@
     mounted()
     {
       this.zero.events.off('page.update');
-      this.zero.events.on('page.update', page =>
+      this.zero.events.on('page.update', props =>
       {
-        this.cache = [];
-        this.$refs.tree.refresh();
+        this.$nextTick(() =>
+        {
+          this.cache = [];
+          this.$refs.tree.refresh();
+        });
       });
     },
 
@@ -131,7 +134,7 @@
 
       async copy(item)
       {
-        await actions.copy(item);
+        await actions.copy(this.$router, item);
       },
 
 

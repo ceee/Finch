@@ -14,6 +14,7 @@ export default {
       name: 'pages',
       path: '/pages',
       component: () => import('./pages.vue'),
+      props: true,
       children: [
         {
           name: 'pages-edit',
