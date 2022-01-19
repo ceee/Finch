@@ -4,7 +4,7 @@
       <ui-icon :symbol="icon" />
     </span>
     <span class="ui-select-button-icon is-image" v-if="isImage">
-      <ui-thumbnail :media="source" :alt="icon" />
+      <ui-thumbnail :media="icon" :alt="icon" />
     </span>
     <div class="ui-select-button-content" v-if="label || description">
       <strong class="ui-select-button-label" v-localize:html="{ key: label, tokens: tokens }"></strong>
@@ -49,11 +49,7 @@
     computed: {
       isImage()
       {
-        return this.iconAsImage && this.icon.indexOf('fth-') !== 0;
-      },
-      source()
-      {
-        return this.icon; //this.iconAsImage ? (this.icon.indexOf('/') === 0 ? this.icon : MediaApi.getImageSource(this.icon)) : null;
+        return this.iconAsImage && (!this.icon || this.icon.indexOf('fth-') !== 0);
       }
     },
 
