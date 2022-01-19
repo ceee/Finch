@@ -18,5 +18,5 @@ export function convertHtmlToText(html: string, preserveNewLines: boolean = fals
   }
   let tag = document.createElement('div');
   tag.innerHTML = html;
-  return tag.innerText.replaceAll('___nl___', '<br>');
+  return tag.innerText.replaceAll('___nl___', '<br>').replace(/^<br>+/, '');
 }

@@ -1,12 +1,17 @@
 ﻿<script lang="ts">
   import { defineComponent, h } from 'vue';
+  import { compile } from '@vue/compiler-dom';
 
   export default defineComponent({
+
     name: 'uiModulePreviewInner',
 
+    compatConfig: {
+      MODE: 3
+    },
 
     props: {
-      value: {
+      model: {
         type: Object,
         default: () => { }
       },
@@ -19,16 +24,14 @@
       }
     },
 
-
-    render()
+    setup(props, { slots, attrs, emit })
     {
-      if (!this.template)
+      if (!props.template)
       {
         return;
       }
 
-      return h({
-        template: '<div class="ui-module-preview-inner">' + this.template + '</div>',
+      return () => h(compile(props.template), {
         props: {
           model: {
             type: Object,
@@ -41,10 +44,10 @@
       },
       {
         props: {
-          model: this.value,
-          options: this.options
+          model: props.model,
+          options: props.options
         }
       });
-    },
+    }
   })
 </script>

@@ -9,6 +9,7 @@ import vMaxLines from './v-max-lines';
 import vPlaceholder from './v-placeholder';
 import vResizeable from './v-resizeable';
 import vSortable from './v-sortable';
+import vEncode from './v-encode'
 
 const directives = [
   { key: 'click-outside', definition: vClickOutside },
@@ -19,7 +20,8 @@ const directives = [
   { key: 'max-lines', definition: vMaxLines },
   { key: 'placeholder', definition: vPlaceholder },
   { key: 'resizeable', definition: vResizeable },
-  { key: 'sortable', definition: vSortable }
+  { key: 'sortable', definition: vSortable },
+  { key: 'encode', definition: vEncode }
 ];
 
 export default function (app: App)

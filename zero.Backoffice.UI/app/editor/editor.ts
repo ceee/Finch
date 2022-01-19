@@ -33,19 +33,37 @@ export class ZeroEditor extends ZeroEditorCanvas implements ZeroSchema
 
 export class ZeroModuleEditor extends ZeroEditor
 {
-  preview: ZeroModuleEditorPreview;
+  _preview: ZeroModuleEditorPreview | null = null;
 
   constructor(alias: string)
   {
     super(alias);
-
-    this.preview = {
-      hideLabel: false
-    } as ZeroModuleEditorPreview;
   }
+
+  preview(component: Component, buildProps?: (model: any) => any, options?: ZeroModuleEditorPreviewOptions): void
+  {
+    this._preview = {
+      component,
+      buildProps: buildProps || (_ => ({})),
+      options: options || {}
+    };
+  }
+
+  getPreview(): ZeroModuleEditorPreview | null
+  {
+    return this._preview;
+  }
+}
+
+export interface ZeroModuleEditorPreviewOptions
+{
+  canEdit?: boolean;
+  hideLabel?: boolean;
 }
 
 export interface ZeroModuleEditorPreview
 {
-  hideLabel?: boolean;
+  component: Component;
+  buildProps?: (model: any) => any;
+  options?: ZeroModuleEditorPreviewOptions;
 }

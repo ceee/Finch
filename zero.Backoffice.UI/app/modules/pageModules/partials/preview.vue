@@ -1,10 +1,9 @@
 ﻿<template>
   <div class="ui-module-item" v-if="!loading" :data-module="alias" :class="{'can-edit': canEdit, 'no-preview': !preview }">
     <div class="ui-module-item-content" v-if="module" @click="emit('edit')">
-      <span v-if="!preview || !preview.hideLabel" class="ui-module-item-header"><ui-icon :symbol="module.icon" /> <span v-localize="module.name"></span></span>
-      <module-preview-inner v-if="tryRender && typeof preview.template === 'string'" :template="preview.template" :value="value" :options="preview" />
-      <div v-if="tryRender && typeof preview.template !== 'string'" class="ui-module-preview-inner">
-        <component :is="preview.template" :model="value" :options="preview" />
+      <span v-if="!preview || !preview.options.hideLabel" class="ui-module-item-header"><ui-icon :symbol="module.icon" /> <span v-localize="module.name"></span></span>
+      <div class="ui-module-preview-inner" v-if="tryRender">
+        <component :is="preview.component" v-bind="preview.buildProps(value)" :model="value" :options="preview.options" />
       </div>
     </div>
     <div class="ui-module-item-content" v-else>
@@ -87,7 +86,7 @@
       },
       tryRender()
       {
-        return this.preview && this.preview.template;
+        return this.preview && this.preview.component;
       },
       canEdit()
       {
@@ -119,8 +118,9 @@
 
         if (schema && schema instanceof ZeroModuleEditor)
         {
-          this.preview = schema.preview;
+          this.preview = schema.getPreview();
         }
+
 
         this.$nextTick(() => this.loading = false);
       },
@@ -196,6 +196,8 @@
     {
       font-size: var(--font-size-l);
       margin-right: 10px;
+      position: relative;
+      top: -1px;
     }
 
     &.is-error
@@ -241,7 +243,7 @@
 
     .ui-module-item-header + &
     {
-      padding-top: 4px;
+      padding-top: 8px;
     }
 
     p
