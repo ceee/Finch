@@ -1,9 +1,10 @@
 ﻿<template>
   <div v-if="loaded" class="ui-modules-inner">
     <div v-if="items.length" class="ui-modules-inner-sortable" v-sortable="{ onUpdate: onSortingUpdated }">
-      <module-preview v-for="item in items" :key="item.id" :types="moduleTypes" :value="item" @edit="edit" @remove="remove" @isActive="onChange" :disabled="disabled" />
+      <module-preview v-for="(item, index) in items" :key="item.id" :types="moduleTypes" :value="item" :disabled="disabled"
+                      @edit="edit" @remove="remove" @isActive="onChange" @insert="onInsert($event ? index : (index + 1))"/>
     </div>
-    <button v-if="canAdd" type="button" class="ui-modules-start-button" @click="selectModule">
+    <button v-if="canAdd" type="button" class="ui-modules-start-button" @click="selectModule()">
       <span class="ui-modules-start-button-icon"><ui-icon symbol="fth-plus" :size="19" /></span>
       <p class="ui-modules-start-button-text"><strong>Add content</strong></p>
     </button>
@@ -82,7 +83,7 @@
       },
 
 
-      async selectModule()
+      async selectModule(index)
       {
         const result = await overlays.open({
           alias: 'modules-select',
@@ -95,12 +96,12 @@
 
         if (result.eventType == 'confirm')
         {
-          this.onAdd(result.value);
+          this.onAdd(result.value, index);
         }
       },
 
 
-      async onAdd(module)
+      async onAdd(module, index)
       {
         const response = await api.getEmpty(module.alias);
 
@@ -109,7 +110,13 @@
           // TODO error
         }
 
-        this.edit(module, response.data, true);
+        this.edit(module, response.data, true, index);
+      },
+
+
+      onInsert(index)
+      {
+        this.selectModule(index);
       },
 
 
@@ -122,7 +129,7 @@
       },
 
 
-      async edit(module, model, isAdd)
+      async edit(module, model, isAdd, index)
       {
         const editor = 'modules:' + module.alias;
 
@@ -150,7 +157,14 @@
         {
           if (isAdd)
           {
-            this.items.push(result.value);
+            if (typeof index !== 'undefined' && this.items.length >= index)
+            {
+              this.items.splice(index, 0, result.value);
+            }
+            else
+            {
+              this.items.push(result.value);
+            }
           }
           else
           {

@@ -22,6 +22,10 @@
         <ui-dropdown-button v-if="canEdit" label="Edit" icon="fth-edit-2" @click="emit('edit')" />
         <ui-dropdown-button v-if="value.isActive" label="Disable" icon="fth-lock" @click="toggleStatus(false)" />
         <ui-dropdown-button v-else label="Enable" icon="fth-unlock" @click="toggleStatus(true)" />
+        <ui-dropdown-separator />
+        <ui-dropdown-button v-if="canEdit" label="Insert above" icon="fth-plus-circle" @click="$emit('insert', true)" />
+        <ui-dropdown-button v-if="canEdit" label="Insert below" icon="fth-plus-circle" @click="$emit('insert', false)" />
+        <ui-dropdown-separator />
         <ui-dropdown-button label="Remove" icon="fth-trash" @click="emit('remove')" />
       </ui-dropdown>
     </div>
