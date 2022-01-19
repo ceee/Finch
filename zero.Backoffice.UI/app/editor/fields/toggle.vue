@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-toggle :on="value" @update:on="$emit('input', $event)" :disabled="config.disabled" v-bind="{ negative, onContent, offContent }" />
+  <ui-toggle :on="value" @update:on="$emit('input', $event)" :disabled="config.disabled" v-bind="{ negative, onContent, offContent }" :content-left="true" />
 </template>
 
 

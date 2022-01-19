@@ -658,6 +658,14 @@
       "html": "Media upload",
       "youtube": "YouTube",
       "vimeo": "Vimeo"
+    },
+    "fields": {
+      "provider": "Provider",
+      "videoUrl": "URL",
+      "videoId": "Pick video",
+      "title": "Title",
+      "previewImageId": "Poster image",
+      "foundParsed": "Parsed video ID is <b>{id}</b>"
     }
   },
 

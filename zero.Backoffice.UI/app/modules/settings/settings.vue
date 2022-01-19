@@ -45,17 +45,17 @@
       this.groups = useUiStore().settingGroups;
       this.appCount = useAppStore().applications.length;
 
-      //if (!this.groups[1].items.find(x => x.alias === 'demo'))
-      //{
-      //  this.groups[1].items.push({
-      //    alias: "demo",
-      //    description: "Demo all editor components",
-      //    icon: "fth-box",
-      //    isPlugin: true,
-      //    name: "Components",
-      //    url: "/settings/demo"
-      //  });
-      //}
+      if (!this.groups[1].items.find(x => x.alias === 'demo'))
+      {
+        this.groups[1].items.push({
+          alias: "demo",
+          description: "Demo all editor components",
+          icon: "fth-box",
+          isPlugin: true,
+          name: "Components",
+          url: "/settings/demo"
+        });
+      }
     }
   }
 </script>

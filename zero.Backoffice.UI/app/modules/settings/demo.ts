@@ -4,6 +4,9 @@ import { formatDate } from '../../utils/dates';
 
 const editor = new ZeroEditor('demo');
 
+editor.field('categoryIds').categoryPicker({ limit: 20, pickChannel: true });
+editor.field('video').video();
+
 editor.field('rte', { label: 'Number' }).rte();
 editor.field('rte').output({ html: false });
 editor.field('link').linkPicker();

@@ -80,9 +80,6 @@ public class ResourceService : IResourceService
       catch { }
     }
 
-    Logger.LogInformation("translation path [0]: " + Path.Combine(AppContext.BaseDirectory, path));
-    Logger.LogInformation("translation path [1]: " + fullpath);
-
     if (!File.Exists(fullpath))
     {
       return items;
