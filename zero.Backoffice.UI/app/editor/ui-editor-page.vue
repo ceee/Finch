@@ -1,6 +1,8 @@
 ﻿<template>
   <ui-form ref="form" class="editor-page" v-slot="form" @submit="onInternalSubmit" @load="onInternalLoad" :route="route">
-    <ui-form-header v-model:value="model" :prefix="prefix" :title="title" :disabled="readonly" :is-create="!id" :state="form.state" :can-delete="canDelete" @delete="onInternalDelete" />
+    <slot name="header" v-bind="dataObj" v-bind:form="form">
+      <ui-form-header v-model:value="model" :prefix="prefix" :title="title" :disabled="readonly" :is-create="!id" :state="form.state" :can-delete="canDelete" @delete="onInternalDelete" />
+    </slot>
     <ui-editor :config="editor" v-model="model" :meta="meta" :disabled="readonly" :scope="true">
       <template v-slot:below>
         <ui-editor-infos v-model="model" :disabled="readonly" />
@@ -61,6 +63,10 @@
 
 
     computed: {
+      dataObj()
+      {
+        return this;
+      },
       id()
       {
         return this.$route.params.id;
