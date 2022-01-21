@@ -5,6 +5,7 @@
     </template>
     <template v-slot:footer>
       <ui-button type="light onbg" label="@ui.close" @click="config.close"></ui-button>
+      <ui-button type="light onbg" label="@ui.remove" @click="remove()"></ui-button>
     </template>
 
     <ui-search class="ui-iconpicker-overlay-search onbg" v-model="query" />
@@ -134,6 +135,11 @@
         {
           this.items = this.set.icons.filter(item => item.toLowerCase().indexOf(query) > -1);
         }
+      },
+
+      remove()
+      {
+        this.config.confirm(null);
       }
     }
   }
