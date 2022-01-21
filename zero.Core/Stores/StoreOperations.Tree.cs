@@ -118,6 +118,7 @@ public partial class StoreOperations : IStoreOperations
     {
       zeroEntity.IsActive = !isDescendant ? false : (originalModel as ZeroEntity).IsActive;
       zeroEntity.CreatedDate = DateTime.Now;
+      zeroEntity.Hash = null;
 
       // update page name in case they are on the same level
       string name = zeroEntity.Name;

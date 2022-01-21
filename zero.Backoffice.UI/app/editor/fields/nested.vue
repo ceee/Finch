@@ -76,12 +76,16 @@
 
       setup(value)
       {
-        this.items = JSON.parse(JSON.stringify(value)) || [];
-        this.multiple = this.limit > 1;
-        if (!this.multiple)
+        this.items = [];
+        this.$nextTick(() =>
         {
-          this.items = this.items ? [this.items] : [];
-        }
+          this.items = JSON.parse(JSON.stringify(value)) || [];
+          this.multiple = this.limit > 1;
+          if (!this.multiple)
+          {
+            this.items = this.items ? [this.items] : [];
+          }
+        });
       },
 
       getNewItem()
@@ -100,7 +104,7 @@
           return;
         }
         this.editItem(this.getNewItem(), true);
-        this.onChange();
+        this.onChange(this.items);
       },
 
 
@@ -140,7 +144,7 @@
             this.items.splice(index, 0, result.value);
           }
 
-          this.onChange();
+          this.onChange(this.items);
         }
       },
 
@@ -148,13 +152,13 @@
       removeItem(index)
       {
         this.items.splice(index, 1);
-        this.onChange();
+        this.onChange(this.items);
       },
 
 
-      onChange()
+      onChange(items)
       {
-        let value = this.multiple ? this.items : (this.items.length > 0 ? this.items[0] : null)
+        let value = this.multiple ? items : (items.length > 0 ? items[0] : null);
         this.$emit('input', value);
         this.$emit('update:value', value);
       },
@@ -180,9 +184,10 @@
 
 
       onSortingUpdated(ev)
-      {
+      { 
+        //let value = JSON.parse(JSON.stringify(this.items));
         this.items = arrayMove(this.items, ev.oldIndex, ev.newIndex);
-        this.onChange();
+        this.onChange(this.items);
         //this.$emit('input', this.multiple ? result : (result.length > 0 ? result[0] : null));
       },
     }
