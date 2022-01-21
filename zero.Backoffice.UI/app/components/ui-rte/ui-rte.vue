@@ -190,12 +190,7 @@
           bubble: cmd.bubble || false
         };
       }
-    },
-
-    beforeDestroy()
-    {
-      this.editor.destroy();
-    }
+    } 
   }
 </script>
 
