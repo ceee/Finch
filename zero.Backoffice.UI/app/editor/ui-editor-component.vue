@@ -86,7 +86,7 @@
       },
       isDisabled()
       {
-        return this.manualDisabled || this.disabled || this.field.readonly(this.model);
+        return this.manualDisabled || this.disabled || this.field.readonly(this.model, this.value);
       },
       isLocked()
       {
