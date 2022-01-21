@@ -5,9 +5,9 @@ import './core/_flags.scss';
 import './core/_forms.scss';
 import './core/_icons.scss';
 
+import './settings/_accent.scss';
 import './settings/_theme-light.scss';
 import './settings/_theme-dark.scss';
-import './settings/_accent.scss';
 import './settings/_dimensions.scss';
 import './settings/_font-sizes.scss';
 import './settings/_shadows.scss';
