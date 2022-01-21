@@ -3,12 +3,6 @@
     <ui-property label="@links.fields.url.url" :required="true">
       <input :value="url" @input="onUpdateUrl($event.target.value)" type="url" class="ui-input" :maxlength="240" />
     </ui-property>
-    <ui-property label="@links.fields.target">
-      <ui-linktarget v-model:value="value.target" @input="onUpdate" :disabled="disabled" />
-    </ui-property>
-    <ui-property label="@links.fields.title" description="@links.fields.title_text">
-      <input v-model="value.title" type="text" class="ui-input" @input="onUpdate" :maxlength="120" />
-    </ui-property>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-select :value="value" :items="targets" @input="$emit('input', $event)" />
+  <ui-select :value="value" :items="targets" @input="onChange" />
 </template>
 
 
@@ -20,6 +20,14 @@
         { label: '@links.target.self', value: 'self' },
         { label: '@links.target.blank', value: 'blank' }
       ]
-    })
+    }),
+
+    methods: {
+      onChange(value)
+      {
+        this.$emit('input', value);
+        this.$emit('update:value', value);
+      }
+    }
   }
 </script>

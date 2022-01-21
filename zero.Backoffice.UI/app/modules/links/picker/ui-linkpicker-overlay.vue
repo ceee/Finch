@@ -32,8 +32,17 @@
         </ui-property>
       </div>
 
-      <div class="ui-box">
+      <div class="ui-box" v-if="area">
         <component ref="component" v-if="area && area.component" :is="area.component" :area="area" v-model="link" />
+      </div>
+
+      <div class="ui-box" v-if="area">
+        <ui-property label="@links.fields.target">
+          <ui-linktarget v-model="link.target" :disabled="disabled" />
+        </ui-property>
+        <ui-property label="@links.fields.title" description="@links.fields.title_text">
+          <input v-model="link.title" type="text" class="ui-input" :maxlength="120" />
+        </ui-property>
       </div>
     </div>
   </ui-trinity>

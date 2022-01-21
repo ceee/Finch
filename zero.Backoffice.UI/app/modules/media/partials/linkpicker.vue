@@ -6,7 +6,7 @@
     <ui-property>
       <div class="ui-list shop-linkpicker-area-media-items">
         <button v-if="id" type="button" class="-item" key="up" @click="onNavigate(parentId)">
-          <span class="-icon">
+          <span class="-icon -up">
             <ui-icon symbol="fth-corner-left-up" />
           </span>
           <p class="-content">..</p>
@@ -196,6 +196,12 @@
       font-size: 16px;
       flex-shrink: 0;
       overflow: hidden;
+
+      &.-up
+      {
+        background: none;
+        border: 1px solid var(--color-line);
+      }
     }
 
     .-image
@@ -208,7 +214,6 @@
 
     .-aside
     {
-
     }
   }
 </style>
