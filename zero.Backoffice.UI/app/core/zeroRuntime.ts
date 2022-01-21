@@ -14,9 +14,9 @@ import
   applicationPlugin,
   settingsPlugin,
   languagePlugin,
+  pagePlugin,
   mediaPlugin,
   spacePlugin,
-  pagePlugin,
   mailTemplatePlugin,
   translationPlugin,
   integrationPlugin,
@@ -34,8 +34,8 @@ import { Emitter, EventType } from 'mitt';
 
 plugins.push(
   editorPlugin, countryPlugin, applicationPlugin, settingsPlugin, languagePlugin,
-  mediaPlugin, spacePlugin, pagePlugin, mailTemplatePlugin,
-  translationPlugin, integrationPlugin, userPlugin, linksPlugin, pageModulePlugin
+  pagePlugin, linksPlugin, mediaPlugin, spacePlugin, mailTemplatePlugin,
+  translationPlugin, integrationPlugin, userPlugin, pageModulePlugin
 );
 
 

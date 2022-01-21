@@ -126,6 +126,18 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
   {
     id = NormalizeParentId(id);
 
+    zero.Media.Media parent = null;
+
+    if (id.HasValue())
+    {
+     parent = await Store.Load(id);
+
+      if (parent == null)
+      {
+        return NotFound();
+      }
+    }
+
     query.OrderQuery = q => q.OrderByDescending(x => x.IsFolder).ThenByDescending(x => x.CreatedDate);
     Paged<zero.Media.Media> result = await Store.LoadChildren<zero_Api_Media_Listing>(id, query.Page, query.PageSize, q => q.WhereIf(x => x.IsFolder, !files).Filter(query));
     Paged<MediaBasic> mappedResult = Mapper.Map<zero.Media.Media, MediaBasic>(result);
@@ -149,6 +161,8 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
         }
       }
     }
+
+    mappedResult.Properties.Add("parentId", parent?.ParentId);
 
     return mappedResult;
   }

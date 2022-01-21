@@ -5,7 +5,7 @@
     </template>
     <template v-slot:footer>
       <ui-button type="light onbg" label="@ui.close" :parent="config.rootId" @click="config.close" />
-      <ui-button type="primary" label="@ui.confirm" @click="onSave" />
+      <ui-button type="primary" label="@ui.confirm" @click="onSave" :disabled="!isValid" />
     </template>
 
     <div v-if="opened">
@@ -33,7 +33,7 @@
       </div>
 
       <div class="ui-box">
-        <component v-if="area && area.component" :is="area.component" :area="area" v-model="link" />
+        <component ref="component" v-if="area && area.component" :is="area.component" :area="area" v-model="link" />
       </div>
     </div>
   </ui-trinity>
@@ -70,6 +70,20 @@
       current()
       {
         this.reloadSelector();
+      }
+    },
+
+
+    computed: {
+      isValid()
+      {
+        return true;
+        //if (!this.$refs.component || typeof this.$refs.component.isValid != 'function')
+        //{
+        //  return true;
+        //}
+
+        //return this.$refs.component.isValid();
       }
     },
 

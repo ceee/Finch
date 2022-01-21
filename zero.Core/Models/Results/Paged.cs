@@ -32,6 +32,8 @@ public abstract class Paged
 
   public bool HasMore { get; protected set; }
 
+  public Dictionary<string, string> Properties { get; set; } = new();
+
 
   public Paged(long totalItems, long page, long pageSize)
   {

@@ -9,6 +9,8 @@ export default {
     app.vue.component('ui-mediapicker', defineAsyncComponent(() => import('./components/ui-mediapicker.vue')));
     app.vue.component('ui-videopicker', defineAsyncComponent(() => import('./components/ui-videopicker.vue')));
 
+    app.linkArea('zero.media', '@zero.config.linkareas.media', () => import('./partials/linkpicker.vue'));
+
     app.fieldType('media', defineAsyncComponent(() => import('./components/field-mediapicker.vue')));
     app.fieldType('image', defineAsyncComponent(() => import('./components/field-imagepicker.vue')));
     app.fieldType('video', defineAsyncComponent(() => import('./components/field-videopicker.vue')));

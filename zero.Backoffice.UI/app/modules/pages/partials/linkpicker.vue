@@ -99,6 +99,12 @@
     margin: 0 -32px 0;
   }
 
+  .ui-linkpicker-area-pages .ui-property + .ui-property
+  {
+    border-top: none;
+    margin-top: 0;
+  }
+
   .ui-linkpicker-area-pages-tree .ui-tree-item.is-selected,
   .ui-linkpicker-area-pages-tree .ui-tree-item:hover:not(.is-disabled)
   {

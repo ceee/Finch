@@ -25,6 +25,7 @@ public class ApiResponseFilterAttribute : ResultFilterAttribute
             TotalPages = paged.TotalPages,
             TotalItems = paged.TotalItems
           },
+          Properties = paged.Properties,
           Data = paged.GetItems()
         };
       }

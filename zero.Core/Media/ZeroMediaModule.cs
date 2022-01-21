@@ -21,6 +21,7 @@ internal class ZeroMediaModule : ZeroModule
     services.AddScoped<IMediaStore, MediaStore>();
     services.AddScoped<IMediaCreator, MediaCreator>();
     services.AddScoped<IMediaManagement, MediaManagement>();
+    services.AddScoped<ILinkProvider, MediaLinkProvider>();
 
     services.AddOptions<MediaOptions>().Bind(configuration.GetSection("Zero:Media")).Configure(opts =>
     {

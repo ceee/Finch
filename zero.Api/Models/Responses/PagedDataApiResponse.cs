@@ -3,6 +3,8 @@
 public class PagedDataApiResponse : DataApiResponse
 {
   public PagedDataApiResponsePaging Paging { get; set; }
+
+  public Dictionary<string, string> Properties { get; set; } = new();
 }
 
 
