@@ -23,8 +23,8 @@ public class PageRouteProvider : ZeroRouteProvider<Page>
   public override Task<bool> IsRouteStale(RoutingContext context, Page previous, Page current)
   {
     bool compareUrl = UrlBuilder.GetUrlPart(previous) == UrlBuilder.GetUrlPart(current);
-    bool compareParent = previous.ParentId == current.ParentId;
-    return Task.FromResult(!compareUrl || !compareParent);
+    bool compareParent = previous != null && previous.ParentId == current.ParentId;
+    return Task.FromResult(previous == null || !compareUrl || !compareParent);
   }
 
 
