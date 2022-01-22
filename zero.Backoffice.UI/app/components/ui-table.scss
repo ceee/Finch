@@ -124,7 +124,12 @@ a.ui-table-row:hover, button.ui-table-row:hover
     flex: 0 1 40px;
     text-align: center;
     padding: 0;
-    justify-content: center;
+    justify-content: flex-end;
+
+    .ui-native-check-toggle
+    {
+      margin-right: 0;
+    }
   }
 
   &.is-options

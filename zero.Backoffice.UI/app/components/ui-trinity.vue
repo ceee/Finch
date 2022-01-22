@@ -38,6 +38,11 @@
       padding: 20px var(--padding);
       align-items: center;
       //background: var(--color-overlay-footer);
+
+      > * + *
+      {
+        margin-left: 15px;
+      }
     }
 
     > content

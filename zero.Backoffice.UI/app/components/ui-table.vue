@@ -4,31 +4,31 @@
       <slot name="top"></slot>
 
       <header class="ui-table-row ui-table-head">      
-        <div v-for="column in columns" :key="column.path" class="ui-table-cell" :table-field="column.path" :style="column.flex" :class="column.options.class">
-          <span v-localize:html="column.label"></span>
-          <button :disabled="!column.options.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="query.orderBy == column.path ? 'sort-' + (query.orderIsDescending ? 'desc' : 'asc') : null">
-            <i class="arrow arrow-down"></i>
-          </button>
-        </div>
         <button type="button" v-if="listConfig.selectable" table-field="table_selectable" class="ui-table-cell is-head is-selectable" @click="select()">
           <span class="ui-native-check">
             <input type="checkbox" :checked="selected.length === items.length && selected.length > 0" />
             <span class="ui-native-check-toggle"></span>
           </span>
         </button>
+        <div v-for="column in columns" :key="column.path" class="ui-table-cell" :table-field="column.path" :style="column.flex" :class="column.options.class">
+          <span v-localize:html="column.label"></span>
+          <button :disabled="!column.options.canSort" @click="sort(column)" type="button" class="ui-table-sort" :class="query.orderBy == column.path ? 'sort-' + (query.orderIsDescending ? 'desc' : 'asc') : null">
+            <i class="arrow arrow-down"></i>
+          </button>
+        </div>
         <div v-if="listConfig.hasOptions" table-field="table_options" class="ui-table-cell is-head is-options"></div>
       </header>
 
       <slot name="topRow"></slot>
 
       <component :is="component" v-for="(item, index) in items" :key="index" :to="getLink(item)" type="button" class="ui-table-row" :class="{ 'is-selected': selected.indexOf(item) > -1 }" @click="onRowClick(item)">
-        <div v-for="column in columns" :key="column.path" class="ui-table-cell" :class="column.class" :style="column.flex" :table-field="column.path" :field-type="column.type" v-table-value="{ column, item }"></div>
         <button type="button" v-if="listConfig.selectable" table-field="table_selectable" class="ui-table-cell is-selectable" @click.prevent.stop="select(item)">
           <span class="ui-native-check">
             <input type="checkbox" :checked="selected.indexOf(item) > -1" />
             <span class="ui-native-check-toggle"></span>
           </span>
         </button>
+        <div v-for="column in columns" :key="column.path" class="ui-table-cell" :class="column.class" :style="column.flex" :table-field="column.path" :field-type="column.type" v-table-value="{ column, item }"></div>
         <div v-if="listConfig.hasOptions" table-field="table_options" class="ui-table-cell is-options">
           <slot name="options" v-bind="{ item, index }"></slot>
         </div>
@@ -280,7 +280,6 @@
       // set a new filter
       setFilter(filter)
       {
-        console.info('filter', filter);
         this.query.filter = filter;
         this.onChange();
       },
