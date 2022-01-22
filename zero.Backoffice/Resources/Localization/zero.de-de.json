@@ -1,7 +1,6 @@
 {
   "zero": {
     "name": "zero",
-
     "config": {
       "linkareas": {
         "pages": "Seiten",
@@ -10,7 +9,6 @@
       }
     }
   },
-
   "ui": {
     "yes": "Ja",
     "no": "Nein",
@@ -25,8 +23,8 @@
     "save": "Speichern",
     "create": "Erstellen",
     "update": "Aktualisieren",
-    "createdDate": "Erstellt",
-    "modifiedDate": "Zuletzt bearbeitet",
+    "createddate": "Erstellt",
+    "modifieddate": "Zuletzt bearbeitet",
     "id": "ID",
     "disabled": "Deaktiviert",
     "enabled": "Aktiviert",
@@ -35,7 +33,7 @@
     "active": "Aktiv",
     "inactive": "Inaktiv",
     "delete": "Löschen",
-    "deleteQ": "Löschen?",
+    "deleteq": "Löschen?",
     "default": "Standard",
     "remove": "Entfernen",
     "alias": "Alias",
@@ -88,7 +86,7 @@
     },
     "sort": {
       "title": "Sortieren",
-      "text": "Verschiebe die Elemente hoch oder runter, bis du sie korrekt geordnet hast."
+      "text": "Verschiebe die Elemente hoch oder runter; bis du sie korrekt geordnet hast."
     },
     "move": {
       "title": "Verschieben",
@@ -99,7 +97,7 @@
       "title": "Kopieren",
       "action": "Kopieren",
       "text": "Kopiere <b>{name}</b> in der Baumstruktur an ein neues Ziel.",
-      "includeDescendants": "Unterelemente inkludieren"
+      "includedescendants": "Unterelemente inkludieren"
     },
     "open": {
       "title": "Öffnen"
@@ -118,22 +116,20 @@
       "placeholder_output": "ID"
     },
     "entityfields": {
-      "key": "Key",
+      "key": "Schlüssel",
       "alias": "Alias",
       "sort": "Sortierung",
       "hash": "Hash",
       "name": "Name",
-      "isActive": "Aktiv"
+      "isactive": "Aktiv"
     }
   },
-
   "gender": {
     "undisclosed": "Ungenannt",
     "male": "Männlich",
     "female": "Weiblich",
     "nonbinary": "Nicht-binär"
   },
-
   "revisions": {
     "label": "Revisionen",
     "actions": {
@@ -143,7 +139,6 @@
     },
     "view": "Ansehen"
   },
-
   "rte": {
     "undo": "Rückgängig machen",
     "redo": "Nochmals machen",
@@ -172,7 +167,6 @@
     "cancel": "Abbrechen",
     "raw": "HTML bearbeiten"
   },
-
   "links": {
     "overlay": {
       "title": "Link auswählen"
@@ -189,25 +183,23 @@
     "fields": {
       "target": "Ziel",
       "title": "Titel",
-      "title_text": "Wird angezeigt, wenn man über den Link fährt",
+      "title_text": "Wird angezeigt; wenn man über den Link fährt",
       "url": {
         "url": "URL"
       }
     }
   },
-
   "flavors": {
     "default": {
       "name": "Standard",
       "text": "Standard-Element erstellen"
     }
   },
-
   "errors": {
     "idnotfound": "Element konnte nicht gefunden werden",
     "childnotallowed": "Nicht erlaubt als Kind dieses Elements",
     "onsave": {
-      "notallowed": "Keine Berechtigung, um dieses Element zu bearbeiten",
+      "notallowed": "Keine Berechtigung; um dieses Element zu bearbeiten",
       "empty": "Es wurden keine Daten übermittelt",
       "noidmatch": "Beim Erstellen von Elementen darf keine ID übermittelt werden",
       "flavornotfound": "Variante des Elements konnte nicht gefunden werden"
@@ -234,7 +226,7 @@
       "404": "Nicht gefunden",
       "404_text": "Das angefragte Element konnte nicht gefunden werden<br>({path})",
       "409": "Konflikt",
-      "409_text": "Die Operation konnte nicht abgeschlossen werden, da sie nicht mehr gültig ist. Bitte Seite neu laden.",
+      "409_text": "Die Operation konnte nicht abgeschlossen werden; da sie nicht mehr gültig ist. Bitte Seite neu laden.",
       "4xx": "Anwenderfehler",
       "4xx_text": "Interner Anwenderfehler (Code: {code})",
       "504": "Zeitüberschreitung",
@@ -244,7 +236,7 @@
     },
     "role": {
       "emptyclaim": "Eine Berechtigung benötigt einen Schlüssel und einen Wert",
-      "nosection": "Es muss zumindest ein Bereich ausgewählt werden, zu dem der Benutzer Zugang hat"
+      "nosection": "Es muss zumindest ein Bereich ausgewählt werden; zu dem der Benutzer Zugang hat"
     },
     "changepassword": {
       "emptyfields": "Es müssen alle Felder ausgefüllt werden",
@@ -254,7 +246,7 @@
     },
     "preview": {
       "notfound": "Nicht gefunden",
-      "notfound_text": "Element mit der ID \"{id}\" konnte nicht gefunden werden"
+      "notfound_text": "Element mit der ID '{id}' konnte nicht gefunden werden"
     },
     "page": {
       "parentnotallowed": "Die Seite ist als Kind der ausgewählten Überseite nicht erlaubt",
@@ -270,45 +262,40 @@
       "hex_format": "Die Eingabe ist nicht im gültigen HEX #aabbcc Format",
       "url_format": "Die Eingabe ist keine gütlige URL",
       "not_unique": "Der Wert muss einmalig in dieser Kollektion sein",
-      "not_unique_alone": "Es muss zumindest ein Element in dieser Kollektion geben, das diese Bedingung erfüllt",
+      "not_unique_alone": "Es muss zumindest ein Element in dieser Kollektion geben; das diese Bedingung erfüllt",
       "culture": "Culture konnte für diesen ISO Code nicht gefunden werden",
       "reference_notfound": "Die Referenz konnte nicht gefunden werden"
     }
   },
-
   "unsavedchanges": {
     "title": "Ungespeicherte Änderungen vorhanden",
-    "text": "Bist du sicher, dass du diese Seite verlassen möchtest ohne die Änderungen zu speichern?",
+    "text": "Bist du sicher; dass du diese Seite verlassen möchtest ohne die Änderungen zu speichern?",
     "close": "Änderungen verwerfen",
     "confirm": "Auf der Seite bleiben"
   },
-
   "deleteoverlay": {
     "close": "Abbrechen",
     "confirm": "Löschen",
     "title": "Element löschen",
-    "text": "Bist du sicher, dass du dieses Element löschen möchtest?",
+    "text": "Bist du sicher; dass du dieses Element löschen möchtest?",
     "success": "Gelöscht",
     "success_text": "Du hast das Element erfolgreich gelöscht",
     "page_text": "Mit dieser Aktion löscht du die Seite inklusive aller Unterseiten. Bist du sicher?",
     "page_success_text": "Die Seite wurde erfolgreich gelöscht"
   },
-
   "changepasswordoverlay": {
     "title": "Passwort ändern",
     "confirm": "Passwort ändern",
     "fields": {
-      "currentPassword": "Aktuelles Passwort",
-      "newPassword": "Neues Passwort",
-      "confirmNewPassword": "Neues Passwort bestätigen"
+      "currentpassword": "Aktuelles Passwort",
+      "newpassword": "Neues Passwort",
+      "confirmnewpassword": "Neues Passwort bestätigen"
     }
   },
-
   "addoverlay": {
     "title": "Element erstellen",
     "gotoeditor": "Weiter"
   },
-
   "sections": {
     "item": {
       "dashboard": "Dashboard",
@@ -318,7 +305,6 @@
       "settings": "Einstellungen"
     }
   },
-
   "settings": {
     "groups": {
       "system": "System",
@@ -376,7 +362,6 @@
       }
     }
   },
-
   "user": {
     "name": "Benutzer",
     "users": "Benutzer",
@@ -386,30 +371,29 @@
     "count_permissions": "{count} Berechtigungen",
     "one_permission": "1 Berechtigung",
     "tab_permissions": "Berechtigungen",
-    "changePassword": "Passwort ändern",
+    "changepassword": "Passwort ändern",
     "fields": {
       "name_placeholder": "Gib deinen echten Name oder einen Benutzernamen ein",
       "email": "Email",
       "email_text": "Wird auch als Benutzername für den Login verwendet",
       "email_placeholder": "E-Mail Adresse eingeben",
-      "passwordHash": "Passwort",
-      "passwordHash_text": "Login Passwort",
-      "avatarId": "Benutzerbild",
-      "avatarId_text": "Bild hochladen",
-      "languageId": "Sprache",
-      "languageId_text": "Lege die Backoffice-Sprache für diesen Benutzer fest",
+      "passwordhash": "Passwort",
+      "passwordhash_text": "Login Passwort",
+      "avatarid": "Benutzerbild",
+      "avatarid_text": "Bild hochladen",
+      "languageid": "Sprache",
+      "languageid_text": "Lege die Backoffice-Sprache für diesen Benutzer fest",
       "roles": "Benutzerrollen",
       "roles_text": "Berechtigungen der Rollen hinzufügen",
       "sections": "Bereiche",
       "sections_text": "Lege die freigegebenen Bereiche fest",
-      "isActive": "Aktiv",
-      "isDisabled": "Deaktivieren",
-      "isLockedOut": "Ausgesperrt",
-      "isLockedOut_warning": "Der Benutzer ist ausgesperrt bis",
-      "isDisabled_warning": "Dieser Benutzer ist deaktiviert und kann sich nicht bei zero anmelden. Der Status kann unter <b>Aktionen</b> geändert werden"
+      "isactive": "Aktiv",
+      "isdisabled": "Deaktivieren",
+      "islockedout": "Ausgesperrt",
+      "islockedout_warning": "Der Benutzer ist ausgesperrt bis",
+      "isdisabled_warning": "Dieser Benutzer ist deaktiviert und kann sich nicht bei zero anmelden. Der Status kann unter <b>Aktionen</b> geändert werden"
     }
   },
-
   "role": {
     "name": "Benutzerrolle",
     "roles": "Benutzerrollen",
@@ -419,7 +403,6 @@
       "icon": "Symbol"
     }
   },
-
   "permission": {
     "states": {
       "create": "Erstellen",
@@ -431,17 +414,16 @@
       "none": "Nichts"
     },
     "collections": {
-      "sections": "Sections",
-      "sections_description": "Allow access to the following sections",
-      "settings": "Settings",
-      "settings_description": "Define read and write access for settings areas",
-      "spaces": "Spaces",
-      "spaces_description": "Granular control of spaces",
-      "modules": "Modules",
-      "modules_description": "Availability of composing block modules"
+      "sections": "Bereiche",
+      "sections_description": "Zugang zu den folgenden Bereichen erlauben",
+      "settings": "Einstellungen",
+      "settings_description": "Lese- und Schreibzugriff für Einstellungsbereiche",
+      "spaces": "Räume",
+      "spaces_description": "Zugang zu Räumen bearbeiten",
+      "modules": "Module",
+      "modules_description": "Verfügbarkeit von Seitenmodulen"
     }
   },
-
   "login": {
     "headline": "Hallo und Willkommen",
     "button": "Anmelden",
@@ -460,7 +442,7 @@
       "notallowed": "Der Benutzer kann sich nicht anmelden",
       "requirestwofactor": "Zwei-Faktor-Authentifizierung ist für den Login erforderlich"
     },
-    "rejectReasons": {
+    "rejectreasons": {
       "logout": "Erfolgreich abgemeldet",
       "inactive": "Du warst zu lange inaktiv. Bitte erneut anmelden.",
       "terminated": "Deine Session wurde beendet. Bitte erneut anmelden.",
@@ -468,7 +450,14 @@
       "passwordchanged": "Dein Password wurde erfolgreich geändert. Bitte erneut anmelden."
     }
   },
-
+  "order": {
+    "fields": {
+      "no": "",
+      "username": "",
+      "price": "",
+      "status": ""
+    }
+  },
   "modules": {
     "add": {
       "title": "Hinzufügen",
@@ -478,28 +467,25 @@
     "notfound": "Es konnte kein Modul <code>[{alias}]</code> im Code gefunden werden.",
     "noneavailable": "Es sind keine Module verfügbar"
   },
-
   "page": {
     "name": "Seite",
     "type": "Seitentyp",
     "root": "Ursprung",
     "info_tab": "Info",
-
     "folder": {
       "name": "Ordner",
       "description": "Seiten gruppieren",
       "fields": {
-        "isPartOfRoute": "Ist Teil der URL",
-        "isPartOfRoute_text": "Wenn ja, dann wird dieser Ordner als Teil der URL angezeigt",
-        "urlAlias": "URL alias",
-        "urlAlias_text": "Dieses Feld anstatt des Namens für die URL-Generierung verwenden"
+        "ispartofroute": "Ist Teil der URL",
+        "ispartofroute_text": "Wenn ja; dann wird dieser Ordner als Teil der URL angezeigt",
+        "urlalias": "URL alias",
+        "urlalias_text": "Dieses Feld anstatt des Namens für die URL-Generierung verwenden"
       }
     },
-
     "overview": {
       "actions": {
         "continue": "Weitermachen",
-        "continue_text": "Du hast zuletzt \"{page}\" bearbeitet",
+        "continue_text": "Du hast zuletzt '{page}' bearbeitet",
         "new": "Neue Seite",
         "new_text": "Erstelle eine neue Seite im obersten Ordner",
         "history": "Verlauf",
@@ -513,31 +499,25 @@
       "unpublish": "Veröffentlichung zurückziehen",
       "scheduled": "Geplant"
     },
-
     "actions": {
       "emptyrecyclebin": "Papierkorb leeren"
     },
-
     "create": {
       "title": "Seite erstellen",
       "parent": "Seite darüber",
       "nonavailable": "Hier sind keine Unterseiten erlaubt"
     },
-
     "preview": {
       "title": "Vorschau"
     },
-
     "picker": {
       "headline": "Seite auswählen",
       "urlnotfound": "URL nicht gefunden"
     },
-
     "infotab": {
       "links": "Link",
       "revisions": "Revisionen"
     },
-
     "deleteoverlay": {
       "title": "Seite löschen",
       "text": "Mit dieser Aktion löscht du die Seite inklusive aller Unterseiten. Bist du sicher?",
@@ -545,20 +525,18 @@
       "success_text": "Die Seite wurde erfolgreich gelöscht"
     }
   },
-
   "recyclebin": {
     "name": "Papierkorb",
     "description": "Zuletzt gelöscht Seiten anzeigen",
     "purge": "Leeren",
     "fields": {
-      "originalId": "Seiten ID",
-      "createdDate": "Gelöscht"
+      "originalid": "Seiten ID",
+      "createddate": "Gelöscht"
     },
     "overlay": {
       "title": "Aktionen"
     }
   },
-
   "country": {
     "list": "Länder",
     "name": "Land",
@@ -566,14 +544,13 @@
       "name": "Name",
       "code": "Code",
       "code_text": "Code im ISO 3166-1 Format (wird zur Anzeige der Flagge benötigt)",
-      "isPreferred": "Oben anzeigen"
+      "ispreferred": "Oben anzeigen"
     }
   },
-
   "integration": {
     "list": "Integrationen",
     "name": "Integration",
-    "activeWarning": "Diese Integration ist nicht aktiv und wird somit unter keinen Umständen laufen.",
+    "activewarning": "Diese Integration ist nicht aktiv und wird somit unter keinen Umständen laufen.",
     "errors": {
       "typenotfound": "Der Integrationstyp existiert nicht",
       "multiplenotallowed": "Es kann nur eine Integration je Typ angelegt werden",
@@ -581,11 +558,8 @@
       "notfound": "Integration konnte nicht gefunden werden",
       "couldnotupdatestate": "Nicht aktualisiert",
       "noaliasmatch": "Der Typ in der URL stimmt nicht mit dem Typ in den Daten überein"
-    },
-    "fields": {
     }
   },
-
   "language": {
     "list": "Sprachen",
     "name": "Sprache",
@@ -594,12 +568,12 @@
       "locale": "Locale",
       "code": "ISO Code",
       "code_text": "Code im ISO 3166-1 Format",
-      "isDefault": "Standard",
-      "isDefault_text": "Als Standard-Sprache verwenden",
-      "isOptional": "Optional",
-      "isOptional_text": "Werte für eine optionale Sprache müssen nicht zwangsweise eingegeben werden",
-      "inheritedLanguageId": "Ersatz",
-      "inheritedLanguageId_text": "Wenn ein Inhalt in dieser Sprache nicht verfügbar ist, kann auf die ausgewhälte Sprache zurückgegriffen werden"
+      "isdefault": "Standard",
+      "isdefault_text": "Als Standard-Sprache verwenden",
+      "isoptional": "Optional",
+      "isoptional_text": "Werte für eine optionale Sprache müssen nicht zwangsweise eingegeben werden",
+      "inheritedlanguageid": "Ersatz",
+      "inheritedlanguageid_text": "Wenn ein Inhalt in dieser Sprache nicht verfügbar ist; kann auf die ausgewhälte Sprache zurückgegriffen werden"
     },
     "errors": {
       "fallback_invalid": "Wähle eine andere Sprache als Ersatz",
@@ -609,7 +583,6 @@
       "needs_default": "Zumindest eine Sprache muss als Standard gesetzt werden"
     }
   },
-
   "translation": {
     "list": "Übersetzungen",
     "name": "Übersetzung",
@@ -623,35 +596,38 @@
       "display": "Anzeigetyp"
     }
   },
-
   "iconpicker": {
     "title": "Symbol auswählen",
     "notfound": {
       "title": "Symbol-Set nicht gefunden",
-      "text": "Das Symbol-Set (\"{name}\") konnte nicht gefunden werden"
+      "text": "Das Symbol-Set ('{name}') konnte nicht gefunden werden"
     }
   },
-
   "colorpicker": {
     "placeholder": "Wähle eine Farbe aus (#aabbcc)"
   },
-
   "mediapicker": {
     "select_text": "Medien hinzufügen",
     "select_description": "Hochladen oder auswählen",
     "upload_text": "Hochladen",
     "upload_description": "Eine neue Datei hochladen"
   },
-
   "videopicker": {
     "headline": "Video auswählen",
     "providers": {
       "html": "Datei hochladen",
       "youtube": "YouTube",
       "vimeo": "Vimeo"
+    },
+    "fields": {
+      "provider": "",
+      "videourl": "",
+      "videoid": "",
+      "title": "",
+      "previewimageid": "",
+      "foundparsed": ""
     }
   },
-
   "application": {
     "list": "Applikationen",
     "name": "Applikation",
@@ -660,29 +636,28 @@
     "fields": {
       "name": "Name",
       "name_text": "Kurzer lesbarer Name",
-      "fullName": "Vollständiger Name",
-      "fullName_text": "Firmen- oder Produktname",
+      "fullname": "Vollständiger Name",
+      "fullname_text": "Firmen- oder Produktname",
       "imageid": "Bild",
-      "imageid_text": "Bild der Applikation, used for all mails, PDFs, ...",
+      "imageid_text": "Bild der Applikation; used for all mails; PDFs; ...",
       "iconid": "Icon",
       "iconid_text": "Vereinfachtes Bild",
       "email": "Email",
       "email_text": "Kontakt-Email",
       "domains": "Domains",
       "domains_text": "Domains für diese Applikation auswählen",
-      "domains_help": "Gültige Werte sind: \"example.com\", \"www.example.com\", \"example.com:8080\", oder \"https://www.example.com\".",
+      "domains_help": "Gültige Werte sind: 'example.com'; 'www.example.com'; 'example.com:8080'; oder 'https://www.example.com'.",
       "domains_add": "Domain hinzufügen",
       "features": "Features",
       "features_text": "Zusätzliche Features aktivieren"
     }
   },
-
   "media": {
     "list": "Medien",
     "name": "Datei",
     "addfolder": "Ordner hinzufügen",
     "editfolder": "Ordner bearbeiten",
-    "untitledName": "[kein_name]",
+    "untitledname": "[kein_name]",
     "actions": {
       "folderdropdown": "Ordner",
       "addfolder": "Ordner erstellen",
@@ -704,14 +679,14 @@
       "date": "Zuletzt bearbeitet am",
       "filename": "Dateiname",
       "source": "Datei",
-      "imageMeta": {
-        "alternativeText": "Alternativer Text",
-        "alternativeText_text": "Wird benutzt, wenn das Bild nicht geladen werden kann",
+      "imagemeta": {
+        "alternativetext": "Alternativer Text",
+        "alternativetext_text": "Wird benutzt; wenn das Bild nicht geladen werden kann",
         "dpi": "DPI",
-        "colorSpace": "Farbraum",
-        "hasTransparency": "Transparenz",
+        "colorspace": "Farbraum",
+        "hastransparency": "Transparenz",
         "frames": "Bilder/sec.",
-        "imageTakenDate": "Aufnahmedatum",
+        "imagetakendate": "Aufnahmedatum",
         "dimension": "Dimension"
       }
     },
@@ -729,15 +704,14 @@
     "child_count_x": "{count} Elemente",
     "upload": {
       "headline": "Hochladen",
-      "multipleHeadline": "Es werden {count} Datei(en) hochgeladen...",
-      "singleHeadline": "Hochladen..."
+      "multipleheadline": "Es werden {count} Datei(en) hochgeladen...",
+      "singleheadline": "Hochladen..."
     }
   },
-
-  "mailTemplate": {
+  "mailtemplate": {
     "name": "Mailvorlage",
     "list": "Mailvorlagen",
-    "emailBox": "Email-Einstellungen",
+    "emailbox": "Email-Einstellungen",
     "tabs": {
       "sender": "Absender",
       "recipient": "Empfänger"
@@ -745,37 +719,34 @@
     "fields": {
       "name": "Name",
       "key": "Schlüssel",
-      "key_text": "Wird benötigt, um im Code auf die Vorlage zugreifen zu können",
+      "key_text": "Wird benötigt; um im Code auf die Vorlage zugreifen zu können",
       "subject": "Betreff",
       "body": "Inhalt",
-      "body_text": "Zusätzlicher Text, der in der Email ausgegeben wird",
+      "body_text": "Zusätzlicher Text; der in der Email ausgegeben wird",
       "preheader": "Preheader",
       "preheader_text": "Dieser Text wird in der Vorschau des Mailprogramms angezeigt",
-      "senderEmail": "Absender Email",
-      "senderEmail_text": "Wenn leer, dann wird die Email der Applikation verwendet",
-      "senderName": "Absendername",
-      "senderName_text": "Wenn leer, dann wird der Name der Applikation verwendet",
-      "recipientEmail": "Empfänger Email",
-      "recipientEmail_text": "Wird nur für Mails benützt, die keinen dynamischen Empfänger haben (z.B. Reporte)",
+      "senderemail": "Absender Email",
+      "senderemail_text": "Wenn leer; dann wird die Email der Applikation verwendet",
+      "sendername": "Absendername",
+      "sendername_text": "Wenn leer; dann wird der Name der Applikation verwendet",
+      "recipientemail": "Empfänger Email",
+      "recipientemail_text": "Wird nur für Mails benützt; die keinen dynamischen Empfänger haben (z.B. Reporte)",
       "cc": "Kopie an (CC)",
       "cc_text": "E-Mails mit Komma trennen",
       "bcc": "Unsichtbare Kopie an (BCC)",
       "bcc_text": "E-Mails mit Komma trennen"
     },
     "errors": {
-      "senderNotAllowed": "Die Absender E-Mail wird vom Mailservice nicht unterstützt. Bitte kontaktiere den Administrator für zusätzliche Hilfe."
+      "sendernotallowed": "Die Absender E-Mail wird vom Mailservice nicht unterstützt. Bitte kontaktiere den Administrator für zusätzliche Hilfe."
     }
   },
-
   "space": {
     "list": "Räume",
     "name": "Raum"
   },
-
   "preview": {
     "name": "Vorschau"
   },
-
   "search": {
     "permissions": {
       "search_group": "Suche",
@@ -783,22 +754,21 @@
     },
     "collection": {
       "page": "Seite",
-      "mediaFolder": "Medien"
+      "mediafolder": "Medien"
     }
   },
-
   "blueprint": {
     "hint": {
-      "childText": "<b>Dieses Element basiert auf einer Blaupause</b>. Die Werte werden automatisch aktualisiert.",
-      "parentText": "Diese Blaupause <b>überträgt Änderungen automatisch</b> an alle Kind-Elemente.",
-      "parentCreateText": "Diese Blaupause erstellt Kind-Elemente in allen Applikationen und überträgt Änderungen an diese automatisch.",
-      "goToBlueprint": "Blaupause",
-      "goToChild": "Implementation",
-      "settingsButton": "Einstellungen",
-      "xUnlocked": "{count} freigeschalten"
+      "childtext": "<b>Dieses Element basiert auf einer Blaupause</b>. Die Werte werden automatisch aktualisiert.",
+      "parenttext": "Diese Blaupause <b>überträgt Änderungen automatisch</b> an alle Kind-Elemente.",
+      "parentcreatetext": "Diese Blaupause erstellt Kind-Elemente in allen Applikationen und überträgt Änderungen an diese automatisch.",
+      "gotoblueprint": "Blaupause",
+      "gotochild": "Implementation",
+      "settingsbutton": "Einstellungen",
+      "xunlocked": "{count} freigeschalten"
     },
     "errors": {
-      "cannotDeleteChild": "Elemente, welche von einer Blaupause abhängig sind, können nicht gelöscht werden"
+      "cannotdeletechild": "Elemente; welche von einer Blaupause abhängig sind; können nicht gelöscht werden"
     }
   }
 }
