@@ -41,7 +41,7 @@
               <ui-dropdown-button label="@ui.delete" icon="fth-trash" @click="remove([props.item])" />
             </template>
             <template v-if="props.item && !props.item.isFolder">
-              <ui-dropdown-button label="@ui.open.title" icon="fth-arrow-right" @click="goToFolder(props.item.id)" />
+              <!--<ui-dropdown-button label="@ui.open.title" icon="fth-arrow-right" @click="goToFolder(props.item.id)" />-->
               <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move([props.item])" />
               <ui-dropdown-button label="@ui.selection.select" icon="fth-check-circle-2" @click="$refs.grid.select(props.item)" />
               <ui-dropdown-separator />

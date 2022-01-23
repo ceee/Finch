@@ -27,6 +27,12 @@ public class ObjectCopycat
   }
 
 
+  public static bool ContentEquals<T>(T obj1, T obj2)
+  {
+    return (obj1 == null && obj2 == null) || (obj1 != null && obj2 != null && JsonConvert.SerializeObject(obj1) == JsonConvert.SerializeObject(obj2));
+  }
+
+
   public static T CopyProperties<T>(T source, T target, params string[] exceptions)
   {
     return CopyPropertiesInternal(source, target, null, exceptions);
