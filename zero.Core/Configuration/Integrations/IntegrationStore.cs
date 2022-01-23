@@ -145,7 +145,7 @@ public class IntegrationStore : IIntegrationStore
       return Result<Integration>.Fail("@integration.errors.alreadycreated");
     }
 
-    return await Operations.Create(model, async x => await Validate(x));
+    return await Operations.Create(model, async (x, ctx) => await Validate(x));
   }
 }
 

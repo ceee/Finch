@@ -62,10 +62,10 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
   public virtual string GetChangeToken(T model) => Operations.GetChangeToken(model);
 
   /// <inheritdoc />
-  public virtual Task<Result<T>> Create(T model) => Operations.Create(model, async m => await Validate(m));
+  public virtual Task<Result<T>> Create(T model) => Operations.Create(model, async (m, ctx) => await Validate(ctx, m));
 
   /// <inheritdoc />
-  public virtual Task<Result<T>> Update(T model) => Operations.Update(model, async m => await Validate(m));
+  public virtual Task<Result<T>> Update(T model) => Operations.Update(model, async (m, ctx) => await Validate(ctx, m));
 
   /// <inheritdoc />
   public virtual Task<Result<IOrderedEnumerable<T>>> Sort(string[] sortedIds) => Operations.Sort<T>(sortedIds);
@@ -74,12 +74,20 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
   public virtual Task<Result<T>> Delete(T model) => Operations.Delete(model);
 
   /// <inheritdoc />
-  public virtual async Task<ValidationResult> Validate(T model)
+  public virtual async Task<ValidationResult> Validate(ZeroValidationContext ctx, T model)
   {
     ZeroValidator<T> validator = new();
     ValidationRules(validator);
     return await validator.ValidateAsync(model);
   }
+
+  /// <inheritdoc />
+  public Task<ValidationResult> Validate(T model) => Validate(new ZeroValidationContext()
+  {
+    Context = Context,
+    Session = Session,
+    Operation = ValidationOp.Unknown
+  }, model);
 
 
   /// <summary>
@@ -162,7 +170,7 @@ public interface IEntityStore<T> where T : ZeroIdEntity, ISupportsFlavors, ISupp
   /// <summary>
   /// Validates an entity in this collection
   /// </summary>
-  Task<ValidationResult> Validate(T model);
+  Task<ValidationResult> Validate(ZeroValidationContext ctx, T model);
 
   /// <summary>
   /// Creates an entity with an optional validator

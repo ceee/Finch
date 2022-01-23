@@ -36,6 +36,13 @@ public class ZeroIndexController : Controller
       return RedirectToAction("ZeroBackoffice", "Setup");
     }
 
+
+
+    //return View("~/Views/Zero/Index.cshtml", new ZeroBackofficeModel()
+    //{
+    //  Meta = GetMetaInfo()
+    //});
+
     BackofficeOptions options = Options.For<BackofficeOptions>();
 
     int port = options.DevServer.Port;

@@ -29,10 +29,10 @@ public class MediaStore : TreeEntityStore<Media>, IMediaStore
     validator.RuleFor(x => x.Name).Length(2, 120);
     validator.RuleFor(x => x.IsActive).Equal(true);
 
-    validator.When(x => x.IsFolder, () =>
-    {
-      validator.RuleFor(x => x.ParentId).Exists(Context.Store);
-    });
+    //validator.When(x => x.IsFolder, () =>
+    //{
+    //  validator.RuleFor(x => x.ParentId).Exists(Context.Store);
+    //});
   }
 }
 

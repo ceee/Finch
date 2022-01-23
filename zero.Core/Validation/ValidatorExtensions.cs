@@ -92,65 +92,6 @@ public static class ValidatorExtensions
 
 
   /// <summary>
-  /// Check if this value is unique within a collection
-  /// </summary>
-  public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IZeroStore store) where T : ZeroEntity
-  {
-    return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
-    {
-      bool any = await store.Session().Advanced.AsyncDocumentQuery<T>()
-        .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
-        .WhereEquals(context.PropertyName.ToPascalCaseId(), value)
-        .AnyAsync(cancellation);
-
-      return !any;
-    }).WithMessage("@errors.forms.not_unique");
-  }
-
-
-  /// <summary>
-  /// Check if this value is at least set once to the expected value within a collection
-  /// </summary>
-  public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IZeroStore store, TProperty expectedValue) where T : ZeroEntity
-  {
-    return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
-    {
-      return await store.Session().Advanced.AsyncDocumentQuery<T>()
-        .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
-        .WhereEquals(context.PropertyName.ToPascalCaseId(), expectedValue)
-        .AnyAsync(cancellation);
-    }).WithMessage("@errors.forms.not_unique_alone");
-  }
-
-
-  /// <summary>
-  /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
-  /// </summary>
-  public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IZeroStore store) where T : ZeroEntity
-  {
-    return ruleBuilder.Exists<T, T>(store);
-  }
-
-
-  /// <summary>
-  /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
-  /// </summary>
-  public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IZeroStore store) where T : ZeroEntity where TReference : ZeroEntity
-  {
-    return ruleBuilder.MustAsync(async (entity, id, context, cancellation) =>
-    {
-      if (id.IsNullOrWhiteSpace())
-      {
-        return true;
-      }
-
-      TReference model = await store.Session().LoadAsync<TReference>(id);
-      return model != null;
-    }).WithMessage("@errors.forms.reference_notfound");
-  }
-
-
-  /// <summary>
   /// Validates a culture identifier
   /// </summary>
   public static IRuleBuilderOptions<T, string> Culture<T>(this IRuleBuilder<T, string> ruleBuilder)
@@ -180,11 +121,11 @@ public static class ValidatorExtensions
   /// <summary>
   /// Check if this value is unique within a collection
   /// </summary>
-  public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IZeroDocumentSession session) where T : ZeroEntity
+  public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, ZeroValidationContext ctx) where T : ZeroEntity
   {
     return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
     {
-      bool any = await session.Advanced.AsyncDocumentQuery<T>()
+      bool any = await ctx.Session.Advanced.AsyncDocumentQuery<T>()
         .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
         .WhereEquals(context.PropertyName.ToPascalCaseId(), value)
         .AnyAsync(cancellation);
@@ -197,11 +138,11 @@ public static class ValidatorExtensions
   /// <summary>
   /// Check if this value is at least set once to the expected value within a collection
   /// </summary>
-  public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IZeroDocumentSession session, TProperty expectedValue) where T : ZeroEntity
+  public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, ZeroValidationContext ctx, TProperty expectedValue) where T : ZeroEntity
   {
     return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
     {
-      return await session.Advanced.AsyncDocumentQuery<T>()
+      return await ctx.Session.Advanced.AsyncDocumentQuery<T>()
         .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
         .WhereEquals(context.PropertyName.ToPascalCaseId(), expectedValue)
         .AnyAsync(cancellation);
@@ -212,16 +153,16 @@ public static class ValidatorExtensions
   /// <summary>
   /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
   /// </summary>
-  public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IZeroDocumentSession session) where T : ZeroEntity
+  public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, ZeroValidationContext ctx) where T : ZeroEntity
   {
-    return ruleBuilder.Exists<T, T>(session);
+    return ruleBuilder.Exists<T, T>(ctx);
   }
 
 
   /// <summary>
   /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
   /// </summary>
-  public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IZeroDocumentSession session) where T : ZeroEntity where TReference : ZeroEntity
+  public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, ZeroValidationContext ctx) where T : ZeroEntity where TReference : ZeroEntity
   {
     return ruleBuilder.MustAsync(async (entity, id, context, cancellation) =>
     {
@@ -230,8 +171,7 @@ public static class ValidatorExtensions
         return true;
       }
 
-      TReference model = await session.LoadAsync<TReference>(id);
-      return model != null;
+      return await ctx.Session.Query<TReference>().AnyAsync(x => x.Id == id);
     }).WithMessage("@errors.forms.reference_notfound");
   }
 }

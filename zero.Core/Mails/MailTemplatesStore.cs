@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+﻿using FluentValidation.Results;
 using Raven.Client.Documents;
 
 namespace zero.Mails;
@@ -22,17 +22,9 @@ public class MailTemplatesStore : EntityStore<MailTemplate>, IMailTemplatesStore
 
 
   /// <inheritdoc />
-  protected override void ValidationRules(ZeroValidator<MailTemplate> validator)
+  public override Task<ValidationResult> Validate(ZeroValidationContext ctx, MailTemplate model)
   {
-    validator.RuleFor(x => x.SenderEmail).Email();
-
-    if (Dispatcher != null)
-    {
-      validator.RuleFor(x => x.SenderEmail).MustAsync(async (value, ct) =>
-      {
-        return await Dispatcher.IsSenderSupported(value);
-      }).WithMessage("@mailTemplate.errors.senderNotAllowed");
-    }
+    return new MailTemplateValidator(ctx, Dispatcher).ValidateAsync(model);
   }
 }
 

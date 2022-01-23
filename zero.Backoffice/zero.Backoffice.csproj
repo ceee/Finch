@@ -1,10 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <PackageId>zero.Backoffice</PackageId>
     <Version>0.1.0</Version>
     <LangVersion>preview</LangVersion>
     <TargetFramework>net6.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
 
@@ -17,17 +18,17 @@
     <None Remove="Modules_legacy\**" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <None Remove="Resources\Countries\countries.de-de.json" />
     <None Remove="Resources\Countries\countries.en-us.json" />
     <None Remove="Resources\Localization\zero.de-de.json" />
     <None Remove="Resources\Localization\zero.en-us.json" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\backoffice.tpl.html" />
     
-    <Content Include="Resources\Countries\countries.de-de.json">
+    <!--<Content Include="Resources\Countries\countries.de-de.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Countries\countries.en-us.json">
@@ -38,7 +39,7 @@
     </Content>
     <Content Include="Resources\Localization\zero.en-us.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Content>-->
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+﻿using FluentValidation.Results;
 
 namespace zero.Localization;
 
@@ -14,10 +14,9 @@ public class TranslationStore : EntityStore<Translation>, ITranslationStore
   }
 
 
-  protected override void ValidationRules(ZeroValidator<Translation> validator)
+  public override Task<ValidationResult> Validate(ZeroValidationContext ctx, Translation model)
   {
-    validator.RuleFor(x => x.Key).NotEmpty().Length(2, 300).Unique(Context.Store);
-    validator.RuleFor(x => x.Value).MaximumLength(10 * 1000);
+    return new TranslationValidator(ctx).ValidateAsync(model);
   }
 }
 

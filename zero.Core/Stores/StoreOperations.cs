@@ -189,12 +189,12 @@ public interface IStoreOperations
   /// <summary>
   /// Creates an entity with an optional validator
   /// </summary>
-  Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
+  Task<Result<T>> Create<T>(T model, Func<T, ZeroValidationContext, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Updates an entity with an optional validator
   /// </summary>
-  Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
+  Task<Result<T>> Update<T>(T model, Func<T, ZeroValidationContext, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
 
   /// <inheritdoc />
   Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, ISupportsSorting, new();

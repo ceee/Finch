@@ -12,8 +12,8 @@
 
     <div class="ui-property-content">
       <slot></slot>
-      <ui-error v-if="field" :field="field" />
     </div> 
+    <ui-error v-if="field" :field="field" />
     <slot name="after"></slot>
   </div>
 </template>
@@ -64,9 +64,9 @@
       cursor: not-allowed;
     }
 
-    .ui-error
+    &:not(.is-vertical) > .ui-error
     {
-      margin-top: 5px;
+      grid-column: span 2 / auto;
     }
   }
 
