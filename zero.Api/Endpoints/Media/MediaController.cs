@@ -269,6 +269,24 @@ public class MediaController : ZeroApiTreeEntityStoreController<zero.Media.Media
   public virtual async Task<ActionResult<zero.Media.Media>> Get(string id, string changeVector = null) => await GetModel(id, changeVector);
 
 
+  [HttpGet("{id}/source")]
+  [ZeroAuthorize(MediaPermissions.Read)]
+  public virtual async Task<ActionResult<MediaSourceResult>> GetSource(string id)
+  {
+    string path = await Media.GetPublicFilePath(id);
+
+    if (path.IsNullOrEmpty())
+    {
+      return NotFound();
+    }
+
+    return new MediaSourceResult()
+    {
+      Path = path
+    };
+  }
+
+
   [HttpGet("{id}/hierarchy")]
   [ZeroAuthorize(MediaPermissions.Read)]
   public virtual async Task<ActionResult<zero.Media.Media[]>> GetHierarchy(string id) => await Store.GetHierarchy<zero_Api_Media_Hierarchy>(NormalizeParentId(id));

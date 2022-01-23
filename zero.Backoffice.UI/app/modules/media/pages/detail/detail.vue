@@ -2,7 +2,7 @@
   <ui-form ref="form" class="media-detail" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
     <ui-form-header v-model:value="model" prefix="@media.list" title="@media.name" :disabled="disabled" :active-disabled="true" :is-create="!id" :state="form.state" :can-delete="meta.canDelete" @delete="onDelete">
       <template v-slot:actions>
-        <ui-dropdown-button label="@media.actions.openfile" icon="fth-external-link" />
+        <ui-dropdown-button label="@media.actions.openfile" icon="fth-external-link" @click="openFile" :disabled="!id" :prevent="true" />
         <ui-dropdown-button label="@media.actions.replacefile" icon="fth-file-input" :disabled="true" />
       </template>
     </ui-form-header>
@@ -50,6 +50,20 @@
       {
         opts.hide();
         this.$refs.form.onDelete(api.delete.bind(this, this.id));
+      },
+
+      async openFile(val, { dropdown, hide, loading })
+      {
+        loading(true);
+        const result = await api.getSource(this.id);
+        let path = result.success ? result.data.path : null;
+        loading(false);
+        hide();
+
+        if (path)
+        {
+          window.open(window.location.origin + path, 'blank');
+        }
       }
     }
   }

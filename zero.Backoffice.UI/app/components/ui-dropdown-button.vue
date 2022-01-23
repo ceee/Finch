@@ -105,13 +105,15 @@
             this.dropdown.hide();
           }
 
+          let self = this;
+
           this.$emit('click', this.value, {
             dropdown: this.dropdown,
             hide()
             {
-              if (this.dropdown)
+              if (self.dropdown)
               {
-                this.dropdown.hide();
+                self.dropdown.hide();
               }
               instance.$emit('hide');
             },

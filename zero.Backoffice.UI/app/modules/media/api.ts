@@ -7,6 +7,8 @@ const files = {
 
   getById: (id: string, changeVector?: string, config?: ApiRequestConfig) => get('media/' + id, { ...config, params: { changeVector } }),
 
+  getSource: (id: string, config?: ApiRequestConfig) => get(`media/${id}/source`, { ...config }),
+
   getByQuery: (query: ApiRequestQuery, config?: ApiRequestConfig) => get('media', { ...config, params: { ...query } }),
 
   getHierarchy: (id: string, config?: ApiRequestConfig) => get(`media/${id}/hierarchy`, { ...config }),
