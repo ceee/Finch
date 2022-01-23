@@ -137,9 +137,9 @@ public class IntegrationStore : IIntegrationStore
         result.Errors.Add(new ValidationFailure("__nofield", "@integration.errors.alreadycreated"));
       }
 
-      if (type != null && type.Validator != null)
+      if (type != null)
       {
-        ValidationResult innerResult = await type.Validator.ValidateAsync(new ValidationContext<Integration>(model));
+        ValidationResult innerResult = await Operations.Validate(model);
         result.Errors.AddRange(innerResult.Errors);
       }
     }

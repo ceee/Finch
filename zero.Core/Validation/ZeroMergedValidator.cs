@@ -35,7 +35,7 @@ public class ZeroMergedValidator<T> : IZeroMergedValidator<T>
   /// <inheritdoc />
   public IEnumerable<IValidator<T>> ResolveFor(T model)
   {
-    Type type = typeof(T);
+    Type type = model.GetType();
 
     if (!TypeCache.TryGetValue(type, out IEnumerable<IValidator<T>> validators))
     {
