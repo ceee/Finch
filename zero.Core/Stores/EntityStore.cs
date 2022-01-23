@@ -25,12 +25,12 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
   protected IZeroOptions Options { get; private set; }
 
 
-  public EntityStore(IStoreContext collectionContext)
+  public EntityStore(IStoreContext ctx)
   {
-    Context = collectionContext.Context;
-    Interceptors = collectionContext.Interceptors;
-    Options = collectionContext.Options;
-    Operations = new StoreOperations(collectionContext);
+    Context = ctx.Context;
+    Interceptors = ctx.Interceptors;
+    Options = ctx.Options;
+    Operations = new StoreOperations(ctx);
   }
 
 
@@ -62,10 +62,10 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
   public virtual string GetChangeToken(T model) => Operations.GetChangeToken(model);
 
   /// <inheritdoc />
-  public virtual Task<Result<T>> Create(T model) => Operations.Create(model, async (m, ctx) => await Validate(ctx, m));
+  public virtual Task<Result<T>> Create(T model) => Operations.Create(model, async m => await Validate(m));
 
   /// <inheritdoc />
-  public virtual Task<Result<T>> Update(T model) => Operations.Update(model, async (m, ctx) => await Validate(ctx, m));
+  public virtual Task<Result<T>> Update(T model) => Operations.Update(model, async m => await Validate(m));
 
   /// <inheritdoc />
   public virtual Task<Result<IOrderedEnumerable<T>>> Sort(string[] sortedIds) => Operations.Sort<T>(sortedIds);
@@ -74,27 +74,13 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
   public virtual Task<Result<T>> Delete(T model) => Operations.Delete(model);
 
   /// <inheritdoc />
-  public virtual async Task<ValidationResult> Validate(ZeroValidationContext ctx, T model)
-  {
-    ZeroValidator<T> validator = new();
-    ValidationRules(validator);
-    return await validator.ValidateAsync(model);
-  }
-
-  /// <inheritdoc />
-  public Task<ValidationResult> Validate(T model) => Validate(new ZeroValidationContext()
-  {
-    Context = Context,
-    Session = Session,
-    Operation = ValidationOp.Unknown
-  }, model);
-
+  public virtual Task<ValidationResult> Validate(T model) => Operations.Validate(model);
 
   /// <summary>
   /// Create rules for validation
   /// </summary>
+  [Obsolete]
   protected virtual void ValidationRules(ZeroValidator<T> validator) { }
-
 
   /// <summary>
   /// Do only return the model when it is set to active or inactive entities are included with IncludeInactive()
@@ -170,7 +156,7 @@ public interface IEntityStore<T> where T : ZeroIdEntity, ISupportsFlavors, ISupp
   /// <summary>
   /// Validates an entity in this collection
   /// </summary>
-  Task<ValidationResult> Validate(ZeroValidationContext ctx, T model);
+  Task<ValidationResult> Validate(T model);
 
   /// <summary>
   /// Creates an entity with an optional validator

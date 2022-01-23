@@ -4,10 +4,10 @@ namespace zero.Mails;
 
 public class MailTemplateValidator : ZeroValidator<MailTemplate>
 {
-  public MailTemplateValidator(ZeroValidationContext ctx, IMailDispatcher dispatcher)
+  public MailTemplateValidator(IZeroStore store, IMailDispatcher dispatcher = null)
   {
     RuleFor(x => x.Name).NotEmpty().Length(2, 80);
-    RuleFor(x => x.Key).NotEmpty().Unique(ctx);
+    RuleFor(x => x.Key).NotEmpty().Unique(store);
     RuleFor(x => x.Subject).NotEmpty().Length(2, 120);
     RuleFor(x => x.Preheader).MaximumLength(240);
 

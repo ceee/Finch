@@ -10,13 +10,13 @@ public class ApplicationStore : EntityStore<Application>, IApplicationStore
   }
 
 
-  protected override void ValidationRules(ZeroValidator<Application> validator)
-  {
-    validator.RuleFor(x => x.Name).NotEmpty().Length(2, 50);
-    validator.RuleFor(x => x.FullName).MaximumLength(120);
-    validator.RuleFor(x => x.Email).Email().NotEmpty().MaximumLength(120);
-    validator.RuleFor(x => x.Domains).NotEmpty();
-  }
+  //protected override void ValidationRules(ZeroValidator<Application> validator)
+  //{
+  //  validator.RuleFor(x => x.Name).NotEmpty().Length(2, 50);
+  //  validator.RuleFor(x => x.FullName).MaximumLength(120);
+  //  validator.RuleFor(x => x.Email).Email().NotEmpty().MaximumLength(120);
+  //  validator.RuleFor(x => x.Domains).NotEmpty();
+  //}
 }
 
 public interface IApplicationStore : IEntityStore<Application>

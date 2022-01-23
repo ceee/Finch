@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace zero.Localization;
@@ -13,5 +14,9 @@ internal class ZeroLocalizationModule : ZeroModule
     services.AddScoped<ILanguageStore, LanguageStore>();
     services.AddScoped<ITranslationStore, TranslationStore>();
     services.AddScoped<ILocalizer, Localizer>();
+
+    services.AddScoped<IValidator<Country>, CountryValidator>();
+    services.AddScoped<IValidator<Language>, LanguageValidator>();
+    services.AddScoped<IValidator<Translation>, TranslationValidator>();
   }
 }

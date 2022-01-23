@@ -5,13 +5,13 @@ namespace zero.Stores;
 public partial class StoreOperations : IStoreOperations
 {
   /// <inheritdoc />
-  public virtual Task<Result<T>> Create<T>(T model, Func<T, ZeroValidationContext, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new() => Save(model, validate);
+  public virtual Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new() => Save(model, validate);
 
   /// <inheritdoc />
-  public virtual Task<Result<T>> Update<T>(T model, Func<T, ZeroValidationContext, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new() => Save(model, validate);
+  public virtual Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new() => Save(model, validate);
 
   /// <inheritdoc />
-  protected virtual async Task<Result<T>> Save<T>(T model, Func<T, ZeroValidationContext, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new()
+  protected virtual async Task<Result<T>> Save<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new()
   {
     if (model == null)
     {
@@ -52,12 +52,7 @@ public partial class StoreOperations : IStoreOperations
     // run validator
     if (validate != null)
     {
-      ValidationResult validation = await validate(model, new ZeroValidationContext()
-      {
-        Context = Context,
-        Session = Session,
-        Operation = isUpdate ? ValidationOp.Update : ValidationOp.Create
-      });
+      ValidationResult validation = await validate(model);
 
       if (!validation.IsValid)
       {

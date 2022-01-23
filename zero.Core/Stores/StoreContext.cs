@@ -12,14 +12,17 @@ public class StoreContext : IStoreContext
 
   public IStoreCache Cache { get; private set; }
 
+  public IServiceProvider Services { get; private set; }
 
-  public StoreContext(IZeroContext context, IInterceptors interceptors, IStoreCache cache)
+
+  public StoreContext(IZeroContext context, IInterceptors interceptors, IStoreCache cache, IServiceProvider serviceProvider)
   {
     Store = context.Store;
     Options = context.Options;
     Context = context;
     Interceptors = interceptors;
     Cache = cache;
+    Services = serviceProvider;
   }
 }
 
@@ -35,4 +38,6 @@ public interface IStoreContext
   IInterceptors Interceptors { get; }
 
   IStoreCache Cache { get; }
+
+  IServiceProvider Services { get; }
 }

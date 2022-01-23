@@ -1,6 +1,4 @@
-﻿using FluentValidation.Results;
-
-namespace zero.Localization;
+﻿namespace zero.Localization;
 
 public class TranslationStore : EntityStore<Translation>, ITranslationStore
 {
@@ -11,12 +9,6 @@ public class TranslationStore : EntityStore<Translation>, ITranslationStore
   public async Task<string> LoadString(string id)
   {
     return (await Load(id))?.Value;
-  }
-
-
-  public override Task<ValidationResult> Validate(ZeroValidationContext ctx, Translation model)
-  {
-    return new TranslationValidator(ctx).ValidateAsync(model);
   }
 }
 

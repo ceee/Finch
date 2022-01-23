@@ -151,7 +151,7 @@ public class IntegrationStore : IIntegrationStore
   /// <inheritdoc />
   protected virtual async Task<Result<Integration>> Save(Integration model, bool create = false)
   {
-    return await Operations.Create(model, async (x, ctx) => await Validate(x, create));
+    return await Operations.Create(model, async x => await Validate(x, create));
   }
 }
 

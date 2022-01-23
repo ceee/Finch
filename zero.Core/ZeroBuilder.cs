@@ -42,6 +42,7 @@ public class ZeroBuilder
     Modules.Add<ZeroArchitectureModule>();
     Modules.Add<ZeroCommunicationModule>();
     Modules.Add<ZeroConfigurationModule>();
+    Modules.Add<ZeroValidationModule>();
     Modules.Add<ZeroContextModule>();
     Modules.Add<ZeroFileStorageModule>();
     Modules.Add<ZeroIdentityModule>();

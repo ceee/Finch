@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
 using System.Security.Claims;
@@ -25,6 +26,8 @@ public partial class StoreOperations :
 
   protected FlavorOptions Flavors { get; private set; }
 
+  protected IServiceProvider Services { get; private set; }
+
   string _overrideDatabase = null;
 
 
@@ -32,6 +35,7 @@ public partial class StoreOperations :
   {
     Context = context.Context;
     Interceptors =  context.Interceptors;
+    Services = context.Services;
     Flavors = context.Options.For<FlavorOptions>();
     Config = config ?? new();
   }
@@ -91,6 +95,22 @@ public partial class StoreOperations :
     }
 
     return model;
+  }
+
+
+  /// <summary>
+  /// Validates an entity
+  /// </summary>
+  public async Task<ValidationResult> Validate<T>(T model) where T : ZeroIdEntity, new()
+  {
+    IZeroMergedValidator<T> validator = Services.GetService<IZeroMergedValidator<T>>();
+
+    if (validator == null)
+    {
+      return new();
+    }
+
+    return await validator.ValidateAsync(model);
   }
 
 
@@ -187,14 +207,19 @@ public interface IStoreOperations
   string GetChangeToken<T>(T model) where T : ZeroIdEntity, new();
 
   /// <summary>
+  /// Validates an entity
+  /// </summary>
+  Task<ValidationResult> Validate<T>(T model) where T : ZeroIdEntity, new();
+
+  /// <summary>
   /// Creates an entity with an optional validator
   /// </summary>
-  Task<Result<T>> Create<T>(T model, Func<T, ZeroValidationContext, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
+  Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Updates an entity with an optional validator
   /// </summary>
-  Task<Result<T>> Update<T>(T model, Func<T, ZeroValidationContext, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
+  Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
 
   /// <inheritdoc />
   Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, ISupportsSorting, new();

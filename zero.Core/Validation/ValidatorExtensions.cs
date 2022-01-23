@@ -121,11 +121,11 @@ public static class ValidatorExtensions
   /// <summary>
   /// Check if this value is unique within a collection
   /// </summary>
-  public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, ZeroValidationContext ctx) where T : ZeroEntity
+  public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IZeroStore store) where T : ZeroEntity
   {
     return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
     {
-      bool any = await ctx.Session.Advanced.AsyncDocumentQuery<T>()
+      bool any = await store.Session().Advanced.AsyncDocumentQuery<T>()
         .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
         .WhereEquals(context.PropertyName.ToPascalCaseId(), value)
         .AnyAsync(cancellation);
@@ -138,11 +138,11 @@ public static class ValidatorExtensions
   /// <summary>
   /// Check if this value is at least set once to the expected value within a collection
   /// </summary>
-  public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, ZeroValidationContext ctx, TProperty expectedValue) where T : ZeroEntity
+  public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IZeroStore store, TProperty expectedValue) where T : ZeroEntity
   {
     return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
     {
-      return await ctx.Session.Advanced.AsyncDocumentQuery<T>()
+      return await store.Session().Advanced.AsyncDocumentQuery<T>()
         .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
         .WhereEquals(context.PropertyName.ToPascalCaseId(), expectedValue)
         .AnyAsync(cancellation);
@@ -153,16 +153,16 @@ public static class ValidatorExtensions
   /// <summary>
   /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
   /// </summary>
-  public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, ZeroValidationContext ctx) where T : ZeroEntity
+  public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IZeroStore store) where T : ZeroEntity
   {
-    return ruleBuilder.Exists<T, T>(ctx);
+    return ruleBuilder.Exists<T, T>(store);
   }
 
 
   /// <summary>
   /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
   /// </summary>
-  public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, ZeroValidationContext ctx) where T : ZeroEntity where TReference : ZeroEntity
+  public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IZeroStore store) where T : ZeroEntity where TReference : ZeroEntity
   {
     return ruleBuilder.MustAsync(async (entity, id, context, cancellation) =>
     {
@@ -171,7 +171,7 @@ public static class ValidatorExtensions
         return true;
       }
 
-      return await ctx.Session.Query<TReference>().AnyAsync(x => x.Id == id);
+      return await store.Session().Query<TReference>().AnyAsync(x => x.Id == id);
     }).WithMessage("@errors.forms.reference_notfound");
   }
 }
