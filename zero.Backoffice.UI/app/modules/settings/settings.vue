@@ -18,7 +18,17 @@
         </ui-link>
       </div>
     </div>
-    <router-view name="footer"></router-view>
+    <div class="settings-footer" v-if="meta">
+      <p>
+        zero version:<br /><span class="-version">{{meta.zeroVersion}}</span>
+      </p>
+      <p>
+        app version:<br /><span class="-version">{{meta.appVersion}}</span>
+      </p>
+      <p>
+        date:<br /><span class="-version" v-date="meta.appLastModifiedDate"></span>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -34,6 +44,7 @@
       page: true,
       appCount: 0,
       groups: [],
+      meta: null,
       tokens: {
         'zero_version': '0.0.1',
         'plugin_count': 3
@@ -42,6 +53,8 @@
 
     mounted()
     {
+      this.meta = JSON.parse(document.getElementById('zero-meta').innerHTML);
+
       this.groups = useUiStore().settingGroups;
       this.appCount = useAppStore().applications.length;
 
@@ -148,5 +161,24 @@
     position: absolute;
     top: -4px;
     right: -4px;
+  }
+
+  .settings-footer
+  {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-dim);
+    display: flex;
+    gap: var(--padding);
+
+    p
+    {
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .-version
+    {
+      color: var(--color-text);
+    }
   }
 </style>

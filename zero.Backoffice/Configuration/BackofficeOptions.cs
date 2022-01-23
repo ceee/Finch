@@ -3,11 +3,6 @@
 public class BackofficeOptions
 {
   /// <summary>
-  /// Hash for all zero assets
-  /// </summary>
-  public string AssetHash { get; set; }
-
-  /// <summary>
   /// Public path to zero assets
   /// </summary>
   public string AssetPath { get; set; }

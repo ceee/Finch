@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using System.IO;
+using System.Reflection;
+using System.Text.Json;
 using zero.Api.Controllers;
 using zero.Backoffice.Services;
 
@@ -15,6 +17,8 @@ public class ZeroIndexController : Controller
   IIconService IconRepository { get; set; }
   IWebHostEnvironment Env { get; set; }
   IBackofficeAssetFileSystem AssetFileSystem { get; set; }
+
+  static string MetaInfoJson { get; set; }
 
   public ZeroIndexController(IZeroOptions options, IIconService iconRepository, IWebHostEnvironment env, IBackofficeAssetFileSystem assetFileSystem)
   {
@@ -37,16 +41,19 @@ public class ZeroIndexController : Controller
     int port = options.DevServer.Port;
     string domain = "http://localhost:" + port;
 
+    MetaInfoJson ??= JsonSerializer.Serialize(GetMetaInfo());
+
     Dictionary<string, string> model = new()
     {
       { "top", String.Empty },
       { "bottom", String.Join(String.Empty, GetJsModules(domain, new[] { "/vite/client", "/app/app.ts" })) },
-      { "svg", await IconRepository.GetCompiledSvg() }
+      { "svg", await IconRepository.GetCompiledSvg() },
+      { "meta", MetaInfoJson }
     };
 
     if (!Env.IsDevelopment())
     {
-      string html = System.IO.File.ReadAllText(Path.Combine(Env.WebRootPath, "zero/index.html"));
+      string html = TokenReplacement.Apply(System.IO.File.ReadAllText(Path.Combine(Env.WebRootPath, "zero/index.html")), model);
       return Content(html, "text/html");
       //string assetHash = options.AssetHash;
       //string suffix = assetHash.HasValue() ? "?v=" + assetHash : String.Empty;
@@ -61,6 +68,20 @@ public class ZeroIndexController : Controller
 
     string content = TokenReplacement.Apply(await LoadTemplate("zero.Backoffice.Resources.backoffice.tpl.html"), model);
     return Content(content, "text/html");
+  }
+
+
+  ZeroBackofficeMetaInfo GetMetaInfo()
+  {
+    Assembly assembly = Assembly.GetEntryAssembly();
+    FileInfo assemblyFileInfo = new(assembly.Location);
+
+    return new()
+    {
+      AppVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion,
+      ZeroVersion = Options.Version,
+      AppLastModifiedDate = assemblyFileInfo.LastWriteTime
+    };
   }
 
 

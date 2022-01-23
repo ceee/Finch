@@ -14,6 +14,6 @@ export default (el, binding) =>
       return;
     }
 
-    el.innerHTML = formatDate(binding.value);
+    el.innerHTML = formatDate(binding.value, binding.arg);
   }
 };

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Indexes;
 using Raven.Client.Http;
 
 namespace zero.Persistence;
@@ -24,11 +25,12 @@ internal class ZeroPersistenceModule : ZeroModule
   protected ZeroDocumentStore CreateRavenStore(IServiceProvider services)
   {
     IZeroOptions options = services.GetService<IZeroOptions>();
+    RavenOptions ravenOptions = options.For<RavenOptions>();
     IZeroDocumentConventionsBuilder conventionsBuilder = services.GetService<IZeroDocumentConventionsBuilder>();
 
     IZeroDocumentStore store = new ZeroDocumentStore(options)
     {
-      Urls = new string[1] { options.For<RavenOptions>().Url },
+      Urls = new string[1] { ravenOptions.Url },
       Conventions =
       {
         AggressiveCache =
@@ -46,8 +48,8 @@ internal class ZeroPersistenceModule : ZeroModule
     // create all indexes
     if (options.Initialized)
     {
-      //var indexes = options.Raven.Indexes.BuildAll(options, store);
-      //IndexCreation.CreateIndexes(indexes, store, database: options.Raven.Database);
+      var indexes = ravenOptions.Indexes.BuildAll(options, store);
+      IndexCreation.CreateIndexes(indexes, store, database: ravenOptions.Database);
     }
 
     return (ZeroDocumentStore)raven;
