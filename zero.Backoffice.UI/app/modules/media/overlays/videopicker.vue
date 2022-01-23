@@ -24,7 +24,7 @@
           <input type="text" v-model="item.title" maxlength="60" />
         </ui-property>
         <ui-property v-if="item.provider == 'html'" label="@videopicker.fields.previewImageId">
-          <ui-mediapicker v-model="item.videoId" />
+          <ui-mediapicker v-model="item.previewImageId" />
         </ui-property>
       </div>
       <div class="ui-box" v-if="preview">

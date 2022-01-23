@@ -17,4 +17,6 @@ public class UserModel : ZeroIdEntity
   public DateTimeOffset CreatedDate { get; set; }
 
   public string Flavor { get; set; }
+
+  public string Culture { get; set; }
 }

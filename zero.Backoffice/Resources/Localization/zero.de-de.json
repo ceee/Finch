@@ -9,6 +9,20 @@
       }
     }
   },
+  "nav": {
+    "apps": {
+      "manage": "Apps verwalten"
+    },
+    "account": {
+      "edit": "Profil ändern",
+      "changepassword": "Passwort ändern",
+      "logout": "Abmelden"
+    },
+    "theme": {
+      "dark": "Dunkles Theme",
+      "light": "Helles Theme"
+    }
+  },
   "ui": {
     "yes": "Ja",
     "no": "Nein",
@@ -23,8 +37,8 @@
     "save": "Speichern",
     "create": "Erstellen",
     "update": "Aktualisieren",
-    "createddate": "Erstellt",
-    "modifieddate": "Zuletzt bearbeitet",
+    "createddate": "Erstellt am",
+    "modifieddate": "Zuletzt bearbeitet am",
     "id": "ID",
     "disabled": "Deaktiviert",
     "enabled": "Aktiviert",
@@ -39,6 +53,7 @@
     "alias": "Alias",
     "link": "Link",
     "item": "Element",
+    "emptylist": "Keine Ergebnisse gefunden",
     "pagination": {
       "xofy": "Seite {x} von {y}",
       "next": "Nächste Seite",
@@ -61,7 +76,7 @@
     "tab_options": "Optionen",
     "tab_infos": "Infos",
     "pick": {
-      "title": "Auswähle eines aus",
+      "title": "Wähle eines aus",
       "title_multiple": "Auswählen",
       "title_autocomplete": "Wert eingeben",
       "max": "max. {count}"
@@ -86,7 +101,7 @@
     },
     "sort": {
       "title": "Sortieren",
-      "text": "Verschiebe die Elemente hoch oder runter; bis du sie korrekt geordnet hast."
+      "text": "Verschiebe die Elemente hoch oder runter, bis du sie korrekt geordnet hast."
     },
     "move": {
       "title": "Verschieben",
@@ -183,7 +198,7 @@
     "fields": {
       "target": "Ziel",
       "title": "Titel",
-      "title_text": "Wird angezeigt; wenn man über den Link fährt",
+      "title_text": "Wird angezeigt, wenn man über den Link fährt",
       "url": {
         "url": "URL"
       }
@@ -199,7 +214,7 @@
     "idnotfound": "Element konnte nicht gefunden werden",
     "childnotallowed": "Nicht erlaubt als Kind dieses Elements",
     "onsave": {
-      "notallowed": "Keine Berechtigung; um dieses Element zu bearbeiten",
+      "notallowed": "Keine Berechtigung, um dieses Element zu bearbeiten",
       "empty": "Es wurden keine Daten übermittelt",
       "noidmatch": "Beim Erstellen von Elementen darf keine ID übermittelt werden",
       "flavornotfound": "Variante des Elements konnte nicht gefunden werden"
@@ -226,7 +241,7 @@
       "404": "Nicht gefunden",
       "404_text": "Das angefragte Element konnte nicht gefunden werden<br>({path})",
       "409": "Konflikt",
-      "409_text": "Die Operation konnte nicht abgeschlossen werden; da sie nicht mehr gültig ist. Bitte Seite neu laden.",
+      "409_text": "Die Operation konnte nicht abgeschlossen werden, da sie nicht mehr gültig ist. Bitte Seite neu laden.",
       "4xx": "Anwenderfehler",
       "4xx_text": "Interner Anwenderfehler (Code: {code})",
       "504": "Zeitüberschreitung",
@@ -236,7 +251,7 @@
     },
     "role": {
       "emptyclaim": "Eine Berechtigung benötigt einen Schlüssel und einen Wert",
-      "nosection": "Es muss zumindest ein Bereich ausgewählt werden; zu dem der Benutzer Zugang hat"
+      "nosection": "Es muss zumindest ein Bereich ausgewählt werden, zu dem der Benutzer Zugang hat"
     },
     "changepassword": {
       "emptyfields": "Es müssen alle Felder ausgefüllt werden",
@@ -262,14 +277,14 @@
       "hex_format": "Die Eingabe ist nicht im gültigen HEX #aabbcc Format",
       "url_format": "Die Eingabe ist keine gütlige URL",
       "not_unique": "Der Wert muss einmalig in dieser Kollektion sein",
-      "not_unique_alone": "Es muss zumindest ein Element in dieser Kollektion geben; das diese Bedingung erfüllt",
+      "not_unique_alone": "Es muss zumindest ein Element in dieser Kollektion geben, das diese Bedingung erfüllt",
       "culture": "Culture konnte für diesen ISO Code nicht gefunden werden",
       "reference_notfound": "Die Referenz konnte nicht gefunden werden"
     }
   },
   "unsavedchanges": {
     "title": "Ungespeicherte Änderungen vorhanden",
-    "text": "Bist du sicher; dass du diese Seite verlassen möchtest ohne die Änderungen zu speichern?",
+    "text": "Bist du sicher, dass du diese Seite verlassen möchtest ohne die Änderungen zu speichern?",
     "close": "Änderungen verwerfen",
     "confirm": "Auf der Seite bleiben"
   },
@@ -277,7 +292,7 @@
     "close": "Abbrechen",
     "confirm": "Löschen",
     "title": "Element löschen",
-    "text": "Bist du sicher; dass du dieses Element löschen möchtest?",
+    "text": "Bist du sicher, dass du dieses Element löschen möchtest?",
     "success": "Gelöscht",
     "success_text": "Du hast das Element erfolgreich gelöscht",
     "page_text": "Mit dieser Aktion löscht du die Seite inklusive aller Unterseiten. Bist du sicher?",
@@ -302,7 +317,7 @@
       "spaces": "Räume",
       "media": "Medien",
       "pages": "Seiten",
-      "settings": "Einstellungen"
+      "settings": "Optionen"
     }
   },
   "settings": {
@@ -318,11 +333,11 @@
         "text_default": "Die zero Version aktualisieren"
       },
       "applications": {
-        "name": "Applicationen",
-        "text": "Website Applikationen bearbeiten"
+        "name": "Applikationen",
+        "text": "Verwalten der App-Instanzen"
       },
       "users": {
-        "name": "Benutzer & Berechtigungen",
+        "name": "Benutzer",
         "text": "Administration der Backoffice-Benutzer"
       },
       "logs": {
@@ -450,14 +465,7 @@
       "passwordchanged": "Dein Password wurde erfolgreich geändert. Bitte erneut anmelden."
     }
   },
-  "order": {
-    "fields": {
-      "no": "",
-      "username": "",
-      "price": "",
-      "status": ""
-    }
-  },
+
   "modules": {
     "add": {
       "title": "Hinzufügen",
@@ -470,15 +478,15 @@
   "page": {
     "name": "Seite",
     "type": "Seitentyp",
-    "root": "Ursprung",
+    "root": "Top",
     "info_tab": "Info",
     "folder": {
       "name": "Ordner",
       "description": "Seiten gruppieren",
       "fields": {
         "ispartofroute": "Ist Teil der URL",
-        "ispartofroute_text": "Wenn ja; dann wird dieser Ordner als Teil der URL angezeigt",
-        "urlalias": "URL alias",
+        "ispartofroute_text": "Wenn ja, dann wird dieser Ordner als Teil der URL angezeigt",
+        "urlalias": "URL Name",
         "urlalias_text": "Dieses Feld anstatt des Namens für die URL-Generierung verwenden"
       }
     },
@@ -558,7 +566,9 @@
       "notfound": "Integration konnte nicht gefunden werden",
       "couldnotupdatestate": "Nicht aktualisiert",
       "noaliasmatch": "Der Typ in der URL stimmt nicht mit dem Typ in den Daten überein"
-    }
+    },
+    "setup_button": "Einrichten",
+    "saveandactivate": "Speichern und aktivieren"
   },
   "language": {
     "list": "Sprachen",
@@ -573,7 +583,7 @@
       "isoptional": "Optional",
       "isoptional_text": "Werte für eine optionale Sprache müssen nicht zwangsweise eingegeben werden",
       "inheritedlanguageid": "Ersatz",
-      "inheritedlanguageid_text": "Wenn ein Inhalt in dieser Sprache nicht verfügbar ist; kann auf die ausgewhälte Sprache zurückgegriffen werden"
+      "inheritedlanguageid_text": "Wenn ein Inhalt in dieser Sprache nicht verfügbar ist, kann auf die ausgewhälte Sprache zurückgegriffen werden"
     },
     "errors": {
       "fallback_invalid": "Wähle eine andere Sprache als Ersatz",
@@ -615,17 +625,17 @@
   "videopicker": {
     "headline": "Video auswählen",
     "providers": {
-      "html": "Datei hochladen",
+      "html": "Datei auswählen",
       "youtube": "YouTube",
       "vimeo": "Vimeo"
     },
     "fields": {
-      "provider": "",
-      "videourl": "",
-      "videoid": "",
-      "title": "",
-      "previewimageid": "",
-      "foundparsed": ""
+      "provider": "Quelle",
+      "videoUrl": "URL",
+      "videoId": "Video",
+      "title": "Titel",
+      "previewImageId": "Vorschaubild",
+      "foundParsed": "Gefundene Video ID ist <b>{id}</b>"
     }
   },
   "application": {
@@ -639,14 +649,14 @@
       "fullname": "Vollständiger Name",
       "fullname_text": "Firmen- oder Produktname",
       "imageid": "Bild",
-      "imageid_text": "Bild der Applikation; used for all mails; PDFs; ...",
+      "imageid_text": "Bild der Applikation, used for all mails, PDFs, ...",
       "iconid": "Icon",
       "iconid_text": "Vereinfachtes Bild",
       "email": "Email",
       "email_text": "Kontakt-Email",
       "domains": "Domains",
       "domains_text": "Domains für diese Applikation auswählen",
-      "domains_help": "Gültige Werte sind: 'example.com'; 'www.example.com'; 'example.com:8080'; oder 'https://www.example.com'.",
+      "domains_help": "Gültige Werte sind: 'example.com', 'www.example.com', 'example.com:8080', oder 'https://www.example.com'.",
       "domains_add": "Domain hinzufügen",
       "features": "Features",
       "features_text": "Zusätzliche Features aktivieren"
@@ -655,7 +665,7 @@
   "media": {
     "list": "Medien",
     "name": "Datei",
-    "addfolder": "Ordner hinzufügen",
+    "addfolder": "Neuer Ordner",
     "editfolder": "Ordner bearbeiten",
     "untitledname": "[kein_name]",
     "actions": {
@@ -663,7 +673,9 @@
       "addfolder": "Ordner erstellen",
       "addfolder_text": "Einen neuen Unterordner im aktuellen Ordner erstellen",
       "addfile": "Dateien hochladen",
-      "addfile_text": "Eine oder mehrere Dateien in den aktuellen Ordner hochladen"
+      "addfile_text": "Eine oder mehrere Dateien in den aktuellen Ordner hochladen",
+      "openfile": "Ansehen",
+      "replacefile": "Datei ersetzen"
     },
     "notfound": "Datei konnte nicht gefunden werden ({id})",
     "selection": {
@@ -681,7 +693,7 @@
       "source": "Datei",
       "imagemeta": {
         "alternativetext": "Alternativer Text",
-        "alternativetext_text": "Wird benutzt; wenn das Bild nicht geladen werden kann",
+        "alternativetext_text": "Wird benutzt, wenn das Bild nicht geladen werden kann",
         "dpi": "DPI",
         "colorspace": "Farbraum",
         "hastransparency": "Transparenz",
@@ -719,18 +731,18 @@
     "fields": {
       "name": "Name",
       "key": "Schlüssel",
-      "key_text": "Wird benötigt; um im Code auf die Vorlage zugreifen zu können",
+      "key_text": "Wird benötigt, um im Code auf die Vorlage zugreifen zu können",
       "subject": "Betreff",
       "body": "Inhalt",
-      "body_text": "Zusätzlicher Text; der in der Email ausgegeben wird",
+      "body_text": "Zusätzlicher Text, der in der Email ausgegeben wird",
       "preheader": "Preheader",
       "preheader_text": "Dieser Text wird in der Vorschau des Mailprogramms angezeigt",
       "senderemail": "Absender Email",
-      "senderemail_text": "Wenn leer; dann wird die Email der Applikation verwendet",
+      "senderemail_text": "Wenn leer, dann wird die Email der Applikation verwendet",
       "sendername": "Absendername",
-      "sendername_text": "Wenn leer; dann wird der Name der Applikation verwendet",
+      "sendername_text": "Wenn leer, dann wird der Name der Applikation verwendet",
       "recipientemail": "Empfänger Email",
-      "recipientemail_text": "Wird nur für Mails benützt; die keinen dynamischen Empfänger haben (z.B. Reporte)",
+      "recipientemail_text": "Wird nur für Mails benützt, die keinen dynamischen Empfänger haben (z.B. Reporte)",
       "cc": "Kopie an (CC)",
       "cc_text": "E-Mails mit Komma trennen",
       "bcc": "Unsichtbare Kopie an (BCC)",
@@ -768,7 +780,17 @@
       "xunlocked": "{count} freigeschalten"
     },
     "errors": {
-      "cannotdeletechild": "Elemente; welche von einer Blaupause abhängig sind; können nicht gelöscht werden"
+      "cannotdeletechild": "Elemente, welche von einer Blaupause abhängig sind, können nicht gelöscht werden"
+    }
+  },
+  "notfound": {
+    "title": "Nicht gefunden",
+    "text": "Die angeforderte Seite konnte nicht gefunden werden",
+    "show_routes": "Registrierte Routes",
+    "hide_routes": "Ausblenden",
+    "routes": {
+      "name": "Name",
+      "path": "URL"
     }
   }
 }

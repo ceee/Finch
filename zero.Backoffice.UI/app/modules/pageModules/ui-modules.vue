@@ -6,7 +6,7 @@
     </div>
     <button v-if="canAdd" type="button" class="ui-modules-start-button" @click="selectModule()">
       <span class="ui-modules-start-button-icon"><ui-icon symbol="fth-plus" :size="19" /></span>
-      <p class="ui-modules-start-button-text"><strong>Add content</strong></p>
+      <p class="ui-modules-start-button-text"><strong v-localize="'@modules.add.title'"></strong></p>
     </button>
   </div>
 </template>
@@ -245,7 +245,6 @@
     strong
     {
       display: inline-block;
-      margin-bottom: 2px;
       color: var(--color-text);
       font-size: var(--font-size);
     }

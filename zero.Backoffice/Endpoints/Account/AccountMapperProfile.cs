@@ -19,5 +19,6 @@ public class AccountMapperProfile : ZeroMapperProfile
     target.Email = source.Email;
     target.CreatedDate = source.CreatedDate;
     target.Flavor = source.Flavor;
+    target.Culture = source.LanguageId;
   }
 }

@@ -11,6 +11,21 @@
     }
   },
 
+  "nav": {
+    "apps": {
+      "manage": "Manage apps"
+    },
+    "account": {
+      "edit": "Edit",
+      "changepassword": "Change password",
+      "logout": "Logout"
+    },
+    "theme": {
+      "dark": "Dark theme",
+      "light": "Light theme"
+    }
+  },
+
   "ui": {
     "yes": "Yes",
     "no": "No",
@@ -41,6 +56,7 @@
     "alias": "Alias",
     "link": "Link",
     "item": "Item",
+    "emptylist": "There are no items to show in this list",
     "pagination": {
       "xofy": "Page {x} of {y}",
       "next": "Next page",
@@ -93,7 +109,7 @@
     "move": {
       "title": "Move",
       "action": "Move",
-      "text": "Select the new parent for <b>{name}</b> in the tree structure below.",
+      "text": "Select the new parent for <b>{name}</b> in the tree structure below."
     },
     "copy": {
       "title": "Copy",
@@ -469,15 +485,6 @@
     }
   },
 
-  "order": {
-    "fields": {
-      "no": "Number",
-      "username": "Name",
-      "price": "Price",
-      "status": "Status"
-    }
-  },
-
   "modules": {
     "add": {
       "title": "Add content",
@@ -591,7 +598,10 @@
       "couldnotupdatestate": "Not updated",
       "noaliasmatch": "The alias as part of the URL does not match the alias of the model"
     },
+    "setup_button": "Setup",
+    "saveandactivate": "Save and activate",
     "fields": {
+
     }
   },
 
@@ -705,7 +715,9 @@
       "addfolder": "Create folder",
       "addfolder_text": "Adds a new folder in the current parent folder",
       "addfile": "Upload files",
-      "addfile_text": "Add one or more files to the current filter"
+      "addfile_text": "Add one or more files to the current filter",
+      "openfile": "Open",
+      "replacefile": "Replace file"
     },
     "notfound": "Could not find media ({id})",
     "selection": {
@@ -816,6 +828,17 @@
     },
     "errors": {
       "cannotDeleteChild": "Entities which are synchronized with a blueprint cannot be deleted"
+    }
+  },
+
+  "notfound": {
+    "title": "Not found",
+    "text": "The requested resource could not be found",
+    "show_routes": "Defined routes",
+    "hide_routes": "Hide",
+    "routes": {
+      "name": "Name",
+      "path": "Path"
     }
   }
 }

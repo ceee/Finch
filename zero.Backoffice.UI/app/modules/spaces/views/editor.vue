@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-form ref="form" class="space-editor" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
+  <ui-form :key="id + alias" ref="form" class="space-editor" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
     <ui-form-header v-model="model" :title="space.name" :title-disabled="space.view === 'editor'" :disabled="disabled" :is-create="isCreate" :state="form.state" 
                     :can-delete="space.view != 'editor' && meta.canDelete" @delete="onDelete" :active-toggle="true" />
     <ui-editor v-if="editor" :config="editor" v-model="model" :meta="meta" :disabled="disabled" :active-toggle="false">
@@ -17,43 +17,38 @@
   //import Overlay from 'zero/helpers/overlay.js';
 
   export default defineComponent({
-    props: ['config', 'space'],
+
+    props: ['id', 'alias'],
 
     data: () => ({
       disabled: false,
       editor: null,
       meta: {},
       route: null, //zero.alias.sections.settings + '-' + zero.alias.settings.countries + '-edit',
+      space: {},
       model: { name: null }
     }),
 
     computed: {
-      id()
-      {
-        return this.$route.params.id;
-      },
-      alias()
-      {
-        return this.$route.params.alias;
-      },
-      isList()
-      {
-        return !!this.id;
-      },
       isCreate()
       {
         return this.id === 'create' || (this.space.view == 'editor' && this.model && !this.model.id);
       }
     },
 
-    watch: {
-      '$route': 'setup'
-    },
-
     methods: {
 
       async setup()
       {
+        const result = await api.getTypes();
+
+        this.space = result.data.find(x => x.alias == this.alias);
+
+        if (!this.space)
+        {
+          // TODO v3 error
+        }
+
         let alias = this.space.editorAlias || (this.space.alias + ':edit');
         alias = alias.indexOf('spaces:') === 0 ? alias : 'spaces:' + alias;
         this.editor = await this.zero.getSchema(alias);
@@ -62,6 +57,8 @@
 
       async onLoad(form)
       {
+        this.editor = null;
+
         await this.setup();
 
         var config = { system: this.$route.query['zero.scope'] == 'system' };
@@ -69,23 +66,17 @@
         {
           if (this.space.view == 'editor')
           {
-            return api.getByAlias(this.alias);
+            return api.getByAlias(this.space.alias);
           }
           else if (!this.isCreate)
           {
-            return api.getById(this.alias, this.id, undefined, config);
+            return api.getById(this.space.alias, this.id, undefined, config);
           }
 
-          return api.getEmpty(this.alias, config)
+          return api.getEmpty(this.space.alias, config)
         });
 
-        if (this.space.view == 'editor' && !response.id)
-        {
-
-        }
-
         this.model = response;
-        //this.route = { name: 'spaces-edit', params: { alias: this.alias } };
       },
 
 
@@ -98,6 +89,11 @@
         if (response.success)
         {
           this.model = response.data;
+
+          if (this.id === 'create')
+          {
+            this.$router.replace({ name: 'spaces-list-edit', params: { alias: this.alias, id: this.model.id } });
+          }
         }
       },
 

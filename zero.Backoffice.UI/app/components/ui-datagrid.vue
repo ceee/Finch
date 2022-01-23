@@ -12,7 +12,7 @@
 
       <div class="ui-datagrid-empty" v-if="!isLoading && items.length < 1">
         <ui-icon symbol="fth-list" :size="34" class="ui-datagrid-empty-icon" />
-        There are no items to show in this list
+        <span v-localize="'@ui.emptylist'"></span>
       </div>
 
       <div class="ui-datagrid-loading" v-if="isLoading">

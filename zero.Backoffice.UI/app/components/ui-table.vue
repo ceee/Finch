@@ -36,7 +36,7 @@
 
       <div class="ui-table-empty" v-if="!isLoading && items.length < 1">
         <ui-icon class="ui-table-empty-icon" symbol="fth-list" :size="38" />
-        There are no items to show in this list
+        <span v-localize="'@ui.emptylist'"></span>
       </div>
 
       <div class="ui-table-loading" v-if="isLoading">
@@ -54,7 +54,7 @@
 
           <div class="ui-datagrid-empty" v-if="!isLoading && items.length < 1">
             <i class="ui-datagrid-empty-icon fth-list"></i>
-            There are no items to show in this list
+            <span v-localize="'@ui.emptylist'"></span>
           </div>
 
           <div class="ui-datagrid-loading" v-if="isLoading">

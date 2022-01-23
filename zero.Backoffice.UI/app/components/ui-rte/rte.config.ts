@@ -100,7 +100,7 @@ export default function ()
       },
       {
         alias: 'strikethrough',
-        title: '@rte.strike',
+        title: '@rte.strikethrough',
         symbol: 'fth-strikethrough',
         symbolSize: 14,
         isActive: editor => editor.isActive('strike'),

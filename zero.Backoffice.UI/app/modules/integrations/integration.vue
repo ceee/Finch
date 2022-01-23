@@ -3,11 +3,11 @@
     <ui-trinity class="ui-editor-overlay integration">
 
       <template v-slot:header>
-        <ui-header-bar :title="integration.name" prefix="@integration.list" :back-button="false" :close-button="true" @close="config.close" />
+        <ui-header-bar :title="integration.name" prefix="@integration.list" :back-button="false" :close-button="true" @close="config.close(true)" />
       </template>
 
       <template v-slot:footer>
-        <ui-toggle v-if="integration.isConfigured" class="is-accent" v-model:on="model.isActive" on-content="Active" off-content="Inactive" :content-left="true" style="margin-right: 30px;" />
+        <ui-toggle v-if="integration.isConfigured" class="is-accent" v-model:on="model.isActive" on-content="@ui.active" off-content="@ui.inactive" :content-left="true" style="margin-right: 30px;" />
         <ui-button type="light onbg" label="@ui.close" @click="config.close"></ui-button>
         <template v-if="integration.isConfigured">
           <ui-button type="light onbg" label="@ui.remove" @click="onDelete"></ui-button>
@@ -15,7 +15,7 @@
         </template>
         <template v-if="!integration.isConfigured && !disabled">
           <ui-button type="light onbg" :submit="true" label="@ui.save" :state="form.state" :disabled="loading"></ui-button>
-          <ui-button type="accent" @click="saveAndActivate" label="Save and activate" :state="form.state" :disabled="loading"></ui-button>
+          <ui-button type="accent" @click="saveAndActivate" label="@integration.saveandactivate" :state="form.state" :disabled="loading"></ui-button>
         </template>
       </template>
 

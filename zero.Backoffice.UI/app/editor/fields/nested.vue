@@ -27,7 +27,7 @@
       depth: Number,
       disabled: Boolean,
       editor: {
-        type: Object,
+        type: [String, Object],
         required: true
       },
       limit: {

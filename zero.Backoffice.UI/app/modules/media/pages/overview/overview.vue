@@ -4,7 +4,7 @@
       <template v-slot:title>
         <h2 class="ui-header-bar-title">
           <span class="media-items-hierarchy-item">
-            <ui-link :to="{ name: 'media' }" v-localize="'@media.name'"></ui-link>
+            <ui-link :to="{ name: 'media' }" v-localize="'@media.list'"></ui-link>
             <ui-icon class="-chevron" v-if="hierarchy.length > 0 || searchMode" symbol="fth-chevron-right" />
           </span>
           <span v-for="(item, index) in hierarchy" :key="item.id" class="media-items-hierarchy-item">

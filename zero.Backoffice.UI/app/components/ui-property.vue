@@ -50,7 +50,7 @@
   {
     position: relative;
     display: grid;
-    grid-gap: 0 40px;
+    grid-gap: 12px 40px;
     grid-template-columns: minmax(auto, 1fr) auto;
 
     &.is-disabled .ui-property-content,
@@ -218,9 +218,12 @@
   .ui-property-help
   {
     max-width: 932px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 10px;
     font-size: var(--font-size-xs);
     color: var(--color-text-dim);
-    margin: 15px 0 0;
+    margin: 5px 0 0;
     line-height: 1.4;
     //letter-spacing: 0.3px;
 
@@ -232,8 +235,7 @@
       font-size: var(--font-size-l);
       float: left;
       position: relative;
-      top: -1px;
-      margin-right: 6px;
+      top: -3px;
     }
   }
 

@@ -5,7 +5,9 @@
 
 <script>
   import flatpickr from 'flatpickr';
+  import { German } from "flatpickr/dist/l10n/de.js"
   import { extendObject } from '../utils/objects';
+  import { useAccountStore } from '../account/store';
 
   export default {
     name: 'uiCalendar',
@@ -32,12 +34,15 @@
         return;
       }
 
+      const user = useAccountStore();
+
       flatpickr(this.$refs.calendar, extendObject({
         inline: true,
         enableTime: true,
         time_24hr: true,
         defaultDate: this.today,
         minuteIncrement: 1,
+        locale: user.user && user.user.culture == 'de-DE' ? German : null,
         onChange(dates)
         {
           vm.$emit('change', dates[0]);

@@ -19,10 +19,10 @@
         {{value.id}}
       </ui-property>
       <ui-property v-if="!isCreate" label="@ui.createdDate" :is-text="true" :vertical="false">
-        <ui-date v-model="value.createdDate" />
+        <ui-date v-model="value.createdDate" :split="true" format="long" />
       </ui-property>
       <ui-property v-if="!isCreate" label="@ui.modifiedDate" :is-text="true" :vertical="false">
-        <ui-date v-model="value.lastModifiedDate" />
+        <ui-date v-model="value.lastModifiedDate" :split="true" format="long" />
       </ui-property>
       <ui-property v-if="!isCreate" label="@ui.entityfields.alias" :is-text="true" :vertical="false">
         {{value.alias}}

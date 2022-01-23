@@ -16,16 +16,22 @@ export default {
       component: () => import('./spaces.vue'),
       children: [
         {
-          name: 'spaces-edit',
-          path: ':alias/edit/:id?',
+          name: 'spaces-editor',
+          path: ':alias/view',
           props: true,
-          component: () => import('./spaces.vue')
+          component: () => import('./views/editor.vue')
         },
         {
-          name: 'spaces-view',
+          name: 'spaces-list-edit',
+          path: ':alias/edit/:id?',
+          props: true,
+          component: () => import('./views/editor.vue')
+        },
+        {
+          name: 'spaces-list',
           path: ':alias',
           props: true,
-          component: () => import('./spaces.vue')
+          component: () => import('./views/list.vue')
         }
       ]
     });

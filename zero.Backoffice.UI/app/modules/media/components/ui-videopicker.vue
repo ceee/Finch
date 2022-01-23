@@ -4,7 +4,7 @@
     <div class="shop-videopicker-previews" v-if="previews.length > 0" v-sortable="{ onUpdate: onSortingUpdated }">
       <div v-for="(preview, index) in previews" :key="index" class="shop-videopicker-preview">
         <ui-select-button :icon="preview.icon" :label="preview.name" :description="preview.text" :disabled="disabled" @click="pick(preview.model)" :tokens="{ id: preview.id }" />
-        <ui-icon-button v-if="!disabled" @click="remove(preview.model)" icon="fth-x" title="@ui.close" />
+        <ui-icon-button v-if="!disabled" @click="remove(preview.model)" icon="fth-x" title="@ui.remove" />
       </div>
     </div>
 

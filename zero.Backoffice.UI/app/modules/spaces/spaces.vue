@@ -4,7 +4,7 @@
       <ui-header-bar title="@space.list" />
 
       <div class="spaces-tree-items">
-        <ui-link :to="{ name: 'spaces-view', params: { alias: item.alias } }" v-for="item in spaces" :key="item.alias" class="spaces-tree-item" :class="{ 'has-line': item.lineBelow }">
+        <ui-link :to="item.link" v-for="item in spaces" :key="item.alias" class="spaces-tree-item" :class="{ 'has-line': item.lineBelow }">
           <ui-icon class="spaces-tree-item-icon" :symbol="item.icon" />
           <span class="spaces-tree-item-text">
             <span v-localize="item.name"></span>
@@ -15,7 +15,16 @@
       <div class="spaces-tree-resizable ui-resizable"></div>
     </div>
 
-    <component class="spaces-main" v-if="!isOverview && loaded && component" ref="comp" :is="component" :space="space" :config="spaceConfig"></component>
+    <router-view v-if="!isOverview" />
+    <!--<component class="spaces-main" v-if="!isOverview && loaded && component" ref="comp" :is="component" :space="space" :config="spaceConfig"></component>-->
+    <!-- // TODO v3 this renders infinite warnings and crashes the app
+        error:
+            Property "valueOf" was accessed during render but is not defined on instance.
+              at <Spaces onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy {} > >
+              at <RouterView>
+              at <App>
+        -->
+
   </div>
 </template>
 
@@ -44,46 +53,57 @@
     computed: {
       isOverview()
       {
-        return !this.$route.params.alias;
+        return !this.$route.params.id && !this.$route.params.alias;
       }
     },
 
-    watch: {
-      '$route': 'loadSpace'
-    },
+    //watch: {
+    //  '$route': 'loadSpace'
+    //},
 
 
-    async created()
+    created()
     {
-      const types = await api.getTypes();
-      this.spaces = types.data;
-      this.loadSpace();
+      api.getTypes().then(res =>
+      {
+        this.spaces = res.data.map(space =>
+        {
+          space.link = {
+            name: space.view == 'editor' ? 'spaces-editor' : 'spaces-list',
+            params: {
+              alias: space.alias
+            }
+          };
+          return space;
+        });
+        //this.loadSpace();
+      });
     },
 
 
-    beforeRouteLeave(to, from, next) 
-    {
-      if (this.$refs.comp && this.$refs.comp.beforeRouteLeave)
-      {
-        this.$refs.comp.beforeRouteLeave(to, from, next);
-      }
-      else
-      {
-        next();
-      }
-    },
+    //beforeRouteLeave(to, from, next) 
+    //{
+    //  if (this.$refs.comp && this.$refs.comp.beforeRouteLeave)
+    //  {
+    //    this.$refs.comp.beforeRouteLeave(to, from, next);
+    //  }
+    //  else
+    //  {
+    //    next();
+    //  }
+    //},
 
-    beforeRouteUpdate(to, from, next)
-    {
-      if (this.$refs.comp && this.$refs.comp.beforeRouteLeave)
-      {
-        this.$refs.comp.beforeRouteLeave(to, from, next);
-      }
-      else
-      {
-        next();
-      }
-    },
+    //beforeRouteUpdate(to, from, next)
+    //{
+    //  if (this.$refs.comp && this.$refs.comp.beforeRouteLeave)
+    //  {
+    //    this.$refs.comp.beforeRouteLeave(to, from, next);
+    //  }
+    //  else
+    //  {
+    //    next();
+    //  }
+    //},
 
     methods: {
 

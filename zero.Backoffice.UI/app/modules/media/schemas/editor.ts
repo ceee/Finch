@@ -2,7 +2,7 @@
 import { ZeroEditor } from '../../../editor/editor';
 import MetadataEditor from '../pages/detail/metadata.vue';
 
-const editor = new ZeroEditor(); //('media:edit', '@media.fields.');
+const editor = new ZeroEditor('media:edit');
 editor.resourcePrefix = '@media.fields.';
 //editor.blueprintAlias = 'media';
 

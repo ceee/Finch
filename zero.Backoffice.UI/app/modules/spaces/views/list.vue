@@ -1,5 +1,5 @@
 ﻿<template>
-  <div v-if="!loading" class="space-list" :data-space="space.alias">
+  <div v-if="!loading" class="space-list" :data-space="alias">
     <ui-header-bar :title="space.name" :count="count" title-empty="List">
       <ui-table-filter :attach="$refs.table" />
       <ui-add-button :route="createRoute" />
@@ -16,21 +16,18 @@
   import { defineComponent } from 'vue';
 
   export default defineComponent({
-    props: [ 'space', 'config' ],
+    props: [ 'alias' ],
 
     data: () => ({
       count: 0,
       loading: true,
       listRenderer: null,
       createRoute: {
-        name: 'spaces-edit',
+        name: 'spaces-list-edit',
         params: { alias: null, id: 'create' }
-      }
+      },
+      space: {}
     }),
-
-    watch: {
-      'space': 'load'
-    },
 
     created()
     {
@@ -44,24 +41,29 @@
       {
         this.loading = true;
 
-        let alias = this.space.alias.indexOf('spaces:') === 0 ? this.space.alias : 'spaces:' + this.space.alias;
-        const listRenderer = await this.zero.getSchema(alias) || await this.zero.getSchema('spaces:default');
-
-        this.createRoute.params.alias = this.space.alias;
-
-        listRenderer.link = item =>
+        api.getTypes().then(async res =>
         {
-          return {
-            name: 'spaces-edit',
-            params: { alias: this.space.alias, id: item.id }
+          this.space = res.data.find(x => x.alias == this.alias);
+
+          let alias = this.alias.indexOf('spaces:') === 0 ? this.alias : 'spaces:' + this.alias;
+          const listRenderer = await this.zero.getSchema(alias) || await this.zero.getSchema('spaces:default');
+
+          this.createRoute.params.alias = this.alias;
+
+          listRenderer.link = item =>
+          {
+            return {
+              name: 'spaces-list-edit',
+              params: { alias: this.alias, id: item.id }
+            };
           };
-        };
 
-        listRenderer.onFetch(q => api.getByAlias(this.space.alias, q));
+          listRenderer.onFetch(q => api.getByAlias(this.alias, q));
 
-        this.listRenderer = listRenderer;
+          this.listRenderer = listRenderer;
 
-        this.loading = false;
+          this.loading = false;
+        });
       },
 
 
@@ -69,7 +71,7 @@
       {
         this.$router.push({
           name: 'spaces-edit',
-          params: { alias: this.space.alias }
+          params: { alias: this.alias }
         });
       }
     }

@@ -1,6 +1,6 @@
 ﻿<template>
   <div ref="scrollable" class="app-tree page-tree" xv-resizable="resizable">
-    <ui-tree ref="tree" :get="getItems" :config="treeConfig" @select="onSelect" :active="id" :header="'Pages'">
+    <ui-tree ref="tree" :get="getItems" :config="treeConfig" @select="onSelect" :active="id" header="@sections.item.pages">
       <template v-slot:actions="props">
         <template v-if="!props.item || props.id !== 'recyclebin'">
           <ui-dropdown-button label="@ui.create" icon="fth-plus" @click="create(props.item)" />

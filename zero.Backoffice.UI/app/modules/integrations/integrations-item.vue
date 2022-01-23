@@ -20,10 +20,10 @@
         <!--<ui-add-button :route="createRoute" alias="countries" v-if="!model.isConfigured">
           <ui-button class="integrations-item-button" type="action small" v-localize="'Setup'" />
         </ui-add-button>-->
-        <ui-button v-if="!model.isConfigured" class="integrations-item-button" type="action small" v-localize="'Setup'" @click="open" />
-        <ui-button v-else class="integrations-item-button" type="action small" v-localize="'Edit'" @click="open" />
+        <ui-button v-if="!model.isConfigured" class="integrations-item-button" type="action small" v-localize="'@integration.setup_button'" @click="open" />
+        <ui-button v-else class="integrations-item-button" type="action small" v-localize="'@ui.edit.title'" @click="open" />
         <span class="integrations-item-active" v-if="model.isConfigured && model.isActivated">
-          <ui-icon symbol="fth-check-circle" :size="16" /> <span>Active</span>
+          <ui-icon symbol="fth-check-circle" :size="16" /> <span v-localize="'@ui.active'"></span>
         </span>
       </div>
     </main>  

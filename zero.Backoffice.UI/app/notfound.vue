@@ -2,8 +2,8 @@
   <div class="page page-error">
     <ui-icon class="page-error-icon" symbol="fth-cloud-snow" :size="82" />
     <p class="page-error-text">
-      <strong class="page-error-headline">Not found</strong><br>
-      The requested resource could not be found
+      <strong class="page-error-headline" v-localize="'@notfound.title'"></strong><br>
+      <span v-localize="'@notfound.text'"></span>
       <br>
       <code>{{path}}</code>
     </p>
@@ -12,8 +12,8 @@
       <br><br>
       <div class="page-error-routes">
         <span>#</span>
-        <span>Name</span>
-        <span>Path</span>
+        <span v-localize="'@notfound.routes.name'"></span>
+        <span v-localize="'@notfound.routes.path'"></span>
         <template v-for="(route, index) in routes" :key="index">
           <span>{{index + 1}}.</span>
           <b>{{route.name}} <em v-if="route.parent">[{{route.parent}}]</em></b>
@@ -46,7 +46,7 @@
     computed: {
       detailsText()
       {
-        return this.details ? 'Hide' : 'Defined routes';
+        return this.details ? '@notfound.hide_routes' : '@notfound.show_routes';
       }
     },
 

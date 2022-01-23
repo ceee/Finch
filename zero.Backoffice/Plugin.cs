@@ -76,7 +76,7 @@ public class ZeroBackofficePlugin : ZeroPlugin
       Prefix = "fth"
     });
 
-    options.SupportedLanguages = new string[1] { "en-US" }; //, "de-DE" };
+    options.SupportedLanguages = new string[2] { "en-US", "de-DE" };
     options.DefaultLanguage = options.SupportedLanguages[0];
   }
 }

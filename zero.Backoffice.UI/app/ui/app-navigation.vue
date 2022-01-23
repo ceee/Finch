@@ -17,7 +17,7 @@
       <ui-dropdown-button v-for="app in appStore.applications" :value="app" :key="app.id" :label="app.name" :selected="app.id === appId" @click="applicationChanged" :prevent="true" />
       <ui-dropdown-separator />
       <!--<ui-dropdown-button label="Add new application" icon="fth-plus" @click="addApplication" />-->
-      <ui-dropdown-button :disabled="true" label="Manage apps" icon="fth-edit-2" @click="manageApplications" />
+      <ui-dropdown-button :disabled="true" label="@nav.apps.manage" icon="fth-edit-2" @click="manageApplications" />
     </ui-dropdown>
     <div v-else class="app-nav-switch is-fake"></div>
 
@@ -49,12 +49,12 @@
           <ui-icon symbol="fth-more-horizontal" class="-arrow" />
         </button>
       </template>
-      <ui-dropdown-button :disabled="true" label="Edit" icon="fth-edit-2" @click="editUser" />
-      <ui-dropdown-button :disabled="true" label="Change password" icon="fth-lock" @click="changePassword" />
+      <ui-dropdown-button :disabled="true" label="@nav.account.edit" icon="fth-edit-2" @click="editUser" />
+      <ui-dropdown-button :disabled="true" label="@nav.account.changepassword" icon="fth-lock" @click="changePassword" />
       <!--<ui-dropdown-button label="Toggle sidebar" icon="fth-minimize-2" @click="toggleSidebar" />-->
-      <ui-dropdown-button label="Dark theme" v-if="ui.preferences.theme !== 'dark'" icon="fth-moon" @click="ui.setTheme('dark')" />
-      <ui-dropdown-button label="Light theme" v-else icon="fth-sun" @click="ui.setTheme('light')" />
-      <ui-dropdown-button label="Logout" icon="fth-log-out" @click="logout" />
+      <ui-dropdown-button label="@nav.theme.dark" v-if="ui.preferences.theme !== 'dark'" icon="fth-moon" @click="ui.setTheme('dark')" />
+      <ui-dropdown-button label="@nav.theme.light" v-else icon="fth-sun" @click="ui.setTheme('light')" />
+      <ui-dropdown-button label="@nav.account.logout" icon="fth-log-out" @click="logout" />
     </ui-dropdown>
 
   </div>
