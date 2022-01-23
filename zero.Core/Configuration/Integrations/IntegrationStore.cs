@@ -1,4 +1,5 @@
-﻿using FluentValidation.Results;
+﻿using FluentValidation;
+using FluentValidation.Results;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 
@@ -109,43 +110,48 @@ public class IntegrationStore : IIntegrationStore
 
 
   // <inheritdoc />
-  protected virtual async Task<ValidationResult> Validate(Integration model)
+  protected virtual async Task<ValidationResult> Validate(Integration model, bool create = false)
   {
-    await Task.Delay(0);
-    return new ValidationResult();
-    //ZeroValidator<T> validator = new();
-    //ValidationRules(validator);
-    //return await validator.ValidateAsync(model);
-    //return base.Validate(model);
+    ValidationResult result = new();
+
+    if (model == null)
+    {
+      result.Errors.Add(new ValidationFailure("__nofield", "@integration.errors.notfound"));
+    }
+    else
+    {
+      IntegrationType type = IntegrationTypes.GetByAlias(model.Flavor);
+
+      if (type == null)
+      {
+        result.Errors.Add(new ValidationFailure("__nofield", "@integration.errors.typenotfound"));
+      }
+
+      if (create && await Operations.Any<Integration>(q => q.Where(x => x.Flavor == model.Flavor)))
+      {
+        result.Errors.Add(new ValidationFailure("__nofield", "@integration.errors.multiplenotallowed"));
+      }
+
+      if (!create && await Operations.Any<Integration>(q => q.Where(x => x.Flavor == model.Flavor && x.Id != model.Id)))
+      {
+        result.Errors.Add(new ValidationFailure("__nofield", "@integration.errors.alreadycreated"));
+      }
+
+      if (type != null && type.Validator != null)
+      {
+        ValidationResult innerResult = await type.Validator.ValidateAsync(new ValidationContext<Integration>(model));
+        result.Errors.AddRange(innerResult.Errors);
+      }
+    }
+
+    return result;
   }
 
 
   /// <inheritdoc />
   protected virtual async Task<Result<Integration>> Save(Integration model, bool create = false)
   {
-    if (model == null)
-    {
-      return Result<Integration>.Fail("@integration.errors.notfound");
-    }
-
-    IntegrationType type = IntegrationTypes.GetByAlias(model.Flavor);
-
-    if (type == null)
-    {
-      return Result<Integration>.Fail("@integration.errors.typenotfound");
-    }
-
-    if (create && await Operations.Any<Integration>(q => q.Where(x => x.Flavor == model.Flavor)))
-    {
-      return Result<Integration>.Fail("@integration.errors.multiplenotallowed");
-    }
-
-    if (!create && await Operations.Any<Integration>(q => q.Where(x => x.Flavor == model.Flavor && x.Id != model.Id)))
-    {
-      return Result<Integration>.Fail("@integration.errors.alreadycreated");
-    }
-
-    return await Operations.Create(model, async (x, ctx) => await Validate(x));
+    return await Operations.Create(model, async (x, ctx) => await Validate(x, create));
   }
 }
 
