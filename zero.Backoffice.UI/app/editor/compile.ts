@@ -58,9 +58,9 @@ export interface ZeroCompiledEditorField
   options: any | null;
   component: Component;
 
-  optional: (model: any) => boolean;
-  readonly: (model: any) => boolean;
-  hidden: (model: any) => boolean;
+  optional: (model: any, parent: any) => boolean;
+  readonly: (model: any, parent: any) => boolean;
+  hidden: (model: any, parent: any) => boolean;
   label: string;
   hideLabel: boolean;
   description: string | null;
@@ -90,7 +90,7 @@ export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorFi
     path: field.path,
     component,
 
-    optional(model: any)
+    optional(model: any, parent: any)
     {
       if (typeof field.configuration.optional === 'boolean')
       {
@@ -98,12 +98,12 @@ export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorFi
       }
       if (typeof field.configuration.optional === 'function')
       {
-        return field.configuration.optional(model);
+        return field.configuration.optional(model, parent);
       }
       return false;
     },
 
-    readonly(model: any)
+    readonly(model: any, parent: any)
     {
       if (typeof field.configuration.readonly === 'boolean')
       {
@@ -111,12 +111,12 @@ export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorFi
       }
       if (typeof field.configuration.readonly === 'function')
       {
-        return field.configuration.readonly(model);
+        return field.configuration.readonly(model, parent);
       }
       return false;
     },
 
-    hidden(model: any)
+    hidden(model: any, parent: any)
     {
       if (typeof field.configuration.hidden === 'boolean')
       {
@@ -124,7 +124,7 @@ export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorFi
       }
       if (typeof field.configuration.hidden === 'function')
       {
-        return field.configuration.hidden(model);
+        return field.configuration.hidden(model, parent);
       }
       return false;
     },

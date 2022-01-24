@@ -42,3 +42,14 @@ export function toCurrency(value: number, decimals: number = 2, hideSymbol: bool
   return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, noEncode ? " " : "&nbsp;") + (hideSymbol === true ? "" : (noEncode ? " €" : "&nbsp;&euro;"));
   // TODO we have dynamic currencies, not fixed to €
 };
+
+
+/**
+ * Rounds a number up
+ * @returns {number} Number
+ */
+export function roundUp(value: number, decimals: number = 2)
+{
+  decimals = Math.pow(10, decimals);
+  return Math.ceil(value * decimals) / decimals;
+}

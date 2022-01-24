@@ -1,15 +1,15 @@
 ﻿<template>
-  <button v-if="!confirming" :disabled="disabled" type="button" @click="onClick" class="ui-dropdown-button" :class="{ 'has-icon': icon, 'is-active': selected, 'is-multiline': multiline }">
+  <button v-if="!confirming" :disabled="disabled" type="button" @click.stop="onClick" class="ui-dropdown-button" :class="{ 'has-icon': icon, 'is-active': selected, 'is-multiline': multiline }">
     <ui-icon v-if="icon" :symbol="icon" class="ui-dropdown-button-icon" />
-    <span><ui-localize :value="label" /><span v-if="false && confirm && !confirming"> &hellip;</span><span v-if="false && confirming">?</span></span>  
-    <ui-icon v-if="selected" symbol="fth-check" class="ui-dropdown-button-selected" />
+    <span><ui-localize :value="label" /><span v-if="confirm && !confirming"> &hellip;</span></span>   
+    <ui-icon v-if="selected" symbol="fth-check" class="ui-dropdown-button-selected" /> 
     <i v-if="loading" class="ui-dropdown-button-progress"></i>
   </button>
-  <div v-if="confirming" class="ui-dropdown-button-confirmation">
+  <div v-if="confirming" class="ui-dropdown-button ui-dropdown-button-confirmation">
     <ui-icon v-if="icon" :symbol="icon" class="ui-dropdown-button-icon" />
-    <ui-localize :value="label" />
-    <ui-button type="small light" icon="fth-x" title="Cancel" @click="confirming=false" />
-    <ui-button :type="negative ? 'small danger' : 'small primary'" icon="fth-check" title="OK" @click="onClick($event, true)" />
+    <span><ui-localize :value="label" /><span>?</span></span>
+    <ui-button type="small light" icon="fth-x" title="@ui.cancel" @click="confirming=false" />
+    <ui-button :type="negative ? 'small danger' : 'small primary'" icon="fth-check" title="@ui.ok" @click="onClick($event, true)" />
   </div>
 </template>
 
