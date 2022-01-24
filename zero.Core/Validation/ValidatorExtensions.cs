@@ -78,9 +78,9 @@ public static class ValidatorExtensions
 
       foreach (string mail in mails)
       {
-        int index = value.IndexOf(KLAMMERAFFE);
+        int index = mail.IndexOf(KLAMMERAFFE);
 
-        if (index < 0 || index == value.Length - 1 || index != value.LastIndexOf(KLAMMERAFFE))
+        if (index < 0 || index == mail.Length - 1 || index != mail.LastIndexOf(KLAMMERAFFE))
         {
           return false;
         }
