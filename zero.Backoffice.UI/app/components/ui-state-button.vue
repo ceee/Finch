@@ -43,6 +43,7 @@
   .ui-state-button
   {
     display: inline-flex;
+    gap: 3px;
   }
 
   .ui-state-button.is-disabled button

@@ -125,7 +125,8 @@ export function createDefaultFieldConfiguration(): ZeroEditorFieldConfiguration
     horizontal: false,
     sort: 0,
     preview: undefined,
-    changeHandlers: []
+    changeHandlers: [],
+    alsoFor: []
   } as ZeroEditorFieldConfiguration;
 }
 
@@ -179,7 +180,11 @@ export interface ZeroEditorFieldConfiguration
   /**
    * Handlers which get called on value change
    **/
-  changeHandlers?: Array<Function>
+  changeHandlers?: Array<Function>,
+  /**
+   * This field will also handle error output for the other defined fields
+   **/
+  alsoFor?: string[] | string | null,
 }
 
 
