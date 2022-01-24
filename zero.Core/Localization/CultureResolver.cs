@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using System.Globalization;
+using System.Security.Claims;
 
 namespace zero.Localization;
 
@@ -17,13 +19,36 @@ public class CultureResolver : ICultureResolver
 
 
   /// <inheritdoc />
-  public Task<CultureInfo> Resolve(IZeroContext context)
+  public async Task<CultureInfo> Resolve(IZeroContext context)
   {
     // TODO this is just fake, we need to correctly resolve culture here
 
     if (context.IsBackofficeRequest)
     {
+      if (context.IsLoggedIntoBackoffice)
+      {
+        ZeroUser user = await GetBackofficeUser(context.Store, context.BackofficeUser);
+        string cultureCode = user?.LanguageId.Or("en-US");
 
+        try
+        {        
+          CultureInfo culture = CultureInfo.CreateSpecificCulture(cultureCode);
+
+          if (culture.ThreeLetterISOLanguageName.IsNullOrEmpty())
+          {
+            throw new Exception("ThreeLetterISOLanguageName is empty");
+          }
+
+          CultureInfo.CurrentCulture = culture;
+          CultureInfo.CurrentUICulture = culture;
+          ValidatorOptions.Global.LanguageManager.Culture = culture;
+        }
+        catch (Exception ex)
+        {
+          Logger.LogError(ex, "Could not create culture from Language code {code}", cultureCode);
+          return CultureInfo.CurrentCulture;
+        }
+      }
     }
     else
     {
@@ -34,7 +59,7 @@ public class CultureResolver : ICultureResolver
       if (language == null)
       {
         Logger.LogWarning("Could not set request culture as there is no available Language stored");
-        return Task.FromResult(CultureInfo.CurrentCulture);
+        return CultureInfo.CurrentCulture;
       }
 
       try
@@ -53,11 +78,23 @@ public class CultureResolver : ICultureResolver
       catch (Exception ex)
       {
         Logger.LogError(ex, "Could not create culture from Language code {code}", language.Code);
-        return Task.FromResult(CultureInfo.CurrentCulture);
+        return CultureInfo.CurrentCulture;
       }
     }
 
-    return Task.FromResult(CultureInfo.CurrentCulture);
+    return CultureInfo.CurrentCulture;
+  }
+
+
+  /// <summary>
+  /// Get backoffice user from claims principal
+  /// </summary>
+  async Task<ZeroUser> GetBackofficeUser(IZeroStore store, ClaimsPrincipal user)
+  {
+    string userId = user.FindFirstValue(Constants.Auth.Claims.UserId);
+
+    IAsyncDocumentSession session = store.Session(global: true);
+    return await session.LoadAsync<ZeroUser>(userId);
   }
 }
 
