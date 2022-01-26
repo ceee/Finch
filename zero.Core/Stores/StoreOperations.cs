@@ -65,7 +65,7 @@ public partial class StoreOperations :
     if (model is ZeroEntity zeroModel)
     {
       // get current user
-      string userId = Context.BackofficeUser.FindFirstValue(Constants.Auth.Claims.UserId);
+      string userId = Context.BackofficeUser.FindFirstValue(Constants.Auth.Claims.UserId).Or(Constants.Auth.SystemUser);
 
       // set default properties
       if (zeroModel.CreatedDate == default)
