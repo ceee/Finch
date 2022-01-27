@@ -15,12 +15,13 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
   /// <inheritdoc />
   public StoreConfig Config => Operations.Config;
 
+  /// <inheritdoc />
+  public IStoreOperations Operations { get; private set; }
+
   protected IZeroContext Context { get; private set; }
 
 
   protected IInterceptors Interceptors { get; private set; }
-
-  protected IStoreOperations Operations { get; private set; }
 
   protected IZeroOptions Options { get; private set; }
 
@@ -106,6 +107,11 @@ public interface IEntityStore<T> where T : ZeroIdEntity, ISupportsFlavors, ISupp
   /// Configure the store
   /// </summary>
   StoreConfig Config { get; }
+
+  /// <summary>
+  /// Access to underlying operations helper
+  /// </summary>
+  IStoreOperations Operations { get; }
 
   /// <summary>
   /// Get new instance of an entity (with an optional flavor)

@@ -30,6 +30,7 @@ internal class ZeroPersistenceModule : ZeroModule
 
     IZeroDocumentStore store = new ZeroDocumentStore(options)
     {
+      Database = ravenOptions.DatabaseIsDefault ? ravenOptions.Database : null,
       Urls = new string[1] { ravenOptions.Url },
       Conventions =
       {

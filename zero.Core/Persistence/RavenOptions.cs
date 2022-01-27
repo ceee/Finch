@@ -9,6 +9,8 @@ public class RavenOptions
 
   public string Database { get; set; }
 
+  public bool DatabaseIsDefault { get; set; } = false;
+
   public string CollectionPrefix { get; set; } = String.Empty;
 
   public RavenIndexesOptions Indexes { get; set; } = new();
