@@ -47,6 +47,12 @@ public class ZeroMediaHelper : IZeroMediaHelper
     if (!Cache.TryGetValue(id, out Media.Media media))
     {
       media = await Store.Session(Global).LoadAsync<Media.Media>(id);
+
+      if (media != null)
+      {
+        media.Url = MediaManagement.GetPublicFilePath(media);
+      }
+
       Cache.TryAdd(id, media);
     }
 
@@ -76,10 +82,15 @@ public class ZeroMediaHelper : IZeroMediaHelper
     {
       Dictionary<string, Media.Media> remoteItems = await Store.Session(Global).LoadAsync<Media.Media>(remoteIds);
 
-      foreach (var item in remoteItems)
+      foreach ((string id, Media.Media media) in remoteItems)
       {
-        items.TryAdd(item.Key, item.Value);
-        Cache.TryAdd(item.Key, item.Value);
+        if (media != null)
+        {
+          media.Url = MediaManagement.GetPublicFilePath(media);
+        }
+
+        items.TryAdd(id, media);
+        Cache.TryAdd(id, media);
       }
     }
 
