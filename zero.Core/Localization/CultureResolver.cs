@@ -28,7 +28,7 @@ public class CultureResolver : ICultureResolver
       if (context.IsLoggedIntoBackoffice)
       {
         ZeroUser user = await GetBackofficeUser(context.Store, context.BackofficeUser);
-        string cultureCode = user?.LanguageId.Or("en-US");
+        string cultureCode = (user?.LanguageId).Or("en-US");
 
         try
         {        

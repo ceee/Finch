@@ -10,7 +10,7 @@ public static class ValidatorExtensions
 
   private const char KLAMMERAFFE = '@';
 
-  private static string HEX_REGEX = "#[0-9a-fA-F]{3,8}";
+  private static string HEX_REGEX = "(^$)|(#[0-9a-fA-F]{3,8})";
 
   /// <summary>
   /// Validate a color input as HEX (#aabbccdd or #aabbcc or #abc)
