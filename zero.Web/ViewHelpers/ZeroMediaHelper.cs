@@ -68,6 +68,11 @@ public class ZeroMediaHelper : IZeroMediaHelper
 
     foreach (string id in ids)
     {
+      if (id.IsNullOrEmpty())
+      {
+        continue;
+      }
+
       if (Cache.TryGetValue(id, out Media.Media media))
       {
         items.TryAdd(id, media);
@@ -92,6 +97,13 @@ public class ZeroMediaHelper : IZeroMediaHelper
         items.TryAdd(id, media);
         Cache.TryAdd(id, media);
       }
+    }
+
+    IEnumerable<string> failedIds = ids.Where(x => x.HasValue()).Where(id => !items.ContainsKey(id));
+
+    foreach (string id in failedIds)
+    {
+      items.Add(id, null);
     }
 
     return items;
