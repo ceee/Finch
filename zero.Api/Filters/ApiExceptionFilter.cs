@@ -20,11 +20,6 @@ public class ApiExceptionFilter : IExceptionFilter
 
   public void OnException(ExceptionContext context)
   {
-    if (!_hostEnvironment.IsDevelopment())
-    {
-      return;
-    }
-
     _logger.LogError(context.Exception, "API Exception thrown at '{path}'", context.HttpContext.Request.GetEncodedPathAndQuery());
 
     JsonResult result = new(new ErrorApiResponse()
@@ -45,6 +40,7 @@ public class ApiExceptionFilter : IExceptionFilter
     });
 
     result.StatusCode = StatusCodes.Status500InternalServerError;
+    context.HttpContext.Response.Headers["X-Variant"] = "api-response";
 
     context.Result = result;
   }

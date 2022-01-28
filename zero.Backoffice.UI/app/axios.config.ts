@@ -1,5 +1,7 @@
-﻿import Axios from 'axios';
+﻿import { AxiosError } from 'axios';
+import Axios from 'axios';
 import eventHub from './services/eventhub';
+import { open as openOverlay } from './services/overlay';
 //import Auth from 'zero/helpers/auth.js';
 import Qs from 'qs';
 
@@ -18,9 +20,29 @@ Axios.defaults.paramsSerializer = (params) =>
 
 Axios.interceptors.response.use(
   response => response,
-  error =>
+  (error: AxiosError) =>
   {
-    if (error.response && error.response.headers['x-variant'] == 'api-response')
+    const isApi = error.response && error.response.headers['x-variant'] == 'api-response';
+
+    if (isApi && error.response && error.response.status >= 500)
+    {
+      const errorData = error.response.data && error.response.data.errors ? error.response.data.errors[0] : {
+        category: 'server',
+        code: 'server.error.axios',
+        message: 'Unknown server error',
+        propery: null
+      };
+
+      openOverlay({
+        alias: 'servererror',
+        model: errorData,
+        autoclose: true,
+        softdismiss: true,
+        component: () => import('./ui/overlays/servererror.vue')
+      });
+    }
+
+    if (isApi)
     {
       return Promise.resolve(error.response);
     }
