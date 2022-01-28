@@ -16,8 +16,8 @@
       </template>
       <ui-dropdown-button v-for="app in appStore.applications" :value="app" :key="app.id" :label="app.name" :selected="app.id === appId" @click="applicationChanged" :prevent="true" />
       <ui-dropdown-separator />
-      <!--<ui-dropdown-button label="Add new application" icon="fth-plus" @click="addApplication" />-->
-      <ui-dropdown-button :disabled="true" label="@nav.apps.manage" icon="fth-edit-2" @click="manageApplications" />
+      <!--<ui-dropdown-button :disabled="true" label="Add new application" icon="fth-plus" @click="addApplication" />-->
+      <ui-dropdown-button label="@nav.apps.manage" icon="fth-edit-2" @click="manageApplications" />
     </ui-dropdown>
     <div v-else class="app-nav-switch is-fake"></div>
 

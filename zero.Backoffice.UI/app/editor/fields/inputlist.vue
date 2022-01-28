@@ -18,7 +18,7 @@
       },
       maxItemLength: {
         type: Number,
-        default: 10
+        default: 100
       },
       addLabel: {
         type: String,

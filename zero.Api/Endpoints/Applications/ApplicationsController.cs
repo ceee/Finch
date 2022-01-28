@@ -10,12 +10,12 @@ public class ApplicationsController : ZeroApiEntityStoreController<Application, 
 
   [HttpGet("empty")]
   [ZeroAuthorize(ApplicationPermissions.Create)]
-  public virtual Task<ActionResult<ApplicationEdit>> Empty(string flavor = null) => EmptyModel<ApplicationEdit>(flavor);
+  public virtual Task<ActionResult<Application>> Empty(string flavor = null) => EmptyModel(flavor);
 
 
   [HttpGet("{id}")]
   [ZeroAuthorize(ApplicationPermissions.Read)]
-  public virtual Task<ActionResult<ApplicationEdit>> Get(string id, string changeVector = null) => GetModel<ApplicationEdit>(id, changeVector);
+  public virtual Task<ActionResult<Application>> Get(string id, string changeVector = null) => GetModel(id, changeVector);
 
 
   [HttpGet("")]
@@ -25,12 +25,12 @@ public class ApplicationsController : ZeroApiEntityStoreController<Application, 
 
   [HttpPost("")]
   [ZeroAuthorize(ApplicationPermissions.Create)]
-  public virtual Task<ActionResult<Result>> Create(ApplicationSave saveModel) => CreateModel<ApplicationSave, ApplicationEdit>(saveModel);
+  public virtual Task<ActionResult<Result>> Create(Application saveModel) => CreateModel(saveModel);
 
 
   [HttpPut("{id}")]
   [ZeroAuthorize(ApplicationPermissions.Update)]
-  public virtual Task<ActionResult<Result>> Update(string id, ApplicationSave updateModel, [FromQuery] string changeToken = null) => UpdateModel<ApplicationSave, ApplicationEdit>(id, updateModel, changeToken);
+  public virtual Task<ActionResult<Result>> Update(string id, Application updateModel, [FromQuery] string changeToken = null) => UpdateModel(id, updateModel, changeToken);
 
 
   [HttpDelete("{id}")]

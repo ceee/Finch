@@ -9,10 +9,9 @@ export default {
 
   install(app: ZeroPluginOptions)
   {
-    //app.vue.component('ui-countrypicker', defineAsyncComponent(Picker));
-    //app.route({ path: '/countries', component: Page });
+    app.route({ name: 'applications', path: '/settings/applications', component: () => import('./applications.vue') });
+    app.route({ name: 'applications-edit', path: '/settings/applications/edit/:id', component: () => import('./application.vue'), props: true });
 
-    //app.editor('country', null);
-    //app.editorField('')
+    app.schema('applications:edit', () => import('./schemas/editor'));
   }
 } as ZeroPlugin;

@@ -39,6 +39,10 @@ export async function send(config: ApiRequestConfig)
   }
   if (config.system)
   {
+    if (!config.params)
+    {
+      config.params = {};
+    }
     config.params['zero.system'] = true;
   }
 
