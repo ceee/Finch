@@ -7,7 +7,8 @@
       <span v-localize="label"></span>
       <strong class="ui-property-required" v-if="required">*</strong>
       <slot name="label-after"></slot>
-      <small class="ui-property-label-small" v-if="description" :size="14" v-localize:title="description">?</small>
+      <small v-if="description" v-localize="description"></small>
+      <!--<small class="ui-property-label-small" v-if="description" :size="14" v-localize:title="description">?</small>-->
     </label>
 
     <div class="ui-property-content">
@@ -154,6 +155,23 @@
       color: var(--color-accent-info);
     }*/
   }
+
+  .ui-property-label small
+  {
+    display: block;
+    padding-top: 2px;
+    font-size: var(--font-size-xs);
+    font-weight: 400;
+    line-height: 1.3;
+    text-decoration: none;
+    color: var(--color-text-dim-one);
+
+    &:empty
+    {
+      display: none;
+    }
+  }
+
 
   .ui-property-label-small
   {
