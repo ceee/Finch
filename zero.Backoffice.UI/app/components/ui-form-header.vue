@@ -1,5 +1,5 @@
 ﻿<template>
-  <ui-header-bar class="ui-form-header" :back-button="true">
+  <ui-header-bar class="ui-form-header" :back-button="true" :sticky="sticky">
     <template v-slot:title>
       <h2 class="ui-header-bar-title" :class="{'is-empty': title && !value.name && !titleDisabled}">
         <template v-for="prefix in prefixes">
@@ -77,6 +77,10 @@
       hasAlias: {
         type: Boolean,
         default: true
+      },
+      sticky: {
+        type: Boolean,
+        default: false
       }
     },
 

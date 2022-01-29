@@ -1,6 +1,6 @@
 ﻿<template>
   <ui-form :key="id" ref="form" class="page page-editor" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
-    <ui-form-header v-model:value="model" title="@page.name" :disabled="disabled" :is-create="!id" :state="form.state" :active-toggle="!isFolder" :can-delete="meta.canDelete" @delete="onDelete">
+    <ui-form-header v-model:value="model" title="@page.name" :disabled="disabled" :is-create="!id" :state="form.state" :active-toggle="!isFolder" :can-delete="meta.canDelete" @delete="onDelete" :sticky="true">
       <template v-slot:actions>
         <!--<ui-dropdown-button v-if="!isFolder" label="@page.preview.title" icon="fth-eye" :disabled="disabled" @click="openPreview" />
       <ui-dropdown-separator v-if="!isFolder" />-->

@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="ui-header-bar">
+  <div class="ui-header-bar" :class="{ 'is-sticky': sticky }">
     <div class="ui-header-bar-inner">
       <div class="ui-header-bar-main">
         <ui-icon-button v-if="backButton" type="light onbg" @click="onBack" :size="15" />
@@ -60,6 +60,10 @@
       closeButton: {
         type: Boolean,
         default: false
+      },
+      sticky: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -94,12 +98,21 @@
 
     & + .ui-view-box
     {
-      padding-top: 0; 
+      padding-top: 0;
     }
 
     .app-tree &
     {
       margin-bottom: 8px;
+    }
+
+    &.is-sticky
+    {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: var(--color-bg);
+      background: linear-gradient(0deg, transparent, var(--color-bg) 40%);
     }
   }
 

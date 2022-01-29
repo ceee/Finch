@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="media-content">
-    <ui-header-bar :back-button="!!parentId">
+    <ui-header-bar :back-button="!!parentId" :sticky="true">
       <template v-slot:title>
         <h2 class="ui-header-bar-title">
           <span class="media-items-hierarchy-item">

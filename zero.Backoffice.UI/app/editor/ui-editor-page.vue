@@ -1,7 +1,7 @@
 ﻿<template>
   <ui-form ref="form" class="editor-page" v-slot="form" @submit="onInternalSubmit" @load="onInternalLoad" :route="route">
     <slot name="header" v-bind="dataObj" v-bind:form="form">
-      <ui-form-header v-model:value="model" :prefix="prefix" :title="title" :disabled="readonly" :is-create="!id" :state="form.state" :can-delete="canDelete" @delete="onInternalDelete" />
+      <ui-form-header v-model:value="model" :prefix="prefix" :title="title" :disabled="readonly" :is-create="!id" :state="form.state" :can-delete="canDelete" @delete="onInternalDelete" :sticky="true" />
     </slot>
     <ui-editor :config="editor" v-model="model" :meta="meta" :disabled="readonly" :scope="true">
       <template v-slot:below>
