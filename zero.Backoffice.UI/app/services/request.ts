@@ -1,5 +1,5 @@
 ﻿
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { paths } from '../options';
 import { ApiRequestConfig } from './request.types';
 
@@ -47,6 +47,12 @@ export async function send(config: ApiRequestConfig)
   }
 
   const result = await axios(config);
+
+  if (config.fullResponse)
+  {
+    return result;
+  }
+
   return result.data;
 
   //try
@@ -79,46 +85,46 @@ export async function send(config: ApiRequestConfig)
 //}
 
 
-//export function download(response)
-//{
-//  let filename = response.headers["zero-filename"] || 'download.bin';
+export function download(response: AxiosResponse)
+{
+  let filename = response.headers["zero-filename"] || 'download.bin';
 
-//  // code from: https://github.com/kennethjiang/js-file-download/blob/master/file-download.js
+  // code from: https://github.com/kennethjiang/js-file-download/blob/master/file-download.js
 
-//  var blob = response.data;
-//  if (typeof window.navigator.msSaveBlob !== 'undefined')
-//  {
-//    // IE workaround for "HTML7007: One or more blob URLs were
-//    // revoked by closing the blob for which they were created.
-//    // These URLs will no longer resolve as the data backing
-//    // the URL has been freed."
-//    window.navigator.msSaveBlob(blob, filename);
-//  }
-//  else
-//  {
-//    var blobURL = (window.URL && window.URL.createObjectURL) ? window.URL.createObjectURL(blob) : window.webkitURL.createObjectURL(blob);
-//    var tempLink = document.createElement('a');
-//    tempLink.style.display = 'none';
-//    tempLink.href = blobURL;
-//    tempLink.setAttribute('download', filename);
+  var blob = response.data;
+  if (typeof window.navigator.msSaveBlob !== 'undefined')
+  {
+    // IE workaround for "HTML7007: One or more blob URLs were
+    // revoked by closing the blob for which they were created.
+    // These URLs will no longer resolve as the data backing
+    // the URL has been freed."
+    window.navigator.msSaveBlob(blob, filename);
+  }
+  else
+  {
+    var blobURL = (window.URL && window.URL.createObjectURL) ? window.URL.createObjectURL(blob) : window.webkitURL.createObjectURL(blob);
+    var tempLink = document.createElement('a');
+    tempLink.style.display = 'none';
+    tempLink.href = blobURL;
+    tempLink.setAttribute('download', filename);
 
-//    // Safari thinks _blank anchor are pop ups. We only want to set _blank
-//    // target if the browser does not support the HTML5 download attribute.
-//    // This allows you to download files in desktop safari if pop up blocking
-//    // is enabled.
-//    if (typeof tempLink.download === 'undefined')
-//    {
-//      tempLink.setAttribute('target', '_blank');
-//    }
+    // Safari thinks _blank anchor are pop ups. We only want to set _blank
+    // target if the browser does not support the HTML5 download attribute.
+    // This allows you to download files in desktop safari if pop up blocking
+    // is enabled.
+    if (typeof tempLink.download === 'undefined')
+    {
+      tempLink.setAttribute('target', '_blank');
+    }
 
-//    document.body.appendChild(tempLink);
-//    tempLink.click();
+    document.body.appendChild(tempLink);
+    tempLink.click();
 
-//    // Fixes "webkit blob resource error 1"
-//    setTimeout(function ()
-//    {
-//      document.body.removeChild(tempLink);
-//      window.URL.revokeObjectURL(blobURL);
-//    }, 200)
-//  }
-//};
+    // Fixes "webkit blob resource error 1"
+    setTimeout(function ()
+    {
+      document.body.removeChild(tempLink);
+      window.URL.revokeObjectURL(blobURL);
+    }, 200)
+  }
+};

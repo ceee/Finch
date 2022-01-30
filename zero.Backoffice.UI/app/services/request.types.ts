@@ -6,6 +6,7 @@ export interface ApiRequestConfig extends AxiosRequestConfig
   raw?: boolean;
   system?: boolean;
   scope?: string;
+  fullResponse?: boolean;
 }
 
 export interface ApiResponseBase
