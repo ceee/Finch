@@ -770,6 +770,20 @@
       "mediafolder": "Medien"
     }
   },
+
+  "listfilter": {
+    "button": "Filter",
+    "button_selected": "Filter: {name}",
+    "headline": "Filter",
+    "button_edit": "Filter bearbeiten",
+    "button_clear": "Filter aufheben",
+    "clearitem": "Löschen",
+    "saveas": "Speichern als...",
+    "saveas_text": "Der Filter kann für spätere Verwendung gespeichert werden",
+    "search_placeholder": "Suchbegriff eingeben...",
+    "xselected": "{count} ausgewählt"
+  },
+
   "blueprint": {
     "hint": {
       "childtext": "<b>Dieses Element basiert auf einer Blaupause</b>. Die Werte werden automatisch aktualisiert.",

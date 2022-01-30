@@ -4,15 +4,15 @@
 
     <ui-dropdown v-if="hasFilter && storedFilters.length" align="right">
       <template v-slot:button>
-        <ui-button type="light onbg" :label="filterLabel" caret="down" />
+        <ui-button type="light onbg" :label="filterLabel" :tokens="{ name: currentFilter ? currentFilter.name : null }" caret="down" />
       </template>
       <ui-dropdown-button v-if="storedFilters.length" v-for="(filter, index) in storedFilters" :key="index" :value="filter" :label="filter.name" @click="setFilter" />
       <ui-dropdown-separator v-if="storedFilters.length" />
       <ui-dropdown-button label="@ui.add" icon="fth-plus" @click="addOrEditFilter()" />
-      <ui-dropdown-button v-if="currentFilter" label="Edit filter" icon="fth-edit-2" @click="addOrEditFilter(currentFilter.id)" />
-      <ui-dropdown-button label="Clear filter" icon="fth-x" @click="setFilter(null)" />
+      <ui-dropdown-button v-if="currentFilter" label="@listfilter.button_edit" icon="fth-edit-2" @click="addOrEditFilter(currentFilter.id)" />
+      <ui-dropdown-button v-if="currentFilter" label="@listfilter.button_clear" icon="fth-x" @click="setFilter(null)" />
     </ui-dropdown>
-    <ui-button v-if="hasFilter && !storedFilters.length" type="light onbg" label="Filter" @click="addOrEditFilter()" />
+    <ui-button v-if="hasFilter && !storedFilters.length" type="light onbg" label="@listfilter.button" @click="addOrEditFilter()" />
 
     <ui-dropdown v-if="!hideSelection && selection.length > 0" align="right">
       <template v-slot:button>
@@ -82,7 +82,7 @@
     computed: {
       filterLabel()
       {
-        return this.currentFilter ? 'Filter: <span>' + this.currentFilter.name + "</span>" : 'Filter';
+        return this.currentFilter ? '@listfilter.button_selected' : '@listfilter.button';
       }
     },
 
@@ -193,7 +193,6 @@
           component: () => import('./ui-table-filter-overlay.vue'),
           display: 'editor',
           model: {
-            title: 'Filter',
             editor: this.filterOptions.editor,
             template: this.filterOptions.template,
             value: model,

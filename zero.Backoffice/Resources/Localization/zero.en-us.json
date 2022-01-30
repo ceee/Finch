@@ -817,6 +817,19 @@
     }
   },
 
+  "listfilter": {
+    "button": "Filter",
+    "button_selected": "Filter: {name}",
+    "headline": "Filter",
+    "button_edit": "Edit filter",
+    "button_clear": "Clear filter",
+    "clearitem": "Clear",
+    "saveas": "Save as...",
+    "saveas_text": "You can optionally save this filter for future reference",
+    "search_placeholder": "Enter a search term...",
+    "xselected": "{count} selected"
+  },
+
   "blueprint": {
     "hint": {
       "childText": "<b>This entity is a child of a blueprint</b>. Its properties are automatically updated.",

@@ -3,7 +3,7 @@
     <ui-trinity class="ui-module-overlay">
 
       <template v-slot:header>
-        <ui-header-bar :title="model.title" :back-button="false" :close-button="true" />
+        <ui-header-bar title="@listfilter.headline" :back-button="false" :close-button="true" />
       </template>
 
       <template v-slot:footer>
@@ -24,7 +24,7 @@
         <div v-for="(field, index) in fields" class="ui-table-filter-overlay-group" :class="{ 'is-open': activeFilter === index, 'has-value': field.preview.selected(value[field.path]) }">
           <div class="ui-table-filter-overlay-group-head">
             <ui-select-button :label="field.label" :icon="field.preview.icon" :description="field.preview.value(value[field.path])" @click="toggleFilter(field, index)" />
-            <ui-button class="ui-table-filter-overlay-group-clear" type="blank" label="Clear" @click="clearFilter(field, index)" />
+            <ui-button class="ui-table-filter-overlay-group-clear" type="blank" label="@listfilter.clearitem" @click="clearFilter(field, index)" />
           </div>
           <div v-show="activeFilter === index" class="ui-table-filter-overlay-group-content">
             <ui-editor-component :field="field" :value="value" @input="onFieldChange" :disabled="disabled" />
@@ -33,7 +33,7 @@
       </div>
 
       <div v-if="!loading" class="ui-box ui-table-filter-overlay-filtername">
-        <ui-property label="Save as..." description="You can optionally save this filter for future reference" :vertical="true">
+        <ui-property label="@listfilter.saveas" description="@listfilter.saveas_text" :vertical="true">
           <input v-model="filterName" type="text" class="ui-input" maxlength="40" />
         </ui-property>
       </div>
