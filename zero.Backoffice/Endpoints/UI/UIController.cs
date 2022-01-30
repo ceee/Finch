@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Net.Http.Headers;
 using System.Collections;
 using System.IO;
+using System.Net.Http;
 using System.Reflection;
 using zero.Backoffice.Services;
 
@@ -17,8 +18,10 @@ public class UIController : ZeroBackofficeController
   readonly IMediaManagement Media;
   readonly ICultureService CultureService;
   readonly IUserService UserService;
+  readonly IRequestUrlResolver RequestUrlResolver;
+  readonly HttpClient HttpClient;
 
-  public UIController(IUserService userService, IIconService iconService, IResourceService resourceService, ISectionService sectionService, IZeroOptions options, IMediaManagement media, ICultureService cultureService)
+  public UIController(IUserService userService, IIconService iconService, IResourceService resourceService, ISectionService sectionService, IZeroOptions options, IMediaManagement media, ICultureService cultureService, IRequestUrlResolver requestUrlResolver)
   {
     UserService = userService;
     IconService = iconService;
@@ -27,6 +30,8 @@ public class UIController : ZeroBackofficeController
     CultureService = cultureService;  
     Options = options;
     Media = media;
+    RequestUrlResolver = requestUrlResolver;
+    HttpClient = new HttpClient();
   }
 
   [HttpGet("sections")]
@@ -95,35 +100,36 @@ public class UIController : ZeroBackofficeController
   [HttpGet("thumbnail/{id}-{size}.tmp")]
   public async Task<IActionResult> GetThumbnail(string id, string size)
   {
+    Stream stream = null;
     zero.Media.Media media = await Media.GetFile(id);
 
     if (media == null)
     {
-      return Ok();
-    }
-
-    string path = Media.GetPublicFilePath(media, size);
-
-    if (path == null)
-    {
-      return Ok();
-    }
-
-    if (path.StartsWith("url://"))
-    {
-      path = path.Substring(6);
-    }
-
-    FileExtensionContentTypeProvider provider = new();
-    string contentType;
-    if (!provider.TryGetContentType(Path.GetFileName(path), out contentType))
-    {
-      contentType = "application/octet-stream";
+      return null;
     }
 
     try
     {
-      return File(await Media.GetFileStream(media, size), contentType, DateTimeOffset.Now, EntityTagHeaderValue.Any);
+      stream = await Media.GetFileStream(media, size);
+    }
+    catch { }
+
+    if (stream == null)
+    {
+      string fullPath = Media.GetPublicFilePath(media, size);
+
+      if (RequestUrlResolver.IsAbsolute(fullPath))
+      {
+        byte[] bytes = await HttpClient.GetByteArrayAsync(fullPath);
+        return File(bytes, "image/webp"); // TODO this is shit and should not be here in zero (only for CDN link)
+      }
+
+      return Ok();
+    }
+
+    try
+    {
+      return File(stream, "image/jpeg", DateTimeOffset.Now, EntityTagHeaderValue.Any); // TODO we do not query for the content-type
     }
     catch (FileSystemException)
     {

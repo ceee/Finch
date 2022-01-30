@@ -88,6 +88,7 @@ let config = defineConfig({
     vue({
       template: {
         compilerOptions: {
+          isCustomElement: tag => tag == 'content',
           compatConfig: {
             MODE: 2
           }

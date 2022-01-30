@@ -28,7 +28,10 @@
             <span class="ui-native-check-toggle"></span>
           </span>
         </button>
-        <div v-for="column in columns" :key="column.path" class="ui-table-cell" :class="column.class" :style="column.flex" :table-field="column.path" :field-type="column.type" v-table-value="{ column, item }"></div>
+        <div v-for="column in columns" :key="column.path" class="ui-table-cell" :class="column.class" :style="column.flex" 
+             :contenteditable="true"
+             @input="onFieldValueChange(column, $event)"
+             :table-field="column.path" :field-type="column.type" v-table-value="{ column, item }"></div>
         <div v-if="listConfig.hasOptions" table-field="table_options" class="ui-table-cell is-options">
           <slot name="options" v-bind="{ item, index }"></slot>
         </div>
@@ -340,6 +343,11 @@
         }
 
         this.$emit('select', this.selected, this);
+      },
+
+      onFieldValueChange(column, ev)
+      {
+        console.info('change', column, ev);
       }
     }
   })

@@ -32,6 +32,28 @@ public class RequestUrlResolver : IRequestUrlResolver
 
 
   /// <inheritdoc />
+  public bool IsAbsolute(string path)
+  {
+    if (!CanResolve())
+    {
+      return false;
+    }
+
+    if (String.IsNullOrWhiteSpace(path))
+    {
+      return false;
+    }
+
+    if (Protocols.Any(p => path.StartsWith(p, StringComparison.InvariantCultureIgnoreCase)))
+    {
+      return true;
+    }
+
+    return false;
+  }
+
+
+  /// <inheritdoc />
   public string ToAbsolute(string path)
   {
     if (!CanResolve())
@@ -108,6 +130,11 @@ public interface IRequestUrlResolver
   /// URL resolver for backoffice links
   /// </summary>
   IRequestUrlResolver Backoffice { get; }
+
+  /// <summary>
+  /// Checks whether a path is absolute or relative
+  /// </summary>
+  bool IsAbsolute(string path);
 
   /// <summary>
   /// Converts a relative to an absolute path for the currently used domain

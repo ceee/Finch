@@ -202,7 +202,22 @@ class ListColumn
     this._type = 'image';
     this._asHtml = true;
     // TODO correct app ID
-    this._func = (value, opts) => value ? `<img src="/zero/api/hofbauer/backoffice/ui/thumbnail/${(value)}-thumb.tmp" onerror="this.classList.add('is-error')" class="ui-table-field-image">` : '';
+    this._func = (value, opts) =>
+    {
+      let id = value;
+
+      if (Array.isArray(id))
+      {
+        id = id[0];
+      }
+
+      if (!id)
+      {
+        return '';
+      }
+
+      return `<img src="/zero/api/hofbauer/backoffice/ui/thumbnail/${(id)}-thumb.tmp" onerror="this.classList.add('is-error')" class="ui-table-field-image">`;
+    };
     return this;
   }
 

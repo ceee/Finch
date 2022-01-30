@@ -42,6 +42,11 @@ public class MediaManagement : IMediaManagement
   /// <inheritdoc />
   public virtual async Task<Stream> GetFileStream(Media file, string thumbnailKey = null)
   {
+    if (file == null)
+    {
+      return null;
+    }
+
     string path = file?.Path;
 
     if (!thumbnailKey.IsNullOrWhiteSpace())
