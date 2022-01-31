@@ -39,7 +39,6 @@ internal class ZeroMediaModule : ZeroModule
     {
       RavenOptions raven = opts.For<RavenOptions>();
       raven.Indexes.Add<Media_ByChildren>();
-      raven.Indexes.Add<Media_ByParent>();
       raven.Indexes.Add<Media_ByHierarchy>();
     });
 

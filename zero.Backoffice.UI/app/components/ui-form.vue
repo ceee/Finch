@@ -17,7 +17,7 @@
   //import FormErrorView from './form-error-view.vue';
   import * as overlays from '../services/overlay';
   import * as notifications from '../services/notification';
-  import { arrayGroupBy } from '../utils/arrays';
+  import { arrayGroupBy, selectorToArray } from '../utils';
 
   export default defineComponent({
     name: 'uiForm',
@@ -276,21 +276,55 @@
         let errorGroups = arrayGroupBy(this.errors, 'property');
         let handledGroups = [];
 
+        console.info({ errorComponents, errorGroups });
+
         // set errors
         errorComponents.forEach(component =>
         {
           let field = component.field;
 
-          if (field && errorGroups[field])
+          if (field)
           {
-            handledGroups.push(field);
-            component.setErrors(errorGroups[field]);
-
-            if (component.tab)
+            this.errors.forEach(error =>
             {
-              component.tab.setErrors(true);
-            }
+              let errorField = error.property;
+              let errorFieldSelector = selectorToArray(errorField);
+
+              // exact error field match
+              if (errorField == field)
+              {
+                handledGroups.push(field);
+                component.setErrors(error, true);
+
+                if (component.tab)
+                {
+                  component.tab.setErrors(true);
+                }
+              }
+              // nested error
+              else if (errorFieldSelector[0] == field)
+              {
+                handledGroups.push(field);
+                component.setErrors(error, true);
+
+                if (component.tab)
+                {
+                  component.tab.setErrors(true);
+                }
+              }
+          });
           }
+
+          //if (field && errorGroups[field])
+          //{
+          //  handledGroups.push(field);
+          //  component.setErrors(errorGroups[field]);
+
+          //  if (component.tab)
+          //  {
+          //    component.tab.setErrors(true);
+          //  }
+          //}
         });
 
         for (var field in errorGroups)

@@ -29,7 +29,6 @@
           </span>
         </button>
         <div v-for="column in columns" :key="column.path" class="ui-table-cell" :class="column.class" :style="column.flex" 
-             :contenteditable="true"
              @input="onFieldValueChange(column, $event)"
              :table-field="column.path" :field-type="column.type" v-table-value="{ column, item }"></div>
         <div v-if="listConfig.hasOptions" table-field="table_options" class="ui-table-cell is-options">

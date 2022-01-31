@@ -112,7 +112,11 @@
       top: 0;
       z-index: 2;
       background: var(--color-bg);
-      background: linear-gradient(0deg, transparent, var(--color-bg) 40%);
+      //width: auto;
+      //border-radius: var(--radius);
+      //box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      //margin-bottom: var(--padding);
+      //background: linear-gradient(0deg, transparent, var(--color-bg) 30%);
     }
   }
 
