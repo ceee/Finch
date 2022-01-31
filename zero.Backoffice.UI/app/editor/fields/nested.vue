@@ -83,7 +83,7 @@
           this.multiple = this.limit > 1;
           if (!this.multiple)
           {
-            this.items = this.items ? [this.items] : [];
+            this.items = !Array.isArray(this.items) ? [this.items] : [];
           }
         });
       },
