@@ -47,6 +47,11 @@
 .editor.display-boxes .ui-tab
 {
   display: inherit !important;
+
+  &.is-hidden
+  {
+    display: none !important;
+  }
 }
 
 .editor.display-boxes .ui-tab + .ui-tab

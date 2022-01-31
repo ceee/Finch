@@ -1,5 +1,5 @@
 ﻿<template>
-  <section v-show="active && !hide" class="ui-tab" :aria-hidden="!active ? true : null" role="tabpanel">
+  <section v-show="active && !hide" :class="{ 'is-hidden': hide }" class="ui-tab" :aria-hidden="!active ? true : null" role="tabpanel">
     <slot />
   </section>
 </template>

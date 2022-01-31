@@ -30,6 +30,12 @@ export function patch(url: string, data: any, config?: ApiRequestConfig)
   return send({ method: 'patch', url, data, ...config });
 }
 
+export function url(url: string)
+{
+  // TODO correct app
+  return paths.api.replace('{app}', 'hofbauer') + '/' + url;
+}
+
 
 export async function send(config: ApiRequestConfig)
 {
