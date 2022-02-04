@@ -9,7 +9,7 @@
         <ui-icon :symbol="item.icon" :size="18" class="app-search-item-icon" />
         <span class="app-search-item-text">
           <span class="app-search-item-name">{{item.name}} <span class="app-search-item-group" v-localize="item.group"></span></span>
-          <span class="app-search-item-description" v-if="item.description">{{item.description}}</span>
+          <span class="app-search-item-group" v-if="item.description">{{item.description}}</span>
         </span>
       </ui-link>
     </div>
