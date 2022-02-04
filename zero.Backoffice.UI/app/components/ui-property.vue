@@ -236,13 +236,12 @@
   .ui-property-help
   {
     max-width: 932px;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-gap: 10px;
+    padding-left: 26px;
     font-size: var(--font-size-xs);
     color: var(--color-text-dim);
     margin: 5px 0 0;
     line-height: 1.4;
+    position: relative;
     //letter-spacing: 0.3px;
 
     &:before
@@ -251,9 +250,9 @@
       font-family: var(--font-icon);
       color: var(--color-primary);
       font-size: var(--font-size-l);
-      float: left;
-      position: relative;
+      position: absolute;
       top: -3px;
+      left: 0;
     }
   }
 

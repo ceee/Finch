@@ -44,6 +44,11 @@ class List implements ZeroSchema
    */
   onClick = null;
 
+  /**
+   * Prevent generation of query string
+   */
+  noQueryString = null;
+
   columns: ListColumn[] = [];
 
   componentConfig = {

@@ -224,11 +224,11 @@
 
 
       // updates the list (debounced)
-      update()
+      async update()
       {
         if (!this.isLoading)
         {
-          this.load();
+          await this.load();
         }
       },
 
@@ -236,10 +236,12 @@
       // a property has changed and therefore we update the URL and table content
       onChange()
       {
-        const query = Qs.stringify(this.listConfig.paramsToQuery(this.query));
-        const path = this.$route.href.split('?')[0] + (query ? '?' + query : '');
-
-        history.replaceState(null, null, path);
+        if (!this.listConfig.noQueryString)
+        {
+          const query = Qs.stringify(this.listConfig.paramsToQuery(this.query));
+          const path = this.$route.href.split('?')[0] + (query ? '?' + query : '');
+          history.replaceState(null, null, path);
+        }
         this.debouncedUpdate();
       },
 

@@ -50,6 +50,5 @@ export function toCurrency(value: number, decimals: number = 2, hideSymbol: bool
  */
 export function roundUp(value: number, decimals: number = 2)
 {
-  decimals = Math.pow(10, decimals);
-  return Math.ceil(value * decimals) / decimals;
+  return +(value / 1).toFixed(decimals);
 }
