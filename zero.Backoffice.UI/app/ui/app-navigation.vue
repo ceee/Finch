@@ -7,7 +7,7 @@
         <img src="/Assets/zero-dark.svg" class="show-dark" v-localize:alt="'@zero.name'" /> 
       </h1>
       
-      <!--<ui-button icon="fth-search" :stroke="2.5" type="blank" class="app-nav-search" @click="openSearch" />--> 
+      <app-search />
     </div>
 
     <div v-if="currentApplication && appStore.applications.length > 0" class="app-nav-switch">
@@ -173,11 +173,6 @@
       {
         this.compact = !this.compact;
         localStorage.setItem(compactCacheKey, this.compact.toString());
-      },
-
-      openSearch()
-      {
-        //EventHub.$emit('app.search.open');
       }
     }
   });

@@ -59,7 +59,6 @@
       {
         await this.startup();
       }
-
     }
   });
 

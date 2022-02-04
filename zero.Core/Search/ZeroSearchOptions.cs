@@ -1,6 +1,6 @@
-﻿namespace zero.Api.Endpoints.Search;
+﻿namespace zero.Search;
 
-public class SearchOptions : List<SearchIndexMap>
+public class ZeroSearchOptions : List<SearchIndexMap>
 {
   public bool Enabled { get; set; }
 

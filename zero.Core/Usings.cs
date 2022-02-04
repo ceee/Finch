@@ -27,3 +27,4 @@ global using zero.Stores;
 global using zero.Spaces;
 global using zero.Utils;
 global using zero.Validation;
+global using zero.Search;

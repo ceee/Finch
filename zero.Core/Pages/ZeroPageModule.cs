@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using zero.Search;
 
 namespace zero.Pages;
 
@@ -30,6 +31,19 @@ internal class ZeroPageModule : ZeroModule
       {
         cfg.CanUseWithoutFlavors = false;
         cfg.Add<PageFolder>(Constants.Pages.FolderAlias, "@page.folder.name", "@page.folder.description", "fth-folder");
+      });
+    });
+
+    services.Configure<ZeroSearchOptions>(opts =>
+    {
+      opts.Map<Page>().Display((x, res, opts) =>
+      {
+        FlavorConfig flavor = opts.For<FlavorOptions>().Get<Page>(x.Flavor);
+        if (flavor != null)
+        {
+          res.Icon = flavor.Icon;
+        }
+        res.Url = "/pages/edit/" + x.Id;
       });
     });
   }

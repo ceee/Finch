@@ -1,4 +1,4 @@
-﻿namespace zero.Api.Endpoints.Search;
+﻿namespace zero.Search;
 
 public class SearchResult
 {

@@ -12,3 +12,4 @@ export * from './integrations';
 export * from './users';
 export * from './links';
 export * from './pageModules';
+export * from './search';

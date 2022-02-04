@@ -56,6 +56,7 @@ public class ZeroBuilder
     Modules.Add<ZeroRoutingModule>();
     Modules.Add<ZeroSpaceModule>();
     Modules.Add<ZeroStoreModule>();
+    Modules.Add<ZeroSearchModule>();
 
     Modules.ConfigureServices(services, configuration);
 

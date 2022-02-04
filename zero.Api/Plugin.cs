@@ -21,7 +21,6 @@ public class ZeroApiPlugin : ZeroPlugin
 
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
-    services.AddOptions<ApiOptions>().Bind(configuration.GetSection("Zero:Api")).Configure<IWebHostEnvironment>(ConfigureOptions);
     services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, ZeroApiMvcOptions>());
     services.AddTransient<IBackofficeApplicationResolverHandler, ApiApplicationResolverHandler>();
     services.AddTransient<ApiUnhandledExceptionMiddleware>();
@@ -68,9 +67,8 @@ public class ZeroApiPlugin : ZeroPlugin
   }
 
 
-  protected void ConfigureOptions(ApiOptions options, IWebHostEnvironment env)
+  protected void ConfigureOptions(IWebHostEnvironment env)
   {
-    options.Search.Enabled = true;
     //Map<Page>().Display((x, res, opts) =>
     //{
     //  PageType pageType = opts.Pages.GetByAlias(x.PageTypeAlias);

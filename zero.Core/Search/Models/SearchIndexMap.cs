@@ -1,6 +1,6 @@
 ﻿using Raven.Client.Documents;
 
-namespace zero.Api.Endpoints.Search;
+namespace zero.Search;
 
 public class SearchIndexMap
 {
@@ -66,7 +66,7 @@ public class SearchIndexMap<T> : SearchIndexMap where T : ZeroEntity
 {
   internal SearchIndexMap(string icon = null) : base(typeof(T), icon) { }
 
-  public SearchIndexMap<T> Icon(string icon)
+  public virtual SearchIndexMap<T> Icon(string icon)
   {
     _Icon = icon;
     return this;

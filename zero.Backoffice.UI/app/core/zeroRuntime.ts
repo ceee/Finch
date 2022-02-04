@@ -22,7 +22,8 @@ import
   integrationPlugin,
   userPlugin,
   linksPlugin,
-  pageModulePlugin
+  pageModulePlugin,
+  searchPlugin
 } from '../modules';
 import editorPlugin from '../editor/plugin';
 import { ZeroSchema, ZeroSchemaExtension } from 'zero/schemas';
@@ -35,7 +36,7 @@ import { Emitter, EventType } from 'mitt';
 plugins.push(
   editorPlugin, countryPlugin, applicationPlugin, settingsPlugin, languagePlugin,
   pagePlugin, linksPlugin, mediaPlugin, spacePlugin, mailTemplatePlugin,
-  translationPlugin, integrationPlugin, userPlugin, pageModulePlugin
+  translationPlugin, integrationPlugin, userPlugin, pageModulePlugin, searchPlugin
 );
 
 

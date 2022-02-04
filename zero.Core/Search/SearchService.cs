@@ -2,7 +2,7 @@
 using Raven.Client.Documents.Queries;
 using Raven.Client.Documents.Session;
 
-namespace zero.Api.Endpoints.Search;
+namespace zero.Search;
 
 public class SearchService : ISearchService
 {
@@ -25,7 +25,7 @@ public class SearchService : ISearchService
       return "*" + x + "*";
     }).ToArray();
 
-    List<ZeroEntity> results = await Store.Session().Query<SearchIndexResult, zero_Backoffice_Search>()
+    List<ZeroEntity> results = await Store.Session().Query<SearchIndexResult, zero_Search>()
       .Statistics(out QueryStatistics stats)
       .Search(x => x.Name, searchParts, 2, @operator: SearchOperator.And)
       .Search(x => x.Fields, searchParts, 1, Raven.Client.Documents.SearchOptions.Or, @operator: SearchOperator.And)
@@ -35,7 +35,7 @@ public class SearchService : ISearchService
 
     List<SearchResult> items = new();
 
-    IEnumerable<SearchIndexMap> maps = Options.For<SearchOptions>();
+    IEnumerable<SearchIndexMap> maps = Options.For<ZeroSearchOptions>();
 
     foreach (ZeroEntity result in results)
     {

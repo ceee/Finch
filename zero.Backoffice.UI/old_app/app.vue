@@ -68,7 +68,7 @@
         this.rerender();
       });
 
-      EventHub.$on('app.search.open', () =>
+      this.zero.events.on('app.search.open', () =>
       {
         this.search();
       });
