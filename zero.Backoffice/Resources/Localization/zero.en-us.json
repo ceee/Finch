@@ -811,6 +811,10 @@
       "search_group": "Search",
       "search": "Use search"
     },
+    "input_placeholder": "Go to...",
+    "native_hint": "Press <code>CTRL+F</code> again to use native browser search",
+    "native_toggle": "Open on <code>CTRL+F</code>",
+    "noresults": "No results",
     "collection": {
       "page": "Page",
       "mediaFolder": "Media folder"

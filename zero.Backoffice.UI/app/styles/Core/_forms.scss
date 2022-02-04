@@ -152,6 +152,11 @@ textarea
   {
     cursor: default;
   }
+
+  &.is-right
+  {
+    flex-direction: row-reverse;
+  }
 }
 
 .ui-native-check-toggle
@@ -180,6 +185,8 @@ textarea
     font-family: var(--font-icon);
     color: transparent;
     font-size: var(--font-size-s);
+    position: relative;
+    top: -1px;
   }
 
   input:focus ~ &
@@ -198,5 +205,11 @@ textarea
     {
       color: var(--color-checked-fg);
     }
+  }
+
+  .ui-native-check.is-right &
+  {
+    margin-left: 10px; 
+    margin-right: 0;
   }
 }

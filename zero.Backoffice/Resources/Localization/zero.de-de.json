@@ -765,6 +765,10 @@
       "search_group": "Suche",
       "search": "Suchen"
     },
+    "input_placeholder": "Gehe zu...",
+    "native_hint": "Drücke <code>STRG+F</code> erneut um die native Browsersuche zu verwenden",
+    "native_toggle": "Öffnen mit <code>STRG+F</code>",
+    "noresults": "Keine Ergebnisse",
     "collection": {
       "page": "Seite",
       "mediafolder": "Medien"

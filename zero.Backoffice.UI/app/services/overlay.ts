@@ -29,6 +29,7 @@ export interface OverlayOptions
   component?: any;
   theme?: OverlayTheme;
   model?: any;
+  class?: string;
 }
 
 export interface OverlayInstance extends OverlayOptions
@@ -139,7 +140,8 @@ export function open(options: OverlayOptions)
     softdismiss: options.display !== 'editor',
     theme: 'default',
     model: null,
-    component: null
+    component: null,
+    class: options.class
   } as OverlayOptions, options) as OverlayOptions;
 
   const instance = {

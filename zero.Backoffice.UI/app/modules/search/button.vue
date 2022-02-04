@@ -4,17 +4,22 @@
 
 <script>
   import * as overlays from '../../services/overlay';
+  import { useSearchStore } from './store';
 
   export default {
     data: () => ({
-      listener: null
+      open: false,
+      listener: null,
+      store: null
     }),
 
     mounted()
     {
+      this.store = useSearchStore();
+
       this.listener = e =>
       {
-        if (e.key === "f" && (e.ctrlKey || e.metaKey))
+        if (this.store.shortcutEnabled() && e.key === "f" && (e.ctrlKey || e.metaKey) && !this.open)
         {
           e.preventDefault();
           this.openSearch();
@@ -32,13 +37,17 @@
     methods: {
       async openSearch()
       {
+        this.open = true;
+
         const result = await overlays.open({
           component: () => import('./overlay.vue'),
           autoclose: false,
           softdismiss: true,
-          width: 780
-          //class: 'app-search-overlay'
+          width: 780,
+          class: 'app-search-overlay'
         });
+
+        this.open = false;
       }
     }
   }

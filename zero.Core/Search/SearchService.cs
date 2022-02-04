@@ -18,7 +18,7 @@ public class SearchService : ISearchService
   }
 
 
-  public async Task<Paged<SearchResult>> Query(string searchTerm)
+  public async Task<Paged<SearchResult>> Query(string searchTerm, int page = 1, int pageSize = 10)
   {
     string[] searchParts = searchTerm.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Select(x =>
     {
@@ -30,7 +30,7 @@ public class SearchService : ISearchService
       .Search(x => x.Name, searchParts, 2, @operator: SearchOperator.And)
       .Search(x => x.Fields, searchParts, 1, Raven.Client.Documents.SearchOptions.Or, @operator: SearchOperator.And)
       .OrderByScoreDescending()
-      .Paging(1, 6)
+      .Paging(page, pageSize)
       .As<ZeroEntity>()
       .ToListAsync();
 
@@ -70,5 +70,5 @@ public class SearchService : ISearchService
 
 public interface ISearchService
 {
-  Task<Paged<SearchResult>> Query(string searchTerm);
+  Task<Paged<SearchResult>> Query(string searchTerm, int page = 1, int pageSize = 10);
 }

@@ -20,6 +20,6 @@ public class SearchController : ZeroApiController
     {
       return new Paged<SearchResult>(new List<SearchResult>(), 0, query.Page, query.PageSize);
     }
-    return await Service.Query(query.Search);
+    return await Service.Query(query.Search, query.Page, query.PageSize);
   }
 }
