@@ -29,7 +29,8 @@ public class SearchService : ISearchService
       .Statistics(out QueryStatistics stats)
       .Search(x => x.Name, searchParts, 2, @operator: SearchOperator.And)
       .Search(x => x.Fields, searchParts, 1, Raven.Client.Documents.SearchOptions.Or, @operator: SearchOperator.And)
-      .Paging(1, 20)
+      .OrderByScoreDescending()
+      .Paging(1, 6)
       .As<ZeroEntity>()
       .ToListAsync();
 
