@@ -32,6 +32,13 @@
       }
     },
 
+    watch: {
+      '$route'()
+      {
+        this.instances = [];
+      }
+    },
+
     mounted()
     {
       emitter.on(event_showOverlay, overlay => this.add(overlay));
