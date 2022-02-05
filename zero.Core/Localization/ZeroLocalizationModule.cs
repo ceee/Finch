@@ -18,5 +18,22 @@ internal class ZeroLocalizationModule : ZeroModule
     services.AddScoped<IValidator<Country>, CountryValidator>();
     services.AddScoped<IValidator<Language>, LanguageValidator>();
     services.AddScoped<IValidator<Translation>, TranslationValidator>();
+
+    services.Configure<ZeroSearchOptions>(opts =>
+    {
+      opts.Map<Country>("fth-map-pin").Fields().Display((x, res) =>
+      {
+        res.Url = "/settings/countries/edit/" + x.Id;
+      });
+      opts.Map<Language>("fth-globe").Fields().Display((x, res) =>
+      {
+        res.Url = "/settings/languages/edit/" + x.Id;
+      });
+      opts.Map<Translation>("fth-type").Fields("Value").Display((x, res) =>
+      {
+        res.Description = x.Value;
+        res.Url = "/settings/translations/edit/" + x.Id;
+      });
+    });
   }
 }

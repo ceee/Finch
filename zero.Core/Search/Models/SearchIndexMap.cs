@@ -8,13 +8,14 @@ public class SearchIndexMap
   internal string _Icon;
   protected string _group;
   protected string[] _fields;
+  protected float _boost = 0;
   protected Func<ZeroEntity, SearchResult, IZeroOptions, Task> _modify;
 
   const string mapTemplate = @"map('{collection}', function (x) { 
                                 return { 
                                   Id: x.Id,
                                   Group: '{group}',
-                                  Name: x.Name,
+                                  Name: boost(x.Name, {boost}),
                                   IsActive: x.IsActive,
                                   Fields: [{fields}]
                                 };
@@ -33,7 +34,8 @@ public class SearchIndexMap
     {
       { "collection", store.Conventions.GetCollectionName(Type) },
       { "group", _group },
-      { "fields", BuildFieldArray(_fields) }
+      { "fields", BuildFieldArray(_fields) },
+      { "boost", _boost.ToString() }
     });
   }
 
@@ -44,7 +46,7 @@ public class SearchIndexMap
       return String.Empty;
     }
 
-    return "x." + String.Join(", x.", fields);
+    return String.Join(", ", fields.Select(x => $"x.{x}")); //$"boost(x.{x}, {_boost})"));
   }
 
   internal bool CanModify(Type type)
@@ -107,6 +109,12 @@ public class SearchIndexMap<T> : SearchIndexMap where T : ZeroEntity
   public SearchIndexMap<T> Fields(params string[] fieldNames)
   {
     _fields = fieldNames;
+    return this;
+  }
+
+  public SearchIndexMap<T> Boost(float boostValue)
+  {
+    _boost = boostValue;
     return this;
   }
 }

@@ -182,6 +182,11 @@
     {
       margin-top: 2px;
     }
+
+    &:hover .app-search-item-group
+    {
+      background: var(--color-bg-shade-1);
+    }
   }
 
   .app-search-item-text
@@ -192,12 +197,20 @@
     position: relative;
     top: 1px;
     font-size: var(--font-size);
+    flex-grow: 0;
+    width: 100%;
+    overflow: hidden;
 
     .-minor
     {
+      display: block;
+      white-space: nowrap;
       font-size: var(--font-size-xs);
       color: var(--color-text-dim);
       margin-left: 0.5em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-grow: 0;
 
       span
       {
@@ -214,7 +227,7 @@
     font-size: var(--font-size-xs);
     color: var(--color-text);
     font-weight: 600;
-    background: var(--color-table-highlight);
+    background: var(--color-bg-shade-2);
     padding: 4px 12px;
     border-radius: 20px;
   }
@@ -233,7 +246,7 @@
     border-bottom-left-radius: var(--radius);
     border-bottom-right-radius: var(--radius);
     background: var(--color-bg-shade-2);
-    border-top: 1px solid var(--color-line-dashed);
+    //border-top: 1px solid var(--color-line-onbg);
     padding: var(--padding-s) var(--padding-s);
     font-size: var(--font-size-s);
     align-items: center;

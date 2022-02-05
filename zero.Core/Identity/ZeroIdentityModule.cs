@@ -29,5 +29,14 @@ internal class ZeroIdentityModule : ZeroModule
       .AddZeroBackofficeCookie<ZeroUser, ZeroUserRole>();
 
     services.AddAuthorization();
+
+    services.Configure<ZeroSearchOptions>(opts =>
+    {
+      opts.Map<ZeroUser>("fth-user-check").Boost(5).Display((x, res) =>
+      {
+        res.Description = x.Email;
+        res.Url = "/settings/users/edit/" + x.Id;
+      });
+    });
   }
 }

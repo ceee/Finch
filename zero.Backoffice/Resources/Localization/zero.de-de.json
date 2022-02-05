@@ -766,12 +766,18 @@
       "search": "Suchen"
     },
     "input_placeholder": "Gehe zu...",
-    "native_hint": "Drücke <code>STRG+F</code> erneut um die native Browsersuche zu verwenden",
+    "native_hint": "Drücke erneut <code>STRG+F</code> um die native Browsersuche zu verwenden",
     "native_toggle": "Öffnen mit <code>STRG+F</code>",
     "noresults": "Keine Ergebnisse",
     "collection": {
       "page": "Seite",
-      "mediafolder": "Medien"
+      "mediafolder": "Medien",
+      "country": "Land",
+      "language": "Sprache",
+      "translation": "Übersetzung",
+      "zeroUser": "Benutzer",
+      "application": "App",
+      "mailTemplate": "Mail"
     }
   },
 

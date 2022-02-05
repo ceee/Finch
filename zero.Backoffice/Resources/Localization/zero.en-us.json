@@ -817,7 +817,13 @@
     "noresults": "No results",
     "collection": {
       "page": "Page",
-      "mediaFolder": "Media folder"
+      "mediaFolder": "Media folder",
+      "country": "Country",
+      "language": "Language",
+      "translation": "Translation",
+      "zeroUser": "User",
+      "application": "App",
+      "mailTemplate": "Mail"
     }
   },
 

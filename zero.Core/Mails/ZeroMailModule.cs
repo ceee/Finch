@@ -15,5 +15,14 @@ internal class ZeroMailModule : ZeroModule
     {
       opts.BuildViewPath = mail => $"~/Views/Mails/{mail.Template.Key.Replace('.', '/')}.cshtml";
     });
+
+    services.Configure<ZeroSearchOptions>(opts =>
+    {
+      opts.Map<MailTemplate>("fth-mail").Fields("Key").Display((x, res) =>
+      {
+        res.Description = x.Key;
+        res.Url = "/settings/mailtemplates/edit/" + x.Id;
+      });
+    });
   }
 }
