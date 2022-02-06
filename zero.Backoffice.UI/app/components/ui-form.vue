@@ -116,12 +116,12 @@
       // loads data on creation of the form
       async load(promise)
       {
-        this.setState('loading');
+        this.loadingState = 'loading';
         const response = await promise();
 
         if (!response.success)
         {
-          this.setState('error');
+          this.loadingState = 'error';
           if (response.errors)
           {
             this.loadingError = response.errors[0].message;
@@ -130,7 +130,7 @@
         }
 
         this.canEdit = true;
-        this.setState('default');
+        this.loadingState = 'default';
         this.$nextTick(() =>
         {
           this.$emit('loaded', this);

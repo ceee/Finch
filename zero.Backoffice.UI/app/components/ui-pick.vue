@@ -44,7 +44,7 @@
 
       <!-- items -->
       <div class="ui-pick-overlay-items">
-        <button v-for="item in items" :key="item[configuration.keys.id]" type="button" class="ui-pick-overlay-item" @click="select(item)" :class="{'is-selected': isSelected(item) }">
+        <button v-for="item in items" :key="item[configuration.keys.id]" type="button" class="ui-pick-overlay-item" @click="select(item)" :class="{'is-selected': isSelected(item) }" :disabled="item.disabled">
           <ui-icon v-if="item[configuration.keys.icon] && !configuration.list.iconAsImage" class="-icon" :symbol="item[configuration.keys.icon]" />
           <span v-if="item[configuration.keys.icon] && configuration.list.iconAsImage" class="-image">
             <ui-thumbnail :media="item[configuration.keys.icon]" :alt="item[configuration.keys.name]" />
@@ -697,6 +697,11 @@
     align-items: center;
     transition: background .2s, transform .2s, opacity .2s;
     position: relative;
+
+    &[disabled]
+    {
+      opacity: .6;
+    }
 
     &:hover
     {
