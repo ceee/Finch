@@ -14,8 +14,10 @@ public class StoreContext : IStoreContext
 
   public IServiceProvider Services { get; private set; }
 
+  public IMessageAggregator Messages { get; private set; }
 
-  public StoreContext(IZeroContext context, IInterceptors interceptors, IStoreCache cache, IServiceProvider serviceProvider)
+
+  public StoreContext(IZeroContext context, IInterceptors interceptors, IStoreCache cache, IServiceProvider serviceProvider, IMessageAggregator messages)
   {
     Store = context.Store;
     Options = context.Options;
@@ -23,6 +25,7 @@ public class StoreContext : IStoreContext
     Interceptors = interceptors;
     Cache = cache;
     Services = serviceProvider;
+    Messages = messages;
   }
 }
 
@@ -40,4 +43,6 @@ public interface IStoreContext
   IStoreCache Cache { get; }
 
   IServiceProvider Services { get; }
+
+  IMessageAggregator Messages { get; }
 }

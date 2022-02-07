@@ -25,6 +25,8 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
 
   protected IZeroOptions Options { get; private set; }
 
+  protected IMessageAggregator Messages { get; private set; }
+
 
   public EntityStore(IStoreContext ctx)
   {
@@ -32,6 +34,8 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
     Interceptors = ctx.Interceptors;
     Options = ctx.Options;
     Operations = new StoreOperations(ctx);
+    Messages = ctx.Messages;
+
   }
 
 

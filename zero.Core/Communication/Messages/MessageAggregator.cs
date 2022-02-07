@@ -27,7 +27,7 @@ public class MessageAggregator : IMessageAggregator
 
 
   /// <inheritdoc />
-  public void Subscribe<TMessage, TMessageHandler>()
+  public void Activate<TMessage, TMessageHandler>()
     where TMessage : class, IMessage
     where TMessageHandler : IMessageHandler<TMessage>
   {
@@ -46,7 +46,7 @@ public interface IMessageAggregator
   /// <summary>
   /// Subscribes the specified handler to the spified message type
   /// </summary>
-  void Subscribe<TMessage, TMessageHandler>()
+  void Activate<TMessage, TMessageHandler>()
     where TMessage : class, IMessage
     where TMessageHandler : IMessageHandler<TMessage>;
 }
