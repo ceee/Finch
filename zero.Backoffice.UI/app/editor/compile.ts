@@ -6,6 +6,7 @@ import { createBlueprintConfig } from "./editor-blueprint";
 import { ZeroEditorCanvasBase, ZeroEditorTab } from "./editor-canvas";
 import { ZeroEditorFieldConfiguration, ZeroEditorFieldFilterPreview } from "./editor-field";
 import { localize } from '../services/localization';
+import { selectorToArray, setObjectValue } from '../utils';
 
 
 let appliedExtensionsTo: string[] = [];
@@ -57,7 +58,9 @@ export interface ZeroCompiledEditorField
   fieldType: string;
   options: any | null;
   component: Component;
+  selector: string[];
 
+  getValue: (model: any) => any;
   optional: (model: any, parent: any) => boolean;
   readonly: (model: any, parent: any) => boolean;
   hidden: (model: any, parent: any) => boolean;
@@ -83,12 +86,47 @@ export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorFi
     return undefined;
   }
 
+  let selector = selectorToArray(field.path);
+
   let model = {
     configuration: field.configuration,
     fieldType: field.fieldType,
     options: field.options,
     path: field.path,
     component,
+    selector,
+
+    getValue(model: any)
+    {
+      let currentValue = model;
+      let result = null;
+      let found = false;
+
+      if (!selector || !selector.length || !currentValue)
+      {
+        found = true;
+        result = null;
+      }
+      else
+      {
+        for (var key of selector)
+        {
+          if (currentValue && key in currentValue)
+          {
+            found = true;
+            currentValue = currentValue[key];
+          }
+          else
+          {
+            break;
+          }
+        }
+
+        result = found ? currentValue : null;
+      }
+
+      return result;
+    },
 
     optional(model: any, parent: any)
     {

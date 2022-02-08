@@ -1,27 +1,26 @@
 ﻿-<template>
-  <ui-property v-if="loaded && !field.hidden(value)"
-               :field="field.path"
-               :hide-label="field.hideLabel"
-               :label="field.label"
-               :description="description"
-               :required="!field.optional(value)"
-               :disabled="isDisabled"
-               :vertical="!field.horizontal"
-               :class="{'is-disabled': isDisabled }"
-               :locked="isLocked"
-               :can-unlock="canUnlock || false"
-               @unlock="unlock"
-               @lock="lock"
-               >
-    <component :is="field.component" v-bind="field.options" 
-               :value="model" 
-               :config="config"
-               :meta="meta"
-               @input="onChange" />
-    <template v-slot:after>
-      <p v-if="field.helpText" class="ui-property-help" v-localize="field.helpText"></p>
-    </template>
-  </ui-property>
+   <ui-property v-if="loaded && !field.hidden(value)"
+                :field="field.path"
+                :hide-label="field.hideLabel"
+                :label="field.label"
+                :description="description"
+                :required="!field.optional(value)"
+                :disabled="isDisabled"
+                :vertical="!field.horizontal"
+                :class="{'is-disabled': isDisabled }"
+                :locked="isLocked"
+                :can-unlock="canUnlock || false"
+                @unlock="unlock"
+                @lock="lock">
+     <component :is="field.component" v-bind="field.options"
+                :value="model"
+                :config="{ model: value, field, meta, disabled: isDisabled, system }"
+                :meta="meta"
+                @input="onChange" />
+     <template v-slot:after>
+       <p v-if="field.helpText" class="ui-property-help" v-localize="field.helpText"></p>
+     </template>
+   </ui-property>
 </template>
 
 
@@ -55,19 +54,18 @@
       }
     },
 
-    //watch: {
-    //  value: {
-    //    deep: true,
-    //    handler: function ()
-    //    {
-    //      this.rebuildModel();
-    //    }
-    //  }
-    //},
+    watch: {
+      value: {
+        deep: true,
+        handler: function (val)
+        {
+          this.model = this.field.getValue(val);
+        }
+      }
+    },
 
     data: () => ({
       model: null,
-      config: {},
       loaded: false,
       manualDisabled: false,
       selector: null
@@ -75,7 +73,7 @@
 
     mounted()
     {
-      this.rebuildModel();
+      this.model = this.field.getValue(this.value);
       this.loaded = true;
     },
 
@@ -100,45 +98,6 @@
 
     methods: {
 
-      rebuildModel()
-      {
-        this.config = {
-          model: this.value,
-          field: this.field,
-          meta: this.meta,
-          disabled: this.isDisabled,
-          system: this.system
-        };
-
-        this.selector = selectorToArray(this.field.path);
-        let currentValue = this.value;
-        let found = false;
-
-        if (!this.selector || !this.selector.length || !currentValue)
-        {
-          found = true;
-          this.model = null;
-        }
-        else
-        {
-          for (var key of this.selector)
-          {
-            if (currentValue && key in currentValue)
-            {
-              found = true;
-              currentValue = currentValue[key];
-            }
-            else
-            {
-              break;
-            }
-          }
-
-          this.model = found ? currentValue : null;
-        }
-      },
-
-
       onChange(value)
       {
         let oldValue = JSON.parse(JSON.stringify(this.model));
@@ -149,7 +108,7 @@
         }
         else
         {
-          setObjectValue(this.value, this.selector, value);
+          setObjectValue(this.value, this.field.selector, value);
         }
 
         this.$emit('input', this.value);

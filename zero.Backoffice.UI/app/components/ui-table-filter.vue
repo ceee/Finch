@@ -62,7 +62,7 @@
       hasFilter: false,
       filterOptions: null,
       //hideFilter: true,
-      //hideSelection: true,
+      hideSelection: false,
       selection: [],
       storedFilters: [],
       currentFilter: null,
