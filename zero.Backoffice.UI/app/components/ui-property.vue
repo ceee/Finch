@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="ui-property" :class="{'is-vertical': vertical, 'is-text': isText, 'hide-label': hideLabel, 'is-disabled': disabled, 'is-locked': locked, 'can-unlock': canUnlock }">
     <label v-if="label && !hideLabel" class="ui-property-label" :for="field" v-localize:title="description" :class="{ 'has-description': !!description }">
-      <button type="button" v-if="canUnlock" class="ui-property-label-small is-lock" :class="{'is-unlocked': !locked}" :title="locked ? 'Unlock property...' : 'Lock property'" @click="$emit(locked ? 'unlock' : 'lock')">
+      <button type="button" v-if="canUnlock" class="ui-property-label-small is-lock" :class="{'is-unlocked': !locked}" :title="locked ? 'Unlock property...' : 'Lock property'" @click.prevent="$emit(locked ? 'unlock' : 'lock')">
         <ui-icon :size="13" :symbol="locked ? 'fth-lock' : 'fth-unlock'"></ui-icon>
       </button>
       <span v-localize="label"></span>
@@ -211,6 +211,11 @@
       &.is-unlocked
       {
         color: var(--color-text);
+      }
+
+      .is-locked &
+      {
+        color: var(--color-accent-error);
       }
     }
   }

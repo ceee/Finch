@@ -223,7 +223,7 @@
 
         if (this.previews.length > 0)
         {
-          html += ': <b>' + this.previews.map(p => p[this.configuration.keys.name]).join(', ') + '</b>';
+          html += (html ? ': ' : '') + '<b>' + this.previews.map(p => p[this.configuration.keys.name]).join(', ') + '</b>';
         }
 
         return html;

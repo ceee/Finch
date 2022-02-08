@@ -55,15 +55,15 @@
       }
     },
 
-    watch: {
-      value: {
-        deep: true,
-        handler: function ()
-        {
-          this.rebuildModel();
-        }
-      }
-    },
+    //watch: {
+    //  value: {
+    //    deep: true,
+    //    handler: function ()
+    //    {
+    //      this.rebuildModel();
+    //    }
+    //  }
+    //},
 
     data: () => ({
       model: null,

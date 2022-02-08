@@ -100,3 +100,8 @@ export function arrayDifference(array: any[], other: any[]): any[]
 {
   return _difference(array, other);
 }
+
+export function arrayContainsAll(array: any[], other: any[]): boolean
+{
+  return other.every(x => array.indexOf(x) > -1);
+}

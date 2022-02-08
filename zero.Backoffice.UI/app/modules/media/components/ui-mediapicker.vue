@@ -70,6 +70,7 @@
         }
 
         this.$emit('input', value);
+        this.$emit('update:value', value);
       },
 
       async onSortingUpdated(ev)

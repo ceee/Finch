@@ -1,4 +1,4 @@
-import { Component } from "vue";
+import { Component, markRaw } from "vue";
 import { ZeroEditorField, ZeroEditorDisplay } from "zero/schemas";
 import { Zero } from "../core";
 import { ZeroEditor } from "./editor";
@@ -76,7 +76,7 @@ export interface ZeroCompiledEditorField
 
 export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorField): ZeroCompiledEditorField | undefined
 {
-  const component = field.customComponent || zero.getFieldTypeComponent(field.fieldType);
+  const component = markRaw(field.customComponent || zero.getFieldTypeComponent(field.fieldType));
 
   if (!component)
   {

@@ -1,4 +1,4 @@
-﻿import { Component } from "vue";
+﻿import { Component, markRaw } from "vue";
 import { ZeroEditorField } from "zero/schemas";
 import { extendObject } from '../utils/objects';
 
@@ -92,7 +92,7 @@ export class ZeroEditorFieldImpl implements ZeroEditorField
    */
   component(component: Component, options?: any): ZeroEditorField
   {
-    this.customComponent = component;
+    this.customComponent = markRaw(component);
     this.options = options;
     return this;
   }
