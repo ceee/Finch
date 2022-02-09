@@ -1,7 +1,7 @@
 
 import { groupBy as _groupBy, difference as _difference } from 'underscore';
 
-const arrayMoveMutate = (array: any[], from: number, to: number) =>
+export function arrayMoveRef(array: any[], from: number, to: number): any[]
 {
   const startIndex = to < 0 ? array.length + to : to;
   const item = array.splice(from, 1)[0];
@@ -15,7 +15,7 @@ const arrayMoveMutate = (array: any[], from: number, to: number) =>
 export function arrayMove(array: any[], from: number, to: number): any[]
 {
   array = array.slice();
-  arrayMoveMutate(array, from, to);
+  arrayMoveRef(array, from, to);
   return array;
 }
 

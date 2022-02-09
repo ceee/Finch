@@ -53,7 +53,7 @@ public class ZeroDocumentStore : DocumentStore, IZeroDocumentStore
       session.IsDisposed = true;
     };
 
-    session.Advanced.WaitForIndexesAfterSaveChanges(TimeSpan.FromSeconds(3), throwOnTimeout: false);
+    session.Advanced.WaitForIndexesAfterSaveChanges(TimeSpan.FromSeconds(0.5), throwOnTimeout: false);
     session.Advanced.DocumentStore.AggressivelyCacheFor(TimeSpan.FromHours(1), options.Database); // TODO I guess this will not work in backoffice when we want to see changes immediately
     // maybe use caching for frontend but not for backoffice?
 
