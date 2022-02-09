@@ -22,12 +22,24 @@
     methods: {
       onChange(value)
       {
-        var parsedValue = parseFloat(value);
+        let parsedValue = null;
+        let optional = this.config.field.optional(this.config.model);
 
-        if (isNaN(parsedValue))
+        if (value !== null && value.trim() === '')
         {
-          return;
+          parsedValue = optional ? null : 0;
         }
+        else
+        {
+          parsedValue = parseFloat(value);
+
+          if (isNaN(parsedValue))
+          {
+            return;
+          }
+        }
+
+        console.info('val', parsedValue);
 
         this.$emit('input', parsedValue);
       }
