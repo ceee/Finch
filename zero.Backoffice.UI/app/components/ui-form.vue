@@ -276,7 +276,7 @@
         let errorGroups = arrayGroupBy(this.errors, 'property');
         let handledGroups = [];
 
-        console.info({ errorComponents, errorGroups });
+        //console.info({ errorComponents, errorGroups });
 
         // set errors
         errorComponents.forEach(component =>

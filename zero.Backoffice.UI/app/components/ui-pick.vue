@@ -146,13 +146,15 @@
       // hides the search input
       enabled: true,
       // can force a local search for remote items (via promise)
-      local: true,
+      local: false,
       // sets the current model as the search input when opened
       setDefaultValue: false,
       // focus search input on open
       focus: false,
       // placeholder key in search input
-      placeholder: null //vm.options.autocomplete ? 'ui_search_autocomplete' : 'ui_search',
+      placeholder: null, //vm.options.autocomplete ? 'ui_search_autocomplete' : 'ui_search',
+      // function for local search filtering
+      filterFunc: null
     }
   };
 
@@ -406,7 +408,15 @@
         {
           if (!this.isRemote || this.configuration.search.local)
           {
-            items = this.allItems.filter((item) => item.name.toLowerCase().indexOf(search) > -1);
+            let query = search.toLowerCase();
+            let filterFunc = this.configuration.search.filterFunc;
+
+            if (!filterFunc)
+            {
+              filterFunc = (item, q, cfg) => item[cfg.keys.name].toLowerCase().indexOf(q) > -1;
+            }
+
+            items = this.allItems.filter(item => filterFunc(item, query, this.configuration));
           }
           else if (this.isRemote)
           {
