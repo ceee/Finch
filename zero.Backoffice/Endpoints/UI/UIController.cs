@@ -105,7 +105,7 @@ public class UIController : ZeroBackofficeController
 
     if (media == null)
     {
-      return null;
+      return NotFound();
     }
 
     try
