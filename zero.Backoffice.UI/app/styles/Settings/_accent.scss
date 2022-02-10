@@ -3,7 +3,7 @@
 // theme-agnostic colors
 :root
 {
-  --color-accent: #009ae5; // #f9aa19 yellow // #76b900 // #67bdb1 // #009ae5 blue
+  --color-accent: #109088; // #f9aa19 yellow // #76b900 // #67bdb1 // #009ae5 blue // #109088 green
   --color-accent-fg: #fff;
 
   --color-negative: rgb(216, 40, 83);
@@ -15,9 +15,9 @@
   --color-accent-info-bg: rgba(228, 242, 249, 0.6);
   --color-accent-success: rgb(47, 187, 152);
   --color-accent-success-bg: rgba(47, 187, 152, 0.1);
-  --color-accent-warn: rgb(247, 125, 5);
+  --color-accent-warn: rgb(247, 125, 5); // #f7e29a
   --color-accent-warn-bg: rgba(247, 125, 5, 0.1);
-  --color-accent-error: rgb(216, 40, 83);
+  --color-accent-error: rgb(216, 40, 83); // #f48a69
   --color-accent-error-bg: rgba(216, 40, 83, 0.08);
 }
 
