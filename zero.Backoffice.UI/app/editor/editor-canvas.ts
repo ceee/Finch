@@ -1,5 +1,6 @@
 ﻿import { ZeroEditorField } from "zero/schemas";
 import { ZeroEditorFieldImpl, ZeroEditorFieldConfiguration, createFieldProxy } from "./editor-field";
+import { arrayRemove } from '../utils';
 
 
 export class ZeroEditorCanvasBase
@@ -25,6 +26,16 @@ export class ZeroEditorCanvasBase
   getField(path: string): ZeroEditorField | undefined
   {
     return this.fields.find(x => x.path == path);
+  }
+
+  removeField(path: string): void
+  {
+    let field = this.getField(path);
+
+    if (field)
+    {
+      arrayRemove(this.fields, field);
+    }
   }
 }
 
