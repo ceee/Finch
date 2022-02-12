@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 
@@ -63,12 +64,45 @@ public class UserService : IUserService
     bool updateSecurityStamp = false;
     bool isUpdate = false;
 
-    if (!model.Id.IsNullOrEmpty())
+    ZeroUser input = model;
+
+    if (model.Id.HasValue())
     {
-      // TODO throws "Attempted to associate a different object with id ..."
-      //ZeroUser origin = await GetUserById(model.Id);
-      isUpdate = true; // origin != null;
+      model = await GetUserById(model.Id);
+
+      if (model != null)
+      {
+        if (input.PasswordHash.StartsWith("raw:"))
+        {
+          string newPassword = input.PasswordHash.Substring(4);
+          model.PasswordHash = UserManager.PasswordHasher.HashPassword(model, newPassword);
+        }
+
+        ObjectCopycat.CopyProperties(input, model, nameof(ZeroUser.PasswordHash), nameof(ZeroUser.SecurityStamp));
+      }
+
+      isUpdate = model != null;
       updateSecurityStamp = true; // origin != null && model.PasswordHash != origin.PasswordHash;
+    }
+    else
+    {
+      // this is bullshit ;-)
+      model.AppId = "app.hofbauer";
+      model.CurrentAppId = "app.hofbauer";
+      model.RoleIds = new List<string>()
+      {
+        "userRoles.c9ozj4vboing",
+        "userRoles.nc5ezcu660fo"
+      };
+    }
+
+    model.Username = model.Email?.ToUpper();
+    BackofficeUserValidator validator = new(!isUpdate);
+    ValidationResult validation = await validator.ValidateAsync(model);
+
+    if (!validation.IsValid)
+    {
+      return Result<ZeroUser>.Fail(validation);
     }
 
     Result<ZeroUser> result = isUpdate ? await Operations.Update(model) : await Operations.Create(model);

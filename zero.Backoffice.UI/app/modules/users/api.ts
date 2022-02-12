@@ -8,11 +8,13 @@ export default {
 
   getByQuery: (query: ApiRequestQuery, config?: ApiRequestConfig) => get('users', { ...config, params: { ...query } }),
 
-  //create: (model: any, config?: ApiRequestConfig) => post('countries', model, config),
+  create: (model: any, config?: ApiRequestConfig) => post('users', model, config),
 
   update: (model: any, config?: ApiRequestConfig) => put('users/' + model.id, model, config),
 
-  //delete: (id: string, config?: ApiRequestConfig) => del('countries/' + id, null, config),
+  delete: (id: string, config?: ApiRequestConfig) => del('users/' + id, null, config),
+
+  getRandomPassword: (length?: number, config?: ApiRequestConfig) => get("users/password/random" + (length ? '/' + length : ''), { ...config }),
 
   //updatePassword: async model => await post(base + 'updatePassword', model),
 

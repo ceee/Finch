@@ -31,6 +31,9 @@ public class UsersController : ZeroApiController
       return NotFound();
     }
 
+    model.PasswordHash = null;
+    model.SecurityStamp = null;
+
     //HttpContext.Items[ApiConstants.ChangeToken] = Store.GetChangeToken(model);
 
     return model;
@@ -48,9 +51,21 @@ public class UsersController : ZeroApiController
   }
 
 
-  //[HttpPost("")]
-  //[ZeroAuthorize(UserPermissions.Create)]
-  //public virtual Task<ActionResult<Result>> Create(ZeroUser saveModel) => CreateModel(saveModel);
+  [HttpPost("")]
+  [ZeroAuthorize(UserPermissions.Create)]
+  public virtual async Task<ActionResult<Result>> Create(ZeroUser saveModel)
+  {
+    Result<ZeroUser> result = await Users.Save(saveModel);
+
+    bool minimalResponse = Hints.ResponsePreference == ApiResponsePreference.Minimal;
+
+    if (result.IsSuccess)
+    {
+      return Created("/", minimalResponse ? null : saveModel);
+    }
+
+    return result.WithoutModel();
+  }
 
 
   [HttpPut("{id}")]
@@ -73,7 +88,22 @@ public class UsersController : ZeroApiController
   }
 
 
-  //[HttpDelete("{id}")]
-  //[ZeroAuthorize(UserPermissions.Delete)]
-  //public virtual Task<ActionResult<Result>> Delete(string id) => DeleteModel(id);
+  [HttpDelete("{id}")]
+  [ZeroAuthorize(UserPermissions.Delete)]
+  public virtual async Task<ActionResult<Result>> Delete(string id)
+  {
+    Result<ZeroUser> result = await Users.Delete(id);
+    return result.WithoutModel();
+  }
+
+
+  [HttpGet("password/random/{length?}")]
+  [ZeroAuthorize(UserPermissions.Read)]
+  public virtual ActionResult<dynamic> Password(int length = -1)
+  {
+    return new
+    {
+      Password = PasswordGenerator.Random(length)
+    };
+  }
 }

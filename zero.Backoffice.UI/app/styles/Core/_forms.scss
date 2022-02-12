@@ -37,6 +37,11 @@ textarea, .ui-native-select, .ui-rte-input, .flatpickr-current-month
     box-shadow: var(--color-input-focus-shadow);
     outline: none;
   }
+
+  &:read-only, &:-moz-read-only, &[readonly]:focus
+  {
+    outline: none !important;
+  }
 }
 
 select:focus

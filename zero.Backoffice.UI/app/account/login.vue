@@ -1,16 +1,15 @@
 ﻿<template>
   <div class="app-auth">
     <span></span>
-    <form class="app-auth-inner" @submit.prevent="onSubmit">
+    <ui-form class="app-auth-inner" v-slot="form" @submit="onSubmit">
       <div>
         <div class="app-auth-logo">
           <span class="app-nav-logo-circle"></span>
           <img src="/Assets/zero.svg" class="app-auth-image show-light" v-localize:alt="'@zero.name'" />
           <img src="/Assets/zero-dark.svg" class="app-auth-image show-dark" v-localize:alt="'@zero.name'" />
         </div>
-
-        <!--<ui-error :catch-remaining="true" />
-        <ui-message type="info" v-if="rejectReason" :text="rejectReason" />-->
+        
+        <ui-error :catch-remaining="true" />
 
         <ui-property field="email" label="@login.fields.email" :vertical="true">
           <input v-model="model.email" type="text" class="ui-input" maxlength="120" v-localize:placeholder="'@login.fields.email_placeholder'" />
@@ -23,10 +22,10 @@
       </div>
 
       <div class="app-auth-bottom">
-        <ui-button class="app-auth-confirm" type="accent big" :submit="true" label="@login.button" :state="state" />
+        <ui-button class="app-auth-confirm" type="accent big" :submit="true" label="@login.button" :state="form.state" />
         <!--<ui-button type="blank" label="@login.button_forgot" />-->
       </div>
-    </form>
+    </ui-form>
   </div>
 </template>
 
@@ -42,7 +41,6 @@
 
     data: () => ({
       rejectReason: null,
-      state: 'default',
       model: {
         email: '',
         password: '',
@@ -61,7 +59,7 @@
         const accountStore = useAccountStore();
 
         this.rejectReason = null;
-        this.state = 'loading';
+        form.setState('loading');
 
         const response = await api.login(this.model);
 
@@ -72,12 +70,16 @@
           if (userResponse.success)
           {
             this.zero.events.emit('zero.authenticate', userResponse.data);
-            this.state = 'success';
+            form.handle(response);
             return;
           }
         }
+        else
+        {
+          form.handle(response);
+        }
 
-        this.state = 'error';
+        //this.state = 'error';
         return;
       }
     }

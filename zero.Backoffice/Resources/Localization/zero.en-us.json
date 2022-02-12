@@ -314,6 +314,8 @@
   "changepasswordoverlay": {
     "title": "Change password",
     "confirm": "Change password",
+    "regenerate": "Regenerate",
+    "regenerate_help": "Copy the new password before updating the user",
     "fields": {
       "currentPassword": "Current password",
       "newPassword": "New password",

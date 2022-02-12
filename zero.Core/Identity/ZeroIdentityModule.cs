@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +18,7 @@ internal class ZeroIdentityModule : ZeroModule
     services.AddZeroIdentity<ZeroUser, ZeroUserRole>();
     services.Replace<IUserClaimsPrincipalFactory<ZeroUser>, ZeroBackofficeClaimsPrincipalFactory<ZeroUser, ZeroUserRole>>();
     services.Replace<IUserStore<ZeroUser>, RavenCoreUserStore<ZeroUser, ZeroUserRole>>(ServiceLifetime.Scoped);
+    services.AddScoped<IValidator<ZeroUser>, BackofficeUserValidator>();
     services.Replace<IRoleStore<ZeroUserRole>, RavenCoreRoleStore<ZeroUserRole>>(ServiceLifetime.Scoped);
     services.AddSingleton<IAuthenticationSchemeProvider, ZeroAuthenticationSchemeProvider>();
 

@@ -1,5 +1,6 @@
 ﻿
 import { ZeroEditor } from "../../../editor/editor";
+import UiPasswordHash from '../../../components/ui-password-hash.vue';
 //import Permissions from 'zero/components/permissions.vue';
 
 const editor = new ZeroEditor('users');
@@ -18,7 +19,7 @@ permissions.hidden = x => !x.id;
 
 general.field('name', { label: '@ui.name' }).text({ maxLength: 80 });
 general.field('email').text({ maxLength: 120 });
-general.field('passwordHash', { hidden: x => !x.id }).passwordHash();
+general.field('passwordHash', { hidden: x => !x.id }).component(UiPasswordHash);
 general.field('languageId').culturePicker();
 general.field('avatarId', { optional: true }).image();
 //permissions.field('claims', { hideLabel: true }).custom(Permissions);

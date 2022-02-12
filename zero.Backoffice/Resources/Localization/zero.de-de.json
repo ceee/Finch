@@ -302,6 +302,8 @@
   "changepasswordoverlay": {
     "title": "Passwort ändern",
     "confirm": "Passwort ändern",
+    "regenerate": "Neu generieren",
+    "regenerate_help": "Kopiere das neue Passwort, bevor du den Benutzer speicherst",
     "fields": {
       "currentpassword": "Aktuelles Passwort",
       "newpassword": "Neues Passwort",
