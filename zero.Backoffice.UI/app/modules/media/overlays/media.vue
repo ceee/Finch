@@ -86,7 +86,10 @@
       gridConfig: {
         width: 180,
         selectable: true,
-        items: null
+        items: null,
+        page: 1,
+        pageSize: 50,
+        setQuery: false
       },
     }),
 
@@ -120,7 +123,9 @@
 
     mounted()
     {
-      this.parentId = this.config.parentId;
+      this.parentId = this.config.model.parentId;
+      this.search = this.config.model.search;
+      this.gridConfig.page = this.config.model.page || 1;
       this.gridConfig.items = this.getItems;
       this.gridConfig.scrollContainerSelector = '.media-overlay content';
       this.loaded = true;
@@ -136,20 +141,19 @@
           query = {};
         }
 
-        query.pageSize = 50;
-
         if (!query.search || !this.hierarchy.length)
         {
           const hierarchy = await api.folders.getHierarchy(this.id);
           this.hierarchy = hierarchy.data;
         }
 
+
         if (query.search)
         {
           return await api.search(this.search, this.id, query);
         }
 
-        return await api.folders.getChildren(this.id, true, query);
+        return await api.folders.getChildren(this.id, true, { ...query });
       },
 
 
@@ -161,14 +165,20 @@
         }
         else
         {
-          this.config.confirm(item);
+          this.config.confirm({
+            item,
+            query: {
+              search: this.search,
+              parentId: this.parentId,
+              page: this.$refs.grid.filter.page
+            }
+          });
         }
       },
 
 
       async selectItem(id)
       {
-        console.info(id);
         this.parentId = id;
         await this.refresh();
       },

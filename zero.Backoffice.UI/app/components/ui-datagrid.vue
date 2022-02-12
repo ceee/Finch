@@ -59,7 +59,10 @@
     // whether the query params should be set for page + search
     setQuery: true,
     // custom scroll container
-    scrollContainerSelector: null
+    scrollContainerSelector: null,
+    // filter
+    page: 1,
+    pageSize: 30
   };
 
   export default {
@@ -87,13 +90,9 @@
       {
         this.filter.search = val;
       },
-      'value.items': function (val)
-      {
-        this.initialize();
-      },
       'filter.search': function (val)
       {
-        this.filter.page = 1;
+        //this.filter.page = 1;
         this.debouncedUpdate();
       }
     },
@@ -104,6 +103,7 @@
       isLoading: true,
       pages: 1,
       count: 0,
+      loaded: false,
       filter: {
         orderBy: null,
         orderIsDescending: true,
@@ -154,10 +154,16 @@
       // load items based on the current filter
       async load(initial)
       {
+        if (!this.loaded && !initial)
+        {
+          return;
+        }
+
         if (initial)
         {
-          this.filter.page = +this.$route.query.page || 1;
-          this.filter.search = this.$route.query.search;
+          this.filter.page = (!this.configuration.setQuery ? null : +this.$route.query.page) || this.configuration.page || 1;
+          this.filter.pageSize = this.configuration.pageSize || 30;
+          this.filter.search = (!this.configuration.setQuery ? null : this.$route.query.search) || this.configuration.search;
         }
 
         const result = await this.configuration.items(this.filter);
@@ -178,6 +184,11 @@
             this.$nextTick(() => container.scrollTo({ top: 0, behavior: 'smooth' }));
           }
         }
+
+        setTimeout(() =>
+        {
+          this.loaded = true;
+        }, 500);
       },
 
       // updates the list (debounced)
@@ -381,7 +392,7 @@
   }
 </script>
 
-<style>
+<style lang="scss">
   .ui-datagrid-items
   {
     display: grid;
@@ -410,6 +421,11 @@
     text-align: center;
     padding: 0 20px;
     font-size: var(--font-size);
+
+    .ui-loading
+    {
+      left: 0;
+    }
   }
 
   .ui-datagrid-empty-icon

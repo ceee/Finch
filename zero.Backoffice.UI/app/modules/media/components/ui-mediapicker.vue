@@ -10,9 +10,11 @@
 
 <script>
   import api from '../api';
-  import { arrayMove } from '../../../utils';
+  import { arrayMove, generateId } from '../../../utils';
   import * as overlays from '../../../services/overlay';
   import MediaPreviews from './media-previews.vue';
+
+  let media_last_query = { parentId: null, search: null, page: 1 };
 
   export default {
     name: 'uiMediapicker',
@@ -91,14 +93,14 @@
           component: () => import('../overlays/media.vue'),
           display: 'editor',
           width: 1240,
-          model: {
-            parentId: null
-          }
+          model: { ...media_last_query }
         });
 
         if (result.eventType == 'confirm' && result.value)
         {
-          this.add(result.value);
+          let item = result.value.item;
+          media_last_query = JSON.parse(JSON.stringify(result.value.query));
+          this.add(item);
         }
       },
 
