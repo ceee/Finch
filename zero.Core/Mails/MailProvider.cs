@@ -87,7 +87,7 @@ public class MailProvider : IMailProvider
       await Render(message);
       dispatcher.Enqueue(message);
       await dispatcher.Send(token);
-      Logger.LogInformation("Dispatched email (template: {template}) to {recipient}", message.Template?.Alias ?? "none", message.To);
+      Logger.LogInformation("Dispatched email (template: {template}) to {recipient} (cc: {cc}, bcc: {bcc})", message.Template?.Alias ?? "none", message.To, message.CC, message.Bcc);
     }
     catch (Exception ex)
     {

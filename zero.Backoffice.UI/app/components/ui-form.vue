@@ -171,6 +171,7 @@
       {
         if (!this.submitBlocked)
         {
+          this.setState('loading');
           this.$emit('submit', this, e);
         }
       },
