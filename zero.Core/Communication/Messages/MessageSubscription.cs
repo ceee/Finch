@@ -23,8 +23,12 @@ internal class MessageSubscription<TMessage, TMessageHandler> : IMessageSubscrip
       throw new ArgumentException($"{ nameof(message) } must be of type '{typeof(TMessage).FullName}'");
     }
 
-    var handler = serviceProvider.GetRequiredService<TMessageHandler>();
-    await handler.Handle((TMessage)message);
+    var handlers = serviceProvider.GetServices<TMessageHandler>();
+
+    foreach (var handler in handlers)
+    {
+      await handler.Handle((TMessage)message);
+    }
   }
 }
 
