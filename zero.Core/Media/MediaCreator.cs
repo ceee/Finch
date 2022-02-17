@@ -74,14 +74,11 @@ public class MediaCreator : IMediaCreator
         imageFrame.Mutate(x => x.Resize(opts));
 
         using MemoryStream stream = new();
-        await imageFrame.SaveAsync(stream, new JpegEncoder()
-        {
-          Quality = 80
-        }, cancellationToken);
+        await imageFrame.SaveAsync(stream, new PngEncoder(), cancellationToken);
 
         stream.Position = 0;
 
-        string thumbFilename = normalizedFilename.TrimEnd(extension) + "." + Safenames.File(key) + ".jpg";
+        string thumbFilename = normalizedFilename.TrimEnd(extension) + "." + Safenames.File(key) + ".png";
         string path = directory + '/' + thumbFilename;
 
         await FileSystem.CreateFile(path, stream, cancellationToken: cancellationToken);
