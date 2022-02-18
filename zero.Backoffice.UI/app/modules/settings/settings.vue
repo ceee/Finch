@@ -3,7 +3,7 @@
     <div class="settings-group" v-for="group in groups">
       <h2 class="ui-headline settings-group-headline" v-localize="group.name"></h2>
       <div class="settings-group-items">
-        <ui-link :to="item.url || '/'" v-for="item in group.items" :key="item.name" class="settings-group-item">
+        <component :is="getComponent(item)" :to="item.url || '/'" @click="onItemClick($event, item)" type="button" v-for="item in group.items" :key="item.name" class="settings-group-item">
           <span class="settings-group-item-icon">
             <ui-icon :symbol="item.icon || 'fth-settings'" :size="18" />
             <span v-if="item.alias === 'applications'" class="settings-group-item-count">{{appCount}}</span>
@@ -15,7 +15,7 @@
               <ui-localize :value="item.description" :tokens="tokens" />
             </template>
           </p>
-        </ui-link>
+        </component>
       </div>
     </div>
     <div class="settings-footer" v-if="meta">
@@ -57,17 +57,22 @@
 
       this.groups = useUiStore().settingGroups;
       this.appCount = useAppStore().applications.length;
+    },
 
-      if (!this.groups[1].items.find(x => x.alias === 'demo'))
+    methods: {
+      getComponent(item)
       {
-        this.groups[1].items.push({
-          alias: "demo",
-          description: "Demo all editor components",
-          icon: "fth-box",
-          isPlugin: true,
-          name: "Components",
-          url: "/settings/demo"
-        });
+        return typeof item.action === 'function' ? 'button' : 'ui-link';
+      },
+
+      onItemClick(ev, item)
+      {
+        if (typeof item.action !== 'function')
+        {
+          return;
+        }
+
+        item.action();
       }
     }
   }
@@ -96,7 +101,7 @@
     margin-top: var(--padding-m);
   }
 
-  a.settings-group-item
+  a.settings-group-item, button.settings-group-item
   {
     color: var(--color-text);
     font-size: var(--font-size);
@@ -104,11 +109,6 @@
     grid-template-columns: auto 1fr;
     gap: 20px;
     align-items: center;
-
-    /*&:hover .settings-group-item-icon
-    {
-      transform: rotate(5deg);
-    }*/
   }
 
   .settings-group-item-icon
@@ -126,7 +126,7 @@
     position: relative;
   }
 
-  a.settings-group-item:hover .settings-group-item-icon
+  .settings-group-item:hover .settings-group-item-icon
   {
     color: var(--color-text);
   }
@@ -140,8 +140,21 @@
     strong
     {
       display: inline-block;
-      margin-bottom: 3px;
       color: var(--color-text);
+    }
+
+    span
+    {
+      color: var(--color-text-dim);
+      margin-top: 3px;
+      font-size: var(--font-size-s);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: normal;
+      -webkit-line-clamp: 1;
+      max-height: 16px;
     }
   }
 

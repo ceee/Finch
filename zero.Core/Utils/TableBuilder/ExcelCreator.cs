@@ -31,9 +31,9 @@ public class ExcelCreator<T> : ITableCreator<T>
   {
     Localizer = localizer;
     Columns = columns;
-    LinkText = localizer.Text("ui.link");
-    YesText = localizer.Text("ui.yes");
-    NoText = localizer.Text("ui.no");
+    LinkText = "Link"; // localizer.Text("ui.link");
+    YesText = "yes"; // localizer.Text("ui.yes");
+    NoText = "no"; // localizer.Text("ui.no");
   }
 
 

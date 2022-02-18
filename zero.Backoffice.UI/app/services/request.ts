@@ -93,6 +93,11 @@ export async function send(config: ApiRequestConfig)
 
 export function download(response: AxiosResponse)
 {
+  if (response.status != 200)
+  {
+    return;
+  }
+
   let filename = response.headers["zero-filename"] || 'download.bin';
 
   // code from: https://github.com/kennethjiang/js-file-download/blob/master/file-download.js

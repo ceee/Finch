@@ -1,5 +1,5 @@
 ﻿<template>
-  <i class="ui-loading" :class="{'is-big': isBig }"></i>
+  <i class="ui-loading" :class="{'is-big': isBig || big, 'is-small': small }"></i>
 </template>
 
 
@@ -7,6 +7,14 @@
   export default {
     props: {
       isBig: {
+        type: Boolean,
+        default: false
+      },
+      big: {
+        type: Boolean,
+        default: false
+      },
+      small: {
         type: Boolean,
         default: false
       }
@@ -33,6 +41,12 @@
       width: 36px;
       height: 36px;
       border-width: 2px;
+    }
+
+    &.is-small
+    {
+      width: 18px;
+      height: 18px;
     }
   }
 

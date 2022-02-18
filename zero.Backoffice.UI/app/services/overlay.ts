@@ -105,21 +105,25 @@ export function message(title: string, text?: string)
 }
 
 
-export function editor(editorAlias: string, model: any, title?: string, options?: OverlayOptions)
+export function editor(editorAlias: string, model: any, title?: string, confirmButton?: string, options?: OverlayOptions)
 {
-  return open(extendObject({
+  let fullOptions = extendObject({
     alias: 'editor',
     display: 'editor',
-    model: {
-      editor: editorAlias,
-      value: model,
-      title: title || '@ui.edit.title',
-    },
     autoclose: false,
     softdismiss: false,
     component: () => import('../editor/ui-editor-overlay.vue'),
     width: 820
-  }, options || {}));
+  }, options || {});
+
+  fullOptions.model = {
+    editor: editorAlias,
+    value: model,
+    title: title || '@ui.edit.title',
+    confirmButton: confirmButton || '@ui.confirm'
+  };
+
+  return open(fullOptions);
 }
 
 
