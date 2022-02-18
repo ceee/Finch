@@ -79,6 +79,7 @@
   import { debounce } from '../utils/timing';
   import { defineComponent } from 'vue';
   import Qs from 'qs';
+  import { compileList } from '../editor/compile';
 
 
   const tableValue = function (el, binding)
@@ -157,7 +158,8 @@
       async setup()
       {
         this.debouncedUpdate = debounce(this.update, 300);
-        this.listConfig = typeof this.config === 'string' ? await this.zero.getSchema(this.config) : this.config;
+        const schema = typeof this.config === 'string' ? await this.zero.getSchema(this.config) : this.config;
+        this.listConfig = compileList(this.zero, schema);
         this.itemComponentConfig = this.listConfig.componentConfig || { active: false };
         //this.listConfig.selectable = true;
         this.columns = this.listConfig.columns.map(column =>

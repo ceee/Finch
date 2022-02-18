@@ -14,6 +14,8 @@ public class TableColumn<T>
 
   public double Width { get; set; }
 
+  public bool IsBold { get; set; }
+
   public TableColumnType ColumnType { get; set; }
 
   public TableColumn<T> Type(TableColumnType type)
@@ -44,6 +46,12 @@ public class TableColumn<T>
   public TableColumn<T> Link()
   {
     ColumnType = TableColumnType.Link;
+    return this;
+  }
+
+  public TableColumn<T> Bold()
+  {
+    IsBold = true;
     return this;
   }
 }

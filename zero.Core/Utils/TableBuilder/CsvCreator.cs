@@ -22,14 +22,19 @@ public class CsvCreator<T> : ITableCreator<T>
 
   private const string DATE_FORMAT = "dd. MM. yyyy"; // TODO date format from culture
 
-  private const string BOOL_YES = "Ja"; // TODO translation
 
-  private const string BOOL_NO = "Nein";
+  private ILocalizer Localizer = null;
+
+  private string YesText = null;
+  private string NoText = null;
 
 
-  public CsvCreator(IEnumerable<TableColumn<T>> columns)
+  public CsvCreator(ILocalizer localizer, IEnumerable<TableColumn<T>> columns)
   {
+    Localizer = localizer;
     Columns = columns;
+    YesText = localizer.Text("ui.yes");
+    NoText = localizer.Text("ui.no");
   }
 
 
@@ -134,11 +139,11 @@ public class CsvCreator<T> : ITableCreator<T>
 
     if (value is string)
     {
-      property = (string)value;
+      property = Localizer.Maybe((string)value);
     }
     else if (value is bool)
     {
-      property = (bool)value ? BOOL_YES : BOOL_NO;
+      property = (bool)value ? YesText : NoText;
     }
     else if (value is decimal || value is double || value is float)
     {

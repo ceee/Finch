@@ -16,20 +16,24 @@ public class ExcelCreator<T> : ITableCreator<T>
 
   private const string DATETIME_FORMAT = "dd. MM. yyyy, HH:ii";
 
-  private const string BOOL_YES = "yes";
-
-  private const string BOOL_NO = "no";
-
-  private const string LINK_NAME = "Link";
-
   public const string CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
   private CultureInfo Culture = null;
 
+  private ILocalizer Localizer = null;
 
-  public ExcelCreator(IEnumerable<TableColumn<T>> columns)
+  private string LinkText = null;
+  private string YesText = null;
+  private string NoText = null;
+
+
+  public ExcelCreator(ILocalizer localizer, IEnumerable<TableColumn<T>> columns)
   {
+    Localizer = localizer;
     Columns = columns;
+    LinkText = localizer.Text("ui.link");
+    YesText = localizer.Text("ui.yes");
+    NoText = localizer.Text("ui.no");
   }
 
 
@@ -160,11 +164,16 @@ public class ExcelCreator<T> : ITableCreator<T>
         cell.Style.Fill.BackgroundColor = XLColor.WhiteSmoke;
       }
 
+      if (column.IsBold)
+      {
+        cell.Style.Font.SetBold();
+      }
+
       cell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
 
       if (!isHeader && column.ColumnType == TableColumnType.Link)
       {
-        cell.SetValue(LINK_NAME);
+        cell.SetValue(LinkText);
         cell.Hyperlink = new XLHyperlink(value.ToString());
       }
       if (column.ColumnType == TableColumnType.Currency)
@@ -196,7 +205,7 @@ public class ExcelCreator<T> : ITableCreator<T>
 
     if (value is bool)
     {
-      return (bool)value ? BOOL_YES : BOOL_NO;
+      return (bool)value ? YesText : NoText;
     }
     else if (value is decimal || value is float || value is double)
     {
@@ -233,6 +242,10 @@ public class ExcelCreator<T> : ITableCreator<T>
     {
       var val = (DateTimeOffset?)value;
       return val.HasValue ? val.Value.ToString(DATE_FORMAT) : String.Empty;
+    }
+    else if (value is string)
+    {
+      return Localizer.Maybe((string)value, new());
     }
 
     return value;

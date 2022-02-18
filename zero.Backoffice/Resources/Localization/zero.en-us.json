@@ -57,6 +57,7 @@
     "alias": "Alias",
     "link": "Link",
     "item": "Item",
+    "url": "URL",
     "emptylist": "There are no items to show in this list",
     "pagination": {
       "xofy": "Page {x} of {y}",
@@ -148,7 +149,8 @@
     "undisclosed": "Undisclosed",
     "male": "Male",
     "female": "Female",
-    "nonbinary": "Non-binary"
+    "nonbinary": "Non-binary",
+    "unknown": "Unknown"
   },
 
   "revisions": {

@@ -4,9 +4,17 @@ namespace zero.Utils;
 
 public abstract class TableExport<TEntity> : ITableExport<TEntity> where TEntity : ZeroIdEntity
 {
+  protected ILocalizer Localizer { get; private set; }
+
+  public TableExport(ILocalizer localizer)
+  {
+    Localizer = localizer;
+  }
+
+
   public virtual async Task<Stream> Export(TableFormat format = TableFormat.Excel)
   {
-    ITableBuilder<TEntity> builder = new TableBuilder<TEntity>(format);
+    ITableBuilder<TEntity> builder = new TableBuilder<TEntity>(Localizer, format);
 
     await Warmup();
 
@@ -32,7 +40,7 @@ public abstract class TableExport<TEntity> : ITableExport<TEntity> where TEntity
 
   protected virtual void Build(ITableBuilder<TEntity> builder)
   {
-    builder.Column("Id").For(c => c.Id).Size(40);
+    builder.Column("@ui.id").For(c => c.Id).Size(40);
   }
 }
 

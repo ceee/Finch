@@ -7,9 +7,11 @@ import { ZeroEditorCanvasBase, ZeroEditorTab } from "./editor-canvas";
 import { ZeroEditorFieldConfiguration, ZeroEditorFieldFilterPreview } from "./editor-field";
 import { localize } from '../services/localization';
 import { selectorToArray, setObjectValue } from '../utils';
+import List from "../schemas/list/list";
 
 
 let appliedExtensionsTo: string[] = [];
+let appliedListExtensionsTo: string[] = [];
 
 export interface ZeroCompiledEditor
 {
@@ -324,4 +326,29 @@ export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEdito
   model.blueprint = createBlueprintConfig(model.alias, model);
 
   return model;
+}
+
+
+
+
+export function compileList(zero: Zero, list: List): List | null
+{
+  if (!list)
+  {
+    return null;
+  }
+
+  if (appliedListExtensionsTo.indexOf(list.alias) < 0)
+  {
+    appliedListExtensionsTo.push(list.alias);
+
+    let extensions = zero.getSchemaExtensions(list.alias);
+
+    extensions.forEach(extension =>
+    {
+      extension.extension(list);
+    });
+  }
+
+  return list;
 }

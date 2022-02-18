@@ -23,7 +23,8 @@ public class ResourceService : IResourceService
   protected IWebHostEnvironment Env { get; set; }
 
 
-  public ResourceService(IOptions<BackofficeOptions> options, IBackofficeAssetFileSystem assetFileSystem, IBackofficeResourceFileSystem resourceFileSystem, ILogger<IconService> logger, IEnumerable<IZeroPlugin> plugins, IWebHostEnvironment env)
+  public ResourceService(IOptions<BackofficeOptions> options, IBackofficeAssetFileSystem assetFileSystem, IBackofficeResourceFileSystem resourceFileSystem, ILogger<IconService> logger, 
+    IEnumerable<IZeroPlugin> plugins, IWebHostEnvironment env)
   {
     Options = options;
     AssetFileSystem = assetFileSystem;

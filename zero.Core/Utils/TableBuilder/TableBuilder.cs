@@ -12,9 +12,12 @@ public class TableBuilder<T> : ITableBuilder<T>, IDisposable
 
   protected CultureInfo Culture { get; set; }
 
+  protected ILocalizer Localizer { get; set; }
 
-  public TableBuilder(TableFormat format, CultureInfo culture = null)
+
+  public TableBuilder(ILocalizer localizer, TableFormat format, CultureInfo culture = null)
   {
+    Localizer = localizer;
     Format = format;
 
     Columns = new List<TableColumn<T>>();
@@ -42,8 +45,8 @@ public class TableBuilder<T> : ITableBuilder<T>, IDisposable
   {
     ITableCreator<T> creator = Format switch
     {
-      TableFormat.Csv => new CsvCreator<T>(Columns),
-      TableFormat.Excel => new ExcelCreator<T>(Columns),
+      TableFormat.Csv => new CsvCreator<T>(Localizer, Columns),
+      TableFormat.Excel => new ExcelCreator<T>(Localizer, Columns),
       _ => throw new NotSupportedException($"The table format {Format} is not supported")
     };
 
@@ -56,8 +59,8 @@ public class TableBuilder<T> : ITableBuilder<T>, IDisposable
   {
     ITableCreator<T> creator = Format switch
     {
-      TableFormat.Csv => new CsvCreator<T>(Columns),
-      TableFormat.Excel => new ExcelCreator<T>(Columns),
+      TableFormat.Csv => new CsvCreator<T>(Localizer, Columns),
+      TableFormat.Excel => new ExcelCreator<T>(Localizer, Columns),
       _ => throw new NotSupportedException($"The table format {Format} is not supported")
     };
 
@@ -66,7 +69,7 @@ public class TableBuilder<T> : ITableBuilder<T>, IDisposable
 
 
   /// <inheritdoc />
-  public TableColumn<T> Column(string name, Expression<Func<T, object>> fieldSelector = null, double width = 15, TableColumnType type = TableColumnType.Default)
+  public TableColumn<T> Column(string name, Expression<Func<T, object>> fieldSelector = null, double width = 15, TableColumnType type = TableColumnType.Default, int? position = null)
   {
     TableColumn<T> column = new()
     {
@@ -76,7 +79,14 @@ public class TableBuilder<T> : ITableBuilder<T>, IDisposable
       ColumnType = type
     };
 
-    Columns.Add(column);
+    if (position.HasValue && Columns.Count > position.Value)
+    {
+      Columns.Insert(position.Value, column);
+    }
+    else
+    {
+      Columns.Add(column);
+    }
 
     return column;
   }
@@ -123,7 +133,7 @@ public interface ITableBuilder<T>
   /// <summary>
   /// Add a new column to the table
   /// </summary>
-  TableColumn<T> Column(string name, Expression<Func<T, object>> fieldSelector = null, double width = 12, TableColumnType type = TableColumnType.Default);
+  TableColumn<T> Column(string name, Expression<Func<T, object>> fieldSelector = null, double width = 12, TableColumnType type = TableColumnType.Default, int? position = null);
 
   /// <summary>
   /// 

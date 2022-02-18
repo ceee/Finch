@@ -54,6 +54,7 @@
     "alias": "Alias",
     "link": "Link",
     "item": "Element",
+    "url": "URL",
     "emptylist": "Keine Ergebnisse gefunden",
     "pagination": {
       "xofy": "Seite {x} von {y}",
@@ -144,7 +145,8 @@
     "undisclosed": "Ungenannt",
     "male": "Männlich",
     "female": "Weiblich",
-    "nonbinary": "Nicht-binär"
+    "nonbinary": "Nicht-binär",
+    "unknown": "Unbekannt"
   },
   "revisions": {
     "label": "Revisionen",
