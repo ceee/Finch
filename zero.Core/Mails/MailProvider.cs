@@ -99,7 +99,14 @@ public class MailProvider : IMailProvider
     
   protected virtual async Task<MailTemplate> GetMailTemplate(string key)
   {
-    return await Collection.GetByKey(key);
+    MailTemplate mailTemplate = await Collection.GetByKey(key);
+
+    if (mailTemplate != null)
+    {
+      mailTemplate = ObjectCopycat.Clone(mailTemplate);
+    }
+
+    return mailTemplate;
   }
      
 
