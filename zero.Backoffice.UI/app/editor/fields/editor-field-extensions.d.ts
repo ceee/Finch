@@ -74,7 +74,7 @@ declare module 'zero/schemas'
      * Create a list of inputs
      * @param {ChecklistFieldOptions} options - Custom options
      */
-    inputlist(options: InputlistFieldOptions): ZeroEditorField;
+    inputlist(options?: InputlistFieldOptions): ZeroEditorField;
 
     /**
      * Create a nested editor

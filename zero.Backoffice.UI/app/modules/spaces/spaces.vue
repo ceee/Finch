@@ -15,7 +15,7 @@
       <div class="spaces-tree-resizable ui-resizable"></div>
     </div>
 
-    <router-view v-if="!isOverview" />
+    <router-view v-if="!isOverview" :key="$route" />
     <!--<component class="spaces-main" v-if="!isOverview && loaded && component" ref="comp" :is="component" :space="space" :config="spaceConfig"></component>-->
     <!-- // TODO v3 this renders infinite warnings and crashes the app
         error:

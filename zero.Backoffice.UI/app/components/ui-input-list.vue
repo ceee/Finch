@@ -1,8 +1,14 @@
 ﻿<template>
   <div class="ui-input-list" :class="{'is-disabled': disabled }">
-    <div v-for="item in items" class="ui-input-list-item">
-      <input v-model="item.value" type="text" class="ui-input" :maxlength="maxLength" :readonly="disabled" @input="onChange" size="5" />
-      <ui-icon-button type="light" icon="fth-x" @click="removeItem(item)" v-if="!disabled" />
+    <div class="ui-input-list-items" v-sortable="{ onUpdate: onSortingUpdated, enabled: !disabled }">
+      <div v-for="item in items" :key="item.id" class="ui-input-list-item">
+        <button type="button" class="ui-input-list-sort is-handle" tabindex="-1">
+          <ui-icon symbol="fth-grip-vertical" />
+        </button>
+      
+        <input v-model="item.value" type="text" class="ui-input" :maxlength="maxLength" :readonly="disabled" @change="onChange(items)" size="5" />
+        <ui-icon-button type="light" icon="fth-x" @click="removeItem(item)" v-if="!disabled" tabindex="-1" />
+      </div>
     </div>
     <ui-button v-if="!disabled && !plusButton" type="light" :label="addLabel" @click="addItem" />
     <ui-select-button v-if="!disabled && plusButton" icon="fth-plus" :label="items.length > 0 ? null : addLabel" @click="addItem" />
@@ -11,6 +17,8 @@
 
 
 <script>
+  import { arrayMove, generateId } from '../utils';
+
   export default {
     name: 'uiInputList',
     props: {
@@ -45,9 +53,12 @@
     watch: {
       value(value)
       {
-        this.items = (value || []).map(item =>
+        this.$nextTick(() =>
         {
-          return { value: item };
+          this.items = (value || []).map(item =>
+          {
+            return { id: generateId(), value: item };
+          });
         });
       }
     },
@@ -55,20 +66,23 @@
     {
       this.items = (this.value || []).map(item =>
       {
-        return { value: item };
+        return { id: generateId(), value: item };
       });
     },
     methods: {
-      onChange()
+      onChange(items)
       {
-        this.$emit('input', this.items.map(item => item.value));
+        let value = items.map(item => item.value);
+        this.$emit('input', value);
+        this.$emit('update:value', value);
       },
       addItem()
       {
         this.items.push({
-          value: null
+          id: generateId(),
+          value: ''
         });
-        this.onChange();
+        this.onChange(this.items);
         this.$nextTick(() =>
         {
           this.$el.querySelector('.ui-input-list-item:last-of-type input').focus();
@@ -78,7 +92,12 @@
       {
         const index = this.items.indexOf(item);
         this.items.splice(index, 1);
-        this.onChange();
+        this.onChange(this.items);
+      },
+      onSortingUpdated(ev)
+      {
+        let items = arrayMove(this.items, ev.oldIndex, ev.newIndex);
+        this.onChange(items);
       }
     }
   }
@@ -92,7 +111,7 @@
   .ui-input-list-item
   {
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: auto 1fr auto;
     background: var(--color-input);
     border-radius: var(--radius);
     margin-bottom: 6px;
@@ -102,14 +121,8 @@
       background: transparent;
     }
 
-    .ui-input
-    {
-      border-radius: var(--radius) 0 0 var(--radius);
-    }
-
     .ui-icon-button
     {
-      border-radius: 0 var(--radius) var(--radius) 0;
       height: 48px;
       width: 48px;
       border-left: none;
@@ -121,5 +134,17 @@
     {
       margin-left: 0;
     }
+  }
+
+  button.ui-input-list-sort
+  {
+    height: 100%;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    pointer-events: none;
+    cursor: grab;
   }
 </style>
