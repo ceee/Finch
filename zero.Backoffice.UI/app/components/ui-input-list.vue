@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="ui-input-list" :class="{'is-disabled': disabled }">
-    <div class="ui-input-list-items" v-sortable="{ onUpdate: onSortingUpdated, enabled: !disabled }">
+    <div class="ui-input-list-items" v-sortable="{ handle: '.is-handle', onUpdate: onSortingUpdated, enabled: !disabled }">
       <div v-for="item in items" :key="item.id" class="ui-input-list-item">
         <button type="button" class="ui-input-list-sort is-handle" tabindex="-1">
           <ui-icon symbol="fth-grip-vertical" />
