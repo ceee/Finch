@@ -10,6 +10,7 @@ import registerEditorComponents from '../editor/register';
 import { getRouterConfig, appendRouterGuards } from './router/routerConfig';
 import
 {
+  previewPlugin,
   countryPlugin,
   applicationPlugin,
   settingsPlugin,
@@ -34,7 +35,7 @@ import eventHub from '../services/eventhub';
 import { Emitter, EventType } from 'mitt';
 
 plugins.push(
-  editorPlugin, countryPlugin, applicationPlugin, settingsPlugin, languagePlugin,
+  editorPlugin, previewPlugin, countryPlugin, applicationPlugin, settingsPlugin, languagePlugin,
   pagePlugin, linksPlugin, mediaPlugin, spacePlugin, mailTemplatePlugin,
   translationPlugin, integrationPlugin, userPlugin, pageModulePlugin, searchPlugin
 );

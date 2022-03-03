@@ -1,13 +1,16 @@
 ﻿<template>
-  <div class="app" v-if="!loading">
+  <div class="app" v-if="!loading" :class="{ 'is-preview': preview}">
     <app-login v-if="!authenticated" />
-    <template v-else>
+    <template v-if="authenticated && !preview">
       <app-navigation />
       <div class="app-main">
         <router-view></router-view>
       </div>
       <app-overlays />
       <app-notifications />
+    </template>
+    <template v-if="authenticated && preview">
+      <router-view></router-view>
     </template>
   </div>
   <div class="app-loading" v-else>
@@ -35,6 +38,13 @@
       loading: true,
       authenticated: false
     }),
+
+    computed: {
+      preview()
+      {
+        return this.$route.name === 'preview';
+      }
+    },
 
     mounted()
     {

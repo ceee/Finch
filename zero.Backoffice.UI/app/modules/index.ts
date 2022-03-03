@@ -13,3 +13,4 @@ export * from './users';
 export * from './links';
 export * from './pageModules';
 export * from './search';
+export * from './preview';
