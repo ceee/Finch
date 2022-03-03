@@ -67,10 +67,10 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
   public virtual string GetChangeToken(T model) => Operations.GetChangeToken(model);
 
   /// <inheritdoc />
-  public virtual Task<Result<T>> Create(T model) => Operations.Create(model, async m => await Validate(m));
+  public virtual Task<Result<T>> Create(T model, Action<IZeroDocumentSession> onAfterStore = null) => Operations.Create(model, async m => await Validate(m), onAfterStore);
 
   /// <inheritdoc />
-  public virtual Task<Result<T>> Update(T model) => Operations.Update(model, async m => await Validate(m));
+  public virtual Task<Result<T>> Update(T model, Action<IZeroDocumentSession> onAfterStore = null) => Operations.Update(model, async m => await Validate(m), onAfterStore);
 
   /// <inheritdoc />
   public virtual Task<Result<IOrderedEnumerable<T>>> Sort(string[] sortedIds) => Operations.Sort<T>(sortedIds);
@@ -171,12 +171,12 @@ public interface IEntityStore<T> where T : ZeroIdEntity, ISupportsFlavors, ISupp
   /// <summary>
   /// Creates an entity with an optional validator
   /// </summary>
-  Task<Result<T>> Create(T model);
+  Task<Result<T>> Create(T model, Action<IZeroDocumentSession> onAfterStore = null);
 
   /// <summary>
   /// Updates an entity with an optional validator
   /// </summary>
-  Task<Result<T>> Update(T model);
+  Task<Result<T>> Update(T model, Action<IZeroDocumentSession> onAfterStore = null);
 
   /// <summary>
   /// Update sorting of entities on a specific level

@@ -28,6 +28,8 @@ public partial class StoreOperations :
 
   protected IServiceProvider Services { get; private set; }
 
+  protected StoreInterceptorBlocker InterceptorBlocker { get; private set; }
+
   string _overrideDatabase = null;
 
 
@@ -98,9 +100,7 @@ public partial class StoreOperations :
   }
 
 
-  /// <summary>
-  /// Validates an entity
-  /// </summary>
+  /// <inheritdoc />
   public async Task<ValidationResult> Validate<T>(T model) where T : ZeroIdEntity, new()
   {
     IZeroMergedValidator<T> validator = Services.GetService<IZeroMergedValidator<T>>();
@@ -114,6 +114,13 @@ public partial class StoreOperations :
   }
 
 
+  /// <inheritdoc />
+  public StoreInterceptorBlocker WithoutInterceptors()
+  {
+    return InterceptorBlocker ?? (InterceptorBlocker = new(() => InterceptorBlocker = null));
+  }
+
+
   /// <summary>
   /// Do only return the model when it is set to active or inactive entities are included with IncludeInactive()
   /// </summary>
@@ -123,6 +130,21 @@ public partial class StoreOperations :
   }
 }
 
+
+public class StoreInterceptorBlocker : IDisposable
+{
+  Action _onRelease;
+
+  internal StoreInterceptorBlocker(Action onRelease)
+  {
+    _onRelease = onRelease;
+  }
+
+  public void Dispose()
+  {
+    _onRelease();
+  }
+}
 
 
 public interface IStoreOperations
@@ -212,14 +234,19 @@ public interface IStoreOperations
   Task<ValidationResult> Validate<T>(T model) where T : ZeroIdEntity, new();
 
   /// <summary>
+  /// Do not run interceptors for create/update/delete operations while this disposable is active
+  /// </summary>
+  StoreInterceptorBlocker WithoutInterceptors();
+
+  /// <summary>
   /// Creates an entity with an optional validator
   /// </summary>
-  Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
+  Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Updates an entity with an optional validator
   /// </summary>
-  Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
+  Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new();
 
   /// <inheritdoc />
   Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, ISupportsSorting, new();

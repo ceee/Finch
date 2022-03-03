@@ -294,16 +294,17 @@ a.ui-table-row:hover, button.ui-table-row:hover
   padding: 4px 12px;
   border-radius: 20px;
 
-  &[data-state="completed"], &[data-state="cancelled"]
+  &[data-state="completed"], &[data-state="cancelled"],
+  &[data-state="none"], &[data-state="captured"], &[data-state="authorized"], &[data-state="cancelled"], &[data-state="refunded"]
   {
     font-weight: 400;
     color: var(--color-text-dim);
   }
-  /*&[data-payment-state="none"], &[data-payment-state="pending"], &[data-payment-state="cancelled"], &[data-payment-state="refunded"]
+  &[data-state="error"]
   {
-    font-weight: 400;
-    color: var(--color-text-dim);
-  }*/
+    color: var(--color-accent-error);
+    background: var(--color-accent-error-bg);
+  }
   &[data-payment-state]
   {
     font-weight: 400;

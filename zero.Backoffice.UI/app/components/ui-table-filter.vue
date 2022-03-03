@@ -108,7 +108,7 @@
       // called when an action has been clicked
       onActionClicked(action, opts)
       {
-        action.call(opts);
+        action.call(opts, this);
       },
 
 

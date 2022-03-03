@@ -9,23 +9,23 @@ public abstract class TreeEntityStore<T> : EntityStore<T>, ITreeEntityStore<T> w
 
 
   /// <inheritdoc />
-  public override async Task<Result<T>> Create(T model)
+  public override async Task<Result<T>> Create(T model, Action<IZeroDocumentSession> onAfterStore = null)
   {
     if (!await IsAllowedAsChild(model, model.ParentId))
     {
       return Result<T>.Fail("@errors.treeentity.parentnotallowed");
     }
-    return await base.Create(model);
+    return await base.Create(model, onAfterStore);
   }
 
   /// <inheritdoc />
-  public override async Task<Result<T>> Update(T model)
+  public override async Task<Result<T>> Update(T model, Action<IZeroDocumentSession> onAfterStore = null)
   {
     if (!await IsAllowedAsChild(model, model.ParentId))
     {
       return Result<T>.Fail("@errors.treeentity.parentnotallowed");
     }
-    return await base.Update(model);
+    return await base.Update(model, onAfterStore);
   }
 
   /// <inheritdoc />

@@ -12,14 +12,17 @@ public partial class StoreOperations : IStoreOperations
 
     InterceptorInstruction<T> instruction = Interceptors.ForDelete(model);
 
-    if (!await instruction.Start(this))
+    if (InterceptorBlocker == null && !await instruction.Start(this))
     {
       return instruction.Result;
     }
 
     Session.Delete(model);
     await Session.SaveChangesAsync();
-    await instruction.Complete();
+    if (InterceptorBlocker == null)
+    {
+      await instruction.Complete();
+    }
     await Session.SaveChangesAsync();
 
     return Result<T>.Success();

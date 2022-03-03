@@ -5,13 +5,13 @@ namespace zero.Stores;
 public partial class StoreOperations : IStoreOperations
 {
   /// <inheritdoc />
-  public virtual Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new() => Save(model, validate);
+  public virtual Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new() => Save(model, validate, onAfterStore);
 
   /// <inheritdoc />
-  public virtual Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new() => Save(model, validate);
+  public virtual Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new() => Save(model, validate, onAfterStore);
 
   /// <inheritdoc />
-  protected virtual async Task<Result<T>> Save<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new()
+  protected virtual async Task<Result<T>> Save<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new()
   {
     if (model == null)
     {
@@ -69,15 +69,19 @@ public partial class StoreOperations : IStoreOperations
     // run interceptor
     InterceptorInstruction<T> instruction = isUpdate ? Interceptors.ForUpdate(model, previousModel) : Interceptors.ForCreate(model);
 
-    if (!await instruction.Start(this))
+    if (InterceptorBlocker == null && !await instruction.Start(this))
     {
       return instruction.Result;
     }
 
     // store our model
     await Session.StoreAsync(model);
+    onAfterStore?.Invoke(Session);
     await Session.SaveChangesAsync();
-    await instruction.Complete();
+    if (InterceptorBlocker == null)
+    {
+      await instruction.Complete();
+    }
     await Session.SaveChangesAsync();
 
     return Result<T>.Success(model);

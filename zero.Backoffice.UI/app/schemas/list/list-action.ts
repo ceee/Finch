@@ -23,9 +23,9 @@ class ListAction
    * Calls the action
    * @returns {ListColumn}
    */
-  call(options)
+  call(options, cmp)
   {
-    this.action(options);
+    this.action(options, cmp);
   }
 }
 

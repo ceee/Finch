@@ -49,8 +49,7 @@ public class ZeroTokenProvider : IZeroTokenProvider
     await session.StoreAsync(securityToken);
 
     // set the expires flag for the token
-    IMetadataDictionary tokenMetadata = session.Advanced.GetMetadataFor(securityToken);
-    tokenMetadata[Constants.Database.Expires] = DateTime.UtcNow.AddSeconds(expires.TotalSeconds);
+    session.Expires(securityToken, expires);
     await session.SaveChangesAsync();
 
     return tokenKey;
