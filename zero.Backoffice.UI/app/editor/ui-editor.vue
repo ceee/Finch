@@ -34,10 +34,10 @@
         </ui-tab>
       </ui-tabs>
       <aside class="editor-aside" v-if="asideDefined">
-        <slot name="aside"></slot>
+        <slot name="aside" v-bind="{ value }"></slot>
       </aside>
       <aside class="editor-below" v-if="belowDefined">
-        <slot name="below"></slot>
+        <slot name="below" v-bind="{ value }"></slot>
       </aside>
     </div>
   </div>

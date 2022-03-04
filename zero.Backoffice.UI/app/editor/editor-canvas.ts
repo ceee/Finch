@@ -1,6 +1,7 @@
 ﻿import { ZeroEditorField } from "zero/schemas";
 import { ZeroEditorFieldImpl, ZeroEditorFieldConfiguration, createFieldProxy } from "./editor-field";
 import { arrayRemove } from '../utils';
+import { Component } from "vue";
 
 
 export class ZeroEditorCanvasBase
@@ -86,6 +87,8 @@ export class ZeroEditorTab extends ZeroEditorCanvasBaseWithFieldset
   count: (model: any) => number | undefined = () => undefined;
   hidden: (model: any) => boolean = () => false;
   disabled: (model: any) => boolean = () => false;
+  class: string | null = null;
+  component: Component | null = null;
 
   constructor(alias: string, name: string)
   {

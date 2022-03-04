@@ -240,12 +240,12 @@ export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEdito
       name: editorTab.name,
       sort: editorTab.sort,
       alias: editorTab.alias,
-      class: null,
+      class: editorTab.class,
       count: editorTab.count,
       disabled: editorTab.disabled,
       hidden: editorTab.hidden,
       fieldsets: [],
-      component: null
+      component: editorTab.component
     } as ZeroCompiledEditorTab;
 
     let fieldsets = [];
@@ -316,7 +316,7 @@ export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEdito
     });
 
 
-    if (tab.fieldsets.length)
+    if (tab.fieldsets.length || tab.component != null)
     {
       model.tabs.push(tab);
     }

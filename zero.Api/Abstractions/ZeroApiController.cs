@@ -16,6 +16,9 @@ public abstract class ZeroApiController : ControllerBase
   IZeroMapper _mapper;
   protected IZeroMapper Mapper => _mapper ?? (_mapper = HttpContext?.RequestServices?.GetService<IZeroMapper>());
 
+  IZeroContext _context;
+  protected IZeroContext ZeroContext => _context ?? (_context = HttpContext?.RequestServices?.GetService<IZeroContext>());
+
 
   public ApiRequestHints Hints { get; protected set; } = new();
 }

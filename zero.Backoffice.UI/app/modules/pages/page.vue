@@ -2,19 +2,18 @@
   <ui-form :key="id" ref="form" class="page page-editor" v-slot="form" @submit="onSubmit" @load="onLoad" :route="route">
     <ui-form-header v-model:value="model" title="@page.name" :disabled="disabled" :is-create="!id" :state="form.state" :active-toggle="!isFolder" :can-delete="meta.canDelete" @delete="onDelete" :sticky="true">
       <template v-slot:actions>
-        <!--<ui-dropdown-button v-if="!isFolder" label="@page.preview.title" icon="fth-eye" :disabled="disabled" @click="openPreview" />
-      <ui-dropdown-separator v-if="!isFolder" />-->
+        <ui-dropdown-button v-if="hasPreview" label="@page.preview.title" icon="fth-eye" :disabled="disabled" :prevent="true" @click="openPreview" />
+        <ui-dropdown-separator v-if="hasPreview" />
         <ui-dropdown-button label="@ui.move.title" icon="fth-corner-down-right" @click="move(model)" />
         <ui-dropdown-button label="@ui.copy.title" icon="fth-copy" @click="copy(model)" />
         <ui-dropdown-separator />
       </template>
+      <!--<template v-slot:buttons>
+        <ui-button type="light onbg" icon="fth-info" />
+      </template>-->
     </ui-form-header>
 
-    <ui-editor v-if="!loading && editor" :config="editor" v-model="model" :is-page="true" infos="aside" :meta="meta" :disabled="disabled" :scope="true" :on-configure="onEditorConfigure">
-      <template v-slot:below>
-        <ui-editor-infos v-model="model" :disabled="disabled" />
-      </template>
-    </ui-editor>
+    <ui-editor v-if="!loading && editor" :config="editor" v-model="model" :is-page="true" infos="aside" :meta="meta" :disabled="disabled" :scope="true" :on-configure="onEditorConfigure" />
 
     <div v-if="isFolder">
       <!-- // TODO list children -->
@@ -59,6 +58,10 @@
       isCreate()
       {
         return this.$route.name === 'pages-create' || !this.id;
+      },
+      hasPreview()
+      {
+        return this.id && !this.isFolder;
       }
     },
 
@@ -110,7 +113,7 @@
 
         var config = { system: this.$route.query['zero.scope'] == 'system' };
         const response = await form.load(() => !this.isCreate ? api.getById(this.id, undefined, config) : api.getEmpty(this.flavor, this.parent, config));
-        this.model = response; 
+        this.model = response;
 
         if (this.model)
         {
@@ -184,6 +187,19 @@
           disabled: _ => false,
           component: PageInfoTab
         });
+      },
+
+      async openPreview(_, opts)
+      {
+        opts.loading(true);
+        const result = await api.getPreviewUrl(this.id);
+        opts.loading(false);
+        if (result.data && result.data.url)
+        {
+          var resolved = this.$router.resolve({ name: 'preview', query: { path: result.data.url } });
+          window.open(window.location.origin + resolved.href, 'blank');
+          opts.hide();
+        }
       }
     }
   })

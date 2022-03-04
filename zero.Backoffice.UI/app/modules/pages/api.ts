@@ -20,6 +20,9 @@ export default {
 
   getPreviews: (ids: string[], config?: ApiRequestConfig) => get(`backoffice/pages/previews`, { ...config, params: { ids } }),
 
+  getUrls: (id: string, config?: ApiRequestConfig) => get(`pages/${id}/urls`, { ...config }),
+
+  getPreviewUrl: (id: string, config?: ApiRequestConfig) => get(`pages/${id}/urls/preview`, { ...config }),
 
   create: (model: any, config?: ApiRequestConfig) => post('pages', model, config),
 

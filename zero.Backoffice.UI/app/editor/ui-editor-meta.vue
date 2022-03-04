@@ -1,8 +1,8 @@
 ﻿<template>
-  <div class="page-editor-info">
+  <div class="editor-meta">
     <div class="ui-box">
       <ui-property v-if="!isCreate && urls.length" label="@page.infotab.links" :is-text="true" :vertical="false">
-        <a v-for="url in urls" class="ui-linktext" :href="urlDomain + url" target="_blank"><ui-icon symbol="fth-external-link"></ui-icon> {{url}}</a>
+        <a v-for="url in urls" class="ui-linktext" :href="url" target="_blank"><ui-icon symbol="fth-external-link"></ui-icon> {{url}}</a>
       </ui-property>
       <!--<ui-property label="@page.schedule.label" :is-text="true" :vertical="false">
         <ui-daterangepicker :value="{ from: value.publishDate, to: value.unpublishDate }" @input="onRangeChange" :class="{ 'is-primary': value.publishDate || value.unpublishDate }" :disabled="disabled" />
@@ -100,29 +100,29 @@
 </script>
 
 <style lang="scss">
-  .page-editor-info
+  .editor-meta
   {
     padding: 0 !important;
   }
-  .page-editor-info .ui-view-box-aside
+  .editor-meta .ui-view-box-aside
   {
     padding: 0;
   }
-  .page-editor-info .ui-box
+  .editor-meta .ui-box
   {
     margin: 0;
   }
-  .page-editor-info .ui-box + .ui-box
+  .editor-meta .ui-box + .ui-box
   {
     margin-top: var(--padding-s);
   }
-  .page-editor-info .ui-property + .ui-property
+  .editor-meta .ui-property + .ui-property
   {
     /*border-top: none;
     margin-top: 0;
     padding-top: var(--padding-s);*/
   }
-  .page-editor-info .ui-box:last-child
+  .editor-meta .ui-box:last-child
   {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
