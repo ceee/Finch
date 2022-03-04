@@ -2,10 +2,10 @@
   <!--<ui-dropdown-button v-if="hasPreview" label="@page.preview.title" icon="fth-eye" :disabled="disabled || !urlLink" @click="openPreview" />
   <ui-dropdown-button v-if="hasLink" label="@ui.open.title" icon="fth-external-link" :disabled="disabled || !urlLink" @click="openLink" />-->
 
-  <ui-link v-if="hasPreview" :to="{ name: 'preview', query: { path: urlLink }}" target="preview" :disabled="disabled || !urlLink" type="button" class="ui-dropdown-button has-icon" @click="dropdown.hide()">
+  <a v-if="hasPreview" :href="previewLink" target="preview" :disabled="disabled || !urlLink" type="button" class="ui-dropdown-button has-icon" @click.prevent="openPreview">
     <ui-icon symbol="fth-eye" class="ui-dropdown-button-icon" />
     <span class="-name"><ui-localize value="@page.preview.title" /></span>
-  </ui-link>
+  </a>
   <a v-if="hasLink" :href="urlLinkAbsolute" target="_blank" :disabled="disabled || !urlLink" type="button" class="ui-dropdown-button has-icon" @click="dropdown.hide()">
     <ui-icon symbol="fth-external-link" class="ui-dropdown-button-icon" />
     <span class="-name"><ui-localize value="@ui.open.title" /><span class="-minor" v-if="false && urlLink" :title="urlLink">{{urlLink}}</span></span>
@@ -89,6 +89,10 @@
       urlLinkAbsolute()
       {
         return this.urlDomain && this.urlList.length ? this.urlDomain + this.urlList[0] : null;
+      },
+      previewLink()
+      {
+        return this.urlLink ? this.$router.resolve({ name: 'preview', query: { path: this.urlLink } }).href : null;
       }
     },
 
@@ -101,17 +105,10 @@
         this.failed = this.urlList.length < 1 || !result.data.domain;
       },
 
-      async openPreview(_, opts)
+      openPreview()
       {
-        var resolved = this.$router.resolve({ name: 'preview', query: { path: this.urlLink } });
-        window.open(window.location.origin + resolved.href, 'preview');
-        opts.hide();
-      },
-
-      async openLink(_, opts)
-      {
-        window.open(this.urlLinkAbsolute, '_blank');
-        opts.hide();
+        window.open(this.previewLink, 'preview');
+        this.dropdown.hide();
       }
     }
   }
