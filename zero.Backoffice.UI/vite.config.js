@@ -80,6 +80,7 @@ let config = defineConfig({
     alias: {
       vue: path.resolve(__dirname, 'node_modules/@vue/compat'),
       zero: path.resolve(__dirname, 'app'),
+      zeroworkers: path.resolve(__dirname, 'app/modules/preview'),
       ...pluginAliases,
     }
   },

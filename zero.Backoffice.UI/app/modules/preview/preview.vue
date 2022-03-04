@@ -19,7 +19,7 @@
 
     created()
     {
-      this.src = 'http://localhost:2310' + this.$route.query.path + '?preview=true';
+      this.src = 'http://localhost:2310' + this.$route.query.path + '?zero_preview=true';
     }
   });
 </script>
@@ -38,6 +38,11 @@
     height: 100%;
     position: relative;
     background: var(--color-bg);
+
+    .-text
+    {
+      color: var(--color-text);
+    }
   }
 
   iframe.app-preview-frame

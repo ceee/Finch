@@ -40,6 +40,9 @@ public class ZeroContext : IZeroContext
   /// <inheritdoc />
   public ZeroContextScope Scope { get; private set; }
 
+  /// <inheritdoc />
+  public bool IsPreview { get; private set; }
+
 
   protected IApplicationResolver AppResolver { get; private set; }
 
@@ -92,6 +95,9 @@ public class ZeroContext : IZeroContext
     //} // TODO setup
 
     _resolved = true;
+
+    // check whether the current request is a preview request
+    IsPreview = context.Request.Query.ContainsKey("zero_preview");
 
     // check if the current request is a backoffice request
     IsBackofficeRequest = context.IsBackofficeRequest(Options.ZeroPath);
@@ -244,6 +250,11 @@ public interface IZeroContext
   /// Whether the user is logged into the backoffice
   /// </summary>
   bool IsLoggedIntoBackoffice { get; }
+
+  /// <summary>
+  /// Determines whether the current request is a preview request
+  /// </summary>
+  bool IsPreview { get; }
 
   /// <summary>
   /// Global zero options
