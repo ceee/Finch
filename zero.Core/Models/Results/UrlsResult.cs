@@ -1,5 +1,24 @@
 ﻿namespace zero.Models;
 
+public class UrlResult
+{
+  public string Url { get; set; }
+
+  public string Domain { get; set; }
+
+  public UrlResult(string domain, string url)
+  {
+    Domain = domain;
+    Url = url;
+  }
+
+  public UrlResult(Uri domain, string url)
+  {
+    Domain = domain.Scheme + "://" + domain.Authority.TrimEnd("/");
+    Url = url;
+  }
+}
+
 public class UrlsResult
 {
   public string[] Urls { get; set; } = Array.Empty<string>();

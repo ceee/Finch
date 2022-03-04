@@ -121,12 +121,10 @@ public partial class StoreOperations :
   }
 
 
-  /// <summary>
-  /// Do only return the model when it is set to active or inactive entities are included with IncludeInactive()
-  /// </summary>
-  protected virtual T WhenActive<T>(T model) where T : ZeroIdEntity, new()
+  /// <inheritdoc />
+  public virtual T WhenActive<T>(T model) where T : ZeroIdEntity, new()
   {
-    return model != null && (Config.IncludeInactive || model is IAlwaysActive || model is not ZeroEntity || (model as ZeroEntity).IsActive) ? model : default;
+    return model != null && (Context.IsPreview || Config.IncludeInactive || model is IAlwaysActive || model is not ZeroEntity || (model as ZeroEntity).IsActive) ? model : default;
   }
 }
 
@@ -237,6 +235,11 @@ public interface IStoreOperations
   /// Do not run interceptors for create/update/delete operations while this disposable is active
   /// </summary>
   StoreInterceptorBlocker WithoutInterceptors();
+
+  /// <summary>
+  /// Do only return the model when it is set to active or inactive entities are included with IncludeInactive()
+  /// </summary>
+  T WhenActive<T>(T model) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Creates an entity with an optional validator

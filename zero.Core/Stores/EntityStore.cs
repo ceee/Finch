@@ -90,7 +90,7 @@ public abstract class EntityStore<T> : IEntityStore<T> where T : ZeroIdEntity, I
   /// <summary>
   /// Do only return the model when it is set to active or inactive entities are included with IncludeInactive()
   /// </summary>
-  protected virtual T WhenActive(T model) => model != null && (Config.IncludeInactive || (model is not ZeroEntity || (model as ZeroEntity).IsActive)) ? model : default;
+  protected virtual T WhenActive(T model) => Operations.WhenActive<T>(model);
 }
 
 

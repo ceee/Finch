@@ -58,12 +58,13 @@
 
   .app-preview-overlay
   {
-    height: 42px;
+    height: 32px;
     border-radius: 0 0 var(--radius) var(--radius);
     background: var(--color-bg);
     position: fixed;
     top: 0;
-    right: var(--padding);
+    left: 50%;
+    transform: translateX(-50%);
     padding: 0 var(--padding-s);
     z-index: 1;
     display: flex;
@@ -79,7 +80,7 @@
       width: 12px;
       height: 12px;
       border-radius: 16px;
-      background: var(--color-accent-error);
+      background: var(--color-accent);
       animation: shift 1.2s linear reverse infinite;
       margin-right: var(--padding-xs);
     }

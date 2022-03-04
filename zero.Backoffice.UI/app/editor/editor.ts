@@ -12,6 +12,8 @@ export class ZeroEditor extends ZeroEditorCanvas implements ZeroSchema
 
   display: ZeroEditorDisplay = 'tabs';
 
+  meta: ZeroEditorMeta = {};
+
   onLabelCreate = (field: ZeroEditorField): string =>
   {
     return field.configuration.label || (this.resourcePrefix ? this.resourcePrefix + field.path : '@nolabel[' + field.path + ']');
@@ -22,12 +24,18 @@ export class ZeroEditor extends ZeroEditorCanvas implements ZeroSchema
     return field.configuration.description || (this.resourcePrefix ? this.resourcePrefix + field.path + '_text' : '@nodesc[' + field.path + ']');
   };
 
-
   constructor(alias: string)
   {
     super();
     this.alias = alias;
   }
+}
+
+
+export interface ZeroEditorMeta
+{
+  getUrl?: (model: any) => Promise<any>;
+  allowUrlPreview: boolean;
 }
 
 

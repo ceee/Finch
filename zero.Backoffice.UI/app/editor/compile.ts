@@ -1,7 +1,7 @@
 import { Component, markRaw } from "vue";
 import { ZeroEditorField, ZeroEditorDisplay } from "zero/schemas";
 import { Zero } from "../core";
-import { ZeroEditor } from "./editor";
+import { ZeroEditor, ZeroEditorMeta } from "./editor";
 import { createBlueprintConfig } from "./editor-blueprint";
 import { ZeroEditorCanvasBase, ZeroEditorTab } from "./editor-canvas";
 import { ZeroEditorFieldConfiguration, ZeroEditorFieldFilterPreview } from "./editor-field";
@@ -20,6 +20,7 @@ export interface ZeroCompiledEditor
   display: ZeroEditorDisplay;
   tabs: ZeroCompiledEditorTab[];
   origin: ZeroEditor;
+  meta: ZeroEditorMeta;
 }
 
 
@@ -222,6 +223,7 @@ export function compileEditor(zero: Zero, editor: ZeroEditor): ZeroCompiledEdito
     display: editor.display,
     tabs: [],
     origin: editor,
+    meta: editor.meta
   } as ZeroCompiledEditor;
 
   let tabs = [...editor.tabs.sort((a, b) => a.sort - b.sort)];

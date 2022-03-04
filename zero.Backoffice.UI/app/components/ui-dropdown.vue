@@ -1,5 +1,6 @@
 ﻿<template>
   <div class="ui-dropdown-container">
+    <slot name="before"></slot>
     <div v-if="hasButton" ref="trigger" class="ui-dropdown-toggle" @click.prevent.stop="toggle">
       <slot name="button"></slot>
     </div>

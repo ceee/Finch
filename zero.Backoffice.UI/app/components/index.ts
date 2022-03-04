@@ -39,6 +39,7 @@ import uiDaterangepicker from './ui-daterangepicker.vue';
 import uiSelect from './ui-select.vue';
 import uiForm from './ui-form.vue';
 import uiFormHeader from './ui-form-header.vue';
+import uiFormHeaderLinks from './ui-form-header-links.vue';
 import uiLink from './ui-link.vue';
 import uiInputList from './ui-input-list.vue';
 import uiTags from './ui-tags.vue';
@@ -86,6 +87,7 @@ export {
   uiSelect,
   uiForm,
   uiFormHeader,
+  uiFormHeaderLinks,
   uiLink,
   uiInputList,
   uiTags,

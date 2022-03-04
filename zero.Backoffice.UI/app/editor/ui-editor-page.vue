@@ -1,9 +1,14 @@
 ﻿<template>
   <ui-form ref="form" class="editor-page" v-slot="form" @submit="onInternalSubmit" @load="onInternalLoad" :route="route">
     <slot name="header" v-bind="dataObj" v-bind:form="form">
-      <ui-form-header v-model:value="model" :prefix="prefix" :title="title" :disabled="readonly" :is-create="!id" :state="form.state" :can-delete="canDelete" @delete="onInternalDelete" :sticky="true" />
+      <ui-form-header v-model:value="model" :prefix="prefix" :title="title" :disabled="readonly" :is-create="!id" :state="form.state" :can-delete="canDelete" @delete="onInternalDelete" :sticky="true">
+        <template v-slot:actions>
+          <ui-form-header-links v-if="resolvedEditor" :value="model" :url="resolvedEditor.meta.getUrl" :preview-enabled="resolvedEditor.meta.allowUrlPreview" />
+          <slot name="actions"></slot>
+        </template>
+      </ui-form-header>
     </slot>
-    <ui-editor :config="editor" v-model="model" :meta="meta" :disabled="readonly" :scope="true">
+    <ui-editor :config="editor" v-model="model" :meta="meta" :disabled="readonly" :scope="true" :on-configure="onEditorConfigured">
       <template v-slot:below>
         <ui-editor-infos v-model="model" :disabled="readonly" />
       </template>
@@ -80,10 +85,16 @@
 
     data: () => ({
       meta: {},
-      model: {}
+      model: {},
+      resolvedEditor: null
     }),
 
     methods: {
+
+      onEditorConfigured(editor)
+      {
+        this.resolvedEditor = editor;
+      },
 
       async onInternalLoad(form)
       {

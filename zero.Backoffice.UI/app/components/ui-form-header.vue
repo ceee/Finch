@@ -20,10 +20,16 @@
       <slot name="buttons"></slot>
       <ui-dropdown v-if="actionsDefined" align="right" theme="default">
         <template v-slot:button>
-          <ui-button type="light onbg" label="@ui.actions" caret="down" />
+          <ui-button type="light onbg" icon="fth-more-horizontal" v-localize:title="'@ui.actions'" />
         </template>
         <slot name="actions"></slot>
         <ui-dropdown-button v-if="canDelete" label="@ui.delete" icon="fth-trash" @click="onDelete" :disabled="disabled" />
+        <ui-dropdown-separator v-if="!isCreate" />
+        <div class="ui-form-info" v-if="!isCreate">
+          <div class="ui-form-info-item" v-if="value.createdDate"><span class="-key" v-localize="'@ui.createdDate'"></span><span class="-value"><ui-date v-model="value.createdDate" :split="true" format="long" /></span></div>
+          <div class="ui-form-info-item" v-if="value.lastModifiedDate"><span class="-key" v-localize="'@ui.modifiedDate'"></span><span class="-value"><ui-date v-model="value.lastModifiedDate" :split="true" format="long" /></span></div>
+          <!--<div class="ui-form-info-item" v-if="value.alias"><span class="-key" v-localize="'@ui.entityfields.alias'"></span><span class="-value">{{value.alias}}</span></div>-->
+        </div>
       </ui-dropdown>
       <ui-button :submit="true" type="accent" :label="isCreate ? '@ui.create' :'@ui.update'" :state="state" v-if="!disabled" class="ui-form-header-primary-button" />
     </div>
@@ -134,6 +140,7 @@
     position: relative;
     top: -1px;
     margin-left: var(--padding-s);
+    //margin-right: var(--padding-s);
 
     .ui-toggle-off-warning
     {
@@ -235,5 +242,25 @@
   {
     margin: 0 !important;
     font-size: 18px;
+  }
+
+  .ui-form-info
+  {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-xs);
+    font-size: var(--font-size-s);
+  }
+
+  .ui-form-info-item
+  {
+    display: flex;
+    justify-content: space-between;
+
+    .-key
+    {
+      color: var(--color-text-dim-one);
+    }
   }
 </style>

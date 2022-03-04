@@ -64,19 +64,12 @@ public class PagesController : ZeroApiTreeEntityStoreController<Page, IPagesStor
     return GetModelsByIndex<zero_Api_Pages_Listing>(query);
   }
 
-  [HttpGet("{id}/urls")]
+  [HttpGet("{id}/url")]
   [ZeroAuthorize(PagePermissions.Read)]
-  public async Task<ActionResult<UrlsResult>> GetUrls(string id)
+  public async Task<ActionResult<UrlResult>> GetUrl(string id)
   {
     string url = await Routes.GetUrl<Page>(id);
-    return new UrlsResult(ZeroContext.Application.Domains.FirstOrDefault(), url);
-  }
-
-  [HttpGet("{id}/urls/preview")]
-  [ZeroAuthorize(PagePermissions.Read)]
-  public async Task<ActionResult<PreviewUrlResult>> GetPreviewUrl(string id)
-  {
-    return new PreviewUrlResult(await Routes.GetUrl<Page>(id));
+    return new UrlResult(ZeroContext.Application.Domains.FirstOrDefault(), url);
   }
 
   [HttpPost("")]

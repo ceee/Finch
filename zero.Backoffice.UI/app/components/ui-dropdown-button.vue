@@ -1,13 +1,13 @@
 ﻿<template>
   <button v-if="!confirming" :disabled="disabled" type="button" @click.stop="onClick" class="ui-dropdown-button" :class="{ 'has-icon': icon, 'is-active': selected, 'is-multiline': multiline }">
     <ui-icon v-if="icon" :symbol="icon" class="ui-dropdown-button-icon" />
-    <span><ui-localize :value="label" /><span v-if="confirm && !confirming"> &hellip;</span></span>   
+    <span class="-name"><ui-localize :value="label" /><span v-if="confirm && !confirming"> &hellip;</span></span>   
     <ui-icon v-if="selected" symbol="fth-check" class="ui-dropdown-button-selected" /> 
     <i v-if="loading" class="ui-dropdown-button-progress"></i>
   </button>
   <div v-if="confirming" class="ui-dropdown-button ui-dropdown-button-confirmation">
     <ui-icon v-if="icon" :symbol="icon" class="ui-dropdown-button-icon" />
-    <span><ui-localize :value="label" /><span>?</span></span>
+    <span class="-name"><ui-localize :value="label" /><span>?</span></span>
     <ui-button type="small light" icon="fth-x" title="@ui.cancel" @click="confirming=false" />
     <ui-button :type="negative ? 'small danger' : 'small primary'" icon="fth-check" title="@ui.ok" @click="onClick($event, true)" />
   </div>
@@ -130,7 +130,7 @@
 
 
 <style lang="scss">
-  button.ui-dropdown-button
+  button.ui-dropdown-button, a.ui-dropdown-button
   {
     display: grid;
     width: 100%;
@@ -147,6 +147,16 @@
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: 100%;
+
+    .-minor
+    {
+      display: block;
+      font-size: var(--font-size-xs);
+      color: var(--color-text-dim-one);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     &.has-icon
     {
