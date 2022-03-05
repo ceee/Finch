@@ -8,7 +8,8 @@
   </a>
   <a v-if="hasLink" :href="urlLinkAbsolute" target="_blank" :disabled="disabled || !urlLink" type="button" class="ui-dropdown-button has-icon" @click="dropdown.hide()">
     <ui-icon symbol="fth-external-link" class="ui-dropdown-button-icon" />
-    <span class="-name"><ui-localize value="@ui.open.title" /><span class="-minor" v-if="false && urlLink" :title="urlLink">{{urlLink}}</span></span>
+    <span class="-name"><ui-localize value="@ui.open.title" /></span>
+    <span class="-minor -link" v-if="urlLink && urlList.length > 1" :title="urlLink">{{urlList.length}} URLs</span>
   </a>
   <ui-dropdown-separator v-if="hasPreview || hasLink" />
 </template>
@@ -84,11 +85,11 @@
       },
       urlLink()
       {
-        return this.urlDomain && this.urlList.length ? this.urlList[0] : null;
+        return this.urlDomain && this.urlList.length ? this.urlList.reduce((a, b) => a.length <= b.length ? a : b) : null;
       },
       urlLinkAbsolute()
       {
-        return this.urlDomain && this.urlList.length ? this.urlDomain + this.urlList[0] : null;
+        return this.urlDomain && this.urlList.length ? this.urlDomain + this.urlList.reduce((a, b) => a.length <= b.length ? a : b) : null;
       },
       previewLink()
       {
