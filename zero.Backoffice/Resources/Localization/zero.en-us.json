@@ -56,8 +56,10 @@
     "remove": "Remove",
     "alias": "Alias",
     "link": "Link",
+    "links": "Links",
     "item": "Item",
     "url": "URL",
+    "urls": "URLs",
     "emptylist": "There are no items to show in this list",
     "pagination": {
       "xofy": "Page {x} of {y}",

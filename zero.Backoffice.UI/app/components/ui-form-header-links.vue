@@ -9,13 +9,15 @@
   <a v-if="hasLink" :href="urlLinkAbsolute" target="_blank" :disabled="disabled || !urlLink" type="button" class="ui-dropdown-button has-icon" @click="dropdown.hide()">
     <ui-icon symbol="fth-external-link" class="ui-dropdown-button-icon" />
     <span class="-name"><ui-localize value="@ui.open.title" /></span>
-    <span class="-minor -link" v-if="urlLink && urlList.length > 1" :title="urlLink">{{urlList.length}} URLs</span>
+    <span class="-minor -link" v-if="urlLink && urlList.length > 1" @click.prevent.stop="showLinkList">{{urlList.length}} URLs</span>
   </a>
   <ui-dropdown-separator v-if="hasPreview || hasLink" />
 </template>
 
 
 <script>
+  import * as overlays from '../services/overlay';
+
   export default {
     name: 'uiFormHeaderLinks',
 
@@ -110,6 +112,21 @@
       {
         window.open(this.previewLink, 'preview');
         this.dropdown.hide();
+      },
+
+      async showLinkList()
+      {
+        this.dropdown.hide();
+        await overlays.open({
+          component: () => import('./ui-form-header-links-overlay.vue'),
+          display: 'editor',
+          width: 620,
+          softdismiss: true,
+          model: {
+            urls: this.urlList,
+            urlPrefix: this.urlDomain
+          }
+        });
       }
     }
   }
@@ -117,5 +134,15 @@
 
 
 <style lang="scss">
-  
+  .ui-dropdown-button .-link.-minor
+  {
+    display: inline-block;
+    padding: 10px 0;
+
+    &:hover
+    {
+      color: var(--color-text);
+      text-decoration: underline dotted var(--color-text);
+    }
+  }
 </style>

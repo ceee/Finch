@@ -53,8 +53,10 @@
     "remove": "Entfernen",
     "alias": "Alias",
     "link": "Link",
+    "links": "Links",
     "item": "Element",
     "url": "URL",
+    "urls": "URLs",
     "emptylist": "Keine Ergebnisse gefunden",
     "pagination": {
       "xofy": "Seite {x} von {y}",
