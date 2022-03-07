@@ -21,6 +21,7 @@ global using zero.Media;
 global using zero.Models;
 global using zero.Pages;
 global using zero.Persistence;
+global using zero.Preview;
 global using zero.Rendering;
 global using zero.Routing;
 global using zero.Stores;

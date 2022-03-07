@@ -10,6 +10,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue';
+  import api from './api';
 
   export default defineComponent({
 
@@ -19,7 +20,11 @@
 
     created()
     {
-      this.src = 'http://localhost:2310' + this.$route.query.path + '?zero_preview=true';
+      api.createPreviewToken('mykey').then(res =>
+      {
+        let model = res.data;
+        this.src = 'http://localhost:2310' + this.$route.query.path + `?${model.queryParameter}=${model.token}`;
+      });
     }
   });
 </script>

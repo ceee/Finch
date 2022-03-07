@@ -6,6 +6,7 @@ using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using zero.Backoffice.Services;
+using zero.Preview;
 
 namespace zero.Backoffice.Endpoints.UI;
 
@@ -19,9 +20,12 @@ public class UIController : ZeroBackofficeController
   readonly ICultureService CultureService;
   readonly IUserService UserService;
   readonly IRequestUrlResolver RequestUrlResolver;
+  readonly IPreviewService PreviewService;
+  readonly IZeroContext ZeroContext;
   readonly HttpClient HttpClient;
 
-  public UIController(IUserService userService, IIconService iconService, IResourceService resourceService, ISectionService sectionService, IZeroOptions options, IMediaManagement media, ICultureService cultureService, IRequestUrlResolver requestUrlResolver)
+  public UIController(IUserService userService, IIconService iconService, IResourceService resourceService, ISectionService sectionService, IZeroOptions options, IMediaManagement media, 
+    ICultureService cultureService, IRequestUrlResolver requestUrlResolver, IPreviewService previewService, IZeroContext zeroContext)
   {
     UserService = userService;
     IconService = iconService;
@@ -31,6 +35,8 @@ public class UIController : ZeroBackofficeController
     Options = options;
     Media = media;
     RequestUrlResolver = requestUrlResolver;
+    PreviewService = previewService;
+    ZeroContext = zeroContext;
     HttpClient = new HttpClient();
   }
 
@@ -94,6 +100,18 @@ public class UIController : ZeroBackofficeController
     }
 
     return result;
+  }
+
+
+  [HttpPost("previews/token")]
+  public async Task<ActionResult<PreviewRequestTokenModel.Response>> GetPreviewToken(PreviewRequestTokenModel model)
+  {
+    string token = await PreviewService.CreateAccessToken(model.Key, ZeroContext.BackofficeUser);
+    return new PreviewRequestTokenModel.Response()
+    {
+      Token = token,
+      QueryParameter = Options.For<PreviewOptions>().QueryParameter
+    };
   }
 
 

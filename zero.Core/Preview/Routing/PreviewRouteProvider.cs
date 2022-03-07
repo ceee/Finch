@@ -12,7 +12,7 @@ public class PreviewRouteProvider : ZeroRouteProvider<PreviewRouteModel>
   public override async Task<Route> Create(RoutingContext context, PreviewRouteModel model)
   {
     Route route = await base.Create(context, model);
-    route.Url = context.Context.Options.For<PreviewOptions>().PreviewPath.EnsureStartsWith('/').TrimEnd('/');
+    route.Url = context.Context.Options.For<PreviewOptions>().Path.EnsureStartsWith('/').TrimEnd('/');
     return route;
   }
 

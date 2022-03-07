@@ -127,6 +127,22 @@ public class ZeroTokenProvider : IZeroTokenProvider
   }
 
 
+  /// <inheritdoc />
+  public virtual async Task<bool> Exists(string token)
+  {
+    if (token.IsNullOrWhiteSpace())
+    {
+      return false;
+    }
+
+    IZeroDocumentSession session = Store.Session();
+
+    // try to find a valid token
+    SecurityToken securityToken = await session.LoadAsync<SecurityToken>(TokenToId(token));
+    return securityToken != null;
+  }
+
+
   /// <summary>
   /// Converts the token to a database id
   /// </summary>
@@ -271,4 +287,9 @@ public interface IZeroTokenProvider
   /// This method won't store the token in the database and can't be used for verification. Use <see cref="Create(string, TimeSpan, int)"/> instead.
   /// </remarks>
   string Random(int length);
+
+  /// <summary>
+  /// Determines whether a token exists in the database.
+  /// </summary>
+  Task<bool> Exists(string token);
 }

@@ -56,12 +56,14 @@ public class ZeroContext : IZeroContext
 
   protected IPrimitiveTypeCollection ValueCollection { get; private set; }
 
+  protected IPreviewService PreviewService { get; private set; }
+
 
   bool _resolved = false;
 
 
   public ZeroContext(IZeroOptions options, IHttpContextAccessor httpContextAccessor, IApplicationResolver appResolver, ICultureResolver cultureResolver, 
-    ILogger<ZeroContext> logger, IZeroStore store, IHandlerHolder handler, IServiceProvider services)
+    ILogger<ZeroContext> logger, IZeroStore store, IHandlerHolder handler, IServiceProvider services, IPreviewService previewService)
   {
     Options = options;
     AppResolver = appResolver;
@@ -72,6 +74,7 @@ public class ZeroContext : IZeroContext
     ValueCollection = new PrimitiveTypeCollection();
     HttpContextAccessor = httpContextAccessor;
     Services = services;
+    PreviewService = previewService;
   }
 
 
@@ -96,9 +99,6 @@ public class ZeroContext : IZeroContext
 
     _resolved = true;
 
-    // check whether the current request is a preview request
-    IsPreview = context.Request.Query.ContainsKey("zero_preview");
-
     // check if the current request is a backoffice request
     IsBackofficeRequest = context.IsBackofficeRequest(Options.ZeroPath);
 
@@ -111,6 +111,9 @@ public class ZeroContext : IZeroContext
       BackofficeUser = authResult.Principal;
       IsLoggedIntoBackoffice = true;
     }
+
+    // check whether the current request is a preview request
+    IsPreview = await PreviewService.IsAccessGranted(context.Request, BackofficeUser);
 
     // resolve current application
     Application = await AppResolver.Resolve(context, BackofficeUser);

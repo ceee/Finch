@@ -52,6 +52,7 @@ public class ZeroBuilder
     Modules.Add<ZeroMediaModule>();
     Modules.Add<ZeroPageModule>();
     Modules.Add<ZeroPersistenceModule>();
+    Modules.Add<ZeroPreviewModule>();
     Modules.Add<ZeroRenderingModule>();
     Modules.Add<ZeroRoutingModule>();
     Modules.Add<ZeroSpaceModule>();
