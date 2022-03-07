@@ -135,6 +135,13 @@ button::-moz-focus-inner
     padding: 0 16px;
   }
 
+  &.type-outline
+  {
+    background: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-line);
+  }
+
   &.type-block
   {
     display: flex;
