@@ -145,12 +145,17 @@
     watch: {
       'query.search': function (val)
       {
-        if (this.loaded) this.onChange();
+        if (this.loaded)
+        {
+          this.query.page = 1;
+          this.onChange();
+        }
       },
-      //$route(to, from)
-      //{
-      //  this.setup();
-      //}
+      $route(to, from)
+      {
+        //console.info('$route changed', to);
+        this.setup();
+      }
     },
 
     methods: {
@@ -213,7 +218,7 @@
         this.items = fetchResult.data;
         this.selected = [];
 
-        if (!initial && !this.listConfig.preventScroll) //&& this.configuration.scrollToTop)
+        if (!this.listConfig.preventScroll) //&& this.configuration.scrollToTop)
         {
           let container = document.querySelector(this.listConfig.scrollContainerSelector || '.app-main');
 
@@ -240,11 +245,15 @@
       {
         if (!this.listConfig.noQueryString)
         {
-          const query = Qs.stringify(this.listConfig.paramsToQuery(this.query));
-          const path = this.$route.href.split('?')[0] + (query ? '?' + query : '');
-          history.replaceState(null, null, path);
+          //const query = Qs.stringify(this.listConfig.paramsToQuery(this.query));
+          //const path = this.$route.href.split('?')[0] + (query ? '?' + query : '');
+          //history.replaceState({}, null, path);
+          this.$router.replace({ path: this.$route.path, params: this.$route.params, query: this.listConfig.paramsToQuery(this.query) })
         }
-        this.debouncedUpdate();
+        else
+        {
+          this.debouncedUpdate();
+        }
       },
 
 
