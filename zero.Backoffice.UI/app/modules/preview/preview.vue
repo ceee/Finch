@@ -23,7 +23,7 @@
       api.createPreviewToken('mykey').then(res =>
       {
         let model = res.data;
-        this.src = 'http://localhost:2310' + this.$route.query.path + `?${model.queryParameter}=${model.token}`;
+        this.src = 'https://www.laola.biz' + this.$route.query.path + `?${model.queryParameter}=${model.token}`; // TODO dynamic URL
       });
     }
   });
