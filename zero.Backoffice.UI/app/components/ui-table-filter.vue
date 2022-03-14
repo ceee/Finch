@@ -200,6 +200,7 @@
           }
         });
 
+
         if (result.eventType == 'confirm')
         {
           const value = result.value;
