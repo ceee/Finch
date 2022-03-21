@@ -44,9 +44,10 @@ public class ExcelCreator<T> : ITableCreator<T>
   {
     Culture = culture;
     Workbook = Create(true, out int lineNumber);
+    IXLWorksheet sheet = Workbook.Worksheets.First();
     foreach (T item in source)
     {
-      AddRow(Workbook.Worksheets.First(), lineNumber++, Columns, item);
+      AddRow(sheet, lineNumber++, Columns, item);
     }
     Stream = new MemoryStream();
     Workbook.SaveAs(Stream);
@@ -62,9 +63,10 @@ public class ExcelCreator<T> : ITableCreator<T>
   {
     Culture = culture;
     Workbook = Create(true, out int lineNumber);
+    IXLWorksheet sheet = Workbook.Worksheets.First();
     await foreach (T item in source.WithCancellation(token))
     {
-      AddRow(Workbook.Worksheets.First(), lineNumber++, Columns, item);
+      AddRow(sheet, lineNumber++, Columns, item);
     }
     Stream = new MemoryStream();
     Workbook.SaveAs(Stream);
@@ -82,7 +84,6 @@ public class ExcelCreator<T> : ITableCreator<T>
     IXLWorksheet worksheet = workbook.Worksheets.Add("Data");
 
     int lineNumber = 1;
-
 
     // add metadata + defaults
     workbook.RowHeight = 20;
