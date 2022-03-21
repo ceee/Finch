@@ -122,11 +122,10 @@
 
   .ui-header-bar-inner
   {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     height: 100%;
-    /*max-width: 1104px;*/
   }
 
   .ui-header-bar-main
@@ -135,10 +134,12 @@
     align-items: center;
     height: 100%;
     flex: 1 0 auto;
+    overflow: hidden;
 
     .ui-icon-button
     {
       margin-right: var(--padding-s);
+      flex-shrink: 0;
       //margin-top: -2px;
     }
   }
