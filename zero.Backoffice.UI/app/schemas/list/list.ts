@@ -105,6 +105,7 @@ class List implements ZeroSchema
     {
       values.filter = params.filter.id;
     }
+
     return values;
   };
 

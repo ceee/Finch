@@ -98,6 +98,7 @@
     }
   }
 
+  const FILTER_KEY_PREFIX = 'zero.ui-table-filter.';
 
   export default defineComponent({
     name: 'uiTable',
@@ -122,6 +123,7 @@
       listConfig: {},
       columns: [],
       query: {},
+      alias: null,
       filter: null,
 
       items: [],
@@ -164,6 +166,7 @@
       {
         this.debouncedUpdate = debounce(this.update, 300);
         const schema = typeof this.config === 'string' ? await this.zero.getSchema(this.config) : this.config;
+        this.alias = schema.alias;
         this.listConfig = compileList(this.zero, schema);
         this.itemComponentConfig = this.listConfig.componentConfig || { active: false };
         //this.listConfig.selectable = true;
@@ -187,6 +190,18 @@
         this.query = { ...this.listConfig.query, ...this.listConfig.queryToParams(this.$route.query) };
         this.component = !!this.listConfig.link ? 'router-link' : (!!this.listConfig.onClick ? 'button' : 'div');
         this.filter = { ...this.listConfig.filterOptions };
+
+        if (this.query.filter && this.query.filter.id)
+        {
+          let filters = this.getStoredFilters();
+          let filter = filters.find(x => x.id === this.query.filter.id);
+
+          if (filter)
+          {
+            this.query.filter = { ...filter.filter, id: filter.id };
+          }
+        }
+
         this.$nextTick(() =>
         {
           this.loaded = true;
@@ -227,6 +242,17 @@
             this.$nextTick(() => container.scrollTo({ top: 0, behavior: 'smooth' }));
           }
         }
+      },
+
+
+      // load stored filters from local storage
+      getStoredFilters()
+      {
+        if (!this.filter.editor)
+        {
+          return [];
+        }
+        return JSON.parse(localStorage.getItem(FILTER_KEY_PREFIX + this.filter.editor.alias) || "[]");
       },
 
 
@@ -295,7 +321,6 @@
       // set a new filter
       setFilter(filter)
       {
-        console.info('filter', filter);
         this.query.filter = filter;
         this.onChange();
       },

@@ -9,7 +9,7 @@
       <template v-slot:footer>
         <ui-button type="light onbg" label="@ui.close" @click="config.close"></ui-button>
         <ui-button v-if="!model.isCreate" type="light onbg" label="@ui.remove" @click="onRemove"></ui-button>
-        <ui-button type="accent" :submit="true" label="@ui.confirm" :state="form.state" :disabled="loading || disabled"></ui-button>
+        <ui-button type="accent" :submit="true" label="@ui.confirm" :state="form.state" :disabled="loading || disabled || !filterName"></ui-button>
       </template>
 
       <ui-loading v-if="loading" :is-big="true" />

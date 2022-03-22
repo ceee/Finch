@@ -101,6 +101,18 @@
         this.storedFilters = this.getStoredFilters();
         this.actions = this.attach.listConfig.actions;
 
+        let filterId = this.$route.query['filter'];
+
+        if (filterId)
+        {
+          let filter = this.storedFilters.find(x => x.id === filterId);
+
+          if (filter)
+          {
+            this.setFilter(filter);
+          }
+        }
+
         this.loaded = true;
       },
 
@@ -124,7 +136,7 @@
 
 
       // set the current filter
-      setFilter(value, two)
+      setFilter(value)
       {
         if (!value)
         {
