@@ -2,6 +2,11 @@
 
 public struct ApiRequestHints
 {
+  public ApiRequestHints(ApiResponsePreference responsePreference)
+  {
+    ResponsePreference = responsePreference;
+  }
+
   public ApiResponsePreference ResponsePreference { get; set; } = ApiResponsePreference.Representation;
 }
 
