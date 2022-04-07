@@ -101,7 +101,7 @@ public abstract class ZeroApiTreeEntityStoreController<TModel, TStore> : ZeroApi
   {
     Result<TModel> result = await action();
 
-    if (Hints.ResponsePreference == ApiResponsePreference.Minimal)
+    if (false && Hints.ResponsePreference == ApiResponsePreference.Minimal)
     {
       return result.WithoutModel();
     }
@@ -114,7 +114,7 @@ public abstract class ZeroApiTreeEntityStoreController<TModel, TStore> : ZeroApi
   {
     Result<TModel> result = await action();
 
-    if (Hints.ResponsePreference == ApiResponsePreference.Minimal)
+    if (false && Hints.ResponsePreference == ApiResponsePreference.Minimal)
     {
       return result.WithoutModel();
     }

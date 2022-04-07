@@ -137,7 +137,7 @@ public class ZeroApiEntityStoreOperations<TModel, TStore>
 
     Result<TModel> result = await Store.Create(model);
 
-    bool minimalResponse = Controller.Hints.ResponsePreference == ApiResponsePreference.Minimal;
+    bool minimalResponse = false && Controller.Hints.ResponsePreference == ApiResponsePreference.Minimal;
 
     if (result.IsSuccess)
     {
@@ -153,7 +153,7 @@ public class ZeroApiEntityStoreOperations<TModel, TStore>
   {
     Result<TModel> result = await Store.Create(saveModel);
 
-    bool minimalResponse = Controller.Hints.ResponsePreference == ApiResponsePreference.Minimal;
+    bool minimalResponse = false && Controller.Hints.ResponsePreference == ApiResponsePreference.Minimal;
 
     if (result.IsSuccess)
     {
@@ -189,7 +189,7 @@ public class ZeroApiEntityStoreOperations<TModel, TStore>
 
     Result<TModel> result = await Store.Update(model);
 
-    if (Controller.Hints.ResponsePreference == ApiResponsePreference.Minimal)
+    if (false && Controller.Hints.ResponsePreference == ApiResponsePreference.Minimal)
     {
       return result.WithoutModel();
     }
@@ -224,7 +224,7 @@ public class ZeroApiEntityStoreOperations<TModel, TStore>
 
     Result<TModel> result = await Store.Update(updateModel);
 
-    if (Controller.Hints.ResponsePreference == ApiResponsePreference.Minimal)
+    if (false && Controller.Hints.ResponsePreference == ApiResponsePreference.Minimal)
     {
       return result.WithoutModel();
     }
