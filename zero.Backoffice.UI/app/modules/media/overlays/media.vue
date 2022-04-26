@@ -115,6 +115,8 @@
       {
         if (this.loaded && this.$refs.grid)
         {
+          this.gridConfig.page = 1;
+          this.$refs.grid.filter.page = 1;
           this.$refs.grid.search(val);
         }
       }
@@ -180,6 +182,10 @@
       async selectItem(id)
       {
         this.parentId = id;
+        this.gridConfig.page = 1;
+        this.$refs.grid.filter.page = 1;
+        this.$refs.grid.filter.search = null;
+        this.search = null;
         await this.refresh();
       },
 
