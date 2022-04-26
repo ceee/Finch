@@ -33,8 +33,8 @@ public class CsvCreator<T> : ITableCreator<T>
   {
     Localizer = localizer;
     Columns = columns;
-    YesText = localizer.Text("ui.yes");
-    NoText = localizer.Text("ui.no");
+    YesText = "yes"; // localizer.Text("ui.yes");
+    NoText = "no"; // localizer.Text("ui.no");
   }
 
 
