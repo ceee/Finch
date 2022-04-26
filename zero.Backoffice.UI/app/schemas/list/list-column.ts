@@ -195,14 +195,15 @@ class ListColumn
 
   /**
    * Output an image by using the value media ID
+   * @param {function} [titleFunc] - Custom function to render a title
    * @returns {ListColumn}
    */
-  image()
+  image(titleFunc: any = null)
   {
     this._type = 'image';
     this._asHtml = true;
-    // TODO correct app ID
-    this._func = (value, opts) =>
+    this._funcOptions = { titleFunc };
+    this._func = (value, opts, model) =>
     {
       let id = value;
 
@@ -216,7 +217,9 @@ class ListColumn
         return '';
       }
 
-      return `<img src="/zero/api/hofbauer/backoffice/ui/thumbnail/${(id)}-thumb.tmp" onerror="this.classList.add('is-error')" class="ui-table-field-image">`;
+      let title = typeof opts.titleFunc == 'function' ? opts.titleFunc(value, model) : '';
+
+      return `<img src="/zero/api/hofbauer/backoffice/ui/thumbnail/${(id)}-thumb.tmp" onerror="this.classList.add('is-error')" title="${title}" class="ui-table-field-image">`;
     };
     return this;
   }
