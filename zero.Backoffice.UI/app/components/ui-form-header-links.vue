@@ -102,6 +102,11 @@
     methods: {
       async loadUrls()
       {
+        if (typeof this.url !== 'function')
+        {
+          this.failed = true;
+          return;
+        }
         const result = await this.url(this.value);
         this.urlList = result.data.urls ? result.data.urls : (result.data.url ? [result.data.url] : []);
         this.urlDomain = result.data.domain;
