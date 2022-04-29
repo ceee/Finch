@@ -84,9 +84,10 @@ class List implements ZeroSchema
   /**
    * Converts the list parameters (like page, search, filter, ...) to a vue router query
    */
-  paramsToQuery = params =>
+  paramsToQuery = (params: any, mergeWithUrlQuery: boolean = false) =>
   {
     let values: any = {};
+    let reserved = ['page', 'by', 'desc', 'search', 'filter', 'orderBy', 'isDescending'];
 
     if (params.page !== this.query.page)
     {
@@ -104,6 +105,18 @@ class List implements ZeroSchema
     if (params.filter && params.filter.id)
     {
       values.filter = params.filter.id;
+    }
+
+    if (mergeWithUrlQuery)
+    {
+      var urlParams = new URLSearchParams(location.search);
+      urlParams.forEach((value, key) =>
+      {
+        if (reserved.indexOf(key) < 0)
+        {
+          values[key] = value;
+        }
+      });
     }
 
     return values;
