@@ -110,6 +110,7 @@
       onSelect(date)
       {
         let dateStr = toIsoDate(date);
+        //console.info(dateStr, date);
         this.setValue(dateStr);
         this.$refs.overlay.hide();
         document.activeElement.blur();

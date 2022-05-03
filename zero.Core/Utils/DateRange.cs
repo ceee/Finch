@@ -29,12 +29,12 @@ public class DateRange
     }
     if (!From.HasValue && To.HasValue)
     {
-      return "≤ " + To.Value.ToString(format);
+      return "≤ " + To.Value.ToLocalTime().ToString(format);
     }
     if (From.HasValue && !To.HasValue)
     {
-      return "≥ " + From.Value.ToString(format);
+      return "≥ " + From.Value.ToLocalTime().ToString(format);
     }
-    return From.Value.ToString(format) + " – " + To.Value.ToString(format);
+    return From.Value.ToLocalTime().ToString(format) + " – " + To.Value.ToLocalTime().ToString(format);
   }
 }
