@@ -4,15 +4,15 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import pluginRewriteAll from 'vite-plugin-rewrite-all'
 
+let projectConfig = {
+  host: 'http://localhost:2310',
+  plugins: ["../plugins/zero.Commerce/Backoffice/Plugin", "../../Laola/Laola.Backoffice/Plugin"]
+};
+
 let loadedPlugins = JSON.parse(process.env.ZERO_PLUGINS || "[]");
-
-
 if (!process.env.ZERO_PLUGINS)
 {
-  //loadedPlugins = ["../zero.Commerce/Plugin", "../zero.Stories/Plugin", "../zero.Forms/Plugin", "../../Laola/Laola.Backoffice/Plugin"];
-  loadedPlugins = ["../plugins/zero.Commerce/Backoffice/Plugin", "../../Laola/Laola.Backoffice/Plugin"]
-  //loadedPlugins = ["../plugins/zero.Commerce/Backoffice/Plugin"]
-  //loadedPlugins = [];
+  loadedPlugins = projectConfig.plugins;
 }
 
 let zeroPlugins = [];
@@ -63,13 +63,13 @@ let config = defineConfig({
     cors: true,
     proxy: {
       '/zero/api': {
-        target: 'http://localhost:2310',
+        target: projectConfig.host,
         changeOrigin: true,
         secure: false,
         ws: false
       },
       '/uploads': {
-        target: 'http://localhost:2310',
+        target: projectConfig.host,
         changeOrigin: true,
         secure: false,
         ws: false
