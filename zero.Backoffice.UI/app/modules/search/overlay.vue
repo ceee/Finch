@@ -185,7 +185,7 @@
 
     &:hover .app-search-item-group
     {
-      background: var(--color-bg-shade-1);
+      background: var(--color-bg-shade-4);
     }
   }
 
