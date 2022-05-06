@@ -91,4 +91,19 @@ public static class ServiceCollectionExtensions
       services.Add(new ServiceDescriptor(typeof(TService), typeof(TNewImplementation), oldDescriptor.Lifetime));
     }
   }
+
+
+  /// <summary>
+  /// Removes an implementation
+  /// </summary>
+  public static void Remove<TService, TImplementation>(this IServiceCollection services)
+    where TService : class
+    where TImplementation : class, TService
+  {
+    ServiceDescriptor oldDescriptor = services.FirstOrDefault(x => x.ImplementationType == typeof(TImplementation));
+    if (oldDescriptor != null)
+    {
+      services.Remove(oldDescriptor);
+    }
+  }
 }

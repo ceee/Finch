@@ -5,9 +5,16 @@ import vue from '@vitejs/plugin-vue'
 import pluginRewriteAll from 'vite-plugin-rewrite-all'
 
 let projectConfig = {
-  host: 'http://localhost:2310',
-  plugins: ["../plugins/zero.Commerce/Backoffice/Plugin", "../../Laola/Laola.Backoffice/Plugin"]
+  port: 3499,
+  host: 'http://localhost:2510',
+  plugins: ["../../Gugg/Gugg.Backoffice/Plugin"]
 };
+
+//let projectConfig = {
+//  port: 3399,
+//  host: 'http://localhost:2310',
+//  plugins: ["../plugins/zero.Commerce/Backoffice/Plugin", "../../Laola/Laola.Backoffice/Plugin"]
+//};
 
 let loadedPlugins = JSON.parse(process.env.ZERO_PLUGINS || "[]");
 if (!process.env.ZERO_PLUGINS)
@@ -59,7 +66,7 @@ fs.writeFile(path.resolve(__dirname, 'app/plugins.generated.ts'), pluginFileCont
 
 let config = defineConfig({
   server: {
-    port: process.env.PORT || 3399,
+    port: process.env.PORT || projectConfig.port,
     cors: true,
     proxy: {
       '/zero/api': {

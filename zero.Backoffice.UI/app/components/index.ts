@@ -8,6 +8,7 @@ import uiDotButton from './ui-dot-button.vue';
 import uiIconButton from './ui-icon-button.vue';
 import uiSelectButton from './ui-select-button.vue';
 import uiStateButton from './ui-state-button.vue';
+import uiRadioButton from './ui-radio-button.vue';
 import uiAddButton from './ui-add-button.vue';
 import uiMessage from './ui-message.vue';
 import uiPagination from './ui-pagination.vue';
@@ -56,6 +57,7 @@ export {
   uiIconButton,
   uiSelectButton,
   uiStateButton,
+  uiRadioButton,
   uiAddButton,
   uiMessage,
   uiPagination,

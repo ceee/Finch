@@ -54,6 +54,12 @@ declare module 'zero/schemas'
 
     /**
      * Select one of the predefined values
+     * @param {RadioFieldOptions} options - Custom options
+     */
+    radio(options: RadioFieldOptions): ZeroEditorField;
+
+    /**
+     * Select one of the predefined values
      * @param {SelectFieldOptions} options - Custom options
      */
     select(options: SelectFieldOptions): ZeroEditorField;
@@ -159,6 +165,11 @@ declare module 'zero/schemas'
     items: SelectFieldItem[];
   }
 
+  export interface RadioFieldOptions
+  {
+    items: ExtendedSelectFieldItem[];
+  }
+
   export interface SelectFieldOptions
   {
     items: SelectFieldItem[] | ((model: any) => SelectFieldItem[]);
@@ -170,6 +181,12 @@ declare module 'zero/schemas'
     value: any;
     label: string;
     disabled?: boolean;
+  }
+
+  export interface ExtendedSelectFieldItem extends SelectFieldItem
+  {
+    description?: string;
+    icon?: string;
   }
 
   export interface TagFieldOptions
