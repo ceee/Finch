@@ -139,7 +139,7 @@
             this.zero.events.emit('page.create', response.model);
           }
           this.model = response.data;
-          localStorage.setItem('zero.last-page.hofbauer' /* // TODO v3 appid + response.model.appId */, response.data.id);
+          localStorage.setItem('zero.last-page' /* // TODO v3 appid + response.model.appId */, response.data.id);
         }
       },
 

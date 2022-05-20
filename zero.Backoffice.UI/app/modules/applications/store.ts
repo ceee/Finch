@@ -4,6 +4,7 @@ import api from './api';
 
 export const useAppStore = defineStore('zero.apps', {
   state: () => ({
+    appId: null,
     applications: []
   }),
 
@@ -12,6 +13,7 @@ export const useAppStore = defineStore('zero.apps', {
     {
       const response = await api.getByQuery({ pageSize: 1000 });
       this.applications = response.data;
+      this.appId = this.applications[0].id;
     }
   }
 });

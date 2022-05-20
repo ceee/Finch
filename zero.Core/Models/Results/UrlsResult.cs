@@ -14,7 +14,10 @@ public class UrlResult
 
   public UrlResult(Uri domain, string url)
   {
-    Domain = domain.Scheme + "://" + domain.Authority.TrimEnd("/");
+    if (domain != null)
+    {
+      Domain = domain.Scheme + "://" + domain.Authority.TrimEnd("/");
+    }
     Url = url;
   }
 }
@@ -33,7 +36,10 @@ public class UrlsResult
 
   public UrlsResult(Uri domain, params string[] urls)
   {
-    Domain = domain.Scheme + "://" + domain.Authority.TrimEnd("/");
+    if (domain != null)
+    {
+      Domain = domain.Scheme + "://" + domain.Authority.TrimEnd("/");
+    }
     Urls = urls.Where(x => x.HasValue()).ToArray();
   }
 }

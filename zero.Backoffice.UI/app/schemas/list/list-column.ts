@@ -219,7 +219,7 @@ class ListColumn
 
       let title = typeof opts.titleFunc == 'function' ? opts.titleFunc(value, model) : '';
 
-      return `<img src="/zero/api/hofbauer/backoffice/ui/thumbnail/${(id)}-thumb.tmp" onerror="this.classList.add('is-error')" title="${title}" class="ui-table-field-image">`;
+      return `<img src="/zero/api/root/backoffice/ui/thumbnail/${(id)}-thumb.tmp" onerror="this.classList.add('is-error')" title="${title}" class="ui-table-field-image">`;
     };
     return this;
   }

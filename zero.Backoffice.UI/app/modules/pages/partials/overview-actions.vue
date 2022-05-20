@@ -35,7 +35,7 @@
 
       var instance = this;
 
-      let lastEditedPageId = localStorage.getItem('zero.last-page.hofbauer'); // TODO v3 + zero.appId);
+      let lastEditedPageId = localStorage.getItem('zero.last-page'); // TODO v3 + zero.appId);
 
       if (lastEditedPageId)
       {

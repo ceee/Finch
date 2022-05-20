@@ -68,7 +68,7 @@ Axios.interceptors.request.use(config =>
   }
 
   let locationQuery = Qs.parse(location.search.substring(1));
-  let appKey = 'hofbauer';
+  let appKey = 'system';
 
   // set app key to system when required
   if (config.params['zero.system'] === true || locationQuery['zero.shared'] === "true")

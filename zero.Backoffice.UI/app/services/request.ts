@@ -33,7 +33,7 @@ export function patch(url: string, data: any, config?: ApiRequestConfig)
 export function url(url: string)
 {
   // TODO correct app
-  return paths.api.replace('{app}', 'hofbauer') + '/' + url;
+  return paths.api.replace('{app}', 'system') + '/' + url;
 }
 
 

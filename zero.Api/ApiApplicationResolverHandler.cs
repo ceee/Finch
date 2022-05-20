@@ -22,15 +22,18 @@ public class ApiApplicationResolverHandler : IBackofficeApplicationResolverHandl
       return false;
     }
 
-    string appKey = context.Request.Path.Value.Substring(path.Length).TrimStart('/').Split('/').ElementAtOrDefault(1);
+    resolved = applications.FirstOrDefault();
+    return resolved != null;
 
-    if (appKey.HasValue())
-    {
-      resolved = applications.FirstOrDefault(x => x.Alias == appKey);
-      return resolved != null;
-    }
+    //string appKey = context.Request.Path.Value.Substring(path.Length).TrimStart('/').Split('/').ElementAtOrDefault(1);
 
-    resolved = null;
-    return false;
+    //if (appKey.HasValue())
+    //{
+    //  resolved = applications.FirstOrDefault(x => x.Alias == appKey);
+    //  return resolved != null;
+    //}
+
+    //resolved = null;
+    //return false;
   }
 }

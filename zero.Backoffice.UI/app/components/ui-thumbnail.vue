@@ -7,6 +7,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { paths } from '../options';
+  import { useAppStore } from '../modules/applications/store';
 
   export default defineComponent({
     name: 'uiThumbnail',
@@ -23,13 +24,19 @@
     },
 
     data: () => ({
-      hasError: false
+      hasError: false,
+      appStore: null,
     }),
+
+    created()
+    {
+      this.appStore = useAppStore();
+    },
 
     computed: {
       src()
       {
-        return this.media ? (paths.api.replace('{app}', 'hofbauer') + '/backoffice/ui/thumbnail/' + this.media + '-' + this.size + '.tmp') : null;
+        return this.media ? (paths.api.replace('{app}', this.appStore.appId) + '/backoffice/ui/thumbnail/' + this.media + '-' + this.size + '.tmp') : null;
       },
 
       onError(ev)
