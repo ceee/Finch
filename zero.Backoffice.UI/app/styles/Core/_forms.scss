@@ -212,6 +212,19 @@ textarea
     }
   }
 
+  &.is-accent
+  {
+    input:checked ~ &
+    {
+      background: var(--color-accent);
+
+      &:before
+      {
+        color: var(--color-accent-fg);
+      }
+    }
+  }
+
   .ui-native-check.is-right &
   {
     margin-left: 10px; 

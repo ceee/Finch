@@ -82,9 +82,18 @@ export interface ZeroCompiledEditorField
 
 export function compileField(zero: Zero, editor: ZeroEditor, field: ZeroEditorField): ZeroCompiledEditorField | undefined
 {
-  const component = markRaw(field.customComponent || zero.getFieldTypeComponent(field.fieldType));
+  let component = null;
 
-  if (!component)
+  try
+  {
+    component = markRaw(field.customComponent || zero.getFieldTypeComponent(field.fieldType));
+
+    if (!component)
+    {
+      return undefined;
+    }
+  }
+  catch
   {
     return undefined;
   }
