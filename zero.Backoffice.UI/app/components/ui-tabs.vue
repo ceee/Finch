@@ -116,7 +116,7 @@
   {
     padding: var(--padding) var(--padding) 0;
     margin-bottom: calc(var(--padding) * -1);
-    height: 58px;
+    //height: 50px;
     display: flex;
   }
 
@@ -135,8 +135,8 @@
   {
     display: inline-flex;
     align-items: center;
-    height: 58px;
-    padding: 0 var(--padding);
+    height: 50px;
+    padding: 0 var(--padding-m);
     font-size: var(--font-size);
     color: var(--color-text);
     position: relative;

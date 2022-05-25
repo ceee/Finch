@@ -78,7 +78,6 @@
         {
           this.items = this.items && !Array.isArray(this.items) ? [this.items] : [];
         }
-        console.info(this.items);
       },
 
       onChange()
