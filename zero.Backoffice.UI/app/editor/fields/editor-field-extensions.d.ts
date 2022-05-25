@@ -101,6 +101,12 @@ declare module 'zero/schemas'
     dateRangePicker(options?: DateRangePickerFieldOptions): ZeroEditorField;
 
     /**
+    * Create a time picker
+    * @param {TimePickerFieldOptions} options - Custom options
+    */
+    timePicker(options?: TimePickerFieldOptions): ZeroEditorField;
+
+    /**
     * Create an icon picker
     * @param {DatePickerFieldOptions} options - Custom options
     */
@@ -140,6 +146,12 @@ declare module 'zero/schemas'
     amPm?: boolean;
   }
 
+  export interface TimePickerFieldOptions
+  {
+    format?: string;
+    amPm?: boolean;
+  }
+
   export interface ToggleFieldOptions
   {
     negative?: boolean | null;
@@ -167,6 +179,7 @@ declare module 'zero/schemas'
 
   export interface RadioFieldOptions
   {
+    horizontal?: boolean | null;
     items: ExtendedSelectFieldItem[];
   }
 

@@ -70,7 +70,7 @@
     align-items: center;
     width: 100%;
     position: relative;
-    padding: var(--padding-m) var(--padding-s);
+    padding: var(--padding-s);
     border: 1px solid var(--color-line);
     background: var(--color-box);
     cursor: pointer;

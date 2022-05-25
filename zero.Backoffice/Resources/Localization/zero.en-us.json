@@ -98,6 +98,10 @@
       "range_from": "Date from",
       "range_to": "Date to"
     },
+    "time": {
+      "set": "Set time",
+      "select": "Select time..."
+    },
     "price": {
       "free": "Free",
       "xtoy": "from {x} to {y}",

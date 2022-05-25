@@ -95,6 +95,10 @@
       "range_from": "Datum von",
       "range_to": "Datum bis"
     },
+    "time": {
+      "set": "Zeit setzen",
+      "select": "Zeit wählen..."
+    },
     "price": {
       "free": "Gratis",
       "xtoy": "von {x} bis {y}",

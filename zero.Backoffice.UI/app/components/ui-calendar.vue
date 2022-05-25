@@ -39,6 +39,7 @@
       flatpickr(this.$refs.calendar, extendObject({
         inline: true,
         enableTime: true,
+        noCalendar: false,
         time_24hr: true,
         defaultDate: this.today,
         minuteIncrement: 1,
@@ -57,6 +58,5 @@
 <style lang="scss">
   .ui-calendar
   {
-    
   }
 </style>

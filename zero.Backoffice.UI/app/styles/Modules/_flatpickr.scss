@@ -221,6 +221,13 @@
     background: var(--color-dropdown);
     box-shadow: var(--shadow-short);
   }
+
+  .flatpickr-calendar.noCalendar &
+  {
+    padding: 10px 15px;
+    background: none;
+    border-top: none;
+  }
 }
 
 .flatpickr-time-separator
