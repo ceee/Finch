@@ -88,7 +88,7 @@ public class ZeroEntityRouteInterceptor : Interceptor<ZeroEntity>
     // This has to be done in ProductRouteProvider as only the provider knows which properties of the entity it is using (therefore which properties need to be compared).
 
     RoutingContext context = GetContext();
-    context.Session.Advanced.MaxNumberOfRequestsPerSession = 100_000;
+    context.Session.Advanced.MaxNumberOfRequestsPerSession = 100_000_000;
 
     Dictionary<string, string> urlUpdates = new();
     List<Route> obsoleteRoutes = await GetDependencies(context, model);

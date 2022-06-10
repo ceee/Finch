@@ -29,7 +29,7 @@ public class RouteBulkRefresher
     {
       using ZeroContextScope scope = Context.CreateScope(app);
       using IZeroDocumentSession session = scope.Store.Session(scope.Database, ZeroSessionResolution.Create);
-      session.Advanced.MaxNumberOfRequestsPerSession = 100_000;
+      session.Advanced.MaxNumberOfRequestsPerSession = 100_000_000;
 
       await scope.Store.Raven.PurgeAsync<Route>(scope.Database);
 
