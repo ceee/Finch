@@ -18,6 +18,8 @@ export default {
 
   getDependencies: (id: string, config?: ApiRequestConfig) => get(`backoffice/pages/${id}/dependencies`, { ...config }),
 
+  getPreviews: (ids: string[], config?: ApiRequestConfig) => get(`backoffice/pages/previews`, { ...config, params: { ids } }),
+
   getUrl: (id: string, config?: ApiRequestConfig) => get(`pages/${id}/url`, { ...config }),
 
   create: (model: any, config?: ApiRequestConfig) => post('pages', model, config),
