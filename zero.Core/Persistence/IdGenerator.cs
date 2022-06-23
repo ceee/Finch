@@ -5,20 +5,23 @@ namespace zero.Persistence;
 public class IdGenerator
 {
   const string CHARS = "abcdefghijklmnopqrstuvwxyz0123456789";
+  const string CHARS_COMPLEX = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-@#.:!?*";
 
   private static Random random = new();
 
   /// <summary>
   /// Create a new unique Id
   /// </summary>
-  public static string Create(int length = -1)
+  public static string Create(int length = -1, Charset charset = Charset.az09)
   {
     if (length < 1)
     {
       length = 12;
     }
 
-    return new string(Enumerable.Repeat(CHARS, length).Select(s => s[random.Next(s.Length)]).ToArray());
+    string chars = charset == Charset.az09 ? CHARS : CHARS_COMPLEX;
+
+    return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
 
     //if (length > 0)
     //{
@@ -92,5 +95,18 @@ public class IdGenerator
 
       return hash1 + (hash2 * 1566083941);
     }
+  }
+
+
+  public enum Charset
+  {
+    /// <summary>
+    /// a-z, 0-9
+    /// </summary>
+    az09 = 0,
+    /// <summary>
+    /// a-z, A-Z, 0-9, _-@#.:!?*
+    /// </summary>
+    azAZ09x = 1
   }
 }
