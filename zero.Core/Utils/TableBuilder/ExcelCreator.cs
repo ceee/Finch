@@ -175,7 +175,7 @@ public class ExcelCreator<T> : ITableCreator<T>
       if (!isHeader && column.ColumnType == TableColumnType.Link)
       {
         cell.SetValue(LinkText);
-        cell.Hyperlink = new XLHyperlink(value.ToString());
+        cell.SetHyperlink(new XLHyperlink(value.ToString()));
       }
       if (column.ColumnType == TableColumnType.Currency)
       {
