@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="app-nav theme-darkx" :class="{'is-compact': compact }">
+  <div class="app-nav theme-dark" :class="{'is-compact': compact }">
     <div class="app-nav-boxed">
       <h1 class="app-nav-headline">
         <span class="app-nav-logo-circle"></span>
@@ -300,6 +300,11 @@
     border-radius: 20px;
     border: 4px solid var(--color-accent);
     margin-right: 12px;
+
+    .theme-dark &
+    {
+      border-color: var(--color-text);
+    }
   }
 
   .app-nav-search
