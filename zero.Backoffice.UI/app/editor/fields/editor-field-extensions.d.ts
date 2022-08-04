@@ -47,6 +47,12 @@ declare module 'zero/schemas'
     output(options?: OutputFieldOptions): ZeroEditorField;
 
     /**
+     * Link to a file
+     * @param {FileFieldOptions} [options] - Custom options
+     */
+    file(options?: FileFieldOptions): ZeroEditorField;
+
+    /**
      * Select one of the predefined values
      * @param {StateFieldOptions} options - Custom options
      */
@@ -170,6 +176,15 @@ declare module 'zero/schemas'
   {
     html?: boolean;
     render?: (value: any, model: any) => string;
+  }
+
+  export interface FileFieldOptions
+  {
+    name?: string | ((value: any, model: any) => string);
+    extension?: string | ((value: any, model: any) => string);
+    icon?: string | ((value: any, model: any) => string);
+    path?: string | ((value: any, model: any) => string);
+    visiblePath?: string | ((value: any, model: any) => string);
   }
 
   export interface StateFieldOptions

@@ -763,6 +763,9 @@
       "sendernotallowed": "Die Absender E-Mail wird vom Mailservice nicht unterstützt. Bitte kontaktiere den Administrator für zusätzliche Hilfe."
     }
   },
+  "filelink": {
+    "defaultName": "Datei"
+  },
   "space": {
     "list": "Räume",
     "name": "Raum"

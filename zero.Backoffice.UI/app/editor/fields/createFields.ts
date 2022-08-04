@@ -24,4 +24,5 @@ export default function createFields(app: ZeroPluginOptions): void
   app.fieldType('colorPicker', defineAsyncComponent(() => import('./colorPicker.vue')));
   app.fieldType('culturePicker', defineAsyncComponent(() => import('./culturePicker.vue')));
   app.fieldType('radio', defineAsyncComponent(() => import('./radio.vue')));
+  app.fieldType('file', defineAsyncComponent(() => import('./file.vue')));
 }

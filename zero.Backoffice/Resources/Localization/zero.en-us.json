@@ -807,6 +807,10 @@
     }
   },
 
+  "filelink": {
+    "defaultName": "File"
+  },
+
   "space": {
     "list": "Spaces",
     "name": "Space"

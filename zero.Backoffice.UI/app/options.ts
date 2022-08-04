@@ -1,7 +1,7 @@
 
 export const paths = {
   root: '/zero',
-  api: '/zero/api/{app}'
+  api: '/zero/api/system'
 };
 
 //export const blueprinting = {
