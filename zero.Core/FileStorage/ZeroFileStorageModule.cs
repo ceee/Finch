@@ -15,5 +15,11 @@ internal class ZeroFileStorageModule : ZeroModule
     {
       opts.ZeroAssetsPath = "zero";
     });
+
+    services.AddSingleton<IWebRootFileSystem, WebRootFileSystem>(svc =>
+    {
+      IWebHostEnvironment env = svc.GetRequiredService<IWebHostEnvironment>();
+      return new(env.WebRootPath, null);
+    });
   }
 }

@@ -71,19 +71,25 @@
   .ui-filelink
   {
     border-radius: var(--radius-inner);
-    background: var(--color-button-light);
-    padding: 16px 26px 16px 20px;
+    border: 1px solid var(--color-line-dashed);
+    //background: var(--color-button-light);
+    padding: 16px 24px;
     display: inline-grid;
-    grid-template-columns: 36px 1fr;
-    gap: 12px;
+    grid-template-columns: auto 1fr;
+    gap: 22px;
     align-items: center;
+
+    &:hover
+    {
+      background: var(--color-button-light);
+      border-color: transparent;
+    }
   }
 
   .ui-filelink-icon
   {
     position: relative;
     top: -2px;
-    left: 4px;
     color: var(--color-text);
   }
 
