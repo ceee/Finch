@@ -79,6 +79,8 @@
     previews: [],
     // exclude Ids from the picker selection items
     excludedIds: [],
+    // limit results to the given IDs
+    filteredIds: [],
     // autocomplete allows entering custom texts
     autocomplete: false,  
     // maximum selection count
@@ -394,7 +396,12 @@
 
           if (this.configuration.excludedIds && this.configuration.excludedIds.length)
           {
-            res = res.filter((item) => this.configuration.excludedIds.indexOf(item[this.configuration.keys.id]) < 0);
+            res = res.filter(item => this.configuration.excludedIds.indexOf(item[this.configuration.keys.id]) < 0);
+          }
+          if (this.configuration.filteredIds && this.configuration.filteredIds.length)
+          {
+            console.info('filtered-ids:', this.configuration.filteredIds, res);
+            res = res.filter(item => this.configuration.filteredIds.indexOf(item[this.configuration.keys.id]) > -1);
           }
          
           this.items = res;
