@@ -144,7 +144,6 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    pointer-events: none;
     cursor: grab;
   }
 </style>
