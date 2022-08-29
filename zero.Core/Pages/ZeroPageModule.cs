@@ -36,9 +36,9 @@ internal class ZeroPageModule : ZeroModule
 
     services.Configure<ZeroSearchOptions>(opts =>
     {
-      opts.Map<Page>().Display((x, res, opts) =>
+      opts.Map<Page>().Display((x, res, ctx) =>
       {
-        FlavorConfig flavor = opts.For<FlavorOptions>().Get<Page>(x.Flavor);
+        FlavorConfig flavor = ctx.Options.For<FlavorOptions>().Get<Page>(x.Flavor);
         if (flavor != null)
         {
           res.Icon = flavor.Icon;

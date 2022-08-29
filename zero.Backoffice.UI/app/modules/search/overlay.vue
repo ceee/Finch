@@ -101,7 +101,7 @@
           return;
         }
 
-        const result = await api.query(this.query, { pageSize: 20 });
+        const result = await api.query(this.query, { pageSize: 100 });
 
         if (result.data)
         {

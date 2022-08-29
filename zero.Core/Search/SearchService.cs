@@ -9,12 +9,15 @@ public class SearchService : ISearchService
   protected IZeroStore Store { get; private set; }
 
   protected IZeroOptions Options { get; private set; }
+
+  protected IZeroContext Context { get; private set; }
     
 
-  public SearchService(IZeroStore store, IZeroOptions options)
+  public SearchService(IZeroStore store, IZeroOptions options, IZeroContext context)
   {
     Store = store;
     Options = options;
+    Context = context;
   }
 
 
@@ -53,7 +56,7 @@ public class SearchService : ISearchService
         Url = "/" 
       };
 
-      await map.Modify(result, searchResult, Options);
+      await map.Modify(result, searchResult, Context);
 
       items.Add(searchResult);
     }

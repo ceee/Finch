@@ -9,7 +9,7 @@ public class SearchIndexMap
   protected string _group;
   protected string[] _fields;
   protected float _boost = 0;
-  protected Func<ZeroEntity, SearchResult, IZeroOptions, Task> _modify;
+  protected Func<ZeroEntity, SearchResult, IZeroContext, Task> _modify;
 
   const string mapTemplate = @"map('{collection}', function (x) { 
                                 return { 
@@ -54,11 +54,11 @@ public class SearchIndexMap
     return Type.IsAssignableFrom(type);
   }
 
-  internal async Task Modify(ZeroEntity entity, SearchResult result, IZeroOptions options)
+  internal async Task Modify(ZeroEntity entity, SearchResult result, IZeroContext context)
   {
     if (_modify != null)
     {
-      await _modify(entity, result, options);
+      await _modify(entity, result, context);
     }
   }
 }
@@ -86,23 +86,23 @@ public class SearchIndexMap<T> : SearchIndexMap where T : ZeroEntity
 
   public SearchIndexMap<T> Display(Func<T, SearchResult, Task> modify = null)
   {
-    _modify = (x, res, opts) => modify?.Invoke(x as T, res);
+    _modify = (x, res, ctx) => modify?.Invoke(x as T, res);
     return this;
   }
 
-  public SearchIndexMap<T> Display(Action<T, SearchResult, IZeroOptions> modify = null)
+  public SearchIndexMap<T> Display(Func<T, SearchResult, IZeroContext, Task> modify = null)
   {
-    _modify = (x, res, opts) =>
+    _modify = (x, res, ctx) => modify?.Invoke(x as T, res, ctx);
+    return this;
+  }
+
+  public SearchIndexMap<T> Display(Action<T, SearchResult, IZeroContext> modify = null)
+  {
+    _modify = (x, res, ctx) =>
     {
-      modify?.Invoke(x as T, res, opts);
+      modify?.Invoke(x as T, res, ctx);
       return Task.CompletedTask;
     };
-    return this;
-  }
-
-  public SearchIndexMap<T> Display(Func<T, SearchResult, IZeroOptions, Task> modify = null)
-  {
-    _modify = (x, res, opts) => modify?.Invoke(x as T, res, opts);
     return this;
   }
 
