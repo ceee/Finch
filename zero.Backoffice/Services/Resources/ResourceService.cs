@@ -86,7 +86,7 @@ public class ResourceService : IResourceService
       return items;
     }
 
-    string text = File.ReadAllText(fullpath, Encoding.GetEncoding("ISO-8859-1"));
+    string text = File.ReadAllText(fullpath, Encoding.GetEncoding("UTF-8"));
 
     JObject json = JObject.Parse(text);
     IEnumerable<JToken> tokens = json.Descendants().Where(p => !p.Any());
