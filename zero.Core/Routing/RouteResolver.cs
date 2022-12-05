@@ -65,11 +65,11 @@ public class RouteResolver : Routes, IRouteResolver
     if (routes.Count > 1)
     {
       int maxPathParts = routes.Max(x => x.Url.Count(u => u == PATH_SEPERATOR));
-      IEnumerable<Route> longestRoutes = routes.Where(x => maxPathParts == x.Url.Count(u => u == PATH_SEPERATOR)).OrderBy(x => x.AllowSuffix);
+      List<Route> longestRoutes = routes.Where(x => maxPathParts == x.Url.Count(u => u == PATH_SEPERATOR)).OrderBy(x => x.AllowSuffix).ToList();
 
-      if (longestRoutes.Count() > 1) 
+      if (longestRoutes.Count > 1) 
       {
-        Logger.LogWarning("Multiple routes {routes} were found for {path}", longestRoutes.Select(x => x.Id), path);
+        Logger.LogInformation("Multiple routes {routes} were found for {path}", longestRoutes.Select(x => x.Id), path);
       }
 
       route = longestRoutes.FirstOrDefault();
