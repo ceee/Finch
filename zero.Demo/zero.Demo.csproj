@@ -12,9 +12,6 @@
   <ItemGroup>
     <ProjectReference Include="..\plugins\zero.Commerce\zero.Commerce.csproj" />
     <ProjectReference Include="..\zero.Core\zero.Core.csproj" />
-    <ProjectReference Include="..\zero.Backoffice\zero.Backoffice.csproj" />
-    <ProjectReference Include="..\zero.Api\zero.Api.csproj" />
-    <ProjectReference Include="..\zero.Web\zero.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

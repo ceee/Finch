@@ -1,10 +1,9 @@
-﻿namespace zero.Applications;
+namespace zero.Applications;
 
 /// <summary>
 /// An application is a website or app. zero can host multiple websites at once which share common assets
 /// </summary>
-[RavenCollection("Applications")]
-public class Application : ZeroEntity
+public class Application
 {
   /// <summary>
   /// Raven database name for application data
