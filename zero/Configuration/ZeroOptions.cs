@@ -7,9 +7,6 @@ namespace zero.Configuration;
 public class ZeroOptions : IZeroOptions
 {
   /// <inheritdoc />
-  public bool Initialized => !string.IsNullOrEmpty(For<RavenOptions>()?.Database);
-
-  /// <inheritdoc />
   public string Version { get; set; }
 
   /// <inheritdoc />
@@ -45,11 +42,6 @@ public interface IZeroOptions
   /// This should not be set manually, as it is used for setup and migrations and incremented automatically
   /// </summary>
   string Version { get; set; }
-
-  /// <summary>
-  /// Whether this zero instance is initialized (setup is completed)
-  /// </summary>
-  bool Initialized { get; }
 
   /// <summary>
   /// Expiration of a generated change token for an entity

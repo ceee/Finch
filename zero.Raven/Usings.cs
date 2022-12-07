@@ -6,7 +6,6 @@ global using System.Linq;
 global using System.Threading;
 global using System.Threading.Tasks;
 
-//global using zero.Persistence;
 global using zero.Utils;
 global using zero.Configuration;
 global using zero.Extensions;

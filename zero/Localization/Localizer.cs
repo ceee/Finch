@@ -3,16 +3,9 @@ using System.Reflection;
 
 namespace zero.Localization;
 
-public class Localizer : ILocalizer
+public abstract class Localizer : ILocalizer
 {
   protected ConcurrentDictionary<string, string> Cache { get; private set; } = new();
-
-  protected IRavenOperations Raven { get; private set; }
-
-  public Localizer(IRavenOperations raven)
-  {
-    Raven = raven;
-  }
 
 
   /// <inheritdoc />
@@ -76,10 +69,7 @@ public class Localizer : ILocalizer
   /// <summary>
   /// Get translation from database or any other source
   /// </summary>
-  protected virtual Translation LoadTranslation(string key)
-  {
-    return Raven.Session.Synchronous.Query<Translation>().FirstOrDefault(x => x.Key == key);
-  }
+  protected abstract Translation LoadTranslation(string key);
 }
 
 public interface ILocalizer

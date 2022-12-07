@@ -9,10 +9,6 @@ public class ZeroContext : IZeroContext
 {
   /// <inheritdoc />
   public IZeroOptions Options { get; protected set; }
-
-  /// <inheritdoc />
-  public IZeroStore Store { get; private set; }
-
   /// <inheritdoc />
   public IServiceProvider Services { get; private set; }
 
@@ -31,12 +27,11 @@ public class ZeroContext : IZeroContext
 
 
   public ZeroContext(IZeroOptions options, IHttpContextAccessor httpContextAccessor, ICultureResolver cultureResolver, 
-    ILogger<ZeroContext> logger, IZeroStore store, IHandlerHolder handler, IServiceProvider services)
+    ILogger<ZeroContext> logger, IHandlerHolder handler, IServiceProvider services)
   {
     Options = options;
     CultureResolver = cultureResolver;
     Logger = logger;
-    Store = store;
     Handler = handler;
     ValueCollection = new PrimitiveTypeCollection();
     HttpContextAccessor = httpContextAccessor;
@@ -79,11 +74,6 @@ public interface IZeroContext
   /// Global zero options
   /// </summary>
   IZeroOptions Options { get; }
-
-  /// <summary>
-  /// Document store
-  /// </summary>
-  IZeroStore Store { get; }
 
   /// <summary>
   /// Service container

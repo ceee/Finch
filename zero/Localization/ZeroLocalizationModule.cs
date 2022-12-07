@@ -10,6 +10,11 @@ internal class ZeroLocalizationModule : ZeroModule
   {
     services.AddScoped<ICultureResolver, CultureResolver>();
     services.AddScoped<ICultureService, CultureService>();
-    services.AddScoped<ILocalizer, Localizer>();
+    services.AddScoped<ILocalizer, FileLocalizer>();
+    
+    services.AddOptions<LocalizationOptions>().Bind(configuration.GetSection("Zero:Localization")).Configure(opts =>
+    {
+      opts.FilePath = "Config/texts.json";
+    });
   }
 }

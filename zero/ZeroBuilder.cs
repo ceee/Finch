@@ -47,7 +47,6 @@ public class ZeroBuilder
     //Modules.Add<ZeroMapperModule>();
     //Modules.Add<ZeroMediaModule>();
     //Modules.Add<ZeroPageModule>();
-    Modules.Add<ZeroPersistenceModule>();
     Modules.Add<ZeroRenderingModule>();
     //Modules.Add<ZeroRoutingModule>();
 
@@ -64,6 +63,23 @@ public class ZeroBuilder
   public ZeroBuilder WithOptions(Action<ZeroOptions> configureOptions)
   {
     Services.Configure(configureOptions);
+    return this;
+  }
+
+
+  public ZeroBuilder AddModule(IZeroModule module)
+  {
+    module.ConfigureServices(Services, _configuration);
+    Modules.Add(module);
+    return this;
+  }
+  
+  
+  public ZeroBuilder AddModule<T>() where T : class, IZeroModule, new()
+  {
+    T module = new();
+    module.ConfigureServices(Services, _configuration);
+    Modules.Add(module);
     return this;
   }
 }

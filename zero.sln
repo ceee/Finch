@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero", "zero\zero.csproj", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "legacy", "legacy", "{93A1CCEB-A323-445E-8116-4575C5939B46}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Raven", "zero.Raven\zero.Raven.csproj", "{DC79D7EA-FAA1-4701-9C36-8295CD1C45D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{33CD6E46-CD81-42C3-9019-C0EAD557EE99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33CD6E46-CD81-42C3-9019-C0EAD557EE99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33CD6E46-CD81-42C3-9019-C0EAD557EE99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC79D7EA-FAA1-4701-9C36-8295CD1C45D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC79D7EA-FAA1-4701-9C36-8295CD1C45D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC79D7EA-FAA1-4701-9C36-8295CD1C45D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC79D7EA-FAA1-4701-9C36-8295CD1C45D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

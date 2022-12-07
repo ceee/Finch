@@ -1,13 +1,12 @@
 ﻿namespace zero.Localization;
 
-[RavenCollection("Translations")]
-public class Translation : ZeroEntity, IAlwaysActive
+public class Translation
 {
-  public Translation()
-  {
-    IsActive = true;
-  }
-
+  /// <summary>
+  /// Key of the translation
+  /// </summary>
+  public string Key { get; set; }
+  
   /// <summary>
   /// Value of the translation
   /// </summary>
@@ -23,5 +22,5 @@ public class Translation : ZeroEntity, IAlwaysActive
 public enum TranslationDisplay
 {
   Text = 0,
-  HTML = 1
+  Html = 1
 }
