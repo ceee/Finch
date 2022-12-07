@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace zero.Stores;
+namespace zero.Utils;
 
 public abstract class JsonDiscriminatorConverter<T> : JsonConverter<T> where T : class, new()
 {

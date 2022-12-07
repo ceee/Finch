@@ -20,7 +20,7 @@ public class InterceptorParameters
   /// <summary>
   /// Access to operations
   /// </summary>
-  public IStoreOperations Operations { get; internal set; }
+  public IRavenOperations Operations { get; internal set; }
 
   /// <summary>
   /// Parameters from the interceptor which ran on before the operation (only available for completed operations)

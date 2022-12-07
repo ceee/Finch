@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace zero.Stores;
+namespace zero.Persistence;
 
 public class FlavorOptions
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-namespace zero.Stores;
+namespace zero.Persistence;
 
 
 public class ConfigureFlavorJsonOptions : IConfigureOptions<JsonOptions>

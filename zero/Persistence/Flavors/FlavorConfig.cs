@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace zero.Stores;
+namespace zero.Persistence;
 
 /// <summary>
 /// A flavor config holds information about a flavor implementation

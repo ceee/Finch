@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace zero.Stores;
+namespace zero.Persistence;
 
 public class JsonFlavorVariantConverterFactory : JsonConverterFactory
 {

@@ -1,6 +1,6 @@
-﻿namespace zero.Stores;
+﻿namespace zero.Persistence;
 
-public partial class StoreOperations : IStoreOperations
+public partial class RavenOperations : IRavenOperations
 {
   /// <inheritdoc />
   public virtual Task<T> Empty<T>(string flavorAlias = null) where T : ZeroIdEntity, ISupportsFlavors, new() => Empty<T, T>(flavorAlias);

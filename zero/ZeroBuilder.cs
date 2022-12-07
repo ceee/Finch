@@ -50,7 +50,6 @@ public class ZeroBuilder
     Modules.Add<ZeroPersistenceModule>();
     Modules.Add<ZeroRenderingModule>();
     //Modules.Add<ZeroRoutingModule>();
-    Modules.Add<ZeroStoreModule>();
 
     Modules.ConfigureServices(services, configuration);
 

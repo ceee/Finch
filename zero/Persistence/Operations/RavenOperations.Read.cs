@@ -3,9 +3,9 @@ using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 
-namespace zero.Stores;
+namespace zero.Persistence;
 
-public partial class StoreOperations : IStoreOperations
+public partial class RavenOperations : IRavenOperations
 {
   /// <inheritdoc />
   public virtual async Task<T> Load<T>(string id, string changeVector = null) where T : ZeroIdEntity, new()

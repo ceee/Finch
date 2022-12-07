@@ -37,11 +37,6 @@ public class ZeroStore : IZeroStore
     database ??= ResolvedDatabase;
     options ??= new SessionOptions() { Database = database };
 
-    if (!database.HasValue())
-    {
-      return Session(true, database, resolution, options);
-    }
-
     if (resolution == ZeroSessionResolution.Create)
     {
       return Raven.OpenAsyncSession(options) as IZeroDocumentSession;
@@ -61,13 +56,6 @@ public class ZeroStore : IZeroStore
     }
 
     return session;
-  }
-
-
-  /// <inheritdoc />
-  public IZeroDocumentSession Session(bool global, string database = null, ZeroSessionResolution resolution = ZeroSessionResolution.Reuse, SessionOptions options = null)
-  {
-    return Session(global ? Options.For<RavenOptions>().Database : database, resolution, options);
   }
 }
 
@@ -95,9 +83,4 @@ public interface IZeroStore
   /// Use a specific session
   /// </summary>
   IZeroDocumentSession Session(string database = null, ZeroSessionResolution resolution = ZeroSessionResolution.Reuse, SessionOptions options = null);
-
-  /// <summary>
-  /// Use a session for the core database
-  /// </summary>
-  IZeroDocumentSession Session(bool global, string database = null, ZeroSessionResolution resolution = ZeroSessionResolution.Reuse, SessionOptions options = null);
 }

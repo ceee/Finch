@@ -1,4 +1,4 @@
-﻿namespace zero.Stores;
+﻿namespace zero.Persistence;
 
 public class FlavorProviderOptions<TEntity> where TEntity : class, ISupportsFlavors, new()
 {

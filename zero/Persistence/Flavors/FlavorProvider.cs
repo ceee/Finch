@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace zero.Stores;
+namespace zero.Persistence;
 
 /// <summary>
 /// A flavor provider is attached to an entity (which has ISupportsFlavors) and contains all flavors

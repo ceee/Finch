@@ -1,8 +1,8 @@
 ﻿using FluentValidation.Results;
 
-namespace zero.Stores;
+namespace zero.Persistence;
 
-public partial class StoreOperations : IStoreOperations
+public partial class RavenOperations : IRavenOperations
 {
   /// <inheritdoc />
   public virtual Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new() => Save(model, validate, onAfterStore);
@@ -24,7 +24,7 @@ public partial class StoreOperations : IStoreOperations
     // check if the Id for a model already exists
     if (!model.Id.IsNullOrEmpty())
     {
-      using (IZeroDocumentSession session = Context.Store.Session(resolution: ZeroSessionResolution.Create, options: new Raven.Client.Documents.Session.SessionOptions() { Database = Context.Store.ResolvedDatabase, NoCaching = true }))
+      using (IZeroDocumentSession session = Context.Store.Session(options: new Raven.Client.Documents.Session.SessionOptions() { Database = Context.Store.ResolvedDatabase, NoCaching = true }))
       {
         previousModel = await session.LoadAsync<T>(model.Id);
       }

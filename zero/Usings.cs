@@ -18,4 +18,3 @@ global using zero.Validation;
 global using zero.Localization;
 global using zero.Context;
 global using zero.Communication;
-global using zero.Stores;

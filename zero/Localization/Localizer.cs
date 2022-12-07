@@ -7,11 +7,11 @@ public class Localizer : ILocalizer
 {
   protected ConcurrentDictionary<string, string> Cache { get; private set; } = new();
 
-  protected IZeroStore Store { get; private set; }
+  protected IRavenOperations Raven { get; private set; }
 
-  public Localizer(IZeroStore store)
+  public Localizer(IRavenOperations raven)
   {
-    Store = store;
+    Raven = raven;
   }
 
 
@@ -78,7 +78,7 @@ public class Localizer : ILocalizer
   /// </summary>
   protected virtual Translation LoadTranslation(string key)
   {
-    return Store.Session().Synchronous.Query<Translation>().FirstOrDefault(x => x.Key == key);
+    return Raven.Session.Synchronous.Query<Translation>().FirstOrDefault(x => x.Key == key);
   }
 }
 

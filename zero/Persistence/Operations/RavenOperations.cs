@@ -4,9 +4,9 @@ using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
 using System.Security.Claims;
 
-namespace zero.Stores;
+namespace zero.Persistence;
 
-public partial class StoreOperations : IStoreOperations
+public partial class RavenOperations : IRavenOperations
 {
   /// <inheritdoc />
   public IZeroDocumentSession Session => Context.Store.Session();
@@ -24,7 +24,7 @@ public partial class StoreOperations : IStoreOperations
   protected StoreInterceptorBlocker InterceptorBlocker { get; private set; }
 
 
-  public StoreOperations(StoreContext context)
+  public RavenOperations(StoreContext context)
   {
     Context = context.Context;
     Interceptors =  context.Interceptors;
@@ -132,7 +132,7 @@ public class StoreInterceptorBlocker : IDisposable
 }
 
 
-public interface IStoreOperations
+public interface IRavenOperations
 {
   /// <summary>
   /// Access to the current session

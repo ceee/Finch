@@ -58,7 +58,7 @@ public class InterceptorInstruction<T> where T : ZeroIdEntity, new()
   /// Depending on the action any of the following methods on the interceptor is called: Creating(), Updating(), Deleting().
   /// If any of the interceptors returns a result the operation is cancelled and this result is returned.
   /// </summary>
-  public async Task<bool> Start(IStoreOperations operations)
+  public async Task<bool> Start(IRavenOperations operations)
   {
     foreach (IInterceptor interceptor in GetInterceptors())
     {

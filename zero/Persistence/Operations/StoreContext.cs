@@ -1,4 +1,4 @@
-﻿namespace zero.Stores;
+﻿namespace zero.Persistence;
 
 public class StoreContext
 {

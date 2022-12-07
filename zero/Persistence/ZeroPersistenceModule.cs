@@ -14,8 +14,12 @@ internal class ZeroPersistenceModule : ZeroModule
     services.AddSingleton<IZeroDocumentStore, ZeroDocumentStore>(CreateRavenStore);
     services.AddScoped<IZeroStore, ZeroStore>();
     services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();
+    services.AddScoped<StoreContext>();
+    services.AddTransient<IRavenOperations, RavenOperations>();
 
+    services.AddOptions<FlavorOptions>();
     services.AddOptions<RavenOptions>().Bind(configuration.GetSection("Zero:Raven"));
+    services.ConfigureOptions<ConfigureFlavorJsonOptions>();
   }
 
   /// <summary>
@@ -29,13 +33,13 @@ internal class ZeroPersistenceModule : ZeroModule
 
     IZeroDocumentStore store = new ZeroDocumentStore(options)
     {
-      Database = ravenOptions.DatabaseIsDefault ? ravenOptions.Database : null,
+      Database = ravenOptions.Database,
       Urls = new string[1] { ravenOptions.Url },
       Conventions =
       {
         AggressiveCache =
         {
-          Duration = TimeSpan.FromHours(1),
+          Duration = TimeSpan.FromMinutes(ravenOptions.CacheInMinutes),
           Mode = AggressiveCacheMode.TrackChanges
         }
       }
