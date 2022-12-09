@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace zero.Architecture;
+namespace zero.Modules;
 
 public abstract class ZeroModule : IZeroModule
 {

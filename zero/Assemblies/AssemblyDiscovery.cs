@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
 using System.Reflection;
 
-namespace zero.Architecture;
+namespace zero.Assemblies;
 
 public class AssemblyDiscovery : IAssemblyDiscovery
 {

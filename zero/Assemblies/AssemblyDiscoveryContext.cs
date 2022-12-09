@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace zero.Architecture;
+namespace zero.Assemblies;
 
 public class AssemblyDiscoveryContext
 {

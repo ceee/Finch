@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
 
-namespace zero.Architecture;
+namespace zero.Modules;
 
 public class ZeroModuleCollection : ZeroModule
 {

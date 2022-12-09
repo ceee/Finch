@@ -4,9 +4,10 @@ using Raven.Client.Documents.Linq;
 using Raven.Client.Exceptions;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using zero.Identity;
 using zero.Raven;
 
-namespace zero.Identity;
+namespace zero.Raven;
 
 public class RavenRoleStore<TRole> :
   IRoleStore<TRole>, 

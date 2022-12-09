@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
+using zero.Identity;
 using zero.Raven;
 
-namespace zero.Identity;
+namespace zero.Raven;
 
 public partial class RavenUserStore<TUser, TRole> : RavenUserStore<TUser>,
   IUserRoleStore<TUser>

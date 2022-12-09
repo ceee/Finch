@@ -11,7 +11,7 @@ global using zero.Configuration;
 global using zero.Extensions;
 global using zero.FileStorage;
 global using zero.Models;
-global using zero.Architecture;
+global using zero.Modules;
 global using zero.Rendering;
 global using zero.Validation;
 global using zero.Localization;
