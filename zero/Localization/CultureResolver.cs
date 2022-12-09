@@ -19,7 +19,7 @@ public class CultureResolver : ICultureResolver
 
 
   /// <inheritdoc />
-  public async Task<CultureInfo> Resolve(IZeroContext context)
+  public Task<CultureInfo> Resolve(IZeroContext context)
   {
     //var session = context.Store.Session();
     //Language language = await session.Query<Language>().FirstOrDefaultAsync();
@@ -41,10 +41,10 @@ public class CultureResolver : ICultureResolver
     catch (Exception ex)
     {
       Logger.LogError(ex, "Could not create culture from Language code {code}", isoCode);
-      return CultureInfo.CurrentCulture;
+      return Task.FromResult(CultureInfo.CurrentCulture);
     }
     
-    return CultureInfo.CurrentCulture;
+    return Task.FromResult(CultureInfo.CurrentCulture);
   }
 }
 

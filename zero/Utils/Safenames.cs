@@ -108,7 +108,7 @@ public class Safenames
         output.Append(target);
       }
       // add hyphen if it isn't first and previous char is not + or -
-      else if (target == HYPHEN && previous != default && previous != PLUS && previous != HYPHEN)
+      else if (target == HYPHEN && previous != default(char) && previous != PLUS && previous != HYPHEN)
       {
         output.Append(target);
       }
