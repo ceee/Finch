@@ -33,10 +33,7 @@ public partial class RavenUserStore<TUser> :
   }
   
   private StringComparison _comparer = StringComparison.InvariantCultureIgnoreCase;
-  private const string InternalLoginProvider = "[AspNetUserStore]";
-  private const string AuthenticatorKeyTokenName = "AuthenticatorKey";
-  private const string RecoveryCodeTokenName = "RecoveryCodes";
-  
+
   protected IdentityErrorDescriber ErrorDescriber { get; private set; }
   
   protected virtual IRavenOperations Ops { get; set; }
@@ -478,15 +475,18 @@ public partial class RavenUserStore<TUser> :
 
 
   /// <inheritdoc />
-  public Task SetAuthenticatorKeyAsync(TUser user, string key, CancellationToken cancellationToken) =>
-    SetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, key, cancellationToken);
+  public Task SetAuthenticatorKeyAsync(TUser user, string key, CancellationToken cancellationToken)
+  {
+    user.TwoFactorAuthenticatorKey = key;
+    return Task.CompletedTask;
+  }
 
 
   /// <inheritdoc />
   public Task<string> GetAuthenticatorKeyAsync(TUser user, CancellationToken cancellationToken) =>
-    GetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, cancellationToken);
+    Task.FromResult(user.TwoFactorAuthenticatorKey);
 
-  
+
   /// <inheritdoc />
   public Task SetTwoFactorEnabledAsync(TUser user, bool enabled, CancellationToken cancellationToken)
   {
@@ -501,8 +501,11 @@ public partial class RavenUserStore<TUser> :
 
 
   /// <inheritdoc />
-  public Task ReplaceCodesAsync(TUser user, IEnumerable<string> recoveryCodes, CancellationToken cancellationToken) =>
-    SetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, string.Join(";", recoveryCodes), cancellationToken);
+  public Task ReplaceCodesAsync(TUser user, IEnumerable<string> recoveryCodes, CancellationToken cancellationToken)
+  {
+    user.TwoFactorRecoveryCodes = recoveryCodes;
+    return Task.CompletedTask;
+  }
 
 
   /// <inheritdoc />
@@ -519,11 +522,10 @@ public partial class RavenUserStore<TUser> :
       throw new ArgumentNullException(nameof(code));
     }
     
-    var mergedCodes = await GetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, cancellationToken).ConfigureAwait(false) ?? "";
-    var splitCodes = mergedCodes.Split(';');
-    if (splitCodes.Contains(code))
+
+    if (user.TwoFactorRecoveryCodes.Contains(code))
     {
-      var updatedCodes = new List<string>(splitCodes.Where(s => s != code));
+      List<string> updatedCodes = new(user.TwoFactorRecoveryCodes.Where(s => s != code));
       await ReplaceCodesAsync(user, updatedCodes, cancellationToken).ConfigureAwait(false);
       return true;
     }
@@ -540,12 +542,8 @@ public partial class RavenUserStore<TUser> :
     {
       throw new ArgumentNullException(nameof(user));
     }
-    var mergedCodes = await GetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, cancellationToken).ConfigureAwait(false) ?? "";
-    if (mergedCodes.Length > 0)
-    {
-      return mergedCodes.Split(';').Length;
-    }
-    return 0;
+
+    return user.TwoFactorRecoveryCodes?.Count() ?? 0;
   }
 
 

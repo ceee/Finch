@@ -81,7 +81,7 @@ public abstract class ZeroIdentityUser : ZeroEntity
   /// <summary>
   /// The list of two factor authentication recovery codes
   /// </summary>
-  public List<string> TwoFactorRecoveryCodes { get; set; } = new();
+  public IEnumerable<string> TwoFactorRecoveryCodes { get; set; } = new List<string>();
 
   /// <summary>
   /// Store all external logins (Microsoft, Google, ...)

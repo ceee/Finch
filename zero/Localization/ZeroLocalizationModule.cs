@@ -8,6 +8,8 @@ internal class ZeroLocalizationModule : ZeroModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
+    // hint: think about using https://github.com/nuages-io/nuages-localization
+    
     services.AddScoped<ICultureResolver, CultureResolver>();
     services.AddScoped<ICultureService, CultureService>();
     services.AddScoped<ILocalizer, FileLocalizer>();
