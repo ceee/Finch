@@ -1,4 +1,4 @@
-﻿namespace zero.Raven;
+﻿namespace zero.Utils;
 
 /// <summary>
 /// Automatically generate ID with the specified length and insert it into this property on entity save

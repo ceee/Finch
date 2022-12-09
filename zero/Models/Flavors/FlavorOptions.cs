@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace zero.Raven;
+namespace zero.Models;
 
 public class FlavorOptions
 {

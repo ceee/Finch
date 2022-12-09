@@ -6,7 +6,7 @@ using Rv = Raven.Client;
 
 namespace zero.Raven;
 
-public class ZeroDocumentConventionsBuilder : IZeroDocumentConventionsBuilder
+public class RavenDocumentConventionsBuilder : IRavenDocumentConventionsBuilder
 {
   protected HashSet<Type> PolymorphTypes { get; private set; } = new();
 
@@ -19,7 +19,7 @@ public class ZeroDocumentConventionsBuilder : IZeroDocumentConventionsBuilder
   protected static ConcurrentDictionary<Type, string> CachedTypeCollectionNameMap = new();
 
 
-  public ZeroDocumentConventionsBuilder(IZeroOptions options)
+  public RavenDocumentConventionsBuilder(IZeroOptions options)
   {
     Options = options;
   }
@@ -134,7 +134,7 @@ public class ZeroDocumentConventionsBuilder : IZeroDocumentConventionsBuilder
 }
 
 
-public interface IZeroDocumentConventionsBuilder
+public interface IRavenDocumentConventionsBuilder
 {
   /// <summary>
   /// Applies internal rules to the RavenDB document conventions

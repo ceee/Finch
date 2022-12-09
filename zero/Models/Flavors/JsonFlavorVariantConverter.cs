@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace zero.Raven;
+namespace zero.Models;
 
 internal class JsonFlavorVariantConverter<T> : JsonDiscriminatorConverter<T> where T : class, ISupportsFlavors, new()
 {

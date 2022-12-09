@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace zero.Raven;
+namespace zero.Utils;
 
 public class Safenames
 {

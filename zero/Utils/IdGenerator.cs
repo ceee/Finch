@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace zero.Raven;
+namespace zero.Utils;
 
 public class IdGenerator
 {

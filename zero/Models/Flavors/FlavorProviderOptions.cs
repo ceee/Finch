@@ -1,4 +1,4 @@
-﻿namespace zero.Raven;
+﻿namespace zero.Models;
 
 public class FlavorProviderOptions<TEntity> where TEntity : class, ISupportsFlavors, new()
 {

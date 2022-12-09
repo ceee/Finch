@@ -6,11 +6,20 @@ using Raven.Client.Http;
 
 namespace zero.Raven;
 
+public static class ZeroBuilderExtensions
+{
+  public static ZeroBuilder AddRavenDb(this ZeroBuilder builder)
+  {
+    builder.AddModule<ZeroRavenModule>();
+    return builder;
+  }
+}
+
 internal class ZeroRavenModule : ZeroModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
-    services.AddSingleton<IZeroDocumentConventionsBuilder, ZeroDocumentConventionsBuilder>();
+    services.AddSingleton<IRavenDocumentConventionsBuilder, RavenDocumentConventionsBuilder>();
     services.AddSingleton<IZeroDocumentStore, ZeroDocumentStore>(CreateRavenStore);
     services.AddScoped<IZeroStore, ZeroStore>();
     services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();
@@ -30,7 +39,7 @@ internal class ZeroRavenModule : ZeroModule
   {
     IZeroOptions options = services.GetService<IZeroOptions>();
     RavenOptions ravenOptions = options.For<RavenOptions>();
-    IZeroDocumentConventionsBuilder conventionsBuilder = services.GetService<IZeroDocumentConventionsBuilder>();
+    IRavenDocumentConventionsBuilder conventionsBuilder = services.GetService<IRavenDocumentConventionsBuilder>();
 
     IZeroDocumentStore store = new ZeroDocumentStore(options)
     {
