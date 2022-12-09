@@ -29,7 +29,7 @@ public class ZeroEntity : ZeroIdEntity, ISupportsDbConventions, ISupportsRouting
   /// <summary>
   /// Whether the entity is visible in the frontend
   /// </summary>
-  public bool IsActive { get; set; }
+  public bool IsActive { get; set; } = true;
 
   /// <summary>
   /// Unique hash for this entity (primarily used for routing)

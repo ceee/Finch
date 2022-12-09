@@ -125,7 +125,7 @@ public partial class RavenUserStore<TUser> :
       return IdentityResult.Failed(new IdentityError
       {
         Code = "UserNotFound",
-        Description = $"Could not find stored user with id {user.Id}."
+        Description = $"Could not find stored user with id {user.Id}"
       });
     }
 
@@ -440,9 +440,13 @@ public partial class RavenUserStore<TUser> :
   /// <inheritdoc />
   public Task SetTokenAsync(TUser user, string loginProvider, string name, string value, CancellationToken cancellationToken)
   {
-    UserToken token = user.Tokens.FirstOrDefault(x =>
-                        x.LoginProvider.Equals(loginProvider, _comparer) && x.Name.Equals(name, _comparer)) 
-                        ?? new() { LoginProvider = loginProvider, Name = name };
+    UserToken token = user.Tokens.FirstOrDefault(x => x.LoginProvider.Equals(loginProvider, _comparer) && x.Name.Equals(name, _comparer));
+
+    if (token == null)
+    {
+      token = new() { LoginProvider = loginProvider, Name = name };
+      user.Tokens.Add(token);
+    }
 
     token.Value = value;
 

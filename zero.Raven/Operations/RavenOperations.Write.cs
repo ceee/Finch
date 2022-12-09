@@ -25,7 +25,7 @@ public partial class RavenOperations : IRavenOperations
     // check if the Id for a model already exists
     if (!model.Id.IsNullOrEmpty())
     {
-      using (IZeroDocumentSession session = Store.Session(options: new Rv.Documents.Session.SessionOptions() { Database = Store.ResolvedDatabase, NoCaching = true }))
+      using (IZeroDocumentSession session = Store.Session(options: new Rv.Documents.Session.SessionOptions() { NoCaching = true }))
       {
         previousModel = await session.LoadAsync<T>(model.Id);
       }
