@@ -3,6 +3,7 @@ using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Exceptions;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using zero.Raven;
 
 namespace zero.Identity;
@@ -26,9 +27,16 @@ public class RavenRoleStore<TRole> :
 
   private IdentityResult Fail(Result<TRole> result)
   {
-    ResultError error = result.Errors.FirstOrDefault() ?? new("unknown", "Unknown error");
-    string message = error.Message + "(key: " + error.Property + ")";
-    return IdentityResult.Failed(new IdentityError { Description = message });
+    IdentityError[] errors = new IdentityError[result.Errors.Count];
+
+    int index = 0;
+    foreach (ResultError error in result.Errors)
+    {
+      string message = error.Message + "(key: " + error.Property + ")";
+      errors[index++] = new() { Code = "zero/raven/500", Description = message };
+    }
+
+    return IdentityResult.Failed(errors);
   }
 
 

@@ -42,9 +42,16 @@ public partial class RavenUserStore<TUser> :
   
   private IdentityResult Fail(Result<TUser> result)
   {
-    ResultError error = result.Errors.FirstOrDefault() ?? new("unknown", "Unknown error");
-    string message = error.Message + "(key: " + error.Property + ")";
-    return IdentityResult.Failed(new IdentityError { Description = message });
+    IdentityError[] errors = new IdentityError[result.Errors.Count];
+
+    int index = 0;
+    foreach (ResultError error in result.Errors)
+    {
+      string message = error.Message + "(key: " + error.Property + ")";
+      errors[index++] = new() { Code = "zero/raven/500", Description = message };
+    }
+
+    return IdentityResult.Failed(errors);
   }
 
   /// <summary>
