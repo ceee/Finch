@@ -6,12 +6,11 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using Raven.Client.Exceptions;
 using zero.Identity;
-using zero.Raven;
 
-namespace zero.Raven;
+namespace zero.Identity;
 
 
-public partial class RavenUserStore<TUser> :
+public partial class ZeroUserStore<TUser> :
   IUserStore<TUser>,
   IUserEmailStore<TUser>,
   IUserLockoutStore<TUser>,
@@ -26,9 +25,9 @@ public partial class RavenUserStore<TUser> :
   IUserPhoneNumberStore<TUser>
   where TUser : ZeroIdentityUser, new()
 {
-  public RavenUserStore(IRavenOperations operations, IdentityErrorDescriber describer = null)
+  public ZeroUserStore(IZeroIdentityStoreDbProvider db, IdentityErrorDescriber describer = null)
   {
-    Ops = operations;
+    Db = db;
     ErrorDescriber = describer ?? new IdentityErrorDescriber();
   }
   
@@ -36,7 +35,7 @@ public partial class RavenUserStore<TUser> :
 
   protected IdentityErrorDescriber ErrorDescriber { get; private set; }
   
-  protected virtual IRavenOperations Ops { get; set; }
+  protected virtual IZeroIdentityStoreDbProvider Db { get; set; }
   
   private IdentityResult Fail(Result<TUser> result)
   {
@@ -64,7 +63,7 @@ public partial class RavenUserStore<TUser> :
   protected virtual async Task<bool> IsEmailReserved(TUser user, CancellationToken cancellationToken = default)
   {
     // TODO index
-    TUser existingUser = await Ops.Session.Query<TUser>().FirstOrDefaultAsync(x => x.Email == user.Email, cancellationToken);
+    TUser existingUser = await Db.Find<TUser>(x => x.Email == user.Email, cancellationToken);
     return existingUser != null && existingUser.Id != user.Id;
   }
 
@@ -81,7 +80,7 @@ public partial class RavenUserStore<TUser> :
       });
     }
 
-    Result<TUser> result = await Ops.Create(user);
+    Result<TUser> result = await Db.Create(user);
     
     if (!result.IsSuccess)
     {
@@ -97,7 +96,7 @@ public partial class RavenUserStore<TUser> :
   {
     try
     {
-      Result<TUser> result = await Ops.Delete(user);
+      Result<TUser> result = await Db.Delete(user);
       
       if (!result.IsSuccess)
       {
@@ -115,7 +114,7 @@ public partial class RavenUserStore<TUser> :
   /// <inheritdoc />
   public async Task<IdentityResult> UpdateAsync(TUser user, CancellationToken cancellationToken)
   {
-    TUser source = await Ops.Load<TUser>(user.Id);
+    TUser source = await Db.Find<TUser>(x => x.Id == user.Id);
 
     if (source == null)
     {
@@ -135,7 +134,7 @@ public partial class RavenUserStore<TUser> :
       });
     }
 
-    Result<TUser> result = await Ops.Update(user);
+    Result<TUser> result = await Db.Update(user);
     
     if (!result.IsSuccess)
     {
@@ -150,7 +149,7 @@ public partial class RavenUserStore<TUser> :
   public async Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
   {
     // TODO index
-    return await Ops.Session.Query<TUser>().FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+    return await Db.Find<TUser>(x => x.Id == userId, cancellationToken);
   }
 
 
@@ -158,7 +157,7 @@ public partial class RavenUserStore<TUser> :
   public async Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
   {
     // TODO index
-    return await Ops.Session.Query<TUser>().FirstOrDefaultAsync(x => x.Username == normalizedUserName, cancellationToken);
+    return await Db.Find<TUser>(x => x.Username == normalizedUserName, cancellationToken);
   }
 
 
@@ -222,7 +221,7 @@ public partial class RavenUserStore<TUser> :
   public async Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
   {
     // TODO index
-    return await Ops.Session.Query<TUser>().FirstOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
+    return await Db.Find<TUser>(x => x.Email == normalizedEmail, cancellationToken);
   }
 
 
@@ -363,7 +362,7 @@ public partial class RavenUserStore<TUser> :
   {
     UserClaim userClaim = new(claim);
     // TODO index
-    return await Ops.Session.Query<TUser>().Where(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value)).ToListAsync(token: cancellationToken);
+    return await Db.FindAll<TUser>(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value), cancellationToken);
   }
 
 
@@ -430,7 +429,7 @@ public partial class RavenUserStore<TUser> :
   public async Task<TUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
   {
     // TODO index
-    return await Ops.Session.Query<TUser>().FirstOrDefaultAsync(x => x.ExternalLogins.Any(l => l.LoginProvider.Equals(loginProvider, _comparer) && l.ProviderKey.Equals(providerKey, _comparer)), token: cancellationToken);
+    return await Db.Find<TUser>(x => x.ExternalLogins.Any(l => l.LoginProvider.Equals(loginProvider, _comparer) && l.ProviderKey.Equals(providerKey, _comparer)), cancellationToken);
   }
 
   
@@ -534,7 +533,7 @@ public partial class RavenUserStore<TUser> :
 
   
   /// <inheritdoc />
-  public async Task<int> CountCodesAsync(TUser user, CancellationToken cancellationToken)
+  public Task<int> CountCodesAsync(TUser user, CancellationToken cancellationToken)
   {
     cancellationToken.ThrowIfCancellationRequested();
 
@@ -543,7 +542,7 @@ public partial class RavenUserStore<TUser> :
       throw new ArgumentNullException(nameof(user));
     }
 
-    return user.TwoFactorRecoveryCodes?.Count() ?? 0;
+    return Task.FromResult<int>(user.TwoFactorRecoveryCodes?.Count() ?? 0);
   }
 
 

@@ -45,7 +45,7 @@ public class ZeroBuilder
     Modules.Add<ZeroLocalizationModule>();
     //Modules.Add<ZeroMailModule>();
     //Modules.Add<ZeroMapperModule>();
-    //Modules.Add<ZeroMediaModule>();
+    Modules.Add<ZeroMediaModule>();
     //Modules.Add<ZeroPageModule>();
     Modules.Add<ZeroRenderingModule>();
     //Modules.Add<ZeroRoutingModule>();

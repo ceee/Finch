@@ -2,16 +2,15 @@
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using zero.Identity;
-using zero.Raven;
 
-namespace zero.Raven;
+namespace zero.Identity;
 
-public partial class RavenUserStore<TUser, TRole> : RavenUserStore<TUser>,
+public partial class ZeroUserStore<TUser, TRole> : ZeroUserStore<TUser>,
   IUserRoleStore<TUser>
   where TUser : ZeroIdentityUser, new()
   where TRole : ZeroIdentityRole, new()
 {
-  public RavenUserStore(IRavenOperations operations) : base(operations) { }
+  public ZeroUserStore(IZeroIdentityStoreDbProvider db) : base(db) { }
 
 
   /// <inheritdoc />
@@ -32,7 +31,7 @@ public partial class RavenUserStore<TUser, TRole> : RavenUserStore<TUser>,
   /// <inheritdoc />
   public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
   {
-    return await Ops.Session.Query<TUser>().Where(x => roleName.In(x.RoleIds)).ToListAsync();
+    return await Db.FindAll<TUser>(x => roleName.In(x.RoleIds), cancellationToken);
   }
 
 

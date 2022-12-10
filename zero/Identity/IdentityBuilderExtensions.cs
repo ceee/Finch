@@ -2,18 +2,19 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace zero.Raven;
+namespace zero.Identity;
 
 public static class IdentityBuilderExtensions
 {
   /// <summary>
-  /// Adds a RavenDb implementation of identity information stores.
+  /// Adds an implementation of identity information stores.
   /// </summary>
-  public static IdentityBuilder AddRavenDbStores(this IdentityBuilder builder)
+  public static IdentityBuilder AddZeroIdentityStores<T>(this IdentityBuilder builder) where T : class, IZeroIdentityStoreDbProvider
   {
-    Type userStoreType = typeof(RavenUserStore<,>).MakeGenericType(builder.UserType, builder.RoleType);
-    Type roleStoreType = typeof(RavenRoleStore<>).MakeGenericType(builder.RoleType);
-    
+    Type userStoreType = typeof(ZeroUserStore<,>).MakeGenericType(builder.UserType, builder.RoleType);
+    Type roleStoreType = typeof(ZeroRoleStore<>).MakeGenericType(builder.RoleType);
+
+    builder.Services.AddScoped<IZeroIdentityStoreDbProvider, T>();
     builder.Services.TryAddScoped(typeof(IUserStore<>).MakeGenericType(builder.UserType), userStoreType);
     builder.Services.TryAddScoped(typeof(IRoleStore<>).MakeGenericType(builder.RoleType), roleStoreType);
     

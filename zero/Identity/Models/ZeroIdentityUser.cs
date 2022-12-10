@@ -7,11 +7,13 @@ public abstract class ZeroIdentityUser : ZeroEntity
   /// <summary>
   /// Optional username (can also be used as login when configured)
   /// </summary>
+  [PersonalData]
   public string Username { get; set; }
 
   /// <summary>
   /// E-Mail address which is also used as the username
   /// </summary>
+  [PersonalData]
   public string Email { get; set; }
 
   /// <summary>
@@ -22,6 +24,7 @@ public abstract class ZeroIdentityUser : ZeroEntity
   /// <summary>
   /// The phone number for the user
   /// </summary>
+  [PersonalData]
   public string PhoneNumber { get; set; }
 
   /// <summary>

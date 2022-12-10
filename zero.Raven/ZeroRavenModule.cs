@@ -1,8 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
 using Raven.Client.Http;
+using zero.Identity;
+using zero.Media;
 
 namespace zero.Raven;
 
@@ -26,6 +29,9 @@ internal class ZeroRavenModule : ZeroModule
     services.AddScoped<StoreContext>();
     services.AddTransient<IRavenOperations, RavenOperations>();
     services.AddScoped<IInterceptors, Interceptors>();
+
+    services.AddScoped<IZeroIdentityStoreDbProvider, RavenIdentityStoreDbProvider>();
+    services.AddScoped<IZeroMediaStoreDbProvider, RavenMediaStoreDbProvider>();
 
     services.AddOptions<FlavorOptions>();
     services.AddOptions<RavenOptions>().Bind(configuration.GetSection("Zero:Raven"));

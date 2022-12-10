@@ -13,6 +13,7 @@ global using zero.Extensions;
 global using zero.FileStorage;
 global using zero.Models;
 global using zero.Modules;
+global using zero.Media;
 global using zero.Rendering;
 global using zero.Validation;
 global using zero.Localization;

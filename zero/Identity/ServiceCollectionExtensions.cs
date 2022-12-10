@@ -5,28 +5,30 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using zero.Identity;
 
-namespace zero.Raven;
+namespace zero.Identity;
 
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Adds the default identity system configuration for the specified User and Role types, using RavenDB as the data store.
+    /// Adds the default identity system configuration for the specified User and Role types
     /// </summary>
-    public static IdentityBuilder AddRavenDbIdentity<TUser, TRole>(
-        this IServiceCollection services)
-        where TUser : ZeroIdentityUser, new()
-        where TRole : ZeroIdentityRole, new()
-        => services.AddIdentity<TUser, TRole>(setupAction: null!);
+    // public static IdentityBuilder AddZeroIdentity<TUser, TRole, TStore>(
+    //     this IServiceCollection services)
+    //     where TUser : ZeroIdentityUser, new()
+    //     where TRole : ZeroIdentityRole, new()
+    //     where TStore : class, IZeroIdentityStoreDbProvider 
+    //     => services.AddIdentity<TUser, TRole>(setupAction: null!);
 
     /// <summary>
-    /// Adds and configures the identity system for the specified User and Role types, using RavenDB as the data store.
+    /// Adds and configures the identity system for the specified User and Role types
     /// </summary>
-    public static IdentityBuilder AddRavenDbIdentity<TUser, TRole>(
+    public static IdentityBuilder AddZeroIdentity<TUser, TRole, TStore>(
         this IServiceCollection services,
         Action<IdentityOptions> setupAction
     )
         where TUser : ZeroIdentityUser, new()
         where TRole : ZeroIdentityRole, new()
+        where TStore : class, IZeroIdentityStoreDbProvider 
     {
         // Services used by identity
         services.AddAuthentication(options =>
@@ -66,8 +68,9 @@ public static class ServiceCollectionExtensions
         services.AddHttpContextAccessor();
 
         // Data stores
-        services.TryAddScoped<IUserStore<TUser>, RavenUserStore<TUser>>();
-        services.TryAddScoped<IRoleStore<TRole>, RavenRoleStore<TRole>>();
+        services.AddScoped<IZeroIdentityStoreDbProvider, TStore>();
+        services.TryAddScoped<IUserStore<TUser>, ZeroUserStore<TUser>>();
+        services.TryAddScoped<IRoleStore<TRole>, ZeroRoleStore<TRole>>();
 
         // Identity services
         services.TryAddScoped<IUserValidator<TUser>, UserValidator<TUser>>();

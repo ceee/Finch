@@ -5,23 +5,22 @@ using Raven.Client.Exceptions;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using zero.Identity;
-using zero.Raven;
 
-namespace zero.Raven;
+namespace zero.Identity;
 
-public class RavenRoleStore<TRole> :
+public  class ZeroRoleStore<TRole> :
   IRoleStore<TRole>, 
   IRoleClaimStore<TRole>
   where TRole : ZeroIdentityRole, new()
 {
   protected IdentityErrorDescriber ErrorDescriber { get; private set; }
 
-  protected virtual IRavenOperations Ops { get; set; }
+  protected virtual IZeroIdentityStoreDbProvider Db { get; set; }
 
 
-  public RavenRoleStore(IRavenOperations operations, IdentityErrorDescriber describer = null)
+  public ZeroRoleStore(IZeroIdentityStoreDbProvider db, IdentityErrorDescriber describer = null)
   {
-    Ops = operations;
+    Db = db;
     ErrorDescriber = describer ?? new IdentityErrorDescriber();
   }
 
@@ -53,7 +52,7 @@ public class RavenRoleStore<TRole> :
 
     try
     {
-      Result<TRole> result =  await Ops.Create(role);
+      Result<TRole> result =  await Db.Create(role);
 
       if (!result.IsSuccess)
       {
@@ -74,7 +73,7 @@ public class RavenRoleStore<TRole> :
   {
     try
     {
-      Result<TRole> result = await Ops.Update(role);
+      Result<TRole> result = await Db.Update(role);
       
       if (!result.IsSuccess)
       {
@@ -94,7 +93,7 @@ public class RavenRoleStore<TRole> :
   {
     try
     {
-      Result<TRole> result = await Ops.Delete(role);
+      Result<TRole> result = await Db.Delete(role);
       
       if (!result.IsSuccess)
       {
@@ -139,7 +138,7 @@ public class RavenRoleStore<TRole> :
   public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
   {
     // TODO index
-    return await Ops.Session.Query<TRole>().FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken);
+    return await Db.Find<TRole>(x => x.Id == roleId, cancellationToken);
   }
 
 
@@ -147,7 +146,7 @@ public class RavenRoleStore<TRole> :
   public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
   {
     // TODO index
-    return await Ops.Session.Query<TRole>().FirstOrDefaultAsync(x => x.Name == normalizedRoleName, cancellationToken);
+    return await Db.Find<TRole>(x => x.Name == normalizedRoleName, cancellationToken);
   }
 
 

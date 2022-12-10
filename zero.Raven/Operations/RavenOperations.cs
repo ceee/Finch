@@ -81,11 +81,6 @@ public partial class RavenOperations : IRavenOperations
       zeroModel.Hash ??= IdGenerator.Create();
     }
 
-    if (model is IAlwaysActive activeModel)
-    {
-      activeModel.IsActive = true;
-    }
-
     return model;
   }
 
@@ -114,7 +109,7 @@ public partial class RavenOperations : IRavenOperations
   /// <inheritdoc />
   public virtual T WhenActive<T>(T model) where T : ZeroIdEntity, new()
   {
-    return model != null && (model is IAlwaysActive || model is not ZeroEntity || (model as ZeroEntity).IsActive) ? model : default;
+    return model != null && (model is not ZeroEntity || (model as ZeroEntity).IsActive) ? model : default;
   }
 }
 
