@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "legacy", "legacy", "{93A1CC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Raven", "zero.Raven\zero.Raven.csproj", "{DC79D7EA-FAA1-4701-9C36-8295CD1C45D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Raven.IdentityDemo", "..\playground\zero.Raven.IdentityDemo\zero.Raven.IdentityDemo.csproj", "{05C829D6-3052-40DB-9282-3BDFCDAE0F05}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Raven.IdentityDemo", "zero.Raven.IdentityDemo\zero.Raven.IdentityDemo.csproj", "{05C829D6-3052-40DB-9282-3BDFCDAE0F05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
