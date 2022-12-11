@@ -9,12 +9,10 @@ public static class IdentityBuilderExtensions
   /// <summary>
   /// Adds an implementation of identity information stores.
   /// </summary>
-  public static IdentityBuilder AddZeroIdentityStores<T>(this IdentityBuilder builder) where T : class, IZeroIdentityStoreDbProvider
+  public static IdentityBuilder AddZeroIdentityStores(this IdentityBuilder builder)
   {
     Type userStoreType = typeof(ZeroUserStore<,>).MakeGenericType(builder.UserType, builder.RoleType);
     Type roleStoreType = typeof(ZeroRoleStore<>).MakeGenericType(builder.RoleType);
-
-    builder.Services.AddScoped<IZeroIdentityStoreDbProvider, T>();
     builder.Services.TryAddScoped(typeof(IUserStore<>).MakeGenericType(builder.UserType), userStoreType);
     builder.Services.TryAddScoped(typeof(IRoleStore<>).MakeGenericType(builder.RoleType), roleStoreType);
     
