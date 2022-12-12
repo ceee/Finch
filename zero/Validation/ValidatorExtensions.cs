@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
-using Raven.Client.Documents;
 using System.Globalization;
+using System.Net.Mail;
 
 namespace zero.Validation;
 
@@ -38,22 +38,7 @@ public static class ValidatorExtensions
   /// </summary>
   public static IRuleBuilderOptions<T, string> Email<T>(this IRuleBuilder<T, string> ruleBuilder)
   {
-    return ruleBuilder.Must((root, value, context) =>
-    {
-      if (value.IsNullOrWhiteSpace())
-      {
-        return true;
-      }
-
-      int index = value.IndexOf(KLAMMERAFFE);
-
-      if (index < 0 || index == value.Length - 1 || index != value.LastIndexOf(KLAMMERAFFE))
-      {
-        return false;
-      }
-
-      return true;
-    }).WithMessage("@errors.forms.email_invalid");
+    return ruleBuilder.Must((root, value, context) => ValidateEmail(value)).WithMessage("@errors.forms.email_invalid");
   }
 
 
@@ -78,9 +63,7 @@ public static class ValidatorExtensions
 
       foreach (string mail in mails)
       {
-        int index = mail.IndexOf(KLAMMERAFFE);
-
-        if (index < 0 || index == mail.Length - 1 || index != mail.LastIndexOf(KLAMMERAFFE))
+        if (!ValidateEmail(mail))
         {
           return false;
         }
@@ -88,6 +71,23 @@ public static class ValidatorExtensions
 
       return true;
     }).WithMessage("@errors.forms.emails_invalid");
+  }
+
+
+  private static bool ValidateEmail(string value)
+  {
+    if (value == null)
+    {
+      return false;
+    }
+
+    int index = value.IndexOf(KLAMMERAFFE);
+
+    return
+      index > 0 &&
+      index != value.Length - 1 &&
+      index == value.LastIndexOf(KLAMMERAFFE) &&
+      MailAddress.TryCreate(value, out _);
   }
 
 

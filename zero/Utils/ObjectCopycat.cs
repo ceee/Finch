@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Reflection;
+using System.Text.Json;
 
 namespace zero.Utils;
 
@@ -16,20 +16,20 @@ public class ObjectCopycat
   public static T Clone<T>(T obj)
   {
     Type type = obj.GetType();
-    return (T)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(obj), type);
+    return (T)JsonSerializer.Deserialize(JsonSerializer.Serialize(obj), type);
   }
 
 
   public static T CloneSpecific<T>(T obj)
   {
     Type type = obj.GetType();
-    return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj));
+    return JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(obj));
   }
 
 
   public static bool ContentEquals<T>(T obj1, T obj2)
   {
-    return (obj1 == null && obj2 == null) || (obj1 != null && obj2 != null && JsonConvert.SerializeObject(obj1) == JsonConvert.SerializeObject(obj2));
+    return (obj1 == null && obj2 == null) || (obj1 != null && obj2 != null && JsonSerializer.Serialize(obj1) == JsonSerializer.Serialize(obj2));
   }
 
 

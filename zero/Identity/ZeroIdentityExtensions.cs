@@ -106,7 +106,7 @@ public static class ZeroIdentityExtensions
     services.Configure<IdentityOptions>(opts =>
     {
       opts.ClaimsIdentity.UserIdClaimType = ZeroIdentityConstants.Claims.UserId;
-      opts.ClaimsIdentity.UserNameClaimType = ZeroIdentityConstants.Claims.UserName;
+      opts.ClaimsIdentity.UserNameClaimType = ZeroIdentityConstants.Claims.Username;
       opts.ClaimsIdentity.RoleClaimType = ZeroIdentityConstants.Claims.Role;
       opts.ClaimsIdentity.SecurityStampClaimType = ZeroIdentityConstants.Claims.SecurityStamp;
       opts.ClaimsIdentity.EmailClaimType = ZeroIdentityConstants.Claims.Email;

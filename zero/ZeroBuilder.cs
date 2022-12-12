@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using zero.Mvc;
 
 namespace zero;
 
@@ -42,6 +43,7 @@ public class ZeroBuilder
     new AssemblyDiscovery(Mvc).Execute(_startupOptions.AssemblyDiscoveryRules);
     
     Modules.Add<ZeroCommunicationModule>();
+    Modules.Add<ZeroMvcModule>();
     Modules.Add<ZeroConfigurationModule>();
     Modules.Add<ZeroValidationModule>();
     Modules.Add<ZeroContextModule>();

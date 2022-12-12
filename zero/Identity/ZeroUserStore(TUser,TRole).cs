@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
 using zero.Identity;
 
 namespace zero.Identity;
@@ -31,7 +29,7 @@ public partial class ZeroUserStore<TUser, TRole> : ZeroUserStore<TUser>,
   /// <inheritdoc />
   public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
   {
-    return await Db.FindAll<TUser>(x => roleName.In(x.RoleIds), cancellationToken);
+    return await Db.FindAll<TUser>(x => x.RoleIds.Contains(roleName), cancellationToken);
   }
 
 

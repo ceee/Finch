@@ -17,6 +17,5 @@ public static partial class Constants
   public static partial class Database
   {
     public const string ReservationPrefix = "zero.";
-    public const string Expires = Raven.Client.Constants.Documents.Metadata.Expires;
   }
 }

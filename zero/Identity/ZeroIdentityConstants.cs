@@ -21,7 +21,9 @@ public class ZeroIdentityConstants
     
     public static readonly string IsZero = ClaimPrefix + ".iszero";
     public static readonly string UserId = ClaimPrefix + ".userid";
-    public static readonly string UserName = ClaimPrefix + ".username";
+    public static readonly string Username = ClaimPrefix + ".username";
+    public static readonly string Name = ClaimPrefix + ".name";
+    public static readonly string Nickname = ClaimPrefix + ".nickname";
     public static readonly string Role = ClaimPrefix + ".rolealias";
     public static readonly string SecurityStamp = ClaimPrefix + ".securitystamp";
     public static readonly string Email = ClaimPrefix + ".email";

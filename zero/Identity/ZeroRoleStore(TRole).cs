@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
-using Raven.Client.Exceptions;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using zero.Identity;
@@ -71,18 +68,11 @@ public  class ZeroRoleStore<TRole> :
   /// <inheritdoc/>
   public async Task<IdentityResult> UpdateAsync(TRole role, CancellationToken cancellationToken)
   {
-    try
-    {
-      Result<TRole> result = await Db.Update(role);
+    Result<TRole> result = await Db.Update(role);
       
-      if (!result.IsSuccess)
-      {
-        return Fail(result);
-      }
-    }
-    catch (ConcurrencyException)
+    if (!result.IsSuccess)
     {
-      return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
+      return Fail(result);
     }
     return IdentityResult.Success;
   }
@@ -91,18 +81,11 @@ public  class ZeroRoleStore<TRole> :
   /// <inheritdoc/>
   public async Task<IdentityResult> DeleteAsync(TRole role, CancellationToken cancellationToken)
   {
-    try
-    {
-      Result<TRole> result = await Db.Delete(role);
+    Result<TRole> result = await Db.Delete(role);
       
-      if (!result.IsSuccess)
-      {
-        return Fail(result);
-      }
-    }
-    catch (ConcurrencyException)
+    if (!result.IsSuccess)
     {
-      return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
+      return Fail(result);
     }
     return IdentityResult.Success;
   }

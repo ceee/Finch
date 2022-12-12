@@ -1,10 +1,7 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using Raven.Client.Exceptions;
 using zero.Identity;
 
 namespace zero.Identity;
@@ -94,18 +91,11 @@ public partial class ZeroUserStore<TUser> :
   /// <inheritdoc />
   public async Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
   {
-    try
-    {
-      Result<TUser> result = await Db.Delete(user);
+    Result<TUser> result = await Db.Delete(user);
       
-      if (!result.IsSuccess)
-      {
-        return Fail(result);
-      }
-    }
-    catch (ConcurrencyException)
+    if (!result.IsSuccess)
     {
-      return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
+      return Fail(result);
     }
     return IdentityResult.Success;
   }

@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Logging;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Session;
 using System.Globalization;
 using System.Security.Claims;
 

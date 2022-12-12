@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace zero.Models;
 
@@ -65,12 +64,5 @@ public class ZeroEntity : ZeroIdEntity, ISupportsDbConventions, ISupportsRouting
   /// Additional properties for this entity
   /// </summary>
   public Dictionary<string, string> Properties { get; set; } = new();
-
-  /// <summary>
-  /// [Warning] This field is always empty when bound to the database.
-  /// It is only filled in the app-code for routing.
-  /// </summary>
-  [JsonIgnore]
-  public string Url { get; set; }
 }
  
