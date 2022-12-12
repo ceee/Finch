@@ -41,4 +41,30 @@ public static class HttpContextExtensions
     //string ipAddress = context.GetServerVariable("HTTP_X_FORWARDED_FOR");
     //return !ipAddress.IsNullOrEmpty() ? ipAddress.Split(',')[0] : context.GetServerVariable("REMOTE_ADDR");
   }
+  
+  
+  public static bool IsPartOfUrl(this HttpContext model, string url)
+  {
+    if (url.IsNullOrEmpty())
+    {
+      return false;
+    }
+
+    string destination = url.EnsureStartsWith('/').TrimEnd('/');
+    string current = model.Request.Path.ToUriComponent().TrimEnd('/');
+    return current.StartsWith(destination, StringComparison.InvariantCultureIgnoreCase);
+  }
+
+
+  public static bool IsUrl(this HttpContext model, string url)
+  {
+    if (url.IsNullOrEmpty())
+    {
+      return false;
+    }
+
+    string destination = url.EnsureStartsWith('/').TrimEnd('/');
+    string current = model.Request.Path.ToUriComponent().TrimEnd('/');
+    return current.Equals(destination, StringComparison.InvariantCultureIgnoreCase);
+  }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Globalization;
+using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace zero.Extensions;
@@ -192,5 +194,22 @@ public static class StringExtensions
       return text;
     }
     return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+  }
+  
+  
+  public static string NewLinesToBr(this string source)
+  {
+    StringBuilder builder = new();
+    string[] lines = source.Split('\n');
+    for (int i = 0; i < lines.Length; i++)
+    {
+      if (i > 0)
+      {
+        builder.Append("<br/>");
+      }
+      builder.Append(WebUtility.HtmlEncode(lines[i]));
+    }
+
+    return builder.ToString();
   }
 }

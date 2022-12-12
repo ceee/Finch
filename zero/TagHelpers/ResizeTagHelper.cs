@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace zero.TagHelpers;
 
-[HtmlTargetElement(Attributes = "zero-resize")]
+[HtmlTargetElement(Attributes = "app-resize")]
 public class ResizeTagHelper : TagHelper
 {
   [HtmlAttributeName("src")]
   public string Src { get; set; }
 
-  [HtmlAttributeName("zero-resize")]
+  [HtmlAttributeName("app-resize")]
   public string Preset { get; set; }
   
   [ViewContext]
@@ -28,7 +28,7 @@ public class ResizeTagHelper : TagHelper
   public override void Process(TagHelperContext context, TagHelperOutput output)
   {
     string src = FileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, Src).Resize(Preset);
-    output.Attributes.RemoveAll("zero-resize");
+    output.Attributes.RemoveAll("app-resize");
     output.Attributes.SetAttribute("src", src);
   }
 }
