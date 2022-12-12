@@ -20,8 +20,7 @@ public class ConfigurationLocalizer : Localizer
 
   protected override Translation LoadTranslation(string key)
   {
-    string normalizedKey = key.Replace(".", ":");
-    IConfigurationSection section = _configuration.GetSection($"Zero:Localization:{normalizedKey}");
+    IConfigurationSection section = _configuration.GetSection($"Zero:Localization:{key}");
 
     if (section == null)
     {

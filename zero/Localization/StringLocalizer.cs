@@ -3,6 +3,14 @@ using Microsoft.Extensions.Localization;
 
 namespace zero.Localization;
 
+public class StringLocalizer<T> : StringLocalizer, IStringLocalizer<T>
+{
+  public StringLocalizer(ILocalizer localizer) : base(localizer)
+  {
+    
+  }
+}
+
 public class StringLocalizer : IStringLocalizer
 {
   private readonly ILocalizer _localizer;

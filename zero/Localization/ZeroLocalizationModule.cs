@@ -20,6 +20,7 @@ internal class ZeroLocalizationModule : ZeroModule
     services.AddScoped<ICultureService, CultureService>();
     services.AddScoped<ILocalizer, ConfigurationLocalizer>();
     services.AddScoped<IStringLocalizer, StringLocalizer>();
+    services.AddScoped(typeof(IStringLocalizer<>), typeof(StringLocalizer<>));
     
     services.Configure<RazorViewEngineOptions>(opts => opts.ViewLocationExpanders.Add(new LanguageViewLocationExpander(LanguageViewLocationExpanderFormat.Suffix)));
     services.AddSingleton<IHtmlLocalizerFactory, HtmlLocalizerFactory>();
