@@ -49,7 +49,7 @@ public static class ZeroIdentityExtensions
       })
       .AddCookie(IdentityConstants.ApplicationScheme, o =>
       {
-        o.LoginPath = new PathString("/Account/Login");
+        o.LoginPath = new PathString("/account/login");
         o.SlidingExpiration = true;
         o.ExpireTimeSpan = TimeSpan.FromDays(90);
         
