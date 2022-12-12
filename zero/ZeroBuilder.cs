@@ -32,7 +32,9 @@ public class ZeroBuilder
     setupAction?.Invoke(_startupOptions);
 
     services.AddControllers();
-    services.AddRazorPages();
+    Mvc = services.AddRazorPages();
+
+    Mvc.AddDataAnnotationsLocalization();
 
     services.Configure<AntiforgeryOptions>(opts => opts.Cookie.Name = "zero.antiforgery");
 

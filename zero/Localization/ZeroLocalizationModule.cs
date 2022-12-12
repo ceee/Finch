@@ -1,6 +1,12 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 
 namespace zero.Localization;
 
@@ -12,8 +18,17 @@ internal class ZeroLocalizationModule : ZeroModule
     
     services.AddScoped<ICultureResolver, CultureResolver>();
     services.AddScoped<ICultureService, CultureService>();
-    services.AddScoped<ILocalizer, FileLocalizer>();
+    services.AddScoped<ILocalizer, ConfigurationLocalizer>();
+    services.AddScoped<IStringLocalizer, StringLocalizer>();
     
+    services.Configure<RazorViewEngineOptions>(opts => opts.ViewLocationExpanders.Add(new LanguageViewLocationExpander(LanguageViewLocationExpanderFormat.Suffix)));
+    services.AddSingleton<IHtmlLocalizerFactory, HtmlLocalizerFactory>();
+    services.AddTransient<IHtmlLocalizer, HtmlLocalizer>();
+    services.AddTransient<IViewLocalizer, ViewLocalizer>();
+
+    services.AddLocalization();
+    
+
     services.AddOptions<LocalizationOptions>().Bind(configuration.GetSection("Zero:Localization")).Configure(opts =>
     {
       opts.FilePath = "Config/texts.json";
