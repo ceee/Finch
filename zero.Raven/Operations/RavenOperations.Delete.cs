@@ -3,8 +3,15 @@
 public partial class RavenOperations : IRavenOperations
 {
   /// <inheritdoc />
-  public virtual async Task<Result<T>> Delete<T>(T model) where T : ZeroIdEntity, new()
+  public virtual Task<Result<T>> Delete<T>(T model) where T : ZeroIdEntity, new()
+    => Delete<T>(model.Id);
+
+
+  /// <inheritdoc />
+  public virtual async Task<Result<T>> Delete<T>(string id) where T : ZeroIdEntity, new()
   {
+    T model = await Load<T>(id);
+    
     if (model == null)
     {
       return Result<T>.Fail("@errors.ondelete.idnotfound");
@@ -17,7 +24,7 @@ public partial class RavenOperations : IRavenOperations
       return instruction.Result;
     }
 
-    Session.Delete(model);
+    Session.Delete<T>(model);
     await Session.SaveChangesAsync();
     if (InterceptorBlocker == null)
     {

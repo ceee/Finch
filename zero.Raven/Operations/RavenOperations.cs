@@ -238,6 +238,11 @@ public interface IRavenOperations
   /// Deletes an entity
   /// </summary>
   Task<Result<T>> Delete<T>(T model) where T : ZeroIdEntity, new();
+  
+  /// <summary>
+  /// Deletes an entity
+  /// </summary>
+  Task<Result<T>> Delete<T>(string id) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Loads all children for an entity

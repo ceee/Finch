@@ -31,10 +31,11 @@ public static class MediaExtensions
     return values;
   }
 
+  public static string Resize(this Media media, string preset) => media?.Path.Resize(preset, media?.Metadata?.FocalPoint, true);
+  
+  public static string Resize(this string path, string preset, bool isZeroMedia) => path.Resize(preset, null, isZeroMedia);
 
-  public static string Resize(this string path, string preset) => path.Resize(preset, null);
-
-  public static string Resize(this string path, string preset, MediaFocalPoint focalPoint = null)
+  public static string Resize(this string path, string preset, MediaFocalPoint focalPoint = null, bool isZeroMedia = false)
   {
     if (path.IsNullOrEmpty())
     {
@@ -47,6 +48,14 @@ public static class MediaExtensions
     if (parts[0] == "http:" || parts[0] == "https:")
     {
       return String.Join('/', parts);
+    }
+
+    if (isZeroMedia)
+    {
+      // TODO this is bullshit because we need to get the base path from options
+      return parts[1] == "media" || parts[0] == "media"
+        ? String.Join('/', parts)
+        : ("/media" + String.Join('/', parts).EnsureStartsWith('/'));
     }
 
     return String.Join('/', parts).EnsureStartsWith('/');

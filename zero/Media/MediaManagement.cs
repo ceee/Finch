@@ -88,7 +88,7 @@ public class MediaManagement : IMediaManagement
 
 
   /// <inheritdoc />
-  public virtual async Task<Result<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default)
+  public virtual async Task<Result<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, Action<Media> onBeforeSave = null, CancellationToken cancellationToken = default)
   {
     Result<Media> result = await Creator.UploadFile(fileStream, filename, folderId, cancellationToken);
 
@@ -96,6 +96,8 @@ public class MediaManagement : IMediaManagement
     {
       return result;
     }
+
+    onBeforeSave?.Invoke(result.Model);
 
     return await Db.Create(result.Model);
   }
@@ -176,7 +178,7 @@ public interface IMediaManagement
   /// <summary>
   /// Uploads a file and persists it
   /// </summary>
-  Task<Result<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default);
+  Task<Result<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, Action<Media> onBeforeSave = null, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get a media folder by id

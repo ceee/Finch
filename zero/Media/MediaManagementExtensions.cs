@@ -36,20 +36,20 @@ namespace zero.Media
     /// <summary>
     /// Uploads a file and persists it
     /// </summary>
-    public static async Task<Result<Media>> UploadFile(this IMediaManagement media, IFormFile formFile, string folderId = null, CancellationToken cancellationToken = default)
+    public static async Task<Result<Media>> UploadFile(this IMediaManagement media, IFormFile formFile, string folderId = null, Action<Media> onBeforeSave = null, CancellationToken cancellationToken = default)
     {
       using Stream stream = formFile.OpenReadStream();
-      return await media.UploadFile(stream, formFile.FileName, folderId, cancellationToken);
+      return await media.UploadFile(stream, formFile.FileName, folderId, onBeforeSave, cancellationToken);
     }
 
 
     /// <summary>
     /// Uploads a file and persists it
     /// </summary>
-    public static async Task<Result<Media>> UploadFile(this IMediaManagement media, byte[] fileBytes, string filename, string folderId = null, CancellationToken cancellationToken = default)
+    public static async Task<Result<Media>> UploadFile(this IMediaManagement media, byte[] fileBytes, string filename, string folderId = null, Action<Media> onBeforeSave = null, CancellationToken cancellationToken = default)
     {
       using Stream stream = new MemoryStream(fileBytes);
-      return await media.UploadFile(stream, filename, folderId, cancellationToken);
+      return await media.UploadFile(stream, filename, folderId, onBeforeSave, cancellationToken);
     }
 
 

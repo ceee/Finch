@@ -33,7 +33,7 @@ public class MediaCreator : IMediaCreator
     if (!isImage && !isDocument)
     {
       // TODO error
-      return Result<Media>.Fail("ERROR");
+      return Result<Media>.Fail("This file type is not supported");
     }
 
     Media model = new();
@@ -65,22 +65,25 @@ public class MediaCreator : IMediaCreator
 
       string extension = Path.GetExtension(model.Path);
 
-      foreach ((string key, ResizeOptions opts) in Options.Thumbnails)
+      if (Options.Thumbnails != null)
       {
-        Image<Rgba32> imageFrame = image.Frames.Count > 1 ? image.Frames.CloneFrame(0) : image.Clone();
-        imageFrame.Mutate(x => x.Resize(opts));
+        foreach ((string key, ResizeOptions opts) in Options.Thumbnails)
+        {
+          Image<Rgba32> imageFrame = image.Frames.Count > 1 ? image.Frames.CloneFrame(0) : image.Clone();
+          imageFrame.Mutate(x => x.Resize(opts));
 
-        using MemoryStream stream = new();
-        await imageFrame.SaveAsync(stream, new PngEncoder(), cancellationToken);
+          using MemoryStream stream = new();
+          await imageFrame.SaveAsync(stream, new PngEncoder(), cancellationToken);
 
-        stream.Position = 0;
+          stream.Position = 0;
 
-        string thumbFilename = normalizedFilename.TrimEnd(extension) + "." + Safenames.File(key) + ".png";
-        string path = directory + '/' + thumbFilename;
+          string thumbFilename = normalizedFilename.TrimEnd(extension) + "." + Safenames.File(key) + ".png";
+          string path = directory + '/' + thumbFilename;
 
-        await FileSystem.CreateFile(path, stream, cancellationToken: cancellationToken);
+          await FileSystem.CreateFile(path, stream, cancellationToken: cancellationToken);
 
-        model.Thumbnails[key] = path;
+          model.Thumbnails[key] = path;
+        }
       }
     }
 

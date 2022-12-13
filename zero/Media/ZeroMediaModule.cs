@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp.Processing;
 using System.IO;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using SixLabors.ImageSharp.Web.Caching;
 using SixLabors.ImageSharp.Web.DependencyInjection;
 using zero.Media.ImageSharp;
@@ -52,5 +54,10 @@ internal class ZeroMediaModule : ZeroModule
     //   raven.Indexes.Add<Media_ByChildren>();
     //   raven.Indexes.Add<Media_ByHierarchy>();
     // });
+  }
+
+  public override void Configure(IApplicationBuilder app, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
+  {
+    app.UseImageSharp();
   }
 }
