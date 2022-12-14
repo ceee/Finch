@@ -11,9 +11,6 @@ public class ActiveTagHelper : TagHelper
   [HtmlAttributeName("class")]
   public string Classes { get; set; }
 
-  [HtmlAttributeName("href")]
-  public string Href { get; set; }
-
   public override int Order => 100;
 
 
@@ -27,13 +24,16 @@ public class ActiveTagHelper : TagHelper
   {
     output.Attributes.RemoveAll("app-active");
 
+    output.Attributes.TryGetAttribute("Href", out TagHelperAttribute _href);
+    string href = _href?.Value?.ToString() ?? string.Empty;
+
     HashSet<string> classes = Classes?.Split(" ").ToHashSet() ?? new HashSet<string>();
 
-    if (_httpContextAccessor.HttpContext.IsPartOfUrl(Href))
+    if (_httpContextAccessor.HttpContext.IsPartOfUrl(href))
     {
       classes.Add("is-active");
     }
-    if (_httpContextAccessor.HttpContext.IsUrl(Href))
+    if (_httpContextAccessor.HttpContext.IsUrl(href))
     {
       classes.Add("is-active-exact");
     }
