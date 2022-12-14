@@ -46,7 +46,6 @@ public static class UserManagerExtensions
       (int)options.Period);
     
     QrCode qr = QrCode.EncodeText(url, QrCode.Ecc.Medium);
-    string svg = qr.ToSvgString(0);
 
     return new TwoFactorKey()
     {
@@ -54,7 +53,7 @@ public static class UserManagerExtensions
       UnformattedKey = unformattedKey,
       FormattedKey = FormatTwoFactorAuthenticationKey(unformattedKey),
       AuthenticatorUrl = url,
-      QrCodeSvg = svg,
+      QrCode = qr,
       Options = options
     };
   }

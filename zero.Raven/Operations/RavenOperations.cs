@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace zero.Raven;
@@ -109,7 +110,7 @@ public partial class RavenOperations : IRavenOperations
   /// <inheritdoc />
   public virtual T WhenActive<T>(T model) where T : ZeroIdEntity, new()
   {
-    return model != null && (model is not ZeroEntity || (model as ZeroEntity).IsActive) ? model : default;
+    return model != null && (model is not ZeroEntity || (model as ZeroEntity).IsActive) && (model is not ISupportsSoftDelete || !(model as ISupportsSoftDelete).IsDeleted) ? model : default;
   }
 }
 
@@ -189,6 +190,26 @@ public interface IRavenOperations
   /// Get entities by query (by using the specified index)
   /// </summary>
   Task<Paged<T>> Load<T, TIndex>(int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> expression = default) where T : ZeroIdEntity, new() where TIndex : AbstractCommonApiForIndexes, new();
+
+  /// <summary>
+  /// Get entities by query
+  /// </summary>
+  Task<List<T>> Load<T>(Func<IRavenQueryable<T>, IQueryable<T>> expression) where T : ZeroIdEntity, new();
+
+  /// <summary>
+  /// Get entities by query (by using the specified index)
+  /// </summary>
+  Task<List<T>> Load<T, TIndex>(Func<IRavenQueryable<T>, IQueryable<T>> expression) where T : ZeroIdEntity, new() where TIndex : AbstractCommonApiForIndexes, new();
+
+  /// <summary>
+  /// Get entities by query
+  /// </summary>
+  Task<List<T>> Load<T>(Expression<Func<T, bool>> predicate) where T : ZeroIdEntity, new();
+
+  /// <summary>
+  /// Get entities by query (by using the specified index)
+  /// </summary>
+  Task<List<T>> Load<T, TIndex>(Expression<Func<T, bool>> predicate) where T : ZeroIdEntity, new() where TIndex : AbstractCommonApiForIndexes, new();
 
   /// <summary>
   /// Get all entities from this collection. 

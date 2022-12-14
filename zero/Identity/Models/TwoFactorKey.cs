@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using zero.Rendering.QrCode;
 
 namespace zero.Identity;
 
@@ -12,7 +13,7 @@ public class TwoFactorKey
 
   public string AuthenticatorUrl { get; init; }
   
-  public string QrCodeSvg { get; set; }
+  public QrCode QrCode { get; set; }
 
   public TwoFactorKeyOptions Options { get; init; }
 }

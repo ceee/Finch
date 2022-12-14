@@ -24,7 +24,15 @@ public partial class RavenOperations : IRavenOperations
       return instruction.Result;
     }
 
-    Session.Delete<T>(model);
+    if (model is ISupportsSoftDelete softDeleteModel)
+    {
+      softDeleteModel.IsDeleted = true;
+    }
+    else
+    {
+      Session.Delete<T>(model);
+    }
+
     await Session.SaveChangesAsync();
     if (InterceptorBlocker == null)
     {

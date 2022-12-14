@@ -2,6 +2,7 @@
 using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
+using System.Linq.Expressions;
 
 namespace zero.Raven;
 
@@ -70,6 +71,44 @@ public partial class RavenOperations : IRavenOperations
 
     List<T> result = await querySelector(queryable).Paging(pageNumber, pageSize).ToListAsync();
     return new Paged<T>(result, statistics.TotalResults, pageNumber, pageSize);
+  }
+
+
+  /// <inheritdoc />
+  public virtual async Task<List<T>> Load<T>(Func<IRavenQueryable<T>, IQueryable<T>> querySelector) where T : ZeroIdEntity, new()
+  {
+    IRavenQueryable<T> queryable = Session.Query<T>();
+    querySelector ??= x => x;
+
+    return await querySelector(queryable).ToListAsync();
+  }
+
+
+  /// <inheritdoc />
+  public virtual async Task<List<T>> Load<T, TIndex>(Func<IRavenQueryable<T>, IQueryable<T>> querySelector)
+    where T : ZeroIdEntity, new()
+    where TIndex : AbstractCommonApiForIndexes, new()
+  {
+    IRavenQueryable<T> queryable = Session.Query<T, TIndex>();
+    querySelector ??= x => x;
+
+    return await querySelector(queryable).ToListAsync();
+  }
+
+
+  /// <inheritdoc />
+  public virtual async Task<List<T>> Load<T>(Expression<Func<T, bool>> predicate) where T : ZeroIdEntity, new()
+  {
+    return await Session.Query<T>().Where(predicate).ToListAsync();
+  }
+
+
+  /// <inheritdoc />
+  public virtual async Task<List<T>> Load<T, TIndex>(Expression<Func<T, bool>> predicate)
+    where T : ZeroIdEntity, new()
+    where TIndex : AbstractCommonApiForIndexes, new()
+  {
+    return await Session.Query<T, TIndex>().Where(predicate).ToListAsync();
   }
 
 
