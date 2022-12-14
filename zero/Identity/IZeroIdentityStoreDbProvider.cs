@@ -4,6 +4,8 @@ namespace zero.Identity;
 
 public interface IZeroIdentityStoreDbProvider
 {
+  Task<T> Load<T>(string id, CancellationToken ct = default) where T : ZeroEntity, new();
+
   Task<T> Find<T>(Expression<Func<T, bool>> expression, CancellationToken ct = default) where T : ZeroEntity;
   
   Task<IList<T>> FindAll<T>(Expression<Func<T, bool>> expression, CancellationToken ct = default) where T : ZeroEntity;

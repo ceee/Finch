@@ -1,8 +1,5 @@
-﻿using FluentValidation.Results;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using zero.Identity;
 
 namespace zero.Identity;
 
@@ -60,7 +57,7 @@ public partial class ZeroUserStore<TUser> :
   protected virtual async Task<bool> IsEmailReserved(TUser user, CancellationToken cancellationToken = default)
   {
     // TODO index
-    TUser existingUser = await Db.Find<TUser>(x => x.Email == user.Email, cancellationToken);
+    TUser existingUser = await Db.Find<TUser>(x => x.Email == user.Email && !x.IsDeleted, cancellationToken);
     return existingUser != null && existingUser.Id != user.Id;
   }
 
@@ -104,7 +101,7 @@ public partial class ZeroUserStore<TUser> :
   /// <inheritdoc />
   public async Task<IdentityResult> UpdateAsync(TUser user, CancellationToken cancellationToken)
   {
-    TUser source = await Db.Find<TUser>(x => x.Id == user.Id);
+    TUser source = await Db.Load<TUser>(user.Id);
 
     if (source == null)
     {
@@ -139,7 +136,7 @@ public partial class ZeroUserStore<TUser> :
   public async Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
   {
     // TODO index
-    return await Db.Find<TUser>(x => x.Id == userId, cancellationToken);
+    return await Db.Load<TUser>(userId);
   }
 
 
@@ -147,7 +144,7 @@ public partial class ZeroUserStore<TUser> :
   public async Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
   {
     // TODO index
-    return await Db.Find<TUser>(x => x.Username == normalizedUserName, cancellationToken);
+    return await Db.Find<TUser>(x => x.Username == normalizedUserName && !x.IsDeleted, cancellationToken);
   }
 
 
@@ -211,7 +208,7 @@ public partial class ZeroUserStore<TUser> :
   public async Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
   {
     // TODO index
-    return await Db.Find<TUser>(x => x.Email == normalizedEmail, cancellationToken);
+    return await Db.Find<TUser>(x => x.Email == normalizedEmail && !x.IsDeleted, cancellationToken);
   }
 
 
@@ -352,7 +349,7 @@ public partial class ZeroUserStore<TUser> :
   {
     UserClaim userClaim = new(claim);
     // TODO index
-    return await Db.FindAll<TUser>(x => x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value), cancellationToken);
+    return await Db.FindAll<TUser>(x => !x.IsDeleted && x.Claims.Any(c => c.Type == userClaim.Type && c.Value == userClaim.Value), cancellationToken);
   }
 
 
@@ -419,7 +416,7 @@ public partial class ZeroUserStore<TUser> :
   public async Task<TUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
   {
     // TODO index
-    return await Db.Find<TUser>(x => x.ExternalLogins.Any(l => l.LoginProvider.Equals(loginProvider, _comparer) && l.ProviderKey.Equals(providerKey, _comparer)), cancellationToken);
+    return await Db.Find<TUser>(x => !x.IsDeleted && x.ExternalLogins.Any(l => l.LoginProvider.Equals(loginProvider, _comparer) && l.ProviderKey.Equals(providerKey, _comparer)), cancellationToken);
   }
 
   

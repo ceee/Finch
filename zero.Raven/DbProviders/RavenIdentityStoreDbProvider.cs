@@ -13,8 +13,12 @@ public class RavenIdentityStoreDbProvider : IZeroIdentityStoreDbProvider
   {
     Ops = ops;
   }
-  
-  
+
+
+  public Task<T> Load<T>(string id, CancellationToken ct = default) where T : ZeroEntity, new() =>
+    Ops.Load<T>(id);
+
+
   public Task<T> Find<T>(Expression<Func<T, bool>> expression, CancellationToken ct = default) where T : ZeroEntity =>
     Ops.Session.Query<T>().FirstOrDefaultAsync(expression, ct);
   

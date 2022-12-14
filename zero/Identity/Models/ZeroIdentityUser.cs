@@ -52,6 +52,11 @@ public abstract class ZeroIdentityUser : ZeroEntity
   /// </summary>
   public List<string> RoleIds { get; set; } = new();
 
+  /// <summary>
+  /// Ability to implement ISupportsSoftDelete
+  /// </summary>
+  public bool IsDeleted { get; set; }
+
 
 
   /// <summary>

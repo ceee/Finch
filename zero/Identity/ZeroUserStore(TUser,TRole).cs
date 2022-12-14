@@ -29,7 +29,7 @@ public partial class ZeroUserStore<TUser, TRole> : ZeroUserStore<TUser>,
   /// <inheritdoc />
   public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
   {
-    return await Db.FindAll<TUser>(x => x.RoleIds.Contains(roleName), cancellationToken);
+    return await Db.FindAll<TUser>(x => !x.IsDeleted && x.RoleIds.Contains(roleName), cancellationToken);
   }
 
 

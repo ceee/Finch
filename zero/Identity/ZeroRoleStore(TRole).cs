@@ -121,7 +121,7 @@ public  class ZeroRoleStore<TRole> :
   public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
   {
     // TODO index
-    return await Db.Find<TRole>(x => x.Id == roleId, cancellationToken);
+    return await Db.Load<TRole>(roleId);
   }
 
 
