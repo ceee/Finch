@@ -14,6 +14,8 @@ public class ActiveTagHelper : TagHelper
   [HtmlAttributeName("href")]
   public string Href { get; set; }
 
+  public override int Order => 100;
+
 
   public ActiveTagHelper(IHttpContextAccessor contextAccessor)
   {
@@ -36,7 +38,6 @@ public class ActiveTagHelper : TagHelper
       classes.Add("is-active-exact");
     }
 
-    output.Attributes.SetAttribute("href", Href);
     output.Attributes.SetAttribute("class", string.Join(" ", classes));
   }
 }

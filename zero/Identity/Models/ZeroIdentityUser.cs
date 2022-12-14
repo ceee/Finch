@@ -77,6 +77,11 @@ public abstract class ZeroIdentityUser : ZeroEntity
   public bool TwoFactorEnabled { get; set; }
 
   /// <summary>
+  /// When the user activated two-factor authentication
+  /// </summary>
+  public DateTimeOffset? TwoFactorEnabledDate { get; set; }
+
+  /// <summary>
   /// The two-factor authenticator key
   /// </summary>
   public string TwoFactorAuthenticatorKey { get; set; }

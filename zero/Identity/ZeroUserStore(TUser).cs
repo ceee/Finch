@@ -480,6 +480,7 @@ public partial class ZeroUserStore<TUser> :
   public Task SetTwoFactorEnabledAsync(TUser user, bool enabled, CancellationToken cancellationToken)
   {
     user.TwoFactorEnabled = enabled;
+    user.TwoFactorEnabledDate = enabled ? DateTimeOffset.Now : null;
     return Task.CompletedTask;
   }
 
