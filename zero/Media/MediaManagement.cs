@@ -66,6 +66,7 @@ public class MediaManagement : IMediaManagement
   /// <inheritdoc />
   public virtual async Task<Media> GetFile(string id)
   {
+
     Media file = await Db.Find<Media>(x => x.Id == id);
     return file != null && !file.IsFolder ? file : null;
   }
@@ -82,9 +83,10 @@ public class MediaManagement : IMediaManagement
   /// <inheritdoc />
   public virtual async Task<Result<Media>> DeleteFile(Media file)
   {
-    // TODO delete in file system
+    await FileSystem.DeleteDirectory(file.FileId, true);
     return await Db.Delete(file);
   }
+
 
 
   /// <inheritdoc />
