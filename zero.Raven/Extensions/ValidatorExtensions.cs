@@ -1,9 +1,5 @@
 ﻿using FluentValidation;
 using Raven.Client.Documents;
-using System.Globalization;
-using zero.Extensions;
-using zero.Models;
-using zero.Raven;
 
 namespace zero.Raven;
 
@@ -12,12 +8,29 @@ public static class ValidatorExtensions
   /// <summary>
   /// Check if this value is unique within a collection
   /// </summary>
-  public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IZeroStore store) where T : ZeroEntity
+  public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IRavenOperations ops) 
+    where T : ZeroIdEntity
   {
     return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
     {
-      bool any = await store.Session().Advanced.AsyncDocumentQuery<T>()
+      bool any = await ops.Session.Advanced.AsyncDocumentQuery<T>()
         .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
+        .WhereEquals(context.PropertyName.ToPascalCaseId(), value)
+        .AnyAsync(cancellation);
+
+      return !any;
+    }).WithMessage("@errors.forms.not_unique");
+  }
+
+
+  /// <summary>
+  /// Check if this value is unique within a collection
+  /// </summary>
+  public static IRuleBuilderOptions<T, TProperty> Unique<T, TProperty, TCollection>(this IRuleBuilder<T, TProperty> ruleBuilder, IRavenOperations ops) 
+  {
+    return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
+    {
+      bool any = await ops.Session.Advanced.AsyncDocumentQuery<TCollection>()
         .WhereEquals(context.PropertyName.ToPascalCaseId(), value)
         .AnyAsync(cancellation);
 
@@ -29,11 +42,12 @@ public static class ValidatorExtensions
   /// <summary>
   /// Check if this value is at least set once to the expected value within a collection
   /// </summary>
-  public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IZeroStore store, TProperty expectedValue) where T : ZeroEntity
+  public static IRuleBuilderOptions<T, TProperty> ExpectAnyUnique<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, IRavenOperations ops, TProperty expectedValue) 
+    where T : ZeroIdEntity
   {
     return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
     {
-      return await store.Session().Advanced.AsyncDocumentQuery<T>()
+      return await ops.Session.Advanced.AsyncDocumentQuery<T>()
         .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
         .WhereEquals(context.PropertyName.ToPascalCaseId(), expectedValue)
         .AnyAsync(cancellation);
@@ -42,18 +56,21 @@ public static class ValidatorExtensions
 
 
   /// <summary>
-  /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
+  /// Check if this reference exists and is an entity which can be referenced
   /// </summary>
-  public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IZeroStore store) where T : ZeroEntity
+  public static IRuleBuilderOptions<T, string> Exists<T>(this IRuleBuilder<T, string> ruleBuilder, IRavenOperations ops) 
+    where T : ZeroIdEntity
   {
-    return ruleBuilder.Exists<T, T>(store);
+    return ruleBuilder.Exists<T, T>(ops);
   }
 
 
   /// <summary>
-  /// Check if this reference exists and is an entity which can be referenced (appId = shared for shareable entities or appId = current)
+  /// Check if this reference exists and is an entity which can be referenced
   /// </summary>
-  public static IRuleBuilderOptions<T, string> Exists<T, TReference>(this IRuleBuilder<T, string> ruleBuilder, IZeroStore store) where T : ZeroEntity where TReference : ZeroEntity
+  public static IRuleBuilderOptions<T, string> Exists<T, TCollection>(this IRuleBuilder<T, string> ruleBuilder, IRavenOperations ops) 
+    where T : ZeroIdEntity 
+    where TCollection : ZeroIdEntity
   {
     return ruleBuilder.MustAsync(async (entity, id, context, cancellation) =>
     {
@@ -62,7 +79,7 @@ public static class ValidatorExtensions
         return true;
       }
 
-      return await store.Session().Query<TReference>().AnyAsync(x => x.Id == id);
+      return await ops.Session.Query<TCollection>().AnyAsync(x => x.Id == id);
     }).WithMessage("@errors.forms.reference_notfound");
   }
 }
