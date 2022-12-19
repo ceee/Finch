@@ -1,5 +1,6 @@
 ﻿using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
+using Raven.Client;
 using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
 using System.Linq.Expressions;
@@ -256,6 +257,11 @@ public interface IRavenOperations
   Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, ISupportsSorting, new();
 
   /// <summary>
+  /// Batch create entities
+  /// </summary>
+  Task<Result<IEnumerable<T>>> CreateAll<T>(IEnumerable<T> models) where T : ZeroIdEntity, new();
+
+  /// <summary>
   /// Deletes an entity
   /// </summary>
   Task<Result<T>> Delete<T>(T model) where T : ZeroIdEntity, new();
@@ -264,6 +270,11 @@ public interface IRavenOperations
   /// Deletes an entity
   /// </summary>
   Task<Result<T>> Delete<T>(string id) where T : ZeroIdEntity, new();
+
+  /// <summary>
+  /// Deletes the whole collection
+  /// </summary>
+  Task Purge<T>(string querySuffix = null, Parameters parameters = null) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Loads all children for an entity

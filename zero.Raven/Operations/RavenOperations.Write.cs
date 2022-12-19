@@ -110,4 +110,38 @@ public partial class RavenOperations : IRavenOperations
 
     return Result<IOrderedEnumerable<T>>.Success(items.Select(x => x.Value).OrderByDescending(x => x.Sort));
   }
+
+
+  /// <inheritdoc />
+  public virtual async Task<Result<IEnumerable<T>>> CreateAll<T>(IEnumerable<T> models) where T : ZeroIdEntity, new()
+  {
+    using var bulkInsert = Store.Raven.BulkInsert();
+
+    foreach (T model in models)
+    {
+      // prepare model
+      PrepareForSave(model);
+
+      // create ID before-hand so interceptors can use it
+      model.Id = await GenerateId(model);
+
+      // run interceptor
+      InterceptorInstruction<T> instruction = Interceptors.ForCreate(model);
+
+      if (InterceptorBlocker == null && !await instruction.Start(this))
+      {
+        await bulkInsert.AbortAsync();
+        return instruction.Result.ConvertTo<IEnumerable<T>>(null);
+      }
+
+      // store our model
+      await bulkInsert.StoreAsync(model);
+      if (InterceptorBlocker == null)
+      {
+        await instruction.Complete();
+      }
+    }
+
+    return Result<IEnumerable<T>>.Success(models);
+  }
 }

@@ -1,4 +1,8 @@
-﻿namespace zero.Raven;
+﻿using Raven.Client.Documents.Operations;
+using Raven.Client.Documents.Queries;
+using Raven.Client;
+
+namespace zero.Raven;
 
 public partial class RavenOperations : IRavenOperations
 {
@@ -41,5 +45,20 @@ public partial class RavenOperations : IRavenOperations
     await Session.SaveChangesAsync();
 
     return Result<T>.Success();
+  }
+
+
+  /// <inheritdoc />
+  public virtual async Task Purge<T>(string querySuffix = null, Parameters parameters = null) where T : ZeroIdEntity, new()
+  {
+    var collectionName = Store.Raven.Conventions.FindCollectionName(typeof(T));
+    var operationQuery = new DeleteByQueryOperation(new IndexQuery()
+    {
+      Query = $"from {collectionName} c {querySuffix ?? String.Empty}",
+      QueryParameters = parameters
+    }, new QueryOperationOptions { AllowStale = true });
+
+    Operation operation = await Store.Raven.GetOperationExecutor().SendAsync(operationQuery);
+    await operation.WaitForCompletionAsync();
   }
 }
