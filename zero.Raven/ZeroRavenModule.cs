@@ -6,6 +6,7 @@ using Raven.Client.Documents.Indexes;
 using Raven.Client.Http;
 using zero.Identity;
 using zero.Media;
+using zero.Numbers;
 
 namespace zero.Raven;
 
@@ -32,6 +33,7 @@ internal class ZeroRavenModule : ZeroModule
 
     services.AddScoped<IZeroIdentityStoreDbProvider, RavenIdentityStoreDbProvider>();
     services.AddScoped<IZeroMediaStoreDbProvider, RavenMediaStoreDbProvider>();
+    services.AddScoped<IZeroNumberStoreDbProvider, RavenNumberStoreDbProvider>();
 
     services.AddOptions<FlavorOptions>();
     services.AddOptions<RavenOptions>().Bind(configuration.GetSection("Zero:Raven"));

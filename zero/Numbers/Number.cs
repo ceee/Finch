@@ -41,7 +41,5 @@ public class NumberCounter
 {
   public string Key { get; set; }
 
-  public string Value { get; set; }
-
   public long Count { get; set; }
 }
