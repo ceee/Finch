@@ -9,10 +9,10 @@ public partial class RavenOperations : IRavenOperations
   public virtual Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new() => Save(model, validate, onAfterStore);
 
   /// <inheritdoc />
-  public virtual Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new() => Save(model, validate, onAfterStore);
+  public virtual Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new() => Save(model, validate, onAfterStore, true);
 
   /// <inheritdoc />
-  protected virtual async Task<Result<T>> Save<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new()
+  protected virtual async Task<Result<T>> Save<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null, bool update = false) where T : ZeroIdEntity, new()
   {
     if (model == null)
     {
@@ -30,9 +30,13 @@ public partial class RavenOperations : IRavenOperations
         previousModel = await session.LoadAsync<T>(model.Id);
       }
 
-      if (previousModel == null)
+      if (update && previousModel == null)
       {
         return Result<T>.Fail("@errors.onsave.noidmatch");
+      }
+      else if (!update && previousModel != null)
+      {
+        return Result<T>.Fail("@errors.oncreate.idmismatch");
       }
 
       isUpdate = true;
