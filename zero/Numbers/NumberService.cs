@@ -18,6 +18,96 @@ public class NumberService : INumberService
     Db = db;
     //RegisteredTypes = options.For<FlavorOptions>().GetAll<Number>().Select(x => x as NumberType);
   }
+
+
+  /// <inheritdoc />
+  public async Task<string> Next(string alias, DateTimeOffset? date = null, bool store = true)
+  {
+    Number number = await Get(alias);
+    throw new NotImplementedException();
+  }
+
+
+  /// <inheritdoc />
+  public Task Reset(string alias)
+  {
+    throw new NotImplementedException();
+  }
+
+
+  /// <inheritdoc />
+  public Task ResetAll(string alias)
+  {
+    throw new NotImplementedException();
+  }
+
+
+  /// <inheritdoc />
+  public string Compile(string alias, long value, DateTimeOffset? date = null)
+  {
+    throw new NotImplementedException();
+  }
+
+
+  /// <summary>
+  /// Create a new number implementation
+  /// </summary>
+  protected async Task<Number> Get(string alias, string template = "{number}", long startNumber = 1, int minLength = 1)
+  {
+    string id = Id(alias);
+
+    Number number = await Db.Load<Number>(id);
+    bool exists = number != null;
+
+    if (!exists)
+    {
+      number = new()
+      {
+        Id = id,
+        Template = template,
+        StartNumber = startNumber,
+        MinLength = minLength
+      };
+
+      await Db.Create(number);
+    }
+    else
+    {
+      bool changed = false;
+
+      if (!number.Template.Equals(template))
+      {
+        number.Template = template;
+        changed = true;
+      }
+      if (!number.StartNumber.Equals(startNumber))
+      {
+        number.StartNumber = startNumber;
+        changed = true;
+      }
+      if (!number.MinLength.Equals(minLength))
+      {
+        number.MinLength = minLength;
+        changed = true;
+      }
+
+      if (changed)
+      {
+        await Db.Update(number);
+      }
+    }
+
+    return number;
+  }
+
+
+  /// <summary>
+  /// Generate number ID
+  /// </summary>
+  protected string Id(string alias)
+  {
+    return "numbers." + alias;
+  }
 }
 
 
