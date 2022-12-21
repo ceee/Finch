@@ -39,7 +39,7 @@ internal class ZeroMediaModule : ZeroModule
     services.AddOptions<MediaOptions>().Bind(configuration.GetSection("Zero:Media")).Configure(opts =>
     {
       opts.FolderPath = "media";
-      opts.AllowedOtherFileExtensions = new() { ".pdf", ".docx", ".doc" };
+      opts.AllowedOtherFileExtensions = new() { ".pdf", ".docx", ".doc", ".svg", ".xml" };
       opts.AllowedImageFileExtensions = new() { ".jpg", ".jpeg", ".png", ".bmp", ".webp", ".gif", ".avif" };
       // opts.Thumbnails = new()
       // {
