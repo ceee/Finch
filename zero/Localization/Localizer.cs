@@ -62,7 +62,17 @@ public abstract class Localizer : ILocalizer
   /// <inheritdoc />
   public string Maybe(string key, Dictionary<string, string> tokens)
   {
-    return key.IsNullOrEmpty() || !key.StartsWith("@") ? key : Text(key.Substring(1), tokens);
+    if (key.IsNullOrEmpty() || !key.StartsWith("@"))
+    {
+      string value = key;
+      if (tokens != null)
+      {
+        value = TokenReplacement.Apply(value, tokens);
+      }
+      return value;
+    }
+
+    return Text(key.Substring(1), tokens);
   }
 
 
