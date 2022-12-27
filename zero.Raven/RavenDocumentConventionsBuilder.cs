@@ -28,7 +28,7 @@ public class RavenDocumentConventionsBuilder : IRavenDocumentConventionsBuilder
   /// <inheritdoc />
   public void Run(DocumentConventions conventions)
   {
-    conventions.MaxNumberOfRequestsPerSession = 1000;
+    conventions.MaxNumberOfRequestsPerSession = 100_000;
     conventions.IdentityPartsSeparator = IdentityPartsSeparator;
     conventions.TransformTypeCollectionNameToDocumentIdPrefix = TransformTypeCollectionNameToDocumentIdPrefix;
     conventions.FindCollectionName = FindCollectionName;

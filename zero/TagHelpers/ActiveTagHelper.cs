@@ -41,3 +41,39 @@ public class ActiveTagHelper : TagHelper
     output.Attributes.SetAttribute("class", string.Join(" ", classes));
   }
 }
+
+
+[HtmlTargetElement(Attributes = "app-active-exact")]
+public class ActiveExactTagHelper : TagHelper
+{
+  private readonly IHttpContextAccessor _httpContextAccessor;
+
+  [HtmlAttributeName("class")]
+  public string Classes { get; set; }
+
+  public override int Order => 100;
+
+
+  public ActiveExactTagHelper(IHttpContextAccessor contextAccessor)
+  {
+    _httpContextAccessor = contextAccessor;
+  }
+
+
+  public override void Process(TagHelperContext context, TagHelperOutput output)
+  {
+    output.Attributes.RemoveAll("app-active-exact");
+
+    output.Attributes.TryGetAttribute("Href", out TagHelperAttribute _href);
+    string href = _href?.Value?.ToString() ?? string.Empty;
+
+    HashSet<string> classes = Classes?.Split(" ").ToHashSet() ?? new HashSet<string>();
+
+    if (_httpContextAccessor.HttpContext.IsUrl(href))
+    {
+      classes.Add("is-active-exact");
+    }
+
+    output.Attributes.SetAttribute("class", string.Join(" ", classes));
+  }
+}

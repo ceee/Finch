@@ -60,7 +60,7 @@ public class MediaCreator : IMediaCreator
 
     if (isImage)
     {
-      using Image<Rgba32> image = await Image.LoadAsync<Rgba32>(fileInfo.AbsolutePath);
+      using Image<Rgba32> image = await Image.LoadAsync<Rgba32>(fileInfo.AbsolutePath, cancellationToken);
       model.Metadata = GetImageMetadata(image);
 
       string extension = Path.GetExtension(model.Path);
