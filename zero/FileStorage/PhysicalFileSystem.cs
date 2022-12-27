@@ -119,6 +119,12 @@ public class PhysicalFileSystem : IFileSystem
     try
     {
       string resolvedPath = ResolvePath(path);
+
+      if (!File.Exists(resolvedPath))
+      {
+        return Task.CompletedTask;
+      }
+
       File.Delete(resolvedPath);
       return Task.CompletedTask;
     }
@@ -256,6 +262,12 @@ public class PhysicalFileSystem : IFileSystem
     try
     {
       string resolvedPath = ResolvePath(path);
+
+      if (!Directory.Exists(resolvedPath))
+      {
+        return Task.CompletedTask;
+      }
+
       Directory.Delete(resolvedPath, recursive);
       return Task.CompletedTask;
     }
