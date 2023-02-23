@@ -3,23 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Commerce", "plugins\zero.Commerce\zero.Commerce.csproj", "{63A8AD15-15F0-4555-BD62-C38B4465FFC1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Stories", "plugins\zero.Stories\zero.Stories.csproj", "{C23CF90A-DB90-427F-816C-0E2FE20E29D0}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Forms", "plugins\zero.Forms\zero.Forms.csproj", "{A8E5F34F-5400-4F92-96C6-7F91645BC220}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{6FAA92A8-CA1A-48EA-9857-C9092971B4D1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Core", "zero.Core\zero.Core.csproj", "{CED2A7FA-8D35-4A2A-AF57-8B95307547CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero", "zero\zero.csproj", "{33CD6E46-CD81-42C3-9019-C0EAD557EE99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero", "zero\zero.csproj", "{33CD6E46-CD81-42C3-9019-C0EAD557EE99}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "legacy", "legacy", "{93A1CCEB-A323-445E-8116-4575C5939B46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Raven", "zero.Raven\zero.Raven.csproj", "{DC79D7EA-FAA1-4701-9C36-8295CD1C45D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Raven", "zero.Raven\zero.Raven.csproj", "{DC79D7EA-FAA1-4701-9C36-8295CD1C45D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Raven.IdentityDemo", "zero.Raven.IdentityDemo\zero.Raven.IdentityDemo.csproj", "{05C829D6-3052-40DB-9282-3BDFCDAE0F05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Raven.IdentityDemo", "zero.Raven.IdentityDemo\zero.Raven.IdentityDemo.csproj", "{05C829D6-3052-40DB-9282-3BDFCDAE0F05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,18 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{63A8AD15-15F0-4555-BD62-C38B4465FFC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63A8AD15-15F0-4555-BD62-C38B4465FFC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63A8AD15-15F0-4555-BD62-C38B4465FFC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63A8AD15-15F0-4555-BD62-C38B4465FFC1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C23CF90A-DB90-427F-816C-0E2FE20E29D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C23CF90A-DB90-427F-816C-0E2FE20E29D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C23CF90A-DB90-427F-816C-0E2FE20E29D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C23CF90A-DB90-427F-816C-0E2FE20E29D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A8E5F34F-5400-4F92-96C6-7F91645BC220}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A8E5F34F-5400-4F92-96C6-7F91645BC220}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A8E5F34F-5400-4F92-96C6-7F91645BC220}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A8E5F34F-5400-4F92-96C6-7F91645BC220}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CED2A7FA-8D35-4A2A-AF57-8B95307547CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CED2A7FA-8D35-4A2A-AF57-8B95307547CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CED2A7FA-8D35-4A2A-AF57-8B95307547CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -60,9 +40,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{63A8AD15-15F0-4555-BD62-C38B4465FFC1} = {6FAA92A8-CA1A-48EA-9857-C9092971B4D1}
-		{C23CF90A-DB90-427F-816C-0E2FE20E29D0} = {6FAA92A8-CA1A-48EA-9857-C9092971B4D1}
-		{A8E5F34F-5400-4F92-96C6-7F91645BC220} = {6FAA92A8-CA1A-48EA-9857-C9092971B4D1}
 		{CED2A7FA-8D35-4A2A-AF57-8B95307547CB} = {93A1CCEB-A323-445E-8116-4575C5939B46}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
