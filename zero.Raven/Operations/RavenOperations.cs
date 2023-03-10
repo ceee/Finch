@@ -111,7 +111,8 @@ public partial class RavenOperations : IRavenOperations
   /// <inheritdoc />
   public virtual T WhenActive<T>(T model) where T : ZeroIdEntity, new()
   {
-    return model != null && (model is not ZeroEntity || (model as ZeroEntity).IsActive) && (model is not ISupportsSoftDelete || !(model as ISupportsSoftDelete).IsDeleted) ? model : default;
+    return model; // TODO should we really use this? I tried to get data in a custom backend but couldn't because of this
+    //return model != null && (model is not ZeroEntity || (model as ZeroEntity).IsActive) && (model is not ISupportsSoftDelete || !(model as ISupportsSoftDelete).IsDeleted) ? model : default;
   }
 }
 

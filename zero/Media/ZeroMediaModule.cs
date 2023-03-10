@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Routing;
 using SixLabors.ImageSharp.Web.Caching;
 using SixLabors.ImageSharp.Web.DependencyInjection;
 using zero.Media.ImageSharp;
+using zero.Numbers;
+using zero.Media.ImageSharp.Processors;
 
 namespace zero.Media;
 
@@ -20,6 +22,7 @@ internal class ZeroMediaModule : ZeroModule
       .SetRequestParser<PresetRequestParser>()
       .ClearProviders()
       .AddProvider<PhysicalFileProvider>()
+      .AddProcessor<RotateWebProcessor>()
       .Configure<PhysicalFileSystemCacheOptions>(configuration.GetSection("Zero:Media:ImageSharp:Cache"));
     
     //configuration.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "Config/imaging.json"), true, true);
@@ -35,6 +38,7 @@ internal class ZeroMediaModule : ZeroModule
     services.AddScoped<IMediaCreator, MediaCreator>();
     services.AddScoped<IMediaManagement, MediaManagement>();
     services.AddScoped<IMediaMetadataCache, MediaMetadataCache>();
+    services.AddScoped<IZeroMediaStoreDbProvider, EmptyZeroMediaStoreDbProvider>();
 
     services.AddOptions<MediaOptions>().Bind(configuration.GetSection("Zero:Media")).Configure(opts =>
     {

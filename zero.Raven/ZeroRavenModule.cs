@@ -31,9 +31,9 @@ internal class ZeroRavenModule : ZeroModule
     services.AddTransient<IRavenOperations, RavenOperations>();
     services.AddScoped<IInterceptors, Interceptors>();
 
-    services.AddScoped<IZeroIdentityStoreDbProvider, RavenIdentityStoreDbProvider>();
-    services.AddScoped<IZeroMediaStoreDbProvider, RavenMediaStoreDbProvider>();
-    services.AddScoped<IZeroNumberStoreDbProvider, RavenNumberStoreDbProvider>();
+    services.Replace<IZeroIdentityStoreDbProvider, RavenIdentityStoreDbProvider>(ServiceLifetime.Scoped);
+    services.Replace<IZeroMediaStoreDbProvider, RavenMediaStoreDbProvider>(ServiceLifetime.Scoped);
+    services.Replace<IZeroNumberStoreDbProvider, RavenNumberStoreDbProvider>(ServiceLifetime.Scoped);
 
     services.AddOptions<FlavorOptions>();
     services.AddOptions<RavenOptions>().Bind(configuration.GetSection("Zero:Raven"));

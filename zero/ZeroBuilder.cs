@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using zero.Mvc;
 using zero.Numbers;
+using zero.Routing;
 
 namespace zero;
 
@@ -57,7 +58,7 @@ public class ZeroBuilder
     //Modules.Add<ZeroPageModule>();
     Modules.Add<ZeroRenderingModule>();
     Modules.Add<ZeroNumberModule>();
-    //Modules.Add<ZeroRoutingModule>();
+    Modules.Add<ZeroRoutingModule>();
 
     Modules.ConfigureServices(services, configuration);
 
