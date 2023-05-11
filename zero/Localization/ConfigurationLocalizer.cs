@@ -8,12 +8,9 @@ public class ConfigurationLocalizer : Localizer
   private IConfiguration _configuration;
 
 
-  public ConfigurationLocalizer(IConfiguration configuration, IOptionsMonitor<LocalizationOptions> options) : base()
+  public ConfigurationLocalizer(IConfiguration configuration, ICultureResolver cultureResolver, IOptionsMonitor<LocalizationOptions> options) : base(cultureResolver)
   {
     _configuration = configuration;
-
-    // set default language
-    Language(_configuration.GetValue<string>("Zero:Localization:Default", "de"));
   }
 
 

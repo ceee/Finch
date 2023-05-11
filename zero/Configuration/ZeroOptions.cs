@@ -10,6 +10,9 @@ public class ZeroOptions : IZeroOptions
   public string Version { get; set; }
 
   /// <inheritdoc />
+  public string Language { get; set; } = "en_US";
+
+  /// <inheritdoc />
   public TimeSpan TokenExpiration { get; set; }
 
 
@@ -42,6 +45,11 @@ public interface IZeroOptions
   /// This should not be set manually, as it is used for setup and migrations and incremented automatically
   /// </summary>
   string Version { get; set; }
+
+  /// <summary>
+  /// ISO Code for language
+  /// </summary>
+  public string Language { get; set; }
 
   /// <summary>
   /// Expiration of a generated change token for an entity

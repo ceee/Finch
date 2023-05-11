@@ -1,23 +1,30 @@
 ﻿using System.Collections.Concurrent;
+using System.Globalization;
 using System.Reflection;
 
 namespace zero.Localization;
 
 public abstract class Localizer : ILocalizer
 {
-  /// <inheritdoc />
-  public string LanguageCode { get; private set; } = "de";
-
-
   protected ConcurrentDictionary<string, string> Cache { get; private set; } = new();
 
+  protected ICultureResolver CultureResolver { get; private set; }
 
-  /// <inheritdoc />
-  public ILocalizer Language(string languageCode)
+  protected string LanguageCode { get; set; }
+
+
+  public Localizer(ICultureResolver cultureResolver)
   {
-    Cache = new();
-    LanguageCode = languageCode;
-    return this;
+    CultureResolver = cultureResolver;
+    CultureResolver.Subscribe(msg => OnCultureChange(msg.Culture));
+    OnCultureChange(CultureResolver.Current);
+  }
+
+
+  Task OnCultureChange(CultureInfo culture)
+  {
+    LanguageCode = culture.Name.Split(new char[] { '_', '-' })[0];
+    return Task.CompletedTask;
   }
 
 
@@ -97,16 +104,6 @@ public abstract class Localizer : ILocalizer
 
 public interface ILocalizer
 {
-  /// <summary>
-  /// Current language code
-  /// </summary>
-  string LanguageCode { get; }
-
-  /// <summary>
-  /// Set language for localizer
-  /// </summary>
-  ILocalizer Language(string languageCode);
-
   /// <summary>
   /// 
   /// </summary>
