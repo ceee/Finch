@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Linq.Expressions;
 
 namespace zero.Communication;
 
@@ -27,6 +28,13 @@ public class MessageAggregator : IMessageAggregator
 
 
   /// <inheritdoc />
+  public void Subscribe<TMessage>(Expression<Func<TMessage, Task>> handle) where TMessage : class, IMessage
+  {
+    Subscription.Add(new InlineMessageSubscription<TMessage>(handle));
+  }
+
+
+  /// <inheritdoc />
   public void Activate<TMessage, TMessageHandler>()
     where TMessage : class, IMessage
     where TMessageHandler : IMessageHandler<TMessage>
@@ -42,6 +50,11 @@ public interface IMessageAggregator
   /// Publishes the specified message, invoking any handlers subscribed to the message.
   /// </summary>
   Task Publish<TMessage>(TMessage message) where TMessage : class, IMessage;
+
+  /// <summary>
+  /// Subscribe to a message
+  /// </summary>
+  void Subscribe<TMessage>(Expression<Func<TMessage, Task>> handle) where TMessage : class, IMessage;
 
   /// <summary>
   /// Subscribes the specified handler to the spified message type
