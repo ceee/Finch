@@ -5,7 +5,20 @@ namespace zero.Localization;
 
 public abstract class Localizer : ILocalizer
 {
+  /// <inheritdoc />
+  public string LanguageCode { get; private set; } = "de";
+
+
   protected ConcurrentDictionary<string, string> Cache { get; private set; } = new();
+
+
+  /// <inheritdoc />
+  public ILocalizer Language(string languageCode)
+  {
+    Cache = new();
+    LanguageCode = languageCode;
+    return this;
+  }
 
 
   /// <inheritdoc />
@@ -83,7 +96,17 @@ public abstract class Localizer : ILocalizer
 }
 
 public interface ILocalizer
-{   
+{
+  /// <summary>
+  /// Current language code
+  /// </summary>
+  string LanguageCode { get; }
+
+  /// <summary>
+  /// Set language for localizer
+  /// </summary>
+  ILocalizer Language(string languageCode);
+
   /// <summary>
   /// 
   /// </summary>

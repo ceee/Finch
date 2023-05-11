@@ -22,7 +22,14 @@ public class Numbers : INumbers
 
 
   /// <inheritdoc />
-  public async Task<string> Next(string alias, DateTimeOffset? date = null, bool store = true)
+  public Task<string> Next(string alias, DateTimeOffset? date = null, bool store = true)
+  {
+    return Next(alias, date.HasValue ? DateOnly.FromDateTime(date.Value.Date) : null, store);
+  }
+
+
+  /// <inheritdoc />
+  public async Task<string> Next(string alias, DateOnly? date = null, bool store = true)
   {
     Number number = await Get(alias);
     string key = GetCounterKey(number);
@@ -93,9 +100,16 @@ public class Numbers : INumbers
   /// <inheritdoc />
   public string Compile(string template, long value, int minLength, DateTimeOffset? date = null)
   {
+    return Compile(template, value, minLength, date.HasValue ? DateOnly.FromDateTime(date.Value.Date) : null);
+  }
+
+
+  /// <inheritdoc />
+  public string Compile(string template, long value, int minLength, DateOnly? date = null)
+  {
     string output = template;
     MatchCollection matches = templateRegex.Matches(output);
-    DateTimeOffset usedDate = date ?? DateTimeOffset.Now;
+    DateOnly usedDate = date ?? DateOnly.FromDateTime(DateTime.Now);
 
     foreach (Match match in matches)
     {
@@ -229,6 +243,11 @@ public interface INumbers
   Task<string> Next(string alias, DateTimeOffset? date = null, bool store = true);
 
   /// <summary>
+  /// Get the next available number for the specified template
+  /// </summary>
+  Task<string> Next(string alias, DateOnly? date = null, bool store = true);
+
+  /// <summary>
   /// Resets the current counter for the specified template
   /// </summary>
   Task Reset(string alias);
@@ -242,4 +261,9 @@ public interface INumbers
   /// Renders the final output from the template and the value
   /// </summary>
   string Compile(string template, long value, int minLength, DateTimeOffset? date = null);
+
+  /// <summary>
+  /// Renders the final output from the template and the value
+  /// </summary>
+  string Compile(string template, long value, int minLength, DateOnly? date = null);
 }
