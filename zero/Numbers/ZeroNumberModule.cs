@@ -12,5 +12,6 @@ internal class ZeroNumberModule : ZeroModule
 
     services.AddScoped<INumbers, Numbers>();
     services.AddScoped<IValidator<Number>, NumberValidator>();
+    services.AddScoped<IZeroNumberStoreDbProvider, EmptyZeroNumberStoreDbProvider>();
   }
 }

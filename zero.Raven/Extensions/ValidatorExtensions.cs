@@ -69,7 +69,6 @@ public static class ValidatorExtensions
   /// Check if this reference exists and is an entity which can be referenced
   /// </summary>
   public static IRuleBuilderOptions<T, string> Exists<T, TCollection>(this IRuleBuilder<T, string> ruleBuilder, IRavenOperations ops) 
-    where T : ZeroIdEntity 
     where TCollection : ZeroIdEntity
   {
     return ruleBuilder.MustAsync(async (entity, id, context, cancellation) =>

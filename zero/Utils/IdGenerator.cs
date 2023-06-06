@@ -4,8 +4,9 @@ namespace zero.Utils;
 
 public class IdGenerator
 {
-  const string CHARS = "abcdefghijklmnopqrstuvwxyz0123456789";
-  const string CHARS_COMPLEX = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-@#.:!?*";
+  const string CHARS_az09 = "abcdefghijklmnopqrstuvwxyz0123456789";
+  const string CHARS_azAZ09x = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-@#.:!?*";
+  const string CHARS_x09 = "0123456789";
 
   private static Random random = new();
 
@@ -19,7 +20,7 @@ public class IdGenerator
       length = 12;
     }
 
-    string chars = charset == Charset.az09 ? CHARS : CHARS_COMPLEX;
+    string chars = charset == Charset.az09 ? CHARS_az09 : charset == Charset.x09 ? CHARS_x09 : CHARS_azAZ09x;
 
     return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
 
@@ -107,6 +108,10 @@ public class IdGenerator
     /// <summary>
     /// a-z, A-Z, 0-9, _-@#.:!?*
     /// </summary>
-    azAZ09x = 1
+    azAZ09x = 1,
+    /// <summary>
+    /// 0-9
+    /// </summary>
+    x09 = 2
   }
 }

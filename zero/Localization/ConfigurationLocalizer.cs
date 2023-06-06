@@ -1,7 +1,4 @@
-﻿using System.IO;
-using Microsoft.AspNetCore.Hosting;
-using System.Text;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace zero.Localization;
@@ -11,7 +8,7 @@ public class ConfigurationLocalizer : Localizer
   private IConfiguration _configuration;
 
 
-  public ConfigurationLocalizer(IConfiguration configuration, IOptionsMonitor<LocalizationOptions> options) : base()
+  public ConfigurationLocalizer(IConfiguration configuration, ICultureResolver cultureResolver, IOptionsMonitor<LocalizationOptions> options) : base(cultureResolver)
   {
     _configuration = configuration;
   }
@@ -19,7 +16,7 @@ public class ConfigurationLocalizer : Localizer
 
   protected override Translation LoadTranslation(string key)
   {
-    IConfigurationSection section = _configuration.GetSection($"Zero:Localization:{key}");
+    IConfigurationSection section = _configuration.GetSection($"Zero:Localization:{LanguageCode}:{key}");
 
     if (section == null)
     {

@@ -83,6 +83,10 @@ public class MediaManagement : IMediaManagement
   /// <inheritdoc />
   public virtual async Task<Result<Media>> DeleteFile(Media file)
   {
+    if (file == null)
+    {
+      return Result<Media>.Success();
+    }
     await FileSystem.DeleteDirectory(file.FileId, true);
     return await Db.Delete(file);
   }
@@ -90,11 +94,11 @@ public class MediaManagement : IMediaManagement
 
 
   /// <inheritdoc />
-  public virtual async Task<Result<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, Action<Media> onBeforeSave = null, CancellationToken cancellationToken = default)
+  public virtual async Task<Result<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, Action<Media> onBeforeSave = null, bool persist = true, CancellationToken cancellationToken = default)
   {
     Result<Media> result = await Creator.UploadFile(fileStream, filename, folderId, cancellationToken);
 
-    if (!result.IsSuccess)
+    if (!result.IsSuccess || !persist)
     {
       return result;
     }
@@ -180,7 +184,7 @@ public interface IMediaManagement
   /// <summary>
   /// Uploads a file and persists it
   /// </summary>
-  Task<Result<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, Action<Media> onBeforeSave = null, CancellationToken cancellationToken = default);
+  Task<Result<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, Action<Media> onBeforeSave = null, bool persist = true, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Get a media folder by id
