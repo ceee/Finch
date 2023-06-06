@@ -113,6 +113,20 @@ public partial class RavenOperations : IRavenOperations
 
 
   /// <inheritdoc />
+  public virtual async Task<Paged<TProjection>> Load<T, TIndex, TProjection>(int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default)
+    where T : ZeroIdEntity, new()
+    where TProjection : ZeroIdEntity, new()
+    where TIndex : AbstractCommonApiForIndexes, new()
+  {
+    IRavenQueryable<T> queryable = Session.Query<T, TIndex>().Statistics(out QueryStatistics statistics);
+    querySelector ??= x => x;
+
+    List<TProjection> result = await querySelector(queryable).ProjectInto<TProjection>().Paging(pageNumber, pageSize).ToListAsync();
+    return new Paged<TProjection>(result, statistics.TotalResults, pageNumber, pageSize);
+  }
+
+
+  /// <inheritdoc />
   public virtual async Task<List<T>> LoadAll<T>() where T : ZeroIdEntity, new()
   {
     List<T> items = new();
