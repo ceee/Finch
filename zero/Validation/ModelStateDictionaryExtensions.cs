@@ -34,7 +34,6 @@ public static class ModelStateDictionaryExtensions
       }
 
       string key = prefix.IsNullOrEmpty() ? propertyName : (propertyName.IsNullOrEmpty() ? string.Empty : prefix + DOT + propertyName);
-      string message = error.ErrorMessage;
       bool found = formProperties.Contains(key, StringComparer.InvariantCultureIgnoreCase);
 
       // find property by alias
@@ -51,7 +50,7 @@ public static class ModelStateDictionaryExtensions
         key = string.Empty;
       }
 
-      modelState.AddModelError(key, message);
+      modelState.AddModelError(key, error.ErrorMessage);
     }
   }
   
@@ -82,7 +81,6 @@ public static class ModelStateDictionaryExtensions
       }
 
       string key = prefix.IsNullOrEmpty() ? propertyName : (propertyName.IsNullOrEmpty() ? string.Empty : prefix + DOT + propertyName);
-      string message = error.Message;
       bool found = formProperties.Contains(key, StringComparer.InvariantCultureIgnoreCase);
 
       // find property by alias
@@ -99,7 +97,7 @@ public static class ModelStateDictionaryExtensions
         key = string.Empty;
       }
 
-      modelState.AddModelError(key, message);
+      modelState.AddModelError(key, error.Message);
     }
   }
   
