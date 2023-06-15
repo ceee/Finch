@@ -214,6 +214,14 @@ public interface IRavenOperations
   Task<List<T>> Load<T, TIndex>(Expression<Func<T, bool>> predicate) where T : ZeroIdEntity, new() where TIndex : AbstractCommonApiForIndexes, new();
 
   /// <summary>
+  /// Get entities by query (by using the specified index) and project into a result
+  /// </summary>
+  Task<Paged<TProjection>> Load<T, TIndex, TProjection>(int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default)
+    where T : ZeroIdEntity, new()
+    where TProjection : ZeroIdEntity, new()
+    where TIndex : AbstractCommonApiForIndexes, new();
+
+  /// <summary>
   /// Get all entities from this collection. 
   /// Warning: Don't use this method for large collections. Stream the results instead.
   /// </summary>
