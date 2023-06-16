@@ -31,6 +31,11 @@ public class Number : ZeroEntity
   public int MinLength { get; set; } = 1;
 
   /// <summary>
+  /// How far to increase
+  /// </summary>
+  public int Step { get; set; } = 1;
+
+  /// <summary>
   /// Store current counters
   /// </summary>
   public List<NumberCounter> Counters { get; set; } = new();

@@ -40,7 +40,7 @@ public class Numbers : INumbers
     // calculate new value
     bool hasValue = counter.Count != 0;
     long oldValue = hasValue ? counter.Count : number.StartNumber;
-    long newValue = oldValue + (hasValue ? 1 : 0);
+    long newValue = oldValue + (hasValue ? number.Step : 0);
 
     // increment the value and store it in database
     if (store)
@@ -176,7 +176,8 @@ public class Numbers : INumbers
         Id = id,
         Template = options.Template,
         StartNumber = options.StartNumber,
-        MinLength = options.MinLength
+        MinLength = options.MinLength,
+        Step = options.Step
       };
 
       await Db.Create(number);
@@ -198,6 +199,11 @@ public class Numbers : INumbers
       if (!number.MinLength.Equals(options.MinLength))
       {
         number.MinLength = options.MinLength;
+        changed = true;
+      }
+      if (!number.Step.Equals(options.Step))
+      {
+        number.Step = options.Step;
         changed = true;
       }
 

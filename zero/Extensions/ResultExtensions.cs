@@ -31,7 +31,7 @@ public static class ResultExtensions
   public static Result AddError(this Result origin, string message)
   {
     origin.IsSuccess = false;
-    origin.Errors.Add(new(Constants.ErrorFieldNone, message));
+    origin.Errors.Add(new("__zero_no_field", message));
     return origin;
   }
 

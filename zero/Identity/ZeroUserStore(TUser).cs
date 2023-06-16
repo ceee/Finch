@@ -46,12 +46,6 @@ public partial class ZeroUserStore<TUser> :
   }
 
   /// <summary>
-  /// Get the Raven compare/exchange key for this user.
-  /// This should be unique within the store, otherwise you can't create users with the same email in different stores.
-  /// </summary>
-  protected virtual string GetReservationKey(TUser user) => Constants.Database.ReservationPrefix + typeof(TUser) + ':' + user.Email;
-
-  /// <summary>
   /// Whether an email is already reserved
   /// </summary>
   protected virtual async Task<bool> IsEmailReserved(TUser user, CancellationToken cancellationToken = default)

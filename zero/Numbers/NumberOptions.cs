@@ -12,4 +12,6 @@ public class NumberOptionsItem
   public long StartNumber { get; set; } = 1;
 
   public int MinLength { get; set; } = 1;
+
+  public int Step { get; set; } = 1;
 }
