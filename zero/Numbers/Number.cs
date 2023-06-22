@@ -36,6 +36,11 @@ public class Number : ZeroEntity
   public int Step { get; set; } = 1;
 
   /// <summary>
+  /// Whether to start a new number when a new year is reached and the template contains the yeae
+  /// </summary>
+  public bool ResetPerYear { get; set; } = false;
+
+  /// <summary>
   /// Store current counters
   /// </summary>
   public List<NumberCounter> Counters { get; set; } = new();

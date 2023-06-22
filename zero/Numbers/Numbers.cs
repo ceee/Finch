@@ -177,7 +177,8 @@ public class Numbers : INumbers
         Template = options.Template,
         StartNumber = options.StartNumber,
         MinLength = options.MinLength,
-        Step = options.Step
+        Step = options.Step,
+        ResetPerYear = options.ResetPerYear
       };
 
       await Db.Create(number);
@@ -206,6 +207,11 @@ public class Numbers : INumbers
         number.Step = options.Step;
         changed = true;
       }
+      if (!number.ResetPerYear.Equals(options.ResetPerYear))
+      {
+        number.ResetPerYear = options.ResetPerYear;
+        changed = true;
+      }
 
       if (changed)
       {
@@ -231,7 +237,7 @@ public class Numbers : INumbers
   /// </summary>
   protected virtual string GetCounterKey(Number number)
   {
-    if (!containsYearRegex.IsMatch(number.Template))
+    if (!number.ResetPerYear || !containsYearRegex.IsMatch(number.Template))
     {
       return DEFAULT_COUNTER;
     }

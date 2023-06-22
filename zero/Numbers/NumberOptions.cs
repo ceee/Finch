@@ -14,4 +14,6 @@ public class NumberOptionsItem
   public int MinLength { get; set; } = 1;
 
   public int Step { get; set; } = 1;
+
+  public bool ResetPerYear { get; set; } = false;
 }
