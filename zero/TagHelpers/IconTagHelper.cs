@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -20,12 +22,19 @@ public class IconTagHelper : TagHelper
 
   private readonly ILogger<IconTagHelper> _logger;
 
+  private readonly IFileVersionProvider _fileVersionProvider;
 
-  public IconTagHelper(IOptionsMonitor<IconOptions> options, ILogger<IconTagHelper> logger)
+  [HtmlAttributeNotBound]
+  [ViewContext]
+  public ViewContext ViewContext { get; set; } = default;
+
+
+  public IconTagHelper(IOptionsMonitor<IconOptions> options, ILogger<IconTagHelper> logger, IFileVersionProvider fileVersionProvider)
   {
     _options = options.CurrentValue;
     _logger = logger;
-    
+    _fileVersionProvider = fileVersionProvider;
+
     options.OnChange(val => _options = val);
   }
 
@@ -55,7 +64,8 @@ public class IconTagHelper : TagHelper
 
   public string BuildIcon(string symbol, int size = 18, string stroke = "2", string classes = null, bool withSvg = false)
   {
-    string inner = $"<use xlink:href='{_options.Path}#{symbol}\'></use>";
+    string path = _fileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, _options.Path);
+    string inner = $"<use xlink:href='{path}#{symbol}\'></use>";
 
     if (!withSvg)
     {
