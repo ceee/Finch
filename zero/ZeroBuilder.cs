@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using zero.Mails;
 using zero.Mvc;
 using zero.Numbers;
 using zero.Routing;
@@ -52,7 +53,7 @@ public class ZeroBuilder
     Modules.Add<ZeroFileStorageModule>();
     //Modules.Add<ZeroIdentityModule>();
     Modules.Add<ZeroLocalizationModule>();
-    //Modules.Add<ZeroMailModule>();
+    Modules.Add<ZeroMailModule>();
     //Modules.Add<ZeroMapperModule>();
     Modules.Add<ZeroMediaModule>();
     //Modules.Add<ZeroPageModule>();

@@ -1,4 +1,5 @@
 ﻿using Raven.Client.Documents.Linq;
+using System.Linq.Expressions;
 
 namespace zero.Raven;
 
@@ -15,6 +16,10 @@ public static class RavenOperationsExtensions
   /// </summary>
   public static async Task<Result<T>> Delete<T>(this IRavenOperations ops, string id) where T : ZeroIdEntity, new() => await ops.Delete(await ops.Load<T>(id));
 
+  /// <summary>
+  /// Deletes entities by selector
+  /// </summary>
+  public static async Task<int> Delete<T>(this IRavenOperations ops, Expression<Func<T, bool>> predicate) where T : ZeroIdEntity, new() => await ops.Delete(await ops.Load<T>(predicate));
 
   /// <summary>
   /// Deletes entities by Id
