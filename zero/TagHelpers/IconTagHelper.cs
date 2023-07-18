@@ -17,8 +17,14 @@ public class IconTagHelper : TagHelper
 
   public string Class { get; set; }
 
+  [HtmlAttributeNotBound]
+  [ViewContext]
+  public ViewContext ViewContext { get; set; } = default!;
+
 
   private IconOptions _options;
+
+  private IFileVersionProvider _fileVersionProvider;
 
   private readonly ILogger<IconTagHelper> _logger;
 
@@ -34,7 +40,6 @@ public class IconTagHelper : TagHelper
     _options = options.CurrentValue;
     _logger = logger;
     _fileVersionProvider = fileVersionProvider;
-
     options.OnChange(val => _options = val);
   }
 
