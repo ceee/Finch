@@ -28,12 +28,6 @@ public class IconTagHelper : TagHelper
 
   private readonly ILogger<IconTagHelper> _logger;
 
-  private readonly IFileVersionProvider _fileVersionProvider;
-
-  [HtmlAttributeNotBound]
-  [ViewContext]
-  public ViewContext ViewContext { get; set; } = default;
-
 
   public IconTagHelper(IOptionsMonitor<IconOptions> options, ILogger<IconTagHelper> logger, IFileVersionProvider fileVersionProvider)
   {
