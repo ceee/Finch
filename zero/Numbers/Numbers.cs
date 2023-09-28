@@ -59,6 +59,29 @@ public class Numbers : INumbers
 
 
   /// <inheritdoc />
+  public async Task<string> Set(string alias, long value, DateTimeOffset? date = null)
+  {
+    Number number = await Get(alias);
+    string key = GetCounterKey(number);
+
+    // get a matching counter
+    NumberCounter counter = number.Counters.FirstOrDefault(x => x.Key == key) ?? new() { Key = key };
+    bool isNew = counter.Count == 0;
+
+    // set new value
+    counter.Count = value;
+    if (isNew)
+    {
+      number.Counters.Add(counter);
+    }
+    await Db.Update(number);
+
+    // compiles the template and returns the rendered result
+    return Compile(number.Template, value, number.MinLength, date);
+  }
+
+
+  /// <inheritdoc />
   public async Task Reset(string alias)
   {
     string id = Id(alias);
@@ -258,6 +281,11 @@ public interface INumbers
   /// Get the next available number for the specified template
   /// </summary>
   Task<string> Next(string alias, DateOnly? date = null, bool store = true);
+
+  /// <summary>
+  /// Set a number to a value
+  /// </summary>
+  Task<string> Set(string alias, long value, DateTimeOffset? date = null);
 
   /// <summary>
   /// Resets the current counter for the specified template
