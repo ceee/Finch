@@ -18,9 +18,9 @@ public class EmailValidator<T> : PropertyValidator<T, string>, IEmailValidator
 
   public static bool ValidateEmail(string value)
   {
-    if (value == null)
+    if (value.IsNullOrWhiteSpace())
     {
-      return false;
+      return true;
     }
 
     int index = value.IndexOf(KLAMMERAFFE);
