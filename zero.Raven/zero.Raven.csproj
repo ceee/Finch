@@ -11,8 +11,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="RavenDB.Client" Version="5.4.5" />
-        <PackageReference Include="FluentValidation" Version="11.4.0" />
+        <PackageReference Include="RavenDB.Client" Version="5.4.113" />
+        <PackageReference Include="FluentValidation" Version="11.9.0" />
     </ItemGroup>
 
     <ItemGroup>

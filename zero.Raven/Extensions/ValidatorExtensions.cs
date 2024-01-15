@@ -15,7 +15,7 @@ public static class ValidatorExtensions
     {
       bool any = await ops.Session.Advanced.AsyncDocumentQuery<T>()
         .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
-        .WhereEquals(context.PropertyName.ToPascalCaseId(), value)
+        .WhereEquals(context.PropertyPath.ToPascalCaseId(), value)
         .AnyAsync(cancellation);
 
       return !any;
@@ -31,7 +31,7 @@ public static class ValidatorExtensions
     return ruleBuilder.MustAsync(async (entity, value, context, cancellation) =>
     {
       bool any = await ops.Session.Advanced.AsyncDocumentQuery<TCollection>()
-        .WhereEquals(context.PropertyName.ToPascalCaseId(), value)
+        .WhereEquals(context.PropertyPath.ToPascalCaseId(), value)
         .AnyAsync(cancellation);
 
       return !any;
@@ -49,7 +49,7 @@ public static class ValidatorExtensions
     {
       return await ops.Session.Advanced.AsyncDocumentQuery<T>()
         .WhereNotEquals(nameof(ZeroIdEntity.Id), entity.Id)
-        .WhereEquals(context.PropertyName.ToPascalCaseId(), expectedValue)
+        .WhereEquals(context.PropertyPath.ToPascalCaseId(), expectedValue)
         .AnyAsync(cancellation);
     }).WithMessage("@errors.forms.not_unique_alone");
   }
