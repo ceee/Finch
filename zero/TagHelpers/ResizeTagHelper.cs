@@ -32,3 +32,45 @@ public class ResizeTagHelper : TagHelper
     output.Attributes.SetAttribute("src", src);
   }
 }
+
+
+[HtmlTargetElement(Attributes = PREFIX + "*")]
+public class ResizeCustomTagHelper : TagHelper
+{
+  private const string PREFIX = "app-resize:";
+
+  private IDictionary<string, string> _values;
+
+  [HtmlAttributeName("", DictionaryAttributePrefix = PREFIX)]
+  public IDictionary<string, string> Values
+  {
+    get => _values ??= new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+    set => _values = value;
+  }
+
+  [ViewContext]
+  public ViewContext ViewContext { get; set; }
+
+  protected IFileVersionProvider FileVersionProvider { get; set; }
+
+
+  public ResizeCustomTagHelper(IFileVersionProvider fileVersionProvider)
+  {
+    FileVersionProvider = fileVersionProvider;
+  }
+
+
+  public override void Process(TagHelperContext context, TagHelperOutput output)
+  {
+    foreach (var value in Values)
+    {
+      if (output.Attributes.TryGetAttribute(value.Key, out TagHelperAttribute attr))
+      {
+        string parameterName = attr.Name.ToString();
+        string parameterValue = attr.Value.ToString();
+        string newValue = FileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, parameterValue).Resize(value.Value);
+        output.Attributes.SetAttribute(parameterName, newValue);
+      }
+    }
+  }
+}

@@ -15,7 +15,7 @@ public class ClassTagHelper : TagHelper
   [HtmlAttributeName("", DictionaryAttributePrefix = PREFIX)]
   public IDictionary<string, bool> ClassValues
   {
-    get => _classValues ?? (_classValues = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase));
+    get => _classValues ??= new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
     set => _classValues = value;
   }
 
