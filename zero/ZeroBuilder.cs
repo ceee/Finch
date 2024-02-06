@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using zero.Mails;
+using zero.Metadata;
 using zero.Mvc;
 using zero.Numbers;
 using zero.Routing;
@@ -60,6 +61,7 @@ public class ZeroBuilder
     Modules.Add<ZeroRenderingModule>();
     Modules.Add<ZeroNumberModule>();
     Modules.Add<ZeroRoutingModule>();
+    Modules.Add<ZeroMetadataModule>();
 
     Modules.ConfigureServices(services, configuration);
 

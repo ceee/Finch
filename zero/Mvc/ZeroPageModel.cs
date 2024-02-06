@@ -1,6 +1,6 @@
-﻿using System.Net.Mime;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using zero.Metadata;
 
 namespace zero.Mvc;
 
@@ -17,4 +17,9 @@ public abstract class ZeroPageModel : PageModel
   /// </summary>
   public ILocalizer Localizer => _localizer ?? (_localizer = HttpContext?.RequestServices?.GetService<ILocalizer>());
   ILocalizer _localizer;
+
+  /// <summary>
+  /// Set metadata for this page
+  /// </summary>
+  public MetadataOptions Metadata { get; protected set; } = new();
 }
