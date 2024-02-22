@@ -45,47 +45,61 @@ public sealed class PresetRequestParser : IRequestParser
 
     if (preset == "{rx}")
     {
-      return new();
+      return [];
     }
 
     if (!_options.ImageSharp.Presets.TryGetValue(preset, out string[] transformed))
     {
       _logger.LogWarning("Could not load imaging preset {preset}", preset);
-      return new();
-    }
-
-    Dictionary<string, string> filters = transformed.Select(x => x.Split("=", 2)).ToDictionary(x => x[0], x => x[1]);
-
-    if (focalPoint != null)
-    {
-      filters["rxy"] = focalPoint;
-    }
-    else
-    {
-      filters["ranchor"] = "center";
+      return [];
     }
 
     FallbackFormat fallbackFormat = FindFallbackFormatInContext(context);
 
     // fall back to webp, as avif is not supported yet by ImageSharp
-    if (!filters.ContainsKey("format") && fallbackFormat != FallbackFormat.None)
+    string format = fallbackFormat != FallbackFormat.None ? "webp" : null;
+    string quality = _options.ImageSharp.DefaultQuality.ToString();
+
+    CommandCollection filters = [];
+
+    foreach (string[] kv in transformed.Select(x => x.Split("=", 2)))
     {
-      filters["format"] = "webp"; 
+      string key = kv[0];
+      string value = kv[1];
+
+      // skip format/quality filters because they need to be appended at the end
+      if (key == "format")
+      {
+        format = value;
+        continue;
+      }
+      if (key == "quality")
+      {
+        quality = value;
+        continue;
+      }
+
+      filters.Add(key, value);
     }
 
-    if (!filters.ContainsKey("quality"))
+    // add positioning filters
+    if (focalPoint != null)
     {
-      filters["quality"] = _options.ImageSharp.DefaultQuality.ToString();
+      filters.Add("rxy", focalPoint);
+    }
+    else
+    {
+      filters.Add("ranchor", "center");
     }
 
-    CommandCollection collection = new();
-
-    foreach (KeyValuePair<string, string> filter in filters)
+    // add format/quality filters
+    if (format.HasValue())
     {
-      collection.Add(filter);
+      filters.Add("format", format);
     }
+    filters.Add("quality", quality);
 
-    return collection;
+    return filters;
   }
 
 

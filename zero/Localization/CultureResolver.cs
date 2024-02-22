@@ -1,9 +1,7 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using System.Linq.Expressions;
-using System.Security.Claims;
 
 namespace zero.Localization;
 
