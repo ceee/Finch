@@ -62,11 +62,13 @@ public class ObjectCopycat
 
       if (property.PropertyType.IsValueType || property.PropertyType.IsEnum || property.PropertyType.Equals(STRING_TYPE) || propertyValue == null || propertyValue is IEnumerable)
       {
+        target ??= (T)Activator.CreateInstance(type);
         property.SetValue(target, propertyValue, null);
       }
       else if (property.PropertyType.IsClass)
       {
         string[] nestedExceptions = exceptions.Where(x => x.StartsWith(propertyNameWithPrefix, StringComparison.InvariantCultureIgnoreCase)).ToArray();
+        target ??= (T)Activator.CreateInstance(type);
         property.SetValue(target, CopyPropertiesInternal(propertyValue, property.GetValue(target, null), propertyNameWithPrefix, nestedExceptions), null);
       }
     }
