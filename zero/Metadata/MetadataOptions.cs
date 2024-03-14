@@ -16,6 +16,12 @@ public class MetadataOptions
 
   public string Author { get; set; }
 
+  public string TitleFragmentsSeparator { get; set; } = " / ";
+
+  public string TitlePageNameToFragmentSeparator { get; set; } = " / ";
+
+  public bool HidePageName { get; set; }
+
   //public Schema Schema { get; set; }
 
   public MetadataOptions() { }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Reflection;
+using System.Text;
 
 namespace zero.Metadata;
 
@@ -18,7 +19,7 @@ public class MetadataService : IMetadataService
 
 
   /// <inheritdoc />
-  public Metadata Generate(string pageName, MetadataOptions options)
+  public virtual Metadata Generate(string pageName, MetadataOptions options)
   {
     Metadata model = new()
     {
@@ -37,7 +38,7 @@ public class MetadataService : IMetadataService
 
     // title
     HashSet<string> fragments = options.TitleFragments.Where(x => !x.IsNullOrWhiteSpace()).Reverse().ToHashSet();
-    model.Title = !fragments.Any() ? pageName : (String.Join(" / ", fragments.Select(fragment => Localizer.Maybe(fragment))) + " / " + pageName);
+    model.Title = GenerateTitle(pageName, fragments, options);
 
     // add schema
     //if (options.Schema != null)
@@ -46,6 +47,32 @@ public class MetadataService : IMetadataService
     //}
 
     return model;
+  }
+
+
+  /// <summary>
+  /// Generates the page title based on passed fragments
+  /// </summary>
+  protected virtual string GenerateTitle(string pageName, HashSet<string> fragments, MetadataOptions options)
+  {
+    StringBuilder sb = new();
+
+    if (fragments.Count != 0)
+    {
+      sb.Append(string.Join(options.TitleFragmentsSeparator, fragments.Select(fragment => Localizer.Maybe(fragment))));
+      
+      if (!options.HidePageName)
+      {
+        sb.Append(options.TitlePageNameToFragmentSeparator);
+        sb.Append(pageName);
+      }
+    }
+    else 
+    {
+      sb.Append(pageName);
+    }
+
+    return sb.ToString();
   }
 }
 
