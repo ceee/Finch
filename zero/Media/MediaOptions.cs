@@ -25,9 +25,9 @@ public class ImageSharpOptions
 
   public PhysicalFileSystemCacheOptions Cache { get; set; } = new();
 
-  public Dictionary<string, string[]> Presets { get; set; } = new();
+  public Dictionary<string, string[]> Presets { get; set; } = [];
 
-  public int DefaultQuality { get; set; } = 75;
+  public string[] DefaultCommands { get; set; } = [];
 }
 
 

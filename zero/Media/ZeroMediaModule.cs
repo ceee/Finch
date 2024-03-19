@@ -23,6 +23,7 @@ internal class ZeroMediaModule : ZeroModule
       .ClearProviders()
       .AddProvider<PhysicalFileProvider>()
       .AddProcessor<RotateWebProcessor>()
+      .AddProcessor<StripMetadataWebProcessor>()
       .Configure<PhysicalFileSystemCacheOptions>(configuration.GetSection("Zero:Media:ImageSharp:Cache"));
     
     //configuration.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "Config/imaging.json"), true, true);
@@ -32,15 +33,17 @@ internal class ZeroMediaModule : ZeroModule
     {
       IOptions<MediaOptions> options = svc.GetRequiredService<IOptions<MediaOptions>>();
       IWebHostEnvironment env = svc.GetRequiredService<IWebHostEnvironment>();
+      Console.WriteLine("media path: " + options.Value.FolderPath);
       return new(Path.Combine(env.WebRootPath, options.Value.FolderPath), options.Value.PublicPathPrefix + options.Value.FolderPath.EnsureStartsWith('/'));
     });
 
     services.AddScoped<IMediaCreator, MediaCreator>();
     services.AddScoped<IMediaManagement, MediaManagement>();
-    services.AddScoped<IMediaMetadataCache, MediaMetadataCache>();
     services.AddScoped<IZeroMediaStoreDbProvider, EmptyZeroMediaStoreDbProvider>();
+    services.AddSingleton<IImageDimensionReader, ImageDimensionReader>();
+    services.AddSingleton<MediaMetadataCache>();
 
-    services.AddOptions<MediaOptions>().Bind(configuration.GetSection("Zero:Media")).Configure(opts =>
+    services.AddOptions<MediaOptions>().Configure(opts =>
     {
       opts.FolderPath = "media";
       opts.AllowedOtherFileExtensions = new() { ".pdf", ".docx", ".doc", ".svg", ".xml" };
@@ -50,7 +53,7 @@ internal class ZeroMediaModule : ZeroModule
       //   { "thumb", new ResizeOptions() { Size = new(100, 100), Mode = ResizeMode.Max } },
       //   { "preview", new ResizeOptions() { Size = new(210, 210), Mode = ResizeMode.Min } }
       // };
-    });
+    }).Bind(configuration.GetSection("Zero:Media"));
 
     // services.Configure<ZeroOptions>(opts =>
     // {

@@ -54,13 +54,25 @@ public sealed class PresetRequestParser : IRequestParser
       return [];
     }
 
-    FallbackFormat fallbackFormat = FindFallbackFormatInContext(context);
+    // get default processing commands (which are added to each request) from options
+    Dictionary<string, string> defaults = _options.ImageSharp.DefaultCommands.Select(x => x.Split("=", 2)).ToDictionary(x => x[0], x => x[1]);
+
 
     // fall back to webp, as avif is not supported yet by ImageSharp
-    string format = fallbackFormat != FallbackFormat.None ? "webp" : null;
-    string quality = _options.ImageSharp.DefaultQuality.ToString();
+    FallbackFormat fallbackFormat = FindFallbackFormatInContext(context);
+    string format = defaults.GetValueOrDefault("format", fallbackFormat != FallbackFormat.None ? "webp" : null);
+    string quality = defaults.GetValueOrDefault("quality");
 
     CommandCollection filters = [];
+
+    foreach (KeyValuePair<string, string> kv in defaults)
+    {
+      string key = kv.Key;
+      if (key != "format" && key != "quality")
+      {
+        filters[key] = kv.Value;
+      }
+    }
 
     foreach (string[] kv in transformed.Select(x => x.Split("=", 2)))
     {
@@ -79,25 +91,28 @@ public sealed class PresetRequestParser : IRequestParser
         continue;
       }
 
-      filters.Add(key, value);
+      filters[key] = value;
     }
 
     // add positioning filters
     if (focalPoint != null)
     {
-      filters.Add("rxy", focalPoint);
+      filters["rxy"] = focalPoint;
     }
     else
     {
-      filters.Add("ranchor", "center");
+      filters["ranchor"] = "center";
     }
 
     // add format/quality filters
     if (format.HasValue())
     {
-      filters.Add("format", format);
+      filters["format"] = format;
     }
-    filters.Add("quality", quality);
+    if (quality.HasValue())
+    {
+      filters["quality"] = quality;
+    }
 
     return filters;
   }
