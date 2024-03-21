@@ -45,7 +45,7 @@ public class ImageDimensionReader : IImageDimensionReader
 
     MemoryCacheEntryOptions cacheEntryOptions = new();
     cacheEntryOptions.AddExpirationToken(FileProvider.Watch(resolvedPath));
-    //cacheEntryOptions.SetSize(value.Length * sizeof(char));
+    cacheEntryOptions.SetSize(1);
     Cache.Set(path, value, cacheEntryOptions);
 
     return value;

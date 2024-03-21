@@ -22,7 +22,7 @@ public class MediaCreator : IMediaCreator
 
 
   /// <inheritdoc />
-  public async Task<Result<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default)
+  public virtual async Task<Result<Media>> UploadFile(Stream fileStream, string filename, string folderId = null, CancellationToken cancellationToken = default)
   {
     string fileExtension = Path.GetExtension(filename);
     string normalizedFilename = Safenames.File(filename);
@@ -92,7 +92,7 @@ public class MediaCreator : IMediaCreator
 
 
   /// <inheritdoc />
-  protected virtual MediaMetadata GetImageMetadata(Image<Rgba32> image)
+  protected virtual MediaMetadata GetImageMetadata(IImageInfo image)
   {
     PngMetadata pngMetadata = image.Metadata.GetPngMetadata();
     //WebpMetadata webpMetadata = image.Metadata.GetWebpMetadata();

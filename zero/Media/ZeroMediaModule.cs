@@ -33,11 +33,11 @@ internal class ZeroMediaModule : ZeroModule
     {
       IOptions<MediaOptions> options = svc.GetRequiredService<IOptions<MediaOptions>>();
       IWebHostEnvironment env = svc.GetRequiredService<IWebHostEnvironment>();
-      Console.WriteLine("media path: " + options.Value.FolderPath);
       return new(Path.Combine(env.WebRootPath, options.Value.FolderPath), options.Value.PublicPathPrefix + options.Value.FolderPath.EnsureStartsWith('/'));
     });
 
     services.AddScoped<IMediaCreator, MediaCreator>();
+    services.AddScoped<IStaticMediaCreator, StaticMediaCreator>();
     services.AddScoped<IMediaManagement, MediaManagement>();
     services.AddScoped<IZeroMediaStoreDbProvider, EmptyZeroMediaStoreDbProvider>();
     services.AddSingleton<IImageDimensionReader, ImageDimensionReader>();
