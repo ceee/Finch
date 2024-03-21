@@ -51,8 +51,8 @@ public class StaticMediaCreator : MediaCreator, IStaticMediaCreator
 
     if (isImage)
     {
-      IImageInfo info = await Image.IdentifyAsync(fileInfo.AbsolutePath, cancellationToken);
-      model.Metadata = GetImageMetadata(info);
+      ImageInfo info = await Image.IdentifyAsync(fileInfo.AbsolutePath, cancellationToken);
+      model.Metadata = GetImageMetadata(info.Metadata, info.Size);
     }
 
     MemoryCacheEntryOptions cacheEntryOptions = new();

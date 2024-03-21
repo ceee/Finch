@@ -1,6 +1,7 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.Metadata;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System.IO;
@@ -61,7 +62,7 @@ public class MediaCreator : IMediaCreator
     if (isImage)
     {
       using Image<Rgba32> image = await Image.LoadAsync<Rgba32>(fileInfo.AbsolutePath, cancellationToken);
-      model.Metadata = GetImageMetadata(image);
+      model.Metadata = GetImageMetadata(image.Metadata, image.Size);
 
       string extension = Path.GetExtension(model.Path);
 
@@ -92,19 +93,19 @@ public class MediaCreator : IMediaCreator
 
 
   /// <inheritdoc />
-  protected virtual MediaMetadata GetImageMetadata(IImageInfo image)
+  protected virtual MediaMetadata GetImageMetadata(ImageMetadata metadata, Size size)
   {
-    PngMetadata pngMetadata = image.Metadata.GetPngMetadata();
+    PngMetadata pngMetadata = metadata.GetPngMetadata();
     //WebpMetadata webpMetadata = image.Metadata.GetWebpMetadata();
 
     return new MediaMetadata()
     {
-      Width = image.Width,
-      Height = image.Height,
+      Width = size.Width,
+      Height = size.Height,
       //ImageTakenDate = new DateTimeOffset(image.Metadata.IccProfile?.Header?.CreationDate ?? DateTime.Now),
       //Dpi = image.Metadata.HorizontalResolution,
       //ColorSpace = image.Metadata.IccProfile?.Header?.DataColorSpace.ToString(),
-      HasTransparency = pngMetadata?.HasTransparency ?? false
+      HasTransparency = pngMetadata?.TransparentColor.HasValue ?? false
       //Frames = image.Frames.Count
     };
   }

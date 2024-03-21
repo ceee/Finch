@@ -35,7 +35,7 @@ public class ImageDimensionReader : IImageDimensionReader
 
     try
     {
-      IImageInfo info = Image.Identify(resolvedPath);
+      ImageInfo info = Image.Identify(resolvedPath);
       value = new(info.Width, info.Height);
     }
     catch (Exception)
@@ -69,7 +69,7 @@ public class ImageDimensionReader : IImageDimensionReader
 
     try
     {
-      IImageInfo info = await Image.IdentifyAsync(resolvedPath);
+      ImageInfo info = await Image.IdentifyAsync(resolvedPath);
       value = new(info.Width, info.Height);
     }
     catch (Exception)
