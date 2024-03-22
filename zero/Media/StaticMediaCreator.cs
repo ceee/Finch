@@ -29,6 +29,11 @@ public class StaticMediaCreator : MediaCreator, IStaticMediaCreator
       return Result<Media>.Success(media);
     }
 
+    if (!await FileSystem.Exists(path, cancellationToken))
+    {
+      return Result<Media>.Fail("File not found");
+    }
+
     string filename = Path.GetFileName(path);
     string fileExtension = Path.GetExtension(filename);
 
