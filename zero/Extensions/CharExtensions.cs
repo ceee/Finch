@@ -18,7 +18,7 @@ public static class CharExtensions
     { 'ö', new char[2] { 'o', 'e' } },
     { 'ü', new char[2] { 'u', 'e' } },
     { 'ß', new char[2] { 's', 's' } },
-    { '&', new char[1] { '+' } }
+    //{ '&', new char[1] { '+' } }
   };
 
 

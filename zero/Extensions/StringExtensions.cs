@@ -212,8 +212,28 @@ public static class StringExtensions
 
     return builder.ToString();
   }
-  
-  
+
+
+  public static string NewLinesToParagraphs(this string source, string classes = null)
+  {
+    StringBuilder builder = new();
+    string classAttribute = classes.HasValue() ? $" class=\"{classes}\"" : string.Empty;
+    builder.Append($"<p{classAttribute}>");
+    string[] lines = source.Split('\n');
+    for (int i = 0; i < lines.Length; i++)
+    {
+      if (i > 0)
+      {
+        builder.Append($"</p><p{classAttribute}>");
+      }
+      builder.Append(WebUtility.HtmlEncode(lines[i]));
+    }
+
+    builder.Append("</p>");
+    return builder.ToString();
+  }
+
+
   public static string FormatTwoFactorAuthenticationKey(this string unformattedKey)
   {
     var result = new StringBuilder();
