@@ -1,4 +1,6 @@
-﻿using SixLabors.ImageSharp.Processing;
+﻿using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Web.Caching;
 
 namespace zero.Media;
@@ -13,7 +15,7 @@ public class MediaOptions
 
   public List<string> AllowedImageFileExtensions { get; set; }
 
-  public Dictionary<string, ResizeOptions> Thumbnails { get; set; }
+  public Dictionary<string, ThumbnailOptions> Thumbnails { get; set; }
 
   public ImageSharpOptions ImageSharp { get; set; } = new();
 }
@@ -40,4 +42,14 @@ public class ImagingSharpRemoteCacheOptions
   public string MediaFolder { get; set; } = "/media/_remote/";
 
   public string KeyMapFile { get; set; } = "/Config/remotekeys.json";
+}
+
+
+public class ThumbnailOptions
+{
+  public string Extension { get; set; }
+
+  public IImageEncoder Encoder { get; set; }
+
+  public Action<IImageProcessingContext> Mutate { get; set; }
 }
