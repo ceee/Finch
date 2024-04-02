@@ -5,7 +5,7 @@ namespace zero.Media;
 
 public class MediaOptions
 {
-  public string FolderPath { get; set; }
+  public string FolderPath { get; set; } = string.Empty;
 
   public string PublicPathPrefix { get; set; } = string.Empty;
 

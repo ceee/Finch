@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using SixLabors.ImageSharp.Processing;
-using System.IO;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
 using SixLabors.ImageSharp.Web.Caching;
 using SixLabors.ImageSharp.Web.DependencyInjection;
+using System.IO;
 using zero.Media.ImageSharp;
-using zero.Numbers;
 using zero.Media.ImageSharp.Processors;
 
 namespace zero.Media;
@@ -24,7 +22,13 @@ internal class ZeroMediaModule : ZeroModule
       .AddProvider<PhysicalFileProvider>()
       .AddProcessor<RotateWebProcessor>()
       .AddProcessor<StripMetadataWebProcessor>()
-      .Configure<PhysicalFileSystemCacheOptions>(configuration.GetSection("Zero:Media:ImageSharp:Cache"));
+      .AddProcessor<BlurWebProcessor>();
+
+    services.AddOptions<PhysicalFileSystemCacheOptions>().Configure(opts =>
+    {
+      opts.CacheRootPath = "~/";
+      opts.CacheFolder = "cache";
+    }).Bind(configuration.GetSection("Zero:Media:ImageSharp:Cache"));
     
     //configuration.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "Config/imaging.json"), true, true);
     //configuration.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), $"Config/imaging.{builder.Environment.EnvironmentName}.json"), true);
