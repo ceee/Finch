@@ -22,7 +22,13 @@ internal class ZeroMediaModule : ZeroModule
       .AddProvider<PhysicalFileProvider>()
       .AddProcessor<RotateWebProcessor>()
       .AddProcessor<StripMetadataWebProcessor>()
-      .Configure<PhysicalFileSystemCacheOptions>(configuration.GetSection("Zero:Media:ImageSharp:Cache"));
+      .AddProcessor<BlurWebProcessor>();
+
+    services.AddOptions<PhysicalFileSystemCacheOptions>().Configure(opts =>
+    {
+      opts.CacheRootPath = "~/";
+      opts.CacheFolder = "cache";
+    }).Bind(configuration.GetSection("Zero:Media:ImageSharp:Cache"));
     
     //configuration.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "Config/imaging.json"), true, true);
     //configuration.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), $"Config/imaging.{builder.Environment.EnvironmentName}.json"), true);

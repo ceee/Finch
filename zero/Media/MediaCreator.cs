@@ -1,6 +1,9 @@
 ﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Metadata;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -61,6 +64,7 @@ public class MediaCreator : IMediaCreator
 
     if (isImage)
     {
+      // load image to create thumbnails
       using Image<Rgba32> image = await Image.LoadAsync<Rgba32>(fileInfo.AbsolutePath, cancellationToken);
       model.Metadata = GetImageMetadata(image.Metadata, image.Size);
 
@@ -68,17 +72,22 @@ public class MediaCreator : IMediaCreator
 
       if (Options.Thumbnails != null)
       {
-        foreach ((string key, ResizeOptions opts) in Options.Thumbnails)
+        foreach ((string key, ThumbnailOptions opts) in Options.Thumbnails)
         {
           Image<Rgba32> imageFrame = image.Frames.Count > 1 ? image.Frames.CloneFrame(0) : image.Clone();
-          imageFrame.Mutate(x => x.Resize(opts));
+          IImageEncoder encoder = opts.Encoder ?? new WebpEncoder();
+
+          if (opts.Mutate != null)
+          {
+            imageFrame.Mutate(opts.Mutate);
+          }
 
           using MemoryStream stream = new();
-          await imageFrame.SaveAsync(stream, new PngEncoder(), cancellationToken);
+          await imageFrame.SaveAsync(stream, encoder, cancellationToken);
 
           stream.Position = 0;
 
-          string thumbFilename = normalizedFilename.TrimEnd(extension) + "." + Safenames.File(key) + ".png";
+          string thumbFilename = normalizedFilename.TrimEnd(extension) + "." + Safenames.File(key) + opts.Extension.Or(".webp");
           string path = directory + '/' + thumbFilename;
 
           await FileSystem.CreateFile(path, stream, cancellationToken: cancellationToken);
