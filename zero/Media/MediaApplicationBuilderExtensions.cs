@@ -12,10 +12,6 @@ public static class MediaApplicationBuilderExtensions
       OnPrepareResponse = ctx =>
       {
         ctx.Context.Response.Headers[HeaderNames.CacheControl] = "public, must-revalidate, max-age=" + (int)cacheDuration.TotalSeconds;
-      },
-      OnPrepareResponseAsync = async ctx =>
-      {
-        await Task.Delay(0);
       }
     });
   }
