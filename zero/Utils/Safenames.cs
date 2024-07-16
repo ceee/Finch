@@ -19,6 +19,8 @@ public class Safenames
 
   const char AMPERSAND = '&';
 
+  static char[] TICKS = new char[3] { '`', '\'', '´' };
+
 
   /// <summary>
   /// Converts an untrusted to a safe filename
@@ -68,6 +70,11 @@ public class Safenames
 
       // do not handle surrogates
       if (char.IsSurrogate(character))
+      {
+        continue;
+      }
+      // do not handle ticks
+      else if (TICKS.Contains(character))
       {
         continue;
       }
