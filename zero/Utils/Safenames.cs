@@ -15,10 +15,6 @@ public class Safenames
 
   const char DOT = '.';
 
-  const char PLUS = '+';
-
-  const char AMPERSAND = '&';
-
   static char[] TICKS = new char[3] { '`', '\'', '´' };
 
 
@@ -94,11 +90,7 @@ public class Safenames
       {
         target = character;
       }
-      // + sign for + and &
-      else if (character == PLUS || character == AMPERSAND)
-      {
-        target = PLUS;
-      }
+      // - sign for + and &
       else if (scope == Scope.File && character == DOT)
       {
         target = DOT;
@@ -110,22 +102,13 @@ public class Safenames
       }
 
       // add default characters
-      if (target != HYPHEN && target != PLUS)
+      if (target != HYPHEN)
       {
         output.Append(target);
       }
       // add hyphen if it isn't first and previous char is not + or -
-      else if (target == HYPHEN && previous != default(char) && previous != PLUS && previous != HYPHEN)
+      else if (target == HYPHEN && previous != default(char) && previous != HYPHEN)
       {
-        output.Append(target);
-      }
-      // add plus. do remove hyphen it is the previous character
-      else if (target == PLUS)
-      {
-        if (previous == HYPHEN)
-        {
-          output.Remove(output.Length - 1, 1);
-        }
         output.Append(target);
       }
 
