@@ -20,7 +20,6 @@ public partial class RavenOperations : IRavenOperations
     }
 
     T previousModel = null;
-    bool isUpdate = false;
 
     // check if the Id for a model already exists
     if (!model.Id.IsNullOrEmpty())
@@ -38,8 +37,6 @@ public partial class RavenOperations : IRavenOperations
       {
         return Result<T>.Fail("@errors.oncreate.idmismatch");
       }
-
-      isUpdate = true;
     }
 
     // validate flavor
@@ -66,13 +63,13 @@ public partial class RavenOperations : IRavenOperations
     }
 
     // create ID before-hand so interceptors can use it
-    if (!isUpdate)
+    if (!update)
     {
       model.Id = await GenerateId(model);
     }
 
     // run interceptor
-    InterceptorInstruction<T> instruction = isUpdate ? Interceptors.ForUpdate(model, previousModel) : Interceptors.ForCreate(model);
+    InterceptorInstruction<T> instruction = update ? Interceptors.ForUpdate(model, previousModel) : Interceptors.ForCreate(model);
 
     if (InterceptorBlocker == null && !await instruction.Start(this))
     {
