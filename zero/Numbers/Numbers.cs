@@ -77,7 +77,7 @@ public class Numbers : INumbers
     await Db.Update(number);
 
     // compiles the template and returns the rendered result
-    return Compile(number.Template, value, number.MinLength, date);
+    return Compile(number.Template, value, number.MinLength, date, number.PostProcess);
   }
 
 
@@ -121,14 +121,14 @@ public class Numbers : INumbers
 
 
   /// <inheritdoc />
-  public string Compile(string template, long value, int minLength, DateTimeOffset? date = null)
+  public string Compile(string template, long value, int minLength, DateTimeOffset? date = null, Func<string, string> postProcess = null)
   {
-    return Compile(template, value, minLength, date.HasValue ? DateOnly.FromDateTime(date.Value.Date) : null);
+    return Compile(template, value, minLength, date.HasValue ? DateOnly.FromDateTime(date.Value.Date) : null, postProcess);
   }
 
 
   /// <inheritdoc />
-  public string Compile(string template, long value, int minLength, DateOnly? date = null)
+  public string Compile(string template, long value, int minLength, DateOnly? date = null, Func<string, string> postProcess = null)
   {
     string output = template;
     MatchCollection matches = templateRegex.Matches(output);
@@ -169,6 +169,11 @@ public class Numbers : INumbers
       }
 
       output = output.ReplaceFirst(original, result);
+    }
+
+    if (postProcess != null)
+    {
+      output = postProcess(output);
     }
 
     return output;
@@ -300,10 +305,10 @@ public interface INumbers
   /// <summary>
   /// Renders the final output from the template and the value
   /// </summary>
-  string Compile(string template, long value, int minLength, DateTimeOffset? date = null);
+  string Compile(string template, long value, int minLength, DateTimeOffset? date = null, Func<string, string> postProcess = null);
 
   /// <summary>
   /// Renders the final output from the template and the value
   /// </summary>
-  string Compile(string template, long value, int minLength, DateOnly? date = null);
+  string Compile(string template, long value, int minLength, DateOnly? date = null, Func<string, string> postProcess = null);
 }

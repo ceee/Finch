@@ -250,4 +250,25 @@ public static class StringExtensions
 
     return result.ToString().ToLowerInvariant();
   }
+
+
+  public static IEnumerable<string> Chunks(this string text, int groupSize)
+  {
+    ArgumentException.ThrowIfNullOrEmpty(text);
+
+    if (groupSize < 1)
+    {
+      throw new ArgumentException();
+    }
+
+    for (int i = 0; i < text.Length; i += groupSize)
+    {
+      if (groupSize + i > text.Length)
+      {
+        groupSize = text.Length - i;
+      }
+
+      yield return text.Substring(i, groupSize);
+    }
+  }
 }

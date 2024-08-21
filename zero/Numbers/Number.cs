@@ -44,6 +44,11 @@ public class Number : ZeroEntity
   /// Store current counters
   /// </summary>
   public List<NumberCounter> Counters { get; set; } = new();
+
+  /// <summary>
+  /// Post process the compiled number
+  /// </summary>
+  public virtual string PostProcess(string compiled) => compiled;
 }
 
 
