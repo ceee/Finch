@@ -1,6 +1,6 @@
 ﻿namespace zero.Localization;
 
-public class Translation
+public record Translation
 {
   /// <summary>
   /// Key of the translation
