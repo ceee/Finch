@@ -196,17 +196,17 @@ public class PhysicalFileSystem : IFileSystem
 
 
   /// <inheritdoc />
-  public virtual IAsyncEnumerable<IFileMeta> GetDirectoryContent(string path = null, bool recursive = false, CancellationToken cancellationToken = default)
+  public virtual IEnumerable<IFileMeta> GetDirectoryContent(string path = null, bool recursive = false, CancellationToken cancellationToken = default)
   {
     try
     {
       string resolvedPath = ResolvePath(path);
-      List<IFileMeta> results = new();
+      List<IFileMeta> results = [];
       SearchOption searchOption = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
 
       if (!Directory.Exists(resolvedPath))
       {
-        return results.ToAsyncEnumerable();
+        return results;
       }
 
       results.AddRange(Directory.GetDirectories(resolvedPath, "*", searchOption).Select(f =>
@@ -221,7 +221,7 @@ public class PhysicalFileSystem : IFileSystem
         return new PhysicalFileMeta(fileSystemInfo, ResolvePath(f.Substring(_root.Length)));
       }));
 
-      return results.ToAsyncEnumerable();
+      return results;
     }
     catch (Exception ex) when (ex is not FileSystemException)
     {

@@ -57,7 +57,7 @@ public interface IFileSystem
   /// <summary>
   /// Get all items within a directory
   /// </summary>
-  IAsyncEnumerable<IFileMeta> GetDirectoryContent(string path = null, bool recursive = false, CancellationToken cancellationToken = default);
+  IEnumerable<IFileMeta> GetDirectoryContent(string path = null, bool recursive = false, CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Tries to create a directory at the given path. This method returns if the directory already exists.
