@@ -1,32 +1,35 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using System.Collections.Concurrent;
 
 namespace zero.Localization;
 
 public class ConfigurationLocalizer : Localizer
 {
-  private IConfiguration _configuration;
+  protected ConcurrentDictionary<string, Translation> FileCache { get; set; } = [];
 
 
   public ConfigurationLocalizer(IConfiguration configuration, ICultureResolver cultureResolver, IOptionsMonitor<LocalizationOptions> options) : base(cultureResolver)
   {
-    _configuration = configuration;
+    IConfigurationSection section = configuration.GetSection($"Zero:Localization:{LanguageCode}");
+
+    if (section != null)
+    {
+      foreach (IConfigurationSection child in section.GetChildren())
+      {
+        FileCache.TryAdd(child.Key, new Translation() { Value = child.Value });
+      }
+    }
   }
 
 
   protected override Translation LoadTranslation(string key)
   {
-    IConfigurationSection section = _configuration.GetSection($"Zero:Localization:{LanguageCode}:{key}");
-
-    if (section == null)
+    if (!FileCache.TryGetValue(key, out Translation translation))
     {
       return null;
     }
 
-    return new()
-    {
-      Key = key,
-      Value = section.Value
-    };
+    return translation;
   }
 }
