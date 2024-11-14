@@ -23,7 +23,8 @@ public abstract class Localizer : ILocalizer
 
   Task OnCultureChange(CultureInfo culture)
   {
-    LanguageCode = culture.Name.Split(new char[] { '_', '-' })[0];
+    culture ??= CultureInfo.InvariantCulture;
+    LanguageCode = culture.Name.Split(['_', '-'])[0];
     return Task.CompletedTask;
   }
 
