@@ -184,6 +184,11 @@ public interface IRavenOperations
   Task<Dictionary<string, T>> Load<T>(IEnumerable<string> ids) where T : ZeroIdEntity, new();
 
   /// <summary>
+  /// Get entities by ids
+  /// </summary>
+  Task<List<T>> LoadAsList<T>(IEnumerable<string> ids) where T : ZeroIdEntity, new();
+
+  /// <summary>
   /// Get entities by query
   /// </summary>
   Task<Paged<T>> Load<T>(int pageNumber, int pageSize, Func<IRavenQueryable<T>, IQueryable<T>> expression = default) where T : ZeroIdEntity, new();

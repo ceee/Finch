@@ -43,6 +43,27 @@ public partial class RavenOperations : IRavenOperations
 
 
   /// <inheritdoc />
+  public virtual async Task<List<T>> LoadAsList<T>(IEnumerable<string> ids) where T : ZeroIdEntity, new()
+  {
+    ids = ids.Distinct().ToArray();
+
+    Dictionary<string, T> models = await Session.LoadAsync<T>(ids);
+    List<T> result = new();
+
+    foreach (string id in ids)
+    {
+      models.TryGetValue(id, out T model);
+      if (WhenActive(model) != null)
+      {
+        result.Add(model);
+      }
+    }
+
+    return result;
+  }
+
+
+  /// <inheritdoc />
   public virtual async Task<bool> Any<T>(Func<IRavenQueryable<T>, IQueryable<T>> querySelector = default) where T : ZeroIdEntity, new()
   {
     querySelector ??= x => x;
