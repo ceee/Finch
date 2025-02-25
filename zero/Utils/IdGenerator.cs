@@ -43,7 +43,7 @@ public class IdGenerator
   /// </summary>
   public static string HashString(string value)
   {
-    return GetStableHashCode(value).ToString().Replace("-", string.Empty);
+    return GetStableHashCode(value).ToString().Replace("-", String.Empty);
   }
 
 
@@ -52,7 +52,7 @@ public class IdGenerator
   /// </summary>
   public static string HashObject(params object[] values)
   {
-    return GetStableHashCode(JsonSerializer.Serialize(values)).ToString().Replace("-", string.Empty);
+    return GetStableHashCode(JsonSerializer.Serialize(values)).ToString().Replace("-", String.Empty);
   }
 
 

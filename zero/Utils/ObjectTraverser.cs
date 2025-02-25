@@ -21,7 +21,7 @@ public class ObjectTraverser
     HashSet<object> exploredObjects = new HashSet<object>();
     List<Result<T>> found = new List<Result<T>>();
 
-    Find<T>(value, null, string.Empty, null, exploredObjects, found);
+    Find<T>(value, null, String.Empty, null, exploredObjects, found);
 
     return found;
   }
@@ -35,7 +35,7 @@ public class ObjectTraverser
     HashSet<object> exploredObjects = new HashSet<object>();
     List<Result> found = new List<Result>();
 
-    Find(type, value, null, string.Empty, null, exploredObjects, found);
+    Find(type, value, null, String.Empty, null, exploredObjects, found);
 
     return found;
   }
@@ -49,7 +49,7 @@ public class ObjectTraverser
     HashSet<string> exploredObjects = new HashSet<string>();
     List<Result<T>> found = new List<Result<T>>();
 
-    FindAttribute<T>(value, null, string.Empty, null, exploredObjects, found);
+    FindAttribute<T>(value, null, String.Empty, null, exploredObjects, found);
 
     return found;
   }
@@ -75,7 +75,7 @@ public class ObjectTraverser
       int idx = 0;
       foreach (object item in enumerable)
       {
-        Find<T>(item, value, CombineKey(string.Empty, key, SQBKT_OPEN + idx + SQBKT_CLOSE), property, exploredObjects, found);
+        Find<T>(item, value, CombineKey(String.Empty, key, SQBKT_OPEN + idx + SQBKT_CLOSE), property, exploredObjects, found);
         idx += 1;
       }
       return;
@@ -135,7 +135,7 @@ public class ObjectTraverser
       int idx = 0;
       foreach (object item in enumerable)
       {
-        Find(type, item, value, CombineKey(string.Empty, key, SQBKT_OPEN + idx + SQBKT_CLOSE), property, exploredObjects, found);
+        Find(type, item, value, CombineKey(String.Empty, key, SQBKT_OPEN + idx + SQBKT_CLOSE), property, exploredObjects, found);
         idx += 1;
       }
       return;
@@ -213,7 +213,7 @@ public class ObjectTraverser
       int idx = 0;
       foreach (object item in enumerable)
       {
-        FindAttribute<T>(item, value, CombineKey(string.Empty, key, SQBKT_OPEN + idx + SQBKT_CLOSE), null, exploredObjects, found);
+        FindAttribute<T>(item, value, CombineKey(String.Empty, key, SQBKT_OPEN + idx + SQBKT_CLOSE), null, exploredObjects, found);
         idx += 1;
       }
       return;
@@ -237,11 +237,11 @@ public class ObjectTraverser
 
   private static string CombineKey(string sep, string key1, string key2)
   {
-    if (string.IsNullOrEmpty(key1))
+    if (String.IsNullOrEmpty(key1))
     {
       return key2;
     }
-    return string.Join(sep, key1, key2);
+    return String.Join(sep, key1, key2);
   }
 
 

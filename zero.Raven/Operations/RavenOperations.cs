@@ -11,7 +11,7 @@ namespace zero.Raven;
 public partial class RavenOperations : IRavenOperations
 {
   /// <inheritdoc />
-  public IZeroDocumentSession Session => Store.Session();
+  public IAsyncDocumentSession Session => Store.Session();
 
   protected record OperationOptions(bool IncludeInactive);
 
@@ -41,7 +41,7 @@ public partial class RavenOperations : IRavenOperations
   /// <inheritdoc />
   public async Task<string> GenerateId<T>(T model) where T : ZeroIdEntity
   {
-    IZeroDocumentSession session = Session;
+    IAsyncDocumentSession session = Session;
     return await session.Advanced.DocumentStore.Conventions.GenerateDocumentIdAsync(session.Advanced.DocumentStore.Database, model);
   }
 
@@ -138,7 +138,7 @@ public interface IRavenOperations
   /// <summary>
   /// Access to the current session
   /// </summary>
-  IZeroDocumentSession Session { get; }
+  IAsyncDocumentSession Session { get; }
 
   /// <summary>
   /// Get new instance of an entity (with an optional flavor)
@@ -260,12 +260,12 @@ public interface IRavenOperations
   /// <summary>
   /// Creates an entity with an optional validator
   /// </summary>
-  Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new();
+  Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IAsyncDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new();
 
   /// <summary>
   /// Updates an entity with an optional validator
   /// </summary>
-  Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new();
+  Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IAsyncDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new();
 
   /// <inheritdoc />
   Task<Result<IOrderedEnumerable<T>>> Sort<T>(string[] sortedIds) where T : ZeroIdEntity, ISupportsSorting, new();

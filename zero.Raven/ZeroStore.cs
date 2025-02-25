@@ -16,7 +16,7 @@ public class ZeroStore : IZeroStore
   }
 
   protected IZeroOptions Options { get; set; }
-  protected Dictionary<string, IZeroDocumentSession> ScopedSessions { get; set; } = new();
+  protected Dictionary<string, IAsyncDocumentSession> ScopedSessions { get; set; } = new();
   private const string NullDb = "__default__";
 
 
@@ -25,33 +25,19 @@ public class ZeroStore : IZeroStore
 
 
   /// <inheritdoc />
-  public IZeroDocumentSession Session(string database = null, ZeroSessionResolution resolution = ZeroSessionResolution.Reuse, SessionOptions options = null)
+  public IAsyncDocumentSession Session(ZeroSessionResolution resolution = ZeroSessionResolution.Reuse, SessionOptions options = null)
   {
-    string databaseKey = database ?? NullDb;
-    
     options ??= new SessionOptions();
-
-    if (database.HasValue())
-    {
-      options.Database = database;
-    }
 
     if (resolution == ZeroSessionResolution.Create)
     {
-      return Raven.OpenAsyncSession(options) as IZeroDocumentSession;
+      return Raven.OpenAsyncSession(options);
     }
 
-    if (!ScopedSessions.TryGetValue(databaseKey, out IZeroDocumentSession session))
+    if (!ScopedSessions.TryGetValue(Raven.Database, out IAsyncDocumentSession session))
     {
-      session = Raven.OpenAsyncSession(options) as IZeroDocumentSession;
-      ScopedSessions.TryAdd(databaseKey, session);
-    }
-      
-    if (session.IsDisposed)
-    {
-      session = Raven.OpenAsyncSession(options) as IZeroDocumentSession;
-      ScopedSessions.Remove(databaseKey);
-      ScopedSessions.TryAdd(databaseKey, session);
+      session = Raven.OpenAsyncSession(options);
+      ScopedSessions.TryAdd(Raven.Database, session);
     }
 
     return session;
@@ -106,7 +92,7 @@ public interface IZeroStore
   /// <summary>
   /// Use a specific session
   /// </summary>
-  IZeroDocumentSession Session(string database = null, ZeroSessionResolution resolution = ZeroSessionResolution.Reuse, SessionOptions options = null);
+  IAsyncDocumentSession Session(ZeroSessionResolution resolution = ZeroSessionResolution.Reuse, SessionOptions options = null);
 
   /// <summary>
   /// Purges a collection

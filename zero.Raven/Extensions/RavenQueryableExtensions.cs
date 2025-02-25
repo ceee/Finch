@@ -10,7 +10,7 @@ public static class RavenQueryableExtensions
 {
   public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> source, string path, bool isDescending, OrderingType type = OrderingType.String)
   {
-    if (!string.IsNullOrEmpty(path))
+    if (!String.IsNullOrEmpty(path))
     {
       char[] a = path.ToCharArray();
       a[0] = char.ToUpper(a[0]);
@@ -27,7 +27,7 @@ public static class RavenQueryableExtensions
 
   public static IOrderedQueryable<T> ThenBy<T>(this IOrderedQueryable<T> source, string path, bool isDescending, OrderingType type = OrderingType.String)
   {
-    if (!string.IsNullOrEmpty(path))
+    if (!String.IsNullOrEmpty(path))
     {
       char[] a = path.ToCharArray();
       a[0] = char.ToUpper(a[0]);
@@ -88,7 +88,7 @@ public static class RavenQueryableExtensions
 
   public static IQueryable<T> SearchIf<T>(this IQueryable<T> source, Expression<Func<T, object>> fieldSelector, string searchTerms, string suffix = null, string prefix = null, SearchOperator @operator = SearchOperator.Or)
   {
-    if (string.IsNullOrWhiteSpace(searchTerms))
+    if (String.IsNullOrWhiteSpace(searchTerms))
     {
       return source;
     }

@@ -122,7 +122,7 @@ public class Paths : IPaths
   /// </summary>
   public string ToFilename(string value)
   {
-    if (string.IsNullOrWhiteSpace(value))
+    if (String.IsNullOrWhiteSpace(value))
     {
       return value;
     }

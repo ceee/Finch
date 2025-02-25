@@ -43,7 +43,7 @@ public class ZeroTokenProvider : IZeroTokenProvider
       Metadata = metadata ?? new()
     };
 
-    IZeroDocumentSession session = Store.Session();
+    IAsyncDocumentSession session = Store.Session();
 
     // saves the token
     await session.StoreAsync(securityToken);
@@ -64,7 +64,7 @@ public class ZeroTokenProvider : IZeroTokenProvider
       return false;
     }
 
-    IZeroDocumentSession session = Store.Session();
+    IAsyncDocumentSession session = Store.Session();
 
     // try to find a valid token
     SecurityToken securityToken = await session.LoadAsync<SecurityToken>(TokenToId(token));
@@ -89,7 +89,7 @@ public class ZeroTokenProvider : IZeroTokenProvider
       return null;
     }
 
-    IZeroDocumentSession session = Store.Session();
+    IAsyncDocumentSession session = Store.Session();
 
     // try to find a valid token
     SecurityToken securityToken = await session.LoadAsync<SecurityToken>(TokenToId(token));
@@ -135,7 +135,7 @@ public class ZeroTokenProvider : IZeroTokenProvider
       return false;
     }
 
-    IZeroDocumentSession session = Store.Session();
+    IAsyncDocumentSession session = Store.Session();
 
     // try to find a valid token
     SecurityToken securityToken = await session.LoadAsync<SecurityToken>(TokenToId(token));

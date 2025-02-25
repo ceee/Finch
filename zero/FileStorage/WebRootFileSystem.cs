@@ -7,7 +7,7 @@ public class WebRootFileSystem : PhysicalFileSystem, IWebRootFileSystem
 
   public WebRootFileSystem(string root, string publicPathPrefix) : base(root)
   {
-    PublicPathPrefix = (publicPathPrefix ?? string.Empty).EnsureEndsWith('/');
+    PublicPathPrefix = (publicPathPrefix ?? String.Empty).EnsureEndsWith('/');
   }
 
 

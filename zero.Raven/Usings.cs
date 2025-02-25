@@ -17,3 +17,10 @@ global using zero.Validation;
 global using zero.Localization;
 global using zero.Context;
 global using zero.Communication;
+
+global using Raven.Client.Documents.Session;
+global using Raven.Client.Documents;
+global using Raven.Client.Documents.Operations;
+global using Raven.Client.Documents.Queries;
+global using Raven.Client.Documents.Session;
+global using Raven.Client;

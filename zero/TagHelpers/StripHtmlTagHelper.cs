@@ -18,7 +18,7 @@ public class StripHtmlTagHelper : TagHelper
     output.TagName = string.Empty;
     string text = string.Empty;
 
-    if (!string.IsNullOrWhiteSpace(Text))
+    if (!String.IsNullOrWhiteSpace(Text))
     {
       text = WebUtility.HtmlDecode(Regex.Replace(Text, "<[^>]*(>|$)", string.Empty).Trim());
 

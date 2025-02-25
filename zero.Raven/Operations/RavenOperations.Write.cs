@@ -6,13 +6,13 @@ namespace zero.Raven;
 public partial class RavenOperations : IRavenOperations
 {
   /// <inheritdoc />
-  public virtual Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new() => Save(model, validate, onAfterStore);
+  public virtual Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IAsyncDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new() => Save(model, validate, onAfterStore);
 
   /// <inheritdoc />
-  public virtual Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new() => Save(model, validate, onAfterStore, true);
+  public virtual Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IAsyncDocumentSession> onAfterStore = null) where T : ZeroIdEntity, new() => Save(model, validate, onAfterStore, true);
 
   /// <inheritdoc />
-  protected virtual async Task<Result<T>> Save<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IZeroDocumentSession> onAfterStore = null, bool update = false) where T : ZeroIdEntity, new()
+  protected virtual async Task<Result<T>> Save<T>(T model, Func<T, Task<ValidationResult>> validate = null, Action<IAsyncDocumentSession> onAfterStore = null, bool update = false) where T : ZeroIdEntity, new()
   {
     if (model == null)
     {
@@ -24,7 +24,7 @@ public partial class RavenOperations : IRavenOperations
     // check if the Id for a model already exists
     if (!model.Id.IsNullOrEmpty())
     {
-      using (IZeroDocumentSession session = Store.Session(options: new Rv.Documents.Session.SessionOptions() { NoCaching = true }))
+      using (IAsyncDocumentSession session = Store.Session(options: new Rv.Documents.Session.SessionOptions() { NoCaching = true }))
       {
         previousModel = await session.LoadAsync<T>(model.Id);
       }

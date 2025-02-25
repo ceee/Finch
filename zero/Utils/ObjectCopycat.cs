@@ -79,10 +79,10 @@ public class ObjectCopycat
 
   private static string CombineKey(string sep, string key1, string key2)
   {
-    if (string.IsNullOrEmpty(key1))
+    if (String.IsNullOrEmpty(key1))
     {
       return key2;
     }
-    return string.Join(sep, key1, key2);
+    return String.Join(sep, key1, key2);
   }
 }
