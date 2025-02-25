@@ -21,12 +21,12 @@ public static class MediaExtensions
 
   public static string CssObjectPosition(this MediaFocalPoint focalPoint)
   {
-    string values = String.Empty;
+    string values = string.Empty;
 
     if (focalPoint != null && (focalPoint.Left != 0.5m || focalPoint.Top != 0.5m))
     {
-      Func<decimal, string> round = input => Decimal.Round(input, 0, MidpointRounding.ToEven).ToString();
-      values = String.Format("{0}% {1}%", round(focalPoint.Left * 100), round(focalPoint.Top * 100));
+      Func<decimal, string> round = input => decimal.Round(input, 0, MidpointRounding.ToEven).ToString();
+      values = string.Format("{0}% {1}%", round(focalPoint.Left * 100), round(focalPoint.Top * 100));
     }
 
     return values;
@@ -40,7 +40,7 @@ public static class MediaExtensions
   {
     if (path.IsNullOrEmpty())
     {
-      return String.Empty;
+      return string.Empty;
     }
 
     List<string> parts = path.Split('/').ToList();
@@ -48,33 +48,33 @@ public static class MediaExtensions
 
     if (parts[0] == "http:" || parts[0] == "https:")
     {
-      return String.Join('/', parts);
+      return string.Join('/', parts);
     }
 
     if (isZeroMedia)
     {
       // TODO this is bullshit because we need to get the base path from options
       return parts[1] == "media" || parts[0] == "media"
-        ? String.Join('/', parts)
-        : ("/media" + String.Join('/', parts).EnsureStartsWith('/'));
+        ? string.Join('/', parts)
+        : ("/media" + string.Join('/', parts).EnsureStartsWith('/'));
     }
 
-    return String.Join('/', parts).EnsureStartsWith('/');
+    return string.Join('/', parts).EnsureStartsWith('/');
   }
 
 
   static string StringifyFocalPoint(MediaFocalPoint focalPoint = null)
   {
-    string xy = String.Empty;
+    string xy = string.Empty;
 
     if (focalPoint != null && (focalPoint.Left != 0.5m || focalPoint.Top != 0.5m))
     {
       Func<decimal, string> round = input =>
       {
-        return Decimal.Round(input, 2, MidpointRounding.ToEven).ToString().Replace(',', '.');
+        return decimal.Round(input, 2, MidpointRounding.ToEven).ToString().Replace(',', '.');
       };
 
-      xy = String.Format(":{0},{1}", round(focalPoint.Left), round(focalPoint.Top));
+      xy = string.Format(":{0},{1}", round(focalPoint.Left), round(focalPoint.Top));
     }
 
     return xy;

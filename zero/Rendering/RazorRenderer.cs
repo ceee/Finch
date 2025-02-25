@@ -243,7 +243,7 @@ public class RazorRenderer : IRazorRenderer, IDisposable
     }
 
     IEnumerable<string> searchedLocations = getViewResult.SearchedLocations.Concat(findViewResult.SearchedLocations);
-    string errorMessage = String.Join(Environment.NewLine, new[] { $"Unable to find view '{viewName}'. The following locations were searched:" }.Concat(searchedLocations));
+    string errorMessage = string.Join(Environment.NewLine, new[] { $"Unable to find view '{viewName}'. The following locations were searched:" }.Concat(searchedLocations));
 
     throw new InvalidOperationException(errorMessage);
   }
@@ -267,7 +267,7 @@ public class RazorRenderer : IRazorRenderer, IDisposable
     }
 
     IEnumerable<string> searchedLocations = getPageResult.SearchedLocations.Concat(findPageResult.SearchedLocations);
-    string errorMessage = String.Join(Environment.NewLine, new[] { $"Unable to find page '{pageName}'. The following locations were searched:" }.Concat(searchedLocations));
+    string errorMessage = string.Join(Environment.NewLine, new[] { $"Unable to find page '{pageName}'. The following locations were searched:" }.Concat(searchedLocations));
 
     throw new InvalidOperationException(errorMessage);
   }

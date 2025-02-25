@@ -27,7 +27,7 @@ public class RequestUrlResolver : IRequestUrlResolver
       return false;
     }
 
-    if (String.IsNullOrWhiteSpace(path))
+    if (string.IsNullOrWhiteSpace(path))
     {
       return false;
     }
@@ -49,7 +49,7 @@ public class RequestUrlResolver : IRequestUrlResolver
       return null;
     }
 
-    if (String.IsNullOrWhiteSpace(path))
+    if (string.IsNullOrWhiteSpace(path))
     {
       return GetRoot();
     }
@@ -84,7 +84,7 @@ public class RequestUrlResolver : IRequestUrlResolver
     }
 
     HttpRequest request = HttpContextAccessor.HttpContext.Request;
-    return $"{request.Scheme}://{request.Host.Host}{GetPortUrlPart(request)}{(includePath ? request.PathBase.ToUriComponent() : String.Empty)}";
+    return $"{request.Scheme}://{request.Host.Host}{GetPortUrlPart(request)}{(includePath ? request.PathBase.ToUriComponent() : string.Empty)}";
   }
 
 
@@ -101,7 +101,7 @@ public class RequestUrlResolver : IRequestUrlResolver
   {
     if (!request.Host.Port.HasValue || request.Host.Port == 80 || (request.Host.Port == 443 && request.IsHttps))
     {
-      return String.Empty;
+      return string.Empty;
     }
 
     return ":" + request.Host.Port;

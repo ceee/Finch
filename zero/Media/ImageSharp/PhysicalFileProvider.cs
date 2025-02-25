@@ -79,6 +79,6 @@ public class PhysicalFileProvider : IImageProvider
     List<string> parts = path.Split('/').ToList();
 
     parts.RemoveAt(parts.Count - 2);
-    return String.Join('/', parts);
+    return string.Join('/', parts);
   }
 }

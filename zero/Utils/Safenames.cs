@@ -50,9 +50,9 @@ public class Safenames
   /// </summary>
   static string Generate(string value, Scope scope)
   {
-    if (String.IsNullOrWhiteSpace(value))
+    if (string.IsNullOrWhiteSpace(value))
     {
-      return String.Empty;
+      return string.Empty;
     }
 
     char previous = default;

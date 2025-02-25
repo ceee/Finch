@@ -144,7 +144,7 @@ public class Numbers : INumbers
       string original = match.Value;
       string type = match.Groups[1].Value;
       string options = match.Groups[2].Value;
-      string result = String.Empty;
+      string result = string.Empty;
 
       if (type == "year")
       {
@@ -161,11 +161,11 @@ public class Numbers : INumbers
       else if (type == "random")
       {
         int length = 5;
-        if (!options.IsNullOrWhiteSpace() && Int32.TryParse(options, out int oLength) && oLength > 0 && oLength <= 10)
+        if (!options.IsNullOrWhiteSpace() && int.TryParse(options, out int oLength) && oLength > 0 && oLength <= 10)
         {
           length = oLength;
         }
-        result = random.Next(0, Int32.MaxValue).ToString("D10").Substring(0, length);
+        result = random.Next(0, int.MaxValue).ToString("D10").Substring(0, length);
       }
 
       output = output.ReplaceFirst(original, result);

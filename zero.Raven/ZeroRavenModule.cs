@@ -24,7 +24,7 @@ internal class ZeroRavenModule : ZeroModule
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddSingleton<IRavenDocumentConventionsBuilder, RavenDocumentConventionsBuilder>();
-    services.AddSingleton<IZeroDocumentStore, ZeroDocumentStore>(CreateRavenStore);
+    services.AddSingleton<IDocumentStore>(CreateRavenStore);
     services.AddScoped<IZeroStore, ZeroStore>();
     services.AddScoped<IZeroTokenProvider, ZeroTokenProvider>();
     services.AddScoped<StoreContext>();
@@ -43,13 +43,13 @@ internal class ZeroRavenModule : ZeroModule
   /// <summary>
   /// Creates and configures the raven store
   /// </summary>
-  protected ZeroDocumentStore CreateRavenStore(IServiceProvider services)
+  protected IDocumentStore CreateRavenStore(IServiceProvider services)
   {
     IZeroOptions options = services.GetService<IZeroOptions>();
     RavenOptions ravenOptions = options.For<RavenOptions>();
     IRavenDocumentConventionsBuilder conventionsBuilder = services.GetService<IRavenDocumentConventionsBuilder>();
 
-    IZeroDocumentStore store = new ZeroDocumentStore(options)
+    IDocumentStore store = new DocumentStore()
     {
       Database = ravenOptions.Database,
       Urls = new string[1] { ravenOptions.Url },
@@ -72,6 +72,6 @@ internal class ZeroRavenModule : ZeroModule
     IndexCreation.CreateIndexes(indexes, store, database: ravenOptions.Database);
 
       
-    return (ZeroDocumentStore)raven;
+    return raven;
   }
 }

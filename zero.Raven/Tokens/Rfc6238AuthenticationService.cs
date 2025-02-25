@@ -45,7 +45,7 @@ public static class Rfc6238AuthenticationService
 
   private static byte[] ApplyModifier(byte[] input, string modifier)
   {
-    if (String.IsNullOrEmpty(modifier))
+    if (string.IsNullOrEmpty(modifier))
     {
       return input;
     }

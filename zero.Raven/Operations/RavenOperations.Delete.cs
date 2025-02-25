@@ -54,11 +54,11 @@ public partial class RavenOperations : IRavenOperations
     var collectionName = Store.Raven.Conventions.FindCollectionName(typeof(T));
     var operationQuery = new DeleteByQueryOperation(new IndexQuery()
     {
-      Query = $"from {collectionName} c {querySuffix ?? String.Empty}",
+      Query = $"from {collectionName} c {querySuffix ?? string.Empty}",
       QueryParameters = parameters
     }, new QueryOperationOptions { AllowStale = true });
 
-    Operation operation = await Store.Raven.GetOperationExecutor().SendAsync(operationQuery);
+    Operation operation = await Store.Raven.Operations.SendAsync(operationQuery);
     await operation.WaitForCompletionAsync();
   }
 }

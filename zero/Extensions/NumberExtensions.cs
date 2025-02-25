@@ -42,6 +42,6 @@ public static class NumberExtensions
       sizeInBytes = sizeInBytes / power;
     }
 
-    return String.Format("{0:0.##} {1}", sizeInBytes, units[order]);
+    return string.Format("{0:0.##} {1}", sizeInBytes, units[order]);
   }
 }

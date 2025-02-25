@@ -1,10 +1,14 @@
-﻿using Raven.Client.Documents.Session;
+﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Operations;
+using Raven.Client.Documents.Queries;
+using Raven.Client.Documents.Session;
+using Raven.Client;
 
 namespace zero.Raven;
 
 public class ZeroStore : IZeroStore
 {
-  public ZeroStore(IZeroDocumentStore raven, IZeroOptions options) : base()
+  public ZeroStore(IDocumentStore raven, IZeroOptions options) : base()
   {
     Options = options;
     Raven = raven;
@@ -17,7 +21,7 @@ public class ZeroStore : IZeroStore
 
 
   /// <inheritdoc />
-  public IZeroDocumentStore Raven { get; private set; }
+  public IDocumentStore Raven { get; private set; }
 
 
   /// <inheritdoc />
@@ -52,6 +56,36 @@ public class ZeroStore : IZeroStore
 
     return session;
   }
+
+
+  /// <inheritdoc />
+  public async Task PurgeAsync<T>(string querySuffix = null, Parameters parameters = null)
+  {
+    string collectionName = Raven.Conventions.FindCollectionName(typeof(T));
+    DeleteByQueryOperation operationQuery = new DeleteByQueryOperation(new IndexQuery()
+    {
+      Query = $"from {collectionName} c {querySuffix ?? string.Empty}",
+      QueryParameters = parameters
+    }, new QueryOperationOptions { AllowStale = true });
+
+    Operation operation = await Raven.Operations.SendAsync(operationQuery);
+
+    await operation.WaitForCompletionAsync();
+  }
+
+
+  /// <inheritdoc />
+  public void Purge<T>(string querySuffix = null, Parameters parameters = null)
+  {
+    string collectionName = Raven.Conventions.FindCollectionName(typeof(T));
+    DeleteByQueryOperation operationQuery = new DeleteByQueryOperation(new IndexQuery()
+    {
+      Query = $"from {collectionName} c {querySuffix ?? string.Empty}",
+      QueryParameters = parameters
+    }, new QueryOperationOptions { AllowStale = true });
+
+    Raven.Operations.Send(operationQuery);
+  }
 }
 
 
@@ -67,10 +101,20 @@ public interface IZeroStore
   /// <summary>
   /// Get underlying raven document store
   /// </summary>
-  IZeroDocumentStore Raven { get; }
+  IDocumentStore Raven { get; }
 
   /// <summary>
   /// Use a specific session
   /// </summary>
   IZeroDocumentSession Session(string database = null, ZeroSessionResolution resolution = ZeroSessionResolution.Reuse, SessionOptions options = null);
+
+  /// <summary>
+  /// Purges a collection
+  /// </summary>
+  Task PurgeAsync<T>(string querySuffix = null, Parameters parameters = null);
+
+  /// <summary>
+  /// Purges a collection
+  /// </summary>
+  void Purge<T>(string querySuffix = null, Parameters parameters = null);
 }

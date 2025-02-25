@@ -24,14 +24,14 @@ public class ClassTagHelper : TagHelper
   {
     var items = _classValues.Where(e => e.Value).Select(e => e.Key).ToList();
 
-    if (!String.IsNullOrEmpty(Classes))
+    if (!string.IsNullOrEmpty(Classes))
     {
       items.Insert(0, Classes);
     }
 
     if (items.Any())
     {
-      var classes = String.Join(" ", items.ToArray());
+      var classes = string.Join(" ", items.ToArray());
       output.Attributes.Add("class", classes);
     }
   }
