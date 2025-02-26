@@ -3,23 +3,21 @@
     <PropertyGroup>
         <PackageId>zero.Raven</PackageId>
         <Version>1.0.0</Version>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
         <RootNamespace>zero.Raven</RootNamespace>
         <DebugType>embedded</DebugType>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="RavenDB.Client" Version="7.0.0" />
+        <!-- // for client <-> server compatibility see:
+             // https://ravendb.net/docs/article-page/7.0/csharp/client-api/faq/backward-compatibility  -->
+        <PackageReference Include="RavenDB.Client" Version="5.4.206" />
         <PackageReference Include="FluentValidation" Version="11.11.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\zero\zero.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Identity" />
     </ItemGroup>
 
 </Project>
