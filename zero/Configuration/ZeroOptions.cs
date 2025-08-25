@@ -13,6 +13,9 @@ public class ZeroOptions : IZeroOptions
   public string Language { get; set; } = "en_US";
 
   /// <inheritdoc />
+  public string AppName { get; set; }
+
+  /// <inheritdoc />
   public TimeSpan TokenExpiration { get; set; }
 
 
@@ -50,6 +53,11 @@ public interface IZeroOptions
   /// ISO Code for language
   /// </summary>
   public string Language { get; set; }
+
+  /// <summary>
+  /// Name of the app (used in logging and otehr areas)
+  /// </summary>
+  public string AppName { get; set; }
 
   /// <summary>
   /// Expiration of a generated change token for an entity

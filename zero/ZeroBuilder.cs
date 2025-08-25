@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,12 +37,17 @@ public class ZeroBuilder
     _startupOptions.AssemblyDiscoveryRules.Add(new ZeroAssemblyDiscoveryRule());
     setupAction?.Invoke(_startupOptions);
 
+    //string appName = configuration.GetValue<string>("Zero:AppName").Or("zero-app");
+    //services.AddDataProtection();.PersistKeysToRegistry()
+
     services.AddControllers();
+    services.AddOutputCache();
     Mvc = services.AddRazorPages();
 
     Mvc.AddDataAnnotationsLocalization();
 
     services.Configure<AntiforgeryOptions>(opts => opts.Cookie.Name = "zero.antiforgery");
+
 
     // adds and discovers additional and built-in assemblies
     new AssemblyDiscovery(Mvc).Execute(_startupOptions.AssemblyDiscoveryRules);

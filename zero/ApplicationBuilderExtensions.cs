@@ -7,6 +7,7 @@ public static class ApplicationBuilderExtensions
   public static IApplicationBuilder UseZero(this IApplicationBuilder app)
   {
     app.UseMiddleware<ZeroContextMiddleware>();
+    app.UseOutputCache();
     ZeroBuilder.Modules.Configure(app, null, app.ApplicationServices);
     return app;
   }

@@ -28,8 +28,7 @@ public class MetadataService : IMetadataService
       Image = options.Image,
       Author = options.Author,
       PageName = pageName,
-      AppVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion
-    };
+      AppVersion = Assembly.GetEntryAssembly()!.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion.Split('+').FirstOrDefault()};
 
     // generate robots
     bool noIndex = options.NoIndex ?? false;
