@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero", "zero\zero.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zero.Raven", "zero.Raven\zero.Raven.csproj", "{DC79D7EA-FAA1-4701-9C36-8295CD1C45D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zero.Sqlite", "zero.Sqlite\zero.Sqlite.csproj", "{A57D88BC-952F-4311-B474-26FBF0FA957E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DC79D7EA-FAA1-4701-9C36-8295CD1C45D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC79D7EA-FAA1-4701-9C36-8295CD1C45D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC79D7EA-FAA1-4701-9C36-8295CD1C45D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A57D88BC-952F-4311-B474-26FBF0FA957E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A57D88BC-952F-4311-B474-26FBF0FA957E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A57D88BC-952F-4311-B474-26FBF0FA957E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A57D88BC-952F-4311-B474-26FBF0FA957E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
