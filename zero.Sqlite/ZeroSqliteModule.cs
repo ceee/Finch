@@ -36,17 +36,19 @@ internal class ZeroSqliteModule : ZeroModule
   protected IDbConnectionFactory CreateDbConnectionFactory(IServiceProvider services)
   {
     IZeroOptions options = services.GetService<IZeroOptions>();
-    SqliteOptions ravenOptions = options.For<SqliteOptions>();
-    return new OrmLiteConnectionFactory(ravenOptions.ConnectionString, SqliteDialect.Provider);
+    SqliteOptions sqliteOptions = options.For<SqliteOptions>();
+    return new OrmLiteConnectionFactory(sqliteOptions.ConnectionString, SqliteDialect.Provider);
   }
 
 
   protected IDbConnection CreateDbConnection(IServiceProvider services)
   {
     IDbConnectionFactory factory = services.GetService<IDbConnectionFactory>();
+    IZeroOptions options = services.GetService<IZeroOptions>();
+    SqliteOptions sqliteOptions = options.For<SqliteOptions>();
     IDbConnection db = factory.CreateDbConnection();
     db.Open();
-    //db.CreateTableIfNotExists<News>();
+    sqliteOptions.OnConnectionCreate?.Invoke(db);
     return db;
   }
 }
