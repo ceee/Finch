@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Localization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,8 @@ internal class ZeroLocalizationModule : ZeroModule
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     // hint: think about using https://github.com/nuages-io/nuages-localization
+    
+    ValidatorOptions.Global.LanguageManager.AddGermanOverrides();
     
     services.AddScoped<ICultureResolver, CultureResolver>();
     services.AddScoped<ICultureService, CultureService>();

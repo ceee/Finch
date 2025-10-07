@@ -152,6 +152,27 @@ public interface IDbOperations
   Task<List<T>> LoadAsList<T>(IEnumerable<string> ids) where T : ZeroIdEntity, new();
 
   /// <summary>
+  /// Check if any items exist in this collection (with optional query)
+  /// </summary>
+  Task<bool> Any<T>(Expression<Func<T, bool>> querySelector = null) where T : ZeroIdEntity, new();
+
+  /// <summary>
+  /// Get entities by query
+  /// </summary>
+  Task<List<T>> Load<T>(Expression<Func<T, bool>> querySelector) where T : ZeroIdEntity, new();
+
+  /// <summary>
+  /// Get entities by sql query
+  /// </summary>
+  Task<List<T>> LoadBySql<T>(Func<SqlExpression<T>, SqlExpression<T>> querySelector) where T : ZeroIdEntity, new();
+
+  /// <summary>
+  /// Get all entities from this collection. 
+  /// Warning: Don't use this method for large collections. Stream the results instead.
+  /// </summary>
+  Task<List<T>> LoadAll<T>() where T : ZeroIdEntity, new();
+
+  /// <summary>
   /// Creates an entity with an optional validator
   /// </summary>
   Task<Result<T>> Create<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
