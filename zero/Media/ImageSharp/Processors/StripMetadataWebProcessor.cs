@@ -16,8 +16,7 @@ public class StripMetadataWebProcessor : IImageWebProcessor
   /// <summary>
   /// The reusable collection of commands.
   /// </summary>
-  private static readonly IEnumerable<string> StripCommands
-      = new[] { Strip };
+  private static readonly IEnumerable<string> StripCommands = [Strip];
 
   /// <inheritdoc/>
   public IEnumerable<string> Commands { get; } = StripCommands;

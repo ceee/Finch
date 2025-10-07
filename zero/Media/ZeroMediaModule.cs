@@ -22,7 +22,8 @@ internal class ZeroMediaModule : ZeroModule
       .AddProvider<PhysicalFileProvider>()
       .AddProcessor<RotateWebProcessor>()
       .AddProcessor<StripMetadataWebProcessor>()
-      .AddProcessor<BlurWebProcessor>();
+      .AddProcessor<BlurWebProcessor>()
+      .AddProcessor<LoopWebProcessor>();
 
     services.AddOptions<PhysicalFileSystemCacheOptions>().Configure(opts =>
     {
