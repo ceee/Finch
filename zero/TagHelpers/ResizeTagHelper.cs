@@ -12,6 +12,9 @@ public class ResizeTagHelper : TagHelper
 
   [HtmlAttributeName("app-resize")]
   public string Preset { get; set; }
+
+  [HtmlAttributeName("app-focal-point")]
+  public string FocalPoint { get; set; }
   
   [ViewContext]
   public ViewContext ViewContext { get; set; }
@@ -27,8 +30,21 @@ public class ResizeTagHelper : TagHelper
 
   public override void Process(TagHelperContext context, TagHelperOutput output)
   {
-    string src = FileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, Src).Resize(Preset);
+    MediaFocalPoint focalPoint = null;
+
+    if (FocalPoint != null)
+    {
+      string[] parts = FocalPoint.Split(',');
+      focalPoint = new()
+      {
+        Left = decimal.Parse(parts[0].Replace('.', ',')),
+        Top = decimal.Parse(parts[1].Replace('.', ','))
+      };
+    }
+
+    string src = FileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, Src).Resize(Preset, focalPoint);
     output.Attributes.RemoveAll("app-resize");
+    output.Attributes.RemoveAll("app-focal-point");
     output.Attributes.SetAttribute("src", src);
   }
 }
