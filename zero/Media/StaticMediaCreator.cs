@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.FileProviders;
 using SixLabors.ImageSharp;
 using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace zero.Media;
 
@@ -13,7 +14,7 @@ public class StaticMediaCreator : MediaCreator, IStaticMediaCreator
   protected IFileProvider FileProvider { get; set; }
 
 
-  public StaticMediaCreator(IMediaFileSystem fileSystem, IZeroOptions options, IWebHostEnvironment hostingEnvironment, MediaMetadataCache cacheProvider) : base(fileSystem, options)
+  public StaticMediaCreator(IMediaFileSystem fileSystem, IZeroOptions options, IWebHostEnvironment hostingEnvironment, MediaMetadataCache cacheProvider, ILogger<IMediaCreator> logger) : base(fileSystem, options, logger)
   {
     FileProvider = hostingEnvironment.WebRootFileProvider;
     Cache = cacheProvider.Cache;

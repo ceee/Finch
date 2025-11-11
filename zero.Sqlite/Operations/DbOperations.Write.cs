@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation.Results;
+using Microsoft.Extensions.Logging;
 using ServiceStack.OrmLite;
 using zero.Models;
 using zero.Extensions;
@@ -22,15 +23,14 @@ public partial class DbOperations : IDbOperations
   {
     if (model == null)
     {
+      Logger.LogWarning("Could not create/update entity (model is null) for type {type}", typeof(T));
       return Result<T>.Fail("@errors.onsave.empty");
     }
-
-    T previousModel = null;
 
     // check if the Id for a model already exists
     if (!model.Id.IsNullOrEmpty())
     {
-      previousModel = await Db.SingleByIdAsync<T>(model.Id);
+      T previousModel = await Db.SingleByIdAsync<T>(model.Id);
 
       if (update && previousModel == null)
       {
@@ -47,6 +47,7 @@ public partial class DbOperations : IDbOperations
     {
       if (!Flavors.Exists<T>(flavorModel.Flavor))
       {
+        Logger.LogWarning("Flavor {flavor} not found for type {type}", flavorModel.Flavor, typeof(T));
         return Result<T>.Fail("@errors.onsave.flavornotfound");
       }   
     }
@@ -61,6 +62,7 @@ public partial class DbOperations : IDbOperations
 
       if (!validation.IsValid)
       {
+        Logger.LogInformation("Validation failed for {id} ({errors})", model.Id, validation.Errors);
         return Result<T>.Fail(validation);
       }
     }
@@ -73,6 +75,16 @@ public partial class DbOperations : IDbOperations
 
     // store our model
     await Db.SaveAsync(model);
+
+    string action = update ? "Updated" : "Created";
+    if (model is ZeroEntity zeroEntity)
+    {
+      Logger.LogInformation(action + " {id} with name {name}", model.Id, zeroEntity.Name);
+    }
+    else
+    {
+      Logger.LogInformation(action + " {id}", model.Id);
+    }
 
     return Result<T>.Success(model);
   }

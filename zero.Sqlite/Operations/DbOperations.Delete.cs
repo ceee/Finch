@@ -1,5 +1,6 @@
 ﻿
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using ServiceStack.OrmLite;
 using zero.Models;
 
@@ -19,6 +20,7 @@ public partial class DbOperations : IDbOperations
     
     if (model == null)
     {
+      Logger.LogWarning("Could not delete entity (model is null) for type {type}", typeof(T));
       return Result<T>.Fail("@errors.ondelete.idnotfound");
     }
 
@@ -30,6 +32,8 @@ public partial class DbOperations : IDbOperations
     {
       await Db.DeleteByIdAsync<T>(model.Id);
     }
+
+    Logger.LogInformation("{id} ({type}) successfully deleted", typeof(T), model.Id);
 
     return Result<T>.Success();
   }

@@ -8,21 +8,15 @@ using SixLabors.ImageSharp.Metadata;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace zero.Media;
 
-public class MediaCreator : IMediaCreator
+public class MediaCreator(IMediaFileSystem fileSystem, IZeroOptions options, ILogger<IMediaCreator> logger) : IMediaCreator
 {
-  protected IMediaFileSystem FileSystem { get; set; }
+  protected IMediaFileSystem FileSystem { get; set; } = fileSystem;
 
-  protected MediaOptions Options { get; set; }
-
-
-  public MediaCreator(IMediaFileSystem fileSystem, IZeroOptions options)
-  {
-    FileSystem = fileSystem;
-    Options = options.For<MediaOptions>();
-  }
+  protected MediaOptions Options { get; set; } = options.For<MediaOptions>();
 
 
   /// <inheritdoc />
@@ -61,6 +55,8 @@ public class MediaCreator : IMediaCreator
     // we need file metadata to get info about file size and the physical path for image modification
     IFileMeta fileInfo = await FileSystem.GetFileInfo(model.Path, cancellationToken);
     model.Size = fileInfo.Length;
+    
+    logger.LogInformation("Created media item {path} ({size})", model.Path, model.Size.GetFileSize());
 
     if (isImage)
     {
@@ -130,6 +126,7 @@ public class MediaCreator : IMediaCreator
     {
       string directoryName = GetNewDirectoryName();
       await FileSystem.CreateDirectory(directoryName, cancellationToken);
+      logger.LogDebug("Created media directory {name}", directoryName);
       return directoryName;
     }
     catch (FileSystemException ex) when (ex.Message.Contains("already exists"))

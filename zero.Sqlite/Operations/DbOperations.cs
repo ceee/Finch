@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using ServiceStack.OrmLite;
 using zero.Context;
 using zero.Models;
@@ -24,13 +25,16 @@ public partial class DbOperations : IDbOperations
 
   protected IDbConnection Db { get; private set; }
 
+  protected ILogger<IDbOperations> Logger { get; private set; }
 
-  public DbOperations(StoreContext context, IDbConnection db)
+  
+  public DbOperations(StoreContext context, IDbConnection db, ILogger<IDbOperations> logger)
   {
     Context = context.Context;
     Services = context.Services;
     Flavors = context.Options.For<FlavorOptions>();
     Db = db;
+    Logger = logger;
   }
 
 
