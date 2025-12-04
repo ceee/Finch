@@ -19,6 +19,13 @@ public partial class DbOperations : IDbOperations
   public virtual Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new() => Save(model, validate, true);
 
   /// <inheritdoc />
+  public virtual async Task<Result<T>> CreateOrUpdate<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new()
+  {
+    bool update = !model.Id.IsNullOrEmpty() && await Any<T>(x => x.Id == model.Id);
+    return await Save(model, validate, update);
+  }
+
+  /// <inheritdoc />
   protected virtual async Task<Result<T>> Save<T>(T model, Func<T, Task<ValidationResult>> validate = null, bool update = false) where T : ZeroIdEntity, new()
   {
     if (model == null)
@@ -87,5 +94,25 @@ public partial class DbOperations : IDbOperations
     }
 
     return Result<T>.Success(model);
+  }
+
+
+  /// <inheritdoc />
+  public virtual async Task Sort<T>(IEnumerable<string> ids) where T : ZeroEntity, new()
+  {
+    List<T> items = await LoadAll<T>();
+
+    uint sort = 0;
+    foreach (string id in ids)
+    {
+      T item = items.FirstOrDefault(x => x.Id == id);
+      if (item != null)
+      {
+        sort += 10;
+        item.Sort = sort;
+        item.LastModifiedDate = DateTimeOffset.Now;
+      }
+    }
+    await Db.UpdateAllAsync(items);
   }
 }

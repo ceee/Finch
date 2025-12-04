@@ -187,6 +187,16 @@ public interface IDbOperations
   Task<Result<T>> Update<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
 
   /// <summary>
+  /// Checks if an entity exists (via ID) and creates or updates it afterwards accordingly
+  /// </summary>
+  Task<Result<T>> CreateOrUpdate<T>(T model, Func<T, Task<ValidationResult>> validate = null) where T : ZeroIdEntity, new();
+
+  /// <summary>
+  /// Updates sorting of all items in a collection based on the given enumerable
+  /// </summary>
+  Task Sort<T>(IEnumerable<string> ids) where T : ZeroEntity, new();
+
+  /// <summary>
   /// Deletes an entity
   /// </summary>
   Task<Result<T>> Delete<T>(T model) where T : ZeroIdEntity, new();
