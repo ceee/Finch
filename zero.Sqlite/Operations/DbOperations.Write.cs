@@ -75,7 +75,7 @@ public partial class DbOperations : IDbOperations
     }
 
     // create ID before-hand so interceptors can use it
-    if (!update)
+    if (!update && !model.Id.HasValue())
     {
       model.Id = await GenerateId(model);
     }
