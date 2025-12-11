@@ -17,14 +17,16 @@ public class IconTagHelper : TagHelper
 
   public string Class { get; set; }
 
+  public string Set { get; set; }
+
   [HtmlAttributeNotBound]
   [ViewContext]
-  public ViewContext ViewContext { get; set; } = default!;
+  public ViewContext ViewContext { get; set; } = null!;
 
 
   private IconOptions _options;
 
-  private IFileVersionProvider _fileVersionProvider;
+  private readonly IFileVersionProvider _fileVersionProvider;
 
   private readonly ILogger<IconTagHelper> _logger;
 
@@ -40,30 +42,43 @@ public class IconTagHelper : TagHelper
 
   public override void Process(TagHelperContext context, TagHelperOutput output)
   {
-    if (_options.Path.IsNullOrWhiteSpace())
+    IconSetOptions set = Set.HasValue() ? _options.Sets.FirstOrDefault(x => x.Key == Set) : _options;
+
+    if (set == null || set.Path.IsNullOrWhiteSpace())
     {
-      _logger.LogWarning("Could not render <app-icon />. Please configure the path with IconOptions before.");
+      _logger.LogWarning("Could not render <app-icon />. Could not find icon set {set}.", Set);
       output.SuppressOutput();
       return;
     }
     
-    int size = Size < 0 ? _options.DefaultSize : Size;
-    string stroke = (Stroke < 0 ? _options.DefaultStrokeWidth : Stroke).ToString().Replace(',', '.');
+    int size = Size < 0 ? (set.DefaultSize ?? _options.DefaultSize ?? 18) : Size;
+    decimal stroke = Stroke < 0 ? (set.DefaultStrokeWidth ?? _options.DefaultStrokeWidth ?? 2) : Stroke;
+    string strokeStr = stroke.ToString().Replace(',', '.');
+
+    string[] classes = new string[] { _options.CssClass, set.CssClass, Class }.Where(x => x.HasValue()).ToArray();
 
     output.TagName = "svg";
-    output.Attributes.SetAttribute("class", Class.HasValue() ? $"{_options.CssClass} {Class}" : _options.CssClass);
+    output.Attributes.SetAttribute("class", string.Join(" ", classes));
     output.Attributes.SetAttribute("width", size);
     output.Attributes.SetAttribute("height", size);
     output.Attributes.SetAttribute("xmlns", "http://www.w3.org/2000/svg");
-    output.Attributes.SetAttribute("stroke-width", stroke);
+    output.Attributes.SetAttribute("stroke-width", strokeStr);
     output.Attributes.SetAttribute("data-symbol", Symbol);
-    output.Content.SetHtmlContent(BuildIcon(Symbol, size, stroke));
+    output.Content.SetHtmlContent(BuildIcon(Symbol, size, strokeStr, setKey: Set));
   }
 
 
-  public string BuildIcon(string symbol, int size = 18, string stroke = "2", string classes = null, bool withSvg = false)
+  public string BuildIcon(string symbol, int size = 18, string stroke = "2", string classes = null, bool withSvg = false, string setKey = null)
   {
-    string path = _fileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, _options.Path);
+    IconSetOptions set = setKey.HasValue() ? _options.Sets.FirstOrDefault(x => x.Key == setKey) : _options;
+
+    if (set == null || set.Path.IsNullOrWhiteSpace())
+    {
+      _logger.LogWarning("Could not render <app-icon /> (build icon). Could not find icon set {set}.", Set);
+      return null;
+    }
+
+    string path = _fileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, set.Path);
     string inner = $"<use xlink:href='{path}#{symbol}\'></use>";
 
     if (!withSvg)
