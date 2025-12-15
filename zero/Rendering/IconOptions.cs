@@ -2,6 +2,11 @@
 
 public class IconOptions : IconSetOptions
 {
+  public IconOptions()
+  {
+    CssClass = "app-icon";
+  }
+
   public List<IconSetOptions> Sets { get; set; } = [];
 }
 

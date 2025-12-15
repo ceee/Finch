@@ -55,7 +55,7 @@ public class IconTagHelper : TagHelper
     decimal stroke = Stroke < 0 ? (set.DefaultStrokeWidth ?? _options.DefaultStrokeWidth ?? 2) : Stroke;
     string strokeStr = stroke.ToString().Replace(',', '.');
 
-    string[] classes = new string[] { _options.CssClass, set.CssClass, Class }.Where(x => x.HasValue()).ToArray();
+    string[] classes = new[] { set.CssClass.HasValue() ? set.CssClass : _options.CssClass, Class }.Where(x => x.HasValue()).Distinct().ToArray();
 
     output.TagName = "svg";
     output.Attributes.SetAttribute("class", string.Join(" ", classes));
@@ -86,7 +86,7 @@ public class IconTagHelper : TagHelper
       return inner;
     }
 
-    return $"<svg class='{_options.CssClass}{(classes.HasValue() ? " " + classes : string.Empty)}' width='{size}' height='{size}'" +
+    return $"<svg class='{(classes.HasValue() ? " " + classes : string.Empty)}' width='{size}' height='{size}'" +
       $"xmlns='http://www.w3.org/2000/svg' stroke-width='{stroke}' data-symbol='{symbol}'>{inner}</svg>";
   }
 }
