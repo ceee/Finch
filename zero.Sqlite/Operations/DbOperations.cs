@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using ServiceStack.OrmLite;
+using zero.Communication;
 using zero.Context;
 using zero.Models;
 using zero.Utils;
@@ -27,14 +28,17 @@ public partial class DbOperations : IDbOperations
 
   protected ILogger<IDbOperations> Logger { get; private set; }
 
+  protected IEntityModifiedHandler EntityModifiedHandler { get; private set; }
+
   
-  public DbOperations(StoreContext context, IDbConnection db, ILogger<IDbOperations> logger)
+  public DbOperations(StoreContext context, IDbConnection db, ILogger<IDbOperations> logger, IHandlerHolder handler)
   {
     Context = context.Context;
     Services = context.Services;
     Flavors = context.Options.For<FlavorOptions>();
     Db = db;
     Logger = logger;
+    EntityModifiedHandler = handler.Get<IEntityModifiedHandler>();
   }
 
 

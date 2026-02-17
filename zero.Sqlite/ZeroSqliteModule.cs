@@ -27,6 +27,7 @@ internal class ZeroSqliteModule : ZeroModule
     services.AddScoped<IDbConnection>(CreateDbConnection);
     services.AddScoped<IDbOperations, DbOperations>();
     services.AddScoped<StoreContext>();
+    services.AddScoped<IEntityModifiedHandler, EmptyEntityModifiedHandler>();
     services.AddOptions<FlavorOptions>();
     services.AddOptions<SqliteOptions>().Bind(configuration.GetSection("Zero:Sqlite"));
     services.ConfigureOptions<ConfigureFlavorJsonOptions>();
