@@ -83,6 +83,13 @@ public partial class DbOperations : IDbOperations
   
   
   /// <inheritdoc />
+  public virtual async Task<T> Find<T>(Expression<Func<T, bool>> querySelector) where T : ZeroIdEntity, new()
+  {
+    return await Db.SingleAsync(querySelector);
+  }
+  
+  
+  /// <inheritdoc />
   public virtual async Task<List<T>> LoadBySql<T>(Func<SqlExpression<T>, SqlExpression<T>> querySelector) where T : ZeroIdEntity, new()
   {
     return await Db.SelectAsync(querySelector(Db.From<T>()));

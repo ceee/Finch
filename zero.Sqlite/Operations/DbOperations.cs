@@ -166,6 +166,11 @@ public interface IDbOperations
   Task<List<T>> Load<T>(Expression<Func<T, bool>> querySelector) where T : ZeroIdEntity, new();
 
   /// <summary>
+  /// Find entity by query
+  /// </summary>
+  Task<T> Find<T>(Expression<Func<T, bool>> querySelector) where T : ZeroIdEntity, new();
+
+  /// <summary>
   /// Get entities by sql query
   /// </summary>
   Task<List<T>> LoadBySql<T>(Func<SqlExpression<T>, SqlExpression<T>> querySelector) where T : ZeroIdEntity, new();
