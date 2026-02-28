@@ -34,6 +34,7 @@ public partial class DbOperations : IDbOperations
     }
 
     Logger.LogInformation("{id} ({type}) successfully deleted", typeof(T), model.Id);
+    await EntityModifiedHandler.Deleted(model);
 
     return Result<T>.Success();
   }

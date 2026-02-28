@@ -93,6 +93,8 @@ public partial class DbOperations : IDbOperations
       Logger.LogInformation(action + " {id}", model.Id);
     }
 
+    await EntityModifiedHandler.Saved(model, update);
+
     return Result<T>.Success(model);
   }
 
@@ -114,5 +116,9 @@ public partial class DbOperations : IDbOperations
       }
     }
     await Db.UpdateAllAsync(items);
+    foreach (T item in items)
+    {
+      await EntityModifiedHandler.Updated(item);
+    }
   }
 }
