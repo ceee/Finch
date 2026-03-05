@@ -8,7 +8,8 @@ internal class ZeroMailModule : ZeroModule
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddScoped<IMailProvider, MailProvider>();
-    services.AddScoped<IMailDispatcher, LoggerMailDispatcher>();
+    //services.AddScoped<IMailDispatcher, LoggerMailDispatcher>();
+    services.AddScoped<IMailDispatcher, PostmarkDispatcher>();
 
     services.AddOptions<MailOptions>().Bind(configuration.GetSection("Zero:Mails")).Configure(opts =>
     {

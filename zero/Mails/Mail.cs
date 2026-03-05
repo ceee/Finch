@@ -1,4 +1,5 @@
 ﻿using System.Net.Mail;
+using System.Text;
 
 namespace zero.Mails;
 
@@ -26,6 +27,30 @@ public class Mail : MailMessage
   public MailPlaceholders Placeholders { get; set; } = new();
 
   public MailMetadata Metadata { get; set; } = new();
+
+  /// <summary>
+  /// Set To and From addresses based on values in MailOptions
+  /// </summary>
+  public Mail For(MailOptions options)
+  {
+    To.Add(new MailAddress(options.To, options.ToName));
+    From = new MailAddress(options.From, options.FromName);
+    return this;
+  }
+
+  /// <summary>
+  /// Sets the body as plain text
+  /// </summary>
+  public string PlainText
+  {
+    get => Body;
+    set 
+    {
+      Body = value;
+      IsBodyHtml = false;
+      BodyEncoding = Encoding.UTF8;
+    }
+  }
 }
 
 public class MailMetadata : Dictionary<string, string>
