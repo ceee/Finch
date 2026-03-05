@@ -49,6 +49,24 @@ internal class ZeroSecurityModule : ZeroModule
           await resource.CopyToAsync(context.Response.Body, context.RequestAborted);
         }
       });
+
+      endpoints.MapGet(endpointPrefix + "/cap.widget.js", async context =>
+      {
+        Assembly assembly = typeof(ZeroSecurityModule).GetTypeInfo().Assembly;
+        Stream resource = assembly.GetManifestResourceStream("zero.Resources.cap_min_0_1_41.js");
+
+        if (resource is null)
+        {
+          context.Response.StatusCode = StatusCodes.Status404NotFound;
+          return;
+        }
+
+        await using (resource)
+        {
+          context.Response.ContentType = "text/javascript";
+          await resource.CopyToAsync(context.Response.Body, context.RequestAborted);
+        }
+      });
     });
     StaticCaptchaService.Configure(serviceProvider);
   }

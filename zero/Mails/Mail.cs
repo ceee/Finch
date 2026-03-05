@@ -33,8 +33,18 @@ public class Mail : MailMessage
   /// </summary>
   public Mail For(MailOptions options)
   {
-    To.Add(new MailAddress(options.To, options.ToName));
-    From = new MailAddress(options.From, options.FromName);
+    if (options.To.HasValue())
+    {
+      To.Add(new MailAddress(options.To, options.ToName));
+    }
+    if (options.From.HasValue())
+    {
+      From = new MailAddress(options.From, options.FromName);
+    }
+    if (options.ReplyTo.HasValue())
+    {
+      ReplyToList.Add(options.ReplyTo);
+    }
     return this;
   }
 
@@ -44,7 +54,7 @@ public class Mail : MailMessage
   public string PlainText
   {
     get => Body;
-    set 
+    set
     {
       Body = value;
       IsBodyHtml = false;

@@ -20,7 +20,7 @@ public class MailOptions
 
   public string ReplyTo { get; set; }
 
-  public bool Debug { get; set; } = true;
+  public bool Debug { get; set; }
 
   public string SenderEmail { get; set; }
 

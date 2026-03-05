@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="Resources\cap_wasm_bg_0_0_6.wasm" />
+      <EmbeddedResource Include="Resources\**\*" />
     </ItemGroup>
 
 </Project>

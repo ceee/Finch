@@ -31,7 +31,9 @@ public class CaptchaTagHelper(IOptionsMonitor<CaptchaOptions> options) : TagHelp
     output.Attributes.SetAttribute("data-cap-hidden-field-name", _options.HiddenFieldName);
 
     string wasmFilePath =_options.Endpoint + "/cap.wasm";
+    string widgetFilePath =_options.Endpoint + "/cap.widget.js";
     output.PreElement.AppendHtml($"<script>window.CAP_CUSTOM_WASM_URL = '{wasmFilePath}';</script>");
+    output.PreElement.AppendHtml($"<script type='module' src='{widgetFilePath}'></script>");
 
     foreach ((string key, string value) in _options.Localization)
     {
