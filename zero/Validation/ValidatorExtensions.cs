@@ -3,7 +3,7 @@ using zero.Validation.Validators;
 
 namespace zero.Validation;
 
-public static class ValidatorExtensions
+public static partial class ValidatorExtensions
 {
   /// <summary>
   /// Validate a color input as HEX (#aabbccdd or #aabbcc or #abc)

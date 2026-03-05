@@ -34,6 +34,7 @@ public class FluentValidationGermanLanguage
 		{ "MinimumLength_Simple", "Die Länge muss größer oder gleich {MinLength} sein." },
 		{ "MaximumLength_Simple", "Die Länge muss kleiner oder gleich {MaxLength} sein." },
 		{ "ExactLength_Simple", "Dieses Feld muss genau {MaxLength} lang sein." },
-		{ "InclusiveBetween_Simple", "Der Wert muss zwischen {From} and {To} sein." }
+		{ "InclusiveBetween_Simple", "Der Wert muss zwischen {From} and {To} sein." },
+		{ "CaptchaValidator", "Das Catpcha wurde nicht erfolgreich gelöst." }
 	};
 }

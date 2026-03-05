@@ -9,6 +9,7 @@ using zero.Metadata;
 using zero.Mvc;
 using zero.Numbers;
 using zero.Routing;
+using zero.Security;
 
 namespace zero;
 
@@ -68,6 +69,7 @@ public class ZeroBuilder
     Modules.Add<ZeroNumberModule>();
     Modules.Add<ZeroRoutingModule>();
     Modules.Add<ZeroMetadataModule>();
+    Modules.Add<ZeroSecurityModule>();
 
     Modules.ConfigureServices(services, configuration);
 
