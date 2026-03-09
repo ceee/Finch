@@ -8,12 +8,15 @@ using zero.Security;
 
 namespace zero.TagHelpers;
 
-[HtmlTargetElement("app-captcha", TagStructure = TagStructure.NormalOrSelfClosing)]
+[HtmlTargetElement("app-captcha", Attributes = "for", TagStructure = TagStructure.NormalOrSelfClosing)]
 public class CaptchaTagHelper(IOptionsMonitor<CaptchaOptions> options) : TagHelper
 {
   [HtmlAttributeNotBound]
   [ViewContext]
   public ViewContext ViewContext { get; set; } = null!;
+
+  [HtmlAttributeName("for")]
+  public ModelExpression For { get; set; }
 
   private readonly CaptchaOptions _options = options.CurrentValue;
 
@@ -25,10 +28,13 @@ public class CaptchaTagHelper(IOptionsMonitor<CaptchaOptions> options) : TagHelp
       output.SuppressOutput();
       return;
     }
+
+    string fullName = NameAndIdProviderCopy.GetFullHtmlFieldName(ViewContext, For.Name);
+
     output.TagName = "cap-widget";
     output.Attributes.SetAttribute("class", "cap-widget");
     output.Attributes.SetAttribute("data-cap-api-endpoint", _options.Endpoint);
-    output.Attributes.SetAttribute("data-cap-hidden-field-name", _options.HiddenFieldName);
+    output.Attributes.SetAttribute("data-cap-hidden-field-name", fullName);
 
     string wasmFilePath =_options.Endpoint + "/cap.wasm";
     string widgetFilePath =_options.Endpoint + "/cap.widget.js";

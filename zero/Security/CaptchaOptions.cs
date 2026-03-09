@@ -8,8 +8,6 @@ public class CaptchaOptions : PowCapConfig
 
   public bool Enabled { get; set; } = true;
 
-  public string HiddenFieldName { get; set; } = "CaptchaToken";
-
   public CaptchaLocalizationOptions Localization { get; set; } = CaptchaLocalizationOptions.German;
 }
 
