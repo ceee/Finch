@@ -8,7 +8,7 @@ using zero.Security;
 
 namespace zero.TagHelpers;
 
-[HtmlTargetElement("app-captcha", Attributes = "for", TagStructure = TagStructure.NormalOrSelfClosing)]
+[HtmlTargetElement("app-captcha", Attributes = "for,lang", TagStructure = TagStructure.NormalOrSelfClosing)]
 public class CaptchaTagHelper(IOptionsMonitor<CaptchaOptions> options) : TagHelper
 {
   [HtmlAttributeNotBound]
@@ -17,6 +17,9 @@ public class CaptchaTagHelper(IOptionsMonitor<CaptchaOptions> options) : TagHelp
 
   [HtmlAttributeName("for")]
   public ModelExpression For { get; set; }
+
+  [HtmlAttributeName("lang")]
+  public string Lang { get; set; }
 
   private readonly CaptchaOptions _options = options.CurrentValue;
 
@@ -41,7 +44,14 @@ public class CaptchaTagHelper(IOptionsMonitor<CaptchaOptions> options) : TagHelp
     output.PreElement.AppendHtml($"<script>window.CAP_CUSTOM_WASM_URL = '{wasmFilePath}';</script>");
     output.PreElement.AppendHtml($"<script type='module' src='{widgetFilePath}'></script>");
 
-    foreach ((string key, string value) in _options.Localization)
+    CaptchaLocalizationOptions texts = _options.Localization;
+
+    if (Lang == "en")
+    {
+      texts = CaptchaLocalizationOptions.English;
+    }
+
+    foreach ((string key, string value) in texts)
     {
       output.Attributes.SetAttribute($"data-cap-i18n-{key}", value);
     }

@@ -7,8 +7,9 @@ namespace zero.Validation;
 
 public static class ServiceCollectionExtensions
 {
-  public static void AddGermanValidation(this IServiceCollection services)
+  public static void AddValidationLanguageExtensions(this IServiceCollection services)
   {
+    ValidatorOptions.Global.LanguageManager.AddEnglishOverrides();
     ValidatorOptions.Global.LanguageManager.AddGermanOverrides();
     services.Replace<IdentityErrorDescriber, GermanIdentityErrorDescriber>(ServiceLifetime.Scoped);
   }
@@ -27,4 +28,18 @@ public static class ServiceCollectionExtensions
     }
 		return manager;
 	}
+
+  static ILanguageManager AddEnglishOverrides(this ILanguageManager manager)
+  {
+    if (manager is LanguageManager)
+    {
+      var lmanager = manager as LanguageManager;
+
+      foreach (var kvp in FluentValidationEnglishLanguage.Translations)
+      {
+        lmanager.AddTranslation("en", kvp.Key, kvp.Value);
+      }
+    }
+    return manager;
+  }
 }

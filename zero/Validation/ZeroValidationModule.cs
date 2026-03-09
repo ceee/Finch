@@ -7,6 +7,7 @@ internal class ZeroValidationModule : ZeroModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
+    services.AddValidationLanguageExtensions();
     services.AddScoped(typeof(IZeroMergedValidator<>), typeof(ZeroMergedValidator<>));
   }
 }
