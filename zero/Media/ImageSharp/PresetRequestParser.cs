@@ -55,7 +55,7 @@ public sealed class PresetRequestParser : IRequestParser
     }
 
     // get default processing commands (which are added to each request) from options
-    Dictionary<string, string> defaults = _options.ImageSharp.DefaultCommands.Select(x => x.Split("=", 2)).ToDictionary(x => x[0], x => x[1]);
+    Dictionary<string, string> defaults = _options.ImageSharp.DefaultCommands.Select(x => x.Split("=", 2)).ToDictionary(x => x[0], x => x.Length > 1 ? x[1] : null);
 
 
     // fall back to webp, as avif is not supported yet by ImageSharp
@@ -65,12 +65,11 @@ public sealed class PresetRequestParser : IRequestParser
 
     CommandCollection filters = [];
 
-    foreach (KeyValuePair<string, string> kv in defaults)
+    foreach ((string key, string value) in defaults)
     {
-      string key = kv.Key;
       if (key != "format" && key != "quality")
       {
-        filters[key] = kv.Value;
+        filters[key] = value;
       }
     }
 
@@ -123,12 +122,12 @@ public sealed class PresetRequestParser : IRequestParser
   {
     string acceptKey = Microsoft.Net.Http.Headers.HeaderNames.Accept;
 
-    if (context == null || context.Request == null || !context.Request.Headers.ContainsKey(acceptKey))
+    if (context?.Request == null || !context.Request.Headers.TryGetValue(acceptKey, out StringValues value))
     {
       return FallbackFormat.None;
     }
 
-    string acceptHeader = context.Request.Headers[acceptKey].ToString();
+    string acceptHeader = value.ToString();
 
     if (acceptHeader.IsNullOrEmpty())
     {
@@ -155,7 +154,7 @@ public sealed class PresetRequestParser : IRequestParser
 
     if (startSlash < 0)
     {
-      return new();
+      return [];
     }
 
     string preset = path.Substring(startSlash + PREFIX.Length, lastSlash - startSlash - PREFIX.Length);

@@ -3,6 +3,7 @@ using SixLabors.ImageSharp.Web;
 using SixLabors.ImageSharp.Web.Commands;
 using SixLabors.ImageSharp.Web.Processors;
 using System.Globalization;
+using SixLabors.ImageSharp.Processing;
 
 namespace zero.Media.ImageSharp.Processors;
 
@@ -35,6 +36,8 @@ public class StripMetadataWebProcessor : IImageWebProcessor
 
       if (strip)
       {
+        image.Image.Mutate(x => x.AutoOrient());
+
         image.Image.Metadata.ExifProfile = null;
         image.Image.Metadata.XmpProfile = null;
         image.Image.Metadata.IptcProfile = null;
