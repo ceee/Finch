@@ -8,6 +8,13 @@ public static class ApplicationBuilderExtensions
   {
     app.UseMiddleware<ZeroContextMiddleware>();
     app.UseOutputCache();
+
+    if (app is WebApplication webApplication)
+    {
+      webApplication.MapRazorPages();
+      webApplication.MapControllers();
+    }
+
     ZeroBuilder.Modules.Configure(app, null, app.ApplicationServices);
     return app;
   }

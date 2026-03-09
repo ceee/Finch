@@ -8,7 +8,7 @@ using zero.Security;
 
 namespace zero.TagHelpers;
 
-[HtmlTargetElement("app-captcha", Attributes = "for,lang", TagStructure = TagStructure.NormalOrSelfClosing)]
+[HtmlTargetElement("app-captcha", Attributes = "for", TagStructure = TagStructure.NormalOrSelfClosing)]
 public class CaptchaTagHelper(IOptionsMonitor<CaptchaOptions> options) : TagHelper
 {
   [HtmlAttributeNotBound]
