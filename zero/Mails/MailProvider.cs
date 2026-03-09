@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Net.Mail;
+using System.Reflection;
 using System.Text;
 
 namespace zero.Mails;
@@ -75,6 +76,9 @@ public class MailProvider : IMailProvider
     message.Body = TokenReplacement.Apply(message.Body, message.Placeholders);
     message.BodyEncoding = encoding;
     message.Preheader = TokenReplacement.Apply(message.Preheader, message.Placeholders);
+
+    string appName = Zero.Options.AppName.Or(Assembly.GetEntryAssembly()?.GetName().Name);
+    message.Metadata.Add("application", appName);
 
     if (!message.HasView || message.Body.HasValue())
     {
