@@ -1,14 +1,12 @@
-﻿using System.IO;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using zero.Security;
 
 namespace zero.TagHelpers;
 
-[HtmlTargetElement("app-captcha", Attributes = "for", TagStructure = TagStructure.NormalOrSelfClosing)]
+[HtmlTargetElement("app-captcha", TagStructure = TagStructure.NormalOrSelfClosing)]
 public class CaptchaTagHelper(IOptionsMonitor<CaptchaOptions> options) : TagHelper
 {
   [HtmlAttributeNotBound]
@@ -17,6 +15,9 @@ public class CaptchaTagHelper(IOptionsMonitor<CaptchaOptions> options) : TagHelp
 
   [HtmlAttributeName("for")]
   public ModelExpression For { get; set; }
+
+  [HtmlAttributeName("name")]
+  public string Name { get; set; }
 
   [HtmlAttributeName("lang")]
   public string Lang { get; set; }
@@ -32,12 +33,17 @@ public class CaptchaTagHelper(IOptionsMonitor<CaptchaOptions> options) : TagHelp
       return;
     }
 
-    string fullName = NameAndIdProviderCopy.GetFullHtmlFieldName(ViewContext, For.Name);
+    string fieldName = Name.Or("Captcha");
+
+    if (For != null)
+    {
+      fieldName = NameAndIdProviderCopy.GetFullHtmlFieldName(ViewContext, For.Name);
+    }
 
     output.TagName = "cap-widget";
     output.Attributes.SetAttribute("class", "cap-widget");
     output.Attributes.SetAttribute("data-cap-api-endpoint", _options.Endpoint);
-    output.Attributes.SetAttribute("data-cap-hidden-field-name", fullName);
+    output.Attributes.SetAttribute("data-cap-hidden-field-name", fieldName);
 
     string wasmFilePath =_options.Endpoint + "/cap.wasm";
     string widgetFilePath =_options.Endpoint + "/cap.widget.js";
