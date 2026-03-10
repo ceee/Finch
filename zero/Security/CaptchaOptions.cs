@@ -30,15 +30,15 @@ public class CaptchaLocalizationOptions : Dictionary<string, string>
 
   public static CaptchaLocalizationOptions German { get; } = new()
   {
-    ["initial-state"] = "Bestätige, dass du kein Bot bist",
+    ["initial-state"] = "Bestätigen, dass Sie kein Bot sind",
     ["verifying-label"] = "Wird überprüft...",
     ["solved-label"] = "Erfolgreich",
     ["error-label"] = "Fehler",
     ["troubleshooting-label"] = "Fehlerbehebung",
-    ["wasm-disabled"] = "Aktiviere WASM für eine deutlich schnellere Lösung",
-    ["verify-aria-label"] = "Klicke, um zu bestätigen, dass du ein Mensch bist",
+    ["wasm-disabled"] = "Aktivieren Sie WASM für eine deutlich schnellere Lösung",
+    ["verify-aria-label"] = "Klicken, um zu bestätigen, dass Sie ein Mensch bist",
     ["verifying-aria-label"] = "Wird überprüft, bitte warten",
     ["verified-aria-label"] = "Bestätigt",
-    ["error-aria-label"] = "Ein Fehler ist aufgetreten, bitte versuche es erneut",
+    ["error-aria-label"] = "Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut",
   };
 }
