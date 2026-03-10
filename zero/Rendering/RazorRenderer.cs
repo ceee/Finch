@@ -154,24 +154,26 @@ public class RazorRenderer : IRazorRenderer, IDisposable
   /// <summary>
   /// Renders a razor view to a string
   /// </summary>
-  public async Task<string> ViewAsync(string view, object model = null)
+  public async Task<string> ViewAsync(string view, object model = null, Action<ViewContext> onBeforeRender = null)
   {
-    return await ViewAsync(BuildActionContext(), view, model);
+    return await ViewAsync(BuildActionContext(), view, model, onBeforeRender);
   }
 
 
   /// <summary>
   /// Renders a razor view to a string
   /// </summary>
-  public async Task<string> ViewAsync(ActionContext context, string view, object model = null)
+  public async Task<string> ViewAsync(ActionContext context, string view, object model = null, Action<ViewContext> onBeforeRender = null)
   {
     IView viewResult = FindView(context, view);
 
-    using StringWriter stringWriter = new();
+    await using StringWriter stringWriter = new();
 
     ViewContext viewContext = BuildViewContext(context, stringWriter, viewResult);
     viewContext.RouteData = context.RouteData;
     viewContext.ViewData.Model = model;
+
+    onBeforeRender?.Invoke(viewContext);
 
     await viewResult.RenderAsync(viewContext);
     await stringWriter.FlushAsync();
@@ -336,10 +338,10 @@ public interface IRazorRenderer
   /// <summary>
   /// Renders a razor view to a string
   /// </summary>
-  Task<string> ViewAsync(string view, object model = null);
+  Task<string> ViewAsync(string view, object model = null, Action<ViewContext> onBeforeRender = null);
 
   /// <summary>
   /// Renders a razor view to a string
   /// </summary>
-  Task<string> ViewAsync(ActionContext context, string view, object model = null);
+  Task<string> ViewAsync(ActionContext context, string view, object model = null, Action<ViewContext> onBeforeRender = null);
 }
