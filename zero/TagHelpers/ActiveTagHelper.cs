@@ -1,79 +1,53 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace zero.TagHelpers;
 
 [HtmlTargetElement(Attributes = "app-active")]
-public class ActiveTagHelper : TagHelper
+public class ActiveTagHelper(IHttpContextAccessor contextAccessor) : TagHelper
 {
-  private readonly IHttpContextAccessor _httpContextAccessor;
+  [HtmlAttributeName("href")]
+  public string Href { get; set; }
 
-  [HtmlAttributeName("class")]
-  public string Classes { get; set; }
-
-  public override int Order => 100;
-
-
-  public ActiveTagHelper(IHttpContextAccessor contextAccessor)
-  {
-    _httpContextAccessor = contextAccessor;
-  }
+  public override int Order { get; } = 100;
 
 
   public override void Process(TagHelperContext context, TagHelperOutput output)
   {
     output.Attributes.RemoveAll("app-active");
 
-    output.Attributes.TryGetAttribute("Href", out TagHelperAttribute _href);
-    string href = _href?.Value?.ToString() ?? string.Empty;
-
-    HashSet<string> classes = Classes?.Split(" ").ToHashSet() ?? new HashSet<string>();
-
-    if (_httpContextAccessor.HttpContext.IsPartOfUrl(href))
+    if (contextAccessor.HttpContext.IsPartOfUrl(Href))
     {
-      classes.Add("is-active");
+      output.AddClass("is-active", HtmlEncoder.Default);
     }
-    if (_httpContextAccessor.HttpContext.IsUrl(href))
+    if (contextAccessor.HttpContext.IsUrl(Href))
     {
-      classes.Add("is-active-exact");
+      output.AddClass("is-active-exact", HtmlEncoder.Default);
     }
 
-    output.Attributes.SetAttribute("class", string.Join(" ", classes));
+    output.Attributes.SetAttribute("href", Href);
   }
 }
 
 
 [HtmlTargetElement(Attributes = "app-active-exact")]
-public class ActiveExactTagHelper : TagHelper
+public class ActiveExactTagHelper(IHttpContextAccessor contextAccessor) : TagHelper
 {
-  private readonly IHttpContextAccessor _httpContextAccessor;
-
-  [HtmlAttributeName("class")]
-  public string Classes { get; set; }
-
-  public override int Order => 100;
-
-
-  public ActiveExactTagHelper(IHttpContextAccessor contextAccessor)
-  {
-    _httpContextAccessor = contextAccessor;
-  }
+  [HtmlAttributeName("href")]
+  public string Href { get; set; }
 
 
   public override void Process(TagHelperContext context, TagHelperOutput output)
   {
     output.Attributes.RemoveAll("app-active-exact");
 
-    output.Attributes.TryGetAttribute("Href", out TagHelperAttribute _href);
-    string href = _href?.Value?.ToString() ?? string.Empty;
-
-    HashSet<string> classes = Classes?.Split(" ").ToHashSet() ?? new HashSet<string>();
-
-    if (_httpContextAccessor.HttpContext.IsUrl(href))
+    if (contextAccessor.HttpContext.IsUrl(Href))
     {
-      classes.Add("is-active-exact");
+      output.AddClass("is-active-exact", HtmlEncoder.Default);
     }
 
-    output.Attributes.SetAttribute("class", string.Join(" ", classes));
+    output.Attributes.SetAttribute("href", Href);
   }
 }

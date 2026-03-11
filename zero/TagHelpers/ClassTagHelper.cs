@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace zero.TagHelpers;
 
-[HtmlTargetElement(Attributes = PREFIX + "*")]
+[HtmlTargetElement(Attributes = Prefix + "*")]
 public class ClassTagHelper : TagHelper
-{ 
-  private const string PREFIX = "app-class:"; 
-
-  [HtmlAttributeName("class")]
-  public string Classes { get; set; }
+{
+  private const string Prefix = "app-class:";
 
   private IDictionary<string, bool> _classValues;
 
-  [HtmlAttributeName("", DictionaryAttributePrefix = PREFIX)]
+  [HtmlAttributeName("", DictionaryAttributePrefix = Prefix)]
   public IDictionary<string, bool> ClassValues
   {
     get => _classValues ??= new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
@@ -22,17 +21,9 @@ public class ClassTagHelper : TagHelper
 
   public override void Process(TagHelperContext context, TagHelperOutput output)
   {
-    var items = _classValues.Where(e => e.Value).Select(e => e.Key).ToList();
-
-    if (!String.IsNullOrEmpty(Classes))
+    foreach (KeyValuePair<string, bool> item in _classValues.Where(e => e.Value))
     {
-      items.Insert(0, Classes);
-    }
-
-    if (items.Any())
-    {
-      var classes = String.Join(" ", items.ToArray());
-      output.Attributes.Add("class", classes);
+      output.AddClass(item.Key, HtmlEncoder.Default);
     }
   }
 }

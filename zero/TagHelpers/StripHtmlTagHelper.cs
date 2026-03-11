@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Net;
-using System.Text.RegularExpressions;
+using static System.Text.RegularExpressions.Regex;
 
 namespace zero.TagHelpers;
 
@@ -18,13 +18,13 @@ public class StripHtmlTagHelper : TagHelper
     output.TagName = string.Empty;
     string text = string.Empty;
 
-    if (!String.IsNullOrWhiteSpace(Text))
+    if (!string.IsNullOrWhiteSpace(Text))
     {
-      text = WebUtility.HtmlDecode(Regex.Replace(Text, "<[^>]*(>|$)", string.Empty).Trim());
+      text = WebUtility.HtmlDecode(Replace(Text, "<[^>]*(>|$)", string.Empty).Trim());
 
       if (MaxLength > 0 && text.Length > MaxLength)
       {
-        text = text.Substring(0, MaxLength) + "...";
+        text = string.Concat(text.AsSpan(0, MaxLength), "...");
       }
     }
 
