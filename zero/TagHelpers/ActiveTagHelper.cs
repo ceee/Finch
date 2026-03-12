@@ -26,8 +26,6 @@ public class ActiveTagHelper(IHttpContextAccessor contextAccessor) : TagHelper
     {
       output.AddClass("is-active-exact", HtmlEncoder.Default);
     }
-
-    output.Attributes.SetAttribute("href", Href);
   }
 }
 
@@ -47,7 +45,5 @@ public class ActiveExactTagHelper(IHttpContextAccessor contextAccessor) : TagHel
     {
       output.AddClass("is-active-exact", HtmlEncoder.Default);
     }
-
-    output.Attributes.SetAttribute("href", Href);
   }
 }
