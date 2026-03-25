@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using zero.Logging;
 using zero.Mails;
 using zero.Metadata;
 using zero.Mvc;
@@ -52,7 +51,8 @@ public class ZeroBuilder
 
     // adds and discovers additional and built-in assemblies
     new AssemblyDiscovery(Mvc).Execute(_startupOptions.AssemblyDiscoveryRules);
-    
+
+    Modules.Add<ZeroLoggingModule>();
     Modules.Add<ZeroCommunicationModule>();
     Modules.Add<ZeroMvcModule>();
     Modules.Add<ZeroConfigurationModule>();
