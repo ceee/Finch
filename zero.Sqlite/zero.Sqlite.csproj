@@ -3,15 +3,15 @@
     <PropertyGroup>
         <PackageId>zero.Sqlite</PackageId>
         <Version>1.0.0</Version>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
         <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
         <RootNamespace>zero.Sqlite</RootNamespace>
         <DebugType>embedded</DebugType>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="11.11.0" />
-        <PackageReference Include="ServiceStack.OrmLite.Sqlite" Version="8.8.0" />
+        <PackageReference Include="FluentValidation" Version="12.1.1" />
+        <PackageReference Include="ServiceStack.OrmLite.Sqlite" Version="10.0.6" />
     </ItemGroup>
 
     <ItemGroup>
