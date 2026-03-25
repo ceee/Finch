@@ -17,10 +17,6 @@ public class ZeroLoggingModule : ZeroModule
       IConfigurationSection seqConfig = configuration.GetSection("Zero:Seq");
       ZeroSeqOptions seqOptions = seqConfig.Get<ZeroSeqOptions>();
 
-      Console.WriteLine(seqOptions.ApiKey);
-      Console.WriteLine(seqOptions.ServerUrl);
-      Console.WriteLine("use seq: " + seqConfig.Exists());
-
       // default level
       builder.SetMinimumLevel(seqOptions.MinimumLevel);
 
