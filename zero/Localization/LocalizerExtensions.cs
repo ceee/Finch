@@ -22,4 +22,14 @@ public static class LocalizerExtensions
     builder.SetHtmlContent(value);
     return builder;
   }
+
+
+  public static IHtmlContent HtmlEntities(this ILocalizer localizer, string key, Dictionary<string, string> tokens = null)
+  {
+    string value = localizer.Text(key, tokens);
+
+    HtmlContentBuilder builder = new();
+    builder.SetHtmlContent(value.ToHtmlEntities());
+    return builder;
+  }
 }

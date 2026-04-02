@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Html;
 
 namespace zero.Extensions;
 
@@ -270,5 +271,22 @@ public static class StringExtensions
 
       yield return text.Substring(i, groupSize);
     }
+  }
+
+
+  public static IHtmlContent ToHtmlEntities(this string text)
+  {
+    StringBuilder sb = new();
+
+    foreach (char ch in text)
+    {
+      sb.Append("&#");
+      sb.Append((int)ch);
+      sb.Append(';');
+    }
+
+    HtmlContentBuilder builder = new();
+    builder.SetHtmlContent(sb.ToString());
+    return builder;
   }
 }
