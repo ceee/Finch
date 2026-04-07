@@ -36,6 +36,7 @@ public class ViteScriptTagHelper(IWebHostEnvironment env, IFinchOptions options)
     string fullPath = $"{request.Scheme}://{request.Host.Host}:{viteProxyPort}/{Src}";
 
     output.TagName = "script";
+    output.TagMode = TagMode.StartTagAndEndTag;
     output.Attributes.SetAttribute("type", "module");
     output.Attributes.SetAttribute("defer", string.Empty);
     output.Attributes.SetAttribute("crossorigin", string.Empty);
