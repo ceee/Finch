@@ -260,20 +260,3 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
-
-# Media folder + app_data
-App_Data/
-**/wwwroot/Media/
-**/wwwroot/Uploads/
-Temp/
-**/Assets/**/app.*
-**/Assets/**/setup.*
-**/Assets/**/*.js
-deps/*.dll
-zero.Commerce/
-zero.Stories/
-zero.Forms/
-zero.Backoffice.UI/package.json
-zero.Backoffice.UI/package-lock.json
-zero.Backoffice.UI/app/core/plugins.js
-zero.Backoffice.UI/dist
