@@ -9,7 +9,7 @@ public class RavenOptions
 
   public string Database { get; set; }
 
-  public string CollectionPrefix { get; set; } = String.Empty;
+  public string CollectionPrefix { get; set; } = string.Empty;
 
   public int CacheInMinutes { get; set; } = 60;
 

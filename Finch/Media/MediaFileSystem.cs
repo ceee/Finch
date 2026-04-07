@@ -7,7 +7,7 @@ public class MediaFileSystem : PhysicalFileSystem, IMediaFileSystem
 
   public MediaFileSystem(string root, string publicPathPrefix) : base(root)
   {
-    PublicPathPrefix = (publicPathPrefix ?? String.Empty).EnsureEndsWith('/');
+    PublicPathPrefix = (publicPathPrefix ?? string.Empty).EnsureEndsWith('/');
   }
 
 

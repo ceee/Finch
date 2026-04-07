@@ -33,7 +33,7 @@ public class MetadataService : IMetadataService
     // generate robots
     bool noIndex = options.NoIndex ?? false;
     bool noFollow = options.NoFollow ?? false;
-    model.Robots = String.Format("{0},{1}", noIndex ? "noindex" : "index", noFollow ? "nofollow" : "follow");
+    model.Robots = string.Format("{0},{1}", noIndex ? "noindex" : "index", noFollow ? "nofollow" : "follow");
 
     // title
     HashSet<string> fragments = options.TitleFragments.Where(x => !x.IsNullOrWhiteSpace()).Reverse().ToHashSet();

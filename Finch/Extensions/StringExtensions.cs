@@ -17,7 +17,7 @@ public static class StringExtensions
 
   public static string FullTrim(this string value)
   {
-    if (String.IsNullOrEmpty(value))
+    if (string.IsNullOrEmpty(value))
     {
       return value;
     }
@@ -59,14 +59,14 @@ public static class StringExtensions
 
   public static string Or(this string value, string fallback)
   {
-    return String.IsNullOrWhiteSpace(value) ? fallback : value;
+    return string.IsNullOrWhiteSpace(value) ? fallback : value;
   }
 
 
   public static string TrimEnd(this string value, string forRemoving)
   {
-    if (String.IsNullOrEmpty(value)) return value;
-    if (String.IsNullOrEmpty(forRemoving)) return value;
+    if (string.IsNullOrEmpty(value)) return value;
+    if (string.IsNullOrEmpty(forRemoving)) return value;
 
     while (value.EndsWith(forRemoving, StringComparison.InvariantCultureIgnoreCase))
     {
@@ -78,8 +78,8 @@ public static class StringExtensions
 
   public static string TrimStart(this string value, string forRemoving)
   {
-    if (String.IsNullOrEmpty(value)) return value;
-    if (String.IsNullOrEmpty(forRemoving)) return value;
+    if (string.IsNullOrEmpty(value)) return value;
+    if (string.IsNullOrEmpty(forRemoving)) return value;
 
     while (value.StartsWith(forRemoving, StringComparison.InvariantCultureIgnoreCase))
     {
@@ -91,42 +91,42 @@ public static class StringExtensions
 
   public static bool HasValue(this string input)
   {
-    return !String.IsNullOrWhiteSpace(input);
+    return !string.IsNullOrWhiteSpace(input);
   }
 
 
   public static bool IsNullOrEmpty(this string input)
   {
-    return String.IsNullOrEmpty(input);
+    return string.IsNullOrEmpty(input);
   }
 
 
   public static bool IsNullOrWhiteSpace(this string input)
   {
-    return String.IsNullOrWhiteSpace(input);
+    return string.IsNullOrWhiteSpace(input);
   }
 
   public static string ToCamelCase(this string input)
   {
-    if (!String.IsNullOrEmpty(input) && input.Length > 1)
+    if (!string.IsNullOrEmpty(input) && input.Length > 1)
     {
-      return Char.ToLowerInvariant(input[0]) + input.Substring(1);
+      return char.ToLowerInvariant(input[0]) + input.Substring(1);
     }
     return input;
   }
 
   public static string ToPascalCase(this string input)
   {
-    if (!String.IsNullOrEmpty(input) && input.Length > 1)
+    if (!string.IsNullOrEmpty(input) && input.Length > 1)
     {
-      return Char.ToUpperInvariant(input[0]) + input.Substring(1);
+      return char.ToUpperInvariant(input[0]) + input.Substring(1);
     }
     return input;
   }
 
   public static string ToCamelCaseId(this string input)
   {
-    if (String.IsNullOrEmpty(input))
+    if (string.IsNullOrEmpty(input))
     {
       return input;
     }
@@ -138,13 +138,13 @@ public static class StringExtensions
 
     string[] parts = input.Split('.');
 
-    return String.Join(".", parts.Select(x => x.ToCamelCase()));
+    return string.Join(".", parts.Select(x => x.ToCamelCase()));
   }
 
 
   public static string ToPascalCaseId(this string input)
   {
-    if (String.IsNullOrEmpty(input))
+    if (string.IsNullOrEmpty(input))
     {
       return input;
     }
@@ -156,18 +156,18 @@ public static class StringExtensions
 
     string[] parts = input.Split('.');
 
-    return String.Join(".", parts.Select(x => x.ToPascalCase()));
+    return string.Join(".", parts.Select(x => x.ToPascalCase()));
   }
 
 
   public static string RemoveNewLines(this string input)
   {
-    if (String.IsNullOrEmpty(input))
+    if (string.IsNullOrEmpty(input))
     {
       return input;
     }
 
-    return newLineCharsRegex.Replace(input, String.Empty).Trim();
+    return newLineCharsRegex.Replace(input, string.Empty).Trim();
   }
 
 
@@ -178,7 +178,7 @@ public static class StringExtensions
       throw new ArgumentOutOfRangeException("maxLength", "Has to be at least 4 characters long");
     }
 
-    if (String.IsNullOrEmpty(input) || input.Length <= maxLength)
+    if (string.IsNullOrEmpty(input) || input.Length <= maxLength)
     {
       return input;
     }
