@@ -2,6 +2,7 @@
 using System.Net.Mail;
 using System.Reflection;
 using System.Text;
+using Microsoft.Extensions.Options;
 
 namespace Finch.Mails;
 
@@ -17,16 +18,16 @@ public class MailProvider : IMailProvider
 
   protected MailOptions Options { get; set; }
 
-  private Encoding encoding = Encoding.UTF8;
+  private readonly Encoding _encoding = Encoding.UTF8;
 
 
-  public MailProvider(IFinchContext finch, ILogger<IMailProvider> logger, IMailDispatcher mailSender, IRazorRenderer renderer)
+  public MailProvider(IFinchContext finch, IOptionsMonitor<MailOptions> mailOptions, ILogger<IMailProvider> logger, IMailDispatcher mailSender, IRazorRenderer renderer)
   {
-    Finch = Finch;
+    Finch = finch;
     Logger = logger;
     MailSender = mailSender;
     Renderer = renderer;
-    Options = Finch.Options.For<MailOptions>();
+    Options = mailOptions.CurrentValue;
   }
 
 
@@ -63,7 +64,7 @@ public class MailProvider : IMailProvider
   /// <inheritdoc />
   public virtual async Task<string> Prepare(Mail message)
   {
-    message.From ??= new MailAddress(Options.SenderEmail, Options.SenderName, encoding);
+    message.From ??= new MailAddress(Options.SenderEmail, Options.SenderName, _encoding);
     message.Sender ??= message.From;
 
     if (message.ReplyToList.Count < 1)
@@ -72,9 +73,9 @@ public class MailProvider : IMailProvider
     }
 
     message.Subject = TokenReplacement.Apply(message.Subject, message.Placeholders);
-    message.SubjectEncoding = encoding;
+    message.SubjectEncoding = _encoding;
     message.Body = TokenReplacement.Apply(message.Body, message.Placeholders);
-    message.BodyEncoding = encoding;
+    message.BodyEncoding = _encoding;
     message.Preheader = TokenReplacement.Apply(message.Preheader, message.Placeholders);
 
     string appName = Finch.Options.AppName.Or(Assembly.GetEntryAssembly()?.GetName().Name);
