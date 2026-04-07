@@ -1,7 +1,4 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
-
-namespace Finch.Identity;
+﻿namespace Finch.Identity;
 
 public class UserToken
 {

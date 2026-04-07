@@ -1,8 +1,4 @@
-﻿using Raven.Client.Documents.Operations;
-using Raven.Client.Documents.Queries;
-using Raven.Client;
-
-namespace Finch.Raven;
+﻿namespace Finch.Raven;
 
 public partial class RavenOperations : IRavenOperations
 {

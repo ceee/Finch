@@ -2,8 +2,6 @@
 using System.Text;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Finch.Rendering.QrCode;
 
 namespace Finch.Identity;

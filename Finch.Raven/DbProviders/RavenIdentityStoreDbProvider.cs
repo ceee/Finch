@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using Raven.Client.Documents;
 using Finch.Identity;
 
 namespace Finch.Raven;

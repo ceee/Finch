@@ -4,7 +4,6 @@ using System.Data;
 using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using ServiceStack.OrmLite;

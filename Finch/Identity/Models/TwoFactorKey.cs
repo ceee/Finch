@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Finch.Rendering.QrCode;
+﻿using Finch.Rendering.QrCode;
 
 namespace Finch.Identity;
 

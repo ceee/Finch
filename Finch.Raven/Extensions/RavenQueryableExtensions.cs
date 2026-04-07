@@ -1,7 +1,4 @@
-﻿using Raven.Client.Documents;
-using Raven.Client.Documents.Linq;
-using Raven.Client.Documents.Queries;
-using Raven.Client.Documents.Session;
+﻿using Raven.Client.Documents.Linq;
 using System.Linq.Expressions;
 
 namespace Finch.Raven;

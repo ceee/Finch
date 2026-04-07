@@ -1,10 +1,8 @@
 ﻿using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
-using Raven.Client;
 using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
 using System.Linq.Expressions;
-using System.Security.Claims;
 
 namespace Finch.Raven;
 

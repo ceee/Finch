@@ -4,10 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ServiceStack.OrmLite;
-using ServiceStack.OrmLite.Dapper;
 using Finch.Extensions;
 using Finch.Models;
-using Finch.Utils;
 
 namespace Finch.Sqlite;
 

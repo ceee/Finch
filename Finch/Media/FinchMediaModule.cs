@@ -9,8 +9,6 @@ using SixLabors.ImageSharp.Web.DependencyInjection;
 using System.IO;
 using Finch.Media.ImageSharp;
 using Finch.Media.ImageSharp.Processors;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Finch.Media;
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Finch.Identity;
 
 namespace Finch.Identity;
 

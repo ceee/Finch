@@ -1,5 +1,4 @@
-﻿using Raven.Client.Documents;
-using Raven.Client.Documents.Indexes;
+﻿using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Indexes.Spatial;
 using Raven.Client.Documents.Operations.Attachments;
 using System.Linq.Expressions;

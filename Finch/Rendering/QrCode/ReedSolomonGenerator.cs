@@ -25,8 +25,6 @@
  * IN THE SOFTWARE.
  */
 
-using System;
-using System.Collections;
 using System.Diagnostics;
 
 namespace Finch.Rendering.QrCode;

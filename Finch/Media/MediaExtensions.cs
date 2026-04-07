@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using SixLabors.ImageSharp.Metadata.Profiles.Exif;
+﻿using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using SixLabors.ImageSharp.Web;
 using System.Numerics;
 

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Finch.Identity;
 
 namespace Finch.Identity;
 

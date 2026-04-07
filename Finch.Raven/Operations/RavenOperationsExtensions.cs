@@ -1,5 +1,4 @@
-﻿using Raven.Client.Documents.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace Finch.Raven;
 
