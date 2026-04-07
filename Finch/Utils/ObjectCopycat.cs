@@ -10,7 +10,7 @@ public class ObjectCopycat
 
   static readonly Type STRING_TYPE = typeof(string);
 
-  static ConcurrentDictionary<string, IEnumerable<PropertyInfo>> PublicPropertiesPerType { get; set; } = new();
+  static ConcurrentDictionary<string, IEnumerable<PropertyInfo>> PublicPropertiesPerType { get; } = new();
 
 
   public static T Clone<T>(T obj)

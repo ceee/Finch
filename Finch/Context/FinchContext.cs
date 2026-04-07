@@ -8,9 +8,9 @@ public class FinchContext : IFinchContext
   /// <inheritdoc />
   public IFinchOptions Options { get; protected set; }
   /// <inheritdoc />
-  public IServiceProvider Services { get; private set; }
+  public IServiceProvider Services { get; }
 
-  protected ICultureResolver CultureResolver { get; private set; }
+  protected ICultureResolver CultureResolver { get; }
 
   protected ILogger<FinchContext> Logger { get; private set; }
 
@@ -18,7 +18,7 @@ public class FinchContext : IFinchContext
 
   protected IHttpContextAccessor HttpContextAccessor { get; private set; }
 
-  protected IPrimitiveTypeCollection ValueCollection { get; private set; }
+  protected IPrimitiveTypeCollection ValueCollection { get; }
 
 
   bool _resolved = false;

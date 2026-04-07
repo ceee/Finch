@@ -10,9 +10,9 @@ public class CultureResolver : ICultureResolver
   /// <inheritdoc />
   public CultureInfo Current { get; protected set; }
 
-  protected ILogger<CultureResolver> Logger { get; private set; }
+  protected ILogger<CultureResolver> Logger { get; }
 
-  protected IMessageAggregator MessageAggregator { get; private set; }
+  protected IMessageAggregator MessageAggregator { get; }
 
 
   public CultureResolver(ILogger<CultureResolver> logger, IMessageAggregator messageAggregator)

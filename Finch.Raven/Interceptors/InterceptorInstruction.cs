@@ -6,27 +6,27 @@ public class InterceptorInstruction<T> where T : FinchIdEntity, new()
 {
   public Guid Guid { get; private set; }
 
-  public InterceptorRunType Runtype { get; private set; }
+  public InterceptorRunType Runtype { get; }
 
-  public T Model { get; private set; }
+  public T Model { get; }
 
-  public T PreviousModel { get; private set; }
+  public T PreviousModel { get; }
 
-  public Type ModelType { get; private set; }
+  public Type ModelType { get; }
 
   public Result<T> Result { get; private set; }
 
-  protected IFinchContext Context { get; private set; }
+  protected IFinchContext Context { get; }
   
-  protected IFinchStore Store { get; private set; }
+  protected IFinchStore Store { get; }
 
-  protected Lazy<IEnumerable<IInterceptor>> Interceptors { get; private set; }
+  protected Lazy<IEnumerable<IInterceptor>> Interceptors { get; }
 
-  protected Dictionary<IInterceptor, InterceptorParameters> InterceptorCache { get; private set; } = new();
+  protected Dictionary<IInterceptor, InterceptorParameters> InterceptorCache { get; } = new();
 
-  protected IInterceptors InterceptorHandler { get; private set; }
+  protected IInterceptors InterceptorHandler { get; }
 
-  protected ILogger<IInterceptor> Logger { get; private set; }
+  protected ILogger<IInterceptor> Logger { get; }
 
   protected Func<IInterceptor, bool> InterceptorFilter { get; private set; } = x => true;
 

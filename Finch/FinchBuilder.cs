@@ -20,7 +20,7 @@ public class FinchBuilder
 
   public virtual IMvcBuilder Mvc { get; }
 
-  internal static FinchModuleCollection Modules { get; private set; } = new();
+  internal static FinchModuleCollection Modules { get; } = new();
 
   readonly IConfiguration _configuration;
   readonly IFinchStartupOptions _startupOptions;

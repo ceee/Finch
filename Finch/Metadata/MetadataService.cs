@@ -8,7 +8,7 @@ public class MetadataService : IMetadataService
 {
   protected ILogger<MetadataService> Logger { get; private set; }
 
-  protected ILocalizer Localizer { get; private set; }
+  protected ILocalizer Localizer { get; }
 
 
   public MetadataService(ILogger<MetadataService> logger, ILocalizer localizer)

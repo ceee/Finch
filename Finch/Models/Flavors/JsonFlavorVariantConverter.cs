@@ -5,7 +5,7 @@ namespace Finch.Models;
 
 internal class JsonFlavorVariantConverter<T> : JsonDiscriminatorConverter<T> where T : class, ISupportsFlavors, new()
 {
-  protected FlavorProvider Provider { get; private set; }
+  protected FlavorProvider Provider { get; }
 
   Type _factoryType = typeof(JsonFlavorVariantConverterFactory);
 

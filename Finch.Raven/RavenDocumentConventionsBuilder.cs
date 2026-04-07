@@ -8,13 +8,13 @@ namespace Finch.Raven;
 
 public class RavenDocumentConventionsBuilder : IRavenDocumentConventionsBuilder
 {
-  protected HashSet<Type> PolymorphTypes { get; private set; } = new();
+  protected HashSet<Type> PolymorphTypes { get; } = new();
 
   protected Type AcceptsFinchConventionsType { get; set; } = typeof(ISupportsDbConventions);
 
   protected char IdentityPartsSeparator { get; set; } = '.';
 
-  protected IFinchOptions Options { get; private set; }
+  protected IFinchOptions Options { get; }
 
   protected static ConcurrentDictionary<Type, string> CachedTypeCollectionNameMap = new();
 

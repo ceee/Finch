@@ -19,15 +19,15 @@ public partial class DbOperations : IDbOperations
 {
   protected IFinchContext Context { get; private set; }
 
-  protected FlavorOptions Flavors { get; private set; }
+  protected FlavorOptions Flavors { get; }
 
-  protected IServiceProvider Services { get; private set; }
+  protected IServiceProvider Services { get; }
 
-  protected IDbConnection Db { get; private set; }
+  protected IDbConnection Db { get; }
 
-  protected ILogger<IDbOperations> Logger { get; private set; }
+  protected ILogger<IDbOperations> Logger { get; }
 
-  protected IEntityModifiedHandler EntityModifiedHandler { get; private set; }
+  protected IEntityModifiedHandler EntityModifiedHandler { get; }
 
   
   public DbOperations(StoreContext context, IDbConnection db, ILogger<IDbOperations> logger, IHandlerHolder handler)

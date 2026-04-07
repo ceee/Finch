@@ -6,9 +6,9 @@ namespace Finch.Localization;
 
 public abstract class Localizer : ILocalizer
 {
-  protected ConcurrentDictionary<string, string> Cache { get; private set; } = new();
+  protected ConcurrentDictionary<string, string> Cache { get; } = new();
 
-  protected ICultureResolver CultureResolver { get; private set; }
+  protected ICultureResolver CultureResolver { get; }
 
   protected string LanguageCode { get; set; }
 

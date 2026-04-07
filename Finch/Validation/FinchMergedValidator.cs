@@ -6,7 +6,7 @@ namespace Finch.Validation;
 
 public class FinchMergedValidator<T> : IFinchMergedValidator<T>
 {
-  protected IEnumerable<IValidator<T>> Validators { get; private set; }
+  protected IEnumerable<IValidator<T>> Validators { get; }
 
   ConcurrentDictionary<Type, IEnumerable<IValidator<T>>> TypeCache = new();
 

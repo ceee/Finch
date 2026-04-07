@@ -8,7 +8,7 @@ namespace Finch.Mails;
 
 public class PostmarkDispatcher : IMailDispatcher
 {
-  protected Queue<Mail> Queue { get; private set; } = new();
+  protected Queue<Mail> Queue { get; } = new();
 
   protected PostmarkClient Postmark { get; set; }
 

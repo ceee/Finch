@@ -21,7 +21,7 @@ public class FinchOptions : IFinchOptions
 
   internal IServiceProvider ServiceProvider { get; set; }
 
-  protected ConcurrentDictionary<Type, object> OptionsCache { get; private set; } = new();
+  protected ConcurrentDictionary<Type, object> OptionsCache { get; } = new();
 
 
   /// <inheritdoc />

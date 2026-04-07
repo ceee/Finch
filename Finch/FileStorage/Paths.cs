@@ -25,7 +25,7 @@ public class Paths : IPaths
 
   const char REPLACEMENT_CHAR = '-';
 
-  FileExtensionContentTypeProvider FileExtensionContentTypeProvider { get; set; }
+  FileExtensionContentTypeProvider FileExtensionContentTypeProvider { get; }
 
   static readonly Dictionary<char, string> Replacements = new()
   {

@@ -9,7 +9,7 @@ namespace Finch.Mails;
 /// </summary>
 public class LoggerMailDispatcher : IMailDispatcher
 {
-  protected Queue<Mail> Queue { get; private set; } = new Queue<Mail>();
+  protected Queue<Mail> Queue { get; } = new Queue<Mail>();
 
   protected ILogger<LoggerMailDispatcher> Logger { get; set; }
 

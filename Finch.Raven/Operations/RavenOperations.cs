@@ -15,13 +15,13 @@ public partial class RavenOperations : IRavenOperations
 
   protected IFinchContext Context { get; private set; }
 
-  protected IInterceptors Interceptors { get; private set; }
+  protected IInterceptors Interceptors { get; }
 
-  protected FlavorOptions Flavors { get; private set; }
+  protected FlavorOptions Flavors { get; }
 
-  protected IServiceProvider Services { get; private set; }
+  protected IServiceProvider Services { get; }
   
-  protected  IFinchStore Store { get; private set; }
+  protected  IFinchStore Store { get; }
 
   protected StoreInterceptorBlocker InterceptorBlocker { get; private set; }
 

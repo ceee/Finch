@@ -10,7 +10,7 @@ public class FinchTokenProvider : IFinchTokenProvider
 
   readonly RandomNumberGenerator randonNumberGenerator;
 
-  protected IFinchStore Store { get; private set; }
+  protected IFinchStore Store { get; }
     
 
   public FinchTokenProvider(IFinchStore store)

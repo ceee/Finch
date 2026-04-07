@@ -4,9 +4,9 @@ namespace Finch.Configuration;
 
 public class FinchStartupOptions : IFinchStartupOptions
 {
-  public IList<IAssemblyDiscoveryRule> AssemblyDiscoveryRules { get; private set; } = new List<IAssemblyDiscoveryRule>();
+  public IList<IAssemblyDiscoveryRule> AssemblyDiscoveryRules { get; } = new List<IAssemblyDiscoveryRule>();
 
-  public IMvcBuilder Mvc { get; private set; }
+  public IMvcBuilder Mvc { get; }
 
 
   public FinchStartupOptions(IMvcBuilder mvc)

@@ -4,7 +4,7 @@ namespace Finch.Assemblies;
 
 public class AssemblyDiscoveryContext
 {
-  public Assembly EntryAssembly { get; private set; }
+  public Assembly EntryAssembly { get; }
 
   public string EntryAssemblyName { get; private set; }
 

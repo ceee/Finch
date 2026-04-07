@@ -15,7 +15,7 @@ public class FinchStore : IFinchStore
 
 
   /// <inheritdoc />
-  public IDocumentStore Raven { get; private set; }
+  public IDocumentStore Raven { get; }
 
 
   /// <inheritdoc />

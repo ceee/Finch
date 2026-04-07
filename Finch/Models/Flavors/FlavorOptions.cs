@@ -4,7 +4,7 @@ namespace Finch.Models;
 
 public class FlavorOptions
 {
-  public ConcurrentDictionary<Type, FlavorProvider> Providers { get; private set; } = new();
+  public ConcurrentDictionary<Type, FlavorProvider> Providers { get; } = new();
 
   public void Configure<TEntity>(Action<FlavorProviderOptions<TEntity>> configure) where TEntity : class, ISupportsFlavors, new()
   {

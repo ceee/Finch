@@ -5,9 +5,9 @@ namespace Finch.Routing;
 
 public class RequestUrlResolver : IRequestUrlResolver
 {
-  protected IHttpContextAccessor HttpContextAccessor { get; private set; }
+  protected IHttpContextAccessor HttpContextAccessor { get; }
 
-  protected ILogger<RequestUrlResolver> Logger { get; private set; }
+  protected ILogger<RequestUrlResolver> Logger { get; }
 
   static string[] Protocols = new[] { "http://", "https://", "ftp://", "ftps://", "sftp://", "udp://" };
 
