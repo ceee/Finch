@@ -7,17 +7,17 @@ public class LogLevelOverrides : Dictionary<string, LogLevel>
 {
   public LogLevelOverrides()//IHostEnvironment env)
   {
-    this["finch"] = LogLevel.Debug;
+    this["Finch"] = LogLevel.Debug;
     this["Finch.Routing"] = LogLevel.Debug;
 
     // if (env.IsDevelopment())
     // {
-    //   this["finch"] = LogLevel.Debug;
+    //   this["Finch"] = LogLevel.Debug;
     //   this["Finch.Routing"] = LogLevel.Debug;
     // }
     // else
     // {
-    //   this["finch"] = LogLevel.Debug;
+    //   this["Finch"] = LogLevel.Debug;
     // }
 
     this["SixLabors"] = LogLevel.Warning;

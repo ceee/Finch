@@ -9,6 +9,8 @@ using SixLabors.ImageSharp.Web.DependencyInjection;
 using System.IO;
 using Finch.Media.ImageSharp;
 using Finch.Media.ImageSharp.Processors;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Finch.Media;
 
@@ -27,8 +29,8 @@ internal class FinchMediaModule : FinchModule
 
     services.AddOptions<PhysicalFileSystemCacheOptions>().Configure(opts =>
     {
-      opts.CacheRootPath = "~/";
-      opts.CacheFolder = "cache";
+      opts.CacheRootPath = Path.GetTempPath().EnsureEndsWith('/');
+      opts.CacheFolder = ".imagesharpcache";
     }).Bind(configuration.GetSection("Finch:Media:ImageSharp:Cache"));
     
     //configuration.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "Config/imaging.json"), true, true);
@@ -51,8 +53,8 @@ internal class FinchMediaModule : FinchModule
     services.AddOptions<MediaOptions>().Configure(opts =>
     {
       opts.FolderPath = "media";
-      opts.AllowedOtherFileExtensions = new() { ".pdf", ".docx", ".doc", ".svg", ".xml" };
-      opts.AllowedImageFileExtensions = new() { ".jpg", ".jpeg", ".png", ".bmp", ".webp", ".gif", ".avif" };
+      opts.AllowedOtherFileExtensions = [".pdf", ".docx", ".doc", ".svg", ".mp4", ".webm", ".avif", ".av1", ".xlsx", ".xls", ".xml"];
+      opts.AllowedImageFileExtensions = [".jpg", ".jpeg", ".png", ".bmp", ".webp", ".gif", ".avif"];
       // opts.Thumbnails = new()
       // {
       //   { "thumb", new ResizeOptions() { Size = new(100, 100), Mode = ResizeMode.Max } },

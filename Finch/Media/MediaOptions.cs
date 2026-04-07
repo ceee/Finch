@@ -37,7 +37,7 @@ public class ImagingSharpRemoteCacheOptions
 {
   public bool Enabled { get; set; } = true;
 
-  public int ExpiresInHours { get; set; } = -1;
+  public int ExpiresInHours { get; set; } = 168;
 
   public string MediaFolder { get; set; } = "/media/_remote/";
 
