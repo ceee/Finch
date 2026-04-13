@@ -2,19 +2,12 @@
 
 namespace Finch.Context
 {
-  public class FinchContextMiddleware
+  public class FinchContextMiddleware(RequestDelegate next)
   {
-    RequestDelegate _next;
-
-    public FinchContextMiddleware(RequestDelegate next)
-    {
-      _next = next;
-    }
-
     public async Task Invoke(HttpContext httpContext, IFinchContext finchContext)
     {
       await finchContext.Resolve(httpContext);
-      await _next(httpContext);
+      await next(httpContext);
     }
   }
 }

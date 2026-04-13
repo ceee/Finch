@@ -18,53 +18,52 @@ public class FinchBuilder
 {
   public virtual IServiceCollection Services { get; }
 
-  public virtual IMvcBuilder Mvc { get; }
-
   internal static FinchModuleCollection Modules { get; } = new();
 
   readonly IConfiguration _configuration;
-  readonly IFinchStartupOptions _startupOptions;
 
 
   public FinchBuilder(IServiceCollection services, IConfiguration configuration, Action<IFinchStartupOptions> setupAction)
   {
     Services = services;
-    Mvc = services.AddMvc();
     _configuration = configuration;
 
-    // create startup options
-    _startupOptions = new FinchStartupOptions(Mvc);
-    _startupOptions.AssemblyDiscoveryRules.Add(new FinchAssemblyDiscoveryRule());
-    setupAction?.Invoke(_startupOptions);
+    bool isWeb = services.Any(s => s.ServiceType.FullName == "Microsoft.AspNetCore.Hosting.IWebHostEnvironment");;
+
+    if (isWeb)
+    {
+      IMvcBuilder mvcBuilder = services.AddMvc();
+      // create startup options
+      IFinchStartupOptions startupOptions = new FinchStartupOptions(mvcBuilder);
+      startupOptions.AssemblyDiscoveryRules.Add(new FinchAssemblyDiscoveryRule());
+      setupAction?.Invoke(startupOptions);
+
+      services.AddControllers();
+      services.AddOutputCache();
+      mvcBuilder = services.AddRazorPages();
+
+      mvcBuilder.AddDataAnnotationsLocalization();
+
+      services.Configure<AntiforgeryOptions>(opts => opts.Cookie.Name = "finch.antiforgery");
+
+      // adds and discovers additional and built-in assemblies
+      new AssemblyDiscovery(mvcBuilder).Execute(startupOptions.AssemblyDiscoveryRules);
+
+      Modules.Add<FinchMvcModule>();
+    }
 
     //string appName = configuration.GetValue<string>("Finch:AppName").Or("finch-app");
     //services.AddDataProtection();.PersistKeysToRegistry()
 
-    services.AddControllers();
-    services.AddOutputCache();
-    Mvc = services.AddRazorPages();
-
-    Mvc.AddDataAnnotationsLocalization();
-
-    services.Configure<AntiforgeryOptions>(opts => opts.Cookie.Name = "finch.antiforgery");
-
-
-    // adds and discovers additional and built-in assemblies
-    new AssemblyDiscovery(Mvc).Execute(_startupOptions.AssemblyDiscoveryRules);
-
     Modules.Add<FinchLoggingModule>();
     Modules.Add<FinchCommunicationModule>();
-    Modules.Add<FinchMvcModule>();
     Modules.Add<FinchConfigurationModule>();
     Modules.Add<FinchValidationModule>();
     Modules.Add<FinchContextModule>();
     Modules.Add<FinchFileStorageModule>();
-    //Modules.Add<FinchIdentityModule>();
     Modules.Add<FinchLocalizationModule>();
     Modules.Add<FinchMailModule>();
-    //Modules.Add<FinchMapperModule>();
     Modules.Add<FinchMediaModule>();
-    //Modules.Add<FinchPageModule>();
     Modules.Add<FinchRenderingModule>();
     Modules.Add<FinchNumberModule>();
     Modules.Add<FinchRoutingModule>();

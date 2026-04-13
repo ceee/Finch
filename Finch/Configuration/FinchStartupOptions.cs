@@ -2,17 +2,11 @@
 
 namespace Finch.Configuration;
 
-public class FinchStartupOptions : IFinchStartupOptions
+public class FinchStartupOptions(IMvcBuilder mvc) : IFinchStartupOptions
 {
   public IList<IAssemblyDiscoveryRule> AssemblyDiscoveryRules { get; } = new List<IAssemblyDiscoveryRule>();
 
-  public IMvcBuilder Mvc { get; }
-
-
-  public FinchStartupOptions(IMvcBuilder mvc)
-  {
-    Mvc = mvc;
-  }
+  public IMvcBuilder Mvc { get; } = mvc;
 }
 
 public interface IFinchStartupOptions
