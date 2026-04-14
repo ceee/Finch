@@ -8,5 +8,7 @@ public class FinchMetadataModule : FinchModule
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
     services.AddScoped<IMetadataService, MetadataService>();
+    services.AddHttpClient<AnalyticsController>();
+    services.AddOptions<AnalyticsOptions>().Bind(configuration.GetSection("Finch:Analytics"));
   }
 }
