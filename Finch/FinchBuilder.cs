@@ -38,6 +38,7 @@ public class FinchBuilder
       startupOptions.AssemblyDiscoveryRules.Add(new FinchAssemblyDiscoveryRule());
       setupAction?.Invoke(startupOptions);
 
+      services.AddResponseCaching();
       services.AddControllers();
       services.AddOutputCache();
       mvcBuilder = services.AddRazorPages();

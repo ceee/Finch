@@ -15,7 +15,7 @@ public class FinchLoggingModule : FinchModule
     {
       // get seq configuration
       IConfigurationSection seqConfig = configuration.GetSection("Finch:Seq");
-      FinchSeqOptions seqOptions = seqConfig.Get<FinchSeqOptions>();
+      FinchSeqOptions seqOptions = seqConfig.Get<FinchSeqOptions>() ?? new();
 
       // default level
       builder.SetMinimumLevel(seqOptions.MinimumLevel);
@@ -27,7 +27,7 @@ public class FinchLoggingModule : FinchModule
       }
 
       // add optional seq sink
-      if (seqConfig.Exists())
+      if (seqConfig.Exists() && seqOptions.ApiKey.HasValue())
       {
         builder.AddSeq(seqOptions.ServerUrl, seqOptions.ApiKey, seqOptions.Enrichers);
       }
