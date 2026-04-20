@@ -1,4 +1,4 @@
-﻿namespace Finch.Metadata;
+﻿namespace Finch.Logging;
 
 public class AnalyticsOptions
 {

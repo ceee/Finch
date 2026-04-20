@@ -23,6 +23,7 @@ public class LogLevelOverrides : Dictionary<string, LogLevel>
     this["SixLabors"] = LogLevel.Warning;
     this["Quartz"] = LogLevel.Warning;
     this["Microsoft.AspNetCore"] = LogLevel.Warning;
+    this["System.Net.Http.HttpClient"] = LogLevel.Warning;
 
     string executingAssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
     if (executingAssemblyName != null)

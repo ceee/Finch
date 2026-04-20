@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 
-namespace Finch.Metadata;
+namespace Finch.Logging;
 
 [ApiController]
 [Route("/api/hello")]

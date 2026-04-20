@@ -11,6 +11,9 @@ public class FinchLoggingModule : FinchModule
 
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
+    services.AddHttpClient<AnalyticsController>();
+    services.AddOptions<AnalyticsOptions>().Bind(configuration.GetSection("Finch:Analytics"));
+
     services.AddLogging(builder =>
     {
       // get seq configuration
