@@ -6,7 +6,7 @@ using Finch.Metadata;
 
 namespace Finch.Mvc;
 
-public abstract class FinchPageModel : PageModel
+public class FinchPageModel : PageModel
 {
   /// <summary>
   /// Get access to the finch context for this request
