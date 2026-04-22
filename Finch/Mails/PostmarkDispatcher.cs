@@ -112,7 +112,7 @@ public class PostmarkDispatcher : IMailDispatcher
       }
 
       // overwrite for debug mode
-      if (Options.Debug || (Env != null && Env.IsDevelopment()))
+      if (Options.Debug || (Env != null && !Env.IsProduction()))
       {
         data.From = "noreply@post.swcs.pro";
 
