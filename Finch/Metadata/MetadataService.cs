@@ -1,23 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
+using Microsoft.Extensions.Hosting;
 
 namespace Finch.Metadata;
 
-public class MetadataService : IMetadataService
+public class MetadataService(ILocalizer localizer, IHostEnvironment env) : IMetadataService
 {
-  protected ILogger<MetadataService> Logger { get; private set; }
-
-  protected ILocalizer Localizer { get; }
-
-
-  public MetadataService(ILogger<MetadataService> logger, ILocalizer localizer)
-  {
-    Logger = logger;
-    Localizer = localizer;
-  }
-
-
   /// <inheritdoc />
   public virtual Metadata Generate(string pageName, MetadataOptions options)
   {
@@ -33,7 +21,13 @@ public class MetadataService : IMetadataService
     // generate robots
     bool noIndex = options.NoIndex ?? false;
     bool noFollow = options.NoFollow ?? false;
-    model.Robots = string.Format("{0},{1}", noIndex ? "noindex" : "index", noFollow ? "nofollow" : "follow");
+    // noindex+nofollow when not in production
+    if (!env.IsProduction())
+    {
+      noIndex = true;
+      noFollow = true;
+    }
+    model.Robots = $"{(noIndex ? "noindex" : "index")},{(noFollow ? "nofollow" : "follow")}";
 
     // title
     HashSet<string> fragments = options.TitleFragments.Where(x => !x.IsNullOrWhiteSpace()).Reverse().ToHashSet();
@@ -58,7 +52,7 @@ public class MetadataService : IMetadataService
 
     if (fragments.Count != 0)
     {
-      sb.Append(string.Join(options.TitleFragmentsSeparator, fragments.Select(fragment => Localizer.Maybe(fragment))));
+      sb.Append(string.Join(options.TitleFragmentsSeparator, fragments.Select(localizer.Maybe)));
       
       if (!options.HidePageName)
       {
