@@ -120,7 +120,11 @@ public class AnalyticsController : FinchController
 
       return StatusCode((int)proxyResponse.StatusCode, responseBody);
     }
-    catch (Exception ex) when(ex is not TaskCanceledException and not OperationCanceledException)
+    catch (Exception ex) when (ex is TaskCanceledException or OperationCanceledException)
+    {
+      // ignore
+    }
+    catch (Exception ex)
     {
       Logger.LogError(ex, "Failed to contact umami service");
     }
