@@ -15,6 +15,7 @@ internal class FinchConfigurationModule : FinchModule
       opts.ServiceProvider = svc;
       opts.Version = "1.0.0-alpha.1";
       opts.TokenExpiration = TimeSpan.FromHours(3);
+      opts.DataProtectionStoragePath = "../cache/dpkeys";
     }).Bind(configuration.GetSection("Finch"));
 
     services.AddTransient<IFinchOptions, FinchOptions>(factory => factory.GetService<IOptions<FinchOptions>>().Value);

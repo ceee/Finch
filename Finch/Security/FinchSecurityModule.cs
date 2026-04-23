@@ -1,8 +1,16 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.IO;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using PowCapServer;
 using PowCapServer.Abstractions;
 
@@ -19,19 +27,24 @@ internal class FinchSecurityModule : FinchModule
     services.TryAddTransient<ISerializer, DefaultSerializer>();
     services.Configure<PowCapServerOptions>(opts => opts.Default = captchaSection.Get<CaptchaOptions>() ?? new CaptchaOptions());
     services.AddOptions<CaptchaOptions>().Bind(captchaSection);
+
+    services.AddDataProtection();
+    services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(s =>
+    {
+      ILoggerFactory loggerFactory = s.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;
+      FinchOptions finchOptions = s.GetService<IOptions<FinchOptions>>().Value;
+      string contentRootPath = s.GetService<IHostEnvironment>().ContentRootPath;
+
+      return new ConfigureOptions<KeyManagementOptions>(options =>
+      {
+        string keyPath = Path.GetFullPath(Path.Combine(contentRootPath, finchOptions.DataProtectionStoragePath));
+        options.XmlRepository = new FileSystemXmlRepository(new DirectoryInfo(keyPath), loggerFactory);
+      });
+    });
   }
 
   public override void Configure(IApplicationBuilder app, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
   {
-    // if (app is WebApplication webApp)
-    // {
-    //   webApp.MapGet("/teamup/sync", async (ISchedulerFactory scheduler) =>
-    //   {
-    //     await SyncTeamUpDataJob.RunNow(scheduler);
-    //     return "done";
-    //   });
-    // }
-
     StaticCaptchaService.Configure(serviceProvider);
   }
 }

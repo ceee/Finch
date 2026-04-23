@@ -18,6 +18,9 @@ public class FinchOptions : IFinchOptions
   /// <inheritdoc />
   public TimeSpan TokenExpiration { get; set; }
 
+  /// <inheritdoc />
+  public string DataProtectionStoragePath { get; set; }
+
 
   internal IServiceProvider ServiceProvider { get; set; }
 
@@ -55,7 +58,7 @@ public interface IFinchOptions
   public string Language { get; set; }
 
   /// <summary>
-  /// Name of the app (used in logging and otehr areas)
+  /// Name of the app (used in logging and other areas)
   /// </summary>
   public string AppName { get; set; }
 
@@ -63,6 +66,11 @@ public interface IFinchOptions
   /// Expiration of a generated change token for an entity
   /// </summary>
   TimeSpan TokenExpiration { get; set; }
+
+  /// <summary>
+  /// The path to data protection key storage, when the keys are persisted to the filesystem
+  /// </summary>
+  string DataProtectionStoragePath { get; set; }
 
   /// <summary>
   /// Get typed options (proxy to IOptions<TOptions>)
