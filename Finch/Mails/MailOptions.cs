@@ -26,7 +26,9 @@ public class MailOptions
 
   public string SenderName { get; set; }
 
-  public PostmarkOptions Postmark { get; set; } = new();
+  public PostmarkOptions Postmark { get; set; }
+
+  public Scaleway.ScalewayOptions Scaleway { get; set; }
 
   public Func<Mail, string> BuildViewPath { get; set; }
 }

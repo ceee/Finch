@@ -7,35 +7,19 @@ namespace Finch.Mails;
 /// and therefore not using the SMTP channel.
 /// Implementing real mail sending is up to the consuming application.
 /// </summary>
-public class LoggerMailDispatcher : IMailDispatcher
+public class LoggerMailDispatcher(ILogger<LoggerMailDispatcher> logger) : IMailDispatcher
 {
-  protected Queue<Mail> Queue { get; } = new Queue<Mail>();
+  /// <inheritdoc />
+  public int Priority { get; } = -10;
 
-  protected ILogger<LoggerMailDispatcher> Logger { get; set; }
-
-
-  public LoggerMailDispatcher(ILogger<LoggerMailDispatcher> logger)
-  {
-    Logger = logger;
-  }
+  /// <inheritdoc />
+  public bool CanSend() => true;
 
 
   /// <inheritdoc />
-  public void Enqueue(Mail message)
+  public Task Send(Mail message, CancellationToken token = default)
   {
-    Queue.Enqueue(message);
-  }
-
-
-  /// <inheritdoc />
-  public Task Send(CancellationToken token = default)
-  {
-    while (Queue.Count > 0)
-    {
-      Mail message = Queue.Dequeue();
-      Logger.LogInformation("Mail to {to}. Subject: {subject}", message.To[0].Address, message.Subject);
-    }
-
+    logger.LogInformation("Mail to {to}. Subject: {subject}", message.To[0].Address, message.Subject);
     return Task.CompletedTask;
   }
 

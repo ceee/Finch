@@ -3,17 +3,22 @@
 public interface IMailDispatcher : IDisposable
 {
   /// <summary>
-  /// Adds a new mail message to the outgoing queue
+  /// If multiple dispatchers are available, the dispatcher with the highest priority will be used
   /// </summary>
-  void Enqueue(Mail message);
+  int Priority { get; }
 
   /// <summary>
-  /// Sends all mails which have been added to the queue previously
+  /// Whether this dispatcher is properly configured and can send mails
   /// </summary>
-  Task Send(CancellationToken token = default);
+  bool CanSend();
+
+  /// <summary>
+  /// Sends a mail message
+  /// </summary>
+  Task Send(Mail message, CancellationToken token = default);
 
   /// <summary>
   /// Whether a certain sender signature is supported by this dispatcher
   /// </summary>
-  Task<bool> IsSenderSupported(string email) => Task.FromResult(true);
+  Task<bool> IsSenderSupported(string email, CancellationToken token = default) => Task.FromResult(true);
 }

@@ -6,35 +6,25 @@ using Microsoft.Extensions.Options;
 
 namespace Finch.Mails;
 
-public class MailProvider : IMailProvider
+public class MailProvider(IFinchContext finch, IOptionsMonitor<MailOptions> mailOptions, ILogger<IMailProvider> logger, IEnumerable<IMailDispatcher> dispatchers, IRazorRenderer renderer) : IMailProvider
 {
-  protected ILogger<IMailProvider> Logger { get; set; }
+  protected ILogger<IMailProvider> Logger { get; set; } = logger;
 
-  protected IFinchContext Finch { get; set; }
+  protected IFinchContext Finch { get; set; } = finch;
 
-  protected IMailDispatcher MailSender { get; set; }
+  protected IEnumerable<IMailDispatcher> Dispatchers { get; set; } = dispatchers;
 
-  protected IRazorRenderer Renderer { get; set; }
+  protected IRazorRenderer Renderer { get; set; } = renderer;
 
-  protected MailOptions Options { get; set; }
+  protected MailOptions Options { get; set; } = mailOptions.CurrentValue;
 
   private readonly Encoding _encoding = Encoding.UTF8;
-
-
-  public MailProvider(IFinchContext finch, IOptionsMonitor<MailOptions> mailOptions, ILogger<IMailProvider> logger, IMailDispatcher mailSender, IRazorRenderer renderer)
-  {
-    Finch = finch;
-    Logger = logger;
-    MailSender = mailSender;
-    Renderer = renderer;
-    Options = mailOptions.CurrentValue;
-  }
 
 
   /// <inheritdoc />
   public virtual async Task Send(Mail message, CancellationToken token = default)
   {
-    await Send(message, MailSender, token);
+    await Send(message, GetDispatcher(), token);
   }
 
 
@@ -49,8 +39,7 @@ public class MailProvider : IMailProvider
     try
     {
       await Prepare(message);
-      dispatcher.Enqueue(message);
-      await dispatcher.Send(token);
+      await dispatcher.Send(message, token);
 
       Logger.LogInformation("Dispatched email to {recipient} (cc: {cc}, bcc: {bcc})", message.To, message.CC, message.Bcc);
     }
@@ -98,6 +87,15 @@ public class MailProvider : IMailProvider
     message.IsBodyHtml = true;
     message.IsRendered = true;
     return message.Body;
+  }
+
+
+  /// <inheritdoc />
+  protected IMailDispatcher GetDispatcher()
+  {
+    return Dispatchers
+      .OrderByDescending(x => x.Priority)
+      .FirstOrDefault(dispatcher => dispatcher.CanSend());
   }
 }
 
