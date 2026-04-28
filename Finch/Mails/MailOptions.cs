@@ -1,15 +1,10 @@
-﻿namespace Finch.Mails;
+﻿using Finch.Mails.Dispatchers.Postmark;
+using Finch.Mails.Dispatchers.Scaleway;
+
+namespace Finch.Mails;
 
 public class MailOptions
 {
-  //public string Host { get; set; }
-
-  //public int Port { get; set; }
-
-  //public string Username { get; set; }
-
-  //public string Password { get; set; }
-
   public string From { get; set; }
 
   public string FromName { get; set; }
@@ -28,7 +23,7 @@ public class MailOptions
 
   public PostmarkOptions Postmark { get; set; }
 
-  public Scaleway.ScalewayOptions Scaleway { get; set; }
+  public ScalewayOptions Scaleway { get; set; }
 
   public Func<Mail, string> BuildViewPath { get; set; }
 }

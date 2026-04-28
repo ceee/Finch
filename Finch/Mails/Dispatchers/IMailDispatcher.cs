@@ -1,4 +1,4 @@
-﻿namespace Finch.Mails;
+﻿namespace Finch.Mails.Dispatchers;
 
 public interface IMailDispatcher : IDisposable
 {

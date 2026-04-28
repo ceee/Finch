@@ -9,13 +9,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Attachment = System.Net.Mail.Attachment;
 
-namespace Finch.Mails.Scaleway;
+namespace Finch.Mails.Dispatchers.Scaleway;
 
 public class ScalewayDispatcher : IMailDispatcher
 {
   /// <inheritdoc />
   public int Priority { get; } = 3;
-  
+
   protected Queue<Mail> Queue { get; } = new();
 
   protected MailOptions Options { get; set; }

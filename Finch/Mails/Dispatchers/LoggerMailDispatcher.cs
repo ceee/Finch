@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Finch.Mails;
+namespace Finch.Mails.Dispatchers;
 
 /// <summary>
 /// Default implementation of an IMailSender which sends the mail to the attached logger

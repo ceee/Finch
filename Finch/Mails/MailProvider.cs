@@ -2,17 +2,18 @@
 using System.Net.Mail;
 using System.Reflection;
 using System.Text;
+using Finch.Mails.Dispatchers;
 using Microsoft.Extensions.Options;
 
 namespace Finch.Mails;
 
-public class MailProvider(IFinchContext finch, IOptionsMonitor<MailOptions> mailOptions, ILogger<IMailProvider> logger, IEnumerable<IMailDispatcher> dispatchers, IRazorRenderer renderer) : IMailProvider
+public class MailProvider(IFinchContext finch, IOptionsMonitor<MailOptions> mailOptions, ILogger<IMailProvider> logger, IMailDispatcherResolver dispatcherResolver, IRazorRenderer renderer) : IMailProvider
 {
   protected ILogger<IMailProvider> Logger { get; set; } = logger;
 
   protected IFinchContext Finch { get; set; } = finch;
 
-  protected IEnumerable<IMailDispatcher> Dispatchers { get; set; } = dispatchers;
+  protected IMailDispatcherResolver DispatcherResolver { get; set; } = dispatcherResolver;
 
   protected IRazorRenderer Renderer { get; set; } = renderer;
 
@@ -24,7 +25,8 @@ public class MailProvider(IFinchContext finch, IOptionsMonitor<MailOptions> mail
   /// <inheritdoc />
   public virtual async Task Send(Mail message, CancellationToken token = default)
   {
-    await Send(message, GetDispatcher(), token);
+    IMailDispatcher dispatcher = await DispatcherResolver.Resolve();
+    await Send(message, dispatcher, token);
   }
 
 
@@ -87,15 +89,6 @@ public class MailProvider(IFinchContext finch, IOptionsMonitor<MailOptions> mail
     message.IsBodyHtml = true;
     message.IsRendered = true;
     return message.Body;
-  }
-
-
-  /// <inheritdoc />
-  protected IMailDispatcher GetDispatcher()
-  {
-    return Dispatchers
-      .OrderByDescending(x => x.Priority)
-      .FirstOrDefault(dispatcher => dispatcher.CanSend());
   }
 }
 

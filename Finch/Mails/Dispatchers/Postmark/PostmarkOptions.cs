@@ -1,4 +1,4 @@
-﻿namespace Finch.Mails;
+﻿namespace Finch.Mails.Dispatchers.Postmark;
 
 public class PostmarkOptions
 {

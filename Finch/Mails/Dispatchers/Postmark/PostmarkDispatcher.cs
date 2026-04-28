@@ -4,13 +4,13 @@ using Microsoft.Extensions.Options;
 using PostmarkDotNet;
 using PostmarkDotNet.Model;
 
-namespace Finch.Mails;
+namespace Finch.Mails.Dispatchers.Postmark;
 
 public class PostmarkDispatcher : IMailDispatcher
 {
   /// <inheritdoc />
   public int Priority { get; } = 3;
-  
+
   protected PostmarkClient Postmark { get; set; }
 
   protected PostmarkAdminClient PostmarkAdmin { get; set; }

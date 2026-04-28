@@ -1,4 +1,4 @@
-﻿namespace Finch.Mails.Scaleway;
+﻿namespace Finch.Mails.Dispatchers.Scaleway;
 
 public class ScalewayResponse
 {

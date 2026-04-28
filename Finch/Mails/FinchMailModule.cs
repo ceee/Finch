@@ -1,4 +1,6 @@
-﻿using Finch.Mails.Scaleway;
+﻿using Finch.Mails.Dispatchers;
+using Finch.Mails.Dispatchers.Postmark;
+using Finch.Mails.Dispatchers.Scaleway;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +12,7 @@ internal class FinchMailModule : FinchModule
   {
     services.AddHttpClient<ScalewayDispatcher>().RemoveAllLoggers();
     services.AddScoped<IMailProvider, MailProvider>();
+    services.AddScoped<IMailDispatcherResolver, MailDispatcherResolver>();
     services.AddScoped<IMailDispatcher, LoggerMailDispatcher>();
     services.AddScoped<IMailDispatcher, PostmarkDispatcher>();
     services.AddScoped<IMailDispatcher, ScalewayDispatcher>();
