@@ -17,6 +17,14 @@ internal class FinchMediaModule : FinchModule
 {
   public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
   {
+    // automatically add imaging config file
+    // which is used for image resizing presets and media config
+    if (configuration is ConfigurationManager configurationManager)
+    {
+      configurationManager.AddJsonFile("imaging.json", true, true);
+      configurationManager.AddJsonFile("imaging.{ENVIRONMENT}.json", true, true);
+    }
+
     services.AddImageSharp()
       .SetRequestParser<PresetRequestParser>()
       .ClearProviders()
