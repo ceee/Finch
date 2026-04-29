@@ -69,6 +69,10 @@ public class AnalyticsController : FinchController
 
       return Content(response, "text/javascript");
     }
+    catch (Exception ex) when (ex is TaskCanceledException or OperationCanceledException)
+    {
+      // ignore
+    }
     catch (Exception ex)
     {
       Logger.LogError(ex, "Failed to load umami script");
