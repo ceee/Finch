@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Finch;
 
@@ -9,7 +11,12 @@ public static class ApplicationBuilderExtensions
   {
     app.UseMiddleware<FinchContextMiddleware>();
     app.UseResponseCaching();
-    app.UseOutputCache();
+
+    IHostEnvironment env = app.ApplicationServices.GetRequiredService<IHostEnvironment>();
+    if (!env.IsDevelopment())
+    {
+      app.UseOutputCache();
+    }
 
     if (app is WebApplication webApplication)
     {
