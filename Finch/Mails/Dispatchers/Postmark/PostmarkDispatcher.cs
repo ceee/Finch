@@ -107,28 +107,6 @@ public class PostmarkDispatcher : IMailDispatcher
       data.HtmlBody = message.Body;
     }
 
-    // overwrite for debug mode
-    if (Options.Debug || (Env != null && !Env.IsProduction()))
-    {
-      data.From = "noreply@post.swcs.pro";
-
-      string[] allowedTlds = ["swcs.pro", "alias.swcs.pro"];
-      string tld = data.To.TrimEnd('>').Split('@').LastOrDefault();
-
-      data.Cc = null; // "cee-maildev@gmx.at,anaheimcore@gmail.com,ceemaildev@yahoo.com";
-      data.Bcc = null;
-
-      if (!allowedTlds.Contains(tld, StringComparer.InvariantCultureIgnoreCase))
-      {
-        data.Subject = $"{data.Subject} (test; für {data.To})";
-        data.To = "maildev@alias.swcs.pro";
-      }
-      else
-      {
-        data.Subject = $"{data.Subject} (test)";
-      }
-    }
-
     // finally sends the message
     PostmarkResponse response = await Postmark.SendMessageAsync(data);
 
