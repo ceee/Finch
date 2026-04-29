@@ -9,6 +9,11 @@ public class ScalewayResponse
     public Domain[] Domains { get; set; } = [];
   }
 
+  public class SendEmail
+  {
+    public Email[] Emails { get; set; } = [];
+  }
+
   public class Domain
   {
     public string Name { get; set; }

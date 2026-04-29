@@ -8,9 +8,6 @@ namespace Finch.Mails.Dispatchers.Postmark;
 
 public class PostmarkDispatcher : IMailDispatcher
 {
-  /// <inheritdoc />
-  public int Priority { get; } = 3;
-
   protected PostmarkClient Postmark { get; set; }
 
   protected PostmarkAdminClient PostmarkAdmin { get; set; }
@@ -33,13 +30,6 @@ public class PostmarkDispatcher : IMailDispatcher
       Options = _opts;
       Postmark = new(_opts.Postmark?.ServerToken);
     });
-  }
-
-
-  /// <inheritdoc />
-  public bool CanSend()
-  {
-    return Options.Postmark != null && !Options.Postmark.ServerToken.IsNullOrEmpty();
   }
 
 

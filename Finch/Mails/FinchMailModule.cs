@@ -12,10 +12,10 @@ internal class FinchMailModule : FinchModule
   {
     services.AddHttpClient<ScalewayDispatcher>().RemoveAllLoggers();
     services.AddScoped<IMailProvider, MailProvider>();
-    services.AddScoped<IMailDispatcherResolver, MailDispatcherResolver>();
+
+    // use logger mail dispatcher as default implementation
+    // to use other dispatchers .AddMailDispatcher() should be used
     services.AddScoped<IMailDispatcher, LoggerMailDispatcher>();
-    services.AddScoped<IMailDispatcher, PostmarkDispatcher>();
-    services.AddScoped<IMailDispatcher, ScalewayDispatcher>();
 
     services.AddOptions<MailOptions>().Bind(configuration.GetSection("Finch:Mails")).Configure(opts =>
     {

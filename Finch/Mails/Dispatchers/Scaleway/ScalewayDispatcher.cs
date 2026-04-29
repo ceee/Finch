@@ -13,9 +13,6 @@ namespace Finch.Mails.Dispatchers.Scaleway;
 
 public class ScalewayDispatcher : IMailDispatcher
 {
-  /// <inheritdoc />
-  public int Priority { get; } = 3;
-
   protected Queue<Mail> Queue { get; } = new();
 
   protected MailOptions Options { get; set; }
@@ -42,13 +39,6 @@ public class ScalewayDispatcher : IMailDispatcher
     Logger = logger;
 
     monitor.OnChange(opts => Options = opts);
-  }
-
-
-  /// <inheritdoc />
-  public bool CanSend()
-  {
-    return Options.Scaleway != null && !Options.Scaleway.ProjectId.IsNullOrEmpty() && !Options.Scaleway.SecretKey.IsNullOrEmpty();
   }
 
 
@@ -82,6 +72,8 @@ public class ScalewayDispatcher : IMailDispatcher
 
     ScalewayRequest.SendEmail data = new()
     {
+      ProjectId = Options.Scaleway.ProjectId,
+
       // to addresses
       To = Convert(message.To),
       Cc = Convert(message.CC),
@@ -137,27 +129,18 @@ public class ScalewayDispatcher : IMailDispatcher
       data.Html = message.Body;
     }
 
-    // overwrite for debug mode
-    if (Options.Debug || (Env != null && !Env.IsProduction()))
-    {
-      data.From = new ScalewayRequest.EmailAddress()
-      {
-        Email = "noreply@post.swcs.pro"
-      };
-      data.Cc = null; // "cee-maildev@gmx.at,anaheimcore@gmail.com,ceemaildev@yahoo.com";
-      data.Bcc = null;
-      data.To = [new ScalewayRequest.EmailAddress()
-      {
-        Email = "maildev@alias.swcs.pro"
-      }];
-      data.Subject = $"{data.Subject} (test)";
-    }
-
     try
     {
       using HttpResponseMessage responseMessage = await Http.PostAsJsonAsync(uri, data, JsonSerializerOptions, token);
-      ScalewayResponse.Email response = await responseMessage.Content.ReadFromJsonAsync<ScalewayResponse.Email>(JsonSerializerOptions, token);
-      Logger.LogDebug("Email {id} sent via Scaleway API with status {status}", response.Id, response.Status);
+      ScalewayResponse.SendEmail response = await responseMessage.Content.ReadFromJsonAsync<ScalewayResponse.SendEmail>(JsonSerializerOptions, token);
+
+      if (!responseMessage.IsSuccessStatusCode)
+      {
+        throw new Exception($"Could not send message via Scaleway API. Status code: {responseMessage.StatusCode}, Message: {responseMessage.ReasonPhrase}");
+      }
+
+      string id = response.Emails.FirstOrDefault()?.Id;
+      Logger.LogDebug("Email {id} sent via Scaleway API", id);
     }
     catch (Exception ex)
     {

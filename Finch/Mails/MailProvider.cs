@@ -7,13 +7,13 @@ using Microsoft.Extensions.Options;
 
 namespace Finch.Mails;
 
-public class MailProvider(IFinchContext finch, IOptionsMonitor<MailOptions> mailOptions, ILogger<IMailProvider> logger, IMailDispatcherResolver dispatcherResolver, IRazorRenderer renderer) : IMailProvider
+public class MailProvider(IFinchContext finch, IOptionsMonitor<MailOptions> mailOptions, ILogger<IMailProvider> logger, IMailDispatcher mailDispatcher, IRazorRenderer renderer) : IMailProvider
 {
   protected ILogger<IMailProvider> Logger { get; set; } = logger;
 
   protected IFinchContext Finch { get; set; } = finch;
 
-  protected IMailDispatcherResolver DispatcherResolver { get; set; } = dispatcherResolver;
+  protected IMailDispatcher Dispatcher { get; set; } = mailDispatcher;
 
   protected IRazorRenderer Renderer { get; set; } = renderer;
 
@@ -25,8 +25,7 @@ public class MailProvider(IFinchContext finch, IOptionsMonitor<MailOptions> mail
   /// <inheritdoc />
   public virtual async Task Send(Mail message, CancellationToken token = default)
   {
-    IMailDispatcher dispatcher = await DispatcherResolver.Resolve();
-    await Send(message, dispatcher, token);
+    await Send(message, Dispatcher, token);
   }
 
 

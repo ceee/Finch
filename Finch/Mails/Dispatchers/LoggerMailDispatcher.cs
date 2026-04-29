@@ -10,13 +10,6 @@ namespace Finch.Mails.Dispatchers;
 public class LoggerMailDispatcher(ILogger<LoggerMailDispatcher> logger) : IMailDispatcher
 {
   /// <inheritdoc />
-  public int Priority { get; } = -10;
-
-  /// <inheritdoc />
-  public bool CanSend() => true;
-
-
-  /// <inheritdoc />
   public Task Send(Mail message, CancellationToken token = default)
   {
     logger.LogInformation("Mail to {to}. Subject: {subject}", message.To[0].Address, message.Subject);
