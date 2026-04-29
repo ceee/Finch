@@ -9,6 +9,7 @@ using SixLabors.ImageSharp.Web.DependencyInjection;
 using System.IO;
 using Finch.Media.ImageSharp;
 using Finch.Media.ImageSharp.Processors;
+using Microsoft.Extensions.Hosting;
 
 namespace Finch.Media;
 
@@ -25,11 +26,22 @@ internal class FinchMediaModule : FinchModule
       .AddProcessor<BlurWebProcessor>()
       .AddProcessor<LoopWebProcessor>();
 
-    services.AddOptions<PhysicalFileSystemCacheOptions>().Configure(opts =>
-    {
-      opts.CacheRootPath = Path.GetTempPath().EnsureEndsWith('/');
-      opts.CacheFolder = ".imagesharpcache";
-    }).Bind(configuration.GetSection("Finch:Media:ImageSharp:Cache"));
+    services.AddOptions<PhysicalFileSystemCacheOptions>()
+      .Configure(opts =>
+      {
+        opts.CacheRootPath = Path.GetTempPath();
+        opts.CacheFolder = ".imagesharpcache";
+      })
+      .PostConfigure((PhysicalFileSystemCacheOptions opts, IHostEnvironment env) =>
+      {
+        // override cache location for dev env
+        if (env.IsDevelopment())
+        {
+          opts.CacheRootPath = Path.GetTempPath();
+          opts.CacheFolder = ".imagesharpcache";
+        }
+      })
+      .Bind(configuration.GetSection("Finch:Media:ImageSharp:Cache"));
     
     //configuration.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "Config/imaging.json"), true, true);
     //configuration.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), $"Config/imaging.{builder.Environment.EnvironmentName}.json"), true);
