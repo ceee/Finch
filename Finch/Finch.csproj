@@ -27,7 +27,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="Resources\**\*" />
+      <EmbeddedResource LogicalName="finch/res/cap/cap.js" Include="Includes\cap\widget\src\cap.min.js" />
+      <EmbeddedResource LogicalName="finch/res/cap/cap.wasm" Include="Includes\cap/wasm/src/browser/cap_wasm_bg.wasm" />
     </ItemGroup>
 
 </Project>

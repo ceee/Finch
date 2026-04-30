@@ -57,7 +57,7 @@ public class CaptchaController(ICaptchaService captchaService) : FinchController
   public IActionResult GetWasmFile()
   {
     Assembly assembly = typeof(FinchSecurityModule).GetTypeInfo().Assembly;
-    Stream resource = assembly.GetManifestResourceStream("Finch.Resources.cap_wasm_bg_0_0_6.wasm");
+    Stream resource = assembly.GetManifestResourceStream("finch/res/cap/cap.wasm");
 
     if (resource is null)
     {
@@ -72,7 +72,7 @@ public class CaptchaController(ICaptchaService captchaService) : FinchController
   public IActionResult GetWidgetJsFile()
   {
     Assembly assembly = typeof(FinchSecurityModule).GetTypeInfo().Assembly;
-    Stream resource = assembly.GetManifestResourceStream("Finch.Resources.cap_min_0_1_41.js");
+    Stream resource = assembly.GetManifestResourceStream("finch/res/cap/cap.js");
 
     if (resource is null)
     {

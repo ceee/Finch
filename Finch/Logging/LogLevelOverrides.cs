@@ -26,10 +26,10 @@ public class LogLevelOverrides : Dictionary<string, LogLevel>
     this["System.Net.Http.HttpClient"] = LogLevel.Warning;
     this["Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager"] = LogLevel.Error;
 
-    string executingAssemblyName = Assembly.GetEntryAssembly()?.GetName().Name;
-    if (executingAssemblyName != null)
+    string entryAssemblyName = Assembly.GetEntryAssembly()?.GetName().Name;
+    if (entryAssemblyName != null)
     {
-      this[executingAssemblyName] = LogLevel.Debug;
+      this[entryAssemblyName] = LogLevel.Debug;
     }
   }
 }
