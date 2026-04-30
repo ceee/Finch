@@ -23,6 +23,8 @@ internal class FinchMediaModule : FinchModule
     {
       configurationManager.AddJsonFile("imaging.json", true, true);
       configurationManager.AddJsonFile("imaging.{ENVIRONMENT}.json", true, true);
+      configurationManager.AddJsonFile("Config/imaging.json", true, true);
+      configurationManager.AddJsonFile("Config/imaging.{ENVIRONMENT}.json", true, true);
     }
 
     services.AddImageSharp()
