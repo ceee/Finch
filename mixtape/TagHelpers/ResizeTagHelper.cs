@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace Mixtape.TagHelpers;
 
 [HtmlTargetElement(Attributes = "app-resize")]
-public class ResizeTagHelper : TagHelper
+public class ResizeTagHelper(IFileVersionProvider fileVersionProvider) : TagHelper
 {
   [HtmlAttributeName("src")]
   public string Src { get; set; }
@@ -18,14 +18,6 @@ public class ResizeTagHelper : TagHelper
   
   [ViewContext]
   public ViewContext ViewContext { get; set; }
-  
-  protected  IFileVersionProvider FileVersionProvider { get; set; }
-
-
-  public ResizeTagHelper(IFileVersionProvider fileVersionProvider)
-  {
-    FileVersionProvider = fileVersionProvider;
-  }
 
 
   public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -42,7 +34,7 @@ public class ResizeTagHelper : TagHelper
       };
     }
 
-    string src = FileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, Src).Resize(Preset, focalPoint);
+    string src = fileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, Src).Resize(Preset, focalPoint);
     output.Attributes.RemoveAll("app-resize");
     output.Attributes.RemoveAll("app-focal-point");
     output.Attributes.SetAttribute("src", src);
@@ -50,14 +42,14 @@ public class ResizeTagHelper : TagHelper
 }
 
 
-[HtmlTargetElement(Attributes = PREFIX + "*")]
-public class ResizeCustomTagHelper : TagHelper
+[HtmlTargetElement(Attributes = Prefix + "*")]
+public class ResizeCustomTagHelper(IFileVersionProvider fileVersionProvider) : TagHelper
 {
-  private const string PREFIX = "app-resize:";
+  private const string Prefix = "app-resize:";
 
   private IDictionary<string, string> _values;
 
-  [HtmlAttributeName("", DictionaryAttributePrefix = PREFIX)]
+  [HtmlAttributeName("", DictionaryAttributePrefix = Prefix)]
   public IDictionary<string, string> Values
   {
     get => _values ??= new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -67,24 +59,16 @@ public class ResizeCustomTagHelper : TagHelper
   [ViewContext]
   public ViewContext ViewContext { get; set; }
 
-  protected IFileVersionProvider FileVersionProvider { get; set; }
-
-
-  public ResizeCustomTagHelper(IFileVersionProvider fileVersionProvider)
-  {
-    FileVersionProvider = fileVersionProvider;
-  }
-
 
   public override void Process(TagHelperContext context, TagHelperOutput output)
   {
-    foreach (var value in Values)
+    foreach (KeyValuePair<string, string> value in Values)
     {
       if (output.Attributes.TryGetAttribute(value.Key, out TagHelperAttribute attr))
       {
         string parameterName = attr.Name.ToString();
         string parameterValue = attr.Value.ToString();
-        string newValue = FileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, parameterValue).Resize(value.Value);
+        string newValue = fileVersionProvider.AddFileVersionToPath(ViewContext.HttpContext.Request.PathBase, parameterValue).Resize(value.Value);
         output.Attributes.SetAttribute(parameterName, newValue);
       }
     }

@@ -8,7 +8,11 @@ using Microsoft.Extensions.Hosting;
 namespace Mixtape.Frontend;
 
 [HtmlTargetElement("app-vitescript", Attributes = "src", TagStructure = TagStructure.NormalOrSelfClosing)]
-public class ViteScriptTagHelper(IWebHostEnvironment env, IMixtapeOptions options) : TagHelper
+public class ViteScriptTagHelper(IWebHostEnvironment env
+  #if DEBUG
+  ,IMixtapeOptions options
+  #endif
+  ) : TagHelper
 {
   [HtmlAttributeNotBound]
   [ViewContext]
@@ -26,7 +30,10 @@ public class ViteScriptTagHelper(IWebHostEnvironment env, IMixtapeOptions option
       return;
     }
 
-    int? viteProxyPort = options.For<ViteProxy.ViteProxyOptions>().Port;
+    int? viteProxyPort = 5123;
+    #if DEBUG
+    viteProxyPort = options.For<ViteProxy.ViteProxyOptions>().Port;
+    #endif
 
     HttpRequest request = ViewContext.HttpContext.Request;
     string fullPath = $"{request.Scheme}://{request.Host.Host}:{viteProxyPort}/{Src}";
