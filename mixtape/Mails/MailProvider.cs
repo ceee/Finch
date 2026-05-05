@@ -1,0 +1,112 @@
+﻿using Microsoft.Extensions.Logging;
+using System.Net.Mail;
+using System.Reflection;
+using System.Text;
+using Mixtape.Mails.Dispatchers;
+using Microsoft.Extensions.Options;
+
+namespace Mixtape.Mails;
+
+public class MailProvider(IMixtapeContext mixtape, IOptionsMonitor<MailOptions> mailOptions, ILogger<IMailProvider> logger, IMailDispatcher mailDispatcher, IRazorRenderer renderer) : IMailProvider
+{
+  protected ILogger<IMailProvider> Logger { get; set; } = logger;
+
+  protected IMixtapeContext Mixtape { get; set; } = mixtape;
+
+  protected IMailDispatcher Dispatcher { get; set; } = mailDispatcher;
+
+  protected IRazorRenderer Renderer { get; set; } = renderer;
+
+  protected MailOptions Options { get; set; } = mailOptions.CurrentValue;
+
+  private readonly Encoding _encoding = Encoding.UTF8;
+
+
+  /// <inheritdoc />
+  public virtual async Task Send(Mail message, CancellationToken token = default)
+  {
+    await Send(message, Dispatcher, token);
+  }
+
+
+  /// <inheritdoc />
+  public virtual async Task Send(Mail message, IMailDispatcher dispatcher, CancellationToken token = default)
+  {
+    if (message.IsDeactivated)
+    {
+      return;
+    }
+
+    try
+    {
+      await Prepare(message);
+      await dispatcher.Send(message, token);
+
+      Logger.LogInformation("Dispatched email to {recipient} (cc: {cc}, bcc: {bcc})", message.To, message.CC, message.Bcc);
+    }
+    catch (Exception ex)
+    {
+      Logger.LogError(ex, "Failed to send mail message");
+    }
+  }
+     
+
+  /// <inheritdoc />
+  public virtual async Task<string> Prepare(Mail message)
+  {
+    message.From ??= new MailAddress(Options.SenderEmail, Options.SenderName, _encoding);
+    message.Sender ??= message.From;
+
+    if (message.ReplyToList.Count < 1)
+    {
+      message.ReplyToList.Add(message.From);
+    }
+
+    message.Subject = TokenReplacement.Apply(message.Subject, message.Placeholders);
+    message.SubjectEncoding = _encoding;
+    message.Body = TokenReplacement.Apply(message.Body, message.Placeholders);
+    message.BodyEncoding = _encoding;
+    message.Preheader = TokenReplacement.Apply(message.Preheader, message.Placeholders);
+
+    string appName = Mixtape.Options.AppName.Or(Assembly.GetEntryAssembly()?.GetName().Name);
+    message.Metadata.Add("application", appName);
+
+    if (!message.HasView || message.Body.HasValue())
+    {
+      message.IsRendered = true;
+      return message.Body;
+    }
+
+    string viewPath = message.ViewPath;
+
+    if (viewPath.IsNullOrEmpty())
+    {
+      viewPath = Options.BuildViewPath(message);
+    }
+
+    message.Body = await Renderer.ViewAsync(viewPath, message);
+    message.IsBodyHtml = true;
+    message.IsRendered = true;
+    return message.Body;
+  }
+}
+
+
+public interface IMailProvider
+{
+  /// <summary>
+  /// Renders the message body.
+  /// This is automatically called when sending messages.
+  /// </summary>
+  Task<string> Prepare(Mail message);
+
+  /// <summary>
+  /// Sends a message with the default dispatcher
+  /// </summary>
+  Task Send(Mail message, CancellationToken token = default);
+
+  /// <summary>
+  /// Sends a message with the specified dispatcher
+  /// </summary>
+  Task Send(Mail message, IMailDispatcher dispatcher, CancellationToken token = default);
+}

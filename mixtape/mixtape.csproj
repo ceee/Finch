@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <PackageId>Mixtape</PackageId>
+        <Version>1.0.0</Version>
+        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+        <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+        <RootNamespace>Mixtape</RootNamespace>
+        <DebugType>embedded</DebugType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="10.0.7" />
+        <PackageReference Include="FluentValidation" Version="12.1.1" />
+        <PackageReference Include="Postmark" Version="5.3.0" />
+        <PackageReference Include="PowCapServer.Core" Version="2.0.1" />
+        <PackageReference Include="Seq.Extensions.Logging" Version="9.0.0" />
+        <PackageReference Include="SixLabors.ImageSharp.Web" Version="3.2.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+        <ProjectReference Include="..\..\ViteProxy\src\ViteProxy.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource LogicalName="mixtape/res/cap/cap.js" Include="..\modules\cap\widget\src\cap.min.js" />
+      <EmbeddedResource LogicalName="mixtape/res/cap/cap.wasm" Include="..\modules\cap/wasm/src/browser/cap_wasm_bg.wasm" />
+    </ItemGroup>
+
+</Project>
