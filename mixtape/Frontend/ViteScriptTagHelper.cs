@@ -26,10 +26,7 @@ public class ViteScriptTagHelper(IWebHostEnvironment env, IMixtapeOptions option
       return;
     }
 
-    int? viteProxyPort = 5123;
-#if DEBUG
-    viteProxyPort = options.For<ViteProxy.ViteProxyOptions>().Port;
-#endif
+    int? viteProxyPort = options.For<ViteProxy.ViteProxyOptions>().Port;
 
     HttpRequest request = ViewContext.HttpContext.Request;
     string fullPath = $"{request.Scheme}://{request.Host.Host}:{viteProxyPort}/{Src}";
