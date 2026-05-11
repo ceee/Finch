@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.Routing;
@@ -28,7 +30,11 @@ internal class MixtapeSecurityModule : MixtapeModule
     services.Configure<PowCapServerOptions>(opts => opts.Default = captchaSection.Get<CaptchaOptions>() ?? new CaptchaOptions());
     services.AddOptions<CaptchaOptions>().Bind(captchaSection);
 
-    services.AddDataProtection();
+    services.AddDataProtection();/*.UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
+    {
+      EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+      ValidationAlgorithm = ValidationAlgorithm.HMACSHA512
+    });*/
     services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(s =>
     {
       ILoggerFactory loggerFactory = s.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance;

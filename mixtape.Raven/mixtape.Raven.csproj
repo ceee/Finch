@@ -3,8 +3,9 @@
     <PropertyGroup>
         <PackageId>Mixtape.Raven</PackageId>
         <Version>1.0.0</Version>
-        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+        <TargetFramework>net10.0</TargetFramework>
         <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+        <AssemblyName>Mixtape.Raven</AssemblyName>
         <RootNamespace>Mixtape.Raven</RootNamespace>
         <DebugType>embedded</DebugType>
     </PropertyGroup>
@@ -12,12 +13,12 @@
     <ItemGroup>
         <!-- // for client <-> server compatibility see:
              // https://ravendb.net/docs/article-page/7.0/csharp/client-api/faq/backward-compatibility  -->
-        <PackageReference Include="RavenDB.Client" Version="5.4.206" />
+        <PackageReference Include="RavenDB.Client" Version="7.2.2" />
         <PackageReference Include="FluentValidation" Version="12.1.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\mixtape\mixtape.csproj" />
+      <ProjectReference Include="..\Mixtape\Mixtape.csproj" />
     </ItemGroup>
 
 </Project>

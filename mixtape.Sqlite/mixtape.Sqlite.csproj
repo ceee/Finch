@@ -3,8 +3,9 @@
     <PropertyGroup>
         <PackageId>Mixtape.Sqlite</PackageId>
         <Version>1.0.0</Version>
-        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+        <TargetFramework>net10.0</TargetFramework>
         <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+        <AssemblyName>Mixtape.Sqlite</AssemblyName>
         <RootNamespace>Mixtape.Sqlite</RootNamespace>
         <DebugType>embedded</DebugType>
     </PropertyGroup>
@@ -15,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\mixtape\mixtape.csproj" />
+        <ProjectReference Include="..\Mixtape\Mixtape.csproj" />
     </ItemGroup>
 
 </Project>
