@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-        <ProjectReference Include="..\..\ViteProxy\src\ViteProxy.csproj" />
+        <PackageReference Include="ViteProxy" Version="1.3.0" />
     </ItemGroup>
 
     <ItemGroup>
